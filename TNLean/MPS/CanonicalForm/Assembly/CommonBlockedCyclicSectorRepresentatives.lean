@@ -38,7 +38,7 @@ noncomputable def commonRepresentativeWeight (F : CommonBlockedCyclicSectorFamil
   fun k => (μ k) ^ F.p
 
 /-- Representative weights agree with flattened weights at the chosen representatives. -/
-theorem commonRepresentativeWeight_apply (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeWeight_apply (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (k : Fin r) :
     F.commonRepresentativeWeight μ k =
       F.commonFlatWeight μ (F.flatRepresentativeIndex k) := by
@@ -46,14 +46,14 @@ theorem commonRepresentativeWeight_apply (F : CommonBlockedCyclicSectorFamily bl
     commonFlatWeight, flatKey]
 
 /-- Representative weights remain nonzero after common blocking. -/
-theorem commonRepresentativeWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (k : Fin r) :
     F.commonRepresentativeWeight μ k ≠ 0 :=
   F.commonBlockWeight_ne_zero μ hμ k
 
 /-- Strict ordering by weight norm is preserved when passing to representative
 common-sector weights. -/
-theorem commonRepresentativeWeight_strictAnti_of_weight_strictAnti
+lemma commonRepresentativeWeight_strictAnti_of_weight_strictAnti
     (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ)
     (hAnti : StrictAnti (fun k : Fin r => ‖μ k‖)) :
@@ -64,7 +64,7 @@ theorem commonRepresentativeWeight_strictAnti_of_weight_strictAnti
   simpa [commonRepresentativeWeight, norm_pow] using hpow
 
 /-- The representative common-sector family is trace-preserving. -/
-theorem commonRepresentativeBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) :
     ∑ i : Fin (blockPhysDim d F.p),
       (F.commonRepresentativeBlocks k i)ᴴ * F.commonRepresentativeBlocks k i = 1 := by
@@ -72,7 +72,7 @@ theorem commonRepresentativeBlocks_tp (F : CommonBlockedCyclicSectorFamily block
     F.commonSectorBlock_tp k ⟨0, F.period_pos k⟩
 
 /-- The representative common-sector family has primitive transfer maps. -/
-theorem commonRepresentativeBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) :
     _root_.IsPrimitive
       (transferMap (d := blockPhysDim d F.p) (D := F.commonRepresentativeDim k)
@@ -81,14 +81,14 @@ theorem commonRepresentativeBlocks_primitive (F : CommonBlockedCyclicSectorFamil
     F.commonSectorBlock_primitive k ⟨0, F.period_pos k⟩
 
 /-- The representative common-sector family is tensor-irreducible. -/
-theorem commonRepresentativeBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : IsIrreducibleTensor (F.commonRepresentativeBlocks k) := by
   simpa [commonRepresentativeBlocks, commonRepresentativeDim] using
     F.commonSectorBlock_irreducible k ⟨0, F.period_pos k⟩
 
 /-- The representative common-sector family is trace-preserving at a prescribed
 common blocking length. -/
-theorem commonRepresentativeBlocksAt_tp (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocksAt_tp (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') (k : Fin r) :
     ∑ i : Fin (blockPhysDim d p'),
       (F.commonRepresentativeBlocksAt hp k i)ᴴ *
@@ -98,7 +98,7 @@ theorem commonRepresentativeBlocksAt_tp (F : CommonBlockedCyclicSectorFamily blo
 
 /-- The representative common-sector family has primitive transfer maps at a
 prescribed common blocking length. -/
-theorem commonRepresentativeBlocksAt_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocksAt_primitive (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') (k : Fin r) :
     _root_.IsPrimitive
       (transferMap (d := blockPhysDim d p') (D := F.commonRepresentativeDim k)
@@ -108,14 +108,14 @@ theorem commonRepresentativeBlocksAt_primitive (F : CommonBlockedCyclicSectorFam
 
 /-- The representative common-sector family is tensor-irreducible at a prescribed
 common blocking length. -/
-theorem commonRepresentativeBlocksAt_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeBlocksAt_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') (k : Fin r) :
     IsIrreducibleTensor (F.commonRepresentativeBlocksAt hp k) := by
   subst p'
   simpa [commonRepresentativeBlocksAt] using F.commonRepresentativeBlocks_irreducible k
 
 /-- The representative common-sector family has positive bond dimensions. -/
-theorem commonRepresentativeDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonRepresentativeDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : 0 < F.commonRepresentativeDim k := by
   simpa [commonRepresentativeDim] using
     F.commonSectorBlock_dim_pos k ⟨0, F.period_pos k⟩
@@ -123,7 +123,7 @@ theorem commonRepresentativeDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
 /-- Each representative common-sector block becomes injective after a further
 blocking.  This deliberately does not assert one-site injectivity at the chosen
 common blocking length. -/
-theorem commonRepresentativeBlocksAt_exists_blockTensor_isInjective
+lemma commonRepresentativeBlocksAt_exists_blockTensor_isInjective
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') (k : Fin r) :
     ∃ L : ℕ, IsInjective (blockTensor (F.commonRepresentativeBlocksAt hp k) L) := by
@@ -137,7 +137,7 @@ theorem commonRepresentativeBlocksAt_exists_blockTensor_isInjective
 
 /-- Each representative common-sector block becomes injective after a positive
 further blocking. -/
-theorem commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective
+lemma commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') (k : Fin r) :
     ∃ L : ℕ, 0 < L ∧
@@ -155,7 +155,7 @@ provided positive local injective-blocking witnesses have already been chosen.
 
 This is the source-faithful finite-max/common-multiple step: it does not assert
 that the representatives are injective at the common cyclic period itself. -/
-theorem commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple
+lemma commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p')
     (L : Fin r → ℕ)
@@ -178,7 +178,7 @@ theorem commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple
 
 /-- Existential form of
 `commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple`. -/
-theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses
+lemma exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p')
     (h : ∃ L : Fin r → ℕ,
@@ -192,7 +192,7 @@ theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_
 
 /-- Representative common-sector blocks have one positive common further
 blocking length at which every representative is one-site injective. -/
-theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective
+lemma exists_commonRepresentativeBlocksAt_blockTensor_isInjective
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p') :
     ∃ L₀ : ℕ, 0 < L₀ ∧
@@ -212,7 +212,7 @@ theorem exists_commonRepresentativeBlocksAt_blockTensor_isInjective
 
 /-- A representative common-sector family is a normal canonical form once its transported
 representative weights are sorted by strictly decreasing modulus. -/
-theorem isNormalCanonicalForm_commonRepresentativeBlocks
+lemma isNormalCanonicalForm_commonRepresentativeBlocks
     (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
@@ -232,7 +232,7 @@ theorem isNormalCanonicalForm_commonRepresentativeBlocks
 
 /-- The representative common-sector family is a normal canonical form when expressed at a
 prescribed common blocking length. -/
-theorem isNormalCanonicalForm_commonRepresentativeBlocksAt
+lemma isNormalCanonicalForm_commonRepresentativeBlocksAt
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p')
     (μ : Fin r → ℂ)

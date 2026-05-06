@@ -184,13 +184,13 @@ noncomputable def commonFlatWeight (F : CommonBlockedCyclicSectorFamily blocks)
 This named form gives the per-block weight transport used before flattening;
 `commonFlatWeight_ne_zero` is the corresponding statement after passing to flattened
 sector indices. -/
-theorem commonBlockWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonBlockWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0) (k : Fin r) :
     (μ k) ^ F.p ≠ 0 :=
   pow_ne_zero F.p (hμ k)
 
 /-- Flattened sector weights remain nonzero after common blocking. -/
-theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (x : Fin (∑ k : Fin r, F.period k)) : F.commonFlatWeight μ x ≠ 0 :=
   pow_ne_zero F.p (hμ (F.flatKey x).1)
@@ -237,14 +237,14 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
     simpa [commonSectorBlock] using hcast
 
 /-- Derived common-alphabet sectors are trace-preserving. -/
-theorem commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
     ∑ i : Fin (blockPhysDim d F.p),
       (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1 :=
   (commonSectorBlock_structural F k s).1
 
 /-- Derived common-alphabet sectors have primitive transfer maps. -/
-theorem commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
     _root_.IsPrimitive
       (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
@@ -252,17 +252,17 @@ theorem commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
   (commonSectorBlock_structural F k s).2.1
 
 /-- Derived common-alphabet sectors are tensor-irreducible. -/
-theorem commonSectorBlock_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonSectorBlock_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) : IsIrreducibleTensor (F.commonSectorBlock k s) :=
   (commonSectorBlock_structural F k s).2.2
 
 /-- Derived common-alphabet sectors have positive bond dimensions. -/
-theorem commonSectorBlock_dim_pos (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonSectorBlock_dim_pos (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) : 0 < F.sectorDim k s :=
   F.sector_dim_pos k s
 
 /-- The derived flattened common-sector family is trace-preserving. -/
-theorem commonFlatBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) :
     ∑ i : Fin (blockPhysDim d F.p),
       (F.commonFlatBlocks x i)ᴴ * F.commonFlatBlocks x i = 1 := by
@@ -270,7 +270,7 @@ theorem commonFlatBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
   simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_tp y.1 y.2
 
 /-- The derived flattened common-sector family has primitive transfer maps. -/
-theorem commonFlatBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) :
     _root_.IsPrimitive
       (transferMap (d := blockPhysDim d F.p) (D := F.commonFlatDim x)
@@ -279,20 +279,20 @@ theorem commonFlatBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
   simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_primitive y.1 y.2
 
 /-- The derived flattened common-sector family is tensor-irreducible. -/
-theorem commonFlatBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : IsIrreducibleTensor (F.commonFlatBlocks x) := by
   let y := F.flatKey x
   simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_irreducible y.1 y.2
 
 /-- The derived flattened common-sector family has positive bond dimensions. -/
-theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
+lemma commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : 0 < F.commonFlatDim x := by
   let y := F.flatKey x
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
 
 /-- A common blocked cyclic-sector family is a normal canonical form once its
 transported flat weights are sorted by strictly decreasing modulus. -/
-theorem isNormalCanonicalForm_commonFlatBlocks
+lemma isNormalCanonicalForm_commonFlatBlocks
     (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
@@ -313,7 +313,7 @@ theorem isNormalCanonicalForm_commonFlatBlocks
 
 /-- The derived flattened common-sector family is a normal canonical form when
 expressed at a prescribed common blocking length. -/
-theorem isNormalCanonicalForm_commonFlatBlocksAt
+lemma isNormalCanonicalForm_commonFlatBlocksAt
     (F : CommonBlockedCyclicSectorFamily blocks)
     {p' : ℕ} (hp : F.p = p')
     (μ : Fin r → ℂ)
@@ -327,7 +327,7 @@ theorem isNormalCanonicalForm_commonFlatBlocksAt
     F.isNormalCanonicalForm_commonFlatBlocks μ hμ hAnti
 
 /-- Iterated blocking of a nonzero-weight block is the relabeled common block. -/
-theorem nestedBlock_sameMPV₂_commonReindexedBlock
+lemma nestedBlock_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
@@ -343,7 +343,7 @@ theorem nestedBlock_sameMPV₂_commonReindexedBlock
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
 
 /-- A relabeled nonzero-weight block is represented by its common-alphabet cyclic sectors. -/
-theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
+lemma commonReindexedBlock_sameMPV₂_commonSectorTensor
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂ (F.commonReindexedBlock k) (F.commonSectorTensor k) := by
   intro N σ
@@ -357,7 +357,7 @@ theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
       simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
 
 /-- Weighted nonzero blocks with explicit relabelings flatten to the common-sector family. -/
-theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
+lemma sameMPV₂_weightedCommonReindexedBlock_commonFlat
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
@@ -416,7 +416,7 @@ def groupedBlockCastAgrees (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin
 order-preserving cast from the common blocked alphabet gives the corresponding direct
 blocked index.  This isolates the remaining point as a comparison between the `Fin.cast`
 identification and the canonical direct/iterated blocking equivalence. -/
-theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
+lemma groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     F.groupedBlockCastAgrees k ↔
       ∀ i : Fin (blockPhysDim d F.p),
@@ -456,7 +456,7 @@ private lemma Nat.div_pow_mod_pow_block (x d m j t : ℕ) (ht : t < m) :
 
 /-- Flattening the explicit length-`n` blocked decoding of a length-`m*n` index agrees with
 the direct length-`m*n` decoding. -/
-theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
+lemma flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
     flattenBlockedWord d m
@@ -476,7 +476,7 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/
-theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+lemma groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
     {d : ℕ} (h_flatten : ∀ {m n p : ℕ} (_ : p = m * n)
       (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
       (i : Fin (blockPhysDim d p)),
@@ -513,7 +513,7 @@ theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
 /-- The blocked-word comparison follows if the canonical identification from the common
 alphabet to an iterated alphabet agrees with the grouping map that reads a direct word in
 consecutive blocks of length $m_k$ (the period of block $k$). -/
-theorem wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees
+lemma wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     ∀ i : Fin (blockPhysDim d F.p),
@@ -544,7 +544,7 @@ one original block gives the corresponding block obtained through iterated block
 
 The hypothesis compares the word read from the common block alphabet with the word
 read after first viewing the same index as an iterated block and then flattening it. -/
-theorem blockTensor_eq_commonReindexedBlock_of_word_eq
+lemma blockTensor_eq_commonReindexedBlock_of_word_eq
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hWord : ∀ i : Fin (blockPhysDim d F.p),
       wordOfBlock d F.p i =
@@ -559,7 +559,7 @@ theorem blockTensor_eq_commonReindexedBlock_of_word_eq
 /-- Direct blocking of one original block is the relabeled common block when the
 canonical identification with the iterated alphabet agrees with consecutive grouping of the
 direct word. -/
-theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
+lemma blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k :=
@@ -568,7 +568,7 @@ theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
 
 /-- Direct blocking of one original block has the same MPV family as the block obtained
 through iterated blocking, whenever the associated blocked-word decodings agree. -/
-theorem blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq
+lemma blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hWord : ∀ i : Fin (blockPhysDim d F.p),
       wordOfBlock d F.p i =
@@ -583,7 +583,7 @@ theorem blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq
 
 /-- Direct and iterated common blocking of one original block have the same MPV family
 when the canonical identification with the iterated alphabet agrees with consecutive grouping. -/
-theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
+lemma blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     SameMPV₂
@@ -594,7 +594,7 @@ theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
   rfl
 
 /-- Blockwise MPV comparisons assemble over the weighted direct sum after common blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
+lemma sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hBlock : ∀ k : Fin r,
       SameMPV₂
@@ -625,7 +625,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
 
 /-- Agreement of blocked-word decodings assembles the weighted direct sum obtained by
 blocking the original nonzero blocks with the one obtained through iterated blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_word_eq
+lemma sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_word_eq
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
       wordOfBlock d F.p i =
@@ -644,7 +644,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_word_eq
 /-- Agreement between the canonical identifications and the consecutive grouping maps assembles
 the weighted direct sum obtained by direct blocking with the one obtained through iterated
 blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees
+lemma sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
     SameMPV₂
@@ -658,7 +658,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCa
 
 /-- If every original block has the same MPV family after direct blocking as after
 iterated blocking, then the weighted nonzero part agrees with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise
+lemma sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hBlock : ∀ k : Fin r,
       SameMPV₂
@@ -676,7 +676,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise
 
 /-- Agreement of blocked-word decodings identifies the directly blocked weighted
 nonzero part with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq
+lemma sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
       wordOfBlock d F.p i =
@@ -694,7 +694,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq
 
 /-- Agreement between the canonical identifications and the consecutive grouping maps identifies
 the directly blocked weighted nonzero part with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_groupedBlockCastAgrees
+lemma sameMPV₂_weightedCanonicalBlock_commonFlat_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
     SameMPV₂
@@ -712,7 +712,7 @@ blocks, then the weighted nonzero part agrees with the derived common-sector fam
 The hypothesis isolates the remaining equality after relabeling blocked physical
 words by `iteratedBlockIndex`; the canonical blocked tensor uses the ambient blocked
 alphabet directly. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
+lemma sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hRelabel : SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
@@ -731,7 +731,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
     (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
 
 /-- The preceding comparison expressed at a prescribed common length. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
+lemma sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     {p' : ℕ} (hp : F.p = p')
     (hRelabel : SameMPV₂
