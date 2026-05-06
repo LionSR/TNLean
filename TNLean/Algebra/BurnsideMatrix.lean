@@ -11,7 +11,7 @@ import Mathlib.Algebra.Algebra.Subalgebra.Lattice
 import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Burnside-style bridge: irreducibility to algebra span
+# Burnside--Jacobson connection from irreducibility to algebra span
 
 This file reduces the gap between `IsIrreducibleTensor` (no nontrivial invariant
 orthogonal projection) and eventual cumulative full matrix span to a single,
@@ -22,10 +22,11 @@ project rather than imported from Mathlib.
 
 Source status: arXiv:1606.00608 Section 2.3 uses invariant subspaces to split a
 canonical-form block until no nontrivial invariant subspace remains.  It does not
-invoke Burnside/Jacobson.  The Burnside step here is an external algebraic bridge
+invoke Burnside/Jacobson.  The Burnside step here is an external algebraic input
 from irreducible action to full generated algebra.  The later Wielandt/normality
 arguments use the resulting cumulative full-span statement together with
-aperiodicity or primitivity hypotheses; this bridge alone is not normality.
+aperiodicity or primitivity hypotheses; this algebraic input alone is not
+normality.
 
 ## Main definitions
 
@@ -50,7 +51,7 @@ aperiodicity or primitivity hypotheses; this bridge alone is not normality.
 * `isIrreducibleTensor_of_isIrreducibleAction`: `IsIrreducibleTensor` follows from
   `IsIrreducibleAction` (range of an invariant orthogonal projection is invariant).
 
-### Bridge summary
+### Connection summary
 
 The complete chain from `IsIrreducibleTensor A` to cumulative full matrix span:
 
