@@ -190,13 +190,13 @@ theorem isNormal_implies_cumulativeSpan [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤ :=
   cumulativeSpan_eq_top A hN
 
-/-! ## Part 4: Cumulative Wielandt analysis bundle
+/-! ## Part 4: Cumulative Wielandt analysis
 
 The paper states the pieces below as Lemma 1, eigenvector extraction in the proof
-of Theorem 1, and Lemma 2(a).  The bundled statement is a collected
-lemma, not an additional paper theorem. -/
+of Theorem 1, and Lemma 2(a).  The following lemma collects these cumulative
+consequences; it is not an additional paper theorem. -/
 
-/-- Cumulative Wielandt analysis bundle.
+/-- Cumulative Wielandt analysis consequences.
 
 Given `IsNormal A`:
 1. Cumulative span reaches ⊤ at level D²
@@ -206,7 +206,7 @@ Given `IsNormal A`:
 5. (Needs Lemma 2(b)) All matrices are reachable using word products of
    a single fixed length ≤ D⁴
 
-This lemma packages steps 1-4 for later arguments. -/
+The conclusion is the conjunction of steps 1-4. -/
 lemma wielandt_chain [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     -- Step 1: Cumulative span = ⊤
