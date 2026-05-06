@@ -8,9 +8,9 @@ import TNLean.MPS.ParentHamiltonian.GroundSpace
 /-!
 # Direct-sum image-space consequences
 
-This file packages the algebraic three-block trace transfer as the image-space
-inclusion used in David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.
-It uses only the finite-chain image-space definitions `groundSpaceMap` and
+The algebraic three-block trace transfer gives the image-space inclusion used
+in David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.  The argument
+uses only the finite-chain image-space definitions `groundSpaceMap` and
 `groundSpace`; it does not use the parent-Hamiltonian uniqueness theorem.
 
 ## References
@@ -135,10 +135,9 @@ theorem bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_
 
 If the source-level contradiction input says that the two blocks cannot have
 both equal bond dimension and equal length-`L` image space, then their
-three-block image spaces have zero intersection.  This packages the formal
-part of the two-block direct-sum argument: a nonzero vector in the intersection
-would give a homogeneous three-block trace relation, and the dimension step
-would force the forbidden equality. -/
+three-block image spaces have zero intersection.  A nonzero vector in the
+intersection would give a homogeneous three-block trace relation, and the
+dimension step would force the forbidden equality. -/
 theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)

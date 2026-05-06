@@ -8,8 +8,10 @@ import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 /-!
 # Direct-sum uniqueness input
 
-This file records the equal-size branch of the two-block direct-sum argument
-from David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.
+The equal-size branch of the two-block direct-sum argument from
+David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`, uses uniqueness of
+injective parent ground states to rule out equality of local image spaces for
+distinct injective block states.
 
 The preceding direct-sum files prove the trace-dual and finite-dimensional
 steps: a homogeneous three-block relation forces equality of bond dimensions

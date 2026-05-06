@@ -73,18 +73,19 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
       Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0)) :
     GaugePhaseEquiv A B := by
   classical
+  let proportionalAt : ℕ → Prop := fun N =>
+    ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+      Matrix.trace (evalWord A (List.ofFn σ)) =
+        c * Matrix.trace (evalWord B (List.ofFn σ))
   let c : ℕ → ℂ := fun N =>
-    if h : ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ then
+    if h : proportionalAt N then
       Classical.choose h
     else 0
   have hc_event :
       ∀ᶠ N in Filter.atTop, ∀ σ : Fin N → Fin d, mpv A σ = c N * mpv B σ := by
     filter_upwards [hProp] with N hN σ
-    have hN' :
-        ∃ c : ℂ, ∀ σ : Fin N → Fin d,
-          Matrix.trace (evalWord A (List.ofFn σ)) =
-            c * Matrix.trace (evalWord B (List.ofFn σ)) := by
-      simpa [mpv, coeff] using hN
+    have hN' : proportionalAt N := by
+      simpa [proportionalAt, mpv, coeff] using hN
     dsimp [c]
     rw [dif_pos hN']
     simpa [mpv, coeff] using Classical.choose_spec hN' σ

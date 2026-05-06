@@ -9,11 +9,11 @@ import TNLean.MPS.MPDO.BiCFDerivation.Core
 /-!
 # Direct-sum trace input for canonical-form block separation
 
-This file formalizes the first algebraic step in the proof of
-David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`
-(`Papers/quant-ph_0608197/MPSarchive.tex`): from a homogeneous three-block
-trace relation and the two-sided nonzero span lemma, every trace test on one
-block has a matching trace test on the other block at the single-block length.
+The first algebraic step in David--Perez-Garcia--Schuch--Wolf,
+Lemma `lem:direct-sum` (`Papers/quant-ph_0608197/MPSarchive.tex`) turns a
+homogeneous three-block trace relation and the two-sided nonzero span lemma
+into a transfer statement for trace tests: every trace test on one block has a
+matching trace test on the other block at the single-block length.
 
 The remaining source step, not proved here, is the contradiction with equality
 of the finite-chain image spaces using the injective parent-Hamiltonian
