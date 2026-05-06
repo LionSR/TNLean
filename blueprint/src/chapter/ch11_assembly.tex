@@ -1229,55 +1229,6 @@ facts used to recover the lists of weights from those power sums.
 	sector-weight conclusion.
 \end{proof}
 
-\begin{theorem}[Sector comparison from a common phase cover]%
-\label{thm:after_blocking_sector_common_blocks_phase_cover}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_phaseCover}
-	\leanok
-	\uses{lem:nonzero_block_span_eq_of_common_phase_cover,
-		thm:after_blocking_sector_common_blocks_block_span}
-	Let $A$ and $B$ have the same MPV family, and fix exact nonzero-block decompositions at a
-	common blocking period as in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span}. Assume the nonzero
-	blocks are trace-preserving, primitive, irreducible, injective, and have nonzero
-	weights. Suppose moreover that both nonzero-weight block families map surjectively to one
-	common family of blocks, and that every block is MPV-phase equivalent to its image
-	in the common family. Then the same sector comparison conclusion as in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} holds.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{lem:nonzero_block_span_eq_of_common_phase_cover,
-		thm:after_blocking_sector_common_blocks_block_span}
-	Lemma~\ref{lem:nonzero_block_span_eq_of_common_phase_cover} converts the common
-	MPV phase cover into equality of the nonzero-block finite-length spans.
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_block_span} then applies
-	without any additional sector-basis assumptions.
-\end{proof}
-
-\begin{theorem}[Sector comparison from phase-cover data]%
-\label{thm:after_blocking_sector_common_blocks_common_phase_cover}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_commonPhaseCover}
-	\leanok
-	\uses{def:mpv_common_phase_cover,
-		thm:after_blocking_sector_common_blocks_phase_cover}
-	Let $A$ and $B$ have the same MPV family, and fix exact nonzero-block decompositions at a
-	common blocking period as in
-	Theorem~\ref{thm:after_blocking_sector_common_blocks_phase_cover}. Assume the
-	nonzero-weight blocks are trace-preserving, primitive, irreducible, injective, and have
-	nonzero weights. If the two nonzero-weight block families are equipped with common MPV
-	phase-cover data, then the same sector comparison conclusion holds.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:after_blocking_sector_common_blocks_phase_cover}
-	The common cover data specify the common representative family, the two
-	surjective maps, and the MPV-phase equivalences. The common-cover sector
-	theorem then applies with the same nonzero-part decompositions and structural
-	hypotheses.
-\end{proof}
-
 \begin{lemma}[Zero-tail cancellation for leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
 	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
 	\leanok
@@ -2116,7 +2067,7 @@ two-basis sector comparison theorem.
 	then turns equality of nonzero-sector spans into the hypotheses used by the
 	sector comparison theorem.
 
-	The same comparison can also be expressed through common phases.  A common
+	At the level of span hypotheses, common phases are only an adapter.  A common
 	MPV phase cover gives equality of finite-length nonzero-block spans by
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.  A sector basis pre-matching
 	gives the same span equality and the primitive overlap-span hypotheses by
@@ -2124,7 +2075,9 @@ two-basis sector comparison theorem.
 	Theorem~\ref{thm:sector_basis_pre_matching_to_overlap_span}.  The BNT comparison
 	theorems produce such common phases from a proportional-decomposition conclusion in
 	Theorems~\ref{thm:common_phase_cover_of_proportional_decomposition}
-	and~\ref{thm:common_phase_cover_of_separated_normal_bnt}.
+	and~\ref{thm:common_phase_cover_of_separated_normal_bnt}.  These common-cover
+	facts are not a separate form of the source theorem; they are used only to
+	obtain the finite-length span equality required by the sector comparison.
 
 	Chapter~\ref{ch:canonical} supplies the canonical-form reduction needed before
 	these comparison theorems can be applied: a common physical blocking length,
