@@ -644,7 +644,7 @@ facts used to recover the lists of weights from those power sums.
 	matched bond dimensions, and gauge-phase equivalence of each matched pair.
 	It does not include the copy-count equality; that equality is recovered
 	from total MPV equality and BNT linear independence in
-	Theorem~\ref{thm:sector_basis_pre_matching_to_matching}.
+	Lemma~\ref{lem:sector_basis_pre_matching_to_matching}.
 \end{definition}
 
 \begin{definition}[Single-family overlap-orthogonality data for sector bases]%
@@ -671,8 +671,8 @@ facts used to recover the lists of weights from those power sums.
 	system size.
 \end{definition}
 
-\begin{theorem}[Single-family overlap data plus span give overlap-span hypotheses]%
-\label{thm:sector_basis_overlap_ortho_to_span}
+\begin{lemma}[Single-family overlap data plus span give overlap-span hypotheses]%
+\label{lem:sector_basis_overlap_ortho_to_span}
 	\lean{MPSTensor.SectorBasisOverlapOrthoHypotheses.to_overlapSpan}
 	\leanok
 	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
@@ -680,7 +680,7 @@ facts used to recover the lists of weights from those power sums.
 	and one also supplies one-site injectivity of all their basis blocks together
 	with equality of the finite-length MPV spans, then the two bases satisfy the
 	primitive overlap-span hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -712,8 +712,8 @@ facts used to recover the lists of weights from those power sums.
 	equalities and the phase-adjusted weight-multiset equalities.
 \end{proof}
 
-\begin{theorem}[A pre-matching gives a sector basis matching]%
-\label{thm:sector_basis_pre_matching_to_matching}
+\begin{lemma}[A pre-matching gives a sector basis matching]%
+\label{lem:sector_basis_pre_matching_to_matching}
 	\lean{MPSTensor.SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV}
 	\leanok
 	\uses{def:sector_basis_pre_matching, def:sector_basis_matching}
@@ -722,7 +722,7 @@ facts used to recover the lists of weights from those power sums.
 	independent, then the copy-count equalities recovered by
 	Theorem~\ref{thm:route_b_hetero_phase_match_copies} turn $M$ into a full
 	sector basis matching.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -768,24 +768,24 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:bnt_perm_simple, thm:sector_basis_pre_matching_to_matching}
+	\uses{lem:bnt_perm_simple, lem:sector_basis_pre_matching_to_matching}
 	The permutation-rigidity lemma for bases of normal tensors gives a
 	permutation, the matched bond dimensions, and the gauge-phase equivalences
 	of the basis blocks, hence a sector basis pre-matching. Asymptotic
 	orthonormality gives the BNT linear-independence condition, and
-	Theorem~\ref{thm:sector_basis_pre_matching_to_matching} recovers the
+	Lemma~\ref{lem:sector_basis_pre_matching_to_matching} recovers the
 	copy-count equalities from equality of the total MPV families.
 \end{proof}
 
-\begin{theorem}[Primitive overlap-span hypotheses give a sector basis matching]%
-\label{thm:sector_basis_overlap_span_to_matching}
+\begin{lemma}[Primitive overlap-span hypotheses give a sector basis matching]%
+\label{lem:sector_basis_overlap_span_to_matching}
 	\lean{MPSTensor.SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching}
 	\leanok
 	\uses{def:sector_basis_overlap_span_hyps, def:sector_basis_matching}
 	If two sector decompositions satisfy the primitive overlap-span hypotheses
 	and their total MPV families agree, then there exists a sector basis matching
 	between them.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -924,10 +924,10 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{lem:sector_basis_pre_matching_span_eq,
-		thm:sector_basis_overlap_ortho_to_span}
+		lem:sector_basis_overlap_ortho_to_span}
 	The pre-matching gives the basis-span equality. Combining that equality with
 	the one-family overlap data and injectivity is exactly the construction of
-	Theorem~\ref{thm:sector_basis_overlap_ortho_to_span}.
+	Lemma~\ref{lem:sector_basis_overlap_ortho_to_span}.
 \end{proof}
 
 \begin{theorem}[Common phase cover from a BNT proportional-decomposition conclusion]%
@@ -1125,12 +1125,12 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{thm:sector_basis_overlap_span_to_matching, thm:route_b_hetero_sector_matching}
+	\uses{lem:sector_basis_overlap_span_to_matching, thm:route_b_hetero_sector_matching}
 	Blocking preserves the equality of the MPV families of $A$ and $B$ at the
 	common period. Composing this equality with the two sector equivalences gives
 	equality of the total MPV families of $P$ and $Q$. The primitive overlap-span
 	hypotheses produce a sector basis matching by
-	Theorem~\ref{thm:sector_basis_overlap_span_to_matching}; the two-basis
+	Lemma~\ref{lem:sector_basis_overlap_span_to_matching}; the two-basis
 	sector comparison theorem then gives the sector-weight multiset equalities.
 \end{proof}
 
@@ -1154,12 +1154,12 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Apply the one-sided phase-class BNT construction
 	(Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) to the two
 	nonzero-weight block families. The resulting sector decompositions satisfy the overlap-span
-	hypotheses; Theorem~\ref{thm:sector_basis_overlap_span_to_matching} then
+	hypotheses; Lemma~\ref{lem:sector_basis_overlap_span_to_matching} then
 	produces a sector basis matching, and
 	Theorem~\ref{thm:route_b_hetero_sector_matching} gives the matched
 	sector-weight conclusion.
@@ -1171,7 +1171,7 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho,
-		thm:sector_basis_overlap_ortho_to_span,
+		lem:sector_basis_overlap_ortho_to_span,
 		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family and fix exact nonzero-block decompositions at a
 	common blocking period as in
@@ -1184,14 +1184,14 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho,
-		thm:sector_basis_overlap_ortho_to_span,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_ortho_to_span,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	The phase-class BNT construction gives BNT linear independence and the
 	single-family overlap-orthogonality data for both sides, and carries one-site
 	injectivity from the nonzero-weight blocks to the chosen basis blocks.  The assumed span
 	comparison combines with those one-family data by
-	Theorem~\ref{thm:sector_basis_overlap_ortho_to_span}; the matching and
+	Lemma~\ref{lem:sector_basis_overlap_ortho_to_span}; the matching and
 	sector-weight comparison then proceed as before.
 \end{proof}
 
@@ -1201,7 +1201,7 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan}
 	\leanok
 	\uses{thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family, and fix a common blocking period
 	$p>0$ with exact nonzero-block decompositions by trace-preserving, primitive,
@@ -1218,13 +1218,13 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span} converts
 	the nonzero-block span equality into the primitive overlap-span hypotheses for the
 	chosen sector bases. Equality of the blocked total MPVs gives equality of the
 	sector tensors, so
-	Theorem~\ref{thm:sector_basis_overlap_span_to_matching} produces the sector
+	Lemma~\ref{lem:sector_basis_overlap_span_to_matching} produces the sector
 	basis matching and Theorem~\ref{thm:route_b_hetero_sector_matching} gives the
 	sector-weight conclusion.
 \end{proof}
@@ -1325,7 +1325,7 @@ facts used to recover the lists of weights from those power sums.
 	\leanok
 	\uses{lem:sameMPV2_live_of_zeroTail_eq,
 		thm:bnt_sector_decomp_tp_prim_irr_collapsed,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Apply the leftover-zero-block cancellation lemma to recover full equality
 	of the nonzero-block tensors. Then proceed as in
@@ -1342,7 +1342,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{lem:sameMPV2_live_of_zeroTail_eq,
 		thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	Let $A$ and $B$ have the same MPV family. Fix $p>0$ and suppose $A^{[p]}$
 	and $B^{[p]}$ each decompose as an all-zero leftover block plus a weighted
@@ -1361,7 +1361,7 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{lem:sameMPV2_live_of_zeroTail_eq,
 		thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
-		thm:sector_basis_overlap_span_to_matching,
+		lem:sector_basis_overlap_span_to_matching,
 		thm:route_b_hetero_sector_matching}
 	The finite-length span equality gives the primitive overlap-span hypotheses
 	for the BNT sector bases of the two nonzero parts. Cancellation of leftover

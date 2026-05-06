@@ -469,7 +469,7 @@ lemma phase_match_exists (M : SectorBasisPreMatching P Q) :
 The new information is the copy-count equality. It follows from total MPV equality
 and BNT linear independence by recovering the exponent-zero power sums for the
 matched sector coefficients. -/
-theorem exists_sectorBasisMatching_of_sameMPV
+lemma exists_sectorBasisMatching_of_sameMPV
     (M : SectorBasisPreMatching P Q)
     (hLI : HasBNTSectorData P)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
@@ -583,7 +583,7 @@ variable {P Q : SectorDecomposition d}
 /-- Combine the single-family overlap-orthogonality data for two sector bases
 with the one-site injectivity and finite-length span comparison inputs needed by
 the primitive overlap-rigidity theorem. -/
-theorem to_overlapSpan
+lemma to_overlapSpan
     (HP : SectorBasisOverlapOrthoHypotheses P)
     (HQ : SectorBasisOverlapOrthoHypotheses Q)
     (hP_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j))
@@ -664,7 +664,7 @@ variable {P Q : SectorDecomposition d}
 /-- Convert the bundled primitive overlap-rigidity hypotheses into a sector basis
 matching. The produced witness is not part of the hypotheses: it is obtained by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`. -/
-theorem exists_sectorBasisMatching
+lemma exists_sectorBasisMatching
     (H : SectorBasisOverlapSpanHypotheses P Q)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     Nonempty (SectorBasisMatching P Q) := by
