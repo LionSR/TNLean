@@ -1871,20 +1871,20 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
-	Let $A$ and $B$ have the same MPV family.  Assume the formal blocked-word
+	Let $A$ and $B$ have the same MPV family. Assume the formal blocked-word
 	identification for the common-sector data.  The common-sector structural
-	theorem then produces the common primitive nonzero-sector families. If
-	those families satisfy the BNT-cover hypotheses, then the same sector-weight
-	comparison conclusion holds.
+	theorem gives common primitive nonzero-sector families. If those families
+	satisfy the BNT-cover hypotheses, then the same sector-weight comparison
+	conclusion holds.
 \end{theorem}
 
 \begin{proof}
 	\leanok
 	\uses{thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
 		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	Convert the BNT-cover hypotheses for the produced families to common
-	phase-cover hypotheses, and then apply the common-sector comparison theorem
-	with common phase-cover data.
+	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
+	families to common phase-cover hypotheses, and then apply the common-sector
+	comparison theorem with common phase-cover data.
 \end{proof}
 
 \begin{theorem}[Common sectors from explicit common primitive BNT data]%
@@ -1896,8 +1896,8 @@ two-basis sector comparison theorem.
 		thm:afterBlocking_sectorComparison_reindexed_bntCover}
 	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
 	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces the common primitive nonzero-sector families. If
-	these families have strict weight ordering, internal gauge-phase separation,
+	structural theorem gives common primitive nonzero-sector families. If these
+	families have strict weight ordering, gauge-phase separation,
 	equal zero-tail dimension, one-site injectivity, and proportional-decomposition
 	data, then the same sector-weight comparison conclusion holds.
 \end{theorem}
@@ -1907,8 +1907,9 @@ two-basis sector comparison theorem.
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis,
 		thm:afterBlocking_sectorComparison_reindexed_bntCover}
-	First form the BNT-cover hypotheses for the produced families from the stated
-	common primitive data. Then apply the BNT-cover comparison theorem.
+	First form the BNT-cover hypotheses for the common primitive nonzero-sector
+	families from the stated common primitive data. Then apply the BNT-cover
+	comparison theorem.
 \end{proof}
 
 \begin{theorem}[Common sectors from proportional-comparison data]%
@@ -1919,8 +1920,8 @@ two-basis sector comparison theorem.
 		def:common_sector_relabeling_hypothesis}
 	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
 	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces the common primitive nonzero-sector families. If
-	those families satisfy the proportional-comparison hypotheses of
+	structural theorem gives common primitive nonzero-sector families. If those
+	families satisfy the proportional-comparison hypotheses of
 	Definition~\ref{def:common_primitive_proportional_hypotheses}, then the same
 	sector-weight comparison conclusion holds.
 \end{theorem}
@@ -1929,27 +1930,27 @@ two-basis sector comparison theorem.
 	\leanok
 	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
 		thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	Convert the BNT proportional-decomposition comparison for the produced families
-	to common phase-cover hypotheses, and then apply the common-sector
-	comparison theorem with common phase-cover data.
+	Convert the BNT proportional-decomposition comparison for the common primitive
+	nonzero-sector families to common phase-cover hypotheses, and then apply the
+	common-sector comparison theorem with common phase-cover data.
 \end{proof}
 
-\begin{definition}[After-blocking hypotheses for the CPSV formulation]%
+\begin{definition}[After-blocking BNT-cover comparison hypotheses]%
 	\label{def:after_blocking_fundamental_theorem_hypotheses}
 	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses}
-	These hypotheses consist of the comparison data for the after-blocking
-	formulation of the CPSV Fundamental Theorem that does not use the periodic
-	theorem. The blocked-word identification for common cyclic sectors is
+	For two tensors with the same MPV family, the structural reduction supplies
+	a common blocking, zero-tail identities, and common primitive nonzero-sector
+	families. These hypotheses add the BNT-cover comparison data for those
+	families. The blocked-word identification for common cyclic sectors is
 	derived from the grouped-block cast theorem.
 
-	For the common primitive nonzero-sector families produced from two tensors
-	with the same MPV family, the comparison data include their
+	The comparison data include the sectors'
 	trace-preserving normalization, primitivity, irreducibility, and positive
 	bond-dimension evidence before returning BNT-cover comparison hypotheses for
-	those blocks. The hypotheses are tied to the produced families rather than
-	to an arbitrary chosen decomposition.
+	those blocks. Thus the assumptions apply to the common primitive sectors
+	obtained after blocking, not to an arbitrary chosen decomposition.
 \end{definition}
 
 \begin{definition}[CPSV after-blocking Fundamental Theorem conclusion]%
@@ -1966,14 +1967,14 @@ two-basis sector comparison theorem.
 	side by nonzero sector phases.
 \end{definition}
 
-\begin{theorem}[Conditional after-blocking CPSV formulation]%
+\begin{theorem}[After-blocking comparison from supplied BNT-cover data]%
 \label{thm:fundamental_theorem_after_blocking_comparison_hypotheses}
 	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
 	\leanok
 	\uses{def:after_blocking_fundamental_theorem_hypotheses,
 			def:after_blocking_fundamental_theorem_conclusion}
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
-	comparison hypotheses of
+	BNT-cover comparison hypotheses of
 	Definition~\ref{def:after_blocking_fundamental_theorem_hypotheses}. Then the
 	CPSV conclusion of
 	Definition~\ref{def:after_blocking_fundamental_theorem_conclusion} is
@@ -1985,9 +1986,11 @@ two-basis sector comparison theorem.
 	whose basis sectors and weights match up to permutation and nonzero phases,
 	as in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}.
 
-	The explicit hypotheses include the zero-tail, trace-preserving
-	normalization, primitivity, irreducibility, positive bond-dimension, and
-	BNT-cover comparison inputs.
+	The BNT-cover comparison hypotheses are independent assumptions in this
+	statement. The theorem does not derive them from equality of MPV families;
+	it derives the after-blocking conclusion once the zero-tail,
+	trace-preserving normalization, primitivity, irreducibility, positive
+	bond-dimension, and BNT-cover comparison inputs are supplied.
 \end{theorem}
 
 	\begin{proof}
