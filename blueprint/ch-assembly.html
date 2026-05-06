@@ -1308,7 +1308,7 @@
           
           <li><a href="ch-assembly.html#rem:cf_coeff_arrays">Remark 14.3</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_equal_with_copies">Theorem 14.15</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_equal_with_copies">Lemma 14.15</a></li>
           
           <li><a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">Theorem 14.80</a></li>
           
@@ -1340,7 +1340,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The formalized comparison starts with explicit decomposition coefficients. Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> expands the two canonical-form tensors in their BNT bases, and Remark&#160;<a href="ch-assembly.html#rem:cf_coeff_arrays">14.3</a> describes the resulting coefficient arrays. When the required coefficient identities are supplied, Lemma&#160;<a href="ch-assembly.html#lem:ft_equal_explicit">14.6</a> proves gauge equivalence after permuting the weighted block-diagonal tensors. The sector-multiplicity comparison of Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal_with_copies">14.15</a> uses the supplied multiplicity data to recover both the copy counts and the sector-weight multisets from these identities. </p>
+  <p> The formalized comparison starts with explicit decomposition coefficients. Theorem&#160;<a href="ch-mps.html#thm:mpv_decomposition">2.36</a> expands the two canonical-form tensors in their BNT bases, and Remark&#160;<a href="ch-assembly.html#rem:cf_coeff_arrays">14.3</a> describes the resulting coefficient arrays. When the required coefficient identities are supplied, Lemma&#160;<a href="ch-assembly.html#lem:ft_equal_explicit">14.6</a> proves gauge equivalence after permuting the weighted block-diagonal tensors. The sector-multiplicity comparison of Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.15</a> uses the supplied multiplicity data to recover both the copy counts and the sector-weight multisets from these identities. </p>
 <p>The remaining synchronization statement for the bare equal-MPV theorem must assemble the block-matching data into equality of the weighted block-diagonal tensors. The heterogeneous equal-case theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_equalMPV_CFBNT_hetero">17.51</a>) now proves the block-count, bond-dimension, and gauge-phase matching directly from equality of the full MPV families, without explicit coefficient limits. The after-blocking comparison theorem (Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">14.80</a>) gives the matched sector-weight conclusion once BNT-cover comparison data are supplied. Theorem&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> explains how proportional block comparisons supply common phases. Completing this theorem therefore amounts to deriving the BNT-cover and sector-weight data for the canonical decompositions produced from the bare equality assumption. Once those data are available, the phases are absorbed into the recovered weights and the blockwise conjugacies assemble into a global gauge equivalence. </p>
 
   </div>
@@ -1999,13 +1999,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_equal_with_copies">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_equal_with_copies">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.15</span>
-    <span class="theorem_thmtitle">BNT recovery of copy counts and sector weights</span>
+    <span class="lemma_thmlabel">14.15</span>
+    <span class="lemma_thmtitle">BNT recovery of copy counts and sector weights</span>
     <div class="thm_header_extras">
 
     
@@ -2013,7 +2013,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_equal_with_copies">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_equal_with_copies">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001039"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2071,7 +2071,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(S\) and \(T\) be two sector data over the same basis, without assuming their multiplicities agree. If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then there are copy-count equalities \(r_j^S = r_j^T\) for every basis block&#160;\(j\), and, after transporting along these equalities, the sector weight multisets are equal for every&#160;\(j\): </p>
 <div class="displaymath" id="a0000001040">
   \[  \{ \mu _{j,q}^{S}:1\le q\le r_j^S\}  = \{ \mu _{j,q}^{T}:1\le q\le r_j^T\} .  \]
@@ -2091,13 +2091,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_equal">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_equal">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.16</span>
-    <span class="theorem_thmtitle">Weight multiset recovery with fixed multiplicities</span>
+    <span class="lemma_thmlabel">14.16</span>
+    <span class="lemma_thmtitle">Weight multiset recovery with fixed multiplicities</span>
     <div class="thm_header_extras">
 
     
@@ -2105,7 +2105,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_equal">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_equal">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -2158,7 +2158,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(S\) and \(T\) be two sector data over the same basis with the same multiplicities (\(r_j^S = r_j^T\) for all&#160;\(j\)). If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then for each basis block&#160;\(j\) the sector weight multisets \(\{ \mu _{j,q}^S\} \) and \(\{ \mu _{j,q}^T\} \) are equal. </p>
 <p>The argument proceeds as follows: </p>
 <ol class="enumerate">
@@ -2169,17 +2169,17 @@
   <li><p>Newton–Girard \(\Rightarrow \) equal weight multisets (Theorem&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.28</a>). </p>
 </li>
 </ol>
-<p> At the level of block contributions, this is the fixed-multiplicity specialization of Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal_with_copies">14.15</a>: one compares the weighted sector sums \(\sum _j c_{S,j}^{(N)} V^{(N)}(A_j)\) and \(\sum _j c_{T,j}^{(N)} V^{(N)}(A_j)\) over the same basis block family. </p>
+<p> At the level of block contributions, this is the fixed-multiplicity specialization of Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.15</a>: one compares the weighted sector sums \(\sum _j c_{S,j}^{(N)} V^{(N)}(A_j)\) and \(\sum _j c_{T,j}^{(N)} V^{(N)}(A_j)\) over the same basis block family. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_phase_match">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_hetero_phase_match">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.17</span>
-    <span class="theorem_thmtitle">Two-basis sector comparison after phase matching</span>
+    <span class="lemma_thmlabel">14.17</span>
+    <span class="lemma_thmtitle">Two-basis sector comparison after phase matching</span>
     <div class="thm_header_extras">
 
     
@@ -2187,7 +2187,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_phase_match">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_hetero_phase_match">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001041"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2209,7 +2209,7 @@
           
           <li><a href="ch-assembly.html#lem:paper_decomp_formula">Lemma 14.10</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_equal_with_copies">Theorem 14.15</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_equal_with_copies">Lemma 14.15</a></li>
           
         </ul>
     
@@ -2239,7 +2239,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) there is a nonzero complex number \(\zeta _j\) such that </p>
 <div class="displaymath" id="a0000001042">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
@@ -2256,17 +2256,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Absorb the factors \(\zeta _j\) into the sector weights of \(Q\) and keep the basis blocks of \(P\). The phase-matching hypothesis and the sector decomposition formula show that the resulting decomposition has the same total MPV family as&#160;\(Q\), hence also as&#160;\(P\). One is then in the shared-basis situation with recovered copy counts in Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal_with_copies">14.15</a>, which yields the claimed equality of multisets. </p>
+  <p> Absorb the factors \(\zeta _j\) into the sector weights of \(Q\) and keep the basis blocks of \(P\). The phase-matching hypothesis and the sector decomposition formula show that the resulting decomposition has the same total MPV family as&#160;\(Q\), hence also as&#160;\(P\). One is then in the shared-basis situation with recovered copy counts in Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.15</a>, which yields the claimed equality of multisets. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_matched_basis">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_hetero_matched_basis">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.18</span>
-    <span class="theorem_thmtitle">Gauge-phase paired bases imply phase-matched sector comparison</span>
+    <span class="lemma_thmlabel">14.18</span>
+    <span class="lemma_thmtitle">Gauge-phase paired bases imply phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
     
@@ -2274,7 +2274,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_matched_basis">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_hetero_matched_basis">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001043"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2298,7 +2298,7 @@
           
           <li><a href="ch-mps.html#thm:gauge_phase_mpv_scaling">Theorem 2.22</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match">Theorem 14.17</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_phase_match">Lemma 14.17</a></li>
           
         </ul>
     
@@ -2328,7 +2328,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and each matched pair of basis blocks is gauge-phase equivalent. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) after multiplication by the corresponding gauge phase. </p>
 
   </div>
@@ -2341,7 +2341,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Gauge-phase equivalence gives the required phase-scaling identity for the MPVs by Theorem&#160;<a href="ch-mps.html#thm:gauge_phase_mpv_scaling">2.22</a>. The conclusion then follows immediately from Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match">14.17</a>. </p>
+  <p> Gauge-phase equivalence gives the required phase-scaling identity for the MPVs by Theorem&#160;<a href="ch-mps.html#thm:gauge_phase_mpv_scaling">2.22</a>. The conclusion then follows immediately from Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_phase_match">14.17</a>. </p>
 
   </div>
 </div>
@@ -2418,7 +2418,7 @@
   <li><p>per-block gauge-phase equivalences \(P_j \simeq _{\mathrm{gp}} Q_{\pi (j)}\) after transporting \(P_j\) across the bond-dimension equality. </p>
 </li>
 </ol>
-<p> The hypotheses consumed by Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_matched_basis">14.18</a> are exactly the fields of this matching datum. </p>
+<p> The hypotheses consumed by Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_matched_basis">14.18</a> are exactly the fields of this matching datum. </p>
 
   </div>
 </div>
@@ -2709,13 +2709,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_phase_match_copies">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_hetero_phase_match_copies">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.24</span>
-    <span class="theorem_thmtitle">Phase-matched comparison recovers copy counts</span>
+    <span class="lemma_thmlabel">14.24</span>
+    <span class="lemma_thmtitle">Phase-matched comparison recovers copy counts</span>
     <div class="thm_header_extras">
 
     
@@ -2723,7 +2723,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2743,7 +2743,7 @@
           
           <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_equal_with_copies">Theorem 14.15</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_equal_with_copies">Lemma 14.15</a></li>
           
         </ul>
     
@@ -2773,7 +2773,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions whose basis blocks are matched by a permutation and whose matched MPVs differ by nonzero phase powers. If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the matched copy counts agree. After absorbing the phases into the weights of \(Q\), the corresponding sector-weight multisets agree. </p>
 
   </div>
@@ -2786,7 +2786,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Absorb the phase powers into the sector weights of \(Q\) and write both decompositions over the basis of \(P\). Linear independence gives eventual equality of the coefficient power sums, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal_with_copies">14.15</a> recovers both the copy-count equalities and the phase-adjusted weight-multiset equalities. </p>
+  <p> Absorb the phase powers into the sector weights of \(Q\) and write both decompositions over the basis of \(P\). Linear independence gives eventual equality of the coefficient power sums, and Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.15</a> recovers both the copy-count equalities and the phase-adjusted weight-multiset equalities. </p>
 
   </div>
 </div>
@@ -2826,7 +2826,7 @@
           
           <li><a href="ch-assembly.html#def:sector_basis_matching">Definition 14.19</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">Theorem 14.24</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">Lemma 14.24</a></li>
           
         </ul>
     
@@ -2857,7 +2857,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(M\) be a sector basis pre-matching between \(P\) and \(Q\). If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the copy-count equalities recovered by Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.24</a> turn \(M\) into a full sector basis matching. </p>
+  <p>   Let \(M\) be a sector basis pre-matching between \(P\) and \(Q\). If the total MPV families agree and the basis MPVs of \(P\) are eventually linearly independent, then the copy-count equalities recovered by Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">14.24</a> turn \(M\) into a full sector basis matching. </p>
 
   </div>
 </div>
@@ -2869,7 +2869,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Gauge-phase equivalence gives the required phase-scaling identities for the corresponding basis MPVs. Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.24</a> recovers the missing copy-count equalities, which are precisely the extra fields needed for Definition&#160;<a href="ch-assembly.html#def:sector_basis_matching">14.19</a>. </p>
+  <p> Gauge-phase equivalence gives the required phase-scaling identities for the corresponding basis MPVs. Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">14.24</a> recovers the missing copy-count equalities, which are precisely the extra fields needed for Definition&#160;<a href="ch-assembly.html#def:sector_basis_matching">14.19</a>. </p>
 
   </div>
 </div>
@@ -2909,7 +2909,7 @@
           
           <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">Theorem 14.24</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">Lemma 14.24</a></li>
           
         </ul>
     
@@ -2952,7 +2952,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The gauge-phase equivalences in the pre-matching give the phase-scaling identities for the corresponding basis MPVs. Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">14.24</a> then gives the copy-count equalities and the phase-adjusted multiset equalities. </p>
+  <p> The gauge-phase equivalences in the pre-matching give the phase-scaling identities for the corresponding basis MPVs. Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_phase_match_copies">14.24</a> then gives the copy-count equalities and the phase-adjusted multiset equalities. </p>
 
   </div>
 </div>
@@ -4439,9 +4439,9 @@
           
           <li><a href="ch-assembly.html#def:sector_basis_matching">Definition 14.19</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_matched_basis">Theorem 14.18</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_matched_basis">Lemma 14.18</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_matched_basis">Theorem 14.18</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_matched_basis">Lemma 14.18</a></li>
           
         </ul>
     
@@ -4484,7 +4484,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The sector-basis matching contains exactly the permutation, copy, and gauge-phase hypotheses of Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_matched_basis">14.18</a>, so the conclusion follows directly from that theorem. </p>
+  <p> The sector-basis matching contains exactly the permutation, copy, and gauge-phase hypotheses of Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_matched_basis">14.18</a>, so the conclusion follows directly from that lemma. </p>
 
   </div>
 </div>
@@ -7777,13 +7777,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:route_b_hetero_mpv_scaling">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:route_b_hetero_mpv_scaling">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.86</span>
-    <span class="theorem_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
+    <span class="lemma_thmlabel">14.86</span>
+    <span class="lemma_thmtitle">Cast-compatible MPV scaling implies phase-matched sector comparison</span>
     <div class="thm_header_extras">
 
     
@@ -7791,7 +7791,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:route_b_hetero_mpv_scaling">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001097"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -7811,7 +7811,7 @@
           
           <li><a href="ch-assembly.html#def:paper_sector_data">Definition 14.9</a></li>
           
-          <li><a href="ch-assembly.html#thm:route_b_hetero_phase_match">Theorem 14.17</a></li>
+          <li><a href="ch-assembly.html#lem:route_b_hetero_phase_match">Lemma 14.17</a></li>
           
         </ul>
     
@@ -7841,7 +7841,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
 <div class="displaymath" id="a0000001098">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
@@ -7858,7 +7858,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> After transporting the corresponding basis tensor of \(P_j\) across the dimension identity, this is exactly the hypothesis of Theorem&#160;<a href="ch-assembly.html#thm:route_b_hetero_phase_match">14.17</a>. The conclusion is therefore the same multiset equality. </p>
+  <p> After transporting the corresponding basis tensor of \(P_j\) across the dimension identity, this is exactly the hypothesis of Lemma&#160;<a href="ch-assembly.html#lem:route_b_hetero_phase_match">14.17</a>. The conclusion is therefore the same multiset equality. </p>
 
   </div>
 </div>
@@ -7910,7 +7910,7 @@
 	
 	]
 </span>. </p>
-<p>The comparison theorems in this chapter cover this latter part of the argument. Lemma&#160;<a href="ch-assembly.html#lem:ft_equal_explicit">14.6</a> proves the equal case when the coefficient identities are given explicitly, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_same_structure">14.8</a> proves the common block-structure special case, and Theorem&#160;<a href="ch-assembly.html#thm:route_b_equal_with_copies">14.15</a> recovers the copy counts and sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.148</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.150</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.151</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
+<p>The comparison theorems in this chapter cover this latter part of the argument. Lemma&#160;<a href="ch-assembly.html#lem:ft_equal_explicit">14.6</a> proves the equal case when the coefficient identities are given explicitly, Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_same_structure">14.8</a> proves the common block-structure special case, and Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.15</a> recovers the copy counts and sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.148</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.150</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.151</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.29</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
 <p>The same comparison can also be expressed through common phases. A common MPV phase cover gives equality of finite-length nonzero-block spans by Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.33</a>. A sector basis pre-matching gives the same span equality and the primitive overlap-span hypotheses by Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">14.35</a> and Theorem&#160;<a href="ch-assembly.html#thm:sector_basis_pre_matching_to_overlap_span">14.36</a>. The BNT comparison theorems produce such common phases from a proportional-decomposition conclusion in Theorems&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">14.37</a> and&#160;<a href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">14.43</a>. </p>
 <p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and cyclic-sector families for both tensors on a common blocked alphabet. The blocked-word relabelling and the common primitive irreducible nonzero-sector decompositions are now part of the formalized reduction, culminating in Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.186</a>. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.72</a> then states the hypotheses: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.77</a> gives the corresponding conditional span consequence for the common-sector families themselves: a common MPV phase cover or a proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.79</a> adds the zero-tail and injectivity data to the common phase-cover route and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in <span class="cite">
 	[
