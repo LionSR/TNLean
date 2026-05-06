@@ -64,7 +64,7 @@ mathematical obstruction.
 
 ### Equal-norm blocks need not be gauge-phase equivalent
 
-- Location: `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`
+- Location: `TNLean/MPS/CanonicalForm/GaugePhaseFromOverlap.lean`
 - Statement refuted: equal BNT-level norms plus the full-tensor MPV hypothesis
   force non-decaying cross-overlaps, hence gauge-phase equivalence.
 - Relevance: issue #299 records the counterexample; the theorem keeps the
