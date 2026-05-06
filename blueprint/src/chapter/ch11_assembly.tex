@@ -1136,60 +1136,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	common MPV phase cover for the two block families.
 \end{proof}
 
-\begin{definition}[Proportional-comparison hypotheses for common primitive sectors]%
-\label{def:common_primitive_proportional_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
-	\leanok
-	\uses{def:injective}
-	For two common primitive nonzero-sector families at one blocking length, this
-	condition asserts equality of the two zero-tail dimensions, one-site
-	injectivity of all blocks on both sides, and a BNT proportional-decomposition
-	comparison for the two block families. These hypotheses apply to the
-	representative or grouped BNT sectors used in the comparison, not to an
-	unprocessed flattened list of cyclic sectors. It is the BNT-comparison version
-	of Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
-\end{definition}
-
-\begin{lemma}[Proportional-comparison hypotheses imply phase-cover hypotheses]%
-\label{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toPhaseCoverHypotheses}
-	\leanok
-	\uses{def:common_primitive_proportional_hypotheses,
-		def:common_primitive_phase_cover_hypotheses,
-		lem:common_phase_cover_of_proportional_decomposition}
-	If two common primitive nonzero-sector families satisfy the proportional-comparison
-	hypotheses, then they satisfy the phase-cover hypotheses of
-	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition}
-	The zero-tail equality and injectivity assumptions are already present. The BNT
-	proportional-decomposition comparison gives a common MPV phase cover by
-	Lemma~\ref{lem:common_phase_cover_of_proportional_decomposition}.
-\end{proof}
-
-\begin{lemma}[Proportional comparison implies span hypotheses]%
-\label{lem:common_primitive_proportional_hypotheses_to_span_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
-	\leanok
-	\uses{def:common_primitive_proportional_hypotheses,
-		def:common_primitive_span_hypotheses}
-	If two common primitive nonzero-sector families satisfy the proportional-comparison
-	hypotheses, then they satisfy the remaining span hypotheses of
-	Definition~\ref{def:common_primitive_span_hypotheses}.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
-		lem:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-	First convert the BNT proportional-decomposition comparison into common phase-cover
-	hypotheses. The phase-cover-to-span lemma then gives the finite-length span
-	equality together with the zero-tail and injectivity hypotheses.
-\end{proof}
-
 \begin{definition}[BNT-cover hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,

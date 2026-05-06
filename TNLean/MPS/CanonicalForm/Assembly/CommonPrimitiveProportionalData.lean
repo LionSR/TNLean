@@ -10,10 +10,10 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common primitive proportional data
 
-This file records the span, phase-cover, proportional-comparison, and BNT-cover
-hypotheses for common primitive nonzero-sector families.  These structures express
-the remaining data needed to pass from the common-sector structural theorem to
-the BNT overlap-rigidity comparison.
+This file records the span, phase-cover, and BNT-cover hypotheses for common
+primitive nonzero-sector families.  These structures express the remaining data
+needed to pass from the common-sector structural theorem to the BNT
+overlap-rigidity comparison.
 
 The zero-tail dimensions below are the total bond dimensions of the separated
 all-zero leftover blocks.  They are the dimension gaps allowed by
@@ -107,55 +107,6 @@ lemma toSpanHypotheses
     h.zeroTail_eq h.left_injective h.right_injective cover
 
 end CommonPrimitivePhaseCoverHypotheses
-
-/-- Remaining two-sided hypotheses for common primitive nonzero-sector families,
-formulated with a BNT proportional-decomposition comparison.
-
-This is the proportional-comparison version of `CommonPrimitivePhaseCoverHypotheses`: the
-structural theorem supplies the same primitive nonzero-sector data, while the remaining inputs
-are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
-BNT comparison conclusion for the two block families. -/
-structure CommonPrimitiveProportionalHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (zeroTailA zeroTailB : ℕ)
-    (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x))
-    (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)) : Prop where
-  /-- The two zero-tail dimensions agree. -/
-  zeroTail_eq : zeroTailA = zeroTailB
-  /-- The left nonzero-sector blocks are one-site injective. -/
-  left_injective : ∀ x : Fin rA, IsInjective (blocksA x)
-  /-- The right nonzero-sector blocks are one-site injective. -/
-  right_injective : ∀ x : Fin rB, IsInjective (blocksB x)
-  /-- The two nonzero-sector block families satisfy the BNT proportional comparison conclusion. -/
-  proportional : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB
-
-namespace CommonPrimitiveProportionalHypotheses
-
-/-- A proportional-decomposition comparison gives the corresponding phase-cover hypotheses. -/
-lemma toPhaseCoverHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {zeroTailA zeroTailB : ℕ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB) :
-    CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB where
-  zeroTail_eq := h.zeroTail_eq
-  left_injective := h.left_injective
-  right_injective := h.right_injective
-  cover := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
-    (d := blockPhysDim d p) blocksA blocksB h.proportional
-
-/-- A proportional-decomposition comparison gives the corresponding span hypotheses. -/
-lemma toSpanHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {zeroTailA zeroTailB : ℕ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB) :
-    CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB :=
-  h.toPhaseCoverHypotheses.toSpanHypotheses
-
-end CommonPrimitiveProportionalHypotheses
 
 /-! ### Zero-tail equality from proportional block matching -/
 
