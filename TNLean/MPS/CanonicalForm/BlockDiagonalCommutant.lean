@@ -12,19 +12,18 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 /-!
 # Block-diagonal commutants from sector projections
 
-This file isolates the algebraic part of the block-diagonal commutant argument
-for the parent-Hamiltonian block decomposition. If the sector projections of a
-dependent direct sum lie in the span of a family of matrices and a boundary
-matrix commutes with that family, then it
-commutes with the projections and hence has no off-block entries.
+The algebraic commutant argument for a dependent direct sum is separated into
+finite-dimensional hypotheses.  If the sector projections lie in the span of the
+assembled word products and a boundary matrix commutes with those products, then
+the boundary matrix commutes with every sector projection, hence has no off-block
+entries.
 
-The file also proves a finite-span reduction: if the simultaneous block word
-tuples span the full product algebra, then the sector projections lie in the
-finite word span of the assembled tensor.  The remaining paper-level CF/BNT input
-is to derive that product-word span from the separated canonical-form/BNT
-hypotheses.  Once the projection-span input is available,
-`MPSTensor.isBlockDiagonal'_of_commutes_reindexed_wordSpan` turns long-word
-commutation of the assembled boundary matrix into block diagonality.
+A second reduction obtains the sector-projection span from a product-word span
+for the blocks, provided the assembly weights are nonzero.  For canonical-form
+BNT block families, the results here use only restricted consequences of that
+data: block injectivity, nonzero weights, pair separation, selector words, and
+homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
+comparison, where multiplicities and sector weights remain explicit data.
 -/
 
 open scoped Matrix BigOperators
@@ -174,8 +173,8 @@ theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords
   intro k
   exact isNBlkInjective_one_of_isInjective (hInj.block_injective k)
 
-/-- Canonical-form/BNT data plus finite block-selector words give full product-word span. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
+/-- Canonical-form/BNT data and finite block-selector words give full product-word span. -/
+lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSel : HasBlockSelectorWords A S) :
@@ -198,9 +197,8 @@ theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords
   wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj
     (hasBlockSelectorWords_of_pairBlockSeparatingWords A hPair)
 
-/-- Canonical-form/BNT data plus pairwise block-separating word polynomials give
-full product-word span. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
+/-- Canonical-form/BNT data and pairwise block-separating words give product-word span. -/
+lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hPair : HasPairBlockSeparatingWords A S) :
@@ -222,9 +220,8 @@ theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt
   wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A hInj
     (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt A hSep)
 
-/-- Canonical-form/BNT data plus a finite pair trace-separation criterion give
-full product-word span. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+/-- Canonical-form/BNT data and fixed-length pair trace separation give product-word span. -/
+lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
@@ -253,9 +250,8 @@ theorem wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingUpTo_of_ide
       pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
         (A k) (A j) hST (hSep k j hjk) (hPad k j hjk))
 
-/-- Canonical-form/BNT data plus cumulative pair trace separation and exact
-identity padding give full product-word span. -/
-theorem wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
+/-- Canonical-form/BNT data, cumulative separation, and padding give product-word span. -/
+lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
     (hST : S ≤ T)
@@ -283,9 +279,8 @@ theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairBlockSeparatingW
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_hasInjectiveBlocks_of_pairBlockSeparatingWords A hInj hPair
 
-/-- Positive-length product-word span from canonical-form/BNT data and
-pairwise block-separating word polynomials. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
+/-- Canonical-form/BNT data and pairwise block-separating words give positive product span. -/
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairBlockSeparatingWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hPair : HasPairBlockSeparatingWords A S) :
@@ -312,9 +307,8 @@ theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A hInj hSep
 
-/-- Positive-length product-word span obtained from canonical-form/BNT data and
-the finite pair trace-separation criterion. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+/-- Canonical-form/BNT data and fixed-length pair trace separation give positive product span. -/
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
@@ -326,15 +320,14 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A
     hCF.toHasInjectiveBlocks hSep
 
-/-- Positive-length product-word span from canonical-form/BNT separation and
-the source-faithful three-block direct-sum hypotheses.
+/-- Canonical-form/BNT data and the three-block direct-sum hypotheses give product span.
 
 The BNT data supply non-gauge-equivalence for equal-dimensional distinct
 blocks.  Unequal-dimensional pairs use the strict-size branch of the
 direct-sum argument.  The fixed-length block-injectivity hypotheses are kept
 explicit, matching the direct-sum input rather than inferring them from BNT
 data. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -465,17 +458,16 @@ lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
       μ A hNCF hInj
   exact hasBiCF_of_wordTupleSpanTop A hSpan
 
-/-- Conditional positive-length product-word span from all-words pair separation plus eventual
-identity padding for every ordered pair of distinct BNT blocks.
+/-- Conditional product-word span from all-words pair separation plus eventual identity padding.
 
 The proof takes a finite maximum over the separating and padding lengths for the
 ordered block pairs, obtaining a single homogeneous word length whose block-product
 word evaluations span the full direct product algebra.
 
-This theorem does not supply BNT separation by itself: the homogeneous
+This lemma does not supply BNT separation by itself: the homogeneous
 identity-padding input must be supplied separately, preferably by fixed-length
 or period-window hypotheses. -/
-theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
+lemma exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
@@ -493,13 +485,12 @@ theorem exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
       A hSep hPad
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
-/-- Canonical-form/BNT data give all-words pair trace separation for every
-ordered pair of distinct blocks.
+/-- Canonical-form/BNT data give all-words pair trace separation.
 
 Equal-dimensional pairs use the BNT non-gauge-phase-equivalence hypothesis and
 the pair-product algebra density theorem.  Unequal-dimensional pairs use the
 dimension-mismatch pair-product density theorem. -/
-theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
+lemma pairTraceSeparatingAll_of_isCanonicalFormBNT
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) :
@@ -519,8 +510,7 @@ theorem pairTraceSeparatingAll_of_isCanonicalFormBNT
       (hCF.toHasInjectiveBlocks.block_injective j)
       hdim
 
-/-- Canonical-form/BNT data plus eventual identity padding give a common
-homogeneous trace-separating length for all ordered pairs of distinct blocks.
+/-- Canonical-form/BNT data and identity padding give homogeneous trace separation.
 
 This is the finite-maximum step after the pairwise Burnside-Jacobson
 identity-padding hypotheses have been supplied. The BNT hypotheses provide
@@ -529,7 +519,7 @@ chooses one length that works for the whole finite block family.
 
 The conclusion depends explicitly on homogeneous padding data; it is not the
 David/Perez-Garcia finite-length direct-sum input. -/
-theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -541,18 +531,17 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_pa
   exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
     A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
 
-/-- Conditional positive-length product-word span from canonical-form/BNT data plus eventual
-identity padding for every ordered pair of distinct blocks.
+/-- Canonical-form/BNT data and eventual identity padding give positive product-word span.
 
 Canonical-form/BNT separation gives all-words trace separation for distinct blocks.
 Together with eventual homogeneous identity padding for each ordered block pair, this
 gives a positive word length at which the block-product word evaluations span the full
 direct product algebra.
 
-This theorem depends explicitly on homogeneous padding data. Use a
+This lemma depends explicitly on homogeneous padding data. Use a
 fixed-length or period-window hypothesis rather than replacing that input by
 cumulative or all-words separation. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -570,13 +559,12 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
       μ A hCF hPad
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
-/-- Canonical-form/BNT data plus period-window identity-padding certificates give a common
-homogeneous trace-separating length for all ordered pairs of distinct blocks.
+/-- Canonical-form/BNT data and period-window padding give homogeneous trace separation.
 
 The BNT data supply all-words pair trace separation.  The period-window hypotheses are the
 remaining Burnside-Jacobson input needed to convert the cumulative separation data to one
 homogeneous length. -/
-theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -592,14 +580,13 @@ theorem exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_pe
   exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows
     A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
 
-/-- Product-word span from canonical-form/BNT data plus period-window identity-padding
-certificates for every ordered pair of distinct blocks.
+/-- Canonical-form/BNT data and period-window identity padding give product-word span.
 
 This is the direct word-span form of
 `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`.
 It keeps the period-window hypothesis explicit and takes a finite maximum over block pairs
 to obtain a common length for later commutant and projection-span lemmas. -/
-theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -617,13 +604,11 @@ theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows
       μ A hCF hWindow
   exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
 
-/-- Product-word span from canonical-form/BNT data plus period windows of full
-homogeneous pair spans for every ordered pair of distinct blocks.
+/-- Canonical-form/BNT data and period windows of full pair spans give product-word span.
 
-This is the same BNT finite-family wrapper as
-`exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows`, but
-with the period-window input stated as fixed-length full pair spans. -/
-theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
+This is the same finite-family conclusion as the identity-padding formulation,
+but with the period-window input stated as fixed-length full pair spans. -/
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -636,14 +621,12 @@ theorem exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_wind
       A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
   exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
 
-/-- Positive-length product-word span from canonical-form/BNT data plus a
-finite period-window identity-padding certificate for every ordered pair of
-distinct blocks.
+/-- Canonical-form/BNT data and period-window padding give positive product-word span.
 
 For a block family in canonical BNT form, it suffices to provide the finite
 period-window identity-padding certificates for the ordered pairs of distinct
 blocks.  The all-words pair separation follows from the BNT hypotheses. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
@@ -665,9 +648,8 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_wind
       μ A hCF hWindow
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
-/-- Positive-length product-word span from cumulative pair trace separation plus
-exact identity padding. -/
-theorem
+/-- Canonical-form/BNT data, cumulative separation, and padding give positive product span. -/
+lemma
     exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S T : ℕ}
@@ -705,12 +687,11 @@ theorem exists_pos_productWordSpan_of_hasInjectiveBlocks_of_blockSelectorWords
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel
 
-/-- Positive-length product-word span obtained from canonical-form/BNT data and
-finite block-selector words.
+/-- Canonical-form/BNT data and finite block-selector words give positive product span.
 
 This separates the selector-word hypothesis from the product-span conclusion, anticipating
 the finite selector-word existence theorem. -/
-theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSel : HasBlockSelectorWords A S) :
@@ -738,9 +719,8 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (d := d) (dim := dim) μ A hμ
     (wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel)
 
-/-- Canonical-form/BNT data and selector words give the projection-span input for
-the assembled tensor. -/
-theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
+/-- Canonical-form/BNT data and selector words give the assembled projection-span input. -/
+lemma blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSel : HasBlockSelectorWords A S) :
@@ -753,7 +733,7 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWord
     (d := d) (dim := dim) μ A hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero
     hCF.toHasInjectiveBlocks hSel
 
-/-- Selector-word version of the assembled-tensor commutant criterion.
+/-- Block injectivity, nonzero weights, and selector words give the commutant criterion.
 
 The finite selectors and block injectivity give the projection-span input; only
 nonzero assembly weights are needed to pass through `toTensorFromBlocks`. -/
@@ -779,7 +759,7 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWor
 Under canonical-form/BNT data, finite block selectors replace the product-word
 span hypothesis in the commutant reduction. The construction of those selectors
 from BNT separation is the remaining finite-dimensional separation theorem. -/
-theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords
+lemma isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
     (hSel : HasBlockSelectorWords A S)
