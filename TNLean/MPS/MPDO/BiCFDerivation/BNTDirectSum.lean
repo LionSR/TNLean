@@ -88,4 +88,56 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     hAj_blk hAk_blk hAj_blk3 hAk_blk3 hAj_inj hAk_inj le_rfl hL
     ⟨N, hN, hLN, hSep⟩
 
+/-- BNT-separated blocks give a common three-block homogeneous pair trace
+separation length for every ordered pair, once the direct-sum injectivity
+hypotheses are supplied.
+
+The same-dimension branch uses the BNT non-gauge-equivalence witness.  The
+unequal-dimension branch uses the strict-size part of the direct-sum argument.
+No block injectivity is inferred here; the direct-sum hypotheses remain
+explicit. -/
+theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) (L + (L + L)) := by
+  intro k j hjk
+  by_cases hdim : dim k = dim j
+  · apply pairTraceSeparatingAt_uncast_left hdim
+    exact pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
+      A hIrr hLeft hOverlap hBlocks hjk.symm hdim
+      ((isNBlkInjective_cast_dim hdim (A k) L).2 (hBlk k))
+      (hBlk j)
+      ((isNBlkInjective_cast_dim hdim (A k) (L + (L + L))).2 (hBlk3 k))
+      (hBlk3 j)
+      ((isInjective_cast_dim hdim (A k)).2 (hInj k))
+      (hInj j) hL
+  · exact pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne
+      (hBlk k) (hBlk j) (hBlk3 k) (hBlk3 j) hdim
+
+/-- Existential common-length form of
+`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`. -/
+theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hInj : ∀ k : Fin r, IsInjective (A k))
+    (hL : 1 < L) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
+  ⟨L + (L + L),
+    forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL⟩
+
 end MPSTensor

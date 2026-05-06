@@ -256,6 +256,33 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingA
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hSep
 
+/-- Positive-length product-word span from canonical-form/BNT separation and
+the source-faithful three-block direct-sum hypotheses.
+
+The BNT data supply non-gauge-equivalence for equal-dimensional distinct
+blocks.  Unequal-dimensional pairs use the strict-size branch of the
+direct-sum argument.  The fixed-length block-injectivity hypotheses are kept
+explicit, matching the direct-sum input rather than inferring them from BNT
+data. -/
+theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
+  exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
+    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+      A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
+      hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL)
+
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 

@@ -3141,6 +3141,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
     \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_gt}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
     \lean{MPSTensor.chainGroundSpace_eq_of_groundSpace_eq}
     \lean{MPSTensor.mpvSubmodule_ne_of_not_exists_mpv_eq_smul}
     \lean{MPSTensor.not_exists_mpv_eq_smul_of_not_exists_forall_mpv_eq_mul}
@@ -3151,6 +3152,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
     \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion,
         thm:chain_ground_space_eq_mpv_blk}
@@ -3181,7 +3185,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     direct-sum injectivity hypotheses remain explicit.  Zero intersection of
     the two three-block image spaces also gives homogeneous pair trace
     separation at that length once the boundary-to-chain maps at the
-    three-block length are injective.
+    three-block length are injective.  Combining the equal-dimension and
+    unequal-dimension branches over all ordered block pairs gives one common
+    three-block trace-separation length, and hence the positive-length
+    product-word span required by the selector construction.
 \end{lemma}
 
 \begin{proof}\leanok

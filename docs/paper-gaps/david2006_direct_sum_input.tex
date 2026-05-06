@@ -111,6 +111,8 @@ satisfy the homogeneous three-block trace relation.
 is the corresponding trace-separation form: once the smaller block is also
 block-injective at the three-block length, the strict-size branch gives
 homogeneous pair trace separation at that exact length.
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_isNBlkInjective_of_dim_ne}
+removes the ordering convention, using the symmetry of pair trace separation.
 The conditional directness package
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
 turns any external proof of the source contradiction
@@ -148,9 +150,13 @@ and
 \leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
 record the pair-trace versions consumed by selector and word-span
 constructions.
-This is still not the full BNT source theorem: the remaining BNT-level task is
-to instantiate these witnesses in the direct-sum induction for the paper's
-pairwise different canonical blocks, after the prescribed blocking.
+\leanid{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
+combines the same-dimension BNT branch with the strict-size branch for all
+ordered pairs of distinct blocks at the common length \(3L\), and
+\leanid{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
+feeds that common pair separation into the selector/product-span construction.
+This is still conditional on the direct-sum hypotheses: a caller must supply the
+fixed block-injectivity lengths after the prescribed blocking.
 
 The current formal development also includes downstream lemmas that depend on
 the remaining direct-sum input.
