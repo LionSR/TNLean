@@ -259,7 +259,7 @@ import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
-import TNLean.MPS.CanonicalForm.EqualNormBridge
+import TNLean.MPS.CanonicalForm.GaugePhaseFromOverlap
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
