@@ -143,6 +143,63 @@ flattened cyclic sectors, common phase covers, or cumulative pair algebras are
 formal intermediates; they are source-faithful only insofar as they are proved
 to imply the labelled BNT comparison objects above.
 
+\subsection{Formula-by-formula translation}
+
+Reading the labelled source formulas literally gives the following translation
+rules for the formal theorem surface.
+
+\begin{enumerate}
+  \item The displays \texttt{eq:II\_Aiplusk1} and \texttt{eq:II\_CF1} give a
+  block diagonal tensor
+  \[
+    A^i=\bigoplus_k \mu_k A_k^i
+  \]
+  whose displayed blocks have dimensions summing to at most the original bond
+  dimension.  The formal zero-tail parameter is therefore only the dimension of
+  the omitted all-zero summand.  It is not an additional normal tensor, a BNT
+  representative, or a separate scalar weight in the paper decomposition.
+
+  \item The phase-gauge relation \texttt{eq:II:A=XAX} and the characterization
+  \texttt{prop:char-BNT} quotient the canonical-form blocks by phase and gauge.
+  Thus the paper's BNT is a list of representatives of equivalence classes.
+  A formal common phase cover on raw cyclic sectors is not yet the paper's BNT
+  matching statement until it has been pushed down to these representatives.
+
+  \item The BNT expansion \texttt{eq:II\_ABasicTensors} and \texttt{decBSV}
+  separate the representative index \(j\) from the copy index \(q\):
+  \[
+    |V^{(N)}(A)\rangle
+      =
+    \sum_j\left(\sum_q\mu_{j,q}^N\right)|V^{(N)}(A_j)\rangle .
+  \]
+  Repeated blocks therefore appear in the paper through the power sums of the
+  weights attached to one representative.  They should not be exposed as a new
+  family of theorem-level sector-matching statements unless the statement is
+  exactly about recovering those multiplicities or weights.
+
+  \item The source definitions \texttt{defnbi} and \texttt{propblockinj} give
+  exact physical-length span after blocking:
+  \[
+    \operatorname{span}\{\tilde A^i\}_i
+      =
+    \bigoplus_j M_{D_j}(\mathbb C)
+  \]
+  for the blocked physical alphabet.  Cumulative algebra fullness, or
+  membership of the identity at length zero, is not this assertion.
+
+  \item The Fundamental Theorem \texttt{thm1} compares the BNT representatives
+  of two tensors in canonical form.  The equal-case corollary \texttt{II\_cor2}
+  then uses \texttt{Lem:app\_simple} on the already matched coefficient power
+  sums.  Hence the formal equal-case route should first establish the
+  representative matching and only then recover multiplicities and weights.
+\end{enumerate}
+
+These translation rules are also the naming rule for this part of the
+formalization.  Results that merely package raw cyclic-sector data into one of
+these hypotheses are supporting lemmas.  Theorems should be reserved for the
+source-level milestones above, or for final statements that explicitly include
+the remaining paper-facing hypotheses.
+
 \subsection{Positive-length matrix product vectors}
 
 The 2016 paper defines the matrix product vector family only for positive chain
