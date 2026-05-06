@@ -1,9 +1,10 @@
 \chapter{Proof of the Fundamental Theorem}\label{ch:assembly}
 
-This chapter proves the Fundamental Theorem of Matrix Product States.
-We state the Fundamental Theorem in two versions: one for block-injective
-tensors in canonical form with BNT separation, and one for the
-normal-canonical variant.
+This chapter records the aperiodic comparison results used in the proof of the
+Fundamental Theorem of Matrix Product States.  We first state strict special
+cases for canonical-form tensors with already selected BNT
+representatives, and then state the sector-decomposition surface that keeps the
+repeated-copy multiplicities appearing in the CPSV BNT comparison.
 We then treat the equal-MPV case, including the common-block-structure
 specialization that deduces gauge equivalence.
 The results combine the canonical form reduction
@@ -71,10 +72,10 @@ used in this chapter.
     and per-block gauge-phase equivalences.
 \end{proof}
 
-\section{Proportional Fundamental Theorem}%
+\section{Restricted Proportional Comparisons}%
 \label{sec:assembly_proportional}
 
-\begin{theorem}[Fundamental Theorem --- proportional MPV case]\label{thm:ft_proportional}
+\begin{theorem}[Proportional comparison for restricted CF-BNT data]\label{thm:ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
@@ -144,7 +145,7 @@ used in this chapter.
 	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
 \end{remark}
 
-\begin{theorem}[Proportional Fundamental Theorem in normal canonical form]\label{thm:ft_proportional_nt}
+\begin{theorem}[Proportional comparison for restricted normal-CF-BNT data]\label{thm:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -978,33 +979,6 @@ facts used to recover the lists of weights from those power sums.
 	so the conclusion follows directly from that lemma.
 \end{proof}
 
-\begin{theorem}[After-blocking sector comparison from overlap-span hypotheses]%
-\label{thm:after_blocking_sector_bnt_pair_overlap_span}
-	\lean{MPSTensor.fundamentalTheorem_after_blocking_sector_of_bntPair_overlapSpan}
-	\leanok
-	\uses{def:sector_basis_overlap_span_hyps, thm:route_b_hetero_sector_matching}
-	Let $A$ and $B$ have the same MPV family. Suppose that, after a common
-	blocking period $p>0$, there are sector decompositions $P$ and $Q$ whose
-	total tensors have the same MPVs as the blocked tensors $A^{[p]}$ and
-	$B^{[p]}$, that both decompositions have BNT linear independence, and that
-	$P$ and $Q$ satisfy the primitive overlap-span hypotheses. Then the matched
-	sector-weight conclusion holds: there is a basis permutation, equality of
-	the matched copy counts, and nonzero scalars $\zeta_j$ such that the weight
-	multiset over $P_j$ equals the multiset over $Q_{\pi(j)}$ multiplied by
-	$\zeta_j$.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{lem:sector_basis_overlap_span_to_matching, thm:route_b_hetero_sector_matching}
-	Blocking preserves the equality of the MPV families of $A$ and $B$ at the
-	common period. Composing this equality with the two sector equivalences gives
-	equality of the total MPV families of $P$ and $Q$. The primitive overlap-span
-	hypotheses produce a sector basis matching by
-	Lemma~\ref{lem:sector_basis_overlap_span_to_matching}; the two-basis
-	sector comparison theorem then gives the sector-weight multiset equalities.
-\end{proof}
-
 \begin{lemma}[Zero-tail cancellation for leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
 	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
 	\leanok
@@ -1151,10 +1125,12 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	gauge-phase equivalence, equality of the zero-tail dimensions, one-site
 	injectivity, and a proportional-decomposition comparison. When the primitive
 	structural data and strict weight ordering are supplied in place of normal
-	canonical-form data, together with the remaining conditions above, they yield the
-	BNT-cover hypotheses. The length-zero identity and the proportional matching
-	identify the zero-tail dimensions, so this equality need not be supplied
-	separately once the proportional data are present.
+	canonical-form data, together with the remaining conditions above, they give a
+	special strict-order constructor for these BNT-cover hypotheses.  The general
+	comparison surface is the sector-decomposition data with repeated copies and
+	weights, not this strict-order constructor.  The length-zero identity and the
+	proportional matching identify the zero-tail dimensions, so this equality need
+	not be supplied separately once the proportional data are present.
 \end{definition}
 
 \begin{lemma}[BNT-cover hypotheses produce a common phase cover]%

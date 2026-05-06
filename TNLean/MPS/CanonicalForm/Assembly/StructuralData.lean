@@ -67,8 +67,8 @@ The after-blocking primitive block decomposition provides:
 
 The current library already settles the common-period blocking arithmetic and
 now has a one-sided phase-class BNT construction for TP primitive irreducible
-nonzero-weight blocks, one-sided overlap data, and witness-producing sector comparison
-from primitive overlap-span hypotheses. The theorem
+nonzero-weight blocks, one-sided overlap data, and zero-tail sector comparison
+from finite-length span or BNT-cover hypotheses. The theorem
 `afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂`
 keeps the faithful paper order: first separate the all-zero leftover block and
 TP-gauge the irreducible nonzero-weight blocks, then remove each block's period by
@@ -78,8 +78,8 @@ finite blocking length used for common refinement or injectivity.
 
 The current comparison route uses the zero-tail block-span theorem
 `afterBlocking_sectorComparison_zeroTail_of_blockSpan`, and then the common
-phase-cover or BNT-cover theorems, rather than the retired common-block wrapper
-surface. This keeps the formal statement aligned with the paper-level inputs:
+phase-cover or BNT-cover theorems, rather than the retired common-block
+formulation. This keeps the formal statement aligned with the paper-level inputs:
 zero-block cancellation, finite-length span comparison, and the BNT
 sector-matching step.
 
