@@ -10,14 +10,15 @@ open Filter
 /-!
 # Zero-tail comparison for nonzero block tensors
 
-When two matrix-product-vector families are written as a zero-tail contribution
-plus a weighted nonzero block tensor, equality at positive lengths compares the
-nonzero parts directly. The length-zero equation records the residual
-zero-tail contribution, and full equality of the nonzero parts follows once the
-zero tails agree.
+When two matrix-product-vector families are written as a leftover all-zero-block
+contribution plus a weighted nonzero block tensor, equality at positive lengths
+compares the nonzero parts directly. The length-zero equation records the
+residual all-zero-block contribution, and full equality of the nonzero parts
+follows once the leftover dimensions agree.
 
-Here "zero-tail" is the total bond dimension of the separated all-zero leftover
-blocks.  It is the dimension gap allowed by `∑ k, D_k ≤ D`, where the block
+Here "zero-tail" is only the formal variable name for the total bond dimension of
+the separated all-zero leftover blocks. It is the dimension gap allowed by `∑ k, D_k ≤ D`,
+where the block
 decomposition may include zero blocks.
 
 ## References
@@ -36,14 +37,14 @@ variable {d D : ℕ}
 
 /-- **Zero-tail identity for nonzero block tensors.**
 
-Suppose two tensors with the same MPV family are each written as a zero-tail
+Suppose two tensors with the same MPV family are each written as an all-zero-block
 contribution plus a weighted nonzero block tensor. Then the nonzero parts agree at every
 positive length, while the length-zero equation gives exactly the difference
-between the zero-tail dimensions and the nonzero block bond dimensions.
+between the leftover all-zero-block dimensions and the nonzero block bond dimensions.
 
 This is the local length-zero identity needed before a full `SameMPV₂` comparison of the
 nonzero block tensors can be recovered: the only missing datum is equality of the
-two zero-tail dimensions (or an equivalent replacement for the `N = 0` case). -/
+two leftover all-zero-block dimensions (or an equivalent replacement for the `N = 0` case). -/
 theorem nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -88,10 +89,10 @@ theorem nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
 
 /-- **Reblocked nonzero-block equality with a zero-tail identity.**
 
-If two tensors have the same MPVs and each is expressed as a zero tail plus a
+If two tensors have the same MPVs and each is expressed as a leftover all-zero block plus a
 weighted nonzero block tensor, then every positive common reblocking transports the
 nonzero weights to powers, preserves positive-length equality of the nonzero parts,
-and leaves the zero-tail contribution as the sole length-zero term. -/
+and leaves the all-zero-block contribution as the sole length-zero term. -/
 theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
     {d D₁ D₂ rA rB p : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -147,12 +148,12 @@ theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sam
       hAblock hBblock
   exact ⟨fun N hN σ => hBook.1 hN σ, hBook.2⟩
 
-/-- **Recover full nonzero-block `SameMPV₂` once zero tails agree.**
+/-- **Recover full nonzero-block `SameMPV₂` once leftover all-zero blocks agree.**
 
 This combines the positive-length theorem with the single additional
-length-zero datum needed to remove the zero tails. It does not assert that the
-zero-tail dimensions agree automatically; that remains a separate paper-level
-length-zero condition for the unconditional after-blocking sector comparison. -/
+length-zero datum needed to remove the leftover all-zero blocks. It does not assert that the
+leftover dimensions agree automatically; that remains a separate paper-level length-zero
+condition for the unconditional after-blocking sector comparison. -/
 theorem nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
