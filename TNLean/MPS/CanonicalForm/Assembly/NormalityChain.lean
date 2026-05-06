@@ -15,11 +15,14 @@ This file collects the part of the canonical-form reduction that upgrades
 TP-primitive irreducible blocks to normal blocks and shows that normality is
 preserved by blocking.
 
-The core chain is the standard Perron–Frobenius route: peripheral primitivity
-and tensor irreducibility give a primitive fixed point, irreducibility upgrades
-that fixed point to positive definiteness, and the positive-definite fixed point
-implies normality. A separate word-span argument then shows that blocking keeps
-normality.
+The core chain is the channel Perron–Frobenius route with all hypotheses kept
+separate: trace preservation fixes the normalization convention, peripheral
+primitivity says that the peripheral spectrum of the transfer map is `{1}`,
+tensor irreducibility rules out nontrivial invariant projections, and these
+inputs produce a positive definite Perron fixed point.  The primitive spectral
+gap together with this faithful fixed point gives eventual full Kraus rank,
+which is the normality condition used here. A separate word-span argument then
+shows that blocking keeps normality.
 
 ## Main statements
 
@@ -34,6 +37,7 @@ normality.
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
+* [Wolf, *Quantum Channels & Operations*, Chapter 6]
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
 ## Tags
@@ -48,7 +52,7 @@ variable {d D : ℕ}
 /-!
 ## Per-block chain from TP + primitive + irreducible to IsNormal
 
-For a single block that is TP, has a primitive transfer map, AND is irreducible
+For a single block that is TP, has a primitive transfer map, and is irreducible
 (all three conditions), the full chain to `IsNormal` is available:
 
 1. `_root_.IsPrimitive (transferMap A)` + `IsIrreducibleTensor A` + TP
@@ -68,25 +72,31 @@ For a single MPS tensor that is left-canonical (TP), has a primitive transfer ma
 (peripheral eigenvalues = {1}), and is irreducible (no nontrivial invariant
 projection), the tensor is normal (eventually full Kraus rank).
 
-This chains:
-- Peripheral primitivity + irreducibility → existence of a primitive fixed point
-- Spectral-gap + irreducibility → PosDef fixed point
-- Spectral-gap + PosDef → HasEventuallyFullKrausRank → IsNormal -/
+Here `hPrim` is the peripheral-primitivity hypothesis for the transfer map:
+the only peripheral eigenvalue is `1`.  The conclusion is obtained by the
+following implications:
+
+* TP + peripheral primitivity + irreducibility give an `IsPrimitiveMPS` datum,
+  including a Perron fixed point for the transfer map.
+* Irreducibility upgrades the nonzero positive semidefinite Perron fixed point
+  in that datum to a positive definite, faithful fixed point.
+* The primitive spectral gap together with the faithful fixed point gives
+  eventual full Kraus rank, equivalently `IsNormal A`. -/
 theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (hIrr : IsIrreducibleTensor A) :
     IsNormal A := by
-  -- Step 1: Get spectral-gap primitivity from peripheral primitivity + irreducibility.
+  -- Step 1: Peripheral primitivity plus irreducibility gives primitive MPS data.
   have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
     hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
-  -- Step 2: Extract the PSD fixed point.
+  -- Step 2: Extract the Perron fixed point.
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
   -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.
   have hPD : ρ.PosDef :=
     posDef_of_isIrreducibleTensor_of_isPrimitiveMPS hPrimMPS hIrr
-  -- Step 4: IsNormal from spectral gap + PosDef.
+  -- Step 4: IsNormal from the primitive spectral gap and a faithful fixed point.
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
 
 /-- **TP + primitive + irreducible → injective after blocking**.
