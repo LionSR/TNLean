@@ -248,12 +248,12 @@ def ofCommonPrimitiveData
     have hDimA : ∀ x, 0 < dimA x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimA x))
     exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA
-      hAntiA.antitone
+      hAntiA
   ncfB := by
     have hDimB : ∀ x, 0 < dimB x := fun x => Nat.pos_of_ne_zero (NeZero.ne (dimB x))
     exact isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB
-      hAntiB.antitone
+      hAntiB
   notGpeA := hNotGpeA
   notGpeB := hNotGpeB
   zeroTail_eq := hZeroTail
@@ -303,11 +303,11 @@ def ofCommonPrimitiveData_zeroTailIdentity
   have hNcfA : IsNormalCanonicalForm (d := blockPhysDim d p) μA blocksA :=
     isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μA) blocksA hTPA hPrimA hDimA hμA hIrrA
-      hAntiA.antitone
+      hAntiA
   have hNcfB : IsNormalCanonicalForm (d := blockPhysDim d p) μB blocksB :=
     isNormalCanonicalForm_of_tp_primitive_irr_sorted
       (d' := blockPhysDim d p) (μ := μB) blocksB hTPB hPrimB hDimB hμB hIrrB
-      hAntiB.antitone
+      hAntiB
   have hMatch : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB :=
     fundamentalTheorem_of_separated_normalCFBNT_data
       blocksA blocksB hNcfA hNotGpeA hNcfB hNotGpeB hDecomp
