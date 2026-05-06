@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
-import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
@@ -34,12 +33,6 @@ coefficients from the hypotheses of the source-paper theorem is not part of this
 (`sameMPV₂_implies_proportionalMPV₂`)
 
 Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
-
-### Power-sum multiset equality
-(`power_sum_eq_implies_multiset_eq`)
-
-If two sequences of complex numbers have equal power sums for all exponents, their multisets
-(as roots) are equal. This is the formalized version of Lemma Lem:app_simple from the paper.
 
 ## References
 
@@ -459,26 +452,6 @@ lemma fundamentalTheorem_equalMPV_of_explicit_coefficients
     simp only [toTensorFromBlocks, Bweighted, one_smul]
   rw [hA_tot, hB_tot]
   exact hGaugeWeighted
-
-/-! ## Power-sum multiset equality
-
-This gives the paper's auxiliary power-sum lemma in the notation of the BNT
-comparison.  It is not an additional Fundamental Theorem statement.
--/
-
-/-- **Equal power sums imply equal multisets.**
-
-If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
-`∑ i, (α i)^k = ∑ i, (β i)^k` for all positive `k`, then `α` and `β` have the same
-multiset of values (counted with multiplicity).
-
-This is the paper's auxiliary power-sum lemma, proved via Newton's identities
-(`Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`). -/
-lemma power_sum_eq_implies_multiset_eq (n : ℕ)
-    (α β : Fin n → ℂ)
-    (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
-    Finset.univ.val.map α = Finset.univ.val.map β :=
-  Matrix.sum_pow_eq_implies_multiset_eq α β h
 
 /-! ## Combined corollaries -/
 

@@ -15,7 +15,12 @@ equal power sums for all positive exponents, then their diagonal matrices have e
 characteristic polynomials, and consequently the two families give rise to the same multiset of
 values.
 
-This is the content of **Lemma Lem:app_simple** of arXiv:1606.00608 (lines 1155–1163).
+This is the same-cardinality, all-positive-exponent support lemma used for the
+power-sum argument in **Lemma Lem:app_simple** of arXiv:1606.00608
+(lines 1155-1163). The paper's lemma is sharper: it compares two sorted finite
+families whose cardinalities are not assumed equal, only needs finitely many
+power sums up to the larger cardinality, and concludes equality of the ordered
+families.
 
 ## Strategy
 
@@ -49,10 +54,13 @@ theorem trace_diagonal_pow (a : n → ℂ) (k : ℕ) :
     trace (diagonal a ^ k) = ∑ i, a i ^ k := by
   simp [diagonal_pow, trace_diagonal]
 
-/-- **Scalar power-sum identity** (Lemma Lem:app_simple of arXiv:1606.00608).
+/-- **Scalar power-sum identity.**
 
 If two families of complex scalars, indexed by the same finite type, have equal power sums for all
-positive exponents, then their characteristic polynomials (as diagonal matrices) agree. -/
+positive exponents, then their characteristic polynomials (as diagonal matrices) agree.
+This is a same-cardinality support lemma for the power-sum step in
+arXiv:1606.00608 (Appendix, lines 1155-1163), not the exact finite-range
+statement proved there. -/
 theorem sum_pow_eq_implies_charpoly_diagonal_eq
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
