@@ -98,6 +98,23 @@ inputs:
     required: false
     default: ''
 
+  system_prompt:
+    description: 'Optional system prompt to inject via --append-system-prompt.'
+    required: false
+    default: ''
+  system-prompt:
+    description: 'Optional system prompt to inject via --append-system-prompt.'
+    required: false
+    default: ''
+  system_prompt_file:
+    description: 'Optional path to a system-prompt file.'
+    required: false
+    default: ''
+  system-prompt-file:
+    description: 'Optional path to a system-prompt file.'
+    required: false
+    default: ''
+
   claude_args:
     description: 'Legacy underscore key for additional claude args.'
     required: false
@@ -196,12 +213,42 @@ runs:
             allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
           fi
 
+          system_prompt="${{ inputs.system-prompt }}"
+          if [ -z "$system_prompt" ]; then
+            system_prompt="${{ inputs.system_prompt }}"
+          fi
+          if [ -z "$system_prompt" ]; then
+            system_prompt_path="${{ inputs.system-prompt-file }}"
+            if [ -z "$system_prompt_path" ]; then
+              system_prompt_path="${{ inputs.system_prompt_file }}"
+            fi
+            if [ -n "$system_prompt_path" ]; then
+              if [ ! -f "$system_prompt_path" ]; then
+                echo "::error::System prompt file not found: ${system_prompt_path}"
+                exit 1
+              fi
+              system_prompt="$(cat "$system_prompt_path")"
+            fi
+          fi
+          if [ -z "$system_prompt" ] && [ -n "${CLAUDE_APPEND_SYSTEM_PROMPT-}" ]; then
+            system_prompt="${CLAUDE_APPEND_SYSTEM_PROMPT}"
+          fi
+          if [ -n "$system_prompt" ] && [ -n "$system_prompt" ]; then
+            system_prompt="$(printf '%s' "$system_prompt" | tr '\n' ' ')"
+          fi
+
           plugins='${{ inputs.plugins }}'
           prompt='${{ inputs.prompt }}'
 
           claude_args='${{ inputs.claude_args }}'
           if [ -z "$claude_args" ]; then
             claude_args="${{ inputs['claude-args'] }}"
+          fi
+          if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
+            if [ -n "$claude_args" ]; then
+              claude_args="${claude_args} "
+            fi
+            claude_args="${claude_args}--append-system-prompt \"${system_prompt}\""
           fi
           if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
             if [ -n "$claude_args" ]; then

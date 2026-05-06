@@ -77,6 +77,8 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
+          system-prompt-file: .github/prompts/blueprint-prose-review-system-prompt.md
+          allowed-tools: "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           prompt: |
             Review this PR for TWO categories ONLY:
@@ -228,7 +230,3 @@ jobs:
                             comments(first: 1) { nodes { author { login } body } } }
                     pageInfo { hasNextPage endCursor } } } } }'
             ```
-
-          claude-args: |
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
-            --append-system-prompt "TNLean is a Lean 4 / Mathlib formalization of MPS / quantum-channel / Wielandt theory. You are a focused reviewer with TWO concerns: (A) blueprint ↔ Lean **mathematical equivalence and status accuracy** — verify that the blueprint statement matches the Lean signature on quantifiers, hypotheses, conclusion, indices, and notation; verify that every \\leanok actually holds (no sorry/admit/native_decide in the cited proof) and every \\notready is still genuinely not-ready; flag missing \\leanok on now-formalized results and stale \\lean{...} tags after renames. (B) prose quality per docs/prose_style.md (no Lean jargon, no banned SE/LLM language). Do NOT comment on proof integrity, Mathlib style, performance, modularity, or other concerns reviewed by the main workflow. The project's Fact-Check Lessons in docs/blueprint_style_guide.md document common subtle mismatches (e.g. mpvOverlap vs mpvInner conjugation, KS for unital vs TP maps) — apply that level of mathematical care. Apply judgment on context-sensitive prose entries; the prose doc says which."

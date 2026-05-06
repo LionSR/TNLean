@@ -128,12 +128,6 @@ jobs:
             printf '\nEOF\n'
           } >> "$GITHUB_OUTPUT"
 
-          {
-            printf 'system_prompt<<EOF\n'
-            cat .github/prompts/claude-code-review-system-prompt.md
-            printf '\nEOF\n'
-          } >> "$GITHUB_OUTPUT"
-
       - name: Run Claude Code Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         id: claude-review
@@ -149,5 +143,4 @@ jobs:
             code-review@claude-code-plugins
             lean@leanprover
           prompt: ${{ steps.review-prompts.outputs.prompt }}
-          claude-args: |
-            --append-system-prompt "${{ steps.review-prompts.outputs.system_prompt }}"
+          system-prompt-file: .github/prompts/claude-code-review-system-prompt.md

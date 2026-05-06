@@ -44,6 +44,8 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
+          system-prompt-file: .github/prompts/lean-audit-system-prompt.md
+          allowed-tools: "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
           prompt: |
             REPO: ${{ github.repository }}
             BRANCH: ${{ github.ref_name }}
@@ -60,7 +62,3 @@ jobs:
             paper or blueprint source when available. Avoid AI vocabulary,
             software-process metaphors, and local shorthand when describing
             mathematics.
-
-          claude-args: |
-            --allowedTools "Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
-            --append-system-prompt "This is a Lean 4 / Mathlib formalization project for quantum information theory. Be thorough and precise. Report findings in clean markdown format."

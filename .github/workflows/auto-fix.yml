@@ -233,7 +233,7 @@ jobs:
         - Blueprint sync: when adding or completing (removing sorry from) theorems/lemmas/defs, update the corresponding blueprint/src/chapter/ entry — add `\lean{DeclarationName}` and `\leanok` tags for new results, or add `\leanok` to `\begin{proof}` for newly proven results.
         If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt: "This is a Lean 4 / Mathlib repository. Prefer minimal diffs. You MUST fully close every lemma and theorem — never leave sorry, admit, native_decide on non-trivial goals, or any placeholder. Hold your fix to the same 8-category quality bar used by Claude Code Review (proof integrity, proof correctness, Mathlib style, type safety, performance, modularity, documentation, blueprint sync). See docs/PROOF_INTEGRITY.md for the full integrity ruleset. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and Notes/ and cite the specific paper/section. Validate all changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+      claude_system_prompt_file: .github/prompts/auto-fix-ci-system-prompt.md
 
   # ──────────────────────────────────────────────────────
   # Blueprint compilation auto-fix
@@ -279,7 +279,7 @@ jobs:
         6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
         7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.
       claude_allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
-      claude_system_prompt: "This is a Lean 4 math formalization project with a leanblueprint documentation system. The blueprint uses LaTeX files in blueprint/src/chapter/ with special commands: \\lean{DeclName}, \\leanok, \\uses{label}, \\label{...}. Fix only the blueprint compilation errors. Prefer minimal diffs. Validate with leanblueprint web before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR with a summary of your fix."
+      claude_system_prompt_file: .github/prompts/auto-fix-blueprint-system-prompt.md
 
   # ──────────────────────────────────────────────────────
   # Review comments auto-fix
@@ -349,6 +349,7 @@ jobs:
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
+          allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
           prompt: |
             The automated code review found issues in this PR. Your task is to fix them.
 
@@ -411,6 +412,4 @@ jobs:
             - Paper-gap notes: changed notes under docs/paper-gaps/ must follow `docs/paper-gaps/policy.tex`; they should introduce notation, state the cited assertion, isolate the mathematical obstruction, compare with the blueprint and Lean statement when relevant, and give a precise verdict for third-party mathematical readers.
             If you cannot satisfy a BLOCKER category, STOP and post a PR comment explaining the obstacle instead of pushing a half-fix.
 
-          claude-args: |
-            --allowedTools "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository. Fix only the issues raised in the review. Prefer minimal diffs. Hold your fix to the same quality bar used by Claude Code Review (proof integrity, proof correctness, Mathlib style, type safety, performance, modularity, documentation, blueprint sync, and paper-gap notes). See docs/PROOF_INTEGRITY.md for the full integrity ruleset and docs/paper-gaps/policy.tex for paper-gap note standards. Use your judgment on when Mathlib scouting is warranted — it is essential when closing sorrys or rewriting proofs, but unnecessary for naming fixes, docstrings, style changes, or paper-gap prose unless a formal statement is involved. When scouting IS needed, use exact?, apply?, rw?, simp?, and grep Mathlib source files. Reuse Mathlib lemmas rather than reproving from scratch. If a mathematical result looks wrong, too strong, or suspiciously general, scout the LaTeX sources in Papers/ and Notes/ where the original theorems and proofs are stored — read the relevant sections, compare hypotheses and conclusions, and cite the specific paper/section when flagging a discrepancy. Generated PR comments should name the theorem, lemma, definition, proof obligation, or paper-gap assertion directly and cite paper or blueprint path, line, label, and short quotation or precise paraphrase when available. You MUST fully close every lemma and theorem — never leave sorry, admit, native_decide on non-trivial goals, or any placeholder. Validate Lean changes with lake build before committing. Use GitHub MCP tools (mcp__github__*) to comment on the PR."
+          system-prompt-file: .github/prompts/auto-fix-review-system-prompt.md

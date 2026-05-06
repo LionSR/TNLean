@@ -103,6 +103,8 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
+          system-prompt-file: .github/prompts/mathlib-scout-system-prompt.md
+          allowed-tools: "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
 
           prompt: |
             A Mathlib scouting report has been requested for a formalization
@@ -156,7 +158,3 @@ jobs:
                - Things not yet in Mathlib or TNLean that will need new definitions/lemmas.
 
             5. Do NOT create any files, branches, or PRs. Only post the scouting comment.
-
-          claude-args: |
-            --allowedTools "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
-            --append-system-prompt "This is a Lean 4 / Mathlib repository for quantum information theory (MPS tensors, quantum channels, Wielandt theorem). Your ONLY task is to scout Mathlib and the existing codebase for relevant lemmas and post a scouting report. Do NOT write code or create files. Be thorough -- search multiple keywords and naming conventions. Mathlib sources are under .lake/packages/mathlib/Mathlib/."

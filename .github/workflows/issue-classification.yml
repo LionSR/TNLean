@@ -54,6 +54,8 @@ jobs:
           deepseek-opus-model: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
           deepseek-sonnet-model: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
           model-tier: sonnet
+          system-prompt-file: .github/prompts/issue-classification-system-prompt.md
+          allowed-tools: "Read,Glob,Grep,mcp__github__*"
           allowed_bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           prompt: |
             A human-authored issue has been opened in this Lean 4 formalization
@@ -136,9 +138,6 @@ jobs:
               anchor, attaching the issue to a tracking issue, waiting for the
               Mathlib scouting report, or opening a focused pull request.
 
-          claude-args: |
-            --allowedTools "Read,Glob,Grep,mcp__github__*"
-            --append-system-prompt "This workflow performs issue classification only. It may read repository documentation, add labels to the opened issue, and post one concise issue comment. It must not edit repository files, create branches, open pull requests, or perform code changes. Public comments should use ordinary mathematical and repository-maintenance prose."
 
       - name: Preliminary classification for outside reports
         if: ${{ !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) }}
