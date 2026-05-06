@@ -24,7 +24,7 @@ The canonical-form reduction produces TP + primitive blocks with
 nonzero weights. Equal-modulus blocks are not automatically one BNT sector:
 the source BNT construction keeps minimal gauge-phase representatives and
 records repeated copies through sector weights. The phase-class construction in
-`PhaseClassSectorData.lean` is the source-facing route for that step.
+`PhaseClassSectorData.lean` carries out that construction.
 
 ## Important: equal-norm blocks are NOT automatically gauge-phase equivalent
 
