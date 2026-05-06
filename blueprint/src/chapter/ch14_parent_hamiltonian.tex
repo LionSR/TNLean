@@ -3154,6 +3154,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
+    \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion,
         thm:chain_ground_space_eq_mpv_blk}
@@ -3187,7 +3188,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     three-block length are injective.  Combining the equal-dimension and
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
-    product-word span required by the selector construction.
+    product-word span required by the selector construction.  Since
+    canonical-form/BNT blocks are one-site injective, one may take \(L=2\);
+    injectivity at lengths \(2\) and \(6\) then follows by passing from a
+    fixed injective length to positive multiples.
 \end{lemma}
 
 \begin{proof}\leanok
