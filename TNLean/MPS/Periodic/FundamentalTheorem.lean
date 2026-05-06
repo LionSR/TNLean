@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Defs
+import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap
@@ -830,12 +831,12 @@ theorem perBlock_zgauge_of_power_eq
 /-- **Weight multiset recovery via Newton-Girard (Theorem 3.8, step 6).**
 
 If two weight families have equal power sums for all positive exponents, they determine
-the same multiset. Direct reformulation of `power_sum_eq_implies_multiset_eq`. -/
+the same multiset. Direct reformulation of `Matrix.sum_pow_eq_implies_multiset_eq`. -/
 theorem weight_multisets_eq_of_power_sums_eq
     {r : ℕ} (μ ν : Fin r → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin r, μ i ^ k = ∑ i : Fin r, ν i ^ k) :
     Finset.univ.val.map μ = Finset.univ.val.map ν :=
-  power_sum_eq_implies_multiset_eq r μ ν h
+  Matrix.sum_pow_eq_implies_multiset_eq μ ν h
 
 /-- **Full Z-gauge construction (Theorem 3.8, steps 5–7 composed).**
 

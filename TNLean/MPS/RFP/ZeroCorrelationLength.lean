@@ -7,7 +7,6 @@ import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.BNT.Construction
 import TNLean.Spectral.SpectralGap
-import TNLean.Algebra.ScalarPowerSumIdentity
 
 /-!
 # Zero correlation length (ZCL) for MPS tensors
