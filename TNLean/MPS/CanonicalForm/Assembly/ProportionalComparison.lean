@@ -7,11 +7,11 @@ import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 /-!
-# Sector comparisons from common MPV phase covers
+# Sector comparisons from common primitive data
 
 The results here give after-blocking sector-comparison consequences from finite-length span
-comparisons and common MPV phase covers, and record the special case where the cover comes from a
-BNT proportional-decomposition comparison of the nonzero-weight block families.
+comparisons, common MPV phase covers, and BNT proportional-decomposition comparisons of the
+nonzero-weight block families.
 
 The zero-tail hypotheses mentioned below compare the total bond dimensions of
 the separated all-zero leftover blocks.  These dimensions are the gaps allowed
@@ -20,15 +20,13 @@ by `∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 ## Main statements
 
 * `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` contains the basic
-  proportional-decomposition, block-span, and common-phase-cover sector comparisons.
+  block-span sector comparison.
 * `TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison` contains the
   overlap-span hypothesis constructors from common primitive data.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` — the
   common-length cyclic-sector output, together with the blocked-word relabeling
   equality and the remaining zero-tail, injectivity, and common-cover assertions,
   implies the sector-weight comparison.
-* `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
-  the zero-tail common-cover theorem applied to BNT proportional-decomposition data.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses` —
   the common primitive nonzero-sector theorem, followed by the remaining zero-tail,
   injectivity, and finite-length span hypotheses.
