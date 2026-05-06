@@ -6528,19 +6528,37 @@
 </div>
 <h1 id="sec:cyclic_sectors">11.12 Cyclic sector decomposition</h1>
 
-<p>The source input is the cyclic peripheral structure of an irreducible unital map from <span class="cite">
+<p>The non-periodic canonical-form argument of <span class="cite">
 	[
 	
-	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Chapter&#160;6
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	
 	]
-</span>, applied to the adjoint transfer map, together with the cyclic-block form used in <span class="cite">
+</span> uses only the blocking consequence: after blocking by the least common multiple of the periods, each block has no non-trivial peripheral period. The explicit projection-sector form used here comes from the periodic decomposition of <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, Theorem&#160;5.7
+	]
+</span>, refined by the cyclic-block form in <span class="cite">
 	[
 	
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
 	, equation&#160;(1) and Lemma&#160;1
 	]
-</span>. The source writes \(\mathcal{E}_A^\dagger (P_u)=P_{u+1}\) and \(A^i=\sum _u P_u A^i P_{u+1}\). After reversing the cyclic order, the convention here is, with sector indices modulo the period \(m\), </p>
+</span>, together with the cyclic peripheral structure of an irreducible unital map from <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;6
+	]
+</span>. In the convention of <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	
+	]
+</span>, the sector projections satisfy \(A^i P_u=P_{u-1} A^i\). After reversing the cyclic order, the convention here is, with sector indices modulo the period \(m\), </p>
 <div class="displaymath" id="a0000000850">
   \[  \mathcal{E}_A^\dagger (P_{u+1}) = P_u,\qquad A^i = \sum _u P_{u+1} A^i P_u .  \]
 </div>
@@ -6938,13 +6956,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:cyclic_projection_periodic_fixed">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:cyclic_projection_periodic_fixed">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">11.78</span>
-    <span class="theorem_thmtitle">One full cyclic turn fixes the sector projections</span>
+    <span class="lemma_thmlabel">11.78</span>
+    <span class="lemma_thmtitle">One full cyclic turn fixes the sector projections</span>
     <div class="thm_header_extras">
 
     
@@ -6952,7 +6970,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#thm:cyclic_projection_periodic_fixed">#</a>
+    <a class="icon proof" href="ch-canonical.html#lem:cyclic_projection_periodic_fixed">#</a>
     
     <a class="icon proof" href="ch-canonical.html#a0000000857"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -6980,8 +6998,8 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>  If a family of projections \((P_k)_{k=1}^m\) satisfies \(\mathcal{E}^\dagger (P_{k+1}) = P_k\), then the \(m\)-th iterate of \(\mathcal{E}^\dagger \) fixes each projection \(P_k\). </p>
+  <div class="lemma_thmcontent">
+  <p>  If a family of projections \((P_k)_{k=0}^{m-1}\) satisfies \(\mathcal{E}^\dagger (P_{k+1}) = P_k\), then the \(m\)-th iterate of \(\mathcal{E}^\dagger \) fixes each projection \(P_k\). </p>
 
   </div>
 </div>
@@ -7123,7 +7141,7 @@
           
           <li><a href="ch-canonical.html#thm:blockdecomp_adjoint_fixed">Theorem 11.76</a></li>
           
-          <li><a href="ch-canonical.html#thm:cyclic_projection_periodic_fixed">Theorem 11.78</a></li>
+          <li><a href="ch-canonical.html#lem:cyclic_projection_periodic_fixed">Lemma 11.78</a></li>
           
           <li><a href="ch-canonical.html#thm:blocked_adjoint_transfer_pow">Theorem 11.79</a></li>
           
@@ -7180,7 +7198,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The cyclic decomposition of the adjoint transfer map gives projections \((P_k)\) with \(\mathcal{E}_{A^\dagger }(P_{k+1}) = P_k\). Theorem&#160;<a href="ch-canonical.html#thm:cyclic_projection_periodic_fixed">11.78</a> upgrades this to \((\mathcal{E}_{A^\dagger })^m(P_k) = P_k\), and Theorem&#160;<a href="ch-canonical.html#thm:blocked_adjoint_transfer_pow">11.79</a> identifies \((\mathcal{E}_{A^\dagger })^m\) with the adjoint transfer map of the blocked tensor. Apply Theorem&#160;<a href="ch-canonical.html#thm:blockdecomp_adjoint_fixed">11.76</a>. </p>
+  <p> The cyclic decomposition of the adjoint transfer map gives projections \((P_k)\) with \(\mathcal{E}_{A^\dagger }(P_{k+1}) = P_k\). Lemma&#160;<a href="ch-canonical.html#lem:cyclic_projection_periodic_fixed">11.78</a> upgrades this to \((\mathcal{E}_{A^\dagger })^m(P_k) = P_k\), and Theorem&#160;<a href="ch-canonical.html#thm:blocked_adjoint_transfer_pow">11.79</a> identifies \((\mathcal{E}_{A^\dagger })^m\) with the adjoint transfer map of the blocked tensor. Apply Theorem&#160;<a href="ch-canonical.html#thm:blockdecomp_adjoint_fixed">11.76</a>. </p>
 
   </div>
 </div>
