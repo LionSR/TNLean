@@ -20,7 +20,7 @@ The four remaining hypotheses are:
 |---|-----------|----------------|-------|--------|
 | H1 | Blocked-word Fintype coordinate equality | `flattenWordOfBlock_cast_eq` `sorry` | #1075 / #990 / #1113 (`flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`) | Pure Lean bookkeeping (Fintype instance compatibility) |
 | H2 | Common nonzero-block decomposition after relabeling | `CommonSectorRelabelingHypothesis d` | #942 | Derived from H1 (H1 → H2 via `CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`) |
-| H3 | Zero-tail equality + injectivity + common phase cover / proportional BNT comparison | `CommonPrimitivePhaseCoverHypotheses` (or `CommonPrimitiveProportionalHypotheses`) | #1068 / #652 | Genuine paper-level math |
+| H3 | Zero-tail equality + injectivity + common phase cover / BNT-cover comparison | `CommonPrimitivePhaseCoverHypotheses` (or the `CommonPrimitiveBNTCoverHypotheses` bridge) | #1068 / #652 | Genuine paper-level math |
 | H4 | (Resolved: one-sided BNT construction with overlap data) | `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho` | #877 / #945 / #923 | Resolved (Wave 17G PR #945) |
 
 The conditional after-blocking theorem `fundamentalTheorem_afterBlocking_of_comparisonHypotheses`
@@ -52,7 +52,7 @@ Each step in this chain is now explained in detail.
 
 **Structure:** `AfterBlockingFundamentalTheoremHypotheses` bundles:
 - `relabel : CommonSectorRelabelingHypothesis d`
-- `comparison :` (a forall accepting the produced common nonzero-sector families and requiring `CommonPrimitiveProportionalHypotheses`)
+- `comparison :` (a forall accepting the produced common nonzero-sector families and requiring BNT-cover data for them)
 
 **Theorem:** `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` takes
 `SameMPV₂ A B` and `AfterBlockingFundamentalTheoremHypotheses A B` and produces
@@ -111,9 +111,9 @@ Once H1 and H2 give us the common nonzero-block families, we still need:
 - `right_injective : ∀ x, IsInjective (blocksB x)` — right injectivity
 - `cover : Nonempty (MPVCommonPhaseCover blocksA blocksB)` — a common MPV phase cover
 
-**Equivalent form:** `CommonPrimitiveProportionalHypotheses` requires
-`ProportionalDecompositionConclusion` (a BNT proportional-decomposition comparison),
-which implies the common phase cover via `common_phase_cover_of_proportional_decomposition_conclusion`.
+**BNT-cover form:** `CommonPrimitiveBNTCoverHypotheses` packages the normal
+canonical-form data, gauge-phase separation, injectivity, zero-tail equality, and
+proportional-decomposition data needed to construct a common MPV phase cover.
 
 **Status:** These structures are defined, and the theorems that use them are proved.
 The question is: can we discharge them from the structural reduction?
