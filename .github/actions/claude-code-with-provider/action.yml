@@ -358,7 +358,6 @@ runs:
             ;;
         esac
 
-        write_output auth_token "$token"
         write_output claude_code_oauth_token "$claude_code_oauth_token"
         write_output anthropic_api_key "$anthropic_api_key"
         write_output base_url "$base_url"
@@ -378,7 +377,6 @@ runs:
       env:
         ANTHROPIC_BASE_URL: ${{ steps.resolve.outputs.base_url }}
         ANTHROPIC_API_KEY: ${{ steps.resolve.outputs.anthropic_api_key }}
-        ANTHROPIC_AUTH_TOKEN: ${{ steps.resolve.outputs.auth_token }}
       with:
         claude_code_oauth_token: ${{ steps.resolve.outputs.claude_code_oauth_token }}
         anthropic_api_key: ${{ steps.resolve.outputs.anthropic_api_key }}

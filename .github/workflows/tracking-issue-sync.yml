@@ -71,17 +71,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout trusted automation
+        if: steps.claude-switch.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.event.repository.default_branch }}
+          path: .trusted-actions
+          fetch-depth: 1
+
       - name: Run Claude Code
         if: steps.claude-switch.outputs.skip != 'true'
         id: claude
-        uses: ./.github/actions/claude-code-with-provider
+        uses: ./.trusted-actions/.github/actions/claude-code-with-provider
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           allowed-bots: '*'
           allowed_tools_preset: tracking-issue-sync
 
-          claude-prompt-file: .github/prompts/tracking-issue-sync-prompt.md
+          claude-prompt-file: .trusted-actions/.github/prompts/tracking-issue-sync-prompt.md
           claude-prompt-context: |
             Event: ${{ github.event_name }} / ${{ github.event.action }}
             Repository: ${{ github.repository }}

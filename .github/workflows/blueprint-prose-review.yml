@@ -72,17 +72,25 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Checkout trusted automation
+        if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .trusted-actions
+          fetch-depth: 1
+
       - name: Run Blueprint Sync & Prose Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true'
         id: blueprint-prose-review
-        uses: ./.github/actions/claude-code-with-provider
+        uses: ./.trusted-actions/.github/actions/claude-code-with-provider
         with:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
-          system-prompt-file: .github/prompts/blueprint-prose-review-system-prompt.md
+          system-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-system-prompt.md
           allowed_tools_preset: blueprint-prose-review
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          claude-prompt-file: .github/prompts/blueprint-prose-review-prompt.md
+          claude-prompt-file: .trusted-actions/.github/prompts/blueprint-prose-review-prompt.md
           claude-prompt-context: |
             PR number: ${{ github.event.pull_request.number }}
             Repository: ${{ github.repository }}
