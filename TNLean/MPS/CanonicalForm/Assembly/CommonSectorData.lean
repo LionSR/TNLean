@@ -606,18 +606,12 @@ exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The theorem
-`fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan`
-gives a nonzero-part overlap-span reduction from span equality for the
-constructed sector bases. The theorem
-`fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan`
-strengthens this in the phase-class representative setting: equality of the
-finite-length spans of the original nonzero-weight block families is transported to the
-chosen sector bases and the sector-weight conclusion follows from the original
-`SameMPV₂ A B`. The theorem
-`fundamentalTheorem_after_blocking_sector_of_common_blocks_overlapSpan_zeroTail`
-gives the corresponding zero-tail route when full overlap-span data
-are supplied.
+The current comparison route passes through
+`afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common phase-cover
+or BNT-cover theorems. This avoids keeping separate common-block wrapper
+theorems as public waypoints: the formal residue is the paper-level residue,
+namely blocked-word relabelling, finite-length nonzero-block span comparison,
+and BNT sector matching.
 
 The blocked-word relabelling and common primitive irreducible nonzero-block
 decompositions are now part of this file's structural reduction. The remaining
