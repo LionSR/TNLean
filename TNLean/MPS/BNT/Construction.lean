@@ -41,7 +41,7 @@ lines 317–345.
 
 3. **`isBNT_of_separated_CFBNT_data`** and the bundled-data formulation
    **`IsCanonicalFormBNT.isBNT`**:
-   a canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
+   the restricted separated block data give a valid `IsBNT`
    structure, assembling all overlap and independence properties.
 
 4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the bundled-data formulation
@@ -341,7 +341,7 @@ theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
 
 The only role of `μ` is to specify the block-diagonal tensor `toTensorFromBlocks μ A` and its
 obvious coefficient decomposition.  Strict weight ordering is not used here. -/
-theorem isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
+lemma isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : HasInjectiveBlocks (d := d) A)
@@ -386,8 +386,8 @@ theorem cross_overlap_tendsto_zero
 /-- A canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
 structure.
 
-This bundled-data theorem is a direct consequence of `isBNT_of_separated_CFBNT_data`. -/
-theorem isBNT [∀ k, NeZero (dim k)]
+This bundled-data lemma is a direct consequence of `isBNT_of_separated_CFBNT_data`. -/
+lemma isBNT [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
   isBNT_of_separated_CFBNT_data μ A
@@ -493,7 +493,7 @@ theorem cross_overlap_tendsto_zero
 /-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
 structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are
 supplied explicitly. -/
-theorem isBNT [∀ k, NeZero (dim k)]
+lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
@@ -548,13 +548,13 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data comparison theorem for separated CF-BNT-style decompositions.
+/-- Split-data comparison lemma for separated CF-BNT-style decompositions.
 
-The theorem only needs the separated pieces of data used by the proportional-MPV argument:
+The lemma only needs the separated pieces of data used by the proportional-MPV argument:
 blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
 non-equivalence condition that forces cross-overlap decay. It is a strict
 special case of the CPSV comparison argument, not the full multiplicity BNT theorem. -/
-theorem fundamentalTheorem_of_separated_CFBNT_data
+lemma fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -599,13 +599,13 @@ If two families of tensors in canonical-form BNT give rise to proportional MPVs
 of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
 equivalence.
 
-This bundled theorem uses the strict/already-grouped CF-BNT special case. The general
+This bundled lemma uses the strict/already-grouped CF-BNT special case. The general
 CPSV BNT comparison keeps repeated sectors through the multiplicity data handled
 elsewhere in the sector-decomposition surface.
 
-This bundled-data theorem is a direct consequence of
+This bundled-data lemma is a direct consequence of
 `fundamentalTheorem_of_separated_CFBNT_data`. -/
-theorem fundamentalTheorem_of_IsCanonicalFormBNT
+lemma fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -644,11 +644,11 @@ theorem fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data comparison theorem for separated normal-CF-BNT-style decompositions.
+/-- Split-data comparison lemma for separated normal-CF-BNT-style decompositions.
 
 This is the normal-form analogue of the strict comparison above. It is
 not the full CPSV multiplicity BNT theorem. -/
-theorem fundamentalTheorem_of_separated_normalCFBNT_data
+lemma fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -689,8 +689,8 @@ theorem fundamentalTheorem_of_separated_normalCFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- Proportional comparison for restricted normal-CF-BNT decompositions. -/
-theorem fundamentalTheorem_of_IsNormalCanonicalFormBNT
+/-- Proportional comparison lemma for restricted normal-CF-BNT decompositions. -/
+lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

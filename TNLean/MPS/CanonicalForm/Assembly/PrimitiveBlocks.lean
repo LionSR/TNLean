@@ -21,7 +21,8 @@ blockwise gauge-phase matching.
 * `isIrreducibleTensor_blockTensor_of_tp_primitive_irr` — blocking a
   TP-primitive irreducible tensor preserves irreducibility.
 * `weakFundamentalTheorem_conditional` — proportional MPVs imply block matching
-  for separated TP-primitive normal canonical form data.
+  for restricted separated representative TP-primitive normal canonical form
+  data.
 
 ## References
 
@@ -238,10 +239,11 @@ permutation + gauge-phase matching of blocks.
 
 /-- **Conditional Fundamental Theorem (irreducibility and distinct weights).**
 
-For two tensor families in TP-primitive normal canonical form with BNT separation,
-if their blocked versions have proportional MPVs (with convergent coefficients), then
-the block counts match and blocks are pairwise gauge-phase equivalent (up to
-permutation). This is the corresponding block-matching statement from `Full.lean`. -/
+For two restricted separated representative families in TP-primitive normal canonical form,
+if their blocked versions have proportional MPVs (with convergent coefficients), then the
+block counts match and blocks are pairwise gauge-phase equivalent (up to permutation). The
+full repeated-copy BNT comparison is supplied separately by sector-decomposition and
+multiplicity data. -/
 theorem weakFundamentalTheorem_conditional
     {d' rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
