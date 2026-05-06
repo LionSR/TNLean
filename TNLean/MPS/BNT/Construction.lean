@@ -13,17 +13,23 @@ Released under Apache 2.0 license as described in the file LICENSE.
 /-!
 # Construction of basis-of-normal-tensors data from canonical form
 
-This module introduces `IsCanonicalFormBNT`, which extends `IsCanonicalForm` with the
-requirement that distinct blocks are not gauge-phase equivalent (i.e., equivalent blocks
-have already been merged). The blocks are already chosen as basis-of-normal-tensors
-representatives. This should not be confused with the source term "block-injective canonical
-form" (biCF), which is the separate exact-length direct-sum span condition from
-arXiv:1606.00608, lines 317–345.
+This module introduces `IsCanonicalFormBNT`, a restricted already-grouped canonical-form
+predicate. It extends `IsCanonicalForm` with strict ordering of weight moduli and the
+requirement that distinct blocks are not gauge-phase equivalent, so equivalent blocks have
+already been merged and each remaining block is a chosen BNT representative.
+
+This is not the general BNT normal form of arXiv:1606.00608.  The paper allows repeated
+copies inside a BNT sector, with coefficients `μ_{j,q}` and multiplicities `M_j`; that
+general comparison data is represented by `SectorDecomposition` and the sector-weight
+comparison theorems.  It is also not the paper's "block-injective canonical form" (biCF),
+which is the separate exact-length direct-sum span condition from arXiv:1606.00608,
+lines 317–345.
 
 ## Main results
 
-1. **`IsCanonicalFormBNT`**: A strengthened canonical form where no two distinct blocks are
-   gauge-phase equivalent (the BNT grouping step has been performed).
+1. **`IsCanonicalFormBNT`**: A restricted already-grouped canonical form where no two
+   distinct blocks are gauge-phase equivalent and the representative weight moduli are
+   strictly decreasing.
 
 2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`** and the bundled-data formulation
    **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`**: distinct CF-BNT blocks have decaying
@@ -76,13 +82,14 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
 `IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
 and that the block weight moduli are **strictly decreasing**.
 
-The strictly decreasing condition is justified by the BNT grouping step, which merges
-gauge-phase-equivalent blocks with equal moduli. The base `IsCanonicalForm` only requires
-non-increasing (`Antitone`) moduli, matching the paper definitions.
+The strictly decreasing condition is a special already-grouped hypothesis.  The base
+`IsCanonicalForm` only requires non-increasing (`Antitone`) moduli, and the general BNT
+comparison in arXiv:1606.00608 keeps repeated copies inside sectors rather than forcing every
+equal-modulus family into a single strict-norm representative.
 
 In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
-each block in the basis of normal tensors is represented by a single CF block. It is not
-the paper's biCF condition; block-injectivity is a further fixed-length span input. -/
+each basis element has already been represented by one CF block. It is not the paper's biCF
+condition; block-injectivity is a further fixed-length span input. -/
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
@@ -157,8 +164,8 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 and that the block weight moduli are **strictly decreasing**.
 
 Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
-normality with non-increasing moduli. The BNT level adds strict ordering (justified by the
-grouping step) and the BNT separation assumption.
+normality with non-increasing moduli. The BNT level adds the same restricted already-grouped
+strict ordering as `IsCanonicalFormBNT`, together with the BNT separation assumption.
 
 The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
 equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal
