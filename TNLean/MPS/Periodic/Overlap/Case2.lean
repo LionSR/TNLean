@@ -280,13 +280,10 @@ lemma exists_sector_match_of_gaugePhaseEquiv
           (MPSTensor (blockPhysDim d m)) hdim)
           (blocksA u))
         (blocksB v) := by
-  -- PROOF STRUCTURE: see lemma
-  -- `exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp` for the
-  -- planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
-  -- and `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
-  sorry
+  exact exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
+    A B hA hB blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+    hA_cyclic hB_cyclic hNondegA hNondegB
+    (gaugePhaseEquiv_blockTensor A B m hGPE)
 
 /-- If no nonzero compressed sector pair matches, then the original periodic
 tensors cannot be globally gauge-phase equivalent. -/
@@ -323,12 +320,12 @@ lemma not_gaugePhaseEquiv_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     ¬ GaugePhaseEquiv A B := by
-  -- PROOF STRUCTURE: see lemma
-  -- `exists_sector_match_of_gaugePhaseEquiv` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
-  -- and `primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`.
-  sorry
+  intro hGPE
+  obtain ⟨u, v, hdim, hNondeg, hMatch⟩ :=
+    exists_sector_match_of_gaugePhaseEquiv
+      A B hA hB blocksA blocksB hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv
+      hA_cyclic hB_cyclic hNondegA hNondegB hGPE
+  exact hNoMatch u v hdim hNondeg hMatch
 
 /-- Same-period / no-match statement using compressed sector tensors.
 
