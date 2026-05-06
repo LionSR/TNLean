@@ -11,12 +11,10 @@ open scoped Matrix BigOperators
 open Filter
 
 /-!
-# Equal-norm overlap bridge for phase-class BNT data
+# Gauge-phase equivalence from non-decaying cross-overlap
 
-This file records the overlap/spectral bridge used before the phase-class BNT
-construction: if two trace-preserving irreducible blocks have a non-decaying
-cross-overlap, then they are gauge-phase equivalent after identifying bond
-dimensions.
+This file proves that two trace-preserving irreducible blocks with a non-decaying
+cross-overlap must have equal bond dimensions and be gauge-phase equivalent.
 
 ## Background
 
