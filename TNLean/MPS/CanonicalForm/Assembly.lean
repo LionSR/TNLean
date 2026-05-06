@@ -12,7 +12,7 @@ import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the end-to-end canonical-form
+This module is the public entry point for the complete canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
 split across focused supporting modules.
@@ -68,12 +68,13 @@ The imported modules provide the canonical-form reduction theorems, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `exists_bilateral_tp_primitive_blockDecomp_after_blocking`.
 
-The end-to-end after-blocking comparison has a conditional form here. Equality
-of MPV families gives the common blocking and common primitive sector data; the
-BNT-cover comparison data for those sectors are separate hypotheses. Under those
-hypotheses, `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives
-BNT sector decompositions whose basis sectors and weights match up to
-permutation and nonzero phases.
+The after-blocking comparison of two tensors with the same MPV family has a
+conditional form here. Equality of MPV families gives the common blocking and
+common primitive sector data; the BNT-cover comparison data for those sectors
+are separate hypotheses. Under those hypotheses,
+`fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives BNT sector
+decompositions whose basis sectors and weights match up to permutation and
+nonzero phases.
 
 ## References
 
