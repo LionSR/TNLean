@@ -2929,19 +2929,19 @@ primitivity and normality results to the sector blocks.
 	sector decomposition with strict norm ordering.
 \end{theorem}
 
-\begin{theorem}[Existential BNT independence from overlap limits]
-	\label{thm:bnt_li_from_overlap_limits_exists}
+\begin{lemma}[Existential BNT independence from overlap limits]
+	\label{lem:bnt_li_from_overlap_limits_exists}
 	\lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
 	\leanok
-	\uses{thm:bnt_overlap_orthonormal_li}
+	\uses{lem:bnt_overlap_orthonormal_li}
 	If the self-overlaps of a finite block family tend to $1$ and the
 	cross-overlaps of distinct blocks tend to $0$, then the MPV states are
 	linearly independent for all sufficiently large system sizes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-	\uses{thm:bnt_overlap_orthonormal_li}
-	This is Theorem~\ref{thm:bnt_overlap_orthonormal_li}, restated with an
+	\uses{lem:bnt_overlap_orthonormal_li}
+	This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
 	explicit threshold $N_0$.
 \end{proof}
 
@@ -2949,18 +2949,17 @@ primitivity and normality results to the sector blocks.
 	\label{thm:bnt_li_tp_prim_irr_separated}
 	\lean{MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
 	\leanok
-	\uses{thm:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
+	\uses{lem:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
 	For trace-preserving primitive irreducible blocks of positive bond dimension
 	that are pairwise not gauge-phase equivalent, the block MPV states are
 	linearly independent for all sufficiently large system sizes.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:bnt_li_from_overlap_limits_exists}
+	\uses{lem:bnt_li_from_overlap_limits_exists}
 	Primitivity and trace preservation give self-overlap convergence to $1$.
 	BNT separation gives cross-overlap convergence to $0$ for distinct blocks.
-	The result follows from
-	Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}.
+	The result follows from Lemma~\ref{lem:bnt_li_from_overlap_limits_exists}.
 \end{proof}
 
 \begin{theorem}[One-sector-per-block decomposition from eventual BNT independence]
