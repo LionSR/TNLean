@@ -1451,58 +1451,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	phase-cover hypotheses. The common phase-cover construction then gives the
 	sector decompositions and their primitive overlap-span hypotheses.
 \end{proof}
-
-\begin{lemma}[Explicit BNT data give overlap-span hypotheses]%
-\label{lem:sector_basis_overlap_span_commonPrimitiveBNTData}
-	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		lem:sector_basis_overlap_span_reindexed_bnt_cover}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces common primitive nonzero-sector families. If
-	these families have strict weight ordering, internal gauge-phase separation,
-	equal zero-tail dimension, one-site injectivity, and proportional-decomposition
-	data, then the associated sector decompositions have BNT data, agree as full
-	MPV families, and satisfy the primitive overlap-span hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		lem:sector_basis_overlap_span_reindexed_bnt_cover}
-	First form the BNT-cover hypotheses for the produced families from the stated
-	common primitive data. Then apply the BNT-cover overlap-span lemma.
-\end{proof}
-
-\begin{lemma}[Explicit BNT data with derived zero-tail identity give overlap-span hypotheses]%
-\label{lem:sector_basis_overlap_span_commonPrimitiveBNTData_zeroTailIdentity}
-	\lean{MPSTensor.sectorBasisOverlapSpanHypotheses_of_commonPrimitiveBNTData_zeroTailIdentity}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		lem:sector_basis_overlap_span_reindexed_bnt_cover}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem produces common primitive nonzero-sector families. If
-	these families have strict weight ordering, internal gauge-phase separation,
-	one-site injectivity, and proportional-decomposition data, then the length-zero
-	MPV identity determines the zero tail, and the associated sector decompositions
-	have BNT data, agree as full MPV families, and satisfy the primitive
-	overlap-span hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		lem:sector_basis_overlap_span_reindexed_bnt_cover}
-	First form the BNT-cover hypotheses for the produced families, deriving the
-	zero-tail identity from the proportional-decomposition data. Then apply the
-	BNT-cover overlap-span lemma.
-\end{proof}
-
 \begin{theorem}[Common primitive sectors with span hypotheses]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
@@ -1703,31 +1651,6 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
 	families to common phase-cover hypotheses, and then apply the common-sector
 	comparison theorem with common phase-cover data.
-\end{proof}
-
-\begin{theorem}[Common sectors from explicit common primitive BNT data]%
-\label{thm:afterBlocking_sectorComparison_commonPrimitiveBNTData}
-	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveBNTData}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		thm:afterBlocking_sectorComparison_reindexed_bntCover}
-	Let $A$ and $B$ have the same MPV family, and assume the blocked-word
-	identification hypothesis for the cyclic-sector data. The common-sector
-	structural theorem gives common primitive nonzero-sector families. If these
-	families have strict weight ordering, internal gauge-phase separation,
-	equal zero-tail dimension, one-site injectivity, and proportional-decomposition
-	data, then the same sector-weight comparison conclusion holds.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		thm:afterBlocking_sectorComparison_reindexed_bntCover}
-	First form the BNT-cover hypotheses for the common primitive nonzero-sector
-	families from the stated common primitive data. Then apply the BNT-cover
-	comparison theorem.
 \end{proof}
 
 \begin{theorem}[Common sectors from proportional-comparison data]%
