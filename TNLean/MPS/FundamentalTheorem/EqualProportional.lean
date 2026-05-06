@@ -7,38 +7,35 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
-# Equal and Proportional MPV Fundamental Theorems
+# Equal and proportional MPV comparison for BNT canonical forms
 
-This module collects the **equal-case** and **proportional-case** fundamental theorems for
-matrix product states in canonical form with basis-of-normal-tensors (BNT) separation,
-together with supporting corollaries.
+This module collects equal-MPV and proportional-MPV comparison results for matrix product
+states in canonical form with basis-of-normal-tensors (BNT) separation.
 
 ## Main results
 
-### Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+### Equal-MPV comparison with common block structure
 (`fundamentalTheorem_equalMPV_CFBNT`)
 
-**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation share the same `μ`-weights, same block count `r`, and
-same block dimensions, and
-generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
-with a global gauge equivalence of the block-diagonal tensors.
+This is the common-block-structure specialization of the equal case: if two BNT canonical
+forms share the same `μ`-weights, block count, and block dimensions, and generate equal
+MPVs for all system sizes, then the corresponding blocks are gauge equivalent and the
+assembled block-diagonal tensors are gauge equivalent.
 
-### Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
+### Proportional-MPV comparison with explicit coefficient limits
 (`fundamentalTheorem_proportionalMPV_CFBNT`)
 
-**Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation generate proportional MPVs, and the decomposition
-coefficients converge to
-nonzero limits, then the block counts are equal and blocks match up to permutation,
-dimension equality, and gauge-phase equivalence.
+This theorem proves the block-matching conclusion under the coefficient hypotheses used by
+the proportional-MPV argument. The decomposition coefficients, their limits, and the
+non-vanishing of those limits are explicit assumptions. The extraction of these
+coefficients from the hypotheses of the source-paper theorem is not part of this statement.
 
-### Theorem 3: Equal MPVs imply proportional MPVs
+### Equal MPVs imply proportional MPVs
 (`sameMPV₂_implies_proportionalMPV₂`)
 
 Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
 
-### Theorem 4: Power-sum multiset equality
+### Power-sum multiset equality
 (`mu_multiset_eq_of_power_sum_eq`)
 
 If two sequences of complex numbers have equal power sums for all exponents, their multisets
@@ -53,12 +50,11 @@ If two sequences of complex numbers have equal power sums for all exponents, the
 
 ## Design notes
 
-The **coefficient convergence** question: In the full paper, the decomposition into a basis of
-normal tensors uses coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
-These coefficients need not converge in general after normalization, because unit-modulus
-terms can still oscillate. The `IsCanonicalFormBNT` predicate sidesteps this by requiring the
-BNT grouping already done, and the proportional-case theorem takes whatever convergent
-coefficient data it needs as explicit hypotheses.
+The **coefficient convergence** question: in the source-paper proportional theorem, the
+decomposition into a basis of normal tensors uses coefficients
+`c_j(N) = Σ_{q in group j} μ_{j,q}^N`. These coefficients need not converge in general
+after normalization, because unit-modulus terms can still oscillate. The proportional
+comparison theorem below assumes the convergent coefficient data explicitly.
 -/
 open scoped Matrix BigOperators
 open Filter
@@ -67,14 +63,14 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+/-! ## Equal-MPV comparison for `IsCanonicalFormBNT` with common block structure
 
-This is the content of Corollary II_cor2 from arXiv:2011.12127 / arXiv:1606.00608,
-specialized to the case where both families share the same block structure (same `r`,
-same `dim`, same `μ`).
+This is the common-block-structure specialization of Corollary II_cor2 from
+arXiv:2011.12127 / arXiv:1606.00608: both families share the same block count, block
+dimensions, and weights.
 -/
 
-/-- **Equal-MPV Fundamental Theorem for CF-BNT (Corollary II_cor2, same structure).**
+/-- **Equal-MPV comparison for CF-BNT with common block structure.**
 
 If two families of tensors in canonical form with BNT separation share the same
 block weights `μ`, the same number of blocks `r`, and the same block dimensions
@@ -108,16 +104,16 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
+/-! ## Proportional-MPV comparison with explicit coefficient limits
 
-This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
-The theorem takes convergent coefficient data as explicit hypotheses.
+This is the block-matching conclusion of the proportional-MPV argument under explicit
+coefficient convergence hypotheses.
 -/
 
-/-- Split-data proportional-MPV Fundamental Theorem for CF-BNT-style data (Theorem 4.4).
+/-- Split-data proportional-MPV comparison for CF-BNT-style data.
 
-This formulation exposes exactly the hypotheses used by the proportional-MPV argument,
-separating the BNT matching data from the bundled `IsCanonicalFormBNT` interface. -/
+This formulation separates the BNT block hypotheses from the bundled `IsCanonicalFormBNT`
+predicate and assumes the coefficient arrays and their nonzero limits explicitly. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -173,7 +169,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- **Proportional-MPV Fundamental Theorem for CF-BNT (Theorem 4.4).**
+/-- **Proportional-MPV comparison for CF-BNT with explicit coefficient limits.**
 
 If two families of tensors in canonical form with BNT separation generate proportional
 MPV families (with explicitly convergent nonzero decomposition coefficients), then:
@@ -185,8 +181,9 @@ MPV families (with explicitly convergent nonzero decomposition coefficients), th
 **Coefficient convergence**: The caller must supply the decomposition coefficients
 `aCoeff`, `bCoeff` and their limits. In a strict-dominance specialization one may take
 `aCoeff N j = μA_j^N / μA_0^N` after normalizing so that `|μA_0| = |μB_0| = 1`,
-and then the subdominant ratios decay. In the general paper-level BNT setup, however,
-the coefficients are sums `Σ_q μ_{j,q}^N` and need not converge without extra input. -/
+and then the subdominant ratios decay. In the general BNT setting of the source papers,
+however, the coefficients are sums `Σ_q μ_{j,q}^N` and need not converge without
+extra input. -/
 theorem fundamentalTheorem_proportionalMPV_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -217,7 +214,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
   fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
     cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
-/-- Split-data proportional-MPV Fundamental Theorem for normal-CF-BNT-style data. -/
+/-- Split-data proportional-MPV comparison for normal-CF-BNT-style data. -/
 theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -256,7 +253,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Fundamental Theorem (proportional case) for normal canonical form blocks. -/
+/-- Proportional-MPV comparison for normal canonical form blocks. -/
 theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -290,9 +287,10 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
 
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
-/-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
+/-- **Equal MPVs imply proportional MPVs** (with proportionality constant `1`).
 
-This is useful for reducing Corollary II_cor2 to the proportional case of Theorem 4.4. -/
+This converts an equality hypothesis into the proportionality hypothesis used by the
+explicit-coefficient comparison theorems. -/
 theorem sameMPV₂_implies_proportionalMPV₂
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : SameMPV₂ A B) :
@@ -300,16 +298,14 @@ theorem sameMPV₂_implies_proportionalMPV₂
   intro N
   exact ⟨1, fun σ => by simpa using h N σ⟩
 
-/-- **Equal-MPV upgrade of the current formalized proportional FT for CF-BNT.**
+/-- **Equal-MPV comparison from explicit coefficient data for CF-BNT.**
 
-The literature-level equal-MPV FT (`thm:ft_equal` in the blueprint) should start from only the
-CF-BNT data and `SameMPV₂`.  The current local results are weaker: the available proportional FT
-`fundamentalTheorem_proportionalMPV_CFBNT` still requires explicit decomposition coefficients with
-nonzero limits, and its conclusion is a block permutation together with per-block
-`GaugePhaseEquiv` data.
+The equal-MPV corollary in the papers starts from the CF-BNT data and `SameMPV₂`.
+This theorem assumes more data: the same coefficient arrays and nonzero limits required by
+`fundamentalTheorem_proportionalMPV_CFBNT`. Its conclusion is a block permutation together
+with per-block `GaugePhaseEquiv` data.
 
-This theorem states the equal-case conclusion that *is* derivable from those results.  Under the
-same coefficient hypotheses as the proportional theorem, equal MPVs force the phase-corrected
+Under those coefficient hypotheses, equal MPVs force the phase-corrected
 weights to match blockwise.  After reindexing the `B`-family by the permutation from the
 proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/
 theorem fundamentalTheorem_equalMPV_of_explicit_coefficients
