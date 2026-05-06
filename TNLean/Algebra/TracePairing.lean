@@ -32,6 +32,47 @@ open scoped Matrix BigOperators
 
 namespace Matrix
 
+/-- **David/Perez-Garcia et al. Lemma `lem1` (two-sided nonzero matrix span).**
+
+If `C` is a nonzero square complex matrix, then the linear span of all
+two-sided products `R * C * S` is the full matrix algebra. This is the
+linear-algebra input used in `Papers/quant-ph_0608197/MPSarchive.tex`,
+Lemma `lem1`, in the finite-length direct-sum argument for canonical MPS
+blocks. -/
+theorem span_range_mul_nonzero_mul_eq_top {n : Type*} [Fintype n]
+    {C : Matrix n n ℂ} (hC : C ≠ 0) :
+    Submodule.span ℂ
+        (Set.range fun RS : Matrix n n ℂ × Matrix n n ℂ => RS.1 * C * RS.2) = ⊤ := by
+  classical
+  obtain ⟨p, q, hpq⟩ : ∃ p q, C p q ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hC (by ext p q; exact h p q)
+  have hsingle :
+      ∀ i j : n,
+        Matrix.single i j (1 : ℂ) ∈
+          Submodule.span ℂ
+            (Set.range fun RS : Matrix n n ℂ × Matrix n n ℂ => RS.1 * C * RS.2) := by
+    intro i j
+    let R : Matrix n n ℂ := Matrix.single i p (C p q)⁻¹
+    let S : Matrix n n ℂ := Matrix.single q j (1 : ℂ)
+    have hprod : R * C * S = Matrix.single i j (1 : ℂ) := by
+      rw [Matrix.single_mul_mul_single]
+      simp [hpq]
+    exact hprod ▸
+      Submodule.subset_span
+        (Set.mem_range_self (R, S))
+  apply eq_top_iff.mpr
+  have hbasis :
+      Submodule.span ℂ (Set.range (Matrix.stdBasis ℂ n n)) ≤
+        Submodule.span ℂ
+          (Set.range fun RS : Matrix n n ℂ × Matrix n n ℂ => RS.1 * C * RS.2) := by
+    refine Submodule.span_le.2 ?_
+    rintro M ⟨ij, rfl⟩
+    rcases ij with ⟨i, j⟩
+    simpa [Matrix.stdBasis_eq_single] using hsingle i j
+  simpa [(Matrix.stdBasis ℂ n n).span_eq] using hbasis
+
 /-- Nondegeneracy of the trace pairing on square matrices over `ℂ`:
 if `trace (M * N) = 0` for all `N`, then `M = 0`. -/
 theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
@@ -50,6 +91,83 @@ end Matrix
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- **Exact-length two-sided span from block injectivity.**
+
+This is the word-product form of David/Perez-Garcia et al. Lemma `lem1`
+used in the proof of `Papers/quant-ph_0608197/MPSarchive.tex`,
+Lemma `lem:direct-sum`: if words of length `N` span the full matrix algebra
+and `X` is nonzero, then the span of all products `A_u * X * A_v`, with
+`u` and `v` both of length `N`, is again the full matrix algebra. -/
+theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
+    {N : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
+    (hA : IsNBlkInjective A N) (hX : X ≠ 0) :
+    Submodule.span ℂ
+        (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
+          evalWord A (List.ofFn uv.1) * X * evalWord A (List.ofFn uv.2)) = ⊤ := by
+  classical
+  let E : Set (Matrix (Fin D) (Fin D) ℂ) :=
+    Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)
+  let T : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Submodule.span ℂ
+      (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
+        evalWord A (List.ofFn uv.1) * X * evalWord A (List.ofFn uv.2))
+  have hspanE : Submodule.span ℂ E = ⊤ := by
+    simpa [E, IsNBlkInjective] using hA
+  have hmul_right_gen : ∀ {R : Matrix (Fin D) (Fin D) ℂ},
+      R ∈ Submodule.span ℂ E → ∀ v : Fin N → Fin d,
+        R * X * evalWord A (List.ofFn v) ∈ T := by
+    intro R hR v
+    exact Submodule.span_induction
+      (fun M hM v => by
+        rcases hM with ⟨u, rfl⟩
+        exact Submodule.subset_span ⟨(u, v), rfl⟩)
+      (by
+        intro v
+        simp [T])
+      (fun R₁ R₂ _ _ hR₁ hR₂ v => by
+        simpa [Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, T] using
+          Submodule.add_mem T (hR₁ v) (hR₂ v))
+      (fun a R _ hR v => by
+        have hEq : (a • R) * X * evalWord A (List.ofFn v) =
+            a • (R * X * evalWord A (List.ofFn v)) := by
+          simp [Matrix.mul_assoc]
+        rw [hEq]
+        exact Submodule.smul_mem T a (hR v))
+      hR v
+  have hmul : ∀ {R S : Matrix (Fin D) (Fin D) ℂ},
+      R ∈ Submodule.span ℂ E → S ∈ Submodule.span ℂ E → R * X * S ∈ T := by
+    intro R S hR hS
+    exact Submodule.span_induction
+      (fun M hM => by
+        rcases hM with ⟨v, rfl⟩
+        exact hmul_right_gen hR v)
+      (by
+        simp [T])
+      (fun S₁ S₂ _ _ hS₁ hS₂ => by
+        simpa [Matrix.mul_add, Matrix.mul_assoc, T] using
+          Submodule.add_mem T hS₁ hS₂)
+      (fun a S _ hS => by
+        have hEq : R * X * (a • S) = a • (R * X * S) := by
+          simp [Matrix.mul_assoc]
+        rw [hEq]
+        exact Submodule.smul_mem T a hS)
+      hS
+  apply eq_top_iff.mpr
+  have hsource :
+      Submodule.span ℂ
+          (Set.range fun RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+            RS.1 * X * RS.2) ≤ T := by
+    refine Submodule.span_le.2 ?_
+    rintro Y ⟨RS, rfl⟩
+    exact hmul (by rw [hspanE]; exact Submodule.mem_top)
+      (by rw [hspanE]; exact Submodule.mem_top)
+  have htop :
+      Submodule.span ℂ
+          (Set.range fun RS : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+            RS.1 * X * RS.2) = ⊤ :=
+    Matrix.span_range_mul_nonzero_mul_eq_top hX
+  simpa [T, htop] using hsource
 
 /-- Lemma 2 (paper proof sketch): `SameMPV` implies agreement of traces of all products.
 
