@@ -566,6 +566,23 @@ label name, update `.github/workflows/auto-fix.yml` and the
 
 All Claude-based workflows use `claude-opus-4-7`, configured via `--model` in the `claude_args` parameter of the relevant workflow file. Codex-based workflows run via `openai/codex-action` and use their own model/configuration mechanism rather than Claude `--model` flags.
 
+### Review providers
+
+To run one or both review engines, set this repository variable:
+
+| Variable | Value | Meaning |
+|---|---|---|
+| `CLAUDE_CODE_REVIEW_PROVIDERS` | JSON array string, for example `["anthropic","deepseek"]` | Selects which review jobs run in parallel for `claude-code-review.yml`. If unset, the workflow uses `CLAUDE_CODE_PROVIDER` as a single default. |
+| `CLAUDE_CODE_PROVIDER` | `anthropic` or `deepseek` | Legacy fallback provider when no multi-provider list is set. |
+
+Set `CLAUDE_CODE_REVIEW_PROVIDERS` to `["anthropic"]` to force single Anthropic review.
+Set `CLAUDE_CODE_REVIEW_PROVIDERS` to `["deepseek"]` to force only DeepSeek review.
+
+In the GitHub repository settings, keep these secrets populated as needed:
+
+- `CLAUDE_CODE_OAUTH_TOKEN` for Anthropic runs.
+- `DEEPSEEK_API_KEY` for DeepSeek runs.
+
 ### Lean plugins
 
 The CI-failure auto-fix and review-comment auto-fix workflows load Lean skills from `https://github.com/leanprover/skills.git` (plugin: `lean@leanprover`). The blueprint auto-fix workflow does not load Lean plugins because it works with LaTeX, not Lean code.

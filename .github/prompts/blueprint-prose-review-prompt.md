@@ -1,0 +1,151 @@
+Review this PR for TWO categories ONLY:
+  (A) blueprint ↔ Lean **mathematical equivalence and status accuracy**;
+  (B) prose quality — banned AI/software language AND no Lean jargon.
+
+Authoritative source for category B: `docs/prose_style.md`. Read it once
+before reviewing; do not paraphrase the tables here.
+
+All other concerns (proof integrity, Mathlib style, performance, etc.)
+belong to the main `Claude Code Review (Lean)` workflow — do NOT comment
+on them.
+
+PR: <REPOSITORY>/pull/<PR_NUMBER>
+Trigger: <EVENT>
+
+Use `gh pr diff <PR_NUMBER>` to see the diff.
+
+---
+
+## Category A — 🟡 Blueprint ↔ Lean equivalence and status
+
+This is the **core** check. The blueprint must not merely *link* to a Lean
+declaration via `\lean{...}` — it must state the **same mathematical
+content**, and its `\leanok` / `\notready` status tags must reflect
+reality. `leanblueprint checkdecls` only verifies that tags resolve; YOU
+verify they are *correct*.
+
+For every `\lean{Namespace.Name}` tag in a `.tex` file changed in this PR,
+and for every Lean declaration added or modified in this PR that has a
+blueprint counterpart, do the following four checks:
+
+### A.1 — Mathematical equivalence
+
+Read the blueprint statement in `blueprint/src/chapter/*.tex` and the
+corresponding Lean declaration in `TNLean/...`. Compare them on every
+axis that matters:
+
+- **Quantifiers and hypotheses.** Does every blueprint hypothesis appear
+  in the Lean signature, with the same strength? Watch for silent
+  weakening ("primitive" in blueprint vs "irreducible" in Lean) or
+  silent strengthening ("for all $A$" in blueprint vs implicit
+  `[Nontrivial A]`/`[Fintype d]`/etc. in Lean that the blueprint
+  omits).
+- **Conclusion.** Does the blueprint conclusion match the Lean return
+  type? Watch for "$X$" vs "$X^\dagger$", "$=$" vs "$\leq$", strict
+  vs non-strict inequalities, and conjugate-linear vs linear conventions
+  (e.g. `mpvOverlap A B N = star (mpvInner A B N)` — the project's own
+  `Fact-Check Lessons` in `docs/blueprint_style_guide.md` calls this out).
+- **Indexing conventions.** Blueprint indices run 0 to d−1 (matching
+  `Fin d`). Flag if the blueprint silently uses 1 to d.
+- **Definitions vs theorems.** If the blueprint asserts a fact ("X is a
+  subalgebra"), it must be `\begin{theorem}`, not
+  `\begin{definition}`.
+- **Notation drift.** Does the blueprint use the established notation
+  from `docs/blueprint_style_guide.md` §"Notation Consistency"? Ad-hoc
+  notation that disagrees with the Lean object is a sync bug.
+
+For each mismatch, cite both the blueprint line and the Lean line, and
+describe the mathematical discrepancy precisely. Do NOT accept "close
+enough" — sync means equivalence, not similarity.
+
+### A.2 — `\leanok` accuracy
+
+`\leanok` on a `\begin{definition}`/`\begin{theorem}`/`\begin{lemma}`
+asserts that the *statement* is formalized. `\leanok` inside
+`\begin{proof}` asserts that the *proof* is fully formalized.
+
+For every `\leanok` in changed .tex files (and for every newly proven
+Lean theorem in the diff that should bear one):
+
+- **Statement `\leanok`** is valid iff `\lean{Name}` resolves AND the
+  Lean declaration's signature matches per A.1. If A.1 finds a
+  mismatch, the `\leanok` is invalid.
+- **Proof `\leanok`** is valid iff the corresponding Lean proof contains
+  **no `sorry`, `admit`, `native_decide` on non-trivial goals**, and no
+  `axiom` introduced in this PR. Read the Lean proof body and check.
+  `grep -n 'sorry\|admit' TNLean/...` is a quick first pass.
+- **Missing `\leanok`** is also a sync bug: if the Lean declaration is
+  fully formalized and the blueprint has no `\leanok`, flag it.
+
+### A.3 — `\notready` accuracy
+
+`\notready` means "the blueprint entry itself is not yet ready for
+formalization" (e.g. statement still being clarified). Flag any
+`\notready` on an entry whose Lean counterpart already exists and
+matches — the blueprint clearly *is* ready and the tag is stale.
+
+### A.4 — Tag presence and `\uses{...}`
+
+- **New Lean declaration with no blueprint entry**: must add a
+  `\begin{definition/theorem/lemma}` block with `\lean{...}`,
+  appropriate status tag, and `\uses{...}` for dependencies.
+- **Newly closed `sorry`** in Lean: blueprint `\begin{proof}` for that
+  theorem must gain `\leanok`.
+- **Removed or renamed Lean declaration**: blueprint must drop or
+  rename the corresponding `\lean{...}` tag; otherwise
+  `leanblueprint checkdecls` will fail.
+- **`\uses{...}` accuracy**: a proof's `\uses` must match the lemmas the
+  Lean proof actually invokes. Do not list everything the statement
+  mentions; do not omit lemmas the proof uses.
+
+## Category B — 🟡 Prose quality and no-Lean-jargon
+
+**Read `docs/prose_style.md` before reviewing.** It is the single
+authoritative source for:
+  §1 — no Lean jargon in blueprint prose;
+  §2 — banned software-engineering terms;
+  §3 — banned LLM writing patterns.
+
+Apply judgment for context-sensitive entries (the doc lists which).
+Scope: blueprint `.tex` and Lean docstrings/comments/`section`
+`/`namespace` names. Out of scope: `docs/`, workflow YAML, `Papers/`,
+`Notes/`.
+
+For each finding, cite the exact phrase, link to the line, and propose
+a concrete replacement from the table (or "drop").
+
+---
+
+**Verdict rules.**
+- If category A or B has unresolved issues, submit **REQUEST_CHANGES**.
+- Otherwise **APPROVE**.
+- Do NOT comment on anything outside categories A and B.
+- A category-A equivalence mismatch is more serious than a category-B
+  prose finding — call it out explicitly in the summary.
+
+For each issue, post an inline comment on the relevant line. End with a
+summary comment listing the counts (e.g. "1 equivalence mismatch, 2
+stale `\leanok`, 4 prose issues").
+
+**Reading existing feedback.** Before posting, read all existing PR
+feedback via `mcp__github__get_review_comments` (inline) and
+`mcp__github__get_comments` (conversation). Skip issues already raised.
+
+**Resolving previous review comments.** On `synchronize`:
+1. Fetch review-thread IDs via `gh api graphql` (MCP does not return
+   thread IDs).
+2. For each unresolved thread authored by `claude`,
+   `copilot-pull-request-reviewer`, or `chatgpt-codex-connector` whose
+   issue is now fixed, resolve via `mcp__github__resolve_review_thread`.
+3. Never resolve human or `cursor`/Bugbot threads.
+
+GraphQL pattern (paginate if `hasNextPage`):
+```bash
+gh api graphql -f query='
+{ repository(owner: "<REPOSITORY_OWNER>", name: "<REPOSITORY_NAME>") {
+  pullRequest(number: <PR_NUMBER>) {
+    reviewThreads(first: 100) {
+      nodes { id isResolved isOutdated
+              comments(first: 1) { nodes { author { login } body } } }
+      pageInfo { hasNextPage endCursor } } } } }'
+```
