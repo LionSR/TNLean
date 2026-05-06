@@ -179,7 +179,7 @@ theorem mpv_toTensor_eq_sum_sectors (P : SectorDecomposition d) {N : ℕ}
 Decomposition formula: the MPV of the assembled tensor expands with coefficients
 `coeff N j = ∑_q (μ_{j,q})^N` against the basis MPVs.
 -/
-theorem mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
+lemma mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
     (σ : Fin N → Fin d) :
     mpv P.toTensor σ =
       ∑ j : Fin P.basisCount, P.coeff N j * mpv (P.basis j) σ := by
