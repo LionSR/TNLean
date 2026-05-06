@@ -58,7 +58,7 @@ basis-of-normal-tensors construction from
   and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
   bridging step from the reduction output to the canonical form.
 
-### Section 4 Granular sector decomposition for the sorted distinct-norm case
+### Section 4 One-sector-per-block sector decomposition for the sorted distinct-norm case
 
 * `exists_trivialSectorDecomp_of_sorted_distinct_norms` — Forms from a sorted
   distinct-norm block family a `SectorDecomposition` with all multiplicities
@@ -226,15 +226,16 @@ theorem exists_sortedNCF_of_distinct_norms
     dim_pos           := fun k => hDim (e k)
   }⟩
 
-/-! ### Section 4. Granular sector decomposition -/
+/-! ### Section 4. One-sector-per-block sector decomposition -/
 
-/-- **Granular `SectorDecomposition` with one basis tensor per input block.**
+/-- **One-sector-per-block `SectorDecomposition`.**
 
 Forms from a block family `(μ, blocks)` a `SectorDecomposition` with `copies j = 1`
 for every `j`.  Each input block becomes its own sector basis tensor with sector
 weight `μ j`.  This construction is deliberately only a structural form: by itself
 it does **not** assert the basis-of-normal-tensors linear-independence condition
-`HasBNTSectorData` from `TNLean.MPS.FundamentalTheorem.SectorDecomposition`. -/
+`HasBNTSectorData` from `TNLean.MPS.FundamentalTheorem.SectorDecomposition`, and it is
+not the paper's minimal BNT representative construction. -/
 def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition d where
@@ -275,7 +276,7 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
           symm
           simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
-/-- **Granular `SectorDecomposition` from a sorted block family.**
+/-- **One-sector-per-block `SectorDecomposition` from a sorted block family.**
 
 Specialization of `trivialSectorDecomp` to the sorted distinct-norm case: every block
 becomes its own basis tensor with `copies j = 1`, the assembled tensor has

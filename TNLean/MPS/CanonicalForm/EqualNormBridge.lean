@@ -82,7 +82,7 @@ Theorem matching, etc.).
   blocks once the family is already separated by non-gauge-phase-equivalence.
 
 * `exists_bnt_sectorDecomp_of_linearIndependent` — conditional construction
-  toward the `HasBNTSectorData` predicate.  It forms the granular
+  toward the `HasBNTSectorData` predicate.  It forms the one-sector-per-block
   `trivialSectorDecomp` as a BNT sector decomposition when the actual BNT
   linear-independence condition is supplied explicitly.
 

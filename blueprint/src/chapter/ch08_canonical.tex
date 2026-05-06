@@ -2765,7 +2765,9 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\label{thm:bnt_sorted_blockdecomp}
 	\lean{MPSTensor.exists_sorted_blockDecomp_of_distinct_norms}\leanok
 	\uses{thm:bnt_sorted_reindexing}
-	Under the same distinct-norm hypothesis, the sorted block family is gauge equivalent to the original decomposition and has strictly decreasing norms.
+	Under the same distinct-norm hypothesis, the sorted block family represents
+	the same MPS family as the original decomposition and has strictly decreasing
+	norms.
 \end{theorem}
 
 \begin{theorem}[Normal canonical form after sorting]
@@ -2775,7 +2777,7 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
 \end{theorem}
 
-\begin{definition}[Granular sector decomposition]
+\begin{definition}[One-sector-per-block sector decomposition]
 	\label{def:trivial_sector_decomp}
 	\lean{MPSTensor.trivialSectorDecomp}
 	\leanok
@@ -2783,15 +2785,17 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$,
 	form a sector decomposition with one basis block for each original block,
 	one copy in each sector, and sector weight $\mu_k$ on the $k$th sector.
+	This is a formal one-sector-per-input-block construction, not the paper's
+	minimal BNT representative construction.
 \end{definition}
 
-\begin{lemma}[Granular sector decomposition preserves the represented family]
+\begin{lemma}[One-sector-per-block decomposition preserves the represented family]
 	\label{lem:trivial_sector_decomp_same_mpv}
 	\lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
 	\leanok
 	\uses{def:trivial_sector_decomp}
-	The granular sector decomposition associated to $(\mu_k,B_k)_k$ represents
-	the same MPS family as the original weighted block sum
+	The one-sector-per-block sector decomposition associated to
+	$(\mu_k,B_k)_k$ represents the same MPS family as the original weighted block sum
 	$\bigoplus_k \mu_k B_k$.
 \end{lemma}
 
@@ -2802,7 +2806,7 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-\begin{lemma}[Granular sector decomposition for the sorted distinct-norm case]
+\begin{lemma}[One-sector-per-block decomposition for the sorted distinct-norm case]
 	\label{thm:bnt_trivial_sector}
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
@@ -2908,14 +2912,14 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}.
 \end{proof}
 
-\begin{theorem}[Granular sector decomposition from eventual BNT independence]
+\begin{theorem}[One-sector-per-block decomposition from eventual BNT independence]
 	\label{thm:bnt_sector_decomp_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
 	\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, def:bnt}
 	If the MPV states of the blocks are linearly independent for all sufficiently
-	large system sizes and all weights are nonzero, then the granular sector
-	decomposition represents the same MPS family and satisfies the BNT
+	large system sizes and all weights are nonzero, then the one-sector-per-block
+	sector decomposition represents the same MPS family and satisfies the BNT
 	linear-independence condition.
 \end{theorem}
 
@@ -2923,8 +2927,8 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
 	The equality of represented families is
 	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The assumed eventual linear
-	independence is exactly the BNT condition for the basis blocks of the granular
-	sector decomposition.
+	independence is exactly the BNT condition for the basis blocks of the
+	one-sector-per-block sector decomposition.
 \end{proof}
 
 \begin{theorem}[Separated primitive normal sector construction]
@@ -2934,15 +2938,14 @@ $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
 	For trace-preserving primitive irreducible blocks of positive bond dimension
 	with nonzero weights, if distinct blocks are pairwise not gauge-phase
-	equivalent, then the granular
-	sector decomposition represents the same MPS family and satisfies the BNT
-	linear-independence condition.  Equal-modulus separated blocks remain as
-	distinct basis blocks.
+	equivalent, then the one-sector-per-block sector decomposition represents
+	the same MPS family and satisfies the BNT linear-independence condition.
+	Equal-modulus separated blocks remain as distinct basis blocks.
 \end{theorem}
 
 \begin{proof}\leanok
 	\uses{lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
-	The granular sector decomposition preserves the represented family by
+	The one-sector-per-block sector decomposition preserves the represented family by
 	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The separated primitive
 	normal hypotheses give the eventual linear independence by
 	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
