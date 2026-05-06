@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
+import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization
@@ -282,6 +283,37 @@ theorem exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
     (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
       A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
       hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL)
+
+/-- Positive-length product-word span from canonical-form/BNT separation and
+one-site injectivity of the BNT blocks.
+
+This specializes the three-block direct-sum theorem to `L = 2`.  The
+canonical-form/BNT hypotheses provide one-site injectivity for each block, and
+fixed-length injectivity persists at positive multiples, giving the length-`2`
+and length-`6` direct-sum inputs required by the source argument.  Irreducibility
+remains explicit because the BNT predicate records injectivity and normalization
+but not the tensor-irreducibility hypothesis used by the direct-sum comparison. -/
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  refine exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
+    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · norm_num
 
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
