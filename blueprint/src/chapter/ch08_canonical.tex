@@ -2904,6 +2904,17 @@ primitivity and normality results to the sector blocks.
 	whose sector norms are strictly decreasing.
 \end{lemma}
 
+\begin{lemma}[Single norm class from phase-related MPVs]
+	\label{lem:single_norm_class_phase_mpv}
+	\lean{MPSTensor.exists_singleNormClassSectorDecomp_of_phaseMPV}\leanok
+	\uses{def:tensor_from_blocks, def:paper_sector_data, def:mpv}
+	If all weights have the same norm and, for a chosen block, every block has
+	a unit-modulus phase relating its MPV family to that block, then the family
+	admits a sector decomposition with one basis tensor and one copy for each
+	original block. The total tensor represents the original weighted block
+	sum, and every resulting sector weight has the common norm.
+\end{lemma}
+
 \subsection{Equal-Norm Blocks}
 
 \begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
