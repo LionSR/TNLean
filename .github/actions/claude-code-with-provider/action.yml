@@ -205,9 +205,6 @@ runs:
           if [ -z "$token" ]; then
             token="$anthropic_api_key_input"
           fi
-          if [ -z "$token" ]; then
-            token="${ANTHROPIC_AUTH_TOKEN-}"
-          fi
           if [ -n "$claude_oauth_token_input" ]; then
             claude_code_oauth_token="$claude_oauth_token_input"
           else
