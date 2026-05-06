@@ -3134,10 +3134,12 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.leftTraceWordMap_range_finrank_eq_of_isNBlkInjective}
     \lean{MPSTensor.leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge}
     \lean{MPSTensor.leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.not_three_block_trace_relation_left_of_isNBlkInjective_of_dim_gt}
     \lean{MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective}
     \lean{MPSTensor.bondDim_eq_of_groundSpace_eq_of_isNBlkInjective}
     \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge}
     \lean{MPSTensor.bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge}
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion}
     If \(A\) and \(B\) are length-\(L\) block-injective, the map
@@ -3148,7 +3150,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \(\mathcal G_L^A=\mathcal G_L^B\).  In particular, the three-block
     trace relation from
     Lemma~\ref{lem:three_block_relation_ground_space_inclusion} gives this
-    equality whenever the source-paper size ordering is available.
+    equality whenever the source-paper size ordering is available.  If the
+    inclusion comes from the strictly larger block, \(D_B<D_A\), then the same
+    dimension step already contradicts the existence of the three-block trace
+    relation.  More generally, if an external source input rules out the
+    simultaneous conclusion \(D_A=D_B\) and
+    \(\mathcal G_L^A=\mathcal G_L^B\), then the three-block image spaces
+    \(\mathcal G_{3L}^A\) and \(\mathcal G_{3L}^B\) have zero intersection.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -3157,7 +3165,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \(\dim\mathcal G_L^A=D_A^2\) and \(\dim\mathcal G_L^B=D_B^2\).
     Inclusion gives \(D_A^2\le D_B^2\), while \(D_B\le D_A\) gives the
     reverse inequality.  Hence \(D_A=D_B\), and equality of dimensions inside
-    the inclusion gives equality of the image spaces.
+    the inclusion gives equality of the image spaces.  In the strict-size
+    branch this contradicts \(D_B<D_A\).  For the conditional directness
+    statement, a vector in the intersection of the two three-block image spaces
+    has two boundary representations.  If the first boundary matrix is zero,
+    the vector is zero.  Otherwise the difference of the two coefficient
+    formulas is exactly the homogeneous three-block trace relation, so the
+    dimension step gives the forbidden collapse.
 \end{proof}
 
 \begin{lemma}[All-length pair trace separation has finite cumulative length]
