@@ -211,12 +211,15 @@ lemma exists_commonRepresentativeBlocksAt_blockTensor_isInjective
     hp ⟨L, hL_pos, hL⟩
 
 /-- A representative common-sector family is a normal canonical form once its transported
-representative weights are sorted by strictly decreasing modulus. -/
+representative weights are sorted by non-increasing modulus.
+
+The target normal canonical form permits equal moduli.  Strict ordering is a
+separate restricted branch, not part of the general canonical-form reduction. -/
 lemma isNormalCanonicalForm_commonRepresentativeBlocks
     (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖)) :
+    (hAnti : Antitone (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖)) :
     IsNormalCanonicalForm (d := blockPhysDim d F.p)
       (F.commonRepresentativeWeight μ) F.commonRepresentativeBlocks :=
   isNormalCanonicalForm_of_tp_primitive_irr_sorted
@@ -237,7 +240,7 @@ lemma isNormalCanonicalForm_commonRepresentativeBlocksAt
     {p' : ℕ} (hp : F.p = p')
     (μ : Fin r → ℂ)
     (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖)) :
+    (hAnti : Antitone (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖)) :
     IsNormalCanonicalForm (d := blockPhysDim d p')
       (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) := by
   subst p'

@@ -44,7 +44,7 @@ primitive block decomposition.
 * `exists_tp_primitive_blockDecomp_after_blocking` — arbitrary tensors admit a
   blocked decomposition into a zero tail and TP-primitive blocks.
 * `isNormalCanonicalForm_of_tp_primitive_irr_sorted` — a blocked TP-primitive
-  family with irreducible blocks and strictly separated weights is already in
+  family with irreducible blocks and non-increasing weights is already in
   normal canonical form.
 * `exists_normalCanonicalForm_of_primitive_input` — primitive block data with
   distinct weight norms yields a normal canonical form without nontrivial
@@ -146,19 +146,22 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
 /-!
 ## Conditional normal canonical form
 
-If the blocked weights happen to have pairwise distinct norms, and the blocked
+If the blocked weights are ordered by non-increasing norm, and the blocked
 blocks are irreducible, then the data can be shown to satisfy
-`IsNormalCanonicalForm` after sorting by weight norm.
+`IsNormalCanonicalForm`.  Equal weight moduli are allowed; requiring pairwise
+distinct norms is only a restricted separated-representative branch.
 
-This is a conditional theorem: the two extra hypotheses are genuine conditions
+This is a conditional theorem: the extra hypotheses are genuine conditions
 that the reduction does not produce automatically (see gap documentation above).
 -/
 
 /-- **Conditional normal canonical form after blocking.**
 
 If the blocked data additionally satisfy tensor irreducibility for each block,
-pairwise distinct weight norms, and strict weight ordering (already sorted), then
-the data forms an `IsNormalCanonicalForm` directly.
+and the weight moduli are already sorted in non-increasing order, then the data
+forms an `IsNormalCanonicalForm` directly.  Equal moduli are allowed here, as in
+the canonical form of arXiv:1606.00608; strict separation belongs only to the
+restricted strict-representative branch.
 
 For the unsorted case, use `exists_normalCanonicalForm_of_primitive_blockDecomp`
 which handles both sorting and blocking internally. -/
@@ -172,13 +175,13 @@ theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
     (hDim : ∀ k, 0 < dim k)
     (hμne : ∀ k, μ k ≠ 0)
     (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hAnti : StrictAnti (fun k : Fin r => ‖μ k‖)) :
+    (hAnti : Antitone (fun k : Fin r => ‖μ k‖)) :
     IsNormalCanonicalForm (d := d') μ blocks :=
-  IsNormalCanonicalForm.ofStrictSeparatedData
+  IsNormalCanonicalForm.ofSeparatedData
     (HasIrreducibleBlocks.ofForall hIrr)
     (IsLeftCanonicalBlockFamily.ofForall hTP)
     (HasPrimitiveBlocks.ofForall hPrim)
-    { mu_strict_anti := hAnti
+    { mu_antitone := hAnti
       mu_ne_zero := hμne }
     hDim
 

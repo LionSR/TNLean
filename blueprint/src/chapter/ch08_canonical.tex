@@ -1823,7 +1823,7 @@ the common length $p=m_k e_k$.
 	nonzero weights remain nonzero after being transported to the common
 	blocking length and replicated over the flattened sector family.  If the
 	original weights are nonzero and the transported weights are sorted by
-	strictly decreasing norm, the flattened common-sector family is a normal
+	non-increasing norm, the flattened common-sector family is a normal
 	canonical form.
 \end{lemma}
 
@@ -3279,8 +3279,8 @@ sector weights.
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
 	\leanok
 	\uses{def:is_normal_canonical_form}
-	Let $(\mu_k, A_k)$ be a finite block family with strictly decreasing norms
-	$|\mu_1| > \cdots > |\mu_r|$.
+	Let $(\mu_k, A_k)$ be a finite block family with non-increasing norms
+	$|\mu_1| \geq \cdots \geq |\mu_r|$.
 	If every block $A_k$ is left-canonical, primitive, irreducible, has positive
 	bond dimension, and every $\mu_k \neq 0$, then $(\mu_k,A_k)$ is a normal
 	canonical form.
