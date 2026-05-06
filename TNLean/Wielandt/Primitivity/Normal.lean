@@ -32,7 +32,7 @@ positivity witnesses still require the separate aperiodicity input.
 
 ### From normality
 
-* `wielandt_full_analysis`: collects the four standard Wielandt-chain outputs
+* `wielandt_full_analysis`: collects the four cumulative consequences of normality
 
 ## References
 
@@ -127,18 +127,18 @@ theorem transferMap_pow_ne_zero_of_hasPrimitiveFixedPoint [NeZero D]
   rcases hP with ⟨ρ, hρ⟩
   exact transferMap_pow_ne_zero_of_isPrimitiveMPS hρ n
 
-/-! ## Part 3: Recall the Wielandt chain from normality -/
+/-! ## Part 3: Recall cumulative consequences of normality -/
 
-/-- **The complete Wielandt analysis from normality.**
+/-- Cumulative Wielandt analysis data from normality.
 
-Given `IsNormal A`, the full Wielandt chain provides:
+Given `IsNormal A`, the cumulative part of the Wielandt argument provides:
 1. Cumulative span T_{D²} = ⊤ (all matrices reachable)
 2. A word w₀ with |w₀| ≤ D² and tr(evalWord A w₀) ≠ 0
 3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
 4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
 
-This states `wielandt_chain` from `WielandtBound.lean` under a cleaner name. -/
-theorem wielandt_full_analysis [NeZero D]
+This restates `wielandt_chain` in the normality setting. -/
+lemma wielandt_full_analysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ ∧
     (∃ (w₀ : List (Fin d)),
