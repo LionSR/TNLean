@@ -788,7 +788,7 @@
   <a href="ch-algebraic_ft.html#sec:multi_block_ft"><span class="toc_ref">17.9</span> <span class="toc_entry">The multi-block Fundamental Theorem</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
+  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from ordered canonical-form data</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
@@ -1836,7 +1836,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f5619ada750>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f389eb0e750>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Equation&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -4136,9 +4136,9 @@
 
   </div>
 </div>
-<h1 id="sec:block_separation">17.10 Block separation from canonical form</h1>
+<h1 id="sec:block_separation">17.10 Block separation from ordered canonical-form data</h1>
 
-<p>The multi-block Fundamental Theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">17.38</a>) assumes per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). In practice, one starts from the weaker global hypothesis that the block-diagonal tensors satisfy the same MPV family: \(\mathcal{V}\! (\bigoplus _k \mu _k A_k) = \mathcal{V}\! (\bigoplus _k \mu _k B_k)\). Block separation extracts the per-block identities from the global one under canonical-form normalization. The first step is the weighted block-sum identity </p>
+<p>The multi-block Fundamental Theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_multiBlock_full">17.38</a>) assumes per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). In practice, one starts from the weaker global hypothesis that the block-diagonal tensors satisfy the same MPV family: \(\mathcal{V}\! (\bigoplus _k \mu _k A_k) = \mathcal{V}\! (\bigoplus _k \mu _k B_k)\). Block separation extracts the per-block identities from the global one under canonical-form normalization plus a strict separation of the weight moduli. The first step is the weighted block-sum identity </p>
 <div class="displaymath" id="a0000001327">
   \[  \sum _k \mu _k^N V^{(N)}(A_k)_\sigma = \sum _k \mu _k^N V^{(N)}(B_k)_\sigma ,  \]
 </div>
@@ -4149,7 +4149,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">17.42</span>
-    <span class="definition_thmtitle">Canonical form</span>
+    <span class="definition_thmtitle">Canonical-form data with ordered weights</span>
     <div class="thm_header_extras">
 
     
@@ -4203,17 +4203,18 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A family of block tensors \(\{ A_k\} _{k=0}^{r-1}\) with scaling weights \(\mu _0, \ldots , \mu _{r-1} \in \mathbb {C}^{\times }\) is in <em>canonical form</em> if: </p>
+  <p>   A family of block tensors \(\{ A_k\} _{k=0}^{r-1}\) with scaling weights \(\mu _0, \ldots , \mu _{r-1} \in \mathbb {C}^{\times }\) has <em>canonical-form data with ordered weights</em> if: </p>
 <ol class="enumerate">
   <li><p>each \(A_k\) is injective, </p>
 </li>
   <li><p>each \(A_k\) is left-canonical: \(\sum _i (A_k^i)^{\dagger }\,  A_k^i = \mathbb {1}_{D_k}\), </p>
 </li>
-  <li><p>the weights are strictly ordered by norm: \(|\mu _0| {\gt} |\mu _1| {\gt} \cdots {\gt} |\mu _{r-1}| {\gt} 0\), </p>
+  <li><p>the weights are non-increasing by norm and nonzero: \(|\mu _0| \ge |\mu _1| \ge \cdots \ge |\mu _{r-1}| {\gt} 0\), </p>
 </li>
   <li><p>the self-overlaps are normalised: \(O_{A_k A_k}(N) \to 1\) as \(N \to \infty \). </p>
 </li>
 </ol>
+<p> This records the normalized ordered data used before the final block-separation argument. Equal-modulus blocks are still allowed here, as in the canonical decompositions in arXiv:1606.00608. The strict inequality needed for the leading-block peeling argument is a separate hypothesis in the block-separation lemmas below, and at the BNT level it is obtained only after grouping repeated representatives. </p>
 
   </div>
 </div>
@@ -4223,7 +4224,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">17.43</span>
-    <span class="definition_thmtitle">Normal canonical form</span>
+    <span class="definition_thmtitle">Normal canonical-form data with ordered weights</span>
     <div class="thm_header_extras">
 
     
@@ -4277,7 +4278,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A family is in <em>normal canonical form</em> if it satisfies the canonical-form conditions with each block additionally <em>irreducible</em> (no nontrivial invariant projection) and <em>primitive</em> (the transfer map has spectral gap). </p>
+  <p>   A family has <em>normal canonical-form data with ordered weights</em> if it satisfies Definition&#160;<a href="ch-algebraic_ft.html#def:isCanonicalForm">17.42</a> with each block additionally <em>irreducible</em> (no nontrivial invariant projection) and <em>primitive</em> (the transfer map has spectral gap). </p>
 
   </div>
 </div>
@@ -4360,7 +4361,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The proof is the peeling argument described below for canonical form. The strict weight ordering isolates the leading block, the overlap bounds show that the tail decays geometrically after dividing by the dominant weight, and one then iterates on the remaining blocks. </p>
+  <p>The proof is the peeling argument described below for canonical-form data equipped with a separate strict ordering of the weight moduli. The strict weight ordering isolates the leading block, the overlap bounds show that the tail decays geometrically after dividing by the dominant weight, and one then iterates on the remaining blocks. </p>
 
   </div>
 </div>
@@ -4370,7 +4371,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">17.45</span>
-    <span class="lemma_thmtitle">Block separation from canonical form</span>
+    <span class="lemma_thmtitle">Block separation from canonical-form data and strict weights</span>
     <div class="thm_header_extras">
 
     
@@ -4431,7 +4432,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(\{ A_k\} \) be in canonical form with weights \(\{ \mu _k\} \), and let \(\{ B_k\} \) be another family with each \(B_k\) injective and left-canonical. If \(\mathcal{V}\! (\bigoplus _k \mu _k A_k) = \mathcal{V}\! (\bigoplus _k \mu _k B_k)\), then \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for each block&#160;\(k\) individually. The proof isolates the leading block and treats the remaining blocks as an exponentially decaying tail with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). </p>
+  <p>   Let \(\{ A_k\} \) have canonical-form data with ordered weights \(\{ \mu _k\} \), and assume in addition that the weight norms are strictly decreasing. Let \(\{ B_k\} \) be another family with each \(B_k\) injective and left-canonical. If \(\mathcal{V}\! (\bigoplus _k \mu _k A_k) = \mathcal{V}\! (\bigoplus _k \mu _k B_k)\), then \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for each block&#160;\(k\) individually. The proof isolates the leading block and treats the remaining blocks as an exponentially decaying tail with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). </p>
 
   </div>
 </div>
@@ -4709,7 +4710,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">17.49</span>
-    <span class="theorem_thmtitle">Fundamental Theorem from canonical form</span>
+    <span class="theorem_thmtitle">Fundamental Theorem from canonical-form data and strict weights</span>
     <div class="thm_header_extras">
 
     
@@ -4794,7 +4795,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">17.50</span>
-    <span class="lemma_thmtitle">Explicit gauge from canonical form</span>
+    <span class="lemma_thmtitle">Explicit gauge from canonical-form data and strict weights</span>
     <div class="thm_header_extras">
 
     
@@ -4865,7 +4866,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">17.48</a> with the strict-ordering data extracted from the canonical form. </p>
+  <p> Apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">17.48</a> with the strict-ordering data from the separated hypotheses. </p>
 
   </div>
 </div>

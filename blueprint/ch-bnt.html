@@ -788,7 +788,7 @@
   <a href="ch-algebraic_ft.html#sec:multi_block_ft"><span class="toc_ref">17.9</span> <span class="toc_entry">The multi-block Fundamental Theorem</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from canonical form</span></a>
+  <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from ordered canonical-form data</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
@@ -1403,13 +1403,13 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="thm:bnt_grouping_equal_norm">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:bnt_grouping_equal_norm">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">13.7</span>
-    <span class="lemma_thmtitle">Restricted equal-norm collapse</span>
+    <span class="lemma_thmtitle">Restricted norm-class collapse</span>
     <div class="thm_header_extras">
 
     
@@ -1417,7 +1417,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#thm:bnt_grouping_equal_norm">#</a>
+    <a class="icon proof" href="ch-bnt.html#lem:bnt_grouping_equal_norm">#</a>
     
     <a class="icon proof" href="ch-bnt.html#a0000000975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -1466,7 +1466,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    Let \((\mu _k, A_k)_{k=1}^r\) be a weighted block family with \(\mu _k \neq 0\) for every \(k\). Assume that whenever \(\| \mu _j\|  = \| \mu _k\| \), the tensors \(A_j\) and \(A_k\) generate the same MPV family. Then one can regroup the blocks into a sector decomposition whose associated total tensor generates the same MPV family as \(\bigoplus _k \mu _k A_k\), and whose sector-weight norms are strictly decreasing. </p>
+  <p>    Let \((\mu _k, A_k)_{k=1}^r\) be a weighted block family with \(\mu _k \neq 0\) for every \(k\). Assume that whenever \(\| \mu _j\|  = \| \mu _k\| \), the tensors \(A_j\) and \(A_k\) generate the same MPV family. Then one can regroup the blocks into a sector decomposition whose associated total tensor generates the same MPV family as \(\bigoplus _k \mu _k A_k\), and whose sector-weight norms are strictly decreasing. This is a special-case regrouping lemma, not the full BNT characterization of arXiv:1606.00608: the hypothesis that equal-norm blocks already generate the same MPV family is an input here, while the source BNT construction obtains the representatives by the minimal phase-gauge equivalence relation. </p>
 
   </div>
 </div>
@@ -2856,6 +2856,7 @@
   \[  \sum _q \mu _{j,q}^N  \]
 </div>
 <p> on the two sides. The Newton–Girard input says that equality of all these power sums determines the multiset of weights with multiplicity. It is not a replacement for the BNT matching argument: the block permutation and the phase gauges must already have identified which basis tensor is being compared. Once that matching is available, the power-sum lemma supplies the multiplicity and weight equality needed to assemble the weighted block-diagonal gauge. </p>
+<p>The statement below is the same-cardinality form with equality for all positive exponents used by the BNT comparison in this section. The Appendix lemma in the source is sharper: the two finite families need not initially have the same cardinality, only finitely many power sums up to the larger cardinality are assumed, and the conclusion is equality of the ordered families. </p>
 
   </div>
 </div>
