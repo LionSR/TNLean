@@ -30,7 +30,8 @@ $$
 $$
 Reversing the cyclic order gives the equivalent convention
 $\mathcal E_A^*(P_{u+1}) = P_u$, which is the indexing used by the cyclic
-iteration lemmas.
+iteration lemmas.  In that reversed convention, the off-diagonal support is
+$A^i = \sum_u P_{u+1} A^i P_u$.
 For a finite family of original blocks, a further common blocking length puts all
 cyclic sectors over one physical alphabet.
 
