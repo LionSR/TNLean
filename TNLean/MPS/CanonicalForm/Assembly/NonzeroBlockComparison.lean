@@ -16,9 +16,8 @@ compares the nonzero parts directly. The length-zero equation records the
 residual all-zero-block contribution, and full equality of the nonzero parts
 follows once the leftover dimensions agree.
 
-Here "zero-tail" is only the formal variable name for the total bond dimension of
-the separated all-zero leftover blocks. It is the dimension gap allowed by `∑ k, D_k ≤ D`,
-where the block
+Here "zero-tail" names the total bond dimension of the separated all-zero leftover
+blocks. It is the dimension gap allowed by `∑ k, D_k ≤ D`, where the block
 decomposition may include zero blocks.
 
 ## References
