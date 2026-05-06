@@ -254,8 +254,6 @@ jobs:
       ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
       CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
       CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
-      CLAUDE_DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
-      CLAUDE_DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
     concurrency:
       group: bot-fix-${{ needs.setup.outputs.head_branch }}
       cancel-in-progress: true
@@ -300,10 +298,12 @@ jobs:
           ${{ steps.review_comments.outputs.result }}
           JSON
 
-          echo "skip=$(jq -r '.skip // false' "$RUNNER_TEMP/review-comments.json")" >> "$GITHUB_OUTPUT"
-          echo "review_summary=$(jq -r '.reviewSummary // "No summary available"' "$RUNNER_TEMP/review-comments.json" | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
-          echo "review_state=$(jq -r '.reviewState // "UNKNOWN"' "$RUNNER_TEMP/review-comments.json")" >> "$GITHUB_OUTPUT"
-          echo "threads=$(jq -c '.threads // []' "$RUNNER_TEMP/review-comments.json")" >> "$GITHUB_OUTPUT"
+          {
+            echo "skip=$(jq -r '.skip // false' "$RUNNER_TEMP/review-comments.json")"
+            echo "review_summary=$(jq -r '.reviewSummary // "No summary available"' "$RUNNER_TEMP/review-comments.json" | tr '\n' ' ')"
+            echo "review_state=$(jq -r '.reviewState // "UNKNOWN"' "$RUNNER_TEMP/review-comments.json")"
+            echo "threads=$(jq -c '.threads // []' "$RUNNER_TEMP/review-comments.json")"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Set up Lean toolchain and cache
         if: |
