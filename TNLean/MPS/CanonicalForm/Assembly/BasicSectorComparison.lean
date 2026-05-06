@@ -13,6 +13,10 @@ This module contains the first sector-comparison consequences used after the
 canonical-form reduction: zero-tail block-span comparisons and common MPV
 phase-cover routes for the leftover all-zero block bookkeeping.
 
+Here "zero-tail" means the total bond dimension of the separated all-zero
+leftover blocks in the block decomposition.  It is the dimension gap allowed by
+`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
+
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
