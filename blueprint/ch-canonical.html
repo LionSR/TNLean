@@ -2261,7 +2261,13 @@
 </div>
 <h2 id="subsec:burnside_jacobson_connection">11.4.1 External Burnside–Jacobson connection to algebra span</h2>
 
-<p>The irreducibility condition (Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">11.15</a>) is formulated in terms of invariant <em>projections</em>. For Burnside-style arguments it is more natural to work with invariant <em>subspaces</em> of \(\mathbb {C}^D\) under the Kraus operators. The canonical-form papers provide the invariant-subspace reduction: repeated removal of invariant subspaces leaves blocks with no nontrivial invariant subspace. The next step used here is a separate finite-dimensional algebra input: over \(\mathbb {C}\), an irreducible matrix action generates the full endomorphism algebra. </p>
+<p>The irreducibility condition (Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">11.15</a>) is formulated in terms of invariant <em>projections</em>. For Burnside-style arguments it is more natural to work with invariant <em>subspaces</em> of \(\mathbb {C}^D\) under the Kraus operators. The canonical-form reduction of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Section&#160;2.3
+	]
+</span> provides the invariant-subspace reduction: repeated removal of invariant subspaces leaves blocks with no nontrivial invariant subspace. The next step used here is a separate finite-dimensional algebra input: over \(\mathbb {C}\), an irreducible matrix action generates the full endomorphism algebra. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:alg_span">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -2613,7 +2619,13 @@
 	<a href="sect0001.html#Jacobson2009BasicAlgebraII" >Jac09</a>
 	
 	]
-</span>. </p>
+</span>. It is not a step stated in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Section&#160;2.3
+	]
+</span>; it is the external algebraic input that turns irreducible action into full algebra spanning. </p>
 
   </div>
 </div>
@@ -2649,7 +2661,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>This Burnside–Jacobson density step is a substantial external algebraic ingredient in the chapter. The cited MPS arguments provide the invariant-subspace decomposition and the later blocking-to-injectivity results; they do not name Burnside as a separate theorem at this point. The formal algebraic input used here is precisely </p>
+  <p>This Burnside–Jacobson density step is a substantial external algebraic ingredient in the chapter. The source MPS argument provides the invariant-subspace decomposition and the later blocking-to-injectivity results; it does not name Burnside as a separate theorem at this point. The formal algebraic input used here is precisely </p>
 <div class="displaymath" id="a0000000793">
   \[  \text{irreducible action on }\mathbb {C}^D \quad \Longrightarrow \quad \operatorname{alg}(A)=M_{D}(\mathbb {C}).  \]
 </div>
@@ -4420,7 +4432,13 @@
 </div>
 <h1 id="sec:zero_block_separation">11.9 Zero-block separation</h1>
 
-<p>In the irreducible block decomposition, some blocks may have all-zero Kraus operators. Such blocks contribute to the MPV only at word length \(N = 0\) (where their contribution equals their bond dimension). The following results separate the zero blocks from the nonzero blocks. Following arXiv:1606.00608, equation&#160;(8), this is the case \(\sum _k D_k \le D\), where “there can be zero blocks”. In this case the <em>zero-tail bond dimension</em> is the total bond dimension of these all-zero leftover blocks. It is not an additional source-paper structure; it is a name for the all-zero summand \(\mathbf{0}_{d,D_0}\) used to retain the \(N=0\) MPV coefficient. </p>
+<p>In the irreducible block decomposition, some blocks may have all-zero Kraus operators. Such blocks contribute to the MPV only at word length \(N = 0\) (where their contribution equals their bond dimension). The following results separate the zero blocks from the nonzero blocks. In the block decomposition of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
+	, Section&#160;2.3
+	]
+</span>, the allowance \(\sum _k D_k \le D\) is explained by the statement that “there can be zero blocks”. In this chapter the <em>zero-tail bond dimension</em> is the total bond dimension of these all-zero leftover blocks. It is not an additional structure in the cited source; it is a name for the all-zero summand \(\mathbf{0}_{d,D_0}\) used to retain the \(N=0\) MPV coefficient. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:zero_mps_tensor">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -4618,7 +4636,7 @@
   <div class="theorem_thmcontent">
   <p>   Every MPS tensor \(A\) admits a block decomposition into: </p>
 <ol class="enumerate">
-  <li><p>a <em>trivial block</em> of bond dimension \(D_0\) with all Kraus operators zero (accumulating all all-zero irreducible blocks), and </p>
+  <li><p>a <em>trivial block</em> of bond dimension \(D_0\) with all Kraus operators zero (accumulating all irreducible all-zero blocks), and </p>
 </li>
   <li><p>a finite family of <em>nontrivial blocks</em> \((B_k)_{k=1}^r\), each irreducible, each with at least one nonzero Kraus operator, and each with positive bond dimension, </p>
 </li>
@@ -4627,7 +4645,7 @@
 <div class="displaymath" id="a0000000818">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,D_0})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^r B_k\bigr)_\sigma  \]
 </div>
-<p> for every spin configuration \(\sigma \) of length \(N\). At \(N = 0\) this reads \(D = D_0 + \sum _{k=1}^r D_k\). For \(N \ge 1\) this all-zero, zero-tail term vanishes. </p>
+<p> for every spin configuration \(\sigma \) of length \(N\). At \(N = 0\) this reads \(D = D_0 + \sum _{k=1}^r D_k\). For \(N \ge 1\) this all-zero-block term vanishes. </p>
 
   </div>
 </div>
@@ -10957,7 +10975,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For any MPS tensor \(A\), there exist a period \(p \ge 1\), a zero-tail bond dimension \(D_0\), nonzero weights \((\mu _k)_{k=1}^r\), and left-canonical blocks \((B_k)_{k=1}^r\) with primitive transfer maps and positive bond dimensions, such that </p>
+  <p>   For any MPS tensor \(A\), there exist a period \(p \ge 1\), a zero-tail bond dimension \(D_0\) for the separated all-zero blocks, nonzero weights \((\mu _k)_{k=1}^r\), and left-canonical blocks \((B_k)_{k=1}^r\) with primitive transfer maps and positive bond dimensions, such that </p>
 <div class="displaymath" id="a0000000905">
   \[  V^{(N)}\! \bigl(A^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\mathbf{0}_{d^{[p]},D_0}\bigr)_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k B_k\bigr)_\sigma .  \]
 </div>
@@ -10972,7 +10990,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.49</a> to get the trivial block and left-canonical nontrivial blocks. Apply Theorem&#160;<a href="ch-canonical.html#thm:common_blocking_period">11.69</a> to find a common blocking period \(p\) making all transfer maps primitive. Lemma&#160;<a href="ch-canonical.html#lem:block_weights_ne_zero">11.54</a> keeps the blocked weights nonzero, and Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">11.175</a> transports the zero-tail/nonzero MPV identity through the blocking step. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.49</a> to get the trivial block and left-canonical nontrivial blocks. Apply Theorem&#160;<a href="ch-canonical.html#thm:common_blocking_period">11.69</a> to find a common blocking period \(p\) making all transfer maps primitive. Lemma&#160;<a href="ch-canonical.html#lem:block_weights_ne_zero">11.54</a> keeps the blocked weights nonzero, and Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">11.175</a> transports the all-zero-block/nonzero MPV identity through the blocking step. </p>
 
   </div>
 </div>
@@ -14281,7 +14299,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Each of two tensors admits some blocking after which it decomposes independently into an all-zero tensor of zero-tail bond dimension plus left-canonical blocks with primitive transfer maps, nonzero scalar weights, and positive bond dimensions. Moreover, at every blocked system size and every blocked word, the MPV of the blocked tensor is the sum of the zero-tail MPV and the MPV of the weighted nonzero-block tensor: </p>
+  <p>   Each of two tensors admits some blocking after which it decomposes independently into an all-zero tensor of the zero-tail bond dimension defined in Section&#160;<a href="ch-canonical.html#sec:zero_block_separation">11.9</a>, plus left-canonical blocks with primitive transfer maps, nonzero scalar weights, and positive bond dimensions. Moreover, at every blocked system size and every blocked word, the MPV of the blocked tensor is the sum of this all-zero-block MPV and the MPV of the weighted nonzero-block tensor: </p>
 <div class="displaymath" id="a0000000929">
   \[  V^{(N)}(A^{[p_A]})_\sigma = V^{(N)}(Z_{p_A,z_A})_\sigma + V^{(N)}\! \left(\bigoplus _k \mu ^A_k A_k\right)_\sigma ,  \]
 </div>
@@ -14366,7 +14384,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose \(A\) is expressed as an all-zero tensor of zero-tail bond dimension plus a nonzero part \(L\) at all system sizes. For every positive blocking length \(p\), the blocked tensor \(A^{[p]}\) is expressed as the same zero-tail bond dimension plus \(L^{[p]}\). The all-zero term still contributes only at blocked length \(0\). </p>
+  <p>   Suppose \(A\) is expressed as an all-zero tensor, carrying the zero-block bond dimension from Section&#160;<a href="ch-canonical.html#sec:zero_block_separation">11.9</a>, plus a nonzero part \(L\) at all system sizes. For every positive blocking length \(p\), the blocked tensor \(A^{[p]}\) is expressed as the same all-zero-block contribution plus \(L^{[p]}\). The all-zero term still contributes only at blocked length \(0\). </p>
 
   </div>
 </div>
@@ -14378,7 +14396,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Flatten a blocked word of length \(N\) to an original word of length \(Np\). Since \(p{\gt}0\), this length is zero exactly when \(N=0\), so the zero-tail MPV is unchanged by the reblocking convention. </p>
+  <p>Flatten a blocked word of length \(N\) to an original word of length \(Np\). Since \(p{\gt}0\), this length is zero exactly when \(N=0\), so the all-zero-block MPV is unchanged by the reblocking convention. </p>
 
   </div>
 </div>
@@ -14449,7 +14467,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose \(A\) is expressed as an all-zero tensor of zero-tail bond dimension plus the weighted nonzero-block tensor \(\bigoplus _k \mu _k B_k\). For every positive blocking length \(p\), \(A^{[p]}\) is expressed as the same zero-tail contribution plus the weighted blocked nonzero tensor \(\bigoplus _k \mu _k^p B_k^{[p]}\). </p>
+  <p>   Suppose \(A\) is expressed as an all-zero tensor, carrying the zero-block bond dimension, plus the weighted nonzero-block tensor \(\bigoplus _k \mu _k B_k\). For every positive blocking length \(p\), \(A^{[p]}\) is expressed as the same all-zero-block contribution plus the weighted blocked nonzero tensor \(\bigoplus _k \mu _k^p B_k^{[p]}\). </p>
 
   </div>
 </div>
@@ -14534,7 +14552,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Suppose two tensors have the same MPV family and each is expressed as an all-zero tensor of zero-tail bond dimension plus a weighted nonzero-block tensor. Then the two nonzero-block tensors agree on every positive system size, and at size \(0\) the equality is exactly the equality of the two zero-tail contributions plus the two nonzero bond-dimension traces. </p>
+  <p>   Suppose two tensors have the same MPV family and each is expressed as an all-zero tensor of the zero-tail bond dimension from Section&#160;<a href="ch-canonical.html#sec:zero_block_separation">11.9</a>, plus a weighted nonzero-block tensor. Then the two nonzero-block tensors agree on every positive system size, and at size \(0\) the equality is exactly the equality of the two all-zero-block contributions plus the two nonzero bond-dimension traces. </p>
 
   </div>
 </div>
@@ -14546,7 +14564,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For \(N{\gt}0\), the MPV of the all-zero tensor is zero, so the two decompositions can be compared directly through the common MPV family. For \(N=0\), the zero-tail MPV is its bond dimension, giving the stated length-zero identity. </p>
+  <p> For \(N{\gt}0\), the MPV of the all-zero tensor is zero, so the two decompositions can be compared directly through the common MPV family. For \(N=0\), the all-zero-block MPV is its bond dimension, giving the stated length-zero identity. </p>
 
   </div>
 </div>
@@ -14617,7 +14635,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>, after any positive common blocking length \(p\), the powered weighted nonzero-block tensors agree on all positive blocked system sizes. At blocked length \(0\), the same zero-tail identity holds with weights transported from \(\mu _k\) to \(\mu _k^p\). </p>
+  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>, after any positive common blocking length \(p\), the powered weighted nonzero-block tensors agree on all positive blocked system sizes. At blocked length \(0\), the same length-zero identity holds with weights transported from \(\mu _k\) to \(\mu _k^p\). </p>
 
   </div>
 </div>
@@ -14629,7 +14647,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Use Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">11.175</a> on both zero-tail decompositions, block the original MPV equality, and apply Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a> at the blocked physical dimension. </p>
+  <p>Use Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">11.175</a> on both all-zero-block decompositions, block the original MPV equality, and apply Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a> at the blocked physical dimension. </p>
 
   </div>
 </div>
@@ -14698,7 +14716,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>, if the two zero-tail dimensions are equal, then the two nonzero-block tensors have the same MPV family, including the length-zero case. </p>
+  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>, if the two leftover zero-block dimensions are equal, then the two nonzero-block tensors have the same MPV family, including the length-zero case. </p>
 
   </div>
 </div>
@@ -14710,7 +14728,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The positive-length cases are exactly the first conclusion of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>. At \(N=0\), substitute the equality of zero-tail dimensions into the length-zero identity and cancel the common scalar term. </p>
+  <p> The positive-length cases are exactly the first conclusion of Theorem&#160;<a href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">11.176</a>. At \(N=0\), substitute the equality of leftover zero-block dimensions into the length-zero identity and cancel the common scalar term. </p>
 
   </div>
 </div>
@@ -14783,7 +14801,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then each tensor admits a blocked decomposition into a zero-tail tensor plus nonzero left-canonical blocks with primitive transfer maps and positive bond dimensions. The theorem also retains, for each blocking period, the relation that the blocked tensors generate the same MPV family. </p>
+  <p>   If two tensors generate the same MPV family, then each tensor admits a blocked decomposition into an all-zero tensor of the zero-tail bond dimension, plus nonzero left-canonical blocks with primitive transfer maps and positive bond dimensions. The theorem also retains, for each blocking period, the relation that the blocked tensors generate the same MPV family. </p>
 
   </div>
 </div>
@@ -14795,7 +14813,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.126</a> separately to the two tensors and keep the zero-tail MPV equations returned by that theorem. The property that the blocked tensors generate the same MPV family follows by blocking the original equality. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_primitive_blockdecomp">11.126</a> separately to the two tensors and keep the length-zero all-zero-block equations returned by that theorem. The property that the blocked tensors generate the same MPV family follows by blocking the original equality. </p>
 
   </div>
 </div>
@@ -14874,7 +14892,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then after all-zero-block separation and trace-preserving gauge each side has irreducible nonzero-weight blocks. The nonzero-block tensors agree at all positive system sizes, while the length-zero case is included as the exact zero-tail identity. Moreover each nonzero-weight block has primitive irreducible cyclic sectors. The period-removal length for those sectors is kept separate from any later common blocking or injectivity length. </p>
+  <p>   If two tensors generate the same MPV family, then after all-zero-block separation and trace-preserving gauge each side has irreducible nonzero-weight blocks. The nonzero-block tensors agree at all positive system sizes, while the length-zero case is included as the exact all-zero-block identity. Moreover each nonzero-weight block has primitive irreducible cyclic sectors. The period-removal length for those sectors is kept separate from any later common blocking or injectivity length. </p>
 
   </div>
 </div>
@@ -14963,7 +14981,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then the zero-tail/TP-gauge reduction for nonzero-weight blocks can be combined with a common reblocking of all per-block cyclic sectors. Each side obtains a finite flattened sector family at one physical blocking length, with trace preservation, primitive transfer maps, tensor irreducibility, positive bond dimensions, and nonzero unit weights. The theorem keeps the positive-length equality of the nonzero parts and the exact \(N=0\) zero-tail identity for the original nonzero-block tensors. </p>
+  <p>   If two tensors generate the same MPV family, then the all-zero-block/TP-gauge reduction for nonzero-weight blocks can be combined with a common reblocking of all per-block cyclic sectors. Each side obtains a finite flattened sector family at one physical blocking length, with trace preservation, primitive transfer maps, tensor irreducibility, positive bond dimensions, and nonzero unit weights. The theorem keeps the positive-length equality of the nonzero parts and the exact \(N=0\) all-zero-block identity for the original nonzero-block tensors. </p>
 
   </div>
 </div>
@@ -14979,7 +14997,7 @@
 
   </div>
 </div>
-<p>The next results put the cyclic-sector decompositions on a common blocked alphabet. They compare direct blocking with iterated cyclic-sector blocking and transport the zero-tail identity through this comparison. </p>
+<p>The next results put the cyclic-sector decompositions on a common blocked alphabet. They compare direct blocking with iterated cyclic-sector blocking and transport the all-zero-block identity through this comparison. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_after_blocking_reindexed_common_sector_live_zero_tail">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -15057,7 +15075,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then after reblocking the nonzero blocks one obtains cyclic-sector families over a common alphabet. These families preserve the MPV of the reblocked nonzero part, with nonzero transported weights \(\mu _k^p\), and retain the zero-tail identity. </p>
+  <p>   If two tensors generate the same MPV family, then after reblocking the nonzero blocks one obtains cyclic-sector families over a common alphabet. These families preserve the MPV of the reblocked nonzero part, with nonzero transported weights \(\mu _k^p\), and retain the all-zero-block identity. </p>
 
   </div>
 </div>
@@ -15069,7 +15087,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Start from the common reblocked cyclic-sector families on the two sides. Apply the zero-tail reblocking theorem to the original nonzero-block decomposition, then use the common-alphabet sector decomposition and the derived structural properties of the common-sector family. </p>
+  <p> Start from the common reblocked cyclic-sector families on the two sides. Apply the all-zero-block reblocking theorem to the original nonzero-block decomposition, then use the common-alphabet sector decomposition and the derived structural properties of the common-sector family. </p>
 
   </div>
 </div>
@@ -15158,7 +15176,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then the cyclic-sector decompositions on the two sides can be expressed at one common positive blocking length. At this length the nonzero parts still agree at positive system sizes, and the length-zero identity is exactly the zero-tail identity. </p>
+  <p>   If two tensors generate the same MPV family, then the cyclic-sector decompositions on the two sides can be expressed at one common positive blocking length. At this length the nonzero parts still agree at positive system sizes, and the length-zero identity is exactly the all-zero-block identity. </p>
 
   </div>
 </div>
@@ -15170,7 +15188,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Start from the per-block cyclic-sector theorem. Let \(p_A\) and \(p_B\) be the least common multiples of the period-removal lengths on the two sides, and use \(p=\mathrm{lcm}(p_A,p_B)\). The prescribed-common-multiple theorem constructs both one-sided sector families at this same length. The zero-tail and positive- length equalities are the existing reblocking statements, and the sector conclusions are the common-alphabet MPV equalities. </p>
+  <p> Start from the per-block cyclic-sector theorem. Let \(p_A\) and \(p_B\) be the least common multiples of the period-removal lengths on the two sides, and use \(p=\mathrm{lcm}(p_A,p_B)\). The prescribed-common-multiple theorem constructs both one-sided sector families at this same length. The all-zero-block and positive- length equalities are the existing reblocking statements, and the sector conclusions are the common-alphabet MPV equalities. </p>
 
   </div>
 </div>
@@ -15255,7 +15273,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume a zero-tail/nonzero decomposition on one side. If direct blocking of each nonzero block agrees with the corresponding iterated cyclic-sector blocking, then the zero-tail identity can be rewritten using the common cyclic-sector family. The coordinate-grouping condition supplies this agreement at any prescribed common blocking length. </p>
+  <p>   Assume an all-zero-block/nonzero decomposition on one side. If direct blocking of each nonzero block agrees with the corresponding iterated cyclic-sector blocking, then the all-zero-block identity can be rewritten using the common cyclic-sector family. The coordinate-grouping condition supplies this agreement at any prescribed common blocking length. </p>
 
   </div>
 </div>
@@ -15267,7 +15285,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Transport the zero-tail/nonzero decomposition to the common blocking length. The blockwise comparison then replaces the directly blocked nonzero part by the weighted common-sector tensor. </p>
+  <p> Transport the all-zero-block/nonzero decomposition to the common blocking length. The blockwise comparison then replaces the directly blocked nonzero part by the weighted common-sector tensor. </p>
 
   </div>
 </div>
@@ -15344,7 +15362,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume a zero-tail/nonzero decomposition on one side. If the blocked nonzero tensor agrees, after identifying blocked words, with the common cyclic-sector family, then the same zero-tail identity can be written in that common alphabet. At positive system sizes this says that the blocked tensor and the weighted common-sector tensor have the same MPV coefficients. </p>
+  <p>   Assume an all-zero-block/nonzero decomposition on one side. If the blocked nonzero tensor agrees, after identifying blocked words, with the common cyclic-sector family, then the same all-zero-block identity can be written in that common alphabet. At positive system sizes this says that the blocked tensor and the weighted common-sector tensor have the same MPV coefficients. </p>
 
   </div>
 </div>
@@ -15356,7 +15374,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Transport the zero-tail/nonzero decomposition to the common blocking length. The word-identification hypothesis then replaces the blocked nonzero tensor by the weighted common-sector tensor. At positive lengths the zero-tail tensor has zero MPV coefficients. </p>
+  <p> Transport the all-zero-block/nonzero decomposition to the common blocking length. The word-identification hypothesis then replaces the blocked nonzero tensor by the weighted common-sector tensor. At positive lengths the all-zero tensor has zero MPV coefficients. </p>
 
   </div>
 </div>
@@ -15443,7 +15461,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a> to choose the common blocking length and the two common cyclic-sector families. The assumed word identification converts the blocked nonzero part into the weighted common-sector family on each side. The zero-tail equations then give the displayed decompositions. The structural properties and nonzero weights come from the common-sector families. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a> to choose the common blocking length and the two common cyclic-sector families. The assumed word identification converts the blocked nonzero part into the weighted common-sector family on each side. The all-zero-block equations then give the displayed decompositions. The structural properties and nonzero weights come from the common-sector families. </p>
 
   </div>
 </div>
@@ -15516,7 +15534,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(L_A,L_B\) be two nonzero parts whose MPV families agree at positive lengths and whose zero-tail dimensions satisfy the length-zero identity. If \(L_A'\) and \(L_B'\) generate the same MPV families as \(L_A\) and \(L_B\), respectively, then \(L_A'\) and \(L_B'\) satisfy the same positive-length equality and the same length-zero zero-tail identity. </p>
+  <p>   Let \(L_A,L_B\) be two nonzero parts whose MPV families agree at positive lengths and whose leftover zero-block dimensions satisfy the length-zero identity. If \(L_A'\) and \(L_B'\) generate the same MPV families as \(L_A\) and \(L_B\), respectively, then \(L_A'\) and \(L_B'\) satisfy the same positive-length equality and the same length-zero all-zero-block identity. </p>
 
   </div>
 </div>
@@ -15605,7 +15623,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the blocked nonzero part agrees with the common-sector tensor, then the zero-tail identity can be written with that common-sector tensor. Nonzero original weights remain nonzero after the blocking power. </p>
+  <p>   If the blocked nonzero part agrees with the common-sector tensor, then the all-zero-block identity can be written with that common-sector tensor. Nonzero original weights remain nonzero after the blocking power. </p>
 
   </div>
 </div>
@@ -15698,7 +15716,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume a zero-tail/nonzero decomposition with nonzero weights. If the common blocked alphabet is identified with each iterated alphabet by grouping consecutive words, then the zero-tail identity can be written with the weighted common-sector family. </p>
+  <p>   Assume an all-zero-block/nonzero decomposition with nonzero weights. If the common blocked alphabet is identified with each iterated alphabet by grouping consecutive words, then the all-zero-block identity can be written with the weighted common-sector family. </p>
 
   </div>
 </div>
@@ -15710,7 +15728,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The coordinate-grouping comparison identifies the directly blocked nonzero part with the weighted common-sector family. Combine this with the zero-tail identity and the nonzero-weight statement. </p>
+  <p> The coordinate-grouping comparison identifies the directly blocked nonzero part with the weighted common-sector family. Combine this with the all-zero-block identity and the nonzero-weight statement. </p>
 
   </div>
 </div>
@@ -15783,7 +15801,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, choose a common blocking length for their cyclic-sector decompositions. If each blocked nonzero part agrees with its common-sector form after identifying words, then all zero-tail identities and positive-length MPV equalities can be stated using the common sector families. </p>
+  <p>   If two tensors generate the same MPV family, choose a common blocking length for their cyclic-sector decompositions. If each blocked nonzero part agrees with its common-sector form after identifying words, then all length-zero identities and positive-length MPV equalities can be stated using the common sector families. </p>
 
   </div>
 </div>
@@ -15795,7 +15813,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a>. The two word-identification hypotheses identify the blocked nonzero parts with the weighted common-sector tensors. Substituting these MPV equalities into the zero-tail equations gives the rewritten zero-tail identities, the positive-length MPV equalities, and the \(N=0\) identity. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a>. The two word-identification hypotheses identify the blocked nonzero parts with the weighted common-sector tensors. Substituting these MPV equalities into the all-zero-block equations gives the rewritten all-zero-block identities, the positive-length MPV equalities, and the \(N=0\) identity. </p>
 
   </div>
 </div>
@@ -15835,9 +15853,9 @@
 	, Proposition&#160;IV.4 and Corollary&#160;IV.5
 	]
 </span>. </p>
-<p>The statements in this chapter follow this reduction. Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.49</a> gives the zero-tail block and the trace-preserving irreducible nonzero block family. Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.180</a> applies the cyclic-sector decomposition to each nonzero block, preserving the positive-length MPV equality and the zero-tail identity at \(N=0\). Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">11.99</a> constructs the common reblocked sector family at any common multiple of the period-removal lengths. Consequently Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a> chooses one physical blocking length for both tensors, transports the zero-tail identities to that length, and supplies cyclic-sector families on a common blocked alphabet. The supporting blocking and transport results, including Theorem&#160;<a href="ch-canonical.html#thm:iterated_blocking_samempv_reindex">11.60</a>, identify iterated blocking with one blocking by the product length, after identifying the blocked physical words. </p>
-<p>The results above separate the finite-sum comparison from the blocked-word assertion. Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">11.97</a> shows that, once the length-\(p\) word read directly from the common blocked alphabet equals the word obtained by flattening an iterated \((m_k,e_k)\) block, the weighted direct sum of directly blocked nonzero blocks agrees with the common-sector family. Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_of_blocked_word_comparison">11.184</a> then rewrites the one-sided zero-tail identity with the weighted common-length cyclic sectors under this blockwise word equality. </p>
-<p>The remaining blocked-word equality, after identifying blocked physical words, is the equality between the blocked nonzero part and the cyclic-sector tensor for the whole weighted family. Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_of_reindexed">11.185</a> gives the one-sided form of this conversion, and Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_reindexed">11.190</a> states it simultaneously for the two common-length sector families. The auxiliary transport statements, Theorems&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">11.188</a>, <a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_grouped_block_cast">11.189</a>, and <a href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">11.187</a>, give the nonzero transported weights and the preservation of the positive-length and length-zero identities, while Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.186</a> collects the resulting primitive irreducible sector decompositions needed for comparison. Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">11.96</a> supplies the direct word equality for the chosen coordinates. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.77</a> gives the intermediate span consequence for these common-sector families: a common MPV phase cover or proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.79</a> states the exact inputs after this point: equality of the zero-tail dimensions, injectivity at the chosen common length, and a common MPV phase cover (or the equivalent finite-length span equality) for the two nonzero-sector families. Thus the canonical-form assertions are the blocked-word identification for the whole weighted nonzero family, the zero-tail and injectivity refinements, and the common-phase or proportional-decomposition comparison for the common-length nonzero sectors. </p>
+<p>The statements in this chapter follow this reduction. Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">11.49</a> gives the all-zero block and the trace-preserving irreducible nonzero block family. Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.180</a> applies the cyclic-sector decomposition to each nonzero block, preserving the positive-length MPV equality and the all-zero-block identity at \(N=0\). Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">11.99</a> constructs the common reblocked sector family at any common multiple of the period-removal lengths. Consequently Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">11.183</a> chooses one physical blocking length for both tensors, transports the all-zero-block identities to that length, and supplies cyclic-sector families on a common blocked alphabet. The supporting blocking and transport results, including Theorem&#160;<a href="ch-canonical.html#thm:iterated_blocking_samempv_reindex">11.60</a>, identify iterated blocking with one blocking by the product length, after identifying the blocked physical words. </p>
+<p>The results above separate the finite-sum comparison from the blocked-word assertion. Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">11.97</a> shows that, once the length-\(p\) word read directly from the common blocked alphabet equals the word obtained by flattening an iterated \((m_k,e_k)\) block, the weighted direct sum of directly blocked nonzero blocks agrees with the common-sector family. Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_of_blocked_word_comparison">11.184</a> then rewrites the one-sided all-zero-block identity with the weighted common-length cyclic sectors under this blockwise word equality. </p>
+<p>The remaining blocked-word equality, after identifying blocked physical words, is the equality between the blocked nonzero part and the cyclic-sector tensor for the whole weighted family. Theorem&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_of_reindexed">11.185</a> gives the one-sided form of this conversion, and Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_reindexed">11.190</a> states it simultaneously for the two common-length sector families. The auxiliary transport statements, Theorems&#160;<a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">11.188</a>, <a href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_grouped_block_cast">11.189</a>, and <a href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">11.187</a>, give the nonzero transported weights and the preservation of the positive-length and length-zero identities, while Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.186</a> collects the resulting primitive irreducible sector decompositions needed for comparison. Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">11.96</a> supplies the direct word equality for the chosen coordinates. Theorem&#160;<a href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">14.77</a> gives the intermediate span consequence for these common-sector families: a common MPV phase cover or proportional-decomposition conclusion supplies the finite-length nonzero-block span equality. Theorem&#160;<a href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.79</a> states the exact inputs after this point: equality of the leftover zero-block dimensions, injectivity at the chosen common length, and a common MPV phase cover (or the equivalent finite-length span equality) for the two nonzero-sector families. Thus the canonical-form assertions are the blocked-word identification for the whole weighted nonzero family, the all-zero-block and injectivity refinements, and the common-phase or proportional-decomposition comparison for the common-length nonzero sectors. </p>
 <p>The sorted normal-canonical-form theorem, Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">11.132</a>, assumes pairwise distinct nonzero weight norms. This is a useful special form after sorting. Equal-norm families require the basis-of-normal-tensors and multiplicity comparison developed later, rather than an artificial separation of equal weight norms. </p>
 
   </div>
