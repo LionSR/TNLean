@@ -98,36 +98,62 @@ runs:
     - name: Resolve Claude provider settings
       id: resolve
       shell: bash
+      env:
+        INPUT_PROVIDER: ${{ inputs.provider }}
+        INPUT_MODEL_TIER: ${{ inputs.model-tier }}
+        INPUT_CLAUDE_OAUTH_TOKEN: ${{ inputs.claude-oauth-token }}
+        INPUT_DEEPSEEK_API_KEY: ${{ inputs.deepseek-api-key }}
+        INPUT_ANTHROPIC_BASE_URL: ${{ inputs.anthropic-base-url }}
+        INPUT_DEEPSEEK_BASE_URL: ${{ inputs.deepseek-base-url }}
+        INPUT_CLAUDE_OPUS_MODEL: ${{ inputs.claude-opus-model }}
+        INPUT_CLAUDE_SONNET_MODEL: ${{ inputs.claude-sonnet-model }}
+        INPUT_DEEPSEEK_OPUS_MODEL: ${{ inputs.deepseek-opus-model }}
+        INPUT_DEEPSEEK_SONNET_MODEL: ${{ inputs.deepseek-sonnet-model }}
+        INPUT_ALLOWED_TOOLS: ${{ inputs.allowed-tools }}
+        INPUT_SYSTEM_PROMPT: ${{ inputs.system-prompt }}
+        INPUT_SYSTEM_PROMPT_FILE: ${{ inputs.system-prompt-file }}
+        INPUT_CLAUDE_ARGS: ${{ inputs.claude-args }}
       run: |
           set -euo pipefail
 
-          provider="${{ inputs.provider }}"
+          write_output() {
+            local name="$1"
+            local value="$2"
+            local delimiter="__${name}_$(date +%s%N)__"
+            {
+              printf '%s<<%s\n' "$name" "$delimiter"
+              printf '%s\n' "$value"
+              printf '%s\n' "$delimiter"
+            } >> "$GITHUB_OUTPUT"
+          }
+
+          provider="$INPUT_PROVIDER"
           provider="${provider,,}"
           provider="${provider:-anthropic}"
-          model_tier="${{ inputs.model-tier }}"
+          model_tier="$INPUT_MODEL_TIER"
           model_tier="${model_tier:-opus}"
-          claude_oauth_token_input="${{ inputs.claude-oauth-token }}"
+          claude_oauth_token_input="$INPUT_CLAUDE_OAUTH_TOKEN"
           if [ -z "$claude_oauth_token_input" ]; then
             claude_oauth_token_input="${CLAUDE_CODE_OAUTH_TOKEN-}"
           fi
 
           if [ "$provider" = "deepseek" ]; then
-            token="${{ inputs.deepseek-api-key }}"
+            token="$INPUT_DEEPSEEK_API_KEY"
             if [ -z "$token" ]; then
               token="${DEEPSEEK_API_KEY-}"
             fi
 
-            model_opus="${{ inputs.deepseek-opus-model }}"
+            model_opus="$INPUT_DEEPSEEK_OPUS_MODEL"
             if [ -z "$model_opus" ]; then
               model_opus="${DEEPSEEK_OPUS_MODEL-deepseek-v4-pro[1m]}"
             fi
 
-            model_sonnet="${{ inputs.deepseek-sonnet-model }}"
+            model_sonnet="$INPUT_DEEPSEEK_SONNET_MODEL"
             if [ -z "$model_sonnet" ]; then
               model_sonnet="${DEEPSEEK_SONNET_MODEL-deepseek-v4-flash}"
             fi
 
-            base_url="${{ inputs.deepseek-base-url }}"
+            base_url="$INPUT_DEEPSEEK_BASE_URL"
             if [ -z "$base_url" ]; then
               base_url="${DEEPSEEK_BASE_URL-https://api.deepseek.com/anthropic}"
             fi
@@ -137,39 +163,31 @@ runs:
               token="${ANTHROPIC_AUTH_TOKEN-}"
             fi
 
-            model_opus="${{ inputs.claude-opus-model }}"
+            model_opus="$INPUT_CLAUDE_OPUS_MODEL"
             if [ -z "$model_opus" ]; then
               model_opus="${CLAUDE_OPUS_MODEL-claude-opus-4-7}"
             fi
 
-            model_sonnet="${{ inputs.claude-sonnet-model }}"
+            model_sonnet="$INPUT_CLAUDE_SONNET_MODEL"
             if [ -z "$model_sonnet" ]; then
               model_sonnet="${CLAUDE_SONNET_MODEL-claude-sonnet-4-6}"
             fi
 
-            base_url="${{ inputs.anthropic-base-url }}"
+            base_url="$INPUT_ANTHROPIC_BASE_URL"
             if [ -z "$base_url" ]; then
               base_url="${ANTHROPIC_BASE_URL-https://api.anthropic.com/v1}"
             fi
           fi
 
-          allowed_bots="${{ inputs['allowed-bots'] }}"
-
-          branch_name_template="${{ inputs['branch-name-template'] }}"
-
-          additional_permissions="${{ inputs['additional-permissions'] }}"
-
-          plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
-
-          allowed_tools="${{ inputs.allowed-tools }}"
+          allowed_tools="$INPUT_ALLOWED_TOOLS"
           if [ -z "$allowed_tools" ]; then
             allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
           fi
 
-          system_prompt="${{ inputs.system-prompt }}"
+          system_prompt="$INPUT_SYSTEM_PROMPT"
           system_prompt_path=""
           if [ -z "$system_prompt" ]; then
-            system_prompt_path="${{ inputs['system-prompt-file'] }}"
+            system_prompt_path="$INPUT_SYSTEM_PROMPT_FILE"
           fi
           if [ -n "$system_prompt_path" ]; then
             if [ ! -f "$system_prompt_path" ]; then
@@ -185,10 +203,7 @@ runs:
             system_prompt="$(printf '%s' "$system_prompt" | tr '\n' ' ')"
           fi
 
-          plugins='${{ inputs.plugins }}'
-          prompt='${{ inputs.prompt }}'
-
-          claude_args="${{ inputs['claude-args'] }}"
+          claude_args="$INPUT_CLAUDE_ARGS"
           claude_args="${claude_args//--allowed-tools/--allowedTools}"
           append_system_prompt=''
           if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
@@ -210,18 +225,12 @@ runs:
               ;;
           esac
 
-          echo "auth_token=$token" >> "$GITHUB_OUTPUT"
-          echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
-          echo "model=$model" >> "$GITHUB_OUTPUT"
-          echo "provider=$provider" >> "$GITHUB_OUTPUT"
-          echo "allowed_bots=$allowed_bots" >> "$GITHUB_OUTPUT"
-          echo "branch_name_template=$branch_name_template" >> "$GITHUB_OUTPUT"
-          echo "additional_permissions=$additional_permissions" >> "$GITHUB_OUTPUT"
-          echo "plugin_marketplaces=$plugin_marketplaces" >> "$GITHUB_OUTPUT"
-          echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
-          echo "prompt=$prompt" >> "$GITHUB_OUTPUT"
-          echo "claude_args=$claude_args" >> "$GITHUB_OUTPUT"
-          echo "append_system_prompt=$append_system_prompt" >> "$GITHUB_OUTPUT"
+          write_output "auth_token" "$token"
+          write_output "base_url" "$base_url"
+          write_output "model" "$model"
+          write_output "provider" "$provider"
+          write_output "claude_args" "$claude_args"
+          write_output "append_system_prompt" "$append_system_prompt"
 
     - name: Run Claude Code
       uses: anthropics/claude-code-action@v1
@@ -231,12 +240,12 @@ runs:
         APPEND_SYSTEM_PROMPT: ${{ steps.resolve.outputs.append_system_prompt }}
       with:
         claude_code_oauth_token: ${{ steps.resolve.outputs.auth_token }}
-        allowed_bots: ${{ steps.resolve.outputs.allowed_bots }}
-        branch_name_template: ${{ steps.resolve.outputs.branch_name_template }}
-        additional_permissions: ${{ steps.resolve.outputs.additional_permissions }}
-        plugin_marketplaces: ${{ steps.resolve.outputs.plugin_marketplaces }}
-        plugins: ${{ steps.resolve.outputs.plugins }}
-        prompt: ${{ steps.resolve.outputs.prompt }}
+        allowed_bots: ${{ inputs.allowed-bots }}
+        branch_name_template: ${{ inputs.branch-name-template }}
+        additional_permissions: ${{ inputs.additional-permissions }}
+        plugin_marketplaces: ${{ inputs.plugin-marketplaces }}
+        plugins: ${{ inputs.plugins }}
+        prompt: ${{ inputs.prompt }}
         claude_args: |
           --model ${{ steps.resolve.outputs.model }}
           ${{ steps.resolve.outputs.claude_args }}
