@@ -410,7 +410,7 @@ paper's full basis-of-normal-tensors construction: if two distinct basis tensors
 occur at the same modulus, they should survive as different basis elements rather
 than being forced into one norm class.
 
-**Why `hMPVEq` is an explicit hypothesis**:
+**Why equal-norm blocks must share an MPV function in this collapse**:
 Equal modulus alone does not force two normal tensors to be gauge-phase equivalent.
 The paper's BNT construction keeps distinct non-equivalent equal-modulus tensors
 as separate basis elements. This collapse lemma is therefore applicable only
