@@ -1455,9 +1455,9 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \section{Cyclic sector decomposition}%
 \label{sec:cyclic_sectors}
 
-The non-periodic canonical-form argument in arXiv:1606.00608 uses only the
-blocking consequence: after blocking by the least common multiple of the
-periods, each block has no non-trivial peripheral period.  The explicit
+The non-periodic canonical-form argument of \cite{Cirac2016MPDO_arXiv} uses
+only the blocking consequence: after blocking by the least common multiple of
+the periods, each block has no non-trivial peripheral period.  The explicit
 projection-sector form used here comes from the periodic decomposition of
 \cite[Theorem~5.7]{PerezGarcia2007Matrix}, refined by the cyclic-block form in
 \cite[equation~(1) and Lemma~1]{DeLasCuevas2017Irreducible}, together with the
@@ -1605,7 +1605,7 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 	\label{lem:cyclic_projection_periodic_fixed}
 	\lean{MPSTensor.adjointTransferMap_pow_fixes_cyclic_projection}
 	\leanok
-	If a family of projections $(P_k)_{k=1}^m$ satisfies
+	If a family of projections $(P_k)_{k=0}^{m-1}$ satisfies
 	$\E^\dagger(P_{k+1}) = P_k$, then the $m$-th iterate of $\E^\dagger$
 	fixes each projection $P_k$.
 \end{lemma}
