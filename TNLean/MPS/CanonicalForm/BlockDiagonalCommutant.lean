@@ -315,6 +315,34 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlo
         (hCF.toHasInjectiveBlocks.block_injective k))
   · norm_num
 
+/-- Positive-length product-word span from normal-CF-BNT data plus explicit
+one-site injectivity.
+
+Normal-CF-BNT data provide the irreducibility, trace-preserving normalization,
+self-overlap normalization, weight ordering, and BNT separation used by the
+direct-sum comparison.  The additional one-site injectivity hypothesis supplies
+the `IsCanonicalFormBNT` injectivity field, after which the previous lemma
+specializes the fixed-length direct-sum input to \(L=2\). -/
+lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  let hCF : IsCanonicalFormBNT μ A :=
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall hInj)
+      hNCF.toIsLeftCanonicalBlockFamily
+      hNCF.toHasStrictOrderedNonzeroWeights
+      hNCF.toHasNormalizedSelfOverlap
+      hNCF.blocks_not_equiv
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    μ A hCF hNCF.toHasIrreducibleBlocks
+
 /-- Conditional positive-length product-word span from all-words pair separation plus eventual
 identity padding for every ordered pair of distinct BNT blocks.
 
