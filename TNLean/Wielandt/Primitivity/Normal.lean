@@ -137,8 +137,7 @@ Given `IsNormal A`, the cumulative part of the Wielandt argument provides:
 3. A nonzero eigenvalue μ and eigenvector φ for evalWord A w₀
 4. Vector spanning: for any nonzero φ, word products applied to φ span ℂ^D
 
-This is the same cumulative consequence expressed at the primitivity-normality
-interface. -/
+This restates `wielandt_chain` in the normality setting. -/
 lemma wielandt_full_analysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     cumulativeSpan A (D ^ 2) = ⊤ ∧
