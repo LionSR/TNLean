@@ -104,48 +104,60 @@ runs:
     - name: Resolve Claude provider settings
       id: resolve
       shell: bash
-      run: |
-        set -euo pipefail
+        run: |
+          set -euo pipefail
 
-        provider="${{ inputs.provider }}"
-        provider="${provider,,}"
-        provider="${provider:-anthropic}"
-        model_tier="${{ inputs.model-tier }}"
-        model_tier="${model_tier:-opus}"
+          provider="${{ inputs.provider }}"
+          provider="${provider,,}"
+          provider="${provider:-anthropic}"
+          model_tier="${{ inputs.model-tier }}"
+          model_tier="${model_tier:-opus}"
+          claude_oauth_token_input="${{ inputs.claude-oauth-token }}"
+          if [ -z "$claude_oauth_token_input" ]; then
+            claude_oauth_token_input="${CLAUDE_CODE_OAUTH_TOKEN-}"
+          fi
 
-        if [ "$provider" = "deepseek" ]; then
-          token="${{ inputs.deepseek-api-key }}"
-          if [ -n "${{ inputs.deepseek-opus-model }}" ]; then
+          if [ "$provider" = "deepseek" ]; then
+            token="${{ inputs.deepseek-api-key }}"
+            if [ -z "$token" ]; then
+              token="${DEEPSEEK_API_KEY-}"
+            fi
+
             model_opus="${{ inputs.deepseek-opus-model }}"
-          else
-            model_opus='deepseek-v4-pro[1m]'
-          fi
+            if [ -z "$model_opus" ]; then
+              model_opus="${DEEPSEEK_OPUS_MODEL-deepseek-v4-pro[1m]}"
+            fi
 
-          if [ -n "${{ inputs.deepseek-sonnet-model }}" ]; then
             model_sonnet="${{ inputs.deepseek-sonnet-model }}"
-          else
-            model_sonnet='deepseek-v4-flash'
-          fi
+            if [ -z "$model_sonnet" ]; then
+              model_sonnet="${DEEPSEEK_SONNET_MODEL-deepseek-v4-flash}"
+            fi
 
-          base_url="${{ inputs.deepseek-base-url }}"
-          base_url="${base_url:-https://api.deepseek.com/anthropic}"
-        else
-          token="${{ inputs.claude-oauth-token }}"
-          if [ -n "${{ inputs.claude-opus-model }}" ]; then
+            base_url="${{ inputs.deepseek-base-url }}"
+            if [ -z "$base_url" ]; then
+              base_url="${DEEPSEEK_BASE_URL-https://api.deepseek.com/anthropic}"
+            fi
+          else
+            token="$claude_oauth_token_input"
+            if [ -z "$token" ]; then
+              token="${ANTHROPIC_AUTH_TOKEN-}"
+            fi
+
             model_opus="${{ inputs.claude-opus-model }}"
-          else
-            model_opus='claude-opus-4-7'
-          fi
+            if [ -z "$model_opus" ]; then
+              model_opus="${CLAUDE_OPUS_MODEL-claude-opus-4-7}"
+            fi
 
-          if [ -n "${{ inputs.claude-sonnet-model }}" ]; then
             model_sonnet="${{ inputs.claude-sonnet-model }}"
-          else
-            model_sonnet='claude-sonnet-4-6'
-          fi
+            if [ -z "$model_sonnet" ]; then
+              model_sonnet="${CLAUDE_SONNET_MODEL-claude-sonnet-4-6}"
+            fi
 
-          base_url="${{ inputs.anthropic-base-url }}"
-          base_url="${base_url:-https://api.anthropic.com/v1}"
-        fi
+            base_url="${{ inputs.anthropic-base-url }}"
+            if [ -z "$base_url" ]; then
+              base_url="${ANTHROPIC_BASE_URL-https://api.anthropic.com/v1}"
+            fi
+          fi
 
         allowed_bots="${{ inputs.allowed_bots }}"
         if [ -z "$allowed_bots" ]; then
