@@ -54,8 +54,8 @@ obtained after blocked-word reindexing. If the remaining zero-tail equality, one
 injectivity, and finite-length span equality are supplied for those same families, then the
 zero-tail block-span comparison theorem gives the sector-weight conclusion.
 
-This lemma states the blocked-word reindexing equality and the final span or
-common-cover assertion as separate hypotheses. -/
+Keeping these comparison inputs explicit lets the same sector data be used after
+either a direct span certificate or a common-cover certificate has supplied it. -/
 lemma afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
