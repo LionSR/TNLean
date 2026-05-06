@@ -8,9 +8,17 @@ import Mathlib.Analysis.SpecificLimits.Normed
 /-!
 # Coefficient convergence for canonical-form BNT decompositions
 
-This module proves that the normalized decomposition coefficients `(μ k / μ 0)^N` converge
-from separated nonzero weights, and provides a self-contained version of the Fundamental Theorem
-(Theorem 4.4) that derives the decomposition data from canonical-form structure.
+This module proves the geometric strict-dominance facts for normalized
+coefficients `(μ k / μ 0)^N` and provides an equivalent formulation of the
+proportional Fundamental Theorem that derives the structural BNT data from
+canonical-form hypotheses.
+
+The ratio convergence lemmas are auxiliary. They are not the source paper's
+BNT coefficient theorem: away from a single surviving dominant sector the
+limits of the normalized ratios are zero, while the proportional matching
+theorem used below assumes nonzero coefficient limits. The full source route
+uses the BNT comparison and, in equal-modulus situations, power-sum arguments
+or induction over matched sectors.
 
 ## Main results
 
@@ -32,13 +40,14 @@ an adjusted proportionality constant; equivalently, the dominant factors `μ₀^
 into `c`.
 
 ### `fundamentalTheorem_proportionalMPV_CFBNT_auto`
-Self-contained Fundamental Theorem (Theorem 4.4) that derives the BNT decomposition
-data from `IsCanonicalFormBNT`. Its remaining hypotheses are:
+Reformulation of the proportional Fundamental Theorem that derives the BNT
+decomposition data from `IsCanonicalFormBNT`. Its remaining hypotheses are:
 - Two CF-BNT families
 - A proportionality constant `c : ℕ → ℂ` with
   `mpv(toTensorFromBlocks μA A) σ = c N * mpv(toTensorFromBlocks μB B) σ`
-- Convergent nonzero coefficients `aLim`, `bLim` for re-weighted decompositions
-  (typically built from `(μ j / μ 0)^N` after dominant-weight normalization)
+- Convergent nonzero coefficients `aLim`, `bLim` for the comparison
+  decompositions. Strict-dominance ratios alone do not provide these nonzero
+  limits for subdominant blocks.
 
 ## References
 
@@ -219,12 +228,12 @@ The user only needs to supply:
 
 The coefficient data `aLim`/`bLim` is needed because the direct decomposition coefficients
 `(μ k)^N` do not satisfy the convergence hypotheses directly. In the strict-dominance regime one
-first normalizes by the dominant weight, so the relevant arrays are `(μ k / μ 0)^N`; these
-converge to `0` for non-dominant blocks, while the overall factor `μ 0^N` is absorbed into the
-proportionality constant. In grouped equal-modulus sectors even the normalized sums can still
-oscillate. The paper resolves this via induction on block count, matching dominant blocks first
-and stripping them off. The needed convergent coefficient data is therefore recorded as
-explicit hypotheses.
+can normalize by the dominant weight, but then `(μ k / μ 0)^N` converges to `0` for
+non-dominant blocks. Those zero limits do not satisfy the nonzero-limit hypotheses of the
+proportional matching theorem except after restricting to the surviving dominant sector. In
+grouped equal-modulus sectors even the normalized sums can still oscillate. The paper resolves
+this via induction on block count, matching dominant blocks first and stripping them off. The
+needed convergent nonzero coefficient data is therefore recorded as explicit hypotheses.
 
 **Consequences of the canonical-form hypotheses:**
 - The overlap properties (self → 1, cross → 0)

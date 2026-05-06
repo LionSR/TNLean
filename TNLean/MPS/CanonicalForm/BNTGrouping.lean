@@ -8,9 +8,9 @@ import TNLean.MPS.SharedInfra.SectorDecomposition
 open scoped Matrix BigOperators
 
 /-!
-# BNT grouping step for the canonical form existence reduction
+# Norm-class sector regrouping for the canonical form existence reduction
 
-This file provides the **BNT grouping / sorting** step that bridges the output of the
+This file provides the **norm sorting and sector regrouping** step that bridges the output of the
 canonical form existence reduction (blocks with nonzero weights, not necessarily strictly
 ordered by norm) with the `IsNormalCanonicalForm` predicate (which requires
 `Antitone (fun k => ‖μ k‖)`).
@@ -27,7 +27,7 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 `IsNormalCanonicalFormBNT` further requires `StrictAnti`.  Two resolutions are possible:
 
 * **(a)** Relax the predicate to match the paper's canonical form definition.
-* **(b)** Add a BNT grouping/sorting step.
+* **(b)** Add a norm-sorting and sector-regrouping step.
 
 This file implements strategy **(b)** only in the restricted case where equal-modulus
 blocks on one side are already known to collapse to a single basis tensor. It is
@@ -66,10 +66,11 @@ basis-of-normal-tensors construction from
 
 ### Section 5 Restricted norm-class collapse for possibly-equal norms
 
-* `exists_bnt_grouping` — For blocks with possibly equal norms, given the explicit
-  hypothesis that equal-norm blocks have the same MPV function, there exists a
+* `exists_normClassSectorDecomp_of_equalNorm_sameMPV` — For blocks with possibly equal norms,
+  given the restricted hypothesis that equal-norm blocks have the same MPV function,
+  there exists a
   `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
-  and whose BNT-level norms are strictly decreasing.  The proof constructs a
+  and whose sector-level norms are strictly decreasing.  The proof constructs a
   `SectorDecomposition` from norm-class enumeration and uses the representative block's
   dimension for the sector `basisDim`.  A same-dimension hypothesis is not needed: the
   choice of representative fixes the sector's bond dimension regardless of other
@@ -78,7 +79,7 @@ basis-of-normal-tensors construction from
 ## References
 
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Definition 2.6, Proposition 2.7]:
-  BNT minimality condition and grouping.
+  BNT minimal representative condition.
 - [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section IV.A]: Existence of canonical form.
 -/
 
@@ -280,7 +281,7 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
 
 Specialization of `trivialSectorDecomp` to the sorted distinct-norm case: every block
 becomes its own basis tensor with `copies j = 1`, the assembled tensor has
-`SameMPV₂` with `toTensorFromBlocks μ blocks`, and the BNT-level norm ordering is
+`SameMPV₂` with `toTensorFromBlocks μ blocks`, and the sector-level norm ordering is
 `StrictAnti` because each basis carries exactly one weight `μ j`, already strictly
 decreasing. -/
 lemma exists_trivialSectorDecomp_of_sorted_distinct_norms
@@ -301,7 +302,7 @@ lemma exists_trivialSectorDecomp_of_sorted_distinct_norms
 
 /-! ### Section 5. Restricted norm-class collapse for blocks with possibly equal norms -/
 
-/-- Shared norm-class enumeration used by the BNT grouping constructions. -/
+/-- Shared norm-class enumeration used by the norm-class sector constructions. -/
 structure NormClassGroupingData {r : ℕ} (μ : Fin r → ℂ) where
   g : ℕ
   vals : Fin g → ℝ
@@ -392,7 +393,7 @@ Given a weighted block family `(μ, blocks)` where some blocks may share the sam
 there exists a `SectorDecomposition P` with:
 
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
-2. `StrictAnti` on the BNT-level norms (one norm value per group).
+2. `StrictAnti` on the sector-level norms (one norm value per group).
 
 **Hypotheses**:
 - `hμne`: all weights are nonzero.
@@ -410,13 +411,14 @@ paper's full basis-of-normal-tensors construction: if two distinct basis tensors
 occur at the same modulus, they should survive as different basis elements rather
 than being forced into one norm class.
 
-**Role of `hMPVEq`**:
-The hypothesis is an extra input for this restricted collapse lemma.  The full
+**Where `hMPVEq` comes from**:
+The hypothesis is an extra input for this restricted collapse lemma. The full
 BNT theory of Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3 does not
 collapse all equal-modulus sectors into one block: repeated basis tensors can
-survive as multiplicities with separate coefficients.  Thus `hMPVEq` should be
-proved only in situations where a restricted same-MPV collapse has already been
-justified, not assumed as a general consequence of equal weight norm alone.
+survive as multiplicities with separate coefficients. Only blocks that are
+already known to be gauge-phase equivalent should collapse to one sector basis
+tensor; the phase-class construction carries this identification data through
+representative sectors and repeated weights.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
@@ -435,7 +437,7 @@ justified, not assumed as a general consequence of equal weight norm alone.
    `= mpv (toTensorFromBlocks μ blocks) σ`.
 5. **StrictAnti** holds because the `v_j` are strictly decreasing and
    `‖P.weight j ⟨0, _⟩‖ = ‖μ (enum j 0)‖ = v_j`. -/
-lemma exists_bnt_grouping
+lemma exists_normClassSectorDecomp_of_equalNorm_sameMPV
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -503,5 +505,78 @@ lemma exists_bnt_grouping
     rw [classes.enum_norm j ⟨0, classes.copies_pos j⟩,
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
+
+/-- Collapse a single norm class onto one sector basis tensor, keeping the full sector-weight
+multiplicity data. This is the one-class special case of the norm-class sector-decomposition
+surface. -/
+theorem exists_singleNormClassSectorDecomp_of_phaseMPV
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (k0 : Fin r)
+    (hμne : ∀ k, μ k ≠ 0)
+    (hNorm : ∀ k : Fin r, ‖μ k‖ = ‖μ k0‖)
+    (hPhase : ∀ k : Fin r,
+      ∃ ζ : ℂ, ζ ≠ 0 ∧ ‖ζ‖ = 1 ∧
+        ∀ (N : ℕ) (σ : Fin N → Fin d),
+          mpv (blocks k) σ = ζ ^ N * mpv (blocks k0) σ) :
+    ∃ P : SectorDecomposition d,
+      P.basisCount = 1 ∧
+      P.totalCopies = r ∧
+      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      (∀ s : Fin P.totalCopies, ‖P.flatWeight s‖ = ‖μ k0‖) := by
+  classical
+  let ζFn : Fin r → ℂ := fun k => (hPhase k).choose
+  have hζ_ne : ∀ k : Fin r, ζFn k ≠ 0 := fun k => (hPhase k).choose_spec.1
+  have hζ_norm : ∀ k : Fin r, ‖ζFn k‖ = 1 := fun k => (hPhase k).choose_spec.2.1
+  have hζ_mpv : ∀ (k : Fin r) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (blocks k) σ = (ζFn k) ^ N * mpv (blocks k0) σ :=
+    fun k N σ => (hPhase k).choose_spec.2.2 N σ
+  have hr : 0 < r := by
+    exact Nat.lt_of_lt_of_le (Nat.zero_lt_succ _) (Nat.succ_le_of_lt k0.isLt)
+  let sectors : SectorWeightData 1 := {
+    copies := fun _ => r
+    copies_pos := fun _ => hr
+    weight := fun _ q => ζFn q * μ q
+    weight_ne_zero := fun _ q => mul_ne_zero (hζ_ne q) (hμne q)
+  }
+  let P : SectorDecomposition d := {
+    basisCount := 1
+    basisDim := fun _ => dim k0
+    basis := fun _ => blocks k0
+    sectors := sectors
+  }
+  refine ⟨P, rfl, ?_, ?_, ?_⟩
+  · simp [P, sectors, SectorDecomposition.totalCopies]
+  · intro N σ
+    calc
+      mpv P.toTensor σ
+          = ∑ j : Fin P.basisCount,
+              ∑ q : Fin (P.copies j), (P.weight j q) ^ N * mpv (P.basis j) σ :=
+              P.mpv_toTensor_eq_sum_sectors σ
+      _ = ∑ q : Fin r, (ζFn q * μ q) ^ N * mpv (blocks k0) σ := by
+            simp [P, sectors]
+      _ = ∑ q : Fin r, (μ q) ^ N * mpv (blocks q) σ := by
+            refine Finset.sum_congr rfl fun q _ => ?_
+            rw [mul_pow, hζ_mpv q N σ]
+            ring
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+            symm
+            simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+  · intro s
+    set t : ((j : Fin P.basisCount) × Fin (P.copies j)) := P.flatIndexEquiv.symm s with ht
+    rcases t with ⟨j, q⟩
+    have hj : j = 0 := Subsingleton.elim _ _
+    subst hj
+    rw [SectorDecomposition.flatWeight, ht.symm]
+    change ‖P.weight 0 q‖ = ‖μ k0‖
+    change ‖ζFn q * μ q‖ = ‖μ k0‖
+    rw [norm_mul, hζ_norm q, one_mul, hNorm q]
+
+@[deprecated exists_normClassSectorDecomp_of_equalNorm_sameMPV (since := "2026-05-06")]
+alias exists_bnt_grouping := exists_normClassSectorDecomp_of_equalNorm_sameMPV
+
+@[deprecated exists_singleNormClassSectorDecomp_of_phaseMPV (since := "2026-05-06")]
+alias bnt_grouping_single_norm_class := exists_singleNormClassSectorDecomp_of_phaseMPV
 
 end MPSTensor

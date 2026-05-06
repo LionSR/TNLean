@@ -2894,14 +2894,25 @@ primitivity and normality results to the sector blocks.
 \end{definition}
 
 \begin{lemma}[Restricted norm-class collapse]
-	\label{lem:bnt_grouping}
-	\lean{MPSTensor.exists_bnt_grouping}\leanok
+	\label{lem:restricted_norm_class_collapse}
+	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	Let $(\mu_k,A_k)_{k=1}^r$ be a weighted block family with
 	$\mu_k \neq 0$ for every $k$. If equal-norm blocks represent the same
 	MPS family, then one obtains a sector decomposition whose associated total
 	tensor generates the same MPV family as $\bigoplus_{k=1}^r \mu_k A_k$, and
 	whose sector norms are strictly decreasing.
+\end{lemma}
+
+\begin{lemma}[Single norm class from phase-related MPVs]
+	\label{lem:single_norm_class_phase_mpv}
+	\lean{MPSTensor.exists_singleNormClassSectorDecomp_of_phaseMPV}\leanok
+	\uses{def:tensor_from_blocks, def:paper_sector_data, def:mpv}
+	If all weights are nonzero with the same norm and, for a chosen block, every
+	block has a unit-modulus phase relating its MPV family to that block, then
+	the family admits a sector decomposition with one basis tensor and one copy
+	for each original block. The total tensor represents the original weighted
+	block sum, and every resulting sector weight has the common norm.
 \end{lemma}
 
 \subsection{Equal-Norm Blocks}

@@ -189,51 +189,22 @@ used in this chapter.
 \section{Equal-MPV Fundamental Theorem}%
 \label{sec:assembly_equal}
 
-\begin{theorem}[Fundamental Theorem --- equal MPV case]\label{thm:ft_equal}
-	\notready
-	\uses{def:cf_bnt, def:gauge_equiv}
-	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-	in canonical form with BNT separation, with associated families
-	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-	If
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= V^{(N)}(B_{\mathrm{tot}})_\sigma
-	\]
-	for every $N$ and $\sigma$, then the block-diagonal tensors
-	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
-	$\bigoplus_{k=1}^{g_B} \mu_k^B B_k$
-	are gauge equivalent.
-\end{theorem}
+The source corollary for equal MPVs says that if two canonical-form tensors
+generate the same MPV family for all system sizes, then their matrix dimensions
+coincide and the full tensors are related by one invertible gauge
+\cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}. In the proof, this corollary is
+obtained after the proportional Fundamental Theorem by matching the BNT blocks,
+then comparing the sector-weight power sums.
 
-\begin{proof}
-	\uses{thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
-	      thm:mpv_decomposition,
-	      lem:route_b_equal_with_copies,
-	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
-	      lem:common_phase_cover_of_proportional_decomposition}
-	The comparison proceeds directly from equality of the full MPV families.
-	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
-	their BNT bases, and the sector-multiplicity comparison of
-	Lemma~\ref{lem:route_b_equal_with_copies} recovers both the copy counts and
-	the sector-weight multisets from the resulting power-sum identities.
-
-	The remaining synchronization statement for the bare equal-MPV theorem must
-	assemble the block-matching data into equality of the weighted block-diagonal
-	tensors.  The heterogeneous equal-case theorem
-	(Theorem~\ref{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}) now proves the
-	block-count, bond-dimension, and gauge-phase matching directly from equality
-	of the full MPV families.  The
-	after-blocking comparison theorem
-	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives the
-	matched sector-weight conclusion once BNT-cover comparison data are supplied.
-	Lemma~\ref{lem:common_phase_cover_of_proportional_decomposition} explains
-	how proportional block comparisons supply common phases.  Completing this
-	theorem therefore amounts to deriving the BNT-cover and sector-weight data for
-	the canonical decompositions produced from the bare equality assumption.  Once
-	those data are available, the phases are absorbed into the recovered weights
-	and the blockwise conjugacies assemble into a global gauge equivalence.
-\end{proof}
+We record the comparison statements in the two forms needed below. The
+heterogeneous equal-case theorem, stated as
+Theorem~\ref{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}, gives the
+block-count, bond-dimension, and gauge-phase matching directly from equality of
+the assembled MPV families. The common-structure theorem below proves the
+global gauge statement when the two sides already share the same block data.
+The remaining source-facing assembly step is to combine the heterogeneous
+matching with sector-weight recovery and the copy-count equalities into one
+global block-diagonal gauge.
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
