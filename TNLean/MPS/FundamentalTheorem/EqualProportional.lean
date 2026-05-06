@@ -36,7 +36,7 @@ coefficients from the hypotheses of the source-paper theorem is not part of this
 Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
 
 ### Power-sum multiset equality
-(`mu_multiset_eq_of_power_sum_eq`)
+(`power_sum_eq_implies_multiset_eq`)
 
 If two sequences of complex numbers have equal power sums for all exponents, their multisets
 (as roots) are equal. This is the formalized version of Lemma Lem:app_simple from the paper.
@@ -285,13 +285,13 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     A_total B_total aCoeff bCoeff aLim bLim c cLim
     hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
-/-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
+/-! ## Equal MPVs imply proportional MPVs -/
 
 /-- **Equal MPVs imply proportional MPVs** (with proportionality constant `1`).
 
 This converts an equality hypothesis into the proportionality hypothesis used by the
 explicit-coefficient comparison theorems. -/
-theorem sameMPV₂_implies_proportionalMPV₂
+lemma sameMPV₂_implies_proportionalMPV₂
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (h : SameMPV₂ A B) :
     ProportionalMPV₂ A B := by
@@ -308,7 +308,7 @@ with per-block `GaugePhaseEquiv` data.
 Under those coefficient hypotheses, equal MPVs force the phase-corrected
 weights to match blockwise.  After reindexing the `B`-family by the permutation from the
 proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/
-theorem fundamentalTheorem_equalMPV_of_explicit_coefficients
+lemma fundamentalTheorem_equalMPV_of_explicit_coefficients
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -460,10 +460,10 @@ theorem fundamentalTheorem_equalMPV_of_explicit_coefficients
   rw [hA_tot, hB_tot]
   exact hGaugeWeighted
 
-/-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple)
+/-! ## Power-sum multiset equality
 
-This wraps `Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`
-to provide the paper's Lemma Lem:app_simple in a convenient form.
+This gives the paper's auxiliary power-sum lemma in the notation of the BNT
+comparison.  It is not an additional Fundamental Theorem statement.
 -/
 
 /-- **Equal power sums imply equal multisets (Lem:app_simple).**
@@ -474,7 +474,7 @@ multiset of values (counted with multiplicity).
 
 This is the paper's Lemma Lem:app_simple, proved via Newton's identities
 (`Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`). -/
-theorem power_sum_eq_implies_multiset_eq (n : ℕ)
+lemma power_sum_eq_implies_multiset_eq (n : ℕ)
     (α β : Fin n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
     Finset.univ.val.map α = Finset.univ.val.map β :=
@@ -487,7 +487,7 @@ section Corollaries
 /-- **Per-block SameMPV from CF-BNT equal MPVs.**
 
 Extracts the per-block `SameMPV` conclusion from the equal-MPV theorem. -/
-theorem perBlock_sameMPV_of_equalMPV_CFBNT
+lemma perBlock_sameMPV_of_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
     (A B : (k : Fin r) → MPSTensor d (dim k))
