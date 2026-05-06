@@ -44,6 +44,21 @@ theorem chainGroundSpace_eq_of_groundSpace_eq
   · simp [h, hG]
   · simp [h]
 
+/-- Non-proportional MPV states have distinct MPV lines. -/
+theorem mpvSubmodule_ne_of_not_exists_mpv_eq_smul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hDistinct :
+      ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+    mpvSubmodule A N ≠ mpvSubmodule B N := by
+  intro hEq
+  apply hDistinct
+  have hmem : (mpv A : NSiteSpace d N) ∈ mpvSubmodule B N := by
+    rw [← hEq, mpvSubmodule, Submodule.mem_span_singleton]
+    exact ⟨1, by simp⟩
+  rw [mpvSubmodule, Submodule.mem_span_singleton] at hmem
+  obtain ⟨c, hc⟩ := hmem
+  exact ⟨c, hc.symm⟩
+
 /-- Distinct periodic MPV lines rule out the equal-size local-image collapse.
 
 This is the parent-Hamiltonian uniqueness input used in the equal-size branch
@@ -70,6 +85,18 @@ theorem not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne
     _ = chainGroundSpace B L N := hChain
     _ = mpvSubmodule B N := hBeq
 
+/-- Non-proportional periodic MPV states rule out the equal-size local-image
+collapse. -/
+theorem not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
+    (hDistinct :
+      ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+    ¬ (D₁ = D₂ ∧ groundSpace A L = groundSpace B L) := by
+  exact not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne hA hB hN hL hLN
+    (mpvSubmodule_ne_of_not_exists_mpv_eq_smul hDistinct)
+
 /-- Two-block directness with the equal-size branch discharged by distinct MPV
 lines.
 
@@ -87,5 +114,19 @@ theorem groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge
   exact groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
     hAblk hBblk hD
     (not_bondDim_eq_and_groundSpace_eq_of_mpvSubmodule_ne hA hB hN hL hLN hDistinct)
+
+/-- Two-block directness with the equal-size branch discharged by
+non-proportional MPV states. -/
+theorem groundSpace_inf_eq_bot_of_not_exists_mpv_eq_smul_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hD : D₂ ≤ D₁) (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N)
+    (hDistinct :
+      ¬ ∃ c : ℂ, (mpv A : NSiteSpace d N) = c • (mpv B : NSiteSpace d N)) :
+    groundSpace A (L + (L + L)) ⊓ groundSpace B (L + (L + L)) = ⊥ := by
+  exact groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge
+    hAblk hBblk hA hB hD hN hL hLN
+    (mpvSubmodule_ne_of_not_exists_mpv_eq_smul hDistinct)
 
 end MPSTensor

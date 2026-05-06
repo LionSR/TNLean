@@ -119,10 +119,14 @@ of the periodic MPV lines, so a separately supplied distinct-MPV-line hypothesis
 rules out the equal-size collapse.  Consequently
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_mpvSubmodule_ne_of_dim_ge}
 combines the finite-dimensional step with this uniqueness input to prove
-zero intersection of the two three-block image spaces.  This is still not the
-full BNT source theorem: the remaining BNT-level task is to derive the required
-distinctness of the MPV lines from the paper's pairwise different canonical
-blocks, after the prescribed blocking.
+zero intersection of the two three-block image spaces.  The equivalent
+non-proportional-state form is recorded by
+\leanid{MPSTensor.not_bondDim_eq_and_groundSpace_eq_of_not_exists_mpv_eq_smul}
+and
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_not_exists_mpv_eq_smul_of_dim_ge}.
+This is still not the full BNT source theorem: the remaining BNT-level task is
+to derive the required non-proportionality of MPV states from the paper's
+pairwise different canonical blocks, after the prescribed blocking.
 
 The current formal development also includes downstream lemmas that depend on
 the remaining direct-sum input.
