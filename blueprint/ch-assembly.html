@@ -1697,13 +1697,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:coeff_eventually_eq">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:coeff_eventually_eq">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.11</span>
-    <span class="theorem_thmtitle">Eventual coefficient comparison from BNT linear independence</span>
+    <span class="lemma_thmlabel">14.11</span>
+    <span class="lemma_thmtitle">Eventual coefficient comparison from BNT linear independence</span>
     <div class="thm_header_extras">
 
     
@@ -1711,7 +1711,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:coeff_eventually_eq">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:coeff_eventually_eq">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -1758,8 +1758,11 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   If two sector data \(S, T\) over the same basis, with coefficient arrays \(c_{S,j}^{(N)}\) and \(c_{T,j}^{(N)}\), produce equal total MPVs and the basis is eventually linearly independent (the BNT property), then \(c_{S,j}^{(N)} = c_{T,j}^{(N)}\) for all sufficiently large \(N\). </p>
+  <div class="lemma_thmcontent">
+  <p>   If two sector data \(S, T\) over the same basis, with coefficient arrays \(c_{S,j}^{(N)}\) and \(c_{T,j}^{(N)}\), produce equal total MPVs and the basis is eventually linearly independent (the BNT property), then there is \(N_0\) such that </p>
+<div class="displaymath" id="a0000001028">
+  \[  \forall N{\gt}N_0,\  \forall j,\qquad c_{S,j}^{(N)}=c_{T,j}^{(N)}.  \]
+</div>
 
   </div>
 </div>
@@ -1779,7 +1782,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:geom_extrapolation_hetero">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001028"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1806,11 +1809,18 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  If two finite families of nonzero complex numbers, possibly with different cardinalities, have equal power sums \(\sum _i \alpha _i^k = \sum _j \beta _j^k\) for all sufficiently large exponents \(k\), then the same equality holds for every exponent \(k \geq 0\). </p>
+  <p>  If two finite families of nonzero complex numbers, possibly with different cardinalities, have equal power sums eventually, so there is \(N_0\) such that </p>
+<div class="displaymath" id="a0000001030">
+  \[  \forall N\ge N_0,\qquad \sum _i \alpha _i^N = \sum _j \beta _j^N,  \]
+</div>
+<p> then the same equality holds for every exponent: </p>
+<div class="displaymath" id="a0000001031">
+  \[  \forall k\ge 0,\qquad \sum _i \alpha _i^k = \sum _j \beta _j^k.  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001028">
+<div class="proof_wrapper" id="a0000001029">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1838,7 +1848,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:geom_extrapolation">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001032"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1865,11 +1875,15 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  If two finite families of nonzero complex numbers with the same cardinality have equal power sums \(\sum _i \alpha _i^k = \sum _i \beta _i^k\) for all \(k {\gt} N_0\), then equality holds for all \(k \geq 0\). </p>
+  <p>  If two finite families of nonzero complex numbers with the same cardinality have equal power sums eventually, so there is \(N_0\) such that </p>
+<div class="displaymath" id="a0000001033">
+  \[  \forall N\ge N_0,\qquad \sum _i \alpha _i^N = \sum _i \beta _i^N,  \]
+</div>
+<p> then equality holds for all exponents \(k\ge 0\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001029">
+<div class="proof_wrapper" id="a0000001032">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1881,13 +1895,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:copies_eq_of_eventually_coeff_eq">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:copies_eq_of_eventually_coeff_eq">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.14</span>
-    <span class="theorem_thmtitle">Copy-count recovery from eventual coefficient equality</span>
+    <span class="lemma_thmlabel">14.14</span>
+    <span class="lemma_thmtitle">Copy-count recovery from eventual coefficient equality</span>
     <div class="thm_header_extras">
 
     
@@ -1895,9 +1909,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:copies_eq_of_eventually_coeff_eq">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:copies_eq_of_eventually_coeff_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001030"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001034"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1945,12 +1959,19 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(S\) and \(T\) be sector data over the same basis. If their coefficient arrays satisfy \(c_{S,j}^{(N)} = c_{T,j}^{(N)}\) for every basis block \(j\) and all sufficiently large \(N\), then their copy counts agree: \(r_j^S = r_j^T\) for every&#160;\(j\). </p>
+  <div class="lemma_thmcontent">
+  <p>   Let \(S\) and \(T\) be sector data over the same basis. If there is \(N_0\) such that their coefficient arrays satisfy </p>
+<div class="displaymath" id="a0000001035">
+  \[  \forall N{\gt}N_0,\  \forall j,\qquad c_{S,j}^{(N)} = c_{T,j}^{(N)},  \]
+</div>
+<p> then their copy counts agree: </p>
+<div class="displaymath" id="a0000001036">
+  \[  \forall j,\qquad r_j^S = r_j^T.  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001030">
+<div class="proof_wrapper" id="a0000001034">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1978,7 +1999,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_equal_with_copies">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001031"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001037"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1998,9 +2019,9 @@
           
           <li><a href="ch-bnt.html#def:bnt">Definition 13.1</a></li>
           
-          <li><a href="ch-assembly.html#thm:coeff_eventually_eq">Theorem 14.11</a></li>
+          <li><a href="ch-assembly.html#lem:coeff_eventually_eq">Lemma 14.11</a></li>
           
-          <li><a href="ch-assembly.html#thm:copies_eq_of_eventually_coeff_eq">Theorem 14.14</a></li>
+          <li><a href="ch-assembly.html#lem:copies_eq_of_eventually_coeff_eq">Lemma 14.14</a></li>
           
           <li><a href="ch-assembly.html#lem:geom_extrapolation">Lemma 14.13</a></li>
           
@@ -2036,13 +2057,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(S\) and \(T\) be two sector data over the same basis, without assuming their multiplicities agree. If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then there are copy-count equalities \(r_j^S = r_j^T\) for every basis block&#160;\(j\), and, after transporting along these equalities, the sector weight multisets are equal for every&#160;\(j\): </p>
-<div class="displaymath" id="a0000001032">
+<div class="displaymath" id="a0000001038">
   \[  \{ \mu _{j,q}^{S}:1\le q\le r_j^S\}  = \{ \mu _{j,q}^{T}:1\le q\le r_j^T\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001031">
+<div class="proof_wrapper" id="a0000001037">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2050,7 +2071,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> BNT linear independence and equality of total MPVs give eventual coefficient equality by Theorem&#160;<a href="ch-assembly.html#thm:coeff_eventually_eq">14.11</a>. Then Theorem&#160;<a href="ch-assembly.html#thm:copies_eq_of_eventually_coeff_eq">14.14</a> recovers the copy-count equalities. After identifying the two index sets via these copy-count equalities, the positive-power coefficient equalities extend to all positive exponents by Lemma&#160;<a href="ch-assembly.html#lem:geom_extrapolation">14.13</a>, and Newton–Girard (Theorem&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.28</a>) recovers the weight multisets. </p>
+  <p> BNT linear independence and equality of total MPVs give eventual coefficient equality by Lemma&#160;<a href="ch-assembly.html#lem:coeff_eventually_eq">14.11</a>. Then Lemma&#160;<a href="ch-assembly.html#lem:copies_eq_of_eventually_coeff_eq">14.14</a> recovers the copy-count equalities. After identifying the two index sets via these copy-count equalities, the positive-power coefficient equalities extend to all positive exponents by Lemma&#160;<a href="ch-assembly.html#lem:geom_extrapolation">14.13</a>, and Newton–Girard (Theorem&#160;<a href="ch-bnt.html#thm:power_sum_multiset">13.28</a>) recovers the weight multisets. </p>
 
   </div>
 </div>
@@ -2083,7 +2104,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-assembly.html#thm:coeff_eventually_eq">Theorem 14.11</a></li>
+          <li><a href="ch-assembly.html#lem:coeff_eventually_eq">Lemma 14.11</a></li>
           
           <li><a href="ch-assembly.html#lem:geom_extrapolation">Lemma 14.13</a></li>
           
@@ -2125,7 +2146,7 @@
   <p>   Let \(S\) and \(T\) be two sector data over the same basis with the same multiplicities (\(r_j^S = r_j^T\) for all&#160;\(j\)). If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then for each basis block&#160;\(j\) the sector weight multisets \(\{ \mu _{j,q}^S\} \) and \(\{ \mu _{j,q}^T\} \) are equal. </p>
 <p>The argument proceeds as follows: </p>
 <ol class="enumerate">
-  <li><p>BNT LI \(+\) equal MPVs \(\Rightarrow \) eventual coefficient equality (Theorem&#160;<a href="ch-assembly.html#thm:coeff_eventually_eq">14.11</a>); </p>
+  <li><p>BNT LI \(+\) equal MPVs \(\Rightarrow \) eventual coefficient equality (Lemma&#160;<a href="ch-assembly.html#lem:coeff_eventually_eq">14.11</a>); </p>
 </li>
   <li><p>Geometric extrapolation \(\Rightarrow \) full coefficient equality for all positive&#160;\(k\) (Lemma&#160;<a href="ch-assembly.html#lem:geom_extrapolation">14.13</a>); </p>
 </li>
@@ -2152,7 +2173,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_phase_match">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001033"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001039"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2204,14 +2225,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) there is a nonzero complex number \(\zeta _j\) such that </p>
-<div class="displaymath" id="a0000001034">
+<div class="displaymath" id="a0000001040">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for every \(N\) and \(\sigma \). If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001033">
+<div class="proof_wrapper" id="a0000001039">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2239,7 +2260,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_matched_basis">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001035"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001041"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2296,7 +2317,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001035">
+<div class="proof_wrapper" id="a0000001041">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2603,7 +2624,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_ortho_to_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001036"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001042"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2660,7 +2681,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001036">
+<div class="proof_wrapper" id="a0000001042">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2688,7 +2709,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_phase_match_copies">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001037"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001043"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2741,7 +2762,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001037">
+<div class="proof_wrapper" id="a0000001043">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2769,7 +2790,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_pre_matching_to_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001038"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2824,7 +2845,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001038">
+<div class="proof_wrapper" id="a0000001044">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2852,7 +2873,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_pre_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001039"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2907,7 +2928,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001039">
+<div class="proof_wrapper" id="a0000001045">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2935,7 +2956,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_matching_from_overlap_ortho_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001040"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001046"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2994,7 +3015,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001040">
+<div class="proof_wrapper" id="a0000001046">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3022,7 +3043,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_to_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001041"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001047"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3077,7 +3098,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001041">
+<div class="proof_wrapper" id="a0000001047">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3105,7 +3126,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001042"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3160,7 +3181,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001042">
+<div class="proof_wrapper" id="a0000001048">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3316,7 +3337,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:nonzero_block_span_eq_of_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001043"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001049"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3369,7 +3390,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001043">
+<div class="proof_wrapper" id="a0000001049">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3397,7 +3418,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001044"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3450,7 +3471,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001044">
+<div class="proof_wrapper" id="a0000001050">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3544,7 +3565,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001051"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3599,7 +3620,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001045">
+<div class="proof_wrapper" id="a0000001051">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3627,7 +3648,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_pre_matching_to_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001046"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3686,7 +3707,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001046">
+<div class="proof_wrapper" id="a0000001052">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3714,7 +3735,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_phase_cover_of_proportional_decomposition">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001047"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001053"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3767,7 +3788,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001047">
+<div class="proof_wrapper" id="a0000001053">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3795,7 +3816,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_phase_cover_of_equiv_phase">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3848,7 +3869,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001048">
+<div class="proof_wrapper" id="a0000001054">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3876,7 +3897,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:nonzero_block_span_eq_of_proportional_decomposition">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001049"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001055"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3933,7 +3954,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001049">
+<div class="proof_wrapper" id="a0000001055">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3961,7 +3982,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:nonzero_block_span_eq_of_equiv_phase">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001056"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4014,7 +4035,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001050">
+<div class="proof_wrapper" id="a0000001056">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4042,7 +4063,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001051"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4099,7 +4120,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001051">
+<div class="proof_wrapper" id="a0000001057">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4127,7 +4148,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001058"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4182,7 +4203,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001052">
+<div class="proof_wrapper" id="a0000001058">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4210,7 +4231,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_phase_cover_of_separated_normal_bnt">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001053"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001059"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4271,7 +4292,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001053">
+<div class="proof_wrapper" id="a0000001059">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4299,7 +4320,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:separated_normal_bnt_span_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001060"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4356,7 +4377,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001054">
+<div class="proof_wrapper" id="a0000001060">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4384,7 +4405,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_sector_matching">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001055"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001061"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4439,7 +4460,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001055">
+<div class="proof_wrapper" id="a0000001061">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4467,7 +4488,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_bnt_pair_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001056"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001062"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4524,7 +4545,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001056">
+<div class="proof_wrapper" id="a0000001062">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4552,7 +4573,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001063"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4611,7 +4632,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001057">
+<div class="proof_wrapper" id="a0000001063">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4639,7 +4660,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_injective_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001058"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001064"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4702,7 +4723,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001058">
+<div class="proof_wrapper" id="a0000001064">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4730,7 +4751,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_block_span">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001059"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001065"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4791,7 +4812,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001059">
+<div class="proof_wrapper" id="a0000001065">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4819,7 +4840,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001060"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001066"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4876,7 +4897,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001060">
+<div class="proof_wrapper" id="a0000001066">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4904,7 +4925,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001061"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001067"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4959,7 +4980,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001061">
+<div class="proof_wrapper" id="a0000001067">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4987,7 +5008,7 @@
 
     <a class="icon proof" href="ch-assembly.html#lem:sameMPV2_live_of_zeroTail_eq">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001062"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001068"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5042,7 +5063,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001062">
+<div class="proof_wrapper" id="a0000001068">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5051,7 +5072,7 @@
   </div>
   <div class="proof_content">
   <p> At positive lengths the all-zero leftover block vanishes, so the nonzero parts agree. Theorem&#160;<a href="ch-canonical.html#thm:mpv_zero_tensor">11.47</a> gives the exact value </p>
-<div class="displaymath" id="a0000001063">
+<div class="displaymath" id="a0000001069">
   \[  V^{(0)}(\mathbf{0}_{d,D_0})_\varnothing =D_0,  \]
 </div>
 <p> so equality of the two leftover zero-block dimensions gives cancellation at length zero as well. </p>
@@ -5074,7 +5095,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_sector_common_blocks_overlap_span_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001064"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001070"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5139,7 +5160,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001064">
+<div class="proof_wrapper" id="a0000001070">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5167,7 +5188,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001065"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001071"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5232,7 +5253,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001065">
+<div class="proof_wrapper" id="a0000001071">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5326,7 +5347,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_span_hypotheses_of_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001066"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001072"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5383,7 +5404,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001066">
+<div class="proof_wrapper" id="a0000001072">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5477,7 +5498,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001067"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001073"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5532,7 +5553,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001067">
+<div class="proof_wrapper" id="a0000001073">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5624,7 +5645,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001068"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001074"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5681,7 +5702,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001068">
+<div class="proof_wrapper" id="a0000001074">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5709,7 +5730,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_proportional_hypotheses_to_span_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001069"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001075"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5766,7 +5787,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001069">
+<div class="proof_wrapper" id="a0000001075">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5876,7 +5897,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001070"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001076"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5931,7 +5952,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001070">
+<div class="proof_wrapper" id="a0000001076">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5959,7 +5980,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001071"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001077"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6014,7 +6035,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001071">
+<div class="proof_wrapper" id="a0000001077">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6042,7 +6063,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_ortho_reindexed">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001072"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001078"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6099,7 +6120,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001072">
+<div class="proof_wrapper" id="a0000001078">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6127,7 +6148,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001073"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001079"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6184,7 +6205,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001073">
+<div class="proof_wrapper" id="a0000001079">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6212,7 +6233,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_reindexed_bnt_cover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001074"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6269,7 +6290,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001074">
+<div class="proof_wrapper" id="a0000001080">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6297,7 +6318,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_commonPrimitiveBNTData">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001075"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001081"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6358,7 +6379,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001075">
+<div class="proof_wrapper" id="a0000001081">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6386,7 +6407,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:sector_basis_overlap_span_commonPrimitiveBNTData_zeroTailIdentity">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001076"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001082"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6445,7 +6466,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001076">
+<div class="proof_wrapper" id="a0000001082">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6473,7 +6494,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001077"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001083"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6532,7 +6553,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001077">
+<div class="proof_wrapper" id="a0000001083">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6560,7 +6581,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001078"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001084"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6617,7 +6638,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001078">
+<div class="proof_wrapper" id="a0000001084">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6645,7 +6666,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001079"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001085"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6704,7 +6725,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001079">
+<div class="proof_wrapper" id="a0000001085">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6840,7 +6861,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_grouped_block_cast_of_flatten_word">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001080"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001086"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6895,7 +6916,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001080">
+<div class="proof_wrapper" id="a0000001086">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6923,7 +6944,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:common_grouped_block_cast_to_relabeling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001081"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001087"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6980,7 +7001,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001081">
+<div class="proof_wrapper" id="a0000001087">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7008,7 +7029,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:after_blocking_common_primitive_irreducible_blocks_block_span_consequences">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001082"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001088"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7069,7 +7090,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001082">
+<div class="proof_wrapper" id="a0000001088">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7097,7 +7118,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:unconditional_common_primitive_irreducible_blocks">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001083"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001089"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7154,7 +7175,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001083">
+<div class="proof_wrapper" id="a0000001089">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7182,7 +7203,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001084"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001090"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7239,7 +7260,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001084">
+<div class="proof_wrapper" id="a0000001090">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7267,7 +7288,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_bntCover">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001085"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001091"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7324,7 +7345,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001085">
+<div class="proof_wrapper" id="a0000001091">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7352,7 +7373,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_commonPrimitiveBNTData">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001086"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001092"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7413,7 +7434,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001086">
+<div class="proof_wrapper" id="a0000001092">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7441,7 +7462,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:afterBlocking_sectorComparison_reindexed_proportional">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001087"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001093"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7498,7 +7519,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001087">
+<div class="proof_wrapper" id="a0000001093">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7655,7 +7676,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:fundamental_theorem_after_blocking_comparison_hypotheses">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001088"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001094"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7728,7 +7749,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001088">
+<div class="proof_wrapper" id="a0000001094">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7756,7 +7777,7 @@
 
     <a class="icon proof" href="ch-assembly.html#thm:route_b_hetero_mpv_scaling">#</a>
     
-    <a class="icon proof" href="ch-assembly.html#a0000001089"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-assembly.html#a0000001095"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7806,14 +7827,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) the corresponding basis blocks have the same auxiliary dimension and satisfy </p>
-<div class="displaymath" id="a0000001090">
+<div class="displaymath" id="a0000001096">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for some nonzero complex number \(\zeta _j\), after identifying the two basis tensors along that dimension equality. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001089">
+<div class="proof_wrapper" id="a0000001095">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7825,7 +7846,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001091">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001097">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -7837,7 +7858,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#a0000001091">#</a>
+    <a class="icon proof" href="ch-assembly.html#a0000001097">#</a>
     
     
     
@@ -7857,7 +7878,7 @@
 	
 	]
 </span>. Equality, or proportionality, of the MPV families then pairs the two bases by phase and gauge, as in the Fundamental Theorem of Matrix Product Vectors. In the equal case, one expands each tensor in its basis of normal tensors and compares, for every basis tensor and every length \(N\), the power sums </p>
-<div class="displaymath" id="a0000001092">
+<div class="displaymath" id="a0000001098">
   \[  \sum _q \mu _{j,q}^N = \sum _q (\nu _{j,q}e^{i\phi _j})^N.  \]
 </div>
 <p> Newton identities, equivalently the elementary power-sum lemma used in the CPSV argument, recover the multiplicities and the weights. The blockwise gauge matrices are then placed on the diagonal to obtain the global conjugating matrix; this is the equal-case corollary of the Fundamental Theorem in <span class="cite">
