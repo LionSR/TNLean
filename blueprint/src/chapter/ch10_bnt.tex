@@ -371,19 +371,19 @@ The main references are
 		\qquad
 		B_{\mathrm{tot}} = \bigoplus_{k=1}^{g_B} \nu_k B_k,
 	\]
-	and Theorem~\ref{thm:mpv_decomposition} gives the coefficient arrays
-	$a_{N,j} = \mu_j^N$ and $b_{N,k} = \nu_k^N$.
-	To fit the convergence hypotheses of
-	Theorem~\ref{thm:bnt_perm_prop}, one first normalizes by the dominant
-	weight on each side: the relevant arrays are $(\mu_j/\mu_0)^N$ and
-	$(\nu_k/\nu_0)^N$, with $(\mu_j/\mu_0)^N \to 0$ for $j \ge 1$ and
-	$(\nu_k/\nu_0)^N \to 0$ for $k \ge 1$ by
-	Theorem~\ref{thm:coeff_ratio_decay}, while the overall factors
-	$\mu_0^N$ and $\nu_0^N$ are absorbed into the proportionality
-	constant $c_N$.
+	and Theorem~\ref{thm:mpv_decomposition} gives coefficient arrays
+	built from powers of the sector weights.
+	The hypotheses of Theorem~\ref{thm:bnt_perm_prop} require nonzero
+	coefficient limits for every sector being compared. Therefore the
+	geometric strict-dominance normalization
+	$(\mu_j/\mu_0)^N \to 0$ for $j \ge 1$ is not by itself an input to
+	that theorem for all blocks at once: it only isolates the currently
+	surviving dominant sector.  The source proof matches such sectors
+	and then removes them, while equal-modulus sectors require the
+	power-sum comparison below.
 	Definition~\ref{def:cf_bnt} supplies injectivity, TP normalization,
-	and the within-family overlap limits, so the theorem isolates the
-	abstract permutation argument from this canonical-form setting.
+	and the within-family overlap limits; the remaining coefficient
+	data is kept explicit in Theorem~\ref{thm:bnt_perm_prop}.
 \end{remark}
 
 \begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
@@ -496,26 +496,8 @@ The main references are
 
 \section{Coefficient convergence}
 
-\begin{theorem}[Coefficient ratio decay]\label{thm:coeff_ratio_decay}
-	\lean{MPSTensor.IsCanonicalFormBNT.coeff_ratio_tendsto}
-	\leanok
-	\uses{def:cf_bnt}
-	Under the canonical form with BNT separation of
-	Definition~\ref{def:cf_bnt}, indexed so that $\mu_0$ is the
-	(strictly) dominant weight, one has
-	$(\mu_k / \mu_0)^N \to 0$
-	for every $k \ge 1$ as $N \to \infty$.
-\end{theorem}
-
-\begin{proof}\leanok
-	By the BNT separation condition in Definition~\ref{def:cf_bnt},
-	$|\mu_k| < |\mu_0|$ strictly, so
-	$|\mu_k / \mu_0| < 1$ and the geometric sequence
-	converges to~$0$.
-\end{proof}
-
 \begin{remark}[Strict-dominance regime]\notready
-	Theorem~\ref{thm:coeff_ratio_decay} applies when one
+	The coefficient-ratio decay auxiliary applies when one
 	modulus is strictly dominant:
 	$|\mu_0| > |\mu_k|$ for $k \ge 1$.
 	In the more general periodic setting of
@@ -594,9 +576,9 @@ The main references are
 
 \begin{remark}
 	Theorems~\ref{thm:newton_girard} and~\ref{thm:power_sum_multiset}
-	remain relevant for the general equal-MPV
-	Theorem~\ref{thm:ft_equal}, where one expects a power-sum step to
-	recover the multiplicity-weight data.  In the current route this recovery is
+	remain relevant for the equal-MPV source corollary discussed in
+	Section~\ref{sec:assembly_equal}, where the paper uses a power-sum step to
+	recover the multiplicity-weight data. In the current route this recovery is
 	kept in the BNT multiplicity lemmas rather than in a separate
 	explicit-coefficient equal-case theorem.
 \end{remark}
