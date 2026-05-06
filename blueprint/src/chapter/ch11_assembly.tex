@@ -392,27 +392,36 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	\]
 \end{theorem}
 
-\begin{theorem}[Eventual coefficient comparison from BNT linear independence]%
-\label{thm:coeff_eventually_eq}
+\begin{lemma}[Eventual coefficient comparison from BNT linear independence]%
+\label{lem:coeff_eventually_eq}
 	\lean{MPSTensor.SectorWeightData.coeff_eventually_eq_of_sameMPV}
 	\leanok
 	\uses{def:paper_sector_data, def:bnt}
 	If two sector data $S, T$ over the same basis, with coefficient arrays
 	$c_{S,j}^{(N)}$ and $c_{T,j}^{(N)}$, produce equal total MPVs
 	and the basis is eventually linearly independent (the BNT property),
-	then $c_{S,j}^{(N)} = c_{T,j}^{(N)}$ for all
-	sufficiently large $N$.
-\end{theorem}
+	then there is $N_0$ such that
+	\[
+		\forall N>N_0,\ \forall j,\qquad
+		c_{S,j}^{(N)}=c_{T,j}^{(N)}.
+	\]
+\end{lemma}
 
 \begin{lemma}[Heterogeneous geometric sequence extrapolation]%
 \label{lem:geom_extrapolation_hetero}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq_hetero}
 	\leanok
 	If two finite families of nonzero complex numbers, possibly with different
-	cardinalities, have equal power sums
-	$\sum_i \alpha_i^k = \sum_j \beta_j^k$ for all sufficiently large
-	exponents $k$, then the same equality holds for every exponent
-	$k \geq 0$.
+	cardinalities, have equal power sums eventually, so there is $N_0$ such that
+	\[
+		\forall N\ge N_0,\qquad
+		\sum_i \alpha_i^N = \sum_j \beta_j^N,
+	\]
+	then the same equality holds for every exponent:
+	\[
+		\forall k\ge 0,\qquad
+		\sum_i \alpha_i^k = \sum_j \beta_j^k.
+	\]
 \end{lemma}
 
 \begin{proof}
@@ -427,10 +436,13 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 \label{lem:geom_extrapolation}
 	\lean{MPSTensor.SectorWeightData.power_sums_eq_of_eventually_eq}
 	\leanok
-	If two finite families of nonzero complex numbers with the same
-	cardinality have equal power sums
-	$\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k > N_0$, then
-	equality holds for all $k \geq 0$.
+	If two finite families of nonzero complex numbers with the same cardinality
+	have equal power sums eventually, so there is $N_0$ such that
+	\[
+		\forall N\ge N_0,\qquad
+		\sum_i \alpha_i^N = \sum_i \beta_i^N,
+	\]
+	then equality holds for all exponents $k\ge 0$.
 \end{lemma}
 
 \begin{proof}
@@ -440,16 +452,22 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	Lemma~\ref{lem:geom_extrapolation_hetero}.
 \end{proof}
 
-\begin{theorem}[Copy-count recovery from eventual coefficient equality]%
-\label{thm:copies_eq_of_eventually_coeff_eq}
+\begin{lemma}[Copy-count recovery from eventual coefficient equality]%
+\label{lem:copies_eq_of_eventually_coeff_eq}
 	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
 	\leanok
 	\uses{def:paper_sector_data}
-	Let $S$ and $T$ be sector data over the same basis. If their coefficient
-	arrays satisfy $c_{S,j}^{(N)} = c_{T,j}^{(N)}$ for every basis block $j$
-	and all sufficiently large $N$, then their copy counts agree:
-	$r_j^S = r_j^T$ for every~$j$.
-\end{theorem}
+	Let $S$ and $T$ be sector data over the same basis. If there is $N_0$
+	such that their coefficient arrays satisfy
+	\[
+		\forall N>N_0,\ \forall j,\qquad
+		c_{S,j}^{(N)} = c_{T,j}^{(N)},
+	\]
+	then their copy counts agree:
+	\[
+		\forall j,\qquad r_j^S = r_j^T.
+	\]
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -480,11 +498,11 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 
 \begin{proof}
 	\leanok
-	\uses{thm:coeff_eventually_eq, thm:copies_eq_of_eventually_coeff_eq,
+	\uses{lem:coeff_eventually_eq, lem:copies_eq_of_eventually_coeff_eq,
 	      lem:geom_extrapolation, thm:power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
-	coefficient equality by Theorem~\ref{thm:coeff_eventually_eq}. Then
-	Theorem~\ref{thm:copies_eq_of_eventually_coeff_eq} recovers the
+	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}. Then
+	Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq} recovers the
 	copy-count equalities. After identifying the two index sets via these
 	copy-count equalities, the positive-power coefficient equalities extend
 	to all positive exponents by
@@ -496,7 +514,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 \label{thm:route_b_equal}
 	\lean{MPSTensor.SectorWeightData.weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
-	\uses{thm:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
+	\uses{lem:coeff_eventually_eq, lem:geom_extrapolation, thm:power_sum_multiset, def:paper_sector_data, def:bnt}
 	Let $S$ and $T$ be two sector data over the same basis with
 	the same multiplicities ($r_j^S = r_j^T$ for all~$j$).
 	If the basis is eventually linearly independent and the total MPVs
@@ -506,7 +524,7 @@ multiplicity $r_j$ and the multiset of weights attached to the basis block.
 	The argument proceeds as follows:
 	\begin{enumerate}
 		\item BNT LI $+$ equal MPVs $\Rightarrow$ eventual coefficient
-		      equality (Theorem~\ref{thm:coeff_eventually_eq});
+		      equality (Lemma~\ref{lem:coeff_eventually_eq});
 		\item Geometric extrapolation $\Rightarrow$ full coefficient
 		      equality for all positive~$k$
 		      (Lemma~\ref{lem:geom_extrapolation});
