@@ -60,89 +60,6 @@ section Main
 variable [NeZero D]
 
 omit [NeZero D] in
-private theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_tendsto_zero
-    (A B : MPSTensor d D)
-    (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
-    (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
-    (hProp : ProportionalMPV₂ (d := d) A B)
-    (hZero : ¬ GaugePhaseEquiv A B →
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0)) :
-    GaugePhaseEquiv A B := by
-  classical
-  choose c hc using hProp
-  have hOverlapAB :
-      ∀ N : ℕ,
-        mpvOverlap (d := d) A B N = c N * mpvOverlap (d := d) B B N := by
-    intro N
-    unfold mpvOverlap
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro σ _
-    rw [hc N σ]; ring
-  have hOverlapAA :
-      ∀ N : ℕ,
-        mpvOverlap (d := d) A A N = (c N * star (c N)) * mpvOverlap (d := d) B B N := by
-    intro N
-    unfold mpvOverlap
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro σ _
-    rw [hc N σ]
-    simp only [star_mul]
-    ring
-  have hA_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    simpa using hA_self.norm
-  have hB_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    simpa using hB_self.norm
-  have hRatio :
-      Filter.Tendsto
-        (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
-        Filter.atTop (nhds (1 : ℝ)) := by
-    simpa using hA_self_norm.div hB_self_norm one_ne_zero
-  have hB_self_norm_ne :
-      (∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) B B N‖ ≠ (0 : ℝ)) :=
-    hB_self_norm.eventually_ne one_ne_zero
-  have hRatio_eq :
-      (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
-        =ᶠ[Filter.atTop] fun N => ‖c N‖ ^ 2 := by
-    filter_upwards [hB_self_norm_ne] with N hN
-    calc
-      ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖
-          = ‖(c N * star (c N)) * mpvOverlap (d := d) B B N‖ /
-              ‖mpvOverlap (d := d) B B N‖ := by
-                simp [hOverlapAA N]
-      _ = (‖c N * star (c N)‖ * ‖mpvOverlap (d := d) B B N‖) /
-            ‖mpvOverlap (d := d) B B N‖ := by
-                simp
-      _ = ‖c N * star (c N)‖ := by
-            simpa using
-              (mul_div_cancel_right₀ (a := ‖c N * star (c N)‖)
-                (b := ‖mpvOverlap (d := d) B B N‖) hN)
-      _ = ‖c N‖ ^ 2 := by
-            simp [pow_two]
-  have hc_normsq :
-      Filter.Tendsto (fun N => ‖c N‖ ^ 2) Filter.atTop (nhds (1 : ℝ)) :=
-    Filter.Tendsto.congr' hRatio_eq hRatio
-  have hc_norm :
-      Filter.Tendsto (fun N => ‖c N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    simpa [Real.sqrt_sq (norm_nonneg _)] using hc_normsq.sqrt
-  have hCrossNorm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop (nhds (1 : ℝ)) := by
-    have hmul : Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (d := d) B B N‖)
-        Filter.atTop (nhds (1 : ℝ)) := by
-      simpa using hc_norm.mul hB_self_norm
-    exact hmul.congr fun N => by simp [hOverlapAB N]
-  by_contra hNot
-  have hto0 :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop (nhds 0) :=
-    hZero hNot
-  exact (hCrossNorm.ne_nhds one_ne_zero) (by simpa using hto0.norm)
-
-omit [NeZero D] in
 private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
     (A B : MPSTensor d D)
     (hA_self :
@@ -271,8 +188,9 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
       Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hProp : ProportionalMPV₂ (d := d) A B) :
     GaugePhaseEquiv A B :=
-  gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_tendsto_zero
-    A B hA_self hB_self hProp
+  gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
+    A B hA_self hB_self
+    (Filter.Eventually.of_forall fun N => hProp N)
     (fun hNot => mpvOverlap_tendsto_zero (A := A) (B := B) hA hB hA_norm hB_norm hNot)
 
 /-- NT / irreducible version of
@@ -291,8 +209,9 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_irreduci
       Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hProp : ProportionalMPV₂ (d := d) A B) :
     GaugePhaseEquiv A B :=
-  gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_tendsto_zero
-    A B hA_self hB_self hProp
+  gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
+    A B hA_self hB_self
+    (Filter.Eventually.of_forall fun N => hProp N)
     (fun hNot =>
       mpvOverlap_tendsto_zero_of_irreducible_TP
         (A := A) (B := B) hA_irr hB_irr hA_norm hB_norm hNot)
