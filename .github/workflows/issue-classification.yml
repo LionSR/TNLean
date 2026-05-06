@@ -57,7 +57,7 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/issue-classification-system-prompt.md
-          allowed-tools: "Read,Glob,Grep,mcp__github__*"
+          allowed_tools: "Read,Glob,Grep,mcp__github__*"
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           claude-prompt-file: .github/prompts/issue-classification-prompt.md
           claude-prompt-context: |

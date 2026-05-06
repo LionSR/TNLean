@@ -52,7 +52,7 @@ inputs:
     required: false
     default: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
 
-  allowed-tools:
+  allowed_tools:
     description: 'Optional --allowedTools value applied by default.'
     required: false
     default: ''
@@ -67,7 +67,7 @@ inputs:
     required: false
     default: ''
 
-  plugin-marketplaces:
+  plugin_marketplaces:
     description: 'Plugin marketplaces.'
     required: false
     default: ''
@@ -101,7 +101,7 @@ inputs:
     required: false
     default: ''
 
-  claude-args:
+  claude_args:
     description: 'Additional claude args. The action prepends --model automatically.'
     required: false
     default: ''
@@ -127,15 +127,15 @@ runs:
         INPUT_ALLOWED_BOTS: ${{ inputs['allowed-bots'] }}
         INPUT_BRANCH_NAME_TEMPLATE: ${{ inputs['branch-name-template'] }}
         INPUT_ADDITIONAL_PERMISSIONS: ${{ inputs['additional-permissions'] }}
-        INPUT_PLUGIN_MARKETPLACES: ${{ inputs['plugin-marketplaces'] }}
+        INPUT_PLUGIN_MARKETPLACES: ${{ inputs.plugin_marketplaces }}
         INPUT_PLUGINS: ${{ inputs['plugins'] }}
         INPUT_PROMPT: ${{ inputs.prompt }}
         INPUT_PROMPT_FILE: ${{ inputs['claude-prompt-file'] }}
         INPUT_PROMPT_CONTEXT: ${{ inputs['claude-prompt-context'] }}
-        INPUT_ALLOWED_TOOLS: ${{ inputs['allowed-tools'] }}
+        INPUT_ALLOWED_TOOLS: ${{ inputs.allowed_tools }}
         INPUT_SYSTEM_PROMPT: ${{ inputs['system-prompt'] }}
         INPUT_SYSTEM_PROMPT_FILE: ${{ inputs['system-prompt-file'] }}
-        INPUT_CLAUDE_ARGS: ${{ inputs['claude-args'] }}
+        INPUT_CLAUDE_ARGS: ${{ inputs.claude_args }}
       run: |
         set -euo pipefail
 
@@ -280,15 +280,17 @@ runs:
         fi
 
         claude_args="$INPUT_CLAUDE_ARGS"
-        claude_args="${claude_args//--allowed-tools/--allowedTools}"
         append_system_prompt=''
         if [ -n "$system_prompt" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--append-system-prompt'; then
           append_system_prompt="$system_prompt"
-          claude_args="${claude_args} --append-system-prompt \"${append_system_prompt}\""
+          if [ -n "$claude_args" ]; then
+            claude_args="${claude_args}"$'\n'
+          fi
+          claude_args="${claude_args}--append-system-prompt \"${append_system_prompt}\""
         fi
         if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
           if [ -n "$claude_args" ]; then
-            claude_args="${claude_args} "
+            claude_args="${claude_args}"$'\n'
           fi
           claude_args="${claude_args}--allowedTools \"${allowed_tools}\""
         fi

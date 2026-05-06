@@ -199,13 +199,13 @@ jobs:
       workflow_run_id: ${{ fromJSON(needs.setup.outputs.ci_run_id) }}
       pr_number: ${{ fromJSON(needs.setup.outputs.pr_number) }}
       setup_lean: true
-      plugin-marketplaces: 'https://github.com/leanprover/skills.git'
+      plugin_marketplaces: 'https://github.com/leanprover/skills.git'
       plugins: 'lean@leanprover'
       claude-prompt-file: .github/prompts/auto-fix-ci-prompt.md
       claude-prompt-context: |
         Context added by caller:
         - Source workflow: auto-fix.yml (CI fix job)
-      allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       system-prompt-file: .github/prompts/auto-fix-ci-system-prompt.md
 
   # ──────────────────────────────────────────────────────
@@ -234,7 +234,7 @@ jobs:
       claude-prompt-context: |
         Context added by caller:
         - Source workflow: auto-fix.yml (blueprint fix job)
-      allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+      allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
       system-prompt-file: .github/prompts/auto-fix-blueprint-system-prompt.md
 
   # ──────────────────────────────────────────────────────
@@ -321,9 +321,9 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-          plugin-marketplaces: 'https://github.com/leanprover/skills.git'
+          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
-          allowed-tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
+          allowed_tools: "Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
           system-prompt-file: .github/prompts/auto-fix-review-system-prompt.md
           claude-prompt-file: .github/prompts/auto-fix-review-prompt.md
           claude-prompt-context: |

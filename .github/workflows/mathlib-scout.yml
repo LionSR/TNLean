@@ -106,7 +106,7 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/mathlib-scout-system-prompt.md
-          allowed-tools: "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
+          allowed_tools: "Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
           claude-prompt-file: .github/prompts/mathlib-scout-prompt.md
           claude-prompt-context: |
             Issue #${{ github.event.issue.number }}

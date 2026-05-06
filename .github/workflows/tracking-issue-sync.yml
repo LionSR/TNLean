@@ -79,7 +79,7 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           allowed-bots: '*'
-          allowed-tools: "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
+          allowed_tools: "mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
 
           claude-prompt-file: .github/prompts/tracking-issue-sync-prompt.md
           claude-prompt-context: |

@@ -72,14 +72,14 @@ jobs:
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           branch-name-template: "{{prefix}}{{entityType}}-{{entityNumber}}-{{description}}"
-          allowed-tools: "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*"
+          allowed_tools: "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*"
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional-permissions: |
             actions: read
 
           # Load Lean skills from the official leanprover skills repository
-          plugin-marketplaces: 'https://github.com/leanprover/skills.git'
+          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           system-prompt-file: .github/prompts/claude-code-system-prompt.md
 

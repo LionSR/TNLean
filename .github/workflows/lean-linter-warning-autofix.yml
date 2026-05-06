@@ -178,8 +178,8 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: opus
           system-prompt-file: .github/prompts/lean-linter-warning-system-prompt.md
-          allowed-tools: "Read,Edit,Glob,Grep,Bash(python3 *),Bash(lake build),Bash(lake build *),Bash(lake env),Bash(lake env *),Bash(git diff *),Bash(git status),Bash(grep *),Bash(rg *)"
-          plugin-marketplaces: 'https://github.com/leanprover/skills.git'
+          allowed_tools: "Read,Edit,Glob,Grep,Bash(python3 *),Bash(lake build),Bash(lake build *),Bash(lake env),Bash(lake env *),Bash(git diff *),Bash(git status),Bash(grep *),Bash(rg *)"
+          plugin_marketplaces: 'https://github.com/leanprover/skills.git'
           plugins: 'lean@leanprover'
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           claude-prompt-file: .github/prompts/lean-linter-warning-prompt.md

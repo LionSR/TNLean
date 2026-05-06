@@ -80,7 +80,7 @@ jobs:
           provider: ${{ env.CLAUDE_CODE_PROVIDER }}
           model-tier: sonnet
           system-prompt-file: .github/prompts/blueprint-prose-review-system-prompt.md
-          allowed-tools: "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
+          allowed_tools: "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           claude-prompt-file: .github/prompts/blueprint-prose-review-prompt.md
           claude-prompt-context: |
