@@ -160,7 +160,7 @@ lemma MPVPhaseEquiv.exists_mpvState_eq_smul {r : ℕ} {dim : Fin r → ℕ}
 For each block in `blocksA`, choose a block in `blocksB` whose MPV state differs only by a
 nonzero scalar power. Then, at every finite length, the MPV span of `blocksA` is contained in
 the MPV span of `blocksB`. -/
-theorem mpv_span_le_of_phase_cover {rA rB : ℕ}
+lemma mpv_span_le_of_phase_cover {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -179,7 +179,7 @@ theorem mpv_span_le_of_phase_cover {rA rB : ℕ}
   simpa [hstate] using hmem
 
 /-- Mutual MPV-phase covers give equality of finite-length block MPV spans. -/
-theorem mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
+lemma mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -196,7 +196,7 @@ theorem mpv_span_eq_of_mutual_phase_cover {rA rB : ℕ}
 
 This is the abstract span step used after a common nonzero-weight block theorem identifies a
 representative family and shows that every block maps onto it up to MPV phase. -/
-theorem mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
+lemma mpv_span_eq_of_surjective_phase_cover {r rC : ℕ}
     {dim : Fin r → ℕ} {dimC : Fin rC → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (common : (c : Fin rC) → MPSTensor d (dimC c))
@@ -221,7 +221,7 @@ MPV spans.
 This theorem is deliberately independent of the sector weights.  It states the precise
 linear-algebra hypothesis used by the nonzero-part after-blocking theorem once a common-blocking
 result supplies a common representative family and shows that both sides cover it. -/
-theorem mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
+lemma mpv_span_eq_of_common_phase_cover {rA rB rC : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ} {dimC : Fin rC → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -248,7 +248,7 @@ variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
 variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
 
 /-- A common cover gives equality of the finite-length block MPV spans. -/
-theorem span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
+lemma span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
     Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) :=
   mpv_span_eq_of_common_phase_cover (d := d) blocksA blocksB C.common
@@ -293,7 +293,7 @@ def commonPhaseCover (M : SectorBasisPreMatching P Q) :
 
 /-- A sector-basis pre-matching gives equality of finite-length MPV spans of the two basis
 families. -/
-theorem span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
+lemma span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
     Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
       mpvState (d := d) (P.basis j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
@@ -302,7 +302,7 @@ theorem span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
 
 /-- A sector-basis pre-matching establishes the finite-length span equality needed by the
 primitive overlap-span hypotheses. -/
-theorem to_overlapSpan (M : SectorBasisPreMatching P Q)
+lemma to_overlapSpan (M : SectorBasisPreMatching P Q)
     (HP : SectorBasisOverlapOrthoHypotheses P)
     (HQ : SectorBasisOverlapOrthoHypotheses Q)
     (hP_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j))
@@ -313,7 +313,7 @@ theorem to_overlapSpan (M : SectorBasisPreMatching P Q)
 end SectorBasisPreMatching
 
 /-- A proportional-decomposition BNT comparison conclusion produces a common MPV phase cover. -/
-theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
+lemma nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -350,7 +350,7 @@ theorem nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
 This is the direct implication used when a comparison theorem has already identified
 the phase classes by a bijection, without restating the data as a proportional
 decomposition conclusion. -/
-theorem nonempty_mpvCommonPhaseCover_of_equiv_phase
+lemma nonempty_mpvCommonPhaseCover_of_equiv_phase
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -384,7 +384,7 @@ theorem nonempty_mpvCommonPhaseCover_of_equiv_phase
 
 The conclusion is obtained by taking the left family as the common MPV phase-cover family and
 then applying the common-cover span theorem. -/
-theorem mpv_span_eq_of_proportionalDecompositionConclusion
+lemma mpv_span_eq_of_proportionalDecompositionConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -397,7 +397,7 @@ theorem mpv_span_eq_of_proportionalDecompositionConclusion
   exact cover.span_eq N
 
 /-- A bijective MPV-phase matching gives finite-length MPV span equality. -/
-theorem mpv_span_eq_of_equiv_phase
+lemma mpv_span_eq_of_equiv_phase
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
@@ -416,7 +416,7 @@ phase cover.
 The proof uses the BNT comparison theorem to obtain a permutation and gauge phases between the
 basis blocks; applying the proportional-decomposition cover theorem to that matching yields the
 common MPV phase cover. It does not use a finite-length span equality hypothesis. -/
-theorem nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
+lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {DtotA DtotB : ℕ} {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
@@ -437,7 +437,7 @@ theorem nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
 
 The BNT comparison theorem gives a proportional-decomposition conclusion, hence a common
 MPV phase cover, and the common-cover theorem gives equality of the two block-family spans. -/
-theorem mpv_span_eq_of_separated_normalCFBNT_data
+lemma mpv_span_eq_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {DtotA DtotB : ℕ} {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
