@@ -162,6 +162,9 @@ theorem cumulative_wielandt_bound [NeZero D]
     cumulativeSpan A (D ^ 2) = ⊤ :=
   cumulativeSpan_eq_top A hN
 
+@[deprecated (since := "2026-05-06")]
+alias isNormal_implies_cumulativeSpan := cumulative_wielandt_bound
+
 /-- **Normality implies cumulative spanning.**
 
 If `IsNormal A` (word products of a single fixed length span M_D(ℂ)),
