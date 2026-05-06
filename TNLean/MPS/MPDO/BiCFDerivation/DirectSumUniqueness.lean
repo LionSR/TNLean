@@ -206,4 +206,25 @@ theorem groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
     (not_bondDim_eq_and_groundSpace_eq_of_exists_not_forall_mpv_eq_mul
       hA hB hL hDistinct)
 
+/-- Homogeneous pair trace separation at the three-block length from a
+sufficiently long pointwise non-proportional MPV state.
+
+The length-`L` block-injectivity hypotheses are the direct-sum dimension-step
+input.  The additional block-injectivity hypotheses at `L + (L + L)` are only
+used to identify zero image vectors with zero boundary matrices. -/
+theorem pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} [NeZero D₁] [NeZero D₂]
+    (hAblk : IsNBlkInjective A L) (hBblk : IsNBlkInjective B L)
+    (hAblk3 : IsNBlkInjective A (L + (L + L)))
+    (hBblk3 : IsNBlkInjective B (L + (L + L)))
+    (hA : IsInjective A) (hB : IsInjective B) (hD : D₂ ≤ D₁) (hL : 1 < L)
+    (hDistinct :
+      ∃ N : ℕ, 2 ≤ N ∧ L ≤ N ∧
+        ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ) :
+    PairTraceSeparatingAt A B (L + (L + L)) := by
+  exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
+    (groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge
+      hAblk hBblk hA hB hD hL hDistinct)
+    hAblk3 hBblk3
+
 end MPSTensor

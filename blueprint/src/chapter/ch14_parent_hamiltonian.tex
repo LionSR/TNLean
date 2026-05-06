@@ -3152,6 +3152,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_not_exists_mpv_eq_smul_of_dim_ge}
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_mpv_eq_smul_of_dim_ge}
     \lean{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+    \lean{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+    \lean{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion,
         thm:chain_ground_space_eq_mpv_blk}
@@ -3174,7 +3179,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     at a sufficiently long chain length, equivalently distinctness of the
     corresponding periodic MPV lines: equality of the local image spaces gives
     equality of the periodic-chain constraint spaces, and injective uniqueness
-    identifies those spaces with the two MPV lines.
+    identifies those spaces with the two MPV lines.  For same-dimensional
+    separated BNT blocks, the non-equivalence condition supplies such
+    non-proportional MPV states at arbitrarily large chain lengths; the
+    direct-sum injectivity hypotheses remain explicit.  Zero intersection of
+    the two three-block image spaces also gives homogeneous pair trace
+    separation at that length once the boundary-to-chain maps at the
+    three-block length are injective.
 \end{lemma}
 
 \begin{proof}\leanok

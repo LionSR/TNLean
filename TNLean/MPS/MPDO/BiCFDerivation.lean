@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
+import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness
 
@@ -34,6 +35,9 @@ The supporting modules are:
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness` — the parent-Hamiltonian
   uniqueness input that rules out the equal-size direct-sum collapse once the
   two injective block states have distinct MPV lines.
+* `TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum` — the BNT-facing wrapper that
+  supplies that distinctness input from separated same-dimension blocks, while
+  keeping the direct-sum injectivity hypotheses explicit.
 
 ## References
 
