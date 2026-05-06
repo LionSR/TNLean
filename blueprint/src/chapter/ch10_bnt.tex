@@ -32,8 +32,8 @@ The main references are
 	This is \cite[Definition~4.2]{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[Overlap-orthonormality implies eventual linear independence]
-	\label{thm:bnt_overlap_orthonormal_li}
+\begin{lemma}[Overlap-orthonormality implies eventual linear independence]
+	\label{lem:bnt_overlap_orthonormal_li}
 	\lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
 	\leanok
 	\uses{def:mpv_overlap}
@@ -42,7 +42,7 @@ The main references are
 	for $i \neq j$. Then the MPV states
 	$\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
 	sufficiently large~$N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	The Gram matrix of the family $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$
@@ -181,12 +181,12 @@ The main references are
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:mpv_decomposition, thm:bnt_overlap_orthonormal_li, thm:cross_overlap_zero_split}
+	\uses{thm:mpv_decomposition, lem:bnt_overlap_orthonormal_li, thm:cross_overlap_zero_split}
 	Injective blocks are normal. The block-diagonal decomposition theorem gives
 	the MPV expansion of $\bigoplus_k \mu_k A_k$ in terms of the block MPVs.
 	The self-overlap limits are part of the hypotheses, and
 	Theorem~\ref{thm:cross_overlap_zero_split} supplies the off-diagonal
-	decay. Therefore Theorem~\ref{thm:bnt_overlap_orthonormal_li} gives the
+	decay. Therefore Lemma~\ref{lem:bnt_overlap_orthonormal_li} gives the
 	eventual linear independence required in Definition~\ref{def:bnt}.
 \end{proof}
 
@@ -237,8 +237,8 @@ The main references are
 
 \section{Permutation rigidity for bases of normal tensors}
 
-\begin{theorem}[Invertible change of basis]
-	\label{thm:bnt_invertible_change_basis}
+\begin{lemma}[Invertible change of basis]
+	\label{lem:bnt_invertible_change_basis}
 	\lean{exists_invertible_changeBasis}
 	\leanok
 	Let $v_1, \ldots, v_g$ and $w_1, \ldots, w_g$ be two linearly independent
@@ -248,7 +248,7 @@ The main references are
 		w_j = \sum_{i=1}^g U_{ij} v_i
 	\]
 	for every $j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	Because the two families span the same subspace, each $w_j$ has a unique
@@ -258,22 +258,22 @@ The main references are
 	is injective, hence invertible.
 \end{proof}
 
-\begin{theorem}[Eventual change of basis from equal spans]
-	\label{thm:bnt_eventual_change_basis}
+\begin{lemma}[Eventual change of basis from equal spans]
+	\label{lem:bnt_eventual_change_basis}
 	\lean{MPSTensor.eventually_exists_invertible_changeBasis}
 	\leanok
-	\uses{thm:bnt_invertible_change_basis, def:mpv_overlap}
+	\uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
 	If two finite families of blocks have asymptotically orthonormal overlaps
 	within each family and their MPV spans agree for every system size $N$,
 	then for all sufficiently large $N$ there exists an invertible matrix
 	$U_N$ expressing the MPV states of one family as linear combinations of
 	the MPV states of the other.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:bnt_overlap_orthonormal_li, thm:bnt_invertible_change_basis}
-	By Theorem~\ref{thm:bnt_overlap_orthonormal_li}, both families are
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
+	By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
 	linearly independent for all sufficiently large $N$. At such an $N$, the
-	span equality lets us apply Theorem~\ref{thm:bnt_invertible_change_basis}.
+	span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
 \end{proof}
 
 \begin{theorem}[Permutation rigidity for equal block counts]
@@ -289,8 +289,8 @@ The main references are
 	same bond dimension and are gauge-phase equivalent.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
-	For large $N$, Theorem~\ref{thm:bnt_eventual_change_basis} gives an
+\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
+	For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
 	invertible matrix $U_N$ relating the two MPV families. Fix $j$. If every
 	mixed overlap $O_{A_iB_j}(N)$ tended to $0$, then taking inner products of
 	the relation with the $A_i$ and using that the Gram matrix of the
@@ -397,8 +397,8 @@ The main references are
 	dimension and are gauge-phase equivalent for each~$j$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{thm:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
-	By Theorem~\ref{thm:bnt_overlap_orthonormal_li}, both families are
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
+	By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
 	linearly independent for all sufficiently large $N$. At such an $N$, the
 	common span has the same dimension when computed from the $A$-family or
 	the $B$-family, so $g_A = g_B$. After identifying the two index sets,

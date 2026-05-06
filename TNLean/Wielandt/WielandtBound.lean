@@ -95,7 +95,7 @@ This combines Lemma 1 (`exists_nonzero_trace_word`) with eigenvalue extraction
 structure.
 
 Paper: arXiv:0909.5347, Theorem 1 proof, first paragraph. -/
-theorem wielandtAnalysis [NeZero D]
+lemma wielandtAnalysis [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     Nonempty (WielandtAnalysis A) := by
   obtain ⟨w₀, μ, φ, hw₀, hμ, hφ, heig⟩ := exists_word_eigenvector A hN
@@ -127,7 +127,7 @@ they also span all vectors when applied to any nonzero φ.
 Paper: implicit in the proof — the spanning of all matrices trivially implies
 the spanning of all vectors.
 (arXiv:0909.5347, between Lemma 1 and Lemma 2) -/
-theorem vector_spanning_from_normality [NeZero D]
+lemma vector_spanning_from_normality [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0) :
     cumulativeVectorSpan A φ (D ^ 2) = ⊤ :=
@@ -174,7 +174,7 @@ multiplying word products of different lengths we can eventually fill a
 single-length word span. This is essentially Lemma 2(b) of the paper.
 
 Paper: arXiv:0909.5347, Section II. -/
-theorem isNormal_implies_cumulativeSpan_eq_top'
+lemma isNormal_implies_cumulativeSpan_eq_top'
     (A : MPSTensor d D) (hN : IsNormal A) :
     ∃ N, cumulativeSpan A N = ⊤ :=
   cumulativeSpan_eq_top_of_isNormal A hN
@@ -206,7 +206,7 @@ Given `IsNormal A`:
 5. (Needs Lemma 2(b)) All matrices are reachable using word products of
    a single fixed length ≤ D⁴
 
-The conclusion is the conjunction of steps 1-4. -/
+This lemma covers steps 1-4. -/
 lemma wielandt_chain [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :
     -- Step 1: Cumulative span = ⊤

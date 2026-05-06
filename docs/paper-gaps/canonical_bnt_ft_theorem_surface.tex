@@ -70,6 +70,16 @@ persistence of injectivity under further blocking, and the simultaneous
 application to a finite family of representative sectors.  These statements are
 auxiliary, but they are mathematically faithful to the period-removal step.
 
+\paragraph{Wielandt proof-chain statements.}
+The source proof of the quantum-Wielandt bound uses Lemma~1, eigenvalue
+extraction, vector spreading, and the fixed-length rank-one step as an argument,
+not as separate MPS theorem statements
+\cite[Theorem~1 proof]{Sanz2010Quantum}.  Formal conjunctions that bundle
+these inputs, such as the \emph{Wielandt analysis} and \emph{Wielandt chain}
+declarations, should therefore be lemmas.  The visible theorem is the
+cumulative or fixed-length Wielandt conclusion, with the stronger fixed-length
+claim distinguished from the cumulative span bound.
+
 \paragraph{BNT comparison statements.}
 The source BNT characterization selects one representative from each
 phase-gauge equivalence class and compares the power sums of weights.  The
@@ -78,6 +88,9 @@ permutation rigidity, sector-weight comparison, and phase absorption.  The
 heterogeneous block-matching theorem is a genuine formal endpoint for the
 block-matching part, while the final global weighted gauge equivalence remains
 the paper-level equal-MPV target.
+The overlap-to-linear-independence and change-of-basis declarations are
+linear-algebra support lemmas for the permutation-rigidity theorem, not
+additional BNT theorems from the source.
 
 \section{External lemmas need explanations}
 
