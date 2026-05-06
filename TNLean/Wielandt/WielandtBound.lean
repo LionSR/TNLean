@@ -142,8 +142,8 @@ normality-to-spanning input for that fixed-length passage.
 
 ### What we prove:
 - `cumulative_wielandt_bound`: T_{D²}(A) = ⊤ for normal tensors
-- `isNormal_iff_cumulativeSpan_eq_top`: characterization of normality
-  via cumulative span
+- `isNormal_implies_cumulativeSpan_eq_top'`: eventual cumulative spanning
+  from normality
 
 ### Fixed-length passage:
 The conversion from vector spanning to fixed-length matrix spanning is the
