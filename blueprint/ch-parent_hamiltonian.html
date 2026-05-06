@@ -12737,7 +12737,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">20.154</span>
-    <span class="lemma_thmtitle">Homogenizing cumulative pair separation</span>
+    <span class="lemma_thmtitle">Conditional padding from exact homogeneous identity witnesses</span>
     <div class="thm_header_extras">
 
     
@@ -12793,19 +12793,9 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window" class="lean_decl">MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding" class="lean_decl">MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding" class="lean_decl">MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding" class="lean_decl">MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding</a></li>
-          
           <li><a href="../docs/find/#doc/MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows" class="lean_decl">MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows" class="lean_decl">MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left" class="lean_decl">MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window" class="lean_decl">MPSTensor.exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window</a></li>
           
@@ -12820,7 +12810,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>                Suppose \(S\le T\) and pair words of length at most \(S\) span the product algebra. If, for every \(\ell \le S\), the simultaneous identity pair belongs to the span of pair words of length \(T-\ell \), then pair words of the single length \(T\) already span the product algebra. Equivalently, cumulative trace separation up to \(S\) becomes homogeneous trace separation at length \(T\) under the same identity-padding hypothesis. Consequently, an all-word product-span theorem together with eventual homogeneous identity padding yields a homogeneous pair trace-separation length. </p>
+  <p>           Homogeneous identity-padding witnesses multiply by concatenation of words. Therefore, if one has a positive period and a full residue window of homogeneous pair spans, then the simultaneous identity pair lies in all sufficiently large homogeneous pair spans. Combined with all-length pair trace separation, this period-window input gives one homogeneous pair trace-separation length. This does not prove the David–Perez-Garcia direct-sum input by itself: fullness of spans up to a bounded length is weaker than the exact homogeneous input used here. </p>
 
   </div>
 </div>
@@ -12832,7 +12822,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>A pair word of length \(\ell \) is multiplied by a length-\(T-\ell \) expression for the simultaneous identity. Componentwise multiplication concatenates words, so each cumulative generator is rewritten as a linear combination of length-\(T\) pair words. The trace-dual version follows from homogeneous pair trace duality. In particular, homogeneous identity-padding witnesses multiply to give another identity-padding witness at the sum of their lengths. </p>
+  <p>The length-zero word gives the identity only at length zero, so it is not a positive-length padding theorem. The useful padding facts are homogeneous: if the identity pair is in the span at lengths \(m\) and \(n\), componentwise multiplication puts it in the span at length \(m+n\). A period witness and a complete residue window therefore give homogeneous padding at every sufficiently large length, which is the input needed by the all-length-to-fixed-length implication. </p>
 
   </div>
 </div>
@@ -13106,21 +13096,11 @@
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt</a></li>
           
-          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.pairTraceSeparatingAll_of_isCanonicalFormBNT" class="lean_decl">MPSTensor.pairTraceSeparatingAll_of_isCanonicalFormBNT</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding</a></li>
-          
           <li><a href="../docs/find/#doc/MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows" class="lean_decl">MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_identity_period_windows</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows" class="lean_decl">MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding</a></li>
           
           <li><a href="../docs/find/#doc/MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords" class="lean_decl">MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords</a></li>
           
@@ -13137,7 +13117,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>                   Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. It is enough, by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">20.156</a>, to construct pairwise separators for every ordered pair of distinct blocks; by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">20.155</a>, a common pair trace-separation length is one sufficient finite-dimensional witness. A cumulative pair trace cutoff is also enough, once \(S\le T\), when paired with the simultaneous identity-padding hypothesis of Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_homogenization_with_padding">20.154</a>. Consequently, the pulled-back words at the resulting length for \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
+  <p>              Let \(((\mu _j),(A_j))\) be in canonical form with BNT separation. Suppose there are length-\(S\) block-selector words: for each sector \(k\), a linear combination of length-\(S\) words evaluates to \(I\) on \(A_k\) and to \(0\) on every other block. Then the simultaneous length-\((1+S)\) block-word evaluations span \(\prod _j M_{D_j}(\mathbb {C})\), with positive length. It is enough, by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">20.156</a>, to construct pairwise separators for every ordered pair of distinct blocks; by Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">20.155</a>, a common pair trace-separation length is one sufficient finite-dimensional witness. This witness remains homogeneous: either it is supplied directly as fixed-length pair separation, or it is obtained from an explicit period-window hypothesis as in Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_homogenization_with_padding">20.154</a>. Consequently, the pulled-back words at the resulting length for \(\operatorname {Assemble}(\mu ,A)\) span every virtual sector projection, and the corresponding commutant reduction is available. </p>
 
   </div>
 </div>
