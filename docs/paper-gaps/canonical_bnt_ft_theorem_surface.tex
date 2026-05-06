@@ -112,6 +112,8 @@ This applies in particular to the following families of external input.
     they are not proved in the MPS source.  When they are used to recover
     coefficients, multiplicities, or weight multisets, the blueprint should
     explain the finite linear system or the power-sum recursion.
+    Declarations that only restate these finite-sequence facts in BNT notation
+    should be lemmas, even when they are applied inside a paper-level theorem.
   \item Perron--Frobenius and peripheral-spectrum facts for quantum channels are
     standard inputs from finite-dimensional channel theory, but they are not
     interchangeable.  A formal theorem should specify whether it uses
@@ -123,6 +125,49 @@ This rule also gives a retirement test.  If an external-looking lemma has no
 source citation, no proof explanation, and no current proof path needing it, it
 should not remain as a headline theorem in the paper-level blueprint.
 
+\section{Dependency-chain classification}
+
+The non-periodic Fundamental Theorem route should be read with the following
+separation of proof roles.
+
+\paragraph{Paper-level targets.}
+The proportional canonical-form theorem and the equal-MPV corollary are the
+source targets.  Their formal representatives include
+\path{fundamentalTheorem_proportionalMPV_CFBNT} and
+\path{fundamentalTheorem_equalMPV_CFBNT}.
+Heterogeneous variants that also state the permutation, phases, gauges, and
+weight matching for possibly different sector indices are legitimate theorem
+endpoints when they are the formal form of the same BNT comparison.
+
+\paragraph{Conditional after-blocking consumers.}
+The after-blocking comparison theorems are useful only after the source
+canonical-form, BNT selection, block-injective span, and BNT matching inputs have
+been supplied.  Results such as
+\path{fundamentalTheorem_after_blocking_sector_of_common_blocks_blockSpan}
+and the corresponding common-phase-cover or BNT-cover formulations are
+conditional consumers of those inputs.  They should stay visibly conditional
+until the hypotheses are produced from the paper's assumptions.  In particular,
+the finite-length span or phase-cover assumptions are not extra hypotheses in
+the source theorem; they are the formal names for proof inputs that still have
+to be obtained from the source argument.
+
+\paragraph{Data structures and transport lemmas.}
+Objects such as \path{SectorBasisOverlapSpanHypotheses} and
+\path{CommonPrimitiveBNTCoverHypotheses}
+are formal comparison data for the proof.  They should not be cited as paper
+theorems.  Lemmas converting one data structure into another are needed in the
+formal proof chain, but they are auxiliary unless they state one of the source
+mathematical claims directly.
+
+\paragraph{External finite-dimensional inputs.}
+The formal route also contains named statements for linear algebra that the
+paper uses without proof: Vandermonde separation, Newton--Girard recovery,
+finite-dimensional Perron--Frobenius structure, Burnside--Jacobson algebra
+generation, and quantum Wielandt bounds.  These may be important mathematical
+theorems in their own right, but in this proof chain they enter as cited inputs.
+Their statements should be explained, and their formal names should normally be
+lemma-level when they are merely restated in MPS notation.
+
 \section{Current demotions}
 
 The following declarations are auxiliary and should not be read as independent
@@ -132,8 +177,8 @@ paper-level theorems.
     \[
       \texttt{fundamentalTheorem\_equalMPV\_of\_explicit\_coefficients}.
     \]
-    It is not the full equal-MPV corollary from the papers.  It assumes the
-    coefficient arrays and their nonzero limits.
+    It is now lemma-level.  It is not the full equal-MPV corollary from the
+    papers, since it assumes the coefficient arrays and their nonzero limits.
   \item The proportional result
     \[
       \texttt{fundamentalTheorem\_proportionalMPV\_CFBNT}
@@ -157,6 +202,26 @@ paper-level theorems.
     from \cite{Cirac2016MPDO_arXiv}; the source only says that canonical forms
     may have zero blocks through the inequality
     \(\sum_k D_k \le D\) \cite[lines~217--219]{Cirac2016MPDO_arXiv}.
+  \item The power-sum multiset recovery statement
+    \[
+      \texttt{power\_sum\_eq\_implies\_multiset\_eq}
+    \]
+    is a lemma-level restatement of the elementary Newton--Girard input used in
+    the equal-MPV proof.  Likewise,
+    \[
+      \texttt{perBlock\_sameMPV\_of\_equalMPV\_CFBNT}
+    \]
+    is only the extraction of the blockwise equality conclusion from the
+    equal-MPV theorem.  Neither should be counted as an additional source-level
+    Fundamental Theorem.
+  \item The implication
+    \[
+      \texttt{sameMPV}_{2}\texttt{\_implies\_proportionalMPV}_{2}
+    \]
+    from equal MPV families to proportional MPV families with proportionality
+    constant \(1\) is also lemma-level.  The displayed subscript \(2\) denotes
+    the Unicode subscript \(2\) used in the Lean declaration name.  It is a
+    logical conversion between hypotheses, not a separate source theorem.
 \end{itemize}
 
 \section{Statements to keep visibly conditional}
