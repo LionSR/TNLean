@@ -30,7 +30,9 @@ directness conclusion once the direct-sum injectivity hypotheses are supplied.
 This is the BNT-facing form of the equal-size branch of
 David--Perez-Garcia--Schuch--Wolf, Lemma `lem:direct-sum`.  The theorem does
 not infer injectivity or transport non-equivalence through blocking; those
-inputs remain explicit. -/
+inputs remain explicit. It is exported for the pair-trace theorem below and for
+downstream direct-sum comparisons that need the image-space directness statement
+before applying trace separation. -/
 theorem groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -78,15 +80,11 @@ theorem pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of
     (hAk_inj : IsInjective (A k))
     (hL : 1 < L) :
     PairTraceSeparatingAt
-      (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) (L + (L + L)) := by
-  obtain ⟨N, hNmin, hSep⟩ :=
-    exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP
-      A hIrr hLeft hOverlap hBlocks hjk hdim (max 2 L)
-  have hN : 2 ≤ N := le_trans (Nat.le_max_left 2 L) hNmin
-  have hLN : L ≤ N := le_trans (Nat.le_max_right 2 L) hNmin
-  exact pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge
-    hAj_blk hAk_blk hAj_blk3 hAk_blk3 hAj_inj hAk_inj le_rfl hL
-    ⟨N, hN, hLN, hSep⟩
+    (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k) (L + (L + L)) := by
+  exact pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
+    (groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge
+      A hIrr hLeft hOverlap hBlocks hjk hdim hAj_blk hAk_blk hAj_inj hAk_inj hL)
+    hAj_blk3 hAk_blk3
 
 /-- BNT-separated blocks give a common three-block homogeneous pair trace
 separation length for every ordered pair, once the direct-sum injectivity
@@ -123,7 +121,10 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
       (hBlk k) (hBlk j) (hBlk3 k) (hBlk3 j) hdim
 
 /-- Existential common-length form of
-`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`. -/
+`forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`.
+
+This is the API expected by selector and word-span consumers that only need a
+single finite separating length for all ordered block pairs. -/
 theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
