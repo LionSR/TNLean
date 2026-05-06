@@ -44,11 +44,10 @@ a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127: fo
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
 are linearly independent.  It is a `Prop`; no data is bundled.
 
-This is exactly the linear-independence hypothesis consumed by the heterogeneous
-sector comparison lemmas in this file. It is the linear-independence output
-expected from a general BNT sector construction in the after-blocking
-canonical-form reduction, and it is the input consumed by the final after-blocking
-sector comparison. -/
+Mathematically, this is the eventual linear-independence hypothesis on the basis
+sector MPV families. In comparison theorems for two sector decompositions, it
+lets equality of total MPVs determine the scalar coefficients after the basis
+blocks have been matched, even when the two decompositions use different bases. -/
 def HasBNTSectorData (P : SectorDecomposition d) : Prop :=
   ∃ N0 : ℕ, ∀ N > N0,
     LinearIndependent ℂ (fun j : Fin P.basisCount => mpvState (P.basis j) N)
