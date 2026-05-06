@@ -503,5 +503,4 @@ lemma exists_bnt_grouping
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
 
-
 end MPSTensor
