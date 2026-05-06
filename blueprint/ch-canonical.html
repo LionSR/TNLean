@@ -514,7 +514,13 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#sec:sector_irreducibility_lemmas"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Sector irreducibility lemmas</span></a>
+  <a href="ch-canonical.html#sec:cyclic_projection_period_removal"><span class="toc_ref">11.12.1</span> <span class="toc_entry">Cyclic projections and period removal</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:common_blocked_cyclic_sector_comparison"><span class="toc_ref">11.12.2</span> <span class="toc_entry">Common-blocking comparison data</span></a>
+ </li>
+<li class="">
+  <a href="ch-canonical.html#sec:sector_irreducibility_lemmas"><span class="toc_ref">11.12.3</span> <span class="toc_entry">Preliminary lemmas for sector irreducibility</span></a>
  </li>
 
   </ul>
@@ -6522,6 +6528,25 @@
 </div>
 <h1 id="sec:cyclic_sectors">11.12 Cyclic sector decomposition</h1>
 
+<p>The source input is the cyclic peripheral structure of an irreducible unital map from <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;6
+	]
+</span>, applied to the adjoint transfer map, together with the cyclic-block form used in <span class="cite">
+	[
+	
+	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
+	, equation&#160;(1) and Lemma&#160;1
+	]
+</span>. The source writes \(\mathcal{E}_A^\dagger (P_u)=P_{u+1}\) and \(A^i=\sum _u P_u A^i P_{u+1}\). After reversing the cyclic order, the convention here is, with sector indices modulo the period \(m\), </p>
+<div class="displaymath" id="a0000000846">
+  \[  \mathcal{E}_A^\dagger (P_{u+1}) = P_u,\qquad A^i = \sum _u P_{u+1} A^i P_u .  \]
+</div>
+<p> The tensor \(C_u\) is obtained by compressing the blocked tensor \(A^{[m]}\) to the corner \(P_u\). The later finite-family entries starting at Definition&#160;<a href="ch-canonical.html#def:common_blocked_cyclic_sector_family">11.85</a> record the additional common-blocking data needed when several original blocks must be compared at one physical alphabet; they are not separate cyclic-decomposition assertions. </p>
+<h2 id="sec:cyclic_projection_period_removal">11.12.1 Cyclic projections and period removal</h2>
+
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:compressed_sector">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -6538,7 +6563,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:compressed_sector">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000846"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6566,14 +6591,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Let \(A\) be an MPS tensor satisfying \(\sum _i (A^i)^\dagger A^i = P\) for an orthogonal projection \(P\), and suppose \(P A^i P = A^i\) for every&#160;\(i\). Then there exist a left-canonical tensor \(C\) of bond dimension \(n = \operatorname{tr}(P)\) and a \(\ast \)-algebra isomorphism \(\varphi : M_{n}(\mathbb {C}) \xrightarrow {\sim } P M_{D}(\mathbb {C}) P\) (preserving both multiplication and adjoint) with </p>
-<div class="displaymath" id="a0000000847">
+<div class="displaymath" id="a0000000848">
   \[  V^{(N)}(C)_\sigma = \operatorname{tr}\! \bigl(P \cdot A^\sigma \bigr), \qquad \varphi \! \bigl(\mathcal{E}_{C^\dagger }(X)\bigr) = \mathcal{E}_{A^\dagger }\! \bigl(\varphi (X)\bigr)  \]
 </div>
 <p> for every&#160;\(\sigma \) and every \(X \in M_{n}(\mathbb {C})\), together with \(\varphi (XY) = \varphi (X)\varphi (Y)\) and \(\varphi (X^\dagger ) = \varphi (X)^\dagger \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000846">
+<div class="proof_wrapper" id="a0000000847">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6601,7 +6626,7 @@
 
     <a class="icon proof" href="ch-canonical.html#cor:compressed_sector_pos_mpv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000848"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000849"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6654,7 +6679,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000848">
+<div class="proof_wrapper" id="a0000000849">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6682,7 +6707,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blockdecomp_commuting_projs">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000849"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6735,7 +6760,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000849">
+<div class="proof_wrapper" id="a0000000850">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6763,7 +6788,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blockdecomp_adjoint_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6818,7 +6843,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000850">
+<div class="proof_wrapper" id="a0000000851">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6846,7 +6871,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:conjtranspose_kraus_setup">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000851"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6901,7 +6926,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000851">
+<div class="proof_wrapper" id="a0000000852">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6929,7 +6954,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_projection_periodic_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000853"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6960,7 +6985,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000852">
+<div class="proof_wrapper" id="a0000000853">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6988,7 +7013,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_adjoint_transfer_pow">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000853"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000854"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7044,13 +7069,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every tensor \(A\), blocking length \(m\), and matrix \(X\), </p>
-<div class="displaymath" id="a0000000854">
+<div class="displaymath" id="a0000000855">
   \[  \mathcal{E}_{(A^{[m]})^\dagger }(X) = (\mathcal{E}_{A^\dagger })^m(X).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000853">
+<div class="proof_wrapper" id="a0000000854">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7078,7 +7103,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000855"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000856"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7147,7 +7172,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000855">
+<div class="proof_wrapper" id="a0000000856">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7175,7 +7200,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000856"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000857"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7232,7 +7257,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000856">
+<div class="proof_wrapper" id="a0000000857">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7260,7 +7285,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000857"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000858"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7321,7 +7346,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000857">
+<div class="proof_wrapper" id="a0000000858">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7417,7 +7442,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000858"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7472,7 +7497,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000858">
+<div class="proof_wrapper" id="a0000000859">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7484,6 +7509,9 @@
 
   </div>
 </div>
+<h2 id="sec:common_blocked_cyclic_sector_comparison">11.12.2 Common-blocking comparison data</h2>
+
+<p>The following entries concern a finite family of irreducible nonzero-weight blocks. After each block has been decomposed into period-removed sectors, the least common multiple of the periods is used to express all sectors over the same blocked physical alphabet. The definitions below record the flattening of the double index \((k,u)\), the transported weights \(\mu _k^p\), and the identification between iterated blocking at \((m_k,e_k)\) and direct blocking at the common length \(p=m_k e_k\). </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:common_blocked_cyclic_sector_family">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -7618,13 +7646,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_blocked_cyclic_sector_flat_weight_ne_zero">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:common_blocked_cyclic_sector_flat_weight_ne_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">11.87</span>
-    <span class="theorem_thmtitle">Unit weights are nonzero for common reblocked cyclic sectors</span>
+    <span class="lemma_thmlabel">11.87</span>
+    <span class="lemma_thmtitle">Unit weights are nonzero for common reblocked cyclic sectors</span>
     <div class="thm_header_extras">
 
     
@@ -7632,9 +7660,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">#</a>
+    <a class="icon proof" href="ch-canonical.html#lem:common_blocked_cyclic_sector_flat_weight_ne_zero">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000860"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7680,12 +7708,12 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Every unit weight in Definition&#160;<a href="ch-canonical.html#def:common_blocked_cyclic_sector_flat_weight">11.86</a> is nonzero. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000859">
+<div class="proof_wrapper" id="a0000000860">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7797,7 +7825,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000860"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000861"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7888,7 +7916,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000860">
+<div class="proof_wrapper" id="a0000000861">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7916,7 +7944,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_representative_normal_bnt">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000861"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000862"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7983,7 +8011,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000861">
+<div class="proof_wrapper" id="a0000000862">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8011,7 +8039,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_representative_common_further_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000862"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000863"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8048,7 +8076,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000862">
+<div class="proof_wrapper" id="a0000000863">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8060,13 +8088,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_flat_weight_apply_of_block">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:common_flat_weight_apply_of_block">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">11.92</span>
-    <span class="theorem_thmtitle">Weights of common-alphabet sectors</span>
+    <span class="lemma_thmlabel">11.92</span>
+    <span class="lemma_thmtitle">Weights of common-alphabet sectors</span>
     <div class="thm_header_extras">
 
     
@@ -8074,9 +8102,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#thm:common_flat_weight_apply_of_block">#</a>
+    <a class="icon proof" href="ch-canonical.html#lem:common_flat_weight_apply_of_block">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000863"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000864"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8122,12 +8150,12 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   For a sector \(s\) of the original block \(k\), the weight assigned to the corresponding common-alphabet sector is \(\mu _k^p\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000863">
+<div class="proof_wrapper" id="a0000000864">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8139,13 +8167,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:common_flat_weight_apply_block_eq">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:common_flat_weight_apply_block_eq">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">11.93</span>
-    <span class="theorem_thmtitle">Equal weights inside one original block</span>
+    <span class="lemma_thmlabel">11.93</span>
+    <span class="lemma_thmtitle">Equal weights inside one original block</span>
     <div class="thm_header_extras">
 
     
@@ -8153,9 +8181,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#thm:common_flat_weight_apply_block_eq">#</a>
+    <a class="icon proof" href="ch-canonical.html#lem:common_flat_weight_apply_block_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000864"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000865"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8173,7 +8201,7 @@
           
           <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_derived_blocks">Definition 11.88</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_flat_weight_apply_of_block">Theorem 11.92</a></li>
+          <li><a href="ch-canonical.html#lem:common_flat_weight_apply_of_block">Lemma 11.92</a></li>
           
         </ul>
     
@@ -8203,12 +8231,12 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   All common-alphabet sectors coming from the same original block carry the same transported weight. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000864">
+<div class="proof_wrapper" id="a0000000865">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8236,7 +8264,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000865"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000866"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8307,7 +8335,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000865">
+<div class="proof_wrapper" id="a0000000866">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8401,7 +8429,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000866"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000867"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8432,7 +8460,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000866">
+<div class="proof_wrapper" id="a0000000867">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8460,7 +8488,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000867"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000868"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8541,7 +8569,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000867">
+<div class="proof_wrapper" id="a0000000868">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8569,7 +8597,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000868"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000869"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8626,7 +8654,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000868">
+<div class="proof_wrapper" id="a0000000869">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8654,7 +8682,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000869"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000870"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8727,7 +8755,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000869">
+<div class="proof_wrapper" id="a0000000870">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8755,7 +8783,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000870"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8808,7 +8836,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000870">
+<div class="proof_wrapper" id="a0000000871">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8820,8 +8848,9 @@
 
   </div>
 </div>
-<h2 id="sec:sector_irreducibility_lemmas">11.12.1 Sector irreducibility lemmas</h2>
+<h2 id="sec:sector_irreducibility_lemmas">11.12.3 Preliminary lemmas for sector irreducibility</h2>
 
+<p>This part records the finite-dimensional projection and fixed-point-algebra steps used to prove that the period-removed sectors are irreducible. The source cyclic-block statement supplies the projections and the period \(m\); the entries here justify the corner irreducibility needed before applying primitivity and normality results to the sector blocks. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:pairwise_ortho_proj_sum">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -8838,7 +8867,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:pairwise_ortho_proj_sum">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8869,7 +8898,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000871">
+<div class="proof_wrapper" id="a0000000872">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8897,7 +8926,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:corner_preserv_adjoint_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000873"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8950,7 +8979,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000872">
+<div class="proof_wrapper" id="a0000000873">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8978,7 +9007,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000873"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9009,7 +9038,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000873">
+<div class="proof_wrapper" id="a0000000874">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9037,7 +9066,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_iterate_shifted_sector">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9068,7 +9097,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000874">
+<div class="proof_wrapper" id="a0000000875">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9096,7 +9125,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_iterate_proj">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9149,7 +9178,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000875">
+<div class="proof_wrapper" id="a0000000876">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9177,7 +9206,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_full_sector">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000877"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9225,13 +9254,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((P_k)_{k=1}^m\) be orthogonal projections with \(\sum _k P_k = \mathbb {1}\) and cyclic shift \(T(P_{k+1}) = P_k\). Then for every sector index \(k\), </p>
-<div class="displaymath" id="a0000000877">
+<div class="displaymath" id="a0000000878">
   \[  \sum _{l=0}^{m-1} T^l(P_k) \; =\;  \mathbb {1}.  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000876">
+<div class="proof_wrapper" id="a0000000877">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9259,7 +9288,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_orbit_lift">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000879"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9312,7 +9341,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000878">
+<div class="proof_wrapper" id="a0000000879">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9340,7 +9369,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:fix_upgrade_peripheral">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000879"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9405,7 +9434,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000879">
+<div class="proof_wrapper" id="a0000000880">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9433,7 +9462,7 @@
 
     <a class="icon proof" href="ch-canonical.html#def:sector_fixed_point_algebra_rigidity">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9461,17 +9490,17 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Let \(T\) be the adjoint transfer map and \((P_k)_{k=1}^m\) a cyclic family of orthogonal sector projections. We say that the sector dynamics satisfies fixed-point-algebra rigidity if, for each \(k\), the one-step map \(T\) is multiplicative on the \(T^m\)-fixed operators supported on the corner \(P_k \mathcal M_D P_k\): whenever </p>
-<div class="displaymath" id="a0000000881">
+<div class="displaymath" id="a0000000882">
   \[  X = X P_k = P_k X, \qquad Y = Y P_k = P_k Y, \qquad T^m(X) = X, \qquad T^m(Y) = Y,  \]
 </div>
 <p> one has </p>
-<div class="displaymath" id="a0000000882">
+<div class="displaymath" id="a0000000883">
   \[  T(XY) = T(X) T(Y).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000880">
+<div class="proof_wrapper" id="a0000000881">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9499,7 +9528,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:sector_fixed_algebra_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9552,7 +9581,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000883">
+<div class="proof_wrapper" id="a0000000884">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9561,7 +9590,7 @@
   </div>
   <div class="proof_content">
   <p> Kraus maps preserve conjugate transpose, so \(T(X)\) is Hermitian. The rigidity hypothesis gives </p>
-<div class="displaymath" id="a0000000884">
+<div class="displaymath" id="a0000000885">
   \[  T(X)^2 = T(X^2) = T(X),  \]
 </div>
 <p> since \(X^2 = X\) for an orthogonal projection. Therefore \(T(X)\) is again an orthogonal projection. </p>
@@ -9584,7 +9613,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_fixed_algebra_irred_cyclic">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9641,7 +9670,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000885">
+<div class="proof_wrapper" id="a0000000886">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9650,11 +9679,11 @@
   </div>
   <div class="proof_content">
   <p> Fix \(k\) and let \(X,Y\) be operators supported on \(P_k\) and fixed by \((\mathcal{E}_A^\dagger )^m\). For such an \(X\), the orbit sum </p>
-<div class="displaymath" id="a0000000886">
+<div class="displaymath" id="a0000000887">
   \[  R_X := \sum _{l=0}^{m-1} (\mathcal{E}_A^\dagger )^l(X)  \]
 </div>
 <p> is fixed by \(\mathcal{E}_A^\dagger \) by Lemma&#160;<a href="ch-canonical.html#lem:orbit_sum_fixed">11.103</a>. Since the trace-preserving hypothesis makes \(\mathcal{E}_A^\dagger \) unital, the irreducible unital fixed-point theorem implies that \(R_X\) is a scalar multiple of \(\mathbb {1}\). Compressing by \(P_k\) recovers \(X\), so \(X = c P_k\); the same argument gives \(Y = c' P_k\). Therefore </p>
-<div class="displaymath" id="a0000000887">
+<div class="displaymath" id="a0000000888">
   \[  \mathcal{E}_A^\dagger (XY) = \mathcal{E}_A^\dagger ((cc') P_k) = (cc') P_{k-1} = \mathcal{E}_A^\dagger (X)\mathcal{E}_A^\dagger (Y),  \]
 </div>
 <p> using the cyclic relation \(\mathcal{E}_A^\dagger (P_k)=P_{k-1}\). </p>
@@ -9677,7 +9706,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_fixed_algebra_irred_tp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9736,7 +9765,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000888">
+<div class="proof_wrapper" id="a0000000889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9764,7 +9793,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_fixed_algebra_scalar_blocked">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9817,7 +9846,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000889">
+<div class="proof_wrapper" id="a0000000890">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9826,7 +9855,7 @@
   </div>
   <div class="proof_content">
   <p> Fix \(k\) and let \(X, Y\) be operators supported on \(P_k\) and fixed by \((\mathcal{E}_A^\dagger )^m\). Lift each to the corresponding compressed sector via the intertwining equivalence \(\varphi _k\); the scalar fixed-point hypothesis yields \(X = c_X P_k\) and \(Y = c_Y P_k\). Then </p>
-<div class="displaymath" id="a0000000890">
+<div class="displaymath" id="a0000000891">
   \[  \mathcal{E}_A^\dagger (XY) = \mathcal{E}_A^\dagger ((c_X c_Y) P_k) = (c_X c_Y) P_{k-1} = \mathcal{E}_A^\dagger (X)\mathcal{E}_A^\dagger (Y),  \]
 </div>
 <p> using the cyclic relation \(\mathcal{E}_A^\dagger (P_k) = P_{k-1}\) and the linearity of \(\mathcal{E}_A^\dagger \). </p>
@@ -9849,7 +9878,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_construction">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9920,14 +9949,14 @@
 </li>
 </ol>
 <p> Then for every sector \(k\) and every orthogonal subprojection \(Q \le P_k\) which is a corner fixed point of \(T^m\), the orbit sum </p>
-<div class="displaymath" id="a0000000892">
+<div class="displaymath" id="a0000000893">
   \[  R \; :=\;  \sum _{l=0}^{m-1} T^l(Q)  \]
 </div>
 <p> is an orthogonal projection, preserved by \(T\), with \(Q = 0 \Leftrightarrow R = 0\) and \(Q = P_k \Leftrightarrow R = \mathbb {1}\). In particular \(R\) witnesses the orbit-sum lift hypothesis of Theorem&#160;<a href="ch-canonical.html#thm:sector_irred_orbit_lift">11.107</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000891">
+<div class="proof_wrapper" id="a0000000892">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9955,7 +9984,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10012,7 +10041,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000893">
+<div class="proof_wrapper" id="a0000000894">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10040,7 +10069,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:orbit_sum_hLift_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10105,7 +10134,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000894">
+<div class="proof_wrapper" id="a0000000895">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10133,7 +10162,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:orbit_sum_hLift_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000896"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10190,7 +10219,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000895">
+<div class="proof_wrapper" id="a0000000896">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10218,7 +10247,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_fix_upgrade">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000896"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000897"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10275,7 +10304,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000896">
+<div class="proof_wrapper" id="a0000000897">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10303,7 +10332,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000897"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000898"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10360,7 +10389,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000897">
+<div class="proof_wrapper" id="a0000000898">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10388,7 +10417,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000898"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000899"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10445,7 +10474,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000898">
+<div class="proof_wrapper" id="a0000000899">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10473,7 +10502,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:sector_irred_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000899"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000900"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10530,7 +10559,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000899">
+<div class="proof_wrapper" id="a0000000900">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10560,7 +10589,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_proj_step">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000900"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000901"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10621,7 +10650,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000900">
+<div class="proof_wrapper" id="a0000000901">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10649,7 +10678,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_fixed_algebra">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000901"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000902"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10712,7 +10741,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000901">
+<div class="proof_wrapper" id="a0000000902">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10740,7 +10769,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_scalar_fixed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000902"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000903"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10803,7 +10832,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000902">
+<div class="proof_wrapper" id="a0000000903">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10831,7 +10860,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_sector_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000903"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000904"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10890,7 +10919,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000903">
+<div class="proof_wrapper" id="a0000000904">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10918,7 +10947,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_primitive_blockdecomp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000904"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000905"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10976,13 +11005,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For any MPS tensor \(A\), there exist a period \(p \ge 1\), a zero-tail bond dimension \(D_0\) for the separated all-zero blocks, nonzero weights \((\mu _k)_{k=1}^r\), and left-canonical blocks \((B_k)_{k=1}^r\) with primitive transfer maps and positive bond dimensions, such that </p>
-<div class="displaymath" id="a0000000905">
+<div class="displaymath" id="a0000000906">
   \[  V^{(N)}\! \bigl(A^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\mathbf{0}_{d^{[p]},D_0}\bigr)_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k B_k\bigr)_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000904">
+<div class="proof_wrapper" id="a0000000905">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11010,7 +11039,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000906"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000907"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11071,7 +11100,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000906">
+<div class="proof_wrapper" id="a0000000907">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11105,7 +11134,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_primitive_irred_block_injective">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000907"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000908"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11164,7 +11193,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000907">
+<div class="proof_wrapper" id="a0000000908">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11192,7 +11221,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_blocking_preserved">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000908"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000909"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11251,7 +11280,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000908">
+<div class="proof_wrapper" id="a0000000909">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11524,7 +11553,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000909"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000910"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11577,7 +11606,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000909">
+<div class="proof_wrapper" id="a0000000910">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11890,7 +11919,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:unit_modulus_phase_tp_prim_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000910"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000911"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11947,7 +11976,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000910">
+<div class="proof_wrapper" id="a0000000911">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12105,7 +12134,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_li_from_overlap_limits_exists">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000911"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000912"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12158,7 +12187,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000911">
+<div class="proof_wrapper" id="a0000000912">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12186,7 +12215,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_li_tp_prim_irr_separated">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000912"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000913"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12241,7 +12270,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000912">
+<div class="proof_wrapper" id="a0000000913">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12269,7 +12298,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000913"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12328,7 +12357,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000913">
+<div class="proof_wrapper" id="a0000000914">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12356,7 +12385,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_separated">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000914"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12415,7 +12444,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000914">
+<div class="proof_wrapper" id="a0000000915">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12491,7 +12520,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000915"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000916"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12550,7 +12579,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000915">
+<div class="proof_wrapper" id="a0000000916">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12578,7 +12607,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000916"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000917"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12639,7 +12668,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000916">
+<div class="proof_wrapper" id="a0000000917">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12667,7 +12696,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000917"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12720,7 +12749,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000917">
+<div class="proof_wrapper" id="a0000000918">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12748,7 +12777,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000918"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000919"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12807,7 +12836,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000918">
+<div class="proof_wrapper" id="a0000000919">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12835,7 +12864,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000919"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12888,7 +12917,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000919">
+<div class="proof_wrapper" id="a0000000920">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13608,7 +13637,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blockwise_tp_gauge">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000920"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13659,7 +13688,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000920">
+<div class="proof_wrapper" id="a0000000921">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13687,7 +13716,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_live_block_primitive">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000921"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13742,7 +13771,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000921">
+<div class="proof_wrapper" id="a0000000922">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13770,7 +13799,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocked_irreducible_tp_primitive">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000922"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000923"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13823,7 +13852,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000922">
+<div class="proof_wrapper" id="a0000000923">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13851,7 +13880,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_primitive_irreducible_extra_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000923"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13906,7 +13935,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000923">
+<div class="proof_wrapper" id="a0000000924">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13934,7 +13963,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ncf_sorted_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000924"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000925"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13987,7 +14016,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000924">
+<div class="proof_wrapper" id="a0000000925">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14015,7 +14044,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ncf_from_primitive_input">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000925"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000926"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14068,7 +14097,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000925">
+<div class="proof_wrapper" id="a0000000926">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14096,7 +14125,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:weak_ft_conditional_ch8">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000926"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14147,7 +14176,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000926">
+<div class="proof_wrapper" id="a0000000927">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14175,7 +14204,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_period_two_tensors">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000927"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000928"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14232,7 +14261,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000927">
+<div class="proof_wrapper" id="a0000000928">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14260,7 +14289,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_structural">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000928"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000929"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14314,14 +14343,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Each of two tensors admits some blocking after which it decomposes independently into an all-zero tensor of the zero-tail bond dimension defined in Section&#160;<a href="ch-canonical.html#sec:zero_block_separation">11.9</a>, plus left-canonical blocks with primitive transfer maps, nonzero scalar weights, and positive bond dimensions. Moreover, at every blocked system size and every blocked word, the MPV of the blocked tensor is the sum of this all-zero-block MPV and the MPV of the weighted nonzero-block tensor: </p>
-<div class="displaymath" id="a0000000929">
+<div class="displaymath" id="a0000000930">
   \[  V^{(N)}(A^{[p_A]})_\sigma = V^{(N)}(Z_{p_A,z_A})_\sigma + V^{(N)}\! \left(\bigoplus _k \mu ^A_k A_k\right)_\sigma ,  \]
 </div>
 <p> and likewise for \(B\). This lemma does not use an equality hypothesis between the two original families; the comparison is supplied only by later after-blocking statements. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000928">
+<div class="proof_wrapper" id="a0000000929">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14349,7 +14378,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_decomp_block_tensor">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000930"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14402,7 +14431,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000930">
+<div class="proof_wrapper" id="a0000000931">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14430,7 +14459,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_to_tensor_from_blocks_block_power">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000931"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000932"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14485,7 +14514,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000931">
+<div class="proof_wrapper" id="a0000000932">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14513,7 +14542,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:nonzero_block_zero_tail_identity">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000932"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14570,7 +14599,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000932">
+<div class="proof_wrapper" id="a0000000933">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14598,7 +14627,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:nonzero_block_block_power_zero_tail_identity">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000933"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000934"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14653,7 +14682,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000933">
+<div class="proof_wrapper" id="a0000000934">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14681,7 +14710,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:nonzero_block_same_mpv_zero_tail_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000934"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000935"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14734,7 +14763,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000934">
+<div class="proof_wrapper" id="a0000000935">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14762,7 +14791,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_structural_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000935"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000936"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14819,7 +14848,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000935">
+<div class="proof_wrapper" id="a0000000936">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14847,7 +14876,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000936"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000937"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14910,7 +14939,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000936">
+<div class="proof_wrapper" id="a0000000937">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14938,7 +14967,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000937"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000938"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14958,13 +14987,13 @@
           
           <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Theorem 11.100</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">Theorem 11.87</a></li>
+          <li><a href="ch-canonical.html#lem:common_blocked_cyclic_sector_flat_weight_ne_zero">Lemma 11.87</a></li>
           
           <li><a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 11.180</a></li>
           
           <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Theorem 11.100</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">Theorem 11.87</a></li>
+          <li><a href="ch-canonical.html#lem:common_blocked_cyclic_sector_flat_weight_ne_zero">Lemma 11.87</a></li>
           
         </ul>
     
@@ -14999,7 +15028,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000937">
+<div class="proof_wrapper" id="a0000000938">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15007,7 +15036,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.180</a>. Then apply Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">11.100</a> to the per-block cyclic-sector data on each side. The nonzero unit-weight conclusion is Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">11.87</a>. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">11.180</a>. Then apply Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">11.100</a> to the per-block cyclic-sector data on each side. The nonzero unit-weight conclusion is Lemma&#160;<a href="ch-canonical.html#lem:common_blocked_cyclic_sector_flat_weight_ne_zero">11.87</a>. </p>
 
   </div>
 </div>
@@ -15028,7 +15057,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_reindexed_common_sector_live_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000938"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15093,7 +15122,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000938">
+<div class="proof_wrapper" id="a0000000939">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15121,7 +15150,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_theorem">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000939"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15194,7 +15223,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000939">
+<div class="proof_wrapper" id="a0000000940">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15222,7 +15251,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_common_flat_of_blocked_word_comparison">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000940"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15291,7 +15320,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000940">
+<div class="proof_wrapper" id="a0000000941">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15319,7 +15348,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_common_flat_of_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000941"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15380,7 +15409,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000941">
+<div class="proof_wrapper" id="a0000000942">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15408,7 +15437,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000942"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15467,7 +15496,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000942">
+<div class="proof_wrapper" id="a0000000943">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15495,7 +15524,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:samempv_pos_zero_tail_identity_transport">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15552,7 +15581,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000943">
+<div class="proof_wrapper" id="a0000000944">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15580,7 +15609,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15641,7 +15670,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000944">
+<div class="proof_wrapper" id="a0000000945">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15669,7 +15698,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:zero_tail_common_flat_transport_of_grouped_block_cast">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000946"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15734,7 +15763,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000945">
+<div class="proof_wrapper" id="a0000000946">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15762,7 +15791,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ft_after_blocking_common_length_common_sector_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000946"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000947"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15819,7 +15848,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000946">
+<div class="proof_wrapper" id="a0000000947">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
