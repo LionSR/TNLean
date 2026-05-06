@@ -178,8 +178,8 @@ The main references are
 	Theorem~\ref{thm:cross_overlap_zero_split} applies directly.
 \end{proof}
 
-\begin{theorem}[BNT from explicit blockwise hypotheses]
-	\label{thm:cf_bnt_is_bnt_split}
+\begin{lemma}[BNT from explicit blockwise hypotheses]
+	\label{lem:cf_bnt_is_bnt_split}
 	\lean{MPSTensor.isBNT_of_separated_CFBNT_data}
 	\leanok
 	\uses{def:bnt, def:mpv_overlap}
@@ -188,7 +188,7 @@ The main references are
 	$O_{A_kA_k}(N) \to 1$ for each $k$, and that distinct equal-dimension
 	blocks are not gauge-phase equivalent. Then the blocks form a basis of
 	normal tensors for the block-diagonal tensor $\bigoplus_k \mu_k A_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 	\uses{thm:mpv_decomposition, lem:bnt_overlap_orthonormal_li, thm:cross_overlap_zero_split}
@@ -200,19 +200,19 @@ The main references are
 	eventual linear independence required in Definition~\ref{def:bnt}.
 \end{proof}
 
-\begin{theorem}[Canonical form with BNT separation yields a basis of normal tensors]\label{thm:cf_bnt_is_bnt}
+\begin{lemma}[Restricted CF-BNT data yield a basis of normal tensors]\label{lem:cf_bnt_is_bnt}
 	\lean{MPSTensor.IsCanonicalFormBNT.isBNT}
 	\leanok
 	\uses{def:cf_bnt, def:bnt}
 	If $((\mu_k), (A_k))$ is in canonical form with BNT separation, then
 	the block tensors form a basis of normal tensors for the
 	block-diagonal tensor $\bigoplus_k \mu_k A_k$.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{def:cf_bnt, thm:cf_bnt_is_bnt_split}
+\begin{proof}\leanok\uses{def:cf_bnt, lem:cf_bnt_is_bnt_split}
 	Definition~\ref{def:cf_bnt} provides injective blocks, left-canonical
 	normalization, normalized self-overlaps, and BNT separation. Hence
-	Theorem~\ref{thm:cf_bnt_is_bnt_split} applies.
+	Lemma~\ref{lem:cf_bnt_is_bnt_split} applies.
 \end{proof}
 
 \begin{remark}[Comparing the two normality conditions]\label{rem:normalcf_bnt_gap}
@@ -227,15 +227,15 @@ The main references are
 	eventual block injectivity needed here.
 \end{remark}
 
-\begin{theorem}[Normal canonical-form BNT data give a BNT]
-	\label{thm:normal_cf_bnt_is_bnt}
+\begin{lemma}[Restricted normal-CF-BNT data give a BNT]
+	\label{lem:normal_cf_bnt_is_bnt}
 	\lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
 	\leanok
 	\uses{def:normal_cf_bnt, def:bnt}
 	If a family is in normal canonical form with BNT separation and each block
 	is also known to be normal in the algebraic sense, then the blocks form a
 	basis of normal tensors for the associated block-diagonal tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{rem:normalcf_bnt_gap}
 	Normal-canonical BNT data already give the block-diagonal MPV expansion,
@@ -453,8 +453,8 @@ The main references are
 	would force gauge-phase equivalence.  This contradicts the hypothesis.
 \end{proof}
 
-\begin{theorem}[Canonical-form proportional decomposition theorem]
-	\label{thm:cf_bnt_ft_proportional}
+\begin{lemma}[Restricted CF-BNT proportional comparison]
+	\label{lem:cf_bnt_ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_of_IsCanonicalFormBNT}
 	\leanok
 	\uses{def:cf_bnt, thm:bnt_perm_prop}
@@ -462,7 +462,7 @@ The main references are
 	MPV decompositions with convergent nonzero coefficients, then they have
 	the same number of blocks and match blockwise up to permutation,
 	bond-dimension equality, and gauge-phase equivalence.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:bnt_perm_prop, thm:cross_overlap_zero}
 	Project the two canonical-form hypotheses to blockwise injectivity,
@@ -471,8 +471,8 @@ The main references are
 	proportional decomposition data.
 \end{proof}
 
-\begin{theorem}[Normal-canonical proportional decomposition theorem]
-	\label{thm:normal_cf_bnt_ft_proportional}
+\begin{lemma}[Restricted normal-CF-BNT proportional comparison]
+	\label{lem:normal_cf_bnt_ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_of_IsNormalCanonicalFormBNT}
 	\leanok
 	\uses{def:normal_cf_bnt, thm:bnt_perm_prop_nt}
@@ -480,7 +480,7 @@ The main references are
 	proportional MPV decompositions with convergent nonzero coefficients,
 	then they have the same number of blocks and match blockwise up to
 	permutation, bond-dimension equality, and gauge-phase equivalence.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:bnt_perm_prop_nt}
 	Project the two normal-canonical hypotheses to irreducibility,
