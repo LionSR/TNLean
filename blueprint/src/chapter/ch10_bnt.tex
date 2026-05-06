@@ -426,6 +426,23 @@ The main references are
 	replaced by the corresponding irreducible trace-preserving decay theorems.
 \end{proof}
 
+\begin{theorem}[Non-equivalent primitive blocks are eventually non-proportional]
+	\label{thm:not_gauge_phase_eventually_not_proportional}
+	\lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
+	\leanok
+	\uses{def:gauge_phase_equiv, def:mpv_overlap, def:irreducible_tensor}
+	Let \(A\) and \(B\) be irreducible trace-preserving blocks whose
+	self-overlaps converge to \(1\).  If they are not gauge-phase equivalent,
+	then for every lower bound \(N_0\) there is \(N\ge N_0\) such that
+	\(V^{(N)}(A)\) is not proportional to \(V^{(N)}(B)\).
+\end{theorem}
+
+\begin{proof}\leanok
+	If the two MPV states were proportional for all sufficiently large \(N\),
+	the same overlap argument used in Theorem~\ref{thm:bnt_perm_prop_nt}
+	would force gauge-phase equivalence.  This contradicts the hypothesis.
+\end{proof}
+
 \begin{theorem}[Canonical-form proportional decomposition theorem]
 	\label{thm:cf_bnt_ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_of_IsCanonicalFormBNT}
