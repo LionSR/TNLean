@@ -206,27 +206,23 @@ used in this chapter.
 \end{theorem}
 
 \begin{proof}
-	\uses{lem:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
+	\uses{thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
 	      thm:mpv_decomposition,
-	      rem:cf_coeff_arrays, lem:route_b_equal_with_copies,
+	      lem:route_b_equal_with_copies,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
 	      thm:common_phase_cover_of_proportional_decomposition}
-	The comparison starts with explicit decomposition coefficients.
+	The comparison proceeds directly from equality of the full MPV families.
 	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
-	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
-	coefficient arrays.  When the required coefficient identities are supplied,
-	Lemma~\ref{lem:ft_equal_explicit} proves gauge equivalence after permuting
-	the weighted block-diagonal tensors.  The sector-multiplicity comparison of
-	Lemma~\ref{lem:route_b_equal_with_copies} uses the supplied multiplicity
-	data to recover both the copy counts and the sector-weight multisets from
-	these identities.
+	their BNT bases, and the sector-multiplicity comparison of
+	Lemma~\ref{lem:route_b_equal_with_copies} recovers both the copy counts and
+	the sector-weight multisets from the resulting power-sum identities.
 
 	The remaining synchronization statement for the bare equal-MPV theorem must
 	assemble the block-matching data into equality of the weighted block-diagonal
 	tensors.  The heterogeneous equal-case theorem
 	(Theorem~\ref{thm:fundamentalTheorem_equalMPV_CFBNT_hetero}) now proves the
 	block-count, bond-dimension, and gauge-phase matching directly from equality
-	of the full MPV families, without explicit coefficient limits.  The
+	of the full MPV families.  The
 	after-blocking comparison theorem
 	(Theorem~\ref{thm:afterBlocking_sectorComparison_reindexed_bntCover}) gives the
 	matched sector-weight conclusion once BNT-cover comparison data are supplied.
@@ -237,89 +233,6 @@ used in this chapter.
 	those data are available, the phases are absorbed into the recovered weights
 	and the blockwise conjugacies assemble into a global gauge equivalence.
 \end{proof}
-
-\begin{lemma}[Equal MPV comparison with explicit coefficients]\label{lem:ft_equal_explicit}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_of_explicit_coefficients}
-	\leanok
-	\uses{def:cf_bnt, def:gauge_equiv}
-	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-	in canonical form with BNT separation, with associated families
-	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
-	nonzero limits $a_j^\infty$, $b_k^\infty$ such that
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
-		\qquad
-		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
-	\]
-	with $a_{N,j} \to a_j^\infty \neq 0$ and
-	$b_{N,k} \to b_k^\infty \neq 0$.
-	If
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= V^{(N)}(B_{\mathrm{tot}})_\sigma
-	\]
-	for every $N$ and $\sigma$, then $g_A = g_B$, and there is a
-	permutation $\pi$ such that $D_j^A = D_{\pi(j)}^B$ and, after
-	ordering the $B$-blocks by $\pi$, the weighted block-diagonal tensors
-	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
-	$\bigoplus_{j=1}^{g_A} \mu_{\pi(j)}^B B_{\pi(j)}$
-	are gauge equivalent.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{thm:ft_proportional, thm:cf_bnt_is_bnt, def:bnt,
-	      thm:mpv_decomposition, thm:gauge_phase_mpv_scaling}
-	Apply Theorem~\ref{thm:ft_proportional} with $c_N = 1$.
-	This yields $g_A = g_B$, a permutation $\pi$, equal block dimensions,
-	and for each $j$ a gauge-phase equivalence
-	\[
-		B_{\pi(j)}^i = \zeta_j X_j A_j^i X_j^{-1}.
-	\]
-	By Theorem~\ref{thm:mpv_decomposition},
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g_A} (\mu_j^A)^N V^{(N)}(A_j)_\sigma,
-	\]
-	and similarly for $B_{\mathrm{tot}}$.
-	Reindex the $B$-sum by $\pi$ and use the gauge-phase identity to rewrite
-	\[
-		V^{(N)}(B_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(A_j)_\sigma.
-	\]
-	Then equality of MPVs implies
-	\[
-		\sum_{j=1}^{g_A}
-		\left((\mu_j^A)^N - (\mu_{\pi(j)}^B \zeta_j)^N\right)
-		V^{(N)}(A_j)_\sigma = 0.
-	\]
-	By Theorem~\ref{thm:cf_bnt_is_bnt} and Definition~\ref{def:bnt}, the
-	family $\{V^{(N)}(A_j)\}_{j=1}^{g_A}$ is linearly independent for all
-	sufficiently large $N$, so
-	\[
-		(\mu_j^A)^N = (\mu_{\pi(j)}^B \zeta_j)^N
-	\]
-	for every $j$ and all large $N$.
-	Comparing two consecutive values of $N$ and using that the weights are
-	nonzero gives
-	\[
-		\mu_j^A = \mu_{\pi(j)}^B \zeta_j.
-	\]
-	Thus the phase factors can be absorbed into the weights, and the
-	resulting blockwise conjugacies combine to give a gauge equivalence of the
-	permuted weighted block-diagonal tensors.
-\end{proof}
-
-\begin{remark}
-	Lemma~\ref{lem:ft_equal_explicit} gives a conditional special case of
-	\cite[Corollary~IV.5]{Cirac2021Matrix} for tensors in canonical form with
-	BNT separation, assuming the coefficient identities explicitly rather than
-	deriving them by Newton--Girard identities. The weight matching uses BNT linear
-	independence (Theorem~\ref{thm:cf_bnt_is_bnt} and
-	Definition~\ref{def:bnt}) directly.
-\end{remark}
 
 \begin{theorem}[Fundamental Theorem --- equal MPV case, common block structure]\label{thm:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
@@ -2062,10 +1975,8 @@ BNT-cover inputs needed by the zero-block sector comparison below.
 	matrix; this is the equal-case corollary of the Fundamental Theorem in
 	\cite{Cirac2016MPDO_arXiv}, restated in \cite{Cirac2021Matrix}.
 
-	The comparison theorems in this chapter cover this latter part of the argument.
-	Lemma~\ref{lem:ft_equal_explicit} proves the equal case when the coefficient
-	identities are given explicitly,
-	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
+	The comparison theorems in this chapter cover this latter part of the
+	argument.  Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
 	special case, and Lemma~\ref{lem:route_b_equal_with_copies} recovers the
 	copy counts and sector-weight multisets from the multiplicity data.  The
 	basis-of-normal-tensors construction
