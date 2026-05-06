@@ -11028,6 +11028,8 @@
           
           <li><a href="ch-wielandt.html#def:primitive_mps">Definition 10.57</a></li>
           
+          <li><a href="ch-channels.html#def:primitive_channel">Definition 5.49</a></li>
+          
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 11.15</a></li>
           
           <li><a href="ch-mps.html#def:normal">Definition 2.26</a></li>
@@ -11065,7 +11067,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with \(D {\gt} 0\), irreducible transfer map, and peripheral spectrum \(\{ 1\} \). Then \(A\) is normal. </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with \(D {\gt} 0\), irreducible tensor action, and primitive transfer map, equivalently peripheral spectrum \(\{ 1\} \). Then \(A\) is normal. </p>
 
   </div>
 </div>
@@ -11077,7 +11079,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Peripheral primitivity and irreducibility yield the spectral-gap condition. The PSD fixed point is positive definite by Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.4</a>. Apply Theorem&#160;<a href="ch-wielandt.html#thm:normal_from_primitive_posdef">10.67</a>. </p>
+  <p> The channel-theoretic results of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Chapter&#160;6
+	]
+</span> are used in three distinct places. First, trace preservation fixes the left-canonical convention, and peripheral primitivity says that the only peripheral eigenvalue of \(\mathcal{E}_A\) is&#160;\(1\). Together with irreducibility, this gives a primitive Perron fixed-point datum. Second, irreducibility upgrades the nonzero positive semidefinite fixed point to a positive definite faithful fixed point by Theorem&#160;<a href="ch-qpf.html#thm:psd_fp_pd_irred">8.4</a>. Third, the primitive spectral gap with this faithful fixed point is the hypothesis of Theorem&#160;<a href="ch-wielandt.html#thm:normal_from_primitive_posdef">10.67</a>. Apply Theorem&#160;<a href="ch-wielandt.html#thm:normal_from_primitive_posdef">10.67</a>. </p>
 
   </div>
 </div>
@@ -11152,7 +11160,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be a left-canonical MPS tensor with \(D {\gt} 0\), irreducible transfer map, and peripheral spectrum \(\{ 1\} \). Then some positive blocking \(A^{[L]}\) is one-site injective. </p>
+  <p>   Let \(A\) be a left-canonical MPS tensor with \(D {\gt} 0\), irreducible tensor action, and primitive transfer map, equivalently peripheral spectrum \(\{ 1\} \). Then some positive blocking \(A^{[L]}\) is one-site injective. </p>
 
   </div>
 </div>
