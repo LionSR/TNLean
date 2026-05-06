@@ -172,4 +172,65 @@ theorem groundSpace_inf_eq_bot_of_not_bondDim_eq_and_groundSpace_eq_of_dim_ge
               rw [Matrix.trace_mul_comm Y Bw]
       _ = 0 := by simp [hcoeff]
 
+/-- Zero intersection of the two finite-chain image spaces gives homogeneous
+pair trace separation at the same length, provided the two boundary-to-chain
+maps are injective. -/
+theorem pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hInf : groundSpace A S ⊓ groundSpace B S = ⊥)
+    (hAinj : Function.Injective (groundSpaceMap A S))
+    (hBinj : Function.Injective (groundSpaceMap B S)) :
+    PairTraceSeparatingAt A B S := by
+  intro ΔA ΔB hRel
+  have hEq :
+      groundSpaceMap A S ΔA = groundSpaceMap B S (-ΔB) := by
+    ext σ
+    let Aw := evalWord A (List.ofFn σ)
+    let Bw := evalWord B (List.ofFn σ)
+    have hRelσ := hRel σ
+    have hRelσ' :
+        Matrix.trace (ΔA * Aw) + Matrix.trace (ΔB * Bw) = 0 := by
+      simpa [Aw, Bw] using hRelσ
+    calc
+      groundSpaceMap A S ΔA σ = Matrix.trace (Aw * ΔA) := by
+        simp [Aw, groundSpaceMap_apply]
+      _ = Matrix.trace (ΔA * Aw) := Matrix.trace_mul_comm Aw ΔA
+      _ = -Matrix.trace (ΔB * Bw) := eq_neg_of_add_eq_zero_left hRelσ'
+      _ = -Matrix.trace (Bw * ΔB) := by
+        rw [Matrix.trace_mul_comm ΔB Bw]
+      _ = Matrix.trace (Bw * (-ΔB)) := by
+        simp
+      _ = groundSpaceMap B S (-ΔB) σ := by
+        simp [Bw, groundSpaceMap_apply]
+  have hmem :
+      groundSpaceMap A S ΔA ∈ groundSpace A S ⊓ groundSpace B S := by
+    exact Submodule.mem_inf.mpr
+      ⟨⟨ΔA, rfl⟩, by rw [hEq]; exact ⟨-ΔB, rfl⟩⟩
+  have hzero : groundSpaceMap A S ΔA = 0 := by
+    have hbot : groundSpaceMap A S ΔA ∈ (⊥ : Submodule ℂ (NSiteSpace d S)) := by
+      rwa [← hInf]
+    simpa using hbot
+  have hΔA : ΔA = 0 := hAinj (by simpa using hzero)
+  have hBzero : groundSpaceMap B S (-ΔB) = 0 := by
+    rw [← hEq, hzero]
+  have hneg : -ΔB = 0 := hBinj (by simpa using hBzero)
+  exact ⟨hΔA, neg_eq_zero.mp hneg⟩
+
+/-- Block-injectivity at the target length is a convenient way to supply the
+injectivity hypotheses in
+`pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap`. -/
+theorem pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hInf : groundSpace A S ⊓ groundSpace B S = ⊥)
+    (hA : IsNBlkInjective A S) (hB : IsNBlkInjective B S) :
+    PairTraceSeparatingAt A B S :=
+  pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_injective_groundSpaceMap
+    hInf
+    (by
+      rw [groundSpaceMap_eq_leftTraceWordMap]
+      exact leftTraceWordMap_injective_of_isNBlkInjective hA)
+    (by
+      rw [groundSpaceMap_eq_leftTraceWordMap]
+      exact leftTraceWordMap_injective_of_isNBlkInjective hB)
+
 end MPSTensor

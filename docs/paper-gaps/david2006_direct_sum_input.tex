@@ -138,6 +138,20 @@ states are not proportional.
 is the corresponding already-blocked BNT-family wrapper for same-dimensional
 distinct blocks.  The direct-sum file records the pointwise conversion by
 \leanid{MPSTensor.groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge}.
+\leanid{MPSTensor.groundSpace_inf_eq_bot_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+then packages these two ingredients for the same-dimensional equal-size
+direct-sum branch: BNT separation supplies the long-chain non-proportional MPV
+witness, while injectivity and length-\(L\) block injectivity are still stated
+as explicit direct-sum hypotheses.
+\leanid{MPSTensor.pairTraceSeparatingAt_of_groundSpace_inf_eq_bot_of_isNBlkInjective}
+turns zero intersection of the two image spaces at a fixed length into
+homogeneous pair trace separation, provided the two boundary-to-chain maps are
+injective at that fixed length.  Hence
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_exists_not_forall_mpv_eq_mul_of_dim_ge}
+and
+\leanid{MPSTensor.pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_same_dim_of_dim_ge}
+record the pair-trace versions consumed by selector and word-span
+constructions.
 This is still not the full BNT source theorem: the remaining BNT-level task is
 to instantiate these witnesses in the direct-sum induction for the paper's
 pairwise different canonical blocks, after the prescribed blocking.
