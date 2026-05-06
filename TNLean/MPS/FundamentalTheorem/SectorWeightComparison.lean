@@ -46,7 +46,7 @@ is eventually linearly independent (the BNT property), then the coefficient arra
 
 This is the key step converting MPV equality into the algebraic statement needed for
 Newton–Girard. -/
-theorem coeff_eventually_eq_of_sameMPV
+lemma coeff_eventually_eq_of_sameMPV
     {dim : Fin g → ℕ}
     (basis : (j : Fin g) → MPSTensor d (dim j))
     (S T : SectorWeightData g)
@@ -228,7 +228,7 @@ lemma power_sums_eq_of_eventually_eq
     (m := m) (n := m) a b ha hb (M := M) hEv
 
 /-- Eventual equality of coefficient power sums forces equality of multiplicities. -/
-theorem copies_eq_of_eventually_coeff_eq
+lemma copies_eq_of_eventually_coeff_eq
     (S T : SectorWeightData g)
     {N0 : ℕ}
     (hEv : ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j) :
