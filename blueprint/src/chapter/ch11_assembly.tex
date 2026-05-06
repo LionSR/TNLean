@@ -206,7 +206,7 @@ used in this chapter.
 \end{theorem}
 
 \begin{proof}
-	\uses{thm:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
+	\uses{lem:ft_equal_explicit, thm:fundamentalTheorem_equalMPV_CFBNT_hetero,
 	      thm:mpv_decomposition,
 	      rem:cf_coeff_arrays, thm:route_b_equal_with_copies,
 	      thm:afterBlocking_sectorComparison_reindexed_bntCover,
@@ -215,7 +215,7 @@ used in this chapter.
 	Theorem~\ref{thm:mpv_decomposition} expands the two canonical-form tensors in
 	their BNT bases, and Remark~\ref{rem:cf_coeff_arrays} describes the resulting
 	coefficient arrays.  When the required coefficient identities are supplied,
-	Theorem~\ref{thm:ft_equal_explicit} proves gauge equivalence after permuting
+	Lemma~\ref{lem:ft_equal_explicit} proves gauge equivalence after permuting
 	the weighted block-diagonal tensors.  The sector-multiplicity comparison of
 	Theorem~\ref{thm:route_b_equal_with_copies} uses the supplied multiplicity
 	data to recover both the copy counts and the sector-weight multisets from
@@ -238,7 +238,7 @@ used in this chapter.
 	and the blockwise conjugacies assemble into a global gauge equivalence.
 \end{proof}
 
-\begin{theorem}[Equal MPV comparison with explicit coefficients]\label{thm:ft_equal_explicit}
+\begin{lemma}[Equal MPV comparison with explicit coefficients]\label{lem:ft_equal_explicit}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_of_explicit_coefficients}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
@@ -267,7 +267,7 @@ used in this chapter.
 	$\bigoplus_{j=1}^{g_A} \mu_j^A A_j$ and
 	$\bigoplus_{j=1}^{g_A} \mu_{\pi(j)}^B B_{\pi(j)}$
 	are gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
@@ -313,10 +313,10 @@ used in this chapter.
 \end{proof}
 
 \begin{remark}
-	Theorem~\ref{thm:ft_equal_explicit} recovers
+	Lemma~\ref{lem:ft_equal_explicit} gives a conditional special case of
 	\cite[Corollary~IV.5]{Cirac2021Matrix} for tensors in canonical form with
-	BNT separation, without assuming common block structure and without
-	Newton--Girard identities. The weight matching uses BNT linear
+	BNT separation, assuming the coefficient identities explicitly rather than
+	deriving them by Newton--Girard identities. The weight matching uses BNT linear
 	independence (Theorem~\ref{thm:cf_bnt_is_bnt} and
 	Definition~\ref{def:bnt}) directly.
 \end{remark}
@@ -2099,7 +2099,7 @@ two-basis sector comparison theorem.
 	\cite{Cirac2016MPDO_arXiv}, restated in \cite{Cirac2021Matrix}.
 
 	The comparison theorems in this chapter cover this latter part of the argument.
-	Theorem~\ref{thm:ft_equal_explicit} proves the equal case when the coefficient
+	Lemma~\ref{lem:ft_equal_explicit} proves the equal case when the coefficient
 	identities are given explicitly,
 	Theorem~\ref{thm:ft_equal_same_structure} proves the common block-structure
 	special case, and Theorem~\ref{thm:route_b_equal_with_copies} recovers the
