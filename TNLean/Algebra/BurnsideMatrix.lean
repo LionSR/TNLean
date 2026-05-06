@@ -168,7 +168,7 @@ theorem mem_cumulativeSpan_of_mem_algSpan (A : MPSTensor d D)
 is all of `M_D(ℂ)`, then the cumulative span reaches ⊤ at some finite level.
 
 Uses the Noetherian property of finite-dimensional modules. -/
-theorem exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
+lemma exists_cumulativeSpan_eq_top_of_algSpan_eq_top (A : MPSTensor d D)
     (h : algSpan A = ⊤) :
     ∃ N : ℕ, cumulativeSpan A N = ⊤ := by
   -- Every matrix is in the algebra span, hence in some cumulative span
@@ -211,7 +211,7 @@ private theorem mul_proj_eq {P M : Matrix (Fin D) (Fin D) ℂ}
 
 If there are no nontrivial invariant submodules, then there are no
 nontrivial invariant orthogonal projections. -/
-theorem isIrreducibleTensor_of_isIrreducibleAction
+lemma isIrreducibleTensor_of_isIrreducibleAction
     (A : MPSTensor d D) (hIrr : IsIrreducibleAction A) :
     IsIrreducibleTensor (d := d) (D := D) A := by
   intro ⟨P, horth, hne0, hne1, hinv⟩
@@ -260,7 +260,7 @@ theorem isIrreducibleTensor_of_isIrreducibleAction
 
 This is Burnside's theorem (`burnside_matrix`, proven in `TNLean.Algebra.BurnsideTheorem`)
 combined with `exists_cumulativeSpan_eq_top_of_algSpan_eq_top`. -/
-theorem exists_cumulativeSpan_eq_top_of_isIrreducibleAction [NeZero D]
+lemma exists_cumulativeSpan_eq_top_of_isIrreducibleAction [NeZero D]
     (A : MPSTensor d D) (hIrr : IsIrreducibleAction A) :
     ∃ N : ℕ, cumulativeSpan A N = ⊤ := by
   have hBurn : algSpan A = ⊤ := burnside_matrix (A := A) hIrr
