@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
-import TNLean.MPS.ParentHamiltonian.GroundSpace
+import TNLean.MPS.ParentHamiltonian.BlockStrip
 
 /-!
 # Direct-sum image-space consequences
@@ -90,5 +90,73 @@ theorem groundSpace_eq_of_three_block_trace_relation
       _ = Matrix.trace (evalWord B (List.ofFn t) * W) := by
           rw [Matrix.trace_mul_comm]
       _ = groundSpaceMap B L W t := by simp
+
+/-- Under block injectivity, the finite-chain image space has dimension equal to
+the boundary matrix algebra. -/
+theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
+    (hA : IsNBlkInjective A L) :
+    Module.finrank ℂ (groundSpace A L) = D ^ 2 := by
+  rw [groundSpace, LinearMap.finrank_range_of_inj
+    (groundSpaceMap_injective_of_isNBlkInjective hA)]
+  calc
+    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
+        = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
+            simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
+    _ = D * D := by simp
+    _ = D ^ 2 := by simp [pow_two]
+
+/-- Equal finite-chain image spaces for two block-injective tensors force equal
+bond dimensions. -/
+theorem bondDim_eq_of_groundSpace_eq_of_isNBlkInjective
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hG : groundSpace A L = groundSpace B L) :
+    D₁ = D₂ := by
+  have hfinA := groundSpace_finrank_eq_of_isNBlkInjective (A := A) hA
+  have hfinB := groundSpace_finrank_eq_of_isNBlkInjective (A := B) hB
+  have hsq : D₁ ^ 2 = D₂ ^ 2 := by
+    calc
+      D₁ ^ 2 = Module.finrank ℂ (groundSpace A L) := hfinA.symm
+      _ = Module.finrank ℂ (groundSpace B L) := by rw [hG]
+      _ = D₂ ^ 2 := hfinB
+  exact Nat.mul_self_inj.mp (by simpa [pow_two] using hsq)
+
+/-- The paper's dimension step for the two-block direct-sum argument.
+
+If the finite-chain image space of the larger block is contained in that of the
+smaller block, and both blocks are length-`L` block-injective, then their bond
+dimensions are equal and the image spaces are equal. -/
+theorem bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ ≤ D₁) (hLe : groundSpace A L ≤ groundSpace B L) :
+    D₁ = D₂ ∧ groundSpace A L = groundSpace B L := by
+  have hfinLe := Submodule.finrank_mono hLe
+  have hfinA := groundSpace_finrank_eq_of_isNBlkInjective (A := A) hA
+  have hfinB := groundSpace_finrank_eq_of_isNBlkInjective (A := B) hB
+  have hsq_le : D₁ ^ 2 ≤ D₂ ^ 2 := by
+    simpa [hfinA, hfinB] using hfinLe
+  have hsq_ge : D₂ ^ 2 ≤ D₁ ^ 2 := Nat.pow_le_pow_left hD 2
+  have hsq : D₁ ^ 2 = D₂ ^ 2 := le_antisymm hsq_le hsq_ge
+  have hD_eq : D₁ = D₂ := Nat.mul_self_inj.mp (by simpa [pow_two] using hsq)
+  have hfinEq :
+      Module.finrank ℂ (groundSpace A L) = Module.finrank ℂ (groundSpace B L) := by
+    simpa [hfinA, hfinB] using hsq
+  exact ⟨hD_eq, Submodule.eq_of_le_of_finrank_eq hLe hfinEq⟩
+
+/-- The three-block trace relation plus the paper's size ordering gives equality
+of finite-chain image spaces in the two-block direct-sum argument. -/
+theorem bondDim_eq_and_groundSpace_eq_of_three_block_trace_relation_left_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ ≤ D₁) (hΔA : ΔA ≠ 0)
+    (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+    D₁ = D₂ ∧ groundSpace A L = groundSpace B L := by
+  exact bondDim_eq_and_groundSpace_eq_of_groundSpace_le_of_isNBlkInjective_of_dim_ge
+    hA hB hD (groundSpace_le_of_three_block_trace_relation_left hA hΔA hRel)
 
 end MPSTensor

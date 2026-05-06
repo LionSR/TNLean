@@ -221,4 +221,78 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation
           simpa using neg_eq_of_add_eq_zero_right (hZ t)
       _ = leftTraceWordMap B L W t := by simp
 
+/-- Block injectivity makes the length-`L` trace-test map injective. -/
+theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
+    (hA : IsNBlkInjective A L) :
+    Function.Injective (leftTraceWordMap A L) := by
+  classical
+  apply LinearMap.ker_eq_bot.mp
+  apply (LinearMap.ker_eq_bot').2
+  intro Z hZ
+  have hφ :
+      (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ Z) = 0 := by
+    apply LinearMap.ext_on_range
+      (v := fun t : Fin L → Fin d => evalWord A (List.ofFn t))
+    · simpa [IsNBlkInjective] using hA
+    · intro t
+      simpa [leftTraceWordMap_apply, Matrix.traceLinearMap_apply] using
+        congrArg (fun f => f t) hZ
+  exact trace_mul_right_eq_zero fun N => by
+    simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
+
+/-- Under block injectivity, the trace-test image has the full boundary-matrix
+dimension. -/
+theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
+    (hA : IsNBlkInjective A L) :
+    Module.finrank ℂ ((leftTraceWordMap A L).range) = D ^ 2 := by
+  rw [LinearMap.finrank_range_of_inj
+    (leftTraceWordMap_injective_of_isNBlkInjective hA)]
+  calc
+    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
+        = (Fintype.card (Fin D) * Fintype.card (Fin D)) * Module.finrank ℂ ℂ := by
+            simpa using (Module.finrank_matrix ℂ ℂ (Fin D) (Fin D))
+    _ = D * D := by simp
+    _ = D ^ 2 := by simp [pow_two]
+
+/-- The paper's dimension step for the two-block direct-sum argument.
+
+If the length-`L` trace-test image of the larger block is contained in that of
+the smaller block, and both blocks are length-`L` block-injective, then their
+bond dimensions are equal and the trace-test images are equal. -/
+theorem leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ ≤ D₁)
+    (hLe : (leftTraceWordMap A L).range ≤ (leftTraceWordMap B L).range) :
+    D₁ = D₂ ∧ (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
+  have hfinLe := Submodule.finrank_mono hLe
+  have hfinA := leftTraceWordMap_range_finrank_eq_of_isNBlkInjective (A := A) hA
+  have hfinB := leftTraceWordMap_range_finrank_eq_of_isNBlkInjective (A := B) hB
+  have hsq_le : D₁ ^ 2 ≤ D₂ ^ 2 := by
+    simpa [hfinA, hfinB] using hfinLe
+  have hsq_ge : D₂ ^ 2 ≤ D₁ ^ 2 := Nat.pow_le_pow_left hD 2
+  have hsq : D₁ ^ 2 = D₂ ^ 2 := le_antisymm hsq_le hsq_ge
+  have hD_eq : D₁ = D₂ := by
+    exact Nat.mul_self_inj.mp (by simpa [pow_two] using hsq)
+  have hfinEq :
+      Module.finrank ℂ ((leftTraceWordMap A L).range) =
+        Module.finrank ℂ ((leftTraceWordMap B L).range) := by
+    simpa [hfinA, hfinB] using hsq
+  exact ⟨hD_eq, Submodule.eq_of_le_of_finrank_eq hLe hfinEq⟩
+
+/-- The three-block relation plus the paper's size ordering gives equality of
+the trace-test images in the two-block direct-sum argument. -/
+theorem leftTraceWordMap_range_eq_of_three_block_trace_relation_left_of_dim_ge
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {ΔA : Matrix (Fin D₁) (Fin D₁) ℂ}
+    {ΔB : Matrix (Fin D₂) (Fin D₂) ℂ}
+    (hA : IsNBlkInjective A L) (hB : IsNBlkInjective B L)
+    (hD : D₂ ≤ D₁) (hΔA : ΔA ≠ 0)
+    (hRel : ∀ w : Fin (L + (L + L)) → Fin d,
+      Matrix.trace (ΔA * evalWord A (List.ofFn w)) +
+        Matrix.trace (ΔB * evalWord B (List.ofFn w)) = 0) :
+    D₁ = D₂ ∧ (leftTraceWordMap A L).range = (leftTraceWordMap B L).range := by
+  exact leftTraceWordMap_range_eq_of_range_le_of_isNBlkInjective_of_dim_ge
+    hA hB hD (leftTraceWordMap_range_le_of_three_block_trace_relation_left hA hΔA hRel)
+
 end MPSTensor
