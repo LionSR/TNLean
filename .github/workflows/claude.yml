@@ -72,7 +72,7 @@ jobs:
           model-tier: opus
           allowed-bots: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
           branch-name-template: "{{prefix}}{{entityType}}-{{entityNumber}}-{{description}}"
-          allowed_tools: "Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*"
+          allowed_tools_preset: claude-interactive
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional-permissions: |

@@ -56,6 +56,10 @@ inputs:
     description: 'Optional --allowedTools value applied by default.'
     required: false
     default: ''
+  allowed_tools_preset:
+    description: 'Named --allowedTools preset. Ignored when allowed_tools is set.'
+    required: false
+    default: ''
 
   branch-name-template:
     description: 'Branch-name template for the checkout branch.'
@@ -133,6 +137,7 @@ runs:
         INPUT_PROMPT_FILE: ${{ inputs['claude-prompt-file'] }}
         INPUT_PROMPT_CONTEXT: ${{ inputs['claude-prompt-context'] }}
         INPUT_ALLOWED_TOOLS: ${{ inputs.allowed_tools }}
+        INPUT_ALLOWED_TOOLS_PRESET: ${{ inputs.allowed_tools_preset }}
         INPUT_SYSTEM_PROMPT: ${{ inputs['system-prompt'] }}
         INPUT_SYSTEM_PROMPT_FILE: ${{ inputs['system-prompt-file'] }}
         INPUT_CLAUDE_ARGS: ${{ inputs.claude_args }}
@@ -232,6 +237,55 @@ runs:
         plugins="$INPUT_PLUGINS"
 
         allowed_tools="$INPUT_ALLOWED_TOOLS"
+        allowed_tools_preset="$INPUT_ALLOWED_TOOLS_PRESET"
+        preset_allowed_tools=""
+        case "$allowed_tools_preset" in
+          "")
+            ;;
+          lean-auto-fix)
+            preset_allowed_tools="Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+            ;;
+          lean-review-auto-fix)
+            preset_allowed_tools="Edit,Write,Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),Bash(gh pr *),Bash(gh api *),mcp__github__*"
+            ;;
+          blueprint-auto-fix)
+            preset_allowed_tools="Edit,Write,Read,Glob,Grep,Bash(pip install leanblueprint plastex),Bash(cd blueprint && leanblueprint *),Bash(leanblueprint *),Bash(python3 scripts/*),Bash(git add *),Bash(git commit *),Bash(git push *),Bash(git diff *),Bash(git status),mcp__github__*"
+            ;;
+          lean-audit)
+            preset_allowed_tools="Read,Glob,Grep,Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(find *),Bash(wc *),Bash(leanblueprint *)"
+            ;;
+          lean-linter-warning-auto-fix)
+            preset_allowed_tools="Read,Edit,Glob,Grep,Bash(python3 *),Bash(lake build),Bash(lake build *),Bash(lake env),Bash(lake env *),Bash(git diff *),Bash(git status),Bash(grep *),Bash(rg *)"
+            ;;
+          claude-interactive)
+            preset_allowed_tools="Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),Bash(gh pr:*),Bash(gh issue:*),Bash(leanblueprint *),mcp__github__*"
+            ;;
+          blueprint-prose-review)
+            preset_allowed_tools="Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(grep *),mcp__github__*"
+            ;;
+          mathlib-scout)
+            preset_allowed_tools="Read,Glob,Grep,Bash(lean *),Bash(lake env),mcp__github__add_issue_comment,mcp__github__issue_read"
+            ;;
+          github-read)
+            preset_allowed_tools="Read,Glob,Grep,mcp__github__*"
+            ;;
+          github-pr-cleanup)
+            preset_allowed_tools="Read,Glob,Grep,Bash(gh pr:*),Bash(gh issue:*)"
+            ;;
+          tracking-issue-sync)
+            preset_allowed_tools="mcp__github__*,Bash(git diff *),Bash(git log *),Bash(git show *)"
+            ;;
+          daily-standup)
+            preset_allowed_tools="Read,Glob,Grep,Bash(git log *),Bash(git diff *),Bash(git show *),Bash(gh label create *),mcp__github__search_issues,mcp__github__issue_write,mcp__github__issue_read,mcp__github__add_issue_comment,mcp__github__get_label,mcp__github__list_issues,mcp__github__search_pull_requests,mcp__github__list_pull_requests,mcp__github__pull_request_read,mcp__github__list_commits"
+            ;;
+          *)
+            echo "::error::Unknown allowed_tools_preset: ${allowed_tools_preset}"
+            exit 1
+            ;;
+        esac
+        if [ -z "$allowed_tools" ] && [ -n "$preset_allowed_tools" ]; then
+          allowed_tools="$preset_allowed_tools"
+        fi
         if [ -z "$allowed_tools" ]; then
           allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
         fi
