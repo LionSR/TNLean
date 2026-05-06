@@ -145,12 +145,22 @@ separation of proof roles.
 
 \paragraph{Paper-level targets.}
 The proportional canonical-form theorem and the equal-MPV corollary are the
-source targets.  Their formal representatives include
+source targets.  Their source proof is formulated after choosing BNT
+representatives and retaining the repeated-copy coefficients
+\(\mu_{j,q}\) in the sums
+\[
+  \sum_q \mu_{j,q}^N.
+\]
+The current strict-representative declarations
 \path{fundamentalTheorem_proportionalMPV_CFBNT} and
-\path{fundamentalTheorem_equalMPV_CFBNT}.
-Heterogeneous variants that also state the permutation, phases, gauges, and
-weight matching for possibly different sector indices are legitimate theorem
-endpoints when they are the formal form of the same BNT comparison.
+\path{fundamentalTheorem_equalMPV_CFBNT} are therefore special-case endpoints:
+they apply after the repeated-copy structure has been eliminated or supplied as
+explicit coefficient data.  They should not be cited as the general
+arXiv:1606.00608 theorem unless the missing BNT multiplicity comparison has
+already been discharged.  Heterogeneous variants that state the permutation,
+phases, gauges, and weight matching for possibly different sector indices are
+legitimate theorem endpoints only when their hypotheses are obtained from the
+same BNT comparison.
 
 \paragraph{Conditional after-blocking consumers.}
 The after-blocking comparison theorems are useful only after the source
@@ -199,7 +209,8 @@ paper-level theorems.
     is stated with the same explicit coefficient arrays, their limits, and
     non-vanishing assumptions.  The source theorem derives the relevant BNT
     coefficient comparison from the proportional MPV hypothesis; that extraction
-    is not part of this formal statement.
+    is not part of this formal statement.  This is a genuine restriction of the
+    formal route, not merely a theorem-versus-lemma presentation choice.
   \item The unused fixed-size BNT Vandermonde MPV declarations have been
     removed.  The scalar Vandermonde separation lemma remains because it is a
     small algebraic input elsewhere, but it is not presented as part of the

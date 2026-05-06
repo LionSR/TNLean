@@ -13,18 +13,17 @@ open Filter
 /-!
 # Gauge-phase equivalence from non-decaying cross-overlap
 
-This file proves that two trace-preserving irreducible blocks with a non-decaying
-cross-overlap must have equal bond dimensions and be gauge-phase equivalent.
+For two trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal
+bond dimensions and gauge-phase equivalence.
 
 ## Background
 
-The canonical-form reduction produces TP + primitive blocks with
-nonzero weights. Equal-modulus blocks are not automatically one BNT sector:
-the source BNT construction keeps minimal gauge-phase representatives and
-records repeated copies through sector weights. The phase-class construction in
-`PhaseClassSectorData.lean` carries out that construction.
+The canonical-form reduction produces TP + primitive blocks with nonzero weights.
+Equal-modulus blocks are not automatically one BNT sector: the source BNT construction
+keeps minimal gauge-phase representatives and records repeated copies through sector
+weights.
 
-## Important: equal-norm blocks are NOT automatically gauge-phase equivalent
+## Important: equal-norm blocks are not automatically gauge-phase equivalent
 
 The BNT of a tensor (Cirac--Perez-Garcia--Schuch--Verstraete 2017,
 Proposition A.6) is constructed so that all pairs of BNT elements have
@@ -42,10 +41,7 @@ Theorem matching, etc.).
 
 * `gaugePhaseEquiv_of_nonDecaying_overlap` — Non-decaying cross-overlap between two
   TP + irreducible blocks implies equal bond dimensions and gauge-phase equivalence.
-  Uses the spectral dichotomy from `SpectralGap.lean`.  **Fully proved.**
-
-The BNT sector constructors formerly summarized here now live in
-`PhaseClassSectorData.lean`.
+  The proof uses the spectral dichotomy for mixed transfer operators.
 
 ## References
 
@@ -66,16 +62,12 @@ variable {d : ℕ}
 If two TP + irreducible blocks have a cross-overlap that does not decay to zero,
 then they must have equal bond dimensions and be gauge-phase equivalent.
 
-The proof uses the **spectral dichotomy** (proved in `SpectralGap.lean` and
-`SpectralGapNT.lean`): for injective TP-normalized blocks, either
+The proof uses the **spectral dichotomy** for injective TP-normalized blocks: either
 - `spectralRadius(F_{AB}) < 1`, which forces `mpvOverlap A B N → 0`, or
 - `spectralRadius(F_{AB}) ≥ 1`, which forces `GaugePhaseEquiv A B`.
 
 If the overlap does NOT decay, we are in the second case. Dimension equality
-follows from `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (contrapositive).
-
-This factored-out lemma replaces the previous monolithic placeholder proof in
-`gaugePhaseEquiv_of_equal_norm_blocks`. -/
+follows from `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (contrapositive). -/
 theorem gaugePhaseEquiv_of_nonDecaying_overlap
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
