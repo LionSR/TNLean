@@ -28,22 +28,24 @@ jobs:
     #   unset or any other value preserves the default enabled behavior.
     if: vars.CLAUDE_REVIEW_ENABLED != 'false'
     runs-on: ubuntu-latest
-permissions:
-  contents: read
-  pull-requests: write
-  actions: read
-  issues: write
-  id-token: write
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+      issues: write
+      id-token: write
 
-env:
-  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-  DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-  ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
-  CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
-  CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
-  DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
-  DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
-  DEEPSEEK_BASE_URL: https://api.deepseek.com/anthropic
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      ANTHROPIC_BASE_URL: ${{ vars.ANTHROPIC_BASE_URL }}
+      CLAUDE_OPUS_MODEL: ${{ vars.CLAUDE_OPUS_MODEL }}
+      CLAUDE_SONNET_MODEL: ${{ vars.CLAUDE_SONNET_MODEL }}
+      DEEPSEEK_OPUS_MODEL: ${{ vars.CLAUDE_DEEPSEEK_OPUS_MODEL }}
+      DEEPSEEK_SONNET_MODEL: ${{ vars.CLAUDE_DEEPSEEK_SONNET_MODEL }}
+      DEEPSEEK_BASE_URL: https://api.deepseek.com/anthropic
+      CLAUDE_ALLOWED_TOOLS: >
+        Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*
 
     steps:
       - name: Check Claude review switch
@@ -148,5 +150,4 @@ env:
             lean@leanprover
           prompt: ${{ steps.review-prompts.outputs.prompt }}
           claude-args: |
-            --allowedTools "Read,Glob,Grep,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Bash(gh api graphql:*),Bash(lake build),Bash(lake exe cache get),Bash(lake update),Bash(lake env),Bash(lean *),Bash(elan *),Bash(grep *),mcp__github__*"
             --append-system-prompt "${{ steps.review-prompts.outputs.system_prompt }}"

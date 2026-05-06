@@ -52,6 +52,15 @@ inputs:
     required: false
     default: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
 
+  allowed-tools:
+    description: 'Optional allowedTools value applied by default.'
+    required: false
+    default: ''
+  allowed_tools:
+    description: 'Legacy underscore key for allowed tools.'
+    required: false
+    default: ''
+
   branch_name_template:
     description: 'Legacy underscore key for branch name template.'
     required: false
@@ -104,7 +113,7 @@ runs:
     - name: Resolve Claude provider settings
       id: resolve
       shell: bash
-        run: |
+      run: |
           set -euo pipefail
 
           provider="${{ inputs.provider }}"
@@ -159,54 +168,68 @@ runs:
             fi
           fi
 
-        allowed_bots="${{ inputs.allowed_bots }}"
-        if [ -z "$allowed_bots" ]; then
-          allowed_bots="${{ inputs['allowed-bots'] }}"
-        fi
+          allowed_bots="${{ inputs.allowed_bots }}"
+          if [ -z "$allowed_bots" ]; then
+            allowed_bots="${{ inputs['allowed-bots'] }}"
+          fi
 
-        branch_name_template="${{ inputs.branch_name_template }}"
-        if [ -z "$branch_name_template" ]; then
-          branch_name_template="${{ inputs['branch-name-template'] }}"
-        fi
+          branch_name_template="${{ inputs.branch_name_template }}"
+          if [ -z "$branch_name_template" ]; then
+            branch_name_template="${{ inputs['branch-name-template'] }}"
+          fi
 
-        additional_permissions="${{ inputs.additional_permissions }}"
-        if [ -z "$additional_permissions" ]; then
-          additional_permissions="${{ inputs['additional-permissions'] }}"
-        fi
+          additional_permissions="${{ inputs.additional_permissions }}"
+          if [ -z "$additional_permissions" ]; then
+            additional_permissions="${{ inputs['additional-permissions'] }}"
+          fi
 
-        plugin_marketplaces="${{ inputs.plugin_marketplaces }}"
-        if [ -z "$plugin_marketplaces" ]; then
-          plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
-        fi
+          plugin_marketplaces="${{ inputs.plugin_marketplaces }}"
+          if [ -z "$plugin_marketplaces" ]; then
+            plugin_marketplaces="${{ inputs['plugin-marketplaces'] }}"
+          fi
 
-        plugins='${{ inputs.plugins }}'
-        prompt='${{ inputs.prompt }}'
+          allowed_tools="${{ inputs.allowed-tools }}"
+          if [ -z "$allowed_tools" ]; then
+            allowed_tools="${{ inputs.allowed_tools }}"
+          fi
+          if [ -z "$allowed_tools" ]; then
+            allowed_tools="${CLAUDE_ALLOWED_TOOLS-}"
+          fi
 
-        claude_args='${{ inputs.claude_args }}'
-        if [ -z "$claude_args" ]; then
-          claude_args="${{ inputs['claude-args'] }}"
-        fi
+          plugins='${{ inputs.plugins }}'
+          prompt='${{ inputs.prompt }}'
 
-        case "$model_tier" in
-          sonnet)
-            model="$model_sonnet"
-            ;;
-          *)
-            model="$model_opus"
-            ;;
-        esac
+          claude_args='${{ inputs.claude_args }}'
+          if [ -z "$claude_args" ]; then
+            claude_args="${{ inputs['claude-args'] }}"
+          fi
+          if [ -n "$allowed_tools" ] && ! printf '%s\n' "$claude_args" | grep -q -- '--allowedTools'; then
+            if [ -n "$claude_args" ]; then
+              claude_args="${claude_args} "
+            fi
+            claude_args="${claude_args}--allowedTools \"${allowed_tools}\""
+          fi
 
-        echo "auth_token=$token" >> "$GITHUB_OUTPUT"
-        echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
-        echo "model=$model" >> "$GITHUB_OUTPUT"
-        echo "provider=$provider" >> "$GITHUB_OUTPUT"
-        echo "allowed_bots=$allowed_bots" >> "$GITHUB_OUTPUT"
-        echo "branch_name_template=$branch_name_template" >> "$GITHUB_OUTPUT"
-        echo "additional_permissions=$additional_permissions" >> "$GITHUB_OUTPUT"
-        echo "plugin_marketplaces=$plugin_marketplaces" >> "$GITHUB_OUTPUT"
-        echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
-        echo "prompt=$prompt" >> "$GITHUB_OUTPUT"
-        echo "claude_args=$claude_args" >> "$GITHUB_OUTPUT"
+          case "$model_tier" in
+            sonnet)
+              model="$model_sonnet"
+              ;;
+            *)
+              model="$model_opus"
+              ;;
+          esac
+
+          echo "auth_token=$token" >> "$GITHUB_OUTPUT"
+          echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
+          echo "model=$model" >> "$GITHUB_OUTPUT"
+          echo "provider=$provider" >> "$GITHUB_OUTPUT"
+          echo "allowed_bots=$allowed_bots" >> "$GITHUB_OUTPUT"
+          echo "branch_name_template=$branch_name_template" >> "$GITHUB_OUTPUT"
+          echo "additional_permissions=$additional_permissions" >> "$GITHUB_OUTPUT"
+          echo "plugin_marketplaces=$plugin_marketplaces" >> "$GITHUB_OUTPUT"
+          echo "plugins=$plugins" >> "$GITHUB_OUTPUT"
+          echo "prompt=$prompt" >> "$GITHUB_OUTPUT"
+          echo "claude_args=$claude_args" >> "$GITHUB_OUTPUT"
 
     - name: Run Claude Code
       uses: anthropics/claude-code-action@v1
