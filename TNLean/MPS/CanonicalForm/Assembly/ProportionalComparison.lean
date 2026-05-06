@@ -14,8 +14,8 @@ comparisons and common MPV phase covers, and record the special case where the c
 BNT proportional-decomposition comparison of the nonzero-weight block families.
 
 The zero-tail hypotheses mentioned below compare the total bond dimensions of
-the separated all-zero leftover blocks.  This is the formal counterpart of the
-source-paper block-decomposition allowance `∑ k, D_k ≤ D` and its zero blocks.
+the separated all-zero leftover blocks.  These dimensions are the gaps allowed
+by `∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 
 ## Main statements
 

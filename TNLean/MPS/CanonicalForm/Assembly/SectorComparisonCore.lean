@@ -17,8 +17,8 @@ public declaration names while separating the BNT/overlap-span comparison layer
 from the structural-data construction.
 
 When later statements in this route mention zero-tail data, the term denotes
-the total bond dimension of the separated all-zero leftover blocks, corresponding
-to the source-paper allowance `∑ k, D_k ≤ D`.
+the total bond dimension of the separated all-zero leftover blocks, namely the
+dimension gap allowed by `∑ k, D_k ≤ D`.
 -/
 
 namespace MPSTensor

@@ -15,9 +15,9 @@ hypotheses for common primitive nonzero-sector families.  These structures expre
 the remaining data needed to pass from the common-sector structural theorem to
 the BNT overlap-rigidity comparison.
 
-The zero-tail dimensions below are the formal variables for the total bond
-dimension of the separated all-zero leftover blocks.  They correspond to the
-source-paper allowance `∑ k, D_k ≤ D` and the associated zero blocks.
+The zero-tail dimensions below are the total bond dimensions of the separated
+all-zero leftover blocks.  They are the dimension gaps allowed by
+`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 
 ## Tags
 

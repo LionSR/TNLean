@@ -16,10 +16,9 @@ nonzero parts directly. The length-zero equation records the residual
 zero-tail contribution, and full equality of the nonzero parts follows once the
 zero tails agree.
 
-Here "zero-tail" is the formal variable for the total bond dimension of the
-separated all-zero leftover blocks.  It corresponds to the source-paper
-allowance `∑ k, D_k ≤ D`, where the block decomposition may include zero
-blocks.
+Here "zero-tail" is the total bond dimension of the separated all-zero leftover
+blocks.  It is the dimension gap allowed by `∑ k, D_k ≤ D`, where the block
+decomposition may include zero blocks.
 
 ## References
 
