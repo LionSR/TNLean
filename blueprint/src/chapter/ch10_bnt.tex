@@ -496,6 +496,40 @@ The main references are
 
 \section{Coefficient convergence}
 
+\begin{lemma}[Strict-dominance coefficient ratios]
+	\label{lem:strict_dominance_coefficient_ratios}
+	\lean{MPSTensor.HasStrictOrderedNonzeroWeights.coeff_ratio_tendsto}
+	\lean{MPSTensor.IsCanonicalFormBNT.coeff_ratio_tendsto}
+	\leanok
+	Let \((\mu_k)_k\) be a strictly ordered nonzero weight family with
+	\(\mu_0\) dominant.  Then the normalized powers
+	\((\mu_k/\mu_0)^N\) converge to \(1\) for the dominant block and to
+	\(0\) for every other block.
+\end{lemma}
+
+\begin{proof}\leanok
+	The dominant ratio is \(1\).  For every other block, strict ordering gives
+	\(|\mu_k/\mu_0|<1\), so its powers converge to \(0\).
+\end{proof}
+
+\begin{lemma}[Dominant-weight normalization]
+	\label{lem:dominant_weight_normalization}
+	\lean{MPSTensor.mpv_toTensorFromBlocks_eq_mu0_pow_mul_normalized}
+	\lean{MPSTensor.proportional_normalized_of_proportional}
+	\leanok
+	Factoring the dominant weight from a block-diagonal tensor rewrites its
+	MPV as \(\mu_0^N\) times the MPV of the normalized block family.  Hence
+	a proportionality relation between two such tensors induces the
+	corresponding proportionality relation between their normalized block
+	families, with the scalar adjusted by the dominant-weight ratio.
+\end{lemma}
+
+\begin{proof}\leanok
+	Expand the MPV of the block-diagonal tensor as the sum over blocks and
+	factor \(\mu_0^N\) from each coefficient.  The proportionality statement
+	follows by dividing by the nonzero dominant power.
+\end{proof}
+
 \begin{remark}[Strict-dominance regime]\notready
 	The coefficient-ratio decay auxiliary applies when one
 	modulus is strictly dominant:
