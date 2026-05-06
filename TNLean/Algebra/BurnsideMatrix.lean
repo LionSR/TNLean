@@ -11,14 +11,21 @@ import Mathlib.Algebra.Algebra.Subalgebra.Lattice
 import Mathlib.RingTheory.Noetherian.Defs
 
 /-!
-# Burnside-style Bridge: Irreducibility → Normality
+# Burnside-style bridge: irreducibility to algebra span
 
 This file reduces the gap between `IsIrreducibleTensor` (no nontrivial invariant
-orthogonal projection) and `IsNormal` (word products span `M_D(ℂ)`) to a single,
-cleanly stated algebraic theorem: **Burnside's theorem for matrix algebras**.
+orthogonal projection) and eventual cumulative full matrix span to a single,
+cleanly stated algebraic input: **Burnside's theorem for matrix algebras**.
 
 Burnside's theorem (Jacobson density theorem) is formalized directly in this
 project rather than imported from Mathlib.
+
+Source status: arXiv:1606.00608 Section 2.3 uses invariant subspaces to split a
+canonical-form block until no nontrivial invariant subspace remains.  It does not
+invoke Burnside/Jacobson.  The Burnside step here is an external algebraic bridge
+from irreducible action to full generated algebra.  The later Wielandt/normality
+arguments use the resulting cumulative full-span statement together with
+aperiodicity or primitivity hypotheses; this bridge alone is not normality.
 
 ## Main definitions
 
@@ -45,7 +52,7 @@ project rather than imported from Mathlib.
 
 ### Bridge summary
 
-The complete chain from `IsIrreducibleTensor A` to `∃ N, cumulativeSpan A N = ⊤`:
+The complete chain from `IsIrreducibleTensor A` to cumulative full matrix span:
 
 1. `IsIrreducibleTensor A` → `IsIrreducibleAction A` (proved in `IrreducibleTensorAction.lean`)
 2. `IsIrreducibleAction A` → `algSpan A = ⊤` (Burnside/Jacobson density, proved in
@@ -59,6 +66,7 @@ alternates. Aperiodicity (e.g., `IsPrimitiveMPS`) is needed for IsNormal.
 ## References
 
 * Burnside (1905), Proc. London Math. Soc.
+* arXiv:1606.00608, Section 2.3 (invariant-subspace reduction)
 * arXiv:0909.5347, Proposition 3
 -/
 
