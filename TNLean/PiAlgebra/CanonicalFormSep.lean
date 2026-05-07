@@ -509,7 +509,7 @@ lemma block_separation_all_words
     ∀ k, SameMPV (A k) (B k) :=
   block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
 
-/-- NT / normal-canonical-form form of `block_separation_all_words`.
+/-- NT / normal-canonical formulation of `block_separation_all_words`.
 
 Besides irreducibility and left-canonical normalization on both block families,
 this lemma also assumes the self-overlap convergence hypothesis on the
