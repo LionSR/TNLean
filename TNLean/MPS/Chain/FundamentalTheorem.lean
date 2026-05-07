@@ -24,11 +24,13 @@ namespace MPSChainTensor
 
 variable {d D n : ℕ}
 
-/-- **Fundamental Theorem for injective MPS chains** (Theorem 1 of arXiv:1804.04964).
+/-- **Combined-tensor form of the injective chain Fundamental Theorem**
+(Theorem 1 of arXiv:1804.04964).
 
 If `A` and `B` are `n`-site chains with `A` injective and
 `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`, then `A` and `B`
-are cyclically gauge equivalent.  The proof produces a *uniform* gauge
+are cyclically gauge equivalent. The hypothesis is stated for the combined
+tensors, whose physical index is the pair `(k, i)`. The proof produces a uniform gauge
 (the same `X ∈ GL(D, ℂ)` at every bond), which is a special case of cyclic
 gauge equivalence. -/
 theorem fundamentalTheorem_injective_chain
