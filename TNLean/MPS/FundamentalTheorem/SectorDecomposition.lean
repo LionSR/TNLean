@@ -60,7 +60,7 @@ sector weights inside each basis block.
 
 The result formalized here is the BNT coefficient comparison that recovers both
 multiplicities and sector weights. A global gauge-equivalence statement for the
-block-diagonal tensors still requires a theorem deriving the coefficient and phase
+block-diagonal tensors still require a theorem deriving the coefficient and phase
 hypotheses required by the proportional decomposition theorem from bare equality
 of matrix-product vectors. In sector form the coefficients are finite sums of powers
 of unit-modulus weights, so convergence is not automatic without a dominant

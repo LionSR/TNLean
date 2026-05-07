@@ -606,7 +606,7 @@ exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The current comparison route passes through
+The current comparison uses
 `afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common phase-cover
 or BNT comparison theorems. This avoids keeping separate common-block comparison
 variants as public waypoints: the formal residue is the paper-level residue,
