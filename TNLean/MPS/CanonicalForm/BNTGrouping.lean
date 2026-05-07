@@ -17,7 +17,7 @@ ordered by norm) with the `IsNormalCanonicalForm` predicate (which requires
 
 ## Background: Norm sorting in the existence reduction
 
-The existence reduction (in `Assembly.lean`) produces a weighted block family
+The existence reduction (in `SectorComparison.lean`) produces a weighted block family
 `(μ k, blocks k)` with `μ k ≠ 0` for all `k`, but does **not** guarantee pairwise
 distinct norms `‖μ j‖ ≠ ‖μ k‖` for `j ≠ k`.  In particular, after blocking by
 period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `μ₀ j`,

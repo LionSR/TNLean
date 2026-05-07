@@ -2,9 +2,9 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction
-import TNLean.MPS.CanonicalForm.Assembly.NonzeroBlockComparison
-import TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction
+import TNLean.MPS.CanonicalForm.SectorComparison.NonzeroBlockComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant.ProjectionSpan
-import TNLean.MPS.CanonicalForm.Assembly.NormalityChain
+import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization

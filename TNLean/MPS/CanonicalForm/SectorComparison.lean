@@ -2,50 +2,49 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
-import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
-import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
-import TNLean.MPS.CanonicalForm.Assembly.CommonSectorData
+import TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the complete canonical-form
-reduction after blocking. It keeps the historical import path
-`TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
-split across focused supporting modules.
+The canonical-form reduction after blocking combines sector comparison,
+common-period blocking, zero-block comparison, and weight-comparison statements
+used in the non-periodic fundamental theorem.
 
 The supporting modules are:
 
-* `TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction` — blocked
+* `TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction` — blocked
   TP-primitive decomposition from arbitrary input.
-* `TNLean.MPS.CanonicalForm.Assembly.NormalityChain` — the normality chain for
+* `TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain` — the normality chain for
   TP-primitive irreducible blocks and preservation of normality under blocking.
-* `TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks` — blocked irreducibility
+* `TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks` — blocked irreducibility
   and the conditional weak block-matching theorem.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily` —
   definitions and lemmas for common-period cyclic-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorRepresentatives` —
   definitions and lemmas for representative common-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition` — cyclic sector
+* `TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition` — cyclic sector
   decomposition after blocking.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction` —
   construction of common-period cyclic-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport` — generic zero-tail
+* `TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport` — generic zero-tail
   MPV transport lemmas.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorData` — common-sector data
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData` — common-sector hypotheses
   after the zero-tail and TP-gauge structural reduction.
-* `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
-  and structural after-blocking data.
-* `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
-  path for structural data and common-sector transport.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralData` — common-period blocking
+  and structural after-blocking hypotheses.
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — structural theorem
+  imports and common-sector transport.
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport` — zero-tail and
   common-sector transport after the structural theorem.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData` —
   common primitive span, phase-cover, proportional, and BNT-cover hypotheses.
-* `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` — basic sector
+* `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
-* `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
+* `TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
 ## Main statements
@@ -61,7 +60,7 @@ The imported modules provide the canonical-form reduction theorems, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `afterBlocking_structuralData_of_sameMPV₂`.
 
-This public entry point also records a conditional formulation of the
+This collection also records a conditional formulation of the
 Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
 invoke the periodic Fundamental Theorem.  The structure
 `BlockedNormalFormHypotheses` names the source proof obligations (blocking

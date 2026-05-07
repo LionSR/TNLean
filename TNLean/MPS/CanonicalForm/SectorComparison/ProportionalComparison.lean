@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -19,7 +19,7 @@ by `∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 
 ## Main statements
 
-* `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` contains the basic
+* `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` contains the basic
   block-span sector comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` — the
   common-length cyclic-sector output, together with the blocked-word relabeling

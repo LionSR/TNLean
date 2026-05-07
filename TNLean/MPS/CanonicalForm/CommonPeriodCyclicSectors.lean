@@ -7,12 +7,12 @@ import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingInfrastructure
 
 /-!
-# Common-period assembly helpers for cyclic-sector blocks
+# Common-period cyclic-sector blocking
 
-This file provides lightweight helpers used to align periodic blocks to a
-single global period and to transport per-block primitivity witnesses to that
-common blocking level. The underlying `lcmPeriod` abbreviation and its basic
-positivity / divisibility facts live in `TNLean.MPS.Core.BlockingInfrastructure`.
+The common-period blocking operation for cyclic-sector blocks transports
+per-block primitivity witnesses to a common blocking level. The abbreviation
+`lcmPeriod` is defined in `TNLean.MPS.Core.BlockingInfrastructure`, together
+with its positivity and divisibility lemmas.
 -/
 
 namespace MPSTensor
@@ -21,9 +21,9 @@ variable {d k : ℕ}
 
 /-- Block each family member to the common `lcmPeriod`.
 
-This keeps a uniform physical dimension across the assembled family while
+This keeps a uniform physical dimension across the common-period family while
 allowing the bond dimension to vary with the index. The
-resulting family is the basic input for common-period cyclic-sector assembly.
+resulting family is the basic input for common-period cyclic-sector comparison.
 -/
 noncomputable def commonPeriodBlocking
     {dim : Fin k → ℕ}

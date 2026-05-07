@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
-import TNLean.MPS.CanonicalForm.CyclicSectorAssembly
-import TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport
+import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
+import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.EqualProportional
