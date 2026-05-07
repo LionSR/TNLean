@@ -16,15 +16,16 @@ states in canonical form with basis-of-normal-tensors (BNT) separation.
 ### Equal-MPV comparison with common block structure
 (`fundamentalTheorem_equalMPV_CFBNT`)
 
-This is the common-block-structure specialization of the equal case: if two BNT canonical
-forms share the same `μ`-weights, block count, and block dimensions, and generate equal
-MPVs for all system sizes, then the corresponding blocks are gauge equivalent and the
-assembled block-diagonal tensors are gauge equivalent.
+This lemma is the common-block-structure specialization of the equal case: if two BNT
+canonical forms already share the same `μ`-weights, block count, and block dimensions, and
+generate equal MPVs for all system sizes, then the corresponding blocks are gauge equivalent
+and the assembled block-diagonal tensors are gauge equivalent.  The source-paper corollary
+also has to derive this common block structure from the BNT coefficient comparison.
 
 ### Proportional-MPV comparison with explicit coefficient limits
 (`fundamentalTheorem_proportionalMPV_CFBNT`)
 
-This theorem proves the block-matching conclusion under the coefficient hypotheses used by
+This lemma proves the block-matching conclusion under the coefficient hypotheses used by
 the proportional-MPV argument. The decomposition coefficients, their limits, and the
 non-vanishing of those limits are explicit assumptions. The extraction of these
 coefficients from the hypotheses of the source-paper theorem is not part of this statement.
@@ -65,8 +66,11 @@ block weights `μ`, the same number of blocks `r`, and the same block dimensions
 `dim`, and generate equal MPV families for all system sizes, then:
 
 (i)  per-block gauge equivalence: `GaugeEquiv (A k) (B k)` for all `k`;
-(ii) global gauge equivalence of the block-diagonal tensors. -/
-theorem fundamentalTheorem_equalMPV_CFBNT
+(ii) global gauge equivalence of the block-diagonal tensors.
+
+This is a strict common-block lemma, not the full source-paper equal-MPV corollary: the
+matching of BNT multiplicities and weights is already built into the common data. -/
+lemma fundamentalTheorem_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -78,8 +82,8 @@ theorem fundamentalTheorem_equalMPV_CFBNT
   fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.** -/
-theorem fundamentalTheorem_equalMPV_CFBNT_explicit
+/-- **Common-block equal-MPV comparison with explicit gauge matrices.** -/
+lemma fundamentalTheorem_equalMPV_CFBNT_explicit
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -115,7 +119,7 @@ abbrev BlockPermutationGaugeWitness
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
+lemma fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -172,7 +176,7 @@ MPV families (with explicitly convergent nonzero decomposition coefficients), th
 and then the subdominant ratios decay. In the general BNT setting of the source papers,
 however, the coefficients are sums `Σ_q μ_{j,q}^N` and need not converge without
 extra input. -/
-theorem fundamentalTheorem_proportionalMPV_CFBNT
+lemma fundamentalTheorem_proportionalMPV_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -203,7 +207,7 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
 /-- Split-data proportional-MPV comparison for normal-CF-BNT-style data. -/
-theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
+lemma fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -242,7 +246,7 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
 /-- Proportional-MPV comparison for normal canonical form blocks. -/
-theorem fundamentalTheorem_proportionalMPV_normalCFBNT
+lemma fundamentalTheorem_proportionalMPV_normalCFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -279,7 +283,7 @@ section Corollaries
 
 /-- **Per-block SameMPV from CF-BNT equal MPVs.**
 
-Extracts the per-block `SameMPV` conclusion from the equal-MPV theorem. -/
+Extracts the per-block `SameMPV` conclusion from the common-block equal-MPV lemma. -/
 lemma perBlock_sameMPV_of_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}

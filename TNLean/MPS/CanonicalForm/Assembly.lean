@@ -194,8 +194,8 @@ the common primitive nonzero-sector families obtained after blocking, there is a
 blocking after which the two tensors admit BNT sector
 decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
 sector-weight multisets up to nonzero phases.  The `comparison` field is an independent
-hypothesis of this theorem; the result does not derive it from `SameMPV₂`. -/
-theorem fundamentalTheorem_afterBlocking_of_comparisonHypotheses
+hypothesis of this lemma; the result does not derive it from `SameMPV₂`. -/
+lemma fundamentalTheorem_afterBlocking_of_comparisonHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)

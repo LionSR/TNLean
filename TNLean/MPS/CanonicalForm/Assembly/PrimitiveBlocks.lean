@@ -226,10 +226,10 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
       (d := d) (D := D) A hTP hPrim hIrr hk
 
 /-!
-## Conditional Fundamental Theorem: proportional MPVs → block matching
+## Conditional block matching: proportional MPVs → matched blocks
 
 This combines the full reduction data with the block-matching conclusions
-of the fundamental theorem.
+available for restricted normal-CF-BNT data.
 
 For two arbitrary tensors A, B with proportional MPVs, the reduction produces
 blocked TP-primitive decompositions. Under the additional hypotheses needed
@@ -237,14 +237,14 @@ for `IsNormalCanonicalForm` (irreducibility and distinct weight norms), one obta
 permutation + gauge-phase matching of blocks.
 -/
 
-/-- **Conditional Fundamental Theorem (irreducibility and distinct weights).**
+/-- **Conditional block matching for restricted normal-CF-BNT data.**
 
 For two restricted separated representative families in TP-primitive normal canonical form,
 if their blocked versions have proportional MPVs (with convergent coefficients), then the
 block counts match and blocks are pairwise gauge-phase equivalent (up to permutation). The
 full repeated-copy BNT comparison is supplied separately by sector-decomposition and
 multiplicity data. -/
-theorem weakFundamentalTheorem_conditional
+lemma weakFundamentalTheorem_conditional
     {d' rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
