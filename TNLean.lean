@@ -150,6 +150,7 @@ import TNLean.Spectral.QuantitativeGap
 
 -- Layer 3: MPS core
 import TNLean.MPS.Defs
+import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Tactic.Basic
 import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Chain.VirtualInsertion
@@ -265,7 +266,6 @@ import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
 import TNLean.PiAlgebra.Construction
 import TNLean.PiAlgebra.FundamentalTheoremComplete
-import TNLean.PiAlgebra.BlockSeparation
 import TNLean.PiAlgebra.TIReduction
 import TNLean.PiAlgebra.GlobalSymmetry
 
