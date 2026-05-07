@@ -463,9 +463,6 @@ lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_inject
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  obtain ⟨S, hSep⟩ :=
-    exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
-      μ A hNCF hInj
   let hCF : IsCanonicalFormBNT μ A :=
     IsCanonicalFormBNT.ofSeparatedData
       (HasInjectiveBlocks.ofForall hInj)
@@ -473,8 +470,8 @@ lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_inject
       hNCF.toHasStrictOrderedNonzeroWeights
       hNCF.toHasNormalizedSelfOverlap
       hNCF.blocks_not_equiv
-  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
-    μ A hCF hSep
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    μ A hCF hNCF.toHasIrreducibleBlocks
 
 /-- `WordTupleSpanTop` version of the direct-sum span theorem for
 canonical-form/BNT block families. -/
