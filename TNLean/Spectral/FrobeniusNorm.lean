@@ -8,9 +8,14 @@ import Mathlib.Analysis.Matrix.Order
 /-!
 # Frobenius norm squared and Euclidean-space embedding for matrices
 
-Shared Frobenius-norm identities for the spectral-gap modules (`SpectralGap.lean`,
-`SpectralGapRect.lean`).  Everything here works for *rectangular*
+Frobenius-norm identities for rectangular matrices. Everything here works for
 `Matrix (Fin m) (Fin n) ℂ`; the square case is obtained by setting `m = n`.
+
+The Frobenius (Hilbert--Schmidt) norm gives the rectangular Cauchy--Schwarz
+estimates used in the MPS spectral-gap argument of PerezGarcia2007. Wolf
+Chapter 6 proves the analogous eigenvalue bound for positive maps by the
+operator norm and Russo--Dye theorem (Proposition 6.1); in finite dimension
+both norms give the same spectral radius.
 
 ## Main definitions
 

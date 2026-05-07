@@ -32,8 +32,10 @@ to zero. This is the mechanism by which the mixed transfer operator
 
 ## References
 
+* [Wolf2012Quantum] Wolf, *Quantum Channels & Operations: Guided Tour*,
+  Proposition 6.1, Theorem 6.6, Section 6.2.
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
-  *Matrix Product State Representations*, 2007.
+  *Matrix Product State Representations*, 2007. Lemma 5.
 * [Evans1978Spectral] Evans, Hanche-Olsen, *Spectral properties of positive
   maps on C*-algebras*, 1978.
 -/
@@ -210,7 +212,12 @@ private lemma hs_contraction_mixedTransfer [NeZero D]
 
 /-! ### Eigenvalue bound -/
 
-/-- **Every eigenvalue of the mixed transfer operator has modulus ≤ 1.** -/
+/-- **Every eigenvalue of the mixed transfer operator has modulus ≤ 1.**
+
+This is the MPS specialization of Wolf Proposition 6.1
+(the spectral radius of a positive unital/trace-preserving map is ≤ 1).
+The proof uses a uniform Frobenius-norm contraction estimate rather than
+the Russo--Dye operator-norm argument of Wolf, following PerezGarcia2007. -/
 theorem eigenvalue_norm_le_one [NeZero D]
     (A B : MPSTensor d D)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -412,9 +419,15 @@ end
 set_option synthInstance.maxHeartbeats 200000 in
 -- Instance search for the finite-dimensional continuous endomorphism space of matrices
 -- needs a local heartbeat bump during the spectral-radius extraction.
-/-- **Eigenvalue rigidity** (Pérez-García et al. 2007, Lemma 5):
+/-- **Eigenvalue rigidity** (PerezGarcia2007 Lemma 5, cf. Wolf Theorem 6.6):
 if the mixed transfer spectral radius is ≥ 1, then A and B are
-gauge-phase equivalent. -/
+gauge-phase equivalent.
+
+The proof passes to the left-canonical gauge, uses the Kadison--Schwarz
+equality for peripheral eigenvectors (Wolf Theorem 5.3, 5.4), applies the
+Kraus-commutation step to obtain intertwining relations, and concludes
+invertibility via the Perron--Frobenius fixed-point theory
+(Wolf Theorems 6.2, 6.3). -/
 theorem modulus_one_eigenvalue_implies_gauge
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)

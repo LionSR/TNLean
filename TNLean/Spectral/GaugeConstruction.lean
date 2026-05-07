@@ -11,16 +11,15 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Matrix.Normed
 
 /-!
-# Shared gauge construction for spectral-gap rigidity
+# Gauge construction for spectral-gap rigidity
 
-This module factors out the common "modulus-one eigenvector gives intertwining"
-core used by the spectral-gap rigidity arguments.  The shared pattern is:
-
-1. gauge both tensors to left-canonical / unital form;
-2. transport the mixed-transfer eigenvector into that gauge;
-3. block-embed the transported eigenvector into a unital Kraus map;
-4. use weighted Kadison--Schwarz equality to obtain Kraus-level intertwining;
-5. feed the intertwining identities into the file-specific endgames.
+For tensors $A$ and $B$, a mixed-transfer eigenvector with $|\lambda|=1$
+can be transported through left-canonical gauges.  After embedding the
+transported matrix into a block Kraus map, equality in the weighted
+Kadison--Schwarz inequality gives intertwining relations between the
+gauged Kraus operators.  This is the common argument in Wolf Theorem 6.6
+(peripheral spectrum of irreducible Schwarz maps) and PerezGarcia2007
+Lemma 5 (spectral gap for distinct MPS blocks).
 -/
 
 open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
@@ -29,9 +28,8 @@ attribute [local instance] Matrix.linftyOpNormedAddCommGroup Matrix.linftyOpNorm
 
 /-! ### ContinuousLinearMap endomorphism structure
 
-These definitions provide the analytic structure on `Matrix (Fin m) (Fin n) ℂ →L[ℂ] …`
-needed by the spectral-radius arguments. They are activated locally via
-`attribute [local instance]` in each consumer file. -/
+These definitions provide the analytic structure on continuous endomorphisms
+of rectangular complex matrices needed by the spectral-radius arguments. -/
 
 section CLMInstances
 open scoped Matrix.Norms.Frobenius

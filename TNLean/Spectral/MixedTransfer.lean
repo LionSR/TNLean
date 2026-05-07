@@ -33,7 +33,9 @@ multi-block fundamental theorem.
 ## References
 
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
-  *Matrix Product State Representations*, 2007.
+  *Matrix Product State Representations*, 2007. (transfer maps, §II.B)
+* [Wolf2012Quantum] Wolf, *Quantum Channels & Operations: Guided Tour*,
+  Chapter 6. (spectral theory of the mixed transfer map as a CP map)
 -/
 
 open scoped Matrix ComplexOrder BigOperators
