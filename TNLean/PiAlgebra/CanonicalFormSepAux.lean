@@ -784,7 +784,7 @@ private lemma eq_one_of_tendsto_pow_atTop_nhds_one (z : ℂ)
   simpa [eq_comm] using huniq
 
 /-- For injective left-canonical tensors of the same bond dimension, a mixed overlap
-converging to `1` forces gauge-phase equivalence.
+converging to `1` forces `GaugePhaseEquiv`, i.e. conjugacy up to a nonzero scalar.
 
 In the block-separation proof, the equal-dimension hypothesis is encoded by the
 shared type parameter `D`; any bond-dimension mismatch is excluded one step earlier
@@ -805,8 +805,8 @@ lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one
 Again the two tensors already share the bond dimension `D`; in the block-separation
 proof the dimension-mismatch case is ruled out separately by
 `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`, and the nondecaying
-equal-dimension overlap is then identified via the modulus-one-eigenvalue
-rigidity theorem for irreducible tensors. -/
+equal-dimension overlap gives `GaugePhaseEquiv`, i.e. conjugacy up to a nonzero
+scalar, via the modulus-one-eigenvalue rigidity theorem for irreducible tensors. -/
 lemma gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP
     {D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
