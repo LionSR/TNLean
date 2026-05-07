@@ -27,7 +27,9 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     Use the source notation and display the defining equations whenever possible.
     If Lean proves an auxiliary reformulation, state the source result first.
     Put maintainer-only proof-status notes in LaTeX comments, not displayed
-    mathematical prose.
+    mathematical prose. The explicit proof-status markers in
+    [`prose_style.md`](prose_style.md) are for Lean docstrings and comments, not
+    blueprint-visible paragraphs.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -40,6 +42,8 @@ This is the most important rule. Every proof in the blueprint must faithfully de
 - **Do not present local auxiliary routes as source mathematics.** If a proof uses
   a formal auxiliary lemma not stated in the cited source, name the mathematical
   assertion it proves. Put maintainer-only proof-status notes in LaTeX comments.
+  Do not introduce visible note labels such as `Formalization note.` in
+  blueprint prose.
   If the auxiliary route is no longer used by the checked proof, delete the entry
   rather than keeping an unmotivated theorem-like statement in the blueprint.
 
