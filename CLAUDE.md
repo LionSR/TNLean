@@ -78,11 +78,11 @@ Detailed conventions live in `docs/`. Read the relevant file before working in t
 
 | File | Covers |
 |------|--------|
-| [`docs/style.md`](docs/style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, deprecation |
-| [`docs/naming.md`](docs/naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
-| [`docs/doc.md`](docs/doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
+| [`docs/MATHLIB_style.md`](docs/MATHLIB_style.md) | Code formatting, line length (100 chars), declarations, tactic style, whitespace, transparency, deprecation |
+| [`docs/MATHLIB_naming.md`](docs/MATHLIB_naming.md) | Capitalization rules, symbol-to-name dictionary, variable conventions |
+| [`docs/MATHLIB_doc.md`](docs/MATHLIB_doc.md) | Module docstrings, definition docstrings, sectioning comments, BibTeX citations |
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | PR title format (`type(scope): description`), issue conventions, label taxonomy, review checklist, mathematical-language renames |
-| [`docs/pr-review.md`](docs/pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
+| [`docs/MATHLIB_pr-review.md`](docs/MATHLIB_pr-review.md) | Review criteria: style, documentation, location, improvements, library integration |
 | [`docs/pr_review_management.md`](docs/pr_review_management.md) | PR triage process, comment API mapping, merge decisions |
 | [`docs/PROOF_INTEGRITY.md`](docs/PROOF_INTEGRITY.md) | Blockers (`sorry`, `axiom`, kernel bypasses, circular reasoning) and warnings (`maxHeartbeats`, debug artifacts) |
 | [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |

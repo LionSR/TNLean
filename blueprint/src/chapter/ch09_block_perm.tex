@@ -136,7 +136,7 @@ results of~\cite{Cirac2021Matrix}.
     $D_{\pi(k)} = D_k$.
     For each $k$, Theorem~\ref{thm:component_map_bijective} gives a bijective
     multiplicative map from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ extracted from the
-    single-support inputs of~$T$; after reindexing by the dimension equality,
+    elements supported on one factor of~$T$; after reindexing by the dimension equality,
     this is a $\C$-algebra automorphism of $\MN{D_k}$.
     Skolem--Noether (Theorem~\ref{thm:skolem_noether}) makes each such
     automorphism inner.
@@ -164,7 +164,7 @@ results of~\cite{Cirac2021Matrix}.
     \lean{MPSTensor.piAlgEquiv}
     \leanok
     \uses{def:per_block_linear_ext}
-    The \emph{product algebra automorphism} is the blockwise map
+    The \emph{product algebra automorphism} is the componentwise map
     $T:\prod_k\MN{D_k}\to\prod_k\MN{D_k}$ defined by
     $T(M)_k := T_k(M_k)$.
     Theorem~\ref{thm:pi_linear_ext} shows that each $T_k$ is a
@@ -192,13 +192,13 @@ results of~\cite{Cirac2021Matrix}.
     Each $T_k$ exists uniquely and is multiplicative by
     Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
     Promotion to algebra homomorphisms
-    (Lemma~\ref{lem:linear_map_to_alg}) and blockwise composition give an
+    (Lemma~\ref{lem:linear_map_to_alg}) and componentwise composition give an
     algebra automorphism of $\prod_k \MN{D_k}$.
     Theorem~\ref{thm:pi_auto_decomp} then decomposes this automorphism as a
     block permutation together with per-block inner automorphisms.
 \end{proof}
 
-\begin{theorem}[Per-block same MPV gives global gauge equivalence]\label{thm:per_block_gauge}
+\begin{lemma}[Per-block same MPV gives global gauge equivalence]\label{lem:per_block_gauge}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:gauge_equiv, def:tensor_from_blocks}
@@ -208,16 +208,16 @@ results of~\cite{Cirac2021Matrix}.
     equivalent, and the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     are globally gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:ft_single, thm:multi_block_global}
+    \uses{thm:ft_single, lem:multi_block_global}
     Per-block gauge equivalence follows from the single-block
     FT (Theorem~\ref{thm:ft_single}) applied to each block.
     Global gauge equivalence follows by placing the
     per-block gauge matrices on the block diagonal
-    (Theorem~\ref{thm:multi_block_global}).
+    (Lemma~\ref{lem:multi_block_global}).
 \end{proof}
 
 \section{Burnside and invariant projections}
@@ -515,7 +515,7 @@ We use this notation throughout the block-separation argument.
     the conclusion is direct per-block same MPV.
 \end{proof}
 
-\begin{theorem}[Canonical form fundamental theorem, same-structure version]\label{thm:ft_canonical}
+\begin{lemma}[Canonical-form gauge comparison, same-structure case]\label{lem:ft_canonical}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
     \uses{def:is_canonical_form, def:gauge_equiv, def:tensor_from_blocks}
@@ -523,13 +523,13 @@ We use this notation throughout the block-separation argument.
     $(A_k, B_k)$ is gauge equivalent. Hence the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     are gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:block_sep, thm:per_block_gauge}
+    \uses{lem:block_sep, lem:per_block_gauge}
     Lemma~\ref{lem:block_sep} gives per-block same MPV.
-    Theorem~\ref{thm:per_block_gauge} then converts this to
+    Lemma~\ref{lem:per_block_gauge} then converts this to
     per-block gauge equivalence and then to global gauge equivalence
     of the block-diagonal tensors.
 \end{proof}
