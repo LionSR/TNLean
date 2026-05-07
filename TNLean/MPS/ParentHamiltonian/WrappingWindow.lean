@@ -58,6 +58,31 @@ proceeds as follows:
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, lines 2013–2094
 * [FNW92] Sections 3–4
+
+## External input — Quantum Wielandt vector-to-matrix span
+
+This file imports `TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan`, which supplies
+the critical spanning step used in the wrapping-window argument:
+
+> **Vector-to-matrix spanning step (arXiv:0909.5347, Lemma 2(a) / Wolf Chapter 6).**
+> If the vector-valued images of Kraus word products span the full vector space
+> `ℂ^D`, then the matrix-valued word products span the full matrix
+> algebra `M_D(ℂ)`.  Concretely: `span{A_w v} = ℂ^D` for all `v ≠ 0` implies
+> `span{A_w} = M_D(ℂ)`.
+
+In MPS notation after blocking: for an injective tensor `A`, the Kraus word
+products of length `L-1` span `M_D(ℂ)` (`wordSpan A (L-1) = ⊤`).
+This spanning conclusion is what allows the proof to extend the word-compatibility
+identity from `evalWord` values to arbitrary matrices `M₁`, yielding the
+commutation condition `X M₁ = M₁ X` for all matrices `M₁`, hence
+`X A_j = A_j X` for each generator.
+
+The formal Lean declaration:
+
+> `Wielandt.SpanGrowth.VectorToMatrixSpan` provides the lemmas that turn
+> a vector-span hypothesis into a matrix-span conclusion.  In the wrapping-window
+> proof, this is applied after the injectivity hypothesis `IsInjective A` gives
+> `wordSpan A (L-1) = ⊤` via `wordSpan_eq_top_of_isInjective`.
 -/
 
 open scoped Matrix BigOperators

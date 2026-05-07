@@ -28,10 +28,36 @@ implies irreducibility, left-canonicality is built in, and the spectral gap
 gives overlap convergence), the formulation here reduces the hypothesis count from
 7 to 4.
 
+## External input — Quantum Wielandt primitivity ⇒ irreducibility
+
+This file imports `TNLean.Wielandt.Primitivity.ImpliesIrreducible`, which
+supplies the Quantum Wielandt theorem that a primitive (aperiodic) transfer
+map yields irreducible Kraus operators:
+
+> **Quantum Wielandt, primitivity-to-irreducibility direction**
+> (arXiv:0909.5347, Proposition 3 / Wolf Theorem 6.7).
+> If `E_A` is primitive (has a unique peripheral eigenvalue `1`), then the
+> Kraus operators `{A_i}` are **irreducible**: their word products span the
+> full matrix algebra `M_D(ℂ)`.
+
+In MPS notation: `IsPrimitiveMPS A ρ` (primitive transfer map with PD fixed
+point `ρ`) implies `IsIrreducible A` (the Kraus operators `{A_i}` generate
+`M_D(ℂ)` as an algebra).  This implication is used here to eliminate the
+separate irreducibility hypothesis from the proportional FT statement.
+
+The formal Lean declaration that supplies this external input is:
+
+> `Wielandt.Primitivity.ImpliesIrreducible` provides the bridge from the
+> peripheral-spectrum primitivity predicate (`_root_.IsPrimitive`) to the
+> irreducibility conclusion.
+
 ## References
 
 - Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product States and Projected
   Entangled Pair States*, arXiv:2011.12127, Theorem 4.4
+- Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
+  arXiv:0909.5347, Proposition 3
+- Wolf, *Quantum Channels & Operations*, Theorem 6.7
 -/
 
 open scoped Matrix BigOperators ComplexOrder

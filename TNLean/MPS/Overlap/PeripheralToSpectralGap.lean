@@ -24,6 +24,29 @@ Concretely, for the transfer map of an injective normalized tensor `A`, we prove
 * peripheral primitivity implies a spectral gap for the complementary map `E - P`,
 * hence `MPSTensor.HasPrimitiveFixedPoint A` and the overlap convergence
   `mpvOverlap → 1`.
+
+## External input — Wolf spectral theory: Proposition 6.8
+
+The trace-zero fixed-point argument uses Wolf Proposition 6.8 from
+*Quantum Channels & Operations*, Chapter 6:
+
+> **Wolf Proposition 6.8 (PSD decomposition of Hermitian fixed points).**
+> If $E$ is a quantum channel and $H = H^\dagger$ is a Hermitian fixed point
+> ($E(H) = H$), then $H$ decomposes as $H = Q_1 - Q_2$ where both $Q_1, Q_2$
+> are positive semidefinite and also fixed by $E$.
+
+In MPS notation: for the transfer map $E_A(X) = \sum_i A_i X A_i^\dagger$ of a
+normalized tensor, any Hermitian fixed point $Y$ with $\operatorname{tr}(Y) = 0$
+decomposes into two PSD fixed points.  Combined with the unique-PD-fixed-point
+property of injective tensors (QPF), this forces $Y = 0$.
+
+The formal Lean declaration:
+
+> `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` from
+> `TNLean.Channel.FixedPoint.Cesaro` supplies the PSD decomposition used in
+> `transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero` (line 93).
+> This is the Wolf Proposition 6.8 formalization consumed by the
+> peripheral-to-spectral-gap bridge.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal

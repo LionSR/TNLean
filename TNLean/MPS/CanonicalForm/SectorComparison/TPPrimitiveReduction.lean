@@ -55,6 +55,38 @@ primitive block decomposition.
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
 
+## External inputs
+
+This file is the main integration point for the Quantum Wielandt machinery in the
+canonical-form reduction.  It imports four Wielandt modules:
+
+1. **`Wielandt.SpanGrowth.VectorToMatrixSpan`** — the vector-to-matrix spanning step
+   (arXiv:0909.5347, Lemma 2(a)/Wolf Chapter 6): if a vector-valued linear image of the
+   Kraus word products spans the full vector space, then the matrix-valued word products
+   span the full matrix algebra.
+
+2. **`Wielandt.SpanGrowth.CumulativeSpan`** — the cumulative span growth machinery
+   (arXiv:0909.5347, Lemma 1): the cumulative span `S_n(A)` grows strictly until it
+   reaches the full matrix algebra, with an explicit bound on the stopping time.
+
+3. **`Wielandt.RectangularSpan.Basic`** — the rectangular span theory for Wielandt
+   Lemma 2(b): provides the conditional assembly `wielandt_lemma2b_conditional` that
+   reduces the full-rank conclusion to finding a rank-one element in the word span.
+
+4. **`Wielandt.Primitivity.StronglyIrreducibleToFullRank`** — the hardest direction
+   of the primitivity equivalence (Proposition 3(a)→(c) of arXiv:0909.5347): strong
+   irreducibility of the transfer map implies `krausRank A = D`.
+
+5. **`Wielandt.Primitivity.ToNormal`** — the primitivity-to-normality implication:
+   when the peripheral spectrum condition is satisfied, the transfer map becomes normal
+   (commutes with its adjoint), which unlocks the full Wielandt chain.
+
+Together, these inputs supply the fact that a TP-primitive block (after the
+Perron-Frobenius gauge and periodicity blocking) is injective — its Kraus operators
+span the full matrix algebra at length 1, and therefore block-injective at every
+positive length.  This is the critical mathematical content that justifies the
+"primitive ⇒ injective" implication used in the blocked canonical-form decomposition.
+
 ## Tags
 
 matrix product states, canonical form, blocking, primitive transfer maps

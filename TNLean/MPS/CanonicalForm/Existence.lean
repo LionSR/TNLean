@@ -46,6 +46,62 @@ What is **not** yet proved here:
 
 Accordingly, this file gives reduction lemmas and explicit conditional statements,
 **not** a complete canonical-form existence theorem for arbitrary input tensors.
+
+## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
+
+This file imports `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`,
+which supplies the hardest direction of the Quantum Wielandt primitivity equivalence:
+
+> **Proposition 3(c)→(b) of arXiv:0909.5347 / Wolf Theorem 6.7 case (iii).**
+> If `E_A` is **strongly irreducible** — the Kraus operators' word products
+> eventually span the full matrix algebra `M_D(ℂ)` — then the fixed-point
+> space of `E_A` has full Kraus rank: `dim S_1(A) = D` (the Kraus operators
+> themselves span `M_D(ℂ)` at word-length `1`).
+
+In MPS notation after blocking: `IsStronglyIrreducible A` (Kraus word products
+eventually span `M_D(ℂ)`) implies `IsInjective A` (the single-site
+Kraus operators `{A_i}` already span `M_D(ℂ)`).  This is a critical
+step in the canonical-form existence argument: it upgrades the cumulative word
+span to single-site injectivity, which then yields block injectivity at every
+positive length.
+
+The formal Lean declaration:
+
+> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves the implication
+> `IsStronglyIrreduciblePaper A → krausRank A = D` (equivalently,
+> `wordSpan A 1 = ⊤`).  This is the paper-faithful proof of the hardest direction
+> in the Sanz–Pérez-García–Wolf–Cirac primitivity equivalence.
+
+## External input — Perez-Garcia et al. invariant subspace decomposition
+
+The iterated invariant-projection splitting in Section 2.3 (Wolf/Cirac/Verstraete
+canonical-form reduction) is formalized in `TNLean.MPS.Structure.InvariantSubspaceDecomp`.
+This external input provides:
+
+> **Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803).**
+> An invariant orthogonal projection `P` on the bond space (satisfying
+> `(1-P) A_i P = 0` for all `i`) yields an MPV-equivalent two-block direct-sum
+> tensor with strictly smaller block dimensions.
+
+The formal Lean declaration:
+
+> `MPSTensor.exists_twoBlock_decomp_of_lowerZero` produces a two-block
+> block-diagonal tensor MPV-equivalent to the original, with a strict dimension
+> decrease (`exists_strict_twoBlock_decomp_of_lowerZero`).
+
+## External input — Wolf spectral theory: Perron-Frobenius fixed point
+
+The Appendix A PF/TP gauge step uses the Perron-Frobenius theorem for
+completely positive maps (Wolf Chapter 6), formalized in
+`TNLean.Channel.PerronFrobenius.Existence`:
+
+> An irreducible CP map on `M_D(ℂ)` with spectral radius `1` has a
+> positive-definite fixed point `ρ > 0`.  This provides the TP gauge
+> transformation `A_i ↦ ρ^{1/2} A_i ρ^{-1/2}` that makes the
+> tensor left-canonical.
+
+The spectral-gap bridge to peripheral primitivity is supplied by
+`TNLean.MPS.Overlap.PeripheralToSpectralGap` (Wolf Proposition 6.8).
 -/
 
 namespace MPSTensor
