@@ -31,7 +31,7 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
   `trace (diagonal a ^ k) = ∑ i, a i ^ k`
 
-## Main results, in declaration order
+## Principal statements
 
 * `Matrix.trace_diagonal_pow`: `trace (diagonal a ^ k) = ∑ i, a i ^ k`.
 
@@ -151,8 +151,9 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
 
-This is the finite-range theorem with the all-positive-power hypothesis restricted to
-`1 ≤ k ≤ card n`.  Note that this is a **same-cardinality** result; the paper's
+This is an immediate corollary of `sum_pow_eq_implies_multiset_eq_of_le_card`,
+obtained by restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`.
+Note that this is a **same-cardinality** result; the paper's
 `Lem:app_simple` additionally deduces cardinality equality when the sizes may differ. -/
 theorem sum_pow_eq_implies_multiset_eq
     (a b : n → ℂ)
