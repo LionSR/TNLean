@@ -14,14 +14,14 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 
 The algebraic commutant argument for a dependent direct sum is separated into
 finite-dimensional hypotheses.  If the sector projections lie in the span of the
-assembled word products and a boundary matrix commutes with those products, then
+word products of the block-diagonal tensor and a boundary matrix commutes with those products, then
 the boundary matrix commutes with every sector projection, hence has no off-block
 entries.
 
 A second reduction obtains the sector-projection span from a product-word span
-for the blocks, provided the assembly weights are nonzero.  For canonical-form
+for the blocks, provided the weights are nonzero.  For canonical-form
 BNT block families, the results here use only restricted consequences of that
-data: block injectivity, nonzero weights, pair separation, selector words, and
+hypotheses: block injectivity, nonzero weights, pair separation, selector words, and
 homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
 comparison, where multiplicities and sector weights remain explicit data.
 -/
@@ -32,11 +32,11 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
 
-/-- Finite product-word span gives the projection-span input for the assembled tensor.
+/-- Finite product-word span gives the projection-span input for `toTensorFromBlocks μ A`.
 
 Assume that the simultaneous length-`m` word evaluations
 `ω ↦ (k ↦ evalWord (A k) (List.ofFn ω))` span the full product algebra of the
-blocks.  If all assembly weights are nonzero, then after pulling the length-`m`
+blocks.  If all weights `μ k` are nonzero, then after pulling the length-`m`
 word products of `toTensorFromBlocks μ A` back to the dependent direct-sum basis,
 their span contains every sector projection.
 
@@ -104,7 +104,7 @@ Let `B` be a tensor whose bond space is the reindexed direct sum
 `Fin (∑ k, dim k)`.  Pull all length-`m` word products and the boundary matrix
 back to the dependent `Σ`-indexed direct sum via `finSigmaFinEquiv.symm`.  If the
 block projections lie in the span of these pulled-back word products, then any
-matrix on the assembled bond space commuting with all length-`m` word products
+matrix on the block-diagonal bond space commuting with all length-`m` word products
 pulls back to a block-diagonal matrix.
 
 For `B = toTensorFromBlocks μ A`, the pulled-back word products are the matrices
@@ -185,7 +185,7 @@ lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
 product-word span.
 
 The pairwise hypotheses ask only for a word polynomial separating one ordered
-pair of distinct blocks at a time.  The finite selector assembly in
+pair of distinct blocks at a time.  The finite selector construction in
 `hasBlockSelectorWords_of_pairBlockSeparatingWords` turns these pairwise
 separators into full block selectors, and the selector-word reduction then gives
 product-word span. -/
@@ -320,13 +320,45 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
   exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A
     hCF.toHasInjectiveBlocks hSep
 
-/-- Canonical-form/BNT data and the three-block direct-sum hypotheses give product span.
+/-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give
+homogeneous pair separation at length `L + (L + L)`.
 
-The BNT data supply non-gauge-equivalence for equal-dimensional distinct
-blocks.  Unequal-dimensional pairs use the strict-size branch of the
-direct-sum argument.  The fixed-length block-injectivity hypotheses are kept
-explicit, matching the direct-sum input rather than inferring them from BNT
-data. -/
+Equal-dimensional distinct blocks use the BNT non-gauge-equivalence hypothesis;
+unequal-dimensional pairs use the strict-size direct-sum branch. -/
+lemma forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) (L + (L + L)) :=
+  forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+    A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
+    hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL
+
+/-- Existential form of
+`forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock`. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
+  ⟨L + (L + L),
+    forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+      μ A hCF hIrr hBlk hBlk3 hL⟩
+
+/-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give product span.
+
+This is the product-algebra form of
+`exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock`. -/
 lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -340,11 +372,35 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
       Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
-        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
-  exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
-    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
-      A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
-      hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL)
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨S, hSep⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+      μ A hCF hIrr hBlk hBlk3 hL
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    μ A hCF hSep
+
+/-- One-site injectivity of the BNT blocks gives one homogeneous pair-separation
+length for all ordered pairs of distinct blocks.
+
+The proof specializes the three-block direct-sum theorem to `L = 2`; one-site
+injectivity gives the length-`2` and length-`6` fixed-length inputs. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S := by
+  refine exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · norm_num
 
 /-- Positive-length product-word span from canonical-form/BNT separation and
 one-site injectivity of the BNT blocks.
@@ -365,17 +421,29 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlo
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  refine exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
-    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
-  · intro k
-    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
-      (by norm_num) (isNBlkInjective_one_of_isInjective
-        (hCF.toHasInjectiveBlocks.block_injective k))
-  · intro k
-    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
-      (by norm_num) (isNBlkInjective_one_of_isInjective
-        (hCF.toHasInjectiveBlocks.block_injective k))
-  · norm_num
+  obtain ⟨S, hSep⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    μ A hCF hSep
+
+/-- Normal-CF-BNT hypotheses plus explicit one-site injectivity give one
+homogeneous pair-separation length for all ordered pairs of distinct blocks. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S := by
+  let hCF : IsCanonicalFormBNT μ A :=
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall hInj)
+      hNCF.toIsLeftCanonicalBlockFamily
+      hNCF.toHasStrictOrderedNonzeroWeights
+      hNCF.toHasNormalizedSelfOverlap
+      hNCF.blocks_not_equiv
+  exact exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    μ A hCF hNCF.toHasIrreducibleBlocks
 
 /-- Positive-length product-word span from normal-CF-BNT data plus explicit
 one-site injectivity.
@@ -724,7 +792,7 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
     hCF.toHasInjectiveBlocks hSel
 
 /-- Nonzero weights, block injectivity, and selector words give the projection-span
-input for the assembled tensor. -/
+input for `toTensorFromBlocks μ A`. -/
 theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -739,7 +807,8 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (d := d) (dim := dim) μ A hμ
     (wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel)
 
-/-- Canonical-form/BNT data and selector words give the assembled projection-span input. -/
+/-- Canonical-form/BNT hypotheses and selector words give the projection-span input for
+`toTensorFromBlocks μ A`. -/
 lemma blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
@@ -756,7 +825,7 @@ lemma blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
 /-- Block injectivity, nonzero weights, and selector words give the commutant criterion.
 
 The finite selectors and block injectivity give the projection-span input; only
-nonzero assembly weights are needed to pass through `toTensorFromBlocks`. -/
+nonzero weights are needed to pass through `toTensorFromBlocks`. -/
 theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -774,7 +843,7 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWor
       (d := d) (dim := dim) μ A hμ hInj hSel)
     hComm
 
-/-- Selector-word version of the assembled-tensor commutant criterion.
+/-- Selector-word version of the block-diagonal commutant criterion.
 
 Under canonical-form/BNT data, finite block selectors replace the product-word
 span hypothesis in the commutant reduction. The construction of those selectors
@@ -814,7 +883,7 @@ theorem offBlock_zero_of_commutes_reindexed_wordSpan
   have hBD := isBlockDiagonal'_of_commutes_reindexed_wordSpan (B := B) hProj hComm
   exact (Matrix.isBlockDiagonal'_iff_offBlock_zero _).mp hBD hij a b
 
-/-- Entrywise off-block-zero form of the assembled-tensor criterion with a finite
+/-- Entrywise off-block-zero form of the block-diagonal criterion with a finite
 product-word span hypothesis. -/
 theorem offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
