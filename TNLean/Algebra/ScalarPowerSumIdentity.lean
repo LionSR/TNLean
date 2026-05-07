@@ -35,12 +35,12 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
 * `Matrix.trace_diagonal_pow`: `trace (diagonal a ^ k) = ∑ i, a i ^ k`.
 
-* `Matrix.sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card`: If
-  `∑ i, a i ^ k = ∑ i, b i ^ k` for `1 ≤ k ≤ card n`, then
-  `(diagonal a).charpoly = (diagonal b).charpoly`.
-
 * `Matrix.sum_pow_eq_implies_charpoly_diagonal_eq`: If
   `∑ i, a i ^ k = ∑ i, b i ^ k` for all `k ≥ 1`, then
+  `(diagonal a).charpoly = (diagonal b).charpoly`.
+
+* `Matrix.sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card`: If
+  `∑ i, a i ^ k = ∑ i, b i ^ k` for `1 ≤ k ≤ card n`, then
   `(diagonal a).charpoly = (diagonal b).charpoly`.
 
 * `Matrix.sum_pow_eq_implies_multiset_eq_of_le_card`: Under the finite-range
@@ -130,24 +130,6 @@ private lemma roots_prod_X_sub_C (f : n → ℂ) :
   rw [roots_prod _ _ hne]
   simp
 
-/-- Equal power sums of two families indexed by the same finite type imply that the families
-give rise to the same multiset of values.
-
-This is a direct corollary: equal characteristic polynomials of diagonal matrices unfold (via
-`charpoly_diagonal`) to `∏ i, (X - C (a i)) = ∏ i, (X - C (b i))`, from which we extract equal
-roots.  Note that this is a **same-cardinality** result; the paper's `Lem:app_simple` additionally
-deduces cardinality equality when the sizes may differ. -/
-theorem sum_pow_eq_implies_multiset_eq
-    (a b : n → ℂ)
-    (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
-    Finset.univ.val.map a = Finset.univ.val.map b := by
-  classical
-  have hcp := sum_pow_eq_implies_charpoly_diagonal_eq a b h
-  rw [charpoly_diagonal, charpoly_diagonal] at hcp
-  have hroots : (∏ i : n, (X - C (a i))).roots = (∏ i : n, (X - C (b i))).roots :=
-    congrArg Polynomial.roots hcp
-  simpa [roots_prod_X_sub_C] using hroots
-
 /-- Equal power sums through `card n` determine the same multiset of values for
 two families indexed by the same finite type.
 
@@ -163,6 +145,18 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
   have hroots : (∏ i : n, (X - C (a i))).roots = (∏ i : n, (X - C (b i))).roots :=
     congrArg Polynomial.roots hcp
   simpa [roots_prod_X_sub_C] using hroots
+
+/-- Equal power sums of two families indexed by the same finite type imply that the families
+give rise to the same multiset of values.
+
+This is the finite-range theorem with the all-positive-power hypothesis restricted to
+`1 ≤ k ≤ card n`.  Note that this is a **same-cardinality** result; the paper's
+`Lem:app_simple` additionally deduces cardinality equality when the sizes may differ. -/
+theorem sum_pow_eq_implies_multiset_eq
+    (a b : n → ℂ)
+    (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
+    Finset.univ.val.map a = Finset.univ.val.map b :=
+  sum_pow_eq_implies_multiset_eq_of_le_card a b (fun k hk _ => h k hk)
 
 private def padFin (m N : ℕ) (a : Fin m → ℂ) : Fin N → ℂ :=
   fun i => if h : (i : ℕ) < m then a ⟨i, h⟩ else 0

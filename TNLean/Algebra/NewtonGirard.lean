@@ -30,6 +30,9 @@ characteristic polynomials.
 * `Matrix.charpolyRev_eq_of_trace_pow_eq_of_le_card`: If `tr(A^k) = tr(B^k)`
   for `1 ≤ k ≤ card n`, then `A.charpolyRev = B.charpolyRev`.
 
+* `Matrix.charpoly_eq_of_trace_pow_eq_of_le_card`: If `tr(A^k) = tr(B^k)`
+  for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`.
+
 * `Matrix.charpoly_eq_of_forall_trace_pow_eq`: If `tr(A^k) = tr(B^k)` for all
   `k ≥ 1`, then `A.charpoly = B.charpoly`.
 
@@ -372,20 +375,6 @@ private lemma charpoly_eq_of_charpolyRev_eq
   have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
   rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
 
-/-- **Main result**: If `tr(A^k) = tr(B^k)` for all `k ≥ 1`, then
-`A.charpoly = B.charpoly`.
-
-Follows from `charpolyRev_eq_of_forall_trace_pow_eq` using the fact that
-`charpoly` and `charpolyRev` determine each other via polynomial reversal.
--/
-theorem charpoly_eq_of_forall_trace_pow_eq
-    (A B : Matrix n n R)
-    (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = trace (B ^ k)) :
-    A.charpoly = B.charpoly := by
-  have hrev : A.charpolyRev = B.charpolyRev :=
-    charpolyRev_eq_of_forall_trace_pow_eq A B h
-  exact charpoly_eq_of_charpolyRev_eq A B hrev
-
 /-- If `tr(A^k) = tr(B^k)` for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`. -/
 theorem charpoly_eq_of_trace_pow_eq_of_le_card
     (A B : Matrix n n R)
@@ -394,6 +383,17 @@ theorem charpoly_eq_of_trace_pow_eq_of_le_card
   have hrev : A.charpolyRev = B.charpolyRev :=
     charpolyRev_eq_of_trace_pow_eq_of_le_card A B h
   exact charpoly_eq_of_charpolyRev_eq A B hrev
+
+/-- **Main result**: If `tr(A^k) = tr(B^k)` for all `k ≥ 1`, then
+`A.charpoly = B.charpoly`.
+
+This is the finite-range theorem with the all-positive-power hypothesis restricted to
+`1 ≤ k ≤ card n`. -/
+theorem charpoly_eq_of_forall_trace_pow_eq
+    (A B : Matrix n n R)
+    (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = trace (B ^ k)) :
+    A.charpoly = B.charpoly :=
+  charpoly_eq_of_trace_pow_eq_of_le_card A B (fun k hk _ => h k hk)
 
 end CharZeroDomain
 
