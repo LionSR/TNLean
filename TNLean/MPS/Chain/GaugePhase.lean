@@ -3,9 +3,10 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Gauge-phase variant of the injective-chain Fundamental Theorem
 
-Let $\widetilde A$ and $\widetilde B$ denote the tensors obtained by contracting
-the chains $A$ and $B$ around the period.  If they are gauge-phase equivalent,
-i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
+Let $\widetilde A$ and $\widetilde B$ denote the combined tensors
+$\widetilde A^{(k,i)}=A_k^i$ and $\widetilde B^{(k,i)}=B_k^i$, obtained by
+using the pair of indices $(k,i)$ as one physical index. If they are
+gauge-phase equivalent, i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
 $$
   \widetilde B^j = \zeta\, X\,\widetilde A^j\,X^{-1},
 $$
