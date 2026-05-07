@@ -21,8 +21,7 @@ and proves its key properties.
 
 ## Main results
 
-* `aklt_not_isInjective` : the AKLT tensor is not 1-block injective (the 3
-  matrices span only the traceless subspace of M₂(ℂ))
+* `aklt_not_isInjective` : the AKLT tensor is not 1-block injective
 * `aklt_isNormal` : the AKLT tensor is normal (2-block injective)
 * `aklt_transferMap_one` : the identity is a fixed point of the transfer map
 * `aklt_isOnSiteSymmetric_Z2` : the AKLT tensor is on-site symmetric under Z₂
@@ -101,8 +100,7 @@ theorem aklt_not_isInjective : ¬ IsInjective akltTensor := by
 
 /-! ### Transfer map -/
 
-/-- The conjTranspose of each AKLT matrix. Pre-computing avoids a `simp` loop
-between `conjTranspose_apply`, `star`, and `Complex.conj_ofReal`. -/
+/-- The conjugate transpose of each AKLT matrix. -/
 @[simp]
 lemma akltTensor_conjTranspose (k : Fin 3) :
     (akltTensor k)ᴴ = match k with
@@ -235,9 +233,8 @@ theorem aklt_isNormal : IsNormal akltTensor := ⟨2, aklt_isNBlkInjective_two⟩
 
 /-! ### Z₂ on-site symmetry -/
 
-/-- The Z₂ physical action on the spin-1 basis `{|+1⟩, |0⟩, |−1⟩}`:
-the generator `Rx(π)` acts as `diag(−1, 1, 1)` composed with the `|0⟩ ↔ |−1⟩` swap,
-giving the matrix `!![−1, 0, 0; 0, 0, 1; 0, 1, 0]`. -/
+/-- The Z₂ physical action on the spin-1 basis ${|+1\rangle, |0\rangle, |-1\rangle}$:
+the generator acts as the matrix $\begin{pmatrix} -1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}$. -/
 def akltZ2Action :
     Multiplicative (ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ where
   toFun g := if Multiplicative.toAdd g = 0 then 1

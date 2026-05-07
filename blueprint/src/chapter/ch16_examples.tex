@@ -1,13 +1,10 @@
 \chapter{Concrete Examples}\label{ch:examples}
 
-This chapter collects concrete MPS tensors that illustrate the general
-theory developed in earlier chapters.  Each example is specified by its
+This chapter collects concrete MPS tensors from
+\cite[Section~III]{Cirac2021Matrix}.  Each example is specified by its
 physical dimension~$d$, bond dimension~$D$, and explicit matrix
 family~$\{A^i\}$.  Key structural properties (injectivity, RFP status,
-symmetry) are stated as propositions linking back to the general
-definitions.
-
-References follow \cite[Section~III]{Cirac2021Matrix}.
+symmetry) are stated for each tensor.
 
 %% ===================================================================
 \section{The GHZ state}\label{sec:ghz}
@@ -46,7 +43,7 @@ non-injective, renormalization-fixed-point MPS.
     The transfer map acts by
     $\E_A(X)_{ij} = \delta_{ij} X_{ij}$
     (extraction of the diagonal).
-    This operation is manifestly idempotent.
+    This operation is idempotent.
 \end{proof}
 
 \begin{theorem}[GHZ tensor is an RFP]\label{thm:ghz_is_rfp}
@@ -108,7 +105,7 @@ symmetry-protected topological (SPT) order.
 
 \begin{definition}[AKLT tensor]\label{def:aklt_tensor}
     \lean{MPSTensor.akltTensor}
-    \notready
+    \leanok
     \uses{def:mps_tensor}
     Set $d = 3$ (spin-1) and $D = 2$.  The AKLT tensor is the family
     $\{A^0, A^1, A^2\} \subset \MN{2}$ defined via the Pauli matrices by
@@ -159,8 +156,8 @@ symmetry-protected topological (SPT) order.
     representation.  The projective phase is the non-trivial
     element of $H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \Z_2$,
     witnessing a non-trivial SPT phase.
-    The $\mathbb{Z}_2$ subgroup symmetry is proved below; the full
-    $\mathrm{SO}(3)$ projective representation is deferred.
+    % The full $\mathrm{SO}(3)$ projective representation is not yet formalized;
+    % only the $\mathbb{Z}_2$ subgroup is proved below.
 \end{theorem}
 
 %% ===================================================================
