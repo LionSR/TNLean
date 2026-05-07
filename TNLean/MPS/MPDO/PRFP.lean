@@ -46,8 +46,8 @@ def IsLPDOWitness {dK D' : ℕ} (M : MPOTensor d D)
   ∀ i j : Fin d, M i j = (∑ k : Fin dK,
     (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e
 
-/-- The MPS tensor obtained by combining the physical and ancilla indices of a
-purifying family `A`. -/
+/-- The MPS tensor `(purifyingMPSTensor A)_{(i,k)} = A^{(i,k)}` obtained by
+combining the physical index `i` and Kraus index `k` of a purifying family `A`. -/
 def purifyingMPSTensor {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) : MPSTensor (d * dK) D' :=
   fun ik => A ik.divNat ik.modNat
@@ -65,8 +65,9 @@ theorem isLPDO_iff_exists_witness (M : MPOTensor d D) :
         IsLPDOWitness M A e :=
   Iff.rfl
 
-/-- An LPDO has a **purification RFP** when it admits a local purification
-whose purifying MPS tensor is a pure-state RFP.
+/-- An MPO tensor has a **purification RFP** when it is an LPDO with a
+purifying family `A` whose purifying MPS tensor is a pure-state renormalization
+fixed point: `IsLPDO M` and `MPSTensor.IsRFP (purifyingMPSTensor A)`.
 
 See arXiv:1606.00608, Definition 4.3. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=

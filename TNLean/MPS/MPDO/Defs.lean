@@ -49,12 +49,13 @@ Verstraete):
 open scoped Matrix ComplexOrder BigOperators Kronecker
 open Matrix Finset
 
-/-- A (periodic, translation-invariant) **Matrix Product Operator** tensor:
-a family of `D × D` matrices indexed by a ket index `i` and a bra index `j`,
-both in `Fin d`.
+/-- A **Matrix Product Operator** tensor:
+a family of `D × D` matrices `M^{ij}` indexed by a ket index `i` and a bra
+index `j`, both in `Fin d`.
 
-Equivalently, this is an MPS tensor with doubled physical index `Fin d × Fin d`,
-but we keep both indices explicit for clarity. -/
+This is equivalent to an MPS tensor with doubled physical index `Fin d × Fin d`;
+we keep both indices explicit following the notation of
+arXiv:1606.00608, Section 4. -/
 abbrev MPOTensor (d D : ℕ) := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ
 
 namespace MPOTensor
@@ -63,9 +64,9 @@ variable {d D : ℕ}
 
 /-! ### Conversion to MPS tensor with doubled physical index -/
 
-/-- View an MPO tensor as an MPS tensor with doubled physical index
-`Fin (d * d)`, where `Fin.divNat` gives the ket index and `Fin.modNat`
-gives the bra index. -/
+/-- The doubled-index MPS view: `(toMPSTensor M)_{(i,j)} = M^{ij}`,
+identifying `Fin d × Fin d` with `Fin (d * d)` via the standard product encoding
+(`Fin.divNat` = ket, `Fin.modNat` = bra). -/
 def toMPSTensor (M : MPOTensor d D) : MPSTensor (d * d) D :=
   fun ij => M (ij.divNat) (ij.modNat)
 
@@ -168,20 +169,14 @@ def IsMPDO (M : MPOTensor d D) : Prop :=
 /-! ### LPDO: local purification -/
 
 /-- An MPO tensor `M` is an **LPDO** (Locally Purifiable Density Operator) if
-there exists a purifying MPS tensor `A` with ancilla/Kraus dimension `dK`
-and inner bond dimension `D'`, together with an equivalence
-`Fin D ≃ Fin D' × Fin D'`, such that
+there exist a Kraus dimension `dK`, an inner bond dimension `D'`, a purifying
+family `A^{(i,k)} ∈ M_{D'}(ℂ)` for `i ∈ Fin d`, `k ∈ Fin dK`, and a bond-space
+identification `e : Fin D ≃ Fin D' × Fin D'` such that
 
-  `M^{ij} = ∑_k A^{(i,k)} ⊗ₖ conj(A^{(j,k)})`
+  `M^{ij} = (∑_{k} A^{(i,k)} ⊗ₖ (A^{(j,k)})^*).submatrix ↑e ↑e`
 
-where `⊗ₖ` is the Kronecker product and `conj` denotes entrywise complex
-conjugation, and where the resulting matrix on `Fin D' × Fin D'` is
-reindexed back to `Fin D` via the chosen equivalence `e` (implemented by
-`.submatrix ↑e ↑e`). This is the local purification condition following
-arXiv:1606.00608 Section 4.3 (Cirac–Pérez-García–Schuch–Verstraete), where the
-auxiliary purification space factors as a tensor product.
-
-Not every MPDO is an LPDO (De las Cuevas et al. 2016). -/
+for all `i, j`, where `(·)^*` is entrywise complex conjugation and `⊗ₖ` is the
+Kronecker product. See arXiv:1606.00608, Section 4.3. -/
 def IsLPDO (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
@@ -280,8 +275,8 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
 
 /-! ### MPDO renormalization fixed points -/
 
-/-- An MPO tensor is an MPDO renormalization fixed point when its transfer map
-is idempotent. -/
+/-- An MPO tensor is an **MPDO renormalization fixed point** when its transfer
+map is idempotent: `E_M ∘ E_M = E_M`. See arXiv:1606.00608, Definition 4.1. -/
 def IsRFP (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
