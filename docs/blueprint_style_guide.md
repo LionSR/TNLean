@@ -25,9 +25,9 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
 10. **Paper source first.** When a theorem, lemma, or proof sketch formalizes a
     cited result, compare against the paper source before introducing local names.
     Use the source notation and display the defining equations whenever possible.
-    If Lean proves an auxiliary reformulation, state the source result first and
-    mark the auxiliary role with `Formalization note.` rather than blending it
-    into the mathematical prose.
+    If Lean proves an auxiliary reformulation, state the source result first.
+    Put maintainer-only proof-status notes in LaTeX comments, not displayed
+    mathematical prose.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -39,12 +39,16 @@ This is the most important rule. Every proof in the blueprint must faithfully de
 - **`\uses` in proofs must be accurate.** Only list what the proof actually uses, not what the statement mentions. If the proof uses `lem:eval_word_gauge` but the statement mentions `def:gauge_equiv`, the proof's `\uses` should list the lemma, not the definition (unless the proof also directly unfolds the definition).
 - **Do not present local auxiliary routes as source mathematics.** If a proof uses
   a formal auxiliary lemma not stated in the cited source, name the mathematical
-  assertion it proves and explain its role in a `Formalization note.`. If the
-  auxiliary route is no longer used by the checked proof, delete the entry rather
-  than keeping an unmotivated theorem-like statement in the blueprint.
+  assertion it proves. Put maintainer-only proof-status notes in LaTeX comments.
+  If the auxiliary route is no longer used by the checked proof, delete the entry
+  rather than keeping an unmotivated theorem-like statement in the blueprint.
 
 ## Notation Consistency
 Notation must be **internally consistent** across the entire blueprint and **close to what the Lean code expresses**:
+
+- Use `$...$` for inline mathematics in new blueprint prose. Do not mix `$...$`
+  and `\(...\)` inside a newly edited paragraph; when touching an existing
+  paragraph, prefer converting the local inline math to `$...$`.
 
 - **Indices**: 0 to d−1 (matching `Fin d` in Lean), not 1 to d
 - **Word evaluation**: $A^w$ for a word $w = (i_1, \ldots, i_L)$. The result is $A^{i_1} \cdots A^{i_L} \in \MN{D}$.
