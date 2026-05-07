@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 
 import TNLean.Wielandt.RectangularSpan.Growth
+import TNLean.MPS.Core.RepeatedWord
 
 /-!
 # Rectangular span universality auxiliary lemmas: rank-one and eigenvector parts
@@ -138,16 +139,6 @@ open Matrix
 
 variable {d D : ℕ}
 
-/-- `evalWord A` on a replicated single letter gives a matrix power.
-
-This is a local copy of `evalWord_replicate` from `BlockSeparation.lean`,
-reproved to avoid adding an import. -/
-private theorem evalWord_replicate_eq_pow (A : MPSTensor d D) (i : Fin d) (L : ℕ) :
-    evalWord A (List.replicate L i) = (A i) ^ L := by
-  induction L with
-  | zero => simp
-  | succ n ih => rw [List.replicate_succ, evalWord, ih, pow_succ']
-
 /-- **The D-th power of a Kraus operator lies in wordSpan A D.**
 
 The matrix `(A i₀)^D` equals `evalWord A [i₀, …, i₀]` (D copies), which is a
@@ -158,13 +149,13 @@ This is the "power membership" ingredient needed by
 theorem pow_mem_wordSpan (A : MPSTensor d D) (i₀ : Fin d) :
     (A i₀) ^ D ∈ wordSpan A D := by
   have h := evalWord_mem_wordSpan A (List.replicate D i₀)
-  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
+  rwa [evalWord_replicate, List.length_replicate] at h
 
 /-- **More general power membership**: `(A i₀)^k ∈ wordSpan A k` for any `k`. -/
 theorem pow_mem_wordSpan' (A : MPSTensor d D) (i₀ : Fin d) (k : ℕ) :
     (A i₀) ^ k ∈ wordSpan A k := by
   have h := evalWord_mem_wordSpan A (List.replicate k i₀)
-  rwa [evalWord_replicate_eq_pow, List.length_replicate] at h
+  rwa [evalWord_replicate, List.length_replicate] at h
 
 /-- Iterating the eigenvalue equation: if `M *ᵥ φ = μ • φ`, then `M^k *ᵥ φ = μ^k • φ`.
 

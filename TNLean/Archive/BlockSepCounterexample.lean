@@ -1,4 +1,4 @@
-import TNLean.PiAlgebra.BlockSeparation
+import TNLean.MPS.Core.RepeatedWord
 
 /-!
 # Scratch counterexample for naive block separation
@@ -6,8 +6,7 @@ import TNLean.PiAlgebra.BlockSeparation
 This file records a concrete counterexample to the naive implication from the
 weighted MPV cancellation identity to per-block `SameMPV`. It is imported by
 neither `TNLean` nor `TNLean.Experimental`; it is retained only as documentary
-scratch material while `TNLean.PiAlgebra.BlockSeparation` explains the
-corrected status of the separation step.
+scratch material explaining why the naive separation statement is false.
 -/
 
 open scoped Matrix BigOperators
@@ -20,9 +19,6 @@ def mat1 (z : ℂ) : Matrix (Fin 1) (Fin 1) ℂ := fun _ _ => z
 
 @[simp] lemma mat1_apply (z : ℂ) (i j : Fin 1) : mat1 z i j = z := rfl
 
--- A concrete counterexample showing the statement of `block_powsum_separation` (as currently
--- stated in `PiAlgebra/BlockSeparation.lean`) cannot be true in this generality.
---
 -- We take `r = 2`, `d = 1`, and 1-dimensional blocks. Then `mpv` depends only on the length `N`.
 -- We can arrange cancellation in the weighted sum without having per-block equality.
 section
@@ -152,8 +148,8 @@ lemma hδEx : ∀ N (σ : Fin N → Fin 1),
               simp [mul_sub, h23]
       _ = 0 := by
         ring
-  simpa [AEx, BEx, μEx, dimEx, MPSTensor.mpv_const_eq_trace_pow, smul_eq_mul,
-    h21, h23] using hgoal
+  simpa [AEx, BEx, μEx, dimEx, mpv_const_eq_trace_pow, evalWord_replicate,
+    mat1_pow, trace_mat1_pow, smul_eq_mul, h21, h23] using hgoal
 
 /-- The per-block MPVs are *not* equal: block 0 differs at `N = 1`. -/
 lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
@@ -165,7 +161,7 @@ lemma not_perBlock_sameMPV : ¬ (∀ k : Fin 2, SameMPV (AEx k) (BEx k)) := by
     -- `N = 1` forces `trace(mat1 1) = trace(mat1 3)`, i.e. `1 = 3`.
     -- The left-hand side simplifies to the trace of the identity, i.e. `D = 1`.
     have h13' := h0
-    simp [AEx, BEx, dimEx, MPSTensor.mpv_const_eq_trace_pow] at h13'
+    simp [AEx, BEx, dimEx] at h13'
   -- Contradiction.
   have : False := by
     norm_num at h13
