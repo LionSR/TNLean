@@ -36,7 +36,10 @@ the eigenvalues on the unit circle.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2–6.3, Theorem 6.6][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.6 (peripheral spectrum of irreducible Schwarz maps)][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.3,
+  Theorem 6.7 (primitive maps)][Wolf2012QChannels]
 * [arXiv:2011.12127, Section IV — peripheral spectrum structure]
 -/
 

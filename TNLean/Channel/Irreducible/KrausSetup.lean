@@ -12,6 +12,13 @@ This file factors out the common boilerplate used when an irreducible
 completely positive map is converted into an irreducible Kraus family and then
 paired with the adjoint Perron--Frobenius eigenvector of that family.
 
+The adjoint eigenvector extraction (`exists_posDef_adjoint_eigenvector`)
+corresponds to applying **Wolf Theorem 6.3** items 2–4 to the dual map
+`T*`, obtaining a positive-definite left eigenvector for the Perron eigenvalue.
+This is used in the proofs of Theorem 6.3(3) (eigenvalue uniqueness via the
+dual-map trace argument, Eq. 6.33) and Theorem 6.3(4) (spectral radius identity
+via TP-gauge reduction).
+
 ## Main declarations
 
 - `IrreducibleCPKrausSetup`: shared Kraus witness for an irreducible CP map
@@ -21,6 +28,11 @@ paired with the adjoint Perron--Frobenius eigenvector of that family.
   setup has a nonzero Kraus operator
 - `IrreducibleCPKrausSetup.exists_posDef_adjoint_eigenvector`: shared adjoint
   Perron--Frobenius data extracted from an irreducible CP map
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  Theorem 6.3 (spectral radius of irreducible maps)][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators

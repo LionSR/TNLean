@@ -172,6 +172,11 @@ private lemma not_posDef_of_conj_projection_ne_one
 if `E` is an irreducible CP map and `C` is an invertible matrix, then
 `X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹` is also irreducible.
 
+In Wolf's notation (Eq. 6.34):
+`T'(·) := c C⁻¹ T(C · C†) C⁻†` is irreducible whenever `T` is irreducible,
+`c > 0`, and `C` is invertible. Our version covers the invertible-matrix case
+(the scalar factor `c` is handled by `isIrreducibleMap_full_similarity` below).
+
 The proof shows that any invariant projection `Q` for the similarity transform
 gives rise to a projection `P = supportProj(CQCᴴ)` that is invariant for `E`;
 irreducibility of `E` then forces `P = 0` or `P = 1`, which in turn forces

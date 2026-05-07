@@ -9,7 +9,21 @@ import TNLean.MPS.Core.Transfer
 # Shared trace-adjoint auxiliary lemma for irreducible-channel developments
 
 This file factors out a common trace-pairing identity used in multiple
-irreducibility proofs.
+irreducibility proofs:
+
+`tr(σ · E(X)) = tr(E*(σ) · X)`
+
+where `E*(Y) = ∑ K_i* Y K_i` is the adjoint (Heisenberg-picture) map.
+
+This identity corresponds to **Wolf's Eq. (6.33)** in the proof of
+**Theorem 6.3(3)** (uniqueness of the positive eigenvalue): taking traces
+against a positive-definite left eigenvector `X' > 0` of `T*` gives
+`r tr(X' Y) = tr(X' T(Y)) = λ tr(X' Y)`, forcing `r = λ`.
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  proof of Theorem 6.3(3), Eq. (6.33)][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder BigOperators
