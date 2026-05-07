@@ -32,7 +32,7 @@ then directly implies `E(X†Y) = E(X)†E(Y)` for all `Y`.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5, Theorem 5.7][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -220,7 +220,7 @@ end KSGapDecomposition
 
 section MultiplicativeDomain
 
-/-- **Left multiplicative domain** (Wolf, Proposition 6.7).
+/-- **Left multiplicative domain** (Wolf, Chapter 5, Theorem 5.7).
 
 If `E` is unital and the KS gap vanishes at `X` (i.e., `E(X†X) = E(X)†E(X)`),
 then `E(X†Y) = E(X)†E(Y)` for all `Y`.

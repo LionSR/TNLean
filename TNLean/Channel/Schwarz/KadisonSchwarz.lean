@@ -7,8 +7,8 @@ import TNLean.Channel.Basic
 /-!
 # Kadison–Schwarz inequality for completely positive maps
 
-The **Kadison–Schwarz inequality** (Wolf, Proposition 6.4) states that for any
-**unital** completely positive map `E`, we have
+The **Kadison–Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)) states that
+for any **unital** completely positive map `E`, we have
 `E(X† X) ≥ E(X)† E(X)` in the Loewner order.
 
 This file also proves the Hilbert–Schmidt contraction property.
@@ -21,7 +21,7 @@ This file also proves the Hilbert–Schmidt contraction property.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition 6.4][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5, Equation (5.2)][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -113,7 +113,7 @@ private theorem isTPKraus_conjTranspose (h : IsUnitalKraus K) :
   change ∑ i, ((K i)ᴴ)ᴴ * (K i)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
-/-- **Kadison-Schwarz inequality** (Wolf, Proposition 6.4).
+/-- **Kadison-Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)).
 
 For a unital CP map `E(X) = ∑ᵢ Kᵢ X Kᵢ†` with `∑ᵢ Kᵢ Kᵢ† = I`,
 we have `E(X† X) ≥ E(X)† E(X)` in the Loewner order, i.e.,
