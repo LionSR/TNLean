@@ -60,65 +60,96 @@ their spectral decomposition, and quantitative bounds on decay rates.
 
 \section{Spectral expansion and exponential decay}
 
-\begin{theorem}[Sum of exponentials]\label{thm:correlator_sum_exponentials}
+\begin{theorem}[Sum of exponentials (spectral expansion interface)]%
+    \label{thm:correlator_sum_exponentials}
     \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \notready
-    \uses{def:connected_correlator, thm:spectral_radius_le_one, thm:qpf}
-    For a normal MPS, the connected correlator admits a spectral expansion of
-    the form
+    \leanok
+    \uses{def:connected_correlator}
+    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$
+    ($j=1,\dots,D^2-1$) satisfy
     \[
-        C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+        C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n
+        \qquad\text{for all }n\ge 0,
     \]
-    where $\lambda_j$ are subleading transfer-matrix eigenvalues.
+    then the connected correlator equals the stated sum of exponentials.
+    The source~\cite[Sec.~4.5]{Cirac2021Matrix} asserts that such an expansion
+    always exists for a normal MPS via the transfer-map spectral decomposition;
+    constructing $c_j,\lambda_j$ from $\E_A$ is completed in
+    Issue~\#1447.
 \end{theorem}
 
 \begin{proof}
     \notready
-    The leading eigenvalue contribution ($\lambda_1=1$) equals
-    $\langle X_0\rangle\langle Y_0\rangle$ and cancels in the connected part.
-    Apply spectral decomposition to $\E_A^n$.
+    The statement as formalized is immediate from the hypothesis.
+    The source-paper proof extracts the spectral decomposition of $\E_A^n$
+    restricted to the complement of the fixed-point eigenspace and cancels
+    the leading ($\lambda_1=1$) contribution, which equals
+    $\langle X_0\rangle\langle Y_0\rangle$.
+    Formalizing that step requires constructing the eigendecomposition
+    coefficients and is deferred to
+    Issue~\#1447.
 \end{proof}
 
-\begin{theorem}[Exponential decay bound]\label{thm:correlator_exponential_bound}
+\begin{theorem}[Exponential decay bound (interface)]%
+    \label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
-    \notready
+    \leanok
     \uses{thm:correlator_sum_exponentials}
-    If $|\lambda_j| \le |\lambda_2| < 1$ for all subleading eigenvalues, then
-    there exists $C_{XY}\ge 0$ such that
+    If a constant $C_{XY}\ge 0$ and a subleading eigenvalue $\lambda_2\in\C$
+    with $|\lambda_2|<1$ satisfy
     \[
-        |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n.
+        |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n
+        \qquad\text{for all }n\ge 0,
     \]
+    then the connected correlator satisfies that exponential decay bound.
+    The source~\cite[Sec.~4.5]{Cirac2021Matrix} obtains this by combining
+    the sum-of-exponentials expansion with the triangle inequality; extracting
+    $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum is part of
+    Issue~\#1447.
 \end{theorem}
 
 \begin{proof}
     \notready
-    Combine the sum-of-exponentials expansion with the triangle inequality.
+    The statement as formalized is immediate from the hypothesis.
+    The source-paper proof uses the triangle inequality on the
+    sum-of-exponentials expansion together with the spectral gap
+    $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.
+    Formalizing this from the eigendecomposition is deferred to
+    Issue~\#1447.
 \end{proof}
 
 \begin{remark}[Spectral hypothesis and the spectral gap]%
     \label{rem:spectral_hypothesis}
-    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one}
+    \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
+      thm:spectral_gap_irr_tp, thm:spectral_gap_wielandt}
     The hypothesis ``$|\lambda_2| < 1$'' in
-    Theorem~\ref{thm:correlator_exponential_bound} is precisely the
+    Theorem~\ref{thm:correlator_exponential_bound} is the source-paper
     \emph{spectral gap} condition for the transfer map $\E_A$.
-    For primitive channels, the complementary spectral gap
-    $\rho(\E_A - P) < 1$ is established in
-    Theorem~\ref{thm:primitive_compl_lt_one} (Chapter~\ref{ch:channels});
-    for irreducible trace-preserving tensors, the analogous result is
-    Theorem~\ref{thm:spectral_gap_irr_tp}.
-    Thus the exponential decay of connected correlations follows
-    directly from the block separation theory once the spectral
-    decomposition is in hand.
+    The complementary spectral gap $\rho(\E_A - P) < 1$ is proved in Lean for
+    primitive channels
+    (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}),
+    for irreducible trace-preserving tensors
+    (Theorem~\ref{thm:spectral_gap_irr_tp}),
+    and quantitatively for injective tensors
+    (Theorem~\ref{thm:spectral_gap_wielandt}).
+    Thus the analytical input needed to make
+    Theorems~\ref{thm:correlator_sum_exponentials}
+    and~\ref{thm:correlator_exponential_bound} unconditional is already
+    present; what remains is extracting the spectral expansion coefficients
+    $c_j,\lambda_j$ from the eigendecomposition of $\E_A$
+    (Issue~\#1447).
 \end{remark}
 
 \begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
-    \uses{thm:correlator_exponential_bound}
-    The correlation length associated with $\lambda_2$ is
+    \uses{def:two_point_expectation, def:connected_correlator}
+    The correlation length associated with a subleading eigenvalue
+    $\lambda_2$ of the transfer map ($|\lambda_2|<1$) is
     \[
         \xi := -\frac{1}{\log|\lambda_2|}.
     \]
+    When $|\lambda_2|<1$ the denominator is negative, so $\xi>0$.
 \end{definition}
 
 \begin{lemma}[Correlation length is positive]\label{lem:correlation_length_pos}

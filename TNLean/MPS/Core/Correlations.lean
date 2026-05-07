@@ -13,13 +13,18 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 # Correlations for normal MPS in the thermodynamic limit
 
 This file defines connected correlations for a (normalized) MPS tensor
-in the thermodynamic limit. We express one-point and two-point
-observables through the transfer map `transferMap`, and state the standard
-sum-of-exponentials / exponential-decay statements in a form that later
-results use.
+in the thermodynamic limit. One-point and two-point observables are expressed
+through the transfer map `transferMap`.
 
-The theorems in this file state the exact assumptions needed later while keeping
-the spectral input independent of a particular diagonalization theorem.
+The two main spectral statements (`connectedCorrelator_eq_sum` and
+`connectedCorrelator_bound`) are currently conditional interfaces:
+they take the spectral decomposition / bound as an explicit hypothesis.
+Constructing the coefficients and eigenvalues from the transfer-map
+eigendecomposition (so that these become unconditional theorems) is
+tracked in GitHub issue #1447.
+
+The definitions here are used by the zero-correlation-length results
+in `MPS/RFP/ZeroCorrelationLength.lean`.
 -/
 
 open scoped Matrix BigOperators
@@ -65,9 +70,15 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
       Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
 
 /--
-Abstract spectral decomposition interface for connected correlators:
-if a spectral expansion is provided, it gives the expected sum-of-exponentials
-formula.
+Spectral expansion interface for connected correlators (conditional).
+
+If coefficients `cⱼ` and eigenvalues `λⱼ` satisfying the spectral expansion
+identity are supplied, then the connected correlator equals the sum of
+exponentials `∑ⱼ cⱼ λⱼⁿ`.
+
+The source (arXiv:2011.12127, Sec. 4.5) asserts that such `cⱼ, λⱼ`
+always exist for a normal MPS via the transfer-map eigendecomposition;
+constructing them is deferred to issue #1447.
 -/
 theorem connectedCorrelator_eq_sum
     (A : MPSTensor d D)
@@ -82,8 +93,16 @@ theorem connectedCorrelator_eq_sum
   hdecomp
 
 /--
-Exponential bound for connected correlations once the subleading spectral radius
-bound is supplied.
+Exponential bound for connected correlations (conditional).
+
+If a constant `C_X_Y ≥ 0` and a subleading eigenvalue `λ₂` with the
+exponential-decay bound are supplied, then the connected correlator
+satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
+
+The source (arXiv:2011.12127, Sec. 4.5) derives this from the
+sum-of-exponentials expansion and the spectral gap condition;
+constructing `C_X_Y` and `λ₂` from the transfer-map spectrum is
+deferred to issue #1447.
 -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)
