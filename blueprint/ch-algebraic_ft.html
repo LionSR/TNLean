@@ -593,13 +593,13 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Conditional Fundamental Theorem</span></a>
+  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Conditional Block Matching</span></a>
  </li>
 <li class="">
   <a href="ch-assembly.html#sec:assembly_proportional"><span class="toc_ref">14.2</span> <span class="toc_entry">Restricted Proportional Comparisons</span></a>
  </li>
 <li class="">
-  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Fundamental Theorem</span></a>
+  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Comparisons</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
@@ -791,7 +791,7 @@
   <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from ordered canonical-form data</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
+  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case block matching</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">17.12</span> <span class="toc_entry">Translation-invariant reduction</span></a>
@@ -1836,7 +1836,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fc6271be6f0>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f8f618ba6f0>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, Equation&#160;?? is the equality obtained by inserting \(X\) on the bond between the two sites, </p>
@@ -4870,15 +4870,15 @@
 
   </div>
 </div>
-<h1 id="sec:hetero_equal_case_ft">17.11 Heterogeneous equal-case result</h1>
+<h1 id="sec:hetero_equal_case_ft">17.11 Heterogeneous equal-case block matching</h1>
 
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamentalTheorem_equalMPV_CFBNT_hetero">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:fundamentalTheorem_equalMPV_CFBNT_hetero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">17.51</span>
-    <span class="theorem_thmtitle">Heterogeneous equal-case Fundamental Theorem</span>
+    <span class="lemma_thmlabel">17.51</span>
+    <span class="lemma_thmtitle">Heterogeneous equal-case block matching</span>
     <div class="thm_header_extras">
 
     
@@ -4886,7 +4886,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#thm:fundamentalTheorem_equalMPV_CFBNT_hetero">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_equalMPV_CFBNT_hetero">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4938,7 +4938,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(\{ \mu _j A_j\} _{j=0}^{r_A-1}\) and \(\{ \nu _k B_k\} _{k=0}^{r_B-1}\) be two canonical-form BNT families, possibly with different block counts and different bond dimensions in corresponding blocks. If the assembled block-diagonal tensors generate the same MPV family, then the two families have the same number of blocks, the blocks can be matched by a permutation preserving the bond dimensions, and each matched pair is gauge-phase equivalent. This is the block-matching conclusion, not yet the final global weighted gauge-equivalence statement for the assembled tensors. </p>
 
   </div>

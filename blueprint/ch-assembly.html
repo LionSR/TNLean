@@ -593,13 +593,13 @@
   <span class="expand-toc">▼</span>
   <ul class="sub-toc-1 active">
      <li class="">
-  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Conditional Fundamental Theorem</span></a>
+  <a href="ch-assembly.html#sec:assembly_weak"><span class="toc_ref">14.1</span> <span class="toc_entry">Conditional Block Matching</span></a>
  </li>
 <li class="">
   <a href="ch-assembly.html#sec:assembly_proportional"><span class="toc_ref">14.2</span> <span class="toc_entry">Restricted Proportional Comparisons</span></a>
  </li>
 <li class="">
-  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Fundamental Theorem</span></a>
+  <a href="ch-assembly.html#sec:assembly_equal"><span class="toc_ref">14.3</span> <span class="toc_entry">Equal-MPV Comparisons</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
@@ -791,7 +791,7 @@
   <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">17.10</span> <span class="toc_entry">Block separation from ordered canonical-form data</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case result</span></a>
+  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">17.11</span> <span class="toc_entry">Heterogeneous equal-case block matching</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">17.12</span> <span class="toc_entry">Translation-invariant reduction</span></a>
@@ -953,16 +953,16 @@
 	
 	]
 </span>, which gives a fundamental theorem valid for periodic tensors directly, with an extra \(Z\)-gauge degree of freedom. </p>
-<h1 id="sec:assembly_weak">14.1 Conditional Fundamental Theorem</h1>
+<h1 id="sec:assembly_weak">14.1 Conditional Block Matching</h1>
 
-<p>The following theorem combines the reduction to canonical form (zero-block separation, TP gauge, blocking, primitivity) with the Fundamental Theorem for normal canonical form. It is still conditional on the two post-blocking hypotheses left open in Chapter&#160;<a href="ch-canonical.html">11</a>: irreducibility for the blocked sectors and pairwise distinct nonzero weight norms. The direct periodic route of Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a> is not used in this chapter. </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:weak_ft_conditional">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<p>The following lemma combines the reduction to canonical form (zero-block separation, TP gauge, blocking, primitivity) with the restricted normal-CF-BNT proportional comparison. It is still conditional on the two post-blocking hypotheses left open in Chapter&#160;<a href="ch-canonical.html">11</a>: irreducibility for the blocked sectors and pairwise distinct nonzero weight norms. The direct periodic route of Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a> is not used in this chapter. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:weak_ft_conditional">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.1</span>
-    <span class="theorem_thmtitle">Conditional Fundamental Theorem</span>
+    <span class="lemma_thmlabel">14.1</span>
+    <span class="lemma_thmtitle">Conditional block matching from restricted normal-CF-BNT data</span>
     <div class="thm_header_extras">
 
     
@@ -970,7 +970,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:weak_ft_conditional">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:weak_ft_conditional">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -992,7 +992,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.18</a></li>
           
-          <li><a href="ch-assembly.html#thm:ft_proportional_nt">Theorem 14.4</a></li>
+          <li><a href="ch-assembly.html#lem:ft_proportional_nt">Lemma 14.4</a></li>
           
         </ul>
     
@@ -1022,7 +1022,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \((\mu _j^A, A_j)_{j=1}^{g_A}\) and \((\mu _k^B, B_k)_{k=1}^{g_B}\) be two families in normal canonical form, each satisfying the non-degeneracy condition that no two distinct blocks in the same family are gauge-phase equivalent. Let \(A_\mathrm {tot}\) and \(B_\mathrm {tot}\) be tensors with MPV decompositions </p>
 <div class="displaymath" id="a0000001009">
   \[  V^{(N)}(A_\mathrm {tot})_\sigma = \sum _j a_{N,j}\,  V^{(N)}(A_j)_\sigma , \quad V^{(N)}(B_\mathrm {tot})_\sigma = \sum _k b_{N,k}\,  V^{(N)}(B_k)_\sigma ,  \]
@@ -1039,19 +1039,19 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is the restricted normal-CF-BNT proportional comparison (Theorem&#160;<a href="ch-assembly.html#thm:ft_proportional_nt">14.4</a>). The normal canonical form data provide the BNT separation and overlap convergence hypotheses; the non-degeneracy condition (no two distinct blocks in the same family are gauge-phase equivalent) is one of the hypotheses used to obtain an existential block-count equality, a matching permutation, and per-block gauge-phase equivalences. </p>
+  <p> This is the restricted normal-CF-BNT proportional comparison (Lemma&#160;<a href="ch-assembly.html#lem:ft_proportional_nt">14.4</a>). The normal canonical form data provide the BNT separation and overlap convergence hypotheses; the non-degeneracy condition (no two distinct blocks in the same family are gauge-phase equivalent) is one of the hypotheses used to obtain an existential block-count equality, a matching permutation, and per-block gauge-phase equivalences. </p>
 
   </div>
 </div>
 <h1 id="sec:assembly_proportional">14.2 Restricted Proportional Comparisons</h1>
 
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_proportional">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:ft_proportional">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.2</span>
-    <span class="theorem_thmtitle">Proportional comparison for restricted CF-BNT data</span>
+    <span class="lemma_thmlabel">14.2</span>
+    <span class="lemma_thmtitle">Proportional comparison for restricted CF-BNT data</span>
     <div class="thm_header_extras">
 
     
@@ -1059,7 +1059,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:ft_proportional">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:ft_proportional">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -1113,7 +1113,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(A_{\mathrm{tot}}\) and \(B_{\mathrm{tot}}\) be MPS tensors in canonical form with BNT separation, with associated families \((\mu _j^A, A_j)_{j=1}^{g_A}\) and \((\mu _k^B, B_k)_{k=1}^{g_B}\). Suppose there exist coefficient arrays \(a_{N,j}\), \(b_{N,k}\) and nonzero limits \(a_j^\infty \), \(b_k^\infty \), \(c^\infty \) such that </p>
 <div class="displaymath" id="a0000001011">
   \[  V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum _{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma , \qquad V^{(N)}(B_{\mathrm{tot}})_\sigma = \sum _{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma ,  \]
@@ -1157,7 +1157,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  In applications the coefficient arrays in Theorem&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> come from the block-diagonal decomposition itself. If </p>
+  <p>  In applications the coefficient arrays in Lemma&#160;<a href="ch-assembly.html#lem:ft_proportional">14.2</a> come from the block-diagonal decomposition itself. If </p>
 <div class="displaymath" id="a0000001013">
   \[  A_{\mathrm{tot}} = \bigoplus _{j=1}^{g_A} \mu _j^A A_j, \qquad B_{\mathrm{tot}} = \bigoplus _{k=1}^{g_B} \mu _k^B B_k,  \]
 </div>
@@ -1165,17 +1165,17 @@
 <div class="displaymath" id="a0000001014">
   \[  V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum _{j=1}^{g_A} (\mu _j^A)^N V^{(N)}(A_j)_\sigma , \qquad V^{(N)}(B_{\mathrm{tot}})_\sigma = \sum _{k=1}^{g_B} (\mu _k^B)^N V^{(N)}(B_k)_\sigma .  \]
 </div>
-<p> Thus one takes \(a_{N,j} = (\mu _j^A)^N\) and \(b_{N,k} = (\mu _k^B)^N\), while the sequence \(c_N\) is the global proportionality factor from the hypothesis \(V^{(N)}(A_{\mathrm{tot}}) = c_N V^{(N)}(B_{\mathrm{tot}})\). Theorem&#160;<a href="ch-assembly.html#thm:ft_proportional">14.2</a> keeps these arrays explicit because Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a> is formulated in that abstract form. </p>
+<p> Thus one takes \(a_{N,j} = (\mu _j^A)^N\) and \(b_{N,k} = (\mu _k^B)^N\), while the sequence \(c_N\) is the global proportionality factor from the hypothesis \(V^{(N)}(A_{\mathrm{tot}}) = c_N V^{(N)}(B_{\mathrm{tot}})\). Lemma&#160;<a href="ch-assembly.html#lem:ft_proportional">14.2</a> keeps these arrays explicit because Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_prop">13.17</a> is formulated in that abstract form. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_proportional_nt">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:ft_proportional_nt">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.4</span>
-    <span class="theorem_thmtitle">Proportional comparison for restricted normal-CF-BNT data</span>
+    <span class="lemma_thmlabel">14.4</span>
+    <span class="lemma_thmtitle">Proportional comparison for restricted normal-CF-BNT data</span>
     <div class="thm_header_extras">
 
     
@@ -1183,7 +1183,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:ft_proportional_nt">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:ft_proportional_nt">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -1239,7 +1239,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>  Let \(A_{\mathrm{tot}}\) and \(B_{\mathrm{tot}}\) be MPS tensors in normal canonical form with BNT separation, with associated families \((\mu _j^A, A_j)_{j=1}^{g_A}\) and \((\mu _k^B, B_k)_{k=1}^{g_B}\). Suppose there exist coefficient arrays \(a_{N,j}\), \(b_{N,k}\) and nonzero limits \(a_j^\infty \), \(b_k^\infty \), \(c^\infty \) such that </p>
 <div class="displaymath" id="a0000001016">
   \[  V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum _{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma , \qquad V^{(N)}(B_{\mathrm{tot}})_\sigma = \sum _{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma ,  \]
@@ -1264,7 +1264,7 @@
 
   </div>
 </div>
-<h1 id="sec:assembly_equal">14.3 Equal-MPV Fundamental Theorem</h1>
+<h1 id="sec:assembly_equal">14.3 Equal-MPV Comparisons</h1>
 
 <p>The source corollary for equal MPVs says that if two canonical-form tensors generate the same MPV family for all system sizes, then their matrix dimensions coincide and the full tensors are related by one invertible gauge <span class="cite">
 	[
@@ -1273,14 +1273,14 @@
 	, Corollary&#160;II.2
 	]
 </span>. In the proof, this corollary is obtained after the proportional Fundamental Theorem by matching the BNT blocks, then comparing the sector-weight power sums. </p>
-<p>We record the comparison statements in the two forms needed below. The restricted heterogeneous equal-case theorem, stated as Theorem&#160;<a href="ch-algebraic_ft.html#thm:fundamentalTheorem_equalMPV_CFBNT_hetero">17.51</a>, gives the block-count, bond-dimension, and gauge-phase matching directly from equality of the assembled MPV families. The common-structure theorem below proves the global gauge statement when the two sides already share the same block data. The general CPSV endpoint still passes through sector decompositions, copy-count recovery, and sector-weight multiset comparison before one obtains a global block-diagonal gauge. </p>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_equal_same_structure">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<p>We record the comparison statements in the two forms needed below. The restricted heterogeneous equal-case lemma, stated as Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_equalMPV_CFBNT_hetero">17.51</a>, gives the block-count, bond-dimension, and gauge-phase matching directly from equality of the assembled MPV families. The common-structure lemma below proves the global gauge statement when the two sides already share the same block data. The general CPSV theorem still passes through sector decompositions, copy-count recovery, and sector-weight multiset comparison before one obtains a global block-diagonal gauge. </p>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:ft_equal_same_structure">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.5</span>
-    <span class="theorem_thmtitle">Fundamental Theorem — equal MPV case, common block structure</span>
+    <span class="lemma_thmlabel">14.5</span>
+    <span class="lemma_thmtitle">Common-block equal-MPV comparison</span>
     <div class="thm_header_extras">
 
     
@@ -1288,7 +1288,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:ft_equal_same_structure">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:ft_equal_same_structure">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001018"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -1340,7 +1340,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Fix a common block structure: the same number of blocks&#160;\(g\), the same bond dimensions \((D_k)_{k=1}^g\), and the same weights \((\mu _k)_{k=1}^g\). Let \((\mu _k, A_k)_{k=1}^g\) and \((\mu _k, B_k)_{k=1}^g\) be two families in canonical form with BNT separation on this common data. If the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) generate the same MPV family, then each pair \((A_k, B_k)\) is gauge equivalent, and hence the corresponding block-diagonal tensors are gauge equivalent. </p>
 
   </div>
@@ -5451,13 +5451,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:fundamental_theorem_after_blocking_comparison_hypotheses">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:fundamental_theorem_after_blocking_comparison_hypotheses">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">14.58</span>
-    <span class="theorem_thmtitle">After-blocking comparison from supplied BNT-cover data</span>
+    <span class="lemma_thmlabel">14.58</span>
+    <span class="lemma_thmtitle">After-blocking comparison from supplied BNT-cover data</span>
     <div class="thm_header_extras">
 
     
@@ -5465,7 +5465,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-assembly.html#thm:fundamental_theorem_after_blocking_comparison_hypotheses">#</a>
+    <a class="icon proof" href="ch-assembly.html#lem:fundamental_theorem_after_blocking_comparison_hypotheses">#</a>
     
     <a class="icon proof" href="ch-assembly.html#a0000001067"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -5521,7 +5521,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   Let \(A\) and \(B\) generate the same MPV family. Assume the after-blocking BNT-cover comparison hypotheses of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_hypotheses">14.56</a>. Then the CPSV conclusion of Definition&#160;<a href="ch-assembly.html#def:after_blocking_fundamental_theorem_conclusion">14.57</a> is nonempty. </p>
 <p>The conclusion matches the sector-decomposition part of the Cirac–Pérez-García–Schuch–Verstraete Fundamental Theorem: after blocking, the tensor families are represented by BNT sector decompositions whose basis sectors and weights match up to permutation and nonzero phases, as in <span class="cite">
 	[
@@ -5600,7 +5600,7 @@
 	
 	]
 </span>. </p>
-<p>The comparison theorems in this chapter cover this latter part of the argument. Theorem&#160;<a href="ch-assembly.html#thm:ft_equal_same_structure">14.5</a> proves the common block-structure special case, and Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.10</a> recovers the copy counts and sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.147</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.149</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.150</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.22</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
+<p>The comparison statements in this chapter cover this latter part of the argument. Lemma&#160;<a href="ch-assembly.html#lem:ft_equal_same_structure">14.5</a> proves the common block-structure special case, and Lemma&#160;<a href="ch-assembly.html#lem:route_b_equal_with_copies">14.10</a> recovers the copy counts and sector-weight multisets from the multiplicity data. The basis-of-normal-tensors construction is available for trace-preserving primitive irreducible nonzero blocks with positive bond dimensions and nonzero weights in Theorem&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">11.147</a>. When these blocks are injective, Theorems&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data">11.149</a> and&#160;<a href="ch-canonical.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span">11.150</a> give the asymptotic orthogonality and finite-length span preservation needed to separate coefficients. Theorem&#160;<a href="ch-assembly.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">14.22</a> then turns equality of nonzero-sector spans into the hypotheses used by the sector comparison theorem. </p>
 <p>Common-phase data are used here only to obtain the required span hypothesis. A common MPV phase cover gives equality of finite-length nonzero-block spans by Lemma&#160;<a href="ch-assembly.html#lem:mpv_common_phase_cover_span_eq">14.26</a>. A sector basis pre-matching gives the same span equality and the primitive overlap-span hypotheses by Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_span_eq">14.28</a> and Lemma&#160;<a href="ch-assembly.html#lem:sector_basis_pre_matching_to_overlap_span">14.29</a>. The BNT comparison lemmas produce such common phases from a proportional-decomposition conclusion in Lemmas&#160;<a href="ch-assembly.html#lem:common_phase_cover_of_proportional_decomposition">14.30</a> and&#160;<a href="ch-assembly.html#lem:common_phase_cover_of_separated_normal_bnt">14.36</a>. These common-cover facts are not a separate form of the source theorem; they are used only to obtain the finite-length span equality required by the sector comparison. </p>
 <p>Chapter&#160;<a href="ch-canonical.html">11</a> supplies the canonical-form reduction needed before these comparison theorems can be applied: a common physical blocking length, the zero-tail identities at that length, and cyclic-sector families for both tensors on a common blocked alphabet. The blocked-word relabelling and the common primitive irreducible nonzero-sector decompositions are now part of the reduction, culminating in Theorem&#160;<a href="ch-canonical.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">11.185</a>. Lemma&#160;<a href="ch-assembly.html#lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses">14.48</a> then states the hypotheses: equality of the zero-tail dimensions, injectivity of the common nonzero-sector blocks, and finite-length MPV span equality. Lemma&#160;<a href="ch-assembly.html#lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover">14.54</a> adds the zero-tail and injectivity data to the common phase-cover route and therefore gives the same sector-weight conclusion. Establishing these hypotheses is the mathematical passage from equality of total MPV vectors to the componentwise power-sum identities used in <span class="cite">
 	[
