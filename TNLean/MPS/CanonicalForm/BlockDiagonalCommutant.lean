@@ -320,13 +320,30 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
   exists_pos_productWordSpan_of_hasInjectiveBlocks_of_pairTraceSeparatingAt A
     hCF.toHasInjectiveBlocks hSep
 
-/-- Canonical-form/BNT data and the three-block direct-sum hypotheses give product span.
+/-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give
+one common homogeneous pair-separation length.
 
-The BNT data supply non-gauge-equivalence for equal-dimensional distinct
-blocks.  Unequal-dimensional pairs use the strict-size branch of the
-direct-sum argument.  The fixed-length block-injectivity hypotheses are kept
-explicit, matching the direct-sum input rather than inferring them from BNT
-data. -/
+The common length is `L + (L + L)`.  Equal-dimensional distinct blocks use the
+BNT non-gauge-equivalence hypothesis; unequal-dimensional pairs use the
+strict-size direct-sum branch. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
+  exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+    A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
+    hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL
+
+/-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give product span.
+
+This is the product-algebra form of
+`exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock`. -/
 lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -340,11 +357,35 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
       Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
-        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :=
-  exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF
-    (forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
-      A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
-      hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL)
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨S, hSep⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+      μ A hCF hIrr hBlk hBlk3 hL
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    μ A hCF hSep
+
+/-- One-site injectivity of the BNT blocks gives one homogeneous pair-separation
+length for all ordered pairs of distinct blocks.
+
+The proof specializes the three-block direct-sum theorem to `L = 2`; one-site
+injectivity gives the length-`2` and length-`6` fixed-length inputs. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S := by
+  refine exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · intro k
+    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
+      (by norm_num) (isNBlkInjective_one_of_isInjective
+        (hCF.toHasInjectiveBlocks.block_injective k))
+  · norm_num
 
 /-- Positive-length product-word span from canonical-form/BNT separation and
 one-site injectivity of the BNT blocks.
@@ -365,17 +406,29 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlo
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  refine exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
-    (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
-  · intro k
-    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
-      (by norm_num) (isNBlkInjective_one_of_isInjective
-        (hCF.toHasInjectiveBlocks.block_injective k))
-  · intro k
-    simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
-      (by norm_num) (isNBlkInjective_one_of_isInjective
-        (hCF.toHasInjectiveBlocks.block_injective k))
-  · norm_num
+  obtain ⟨S, hSep⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    μ A hCF hSep
+
+/-- Normal-CF-BNT hypotheses plus explicit one-site injectivity give one
+homogeneous pair-separation length for all ordered pairs of distinct blocks. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hNCF : IsNormalCanonicalFormBNT μ A)
+    (hInj : ∀ k : Fin r, IsInjective (A k)) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S := by
+  let hCF : IsCanonicalFormBNT μ A :=
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall hInj)
+      hNCF.toIsLeftCanonicalBlockFamily
+      hNCF.toHasStrictOrderedNonzeroWeights
+      hNCF.toHasNormalizedSelfOverlap
+      hNCF.blocks_not_equiv
+  exact exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    μ A hCF hNCF.toHasIrreducibleBlocks
 
 /-- Positive-length product-word span from normal-CF-BNT data plus explicit
 one-site injectivity.
@@ -395,6 +448,9 @@ lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_inject
         fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
       (⊤ : Submodule ℂ
         ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨S, hSep⟩ :=
+    exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hNCF hInj
   let hCF : IsCanonicalFormBNT μ A :=
     IsCanonicalFormBNT.ofSeparatedData
       (HasInjectiveBlocks.ofForall hInj)
@@ -402,8 +458,8 @@ lemma exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_inject
       hNCF.toHasStrictOrderedNonzeroWeights
       hNCF.toHasNormalizedSelfOverlap
       hNCF.blocks_not_equiv
-  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
-    μ A hCF hNCF.toHasIrreducibleBlocks
+  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
+    μ A hCF hSep
 
 /-- `WordTupleSpanTop` version of the direct-sum span theorem for
 canonical-form/BNT block families. -/
