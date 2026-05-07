@@ -484,6 +484,14 @@ the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
 If it finds one of those forms, it adds `auto-fix-claude` to the created pull
 request.
 
+**Pull-request comments are different.** The `auto fix` phrase in a
+pull-request comment does not enable the label-gated auto-fix loop. A comment
+such as `@claude auto fix ...` starts the ordinary mention-handler lane, not the
+review-fix workflow, and can duplicate or race the labeled auto-fix job. On an
+existing pull request, use the `auto-fix-claude` or `auto-fix-codex` label to
+opt into automatic fixes, then let that workflow reach a terminal state before
+manual repair.
+
 ### To enable Codex auto-fix
 
 1. Add repository secret `OPENAI_API_KEY` (required)
@@ -537,6 +545,12 @@ Write a comment on any issue or PR that includes `@claude` followed by your requ
 - `@claude fix the sorry in line 42 of TNLean/MPS/Basic.lean`
 - `@claude why does this tactic fail?`
 - `@claude refactor this proof to use simp instead`
+
+Do not write `@claude auto fix` on an existing pull request to start the
+review-fix loop. That phrase is only meaningful for issue-started work whose
+resulting pull request should receive an auto-fix label. For a pull request,
+add the label or make a direct one-off request without the `auto fix` trigger
+language after the label-gated loop has stopped.
 
 ---
 
