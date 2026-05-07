@@ -7,43 +7,11 @@ import TNLean.PiAlgebra.FundamentalTheoremComplete
 /-!
 # Block separation: from `SameMPV₂` to per-block `SameMPV`
 
-The step from global `SameMPV₂` on block-diagonal tensors to per-block `SameMPV` requires
-separating the weighted sum `∑_k μ_k^N · mpv(A_k, σ) = ∑_k μ_k^N · mpv(B_k, σ)` into
-individual block equalities `mpv(A_k, σ) = mpv(B_k, σ)` for each `k`.
-
-**The difficulty**: a direct Vandermonde argument requires *fixed* coefficients
-at each power, but here the "coefficients"
-`mpv(A_k, σ) - mpv(B_k, σ)` depend on `σ : Fin N → Fin d` whose type varies with `N`.
-
-**Alternative route via repeated words and Newton's identities**:
-
-1. For any fixed word `w` of length `M`, consider the `L`-fold concatenation `w^L` of
-   length `M · L`. The evalWord identity gives
-   `evalWord(A_k, w^L) = (evalWord(A_k, w))^L`, so the SameMPV₂ equation becomes:
-   `∑_k (μ_k^M)^L · [tr(T_k^L) - tr(U_k^L)] = 0` for all `L ≥ 0`
-   where `T_k = evalWord(A_k, w)` and `U_k = evalWord(B_k, w)`.
-
-2. By Newton's identities (power sums determine symmetric functions), the eigenvalue
-   multisets `{μ_k^M · λ_{k,j} : k, j}` and `{μ_k^M · ν_{k,j} : k, j}` coincide
-   (where `λ_{k,j}` and `ν_{k,j}` are eigenvalues of `T_k` and `U_k` respectively).
-
-3. Since this holds for ALL words `w` (of all lengths `M`), the algebraic independence of
-   eigenvalues across blocks (separation by the distinct phases `μ_k`) forces per-block
-   eigenvalue matching: `{λ_{k,j}} = {ν_{k,j}}` for each `k` individually.
-
-4. Per-block eigenvalue matching for ALL words `w` implies per-block SameMPV.
-
-Steps 1, 2 (for the multiset equality), and 4 are elementary. The main gap is step 3:
-separating the combined eigenvalue multiset into per-block multisets. This is a
-polynomial/algebraic-geometry argument (Zariski density of the non-collision locus)
-that is not yet available in Mathlib.
-
-This file develops that alternative Vandermonde / Newton route and the elementary
-repeated-word lemmas supporting it. It is **not** part of the current checked
-end-to-end proof chain: the canonical-form reduction uses the mixed-transfer
-peeling argument in `CanonicalFormSep.lean`, and the later weight-multiset
-matching in the BNT stage is handled by linear independence rather than
-Newton--Girard identities.
+The current checked reduction from global `SameMPV₂` on block-diagonal tensors
+to per-block `SameMPV` uses the mixed-transfer peeling argument in
+`CanonicalFormSep.lean`.  This file only provides the elementary word identities
+needed there, for example
+`evalWord(A, w^L) = (evalWord(A,w))^L`.
 
 ## Main results
 
@@ -131,29 +99,11 @@ theorem sameMPV₂_repeated_word
       ring]
   rw [hsummed, sub_self]
 
-/-! #### Block separation: an alternative algebraic route
+/-! #### Repeated words
 
-The step from `∑_k μ_k^N · (mpv(A_k,σ) - mpv(B_k,σ)) = 0` (for all N, σ) to
-per-block `mpv(A_k,σ) = mpv(B_k,σ)` uses the multiplicative structure of `evalWord`:
-
-**(1) Repeated-word identity**: For any word `w` of length `M` and repetition count `L`,
-    `evalWord(A_k, w^L) = (evalWord(A_k, w))^L` (by `evalWord_flatten_replicate`).
-    This gives `∑_k (μ_k^M)^L · [tr(T_k^L) - tr(U_k^L)] = 0` for all `L ≥ 0`.
-
-**(2) Newton's identities**: Power-sum agreement for all `L` implies the combined
-    eigenvalue multisets `{μ_k^M · spec(T_k)}_k = {μ_k^M · spec(U_k)}_k`.
-
-**(3) Block separation**: For generic `w`, the eigenvalue clusters from different blocks
-    don't collide after μ-scaling, forcing per-block matching.
-
-The formal gap is step (3): the genericity argument (Zariski density of the non-collision
-locus) requires algebraic geometry tools not currently in Mathlib.
-
-This comment gives the same alternative route as the module docstring. The
-current checked reduction instead proceeds through `CanonicalFormSep.lean` and
-later BNT linear-independence arguments.
-
-See also `evalWord_flatten_replicate` for the key combinatorial identity.
+The lemmas in this section are used by the mixed-transfer peeling proof in
+`CanonicalFormSep.lean`.  They only identify evaluations on repeated words; they
+do not assert per-block separation by themselves.
 -/
 
 /-!
@@ -178,8 +128,7 @@ A checked counterexample to the naive full separation statement is retained in
 For end-to-end results from `SameMPV₂`, use
 `fundamentalTheorem_multiBlock_fromSameMPV₂` (in
 `PiAlgebra/FundamentalTheoremComplete.lean`), which takes per-block separation
-as an explicit hypothesis. The repeated-word / Newton route in this file is
-retained only as an alternative route.
+as an explicit hypothesis.
 -/
 
 end BlockSeparation
