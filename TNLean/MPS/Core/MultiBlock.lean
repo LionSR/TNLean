@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 This file introduces the lightweight `CanonicalForm` structure for
 block-diagonal MPS tensors with injective blocks. It constructs the associated
 tensor `CanonicalForm.toTensor` and proves the block-diagonal word-evaluation
-and trace/reindexing lemmas used in the multi-block Fundamental Theorem.
+and trace/reindexing lemmas for weighted direct sums.
 -/
 
 open scoped Matrix BigOperators
@@ -19,8 +19,8 @@ namespace MPSTensor
 
 /-- A block-injective canonical form for an MPS tensor: block diagonal with injective blocks.
 
-This is the lightweight data structure used later to state and prove the multi-block version of
-the Fundamental Theorem. -/
+This is the lightweight data structure for tensors of the form
+`⊕_k μ_k A_k`. -/
 structure CanonicalForm (d : ℕ) where
   /-- Number of blocks -/
   numBlocks : ℕ
@@ -85,7 +85,7 @@ section BlockDiagonal
 
 variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
 
-/-- `evalWord` of a block-diagonal tensor is the block-diagonal of the blockwise `evalWord`s.
+/-- `evalWord` of a block-diagonal tensor is the block diagonal of the component evaluations.
 
 This lemma lives on the `Σ`-type indices of `Matrix.blockDiagonal'`. -/
 lemma evalWord_blockDiagonal'
