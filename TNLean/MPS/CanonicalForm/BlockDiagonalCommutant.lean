@@ -669,6 +669,26 @@ lemma
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
+/-- From `IsCanonicalFormBNT`, obtain `PairTraceSeparatingAll` for every ordered
+pair of distinct blocks and `PairTraceSeparatingUpTo S` for a common cutoff
+`S`.
+
+The homogeneous trace-separation conclusion still requires a period-window
+identity-padding certificate
+(see `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
+above). -/
+theorem forall_pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_isCanonicalFormBNT
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) :
+    (∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j)) ∧
+    (∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S) := by
+  have hSepAll : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j) :=
+    pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF
+  obtain ⟨S, hSepUpTo⟩ :=
+    exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll A hSepAll
+  exact ⟨hSepAll, ⟨S, hSepUpTo⟩⟩
+
 /-- Positive-length product-word span obtained from block injectivity and finite
 block-selector words.
 
