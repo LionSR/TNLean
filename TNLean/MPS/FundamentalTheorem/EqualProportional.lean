@@ -470,7 +470,7 @@ theorem fundamentalTheorem_equalMPV_full
 
 This wraps the same-cardinality power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded version is the same-cardinality part of the paper's Lemma `Lem:app_simple`;
-the full source statement also compares possibly unequal cardinalities.
+the nonzero-entry version below also compares possibly unequal cardinalities.
 -/
 
 /-- **Equal power sums imply equal multisets** (same-cardinality support lemma for
@@ -504,6 +504,20 @@ theorem power_sum_eq_implies_multiset_eq_of_le_card (n : ℕ)
   apply Matrix.sum_pow_eq_implies_multiset_eq_of_le_card
   intro k hk hkcard
   exact h k hk (by simpa using hkcard)
+
+/-- **Bounded unequal-cardinality power sums imply equal cardinality and equal multisets**
+under a nonzero-entry hypothesis.
+
+If two nonzero finite sequences `α : Fin m → ℂ` and `β : Fin n → ℂ` satisfy
+`∑ i, (α i)^k = ∑ i, (β i)^k` for `1 ≤ k ≤ max m n`, then `m = n` and the two
+sequences have the same multiset of values counted with multiplicity. -/
+theorem power_sum_eq_implies_card_eq_and_multiset_eq_of_le_max_card
+    (m n : ℕ) (α : Fin m → ℂ) (β : Fin n → ℂ)
+    (hα : ∀ i, α i ≠ 0) (hβ : ∀ i, β i ≠ 0)
+    (h : ∀ k : ℕ, 0 < k → k ≤ max m n →
+      ∑ i : Fin m, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
+    m = n ∧ Finset.univ.val.map α = Finset.univ.val.map β :=
+  Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card m n α β hα hβ h
 
 /-! ## Combined corollaries -/
 

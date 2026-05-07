@@ -331,7 +331,6 @@ theorem charpolyRev_eq_of_trace_pow_eq_of_le_card
       | m + 1 =>
         have hA := newton_girard_charpolyRev_coeff A m
         have hB := newton_girard_charpolyRev_coeff B m
-        have hm_succ : m + 1 ≤ Fintype.card n := hm_card
         have h_sum_eq :
             ∑ j ∈ range (m + 1), (A.charpolyRev).coeff j * trace (A ^ (m + 1 - j)) =
               ∑ j ∈ range (m + 1), (B.charpolyRev).coeff j *
