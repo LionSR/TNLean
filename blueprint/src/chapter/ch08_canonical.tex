@@ -2814,15 +2814,15 @@ zero-block dimension; the two terms refer to the same concept.
 	\label{thm:bnt_li_from_overlap_limits_exists}
 	\lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
 	\leanok
-	\uses{thm:bnt_overlap_orthonormal_li}
+	\uses{lem:bnt_overlap_orthonormal_li}
 	If the self-overlaps of a finite block family tend to $1$ and the
 	cross-overlaps of distinct blocks tend to $0$, then the MPV states are
 	linearly independent for all sufficiently large system sizes.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:bnt_overlap_orthonormal_li}
-	This is Theorem~\ref{thm:bnt_overlap_orthonormal_li}, restated with an
+	\uses{lem:bnt_overlap_orthonormal_li}
+	This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
 	explicit threshold $N_0$.
 \end{proof}
 
