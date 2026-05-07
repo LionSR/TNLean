@@ -239,7 +239,7 @@ The parametric rectangular span theorem combines:
 2. Eigenvector in range: `φ ∈ range(toLin' ((A i₀)^D))`
 3. Stabilization: `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`
 4. Transfer: `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-5. Conditional rectangular span: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
+5. Conditional fixed-length matrix spanning: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
 
 into a single theorem parameterized by the stabilization witness `n₀`.
 
@@ -260,7 +260,7 @@ i.e., the word span at length `D + n₀ + 2D - 2` is the full matrix algebra.
 1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))`, so for all `ψ`,
    `vecMulVec φ ψ ∈ rectSpan`.
 2. `rectSpan` stabilized at `n₀` → `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-3. Apply conditional rectangular span (eigenvector spreading + row spreading)
+3. Apply conditional fixed-length matrix spanning (eigenvector spreading + row spreading)
 4. Output: `wordSpan A ((D-1) + ((D + n₀) + (D-1))) = ⊤`
 
 This simplifies to `wordSpan A (3D + n₀ - 2) = ⊤`.
@@ -276,7 +276,7 @@ theorem wielandt_parametric_assembly [NeZero D]
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (heigφ : A i₀ *ᵥ φ = μ • φ)
-    -- Row eigenvector (for the conditional rectangular span)
+    -- Row eigenvector (for the conditional fixed-length matrix spanning)
     (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
     (ψ₀ : Fin D → ℂ) (hψ₀ : ψ₀ ≠ 0)
     (heigψ : (A i₁)ᵀ *ᵥ ψ₀ = ν • ψ₀)
@@ -288,7 +288,7 @@ theorem wielandt_parametric_assembly [NeZero D]
   -- Step 1: vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀)
   have hRankOne : vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀) :=
     vecMulVec_eigenvector_mem_wordSpan A i₀ hμ heigφ hstab ψ₀
-  -- Step 2: Apply conditional rectangular span
+  -- Step 2: Apply conditional fixed-length matrix spanning
   exact wielandt_lemma2b_conditional A hNormal i₀ μ hμ φ hφ heigφ
     i₁ ν hν ψ₀ hψ₀ heigψ hRankOne
 

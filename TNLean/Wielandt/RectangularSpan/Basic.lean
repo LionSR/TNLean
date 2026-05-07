@@ -12,12 +12,12 @@ import TNLean.Wielandt.RectangularSpan.Ranges
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
-# Rectangular Span Foundations: Lemma 2(b) (conditional and blocked rectangular span)
+# Rectangular Span Foundations: Lemma 2(b) (conditional and blocked fixed-length matrix spanning)
 
 This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
 one-sided and cumulative rectangular spans, and the conditional and blocked
-rectangular-span theorems for Lemma 2(b).
+fixed-length matrix spanning theorems for Lemma 2(b).
 
 The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
@@ -256,7 +256,7 @@ theorem cumulativeRectSpan_eq_range_of_isNormal [NeZero D]
   cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top P A
     (cumulativeSpan_eq_top A hN)
 
-/-! ## Section 5: Conditional rectangular span (Lemma 2(b)) -/
+/-! ## Section 5: Conditional fixed-length matrix spanning (Lemma 2(b)) -/
 
 /-- **Lemma 2(b) conditional fixed-length matrix spanning.**
 
@@ -290,7 +290,7 @@ theorem wielandt_lemma2b_conditional [NeZero D]
   exact wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     A φ ψ hVecSpread hRankOne hRowSpread
 
-/-! ## Section 6: Blocked rectangular span -/
+/-! ## Section 6: Blocked fixed-length matrix spanning -/
 
 /-- **Fixed-length matrix spanning at the blocked level.**
 
@@ -330,7 +330,7 @@ theorem wielandt_blocked_assembly [NeZero D]
     exact heigψ
   -- B is normal
   have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
-  -- Apply the conditional rectangular span lemma to B
+  -- Apply the conditional fixed-length matrix spanning lemma to B
   have hBtop : wordSpan B ((D - 1) + (m_blocked + (D - 1))) = ⊤ :=
     wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
       heigψ_B hRankOne

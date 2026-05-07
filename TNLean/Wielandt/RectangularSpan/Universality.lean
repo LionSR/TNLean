@@ -773,7 +773,7 @@ end ExactPropagation
 /-!
 The subsequent rank-one step applies the exact word-span result above to word
 eigenvectors of suitable blocked tensors. Combined with the conditional
-rank-one rectangular span theorem, this gives a single word length whose evaluations span
+rank-one reduction theorem, this gives a single word length whose evaluations span
 the full matrix algebra, and hence the fully unconditional form of Lemma 2(b).
 -/
 

@@ -269,7 +269,7 @@ section RankOneExtraction
 /-- **Full rank-one extraction for Wielandt Lemma 2(b).**
 
 Under a positive normality witness `N₀ ≥ 1`, produces all data for the blocked
-rectangular span theorem:
+fixed-length matrix spanning theorem:
 - word functions `σ₀`, `τ₀` of length `N₀` with eigenvector conditions,
 - `vecMulVec φ ψ ∈ wordSpan (blockTensor A N₀) (D + N₀ + D)`.
 
