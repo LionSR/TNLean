@@ -139,8 +139,22 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 
 ## How @codex and @claude Respond
 
-### @codex/@claude only trigger from COMMENTS, not issue/PR body
-Putting `@codex` or `@claude` in the body text when creating an issue does nothing. They only trigger from **comments** posted after creation. Must post a separate comment to activate them.
+### Mention trigger locations
+The current workflows do not all have the same trigger surface.
+
+- `@claude` triggers from issue comments, PR review comments, PR reviews, and
+  issue title/body text on `issues: opened` or `issues: assigned`.
+- `@chatgpt` triggers the Codex workflow from issue comments, PR review
+  comments, PR reviews, and issue title/body text.  The repository uses
+  `@chatgpt`, not `@codex`, to avoid colliding with the OpenAI Codex GitHub
+  Connector handle.
+- PR bodies do not trigger either mention handler; post a PR comment or review
+  comment for existing PR work.
+
+For issue-started work, putting the mention and the request directly in the new
+issue body is valid. Posting a separate comment remains useful when the issue
+body should stay as a stable specification and the agent instruction should be a
+separate operational request.
 
 ### Issue comments vs PR comments — critical distinction
 

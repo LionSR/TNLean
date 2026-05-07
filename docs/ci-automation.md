@@ -506,7 +506,10 @@ default enabled behavior.
 
 ### To ask Claude for help directly
 
-Write a comment on any issue or PR that includes `@claude` followed by your request. For example:
+For existing issues and PRs, write a comment that includes `@claude` followed by
+the request.  For a new issue, the issue title or body may contain `@claude`;
+that triggers the same responder on `issues: opened` or `issues: assigned`.
+Examples:
 - `@claude fix the sorry in line 42 of TNLean/MPS/Basic.lean`
 - `@claude why does this tactic fail?`
 - `@claude refactor this proof to use simp instead`
