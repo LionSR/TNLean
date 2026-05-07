@@ -34,7 +34,7 @@ pairwise distinct nonzero weight norms.
 The direct periodic theorem of Chapter~\ref{ch:periodic_ft_apps} is not
 used in this chapter.
 
-\begin{lemma}[Conditional block matching from restricted normal-CF-BNT data]%
+\begin{lemma}[Conditional block matching from restricted normal-CF-BNT hypotheses]%
     \label{lem:weak_ft_conditional}
     \lean{MPSTensor.weakFundamentalTheorem_conditional}
     \leanok
@@ -76,7 +76,7 @@ used in this chapter.
 \section{Restricted Proportional Comparisons}%
 \label{sec:ft_restricted_proportional}
 
-\begin{lemma}[Proportional comparison for restricted CF-BNT data]\label{lem:ft_proportional}
+\begin{lemma}[Proportional comparison for restricted CF-BNT hypotheses]\label{lem:ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
@@ -152,7 +152,7 @@ used in this chapter.
 	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
 \end{remark}
 
-\begin{lemma}[Proportional comparison for restricted normal-CF-BNT data]\label{lem:ft_proportional_nt}
+\begin{lemma}[Proportional comparison for restricted normal-CF-BNT hypotheses]\label{lem:ft_proportional_nt}
 		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
@@ -208,7 +208,7 @@ restricted heterogeneous equal-case lemma, stated as
 Lemma~\ref{lem:fundamentalTheorem_equalMPV_CFBNT_hetero}, gives the
 block-count, bond-dimension, and gauge-phase matching directly from equality of
 the block-diagonal MPV families. The common-structure lemma below proves the
-global gauge statement when the two sides already share the same block data.
+global gauge statement when the two sides already share the same block structure.
 The general CPSV theorem still passes through sector decompositions, copy-count
 recovery, and sector-weight multiset comparison before one obtains a global
 block-diagonal gauge.
@@ -221,7 +221,7 @@ block-diagonal gauge.
 	the same bond dimensions $(D_k)_{k=1}^g$, and the same weights
 	$(\mu_k)_{k=1}^g$.
 	Let $(\mu_k, A_k)_{k=1}^g$ and $(\mu_k, B_k)_{k=1}^g$ be two families in
-	canonical form with BNT separation on this common data.
+	canonical form with BNT separation on this common structure.
 	If the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
 	generate the same MPV family, then each pair $(A_k, B_k)$ is
@@ -232,7 +232,7 @@ block-diagonal gauge.
 \begin{proof}
 	\leanok
 	\uses{lem:ft_canonical}
-	Since both families share the canonical form data, the BNT separation
+	Since both families share the canonical-form hypotheses, the BNT separation
 	condition is not needed.
 	The same-structure canonical-form comparison
 	(Lemma~\ref{lem:ft_canonical}) then applies directly to this
@@ -258,7 +258,7 @@ This is the scalar part of the source decomposition
 \]
 The sector tensor used below is the representative form after the gauge
 conjugations $X_{j,q}$ have already been absorbed into the choice of basis
-block and gauge-phase data.  Thus BNT linear independence separates the coefficient arrays
+block and gauge phases.  Thus BNT linear independence separates the coefficient arrays
 $c_{S,j}^{(N)}$, and elementary power-sum algebra recovers both the
 multiplicity $r_j$ and the multiset of weights attached to the basis block.
 In the later PEPS application this information is not presented as a separate
@@ -284,20 +284,20 @@ power-sum comparison after the basis blocks have already been matched.  The
 geometric extrapolation and Newton--Girard steps are external finite-sequence
 facts used to recover the lists of weights from those power sums.
 
-\begin{definition}[Sector data and sector decomposition]%
+\begin{definition}[Sector weights and sector decomposition]%
 \label{def:paper_sector_data}
 	\lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
 	\leanok
-	A \emph{sector datum} over $g$ basis blocks specifies:
-	multiplicities $r_j > 0$, sector weights
+	A sector-weight tuple over $g$ basis blocks consists of
+	multiplicities $r_j > 0$, weights
 	$\mu_{j,q} \neq 0$ for $q \in \{1,\dotsc,r_j\}$, and the
 	\emph{sector coefficients}
 	\[
 		c_{S,j}^{(N)} := \sum_{q=1}^{r_j} \mu_{j,q}^N
 	\]
-	for a sector datum $S$.
+	for the tuple $S$.
 	A \emph{sector decomposition} consists of the basis blocks
-	$(A_j)_{j=1}^g$ together with their sector data.
+	$(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
 
 \begin{lemma}[Sector decomposition formula]%
@@ -318,7 +318,7 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.SectorWeightData.coeff_eventually_eq_of_sameMPV}
 	\leanok
 	\uses{def:paper_sector_data, def:bnt}
-	If two sector data $S, T$ over the same basis, with coefficient arrays
+	If two sector-weight tuples $S, T$ over the same basis, with coefficient arrays
 	$c_{S,j}^{(N)}$ and $c_{T,j}^{(N)}$, produce equal total MPVs
 	and the basis is eventually linearly independent (the BNT property),
 	then there is $N_0$ such that
@@ -333,7 +333,7 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
 	\leanok
 	\uses{def:paper_sector_data}
-	If two sector data $S,T$ over the same basis have
+	If two sector-weight tuples $S,T$ over the same basis have
 	\[
 		c_{S,j}^{(N)}=c_{T,j}^{(N)}
 	\]
@@ -356,7 +356,7 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
 	\leanok
 	\uses{def:paper_sector_data, def:bnt}
-	Let $S$ and $T$ be two sector data over the same basis, without assuming
+	Let $S$ and $T$ be two sector-weight tuples over the same basis, without assuming
 	their multiplicities agree. If the basis is eventually linearly
 	independent and the total MPVs of $S$ and $T$ agree, then there are
 	copy-count equalities $r_j^S = r_j^T$ for every basis block~$j$, and,
@@ -487,7 +487,7 @@ facts used to recover the lists of weights from those power sums.
 	\end{enumerate}
 	The hypotheses consumed by
 	Lemma~\ref{lem:gauge_phase_matched_basis_sector_weights} are exactly the fields of
-	this matching datum.
+	this matching tuple.
 \end{definition}
 
 \begin{definition}[Sector basis pre-matching]%
@@ -503,7 +503,7 @@ facts used to recover the lists of weights from those power sums.
 	Lemma~\ref{lem:sector_basis_pre_matching_to_matching}.
 \end{definition}
 
-\begin{definition}[Single-family overlap-orthogonality data for sector bases]%
+\begin{definition}[Single-family overlap-orthogonality hypotheses for sector bases]%
 \label{def:sector_basis_overlap_ortho_hyps}
 	\lean{MPSTensor.SectorBasisOverlapOrthoHypotheses}
 	\leanok
@@ -527,12 +527,12 @@ facts used to recover the lists of weights from those power sums.
 	system size.
 \end{definition}
 
-\begin{lemma}[Single-family overlap data plus span give overlap-span hypotheses]%
+\begin{lemma}[Single-family overlap hypotheses plus span give overlap-span hypotheses]%
 \label{lem:sector_basis_overlap_ortho_to_span}
 	\lean{MPSTensor.SectorBasisOverlapOrthoHypotheses.to_overlapSpan}
 	\leanok
 	\uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
-	If two sector bases each satisfy the single-family overlap-orthogonality data,
+	If two sector bases each satisfy the single-family overlap-orthogonality hypotheses,
 	and one also supplies one-site injectivity of all their basis blocks together
 	with equality of the finite-length MPV spans, then the two bases satisfy the
 	primitive overlap-span hypotheses.
@@ -650,7 +650,7 @@ facts used to recover the lists of weights from those power sums.
 	The two bond dimensions are allowed to differ.
 \end{definition}
 
-\begin{definition}[Common MPV phase-cover data]
+\begin{definition}[Common MPV phase cover]
 \label{def:mpv_common_phase_cover}
 	\lean{MPSTensor.MPVCommonPhaseCover}
 	\leanok
@@ -682,7 +682,7 @@ facts used to recover the lists of weights from those power sums.
 	the equality of the two nonzero-block spans.
 \end{proof}
 
-\begin{lemma}[Common phase-cover data give nonzero-block span equality]%
+\begin{lemma}[Common phase cover gives nonzero-block span equality]%
 \label{lem:mpv_common_phase_cover_span_eq}
 	\lean{MPSTensor.MPVCommonPhaseCover.span_eq}
 	\leanok
@@ -694,7 +694,7 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
 	\leanok
 	\uses{lem:nonzero_block_span_eq_of_common_phase_cover}
-	The common cover data specify the common family, the two surjective class maps,
+	The common cover specifies the common family, the two surjective class maps,
 	and the MPV-phase equivalences. The span lemma then applies directly.
 \end{proof}
 
@@ -732,7 +732,7 @@ facts used to recover the lists of weights from those power sums.
 	\leanok
 	\uses{def:sector_basis_pre_matching, def:sector_basis_overlap_ortho_hyps,
 		def:sector_basis_overlap_span_hyps}
-	If two sector bases satisfy the one-family overlap-orthogonality data and their
+	If two sector bases satisfy the one-family overlap-orthogonality hypotheses and their
 	basis blocks are one-site injective, then a sector basis pre-matching between
 	them establishes the finite-length span equality and hence the full primitive
 	overlap-span hypotheses.
@@ -743,7 +743,7 @@ facts used to recover the lists of weights from those power sums.
 	\uses{lem:sector_basis_pre_matching_span_eq,
 		lem:sector_basis_overlap_ortho_to_span}
 	The pre-matching gives the basis-span equality. Combining that equality with
-	the one-family overlap data and injectivity is exactly the construction of
+		the one-family overlap hypotheses and injectivity is exactly the construction of
 	Lemma~\ref{lem:sector_basis_overlap_ortho_to_span}.
 \end{proof}
 
@@ -779,10 +779,10 @@ facts used to recover the lists of weights from those power sums.
 	\leanok
 	Take the first block family as the common family. The bijection and its inverse
 	give the two class maps, and the assumed phase match gives the second
-	family's phase data.
+	family's phase factors.
 \end{proof}
 
-\begin{lemma}[Span equality from proportional-decomposition data]%
+\begin{lemma}[Span equality from a proportional-decomposition comparison]%
 \label{lem:nonzero_block_span_eq_of_proportional_decomposition}
 	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
 	\leanok
@@ -816,13 +816,13 @@ facts used to recover the lists of weights from those power sums.
 	common-cover span lemma then gives the stated span equality.
 \end{proof}
 
-\begin{theorem}[Overlap-span data from a common phase cover]%
+\begin{theorem}[Overlap-span hypotheses from a common phase cover]%
 \label{thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}
 	\leanok
 	\uses{def:mpv_common_phase_cover, def:sector_basis_overlap_span_hyps}
 	Let two block families be trace-preserving, primitive, irreducible, injective,
-	and carry nonzero weights. If they have common MPV phase-cover data, then there
+	and carry nonzero weights. If they have a common MPV phase cover, then there
 	exist BNT sector decompositions $P$ and $Q$ for
 	the two weighted nonzero parts, and the sector bases satisfy the primitive
 	overlap-span hypotheses.
@@ -835,10 +835,10 @@ facts used to recover the lists of weights from those power sums.
 	The common cover gives finite-length span equality for the two nonzero-weight
 	block families. The phase-class representative construction then transports
 	this span equality to the BNT sector bases and supplies the remaining
-	one-family overlap data.
+	one-family overlap hypotheses.
 \end{proof}
 
-\begin{theorem}[Overlap-span data from proportional decomposition]%
+\begin{theorem}[Overlap-span hypotheses from proportional decomposition]%
 \label{thm:bnt_sectorDecomp_pair_overlapSpan_of_proportionalDecompositionConclusion}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion}
 	\leanok
@@ -855,12 +855,12 @@ facts used to recover the lists of weights from those power sums.
 	\leanok
 	\uses{lem:common_phase_cover_of_proportional_decomposition,
 		thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover}
-	First turn the proportional-decomposition data into common MPV phase-cover data.
+	First turn the proportional-decomposition comparison into a common MPV phase cover.
 	The preceding theorem then converts that cover into the overlap-span hypotheses
 	for the constructed sector bases.
 \end{proof}
 
-\begin{lemma}[Separated normal canonical-form data produce a common phase cover]%
+\begin{lemma}[Separated normal canonical-form hypotheses produce a common phase cover]%
 \label{lem:common_phase_cover_of_separated_normal_bnt}
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
 	\leanok
@@ -869,7 +869,7 @@ facts used to recover the lists of weights from those power sums.
 	For two normal canonical-form block families with no gauge-phase-equivalent
 	distinct equal-dimension blocks, proportional decompositions whose coefficient
 	limits are nonzero give a common MPV phase cover of the two basis families.
-	This is the BNT construction of the cover data; it does not assume equality of
+	This is the BNT construction of the common cover; it does not assume equality of
 	finite-length spans.
 \end{lemma}
 
@@ -880,10 +880,10 @@ facts used to recover the lists of weights from those power sums.
 	The irreducible trace-preserving BNT permutation theorem gives the permutation
 	matching the basis blocks, bond-dimension equalities, and gauge-phase
 	equivalences. Applying the previous lemma to that conclusion yields the
-	common phase cover data.
+	common phase cover.
 \end{proof}
 
-\begin{lemma}[Separated normal canonical-form data give nonzero-block span equality]%
+\begin{lemma}[Separated normal canonical-form hypotheses give nonzero-block span equality]%
 \label{lem:separated_normal_bnt_span_eq}
 	\lean{MPSTensor.mpv_span_eq_of_separated_normalCFBNT_data}
 	\leanok
@@ -891,7 +891,7 @@ facts used to recover the lists of weights from those power sums.
 		lem:mpv_common_phase_cover_span_eq}
 	For two separated normal canonical-form block families as in
 	Lemma~\ref{lem:common_phase_cover_of_separated_normal_bnt}, the BNT
-	comparison data imply equality, at every system size, of the finite-length
+	comparison implies equality, at every system size, of the finite-length
 	MPV spans of the two basis families.
 \end{lemma}
 
@@ -924,14 +924,14 @@ facts used to recover the lists of weights from those power sums.
 	so the conclusion follows directly from that lemma.
 \end{proof}
 
-\begin{lemma}[Zero-tail cancellation for leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
+\begin{lemma}[Cancellation of leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
 	\lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
 	\leanok
 	\uses{def:same_mpv2, def:mpv}
 	Let $A$ and $B$ have the same MPV family, each decomposed as an all-zero
-	leftover block, called the zero-tail part in this convention, plus a
-	nonzero part. If the leftover zero-block dimensions agree, then the nonzero
-	parts themselves have the same MPV family, including at length zero.
+	leftover block plus a nonzero part. If the leftover zero-block dimensions
+	agree, then the nonzero parts themselves have the same MPV family, including
+	at length zero.
 \end{lemma}
 
 \begin{proof}
@@ -946,7 +946,7 @@ facts used to recover the lists of weights from those power sums.
 	at length zero as well.
 \end{proof}
 
-\begin{theorem}[Sector comparison from leftover zero blocks and span data]%
+\begin{theorem}[Sector comparison from leftover zero blocks and span hypotheses]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan}
 	\leanok
@@ -963,7 +963,7 @@ facts used to recover the lists of weights from those power sums.
 	finite-length MPV spans at every system size, then there exist a period
 	$p' > 0$ and sector decompositions $P,Q$ such that $A^{[p']}$ and
 	$B^{[p']}$ agree with the corresponding sector tensors at every positive
-	length, $P$ and $Q$ have the same full MPV family, both have BNT data, and
+	length, $P$ and $Q$ have the same full MPV family, both have BNT bases, and
 	their sector weights satisfy the matched sector-weight conclusion.
 \end{theorem}
 
@@ -1006,8 +1006,8 @@ BNT comparison hypotheses for the common primitive sectors.
 	\leanok
 	\uses{def:common_primitive_span_hypotheses, def:mpv_common_phase_cover,
 		lem:mpv_common_phase_cover_span_eq}
-	If the two common primitive nonzero-sector families have equal zero-tail
-	dimensions, are one-site injective, and are equipped with a common MPV phase cover, then
+	If the two common primitive nonzero-sector families have equal leftover
+	zero-block dimensions, are one-site injective, and are equipped with a common MPV phase cover, then
 	they satisfy the span hypotheses of
 	Definition~\ref{def:common_primitive_span_hypotheses}.
 \end{lemma}
@@ -1015,7 +1015,7 @@ BNT comparison hypotheses for the common primitive sectors.
 \begin{proof}
 	\leanok
 	\uses{lem:mpv_common_phase_cover_span_eq}
-	The zero-tail and injectivity fields are exactly the supplied hypotheses.  The
+	The zero-block dimension equality and injectivity fields are exactly the supplied hypotheses.  The
 	common phase cover gives the finite-length span equality by
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.
 \end{proof}
@@ -1028,7 +1028,7 @@ BNT comparison hypotheses for the common primitive sectors.
 	For two common primitive nonzero-sector families at one blocking length, this
 	condition is the phase-cover analogue of
 	Definition~\ref{def:common_primitive_span_hypotheses}: equality of the two
-	zero-tail dimensions, one-site injectivity of all blocks on both sides, and a
+	leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a
 	common MPV phase cover for the two block families.
 \end{definition}
 
@@ -1048,13 +1048,13 @@ BNT comparison hypotheses for the common primitive sectors.
 \begin{proof}
 	\leanok
 	\uses{lem:common_primitive_span_hypotheses_of_common_phase_cover}
-	The zero-tail equality and the two injectivity assertions are already part of
+	The zero-block dimension equality and the two injectivity assertions are already part of
 	the phase-cover hypotheses.  Apply
 	Lemma~\ref{lem:common_primitive_span_hypotheses_of_common_phase_cover} to a
 	common MPV phase cover for the two block families.
 \end{proof}
 
-\begin{definition}[BNT-cover hypotheses for common primitive sectors]%
+\begin{definition}[BNT matching hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData,
@@ -1064,44 +1064,44 @@ BNT comparison hypotheses for the common primitive sectors.
 	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
 		def:injective, thm:ncf_sorted_tp_primitive_irred}
 	For two common primitive nonzero-sector families at one blocking length, this
-	condition contains the BNT data needed to construct a common MPV phase cover:
-	normal canonical-form data on both sides, separation of distinct sectors by
-	gauge-phase equivalence, equality of the zero-tail dimensions, one-site
-	injectivity, and a proportional-decomposition comparison. When the primitive
-	structural data and strict weight ordering are supplied in place of normal
-	canonical-form data, together with the remaining conditions above, they give a
-	special strict-order constructor for these BNT-cover hypotheses.  The general
-	BNT statement uses sector decompositions with repeated copies and weights,
-	not this strict-order constructor.  The length-zero identity and the
-	proportional matching identify the zero-tail dimensions, so this equality need
-	not be supplied separately once the proportional data are present.
+	condition states the hypotheses needed to apply the BNT comparison theorem:
+	normal canonical form on both sides, no phase-gauge-equivalent distinct
+	blocks in either family, equality \(z_A=z_B\) of the leftover all-zero block
+	dimensions, one-site injectivity, and proportionality of the two block MPV
+	families.  Its output is the source-form matching
+	\(B_{\pi(j)}^i=e^{i\phi_j}X_jA_j^iX_j^{-1}\), hence
+	\(\ket{V^{(N)}(B_{\pi(j)})}=e^{iN\phi_j}\ket{V^{(N)}(A_j)}\).
+
+	% Maintainer note: the structure name contains "cover" because the next
+	% step packages this matching as a common MPV phase cover.  This wording is
+	% not part of the source terminology and is intentionally not displayed.
 \end{definition}
 
-\begin{lemma}[BNT-cover hypotheses produce a common phase cover]%
+\begin{lemma}[BNT matching hypotheses produce a common phase cover]%
 \label{lem:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.toMPVCommonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:mpv_common_phase_cover}
-	If two common primitive nonzero-sector families satisfy the BNT-cover
+	If two common primitive nonzero-sector families satisfy the BNT matching
 	hypotheses, then they have a common MPV phase cover.
 \end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{lem:common_phase_cover_of_separated_normal_bnt}
-	The normal canonical-form data, gauge-phase separation, and proportional
+	The normal canonical-form hypotheses, gauge-phase separation, and proportional
 	decomposition are exactly the hypotheses of
 	Lemma~\ref{lem:common_phase_cover_of_separated_normal_bnt}.
 \end{proof}
 
-\begin{lemma}[BNT-cover hypotheses imply phase-cover hypotheses]%
+\begin{lemma}[BNT matching hypotheses imply phase-cover hypotheses]%
 \label{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.toCommonPrimitivePhaseCoverHypotheses}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_primitive_phase_cover_hypotheses}
-	If two common primitive nonzero-sector families satisfy the BNT-cover
+	If two common primitive nonzero-sector families satisfy the BNT matching
 	hypotheses, then they satisfy the phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}.
 \end{lemma}
@@ -1109,8 +1109,8 @@ BNT comparison hypotheses for the common primitive sectors.
 \begin{proof}
 	\leanok
 	\uses{lem:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
-	The zero-tail equality and injectivity assumptions are part of the BNT-cover
-	hypotheses. The preceding lemma supplies the common MPV phase cover.
+	The zero-block dimension equality and injectivity assumptions are part of the
+	BNT matching hypotheses. The preceding lemma supplies the common MPV phase cover.
 \end{proof}
 
 \begin{lemma}[Common primitive sectors with span hypotheses]%
@@ -1120,29 +1120,30 @@ BNT comparison hypotheses for the common primitive sectors.
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
 		def:common_primitive_span_hypotheses,
 		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
-		Assume $A$ and $B$ have the same MPV family and that the canonically blocked
-		nonzero parts agree with the same families written after identifying
-		blocked physical words.  The common primitive theorem then produces one
-	positive blocking length, zero-tail equations, trace-preserving primitive
-	irreducible nonzero-sector families with positive bond dimensions and nonzero
-	weights, and the positive-length and length-zero identities for those
-	families.  If these produced families also satisfy
-	Definition~\ref{def:common_primitive_span_hypotheses}, then the zero-tail
-	sector comparison conclusion holds: after a positive blocking, there are
-	sector decompositions $P,Q$ agreeing with $A$ and $B$ at all positive lengths,
-	with $P$ and $Q$ generating the same full MPV family, carrying BNT data, and
-	with their sector weights matched up to a permutation and nonzero phases.
+	Assume $A$ and $B$ have the same MPV family and that the canonically blocked
+	nonzero parts agree with the same families written after identifying
+	blocked physical words.  The common primitive theorem then produces one
+	positive blocking length with
+	\(A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and
+	\(B^{[p]}\sim\mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and
+	trace-preserving primitive irreducible nonzero-sector families with positive
+	bond dimensions and nonzero weights.  If these produced families also satisfy
+	Definition~\ref{def:common_primitive_span_hypotheses}, then the leftover
+	zero-block sector comparison conclusion holds: after a positive blocking,
+	there are sector decompositions $P,Q$ agreeing with $A$ and $B$ at all
+	positive lengths, with $P$ and $Q$ generating the same full MPV family, with
+	BNT bases, and with their sector weights matched up to a permutation and
+	nonzero phases.
 \end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
 		thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
-	Apply the common primitive theorem to obtain the nonzero-sector families and
-		their structural properties.  The span hypotheses provide equal
-	zero-tail dimensions, one-site injectivity, and finite-length nonzero-sector
-	span equality.  These are exactly the additional hypotheses required by the
-	zero-tail block-span comparison theorem.
+	Apply the common primitive theorem to obtain the nonzero-sector families.
+	The span hypotheses provide \(z_A=z_B\), one-site injectivity, and
+	finite-length nonzero-sector span equality.  These are exactly the additional
+	hypotheses required by the leftover-zero-block comparison theorem.
 \end{proof}
 
 \begin{definition}[Blocked-word identification for common sectors]%
@@ -1230,19 +1231,21 @@ BNT comparison hypotheses for the common primitive sectors.
 	unconditional decomposition.
 \end{proof}
 
-\begin{lemma}[Common sectors from phase-cover data]%
+\begin{lemma}[Common sectors from phase covers]%
 \label{lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
 	Let $A$ and $B$ have the same MPV family.  Assume the blocked-word
-	identification for the common-sector data.  The common-sector structural
-	theorem then produces a common blocking length, zero-tail identities, and
+	identification for the common-sector families.  The common-sector structural
+	theorem then produces a common blocking length with
+	\(A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and
+	\(B^{[p]}\sim\mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and
 	trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those
 	families satisfy the phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}, then the sector
-	decompositions obtained from the two sides have BNT data, agree as full MPV
+	decompositions obtained from the two sides have BNT bases, agree as full MPV
 	families, and their sector weights satisfy the matched sector-weight conclusion.
 \end{lemma}
 
@@ -1256,16 +1259,16 @@ BNT comparison hypotheses for the common primitive sectors.
 	common-sector comparison lemma with those span hypotheses.
 \end{proof}
 
-\begin{lemma}[Common sectors from BNT-cover data]%
+\begin{lemma}[Common sectors from BNT matching hypotheses]%
 \label{lem:afterBlocking_sectorComparison_reindexed_bntCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses,
 		def:common_sector_relabeling_hypothesis}
 	Let $A$ and $B$ have the same MPV family. Assume the blocked-word
-	identification for the common-sector data.  The common-sector structural
+	identification for the common-sector families.  The common-sector structural
 	theorem gives common primitive nonzero-sector families. If those families
-	satisfy the BNT-cover hypotheses, then the same sector-weight comparison
+	satisfy the BNT matching hypotheses, then the same sector-weight comparison
 	conclusion holds.
 \end{lemma}
 
@@ -1273,26 +1276,28 @@ BNT comparison hypotheses for the common primitive sectors.
 	\leanok
 	\uses{lem:common_primitive_bnt_cover_hypotheses_to_phase_cover_hypotheses,
 		lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	Convert the BNT-cover hypotheses for the common primitive nonzero-sector
+	Convert the BNT matching hypotheses for the common primitive nonzero-sector
 	families to common phase-cover hypotheses, and then apply the common-sector
-	comparison lemma with common phase-cover data.
+	comparison lemma with a common phase cover.
 \end{proof}
 
-\begin{definition}[After-blocking BNT-cover comparison hypotheses]%
+\begin{definition}[After-blocking BNT matching hypotheses]%
 	\label{def:after_blocking_sector_comparison_hypotheses}
 	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses}
 	For two tensors with the same MPV family, the structural reduction supplies
-	a common blocking, identities for the all-zero leftover block (the formal
-	zero-tail parameter), and common primitive nonzero-sector
-	families. These hypotheses add the BNT-cover comparison data for those
-	families. The blocked-word identification for common cyclic sectors is
+	a common blocking with
+	\(A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\),
+	\(B^{[p]}\sim\mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and
+	\(z_A=z_B\), together with common primitive nonzero-sector families. These
+	hypotheses add the BNT matching hypotheses for those families. The
+	blocked-word identification for common cyclic sectors is
 	derived from the grouped-block cast theorem.
 
-	The comparison data include the sectors'
+	The hypotheses include the sectors'
 	trace-preserving normalization, primitivity, irreducibility, and positive
-	bond-dimension evidence before returning BNT-cover comparison hypotheses for
+	bond-dimension evidence before returning BNT matching hypotheses for
 	those blocks. Thus the assumptions apply to the common primitive sectors
 	obtained after blocking, not to an arbitrary chosen decomposition.
 \end{definition}
@@ -1305,20 +1310,20 @@ BNT comparison hypotheses for the common primitive sectors.
 	The conclusion consists of a positive blocking length and sector
 	decompositions $P,Q$ at that length. The blocked tensors agree with
 	$P$ and $Q$ at every positive length, while $P$ and $Q$ generate the same
-	full MPV family. Both sector decompositions carry BNT data. Their basis
+	full MPV family. Both sector decompositions have BNT bases. Their basis
 	sectors are matched by a permutation, the corresponding multiplicities agree,
 	and the sector-weight multisets agree after multiplying the weights on one
 	side by nonzero sector phases.
 \end{definition}
 
-\begin{lemma}[After-blocking comparison from supplied BNT-cover data]%
+\begin{lemma}[After-blocking comparison from supplied BNT matching hypotheses]%
 \label{lem:after_blocking_sector_comparison_of_supplied_bnt_cover}
 	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
 	\leanok
 	\uses{def:after_blocking_sector_comparison_hypotheses,
 			def:after_blocking_sector_comparison_conclusion}
 	Let $A$ and $B$ generate the same MPV family. Assume the after-blocking
-	BNT-cover comparison hypotheses of
+	BNT matching hypotheses of
 	Definition~\ref{def:after_blocking_sector_comparison_hypotheses}. Then the
 	source-paper sector-comparison conclusion of
 	Definition~\ref{def:after_blocking_sector_comparison_conclusion} is
@@ -1330,9 +1335,10 @@ BNT comparison hypotheses for the common primitive sectors.
 	whose basis sectors and weights match up to permutation and nonzero phases,
 	as in \cite{Cirac2016MPDO_arXiv} and \cite{Cirac2021Matrix}.
 
-	This lemma assumes the BNT-cover comparison hypotheses. It does not prove
+	This lemma assumes the BNT matching hypotheses. It does not prove
 	them from equality of MPV families. Under those hypotheses, together with
-	the all-zero leftover block (the formal zero-tail parameter),
+	\(A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\),
+	\(B^{[p]}\sim\mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), \(z_A=z_B\),
 	trace-preserving normalization, primitivity, irreducibility, and positive
 	bond dimensions, the sector-decomposition conclusion is nonempty.
 \end{lemma}
@@ -1342,13 +1348,12 @@ BNT comparison hypotheses for the common primitive sectors.
 		\uses{lem:common_grouped_block_cast_of_flatten_word,
 			lem:common_grouped_block_cast_to_relabeling,
 			lem:afterBlocking_sectorComparison_reindexed_bntCover}
-		Apply
-		Lemma~\ref{lem:afterBlocking_sectorComparison_reindexed_bntCover} with
-			the word-identification derived from
-		Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} and the BNT-cover
-		comparison data from
+	Apply Lemma~\ref{lem:afterBlocking_sectorComparison_reindexed_bntCover} with
+	the word-identification derived from
+	Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} and the BNT matching
+	hypotheses from
 		Definition~\ref{def:after_blocking_sector_comparison_hypotheses}. The proof
-	then records the resulting blocking length, sector decompositions, BNT data,
+	then records the resulting blocking length, sector decompositions, BNT bases,
 	permutation, multiplicity equalities, phases, and sector-weight
 	multiset equalities as the conclusion structure.
 \end{proof}
@@ -1372,23 +1377,25 @@ BNT comparison hypotheses for the common primitive sectors.
 	matrix; this is the equal-case corollary of the Fundamental Theorem in
 	\cite{Cirac2016MPDO_arXiv}, restated in \cite{Cirac2021Matrix}.
 
-	The comparison statements in this chapter cover this latter part of the
-	argument.  Lemma~\ref{lem:ft_equal_same_structure} proves the common block-structure
-	special case, and Lemma~\ref{lem:bnt_power_sum_recover_copies_weights} recovers the
-	copy counts and sector-weight multisets from the multiplicity data.  The
-	basis-of-normal-tensors construction
-	is available for trace-preserving primitive irreducible nonzero blocks with
-	positive bond dimensions and nonzero weights in
-	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these blocks
-	are injective,
-	Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
-	and~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
-	give the asymptotic orthogonality and finite-length span preservation needed to
-	separate coefficients.  Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
-	then turns equality of nonzero-sector spans into the hypotheses used by the
-	sector comparison theorem.
+	% Maintainer note: the comparison statements in this chapter cover this
+	% latter part of the argument.  Lemma~\ref{lem:ft_equal_same_structure}
+	% proves the common block-structure special case, and
+	% Lemma~\ref{lem:bnt_power_sum_recover_copies_weights} recovers the copy
+	% counts and sector-weight multisets from the multiplicities and weights.
+	% The basis-of-normal-tensors construction is available for
+	% trace-preserving primitive irreducible nonzero blocks with positive bond
+	% dimensions and nonzero weights in
+	% Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  When these
+	% blocks are injective,
+	% Theorems~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
+	% and~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data_span}
+	% give the asymptotic orthogonality and finite-length span preservation
+	% needed to separate coefficients.
+	% Theorem~\ref{thm:bnt_sector_decomp_pair_overlap_span_of_block_span} then
+	% turns equality of nonzero-sector spans into the hypotheses used by the
+	% sector comparison theorem.
 
-	Common-phase data are used here only to obtain the required span hypothesis.  A common
+	Common phases are used here only to obtain the required span hypothesis.  A common
 	MPV phase cover gives equality of finite-length nonzero-block spans by
 	Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.  A sector basis pre-matching
 	gives the same span equality and the primitive overlap-span hypotheses by
@@ -1401,18 +1408,20 @@ BNT comparison hypotheses for the common primitive sectors.
 	obtain the finite-length span equality required by the sector comparison.
 
 	Chapter~\ref{ch:canonical} supplies the canonical-form reduction needed before
-	these comparison theorems can be applied: a common physical blocking length,
-	the zero-tail identities at that length, and cyclic-sector families for both
-	tensors on a common blocked alphabet.  The blocked-word relabelling and the
+	these comparison theorems can be applied: a common physical blocking length
+	with \(A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\),
+	\(B^{[p]}\sim\mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and
+	\(z_A=z_B\), plus cyclic-sector families for both tensors on a common
+	blocked alphabet.  The blocked-word relabelling and the
 	common primitive irreducible nonzero-sector decompositions are now part of the
 	reduction, culminating in
 	Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}.
 	Lemma~\ref{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
-		then states the hypotheses: equality of the
-	zero-tail dimensions, injectivity of the common nonzero-sector blocks, and
+		then states the hypotheses: \(z_A=z_B\), injectivity of the common
+	nonzero-sector blocks, and
 	finite-length MPV span equality.
 	Lemma~\ref{lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-	adds the zero-tail and injectivity hypotheses to the common phase-cover theorem and
+	adds the zero-block dimension equality and injectivity hypotheses to the common phase-cover theorem and
 	therefore gives the same sector-weight conclusion.  Establishing these
 	hypotheses is the mathematical passage from equality of total MPV vectors to the
 	componentwise power-sum identities used in
