@@ -41,7 +41,7 @@ finite-dimensional space is of the form `T_t = exp(tL)` for some generator `L`
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.1][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
@@ -192,8 +192,8 @@ theorem expSemigroupCLM_continuous
 
 /-! ### The derivative of the exponential semigroup (Wolf Equation 7.2) -/
 
-/-- The derivative of `t ↦ exp(t • L)` at `t` is `exp(t • L) * L`.
-This is Wolf Equation (7.2): `d/dt T_t = L · T_t`. -/
+/-- The derivative of `t ↦ exp(t • L)` at `t` is `T_t · L = L · T_t`
+(the two forms commute).  This is Wolf Equation (7.2): `d/dt exp(tL) = L · exp(tL)`. -/
 theorem hasDerivAt_expSemigroupCLM
     (L : MatrixCLM (Fin D)) (t : ℝ) :
     HasDerivAt (fun u : ℝ => expSemigroupCLM L u)
