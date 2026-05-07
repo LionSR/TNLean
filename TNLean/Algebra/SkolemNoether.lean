@@ -91,9 +91,9 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
         rw [← hX_lin, ← hX_lin_inv]; simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
     _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by simp [mul_assoc]
 
-/-- If $T : \MN{D} \to \MN{D}$ is a multiplicative surjective $\C$-linear map,
-then $T(\Id) = \Id$. This records the fact that a surjective multiplicative linear map
-automatically preserves the unit. -/
+/-- Promote a multiplicative surjective $\C$-linear map
+$T : \MN{D} \to \MN{D}$ to a $\C$-algebra homomorphism. The key step is
+$T(\Id) = \Id$, which follows from surjectivity. -/
 noncomputable def linearMapToAlgHom
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hMul : ∀ M N, T (M * N) = T M * T N)
