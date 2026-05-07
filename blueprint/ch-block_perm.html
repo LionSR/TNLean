@@ -2363,7 +2363,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By induction on the number of blocks&#160;\(r\). In the inductive step, take overlaps with the leading block \(A_0\); after division by \(\mu _0^N\), the contributions from \(k \ge 1\) decay because \(|\mu _k / \mu _0| {\lt} 1\) (strict weight ordering) and the bilinear overlaps \(O_{A_0 A_k}(N)\) and \(O_{A_0 B_k}(N)\) are bounded (Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> supply the relevant bounds), leaving \(O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0\). Condition&#160;(5) gives \(O_{A_0 A_0}(N) \to 1\), hence \(O_{A_0 B_0}(N) \to 1\). Since \(O_{A_0 B_0}(N) \to 1 \neq 0\), the bond dimensions must match: \(D_{A_0} = D_{B_0}\); otherwise Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> would give \(O_{A_0 B_0}(N) \to 0\), a contradiction. With equal bond dimensions established, the contrapositive of Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> forces \(A_0\) and \(B_0\) to be gauge-phase equivalent; the limit \(O_{A_0 B_0}(N) \to 1\) then makes the phase trivial, so \(A_0\) and \(B_0\) generate the same MPV family. Peeling off the leading block and dividing by \(\mu _0^N\), the induction hypothesis applies. </p>
+  <p> By induction on the number of blocks&#160;\(r\). In the inductive step, take bilinear overlaps with the leading block \(A_0\): from \(\sum _k \mu _k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma ) = 0\) one obtains </p>
+<div class="displaymath" id="a0000000982">
+  \[  \sum _k \overline{\mu _k}^N \bigl(O_{A_0 A_k}(N) - O_{A_0 B_k}(N)\bigr) = 0.  \]
+</div>
+<p> After division by \(\overline{\mu _0}^N\), the contributions from \(k \ge 1\) decay because \(|\mu _k / \mu _0| {\lt} 1\) (strict weight ordering) and the bilinear overlaps \(O_{A_0 A_k}(N)\) and \(O_{A_0 B_k}(N)\) are bounded (Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> supply the relevant bounds), leaving \(O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0\). Condition&#160;(5) gives \(O_{A_0 A_0}(N) \to 1\), hence \(O_{A_0 B_0}(N) \to 1\). Since \(O_{A_0 B_0}(N) \to 1 \neq 0\), the bond dimensions must match: \(D_{A_0} = D_{B_0}\); otherwise Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">9.23</a> would give \(O_{A_0 B_0}(N) \to 0\), a contradiction. With equal bond dimensions established, the contrapositive of Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">9.25</a> forces \(A_0\) and \(B_0\) to be gauge-phase equivalent; the limit \(O_{A_0 B_0}(N) \to 1\) then makes the phase trivial, so \(A_0\) and \(B_0\) generate the same MPV family. Peeling off the leading block and dividing by \(\mu _0^N\), the induction hypothesis applies. </p>
 
   </div>
 </div>
@@ -2383,7 +2387,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:block_sep">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2436,7 +2440,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000982">
+<div class="proof_wrapper" id="a0000000983">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2464,7 +2468,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:block_sep_normal">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2521,7 +2525,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000983">
+<div class="proof_wrapper" id="a0000000984">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2549,7 +2553,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:ft_canonical">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2608,7 +2612,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000984">
+<div class="proof_wrapper" id="a0000000985">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
