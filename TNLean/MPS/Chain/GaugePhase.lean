@@ -3,14 +3,15 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Gauge-phase variant of the injective-chain Fundamental Theorem
 
-Let $\widetilde A$ and $\widetilde B$ denote the tensors obtained by contracting
-the chains $A$ and $B$ around the period.  If they are gauge-phase equivalent,
-i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
+Let $\widetilde A$ and $\widetilde B$ denote the combined tensors
+$\widetilde A^{(k,i)}=A_k^i$ and $\widetilde B^{(k,i)}=B_k^i$, obtained by
+using the pair of indices $(k,i)$ as one physical index. If they are
+gauge-phase equivalent, i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
 $$
   \widetilde B^j = \zeta\, X\,\widetilde A^j\,X^{-1},
 $$
-then the chains themselves are cyclically gauge equivalent with a common
-nonzero phase $\zeta$ multiplying every site tensor:
+then the chains themselves are cyclically gauge equivalent with the same
+nonzero scalar $\zeta$ multiplying every site tensor:
 $$
   B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}.
 $$
@@ -43,7 +44,7 @@ open MPSTensor
 
 variable {d D n : ℕ}
 
-/-- **Injective-chain Fundamental Theorem up to gauge phase.**
+/-- **Injective-chain Fundamental Theorem up to a nonzero scalar.**
 
 If `GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and
 `A` is injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
