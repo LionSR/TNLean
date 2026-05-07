@@ -63,9 +63,9 @@ variable {d D : ℕ} {G : Type*} [Group G]
 
 /-- **Periodic projective-representation rigidity hypothesis.**
 
-A tensor `A : MPSTensor d D` in irreducible form carrying an on-site symmetry
-`U : G →* Mat_d(ℂ)` satisfies `PeriodicProjectiveRigidity A U` if the `Y`-gauges
-implementing Corollary 4.1 can be chosen coherently: there is a family
+For an on-site symmetry `U : G →* Mat_d(ℂ)` of a periodic tensor `A`,
+`PeriodicProjectiveRigidity A U` records the coherent choice of the
+`Y`-gauges obtained from Corollary 4.1: there is a family
 `Y : G → GL (Fin D) ℂ` and a scalar 2-cochain `u : G × G → ℂˣ` such that
 
 1. Each `Y g`, together with some `Z`-matrix (satisfying the period, commutation
@@ -156,10 +156,9 @@ the bond-space symmetry data of Corollary 4.1 to a coherent projective
 representation of `G` on the bond space, with factor system satisfying the
 2-cocycle identity whenever `D > 0`.
 
-Callers that already have the Corollary 4.1 data (irreducible form, unitary
-on-site action, symmetry, periodic equal-case FT) can produce
-`PeriodicProjectiveRigidity A U` in the presence of an additional analytic
-coherence hypothesis. -/
+The irreducible-form and unitarity hypotheses belong to the theorem producing
+`PeriodicProjectiveRigidity A U`; this theorem records only the resulting
+projective representation on the bond space. -/
 theorem projectiveRep_of_symmetry
     (A : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
