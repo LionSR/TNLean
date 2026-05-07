@@ -3,74 +3,40 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
+import TNLean.Channel.Schwarz.OperatorJensenAux
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
-# Axiomatized operator convexity and concavity
+# Operator convexity and concavity
 
-This module collects the axioms for **operator convexity/concavity** of matrix
-power and logarithm functions, the **operator Jensen inequality** for positive
-maps, and the **Lieb concavity theorem**. These results are deferred pending
-upstream Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
+`posMap_rpow_concave_jensen` is proved using the finite-POVM resolvent
+argument together with the integral representation of `rpow` from Mathlib.
 
-## Axioms
+## Remaining sorries
 
-The following results are standard in matrix analysis. They are axiomatized
-here because the connecting Mathlib infrastructure is not yet available:
+Four lemmas/blocks still have `sorry`:
+1. `cfcₙ_rpowIntegrand_eq_resolvent` — CFC-to-resolvent identity
+2. `inv_add_spectral_sum` — spectral decomposition of the inverse
+3. `hP_proj` / `hP_ortho` — eigenvector projection properties
+4. Integration step — commutation of T with the Bochner integral
 
-* `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
-* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
-* `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
-* `lieb_concavity_axiom` — Lieb concavity theorem.
+The core POVM argument connecting the resolvent inequality to the
+rpowIntegrand pointwise inequality is complete.
 
-The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
-live here (`trace_rpow_concave_axiom`, `trace_rpow_convex_axiom`) have been
-discharged: see `TNLean.Analysis.OperatorConvexity` for the genuine proofs
-via the spectral theorem and the scalar Jensen inequality.
-
-## Status
-
-All results are axiomatized. The specific Mathlib TODOs blocking proofs:
-
-* `CFC.Rpow.Order`: operator concavity of `rpow` over `[0, 1]`,
-  operator convexity of `rpow` over `[1, 2]`.
-* `CFC.ExpLog.Order`: operator concavity of `log`.
-* General operator Jensen inequality for positive maps: absent from Mathlib.
-* Lieb concavity integral representation: absent from Mathlib.
-
-## Proof plan
-
-1. **Operator concavity of `rpow` for `p ∈ [0, 1]`**: follows from the
-   integral representation `a ^ p = C_p ∫ t^{p-1} a(a + t)⁻¹ dt` (already
-   in Mathlib as `exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁`),
-   once the integrand is shown to be operator concave (parallel to the
-   existing monotonicity proof in `CFC.Rpow.IntegralRepresentation`).
-2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: uses the
-   decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]`, reducing to
-   concavity of `x^{p-1}` for `p - 1 ∈ [0, 1]`.
-3. **Operator concavity of `log`**: follows from rpow concavity via the
-   limit `log x = lim_{p → 0} (x^p - 1)/p`.
-4. **Jensen inequality for positive maps**: follows from operator
-   concavity/convexity via the Hansen--Pedersen 2×2 matrix block trick.
-5. **Lieb concavity**: requires the integral representation
-   `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
-   resolvent monotonicity.
-
-## References
-
-* [R. Bhatia, *Matrix Analysis*, Springer GTM 169, Chapter V]
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.1]
-* [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
-* [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
-  conjecture*, 1973]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
+open Set
+open scoped NNReal
+open Real
 
 noncomputable section
 
@@ -93,71 +59,240 @@ private local instance instAxiomOCNonnegSpectrumClass : NonnegSpectrumClass ℝ 
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
-/-! ## Jensen inequality axioms for positive maps -/
+/-!
+## Auxiliary lemmas (to be filled)
+-/
 
-/-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1, `p ∈ [0, 1]`).
+lemma cfcₙ_rpowIntegrand_eq_resolvent (p t : ℝ) (hp : p ∈ Ioo (0 : ℝ) 1) (ht_pos : 0 < t)
+    (X : Mat) (hX : 0 ≤ X) :
+    cfcₙ (rpowIntegrand₀₁ p t) X =
+      ((t ^ (p - 1) : ℝ) : ℂ) • (1 : Mat) - ((t ^ p : ℝ) : ℂ) • (((t : ℂ) • (1 : Mat)) + X)⁻¹ := by
+  sorry
 
-For a positive subunital map `T` and `p ∈ [0, 1]`:
-  `T(A ^ p) ≤ (T A) ^ p`.
+lemma inv_add_spectral_sum (t : ℝ) (lam : Fin D → ℝ) (P : Fin D → Mat)
+    (h_spectral : A = ∑ j : Fin D, (lam j : ℂ) • P j)
+    (hP_sum : ∑ j : Fin D, P j = (1 : Mat))
+    (hP_proj : ∀ j, (P j) * (P j) = P j) (hP_ortho : ∀ j k, j ≠ k → (P j) * (P k) = 0) :
+    (((t : ℂ) • (1 : Mat)) + A)⁻¹ = ∑ j : Fin D, (((lam j : ℝ) + t)⁻¹ : ℂ) • P j := by
+  sorry
 
-Follows from operator concavity of `rpow` (Bhatia, Chapter V) combined with
-the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
+/-!
+## Main theorem
+-/
 
-References:
-* Wolf, Theorem 5.1
-* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
-axiom posMap_rpow_concave_jensen
+theorem posMap_rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
-    T (A ^ p) ≤ (T A) ^ p
+    T (A ^ p) ≤ (T A) ^ p := by
+  rcases hp with ⟨hp0, hp1⟩
+  -- Convert hA to PosSemidef (IsPositiveMap works with PosSemidef)
+  have hA_psd : A.PosSemidef := by
+    simpa [sub_zero] using (Matrix.le_iff (A := (0 : Mat)) (B := A)).mp hA
+  -- Handle boundary cases p = 0 and p = 1
+  by_cases hp0' : p = 0
+  · subst hp0'
+    have hTA_psd : (T A).PosSemidef := hT A hA_psd
+    have hTA_nonneg0 : 0 ≤ T A := by
+      rw [Matrix.le_iff]; simpa [sub_zero] using hTA_psd
+    have h_eq_A : A ^ (0 : ℝ) = (1 : Mat) := CFC.rpow_zero A (ha := hA)
+    have h_eq_TA : (T A) ^ (0 : ℝ) = (1 : Mat) := CFC.rpow_zero (T A) (ha := hTA_nonneg0)
+    simp [h_eq_A, h_eq_TA, hSub]
+  by_cases hp1' : p = 1
+  · subst hp1'
+    have hTA_psd : (T A).PosSemidef := hT A hA_psd
+    have hTA_nonneg1 : 0 ≤ T A := by
+      rw [Matrix.le_iff]; simpa [sub_zero] using hTA_psd
+    have h_eq_A : A ^ (1 : ℝ) = A := CFC.rpow_one A (ha := hA)
+    have h_eq_TA : (T A) ^ (1 : ℝ) = T A := CFC.rpow_one (T A) (ha := hTA_nonneg1)
+    simp [h_eq_A, h_eq_TA]
+  have hp_pos : 0 < p := by
+    by_contra! H; have : p = 0 := le_antisymm H hp0; exact hp0' this
+  have hp_lt_one : p < 1 := by
+    by_contra! H; have : p = 1 := le_antisymm hp1 H; exact hp1' this
+  have hp_ioo : p ∈ Ioo (0 : ℝ) 1 := ⟨hp_pos, hp_lt_one⟩
+  let q : ℝ≥0 := ⟨p, hp0⟩
+  have hq_pos : 0 < q := hp_pos
+  have hq_ioo : q ∈ Ioo (0 : ℝ≥0) 1 := by
+    refine ⟨by exact_mod_cast hp_pos, ?_⟩; exact_mod_cast hp_lt_one
+  have hTA_psd : (T A).PosSemidef := hT A hA_psd
+  have hTA_nonneg : 0 ≤ T A := by
+    rw [Matrix.le_iff]; simpa [sub_zero] using hTA_psd
+  -- The Löwner integral step:
+  -- (1) A^p = ∫ cfcₙ(rpowIntegrand₀₁ p t) A dμ
+  -- (2) (T A)^p = ∫ cfcₙ(rpowIntegrand₀₁ p t) (T A) dμ
+  -- (3) For each t > 0: T(cfcₙ(rpowIntegrand₀₁ p t) A) ≤ cfcₙ(rpowIntegrand₀₁ p t) (T A)
+  -- (4) T commutes with the integral, so integrating (3) gives T(A^p) ≤ (T A)^p
+  obtain ⟨μ, hμ⟩ :=
+    CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁ (A := Mat) hq_ioo
+  have hq_eq : (q : ℝ) = p := rfl
+  have h_int_A : A ^ p = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) A ∂μ := by
+    calc
+      A ^ p = A ^ ((q : ℝ)) := by rw [hq_eq]
+      _ = A ^ q := by rw [CFC.nnrpow_eq_rpow hq_pos (a := A)]
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ (q : ℝ) t) A ∂μ := (hμ A hA).2
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) A ∂μ := by
+        refine setIntegral_congr_ae measurableSet_Ioi ?_
+        filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+        rw [hq_eq]
+  have h_int_TA : (T A) ^ p = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) (T A) ∂μ := by
+    calc
+      (T A) ^ p = (T A) ^ ((q : ℝ)) := by rw [hq_eq]
+      _ = (T A) ^ q := by rw [CFC.nnrpow_eq_rpow hq_pos (a := T A)]
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ (q : ℝ) t) (T A) ∂μ := (hμ (T A) hTA_nonneg).2
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) (T A) ∂μ := by
+        refine setIntegral_congr_ae measurableSet_Ioi ?_
+        filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
+        rw [hq_eq]
+  -- The pointwise inequality from the POVM resolvent lemma
+  have h_pointwise (t : ℝ) (ht_pos : 0 < t) :
+      T (cfcₙ (rpowIntegrand₀₁ p t) A) ≤ cfcₙ (rpowIntegrand₀₁ p t) (T A) := by
+    rw [cfcₙ_rpowIntegrand_eq_resolvent p t hp_ioo ht_pos A hA,
+      cfcₙ_rpowIntegrand_eq_resolvent p t hp_ioo ht_pos (T A) hTA_nonneg]
+    simp only [map_sub, map_smul, smul_eq_mul]
+    -- Goal: a·T(1) - b·T((t·I + A)⁻¹) ≤ a·I - b·(t·I + T A)⁻¹
+    -- where a = t^(p-1), b = t^p
+    -- Spectral decomposition of A
+    have hA_herm : A.IsHermitian := hA_psd.isHermitian
+    let U : Mat := (hA_herm.eigenvectorUnitary : Mat)
+    let lam : Fin D → ℝ := hA_herm.eigenvalues
+    have hlam_nonneg (j : Fin D) : 0 ≤ lam j := hA_psd.eigenvalues_nonneg j
+    -- Projections P_j = u_j * u_jᴴ
+    let u (j : Fin D) : Matrix (Fin D) Unit ℂ := fun i _ => U i j
+    let P (j : Fin D) : Mat := (u j) * (u j)ᴴ
+    have hP_psd (j : Fin D) : (P j).PosSemidef :=
+      Matrix.posSemidef_self_mul_conjTranspose _
+    have hP_proj (j : Fin D) : (P j) * (P j) = P j := by
+      sorry
+    have hP_ortho (j k : Fin D) (hjk : j ≠ k) : (P j) * (P k) = 0 := by
+      sorry
+    have hP_sum : ∑ j : Fin D, P j = (1 : Mat) := by
+      calc
+        ∑ j : Fin D, P j = U * Uᴴ := by
+          ext r s
+          simp [P, u, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply]
+        _ = 1 := by
+          have hU_unit : U ∈ unitaryGroup (Fin D) ℂ := hA_herm.eigenvectorUnitary.property
+          have hU_mem := Matrix.mem_unitaryGroup_iff.mp hU_unit
+          simpa [Matrix.star_eq_conjTranspose] using hU_mem
+    have h_spectral : A = ∑ j : Fin D, (lam j : ℂ) • P j := by
+      calc
+        A = Unitary.conjStarAlgAut ℂ Mat hA_herm.eigenvectorUnitary
+              (diagonal (RCLike.ofReal ∘ lam)) := hA_herm.spectral_theorem
+        _ = U * diagonal (RCLike.ofReal ∘ lam) * Uᴴ := rfl
+        _ = ∑ j : Fin D, (lam j : ℂ) • P j := by
+          ext r s
+          simp [U, P, u, Matrix.mul_apply, Matrix.diagonal_apply,
+            Matrix.conjTranspose_apply, Matrix.sum_apply]
+    -- B_j = T(P_j), factorize as C_j * C_jᴴ
+    let B (j : Fin D) : Mat := T (P j)
+    have hB_psd (j : Fin D) : (B j).PosSemidef := hT (P j) (hP_psd j)
+    let C (j : Fin D) : Mat := CFC.sqrt (B j)
+    have hC_eq (j : Fin D) : C j * (C j)ᴴ = B j := by
+      have h_sq : (CFC.sqrt (B j)) ^ 2 = B j :=
+        CFC.sq_sqrt (B j) (ha := by rw [Matrix.le_iff]; exact hB_psd j)
+      have h_sqrt_psd : (CFC.sqrt (B j)).PosSemidef := by
+        have h_nonneg : 0 ≤ CFC.sqrt (B j) := CFC.sqrt_nonneg _
+        rw [Matrix.le_iff] at h_nonneg
+        exact h_nonneg
+      have h_sqrt_herm : (CFC.sqrt (B j)).IsHermitian := h_sqrt_psd.isHermitian
+      calc
+        C j * (C j)ᴴ = (C j) * (C j) := by rw [h_sqrt_herm.eq]
+        _ = (CFC.sqrt (B j)) ^ 2 := by ring
+        _ = B j := h_sq
+    -- Defect S
+    have h_defect_psd : (1 - T (1 : Mat)).PosSemidef := by
+      rw [Matrix.le_iff] at hSub; simpa using hSub
+    let S : Mat := CFC.sqrt (1 - T (1 : Mat))
+    have hS_def : S * Sᴴ = 1 - ∑ j : Fin D, C j * (C j)ᴴ := by
+      have h_sq_S : (CFC.sqrt (1 - T (1 : Mat))) ^ 2 = 1 - T (1 : Mat) :=
+        CFC.sq_sqrt (1 - T (1 : Mat))
+          (ha := by rw [Matrix.le_iff]; exact h_defect_psd)
+      have h_sqrt_psd_S : (CFC.sqrt (1 - T (1 : Mat))).PosSemidef := by
+        have h_nonneg : 0 ≤ CFC.sqrt (1 - T (1 : Mat)) := CFC.sqrt_nonneg _
+        rw [Matrix.le_iff] at h_nonneg
+        exact h_nonneg
+      have h_sqrt_herm_S : (CFC.sqrt (1 - T (1 : Mat))).IsHermitian := h_sqrt_psd_S.isHermitian
+      calc
+        S * Sᴴ = (CFC.sqrt (1 - T (1 : Mat))) * (CFC.sqrt (1 - T (1 : Mat))) := by
+          rw [h_sqrt_herm_S.eq]
+        _ = (CFC.sqrt (1 - T (1 : Mat))) ^ 2 := by ring
+        _ = 1 - T (1 : Mat) := h_sq_S
+        _ = 1 - ∑ j : Fin D, B j := by simp [B, hP_sum, map_sum]
+        _ = 1 - ∑ j : Fin D, C j * (C j)ᴴ := by simp [hC_eq]
+    -- Apply POVM resolvent lemma
+    have h_resolvent :
+        ((∑ j : Fin D, (lam j) • (C j * (C j)ᴴ)) + t • (1 : Mat))⁻¹ ≤
+          (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • (C j * (C j)ᴴ)) + t⁻¹ • (S * Sᴴ) :=
+      TNLean.OperatorJensen.povm_resolvent_inv_le (C := C) (wgt := lam) (hwgt := hlam_nonneg)
+        t ht_pos (hdef := hS_def)
+    -- Translate LHS and RHS
+    have hLHS : (∑ j : Fin D, (lam j) • (C j * (C j)ᴴ)) = T A := by
+      calc
+        (∑ j : Fin D, (lam j) • (C j * (C j)ᴴ)) = ∑ j : Fin D, (lam j) • B j := by simp [hC_eq]
+        _ = ∑ j : Fin D, T ((lam j : ℂ) • P j) := by simp [B, map_smul]
+        _ = T A := by rw [← map_sum, h_spectral]
+    have hRHS1 : (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • (C j * (C j)ᴴ)) =
+        T (((t : ℂ) • (1 : Mat)) + A)⁻¹ := by
+      calc
+        (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • (C j * (C j)ᴴ)) =
+            ∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • B j := by simp [hC_eq]
+        _ = ∑ j : Fin D, T (((lam j : ℝ) + t)⁻¹ • P j) := by simp [B, map_smul]
+        _ = T (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • P j) := by rw [map_sum]
+        _ = T (((t : ℂ) • (1 : Mat)) + A)⁻¹ := by
+          rw [inv_add_spectral_sum t lam P h_spectral hP_sum hP_proj hP_ortho]
+    have hRHS2 : (t⁻¹ • (S * Sᴴ)) = (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat)) := by
+      rw [hS_def]; simp
+    rw [hLHS, hRHS1, hRHS2] at h_resolvent
+    -- Now: (T A + t·1)⁻¹ ≤ T((t·1 + A)⁻¹) + t⁻¹·(1 - T(1))
+    -- Multiply by b = t^p ≥ 0 and rearrange
+    have ht_pow_nonneg : 0 ≤ (t : ℝ) ^ p := by positivity
+    let a : ℂ := ((t : ℝ) ^ (p - 1) : ℝ)
+    let b : ℂ := ((t : ℝ) ^ p : ℝ)
+    have h_mul : b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
+        b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat)) := by
+      have h_smul : b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
+          b • (T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) :=
+        smul_le_smul_of_nonneg_left h_resolvent (by exact_mod_cast ht_pow_nonneg)
+      rw [smul_add] at h_smul
+      have h_pow_mul : b * (t⁻¹ : ℂ) = a := by
+        dsimp [a, b]
+        push_cast
+        calc
+          ((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℝ) = ((t : ℝ) ^ p : ℝ) * (((t : ℝ) ^ (1 : ℝ))⁻¹ : ℝ) := by simp
+          _ = ((t : ℝ) ^ p : ℝ) / ((t : ℝ) ^ (1 : ℝ) : ℝ) := rfl
+          _ = (t : ℝ) ^ (p - (1 : ℝ)) := by
+            rw [Real.rpow_sub ht_pos (show p - 1 ≠ p by linarith)]
+          _ = (t : ℝ) ^ (p - 1) := by ring
+      simpa [smul_smul, h_pow_mul] using h_smul
+    -- Rearrange: a·T(1) - b·T(M) ≤ a·1 - b·N
+    have h_add : a • T (1 : Mat) + b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
+        b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • (1 : Mat) := by
+      have h_temp := add_le_add_left h_mul (a • T (1 : Mat))
+      simpa [add_comm, add_left_comm, add_assoc, smul_sub, sub_add_cancel] using h_temp
+    -- h_add: X + Y ≤ Z + W, want X - Z ≤ W - Y
+    have h_goal' : a • T (1 : Mat) - b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ ≤
+        a • (1 : Mat) - b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by
+      have h_sub := add_le_add_right h_add (-(b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) -
+        (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹))
+      simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using h_sub
+    simpa [a, b] using h_goal'
+  -- Integrate the pointwise inequality to get T(A^p) ≤ (T A)^p
+  -- TODO: fill the Bochner integral commutation detail.
+  sorry
 
-/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`).
-
-For a positive subunital map `T` and `p ∈ [1, 2]`:
-  `(T A) ^ p ≤ T(A ^ p)`.
-
-Follows from operator convexity of `rpow` (Bhatia, Chapter V) combined with
-the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
-
-References:
-* Wolf, Theorem 5.1
-* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
+/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`). -/
 axiom posMap_rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
     (T A) ^ p ≤ T (A ^ p)
 
-/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case).
-
-For a positive **unital** map `T` and positive-definite `A`:
-  `T(log A) ≤ log(T A)`.
-
-Follows from operator concavity of `log` (Bhatia, Chapter V) combined with
-the operator Jensen inequality. Requires unitality (`T 1 = 1`), not
-merely subunitality.
-
-References:
-* Wolf, Theorem 5.1
-* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
+/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case). -/
 axiom posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A)
 
 /-! ## Lieb concavity axiom -/
-
-/-- **Lieb concavity theorem** (Lieb 1973, Ando 1979).
-
-For `s ∈ [0, 1]`, any matrix `K`, and PD matrices `A₁, A₂, B₁, B₂`:
-  the map `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave.
-
-Requires the integral representation
-`A^s B^{1-s} = (sin πs / π) ∫₀^∞ t^{s-1} A(A + tB)⁻¹ B dt`
-and resolvent monotonicity, which are not yet in Mathlib.
-
-References:
-* Lieb, *Convex trace functions*, Adv. Math. 11, 1973
-* Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
 axiom lieb_concavity_axiom
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ B₁ B₂ K : Mat}
