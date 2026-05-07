@@ -3,29 +3,22 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Gauge-phase variant of the injective-chain Fundamental Theorem
 
-This file upgrades the exact injective-chain Fundamental Theorem to the case
-where the two **combined tensors** agree only up to a nonzero scalar.  The
-result is the chain-level contraction statement needed in periodic Case 3:
-from a gauge-phase equivalence between `chainCombinedTensor A` and
-`chainCombinedTensor B`, one recovers a cyclic gauge on the underlying chain
-together with a **common** nonzero phase on every site.
+Let $\widetilde A$ and $\widetilde B$ denote the tensors obtained by contracting
+the chains $A$ and $B$ around the period.  If they are gauge-phase equivalent,
+i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
+$$
+  \widetilde B^j = \zeta\, X\,\widetilde A^j\,X^{-1},
+$$
+then the chains themselves are cyclically gauge equivalent with a common
+nonzero phase $\zeta$ multiplying every site tensor:
+$$
+  B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}.
+$$
 
 ## Main declarations
 
 * `MPSTensor.chainCombinedTensor_smul_chain`
 * `MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase`
-
-## Mathematical idea
-
-If $\widetilde A$ and $\widetilde B$ denote the combined tensors of `A` and
-`B`, and if
-$$
-\widetilde B = \zeta \cdot X \, \widetilde A \, X^{-1},
-$$
-then rescaling every site tensor of `B` by `ζ⁻¹` removes the global scalar on
-its combined tensor.  The exact chain Fundamental Theorem then applies to the
-rescaled chain, and multiplying the site relations back by `ζ` gives the
-required cyclic gauge-phase relation.
 -/
 
 open scoped Matrix
@@ -50,17 +43,14 @@ open MPSTensor
 
 variable {d D n : ℕ}
 
-/-- **Injective-chain contraction up to phase.**
+/-- **Injective-chain Fundamental Theorem up to gauge phase.**
 
-If the combined tensors of two chains are gauge-phase equivalent, then the
-chains themselves are cyclically gauge equivalent with one common nonzero phase
-`ζ` multiplying every site tensor of `A`.
-
-This is the finite-chain `$m$-factor cyclic contraction` used by the periodic
-Case-3 program: once a cyclic family of sector-transition tensors is
-formulated as an injective chain and the corresponding combined tensors are
-known to satisfy `GaugePhaseEquiv`, the conclusion recovers sitewise
-proportionality with a cyclic gauge. -/
+If `GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and
+`A` is injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
+$$
+  B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}
+$$
+for all sites `k` and physical indices `i`. -/
 theorem fundamentalTheorem_injective_chain_gaugePhase
     (A B : MPSChainTensor d D n)
     (hA : IsInjective A)

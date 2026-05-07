@@ -4,27 +4,14 @@ import TNLean.MPS.FundamentalTheorem.Basic
 /-!
 # Fundamental Theorem for injective MPS chains
 
-This file proves the Fundamental Theorem for non-translation-invariant injective
-MPS chains (Theorem 1 of [arXiv:1804.04964](https://arxiv.org/abs/1804.04964)):
+Two injective MPS chains `A` and `B` whose combined tensors
+`chainCombinedTensor A` and `chainCombinedTensor B` generate the same MPV
+family are related by cyclic gauge transformations on the virtual bonds.
 
-Two injective MPS chains whose combined tensors generate the same MPV family are
-related by cyclic gauge transformations on the virtual bonds.
-
-## Proof strategy
-
-We pack all site-local tensors into a single combined tensor via
-`chainCombinedTensor`, then apply the single-block Fundamental Theorem
-(`fundamentalTheorem_singleBlock`) to obtain a uniform gauge. A uniform gauge
-is a special case of cyclic gauge equivalence.
-
-## Hypothesis
-
-The hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)` asks
-for trace agreement of all mixed-site words of all lengths. This is stronger
-than the paper's `SameState` (trace agreement at a single chain length). The
-paper bridges this gap via a blocking argument requiring n ≥ 3; that bridging
-step is not formalized here, so the theorem is stated with the stronger
-hypothesis.
+The hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)` is
+trace agreement for all mixed-site words of all lengths.  The paper bridges
+the gap from fixed-length `SameState` to this hypothesis via a blocking
+argument for `n ≥ 3`; this bridging step is not formalized here.
 
 ## References
 
@@ -37,16 +24,13 @@ namespace MPSChainTensor
 
 variable {d D n : ℕ}
 
-/-- **Fundamental Theorem for injective MPS chains** (Theorem 1, arXiv:1804.04964).
+/-- **Fundamental Theorem for injective MPS chains** (Theorem 1 of arXiv:1804.04964).
 
-Two injective MPS chains whose combined tensors generate the same MPV family
-are related by cyclic gauge transformations on the virtual bonds. The proof
-produces a *uniform* gauge (the same invertible matrix at every bond), which is
-stronger than the general cyclic gauge equivalence.
-
-The hypothesis is `SameMPV` on the combined tensor (all-length trace agreement
-for mixed-site words), which is stronger than the paper's fixed-length
-`SameState`. See the module docstring for discussion. -/
+If `A` and `B` are `n`-site chains with `A` injective and
+`SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`, then `A` and `B`
+are cyclically gauge equivalent.  The proof produces a *uniform* gauge
+(the same `X ∈ GL(D, ℂ)` at every bond), which is a special case of cyclic
+gauge equivalence. -/
 theorem fundamentalTheorem_injective_chain
     (A B : MPSChainTensor d D n)
     (hA : IsInjective A)

@@ -7,38 +7,14 @@ import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 /-!
 # Block matching for equal-MPV BNT families
 
-This module proves `blocks_match_of_sameMPV₂_CFBNT`, which converts the equality of
-total matrix product vectors (`SameMPV₂`) between two assembled `IsCanonicalFormBNT`
-families into a concrete `BlockPermutationGaugeWitness`: equal block counts, a block
-permutation, and blockwise dimension equality together with gauge-phase equivalence.
-This is **Layer 1b** of the heterogeneous equal-case fundamental theorem, combining
-Layer 1a (`exists_nondecaying_overlap_of_sameMPV₂_CFBNT` from
-`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap`) with the overlap dichotomy.
-
-## Main statements
-
-* `blocks_match_of_sameMPV₂_CFBNT`: `SameMPV₂` of assembled CF-BNT families yields a
-  `BlockPermutationGaugeWitness` without any caller-supplied coefficient convergence
-  data.
-
-## Implementation notes
-
-The proof uses `mpv_toTensorFromBlocks_eq_sum` to translate `SameMPV₂` into a weighted
-identity on `mpvState`, applies the non-decaying overlap existence result of Layer 1a,
-then completes matching via the overlap dichotomy
-(`mpvOverlap_tendsto_zero_of_dim_ne`,
-`mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left`) and BNT injectivity.
+`blocks_match_of_sameMPV₂_CFBNT`: from `SameMPV₂` on two assembled
+`IsCanonicalFormBNT` families, obtain a `BlockPermutationGaugeWitness`:
+equal block counts, a block permutation, and per-block gauge-phase equivalence.
 
 ## References
 
-* Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled
-  pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
-* Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
-  arXiv:1606.00608 (2017), Appendix A.
-
-## Tags
-
-matrix product states, fundamental theorem, BNT, block permutation, gauge-phase equivalence
+* Cirac, Pérez-García, Schuch, Verstraete, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+* Cirac, Pérez-García, Schuch, Verstraete, arXiv:1606.00608 Appendix A.
 -/
 
 open scoped Matrix BigOperators
@@ -48,59 +24,16 @@ namespace MPSTensor
 
 section HeteroEqualCase
 
-/-- **Block matching from equal weighted MPV sums via overlap dichotomy.**
+/-- **Heterogeneous equal-case block matching**.
 
-Given two `IsCanonicalFormBNT` families generating equal total MPVs via
-`toTensorFromBlocks`, this lemma produces the block matching: equal block counts,
-a permutation, and per-block gauge-phase equivalence.
+Given two `IsCanonicalFormBNT` families with `SameMPV₂` on their assembled
+block-diagonal tensors, this produces equal block counts `rA = rB`, a block
+permutation, and per-block gauge-phase equivalence.
 
-### Mathematical content (overlap dichotomy approach, CPSV17 Appendix A)
-
-The `SameMPV₂` hypothesis combined with `mpv_toTensorFromBlocks_eq_sum` gives the identity
-  `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`   for all N, σ.
-
-**Step 1 — Finding matches via overlap dichotomy**: For each B-block k₀, take the inner
-product of the identity with `mpvState(B k₀, N)`. The B-side gives a sum where
-`mpvOverlap(B k₀, B k₀)(N) → 1` and cross-BNT terms `→ 0`. If ALL cross-family
-overlaps `mpvOverlap(A j, B k₀)` tended to 0, the Gram-matrix projection would force
-`|μB k₀|^N ≤ o(1) · |μA 0|^N`, giving `|μB k₀| < |μA 0|`. By symmetry from the A-side,
-`|μA 0| < |μB 0|`. Combining gives `|μB 0| < |μA 0| < |μB 0|` — a contradiction.
-So ∃ at least one pair (j, k) with non-decaying overlap. By the overlap dichotomy
-(`mpvOverlap_tendsto_zero_of_dim_ne`, `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv`),
-this forces dim equality and gauge-phase equivalence.
-
-**Step 2 — Injectivity**: If two distinct B-blocks k₁ ≠ k₂ were both matched to the
-same A-block j₀, both would be GPE with A j₀, hence GPE with each other — contradicting
-the B-side BNT separation (`hB.blocks_not_equiv`).
-
-**Step 3 — Induction**: Matched pairs can be peeled off using `μA j = μB k · ζ` (from
-BNT LI at consecutive large N), reducing to a smaller problem. Induction on `rA + rB`
-gives the full matching, with `rA = rB` following from injectivity on finite sets.
-
-### Note on SameMPV vs GaugePhaseEquiv
-
-The conclusion is per-block `GaugePhaseEquiv`, NOT exact per-block `SameMPV₂`. This is
-optimal: from `SameMPV₂` of the assembled tensors, one can only derive GPE for individual
-blocks (the phases may be non-trivial). A counterexample: take `B = ζ • (X · A · X⁻¹)`
-with `|ζ| = 1, ζ ≠ 1` and `μB = μA / ζ`; then the assembled tensors have equal MPVs
-but the blocks differ by phase `ζ^N`.
-
-### Proof structure
-
-The proof has the following fully-formal components:
-
-1. **Base cases** (`rA = 0` or `rB = 0`): linear independence + vanishing sum → ⊥.
-2. **Overlap dichotomy**: non-decaying overlap → dim match + GPE (contrapositives of
-   `mpvOverlap_tendsto_zero_of_dim_ne` and `..._of_not_gaugePhaseEquiv_cast_left`).
-3. **Matching injectivity**: GPE of two A-blocks with the same B-block gives cross-overlap
-   norm → 1 (via `mpv_eq_pow_mul_of_gaugePhase` + `norm_eq_one_of_selfOverlap_scale`),
-   contradicting A-BNT cross-overlap → 0. Similarly for B-side.
-4. **rA = rB**: injective maps `Fin rA → Fin rB` and `Fin rB → Fin rA` on finite types.
-5. **Permutation**: `Equiv.ofBijective` on the now-bijective matching function.
-
-The non-decaying overlap existence (`exists_nondecaying_A` and `exists_nondecaying_B`)
-is established by `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, which uses strong
-induction on `rA + rB` together with a dominant-weight projection argument. -/
+The proof uses the overlap dichotomy: non-decaying cross-family overlap
+forces equal block dimensions and gauge-phase equivalence; injectivity of
+the matching follows from BNT separation.  The argument follows Cirac et al.
+2021 (CPSV17) Appendix A. -/
 lemma blocks_match_of_sameMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
