@@ -31,30 +31,12 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
   `trace (diagonal a ^ k) = ∑ i, a i ^ k`
 
-## Principal statements
-
-* `Matrix.trace_diagonal_pow`: `trace (diagonal a ^ k) = ∑ i, a i ^ k`.
-
-* `Matrix.sum_pow_eq_implies_charpoly_diagonal_eq`: If
-  `∑ i, a i ^ k = ∑ i, b i ^ k` for all `k ≥ 1`, then
-  `(diagonal a).charpoly = (diagonal b).charpoly`.
-
-* `Matrix.sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card`: If
-  `∑ i, a i ^ k = ∑ i, b i ^ k` for `1 ≤ k ≤ card n`, then
-  `(diagonal a).charpoly = (diagonal b).charpoly`.
-
-* `Matrix.sum_pow_eq_implies_multiset_eq_of_le_card`: Under the finite-range
-  hypothesis `1 ≤ k ≤ card n`, the multisets `Finset.univ.val.map a` and
-  `Finset.univ.val.map b` are equal. The all-positive-power multiset theorem
-  is its immediate corollary.
-
-* `Matrix.sum_pow_eq_implies_multiset_eq`: If the power sums agree for every
-  positive exponent, then the multisets `Finset.univ.val.map a` and
-  `Finset.univ.val.map b` are equal.
-
-* `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card`: If two nonzero
-  families indexed by `Fin m` and `Fin n` have equal power sums for
-  `1 ≤ k ≤ max m n`, then `m = n` and the multisets of values are equal.
+The main theorem in this file says that, for nonzero families
+`a : Fin m → ℂ` and `b : Fin n → ℂ`, equality of
+`∑ i : Fin m, a i ^ k` and `∑ i : Fin n, b i ^ k` for
+`1 ≤ k ≤ max m n` implies `m = n` and equality of the two multisets of values.
+The same-cardinality theorems are the corresponding finite-range and
+all-positive-power consequences for families indexed by a single finite type.
 
 ## Design note: relation to the exact source statement
 
@@ -151,9 +133,9 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
 
-This is an immediate corollary of `sum_pow_eq_implies_multiset_eq_of_le_card`,
-obtained by restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`.
-Note that this is a **same-cardinality** result; the paper's
+Now a corollary of `sum_pow_eq_implies_multiset_eq_of_le_card`, obtained by
+restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`. Note that
+this is a **same-cardinality** result; the paper's
 `Lem:app_simple` additionally deduces cardinality equality when the sizes may differ. -/
 theorem sum_pow_eq_implies_multiset_eq
     (a b : n → ℂ)

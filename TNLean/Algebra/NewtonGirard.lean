@@ -390,8 +390,8 @@ theorem charpoly_eq_of_trace_pow_eq_of_le_card
 /-- **Main result**: If `tr(A^k) = tr(B^k)` for all `k ≥ 1`, then
 `A.charpoly = B.charpoly`.
 
-This is an immediate corollary of `charpoly_eq_of_trace_pow_eq_of_le_card`,
-obtained by restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`. -/
+Now a corollary of `charpoly_eq_of_trace_pow_eq_of_le_card`, obtained by
+restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`. -/
 theorem charpoly_eq_of_forall_trace_pow_eq
     (A B : Matrix n n R)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = trace (B ^ k)) :
