@@ -12,19 +12,20 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 /-!
 # Correlations for normal MPS in the thermodynamic limit
 
-This file defines connected correlations for a (normalized) MPS tensor
-in the thermodynamic limit. One-point and two-point observables are expressed
-through the transfer map `transferMap`.
+This file defines connected correlations for an MPS tensor in the
+thermodynamic limit.  One-point and two-point observables are expressed
+through the transfer map, and the connected two-point function is obtained
+by subtracting the product of one-point expectations.
 
-The two main spectral statements (`connectedCorrelator_eq_sum` and
-`connectedCorrelator_bound`) are currently conditional interfaces:
-they take the spectral decomposition / bound as an explicit hypothesis.
-Constructing the coefficients and eigenvalues from the transfer-map
-eigendecomposition (so that these become unconditional theorems) is
-tracked in GitHub issue #1447.
+The spectral statements `connectedCorrelator_eq_sum` and
+`connectedCorrelator_bound` take the spectral decomposition or bound
+as an explicit hypothesis; the source (arXiv:2011.12127, Sec.~4.5)
+derives these hypotheses from the transfer-map eigendecomposition.
+The definitions here are used by the zero-correlation-length results.
 
-The definitions here are used by the zero-correlation-length results
-in `MPS/RFP/ZeroCorrelationLength.lean`.
+[Maintainer note: constructing the coefficients and eigenvalues from the
+transfer-map eigendecomposition (so that the spectral statements become
+unconditional) is tracked in GitHub issue #1447.]
 -/
 
 open scoped Matrix BigOperators
@@ -70,15 +71,18 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
       Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
 
 /--
-Spectral expansion interface for connected correlators (conditional).
+Spectral expansion of connected correlators (conditional on supplied
+coefficients and eigenvalues).
 
 If coefficients `cⱼ` and eigenvalues `λⱼ` satisfying the spectral expansion
 identity are supplied, then the connected correlator equals the sum of
 exponentials `∑ⱼ cⱼ λⱼⁿ`.
 
 The source (arXiv:2011.12127, Sec. 4.5) asserts that such `cⱼ, λⱼ`
-always exist for a normal MPS via the transfer-map eigendecomposition;
-constructing them is deferred to issue #1447.
+always exist for a normal MPS via the transfer-map eigendecomposition.
+
+[Maintainer note: constructing `cⱼ, λⱼ` from the eigendecomposition of
+`transferMap A` is tracked in GitHub issue #1447.]
 -/
 theorem connectedCorrelator_eq_sum
     (A : MPSTensor d D)
@@ -93,16 +97,18 @@ theorem connectedCorrelator_eq_sum
   hdecomp
 
 /--
-Exponential bound for connected correlations (conditional).
+Exponential decay bound for connected correlations (conditional on
+supplied constant and subleading eigenvalue).
 
 If a constant `C_X_Y ≥ 0` and a subleading eigenvalue `λ₂` with the
 exponential-decay bound are supplied, then the connected correlator
 satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
 
-The source (arXiv:2011.12127, Sec. 4.5) derives this from the
-sum-of-exponentials expansion and the spectral gap condition;
-constructing `C_X_Y` and `λ₂` from the transfer-map spectrum is
-deferred to issue #1447.
+The source (arXiv:2011.12127, Sec.~4.5) derives this from the
+sum-of-exponentials expansion and the spectral gap condition.
+
+[Maintainer note: constructing `C_X_Y` and `λ₂` from the spectrum of
+`transferMap A` is tracked in GitHub issue #1447.]
 -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)
