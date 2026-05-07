@@ -926,7 +926,7 @@ decomposition.
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        lem:perBlockLinearExtension_bijective}
+        def:tensor_from_blocks}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -946,8 +946,7 @@ decomposition.
     \]
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
-        thm:piAlgEquiv_decomposition}
+\begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem (existing) to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
