@@ -29,7 +29,7 @@ import Mathlib.Analysis.Normed.Group.InfiniteSum
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace

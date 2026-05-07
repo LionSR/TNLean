@@ -59,7 +59,7 @@ space obtained from that slice.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.5][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.5][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal TNOperatorSpace
