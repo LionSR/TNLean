@@ -98,42 +98,6 @@ The results follow~\cite{Sanz2010Quantum}.
     length~$L$ equals $\MN{D}$.
 \end{proof}
 
-\begin{lemma}[Two-sided span from one nonzero matrix]
-    \label{lem:two_sided_nonzero_matrix_span}
-    \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
-    \leanok
-    If \(C\in M_D(\mathbb C)\) is nonzero, then
-    \[
-        \operatorname{span}\{RCS:R,S\in M_D(\mathbb C)\}=M_D(\mathbb C).
-    \]
-    This is the matrix-factorization input used in
-    \cite[Lemma~\texttt{lem1}]{PerezGarcia2007Matrix}.
-\end{lemma}
-
-\begin{proof}\leanok
-    Choose a nonzero entry \(C_{pq}\).  Then every matrix unit \(E_{ij}\)
-    is a scalar multiple of \(E_{ip}CE_{qj}\), so the displayed span
-    contains the standard matrix basis.
-\end{proof}
-
-\begin{lemma}[Exact words around a nonzero middle matrix]
-    \label{lem:block_injective_two_sided_word_span}
-    \lean{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
-    \leanok
-    \uses{def:l_blk_injective, lem:two_sided_nonzero_matrix_span}
-    If \(A\) is \(L\)-block injective and \(X\neq 0\), then
-    \[
-        \operatorname{span}\{A_uXA_v: |u|=|v|=L\}=M_D(\mathbb C).
-    \]
-\end{lemma}
-
-\begin{proof}\leanok\uses{lem:two_sided_nonzero_matrix_span}
-    By \(L\)-block injectivity, the length-\(L\) word products span
-    \(M_D(\mathbb C)\).  Bilinearity of \((R,S)\mapsto RXS\) reduces the
-    preceding lemma to products with \(R\) and \(S\) chosen among those
-    word products.
-\end{proof}
-
 \section{Fitting decomposition}
 
 \begin{definition}[Fitting decomposition]\label{def:fitting_decomp}
@@ -439,8 +403,61 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \section{Proof of the cumulative Wielandt bound}
 
+\begin{definition}[Wielandt analysis]\label{def:wielandt_analysis}
+    \uses{def:mps_tensor, def:normal}
+    A \emph{Wielandt analysis} for a normal MPS tensor~$A$
+    consists of:
+    a word $w_0$ of length $\le D^2$,
+    a nonzero eigenvalue $\mu$,
+    and a nonzero eigenvector $\varphi$
+    of the matrix $A^{w_0}$, such that
+    $A^{w_0} \varphi = \mu \varphi$.
+\end{definition}
+
+\begin{theorem}[Wielandt analysis exists]\label{thm:wielandt_analysis}
+    \lean{MPSTensor.wielandt_chain}
+    \leanok
+    \uses{def:wielandt_analysis, def:normal}
+    Every normal MPS tensor admits a Wielandt analysis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:eigenvalue_extraction}
+    Immediate from Theorem~\ref{thm:eigenvalue_extraction}.
+\end{proof}
+
+\begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
+    \lean{MPSTensor.wielandt_chain}
+    \leanok
+    \uses{def:wielandt_analysis, def:cumulative_vector_span, def:normal,
+          def:cumulative_span}
+    Let $A$ be a normal MPS tensor with bond dimension~$D \ge 1$.
+    Then the following hold simultaneously:
+    \begin{enumerate}
+        \item $T_{D^2}(A) = \MN{D}$ (cumulative span stabilises);
+        \item there exists a word $w_0$ with $|w_0| \le D^2$ and
+              $\tr(A^{w_0}) \ne 0$;
+        \item there exist $w_0, \mu \ne 0, \varphi \ne 0$ with
+              $|w_0| \le D^2$ and $A^{w_0} \varphi = \mu\,\varphi$;
+        \item for every $\varphi \ne 0$,
+              $K_{D^2}(A, \varphi) = \C^D$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wielandt_analysis, thm:eigenvector_spreading,
+          thm:cumulative_eq_top}
+    Items (1)--(3) follow from earlier results
+    (Theorems~\ref{thm:cumulative_eq_top},
+    \ref{thm:wielandt_analysis}).
+    Item (4) combines these with the eigenvector spreading bound
+    (Theorem~\ref{thm:eigenvector_spreading}).
+\end{proof}
+
 \begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
-    \lean{MPSTensor.cumulative_wielandt_bound}
+    \lean{MPSTensor.cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_span, def:normal}
     If $A$ is a normal MPS tensor with bond dimension~$D$,
@@ -802,7 +819,7 @@ The results follow~\cite{Sanz2010Quantum}.
               $S_{D^2 \cdot n}(A) = \MN{D}$.
         \item If $A^w$ is non-invertible (non-invertible case),
               the eigenvector $\varphi$ spans a proper subspace,
-              and the rank-one extraction argument gives
+              and the Wielandt chain argument gives
               $S_{D^2}(B) = \MN{D}$, whence
               $S_{D^2 \cdot n}(A) = \MN{D}$.
         \end{enumerate}
@@ -956,22 +973,6 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     rank-one hypothesis in blocked form, and
     Theorem~\ref{thm:wielandt_lemma2b} then gives a blocked,
     fixed-length word-span saturation result.
-\end{remark}
-
-\begin{remark}[Use of the quantum Wielandt theorem in the MPS route]
-    The source papers use the quantum Wielandt theorem as an input converting
-    normality into injectivity after blocking. In the notation of this chapter,
-    the input has two distinct conclusions. First,
-    Theorem~\ref{thm:wielandt_bound} gives cumulative saturation
-    $T_{D^2}(A)=\MN{D}$. This alone is not the injectivity statement used in
-    canonical form, because injectivity requires products of one fixed length.
-    Second, Lemma~2(b) of~\cite{Sanz2010Quantum}, formalized here through
-    Theorem~\ref{thm:wielandt_lemma2b}, supplies a length $N$ for which
-    $S_N(A)=\MN{D}$. This is the statement that matches the injectivity of
-    $\Gamma_N$ and can be transported through blocking by
-    Lemma~\ref{lem:blocking_transfer}. Thus any later use of Wielandt in the
-    Fundamental Theorem must specify whether it is using cumulative span,
-    exact-length span, or the blocked version of the exact-length conclusion.
 \end{remark}
 
 \section{Blocked tensor and rectangular span}\label{sec:rectangular_span}
@@ -1309,7 +1310,7 @@ spectral gap. It is connected to normality through the following results.
     Theorem~\ref{thm:primitive_implies_irreducible} gives
     irreducibility.
     Together with Burnside's theorem
-    (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_jacobson_connection})
+    (Chapter~\ref{ch:canonical}, \S\ref{subsec:burnside_bridge})
     and Theorem~\ref{thm:algspan_to_normal}, one obtains
     \[
         \text{primitive} + \rho \text{ positive definite}
@@ -1373,7 +1374,7 @@ spectral gap. It is connected to normality through the following results.
 \end{proof}
 
 \subsection{From primitivity to strong irreducibility and normality}%
-\label{subsec:prim_normality_connection}
+\label{subsec:prim_bridge_normality}
 
 The results in this subsection remove the aperiodicity assumption
 from the normality conclusions.
@@ -1564,7 +1565,7 @@ span.
     This assembles the full chain:
     \[
         \text{irreducible tensor}
-        \;\xrightarrow{\ref{lem:irreducible_tensor_to_action}}\;
+        \;\xrightarrow{\ref{thm:irreducible_tensor_to_action}}\;
         \text{irreducible action}
         \;\xrightarrow{\text{Burnside}}\;
         \algspn(A) = \MN{D}
@@ -1574,15 +1575,16 @@ span.
     This corresponds to the irreducibility-to-normality direction of
     \cite[Proposition~3]{Sanz2010Quantum}.
     For the Burnside step, we appeal forward to
-    Lemma~\ref{lem:irreducible_tensor_to_action}
-    and~\ref{thm:burnside_matrix}; these references point forward in the
-    chapter order, but the mathematical dependency is acyclic.
+    Theorems~\ref{thm:irreducible_tensor_to_action}
+    and~\ref{thm:burnside_matrix}; this is a
+    presentation-level forward dependency,
+    but the mathematical dependency is acyclic.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:algspan_to_normal, thm:burnside_matrix,
-          lem:irreducible_tensor_to_action}
-    By Lemma~\ref{lem:irreducible_tensor_to_action},
+          thm:irreducible_tensor_to_action}
+    By Theorem~\ref{thm:irreducible_tensor_to_action},
     $A$ acts irreducibly on $\C^D$.
     By Theorem~\ref{thm:burnside_matrix},
     $\algspn(A) = \MN{D}$.
