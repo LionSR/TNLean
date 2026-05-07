@@ -176,7 +176,7 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exist
   have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
   simpa [T, hproof] using hMultiset j
 
-/-- **Heterogeneous sector comparison reduces to the shared-basis case after phase matching.**
+/-- **Sector comparison for different bases reduces to the shared-basis case after phase matching.**
 
 Assume two sector decompositions `P` and `Q` have basis blocks matched by a permutation `perm`,
 matching multiplicities, and per-basis MPV relations
