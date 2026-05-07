@@ -9,10 +9,10 @@ import TNLean.MPS.Core.BlockingInfrastructure
 /-!
 # Common-period cyclic-sector blocking
 
-This file provides the common-period blocking operation for cyclic-sector
-blocks and transports per-block primitivity witnesses to that common blocking
-level. The underlying `lcmPeriod` abbreviation and its basic positivity and
-divisibility facts live in `TNLean.MPS.Core.BlockingInfrastructure`.
+The common-period blocking operation for cyclic-sector blocks transports
+per-block primitivity witnesses to a common blocking level. The abbreviation
+`lcmPeriod` is defined in `TNLean.MPS.Core.BlockingInfrastructure`, together
+with its positivity and divisibility lemmas.
 -/
 
 namespace MPSTensor

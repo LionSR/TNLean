@@ -10,10 +10,9 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the complete canonical-form
-reduction after blocking. It gathers the sector-comparison, common-period
-blocking, zero-block comparison, and weight-comparison statements used in the
-non-periodic fundamental theorem.
+The canonical-form reduction after blocking combines sector comparison,
+common-period blocking, zero-block comparison, and weight-comparison statements
+used in the non-periodic fundamental theorem.
 
 The supporting modules are:
 
@@ -61,7 +60,7 @@ The imported modules provide the canonical-form reduction theorems, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `afterBlocking_structuralData_of_sameMPV₂`.
 
-This public entry point also records a conditional formulation of the
+This collection also records a conditional formulation of the
 Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
 invoke the periodic Fundamental Theorem.  The structure
 `BlockedNormalFormHypotheses` names the source proof obligations (blocking
