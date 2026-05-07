@@ -416,11 +416,12 @@ should remain as distinct basis elements. The full BNT theory
 (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3) handles multiple basis
 tensors at the same norm with separate coefficients.
 
-**How `hMPVEq` is supplied.** The hypothesis is provided by a preceding equivalence-class
-decomposition: only blocks equipped with an explicit proof of
-`SameMPV₂ (blocks j) (blocks k)` are placed in the same norm class. The construction
-keeps those `SameMPV₂` proofs together with the representative choice and the factor
-weights.
+**How `hMPVEq` is used.** The construction forms the norm classes from `μ` alone:
+the `j`-th class is `{k | ‖μ k‖ = v_j}`.  The hypothesis `hMPVEq` must already
+hold for every pair in such a class.  Thus this lemma applies only when every
+equal-norm pair satisfies `SameMPV₂`; equal-norm blocks which do not satisfy
+`SameMPV₂` require the full BNT multiplicity theory instead of this
+single-representative norm-class construction.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
