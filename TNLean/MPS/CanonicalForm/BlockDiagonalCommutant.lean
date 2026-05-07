@@ -669,6 +669,52 @@ lemma
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
+/-- **BNT cumulative pair-span bridge**: From `IsCanonicalFormBNT`, obtain the
+cumulative pair-separation data for every ordered pair of distinct blocks:
+`PairTraceSeparatingAll` and `PairTraceSeparatingUpTo S` for a common cutoff `S`.
+
+This packages the data that follows from the BNT hypotheses *without* the
+Burnside-Jacobson identity-padding step.  The missing input needed to reach
+homogeneous trace separation is a period-window identity-padding certificate
+(see `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
+above). -/
+theorem cumulative_pairSpanData_of_isCanonicalFormBNT
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A) :
+    (∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j)) ∧
+    (∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S) := by
+  have hSepAll : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j) :=
+    pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF
+  obtain ⟨S, hSepUpTo⟩ :=
+    exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll A hSepAll
+  exact ⟨hSepAll, ⟨S, hSepUpTo⟩⟩
+
+/-- **Burnside-Jacobson gap at BNT level**: Given `IsCanonicalFormBNT`, the
+cumulative pair-separation data is available.  The remaining Burnside-Jacobson
+input to reach a common homogeneous trace-separating length for all ordered
+pairs of distinct blocks is a period-window identity-padding certificate for
+each ordered pair.
+
+This is a documentation-only restatement of the conditional theorem
+`exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
+to make the gap explicit as a `hWindow` hypothesis. -/
+theorem gap_exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hWindow : ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) period)) ∧
+      ∀ s : ℕ, s < period →
+        ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+            (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (start + s)))) :
+    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T :=
+  exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows
+    μ A hCF hWindow
+
 /-- Positive-length product-word span obtained from block injectivity and finite
 block-selector words.
 

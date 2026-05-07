@@ -1345,4 +1345,111 @@ theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpan
   · exact pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
       A B hperiod_pos hperiod hwindow
 
+/-! ### Burnside-Jacobson pair-span gap
+
+The theorems in this section document the remaining Burnside-Jacobson gap
+between the cumulative pair-span data that follows from BNT non-equivalence
+and the homogeneous `PairWordTupleSpanTop` certificates needed by the
+conditional trace-separation theorem above.
+
+**What is proved** (below):
+  From BNT injectivity, normalization, and non-gauge-equivalence, the
+  simultaneous pair words are trace-separating over all finite lengths
+  (`PairTraceSeparatingAll`), which gives a finite cumulative cutoff
+  `PairTraceSeparatingUpTo A B S` for some `S`.
+
+**What is still needed** (Burnside-Jacobson gap):
+  A homogeneous identity-padding period window: a start length and a nonzero
+  period length such that the simultaneous pair identity `(1, 1)` lies in the
+  homogeneous pair-word span at the period and at every residual length
+  `start + r` for `r < period`.
+
+Once both inputs are available, the conversion lemma
+`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding` (above)
+produces a homogeneous `PairTraceSeparatingAt A B T`.
+
+The source paper (arXiv:1606.00608, lines 317--345) supplies the
+block-injective fixed-length span through a different route (the 3D⁵ bound via
+the Wielandt and Pérez-García--Verstraete--Wolf--Cirac results).  The
+Burnside-Jacobson route chosen here reaches the same mathematical conclusion
+but requires the identity-padding input separately.
+
+For the unequal-dimension case see
+`exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window`. -/
+
+/-- **BNT-to-cumulative bridge**: From BNT injectivity, normalization, and
+non-gauge-equivalence of a same-dimension pair, produce the cumulative
+pair-span data that is available without the Burnside-Jacobson step.
+
+Returns:
+1. `PairTraceSeparatingAll` — all-length trace separation
+2. A finite cutoff `S` such that `PairTraceSeparatingUpTo A B S`
+   (cumulative trace separation up to length `S`)
+3. The equivalent `PairCumulativeWordTupleSpanTop A B S`
+   (cumulative pair words up to length `S` span the product algebra)
+
+The missing Burnside-Jacobson input to reach homogeneous span is the
+identity-padding period window documented above. -/
+theorem cumulative_pairSpanData_of_injective_not_gaugePhaseEquiv
+    {d D : ℕ} [NeZero D]
+    (A B : MPSTensor d D)
+    (hA_inj : IsInjective A) (hB_inj : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hNot : ¬ GaugePhaseEquiv A B) :
+    PairTraceSeparatingAll A B ∧
+    (∃ S : ℕ, PairTraceSeparatingUpTo A B S ∧
+              PairCumulativeWordTupleSpanTop A B S) := by
+  have hSepAll : PairTraceSeparatingAll A B :=
+    pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
+      A B hA_inj hB_inj hA_norm hB_norm hNot
+  obtain ⟨S, hSepUpTo⟩ :=
+    exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
+  have hCum : PairCumulativeWordTupleSpanTop A B S :=
+    pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSepUpTo
+  exact ⟨hSepAll, ⟨S, hSepUpTo, hCum⟩⟩
+
+/-- **Gap connector**: From the BNT cumulative pair-span data and a homogeneous
+identity-padding period window, produce a homogeneous pair trace-separating
+length.
+
+This theorem makes the Burnside-Jacobson gap explicit as a hypothesis:
+`hIdentity_pad` is the remaining input needed to combine the BNT-derived
+cumulative separation with the homogenization lemma
+`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding`. -/
+theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSepUpTo : PairTraceSeparatingUpTo A B S)
+    (hIdentity_pad : ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n))) :
+    ∃ T : ℕ, PairTraceSeparatingAt A B T := by
+  obtain ⟨L, hPadAll⟩ := hIdentity_pad
+  refine ⟨L + S, ?_⟩
+  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+    A B (S := S) (T := L + S) (by omega) hSepUpTo
+    (fun l hl => hPadAll (L + S - l) (by omega))
+
+/-- **Gap connector, period-window variant**: From BNT cumulative pair-span data
+and a period-window identity-padding certificate, produce a homogeneous pair
+trace-separating length.
+
+`hperiod_pos`, `hperiod_pad`, and `hwindow_pad` together give eventual identity
+padding via `pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window`. -/
+theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_period_window
+    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSepUpTo : PairTraceSeparatingUpTo A B S)
+    {start period : ℕ} (hperiod_pos : 0 < period)
+    (hperiod_pad :
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B period)))
+    (hwindow_pad : ∀ s : ℕ, s < period →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B (start + s)))) :
+    ∃ T : ℕ, PairTraceSeparatingAt A B T :=
+  pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+    A B hSepUpTo
+    (pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window
+      A B hperiod_pos hperiod_pad hwindow_pad)
+
 end MPSTensor
