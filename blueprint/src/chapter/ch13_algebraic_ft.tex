@@ -24,9 +24,74 @@ with $d \ge D^2$.
 The extensions to injective and normal PEPS on arbitrary graphs and the
 improved system-size bound ($2L+1$ in place of $3L$) are not pursued in
 this chapter.
-The chain data (Definition~\ref{def:non_ti_chain}),
-including same chain state, injectivity, and cyclic gauge equivalence,
-was introduced in Chapter~\ref{ch:single}.
+The non-translation-invariant chain data, including same chain state,
+injectivity, and cyclic gauge equivalence, is set up below.
+
+%% ---------------------------------------------------------
+\section{Alternative fixed-length non-TI setup}
+\label{sec:non_ti_setup}
+%% ---------------------------------------------------------
+
+The algebraic proof of \cite{Molnar2018NormalPEPS} keeps a
+fixed periodic chain length and allows the local tensors to vary from site to
+site.
+The first step is therefore a separate setup for finite
+non-translation-invariant chains.
+
+\begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
+    \lean{MPSChainTensor, MPSChainTensor.coeff, MPSChainTensor.SameState, MPSChainTensor.IsInjective, MPSChainTensor.GaugeEquiv}
+    \leanok
+    \uses{def:mps_tensor, def:injective}
+    Fix a chain length $n$.
+    A \emph{non-translation-invariant periodic MPS chain} consists of sitewise
+    tensors
+    \[
+        A_k = \{A_k^i\}_{i=0}^{d-1}, \qquad k = 0, \dots, n-1,
+    \]
+    where each $A_k^i \in \MN{D}$.
+    For a basis configuration $\sigma = (\sigma_0,\dots,\sigma_{n-1})$, its
+    coefficient is
+    \[
+        c_{A,\sigma}
+        := \tr\!\bigl(A_0^{\sigma_0} A_1^{\sigma_1} \cdots A_{n-1}^{\sigma_{n-1}}\bigr).
+    \]
+    Two such chains generate the \emph{same chain state} if these coefficients
+    agree for every $\sigma$.
+    The chain is \emph{injective} if each local tensor $A_k$ is injective in
+    the usual single-site sense.
+    Finally, two chains are \emph{cyclically gauge equivalent} if there are
+    invertible bond matrices $Z_0,\dots,Z_{n-1}$ such that
+    \[
+        B_k^i = Z_k A_k^i Z_{k+1}^{-1}
+    \]
+    for every site $k$ and physical index $i$, with indices understood modulo
+    $n$ so that $Z_n = Z_0$. Locally, this gauge relation is
+    represented by
+    \begin{center}
+        \TNGaugeConjugation{Z_k}{i}{Z_{k+1}^{-1}}
+    \end{center}
+    where the black node denotes the site tensor named in the surrounding
+    formula and the two red side nodes denote the bond gauges on the
+    neighboring virtual legs.
+\end{definition}
+
+\begin{lemma}[Cyclic gauge equivalence is an equivalence relation]
+    \label{lem:chain_gauge_equiv_equivalence}
+    \lean{MPSChainTensor.GaugeEquiv.refl}
+    \lean{MPSChainTensor.GaugeEquiv.symm}
+    \lean{MPSChainTensor.GaugeEquiv.trans}
+    \leanok
+    \uses{def:non_ti_chain}
+    On fixed-length periodic chains, cyclic gauge equivalence is reflexive,
+    symmetric, and transitive.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Reflexivity uses the identity gauge on every bond.
+    Symmetry inverts each bond gauge, and transitivity multiplies the gauges
+    pointwise along the chain.
+\end{proof}
 
 %% ---------------------------------------------------------
 \section{One-sided inverse and decomposition}%
@@ -299,13 +364,13 @@ forces the local tensors to be proportional.
          &= \tr(B_2^{j}\, Y\, B_1^{i})
         \label{eq:external_bond}
     \end{align}
-    Diagrammatically, Equation~\eqref{eq:internal_bond} is the equality obtained
-    by inserting $X$ on the bond between the two sites,
+    Diagrammatically, inserting $X$ on the bond between the two sites
+    (Eq.~\ref{eq:internal_bond}):
     \begin{center}
         \TNInternalTraceInsertion{i}{j}{X}
     \end{center}
-    while Equation~\eqref{eq:external_bond} is the corresponding equality with
-    the insertion $Y$ on the outer trace bond,
+    while the insertion $Y$ on the outer trace bond
+    (Eq.~\ref{eq:external_bond}) is:
     \begin{center}
         \TNExternalTraceInsertion{i}{j}{Y}
     \end{center}
@@ -326,7 +391,7 @@ forces the local tensors to be proportional.
     \leanok
     \uses{def:decomposition_map, lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
-    the conditions in Eqs.~\eqref{eq:internal_bond} and~\eqref{eq:external_bond}
+    the conditions in Eqs.~\ref{eq:internal_bond} and~\ref{eq:external_bond}
     give, for all physical indices $i,j$,
     \[
         \begin{aligned}
