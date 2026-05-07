@@ -11,24 +11,17 @@ The quantum mutual information of a bipartite density matrix is
 `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`. It measures the total
 correlations (classical + quantum) between the two subsystems.
 
-This module exposes the bipartite mutual information of
-`TNLean.Analysis.Entropy` under the `Entropy` namespace via a
-Mathlib-style `alias` (rather than a `noncomputable def` wrapper), and
-adds a small algebraic corollary that follows from the sanctioned
-`Entropy.strongSubadditivity` wrapper. Together with
-`Entropy.VonNeumann` and `Entropy.StrongSubadditivity`, it forms the
-entropy namespace used by the Simple MPDO RFP track
-(see issue #613, #236, #239).
+This module places the mutual information of `TNLean.Analysis.Entropy`
+under the `Entropy` namespace via a Mathlib-style `alias`, and adds a
+corollary derived from `Entropy.strongSubadditivity`.
 
 ## Main declarations
 
 * `Entropy.mutualInformation` — alias of `_root_.mutualInformation`,
-  the bipartite mutual information
-  `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`.
-* `Entropy.mutualInformation_ssa_trivial_B_nonneg` — the nonnegativity
-  of the tripartite mutual information in the trivial-middle form,
-  derived from `subadditivity_ssa_trivial_B` with no extra reduced-trace
-  hypothesis.
+  `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)`
+* `Entropy.mutualInformation_ssa_trivial_B_nonneg` — nonnegativity of
+  the tripartite mutual information in the trivial-middle form,
+  derived from `subadditivity_ssa_trivial_B`
 
 ## References
 
@@ -51,13 +44,13 @@ noncomputable alias mutualInformation := _root_.mutualInformation
 /-! ## Nonnegativity via subadditivity (trivial-middle form)
 
 When a bipartite state on `A ⊗ C` is embedded in a trivial-middle
-tripartite state on `A ⊗ 1 ⊗ C`, subadditivity (Theorem
-`subadditivity_ssa_trivial_B`) immediately gives nonnegativity of the
+tripartite state on `A ⊗ 1 ⊗ C`, subadditivity
+(`subadditivity_ssa_trivial_B`) gives nonnegativity of the
 tripartite mutual information `I(A:C) = S(ρ_A) + S(ρ_C) − S(ρ_AC)`.
 
-We state this corollary in the same tripartite form used by
-`subadditivity_ssa_trivial_B` to avoid any reshuffling of indices; it
-is the version directly consumed by MPDO RFP applications. -/
+The corollary is stated in the same tripartite form as
+`subadditivity_ssa_trivial_B` so that no index reshuffling is
+needed. -/
 
 section Nonnegativity
 

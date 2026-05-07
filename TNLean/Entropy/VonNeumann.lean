@@ -7,32 +7,23 @@ import TNLean.Analysis.Entropy
 /-!
 # Von Neumann entropy in the `Entropy` namespace
 
-This module places the von Neumann entropy of `TNLean.Analysis.Entropy`
-in the `Entropy` namespace. It is the first of three files in
-`TNLean/Entropy/` supporting the Simple MPDO RFP track
-(see issue #236, infrastructure request #613, and the umbrella task
-#239).
+This module provides `Entropy`-namespace aliases for the von Neumann
+entropy definitions and theorems from `TNLean.Analysis.Entropy`.
 
 The underlying eigenvalue-based definition, the nonnegativity proof,
-and the `S(ρ) ≤ log D` bound live in `TNLean.Analysis.Entropy`. To
-avoid maintaining two parallel spellings of the same definition, this
-module introduces `Entropy`-namespace aliases for them via Mathlib-style
-`alias` declarations rather than wrapping them in `noncomputable def`s
-plus trivial unfolding `@[simp]` lemmas.
+and the `S(ρ) ≤ log D` bound live in `TNLean.Analysis.Entropy`. The
+aliases defined here are definitionally equal to their root-namespace
+counterparts (see issues #236, #613, #239).
 
 ## Main declarations
 
 * `Entropy.vonNeumannEntropy` — alias of `_root_.vonNeumannEntropy`,
-  the entropy `S(ρ) = -tr(ρ log ρ)` of a Hermitian matrix.
+  `S(ρ) = -tr(ρ log ρ)` for a Hermitian matrix
 * `Entropy.vonNeumannEntropy_nonneg` — alias of
-  `_root_.vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices.
+  `_root_.vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
 * `Entropy.vonNeumannEntropy_le_log_dim` — alias of
   `_root_.vonNeumannEntropy_le_log_dim`: `S(ρ) ≤ log D` for density
-  matrices on a `D`-dimensional system.
-
-The aliases are definitionally equal to their `_root_` targets, so the
-two spellings are interchangeable in tactics; in particular no
-`@[simp]` unfolding lemma is needed.
+  matrices on a `D`-dimensional system
 
 ## References
 

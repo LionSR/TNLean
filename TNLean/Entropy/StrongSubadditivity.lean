@@ -7,53 +7,36 @@ import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann
 
 /-!
-# Strong subadditivity (theorem formulation and basic corollaries)
+# Strong subadditivity
 
-This module states **strong subadditivity** (SSA) of the von Neumann
-entropy as a theorem inside the `Entropy` namespace, following the
-roadmap of issue #613 for the Simple MPDO RFP track (issue #236,
-umbrella #239).
-
-SSA is the statement that for any tripartite density matrix
-`ρ_ABC` on `A ⊗ B ⊗ C`,
+Strong subadditivity (SSA) of the von Neumann entropy:
+for any tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`,
 `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`.
-This is a deep theorem of Lieb–Ruskai (1973). The full Lean proof is
-deferred to the sanctioned axiom `_root_.strong_subadditivity` in
-`TNLean.Axioms.Entropy`; the theorem `Entropy.strongSubadditivity`
-stated here forwards that single axiom, so that the sanctioned
-axiom inventory under `TNLean/Axioms/` remains authoritative and
-no duplicate axiomatization of SSA is introduced.
+
+This is a theorem of Lieb–Ruskai (1973). The proof is currently
+supplied by the axiom `_root_.strong_subadditivity` in
+`TNLean/Axioms/Entropy.lean`; the theorem `Entropy.strongSubadditivity`
+stated here wraps that single axiom in the `Entropy` namespace.
 
 ## Main declarations
 
-* `Entropy.strongSubadditivity` — **theorem** (not a new axiom).
-  Forwards to `_root_.strong_subadditivity` from
-  `TNLean/Axioms/Entropy.lean`.
-* `Entropy.vonNeumannEntropy_eq_zero_of_fin_one` — a 1×1 Hermitian
-  matrix with trace 1 has vanishing entropy; proved from Mathlib via
-  `Real.negMulLog_one`.
-* `Entropy.strongSubadditivity_rearranged` — the algebraic
-  rearrangement `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)` (the
-  conditional-entropy form), proved from SSA alone.
+* `Entropy.strongSubadditivity` — strong subadditivity in the `Entropy` namespace
+* `Entropy.vonNeumannEntropy_eq_zero_of_fin_one` — a `Fin 1`-indexed Hermitian
+  matrix with trace 1 has vanishing entropy
+* `Entropy.strongSubadditivity_rearranged` — the conditional-entropy form
+  `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)`
 * `Entropy.subadditivity_ssa_trivial_B` — subadditivity
-  `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` in the tripartite form with
-  trivial middle subsystem (`dB = 1`). The middle factor contributes
-  zero entropy, and `Matrix.trace_eq_trace_traceAC_ABC` supplies the
-  trace-one hypothesis for the reduced middle state.
+  `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` with trivial middle subsystem (`dB = 1`)
 
 ## TODO
 
-Replace the sanctioned axiom `_root_.strong_subadditivity` (in
-`TNLean/Axioms/Entropy.lean`) with a proof along the classical route:
-1. Define quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ − log σ))`.
-2. Establish Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices.
-3. Lieb's joint concavity of `(A, B) ↦ tr(Kᴴ Aᵗ K B^{1-t})`.
-4. Monotonicity of the relative entropy under partial trace
-   (the "data-processing inequality").
+Replace the axiom `_root_.strong_subadditivity` with a proof:
+1. Quantum relative entropy `D(ρ‖σ) = tr(ρ(log ρ − log σ))`
+2. Klein's inequality: `D(ρ‖σ) ≥ 0` for density matrices
+3. Lieb's joint concavity
+4. Monotonicity of relative entropy under partial trace
 
-See Lieb–Ruskai, JMP 14, 1938 (1973) and also the modern
-operator-concavity proof in Ruskai, "Inequalities for quantum entropy:
-A review with conditions for equality", JMP 43, 4358 (2002).
+See issue #239 and Lieb–Ruskai, JMP 14, 1938 (1973).
 
 ## References
 
@@ -83,11 +66,6 @@ For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
 where the reduced states are obtained via the tripartite partial
 traces `traceAC_ABC`, `traceC_ABC`, `traceA_ABC` (see
 `TNLean.Analysis.Entropy`).
-
-This theorem forwards the sanctioned axiom
-`_root_.strong_subadditivity` (in `TNLean/Axioms/Entropy.lean`); no
-new axiom is introduced by this module. See the module-level TODO for
-the roadmap replacing the underlying axiom with a proof.
 
 References:
 * Lieb, Ruskai, JMP 14, 1938 (1973). -/

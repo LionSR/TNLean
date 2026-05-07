@@ -15,12 +15,13 @@ clear to downstream files and to CI.
 
 ## Status
 
-* `strong_subadditivity` is an **axiom** (proof deferred; see TODO below).
-* `hayashi_ssa_equality_characterization` is an **axiom** stating the
-  standard equality case of strong subadditivity as a quantum-Markov-chain
-  decomposition on the middle subsystem.
-* A `subadditivity` result can be derived from `strong_subadditivity` by
-  specializing `dC = 1`; this is left for downstream modules.
+* `strong_subadditivity` — strong subadditivity (Lieb–Ruskai 1973).
+  The proof requires relative entropy and operator concavity; see TODO below.
+* `hayashi_ssa_equality_characterization` — the equality case of
+  strong subadditivity, equivalent to quantum-Markov-chain structure on
+  the middle subsystem.
+* Subadditivity can be derived from `strong_subadditivity` by
+  specializing `dC = 1` (provided by downstream modules).
 
 ## TODO
 
@@ -170,9 +171,10 @@ variable {dA dB dC : ℕ}
 For a tripartite density matrix `ρ_ABC` on `A ⊗ B ⊗ C`:
   `S(ρ_ABC) + S(ρ_B) ≤ S(ρ_AB) + S(ρ_BC)`
 
-This is axiomatized; see the module docstring for the deferred proof plan.
-Hermiticity of reduced states is derived via `traceA_ABC_isHermitian` etc.
-from `hρ_dm.1.isHermitian`.
+The proof (Lieb–Ruskai 1973) uses relative entropy, Klein's inequality,
+and Lieb concavity; those prerequisites are not yet formalized.
+Hermiticity of the reduced states follows from the partial-trace
+preservation lemmas (`traceA_ABC_isHermitian` etc.).
 
 References:
 * Lieb, Ruskai, JMP 14, 1938 (1973) -/
@@ -211,10 +213,10 @@ The right-hand side is packaged by the structure
 unitary basis change on `B`, the probabilities `p_j`, the component density
 matrices, and the block-diagonal equality.
 
-This result is introduced here as a **sanctioned axiom**: the full proof needs
-operator-algebra and recovery-map theory that is not yet formalized in
-Mathlib or in this repository. Downstream consumers should import the theorem
-statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
+The full proof (Hayashi 2004, Ruskai 2002, Hayden--Jozsa--Petz--Winter 2004)
+requires operator-algebra and recovery-map theory that is not yet formalized.
+The preferred import for downstream use is
+`TNLean/Entropy/MarkovChain.lean`.
 
 References:
 * Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208

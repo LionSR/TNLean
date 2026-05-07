@@ -7,10 +7,6 @@ import TNLean.Entropy.StrongSubadditivity
 /-!
 # SSA equality and quantum Markov-chain structure
 
-This module states the sanctioned axiom
-`_root_.hayashi_ssa_equality_characterization` from
-`TNLean/Axioms/Entropy.lean` in the `Entropy` namespace.
-
 For a tripartite density matrix `ρ_ABC`, equality in strong subadditivity,
 
 `S(ρ_ABC) + S(ρ_B) = S(ρ_AB) + S(ρ_BC)`,
@@ -20,27 +16,24 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 `B` splits as a finite direct sum `⊕_j (B_jᴸ ⊗ B_jᴿ)` and the state is a
 block-diagonal direct sum `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
-The actual proof is intentionally deferred to the sanctioned axiom in
-`TNLean.Axioms.Entropy`; this file provides only the named formulations and
-the namespace abbreviation for the quantum-Markov-chain decomposition.
+The proof is supplied by the axiom `_root_.hayashi_ssa_equality_characterization`
+in `TNLean/Axioms/Entropy.lean`; this file provides the `Entropy`-namespace
+formulations.
 
 ## Main declarations
 
 * `Entropy.QuantumMarkovDecomposition` — abbreviation for
-  `_root_.HayashiMarkovDecomposition`.
-* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — theorem statement of
-  the sanctioned equivalence `_root_.hayashi_ssa_equality_characterization`.
-* `Entropy.exists_quantumMarkovDecomposition_of_ssaEquality` — forward
-  direction.
-* `Entropy.isSSAEquality_of_quantumMarkovDecomposition` — reverse direction.
+  `_root_.HayashiMarkovDecomposition`
+* `Entropy.ssaEquality_iff_exists_quantumMarkovDecomposition` — the equivalence
+* `Entropy.exists_quantumMarkovDecomposition_of_ssaEquality` — forward direction
+* `Entropy.isSSAEquality_of_quantumMarkovDecomposition` — reverse direction
 
 ## References
 
 * Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208
-* Ruskai, "Inequalities for quantum entropy: A review with conditions for
-  equality", JMP 43, 4358 (2002)
+* Ruskai, JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
-* arXiv:1606.00608 Appendix C (the downstream target of issue #632 / #236)
+* arXiv:1606.00608 Appendix C
 -/
 
 open scoped Matrix ComplexOrder
@@ -60,11 +53,7 @@ abbrev QuantumMarkovDecomposition
   HayashiMarkovDecomposition ρ_ABC
 
 /-- Equality in strong subadditivity is equivalent to the existence of a
-quantum-Markov-chain decomposition on the middle subsystem.
-
-This is a statement of the sanctioned axiom
-`_root_.hayashi_ssa_equality_characterization`; no new axiom is introduced by
-this file. -/
+quantum-Markov-chain decomposition on the middle subsystem. -/
 theorem ssaEquality_iff_exists_quantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
