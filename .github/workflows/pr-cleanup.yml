@@ -15,7 +15,8 @@ jobs:
       !github.event.pull_request.head.repo.fork &&
       (
         startsWith(github.event.pull_request.head.ref, 'claude/') ||
-        startsWith(github.event.pull_request.head.ref, 'codex/')
+        startsWith(github.event.pull_request.head.ref, 'codex/') ||
+        startsWith(github.event.pull_request.head.ref, 'deepseek/')
       )
     runs-on: ubuntu-latest
     env:

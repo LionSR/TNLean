@@ -34,7 +34,7 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
 - References should use BibTeX entries
 
 ### PR and issue title conventions
-@codex and @claude generate inconsistent titles. Unify before merging:
+@codex, @claude, and @deepseek generate inconsistent titles. Unify before merging:
 - **Title format**: `type(scope): description`, for example
   `feat(Wolf Chapter 6): add conditional expectation (Theorem 6.15)`.
 - **Types**: `feat` (new formalization), `fix` (mathematical or proof correction),
@@ -137,26 +137,27 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 2. Verify they exist on main or in another open PR
 3. If unique content would be lost, note it in the close comment and create a tracking issue
 
-## How @codex and @claude Respond
+## How @codex, @claude, and @deepseek Respond
 
-### @codex/@claude only trigger from COMMENTS, not issue/PR body
-Putting `@codex` or `@claude` in the body text when creating an issue does nothing. They only trigger from **comments** posted after creation. Must post a separate comment to activate them.
+### @codex/@claude/@deepseek only trigger from COMMENTS, not issue/PR body
+Putting `@codex`, `@claude`, or `@deepseek` in the body text when creating an issue does nothing. They only trigger from **comments** posted after creation. Must post a separate comment to activate them.
 
 ### Issue comments vs PR comments — critical distinction
 
-| Where you post | @codex behavior | @claude behavior |
-|---|---|---|
-| **Issue comment** | Creates a **new branch from main**, writes code from scratch. Cannot see any existing PR branch. | Creates a **new branch from main**, writes code from scratch. Same as codex. |
-| **PR comment** | Runs a cloud task on the PR's diff. **CAN push fix commits** to the branch (confirmed: pushed to #215, #214, #213, #200, #198, #133). Sometimes fails with "Codex couldn't complete this request" (#212, #211, #206, #201, #196, #167, #91). Also posts review comments. Works on `]` branches! | Checks out **that PR's branch**, can push fix commits to it. BUT fails on branches with `]` in the name (all codex branches) due to `claude-code-action` branch name validation. |
-| **Merged PR comment** | May trigger but no useful effect. | May trigger but no useful effect. |
+| Where you post | @codex behavior | @claude behavior | @deepseek behavior |
+|---|---|---|---|
+| **Issue comment** | Creates a **new branch from main**, writes code from scratch. Cannot see any existing PR branch. | Creates a **new branch from main**, writes code from scratch. Same as codex. | Creates a **new branch from main** (`deepseek/issue-N-...`), writes code from scratch. Same mechanism as @claude. |
+| **PR comment** | Runs a cloud task on the PR's diff. **CAN push fix commits** to the branch (confirmed: pushed to #215, #214, #213, #200, #198, #133). Sometimes fails with "Codex couldn't complete this request" (#212, #211, #206, #201, #196, #167, #91). Also posts review comments. Works on `]` branches! | Checks out **that PR's branch**, can push fix commits to it. BUT fails on branches with `]` in the name (all codex branches) due to `claude-code-action` branch name validation. | Checks out **that PR's branch**, can push fix commits to it. **Same `]` branch limitation** as @claude since it uses the same underlying `claude-code-action`. |
+| **Merged PR comment** | May trigger but no useful effect. | May trigger but no useful effect. | May trigger but no useful effect. |
 
 ### Key implications
 1. **@codex on issues = fresh start from main.** It will never see the existing PR's code. Good for: creating replacement PRs. Bad for: reviewing or fixing existing PRs.
 2. **@claude on PRs = works on that branch.** Good for: pushing fix commits to an existing PR. Bad for: codex branches (name has `]`).
-3. **Neither can rebase.** Must do locally.
-4. **@codex cannot fetch other branches.** Sandboxed environment blocks `git fetch` (HTTP 403). Asking it to "review branch X" or "push to branch Y" will always fail.
+3. **@deepseek on PRs = works on that branch.** Same behavior as @claude (same `claude-code-action` under the hood, different model/provider). Good for: pushing fix commits to an existing PR using DeepSeek models. Bad for: same `]` branch restriction.
+4. **Neither can rebase.** Must do locally.
+5. **@codex cannot fetch other branches.** Sandboxed environment blocks `git fetch` (HTTP 403). Asking it to "review branch X" or "push to branch Y" will always fail.
 
-### Why @claude fails on codex branches — confirmed root cause
+### Why @claude / @deepseek fails on codex branches — confirmed root cause
 Codex auto-generates branch names from the issue title:
 `codex/github-mention-{ISSUE_TITLE_SLUG}-{RANDOM}`. Issue titles with brackets,
 such as `[Wolf Chapter 6]` or `[1804.04964]`, can therefore put `]` into the branch
@@ -168,7 +169,7 @@ Action failed with error: Invalid branch name: "codex/github-mention-wolf-ch5]-s
 Branch names cannot contain control characters, spaces, or special git characters (~^:?*[\]).
 ```
 
-This means **every PR created by @codex from a bracket-titled issue → @claude will always fail**.
+This means **every PR created by @codex from a bracket-titled issue → @claude and @deepseek will always fail**.
 
 **The root cause was the old issue naming convention.** Codex strips the `[` but keeps the `]` in the branch slug.
 
@@ -197,16 +198,16 @@ Codex tends to produce very small PRs (6-60 lines) even when asked for substanti
 | Scenario | Solution |
 |---|---|
 | **Fix** a PR on **any branch** | **@codex on the PR comment** — CAN push fix commits even to `]` branches. Sometimes fails ("couldn't complete"), retry if needed. |
-| **Fix** a PR on a **claude branch** (no `]`) | **@claude on the PR comment** — also pushes directly. Preferred when it works (more reliable than codex). |
+| **Fix** a PR on a **claude/deepseek branch** (no `]`) | **@claude or @deepseek on the PR comment** — also pushes directly. Preferred when it works (more reliable than codex). |
 | **Review** a PR (any branch) | @codex on PR comment, or Bugbot/claude-review CI (automated), or locally. |
-| **Rebase** a conflicting PR | Do it locally — neither @codex nor @claude can rebase |
-| **Add new code** related to an issue | @codex or @claude on the issue — both create new branches from main |
+| **Rebase** a conflicting PR | Do it locally — neither @codex, @claude, nor @deepseek can rebase |
+| **Add new code** related to an issue | @codex, @claude, or @deepseek on the issue — all create new branches from main |
 
 ### Preferred workflow for fixing review comments
 **Always fix on the SAME PR.** No new PRs, no new issues for nits.
 
 1. PR gets review comments → **@codex on that PR** to fix (works on any branch, including `]`)
-2. For clean branches (no `]`) → can also use **@claude on that PR** (more reliable)
+2. For clean branches (no `]`) → can also use **@claude or @deepseek on that PR** (more reliable)
 3. Gets new comments after fix → repeat on the same PR
 4. All comments addressed → merge
 

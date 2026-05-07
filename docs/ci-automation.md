@@ -20,6 +20,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Claude Mention Handler](#claude-mention-handler-claudeyml)
   - [Codex Mention Handler](#codex-mention-handler-codexyml)
+  - [DeepSeek Mention Handler](#deepseek-mention-handler-deepseekyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
   - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
 - [Safety Mechanisms](#safety-mechanisms)
@@ -116,6 +117,13 @@ When you push to a PR branch, several things happen in parallel:
   │  │                                                              │
   │  │  Codex Mention Handler (codex.yml)                           │
   │  │  General-purpose Codex responder for ad-hoc requests.        │
+  │  └──────────────────────────────────────────────────────────────┘
+  │
+  │  ┌──────────────────────────────────────────────────────────────┐
+  │  │ Runs when someone writes "@deepseek" in a comment            │
+  │  │                                                              │
+  │  │  DeepSeek Mention Handler (deepseek.yml)                     │
+  │  │  General-purpose DeepSeek responder for ad-hoc requests.     │
   │  └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -353,6 +361,51 @@ restore the default enabled behavior.
 
 ---
 
+### DeepSeek Mention Handler (`deepseek.yml`)
+
+**What it does**: A general-purpose DeepSeek responder for requests that mention
+`@deepseek`. Routes through the shared `claude-code-with-provider` action with
+`provider=deepseek`, which selects a DeepSeek model and the DeepSeek
+Anthropic-compatible API endpoint.
+
+**When it runs**: On issue comments, PR review comments, PR reviews, and issue
+title/body text that contain `@deepseek`; the triggering author must have write
+access to the repository, the event sender must not be a bot, and the same
+trigger must not also mention `@claude` or `@chatgpt`.
+
+**What DeepSeek does**:
+- Responds to the specific request (fix a proof, explain a tactic, refactor code, etc.)
+- Has access to `lake build`, `gh` CLI, `leanblueprint`, and GitHub MCP tools
+- Reads existing review threads for context before responding
+- Replies directly to the thread that mentioned it
+- Does **not** resolve review threads — that is left to humans or the automated review workflow
+
+**Priority**: When a comment mentions multiple bots, priority is `@claude` >
+`@chatgpt` > `@deepseek`. The deepseek handler skips when `@claude` or `@chatgpt`
+is also present in the trigger text so only one bot responds per comment.
+
+**Branch naming**: Issue-created PRs use the branch prefix `deepseek/issue-`.
+PR cleanup (`pr-cleanup.yml`) recognizes this prefix and applies the same
+title/body sanitization as for `claude/` and `codex/` branches.
+
+**Autofix label**: If the trigger text contains an auto-fix keyword
+(`auto-fix`, `auto fix`, or `autofix`), the auto-create-PR step adds the
+`auto-fix-deepseek` label to the created pull request. Unlike `auto-fix-claude`
+(which gates `auto-fix.yml`) and `auto-fix-codex` (which gates
+`auto-fix-codex.yml`), no DeepSeek auto-fix CI/blueprint/review workflow
+currently watches for `auto-fix-deepseek`. The label exists for forward
+compatibility.
+
+**Concurrency**: Shares the same `bot-respond-*` concurrency group as the
+Claude and Codex mention handlers. Jobs on the same issue/PR queue rather than
+racing.
+
+**Global switch**: Set repository variable `DEEPSEEK_MENTION_ENABLED=false` to
+disable the `@deepseek` responder globally. Unset it, or set another value, to
+restore the default enabled behavior.
+
+---
+
 ### Shared CI Auto-Fix Template (`_ci-auto-fix-shared.yml`)
 
 **What it does**: A reusable workflow template called by the CI-fix and
@@ -407,6 +460,7 @@ provider or mention handler.
 | `CLAUDE_REVIEW_ENABLED=false` | `claude-code-review.yml`, `blueprint-prose-review.yml`, `pr-cleanup.yml`, and `tracking-issue-sync.yml` |
 | `CODEX_AUTO_FIX_ENABLED=false` | `auto-fix-codex.yml` |
 | `CODEX_MENTION_ENABLED=false` | `codex.yml` (`@chatgpt` mention handler) |
+| `DEEPSEEK_MENTION_ENABLED=false` | `deepseek.yml` (`@deepseek` mention handler) |
 
 Set them with:
 
@@ -533,13 +587,13 @@ prefixes, the automation has stopped and needs human intervention.
 
 Each workflow requests only the GitHub token permissions it needs:
 
-| Permission | CI failure fix | Blueprint fix | Review fix | Code review | @claude handler |
-|---|---|---|---|---|---|
-| `contents` | write | write | write | read | write |
-| `pull-requests` | write | write | write | write | write |
-| `actions` | read | read | read | read | read |
-| `issues` | write | write | write | write | write |
-| `id-token` | write | write | write | write | write |
+| Permission | CI failure fix | Blueprint fix | Review fix | Code review | @claude handler | @deepseek handler |
+|---|---|---|---|---|---|---|
+| `contents` | write | write | write | read | write | write |
+| `pull-requests` | write | write | write | write | write | write |
+| `actions` | read | read | read | read | read | read |
+| `issues` | write | write | write | write | write | write |
+| `id-token` | write | write | write | write | write | write |
 
 The code review workflow only needs `contents: read` because it does not push code — it only reads the diff and posts comments. All other workflows need `contents: write` because they push fix commits.
 
