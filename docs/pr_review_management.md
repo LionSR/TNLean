@@ -158,14 +158,14 @@ separate operational request.
 
 ### Issue comments vs PR comments — critical distinction
 
-| Where you post | @codex behavior | @claude behavior |
+| Where you post | `@chatgpt` / Codex workflow behavior | `@claude` behavior |
 |---|---|---|
-| **Issue comment** | Creates a **new branch from main**, writes code from scratch. Cannot see any existing PR branch. | Creates a **new branch from main**, writes code from scratch. Same as codex. |
-| **PR comment** | Runs a cloud task on the PR's diff. **CAN push fix commits** to the branch (confirmed: pushed to #215, #214, #213, #200, #198, #133). Sometimes fails with "Codex couldn't complete this request" (#212, #211, #206, #201, #196, #167, #91). Also posts review comments. Works on `]` branches! | Checks out **that PR's branch**, can push fix commits to it. BUT fails on branches with `]` in the name (all codex branches) due to `claude-code-action` branch name validation. |
+| **Issue comment** | Creates a **new branch from main**, writes code from scratch. Cannot see any existing PR branch. | Creates a **new branch from main**, writes code from scratch. Same as the Codex workflow. |
+| **PR comment** | Runs a cloud task on the PR's diff. **CAN push fix commits** to the branch (confirmed: pushed to #215, #214, #213, #200, #198, #133). Sometimes fails with "Codex couldn't complete this request" (#212, #211, #206, #201, #196, #167, #91). Also posts review comments. Works on `]` branches! | Checks out **that PR's branch**, can push fix commits to it. BUT fails on branches with `]` in the name (Codex-created branches from old bracketed issue titles) due to `claude-code-action` branch name validation. |
 | **Merged PR comment** | May trigger but no useful effect. | May trigger but no useful effect. |
 
 ### Key implications
-1. **@codex on issues = fresh start from main.** It will never see the existing PR's code. Good for: creating replacement PRs. Bad for: reviewing or fixing existing PRs.
+1. **`@chatgpt` on issues = fresh start from main.** It will never see the existing PR's code. Good for: creating replacement PRs. Bad for: reviewing or fixing existing PRs.
 2. **@claude on PRs = works on that branch.** Good for: pushing fix commits to an existing PR. Bad for: codex branches (name has `]`).
 3. **Neither can rebase.** Must do locally.
 4. **@codex cannot fetch other branches.** Sandboxed environment blocks `git fetch` (HTTP 403). Asking it to "review branch X" or "push to branch Y" will always fail.
