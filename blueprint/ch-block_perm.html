@@ -2282,118 +2282,12 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:repeated_word_trace_identity">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.21</span>
-    <span class="theorem_thmtitle">Repeated-word trace identity</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#thm:repeated_word_trace_identity">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000000979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-block_perm.html#lem:eval_word_flatten_replicate">Lemma 12.20</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.sameMPV₂_repeated_word" class="lean_decl">MPSTensor.sameMPV₂_repeated_word</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   If the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) generate the same MPV family, then for every word \(w\) and every \(L \ge 0\), </p>
-<div class="displaymath" id="a0000000980">
-  \[  \sum _k \mu _k^{|w|L} \bigl(\operatorname{tr}((A_k^w)^L) - \operatorname{tr}((B_k^w)^L)\bigr) = 0.  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000979">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply the block-diagonal same-MPV identity to the word \(w^L\) obtained by repeating \(w\) exactly \(L\) times. The block-diagonal coefficient is a weighted sum over the blocks. Lemma&#160;<a href="ch-block_perm.html#lem:eval_word_flatten_replicate">12.20</a> rewrites each block evaluation on \(w^L\) as a matrix power, giving the displayed trace identity. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000981">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">12.22</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#a0000000981">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p>Lemma&#160;<a href="ch-block_perm.html#thm:repeated_word_trace_identity">12.21</a> is a word-evaluation identity. It is not a block-separation theorem: the proof below separates blocks by the mixed-transfer peeling argument of Lemma&#160;<a href="ch-block_perm.html#lem:block_sep_core">12.23</a>. The later equal-case BNT weight comparison uses the finite power-sum identity of Chapter&#160;<a href="ch-bnt.html">13</a>. </p>
-
-  </div>
-</div>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:block_sep_core">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.23</span>
+    <span class="lemma_thmlabel">12.21</span>
     <span class="lemma_thmtitle">Block separation core</span>
     <div class="thm_header_extras">
 
@@ -2404,7 +2298,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:block_sep_core">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2461,7 +2355,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000982">
+<div class="proof_wrapper" id="a0000000979">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2478,7 +2372,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.24</span>
+    <span class="lemma_thmlabel">12.22</span>
     <span class="lemma_thmtitle">Block separation from canonical form</span>
     <div class="thm_header_extras">
 
@@ -2489,7 +2383,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:block_sep">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000980"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2507,7 +2401,7 @@
           
           <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 12.16</a></li>
           
-          <li><a href="ch-block_perm.html#lem:block_sep_core">Lemma 12.23</a></li>
+          <li><a href="ch-block_perm.html#lem:block_sep_core">Lemma 12.21</a></li>
           
         </ul>
     
@@ -2542,7 +2436,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000983">
+<div class="proof_wrapper" id="a0000000980">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2550,7 +2444,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-block_perm.html#lem:block_sep_core">12.23</a> to the identity obtained from the equality of the two block-diagonal MPV families. The induction peels off the dominant block and treats the remainder as a decaying tail. Concretely, one isolates the leading term \(\mu _1^N V(A_1)\) and bounds the remaining contribution by \(O(|\mu _2/\mu _1|^N)\) after dividing by \(\mu _1^N\). The canonical form conditions supply injectivity, TP normalization, strict nonzero weights, and self-overlap convergence for \((A_k)\), while the hypotheses on \((B_k)\) supply the comparison injectivity and TP normalization. </p>
+  <p> Apply Lemma&#160;<a href="ch-block_perm.html#lem:block_sep_core">12.21</a> to the identity obtained from the equality of the two block-diagonal MPV families. The induction peels off the dominant block and treats the remainder as a decaying tail. Concretely, one isolates the leading term \(\mu _1^N V(A_1)\) and bounds the remaining contribution by \(O(|\mu _2/\mu _1|^N)\) after dividing by \(\mu _1^N\). The canonical form conditions supply injectivity, TP normalization, strict nonzero weights, and self-overlap convergence for \((A_k)\), while the hypotheses on \((B_k)\) supply the comparison injectivity and TP normalization. </p>
 
   </div>
 </div>
@@ -2559,7 +2453,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.25</span>
+    <span class="lemma_thmlabel">12.23</span>
     <span class="lemma_thmtitle">Block separation from normal canonical form</span>
     <div class="thm_header_extras">
 
@@ -2570,7 +2464,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:block_sep_normal">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2592,7 +2486,7 @@
           
           <li><a href="ch-canonical.html#thm:nt_modulus_one_gauge">Theorem 11.41</a></li>
           
-          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 12.24</a></li>
+          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 12.22</a></li>
           
         </ul>
     
@@ -2627,7 +2521,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000984">
+<div class="proof_wrapper" id="a0000000981">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2635,7 +2529,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The proof follows the same peeling argument as Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.24</a>, with Theorem&#160;<a href="ch-canonical.html#thm:nt_modulus_one_gauge">11.41</a> (modulus-one eigenvalue rigidity for irreducible tensors) replacing the injective overlap-decay argument at the identification step, since the blocks are irreducible rather than injective. Theorem&#160;<a href="ch-canonical.html#thm:ncf_overlap_tendsto_one">11.40</a> replaces the explicit self-overlap hypothesis on the leading block. Since both block families already use the same dimension function, the conclusion is direct per-block same MPV. </p>
+  <p> The proof follows the same peeling argument as Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.22</a>, with Theorem&#160;<a href="ch-canonical.html#thm:nt_modulus_one_gauge">11.41</a> (modulus-one eigenvalue rigidity for irreducible tensors) replacing the injective overlap-decay argument at the identification step, since the blocks are irreducible rather than injective. Theorem&#160;<a href="ch-canonical.html#thm:ncf_overlap_tendsto_one">11.40</a> replaces the explicit self-overlap hypothesis on the leading block. Since both block families already use the same dimension function, the conclusion is direct per-block same MPV. </p>
 
   </div>
 </div>
@@ -2644,7 +2538,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.26</span>
+    <span class="lemma_thmlabel">12.24</span>
     <span class="lemma_thmtitle">Canonical-form gauge comparison, same-structure case</span>
     <div class="thm_header_extras">
 
@@ -2655,7 +2549,7 @@
 
     <a class="icon proof" href="ch-block_perm.html#lem:ft_canonical">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000000985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-block_perm.html#a0000000982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2677,7 +2571,7 @@
           
           <li><a href="ch-canonical.html#def:tensor_from_blocks">Definition 11.1</a></li>
           
-          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 12.24</a></li>
+          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 12.22</a></li>
           
           <li><a href="ch-block_perm.html#lem:per_block_gauge">Lemma 12.11</a></li>
           
@@ -2710,11 +2604,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Under the hypotheses of Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.24</a>, each pair \((A_k, B_k)\) is gauge equivalent. Hence the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are gauge equivalent. </p>
+  <p>   Under the hypotheses of Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.22</a>, each pair \((A_k, B_k)\) is gauge equivalent. Hence the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are gauge equivalent. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000985">
+<div class="proof_wrapper" id="a0000000982">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2722,7 +2616,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.24</a> gives per-block same MPV. Lemma&#160;<a href="ch-block_perm.html#lem:per_block_gauge">12.11</a> then converts this to per-block gauge equivalence and then to global gauge equivalence of the block-diagonal tensors. </p>
+  <p> Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">12.22</a> gives per-block same MPV. Lemma&#160;<a href="ch-block_perm.html#lem:per_block_gauge">12.11</a> then converts this to per-block gauge equivalence and then to global gauge equivalence of the block-diagonal tensors. </p>
 
   </div>
 </div>
@@ -2731,7 +2625,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">12.27</span>
+    <span class="remark_thmlabel">12.25</span>
     <span class="remark_thmtitle">Relation to the literature</span>
     <div class="thm_header_extras">
 
