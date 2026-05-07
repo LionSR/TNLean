@@ -47,8 +47,7 @@ lemma pauliX_sq : pauliX * pauliX = 1 := by
 
 /-! ### Definition -/
 
-/-- The GHZ MPS tensor: `A i = diagonal (Pi.single i 1)`, i.e.
-`A⁰ = |0⟩⟨0|` and `A¹ = |1⟩⟨1|`. -/
+/-- The GHZ MPS tensor: $A⁰ = |0⟩⟨0|$, $A¹ = |1⟩⟨1|$. -/
 def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 
 @[simp] lemma ghzTensor_apply (i : Fin 2) :
@@ -57,7 +56,7 @@ def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 /-! ### Transfer map and RFP -/
 
 /-- The transfer map of the GHZ tensor extracts the diagonal:
-`E(X)ᵢⱼ = if i = j then Xᵢⱼ else 0`. -/
+$\E_A(X)_{ij} = \delta_{ij} X_{ij}$. -/
 private lemma ghz_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
     (transferMap ghzTensor X) i j = if i = j then X i j else 0 := by
   simp only [transferMap_apply, Fin.sum_univ_two, ghzTensor_apply, Matrix.add_apply,
@@ -98,9 +97,8 @@ theorem ghz_not_isInjective : ¬ IsInjective ghzTensor := by
 
 /-! ### Z₂ on-site symmetry -/
 
-/-- The Z₂ on-site representation via Pauli X. We use `Multiplicative (ZMod 2)` as the
-group: the identity corresponds to `ofAdd 0` and the generator to `ofAdd 1`.
-`U(0) = 1` (identity), `U(1) = σx` (Pauli X swap). -/
+/-- The Z₂ on-site representation via Pauli X: the identity element acts as the
+identity matrix, the generator acts as $\sigma_x$. -/
 noncomputable def z2PhysicalAction :
     Multiplicative (ZMod 2) →* Matrix (Fin 2) (Fin 2) ℂ where
   toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliX
