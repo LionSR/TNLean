@@ -58,9 +58,12 @@ A review with conditions for equality", JMP 43, 4358 (2002).
 ## References
 
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
-  entropy", JMP 14, 1938 (1973)
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
+  entropy", JMP 14, 1938 (1973) — source of SSA
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8][Wolf2012QChannels]
 * arXiv:1606.00608 Section 4.4
+* Blueprint `thm:entropy_strong_subadditivity`,
+  `thm:entropy_subadditivity_trivial_B`,
+  `thm:entropy_fin_one_zero`
 -/
 
 open scoped Matrix ComplexOrder
@@ -89,8 +92,8 @@ This theorem forwards the sanctioned axiom
 new axiom is introduced by this module. See the module-level TODO for
 the roadmap replacing the underlying axiom with a proof.
 
-References:
-* Lieb, Ruskai, JMP 14, 1938 (1973). -/
+Source: Lieb, Ruskai, JMP 14, 1938 (1973);
+blueprint `thm:entropy_strong_subadditivity`. -/
 theorem strongSubadditivity
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -108,7 +111,9 @@ theorem strongSubadditivity
 "conditional entropy" form: `S(ρ_ABC) − S(ρ_AB) ≤ S(ρ_BC) − S(ρ_B)`.
 
 This follows from the axiom by adding `−S(ρ_AB) − S(ρ_B)` to both
-sides of the basic SSA inequality. -/
+sides of the basic SSA inequality.
+
+Source: [Wolf, Chapter 8, Section 8.7][Wolf2012QChannels]. -/
 theorem strongSubadditivity_rearranged
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -138,7 +143,9 @@ section FinOneEntropy
 von Neumann entropy.
 
 The single eigenvalue equals the trace (which is `1`), and
-`negMulLog 1 = -(1 * log 1) = 0`. -/
+`negMulLog 1 = -(1 * log 1) = 0`.
+
+Source: blueprint `thm:entropy_fin_one_zero`. -/
 theorem vonNeumannEntropy_eq_zero_of_fin_one
     (M : Matrix (Fin 1) (Fin 1) ℂ)
     (hM : M.IsHermitian) (hM_trace : M.trace = 1) :
