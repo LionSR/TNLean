@@ -28,7 +28,7 @@ continuous-time semigroup arguments in Wolf Chapter 7.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 7][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 7][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal MatrixOrder TNOperatorSpace
