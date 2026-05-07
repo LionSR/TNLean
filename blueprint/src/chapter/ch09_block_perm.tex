@@ -394,37 +394,6 @@ We use this notation throughout the block-separation argument.
     concatenation.
 \end{proof}
 
-\begin{theorem}[Repeated-word trace identity]\label{thm:repeated_word_trace_identity}
-    \lean{MPSTensor.sameMPV₂_repeated_word}
-    \leanok
-    \uses{def:same_mpv2}
-    If the block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
-    $\bigoplus_k \mu_k B_k$ generate the same MPV family,
-    then for every word $w$ and every $L \ge 0$,
-    \[
-        \sum_k \mu_k^{|w|L}
-        \bigl(\tr((A_k^w)^L) - \tr((B_k^w)^L)\bigr) = 0.
-    \]
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:eval_word_flatten_replicate}
-    Apply the block-diagonal same-MPV identity to the word $w^L$ obtained by
-    repeating $w$ exactly $L$ times.
-    The block-diagonal coefficient is a weighted sum over the blocks.
-    Lemma~\ref{lem:eval_word_flatten_replicate} rewrites each block evaluation on
-    $w^L$ as a matrix power, giving the displayed trace identity.
-\end{proof}
-
-\begin{remark}
-    Lemma~\ref{thm:repeated_word_trace_identity} is a word-evaluation identity.
-    It is not a block-separation theorem: the proof below separates blocks by
-    the mixed-transfer peeling argument of Lemma~\ref{lem:block_sep_core}.
-    The later equal-case BNT weight comparison uses the finite power-sum
-    identity of Chapter~\ref{ch:bnt}.
-\end{remark}
-
 \begin{lemma}[Block separation core]\label{lem:block_sep_core}
     \lean{MPSTensor.block_separation_core}
     \leanok

@@ -402,8 +402,9 @@ end BlockSeparationCoreInduction
 
 /-! ### Block separation core lemma (mixed-transfer / overlap argument)
 
-This is the literature-aligned block-separation step in canonical form.
-Compared to the naive statement in `PiAlgebra/BlockSeparation.lean`, we assume:
+This is the literature-aligned block-separation step in canonical form.  The
+statement includes the additional hypotheses needed for the checked
+mixed-transfer proof:
 
 * `hB_inj` : every block of `B` is injective (needed for the overlap decay lemma
   `mpvOverlap_tendsto_zero`), and
