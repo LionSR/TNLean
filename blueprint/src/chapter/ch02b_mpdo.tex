@@ -34,7 +34,12 @@ together with the virtual left and right indices.
     \uses{def:mpo_tensor}
     By combining the pair $(i,j)$ into a single physical index in
     $\{0,\ldots,d^2-1\}$, one obtains an MPS tensor with physical dimension
-    $d^2$ and bond dimension $D$.
+    $d^2$ and bond dimension $D$:
+    \[
+        M^{\mathrm{MPS}}_{(i,j)} = M^{ij},
+    \]
+    identifying $\{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}$ with
+    $\{0,\ldots,d^2{-}1\}$ via the product encoding.
 \end{definition}
 
 \begin{definition}[Word evaluation]\label{def:mpo_eval_word}
@@ -176,8 +181,8 @@ legs cyclically and taking the resulting trace.
     \lean{MPOTensor.IsLPDO}
     \leanok
     \uses{def:mpo_tensor}
-    An MPO tensor is an \emph{LPDO} if there exist an ancilla dimension $d_K$,
-    an inner bond dimension $D'$, an identification of bond indices
+    An MPO tensor is an \emph{LPDO} if there exist a Kraus dimension $d_K$,
+    an inner bond dimension $D'$, a bond-space identification
     $e : \{0, \ldots, D - 1\} \simeq \{0, \ldots, D' - 1\} \times \{0, \ldots, D' - 1\}$
     (equivalently, $D$ and $(D')^2$
     have the same cardinality), and matrices $A^{(i,k)} \in \MN{D'}$ such that,
@@ -188,9 +193,8 @@ legs cyclically and taking the resulting trace.
     \]
     where $\otimes$ denotes the Kronecker product, $\overline{(\cdot)}$
     denotes entrywise complex conjugation, and $(\cdot)_{e,e}$ denotes
-    reindexing along $e$ from $\{0, \ldots, D' - 1\} \times \{0, \ldots, D' - 1\}$
-    back to $\{0, \ldots, D - 1\}$.
-    This is the local purification form of \cite[Section~4.3]{Cirac2017MPDO_AnnPhys}.
+    reindexing along $e$ back to $\{0, \ldots, D - 1\}$.
+    See \cite[Section~4.3]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
 \begin{theorem}[LPDOs are MPDOs]\label{thm:lpdo_is_mpdo}
@@ -233,9 +237,12 @@ legs cyclically and taking the resulting trace.
     \uses{def:mpo_tensor}
     Given a purifying family
     $A^{(i,k)} \in \MN{D'}$ for $i \in \{0,\ldots,d{-}1\}$ and
-    $k \in \{0,\ldots,d_K{-}1\}$, the \emph{purifying MPS tensor} is the
-    MPS tensor with physical dimension $d \cdot d_K$ and bond dimension $D'$
-    obtained by combining the pair $(i,k)$ into a single index.
+    $k \in \{0,\ldots,d_K{-}1\}$, the \emph{purifying MPS tensor} is
+    \[
+        A^{\mathrm{pur}}_{(i,k)} = A^{(i,k)},
+    \]
+    an MPS tensor with physical dimension $d \cdot d_K$ and bond dimension
+    $D'$.
 \end{definition}
 
 \begin{definition}[Purification RFP]\label{def:is_prfp}

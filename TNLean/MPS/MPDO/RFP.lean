@@ -7,19 +7,15 @@ import TNLean.MPS.MPDO.ZCL
 /-!
 # General MPDO renormalization fixed point
 
-This file states consequences of the current mixed-state RFP definition for
-MPO tensors, following the transfer-map aspect of arXiv:1606.00608,
-Definition 4.1.
-
-The full definition in the paper is phrased using trace-preserving completely
-positive blocking and unblocking maps. In this first pass `MPOTensor.IsRFP`
-states the transfer-map idempotence condition, which is the part already
-supported by the current formalization.
+This file states relations between the MPO transfer-map idempotence condition
+(`MPOTensor.IsRFP`) and MPO zero correlation length (`MPOTensor.IsZCL`),
+following arXiv:1606.00608, Definition 4.1.
 
 ## Main results
 
-* `MPOTensor.isRFP_iff_isZCL`: this current RFP condition coincides with
-  `MPOTensor.IsZCL`.
+* `MPOTensor.isRFP_iff_isZCL`: `IsRFP M ↔ IsZCL M`.
+* `MPOTensor.isRFP_iff_toMPSTensor_isRFP`: equivalence with the doubled-index
+  MPS RFP condition.
 
 ## References
 
@@ -32,17 +28,16 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The mixed-state RFP condition in the current development is
-definitionally the same as MPO ZCL. -/
+/-- `IsRFP M` is definitionally `IsZCL M`. -/
 theorem isRFP_iff_isZCL (M : MPOTensor d D) : IsRFP M ↔ IsZCL M :=
   Iff.rfl
 
-/-- The current mixed-state RFP condition implies MPO ZCL. -/
+/-- `IsRFP M` implies `IsZCL M`. -/
 theorem IsRFP.isZCL {M : MPOTensor d D} (h : IsRFP M) : IsZCL M :=
   h
 
-/-- The current mixed-state RFP condition is equivalent to the pure-state
-RFP condition for the doubled-index MPS tensor. -/
+/-- `IsRFP M` is equivalent to the pure-state RFP condition for the
+doubled-index MPS tensor. -/
 theorem isRFP_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
     IsRFP M ↔ MPSTensor.IsRFP (M.toMPSTensor) := by
   simpa [IsRFP, MPOTensor.IsZCL] using isZCL_iff_toMPSTensor_isRFP M
