@@ -1,4 +1,4 @@
-/-
+/-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
@@ -6,6 +6,22 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+
+/-!
+# Representative common-sector blocks
+
+**Internal bookkeeping.**  For each original nonzero-weight block, a
+`CommonBlockedCyclicSectorFamily` flattens all its cyclic sectors over
+a common alphabet.  This file selects one representative sector per
+original block and transports the structural properties
+(trace-preservation, primitivity, irreducibility) and weight ordering
+to that representative family.
+
+All theorems here are properties of the representative indices derived
+from the internal `CommonBlockedCyclicSectorFamily` record.  They are
+consumed by the normal canonical-form existence pipeline, not directly
+by paper-level statements.
+-/
 
 namespace MPSTensor
 namespace CommonBlockedCyclicSectorFamily
