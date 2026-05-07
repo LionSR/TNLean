@@ -586,15 +586,15 @@ The formal chain is:
     \;\Rightarrow\; \exists S,\ \text{PairTraceSeparatingUpTo}\ A\ B\ S .
 \]
 and is stated in
-\leanid{cumulative_pairSpanConsequences_of_injective_not_gaugePhaseEquiv}
-(equal dimension) and \leanid{cumulative_pairSpanConsequences_of_isCanonicalFormBNT}
+\leanid{cumulative\_pairSpanConsequences\_of\_injective\_not\_gaugePhaseEquiv}
+(equal dimension) and \leanid{cumulative\_pairSpanConsequences\_of\_isCanonicalFormBNT}
 (BNT family).
 
 \subsection{Layer 2: Cumulative $\to$ homogeneous span (gap)}
 
 The remaining step converts cumulative pair-word fullness to homogeneous
 fixed-length fullness. The conversion theorem
-\leanid{pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
+\leanid{pairWordTupleSpanTop\_of\_pairCumulativeWordTupleSpanTop\_of\_identity\_padding}
 requires identity padding: for every \(l\le S\), the pair identity \((1,1)\)
 must belong to the homogeneous pair-word span at length \(T-l\). This
 identity padding is not yet supplied by the BNT data.
@@ -611,17 +611,17 @@ The following theorems are already proved conditional on the identity-padding
 period-window hypothesis:
 
 \begin{itemize}
-  \item \leanid{exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window}
+  \item \leanid{exists\_pairTraceSeparatingAt\_of\_not\_gaugePhaseEquiv\_of\_pairWordTupleSpanTop\_period\_window}
     (single pair, same dimension, takes
     \leanid{PairWordTupleSpanTop} period window)
-  \item \leanid{exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows}
+  \item \leanid{exists\_forall\_pairTraceSeparatingAt\_of\_isCanonicalFormBNT\_of\_identity\_period\_windows}
     (BNT family, takes identity-padding period windows for each ordered pair)
-  \item \leanid{exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_period_windows}
+  \item \leanid{exists\_pos\_productWordSpan\_of\_isCanonicalFormBNT\_of\_identity\_period\_windows}
     (BNT product-word span, same hypotheses)
 \end{itemize}
 
 The theorem
-\leanid{pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding}
+\leanid{pairTraceSeparatingAt\_of\_cumulative\_bnt\_pairSpan\_of\_identity\_padding}
 makes the identity-padding hypothesis explicit in the single-pair cumulative
 route.
 

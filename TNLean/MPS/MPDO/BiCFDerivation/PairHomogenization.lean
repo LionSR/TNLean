@@ -1060,6 +1060,26 @@ direct-sum input used in the David/Perez-Garcia BNT argument. For that input,
 BNT applications should use fixed-length or period-window hypotheses.
 -/
 
+/-- **Cumulative-to-homogeneous implication.** From cumulative pair trace
+separation and eventual identity padding, obtain a homogeneous pair
+trace-separating length.
+
+The hypothesis `hIdentity_pad` supplies the identity padding needed to combine
+the cumulative separation with
+`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding`. -/
+theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSepUpTo : PairTraceSeparatingUpTo A B S)
+    (hIdentity_pad : ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n))) :
+    ∃ T : ℕ, PairTraceSeparatingAt A B T := by
+  obtain ⟨L, hPadAll⟩ := hIdentity_pad
+  refine ⟨L + S, ?_⟩
+  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
+    A B (S := S) (T := L + S) (by omega) hSepUpTo
+    (fun l hl => hPadAll (L + S - l) (by omega))
+
 /-- All-words pair separation plus eventual homogeneous identity padding gives
 one homogeneous pair-trace separating length.
 
@@ -1082,11 +1102,8 @@ theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
     pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hSpan
   obtain ⟨S, hSepUpTo⟩ :=
     exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
-  obtain ⟨L, hPadAll⟩ := hPad
-  refine ⟨L + S, ?_⟩
-  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
-    A B (S := S) (T := L + S) (by omega) hSepUpTo
-    (fun l hl => hPadAll (L + S - l) (by omega))
+  exact pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+    A B hSepUpTo hPad
 
 /-- A finite family of all-words pair-separation hypotheses and eventual identity
 padding hypotheses admits one common homogeneous trace-separating length.
@@ -1382,26 +1399,6 @@ theorem cumulative_pairSpanConsequences_of_injective_not_gaugePhaseEquiv
   obtain ⟨S, hSepUpTo⟩ :=
     exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
   exact ⟨hSepAll, ⟨S, hSepUpTo⟩⟩
-
-/-- **Cumulative-to-homogeneous implication.** From cumulative pair trace
-separation and eventual identity padding, obtain a homogeneous pair
-trace-separating length.
-
-The hypothesis `hIdentity_pad` supplies the identity padding needed to combine
-the cumulative separation with
-`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding`. -/
-theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
-    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
-    (hSepUpTo : PairTraceSeparatingUpTo A B S)
-    (hIdentity_pad : ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B n))) :
-    ∃ T : ℕ, PairTraceSeparatingAt A B T := by
-  obtain ⟨L, hPadAll⟩ := hIdentity_pad
-  refine ⟨L + S, ?_⟩
-  exact pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding
-    A B (S := S) (T := L + S) (by omega) hSepUpTo
-    (fun l hl => hPadAll (L + S - l) (by omega))
 
 /-- **Cumulative-to-homogeneous implication, period-window form.** From
 cumulative pair trace separation and a period-window identity-padding
