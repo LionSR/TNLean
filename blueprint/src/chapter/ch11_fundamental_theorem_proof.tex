@@ -1145,6 +1145,32 @@ BNT comparison hypotheses for the common primitive sectors.
 	data linking the two representative families.
 \end{definition}
 
+
+\begin{theorem}[Representative common-sector families supply BNT-cover hypotheses]%
+\label{thm:ofCommonRepresentatives_zeroTailIdentity}
+	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentatives_zeroTailIdentity}
+	\leanok
+	\uses{def:common_representative_bnt_cover_hypotheses}
+	Given representative common-sector families, if the representative weights
+	are strictly ordered by norm, distinct representatives are BNT-separated,
+	the length-zero identity holds for the representative nonzero parts, each
+	representative block is one-site injective, and proportional-decomposition
+	data links the two representative families, then the zero-tail identity
+	and normal-CF-BNT conditions produce BNT-cover hypotheses for the
+	representative blocks.
+\end{theorem}
+
+\begin{theorem}[Representative BNT-cover structure supplies BNT-cover hypotheses]%
+\label{thm:ofCommonRepresentativeBNTCoverHypotheses}
+	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses}
+	\leanok
+	\uses{def:common_representative_bnt_cover_hypotheses}
+	A \texttt{CommonRepresentativeBNTCoverHypotheses} structure directly
+	produces the primitive BNT-cover hypotheses for the representative
+	common-sector families by extracting its fields and calling the previous
+	theorem.
+\end{theorem}
+
 \begin{theorem}[BNT matching hypotheses produce a common phase cover]%
 \label{thm:common_primitive_bnt_cover_hypotheses_to_common_phase_cover}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.toMPVCommonPhaseCover}

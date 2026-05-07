@@ -294,11 +294,11 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
   exact (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
     hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses
 
-/-- **Sector comparison from relabeled common sectors and BNT-cover data.**
+/-- **Sector comparison from relabeled common sectors and BNT-cover hypotheses.**
 
 Assume the blocked-word relabeling statement for cyclic-sector data. The structural
 theorem supplies common primitive nonzero-sector families; if those families carry
-BNT-cover data, then the conversion to phase-cover hypotheses gives the common
+BNT-cover hypotheses, then the conversion to phase-cover hypotheses gives the common
 phase-cover hypotheses. The common-phase-cover comparison theorem then gives the
 sector-weight comparison
 conclusion. -/
