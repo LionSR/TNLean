@@ -117,10 +117,11 @@ without opening the `.lean` files, the prose has failed.
 - Backticks around genuine Lean references (e.g. ``` `Fin d` ```, ``` `evalWord` ```)
   when explaining how to use the API of *this* declaration. Use sparingly — prefer
   mathematical phrasing.
-- Explicitly marked proof-state notes, such as `**Proof status.**` or
-  `**Formalization note.**`, after the mathematical statement. These notes should
-  record a missing implication, a source comparison, or an extra hypothesis in
-  mathematical terms.
+- Explicitly marked proof-state notes after the mathematical statement. These
+  notes should record a missing implication, a source comparison, or an extra
+  hypothesis in mathematical terms.  Keep such notes out of displayed blueprint
+  prose; use Lean comments/docstrings or LaTeX comments when the note is only
+  for maintainers.
 - The other software/LLM bans in Section 2 and Section 3 still apply.
 
 ### Source-faithful terminology and formulas
@@ -153,8 +154,13 @@ When the Lean statement is stronger, weaker, or differently organized than the
 paper source, separate the two assertions:
 
 - the theorem or lemma statement states the mathematics being formalized;
-- a `**Formalization note.**` records the extra hypothesis, missing implication,
-  or auxiliary reformulation.
+- a maintainer-facing note records the extra hypothesis, missing implication,
+  or auxiliary reformulation. In the blueprint this note should be a LaTeX
+  comment, not displayed mathematical prose.
+
+In blueprint files, use `$...$` for inline mathematics in new prose. Do not mix
+`$...$` and `\(...\)` in a newly edited paragraph; when touching an existing
+paragraph, prefer converting it to `$...$` if the change is local.
 
 Do not hide a mathematical difference inside process prose such as "pragmatic
 version", "comparison route", or "assembly step". If the auxiliary result is
