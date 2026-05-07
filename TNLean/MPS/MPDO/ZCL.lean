@@ -29,15 +29,9 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- An MPO tensor has **zero correlation length** when its transfer map is
-idempotent:
-`E_M ∘ E_M = E_M`.
+idempotent: `E_M ∘ E_M = E_M`.
 
-This is the mixed-state analogue of `MPSTensor.IsRFP`. See
-arXiv:1606.00608, Definition 4.2.
-
-Note: `MPOTensor.IsRFP` is currently definitionally equal to this condition
-but is expected to be strengthened to the full blocking/unblocking
-formulation from arXiv:1606.00608, Definition 4.1. -/
+See arXiv:1606.00608, Definition 4.2 and arXiv:2011.12127, Definition 4.2. -/
 def IsZCL (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
