@@ -10,8 +10,8 @@ gauge-phase equivalent, i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
 $$
   \widetilde B^j = \zeta\, X\,\widetilde A^j\,X^{-1},
 $$
-then the chains themselves are cyclically gauge equivalent with a common
-nonzero phase $\zeta$ multiplying every site tensor:
+then the chains themselves are cyclically gauge equivalent with the same
+nonzero scalar $\zeta$ multiplying every site tensor:
 $$
   B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}.
 $$
@@ -44,7 +44,7 @@ open MPSTensor
 
 variable {d D n : ℕ}
 
-/-- **Injective-chain Fundamental Theorem up to gauge phase.**
+/-- **Injective-chain Fundamental Theorem up to a nonzero scalar.**
 
 If `GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and
 `A` is injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
