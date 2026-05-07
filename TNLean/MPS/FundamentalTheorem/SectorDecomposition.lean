@@ -42,7 +42,7 @@ linear-independence condition.**
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
 a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127: for all
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
-are linearly independent.  It is a `Prop`; no witness is bundled.
+are linearly independent.  It is a `Prop`; no witness is included.
 
 Mathematically, this is the eventual linear-independence hypothesis on the basis
 sector MPV families. In comparison theorems for two sector decompositions, it
@@ -208,7 +208,7 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
   have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
   simpa [hproof] using hMultiset j
 
-/-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
+/-- **Cast-compatible MPV scaling gives the phase-matched sector comparison.**
 
 This lemma isolates the weaker hypotheses actually consumed by the
 phase-absorption argument: after matching basis dimensions, each block pair
@@ -244,11 +244,11 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_match
   exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
     P Q perm hCopies hPhase hLI hEqual
 
-/-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
+/-- **Gauge-phase matched sector bases give the phase-matched sector comparison.**
 
 This lemma converts blockwise gauge-phase equivalence into the corresponding
-power-law scaling of matrix-product vectors, then consumes the heterogeneous
-sector comparison for a supplied permutation of basis blocks. Thus the
+power-law scaling of matrix-product vectors, then uses the sector comparison for
+a supplied permutation of basis blocks. Thus the
 phase-absorption step is already available once the basis permutation,
 multiplicity equality, and per-block phase factors have been supplied. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
@@ -573,7 +573,7 @@ namespace SectorBasisOverlapSpanHypotheses
 
 variable {P Q : SectorDecomposition d}
 
-/-- Convert the bundled primitive overlap-rigidity hypotheses into a sector basis
+/-- Convert the combined primitive overlap-rigidity hypotheses into a sector basis
 matching. The produced witness is not part of the hypotheses: it is obtained by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`. -/
 lemma exists_sectorBasisMatching
