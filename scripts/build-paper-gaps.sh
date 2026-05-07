@@ -16,7 +16,6 @@ for texfile in *.tex; do
     continue
   fi
 
-  base="${texfile%.tex}"
   echo "::group::Building $texfile"
 
   # Run latexmk non-interactively with pdf output.  Halt on error so the CI
@@ -29,4 +28,7 @@ for texfile in *.tex; do
   echo "::endgroup::"
 done
 
-echo "::notice::Compiled $(ls *.pdf 2>/dev/null | wc -l) paper-gap PDFs"
+shopt -s nullglob
+pdfs=(*.pdf)
+echo "::notice::Compiled ${#pdfs[@]} paper-gap PDFs"
+shopt -u nullglob
