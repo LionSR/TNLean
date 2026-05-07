@@ -30,8 +30,8 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 * **(b)** Add a norm-sorting and sector-regrouping step.
 
 This file implements strategy **(b)** only in the case where all blocks sharing the same
-norm belong to the same phase class (i.e., there is a single representative basis tensor
-per norm class). It therefore handles the **norm-class sector decomposition from a
+norm have the same MPV family, so there is a single representative basis tensor
+per norm class. It therefore handles the **norm-class sector decomposition from a
 single representative basis tensor per norm class**, not the full
 basis-of-normal-tensors construction from
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6 /
@@ -51,7 +51,7 @@ basis-of-normal-tensors construction from
   `sameMPV₂_toTensorFromBlocks_perm` to produce a permuted block family that
   (i) has `SameMPV₂` to the original family and (ii) has strictly decreasing norms.
 
-### Section 3 Normal canonical form from unsorted distinct-norm block data
+### Section 3 Normal canonical form from unsorted distinct-norm block families
 
 * `exists_sortedNCF_of_distinct_norms` — If blocks satisfy all `IsNormalCanonicalForm`
   conditions except norm ordering (norms distinct but not yet decreasing), there exists
@@ -68,8 +68,8 @@ basis-of-normal-tensors construction from
 ### Section 5 Sector decomposition from norm-class representatives (possibly equal norms)
 
 * `exists_normClassSectorDecomp_of_equalNorm_sameMPV` — For blocks with possibly equal norms,
-  given the hypothesis that equal-norm blocks belong to the same phase class
-  (i.e., `SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`), there exists a
+  given the hypothesis that equal-norm blocks have the same MPV family
+  (`SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`), there exists a
   `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
   and whose sector-level norms are strictly decreasing.  The proof constructs a
   `SectorDecomposition` from norm-class enumeration and uses the representative block's
@@ -176,9 +176,9 @@ theorem exists_sorted_blockDecomp_of_distinct_norms
   -- We need the symmetric direction.
   exact (sameMPV₂_toTensorFromBlocks_perm μ blocks e N σ).symm
 
-/-! ### Section 3. Normal canonical form from unsorted distinct-norm block data -/
+/-! ### Section 3. Normal canonical form from unsorted distinct-norm block families -/
 
-/-- **Lift unsorted distinct-norm block data to `IsNormalCanonicalForm`.**
+/-- **Lift unsorted distinct-norm block families to `IsNormalCanonicalForm`.**
 
 Starting from a weighted block family satisfying all `IsNormalCanonicalForm` conditions
 *except* that the norms `‖μ k‖` are distinct but not yet ordered, this theorem produces:
@@ -390,8 +390,8 @@ noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
 /-- **Sector decomposition from norm-class representatives.**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
-`‖μ j‖ = ‖μ k‖`, and given that blocks of equal norm belong to the same phase class
-via `hMPVEq` (i.e., `SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`),
+`‖μ j‖ = ‖μ k‖`, and given that blocks of equal norm have the same MPV family
+via `hMPVEq` (`SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`),
 there exists a `SectorDecomposition P` with:
 
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
@@ -400,7 +400,7 @@ there exists a `SectorDecomposition P` with:
 **Hypotheses**:
 - `hμne`: all weights are nonzero.
 - `hMPVEq`: whenever `‖μ j‖ = ‖μ k‖`, the blocks satisfy `SameMPV₂ (blocks j) (blocks k)`.
-  This ensures all blocks in a norm class are phase-equivalent, so a single
+  This ensures all blocks in a norm class have the same MPV family, so a single
   representative `reprFn j` suffices for the class; the remaining blocks are counted
   as additional copies (`copies j ≥ 1`).
 
@@ -410,18 +410,17 @@ norm class may have different dimensions. Their MPV values are matched via `hMPV
 which uses the heterogeneous `SameMPV₂` to compare blocks of different dimensions.
 
 **Scope.** This theorem groups blocks by norm class alone; it does not split a
-norm class further into distinct phase classes. If two blocks have the same norm
-but belong to different phase classes (i.e., are not related by `SameMPV₂`), they
+norm class further into distinct MPV classes. If two blocks have the same norm
+but do not satisfy `SameMPV₂`, they
 should remain as distinct basis elements. The full BNT theory
 (Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3) handles multiple basis
 tensors at the same norm with separate coefficients.
 
-**How `hMPVEq` is supplied.** The hypothesis is provided by the calling
-construction (such as a phase-grouping step that places gauge-equivalent blocks
-in the same phase class). Only blocks already identified as phase-equivalent via
-an explicit `SameMPV₂` proof are placed in the same norm class; the phase-class
-construction tracks the `SameMPV₂` data together with the representative choice
-and the factor weights.
+**How `hMPVEq` is supplied.** The hypothesis is provided by a preceding equivalence-class
+decomposition: only blocks equipped with an explicit proof of
+`SameMPV₂ (blocks j) (blocks k)` are placed in the same norm class. The construction
+keeps those `SameMPV₂` proofs together with the representative choice and the factor
+weights.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
