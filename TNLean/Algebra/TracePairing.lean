@@ -170,9 +170,8 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
     Matrix.span_range_mul_nonzero_mul_eq_top hX
   simpa [T, htop] using hsource
 
-/-- Lemma 2 (paper proof sketch): `SameMPV` implies agreement of traces of all products.
-
-We formulate this directly for `evalWord` on arbitrary lists. -/
+/-- If `A` and `B` generate the same MPV family, then
+$\tr(A^w) = \tr(B^w)$ for every word~$w$. -/
 lemma SameMPV.trace_evalWord {A B : MPSTensor d D} (h : SameMPV A B) (w : List (Fin d)) :
     Matrix.trace (evalWord A w) = Matrix.trace (evalWord B w) := by
   -- Use the `SameMPV` equality on the configuration `σ := w.get`.
@@ -195,8 +194,8 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
     traceMulRightPi A M i = Matrix.trace (M * A i) := by
   simp [traceMulRightPi, Matrix.traceLinearMap_apply]
 
-/-- Auxiliary length-2 specialisation of `SameMPV.trace_evalWord`, used in
-linear-extension proofs. -/
+/-- If `A` and `B` generate the same MPV family, then
+$\tr(A^i A^j) = \tr(B^i B^j)$ for all $i, j$. -/
 lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
   have h := hAB.trace_evalWord [i, j]
@@ -220,13 +219,12 @@ theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : IsInjective A) :
   exact trace_mul_right_eq_zero fun N => by
     simpa [Matrix.traceLinearMap_apply] using congrArg (· N) hφ
 
-/-- **Trace doesn't vanish on injective tensors.**
+/-- If `A` is injective and `A`, `B` generate the same MPV family,
+then $\neg(\forall i,\; B^i = 0)$.
 
-If `A` is injective and `SameMPV A B`, then `B` can't be identically zero
-(because trace would vanish on a spanning set, contradicting `trace 1 = D ≠ 0`).
-
-This is the shared core of `linearExtension_nonzero` and
-`perBlockLinearExtension_nonzero`. -/
+Proof: if $B^i = 0$ for all $i$, then $\tr(A^i) = \tr(B^i) = 0$ for each $i$.
+Since the $A^i$ span the full matrix algebra, the trace functional vanishes
+identically, contradicting $\tr(I_D) = D \neq 0$. -/
 theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B) (hBzero : ∀ i, B i = 0) : False := by
   have htr_zero : Matrix.traceLinearMap (Fin D) ℂ ℂ = 0 := by
@@ -236,11 +234,11 @@ theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this
 
-/-- Auxiliary finrank-transfer lemma: if `ΦA` is injective and `range ΦA ≤ range ΦB`,
-then `ΦB` has trivial kernel.
+/-- If $\Phi_A$ is injective and $\operatorname{range} \Phi_A \subseteq \operatorname{range} \Phi_B$,
+then $\ker \Phi_B = \{0\}$.
 
-This is the "finrank dance": `ker ΦA = ⊥` implies `finrank (range ΦA) = finrank V`,
-and the range inclusion forces `finrank (range ΦB) ≥ finrank V`, so by rank-nullity `ker ΦB = ⊥`. -/
+By rank--nullity, $\dim(\operatorname{range} \Phi_A) = \dim V$,
+so $\dim(\operatorname{range} \Phi_B) \ge \dim V$, forcing $\ker \Phi_B = \{0\}$. -/
 theorem ker_bot_of_range_le {V W : Type*} [AddCommGroup V] [Module ℂ V] [Module.Finite ℂ V]
     [AddCommGroup W] [Module ℂ W]
     (ΦA ΦB : V →ₗ[ℂ] W) (hKerA : ΦA.ker = ⊥) (hRange : ΦA.range ≤ ΦB.range) :
