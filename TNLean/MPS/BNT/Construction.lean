@@ -14,8 +14,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 /-!
 # Basis of normal tensors from canonical form
 
-This module introduces `IsCanonicalFormBNT`: a predicate on a family of tensors
-`A_j` with weights `μ_j` that requires
+This module introduces `IsCanonicalFormBNT`: hypotheses on a family of tensors
+`A_j` with weights `μ_j` that require
 
 * `IsCanonicalForm` — the tensors are in left-canonical form, with antitone weight moduli,
 * strict ordering `‖μ_j‖ > ‖μ_{j+1}‖`, and
@@ -23,8 +23,8 @@ This module introduces `IsCanonicalFormBNT`: a predicate on a family of tensors
 
 Equivalent blocks are therefore already merged into a single BNT representative.
 This is not the general BNT normal form of arXiv:1606.00608, which allows repeated
-copies inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j` — those terms
-is obtained from `SectorDecomposition` and the sector-weight comparison theorems.
+copies inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j`; those are
+obtained from `SectorDecomposition` and the sector-weight comparison theorems.
 
 ## Main results
 
@@ -34,8 +34,8 @@ is obtained from `SectorDecomposition` and the sector-weight comparison theorems
 
 2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`**: distinct CF-BNT blocks have
    decaying cross-overlaps.  The theorem
-   **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`** states the same conclusion under
-   the predicate `IsCanonicalFormBNT`. The proof combines:
+   **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`** states the same conclusion from
+   `IsCanonicalFormBNT`. The proof combines:
    - Dimension-mismatch case: `mpvOverlap_tendsto_zero_of_dim_ne`
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
@@ -59,8 +59,8 @@ tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
 coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
 proportionality constant. In the grouped setting, the normalized sums can still oscillate: unit-
-modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` predicate
-sidesteps that issue by requiring that the grouping has already been done (each block in the
+modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` hypotheses
+sidestep that issue by requiring that the grouping has already been done (each block in the
 basis of normal tensors corresponds to a single CF block), and the proportional-case theorem
 below takes the required convergent coefficient limits as explicit hypotheses.
 -/
@@ -79,7 +79,7 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
 
-/-! ### `IsCanonicalFormBNT` predicate -/
+/-! ### `IsCanonicalFormBNT` hypotheses -/
 
 /-- **Canonical form with basis-of-normal-tensors (BNT) separation**: extends
 `IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
@@ -163,19 +163,19 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     hCF.toHasNormalizedSelfOverlap
     (fun _ _ hjk h => absurd (hDistinct h) hjk)
 
-/-! ### `IsNormalCanonicalFormBNT` predicate -/
+/-! ### `IsNormalCanonicalFormBNT` hypotheses -/
 
 /-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with
 the requirement that distinct blocks are not gauge-phase equivalent and that the
 block weight moduli `‖μ_j‖` are **strictly decreasing**.
 
-This predicate keeps one representative per strict weight-modulus class. It does
+These hypotheses keep one representative per strict weight-modulus class. They do
 not retain repeated equal-modulus sectors; the full multiplicity structure (weights
 `μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
 `SectorDecomposition` and the sector-weight comparison theorems.
 
 **Formalization note.** `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map
-version of normality (`IsNormalCanonicalForm`), while the later `IsBNT` predicate asks
+version of normality (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask
 for blockwise `IsNormal` (the equivalent algebraic eventual-block-injectivity notion).
 The primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
@@ -460,7 +460,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
 /-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
 
 Here `hNCF` supplies normality via the primitive-transfer-map characterization from
-`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` predicate
+`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` hypotheses
 (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
 Wielandt / primitive-to-normal implication. -/
 theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
