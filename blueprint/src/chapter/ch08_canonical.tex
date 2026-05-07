@@ -2909,7 +2909,7 @@ primitivity and normality results to the sector blocks.
 		m_\rho=\#\{k\mid |\mu_k|=\rho\}.
 	\]
 	The record also contains an enumeration of the indices in each class and the
-	identity that rewrites $\sum_k \mu_k^N |V^{(N)}(A_k)\rangle$ as the sum over
+	identity that rewrites $\sum_k \mu_k^N\ket{V^{(N)}(A_k)}$ as the sum over
 	norm classes.
 \end{definition}
 
@@ -2933,7 +2933,7 @@ primitivity and normality results to the sector blocks.
 	MPS family, choose one representative $A_{a}$ for each norm class
 	$\{k\mid |\mu_k|=\rho_a\}$.  Then the MPV expansion
 	\[
-		\sum_{k=1}^r \mu_k^N |V^{(N)}(A_k)\rangle
+		\sum_{k=1}^r \mu_k^N\ket{V^{(N)}(A_k)}
 	\]
 	is rewritten as a sum over the representatives $A_a$, and the resulting
 	sector weights have strictly decreasing moduli $\rho_1>\cdots>\rho_s$.
@@ -3066,8 +3066,8 @@ gauge-phase representatives and keeps those repeated weights explicit.
 	For each equivalence class choose a representative $j_a$ and scalars
 	$\zeta_{a,k}$ satisfying
 	\[
-		|V^{(N)}(B_k)\rangle
-		=\zeta_{a,k}^N |V^{(N)}(B_{j_a})\rangle .
+		\ket{V^{(N)}(B_k)}
+		=\zeta_{a,k}^N\ket{V^{(N)}(B_{j_a})}.
 	\]
 	Distinct representatives are not related by a phase and a gauge
 	transformation.
@@ -3082,11 +3082,11 @@ gauge-phase representatives and keeps those repeated weights explicit.
 	with nonzero weights, there is a sector decomposition representing the same
 	weighted block sum and satisfying the BNT linear-independence condition.  If
 	$B_k$ lies in the class of $B_{j_a}$ with
-	$|V^{(N)}(B_k)\rangle=\zeta_{a,k}^N|V^{(N)}(B_{j_a})\rangle$, then its
+	$\ket{V^{(N)}(B_k)}=\zeta_{a,k}^N\ket{V^{(N)}(B_{j_a})}$, then its
 	contribution
 	\[
-		\mu_k^N |V^{(N)}(B_k)\rangle
-		=(\zeta_{a,k}\mu_k)^N |V^{(N)}(B_{j_a})\rangle
+		\mu_k^N\ket{V^{(N)}(B_k)}
+		=(\zeta_{a,k}\mu_k)^N\ket{V^{(N)}(B_{j_a})}
 	\]
 	is written using the representative $B_{j_a}$.
 \end{theorem}
