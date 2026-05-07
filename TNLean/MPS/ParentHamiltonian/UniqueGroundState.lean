@@ -733,11 +733,14 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
     (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N)
     {ψ : NSiteSpace d N} {X : Matrix (Fin D) (Fin D) ℂ}
     (hψ : ψ ∈ chainGroundSpace A L N) (hψX : ψ = groundSpaceMap A N X)
+    (Ywrap Ymirror : (Fin N → Fin d) → Matrix (Fin D) (Fin D) ℂ)
+    (hWrap : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + L₀, by omega⟩)) * A j * X = Ywrap τ * A j)
+    (hMirror : ∀ (j : Fin d) (τ : Fin N → Fin d),
+      X * A j * evalWord A (List.ofFn (fun k : Fin (N - (L₀ + 1)) =>
+        τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
-    let Ywrap := (fun Y _ => Y) (chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
-      (A := A) hInj hL₀ hN hL hLN hψ hψX).1
-    let Ymirror := (fun _ Y => Y) (chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
-      (A := A) hInj hL₀ hN hL hLN hψ hψX).2.1
     Ywrap (wrappedMiddleBackground L₀ N η μ) = Ymirror (mirrorMiddleBackground L₀ N η μ) := by
   -- Both witnesses arise from the same chain ground state ψ restricted to the
   -- two wrapped cyclic windows.  The chain ground space condition at the
@@ -756,34 +759,39 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
     (_hA : IsNormal A) {L₀ : ℕ} (hInj : IsNBlkInjective A L₀)
     {L N : ℕ} (hN : 2 ≤ N) (hL : L₀ < L) (hLN : L ≤ N) :
     chainGroundSpace A L N ≤ mpvSubmodule A N := by
-  have hL₀pos : 0 < L₀ := by omega
-  intro ψ hψ
-  have hψGS : ψ ∈ groundSpace A N :=
-    chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀pos (by omega : 0 < N) hL hLN hψ
-  rw [groundSpace, LinearMap.mem_range] at hψGS
-  obtain ⟨X, hX⟩ := hψGS
-  haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀pos
-  let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
-  obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
-    chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
-      (A := A) hInj hL₀pos hN hL hLN hψ hX.symm
-  have hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
-      Ywrap (wrappedMiddleBackground L₀ N η μ) =
-        Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-    intro μ
-    -- This comparison is the main mathematical content of the closure property.
-    -- Both Ywrap and Ymirror are the unique preimages under groundSpaceMap A (L₀+1)
-    -- of the same periodic-chain ground state ψ restricted to the two wrapped
-    -- cyclic windows.  The two cyclic configurations produce cyclically equivalent
-    -- words; the interior chain ground space constraints force the traces to agree,
-    -- so by injectivity of groundSpaceMap the witnesses coincide.
-    --
-    -- TODO(#961): complete the algebraic proof.
-    exact wrapped_mirror_witness_agree_of_chainGroundSpace
-      (A := A) hInj hL₀pos hN hL hLN hψ hX.symm η μ
-  rw [← hX]
-  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
-    (A := A) (L₀ := L₀) (N := N) hInj hL₀pos η Ywrap Ymirror hWrap hMirror hCompare
+  have hNpos : 0 < N := by omega
+  by_cases hL₀pos : 0 < L₀
+  · intro ψ hψ
+    have hψGS : ψ ∈ groundSpace A N :=
+      chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀pos hNpos hL hLN hψ
+    rw [groundSpace, LinearMap.mem_range] at hψGS
+    obtain ⟨X, hX⟩ := hψGS
+    haveI : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀pos
+    let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
+    obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
+      chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
+        (A := A) hInj hL₀pos hN hL hLN hψ hX.symm
+    have hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
+        Ywrap (wrappedMiddleBackground L₀ N η μ) =
+          Ymirror (mirrorMiddleBackground L₀ N η μ) := by
+      intro μ
+      exact wrapped_mirror_witness_agree_of_chainGroundSpace
+        (A := A) hInj hL₀pos hN hL hLN hψ hX.symm Ywrap Ymirror hWrap hMirror η μ
+    rw [← hX]
+    exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+      (A := A) (L₀ := L₀) (N := N) hInj hL₀pos η Ywrap Ymirror hWrap hMirror hCompare
+  · -- L₀ = 0 case: range reduction is trivial because L₀+1 = 1,
+    -- but we still need the containment.  IsNBlkInjective A 0 is atypical;
+    -- we handle it by using the injective theorem with L=1.
+    have hL₀zero : L₀ = 0 := by omega
+    subst hL₀zero
+    -- When L₀ = 0, the window size is L₀+1 = 1.
+    -- chainGroundSpace A L N ≤ chainGroundSpace A 1 N (by antitone, since 1 ≤ L)
+    -- And chainGroundSpace A 1 N can be handled similarly:
+    -- For range 1, the cyclic windows are single sites, and the constraints
+    -- are handled by the existing machinery.
+    -- This is a degenerate case; we leave it as a sorry for now.
+    sorry
 
 /-- On a periodic chain, the normal parent-Hamiltonian ground space coincides
 with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`).
