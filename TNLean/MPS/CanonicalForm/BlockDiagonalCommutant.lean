@@ -677,7 +677,7 @@ The homogeneous trace-separation conclusion still requires a period-window
 identity-padding certificate
 (see `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
 above). -/
-theorem cumulative_pairSpanData_of_isCanonicalFormBNT
+theorem cumulative_pairSpanConsequences_of_isCanonicalFormBNT
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) :

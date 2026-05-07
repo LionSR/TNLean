@@ -1350,8 +1350,7 @@ theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpan
 BNT injectivity, left-canonical normalization, and non-gauge-equivalence imply
 all-length trace separation for the simultaneous pair words:
 `PairTraceSeparatingAll A B`. Finite-dimensional stabilization then gives a
-cutoff `S` with `PairTraceSeparatingUpTo A B S`, equivalently
-`PairCumulativeWordTupleSpanTop A B S`.
+cutoff `S` with `PairTraceSeparatingUpTo A B S`.
 
 A homogeneous fixed-length conclusion `PairTraceSeparatingAt A B T` also
 requires identity padding: the pair identity `(1, 1)` must lie in appropriate
@@ -1364,12 +1363,11 @@ For the unequal-dimension case see
 
 /-- **BNT-to-cumulative implication.** From BNT injectivity, normalization, and
 non-gauge-equivalence of a same-dimension pair, obtain `PairTraceSeparatingAll`
-and a finite cutoff `S` such that `PairTraceSeparatingUpTo A B S` and
-`PairCumulativeWordTupleSpanTop A B S` hold.
+and a finite cutoff `S` such that `PairTraceSeparatingUpTo A B S`.
 
 The homogeneous fixed-length conclusion additionally requires identity-padding
 hypotheses. -/
-theorem cumulative_pairSpanData_of_injective_not_gaugePhaseEquiv
+theorem cumulative_pairSpanConsequences_of_injective_not_gaugePhaseEquiv
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)
@@ -1377,16 +1375,13 @@ theorem cumulative_pairSpanData_of_injective_not_gaugePhaseEquiv
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hNot : ¬ GaugePhaseEquiv A B) :
     PairTraceSeparatingAll A B ∧
-    (∃ S : ℕ, PairTraceSeparatingUpTo A B S ∧
-              PairCumulativeWordTupleSpanTop A B S) := by
+    (∃ S : ℕ, PairTraceSeparatingUpTo A B S) := by
   have hSepAll : PairTraceSeparatingAll A B :=
     pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv
       A B hA_inj hB_inj hA_norm hB_norm hNot
   obtain ⟨S, hSepUpTo⟩ :=
     exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
-  have hCum : PairCumulativeWordTupleSpanTop A B S :=
-    pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B hSepUpTo
-  exact ⟨hSepAll, ⟨S, hSepUpTo, hCum⟩⟩
+  exact ⟨hSepAll, ⟨S, hSepUpTo⟩⟩
 
 /-- **Cumulative-to-homogeneous implication.** From cumulative pair trace
 separation and eventual identity padding, obtain a homogeneous pair
