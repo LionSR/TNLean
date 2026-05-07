@@ -546,17 +546,12 @@ A gauge-phase equivalence would force those MPV families to be proportional
 (via `mpv_eq_pow_mul_of_gaugePhase`), contradicting eventual linear
 independence.
 
-In the current codebase the eventual linear-independence statement is
-available only under the *hypothesis* of non-gauge-equivalence (see
-`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
-in `PhaseClassSectorData.lean`), which gives the direction
-
-  `¬ GaugePhaseEquiv`  →  eventually linear independent.
-
-What is needed here is the converse of that implication for cyclic-sector
-blocks, i.e. a proof that orthogonal cyclic sectors **are** eventually
-linearly independent.  That converse is not yet exported, so this lemma
-remains a documented gap rather than a closed proof.
+The BDCF lemma in arXiv:1708.00029 establishes the forward implication:
+if two compressed cyclic sectors are not gauge-phase equivalent, then their
+MPV families are eventually linearly independent.  Proving the present lemma
+requires the converse — that orthogonal cyclic sectors are eventually
+linearly independent.  This converse has not yet been established, so the
+proof below remains a documented gap.
 
 **Proof sketch when the converse is available.**  Assume a gauge-phase
 equivalence `blocks v = ζ · X · (cast blocks u) · X⁻¹` with `ζ ≠ 0`.
@@ -581,13 +576,15 @@ Since `u ≠ v`, some pair of distinct projections would then have proportional
 MPV families, which contradicts eventual linear independence of the cyclic
 sector states (the missing BDCF converse).
 
-**Additional data available at the call site.**  The caller
-`sectorBlocks_not_gaugePhaseEquiv_of_ne` holds `IsCyclicSectorDecomp A blocks`,
-which already supplies the compression `∗`-algebra isomorphisms `φ k` and
-the intertwining condition.  Those data carry the per-sector primitivity and
-irreducibility that make the BDCF converse true.  Once that converse is added
-to the codebase (e.g. as a lemma in `CanonicalForm/BlockDiagonalCommutant`),
-the `sorry` below can be discharged by the procedure outlined above. -/
+The cyclic-sector decomposition `IsCyclicSectorDecomp A blocks` supplies the
+compression ∗-algebra isomorphisms `φ k` and the intertwining condition, which
+provide the per-sector primitivity and irreducibility that make the BDCF
+converse true.  Once that converse is proved, the `sorry` below can be
+discharged by the procedure outlined above. -/
+  -- (Implementation: the forward BDCF direction is
+  --  `exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
+  --  in `PhaseClassSectorData.lean`; the missing converse would be a lemma in
+  --  `CanonicalForm/BlockDiagonalCommutant`.)
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -610,10 +607,8 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
-  -- See the docstring above for the complete proof strategy.
-  -- This `sorry` is the single remaining blocker for the self-overlap chain
-  -- (`sectorOverlap_tendsto_delta_of_cyclicSectorDecomp` ->
-  --  `periodicSelfOverlap_tendsto`).
+  -- Missing lemma: the BDCF converse — that orthogonal cyclic sectors are
+  -- eventually linearly independent (see mathematical discussion above).
   sorry
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
