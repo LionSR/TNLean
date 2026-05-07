@@ -27,6 +27,12 @@ characteristic polynomials.
 * `Matrix.charpolyRev_eq_of_forall_trace_pow_eq`: If `tr(A^k) = tr(B^k)` for
   all `k ≥ 1`, then `A.charpolyRev = B.charpolyRev`.
 
+* `Matrix.charpolyRev_eq_of_trace_pow_eq_of_le_card`: If `tr(A^k) = tr(B^k)`
+  for `1 ≤ k ≤ card n`, then `A.charpolyRev = B.charpolyRev`.
+
+* `Matrix.charpoly_eq_of_trace_pow_eq_of_le_card`: If `tr(A^k) = tr(B^k)`
+  for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`.
+
 * `Matrix.charpoly_eq_of_forall_trace_pow_eq`: If `tr(A^k) = tr(B^k)` for all
   `k ≥ 1`, then `A.charpoly = B.charpoly`.
 
@@ -38,8 +44,8 @@ Specifically, Jacobi's formula gives `P'(X) = -tr(adj(1 - X·M) * M.map C)`,
 and expanding the adjugate in powers of X and comparing coefficients yields the
 recursion.
 
-The downstream results (charpolyRev equality and charpoly equality) follow from
-the recursion by strong induction on the coefficient index, using the fact that
+The characteristic-polynomial equalities follow from the recursion by strong
+induction on the coefficient index, using the fact that
 `(m+1 : R) ≠ 0` in characteristic zero rings for cancellation.
 -/
 
@@ -307,33 +313,90 @@ theorem charpolyRev_eq_of_forall_trace_pow_eq
       have hm_ne : (↑(m + 1) : R) ≠ 0 := Nat.cast_ne_zero.mpr (by omega)
       exact mul_left_cancel₀ hm_ne heq
 
+/-- `charpolyRev` coefficients are determined by the first `card n` traces of powers.
+
+For an `n × n` matrix, the Newton--Girard recursion for coefficient `m+1` only uses
+the traces `tr(M^k)` with `1 ≤ k ≤ m+1`. Coefficients above `card n` vanish for
+`charpolyRev`, so traces through degree `card n` determine the whole polynomial. -/
+theorem charpolyRev_eq_of_trace_pow_eq_of_le_card
+    (A B : Matrix n n R)
+    (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → trace (A ^ k) = trace (B ^ k)) :
+    A.charpolyRev = B.charpolyRev := by
+  suffices ∀ m : ℕ, A.charpolyRev.coeff m = B.charpolyRev.coeff m from
+    Polynomial.ext this
+  intro m
+  by_cases hm_card : m ≤ Fintype.card n
+  · induction m using Nat.strong_induction_on with
+    | _ m ih =>
+      match m with
+      | 0 =>
+        rw [coeff_zero_eq_eval_zero, coeff_zero_eq_eval_zero, eval_charpolyRev, eval_charpolyRev]
+      | m + 1 =>
+        have hA := newton_girard_charpolyRev_coeff A m
+        have hB := newton_girard_charpolyRev_coeff B m
+        have h_sum_eq :
+            ∑ j ∈ range (m + 1), (A.charpolyRev).coeff j * trace (A ^ (m + 1 - j)) =
+              ∑ j ∈ range (m + 1), (B.charpolyRev).coeff j *
+                trace (B ^ (m + 1 - j)) := by
+          apply sum_congr rfl
+          intro j hj
+          rw [mem_range] at hj
+          rw [ih j (by omega) (by omega),
+            h (m + 1 - j) (by omega) (by omega)]
+        have heq : (↑(m + 1) : R) * A.charpolyRev.coeff (m + 1) =
+                   (↑(m + 1) : R) * B.charpolyRev.coeff (m + 1) := by
+          rw [hA, hB, h_sum_eq]
+        have hm_ne : (↑(m + 1) : R) ≠ 0 := Nat.cast_ne_zero.mpr (by omega)
+        exact mul_left_cancel₀ hm_ne heq
+  · have hA : A.charpolyRev.coeff m = 0 := by
+      have hdeg : A.charpolyRev.natDegree ≤ Fintype.card n := by
+        rw [← reverse_charpoly A]
+        exact (reverse_natDegree_le A.charpoly).trans_eq (charpoly_natDegree_eq_dim A)
+      exact coeff_eq_zero_of_natDegree_lt (lt_of_le_of_lt hdeg (by omega))
+    have hB : B.charpolyRev.coeff m = 0 := by
+      have hdeg : B.charpolyRev.natDegree ≤ Fintype.card n := by
+        rw [← reverse_charpoly B]
+        exact (reverse_natDegree_le B.charpoly).trans_eq (charpoly_natDegree_eq_dim B)
+      exact coeff_eq_zero_of_natDegree_lt (lt_of_le_of_lt hdeg (by omega))
+    rw [hA, hB]
+
+omit [IsDomain R] in
+private lemma charpoly_eq_of_charpolyRev_eq
+    (A B : Matrix n n R)
+    (hrev : A.charpolyRev = B.charpolyRev) :
+    A.charpoly = B.charpoly := by
+  have hrA := reverse_charpoly A
+  have hrB := reverse_charpoly B
+  have h_rev_eq : A.charpoly.reverse = B.charpoly.reverse := by
+    rw [hrA, hrB, hrev]
+  have hdA := charpoly_natDegree_eq_dim A
+  have hdB := charpoly_natDegree_eq_dim B
+  rw [Polynomial.reverse, Polynomial.reverse, hdA, hdB] at h_rev_eq
+  have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
+  rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
+
+/-- If `tr(A^k) = tr(B^k)` for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`.
+
+The all-positive-power statement below is the immediate corollary obtained by restricting its
+hypothesis to this finite range. -/
+theorem charpoly_eq_of_trace_pow_eq_of_le_card
+    (A B : Matrix n n R)
+    (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → trace (A ^ k) = trace (B ^ k)) :
+    A.charpoly = B.charpoly := by
+  have hrev : A.charpolyRev = B.charpolyRev :=
+    charpolyRev_eq_of_trace_pow_eq_of_le_card A B h
+  exact charpoly_eq_of_charpolyRev_eq A B hrev
+
 /-- **Main result**: If `tr(A^k) = tr(B^k)` for all `k ≥ 1`, then
 `A.charpoly = B.charpoly`.
 
-Follows from `charpolyRev_eq_of_forall_trace_pow_eq` using the fact that
-`charpoly` and `charpolyRev` determine each other via polynomial reversal.
--/
+Now a corollary of `charpoly_eq_of_trace_pow_eq_of_le_card`, obtained by
+restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`. -/
 theorem charpoly_eq_of_forall_trace_pow_eq
     (A B : Matrix n n R)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = trace (B ^ k)) :
-    A.charpoly = B.charpoly := by
-  -- charpolyRev equality
-  have hrev : A.charpolyRev = B.charpolyRev :=
-    charpolyRev_eq_of_forall_trace_pow_eq A B h
-  -- A.charpoly.reverse = A.charpolyRev (and same for B)
-  have hrA := reverse_charpoly A  -- A.charpoly.reverse = A.charpolyRev
-  have hrB := reverse_charpoly B
-  -- So A.charpoly.reverse = B.charpoly.reverse
-  have h_rev_eq : A.charpoly.reverse = B.charpoly.reverse := by
-    rw [hrA, hrB, hrev]
-  -- reverse = reflect natDegree, and both charpolys have natDegree = card n
-  have hdA := charpoly_natDegree_eq_dim A
-  have hdB := charpoly_natDegree_eq_dim B
-  -- Unfold reverse and use that reflect N is involutive
-  rw [Polynomial.reverse, Polynomial.reverse, hdA, hdB] at h_rev_eq
-  -- reflect_reflect : reflect N (reflect N p) = p
-  have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
-  rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
+    A.charpoly = B.charpoly :=
+  charpoly_eq_of_trace_pow_eq_of_le_card A B (fun k hk _ => h k hk)
 
 end CharZeroDomain
 
