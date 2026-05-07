@@ -939,7 +939,13 @@
 <div class="main-text">
 <h1 id="ch:single">4 The Single-Block Fundamental Theorem</h1>
 
-<p>This chapter proves that if an injective MPS tensor&#160;\(A\) generates the same MPV family as another tensor&#160;\(B\) of the same bond dimension, then \(A\) and \(B\) are gauge equivalent. The proof is purely algebraic and does not use the later overlap or normal-form reductions. The trace-pairing maps introduced below are auxiliary devices attached to the chosen generating families \(\{ A^i\} \) and \(\{ B^i\} \); they serve only to construct the linear map that is later shown to be a gauge transform. </p>
+<p>This chapter proves the single-block injective Fundamental Theorem of MPS <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Section&#160;III.B
+	]
+</span>: if an injective MPS tensor&#160;\(A\) generates the same MPV family as another tensor&#160;\(B\) of the same bond dimension, then there exists an invertible matrix&#160;\(X\) such that \(B^i = X A^i X^{-1}\) for all physical indices&#160;\(i\). The proof is purely algebraic and does not require the later overlap or normal-form reductions. </p>
 <h1 id="a0000000025">4.1 Trace pairing</h1>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_nondeg">
   <div class="theorem_thmheading">
@@ -1233,13 +1239,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_ne_zero">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:trace_ne_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">4.5</span>
-    <span class="theorem_thmtitle">Nonvanishing trace on injective tensors</span>
+    <span class="lemma_thmlabel">4.5</span>
+    <span class="lemma_thmtitle">Nonvanishing trace on injective tensors</span>
     <div class="thm_header_extras">
 
     
@@ -1247,7 +1253,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-single.html#thm:trace_ne_zero">#</a>
+    <a class="icon proof" href="ch-single.html#lem:trace_ne_zero">#</a>
     
     <a class="icon proof" href="ch-single.html#a0000000273"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -1299,8 +1305,8 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   If \(D \ge 1\), \(A\) is injective, \(A\) and \(B\) generate the same MPV family, and \(B^i = 0\) for all&#160;\(i\), then we have a contradiction. </p>
+  <div class="lemma_thmcontent">
+  <p>   If \(D \ge 1\), \(A\) is injective, and \(A\) and \(B\) generate the same MPV family, then \(B^i\) cannot be identically zero: \(\neg (\forall i, B^i = 0)\). </p>
 
   </div>
 </div>
@@ -1614,7 +1620,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">4.10</span>
-    <span class="lemma_thmtitle">Promotion to algebra homomorphism</span>
+    <span class="lemma_thmtitle">Unit preservation of multiplicative surjective maps</span>
     <div class="thm_header_extras">
 
     
@@ -1651,7 +1657,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  If \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is a multiplicative surjective \(\mathbb {C}\)-linear map, then \(T(\mathbb {1}) = \mathbb {1}\). Equivalently, the same underlying function defines a \(\mathbb {C}\)-algebra homomorphism. </p>
+  <p>  If \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) is a multiplicative surjective \(\mathbb {C}\)-linear map, then \(T(\mathbb {1}) = \mathbb {1}\). </p>
 
   </div>
 </div>
@@ -1712,7 +1718,7 @@
           
           <li><a href="ch-single.html#thm:simplicity">Theorem 4.8</a></li>
           
-          <li><a href="ch-single.html#thm:trace_ne_zero">Theorem 4.5</a></li>
+          <li><a href="ch-single.html#lem:trace_ne_zero">Lemma 4.5</a></li>
           
           <li><a href="ch-single.html#lem:linear_map_to_alg">Lemma 4.10</a></li>
           
@@ -1759,7 +1765,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-single.html#thm:linear_ext">4.6</a>, there is a unique linear \(T\) with \(T(A^i) = B^i\). By Theorem&#160;<a href="ch-single.html#thm:linear_ext_mul">4.7</a>, \(T\) is multiplicative. \(T\) is nonzero: if \(T = 0\) then \(B^i = 0\) for all&#160;\(i\), contradicting Theorem&#160;<a href="ch-single.html#thm:trace_ne_zero">4.5</a>. By Theorem&#160;<a href="ch-single.html#thm:simplicity">4.8</a>, \(T\) is bijective. By Lemma&#160;<a href="ch-single.html#lem:linear_map_to_alg">4.10</a>, \(T\) is a \(\mathbb {C}\)-algebra automorphism. Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a> gives an invertible \(X\) with \(T(M) = X M X^{-1}\), and evaluating at \(M = A^i\) yields \(B^i = X A^i X^{-1}\). </p>
+  <p> By Theorem&#160;<a href="ch-single.html#thm:linear_ext">4.6</a>, there is a unique linear \(T\) with \(T(A^i) = B^i\). By Theorem&#160;<a href="ch-single.html#thm:linear_ext_mul">4.7</a>, \(T\) is multiplicative. \(T\) is nonzero: if \(T = 0\) then \(B^i = 0\) for all&#160;\(i\), contradicting Lemma&#160;<a href="ch-single.html#lem:trace_ne_zero">4.5</a>. By Theorem&#160;<a href="ch-single.html#thm:simplicity">4.8</a>, \(T\) is bijective. By Lemma&#160;<a href="ch-single.html#lem:linear_map_to_alg">4.10</a>, \(T\) is a \(\mathbb {C}\)-algebra automorphism. Theorem&#160;<a href="ch-single.html#thm:skolem_noether">4.9</a> gives an invertible \(X\) with \(T(M) = X M X^{-1}\), and evaluating at \(M = A^i\) yields \(B^i = X A^i X^{-1}\). </p>
 
   </div>
 </div>
