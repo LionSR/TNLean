@@ -17,10 +17,25 @@ This module sets up the **normalization map**
 $$\rho \mapsto \frac{E(\rho)}{\operatorname{tr}(E(\rho))}$$
 
 on density matrices, together with the key denominator/nonvanishing lemmas
-needed for the Perron–Frobenius / TP-gauge existence step in
-arXiv:1606.00608, Appendix A.
+needed for the Perron–Frobenius / TP-gauge existence step.
 
-No fixed-point theorem is assumed here.
+The normalization map is the central construction in the Brouwer fixed-point
+proof of **Wolf Theorem 6.5** (spectral radius and positive eigenvectors): one
+considers the continuous self-map `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set
+of density matrices; any fixed point yields an eigenvector identity
+`E(ρ) = tr(E(ρ)) · ρ`. The nonvanishing lemma
+`IsIrreducibleMap.map_posSemidef_ne_zero` provides the denominator-nonzero
+hypothesis for irreducible CP maps (used in **Wolf Theorem 6.3** item 2).
+
+No fixed-point theorem is assumed here — that is proved in
+`TNLean.Axioms.BrouwerFixedPoint` and consumed in
+`TNLean.Channel.PerronFrobenius.Existence`.
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2,
+  proof of Theorem 6.5 via Brouwer fixed point][Wolf2012QChannels]
+* [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators TNMatrixCFC
