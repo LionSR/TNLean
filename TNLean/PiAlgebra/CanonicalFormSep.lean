@@ -400,27 +400,19 @@ private theorem block_separation_core_of_crossOverlap_tendsto_one
 
 end BlockSeparationCoreInduction
 
-/-! ### Block separation core lemma (mixed-transfer / overlap argument)
+/-! ### Block separation core
 
-This is the literature-aligned block-separation step in canonical form.  The
-statement includes the additional hypotheses needed for the checked
-mixed-transfer proof:
+Under strict weight ordering, injectivity, left-canonical normalization, and
+`mpvOverlap (A k) (A k) N → 1`, the block identity
+`∑ k, μ k ^ N • (mpv (A k) σ - mpv (B k) σ) = 0` implies
+`SameMPV (A k) (B k)` for every block `k`.
 
-* `hB_inj` : every block of `B` is injective (needed for the overlap decay lemma
-  `mpvOverlap_tendsto_zero`), and
-* `hA_overlap` : aperiodicity / primitive normalization, expressed as
-  `mpvOverlap (A k) (A k) N → 1` as `N → ∞`. This rules out the "overlap → 0" branch
-  in the equal-or-orthogonal dichotomy.
-
-The proof follows Pérez-García et al. (2007, Appendix E) / Cirac et al. (2021, Theorem IV.3):
-we take overlaps with the leading block, divide by the leading weight, and use the
-strict modulus ordering of the weights together with uniform overlap bounds to invoke
-`peeling_exponential_bound`. Thus the geometric decay comes from the weight ratio,
-while the overlap theorems are used only for boundedness and contradiction steps.
-Once the leading mixed overlap is shown to tend to `1`, a nonzero limit first rules
-out a bond-dimension mismatch via the rectangular decay lemma; in the equal-dimension
-case, the usual overlap-decay contradiction forces gauge-phase equivalence of the
-leading block. Finally one iterates by induction on the number of blocks.
+The proof follows Pérez-García et al. (2007, Appendix E) and
+Cirac et al. (2021, Theorem IV.3): take mixed overlaps with the leading block,
+divide by the leading weight, and use `peeling_exponential_bound` with
+`‖μ k / μ 0‖ < 1`. The nonzero limiting overlap rules out unequal bond dimensions;
+in equal dimension, overlap decay forces gauge-phase equivalence of the leading
+blocks, and induction removes that block.
 -/
 lemma block_separation_core
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -510,21 +502,11 @@ lemma block_separation_all_words
     ∀ k, SameMPV (A k) (B k) :=
   block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
 
-/-- NT / normal-canonical formulation of `block_separation_all_words`.
+/-- **Normal-canonical block separation**.
 
-Besides irreducibility and left-canonical normalization on both block families,
-this lemma also assumes the self-overlap convergence hypothesis on the
-`A`-blocks: `mpvOverlap (A k) (A k) N → 1`.
-
-The proof is the same peeling / induction argument as `block_separation_core`.
-The geometric decay again comes from the strict weight ordering after dividing by
-the leading weight, while the NT overlap lemmas provide the boundedness and
-contradiction hypotheses. At the identification step,
-`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` first excludes a
-bond-dimension mismatch, and
-`gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP` replaces the
-injective equal-dimension overlap-decay contradiction via the irreducible
-modulus-one-eigenvalue-rigidity argument. -/
+Irreducible-block variant of `block_separation_all_words`:
+uses the irreducible modulus-one-eigenvalue rigidity argument
+instead of injective overlap-decay at the block-identification step. -/
 lemma block_separation_all_words_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
