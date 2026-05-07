@@ -17,8 +17,7 @@ bond space.
 The pointwise gauges are supplied by `gaugeEquiv_twistedTensor_of_injective`
 (the single-block Fundamental Theorem applied to each twisted tensor).
 Gauge uniqueness and the twist composition law then assemble these gauges into the
-virtual representation.  The string-order theorems in later files depend on this
-result.
+virtual representation.
 
 ## Main results
 

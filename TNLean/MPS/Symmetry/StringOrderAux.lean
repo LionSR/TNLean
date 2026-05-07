@@ -17,9 +17,11 @@ import TNLean.Spectral.SpectralGapNT
 /-!
 # String order: trace-preserving gauge reduction and auxiliary proofs
 
-This file provides the trace-preserving gauge setup and auxiliary proofs
-supporting the main string-order equivalence theorems in
-`TNLean.MPS.Symmetry.StringOrder`.
+The trace-preserving gauge setup and auxiliary proofs in this module
+support the main string-order equivalence theorems:
+reduction of the twisted transfer map to a similarity transform,
+normalization of gauge-phase intertwiners to unitary form, and
+boundary-state invariance `V† Λ V = Λ`.
 
 ## Contents
 

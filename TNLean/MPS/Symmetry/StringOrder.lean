@@ -14,10 +14,10 @@ This file proves the main equivalence theorems relating string order,
 local symmetry, and spectral radius for injective MPS tensors, together
 with the SPT phase classification results.
 
-The core definitions (twisted transfer map, string order parameter, conditions
-C1/C2/C3 and their equivalences) are in `TNLean.MPS.Symmetry.StringOrderDefs`.
-The trace-preserving gauge reduction and supporting proofs are in
-`TNLean.MPS.Symmetry.StringOrderAux`.
+The core definitions — the twisted transfer map, string order parameter, and
+conditions C1/C2/C3 with their equivalences — are imported from companion
+modules.  This file proves the main spectral, local-symmetry, and phase
+classification theorems that use them.
 
 ## Main definitions
 

@@ -6,10 +6,10 @@ import TNLean.MPS.FundamentalTheorem.Basic
 This module defines the symmetry-twisted tensor construction and proves its
 functoriality, establishing the algebraic foundations for on-site symmetric MPS.
 
-The injective virtual-gauge statement follows from the single-block Fundamental
-Theorem: `IsOnSiteSymmetric` gives `SameMPV A (twistedTensor A U g)`, and
-`sameMPV_iff_gaugeEquiv_of_injective` turns equality of MPV families into a
-virtual gauge.
+For an injective MPS tensor, on-site symmetry under a group representation
+implies that each twisted tensor has the same matrix-product-vector family as
+the original.  The single-block Fundamental Theorem then converts equality of
+MPV families into a virtual gauge.
 
 ## Main definitions
 
