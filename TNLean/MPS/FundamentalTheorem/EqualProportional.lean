@@ -468,7 +468,7 @@ theorem fundamentalTheorem_equalMPV_full
 
 /-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
 
-This wraps the same-cardinality power-sum lemmas from `ScalarPowerSumIdentity.lean`.
+This provides the same-cardinality power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded version is the same-cardinality part of the paper's Lemma `Lem:app_simple`;
 the nonzero-entry version below also compares possibly unequal cardinalities.
 -/
