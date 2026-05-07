@@ -22,6 +22,12 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    quantifier in the surrounding sentence, or use mathematical quantifier
    notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
    for the full rule and examples.
+10. **Paper source first.** When a theorem, lemma, or proof sketch formalizes a
+    cited result, compare against the paper source before introducing local names.
+    Use the source notation and display the defining equations whenever possible.
+    If Lean proves an auxiliary reformulation, state the source result first and
+    mark the auxiliary role with `Formalization note.` rather than blending it
+    into the mathematical prose.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -31,6 +37,11 @@ This is the most important rule. Every proof in the blueprint must faithfully de
 - **Don't hand-wave where Lean is specific.** "Standard argument" is not acceptable if Lean uses three specific lemmas. Name them.
 - **Don't be more specific than Lean.** If Lean uses `simp` to close a goal, a one-line sketch is fine.
 - **`\uses` in proofs must be accurate.** Only list what the proof actually uses, not what the statement mentions. If the proof uses `lem:eval_word_gauge` but the statement mentions `def:gauge_equiv`, the proof's `\uses` should list the lemma, not the definition (unless the proof also directly unfolds the definition).
+- **Do not present local auxiliary routes as source mathematics.** If a proof uses
+  a formal auxiliary lemma not stated in the cited source, name the mathematical
+  assertion it proves and explain its role in a `Formalization note.`. If the
+  auxiliary route is no longer used by the checked proof, delete the entry rather
+  than keeping an unmotivated theorem-like statement in the blueprint.
 
 ## Notation Consistency
 Notation must be **internally consistent** across the entire blueprint and **close to what the Lean code expresses**:

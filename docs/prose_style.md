@@ -6,6 +6,7 @@ It is the authoritative source for:
 1. The "no Lean jargon in the leanblueprint" rule.
 2. The banned software-engineering vocabulary.
 3. The banned LLM writing patterns.
+4. Source-faithful terminology and formula-first statements.
 
 It extends — and does not replace — the general mathlib-pasted documentation
 guidance in the "Doc strings" section of [`MATHLIB_doc.md`](MATHLIB_doc.md) ("Doc strings should
@@ -121,6 +122,44 @@ without opening the `.lean` files, the prose has failed.
   record a missing implication, a source comparison, or an extra hypothesis in
   mathematical terms.
 - The other software/LLM bans in Section 2 and Section 3 still apply.
+
+### Source-faithful terminology and formulas
+
+When a blueprint entry or Lean docstring corresponds to a result in a paper,
+the paper source controls the mathematical language. Prefer the notation,
+terminology, and hypotheses used in the cited source. If the formalization uses
+a local auxiliary name, describe the mathematical statement first and put the
+local convention in an explicitly marked note only when the reader needs it.
+
+For MPS canonical-form and fundamental-theorem material, this means that formulas
+such as
+```tex
+A^i = \bigoplus_k \mu_k A_k^i,
+\qquad
+\widetilde A_k^i = e^{i\phi_k} X_k A_j^i X_k^{-1},
+\qquad
+\ket{V^{(N)}(A)} = \sum_k \mu_k^N \ket{V^{(N)}(A_k)}
+```
+are preferable to long prose descriptions of "blocks", "classes", or "pieces"
+when the formulas are the actual content.
+
+If a local term is unavoidable because the source has no name for the object,
+define it at its first reader-facing occurrence by a formula or tuple. Do not
+use unexplained shorthand such as "zero tail", "norm-class data", or
+"blockwise construction". Write, for example, "the remaining direct summand is
+the all-zero block" and display the corresponding direct-sum decomposition.
+
+When the Lean statement is stronger, weaker, or differently organized than the
+paper source, separate the two assertions:
+
+- the theorem or lemma statement states the mathematics being formalized;
+- a `**Formalization note.**` records the extra hypothesis, missing implication,
+  or auxiliary reformulation.
+
+Do not hide a mathematical difference inside process prose such as "pragmatic
+version", "comparison route", or "assembly step". If the auxiliary result is
+neither a source-paper input nor an indirect dependency of checked formalization,
+remove it instead of documenting it as if it were part of the paper.
 
 ---
 
