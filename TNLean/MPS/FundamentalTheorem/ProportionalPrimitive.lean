@@ -47,7 +47,7 @@ separate irreducibility hypothesis from the proportional FT statement.
 
 The formal Lean declaration that supplies this external input is:
 
-> `Wielandt.Primitivity.ImpliesIrreducible` provides the bridge from the
+> `Wielandt.Primitivity.ImpliesIrreducible` provides the connection from the
 > peripheral-spectrum primitivity predicate (`_root_.IsPrimitive`) to the
 > irreducibility conclusion.
 

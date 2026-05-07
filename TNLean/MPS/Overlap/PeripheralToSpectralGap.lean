@@ -46,7 +46,7 @@ The formal Lean declaration:
 > `TNLean.Channel.FixedPoint.Cesaro` supplies the PSD decomposition used in
 > `transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero` (line 93).
 > This is the Wolf Proposition 6.8 formalization consumed by the
-> peripheral-to-spectral-gap bridge.
+> peripheral-to-spectral-gap connection.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal

@@ -62,7 +62,7 @@ proceeds as follows:
 ## External input — Quantum Wielandt vector-to-matrix span
 
 This file imports `TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan`, which supplies
-the critical spanning step used in the wrapping-window argument:
+the spanning step used in the wrapping-window argument:
 
 > **Vector-to-matrix spanning step (arXiv:0909.5347, Lemma 2(a) / Wolf Chapter 6).**
 > If the vector-valued images of Kraus word products span the full vector space

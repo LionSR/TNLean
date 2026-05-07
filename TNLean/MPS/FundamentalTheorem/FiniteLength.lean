@@ -51,7 +51,7 @@ bound `n`.  This "cumulative span to top" is provided by the Wielandt chain:
 
 The formal Lean import is `TNLean.Wielandt.SpanGrowth.CumulativeSpan`, which
 provides `Wielandt.cumulativeSpan_eq_top_of_...` and the cumulative-to-word-span
-bridge `CumulativeToWordSpan`.  These are the declarations that make the
+connection `CumulativeToWordSpan`.  These are the declarations that make the
 finite-length word-span conclusion available inside the MPS proof route.
 -/
 

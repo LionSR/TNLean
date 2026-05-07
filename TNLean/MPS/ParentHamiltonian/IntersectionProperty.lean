@@ -42,9 +42,9 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 ## External input — Quantum Wielandt cumulative-to-word-span
 
 This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies
-the bridge from the cumulative Wielandt bound to a concrete word-span theorem:
+the connection from the cumulative Wielandt bound to a concrete word-span theorem:
 
-> **Cumulative-to-word-span bridge (Wielandt chain, Lemma 2(b) of arXiv:0909.5347).**
+> **Cumulative-to-word-span connection (Wielandt chain, Lemma 2(b) of arXiv:0909.5347).**
 > The cumulative span `S_n(A)` is the linear span of all word products of length
 > `≤ n`.  `CumulativeToWordSpan` converts the statement "`S_n(A)` reaches the
 > full matrix algebra" into "`wordSpan A n = ⊤`" — i.e., the

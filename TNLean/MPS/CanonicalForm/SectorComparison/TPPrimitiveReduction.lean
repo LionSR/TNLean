@@ -84,7 +84,7 @@ canonical-form reduction.  It imports four Wielandt modules:
 Together, these inputs supply the fact that a TP-primitive block (after the
 Perron-Frobenius gauge and periodicity blocking) is injective — its Kraus operators
 span the full matrix algebra at length 1, and therefore block-injective at every
-positive length.  This is the critical mathematical content that justifies the
+positive length.  This is the mathematical content that justifies the
 "primitive ⇒ injective" implication used in the blocked canonical-form decomposition.
 
 ## Tags

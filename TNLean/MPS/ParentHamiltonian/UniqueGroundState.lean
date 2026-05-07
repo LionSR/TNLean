@@ -80,7 +80,7 @@ argument.
 The formal Lean declaration:
 
 > `wrapped_mirror_witness_agree_of_chainGroundSpace` is the **unproven gap**
-> at line 749 of this file.  It is the remaining hard step in the proof of
+> at line 786 of this file.  It is the remaining hard step in the proof of
 > `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.  Once supplied,
 > it yields the normal-range reduction
 > `chainGroundSpace A L N = mpvSubmodule A N` for `L > L₀` (instead of `2L₀`).
@@ -97,7 +97,7 @@ The supplementary files providing the open-chain build-up to this closure proper
 
 This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies:
 
-> **Wielandt cumulative-to-word-span bridge.**  The Wielandt chain
+> **Wielandt cumulative-to-word-span connection.**  The Wielandt chain
 > (`WielandtBound.lean`) proves that under normality, the cumulative span
 > `S_n(A)` reaches the full matrix algebra for some `n ≤ D²`.
 > `CumulativeToWordSpan` converts this cumulative conclusion to a word-span
@@ -107,7 +107,7 @@ This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which suppl
 
 The formal Lean declaration:
 
-> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the bridge from
+> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the connection from
 > `cumulativeSpan_eq_top` to `wordSpan_eq_top`, the concrete word-span conclusion
 > consumed by the parent-Hamiltonian ground-space uniqueness argument.
 -/

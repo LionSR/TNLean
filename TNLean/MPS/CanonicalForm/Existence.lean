@@ -60,7 +60,7 @@ which supplies the hardest direction of the Quantum Wielandt primitivity equival
 
 In MPS notation after blocking: `IsStronglyIrreducible A` (Kraus word products
 eventually span `M_D(ℂ)`) implies `IsInjective A` (the single-site
-Kraus operators `{A_i}` already span `M_D(ℂ)`).  This is a critical
+Kraus operators `{A_i}` already span `M_D(ℂ)`).  This is a
 step in the canonical-form existence argument: it upgrades the cumulative word
 span to single-site injectivity, which then yields block injectivity at every
 positive length.
@@ -100,7 +100,7 @@ completely positive maps (Wolf Chapter 6), formalized in
 > transformation `A_i ↦ ρ^{1/2} A_i ρ^{-1/2}` that makes the
 > tensor left-canonical.
 
-The spectral-gap bridge to peripheral primitivity is supplied by
+The spectral-gap connection to peripheral primitivity is supplied by
 `TNLean.MPS.Overlap.PeripheralToSpectralGap` (Wolf Proposition 6.8).
 -/
 
