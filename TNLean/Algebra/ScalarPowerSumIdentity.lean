@@ -133,10 +133,11 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
 
-Now a corollary of `sum_pow_eq_implies_multiset_eq_of_le_card`, obtained by
-restricting the all-positive-power hypothesis to `1 ≤ k ≤ card n`. Note that
-this is a **same-cardinality** result; the paper's
-`Lem:app_simple` additionally deduces cardinality equality when the sizes may differ. -/
+This all-positive-power statement follows from
+`sum_pow_eq_implies_multiset_eq_of_le_card` by restricting the hypothesis to
+`1 ≤ k ≤ card n`. The theorem is still same-cardinality; Lemma `Lem:app_simple`
+in arXiv:1606.00608 also proves equality of cardinalities when the sizes may
+differ. -/
 theorem sum_pow_eq_implies_multiset_eq
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
