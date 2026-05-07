@@ -8,25 +8,24 @@ import TNLean.MPS.Core.BlockingInfrastructure
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 /-!
-# All-zero-block MPV transport
+# Zero-block MPV transport
 
 This module contains generic lemmas for transporting decompositions of an MPS
-tensor into an all-zero-block contribution plus a nonzero part.  The `zeroTail`
-names in this file are the formal variables for the total bond dimension of the
-all-zero leftover blocks, corresponding to the source-paper allowance
-`∑ k, D_k ≤ D`.
+tensor into a zero block plus a nonzero part.  The Lean formalization uses the
+name "zero tail" (`zeroTailDim`, `zeroMPSTensor`) as an internal bookkeeping
+term; the source paper (arXiv:1606.00608, Section~2.3) calls these "zero blocks." 
 -/
 
 namespace MPSTensor
 
-/-! ## All-zero-block and weight transport through blocking -/
+/-! ## Zero-tail and weight transport through blocking -/
 
-/-- Reblocking preserves an all-zero-block/nonzero-part MPV decomposition.
+/-- Reblocking preserves a zero-tail/nonzero-part MPV decomposition.
 
-The positive-period hypothesis is exactly what keeps the all-zero-block contribution
+The positive-period hypothesis is exactly what keeps the zero-tail contribution
 confined to length zero after blocking: a blocked chain of positive length expands
 to a positive number of original sites. -/
-lemma zeroTail_mpv_decomp_blockTensor
+theorem zeroTail_mpv_decomp_blockTensor
     {d D L z p : ℕ}
     (A : MPSTensor d D) (nonzeroPart : MPSTensor d L)
     (hp : 0 < p)
@@ -52,9 +51,9 @@ lemma zeroTail_mpv_decomp_blockTensor
   congr 1
   exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) nonzeroPart p σ).symm
 
-/-- Reblocking an all-zero-block plus weighted nonzero-block decomposition transports every
+/-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
 nonzero-block weight to the corresponding blocking power. -/
-lemma zeroTail_toTensorFromBlocks_blockPower
+theorem zeroTail_toTensorFromBlocks_blockPower
     {d D r z p : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D)
     (μ : Fin r → ℂ)
@@ -87,8 +86,8 @@ lemma zeroTail_toTensorFromBlocks_blockPower
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           rw [hNonzeroPart N σ]
 
-/-- Transport an all-zero-block decomposition along an MPV equivalence of its nonzero part. -/
-lemma zeroTail_eq_of_sameMPV₂
+/-- Transport a zero-tail decomposition along an MPV equivalence of its nonzero part. -/
+theorem zeroTail_eq_of_sameMPV₂
     {d D L L' z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (flat : MPSTensor d L')
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
@@ -102,8 +101,8 @@ lemma zeroTail_eq_of_sameMPV₂
     _ = mpv (zeroMPSTensor d z) σ + mpv flat σ := by
       rw [hFlat N σ]
 
-/-- At positive lengths, an all-zero-block decomposition reduces to the nonzero part. -/
-lemma sameMPV₂Pos_of_zeroTail_eq
+/-- At positive lengths, a zero-tail decomposition reduces to the nonzero part. -/
+theorem sameMPV₂Pos_of_zeroTail_eq
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
@@ -117,13 +116,13 @@ lemma sameMPV₂Pos_of_zeroTail_eq
     _ = mpv live σ := by
       rw [hZero, zero_add]
 
-/-- Remove matching all-zero-block contributions from two MPV identities.
+/-- Remove matching zero tails from two MPV identities.
 
-If `A` and `B` have the same MPVs, and each is expressed as a leftover all-zero block plus a
-nonzero part, then equality of the leftover block dimensions gives full `SameMPV₂` equality of
-the nonzero parts. For positive lengths the all-zero blocks vanish; at length zero this is
-exactly the missing dimension condition. -/
-lemma sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
+If `A` and `B` have the same MPVs, and each is expressed as a zero tail plus a nonzero part,
+then equality of the zero-tail dimensions gives full `SameMPV₂` equality of the nonzero parts.
+For positive lengths the zero tails vanish; at length zero this is exactly the missing
+zero-tail condition. -/
+theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     {d D₁ D₂ L₁ L₂ z₁ z₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (liveA : MPSTensor d L₁) (liveB : MPSTensor d L₂)

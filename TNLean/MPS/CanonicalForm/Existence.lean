@@ -378,22 +378,23 @@ theorem exists_irreducible_blockDecomp_with_CFII
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
-## Zero-block separation (1606.00608 Section 2.3)
+## Zero-block separation (arXiv:1606.00608 Section 2.3: partition into zero + nonzero blocks)
 
 The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂`
 at `N = 0` includes the identity `trace(I_D) = D`, we cannot silently drop these.
-The source paper states the resulting block form with `∑ k, D_k ≤ D`, "i.e.,
-there can be zero blocks" (arXiv:1606.00608, equation (8)). In this file,
-`zeroTailDim` is the total bond dimension of those all-zero leftover blocks; it is
-not an extra source-paper object.
+Instead we accumulate them into a single **zero block** (called `zeroTailDim` in the
+Lean formalization; the source paper says "there can be zero blocks" without assigning
+a separate name). The zero-block dimension `zeroTailDim` is the sum of bond dimensions
+of all zero blocks. The remaining **nonzero blocks** each have at least one nonzero
+Kraus operator.
 
-Key facts:
+Key facts (matching the paper's canonical-form reduction, eq. II_Aiplusk1):
 - All-zero irreducible blocks have `dim ≤ 1` (`isIrreducibleTensor_allZero_dim_le_one`).
 - For `N > 0`, all-zero blocks contribute `0` to the MPV (`mpv_eq_zero_of_all_zero`).
 - For `N = 0`, each block of dimension `Dₖ` contributes `Dₖ` (the trace of the identity).
 
-The zero-tail contribution is represented as a single all-zero tensor of dimension
-`zeroTailDim`; its MPV is `zeroTailDim` at `N = 0` and `0` for `N > 0`.
+The zero block is represented as a single all-zero tensor `zeroMPSTensor d zeroTailDim`;
+its MPV is `zeroTailDim` at `N = 0` and `0` for `N > 0`.
 -/
 
 /-- The all-zero MPS tensor of given physical and bond dimension.
@@ -420,12 +421,15 @@ private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d')
     mpv A σ = (D' : ℂ) := by
   simp [mpv, coeff, Matrix.trace_one]
 
-/-- **Zero-block separation (1606.00608 Section 2.3).**
+/-- **Zero-block separation** (arXiv:1606.00608 Section 2.3).
 
-Every MPS tensor `A : MPSTensor d D` admits an irreducible block decomposition that is
-faithfully partitioned into:
+The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, some blocks may
+be zero: "there can be zero blocks." Every MPS tensor `A : MPSTensor d D` admits an irreducible
+block decomposition that is faithfully partitioned into:
 
-* an **all-zero leftover block** of bond dimension `zeroTailDim`, and
+* a **zero block** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks --
+  the Lean formalization uses "zero tail" as a bookkeeping term for the sum of zero-block
+  bond dimensions; the paper's wording is "zero blocks"), and
 * a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
   least one nonzero Kraus operator, positive bond dimension, and irreducibility.
 
@@ -434,10 +438,11 @@ The MPV relationship is:
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ≡1 blocks) σ`
 
 which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
-`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the all-zero leftover block vanishes).
+`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the zero block contributes only at
+length 0).
 
-This separation is **exact**: the all-zero leftover block is not silently discarded, and the
-length-zero identity is preserved. -/
+This separation is **exact**: the zero block is not silently discarded, and the length-zero
+identity D = D_0 + Σ_k D_k from the paper is preserved. -/
 theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
