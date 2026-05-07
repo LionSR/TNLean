@@ -377,13 +377,13 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCove
       hPrimA hPrimB hIrrA hIrrB hDimA hDimB
   exact hBNTCover.toCommonPrimitivePhaseCoverHypotheses
 
-/-- **Sector comparison from normal-CF-BNT common primitive data.**
+/-- **Sector comparison from normal-CF-BNT common primitive hypotheses.**
 
-Assume the blocked-word relabeling statement for cyclic-sector data.  If the common primitive
+Assume the blocked-word relabeling statement for cyclic-sector hypotheses.  If the common primitive
 families supplied by the structural theorem are already in normal canonical form with BNT
-separation, and if they also carry proportional-decomposition data and one-site injectivity,
-then the zero-tail sector comparison follows.  The zero-tail equality is derived from the
-length-zero identity and the proportional comparison. -/
+separation, and if they also carry proportional-decomposition hypotheses and
+one-site injectivity, then the zero-tail sector comparison follows.  The zero-tail equality
+is derived from the length-zero identity and the proportional comparison. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
