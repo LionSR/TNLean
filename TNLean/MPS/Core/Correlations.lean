@@ -22,10 +22,6 @@ The spectral statements `connectedCorrelator_eq_sum` and
 as an explicit hypothesis; the source (arXiv:2011.12127, Sec.~4.5)
 derives these hypotheses from the transfer-map eigendecomposition.
 The definitions here are used by the zero-correlation-length results.
-
-[Maintainer note: constructing the coefficients and eigenvalues from the
-transfer-map eigendecomposition (so that the spectral statements become
-unconditional) is tracked in GitHub issue #1447.]
 -/
 
 open scoped Matrix BigOperators
@@ -80,9 +76,6 @@ exponentials `∑ⱼ cⱼ λⱼⁿ`.
 
 The source (arXiv:2011.12127, Sec. 4.5) asserts that such `cⱼ, λⱼ`
 always exist for a normal MPS via the transfer-map eigendecomposition.
-
-[Maintainer note: constructing `cⱼ, λⱼ` from the eigendecomposition of
-`transferMap A` is tracked in GitHub issue #1447.]
 -/
 theorem connectedCorrelator_eq_sum
     (A : MPSTensor d D)
@@ -100,15 +93,12 @@ theorem connectedCorrelator_eq_sum
 Exponential decay bound for connected correlations (conditional on
 supplied constant and subleading eigenvalue).
 
-If a constant `C_X_Y ≥ 0` and a subleading eigenvalue `λ₂` with the
+If a constant `C_X_Y` and a subleading eigenvalue `λ₂` with the
 exponential-decay bound are supplied, then the connected correlator
 satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
 
 The source (arXiv:2011.12127, Sec.~4.5) derives this from the
 sum-of-exponentials expansion and the spectral gap condition.
-
-[Maintainer note: constructing `C_X_Y` and `λ₂` from the spectrum of
-`transferMap A` is tracked in GitHub issue #1447.]
 -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)

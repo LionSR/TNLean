@@ -77,7 +77,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     Given the expansion hypothesis, the equality is immediate.
     The source~\cite[Sec.~4.5]{Cirac2021Matrix} derives this expansion
     from the spectral decomposition of $\E_A^n$ restricted to the
@@ -93,9 +93,8 @@ their spectral decomposition, and quantitative bounds on decay rates.
     \label{thm:correlator_exponential_bound}
     \lean{MPSTensor.connectedCorrelator_bound}
     \leanok
-    \uses{thm:correlator_sum_exponentials}
-    If a constant $C_{XY}\ge 0$ and a subleading eigenvalue $\lambda_2\in\C$
-    with $|\lambda_2|<1$ satisfy, for all $n\ge 0$,
+    \uses{def:connected_correlator}
+    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all $n\ge 0$,
     \[
         |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n,
     \]
@@ -107,7 +106,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \end{theorem}
 
 \begin{proof}
-    \notready
+    \leanok
     Given the bound hypothesis, the estimate is immediate.
     The source~\cite[Sec.~4.5]{Cirac2021Matrix} obtains this bound
     by applying the triangle inequality to the sum-of-exponentials
@@ -142,7 +141,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \begin{definition}[Correlation length]\label{def:correlation_length}
     \lean{MPSTensor.correlationLength}
     \leanok
-    \uses{def:two_point_expectation, def:connected_correlator}
+    \uses{def:transfer_map}
     The correlation length associated with a subleading eigenvalue
     $\lambda_2$ of the transfer map ($|\lambda_2|<1$) is
     \[
