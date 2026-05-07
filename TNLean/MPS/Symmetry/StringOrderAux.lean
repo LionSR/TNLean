@@ -15,18 +15,21 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Spectral.SpectralGapNT
 
 /-!
-# String order: auxiliary lemmas and private proofs
+# String order: trace-preserving gauge reduction and auxiliary proofs
 
-This file contains the TP-gauge setup and the long auxiliary proofs
-supporting the main string-order equivalence theorems in
-`TNLean.MPS.Symmetry.StringOrder`.
+The trace-preserving gauge setup and auxiliary proofs in this module
+support the main string-order equivalence theorems:
+reduction of the twisted transfer map to a similarity transform,
+normalization of gauge-phase intertwiners to unitary form, and
+boundary-state invariance `V† Λ V = Λ`.
 
 ## Contents
 
 * `TwistedTPGaugeSetup` — bundled TP-gauge data for the spectral radius bound
-* `transferMap_tpGauge_eq_similarityMap` — TP gauge rewrites the transfer map
-* `virtualUnitary_of_gaugePhaseEquiv_twisted` — gauge normalization to unitary
-* `boundaryState_invariant_of_virtualUnitary` — `V† Λ V = Λ` conclusion
+* `transferMap_tpGauge_eq_similarityMap` — similarity transform of the transfer map
+* `virtualUnitary_of_gaugePhaseEquiv_twisted` — normalization of a gauge-phase
+  intertwiner to a unitary
+* `boundaryState_invariant_of_virtualUnitary` — boundary-state invariance `V† Λ V = Λ`
 
 ## References
 

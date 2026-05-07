@@ -7,7 +7,7 @@ namespace MPSTensor
 variable {G : Type*} [Group G] {d D : ℕ}
 
 /-- On-site symmetry data on the physical index:
-`u` is a (not-yet-constrained) matrix-valued map and `σ` is the physical-index action. -/
+`u` is a matrix-valued map on the group and `σ` is the physical-index action. -/
 structure OnSiteSymmetry (G : Type*) [Group G] (d : ℕ) where
   u : G → Matrix (Fin d) (Fin d) ℂ
   σ : G → Fin d → Fin d
