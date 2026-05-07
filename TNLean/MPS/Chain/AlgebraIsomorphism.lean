@@ -3,25 +3,19 @@ import TNLean.MPS.Chain.Defs
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.Algebra.SkolemNoether
 /-!
-# Algebra isomorphism between virtual bond algebras (Lemma 1)
+# Algebra isomorphism between virtual bond algebras
 
-For two injective MPS chains whose combined tensor generates the same MPV family,
-virtual insertions on bond 0–1 are related by conjugation (Skolem–Noether).
-
-## Overview of the proof
-
-1. Combine the site-local tensors `A₁, A₂, A₃` into a single family
-   `chainCombinedTensor A` indexed by `Fin (3 * d)` via `finProdFinEquiv`.
-2. Apply the linear extension theorem (`linearExtension_exists_unique`) to
-   obtain the unique linear map `T` with `T(Aₖ(σ)) = Bₖ(σ)` for all sites
-   `k` and physical indices `σ`.
-3. Apply `linearExtension_mul` to show `T` is multiplicative.
-4. By simplicity of the matrix algebra (`linear_mul_endomorphism_bijective`),
-   `T` is bijective.
-5. Apply Skolem–Noether (`skolemNoether_matrix`) to extract the gauge
-   matrix `W` with `T(M) = W M W⁻¹`.
-6. The virtual-insertion identity follows from multiplicativity of `T` and
-   trace-cyclicity.
+For two 3-site injective periodic MPS chains
+`A = (A₀, A₁, A₂)` and `B = (B₀, B₁, B₂)` whose combined tensors generate
+the same MPV family, the virtual-insertion coefficients on bond 0–1 are
+related by conjugation through an invertible matrix `Z ∈ GL(D, ℂ)`:
+```
+  tr(A₀^{σ₀} · X · A₁^{σ₁} · A₂^{σ₂})
+= tr(B₀^{σ₀} · Z⁻¹ X Z · B₁^{σ₁} · B₂^{σ₂})
+```
+for all `X ∈ M_D(ℂ)` and physical configurations `σ`.  The proof uses the
+linear extension from `SameMPV`, multiplicativity, simplicity of `M_D(ℂ)`,
+and Skolem–Noether.
 
 ## References
 
@@ -34,12 +28,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Combined tensor for the linear-extension approach -/
+/-! ### Combined tensor for a chain -/
 
 /-- The combined MPS tensor for a chain: packs site index `k : Fin n` and
 physical index `σ : Fin d` into a single index in `Fin (n * d)` via
-`finProdFinEquiv`. This lets us apply the single-tensor `linearExtension`
-construction to a non-translation-invariant chain. -/
+`finProdFinEquiv`. -/
 noncomputable def chainCombinedTensor {n : ℕ} (A : Fin n → MPSTensor d D) :
     MPSTensor (n * d) D :=
   fun i => A (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm i).2
@@ -50,9 +43,7 @@ lemma chainCombinedTensor_apply {n : ℕ} (A : Fin n → MPSTensor d D)
     chainCombinedTensor A (finProdFinEquiv (k, σ)) = A k σ := by
   simp [chainCombinedTensor]
 
-/-- If any site tensor is injective, the combined tensor is injective.
-This is because `{Aₖ(σ)} ⊆ {chainCombinedTensor A (i)}`, so the
-larger set spans if the smaller one does. -/
+/-- If any site tensor is injective, the combined tensor is injective. -/
 theorem chainCombinedTensor_isInjective {n : ℕ} (A : Fin n → MPSTensor d D)
     (k : Fin n) (hk : IsInjective (A k)) :
     IsInjective (chainCombinedTensor A) := by
@@ -66,24 +57,18 @@ theorem chainCombinedTensor_isInjective {n : ℕ} (A : Fin n → MPSTensor d D)
 
 /-! ### The main theorem -/
 
-/-- **Lemma 1 (arXiv:1804.04964)**: Virtual bond gauge theorem.
+/-- **Virtual bond gauge** (Lemma 1 of arXiv:1804.04964).
 
-For two injective MPS chains whose combined tensors generate the same MPV
-family (`SameMPV` on `chainCombinedTensor`), virtual insertions on bond 0–1
-are related by conjugation: there exists `Z ∈ GL(D,ℂ)` such that for all `X`
-and all physical configurations `σ`,
+For two 3-site injective periodic MPS chains `A = (A₀, A₁, A₂)` and
+`B = (B₀, B₁, B₂)` whose combined tensors generate the same MPV family,
+there exists `Z ∈ GL(D, ℂ)` such that for all `X ∈ M_D(ℂ)` and all
+physical configurations `σ : Fin 3 → Fin d`,
 ```
-virtualInsertCoeff A₁ A₂ A₃ σ X = virtualInsertCoeff B₁ B₂ B₃ σ (Z⁻¹ X Z)
+  virtualInsertCoeff A₀ A₁ A₂ σ X
+= virtualInsertCoeff B₀ B₁ B₂ σ (Z⁻¹ · X · Z)
 ```
-
-The hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`
-requires trace agreement for all mixed-site words of all lengths:
-`tr(A_{s₁}(σ₁) ⋯ A_{sₙ}(σₙ)) = tr(B_{s₁}(σ₁) ⋯ B_{sₙ}(σₙ))`
-for arbitrary site-index sequences `s₁, …, sₙ`.
-
-The proof constructs the linear extension `T` with `T(Aₖ(σ)) = Bₖ(σ)`,
-shows it is multiplicative, promotes it to a bijective algebra endomorphism
-(by simplicity of the matrix ring), and applies Skolem–Noether to extract `Z`. -/
+where the hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`
+is trace agreement for all mixed-site words of all lengths. -/
 theorem virtual_bond_gauge [NeZero D]
     (A B : Fin 3 → MPSTensor d D)
     (hA : ∀ k, IsInjective (A k)) (_hB : ∀ k, IsInjective (B k))
