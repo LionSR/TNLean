@@ -384,7 +384,7 @@
   <a href="ch-spectral.html#a0000000076"><span class="toc_ref">9.12</span> <span class="toc_entry">Further irreducibility and primitivity equivalences</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000077"><span class="toc_ref">9.13</span> <span class="toc_entry">Multi-cycle block-permutation data</span></a>
+  <a href="ch-spectral.html#a0000000077"><span class="toc_ref">9.13</span> <span class="toc_entry">Multi-cycle block-permutation structure</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000078"><span class="toc_ref">9.14</span> <span class="toc_entry">Peripheral eigenvalue group structure</span></a>
@@ -1900,7 +1900,19 @@
   </div>
 </div>
 <h1 id="a0000000067">9.4 Eigenvalue bound and spectral gap</h1>
-<p>The eigenvalue bound comes from a uniform Frobenius-norm estimate obtained directly from the trace-preserving normalization. For the rigidity theorem, one gauges \(A\) and \(B\) separately using positive fixed points of their transfer maps to obtain unital Kraus families, and then applies the Kadison–Schwarz equality argument to a block embedding of a mixed-transfer eigenvector. </p>
+<p>The eigenvalue bound comes from a uniform Frobenius-norm estimate obtained directly from the trace-preserving normalization (cf. <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Proposition&#160;6.1
+	]
+</span> for the general operator-norm version via Russo–Dye). For the rigidity theorem, one gauges \(A\) and \(B\) separately using positive fixed points of their transfer maps to obtain unital Kraus families, and then applies the Kadison–Schwarz equality argument (<span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.3
+	]
+</span>) to a block embedding of a mixed-transfer eigenvector. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:eigenvalue_bound">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -3045,6 +3057,12 @@
 	<a href="sect0001.html#Cirac2017Annals" >CPGSV17b</a>
 	
 	]
+</span> and the irreducibility theory of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Section&#160;6.2
+	]
 </span>. The argument replaces the Kraus-commutation step with a Cauchy–Schwarz rigidity argument for the Perron–Frobenius fixed point. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:modulus_one_gauge_irr_tp">
   <div class="theorem_thmheading">
@@ -3579,6 +3597,31 @@
   </div>
 </div>
 <h1 id="a0000000072">9.9 Conditional expectation from a faithful fixed point</h1>
+<p>This section follows <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Section&#160;6.4
+	]
+</span>; the conditional expectation is built from the fixed-point algebra of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;6.14
+	]
+</span> via <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, (1.40)
+	]
+</span>. The scalar conditional expectation \(E_\sigma \) is the special case where the fixed-point \(*\)-subalgebra is the scalar algebra \(\mathbb {C}\cdot \mathbb {1}\) (the primitive-channel case). The general irreducible case with nontrivial period requires the Wedderburn block decomposition of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;6.14
+	]
+</span>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:is_conditional_expectation">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -4446,11 +4489,11 @@
   </div>
 </div>
 <h1 id="a0000000073">9.10 Stationary support</h1>
-<p>This section develops the support-projection theory behind stationary states, following&#160;<span class="cite">
+<p>This section develops the support-projection theory behind stationary states, following <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Section&#160;6.4
+	, Section&#160;6.4, Propositions&#160;6.10–6.11
 	]
 </span>. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:lower_zero_invariance">
@@ -5099,6 +5142,13 @@
   </div>
 </div>
 <h1 id="a0000000075">9.11 Wedderburn decomposition of the fixed-point algebra</h1>
+<p>This section proves the structure theorem for the fixed-point algebra of a trace-preserving Kraus map, following <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorems&#160;6.12–6.14
+	]
+</span>. The proof uses the Jacobson radical characterization of semisimplicity together with the Wedderburn–Artin structure theorem for finite-dimensional semisimple algebras over an algebraically closed field. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fixedPointAlgebra_isSemisimpleRing">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -5474,7 +5524,13 @@
   </div>
 </div>
 <h1 id="a0000000076">9.12 Further irreducibility and primitivity equivalences</h1>
-<p>This section collects several criteria and equivalences from Wolf’s Chapter&#160;6 that are used later. </p>
+<p>This section collects several criteria and equivalences from <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorems&#160;6.2, 6.7, 6.8
+	]
+</span> that are used later. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:wolf_6_2_item_3">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -5781,14 +5837,21 @@
 
   </div>
 </div>
-<h1 id="a0000000077">9.13 Multi-cycle block-permutation data</h1>
+<h1 id="a0000000077">9.13 Multi-cycle block-permutation structure</h1>
+<p>This section develops the block-permutation structure underlying the cycle decomposition of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;6.16
+	]
+</span>. The multi-cycle decomposition refines the single-cycle case to handle arbitrary peripheral periods. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:cycle_structure">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">9.67</span>
-    <span class="definition_thmtitle">Block-permutation data</span>
+    <span class="definition_thmtitle">Block-permutation structure</span>
     <div class="thm_header_extras">
 
     
@@ -5836,7 +5899,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">9.68</span>
-    <span class="definition_thmtitle">Multi-cycle block-permutation data</span>
+    <span class="definition_thmtitle">Multi-cycle block-permutation structure</span>
     <div class="thm_header_extras">
 
     
@@ -6046,7 +6109,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">9.71</span>
-    <span class="definition_thmtitle">Flattening to single-index block-permutation data</span>
+    <span class="definition_thmtitle">Flattening to a single-index block-permutation structure</span>
     <div class="thm_header_extras">
 
     
@@ -6107,6 +6170,13 @@
   </div>
 </div>
 <h1 id="a0000000078">9.14 Peripheral eigenvalue group structure</h1>
+<p>This section proves the peripheral spectrum structure of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;6.6
+	]
+</span> for irreducible Schwarz maps: the peripheral eigenvalues form a finite cyclic group. The trace-preserving refinement that the order divides the bond dimension is proved in Theorem&#160;<a href="ch-spectral.html#thm:peripheral_cyclic_group">9.75</a>. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:isUnit_peripheral_eigenvector">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -7586,7 +7656,13 @@
   </div>
 </div>
 <h1 id="a0000000081">9.15 Primitive overlap convergence (spectral-gap form)</h1>
-<p>The theorems in this section are stated directly in terms of the complementary map \(E - P\). This is the analytic form needed for the later overlap argument. For primitive normalized transfer maps, Chapter&#160;<a href="ch-channels.html">5</a> supplies this spectral-gap input under explicit hypotheses. </p>
+<p>The theorems in this section are stated directly in terms of the complementary map \(E - P\). This is the analytic form needed for the later overlap argument, corresponding to the primitive-case specialization of <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;6.7
+	]
+</span> where \(T_\phi \) is a rank-one projection. For primitive normalized transfer maps, Chapter&#160;<a href="ch-channels.html">5</a> supplies this spectral-gap input under explicit hypotheses. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_pow_one">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">

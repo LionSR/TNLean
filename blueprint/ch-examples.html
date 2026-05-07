@@ -384,7 +384,7 @@
   <a href="ch-spectral.html#a0000000076"><span class="toc_ref">9.12</span> <span class="toc_entry">Further irreducibility and primitivity equivalences</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000077"><span class="toc_ref">9.13</span> <span class="toc_entry">Multi-cycle block-permutation data</span></a>
+  <a href="ch-spectral.html#a0000000077"><span class="toc_ref">9.13</span> <span class="toc_entry">Multi-cycle block-permutation structure</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000078"><span class="toc_ref">9.14</span> <span class="toc_entry">Peripheral eigenvalue group structure</span></a>
@@ -939,14 +939,13 @@
 <div class="main-text">
 <h1 id="ch:examples">22 Concrete Examples</h1>
 
-<p>This chapter collects concrete MPS tensors that illustrate the general theory developed in earlier chapters. Each example is specified by its physical dimension&#160;\(d\), bond dimension&#160;\(D\), and explicit matrix family&#160;\(\{ A^i\} \). Key structural properties (injectivity, RFP status, symmetry) are stated as propositions linking back to the general definitions. </p>
-<p>References follow <span class="cite">
+<p>This chapter collects concrete MPS tensors from <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Section&#160;III
 	]
-</span>. </p>
+</span>. Each example is specified by its physical dimension&#160;\(d\), bond dimension&#160;\(D\), and explicit matrix family&#160;\(\{ A^i\} \). Key structural properties (injectivity, RFP status, symmetry) are stated for each tensor. </p>
 <h1 id="sec:ghz">22.1 The GHZ state</h1>
 
 <p>The Greenberger–Horne–Zeilinger (GHZ) state is the prototypical non-injective, renormalization-fixed-point MPS. </p>
@@ -1011,11 +1010,11 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = D = 2\). The GHZ tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001700">
+<div class="displaymath" id="a0000001698">
   \[  A^0 = |0\rangle \! \langle 0| = \operatorname{diag}(1,0), \qquad A^1 = |1\rangle \! \langle 1| = \operatorname{diag}(0,1).  \]
 </div>
 <p> For a system of \(N\) sites the resulting MPV is the GHZ state </p>
-<div class="displaymath" id="a0000001701">
+<div class="displaymath" id="a0000001699">
   \[  |\mathrm{GHZ}_N\rangle  = |0\rangle ^{\otimes N} + |1\rangle ^{\otimes N}.  \]
 </div>
 
@@ -1037,7 +1036,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_transfer_idempotent">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001702"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001700"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1090,7 +1089,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001702">
+<div class="proof_wrapper" id="a0000001700">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1098,7 +1097,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The transfer map acts by \(\mathcal{E}_A(X)_{ij} = \delta _{ij} X_{ij}\) (extraction of the diagonal). This operation is manifestly idempotent. </p>
+  <p>The transfer map acts by \(\mathcal{E}_A(X)_{ij} = \delta _{ij} X_{ij}\) (extraction of the diagonal). This operation is idempotent. </p>
 
   </div>
 </div>
@@ -1118,7 +1117,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_is_rfp">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001701"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1175,7 +1174,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001703">
+<div class="proof_wrapper" id="a0000001701">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1203,7 +1202,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001704"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001702"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1256,7 +1255,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001704">
+<div class="proof_wrapper" id="a0000001702">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1284,7 +1283,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:ghz_z2_symmetric">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001705"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001703"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1302,7 +1301,7 @@
           
           <li><a href="ch-examples.html#def:ghz_tensor">Definition 22.1</a></li>
           
-          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.4</a></li>
+          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.3</a></li>
           
         </ul>
     
@@ -1337,7 +1336,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001705">
+<div class="proof_wrapper" id="a0000001703">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1361,6 +1360,8 @@
     <span class="definition_thmtitle">AKLT tensor</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1411,7 +1412,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Set \(d = 3\) (spin-1) and \(D = 2\). The AKLT tensor is the family \(\{ A^0, A^1, A^2\}  \subset M_{2}(\mathbb {C})\) defined via the Pauli matrices by </p>
-<div class="displaymath" id="a0000001706">
+<div class="displaymath" id="a0000001704">
   \[  A^0 = \frac{1}{\sqrt{3}}\, \sigma _z, \qquad A^1 = \frac{\sqrt{2}}{\sqrt{3}}\, |0\rangle \! \langle 1|, \qquad A^2 = -\frac{\sqrt{2}}{\sqrt{3}}\, |1\rangle \! \langle 0|,  \]
 </div>
 <p> where \(\sigma _z = |0\rangle \! \langle 0| - |1\rangle \! \langle 1|\), so equivalently \(A^1 = \frac{1}{\sqrt{3}}\, \sigma _+\) and \(A^2 = -\frac{1}{\sqrt{3}}\, \sigma _-\) for \(\sigma _+ = \sqrt{2}\, |0\rangle \! \langle 1|\) and \(\sigma _- = \sqrt{2}\, |1\rangle \! \langle 0|\). Equivalently, the matrices are the Clebsch–Gordan coefficients coupling spin-\(1\) and spin-\(\tfrac 12\) to spin-\(\tfrac 12\). </p>
@@ -1579,7 +1580,7 @@
           
           <li><a href="ch-examples.html#def:aklt_tensor">Definition 22.6</a></li>
           
-          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.4</a></li>
+          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.3</a></li>
           
         </ul>
     
@@ -1591,7 +1592,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  The AKLT tensor is on-site symmetric under the spin-\(1\) representation of \(\mathrm{SO}(3)\) (the spin-\(1\) representation of \(\mathrm{SU}(2)\) factors through \(\mathrm{SO}(3)\)), with the virtual representation being the projective spin-\(\tfrac 12\) representation. The projective phase is the non-trivial element of \(H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. The \(\mathbb {Z}_2\) subgroup symmetry is proved below; the full \(\mathrm{SO}(3)\) projective representation is deferred. </p>
+  <p>  The AKLT tensor is on-site symmetric under the spin-\(1\) representation of \(\mathrm{SO}(3)\) (the spin-\(1\) representation of \(\mathrm{SU}(2)\) factors through \(\mathrm{SO}(3)\)), with the virtual representation being the projective spin-\(\tfrac 12\) representation. The projective phase is the non-trivial element of \(H^2(\mathrm{SO}(3),\mathrm{U}(1)) \cong \mathbb {Z}_2\), witnessing a non-trivial SPT phase. </p>
 
   </div>
 </div>
@@ -1638,7 +1639,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Set \(d = D = 2\). The cluster-state tensor is the family \(\{ A^0, A^1\}  \subset M_{2}(\mathbb {C})\) defined by </p>
-<div class="displaymath" id="a0000001707">
+<div class="displaymath" id="a0000001705">
   \[  A^0 = |+\rangle \! \langle 0| = \frac{1}{\sqrt{2}} \begin{pmatrix}  1 
 
 &  0 
@@ -1675,7 +1676,7 @@
 
     <a class="icon proof" href="ch-examples.html#thm:cluster_not_injective">#</a>
     
-    <a class="icon proof" href="ch-examples.html#a0000001708"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-examples.html#a0000001706"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1711,7 +1712,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001708">
+<div class="proof_wrapper" id="a0000001706">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1742,7 +1743,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Although the cluster-state tensor is not injective at length&#160;\(1\), the length-\(2\) blocked tensor is injective. Using \(\langle 0 | \pm  \rangle  = \tfrac {1}{\sqrt{2}}\), \(\langle 1 | + \rangle  = \tfrac {1}{\sqrt{2}}\), and \(\langle 1 | - \rangle  = -\tfrac {1}{\sqrt{2}}\), the four products \(A^{ij} = A^i A^j\) are </p>
-<div class="displaymath" id="a0000001709">
+<div class="displaymath" id="a0000001707">
   \[  A^{00} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 0|,\quad A^{01} = \tfrac {1}{\sqrt{2}}|+\rangle \! \langle 1|,\quad A^{10} = \tfrac {1}{\sqrt{2}}|-\rangle \! \langle 0|,\quad A^{11} = -\tfrac {1}{\sqrt{2}}|-\rangle \! \langle 1|.  \]
 </div>
 <p> Since \(\{ |+\rangle ,|-\rangle \} \) and \(\{ \langle 0|,\langle 1|\} \) are bases, these four rank-one matrices are linearly independent and span&#160;\(M_{2}(\mathbb {C})\). </p>
@@ -1778,7 +1779,7 @@
           
           <li><a href="ch-examples.html#def:cluster_tensor">Definition 22.10</a></li>
           
-          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.4</a></li>
+          <li><a href="ch-symmetry.html#def:on_site_symmetric">Definition 19.3</a></li>
           
         </ul>
     
