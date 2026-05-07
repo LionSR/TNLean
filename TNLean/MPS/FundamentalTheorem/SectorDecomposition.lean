@@ -7,7 +7,6 @@ import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
-import TNLean.Algebra.ScalarPowerSumIdentity
 
 import Mathlib.Data.Fintype.BigOperators
 
