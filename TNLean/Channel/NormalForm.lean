@@ -8,11 +8,11 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# SVD normal form for (transfer) matrices (Wolf Section 2.3)
+# SVD normal form for (transfer) matrices (Wolf Section 2.3, Eqs. (2.35)-(2.40))
 
 This file formalizes the singular value decomposition (SVD) existence result
 from Wolf Section 2.3, which serves as the key technical building block for the
-transfer-matrix normal forms discussed there.
+transfer-matrix normal forms discussed there (Wolf Eqs. (2.38)-(2.40)).
 
 * **SVD for PSD matrices.** Every positive semi-definite complex square matrix
   admits a decomposition `M = U * diagonal σ * Uᴴ` with `U` unitary and `σ`

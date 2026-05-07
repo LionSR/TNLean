@@ -9,12 +9,12 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# POVMs, instruments, and the Naimark dilation (Wolf Chapter 2, Theorem 2.6 / Neumark)
+# POVMs, instruments, and the Naimark dilation (Wolf Section 2.1, Theorem 2.6 / Neumark)
 
 This file defines positive operator-valued measures (POVMs) on `M_D(ℂ)`,
 quantum instruments, and proves the **Naimark extension theorem**: every
 finite-outcome POVM can be realised as a projective measurement on a
-larger (dilated) Hilbert space via an isometry.
+larger (dilated) Hilbert space via an isometry (Wolf Eq. (2.16)).
 
 ## Main definitions
 

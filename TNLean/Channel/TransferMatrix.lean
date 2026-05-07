@@ -14,7 +14,7 @@ import Mathlib.Data.Matrix.Basis
 This file defines the **transfer matrix** (matrix representation) of a linear
 map `T : M_D(ℂ) → M_D(ℂ)`. Given an ordered basis `{E_{kl}}` of standard
 matrix units for `M_D(ℂ)`, the transfer matrix `T̂` is the `D² × D²` matrix
-that represents `T` in the column-stacking vectorization `Matrix.vec`.
+that represents `T` in the column-stacking vectorization `Matrix.vec` (Wolf Eq. (2.20)).
 
 The main result is that `T̂` faithfully represents `T` in the vectorized
 picture: `vec(T(ρ)) = T̂ *ᵥ vec(ρ)`, and this representation is compatible

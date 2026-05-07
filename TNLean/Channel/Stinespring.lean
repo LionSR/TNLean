@@ -7,11 +7,11 @@ import TNLean.Channel.KrausRepresentation
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Stinespring representation theorem (Wolf Chapter 2, Theorem 2.2)
+# Stinespring representation theorem (Wolf Section 2.1, Theorem 2.2)
 
 This file states and proves the Stinespring dilation theorem:
 every completely positive map can be written as `T*(A) = V†(A ⊗ 𝟙)V`
-for an explicit isometry `V` constructed from the Kraus operators.
+for an explicit isometry `V` constructed from the Kraus operators (Wolf Eq. (2.11)).
 
 ## Main definitions
 
@@ -77,7 +77,7 @@ theorem stinespringV_isometry_iff_kraus_normalized {r : ℕ}
 
 /-! ### Stinespring representation of the dual and Schrödinger maps -/
 
-/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2):
+/-- **Stinespring representation, Heisenberg picture** (Wolf Theorem 2.2, Eq. (2.11)):
 
   `T*(A) = V† (A ⊗ 𝟙_r) V`
 

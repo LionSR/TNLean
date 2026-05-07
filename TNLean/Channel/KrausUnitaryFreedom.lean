@@ -6,11 +6,11 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 import TNLean.Channel.KrausFreedom
 
 /-!
-# Unitary freedom of Kraus representations
+# Unitary freedom of Kraus representations (Wolf Theorem 2.18 / Eq. (2.10))
 
 This file restates the directional Kraus-freedom lemmas already proved in
 `TNLean.Channel.KrausRepresentation` and `TNLean.Channel.KrausFreedom` as
-iff statements matching Wolf Theorem 2.18.
+iff statements matching Wolf Theorem 2.18 (ensemble equivalence, Eq. (2.10)).
 
 ## Main results
 

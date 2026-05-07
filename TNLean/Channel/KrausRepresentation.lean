@@ -7,10 +7,10 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Algebra.TracePairing
 
 /-!
-# Kraus representation theorem (Wolf Chapter 2, Theorem 2.1)
+# Kraus representation theorem (Wolf Section 2.1, Theorem 2.1)
 
 This file proves key properties of the Kraus representation of completely
-positive maps `T(A) = ∑ⱼ Kⱼ A Kⱼ†`.
+positive maps `T(A) = ∑ⱼ Kⱼ A Kⱼ†` (Wolf Eq. (2.8)).
 
 ## Main results (Wolf Theorem 2.1)
 
@@ -36,9 +36,9 @@ open Matrix Finset BigOperators
 
 variable {D : ℕ}
 
-/-! ### Kraus normalization conditions (Theorem 2.1, item 1) -/
+/-! ### Kraus normalization conditions (Theorem 2.1, item 1, Eq. (2.8)) -/
 
-/-- **Theorem 2.1 item 1 (TP ⟹ normalization)**:
+/-- **Theorem 2.1 item 1 (TP ⟹ normalization, Eq. (2.8))**:
 If `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving, then `∑ᵢ Kᵢ†Kᵢ = 𝟙`. -/
 theorem kraus_sum_conjTranspose_mul_of_tp
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -64,7 +64,7 @@ theorem kraus_sum_conjTranspose_mul_of_tp
   conv_lhs => rw [← hK N]
   rw [htp N, sub_self]
 
-/-- **Theorem 2.1 item 1 (normalization ⟹ TP)**:
+/-- **Theorem 2.1 item 1 (normalization ⟹ TP, Eq. (2.8))**:
 If `∑ᵢ Kᵢ†Kᵢ = 𝟙`, then `T(X) = ∑ᵢ Kᵢ X Kᵢ†` is trace-preserving. -/
 theorem kraus_tp_of_sum_conjTranspose_mul
     {r : ℕ} (K : Fin r → Matrix (Fin D) (Fin D) ℂ)
@@ -93,7 +93,7 @@ theorem kraus_sum_mul_conjTranspose_of_unital
   rw [hunit] at this
   exact this.symm
 
-/-! ### Unitary freedom in Kraus operators (Theorem 2.1, item 4) -/
+/-! ### Unitary freedom in Kraus operators (Theorem 2.1, item 4, Eq. (2.10) ensemble equivalence) -/
 
 /-- **Theorem 2.1 item 4 (isometry freedom, sufficient direction)**:
 If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K̃ₗ`, then `{Kⱼ}` and

@@ -6,11 +6,11 @@ import TNLean.Channel.OrderedCP
 
 /-!
 # Radon–Nikodym theorem for CP maps and open-system representation
-(Wolf Chapter 2, Theorem 2.4 and Theorem 2.5)
+(Wolf Section 2.1, Theorem 2.4 and Theorem 2.5)
 
 This file formalizes the canonical Radon–Nikodym theorem for completely
 positive maps (Wolf Theorem 2.4) and the open-system representation theorem
-(Wolf Theorem 2.5).
+(Wolf Theorem 2.5, Eq. (2.14)).
 
 The Radon–Nikodym theorem says: for CP maps `T₁, T₂`, there exist a
 Stinespring matrix `V` for `T₁ + T₂` and PSD operators `P₁, P₂` on the
@@ -280,7 +280,7 @@ theorem IsCPMap.exists_radon_nikodym
 
 /-! ### Wolf Theorem 2.5 (open-system representation) -/
 
-/-- **Wolf Theorem 2.5 (open-system representation, reduced form)**.
+/-- **Wolf Theorem 2.5 (open-system representation, reduced form, Eq. (2.14))**.
 
 Every CPTP quantum channel `T` admits a Stinespring isometric dilation `V`
 realizing `T` as the reduced dynamics
