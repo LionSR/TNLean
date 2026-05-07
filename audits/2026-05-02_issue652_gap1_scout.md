@@ -23,7 +23,7 @@ The four remaining hypotheses are:
 | H3 | Zero-tail equality + injectivity + common phase cover / BNT-cover comparison | `CommonPrimitivePhaseCoverHypotheses` (or the `CommonPrimitiveBNTCoverHypotheses` bridge) | #1068 / #652 | Genuine paper-level math |
 | H4 | (Resolved: one-sided BNT construction with overlap data) | `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho` | #877 / #945 / #923 | Resolved (Wave 17G PR #945) |
 
-The conditional after-blocking theorem `fundamentalTheorem_afterBlocking_of_comparisonHypotheses`
+The conditional after-blocking theorem `fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses`
 in `TNLean/MPS/CanonicalForm/Assembly.lean` already accepts H1–H3 as explicit hypotheses
 and produces the full sector-weight conclusion.  The remaining work to reach the
 unconditional theorem is the proof of H1 and the derivation of H3 from the
@@ -50,12 +50,12 @@ Each step in this chain is now explained in detail.
 
 **File:** `TNLean/MPS/CanonicalForm/Assembly.lean` lines 67–201
 
-**Structure:** `AfterBlockingFundamentalTheoremHypotheses` bundles:
+**Structure:** `BlockedNormalFormHypotheses` bundles:
 - `relabel : CommonSectorRelabelingHypothesis d`
 - `comparison :` (a forall accepting the produced common nonzero-sector families and requiring BNT-cover data for them)
 
-**Theorem:** `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` takes
-`SameMPV₂ A B` and `AfterBlockingFundamentalTheoremHypotheses A B` and produces
+**Theorem:** `fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` takes
+`SameMPV₂ A B` and `BlockedNormalFormHypotheses A B` and produces
 the BNT sector-weight comparison conclusion.
 
 This conditional theorem is already proved.  It composes:
@@ -194,7 +194,7 @@ case, organized by dependency level:
 - BNT-cover sector comparison — needs H1+H2+H3
 
 ### Level 5: Conditional full FT statement
-- `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` — clean conditional form, proved
+- `fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` — clean conditional form, proved
 
 ### Level 6: Special-case unconditional
 - `fundamentalTheorem_after_blocking_sector_of_common_blocks_injectiveSpan` — unconditional **if** exact common blocks, injectivity, and span equality are supplied as hypotheses
@@ -352,7 +352,7 @@ theorem nonzero_block_span_eq_of_sameMPV₂_after_blocking
 | One-sided BNT construction | ✅ proved | paper math | #877, #945 | `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho` |
 | Two-sided BNT matching from span | ✅ proved | paper math | #860, #935 | `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching` |
 | Common-period blocking arithmetic | ✅ proved | bookkeeping | — | `lcmPeriod`, `isPrimitive_transferMap_blockTensor_of_dvd` |
-| Conditional full FT | ✅ proved | organizational | — | `fundamentalTheorem_afterBlocking_of_comparisonHypotheses` |
+| Conditional full FT | ✅ proved | organizational | — | `fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` |
 
 ## References
 

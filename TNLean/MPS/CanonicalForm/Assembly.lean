@@ -5,12 +5,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
 import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
+import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonSectorData
+import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the complete canonical-form
+This module is the public entry point for the end-to-end canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
 split across focused supporting modules.
@@ -37,6 +39,8 @@ The supporting modules are:
   after the zero-tail and TP-gauge structural reduction.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
+* `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional
+  sector comparison after structural blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
   path for structural data and common-sector transport.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
@@ -45,6 +49,9 @@ The supporting modules are:
   common primitive span, phase-cover, proportional, and BNT-cover hypotheses.
 * `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
+* `TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison` — overlap-span
+  hypothesis constructors from common primitive span, phase-cover, BNT-cover,
+  and proportional data.
 * `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
@@ -59,15 +66,48 @@ The imported modules provide the canonical-form reduction theorems, including
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_fixedAlgebraRigidity`,
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`,
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
-`exists_bilateral_tp_primitive_blockDecomp_after_blocking`.
+`afterBlocking_structuralData_of_sameMPV₂`.
 
-The after-blocking comparison of two tensors with the same MPV family has a
-conditional form here. Equality of MPV families gives the common blocking and
-common primitive sector data; the BNT-cover comparison data for those sectors
-are separate hypotheses. Under those hypotheses,
-`fundamentalTheorem_afterBlocking_of_comparisonHypotheses` gives BNT sector
-decompositions whose basis sectors and weights match up to permutation and
-nonzero phases.
+This public entry point also records a conditional formulation of the
+Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
+invoke the periodic Fundamental Theorem.  The structure
+`BlockedNormalFormHypotheses` names the source proof obligations (blocking
+to normal tensors, matching of nonzero normal summands, equality of the
+residual zero-block dimension, and the phase-gauge formula), while
+`fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` deduces
+the blocked normal-form sector matching conclusion: after a common blocking,
+the two tensors are represented by BNT sector decompositions whose basis
+sectors and weights match up to permutation and nonzero phases.
+
+## Formalization note: packaging as proof obligations
+
+The source CPSV statement is written for tensors already in canonical form:
+after finitely many blocking steps the matrices are replaced by block-diagonal
+matrices $A^i = \bigoplus_k \mu_k A_k^i$ generating the same matrix product
+vector family, the basis-of-normal-tensor expansion is applied, and the
+sector-weight comparison is stated without listing separate hypotheses about
+trace preservation, primitivity, irreducibility, or zero-tail dimension
+matching.
+
+The structures `BlockedNormalFormHypotheses` and
+`BlockedNormalFormSectorMatching` explicitly package these source proof
+obligations as formal inputs:
+
+* **Blocking to normal tensors** — the blocked tensors decompose into a zero
+  block plus a direct sum of trace-preserving, primitive, irreducible
+  summands at a common blocking length;
+* **Equality of the residual zero-block dimension** — the zero-tail
+  contributions of the two blocked tensors must be identified;
+* **Matching of nonzero normal summands** — the BNT-cover comparison data
+  links the two families of nonzero blocks; and
+* **The phase-gauge formula** — the conclusion delivers a permutation of
+  basis sectors, matched multiplicities, and nonzero phases transforming
+  one multiset of sector weights into the other.
+
+This packaging is the current formal boundary between the canonical-form
+reduction that is already proved in Lean and the source-level comparison
+argument that passes from equal matrix product vector families to the BNT
+sector-matching theorem.
 
 ## References
 
@@ -83,20 +123,35 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-/-- BNT-cover comparison hypotheses for the after-blocking comparison theorem.
+/-- Source proof obligations for the after-blocking fundamental theorem.
 
-For tensors with the same MPV family, the structural reduction gives common primitive
-nonzero-sector families after a common blocking.  The blocked-word relabeling assertion is
-derived from the grouped-block cast theorem.  This predicate supplies the additional BNT-cover
-comparison data for those exact families; equality of MPV families alone is not used here to
-derive that data.  The field `comparison` includes their trace-preserving, primitive,
-irreducible, and positive bond-dimension evidence, so the comparison assumptions are tied to the
-families obtained after blocking. -/
-structure AfterBlockingFundamentalTheoremHypotheses
+This structure collects the four source proof obligations that the CPSV paper uses
+implicitly when the tensors are already in canonical form:
+
+1. **Blocking to normal tensors** — the blocked tensors `blockTensor A p` and
+   `blockTensor B p` decompose as a zero block plus a direct sum of normal
+   summands (trace-preserving, primitive, irreducible, with positive bond
+   dimensions and nonzero weights);
+
+2. **Equality of the residual zero-block dimension** — the zero-tail contributions
+   `zeroTailA` and `zeroTailB` satisfy the same length-zero identity after
+   adding the nonzero-part contributions;
+
+3. **Matching of nonzero normal summands** — for the produced nonzero-block
+   families there exist common primitive BNT-cover hypotheses linking the
+   two decompositions.
+
+The fourth source obligation, the phase-gauge formula, appears as the conclusion
+of `fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` (see
+`BlockedNormalFormSectorMatching`).
+
+The field `comparison` is supplied with structural evidence so the remaining
+assumptions cannot be applied to a different decomposition. -/
+structure BlockedNormalFormHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
-  /-- BNT-cover comparison data for the reindexed common primitive nonzero-sector families, with
-  the structural evidence for trace preservation, primitivity, irreducibility, and positive bond
-  dimensions supplied. -/
+  /-- The remaining BNT-cover comparison data for the produced common primitive
+  nonzero-sector families, with the structural evidence for trace preservation,
+  primitivity, irreducibility, and positive bond dimensions supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
       {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
       [∀ x : Fin rA, NeZero (dimA x)]
@@ -142,18 +197,21 @@ structure AfterBlockingFundamentalTheoremHypotheses
           (CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
             (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB)
 
-/-- Conclusion obtained from supplied after-blocking comparison data.
+/-- Blocked normal-form sector matching: the conclusion of the after-blocking theorem.
 
-The conclusion follows the Cirac--Pérez-García--Schuch--Verstraete statement at the level of
-BNT sector decompositions.  After one positive blocking, there are sector decompositions `P` and
-`Q` with BNT data.  The blocked tensors agree with these sector tensors at all positive lengths,
-the two sector tensors generate the same full MPV family, and the basis sectors have matching
-multiplicities and weights up to a permutation and nonzero phases.
+This structure records the fourth source proof obligation (the phase-gauge formula)
+together with the structural data that the blocked tensors admit matching BNT sector
+decompositions: after a common positive blocking length `p`, the two blocked tensors
+are represented by sector decompositions `P` and `Q` that carry BNT data, generate the
+same full MPV family, and agree with the blocked tensors at every positive length.
+The basis sectors are matched by a permutation, the corresponding multiplicities
+agree, and the sector-weight multisets match after multiplying the weights on one
+side by nonzero sector phases.
 
-The positive-length comparison with the original blocked tensors is intentional: before the
-zero-tail dimensions are identified, the zero-tail contribution is the only obstruction at
-length zero. -/
-structure AfterBlockingFundamentalTheoremConclusion
+The positive-length comparison with the original blocked tensors is intentional:
+before the zero-tail dimensions are identified, the zero-tail contribution is the
+only obstruction at length zero. -/
+structure BlockedNormalFormSectorMatching
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) where
   /-- The common physical blocking length. -/
   p : ℕ
@@ -187,20 +245,26 @@ structure AfterBlockingFundamentalTheoremConclusion
       Finset.univ.val.map
         (fun q => phase j * Q.weight (perm j) (Fin.cast (copies_eq j) q))
 
-/-- **After-blocking comparison from supplied BNT-cover data.**
+/-- **Conditional after-blocking fundamental theorem from blocked normal-form hypotheses.**
 
-Let `A` and `B` generate the same MPV family.  If BNT-cover comparison data are supplied for
-the common primitive nonzero-sector families obtained after blocking, there is a positive
-blocking after which the two tensors admit BNT sector
-decompositions with the same sector MPV family, matched basis-sector multiplicities, and matched
-sector-weight multisets up to nonzero phases.  The `comparison` field is an independent
-hypothesis of this lemma; the result does not derive it from `SameMPV₂`. -/
-lemma fundamentalTheorem_afterBlocking_of_comparisonHypotheses
+Let `A` and `B` generate the same MPV family.  Given the source proof obligations
+collected in `BlockedNormalFormHypotheses` (blocking to normal tensors, matching
+of nonzero normal summands, equality of the residual zero-block dimension), the
+conclusion `BlockedNormalFormSectorMatching` (the phase-gauge formula) follows:
+there is a positive blocking after which the two tensors admit BNT sector
+decompositions with the same sector MPV family, matched basis-sector multiplicities,
+and matched sector-weight multisets up to nonzero phases.
+
+This is the conditional formulation proved by the present periodic-theorem-free
+derivation: it is a direct consequence of
+`afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover`, not
+a hidden assumption or an appeal to the periodic Fundamental Theorem. -/
+theorem fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
-    (h : AfterBlockingFundamentalTheoremHypotheses A B) :
-    Nonempty (AfterBlockingFundamentalTheoremConclusion A B) := by
+    (h : BlockedNormalFormHypotheses A B) :
+    Nonempty (BlockedNormalFormSectorMatching A B) := by
   have h_group : CommonGroupedBlockCastHypothesis d :=
     CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
   have h_relabel : CommonSectorRelabelingHypothesis d :=
