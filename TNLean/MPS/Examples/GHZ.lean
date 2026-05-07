@@ -47,7 +47,7 @@ lemma pauliX_sq : pauliX * pauliX = 1 := by
 
 /-! ### Definition -/
 
-/-- The GHZ MPS tensor: $A⁰ = |0⟩⟨0|$, $A¹ = |1⟩⟨1|$. -/
+/-- The GHZ MPS tensor: $A^0 = |0\rangle\langle 0|$, $A^1 = |1\rangle\langle 1|$. -/
 def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 
 @[simp] lemma ghzTensor_apply (i : Fin 2) :
@@ -56,7 +56,7 @@ def ghzTensor : MPSTensor 2 2 := fun i => Matrix.diagonal (Pi.single i 1)
 /-! ### Transfer map and RFP -/
 
 /-- The transfer map of the GHZ tensor extracts the diagonal:
-$\E_A(X)_{ij} = \delta_{ij} X_{ij}$. -/
+$\mathcal{E}_A(X)_{ij} = \delta_{ij} X_{ij}$. -/
 private lemma ghz_transferMap_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2) :
     (transferMap ghzTensor X) i j = if i = j then X i j else 0 := by
   simp only [transferMap_apply, Fin.sum_univ_two, ghzTensor_apply, Matrix.add_apply,
