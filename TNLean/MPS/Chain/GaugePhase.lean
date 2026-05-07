@@ -3,14 +3,14 @@ import TNLean.MPS.Chain.FundamentalTheorem
 /-!
 # Gauge-phase variant of the injective-chain Fundamental Theorem
 
-If the combined tensors `chainCombinedTensor A` and `chainCombinedTensor B`
-are gauge-phase equivalent, i.e. there exist `X ∈ GL(D, ℂ)` and `ζ ≠ 0` with
+Let $\widetilde A$ and $\widetilde B$ denote the tensors obtained by contracting
+the chains $A$ and $B$ around the period.  If they are gauge-phase equivalent,
+i.e. there exist $X \in GL(D,\C)$ and $\zeta \ne 0$ with
 $$
-  (\operatorname{chainCombinedTensor} B)^j
-    = \zeta\, X\,(\operatorname{chainCombinedTensor} A)^j\,X^{-1},
+  \widetilde B^j = \zeta\, X\,\widetilde A^j\,X^{-1},
 $$
 then the chains themselves are cyclically gauge equivalent with a common
-nonzero phase `ζ` multiplying every site tensor:
+nonzero phase $\zeta$ multiplying every site tensor:
 $$
   B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}.
 $$
