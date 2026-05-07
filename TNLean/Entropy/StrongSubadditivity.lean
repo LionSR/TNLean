@@ -176,7 +176,10 @@ For a density matrix `ρ_ABC` on `A ⊗ 1 ⊗ C`, SSA reduces to
 `S(ρ_ABC) ≤ S(ρ_AB) + S(ρ_BC)` because the `Fin 1`-indexed middle
 reduced state contributes zero entropy, and
 `Matrix.trace_eq_trace_traceAC_ABC` supplies the unit-trace condition
-needed by `vonNeumannEntropy_eq_zero_of_fin_one`. -/
+needed by `vonNeumannEntropy_eq_zero_of_fin_one`.
+
+Source: blueprint `thm:entropy_subadditivity_trivial_B`;
+[Wolf, Chapter 8 (SSA corollary)][Wolf2012QChannels]. -/
 theorem subadditivity_ssa_trivial_B
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)
