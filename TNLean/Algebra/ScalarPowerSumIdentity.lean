@@ -6,6 +6,7 @@ import TNLean.Algebra.NewtonGirard
 import Mathlib.Algebra.Polynomial.Roots
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
+import Mathlib.Tactic.Omega
 
 /-!
 # Scalar Power-Sum Identity
