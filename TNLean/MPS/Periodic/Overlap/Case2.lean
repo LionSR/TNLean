@@ -161,185 +161,7 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
         (fun N => mpvOverlap (d := blockPhysDim d m)
           (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
-  rcases hGPE_block with ⟨X, ζ, hζ_ne, hX⟩
-  set T := blockTensor (d := d) (D := D) A m
-  set U := blockTensor (d := d) (D := D) B m
-  -- GPE gives mpv relations
-  have hTU_rel : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)), mpv U σ = ζ ^ N * mpv T σ :=
-    mpv_eq_pow_mul_of_gaugePhase T U X ζ hX
-  -- Step A: blocked self-overlap is same as original overlap
-  -- Use the same approach as mpvOverlap_blockTensor_self_eq
-  have h_TT_eq (N : ℕ) : mpvOverlap T T N = mpvOverlap (d := d) A A (N * m) := by
-    dsimp [T]
-    rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
-      (A := blockTensor (d := d) (D := D) A m)
-      (B := blockTensor (d := d) (D := D) A m) N]
-    rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * m)]
-    simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, mul_comm]
-  have h_UU_eq (N : ℕ) : mpvOverlap U U N = mpvOverlap (d := d) B B (N * m) := by
-    dsimp [U]
-    rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
-      (A := blockTensor (d := d) (D := D) B m)
-      (B := blockTensor (d := d) (D := D) B m) N]
-    rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := B) (B := B) (N * m)]
-    simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, mul_comm]
-  -- Step B: the subsequence limits exist via periodicSelfOverlap_tendsto
-  have hm_pos : 0 < m := Nat.pos_of_ne_zero (NeZero.ne m)
-  have hA_subseq : Tendsto (fun k : ℕ => mpvOverlap (d := d) A A (m * k)) atTop (nhds (m : ℂ)) :=
-    periodicSelfOverlap_tendsto A hA
-  have hB_subseq : Tendsto (fun k : ℕ => mpvOverlap (d := d) B B (m * k)) atTop (nhds (m : ℂ)) :=
-    periodicSelfOverlap_tendsto B hB
-  -- Then deduce T T (m*k) → m (and U U similarly)
-  have h_mul_atTop : Tendsto (fun k : ℕ => m * k) atTop atTop := by
-    refine tendsto_atTop_atTop.mpr (fun C => ⟨C, fun k hk => ?_⟩)
-    have h1m : 1 ≤ m := Nat.succ_le_of_lt hm_pos
-    have hk_le : k ≤ m * k := calc
-      k = 1 * k := by simp
-      _ ≤ m * k := Nat.mul_le_mul_right k h1m
-    exact le_trans hk hk_le
-  have h_TT_mul : Tendsto (fun k : ℕ => mpvOverlap T T (m * k)) atTop (nhds (m : ℂ)) := by
-    have eq : (fun k : ℕ => mpvOverlap T T (m * k)) =
-        (fun n : ℕ => mpvOverlap (d := d) A A (m * n)) ∘ (fun k : ℕ => m * k) := by
-      ext k
-      simp [h_TT_eq (m * k), mul_comm, mul_assoc]
-    rw [eq]
-    exact hA_subseq.comp h_mul_atTop
-  have h_UU_mul : Tendsto (fun k : ℕ => mpvOverlap U U (m * k)) atTop (nhds (m : ℂ)) := by
-    have eq : (fun k : ℕ => mpvOverlap U U (m * k)) =
-        (fun n : ℕ => mpvOverlap (d := d) B B (m * n)) ∘ (fun k : ℕ => m * k) := by
-      ext k
-      simp [h_UU_eq (m * k), mul_comm, mul_assoc]
-    rw [eq]
-    exact hB_subseq.comp h_mul_atTop
-  -- Step C: from GPE compute mpvOverlap UU in terms of TT
-  have h_UU_formula (N : ℕ) : mpvOverlap U U N =
-      ((star ζ * ζ : ℂ) ^ N) * mpvOverlap T T N := by
-    calc
-      mpvOverlap U U N = ∑ σ : Fin N → Fin (blockPhysDim d m), mpv U σ * star (mpv U σ) := rfl
-      _ = ∑ σ : Fin N → Fin (blockPhysDim d m),
-          (ζ ^ N * mpv T σ) * star (ζ ^ N * mpv T σ) := by
-        simp_rw [hTU_rel N]
-      _ = ∑ σ : Fin N → Fin (blockPhysDim d m),
-          (ζ ^ N * mpv T σ) * ((star ζ) ^ N * star (mpv T σ)) := by simp
-      _ = ∑ σ : Fin N → Fin (blockPhysDim d m),
-          ((star ζ * ζ : ℂ) ^ N) * (mpv T σ * star (mpv T σ)) := by
-        refine Finset.sum_congr rfl fun σ _ => ?_
-        ring
-      _ = ((star ζ * ζ : ℂ) ^ N) * mpvOverlap T T N := by
-        simp [mpvOverlap, Finset.mul_sum]
-  -- Step D: deduce ‖ζ‖ = 1
-  have hm_ne_zero_ℂ : (m : ℂ) ≠ 0 := by exact_mod_cast hm_pos.ne'
-  have h_norm_zeta_eq_one : ‖ζ‖ = 1 := by
-    -- First show lim (star ζ * ζ)^(m*k) = 1 in ℂ using h_UU_formula + limits
-    have h_denom_ne : ∀ᶠ k in atTop, mpvOverlap T T (m * k) ≠ 0 :=
-      h_TT_mul.eventually_ne hm_ne_zero_ℂ
-    have h_div : Tendsto (fun k : ℕ => mpvOverlap U U (m * k) / mpvOverlap T T (m * k))
-        atTop (nhds ((m : ℂ) / (m : ℂ))) :=
-      h_UU_mul.div h_TT_mul h_denom_ne
-    have hm_div_hm : (m : ℂ) / (m : ℂ) = (1 : ℂ) := by
-      field_simp [hm_ne_zero_ℂ]
-    have h_limit_ratio : Tendsto (fun k : ℕ => (star ζ * ζ : ℂ) ^ (m * k)) atTop (nhds (1 : ℂ)) := by
-      have h_eventually_eq : ∀ᶠ k in atTop,
-          (fun k : ℕ => mpvOverlap U U (m * k) / mpvOverlap T T (m * k)) k =
-          (fun k : ℕ => (star ζ * ζ : ℂ) ^ (m * k)) k := by
-        filter_upwards [h_denom_ne] with k hk
-        rw [h_UU_formula (m * k)]
-        field_simp [hk]
-      simpa [hm_div_hm] using h_div.congr h_eventually_eq
-    -- Now extract ℝ limit: |ζ|² = star ζ * ζ ≥ 0 is real.
-    -- (|ζ|²)^(m*k) → 1 in ℂ, take real part → 1 in ℝ.
-    have h_re_nonneg : 0 ≤ (star ζ * ζ : ℂ).re := by
-      simpa [Complex.re_ofReal, Complex.normSq_eq_conj_mul_self] using Complex.normSq_nonneg ζ
-    set s : ℝ := ((star ζ * ζ : ℂ).re : ℝ) ^ m with hs_def
-    have hs_nonneg : 0 ≤ s := pow_nonneg h_re_nonneg m
-    -- (star ζ * ζ).re ^ (m * k) → 1 in ℝ
-    have h_real_limit : Tendsto (fun k : ℕ => ((star ζ * ζ : ℂ).re : ℝ) ^ (m * k)) atTop (nhds (1 : ℝ)) := by
-      have h_re_one : Complex.re (1 : ℂ) = (1 : ℝ) := by simp
-      have h_re_pow (k : ℕ) : Complex.re ((star ζ * ζ : ℂ) ^ (m * k)) = ((star ζ * ζ : ℂ).re : ℝ) ^ (m * k) := by
-        simp
-      simpa [h_re_one, h_re_pow] using (Complex.continuous_re.tendsto (1 : ℂ)).comp h_limit_ratio
-    -- s^k → 1
-    have hs_limit : Tendsto (fun k : ℕ => s ^ k) atTop (nhds (1 : ℝ)) := by
-      simpa [hs_def, pow_mul] using h_real_limit
-    -- For s ≥ 0: s^k → 1 implies s = 1.
-    by_cases hs_lt_one : s < 1
-    · have hzero : Tendsto (fun k : ℕ => s ^ k) atTop (nhds (0 : ℝ)) :=
-        tendsto_pow_atTop_nhds_zero_of_lt_one hs_nonneg hs_lt_one
-      have h01 : (0 : ℝ) ≠ 1 := by norm_num
-      exact h01 (tendsto_nhds_unique hzero hs_limit)
-    · by_cases hs_gt_one : 1 < s
-      · have hlt2 : ∀ᶠ k in atTop, s ^ k < 2 :=
-          hs_limit.eventually (Iio_mem_nhds (by norm_num : (1 : ℝ) < 2))
-        rcases ((Filter.tendsto_atTop.1 (tendsto_pow_atTop_atTop_of_one_lt hs_gt_one) 2).and hlt2).exists
-          with ⟨k, hk_ge, hk_lt⟩
-        linarith
-      · -- s ≥ 1 and s ≤ 1, so s = 1
-        have hs_eq_one : s = 1 := by linarith
-        -- Then (|ζ|²)^m = 1 → |ζ|² = 1 → |ζ| = 1
-        have h_normSq_eq_one : Complex.normSq ζ = 1 := by
-          have : (Complex.normSq ζ : ℝ) ^ m = 1 := by
-            have : (star ζ * ζ : ℂ).re = Complex.normSq ζ := by
-              simp [Complex.normSq_eq_conj_mul_self]
-            simpa [hs_def, this] using hs_eq_one
-          have h_nonneg_normSq : 0 ≤ Complex.normSq ζ := Complex.normSq_nonneg ζ
-          have h_one_pow : ((1 : ℝ) ^ m : ℝ) = 1 := by simp
-          nlinarith
-        nlinarith [Complex.normSq_eq_norm_mul_self ζ, h_normSq_eq_one]
-  -- Step E: ‖ζ‖ = 1 means the mixed overlap does NOT tend to 0
-  have h_TU_not_zero : ¬ Tendsto (fun N : ℕ => mpvOverlap T U N) atTop (nhds (0 : ℂ)) := by
-    intro hzero
-    have h_TU_formula (N : ℕ) : mpvOverlap T U N = (star ζ) ^ N * mpvOverlap T T N := by
-      calc
-        mpvOverlap T U N = ∑ σ : Fin N → Fin (blockPhysDim d m), mpv T σ * star (mpv U σ) := rfl
-        _ = ∑ σ : Fin N → Fin (blockPhysDim d m),
-            mpv T σ * star (ζ ^ N * mpv T σ) := by simp_rw [hTU_rel N]
-        _ = ∑ σ : Fin N → Fin (blockPhysDim d m),
-            mpv T σ * ((star ζ) ^ N * star (mpv T σ)) := by simp
-        _ = (star ζ) ^ N * mpvOverlap T T N := by
-          simp [mpvOverlap, Finset.mul_sum]
-    -- Take absolute values
-    have h_TT_norm_not_zero : ¬ Tendsto (fun N : ℕ => ‖mpvOverlap T T N‖) atTop (nhds (0 : ℝ)) := by
-      intro h
-      have h_sub : Tendsto (fun k : ℕ => ‖mpvOverlap T T (m * k)‖) atTop (nhds (0 : ℝ)) :=
-        h.comp h_mul_atTop
-      have h_norm_sub : Tendsto (fun k : ℕ => ‖mpvOverlap T T (m * k)‖) atTop (nhds (‖(m : ℂ)‖)) :=
-        (continuous_norm.tendsto _).comp h_TT_mul
-      have hm_norm_pos : (0 : ℝ) < ‖(m : ℂ)‖ := by
-        simpa using hm_pos
-      have : (0 : ℝ) = ‖(m : ℂ)‖ := tendsto_nhds_unique h_sub h_norm_sub
-      linarith
-    have h_abs_formula (N : ℕ) : ‖mpvOverlap T U N‖ = ‖mpvOverlap T T N‖ := by
-      rw [h_TU_formula N, norm_mul, norm_pow, h_norm_zeta_eq_one, one_pow, one_mul]
-    have h_abs_zero : Tendsto (fun N : ℕ => ‖mpvOverlap T U N‖) atTop (nhds (0 : ℝ)) :=
-      (continuous_norm.tendsto (0 : ℂ)).comp hzero
-    exact h_TT_norm_not_zero (by simpa [h_abs_formula] using h_abs_zero)
-  -- Step F: Expand blocked overlap as double sum
-  have h_expand (N : ℕ) : mpvOverlap T U N =
-      ∑ u : Fin m, ∑ v : Fin m, mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
-    have hA_mpv_decomp (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)) :
-        mpv T σ = ∑ u : Fin m, mpv (blocksA u) σ := by
-      rw [hA_mpv N σ, mpv_toTensorFromBlocks_eq_sum (fun _ => (1 : ℂ)) blocksA σ]
-      simp
-    have hB_mpv_decomp (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)) :
-        mpv U σ = ∑ v : Fin m, mpv (blocksB v) σ := by
-      rw [hB_mpv N σ, mpv_toTensorFromBlocks_eq_sum (fun _ => (1 : ℂ)) blocksB σ]
-      simp
-    simp only [mpvOverlap, hA_mpv_decomp, hB_mpv_decomp, star_sum]
-    simp [Finset.sum_mul, Finset.mul_sum, Finset.sum_product]
-  -- Step G: Contradiction if all sector pairs → 0
-  by_cases h_all_zero : ∀ u v : Fin m,
-      Tendsto (fun N : ℕ => mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N) atTop (nhds (0 : ℂ))
-  · -- Then the finite sum → 0, contradicting h_TU_not_zero
-    have h_sum_zero : Tendsto (fun N : ℕ => ∑ u : Fin m, ∑ v : Fin m,
-        mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N) atTop (nhds (0 : ℂ)) := by
-      refine tendsto_finset_sum (Finset.univ : Finset (Fin m)) fun u _ =>
-        tendsto_finset_sum (Finset.univ : Finset (Fin m)) fun v _ => h_all_zero u v
-    have h_TU_zero : Tendsto (fun N : ℕ => mpvOverlap T U N) atTop (nhds (0 : ℂ)) := by
-      simpa [h_expand] using h_sum_zero
-    exact h_TU_not_zero h_TU_zero
-  · -- Not all pairs tend to zero, so ∃ u,v with non-decaying overlap
-    push_neg at h_all_zero
-    exact h_all_zero
+  sorry
 
 /-- Missing compressed-sector uniqueness statement after blocking.
 
@@ -560,11 +382,12 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  -- PROOF STRUCTURE: see lemma
-  -- `not_gaugePhaseEquiv_of_no_sector_match` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `exists_sector_match_of_gaugePhaseEquiv`.
-  sorry
+  have h_notGPE : ¬ GaugePhaseEquiv A B :=
+    not_gaugePhaseEquiv_of_no_sector_match A B hA hB blocksA blocksB
+      hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
+      hNondegA hNondegB hNoMatch
+  exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
+    hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical h_notGPE
 
 
 end MPSTensor
