@@ -19,7 +19,7 @@ by subtracting the product of one-point expectations.
 
 The spectral statements `connectedCorrelator_eq_sum` and
 `connectedCorrelator_bound` take the spectral decomposition or bound
-as an explicit hypothesis; the source (arXiv:2011.12127, Sec.~4.5)
+as an explicit hypothesis; the source (arXiv:2011.12127, Sec. 4.5)
 derives these hypotheses from the transfer-map eigendecomposition.
 The definitions here are used by the zero-correlation-length results.
 -/
@@ -97,7 +97,7 @@ If a constant `C_X_Y` and a subleading eigenvalue `λ₂` with the
 exponential-decay bound are supplied, then the connected correlator
 satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
 
-The source (arXiv:2011.12127, Sec.~4.5) derives this from the
+The source (arXiv:2011.12127, Sec. 4.5) derives this from the
 sum-of-exponentials expansion and the spectral gap condition.
 -/
 theorem connectedCorrelator_bound
