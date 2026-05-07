@@ -59,6 +59,20 @@ if [ "$WITH_DOCS" = true ]; then
   cp -r "$REPO_ROOT/docbuild/.lake/build/doc" "$WORK_DIR/site/docs"
 fi
 
+# Update paper-gap PDFs (only if built)
+echo "==> Updating paper-gap PDFs..."
+shopt -s nullglob
+GAP_PDFS=("$REPO_ROOT"/docs/paper-gaps/*.pdf)
+if [ ${#GAP_PDFS[@]} -gt 0 ]; then
+  rm -rf "$WORK_DIR/site/paper-gaps"
+  mkdir -p "$WORK_DIR/site/paper-gaps"
+  cp "${GAP_PDFS[@]}" "$WORK_DIR/site/paper-gaps/"
+  echo "Copied ${#GAP_PDFS[@]} paper-gap PDFs"
+else
+  echo "No paper-gap PDFs found; keeping existing site content"
+fi
+shopt -u nullglob
+
 # Commit and push
 echo "==> Committing and pushing..."
 cd "$WORK_DIR/site"

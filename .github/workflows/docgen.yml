@@ -63,6 +63,9 @@ jobs:
       - name: Build blueprint bibliography
         run: python3 scripts/blueprint_bibtex.py
 
+      - name: Build paper-gap PDFs
+        run: bash scripts/build-paper-gaps.sh
+
       - name: Build blueprint
         working-directory: blueprint
         run: |
