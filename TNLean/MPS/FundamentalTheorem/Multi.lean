@@ -190,9 +190,9 @@ lemma fundamentalTheorem_multiBlock_global
 
 end FundamentalTheoremMulti
 
-/-! ## Bridge to `CanonicalForm` -/
+/-! ## Comparison with `CanonicalForm` -/
 
-section CanonicalFormBridge
+section CanonicalFormComparison
 
 open CanonicalForm
 
@@ -209,7 +209,7 @@ theorem fundamentalTheorem_canonicalForm_sameStructure
   rw [C.toTensor_eq_toTensorFromBlocks]
   exact fundamentalTheorem_multiBlock_global C.μ C.blockTensor B hB_inj hSame
 
-end CanonicalFormBridge
+end CanonicalFormComparison
 
 /-! ## Converse and global `SameMPV` transfer -/
 

@@ -407,8 +407,8 @@ finite-dimensional complex theorem
 	\quad\Longrightarrow\quad
 	\C\langle A^i\rangle = \MN{D}.
 \]
-The projection language in Definition~\ref{def:irreducible_tensor} is bridged
-to this subspace formulation first.
+We first translate the projection language in Definition~\ref{def:irreducible_tensor}
+to this subspace formulation.
 
 \begin{definition}[Algebra span]\label{def:alg_span}
 	\lean{MPSTensor.algSpan}\leanok
@@ -1144,7 +1144,7 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	then gives the equivalence at length $N$ with weights $\mu_k^p$.
 \end{proof}
 
-\begin{theorem}[Blocking assembled weighted blocks]%
+\begin{theorem}[Blocking weighted block-diagonal tensors]%
 	\label{thm:block_tensor_to_tensor_from_blocks}
 	\lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}
 	\leanok
@@ -1156,7 +1156,7 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 
 \begin{proof}\leanok
 	Apply Theorem~\ref{thm:samempv_blocking_distributes} to the identity MPV
-	relation for the assembled weighted block tensor.
+	relation for the weighted block-diagonal tensor.
 \end{proof}
 
 \begin{theorem}[Positive-length MPV equality after blocking]%
@@ -1186,8 +1186,8 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 \end{theorem}
 
 \begin{proof}\leanok
-	Use Theorem~\ref{thm:samempv2pos_block_tensor} for the assembled nonzero parts,
-	then rewrite each blocked assembled tensor by
+	Use Theorem~\ref{thm:samempv2pos_block_tensor} for the nonzero block-diagonal
+	parts, then rewrite each blocked block-diagonal tensor by
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
@@ -3492,8 +3492,8 @@ gauge-phase representatives and keeps those repeated weights explicit.
 \end{lemma}
 
 \begin{proof}\leanok
-	Apply Lemma~\ref{lem:zero_tail_decomp_block_tensor} to the assembled
-	weighted nonzero tensor and rewrite the blocked assembled tensor using
+	Apply Lemma~\ref{lem:zero_tail_decomp_block_tensor} to the weighted
+	nonzero block-diagonal tensor and rewrite the blocked block-diagonal tensor using
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 

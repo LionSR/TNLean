@@ -60,7 +60,7 @@ sector weights inside each basis block.
 
 The result formalized here is the BNT coefficient comparison that recovers both
 multiplicities and sector weights. A global gauge-equivalence statement for the
-assembled tensors still requires a theorem deriving the coefficient and phase
+block-diagonal tensors still requires a theorem deriving the coefficient and phase
 hypotheses required by the proportional decomposition theorem from bare equality
 of matrix-product vectors. In sector form the coefficients are finite sums of powers
 of unit-modulus weights, so convergence is not automatic without a dominant
@@ -288,7 +288,7 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
 The sector-comparison theorems above take four separate hypotheses: a permutation
 of sector bases, equality of multiplicities, per-block dimension equality, and
 per-block gauge-phase equivalence. The structures below collect these into a
-single witness. Overlap/span hypotheses or common-cover phase hypotheses produce the
+single witness. Overlap/span hypotheses or common MPV phase-cover hypotheses produce the
 witness; the sector comparison then recovers the corresponding weight multisets.
 -/
 
@@ -321,10 +321,9 @@ This structure collects the four hypotheses required by
 * per-block bond-dimension equality, and
 * per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
 
-**Formalization note.** The overlap/span route produces this witness when the
-corresponding comparison hypotheses are available. For sector decompositions
-obtained after blocking, those hypotheses may instead be supplied by an equivalent
-common-phase BNT-cover comparison. -/
+The overlap/span route produces this witness when the corresponding comparison hypotheses
+are available. For sector decompositions obtained after blocking, the same witness may be
+supplied by common-phase BNT comparison hypotheses. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
   perm : Fin P.basisCount ≃ Fin Q.basisCount
@@ -596,8 +595,8 @@ Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_
 obtained by expressing the matching hypotheses as a `SectorBasisMatching`.
 The matching can be extracted from `SectorBasisOverlapSpanHypotheses`.
 
-**Formalization note.** For after-blocking sector decompositions, those hypotheses may
-instead be supplied by equivalent common-phase BNT-cover hypotheses. -/
+For after-blocking sector decompositions, those hypotheses may instead be supplied by
+common-phase BNT comparison hypotheses. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}
     (M : SectorBasisMatching P Q)
