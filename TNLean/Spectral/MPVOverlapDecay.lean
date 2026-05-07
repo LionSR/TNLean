@@ -19,7 +19,9 @@ open Matrix Filter
 # MPV overlap decay
 
 This file proves a literature-standard decay statement for the *MPV overlap*
-`mpvOverlap A B N` in the **square bond dimension** case.
+`mpvOverlap A B N` in the **square bond dimension** case
+(cf. PerezGarcia2007 Lemma 5; Wolf Theorem 6.6 for the underlying
+spectral-gap theory).
 
 If `A` and `B` are injective, satisfy the trace-preserving normalization
 `∑ i, (A i)ᴴ * A i = 1` and `∑ i, (B i)ᴴ * B i = 1`, and are **not** gauge-phase

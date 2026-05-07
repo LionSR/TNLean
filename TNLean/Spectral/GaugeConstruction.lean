@@ -14,12 +14,15 @@ import Mathlib.Analysis.Matrix.Normed
 # Shared gauge construction for spectral-gap rigidity
 
 This module factors out the common "modulus-one eigenvector gives intertwining"
-core used by the spectral-gap rigidity arguments.  The shared pattern is:
+core used by the spectral-gap rigidity arguments, following the proof pattern
+of Wolf Theorems 6.6 (peripheral spectrum of irreducible Schwarz maps)
+and PerezGarcia2007 Lemma 5 (spectral gap for distinct MPS blocks).
+The shared pattern is:
 
 1. gauge both tensors to left-canonical / unital form;
 2. transport the mixed-transfer eigenvector into that gauge;
 3. block-embed the transported eigenvector into a unital Kraus map;
-4. use weighted Kadison--Schwarz equality to obtain Kraus-level intertwining;
+4. use weighted Kadison--Schwarz equality (Wolf Theorem 5.3) to obtain Kraus-level intertwining;
 5. feed the intertwining identities into the file-specific endgames.
 -/
 

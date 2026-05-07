@@ -12,6 +12,12 @@ Shared Frobenius-norm identities for the spectral-gap modules (`SpectralGap.lean
 `SpectralGapRect.lean`).  Everything here works for *rectangular*
 `Matrix (Fin m) (Fin n) ℂ`; the square case is obtained by setting `m = n`.
 
+The Frobenius (Hilbert--Schmidt) norm is used throughout the spectral-gap
+proofs in this repository (cf. PerezGarcia2007).  Wolf Chapter 6 proves the
+same eigenvalue bound using the operator norm via Russo--Dye
+(Proposition 6.1); both norms yield the same spectral-radius estimate
+for finite-dimensional CP maps.
+
 ## Main definitions
 
 * `MPSTensor.frobSq`: Frobenius norm squared, `∑ i j, ‖X i j‖²`.

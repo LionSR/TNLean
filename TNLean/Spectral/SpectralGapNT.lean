@@ -11,13 +11,14 @@ import TNLean.MPS.Irreducible.FormII
 # Spectral gap for normal tensor (irreducible + TP) blocks
 
 This file proves the overlap dichotomy for irreducible trace-preserving / left-canonical
-blocks without assuming injectivity, following the Cauchy--Schwarz argument from
-Cirac et al., arXiv:1606.00608, Appendix A, Lemma A.1.
+blocks without assuming injectivity. The argument combines the Cauchy--Schwarz
+rigidity from Cirac et al., arXiv:1606.00608, Appendix A, Lemma A.1 with the
+irreducibility theory of Wolf Section 6.2 (Theorems 6.2, 6.3).
 
 The key new rigidity statement is
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`: if two irreducible
 left-canonical tensors have mixed-transfer spectral radius at least `1`, then they are
-already gauge-phase equivalent.
+already gauge-phase equivalent (cf. Wolf Theorem 6.6 adapted to MPS transfer maps).
 
 The same-dimension rigidity step is now fully formalized. The downstream strict-gap and
 overlap-decay consequences for equal bond dimension are routed through the existing
