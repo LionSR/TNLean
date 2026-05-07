@@ -5,7 +5,7 @@ import TNLean.MPS.Chain.FundamentalTheorem
 
 For constant (translation-invariant) chains `(A, …, A)` and `(B, …, B)`,
 the chain fundamental theorem reduces to a single matrix gauge:
-`B^i = X · A^i · X⁻¹` with `λ = 1`.
+$B^i = X A^i X^{-1}$ with `λ = 1`.
 -/
 
 open scoped Matrix
@@ -18,7 +18,7 @@ variable {d D n : ℕ}
 
 If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)`
 satisfy `SameMPV` on their combined tensors, there exists
-`X ∈ GL(D, ℂ)` with `B^i = X · A^i · X⁻¹` for all `i`. -/
+`X ∈ GL(D, ℂ)` with $B^i = X A^i X^{-1}$ for all `i`. -/
 theorem ti_tensors_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)

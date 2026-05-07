@@ -11,7 +11,7 @@ import TNLean.MPS.Chain.TranslationInvariance
 
 For constant (translation-invariant) chains `(A, …, A)` and `(B, …, B)` with
 `A` injective, `SameMPV` on the combined tensors gives
-`B^i = X · A^i · X⁻¹` for a single `X ∈ GL(D, ℂ)`, so `B` is injective.
+$B^i = X A^i X^{-1}$ for a single `X ∈ GL(D, ℂ)`, so `B` is injective.
 
 ## Main results
 
