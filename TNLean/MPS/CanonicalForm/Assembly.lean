@@ -5,14 +5,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
 import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
-import TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison
 import TNLean.MPS.CanonicalForm.Assembly.CommonSectorData
-import TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore
 
 /-!
 # Canonical-form reduction after blocking
 
-This module is the public entry point for the end-to-end canonical-form
+This module is the public entry point for the complete canonical-form
 reduction after blocking. It keeps the historical import path
 `TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
 split across focused supporting modules.
@@ -39,8 +37,6 @@ The supporting modules are:
   after the zero-tail and TP-gauge structural reduction.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
   and structural after-blocking data.
-* `TNLean.MPS.CanonicalForm.Assembly.SectorComparisonCore` — conditional
-  sector comparison after structural blocking.
 * `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
   path for structural data and common-sector transport.
 * `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
@@ -49,9 +45,6 @@ The supporting modules are:
   common primitive span, phase-cover, proportional, and BNT-cover hypotheses.
 * `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
-* `TNLean.MPS.CanonicalForm.Assembly.OverlapSpanComparison` — overlap-span
-  hypothesis constructors from common primitive span, phase-cover, BNT-cover,
-  and proportional data.
 * `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
@@ -79,7 +72,7 @@ the blocked normal-form sector matching conclusion: after a common blocking,
 the two tensors are represented by BNT sector decompositions whose basis
 sectors and weights match up to permutation and nonzero phases.
 
-## Formalization note: packaging as proof obligations
+## Conditional comparison hypotheses
 
 The source CPSV statement is written for tensors already in canonical form:
 after finitely many blocking steps the matrices are replaced by block-diagonal
@@ -90,8 +83,8 @@ trace preservation, primitivity, irreducibility, or zero-tail dimension
 matching.
 
 The structures `BlockedNormalFormHypotheses` and
-`BlockedNormalFormSectorMatching` explicitly package these source proof
-obligations as formal inputs:
+`BlockedNormalFormSectorMatching` state these source proof obligations as
+explicit hypotheses:
 
 * **Blocking to normal tensors** — the blocked tensors decompose into a zero
   block plus a direct sum of trace-preserving, primitive, irreducible
@@ -104,10 +97,10 @@ obligations as formal inputs:
   basis sectors, matched multiplicities, and nonzero phases transforming
   one multiset of sector weights into the other.
 
-This packaging is the current formal boundary between the canonical-form
-reduction that is already proved in Lean and the source-level comparison
-argument that passes from equal matrix product vector families to the BNT
-sector-matching theorem.
+These hypotheses mark the current comparison boundary: the canonical-form
+reduction gives the normal blocks, while the source comparison argument still
+has to derive the BNT sector matching from equality of the matrix product
+vector families.
 
 ## References
 
