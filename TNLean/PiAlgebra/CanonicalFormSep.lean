@@ -410,7 +410,7 @@ Under strict weight ordering, injectivity, left-canonical normalization, and
 The proof follows Pérez-García et al. (2007, Appendix E) and
 Cirac et al. (2021, Theorem IV.3): take mixed overlaps with the leading block,
 divide by the leading weight, and use `peeling_exponential_bound` with
-`‖μ k / μ 0‖ < 1`. The leading blocks already share the bond dimension `dim 0`;
+`‖μ k / μ 0‖ < 1`. The leading blocks already have the same bond dimension;
 the nonzero limiting overlap gives `GaugePhaseEquiv`, i.e. conjugacy up to a
 nonzero scalar, and induction removes that block.
 -/
