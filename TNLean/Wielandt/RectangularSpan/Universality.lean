@@ -26,7 +26,7 @@ theorems.
   reduction of the sharp D²−D+1 bound to a single strict-growth hypothesis, and the
   structural invariance theorem `rectSpan_eq_mulLeft_image_of_finrank_eq`.
 - **Section 8h** (`ExactPropagation`): permanence chain via right-expansion of `rectSpan`,
-  strict growth under `IsNormal`, unconditional assembly, and eigenvector padding to exact
+  strict growth under `IsNormal`, unconditional rectangular span, and eigenvector padding to exact
   word-level.
 -/
 
@@ -194,7 +194,7 @@ every rank-one matrix `vecMulVec φ ψ` lies in `cumulativeSpan A (D² - D + 1)`
 
 Monotonicity is now automatic (via `rectSpan_nilpIndex_finrank_mono`).
 
-This is the assembly that combines:
+This is the rectangular span step that combines:
 1. Strict growth → rectSpan = range within D·D̃ steps
 2. Sharp direct route → vecMulVec φ ψ ∈ wordSpan A (r + n₀)
 3. Arithmetic: r + D·D̃ ≤ D²-D+1
@@ -773,7 +773,7 @@ end ExactPropagation
 /-!
 The subsequent rank-one step applies the exact word-span result above to word
 eigenvectors of suitable blocked tensors. Combined with the conditional
-rank-one assembly theorem, this gives a single word length whose evaluations span
+rank-one reduction theorem, this gives a single word length whose evaluations span
 the full matrix algebra, and hence the fully unconditional form of Lemma 2(b).
 -/
 

@@ -256,7 +256,7 @@ theorem vecMulVec_eigenvector_sharp_of_rectSpan
           sharp_bound_le A i₀ hNotInv
   exact wordSpan_le_cumulativeSpan A hbound hmem
 
-/-- **Parametric sharp assembly via nilpIndex.** -/
+/-- **Parametric sharp rectangular span via nilpIndex.** -/
 theorem wielandt_sharp_parametric_assembly [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)

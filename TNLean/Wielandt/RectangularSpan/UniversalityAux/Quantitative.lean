@@ -232,14 +232,14 @@ theorem finrank_range_mulLeft_pow_le_sq (A : MPSTensor d D) (i₀ : Fin d) :
       ≤ D * D := Nat.mul_le_mul_left D (rank_pow_le A i₀)
     _ = D ^ 2 := by ring
 
-/-! ### Part 6: Parametric assembly — toward exact Lemma 2(b)
+/-! ### Part 6: Parametric rectangular span — toward exact Lemma 2(b)
 
-The parametric assembly theorem combines:
+The parametric rectangular span theorem combines:
 1. Power membership: `(A i₀)^D ∈ wordSpan A D`
 2. Eigenvector in range: `φ ∈ range(toLin' ((A i₀)^D))`
 3. Stabilization: `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`
 4. Transfer: `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-5. Conditional assembly: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
+5. Conditional fixed-length matrix spanning: `wordSpan A (D + n₀ + 2(D-1)) = ⊤`
 
 into a single theorem parameterized by the stabilization witness `n₀`.
 
@@ -247,7 +247,7 @@ When the Wielandt inductive bound is available (giving `n₀ ≤ D² - 3D + 3`),
 this yields `wordSpan A (D² - D + 1) = ⊤`.
 -/
 
-/-- **Parametric Lemma 2(b) assembly.**
+/-- **Parametric Lemma 2(b) (rectangular span).**
 
 Given the full eigenvector/row-eigenvector setup AND a stabilization witness `n₀`
 such that `rectSpan ((A i₀)^D) A n₀ = range(mulLeft ((A i₀)^D))`, we get:
@@ -260,7 +260,7 @@ i.e., the word span at length `D + n₀ + 2D - 2` is the full matrix algebra.
 1. Eigenvector `φ` lies in `range(toLin' ((A i₀)^D))`, so for all `ψ`,
    `vecMulVec φ ψ ∈ rectSpan`.
 2. `rectSpan` stabilized at `n₀` → `vecMulVec φ ψ ∈ wordSpan A (D + n₀)`
-3. Apply conditional assembly (eigenvector spreading + row spreading)
+3. Apply conditional fixed-length matrix spanning (eigenvector spreading + row spreading)
 4. Output: `wordSpan A ((D-1) + ((D + n₀) + (D-1))) = ⊤`
 
 This simplifies to `wordSpan A (3D + n₀ - 2) = ⊤`.
@@ -276,7 +276,7 @@ theorem wielandt_parametric_assembly [NeZero D]
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (heigφ : A i₀ *ᵥ φ = μ • φ)
-    -- Row eigenvector (for the conditional assembly)
+    -- Row eigenvector (for the conditional fixed-length matrix spanning)
     (i₁ : Fin d) (ν : ℂ) (hν : ν ≠ 0)
     (ψ₀ : Fin D → ℂ) (hψ₀ : ψ₀ ≠ 0)
     (heigψ : (A i₁)ᵀ *ᵥ ψ₀ = ν • ψ₀)
@@ -288,7 +288,7 @@ theorem wielandt_parametric_assembly [NeZero D]
   -- Step 1: vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀)
   have hRankOne : vecMulVec φ ψ₀ ∈ wordSpan A (D + n₀) :=
     vecMulVec_eigenvector_mem_wordSpan A i₀ hμ heigφ hstab ψ₀
-  -- Step 2: Apply conditional assembly
+  -- Step 2: Apply conditional fixed-length matrix spanning
   exact wielandt_lemma2b_conditional A hNormal i₀ μ hμ φ hφ heigφ
     i₁ ν hν ψ₀ hψ₀ heigψ hRankOne
 
