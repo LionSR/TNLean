@@ -24,6 +24,12 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
 - [Safety Mechanisms](#safety-mechanisms)
 - [How to Use](#how-to-use)
+  - [For any PR (automatic)](#for-any-pr-automatic)
+  - [Auto-fix labels are PR-only](#auto-fix-labels-are-pr-only)
+  - [To enable Codex auto-fix](#to-enable-codex-auto-fix)
+  - [To enable the review-fix loop](#to-enable-the-review-fix-loop)
+  - [Human intervention while auto-fix is active](#human-intervention-while-auto-fix-is-active)
+  - [To ask Claude for help directly](#to-ask-claude-for-help-directly)
 - [Commit Message Conventions](#commit-message-conventions)
 - [Permissions](#permissions)
 - [Changing the Configuration](#changing-the-configuration)
@@ -514,9 +520,12 @@ human maintainers may still do workflow-control actions:
 - add or remove `auto-fix-claude` / `auto-fix-codex`
 - refresh status and inspect review threads
 - merge only after all required checks are complete and every current review
-  thread is resolved or outdated
+  thread is resolved or outdated, and no auto-fix job is still running for the
+  branch
 - close or supersede the pull request after verifying that no unique
-  mathematical content would be lost
+  mathematical content would be lost; remove auto-fix labels first, and do not
+  delete the branch until in-progress auto-fix jobs have finished or been
+  cancelled
 
 Manual commits to an auto-fix branch are appropriate only after the automated
 cycle has exhausted its iteration budget, failed without a useful follow-up
