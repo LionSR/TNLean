@@ -137,9 +137,9 @@ These lemmas present the complete construction
 
 In the current checked development, the separation input `hSep` is furnished by
 the mixed-transfer / peeling results in `CanonicalFormSep.lean`; the
-repeated-word / Vandermonde sketch in `BlockSeparation.lean` is retained only as
-an alternative route. The separation hypothesis `hSep` is needed for `r ≥ 2`
-(quantum PF theory); for `r = 1` it is proved by `sameMPV₂_single_block`. -/
+repeated-word identities in `BlockSeparation.lean` are only auxiliary word
+identities. The separation hypothesis `hSep` is needed for `r ≥ 2` (quantum PF
+theory); for `r = 1` it is proved by `sameMPV₂_single_block`. -/
 section EndToEnd
 
 variable {r : ℕ} {dim : Fin r → ℕ}

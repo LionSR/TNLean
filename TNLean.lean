@@ -206,7 +206,6 @@ import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
-import TNLean.MPS.BNT.BasisNormal
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.BNT.PermutationRigidity
