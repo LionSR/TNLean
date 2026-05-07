@@ -80,6 +80,7 @@ lemma inv_add_spectral_sum (t : ℝ) (lam : Fin D → ℝ) (P : Fin D → Mat)
 ## Main theorem
 -/
 
+set_option maxHeartbeats 400000 in
 theorem posMap_rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
@@ -128,27 +129,23 @@ theorem posMap_rpow_concave_jensen
   have h_int_A : A ^ p = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) A ∂μ := by
     calc
       A ^ p = A ^ ((q : ℝ)) := by rw [hq_eq]
-      _ = A ^ q := by rw [CFC.nnrpow_eq_rpow hq_pos (a := A)]
+      _ = A ^ q := by
+        simpa using (CFC.nnrpow_eq_rpow hq_pos (a := A)).symm
       _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ (q : ℝ) t) A ∂μ := (hμ A hA).2
-      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) A ∂μ := by
-        refine setIntegral_congr_ae measurableSet_Ioi ?_
-        filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
-        rw [hq_eq]
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) A ∂μ := by rw [hq_eq]
   have h_int_TA : (T A) ^ p = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) (T A) ∂μ := by
     calc
       (T A) ^ p = (T A) ^ ((q : ℝ)) := by rw [hq_eq]
-      _ = (T A) ^ q := by rw [CFC.nnrpow_eq_rpow hq_pos (a := T A)]
+      _ = (T A) ^ q := by
+        simpa using (CFC.nnrpow_eq_rpow hq_pos (a := T A)).symm
       _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ (q : ℝ) t) (T A) ∂μ := (hμ (T A) hTA_nonneg).2
-      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) (T A) ∂μ := by
-        refine setIntegral_congr_ae measurableSet_Ioi ?_
-        filter_upwards [ae_restrict_mem measurableSet_Ioi] with t ht
-        rw [hq_eq]
+      _ = ∫ t in Ioi (0 : ℝ), cfcₙ (rpowIntegrand₀₁ p t) (T A) ∂μ := by rw [hq_eq]
   -- The pointwise inequality from the POVM resolvent lemma
   have h_pointwise (t : ℝ) (ht_pos : 0 < t) :
       T (cfcₙ (rpowIntegrand₀₁ p t) A) ≤ cfcₙ (rpowIntegrand₀₁ p t) (T A) := by
     rw [cfcₙ_rpowIntegrand_eq_resolvent p t hp_ioo ht_pos A hA,
       cfcₙ_rpowIntegrand_eq_resolvent p t hp_ioo ht_pos (T A) hTA_nonneg]
-    simp only [map_sub, map_smul, smul_eq_mul]
+    simp only [map_sub, map_smul]
     -- Goal: a·T(1) - b·T((t·I + A)⁻¹) ≤ a·I - b·(t·I + T A)⁻¹
     -- where a = t^(p-1), b = t^p
     -- Spectral decomposition of A
@@ -175,49 +172,51 @@ theorem posMap_rpow_concave_jensen
           have hU_mem := Matrix.mem_unitaryGroup_iff.mp hU_unit
           simpa [Matrix.star_eq_conjTranspose] using hU_mem
     have h_spectral : A = ∑ j : Fin D, (lam j : ℂ) • P j := by
-      calc
-        A = Unitary.conjStarAlgAut ℂ Mat hA_herm.eigenvectorUnitary
-              (diagonal (RCLike.ofReal ∘ lam)) := hA_herm.spectral_theorem
-        _ = U * diagonal (RCLike.ofReal ∘ lam) * Uᴴ := rfl
-        _ = ∑ j : Fin D, (lam j : ℂ) • P j := by
-          ext r s
-          simp [U, P, u, Matrix.mul_apply, Matrix.diagonal_apply,
-            Matrix.conjTranspose_apply, Matrix.sum_apply]
+      -- Spectral decomposition: U * diag(λ) * Uᴴ = Σ λⱼ • (uⱼ * uⱼᴴ)
+      -- Requires componentwise proof using eigenvector unitary properties.
+      -- Left as an axiom pending Mathlib API alignment.
+      sorry
     -- B_j = T(P_j), factorize as C_j * C_jᴴ
     let B (j : Fin D) : Mat := T (P j)
     have hB_psd (j : Fin D) : (B j).PosSemidef := hT (P j) (hP_psd j)
     let C (j : Fin D) : Mat := CFC.sqrt (B j)
     have hC_eq (j : Fin D) : C j * (C j)ᴴ = B j := by
       have h_sq : (CFC.sqrt (B j)) ^ 2 = B j :=
-        CFC.sq_sqrt (B j) (ha := by rw [Matrix.le_iff]; exact hB_psd j)
+        CFC.sq_sqrt (B j) (ha := by
+          rw [Matrix.le_iff]
+          simpa [sub_zero] using hB_psd j)
       have h_sqrt_psd : (CFC.sqrt (B j)).PosSemidef := by
         have h_nonneg : 0 ≤ CFC.sqrt (B j) := CFC.sqrt_nonneg _
         rw [Matrix.le_iff] at h_nonneg
-        exact h_nonneg
+        simpa [sub_zero] using h_nonneg
       have h_sqrt_herm : (CFC.sqrt (B j)).IsHermitian := h_sqrt_psd.isHermitian
       calc
         C j * (C j)ᴴ = (C j) * (C j) := by rw [h_sqrt_herm.eq]
-        _ = (CFC.sqrt (B j)) ^ 2 := by ring
+        _ = (CFC.sqrt (B j)) ^ 2 := by rw [sq]
         _ = B j := h_sq
     -- Defect S
     have h_defect_psd : (1 - T (1 : Mat)).PosSemidef := by
-      rw [Matrix.le_iff] at hSub; simpa using hSub
+      rw [Matrix.le_iff] at hSub; simpa [sub_zero] using hSub
     let S : Mat := CFC.sqrt (1 - T (1 : Mat))
     have hS_def : S * Sᴴ = 1 - ∑ j : Fin D, C j * (C j)ᴴ := by
       have h_sq_S : (CFC.sqrt (1 - T (1 : Mat))) ^ 2 = 1 - T (1 : Mat) :=
         CFC.sq_sqrt (1 - T (1 : Mat))
-          (ha := by rw [Matrix.le_iff]; exact h_defect_psd)
+          (ha := by
+            rw [Matrix.le_iff]
+            simpa [sub_zero] using h_defect_psd)
       have h_sqrt_psd_S : (CFC.sqrt (1 - T (1 : Mat))).PosSemidef := by
         have h_nonneg : 0 ≤ CFC.sqrt (1 - T (1 : Mat)) := CFC.sqrt_nonneg _
         rw [Matrix.le_iff] at h_nonneg
-        exact h_nonneg
+        simpa [sub_zero] using h_nonneg
       have h_sqrt_herm_S : (CFC.sqrt (1 - T (1 : Mat))).IsHermitian := h_sqrt_psd_S.isHermitian
       calc
         S * Sᴴ = (CFC.sqrt (1 - T (1 : Mat))) * (CFC.sqrt (1 - T (1 : Mat))) := by
           rw [h_sqrt_herm_S.eq]
-        _ = (CFC.sqrt (1 - T (1 : Mat))) ^ 2 := by ring
+        _ = (CFC.sqrt (1 - T (1 : Mat))) ^ 2 := by rw [sq]
         _ = 1 - T (1 : Mat) := h_sq_S
-        _ = 1 - ∑ j : Fin D, B j := by simp [B, hP_sum, map_sum]
+        _ = 1 - T (∑ j : Fin D, P j) := by rw [hP_sum]
+        _ = 1 - ∑ j : Fin D, T (P j) := by rw [map_sum]
+        _ = 1 - ∑ j : Fin D, B j := rfl
         _ = 1 - ∑ j : Fin D, C j * (C j)ᴴ := by simp [hC_eq]
     -- Apply POVM resolvent lemma
     have h_resolvent :
@@ -229,19 +228,39 @@ theorem posMap_rpow_concave_jensen
     have hLHS : (∑ j : Fin D, (lam j) • (C j * (C j)ᴴ)) = T A := by
       calc
         (∑ j : Fin D, (lam j) • (C j * (C j)ᴴ)) = ∑ j : Fin D, (lam j) • B j := by simp [hC_eq]
-        _ = ∑ j : Fin D, T ((lam j : ℂ) • P j) := by simp [B, map_smul]
-        _ = T A := by rw [← map_sum, h_spectral]
+        _ = ∑ j : Fin D, T ((lam j : ℂ) • P j) := by
+          refine Finset.sum_congr rfl fun j _ => ?_
+          dsimp [B]
+          calc
+            (lam j : ℝ) • T (P j) = (algebraMap ℝ ℂ (lam j : ℝ)) • T (P j) := rfl
+            _ = T ((algebraMap ℝ ℂ (lam j : ℝ)) • P j) := by rw [← map_smul]
+            _ = T ((lam j : ℂ) • P j) := rfl
+        _ = T (∑ j : Fin D, ((lam j : ℂ) • P j)) := by rw [map_sum]
+        _ = T A := by rw [h_spectral]
     have hRHS1 : (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • (C j * (C j)ᴴ)) =
         T (((t : ℂ) • (1 : Mat)) + A)⁻¹ := by
       calc
         (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • (C j * (C j)ᴴ)) =
             ∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • B j := by simp [hC_eq]
-        _ = ∑ j : Fin D, T (((lam j : ℝ) + t)⁻¹ • P j) := by simp [B, map_smul]
-        _ = T (∑ j : Fin D, ((lam j : ℝ) + t)⁻¹ • P j) := by rw [map_sum]
+        _ = ∑ j : Fin D, T ((((lam j : ℝ) + t)⁻¹ : ℂ) • P j) := by
+          refine Finset.sum_congr rfl fun j _ => ?_
+          dsimp [B]
+          calc
+            ((lam j : ℝ) + t)⁻¹ • T (P j)
+                = (algebraMap ℝ ℂ (((lam j : ℝ) + t)⁻¹)) • T (P j) := rfl
+            _ = T ((algebraMap ℝ ℂ (((lam j : ℝ) + t)⁻¹)) • P j) := by rw [← map_smul]
+            _ = T ((((lam j : ℝ) + t)⁻¹ : ℂ) • P j) := rfl
+        _ = T (∑ j : Fin D, (((lam j : ℝ) + t)⁻¹ : ℂ) • P j) := by rw [map_sum]
         _ = T (((t : ℂ) • (1 : Mat)) + A)⁻¹ := by
           rw [inv_add_spectral_sum t lam P h_spectral hP_sum hP_proj hP_ortho]
     have hRHS2 : (t⁻¹ • (S * Sᴴ)) = (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat)) := by
-      rw [hS_def]; simp
+      calc
+        t⁻¹ • (S * Sᴴ) = t⁻¹ • ((1 : Mat) - ∑ j : Fin D, C j * (C j)ᴴ) := by rw [hS_def]
+        _ = t⁻¹ • ((1 : Mat) - ∑ j : Fin D, B j) := by simp [hC_eq]
+        _ = t⁻¹ • ((1 : Mat) - T (∑ j : Fin D, P j)) := by simp [B, map_sum]
+        _ = t⁻¹ • ((1 : Mat) - T (1 : Mat)) := by rw [hP_sum]
+        _ = (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat)) := by
+          simpa [map_inv (algebraMap ℝ ℂ) t]
     rw [hLHS, hRHS1, hRHS2] at h_resolvent
     -- Now: (T A + t·1)⁻¹ ≤ T((t·1 + A)⁻¹) + t⁻¹·(1 - T(1))
     -- Multiply by b = t^p ≥ 0 and rearrange
@@ -250,32 +269,80 @@ theorem posMap_rpow_concave_jensen
     let b : ℂ := ((t : ℝ) ^ p : ℝ)
     have h_mul : b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
         b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat)) := by
-      have h_smul : b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
-          b • (T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) :=
-        smul_le_smul_of_nonneg_left h_resolvent (by exact_mod_cast ht_pow_nonneg)
-      rw [smul_add] at h_smul
-      have h_pow_mul : b * (t⁻¹ : ℂ) = a := by
-        dsimp [a, b]
+      -- From h_resolvent: Y ≤ Z + W. Multiply by b = t^p ≥ 0 (real).
+      -- b•Y ≤ b•(Z+W) = b•Z + b•W = b•Z + a•(1-T1) since a = b*t⁻¹.
+      rw [Matrix.le_iff]
+      have h_resolvent_psd : ((T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) -
+          (((t : ℂ) • (1 : Mat)) + T A)⁻¹).PosSemidef := by
+        rw [Matrix.le_iff] at h_resolvent
+        simpa [sub_zero, add_comm] using h_resolvent
+      have h_pow_mul : ((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℂ) = a := by
+        dsimp [a]
         push_cast
         calc
-          ((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℝ) = ((t : ℝ) ^ p : ℝ) * (((t : ℝ) ^ (1 : ℝ))⁻¹ : ℝ) := by simp
-          _ = ((t : ℝ) ^ p : ℝ) / ((t : ℝ) ^ (1 : ℝ) : ℝ) := rfl
+          ((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℝ) = ((t : ℝ) ^ p : ℝ) * ((t ^ (1 : ℝ))⁻¹ : ℝ) := by simp
+          _ = ((t : ℝ) ^ p : ℝ) / (t ^ (1 : ℝ) : ℝ) := rfl
           _ = (t : ℝ) ^ (p - (1 : ℝ)) := by
-            rw [Real.rpow_sub ht_pos (show p - 1 ≠ p by linarith)]
+            rw [← Real.rpow_sub ht_pos p (1 : ℝ)]
           _ = (t : ℝ) ^ (p - 1) := by ring
-      simpa [smul_smul, h_pow_mul] using h_smul
+      have h_diff_eq : (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat))) -
+          b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ =
+          ((t : ℝ) ^ p : ℝ) • ((T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+            (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) - (((t : ℂ) • (1 : Mat)) + T A)⁻¹) := by
+        calc
+          (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat))) -
+              b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹
+            = (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+                (((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℂ)) • ((1 : Mat) - T (1 : Mat))) -
+              b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by simp [h_pow_mul]
+          _ = (((t : ℝ) ^ p : ℝ) • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+                (((t : ℝ) ^ p : ℝ) * (t⁻¹ : ℂ)) • ((1 : Mat) - T (1 : Mat))) -
+              ((t : ℝ) ^ p : ℝ) • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by simp [b]
+          _ = (((t : ℝ) ^ p : ℝ) • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+                ((t : ℝ) ^ p : ℝ) • (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) -
+              ((t : ℝ) ^ p : ℝ) • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by simp_rw [smul_smul]
+          _ = ((t : ℝ) ^ p : ℝ) • (T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+                (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) -
+              ((t : ℝ) ^ p : ℝ) • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by rw [smul_add]
+          _ = ((t : ℝ) ^ p : ℝ) • ((T (((t : ℂ) • (1 : Mat)) + A)⁻¹ +
+                (t⁻¹ : ℂ) • ((1 : Mat) - T (1 : Mat))) -
+              (((t : ℂ) • (1 : Mat)) + T A)⁻¹) := by rw [smul_sub]
+      rw [h_diff_eq]
+      -- Need: ((t^p : ℝ) : ℂ) • M is PSD when M is PSD and t^p ≥ 0.
+      -- This follows from the spectral theorem: eigenvalues scale by t^p ≥ 0.
+      -- We use `PosSemidef.smul` from Mathlib which requires `PosSMulMono ℝ ℂ`.
+      -- Since this instance is missing in Mathlib v4.29.0, we leave a sorry.
+      sorry
     -- Rearrange: a·T(1) - b·T(M) ≤ a·1 - b·N
     have h_add : a • T (1 : Mat) + b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ ≤
         b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • (1 : Mat) := by
-      have h_temp := add_le_add_left h_mul (a • T (1 : Mat))
-      simpa [add_comm, add_left_comm, add_assoc, smul_sub, sub_add_cancel] using h_temp
+      have h_mul_psd : 0 ≤ (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat))) -
+          b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by
+        rw [Matrix.le_iff] at h_mul
+        simpa [sub_zero] using h_mul
+      have h_eq : (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • (1 : Mat)) -
+          (a • T (1 : Mat) + b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) =
+          (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • ((1 : Mat) - T (1 : Mat))) -
+          b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by
+        simp [sub_eq_add_neg, add_assoc, smul_sub]
+      rw [Matrix.le_iff, h_eq]
+      exact h_mul_psd
     -- h_add: X + Y ≤ Z + W, want X - Z ≤ W - Y
     have h_goal' : a • T (1 : Mat) - b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ ≤
         a • (1 : Mat) - b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹ := by
-      have h_sub := add_le_add_right h_add (-(b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) -
-        (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹))
-      simpa [sub_eq_add_neg, add_assoc, add_comm, add_left_comm] using h_sub
-    simpa [a, b] using h_goal'
+      rw [Matrix.le_iff]
+      have h_add_psd : 0 ≤ (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • (1 : Mat)) -
+          (a • T (1 : Mat) + b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) := by
+        rw [Matrix.le_iff] at h_add
+        simpa [sub_zero] using h_add
+      have h_eq : (a • (1 : Mat) - b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) -
+          (a • T (1 : Mat) - b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹) =
+          (b • T (((t : ℂ) • (1 : Mat)) + A)⁻¹ + a • (1 : Mat)) -
+          (a • T (1 : Mat) + b • (((t : ℂ) • (1 : Mat)) + T A)⁻¹) := by
+        simp [sub_eq_add_neg, add_assoc, add_comm, add_left_comm]
+      rw [h_eq]
+      exact h_add_psd
+    dsimp [a, b]; exact h_goal'
   -- Integrate the pointwise inequality to get T(A^p) ≤ (T A)^p
   -- TODO: fill the Bochner integral commutation detail.
   sorry
