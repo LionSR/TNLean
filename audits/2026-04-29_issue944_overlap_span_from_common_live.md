@@ -136,3 +136,39 @@ lines 271--302 and 349--352, while the injectivity/Wielandt blocking requirement
 is the passage in lines 317--332.  In the review article, the corresponding BNT
 comparison is `Papers/2011.12127/TN-Review-main.tex` lines 1846--1859,
 1864--1885, and 1891--1894.
+
+## 2026-05-07 update: unconditional primitive block variants and gap documentation
+
+The `OverlapSpanComparison.lean` module now includes a detailed doc-block enumerating
+the remaining paper-source gaps that prevent an unconditional derivation of
+`SectorBasisOverlapSpanHypotheses` from the structural data alone:
+
+1. **One-site injectivity** — not derivable from the structural theorem; requires
+   a further Wielandt-type blocking (paper lines 317--332, arXiv:1606.00608).
+
+2. **Finite-length MPV span equality** — requires the BNT comparison and
+   proportional-decomposition data (paper lines 271--302, 349--352).
+
+3. **Phase-gauge matching data** — requires normal canonical form, strict weight
+   ordering, gauge-phase separation, and proportional decomposition data
+   (packaged as `CommonPrimitiveBNTCoverHypotheses`).
+
+New unconditional (hReindexed-free) theorem variants added at the end of the file:
+
+- `sectorBasisOverlapSpanHypotheses_of_unconditionalPrimitiveBlocks`
+- `sectorBasisOverlapSpanHypotheses_of_unconditionalPrimitiveBlocks_commonPhaseCover`
+- `sectorBasisOverlapSpanHypotheses_of_unconditionalPrimitiveBlocks_bntCover`
+- `sectorBasisOverlapSpanHypotheses_of_unconditionalPrimitiveBlocks_commonPrimitiveBNTData`
+- `sectorBasisOverlapSpanHypotheses_of_unconditionalPrimitiveBlocks_proportional`
+
+These theorems use `unconditional_commonPrimitiveIrreducibleBlocks` (which needs no
+`CommonSectorRelabelingHypothesis`) instead of
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`.
+All remaining hypotheses (injectivity, span equality, BNT comparison) remain
+explicitly conditional — consistent with the paper gap analysis.
+
+The gap is genuine and not an artifact of the formalization: injectivity requires
+a separate Wielandt blocking step beyond period removal, and span equality requires
+the BNT comparison theorem with normal canonical-form and proportional-decomposition
+data. These are both substantive paper-level arguments that have not yet been
+formalized in the project.
