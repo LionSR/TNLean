@@ -187,11 +187,11 @@ private lemma stringOrderParam_one_eq_one
 /-- The virtual-boundary version of the string-order expression:
 `tr(Λ X ℰ_u^L(Y))`.
 
-This absorbs the paper's endpoint operators `x,y` into arbitrary
-virtual boundary matrices `X,Y`. For injective tensors, sufficiently
-long physical boundary insertions span all such virtual boundaries,
-so this is the right reusable formalization of the paper's boundary
-criterion. -/
+This generalizes the paper's endpoint operators `x,y` to arbitrary
+virtual boundary matrices `X,Y`.  For injective tensors, every virtual
+boundary matrix can be realized by sufficiently long physical boundary
+insertions, so this single definition captures all boundary choices
+needed for the paper's criterion. -/
 noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ X Y : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
@@ -326,14 +326,10 @@ def CondC2 : Prop :=
     transferMap A (V * X * Vᴴ) =
       V * transferMap A X * Vᴴ
 
-/-- **Condition C3** (doubled transfer matrix commutation):
+/-- **Condition C3** (doubled transfer-matrix commutation):
 The doubled transfer matrix `E = ∑_j A_j ⊗ Ā_j` commutes with
-`V ⊗ V̄`.
-
-We express this via the transfer-map channel written in the
-`twistedTransferMap` formalism (with twist `u = 1`):
-`ℰ = ℰ_1`. In channel form this is
-`V ℰ(X) V† = ℰ(V X V†)`, i.e. `[E, V ⊗ V̄] = 0`. -/
+`V ⊗ V̄`.  In the transfer-map language (with twist `u = 1`), this is
+`V ℰ_1(X) V† = ℰ_1(V X V†)`. -/
 def CondC3 : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ,
     V * twistedTransferMap A 1 X * Vᴴ =
@@ -349,17 +345,15 @@ variable {A : MPSTensor d D}
     {u : Matrix (Fin d) (Fin d) ℂ}
     {V : Matrix (Fin D) (Fin D) ℂ}
 
-/-- C2 ↔ C3: Transfer-map covariance is equivalent to doubled
+/-- C2 ↔ C3: Transfer-map covariance is equivalent to doubled-operator
 commutation.
 
-Both sides express the same identity
-`∑_i A_i (V X V†) A_i† = V (∑_i A_i X A_i†) V†`. C2 reads
-right-to-left and C3 rearranges the left side using conjugated
-Kraus operators `V A_i V†`.
-
-Note: This equivalence holds for any `V`, not just unitaries,
-since `CondC2` and `CondC3` are literally `∀ X, P = Q` vs
-`∀ X, Q = P`. -/
+Both conditions express the identity
+`∑_i A_i (V X V†) A_i† = V (∑_i A_i X A_i†) V†`.
+The two formulations are mutual converses: `CondC2` states
+`ℰ(V X V†) = V ℰ(X) V†`, while `CondC3` with `u = 1` states
+`V ℰ(X) V† = ℰ(V X V†)`.  The equivalence holds for any `V`,
+not just unitaries. -/
 theorem condC2_iff_condC3 :
     CondC2 A V ↔ CondC3 A V := by
   simp only [CondC2, CondC3, twistedTransferMap_one]
@@ -420,11 +414,9 @@ then there exists a unitary `u` satisfying C1.
 
 This is the reverse direction of `condC1_imp_condC2`, completing
 the equivalence C1 ↔ C2 for injective MPS (Lemma 1 of
-arXiv:0802.0447). The present formal proof is slightly stronger
-than the paper-facing statement: it derives C1 from C2 by
-identifying `V A_i V†` as an alternative Kraus family for the same
-channel and applying rectangular Kraus freedom, so the explicit
-injectivity hypothesis is retained only to match the paper's formulation. -/
+arXiv:0802.0447).  The proof identifies `V A_i V†` as an alternative
+Kraus family for the same channel and applies rectangular Kraus
+freedom. -/
 theorem condC2_imp_condC1_of_injective
     (_hA : IsInjective A)
     (hV : V * Vᴴ = 1)

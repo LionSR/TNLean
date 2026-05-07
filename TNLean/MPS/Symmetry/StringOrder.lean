@@ -15,8 +15,8 @@ local symmetry, and spectral radius for injective MPS tensors, together
 with the SPT phase classification results.
 
 The core definitions (twisted transfer map, string order parameter, conditions
-C1/C2/C3 and their equivalences) live in `TNLean.MPS.Symmetry.StringOrderDefs`.
-The auxiliary TP-gauge lemmas and long supporting proofs live in
+C1/C2/C3 and their equivalences) are in `TNLean.MPS.Symmetry.StringOrderDefs`.
+The trace-preserving gauge reduction and supporting proofs are in
 `TNLean.MPS.Symmetry.StringOrderAux`.
 
 ## Main definitions
@@ -58,11 +58,10 @@ section MainTheorems
 for an injective pure FCS, every eigenvalue of the twisted
 transfer map `ℰ_u` has modulus at most `1`.
 
-The proof follows a TP-gauge reduction: rewrite `ℰ_u` as a mixed
-transfer map, pass to a common positive-definite fixed point of the
-adjoint channels, gauge both Kraus families into trace-preserving
-form, and invoke the existing mixed-transfer eigenvalue bound
-`eigenvalue_norm_le_one`. -/
+The proof rewrites `ℰ_u` as a mixed transfer map, passes to a common
+positive-definite fixed point of the adjoint channels, gauges both
+Kraus families to trace-preserving form, and applies the mixed-transfer
+eigenvalue bound `eigenvalue_norm_le_one`. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -91,8 +90,8 @@ theorem twistedTransfer_spectralRadius_le_one
 
 /-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
 companion tensor to be gauge-phase equivalent to the original tensor. The proof
-reuses the irreducible TP mixed-transfer rigidity theorem after passing both
-families to a common TP gauge. -/
+passes both families to a common trace-preserving gauge and applies the
+irreducible mixed-transfer rigidity theorem. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -141,9 +140,10 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     hGauge'
     (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
-/-- A non-decaying string-order parameter forces the twisted companion family to be
-gauge-phase equivalent to the original tensor. This identifies the modulus-one
-peripheral spectrum needed for the mixed-transfer rigidity argument. -/
+/-- If string order exists for `u`, then the twisted companion family is gauge-phase
+equivalent to the original tensor.  The proof extracts a modulus-one peripheral
+eigenvalue from the non-decaying boundary sequence and applies the mixed-transfer
+rigidity theorem. -/
 theorem gaugePhaseEquiv_twisted_of_hasStringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -253,9 +253,9 @@ lemma hasStringOrder_of_localSymmetry
     _ = ‖μ ^ L‖ := by rw [hnorm_pow]
     _ = ‖stringOrderBoundaryParam A u Λ Vᴴ V L‖ := by rw [hparam]
 
-/-- A modulus-one twisted-transfer eigenpair yields the paper's local-symmetry
-virtual witness once the stationary boundary state is fixed by the adjoint
-transfer channel. -/
+/-- A modulus-one twisted-transfer eigenpair yields a local-symmetry virtual
+intertwiner, provided the stationary boundary state is a fixed point of the
+adjoint transfer channel. -/
 private theorem localSymmetry_of_twistedTransfer_eigen
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -283,14 +283,13 @@ private theorem localSymmetry_of_twistedTransfer_eigen
 state, `u` is a local symmetry if and only if the twisted transfer
 map `ℰ_u` has a unitary eigenvector with unit-modulus eigenvalue.
 
-The right-hand side is the witness form of `ρ(ℰ_u) = 1`:
-combined with `twistedTransfer_spectralRadius_le_one` (all
-eigenvalues satisfy `|λ| ≤ 1`), existence of an eigenvalue with
-`|μ| = 1` is equivalent to `spectralRadius(ℰ_u) = 1`.
+Combined with `twistedTransfer_spectralRadius_le_one` (all eigenvalues
+satisfy `|λ| ≤ 1`), the existence of an eigenvalue with `|μ| = 1` is
+equivalent to `spectralRadius(ℰ_u) = 1`.
 
-Here `IsLocalSymmetry` is formalized in the virtual form supplied by
-Lemma 1 of the paper, and the theorem assumes the canonical fixed-point
-hypothesis `transferMap A† Λ = Λ` needed to recover `V† Λ V = Λ`. -/
+The theorem states the equivalence in the virtual form supplied by
+Lemma 1 of the paper, and assumes the canonical fixed-point hypothesis
+`transferMap A† Λ = Λ` needed to conclude `V† Λ V = Λ`. -/
 theorem localSymmetry_iff_spectralRadius_one
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -353,13 +352,14 @@ theorem stringOrder_iff_localSymmetry
 
 /-- **Virtual symmetry from string order**: If string order exists
 for `u`, then there exists a virtual unitary `V` and a
-unit-modulus scalar `μ` satisfying a phased intertwining relation
+unit-modulus scalar `μ` satisfying the phased intertwining relation
 `∑_j u_{ij} A_j = μ • (V A_i V†)`.
 
 The phase `μ` is necessary: for `u = e^{iθ} · 1` (a global
-phase), string order holds but `CondC1` (without phase) would
-force `e^{iθ} = 1`. The phased form matches the projective
-symmetry statement from `VirtualRepresentation.lean`. -/
+phase factor on the physical index), string order holds but the
+un-phased intertwining relation would force `e^{iθ} = 1`.
+The phased form is the same relation that the virtual representation
+theorem produces from on-site symmetry data. -/
 theorem virtualUnitary_of_stringOrder
     (A : MPSTensor d D)
     (hA : IsInjective A)
@@ -489,12 +489,10 @@ private lemma twistedTransfer_virtual_rep_fixed
 /-- For an injective symmetric MPS with canonical FCS data and unitary on-site
 representation, `HasStringOrder` holds universally for every group element.
 
-The proof chains:
-1. Virtual rep gives an eigenvector of twisted transfer with eigenvalue 1
-2. `twistedTransfer_modulus_one_implies_gaugePhase` gives gauge-phase equivalence
-3. `virtualUnitary_of_gaugePhaseEquiv_twisted` normalizes to a unitary intertwining
-4. `boundaryState_invariant_of_virtualUnitary` shows the unitary preserves `Λ`
-5. `hasStringOrder_of_localSymmetry` closes the argument -/
+The virtual representation provides an eigenvector of the twisted transfer map
+with eigenvalue 1.  From this, the spectral-radius and rigidity theorems yield a
+virtual unitary intertwining relation.  Boundary-state invariance and the
+local-symmetry-to-string-order implication complete the proof. -/
 theorem hasStringOrder_of_symmetric_injective
     (A : MPSTensor d D)
     (hA : IsInjective A)

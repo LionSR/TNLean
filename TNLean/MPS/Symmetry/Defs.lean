@@ -6,11 +6,10 @@ import TNLean.MPS.FundamentalTheorem.Basic
 This module defines the symmetry-twisted tensor construction and proves its
 functoriality, establishing the algebraic foundations for on-site symmetric MPS.
 
-The injective virtual-gauge statement is deliberately routed through the
-single-block Fundamental Theorem: `IsOnSiteSymmetric` gives
-`SameMPV A (twistedTensor A U g)`, and
-`sameMPV_iff_gaugeEquiv_of_injective` turns that equality of MPV families into a
-virtual gauge. No string-order or periodic-FT input is used in this step.
+The injective virtual-gauge statement follows from the single-block Fundamental
+Theorem: `IsOnSiteSymmetric` gives `SameMPV A (twistedTensor A U g)`, and
+`sameMPV_iff_gaugeEquiv_of_injective` turns equality of MPV families into a
+virtual gauge.
 
 ## Main definitions
 
@@ -26,8 +25,9 @@ virtual gauge. No string-order or periodic-FT input is used in this step.
 
 ## References
 
-* Wolf, *Quantum Channels & Operations*, Chapter 2
 * Pérez-García et al., *Matrix Product State Representations*, arXiv:0608197
+* Pérez-García et al., *String order and symmetries in quantum spin lattices*,
+  arXiv:0802.0447
 -/
 
 open scoped Matrix BigOperators
@@ -74,12 +74,12 @@ lemma twistedTensor_mul (A : MPSTensor d D)
     _ = twistedTensor (twistedTensor A U h) U g i := by
           simp [twistedTensor, Finset.smul_sum, smul_smul]
 
-/-- Injective on-site symmetry implies each twisted tensor is gauge equivalent to `A`.
+/-- If `A` is injective and on-site symmetric under `U`, then each twisted tensor is
+gauge equivalent to `A`.
 
-This is the single-block Fundamental Theorem route: on-site symmetry supplies
-`SameMPV A (twistedTensor A U g)`, and
-`sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into gauge
-equivalence for injective tensors. -/
+On-site symmetry supplies `SameMPV A (twistedTensor A U g)`, and
+`sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into
+gauge equivalence for injective tensors. -/
 theorem gaugeEquiv_twistedTensor_of_injective
     (A : MPSTensor d D) (hA : IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
