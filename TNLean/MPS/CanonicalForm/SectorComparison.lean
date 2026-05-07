@@ -2,10 +2,10 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison
-import TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData
-import TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison
-import TNLean.MPS.CanonicalForm.Assembly.CommonSectorData
+import TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 
 /-!
 # Canonical-form reduction after blocking
@@ -17,35 +17,35 @@ split across focused supporting modules.
 
 The supporting modules are:
 
-* `TNLean.MPS.CanonicalForm.Assembly.TPPrimitiveReduction` — blocked
+* `TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction` — blocked
   TP-primitive decomposition from arbitrary input.
-* `TNLean.MPS.CanonicalForm.Assembly.NormalityChain` — the normality chain for
+* `TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain` — the normality chain for
   TP-primitive irreducible blocks and preservation of normality under blocking.
-* `TNLean.MPS.CanonicalForm.Assembly.PrimitiveBlocks` — blocked irreducibility
+* `TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks` — blocked irreducibility
   and the conditional weak block-matching theorem.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorFamily` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily` —
   definitions and lemmas for common-period cyclic-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorRepresentatives` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorRepresentatives` —
   definitions and lemmas for representative common-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.CyclicSectorDecomposition` — cyclic sector
+* `TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition` — cyclic sector
   decomposition after blocking.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonBlockedCyclicSectorConstruction` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction` —
   construction of common-period cyclic-sector families.
-* `TNLean.MPS.CanonicalForm.Assembly.ZeroTailTransport` — generic zero-tail
+* `TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport` — generic zero-tail
   MPV transport lemmas.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorData` — common-sector data
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData` — common-sector data
   after the zero-tail and TP-gauge structural reduction.
-* `TNLean.MPS.CanonicalForm.Assembly.StructuralData` — common-period blocking
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralData` — common-period blocking
   and structural after-blocking data.
-* `TNLean.MPS.CanonicalForm.Assembly.StructuralTheorem` — historical re-export
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — historical re-export
   path for structural data and common-sector transport.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonSectorTransport` — zero-tail and
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport` — zero-tail and
   common-sector transport after the structural theorem.
-* `TNLean.MPS.CanonicalForm.Assembly.CommonPrimitiveProportionalData` —
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData` —
   common primitive span, phase-cover, proportional, and BNT comparison hypotheses.
-* `TNLean.MPS.CanonicalForm.Assembly.BasicSectorComparison` — basic sector
+* `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
-* `TNLean.MPS.CanonicalForm.Assembly.ProportionalComparison` — sector comparison
+* `TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison` — sector comparison
   from BNT proportional-decomposition data.
 
 ## Main statements
