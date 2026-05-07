@@ -321,11 +321,26 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     hCF.toHasInjectiveBlocks hSep
 
 /-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give
-one common homogeneous pair-separation length.
+homogeneous pair separation at length `L + (L + L)`.
 
-The common length is `L + (L + L)`.  Equal-dimensional distinct blocks use the
-BNT non-gauge-equivalence hypothesis; unequal-dimensional pairs use the
-strict-size direct-sum branch. -/
+Equal-dimensional distinct blocks use the BNT non-gauge-equivalence hypothesis;
+unequal-dimensional pairs use the strict-size direct-sum branch. -/
+lemma forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    {L : ℕ}
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L)
+    (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
+    (hL : 1 < L) :
+    ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) (L + (L + L)) :=
+  forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
+    A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
+    hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL
+
+/-- Existential form of
+`forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock`. -/
 lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -336,9 +351,9 @@ lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_thr
     (hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) (L + (L + L)))
     (hL : 1 < L) :
     ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
-  exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
-    A hIrr hCF.toIsLeftCanonicalBlockFamily hCF.toHasNormalizedSelfOverlap
-    hCF.blocks_not_equiv hBlk hBlk3 hCF.toHasInjectiveBlocks.block_injective hL
+  ⟨L + (L + L),
+    forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+      μ A hCF hIrr hBlk hBlk3 hL⟩
 
 /-- Canonical-form/BNT hypotheses and the three-block direct-sum assumptions give product span.
 
