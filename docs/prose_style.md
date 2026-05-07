@@ -137,7 +137,7 @@ such as
 ```tex
 A^i = \bigoplus_k \mu_k A_k^i,
 \qquad
-\widetilde A_k^i = e^{i\phi_k} X_k A_j^i X_k^{-1},
+\widetilde A_k^i = e^{i\phi_k} X_k A_k^i X_k^{-1},
 \qquad
 \ket{V^{(N)}(A)} = \sum_k \mu_k^N \ket{V^{(N)}(A_k)}
 ```
