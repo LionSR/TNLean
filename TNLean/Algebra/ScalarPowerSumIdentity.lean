@@ -25,9 +25,9 @@ statement.
 
 ## Strategy
 
-We reduce to the already-proved `Matrix.charpoly_eq_of_forall_trace_pow_eq` from
-`TNLean.Algebra.NewtonGirard` by observing that the trace of a power of a diagonal matrix equals
-the corresponding power sum:
+We reduce to `Matrix.charpoly_eq_of_forall_trace_pow_eq` and
+`Matrix.charpoly_eq_of_trace_pow_eq_of_le_card` from `TNLean.Algebra.NewtonGirard`
+by observing that the trace of a power of a diagonal matrix equals the corresponding power sum:
 
   `trace (diagonal a ^ k) = ∑ i, a i ^ k`
 
@@ -47,8 +47,9 @@ the corresponding power sum:
   hypothesis `1 ≤ k ≤ card n`, the multisets `Finset.univ.val.map a` and
   `Finset.univ.val.map b` are equal.
 
-* `Matrix.sum_pow_eq_implies_multiset_eq`: Under the same hypotheses, the multisets
-  `Finset.univ.val.map a` and `Finset.univ.val.map b` are equal.
+* `Matrix.sum_pow_eq_implies_multiset_eq`: If the power sums agree for every
+  positive exponent, then the multisets `Finset.univ.val.map a` and
+  `Finset.univ.val.map b` are equal.
 
 ## Design note: missing exact source statement
 
@@ -84,11 +85,12 @@ open Polynomial
 
 namespace Matrix
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
+variable {n : Type*} [Fintype n]
 
 /-- Trace of a power of a diagonal matrix equals the power sum of the entries. -/
-theorem trace_diagonal_pow (a : n → ℂ) (k : ℕ) :
+theorem trace_diagonal_pow [DecidableEq n] (a : n → ℂ) (k : ℕ) :
     trace (diagonal a ^ k) = ∑ i, a i ^ k := by
+  classical
   simp [diagonal_pow, trace_diagonal]
 
 /-- **Scalar power-sum identity** (same-cardinality support lemma for
@@ -97,6 +99,7 @@ theorem trace_diagonal_pow (a : n → ℂ) (k : ℕ) :
 If two families of complex scalars, indexed by the same finite type, have equal power sums for all
 positive exponents, then their characteristic polynomials (as diagonal matrices) agree. -/
 theorem sum_pow_eq_implies_charpoly_diagonal_eq
+    [DecidableEq n]
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
     (diagonal a).charpoly = (diagonal b).charpoly := by
@@ -112,6 +115,7 @@ If two families of complex scalars, indexed by the same finite type `n`, have eq
 power sums for `1 ≤ k ≤ card n`, then their characteristic polynomials as diagonal
 matrices agree. -/
 theorem sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card
+    [DecidableEq n]
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → ∑ i, a i ^ k = ∑ i, b i ^ k) :
     (diagonal a).charpoly = (diagonal b).charpoly := by
@@ -120,8 +124,14 @@ theorem sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card
   rw [trace_diagonal_pow, trace_diagonal_pow]
   exact h k hk hkcard
 
--- `DecidableEq n` is only needed to define diagonal matrices in the proof, not in the statement.
-set_option linter.unusedDecidableInType false in
+private lemma roots_prod_X_sub_C (f : n → ℂ) :
+    (∏ i : n, (X - C (f i))).roots = Finset.univ.val.map f := by
+  have hne : (∏ i : n, (X - C (f i))) ≠ 0 := by
+    rw [Finset.prod_ne_zero_iff]
+    exact fun i _ => X_sub_C_ne_zero (f i)
+  rw [roots_prod _ _ hne]
+  simp
+
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
 
@@ -133,20 +143,13 @@ theorem sum_pow_eq_implies_multiset_eq
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i, a i ^ k = ∑ i, b i ^ k) :
     Finset.univ.val.map a = Finset.univ.val.map b := by
+  classical
   have hcp := sum_pow_eq_implies_charpoly_diagonal_eq a b h
   rw [charpoly_diagonal, charpoly_diagonal] at hcp
   have hroots : (∏ i : n, (X - C (a i))).roots = (∏ i : n, (X - C (b i))).roots :=
     congrArg Polynomial.roots hcp
-  have roots_eq (f : n → ℂ) : (∏ i : n, (X - C (f i))).roots = Finset.univ.val.map f := by
-    have hne : (∏ i : n, (X - C (f i))) ≠ 0 := by
-      rw [Finset.prod_ne_zero_iff]
-      exact fun i _ => X_sub_C_ne_zero (f i)
-    rw [roots_prod _ _ hne]
-    simp
-  simpa [roots_eq] using hroots
+  simpa [roots_prod_X_sub_C] using hroots
 
--- `DecidableEq n` is only needed to define diagonal matrices in the proof, not in the statement.
-set_option linter.unusedDecidableInType false in
 /-- Equal power sums through `card n` determine the same multiset of values for
 two families indexed by the same finite type.
 
@@ -156,16 +159,11 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → ∑ i, a i ^ k = ∑ i, b i ^ k) :
     Finset.univ.val.map a = Finset.univ.val.map b := by
+  classical
   have hcp := sum_pow_eq_implies_charpoly_diagonal_eq_of_le_card a b h
   rw [charpoly_diagonal, charpoly_diagonal] at hcp
   have hroots : (∏ i : n, (X - C (a i))).roots = (∏ i : n, (X - C (b i))).roots :=
     congrArg Polynomial.roots hcp
-  have roots_eq (f : n → ℂ) : (∏ i : n, (X - C (f i))).roots = Finset.univ.val.map f := by
-    have hne : (∏ i : n, (X - C (f i))) ≠ 0 := by
-      rw [Finset.prod_ne_zero_iff]
-      exact fun i _ => X_sub_C_ne_zero (f i)
-    rw [roots_prod _ _ hne]
-    simp
-  simpa [roots_eq] using hroots
+  simpa [roots_prod_X_sub_C] using hroots
 
 end Matrix

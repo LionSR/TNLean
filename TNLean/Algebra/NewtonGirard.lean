@@ -358,6 +358,21 @@ theorem charpolyRev_eq_of_trace_pow_eq_of_le_card
       exact coeff_eq_zero_of_natDegree_lt (lt_of_le_of_lt hdeg (by omega))
     rw [hA, hB]
 
+omit [IsDomain R] in
+private lemma charpoly_eq_of_charpolyRev_eq
+    (A B : Matrix n n R)
+    (hrev : A.charpolyRev = B.charpolyRev) :
+    A.charpoly = B.charpoly := by
+  have hrA := reverse_charpoly A
+  have hrB := reverse_charpoly B
+  have h_rev_eq : A.charpoly.reverse = B.charpoly.reverse := by
+    rw [hrA, hrB, hrev]
+  have hdA := charpoly_natDegree_eq_dim A
+  have hdB := charpoly_natDegree_eq_dim B
+  rw [Polynomial.reverse, Polynomial.reverse, hdA, hdB] at h_rev_eq
+  have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
+  rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
+
 /-- **Main result**: If `tr(A^k) = tr(B^k)` for all `k ≥ 1`, then
 `A.charpoly = B.charpoly`.
 
@@ -368,23 +383,9 @@ theorem charpoly_eq_of_forall_trace_pow_eq
     (A B : Matrix n n R)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = trace (B ^ k)) :
     A.charpoly = B.charpoly := by
-  -- charpolyRev equality
   have hrev : A.charpolyRev = B.charpolyRev :=
     charpolyRev_eq_of_forall_trace_pow_eq A B h
-  -- A.charpoly.reverse = A.charpolyRev (and same for B)
-  have hrA := reverse_charpoly A  -- A.charpoly.reverse = A.charpolyRev
-  have hrB := reverse_charpoly B
-  -- So A.charpoly.reverse = B.charpoly.reverse
-  have h_rev_eq : A.charpoly.reverse = B.charpoly.reverse := by
-    rw [hrA, hrB, hrev]
-  -- reverse = reflect natDegree, and both charpolys have natDegree = card n
-  have hdA := charpoly_natDegree_eq_dim A
-  have hdB := charpoly_natDegree_eq_dim B
-  -- Unfold reverse and use that reflect N is involutive
-  rw [Polynomial.reverse, Polynomial.reverse, hdA, hdB] at h_rev_eq
-  -- reflect_reflect : reflect N (reflect N p) = p
-  have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
-  rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
+  exact charpoly_eq_of_charpolyRev_eq A B hrev
 
 /-- If `tr(A^k) = tr(B^k)` for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`. -/
 theorem charpoly_eq_of_trace_pow_eq_of_le_card
@@ -393,15 +394,7 @@ theorem charpoly_eq_of_trace_pow_eq_of_le_card
     A.charpoly = B.charpoly := by
   have hrev : A.charpolyRev = B.charpolyRev :=
     charpolyRev_eq_of_trace_pow_eq_of_le_card A B h
-  have hrA := reverse_charpoly A
-  have hrB := reverse_charpoly B
-  have h_rev_eq : A.charpoly.reverse = B.charpoly.reverse := by
-    rw [hrA, hrB, hrev]
-  have hdA := charpoly_natDegree_eq_dim A
-  have hdB := charpoly_natDegree_eq_dim B
-  rw [Polynomial.reverse, Polynomial.reverse, hdA, hdB] at h_rev_eq
-  have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
-  rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
+  exact charpoly_eq_of_charpolyRev_eq A B hrev
 
 end CharZeroDomain
 
