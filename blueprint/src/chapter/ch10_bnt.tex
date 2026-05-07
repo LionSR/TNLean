@@ -7,7 +7,8 @@ arguments used in the proof of the Fundamental Theorem.
 The chapter concludes with auxiliary results on
 coefficient convergence and Newton--Girard identities.
 The main references are
-\cite{PerezGarcia2007Matrix} and~\cite{Cirac2021Matrix}.
+\cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
+and~\cite{Cirac2021Matrix}.
 
 \section{Basis of normal tensors}
 
@@ -29,7 +30,13 @@ The main references are
 		      vectors $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are
 		      linearly independent.
 	\end{enumerate}
-	This is \cite[Definition~4.2]{Cirac2021Matrix}.
+	This is \cite[Definition~4.2]{Cirac2021Matrix}.  In the canonical-form
+	characterization of \cite[Section~2.3 and Appendix~A]{Cirac2016MPDO_arXiv},
+	a BNT is a minimal family of representatives for the relation
+	\[
+		\widetilde A_k^i = e^{i\phi_k}X_k A_j^iX_k^{-1}
+	\]
+	among the normal blocks in the canonical form.
 \end{definition}
 
 \begin{lemma}[Overlap-orthonormality implies eventual linear independence]
@@ -75,13 +82,20 @@ The main references are
 		\item distinct blocks of the same bond dimension are
 		      \emph{not} gauge-phase equivalent.
 	\end{enumerate}
-	This is an already grouped special case: the repeated-copy BNT
-	data of arXiv:1606.00608 are instead represented by sector
-	decompositions with multiplicities and sector weights. Thus this
-	definition records comparison data for selected single
-	representatives; it is not the general BNT normal form and is
-	not the source notion of block-injective canonical form, which is
-	the fixed-length direct-sum span condition discussed in
+	This is an already grouped special case.  In the source BNT expansion
+	of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, repeated copies of a
+	selected basis tensor appear as
+	\[
+		A^i
+		= \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+			\mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1}.
+	\]
+	The coefficients \(\mu_{j,q}\), multiplicities \(r_j\), and gauges
+	\(X_{j,q}\) are not part of this restricted single-representative
+	definition.  This definition therefore records only strict weight
+	ordering and the absence of phase-gauge equivalence among the selected
+	blocks.  It is not the source notion of block-injective canonical form,
+	which is the fixed-length direct-sum span condition discussed in
 	Chapter~\ref{ch:wielandt} and Chapter~\ref{ch:ft_proof}.
 \end{definition}
 
@@ -115,9 +129,15 @@ The main references are
 		      not gauge-phase equivalent.
 	\end{enumerate}
 	As in Definition~\ref{def:cf_bnt}, the strict ordering describes an
-	already selected or grouped representative family.  It is not the full CPSV
-	BNT multiplicity form, where repeated equal-modulus basis tensors can remain
-	as separate copies.
+	already selected or grouped representative family.  It is not the source
+	BNT expansion
+	\[
+		A^i
+		= \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+			\mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+	\]
+	where repeated copies of the same basis tensor remain visible through
+	their coefficients, multiplicities, and gauges.
 \end{definition}
 
 \begin{lemma}[Restricted norm-class collapse]
@@ -132,10 +152,11 @@ The main references are
 	decomposition whose associated total tensor generates the same MPV family
 	as $\bigoplus_k \mu_k A_k$, and whose sector-weight norms are strictly
 	decreasing.  This is a special-case regrouping lemma, not the full BNT
-	characterization of arXiv:1606.00608: the hypothesis that equal-norm
-	blocks already generate the same MPV family is a hypothesis here, while the
-	source BNT construction obtains the representatives by the minimal
-	phase-gauge equivalence relation.
+	characterization of \cite[Section~2.3]{Cirac2016MPDO_arXiv}: the
+	hypothesis that equal-norm blocks already generate the same MPV family is
+	an input here, while the source BNT construction chooses a minimal family
+	of representatives for the phase-gauge equivalence classes of normal
+	blocks.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -200,7 +221,7 @@ The main references are
 	eventual linear independence required in Definition~\ref{def:bnt}.
 \end{proof}
 
-\begin{lemma}[Restricted CF-BNT data yield a basis of normal tensors]\label{lem:cf_bnt_is_bnt}
+\begin{lemma}[Restricted CF-BNT hypotheses yield a basis of normal tensors]\label{lem:cf_bnt_is_bnt}
 	\lean{MPSTensor.IsCanonicalFormBNT.isBNT}
 	\leanok
 	\uses{def:cf_bnt, def:bnt}
@@ -215,7 +236,8 @@ The main references are
 	Lemma~\ref{lem:cf_bnt_is_bnt_split} applies.
 \end{proof}
 
-\begin{remark}[Comparing the two normality conditions]\label{rem:normalcf_bnt_gap}
+\begin{remark}[Proof-status note: comparing the two normality conditions]%
+\label{rem:normalcf_bnt_gap}
 	Definition~\ref{def:normal_cf_bnt} references the normal canonical form
 	conditions (Definition~\ref{def:is_normal_canonical_form}), which encode
 	normality via the spectral characterization (primitive transfer map).
@@ -227,7 +249,7 @@ The main references are
 	eventual block injectivity needed here.
 \end{remark}
 
-\begin{lemma}[Restricted normal-CF-BNT data give a BNT]
+\begin{lemma}[Restricted normal-CF-BNT hypotheses give a BNT]
 	\label{lem:normal_cf_bnt_is_bnt}
 	\lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
 	\leanok
@@ -238,10 +260,10 @@ The main references are
 \end{lemma}
 
 \begin{proof}\leanok\uses{rem:normalcf_bnt_gap}
-	Normal-canonical BNT data already give the block-diagonal MPV expansion,
-	the self-overlap normalization, and the eventual linear independence coming
-	from irreducible trace-preserving overlap decay. Supplying algebraic
-	normality for each block adds the remaining clause in
+	The normal-canonical hypotheses already give the block-diagonal MPV
+	expansion, the self-overlap normalization, and the eventual linear
+	independence coming from irreducible trace-preserving overlap decay.
+	Supplying algebraic normality for each block adds the remaining clause in
 	Definition~\ref{def:bnt}.
 \end{proof}
 
@@ -364,8 +386,8 @@ The main references are
 \end{proof}
 
 \begin{remark}\label{rem:bnt_perm_prop_canonical}
-	In the canonical-form application, the abstract data above come from
-	block-diagonal tensors
+	In the canonical-form application, the coefficients in
+	Theorem~\ref{thm:bnt_perm_prop} come from block-diagonal tensors
 	\[
 		A_{\mathrm{tot}} = \bigoplus_{j=1}^{g_A} \mu_j A_j,
 		\qquad
@@ -373,6 +395,17 @@ The main references are
 	\]
 	and Theorem~\ref{thm:mpv_decomposition} gives coefficient arrays
 	built from powers of the sector weights.
+	For a source BNT expansion
+	\[
+		A^i
+		= \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+			\mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+	\]
+	the coefficient of the selected basis tensor \(A_j\) in
+	\(\ket{V^{(N)}(A)}\) is the power sum
+	\[
+		\sum_{q=1}^{r_j} \mu_{j,q}^N .
+	\]
 	The hypotheses of Theorem~\ref{thm:bnt_perm_prop} require nonzero
 	coefficient limits for every sector being compared. Therefore the
 	geometric strict-dominance normalization
@@ -383,7 +416,7 @@ The main references are
 	power-sum comparison below.
 	Definition~\ref{def:cf_bnt} supplies injectivity, TP normalization,
 	and the within-family overlap limits; the remaining coefficient
-	data is kept explicit in Theorem~\ref{thm:bnt_perm_prop}.
+	limits are kept explicit in Theorem~\ref{thm:bnt_perm_prop}.
 \end{remark}
 
 \begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
@@ -468,7 +501,7 @@ The main references are
 	Project the two canonical-form hypotheses to blockwise injectivity,
 	left-canonical normalization, self-overlap convergence, and BNT
 	separation. Then Theorem~\ref{thm:bnt_perm_prop} applies to the resulting
-	proportional decomposition data.
+	proportional MPV decompositions and their convergent nonzero coefficients.
 \end{proof}
 
 \begin{lemma}[Restricted normal-CF-BNT proportional comparison]
@@ -490,7 +523,7 @@ The main references are
 
 \begin{remark}
 	Lemma~\ref{lem:bnt_perm_simple} is retained for completeness but is
-	not used in the proofs given here; the proportional theorem
+	not used in the proofs given here; the proportional comparison theorem
 	(Theorem~\ref{thm:bnt_perm_prop}) suffices for the Fundamental Theorem.
 \end{remark}
 
@@ -573,13 +606,20 @@ The main references are
 
 \begin{remark}[How the power-sum equality is used]
 	The equal-MPV corollary in the source compares, for each matched basis
-	tensor, the sums
+	tensor, the power sums
 	\[
 		\sum_q \mu_{j,q}^N
 	\]
-	on the two sides. Newton--Girard says that equality of all these
-	power sums determines the multiset of weights with multiplicity. It is not
-	a replacement for the BNT matching argument: the block permutation and the
+	on the two sides.  After the BNT permutation has matched \(A_j\) with
+	\(B_j = e^{i\phi_j}Y_jA_jY_j^{-1}\), the source comparison is
+	\[
+		\sum_{q=1}^{r_{a,j}} \mu_{j,q}^N
+		=
+		\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N .
+	\]
+	The Newton--Girard input says that equality of all these power sums
+	determines the multiset of weights with multiplicity. It is not a
+	replacement for the BNT matching argument: the block permutation and the
 	phase gauges must already have identified which basis tensor is being
 	compared. Once that matching is available, the power-sum lemma supplies the
 	multiplicity and weight equality needed to identify the weighted
@@ -616,8 +656,8 @@ The main references are
 \begin{remark}
 	Theorems~\ref{thm:newton_girard} and~\ref{thm:power_sum_multiset}
 	remain relevant for the equal-MPV source corollary discussed in
-	Section~\ref{sec:ft_equal_mpv_comparisons}, where the paper uses a power-sum step to
-	recover the multiplicity-weight data. In the current proof this recovery is
-	kept in the BNT multiplicity lemmas rather than in a separate
-	explicit-coefficient equal-case theorem.
+	Section~\ref{sec:ft_equal_mpv_comparisons}, where the paper uses a power-sum
+	step to recover the multiplicities \(r_j\) and the weights \(\mu_{j,q}\).
+	In the formalization this recovery is kept in the BNT multiplicity lemmas
+	rather than in a separate explicit-coefficient equal-case theorem.
 \end{remark}
