@@ -468,9 +468,9 @@ theorem fundamentalTheorem_equalMPV_full
 
 /-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
 
-This wraps `Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`
-to provide a convenience wrapper for the same-cardinality power-sum argument.
-See the design note there for what the exact `Lem:app_simple` statement would require.
+This wraps the same-cardinality power-sum lemmas from `ScalarPowerSumIdentity.lean`.
+The bounded version is the same-cardinality part of the paper's Lemma `Lem:app_simple`;
+the full source statement also compares possibly unequal cardinalities.
 -/
 
 /-- **Equal power sums imply equal multisets** (same-cardinality support lemma for
@@ -489,6 +489,21 @@ theorem power_sum_eq_implies_multiset_eq (n : ℕ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
     Finset.univ.val.map α = Finset.univ.val.map β :=
   Matrix.sum_pow_eq_implies_multiset_eq α β h
+
+/-- **Bounded equal power sums imply equal multisets** (same-cardinality part of
+Lemma `Lem:app_simple`).
+
+If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
+`∑ i, (α i)^k = ∑ i, (β i)^k` for `1 ≤ k ≤ n`, then `α` and `β` have the same
+multiset of values counted with multiplicity. -/
+theorem power_sum_eq_implies_multiset_eq_of_le_card (n : ℕ)
+    (α β : Fin n → ℂ)
+    (h : ∀ k : ℕ, 0 < k → k ≤ n →
+      ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
+    Finset.univ.val.map α = Finset.univ.val.map β := by
+  apply Matrix.sum_pow_eq_implies_multiset_eq_of_le_card
+  intro k hk hkcard
+  exact h k hk (by simpa using hkcard)
 
 /-! ## Combined corollaries -/
 

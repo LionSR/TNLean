@@ -579,11 +579,13 @@ and~\cite{Cirac2021Matrix}.
 \section{Newton--Girard identities}
 
 \begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
-	\lean{Matrix.charpoly_eq_of_forall_trace_pow_eq}
+	\lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
+		Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
 	\leanok
 	If $A, B \in \MN{n}$ satisfy
 	$\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
 	then $A$ and $B$ have the same characteristic polynomial.
+	It is enough to assume this equality for $1 \le k \le n$.
 \end{theorem}
 
 \begin{proof}
@@ -628,6 +630,24 @@ and~\cite{Cirac2021Matrix}.
 	cardinality are assumed, and the conclusion is equality of the ordered
 	families.
 \end{remark}
+
+\begin{theorem}[Finite-range equal power sums imply equal multisets]
+	\label{thm:bounded_power_sum_multiset}
+	\lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
+		MPSTensor.power_sum_eq_implies_multiset_eq_of_le_card}
+	\leanok
+	Let $\alpha, \beta : \{1, \ldots, n\} \to \C$.
+	If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for $1 \le k \le n$,
+	then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:newton_girard}
+	Apply the finite-range Newton--Girard theorem to
+	$\diag(\alpha)$ and $\diag(\beta)$, then extract the roots of
+	$\prod_i (X-\alpha_i)$ and $\prod_i (X-\beta_i)$.
+\end{proof}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
 	\lean{Matrix.sum_pow_eq_implies_multiset_eq}
