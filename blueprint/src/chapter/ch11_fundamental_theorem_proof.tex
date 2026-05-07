@@ -1283,7 +1283,7 @@ BNT comparison hypotheses for the common primitive sectors.
 
 \begin{definition}[After-blocking BNT matching hypotheses]%
 	\label{def:after_blocking_sector_comparison_hypotheses}
-	\lean{MPSTensor.AfterBlockingFundamentalTheoremHypotheses}
+	\lean{MPSTensor.BlockedNormalFormHypotheses}
 	\leanok
 	\uses{def:common_primitive_bnt_cover_hypotheses}
 	For two tensors with the same MPV family, the structural reduction supplies
@@ -1304,7 +1304,7 @@ BNT comparison hypotheses for the common primitive sectors.
 
 \begin{definition}[After-blocking sector-comparison conclusion]%
 \label{def:after_blocking_sector_comparison_conclusion}
-	\lean{MPSTensor.AfterBlockingFundamentalTheoremConclusion}
+	\lean{MPSTensor.BlockedNormalFormSectorMatching}
 	\leanok
 	\uses{def:paper_sector_data}
 	The conclusion consists of a positive blocking length and sector
@@ -1318,7 +1318,7 @@ BNT comparison hypotheses for the common primitive sectors.
 
 \begin{lemma}[After-blocking comparison from supplied BNT matching hypotheses]%
 \label{lem:after_blocking_sector_comparison_of_supplied_bnt_cover}
-	\lean{MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses}
+	\lean{MPSTensor.fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses}
 	\leanok
 	\uses{def:after_blocking_sector_comparison_hypotheses,
 			def:after_blocking_sector_comparison_conclusion}

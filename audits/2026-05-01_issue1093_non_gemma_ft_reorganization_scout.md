@@ -43,17 +43,17 @@ The declaration group in `TNLean/MPS/CanonicalForm/Assembly.lean` records a
 conditional statement in the language of the Cirac--Pérez-García--Schuch--Verstraete
 Fundamental Theorem:
 
-- `MPSTensor.AfterBlockingFundamentalTheoremHypotheses` names the remaining
+- `MPSTensor.BlockedNormalFormHypotheses` names the remaining
   comparison data.  It includes blocked-word relabeling, and its comparison field
   is supplied with the produced sectors' trace-preserving, primitive, and
   irreducible structure before returning the remaining zero-tail, injectivity, and
   BNT proportional-comparison hypotheses for those same sectors.
-- `MPSTensor.AfterBlockingFundamentalTheoremConclusion` records the conclusion:
+- `MPSTensor.BlockedNormalFormSectorMatching` records the conclusion:
   after a positive blocking, there are BNT sector decompositions `P` and `Q`; the
   original blocked tensors agree with them at positive lengths; `P` and `Q`
   generate the same full MPV family; and the basis sectors, multiplicities, and
   sector-weight multisets match up to a permutation and nonzero phases.
-- `MPSTensor.fundamentalTheorem_afterBlocking_of_comparisonHypotheses` derives the
+- `MPSTensor.fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses` derives the
   conclusion from `SameMPV₂ A B` and those named hypotheses by applying the
   existing relabeled-common-sector proportional theorem.
 
