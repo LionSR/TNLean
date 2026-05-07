@@ -1,14 +1,12 @@
 \chapter{The Single-Block Fundamental Theorem}\label{ch:single}
 
-This chapter proves that if an injective MPS tensor~$A$ generates
-the same MPV family as another tensor~$B$ of the same bond dimension,
-then $A$ and $B$ are gauge equivalent.
-The proof is purely algebraic and does not use the later
-overlap or normal-form reductions.
-The trace-pairing maps introduced below are auxiliary devices attached
-to the chosen generating families $\{A^i\}$ and $\{B^i\}$; they serve
-only to construct the linear map that is later shown to be a gauge
-transform.
+This chapter proves the single-block injective Fundamental Theorem of MPS
+\cite[Section~III.B]{Cirac2021Matrix}:
+if an injective MPS tensor~$A$ generates the same MPV family as another
+tensor~$B$ of the same bond dimension, then there exists an invertible
+matrix~$X$ such that $B^i = X A^i X^{-1}$ for all physical indices~$i$.
+The proof is purely algebraic and does not require the later overlap or
+normal-form reductions.
 
 \section{Trace pairing}
 
@@ -74,14 +72,14 @@ transform.
     for all~$N$, so $M = 0$ by Theorem~\ref{thm:trace_nondeg}.
 \end{proof}
 
-\begin{theorem}[Nonvanishing trace on injective tensors]\label{thm:trace_ne_zero}
+\begin{lemma}[Nonvanishing trace on injective tensors]\label{lem:trace_ne_zero}
     \lean{MPSTensor.trace_ne_zero_of_injective}
     \leanok
     \uses{def:injective, def:same_mpv}
-    If $D \ge 1$, $A$ is injective, $A$ and $B$ generate the same
-    MPV family, and $B^i = 0$ for all~$i$, then we have a
-    contradiction.
-\end{theorem}
+    If $D \ge 1$, $A$ is injective, and $A$ and $B$ generate the same
+    MPV family, then $B^i$ cannot be identically zero:
+    $\neg (\forall i, B^i = 0)$.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -200,13 +198,11 @@ transform.
     Translating back to matrices gives the invertible~$X$.
 \end{proof}
 
-\begin{lemma}[Promotion to algebra homomorphism]\label{lem:linear_map_to_alg}
+\begin{lemma}[Unit preservation of multiplicative surjective maps]\label{lem:linear_map_to_alg}
     \lean{MPSTensor.linearMapToAlgHom}
     \leanok
     If $T : \MN{D} \to \MN{D}$ is a multiplicative surjective
     $\C$-linear map, then $T(\Id) = \Id$.
-    Equivalently, the same underlying function defines a
-    $\C$-algebra homomorphism.
 \end{lemma}
 
 \begin{proof}
@@ -234,12 +230,12 @@ transform.
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
-          thm:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
+          lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
     By Theorem~\ref{thm:linear_ext}, there is a unique linear
     $T$ with $T(A^i) = B^i$.
     By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
     $T$ is nonzero: if $T = 0$ then $B^i = 0$ for all~$i$,
-    contradicting Theorem~\ref{thm:trace_ne_zero}.
+    contradicting Lemma~\ref{lem:trace_ne_zero}.
     By Theorem~\ref{thm:simplicity}, $T$ is bijective.
     By Lemma~\ref{lem:linear_map_to_alg}, $T$ is a
     $\C$-algebra automorphism.

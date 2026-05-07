@@ -23,15 +23,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Lemma 1 (paper proof sketch):
-
-If `A` is injective (its matrices span the full matrix algebra) and `A` and `B` generate the same
-MPV family, then there exists a *unique* linear map `T` sending `A i` to `B i`.
-
-The key point is that `SameMPV` provides compatibility of all trace pairings
-`trace (A i * A j) = trace (B i * B j)`, which lets us construct `T` via a left inverse of the map
-`M ↦ (i ↦ trace (M * B i))`.
--/
+/-- If `A` is injective and `A`, `B` generate the same MPV family,
+then there exists a unique linear map $T : \MN{D} \to \MN{D}$
+satisfying $T(A^i) = B^i$ for all $i$. -/
 theorem linearExtension_exists_unique {A B : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B) :
     ∃! T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
@@ -73,22 +67,9 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
   refine ⟨T, hT, fun T' hT' =>
     LinearMap.ext_on_range (hv := hA.span_eq_top) fun i => by simp [hT' i, hT i]⟩
 
-/-- Lemma 4 (paper proof sketch, now proved):
-
-If `T` is the linear extension with `T(A i)=B i` and `SameMPV A B`, then `T` is
-multiplicative.
-
-The proof is trace-based:
-
-* Using `SameMPV` for length-2 words, we show
-  `traceMulRightPi B (T (A i)) = traceMulRightPi A (A i)`;
-  by spanning this extends to `traceMulRightPi B ∘ T = traceMulRightPi A`.
-* Injectivity of `A` implies `traceMulRightPi A` is injective, hence has
-  full-rank range. The range inclusion above forces `traceMulRightPi B` to
-  have trivial kernel.
-* Using length-3 trace identities and injectivity of `traceMulRightPi B`, we
-  get `T (A i * A j) = B i * B j`, and then extend bilinearly using spanning.
--/
+/-- If `A` is injective, `A` and `B` generate the same MPV family, and
+$T : \MN{D} \to \MN{D}$ is the linear map satisfying $T(A^i) = B^i$ for all $i$,
+then $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$. -/
 theorem linearExtension_mul {A B : MPSTensor d D}
     (hA : IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
