@@ -13,10 +13,10 @@ Before making any changes, read the project's convention files to ensure
 full compliance:
   - `docs/CONTRIBUTING.md` — PR title format, body template, label taxonomy,
     commit message style, issue conventions
-  - `docs/naming.md` — Lean declaration naming (for understanding scope)
-  - `docs/doc.md` — documentation standards
-  - `docs/style.md` — code style (helps determine PR type)
-  - `docs/pr-review.md` — review checklist (what reviewers expect)
+  - `docs/MATHLIB_naming.md` — Lean declaration naming (for understanding scope)
+  - `docs/MATHLIB_doc.md` — documentation standards
+  - `docs/MATHLIB_style.md` — code style (helps determine PR type)
+  - `docs/MATHLIB_pr-review.md` — review checklist (what reviewers expect)
   - `docs/prose_style.md` — mathematical prose and banned AI/software language
 
 These files are checked out in the workspace. Read them before proceeding

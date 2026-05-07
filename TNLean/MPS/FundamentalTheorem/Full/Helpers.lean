@@ -6,7 +6,7 @@ import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 
 /-!
-# Auxiliary lemmas for the heterogeneous equal-case fundamental theorem
+# Auxiliary lemmas for heterogeneous equal-case block matching
 
 This module collects small auxiliary lemmas used by the two core lemmas
 `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`
@@ -14,6 +14,8 @@ This module collects small auxiliary lemmas used by the two core lemmas
 `blocks_match_of_sameMPV₂_CFBNT` (`TNLean.MPS.FundamentalTheorem.Full.BlocksMatch`)
 that together prove the self-contained equal-case fundamental theorem
 `fundamentalTheorem_equalMPV_CFBNT_hetero` in `TNLean.MPS.FundamentalTheorem.Full`.
+That declaration is a restricted CFBNT comparison lemma rather than the full
+source-paper Fundamental Theorem.
 
 ## Main statements
 
@@ -21,8 +23,8 @@ that together prove the self-contained equal-case fundamental theorem
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
 * `eq_one_of_pow_tendsto_nhds_one`: powers converging to `1` force the base to be `1`.
 
-This file collects public auxiliary lemmas used by the full heterogeneous equal-case
-theorem.
+This file collects public auxiliary lemmas used by heterogeneous equal-case
+block matching.
 
 ## References
 
@@ -33,7 +35,7 @@ theorem.
 
 ## Tags
 
-matrix product states, fundamental theorem, gauge-phase equivalence, overlap, helpers
+matrix product states, block matching, gauge-phase equivalence, overlap, helpers
 -/
 
 open scoped Matrix BigOperators
@@ -45,7 +47,7 @@ variable {d : ℕ}
 
 /-! ## Helpers for the heterogeneous equal-case fundamental theorem -/
 
-/-- Norm-convergence version of normalized self-overlap convergence. -/
+/-- Norm-convergence form of normalized self-overlap convergence. -/
 lemma tendsto_norm_selfOverlap_one
     {D : ℕ} (A : MPSTensor d D)
     (hA : Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :

@@ -1,15 +1,20 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter reduces a general MPS tensor to block-diagonal data via iterated
-invariant-subspace decomposition. Two reduction schemes are relevant.
-The block-injective reduction aims at injective TP-normalized blocks and the
-canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
-reduction uses a weighted family of irreducible TP-normalized blocks with
-primitive transfer maps and pairwise distinct nonzero weight moduli, in the
-sense of \cite{Cirac2017MPDO_AnnPhys}.
+This chapter reduces a general MPS tensor to the block-diagonal form
+\[
+	A^i=\bigoplus_{k=1}^r \mu_k A_k^i
+\]
+of \cite[Sec.~II]{Cirac2017MPDO_AnnPhys}.  The first reduction produces
+injective trace-preserving blocks satisfying the canonical form conditions of
+Chapter~\ref{ch:block_perm}.  The normal-canonical reduction produces
+irreducible trace-preserving blocks with primitive transfer maps and nonzero
+weights ordered by
+\[
+	|\mu_1|\ge \cdots \ge |\mu_r|.
+\]
 The Perron--Frobenius eigenvector existence and TP-gauge construction
 are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
-left-canonical normalization data and the normal canonical form data.
+left-canonical normalizations and normal canonical forms.
 The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
@@ -32,7 +37,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	placing the scaled block Kraus operators on the diagonal.
 \end{definition}
 
-\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
+\begin{lemma}[Gauge equivalence of block pairs with equal MPVs]\label{lem:multi_block_ft}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
 	\leanok
 	\uses{def:tensor_from_blocks, def:injective}
@@ -40,16 +45,19 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	same-MPV condition holds ($A_k$ and $B_k$ generate the same
 	MPV family for each~$k$),
 	then each pair $(A_k, B_k)$ is gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{thm:ft_single}
-	Apply the single-block fundamental theorem
-	(Theorem~\ref{thm:ft_single}) to each block independently.
+	For every $k$, Theorem~\ref{thm:ft_single} gives an invertible
+	$X_k$ with
+	\[
+		B_k^i = X_k A_k^i X_k^{-1}.
+	\]
 \end{proof}
 
-\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
+\begin{lemma}[MPV equality for weighted direct sums]\label{lem:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
 	\uses{def:tensor_from_blocks, def:same_mpv}
@@ -57,7 +65,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	block~$k$, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
 	also generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition}
 	By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
@@ -65,20 +73,23 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
-\begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
+\begin{lemma}[Gauge equivalence for weighted direct sums]\label{lem:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
-	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, thm:multi_block_ft}
+	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, lem:multi_block_ft}
 	If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
 	the same MPV family, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:multi_block_ft}
-	Apply the per-block single-block fundamental theorem
-	(Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
-	equivalences from injectivity and equality of MPV families, then
-	combine them into a global gauge for the block-diagonal tensors.
+\begin{proof}\leanok\uses{lem:multi_block_ft}
+	Apply Lemma~\ref{lem:multi_block_ft} to obtain matrices
+	$X_k \in \GL_{D_k}(\C)$ with $B_k^i=X_kA_k^iX_k^{-1}$.
+	Then $X=\bigoplus_k X_k$ gives
+	\[
+		\bigoplus_k \mu_k B_k^i
+		= X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1}.
+	\]
 \end{proof}
 
 \section{Transfer map normalization}
@@ -517,7 +528,7 @@ to this subspace formulation first.
 	aperiodicity, primitivity, or quantum-Wielandt inputs.
 \end{remark}
 
-\section{Proportional single-block theorem}
+\section{Gauge-phase equivalence from proportional MPVs}
 
 \begin{theorem}[Proportional MPV implies gauge-phase equivalence]\label{thm:proportional_ft}
 	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
@@ -547,7 +558,7 @@ to this subspace formulation first.
 
 	In~\cite{PerezGarcia2007Matrix}, the proportional case
 	is handled as part of the canonical form argument.
-	Here it is obtained directly from the overlap-decay theorem.
+	Here it follows directly from the overlap-decay theorem.
 \end{proof}
 
 \begin{theorem}[Proportional MPV + primitive implies gauge-phase equivalence]%
@@ -581,11 +592,11 @@ include an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
 The first theorem below derives this from
-blockwise primitive fixed-point data.
+primitive fixed points for the transfer maps.
 The second derives the same conclusion from
 per-block peripheral-spectrum primitivity.
 
-\begin{theorem}[Canonical form from primitive fixed-point data]%
+\begin{theorem}[Canonical form from primitive transfer fixed points]%
 	\label{thm:canonical_from_primitive_fixedpoint}
 	\lean{MPSTensor.isCanonicalForm_of_primitive}
 	\leanok
@@ -848,7 +859,7 @@ per-block peripheral-spectrum primitivity.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
-		Peripheral-spectrum primitivity is part of the data. Together with
+		Peripheral-spectrum primitivity is one of the hypotheses. Together with
 		irreducibility and TP normalization, it yields the spectral-gap
 		primitive theorem needed for overlap convergence, so the self-overlap
 		condition follows from the other hypotheses rather than appearing as
@@ -1013,7 +1024,7 @@ $N = 0$ (where their contribution equals their bond dimension).
 The following results separate the zero blocks from the nonzero blocks.
 In the block decomposition of \cite[Section~2.3]{Cirac2016MPDO_arXiv},
 the allowance $\sum_k D_k \le D$ is explained by the statement that
-``there can be zero blocks''.  In this chapter the \emph{zero-tail bond
+``there can be zero blocks''.  In this chapter the \emph{all-zero leftover bond
 dimension} is the total bond dimension of these all-zero leftover blocks.
 It is not an additional structure in the cited source; it is a name for the all-zero
 summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
@@ -1087,7 +1098,7 @@ summand $\mathbf{0}_{d,D_0}$ used to retain the $N=0$ MPV coefficient.
 	\uses{def:irreducible_tensor, def:zero_mps_tensor}
 	For any MPS tensor $A$, there exist:
 	\begin{enumerate}
-		\item a zero-tail bond dimension $D_0$, namely the total bond
+		\item an all-zero leftover bond dimension $D_0$, namely the total bond
 		      dimension of the separated all-zero blocks,
 		\item nontrivial blocks $(B_k)_{k=1}^r$ with nonzero weights
 		      $(\mu_k)_{k=1}^r$, each block irreducible and
@@ -1482,7 +1493,7 @@ is, with sector indices modulo the period $m$,
 The tensor $C_u$ is obtained by compressing the blocked tensor $A^{[m]}$ to
 the corner $P_u$.  The later finite-family entries starting at
 Definition~\ref{def:common_blocked_cyclic_sector_family} record the additional
-common-blocking data needed when several original blocks must be compared at
+common blocking length needed when several original blocks must be compared at
 one physical alphabet; they are not separate cyclic-decomposition assertions.
 
 \subsection{Cyclic projections and period removal}%
@@ -1689,8 +1700,11 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 	Apply Theorem~\ref{thm:conjtranspose_kraus_setup} to obtain the
 	conjugate-transposed Kraus family, an irreducible adjoint transfer map,
 	and a positive-definite fixed point.
-	The cyclic peripheral-spectrum theorem then provides a period $m$ and the
-	required cyclic spectral data.
+	The cyclic peripheral-spectrum theorem then provides a period $m$ and
+	projections $P_u$ satisfying
+	\[
+		\E_A^\dagger(P_{u+1})=P_u.
+	\]
 	Apply Theorem~\ref{thm:cyclic_sector_decomp_after_blocking}.
 \end{proof}
 
@@ -1709,13 +1723,13 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 	\uses{thm:conjtranspose_kraus_setup, thm:peripheral_cyclic_structure,
 		thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
 	The proof repeats the cyclic-sector construction of
-	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projection and
-	compression data, and applies
+	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projections $P_u$
+	and the compression maps $\varphi_u$, and applies
 	Theorem~\ref{thm:blocked_sector_unconditional} to the resulting
 	sector blocks.
 \end{proof}
 
-\begin{definition}[Primitive irreducible cyclic-sector data]%
+\begin{definition}[Primitive irreducible cyclic sectors]%
 \label{def:primitive_irreducible_cyclic_sectors}
 	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
 	\leanok
@@ -1744,7 +1758,7 @@ one physical alphabet; they are not separate cyclic-decomposition assertions.
 	the predicate of Definition~\ref{def:primitive_irreducible_cyclic_sectors}.
 \end{proof}
 
-\subsection{Common-blocking comparison data}%
+\subsection{Common blocking length for cyclic sectors}%
 \label{sec:common_blocked_cyclic_sector_comparison}
 
 The following entries concern a finite family of irreducible nonzero-weight
@@ -1753,7 +1767,9 @@ least common multiple of the periods is used to express all sectors over the
 same blocked physical alphabet.  The definitions below record the flattening of
 the double index $(k,u)$, the transported weights $\mu_k^p$, and the
 identification between iterated blocking at $(m_k,e_k)$ and direct blocking at
-the common length $p=m_k e_k$.
+the common length $p=m_k e_k$.  This is the source blocking formula
+$C^{(i_1,\ldots,i_p)}=B^{i_1}\cdots B^{i_p}$, applied with a common value of
+$p$ for all sectors.
 
 \begin{definition}[Common cyclic-sector family]%
 \label{def:common_blocked_cyclic_sector_family}
@@ -1761,12 +1777,16 @@ the common length $p=m_k e_k$.
 	\leanok
 	\uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor,
 		def:tensor_from_blocks, def:same_mpv2}
-	For a finite family of nonzero-weight blocks $(B_k)$, these data specify a single
-	positive physical blocking length $p$, the per-block period-removal lengths
-	$m_k$, the later positive reblocking lengths $e_k$ with $p=m_k e_k$, and the
-	resulting flattened finite sector family at physical dimension $d^p$.  They
-	retain trace preservation, primitive transfer maps, tensor irreducibility,
-	positive bond dimensions, and the per-block iterated-blocking MPV equivalences.
+	For a finite family of nonzero-weight blocks $(B_k)$, choose one positive
+	blocking length $p$, per-block period-removal lengths $m_k$, and positive
+	integers $e_k$ with
+	\[
+		p=m_k e_k.
+	\]
+	The resulting sectors are indexed by pairs $(k,u)$ and live at physical
+	dimension $d^p$.  Trace preservation, primitive transfer maps, tensor
+	irreducibility, positive bond dimensions, and the per-block iterated-blocking
+	MPV equivalences are retained.
 \end{definition}
 
 \begin{definition}[Unit weights for a common reblocked cyclic-sector family]%
@@ -1807,10 +1827,10 @@ the common length $p=m_k e_k$.
 	For a common reblocked cyclic-sector family, the sector tensors over the
 	common alphabet are obtained directly from the original per-block sector
 	tensors.  The same flattened common-sector family is available at a
-	prescribed length $p'$ assuming the family length equals $p'$.  The block data
-	specify the identification of blocked physical words: for the block $B_k$, it
-	uses $B_k^{[m_k e_k]}$ with the labels obtained by flattening an iterated
-	$(m_k,e_k)$ block.
+	prescribed length $p'$ assuming the family length equals $p'$.  For the block
+	$B_k$, the word identification is the equality between the direct block
+	$B_k^{[m_k e_k]}$ and the iterated block $(B_k^{[m_k]})^{[e_k]}$ after
+	flattening the two physical indices.
 \end{definition}
 
 \begin{lemma}[Common-alphabet cyclic sectors retain structural properties]%
@@ -1848,7 +1868,7 @@ the common length $p=m_k e_k$.
 	equality between the iterated and common physical alphabets, and use that a
 	positive power of a nonzero complex number is nonzero.  The normal canonical
 	form statement is Theorem~\ref{thm:ncf_sorted_tp_primitive_irred} applied to
-	these derived sector data.
+	the resulting sector blocks and weights.
 \end{proof}
 
 \begin{lemma}[Common-sector representatives form a BNT-separated normal canonical form]%
@@ -2608,7 +2628,7 @@ primitivity and normality results to the sector blocks.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If the one-step projection-preservation
+	be the blocked cyclic-sector decomposition. If the one-step projection-preservation
 	hypothesis of Lemma~\ref{lem:orbit_sum_hLift_proj_step} holds, then every
 	blocked sector tensor $C_u$ has primitive transfer map and is irreducible.
 \end{theorem}
@@ -2618,7 +2638,7 @@ primitivity and normality results to the sector blocks.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_proj_step} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provides compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2640,7 +2660,7 @@ primitivity and normality results to the sector blocks.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If the fixed-point-algebra rigidity
+	be the blocked cyclic-sector decomposition. If the fixed-point-algebra rigidity
 	hypothesis from Definition~\ref{def:sector_fixed_point_algebra_rigidity}
 	holds, then every blocked sector tensor $C_u$ has primitive transfer map and
 	is irreducible.
@@ -2652,7 +2672,7 @@ primitivity and normality results to the sector blocks.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_fixed_algebra} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provides compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2675,7 +2695,7 @@ primitivity and normality results to the sector blocks.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If every $(\E_{C_u}^\dagger)$-fixed element
+	be the blocked cyclic-sector decomposition. If every $(\E_{C_u}^\dagger)$-fixed element
 	in the compressed sector $P_u \MN{D} P_u$ is a scalar multiple of the identity,
 	then every blocked sector tensor $C_u$ has primitive transfer map and is
 	irreducible.
@@ -2700,7 +2720,7 @@ primitivity and normality results to the sector blocks.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. Then every blocked sector tensor $C_u$ has
+	be the blocked cyclic-sector decomposition. Then every blocked sector tensor $C_u$ has
 	primitive transfer map and is irreducible.
 \end{theorem}
 
@@ -2709,7 +2729,7 @@ primitivity and normality results to the sector blocks.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provides compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2725,7 +2745,7 @@ primitivity and normality results to the sector blocks.
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor}
 	For any MPS tensor $A$, there exist a period $p \ge 1$,
-	a zero-tail bond dimension $D_0$ for the separated all-zero blocks,
+	an all-zero leftover bond dimension $D_0$ for the separated all-zero blocks,
 	nonzero weights $(\mu_k)_{k=1}^r$,
 	and left-canonical blocks $(B_k)_{k=1}^r$ with primitive transfer
 	maps and positive bond dimensions, such that
@@ -2883,25 +2903,42 @@ primitivity and normality results to the sector blocks.
 \begin{definition}[Norm-class partition]
 	\label{def:norm_class_grouping_data}
 	\lean{MPSTensor.NormClassGroupingData}\leanok
-	The grouping data consists of: norm classes, one representative value per class, class multiplicities, an enumeration of members in each class, and a regrouping identity recovering the full finite sum.
+	For weights $(\mu_k)_{k=1}^r$, partition $\{1,\ldots,r\}$ by
+	$k\sim \ell$ iff $|\mu_k|=|\mu_\ell|$.  For each norm value $\rho$ the
+	corresponding class has multiplicity
+	\[
+		m_\rho=\#\{k\mid |\mu_k|=\rho\}.
+	\]
+	The record also contains an enumeration of the indices in each class and the
+	identity that rewrites $\sum_k \mu_k^N\ket{V^{(N)}(A_k)}$ as the sum over
+	norm classes.
 \end{definition}
 
 \begin{definition}[Norm-class enumeration in decreasing order]
 	\label{def:norm_class_grouping}
 	\lean{MPSTensor.normClassGroupingData}\leanok
 	\uses{def:norm_class_grouping_data}
-	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
+	From a finite weight family, enumerate the distinct values of $|\mu_k|$ as
+	\[
+		\rho_1>\rho_2>\cdots>\rho_s
+	\]
+	and attach to each $\rho_a$ the indices $k$ with $|\mu_k|=\rho_a$.
 \end{definition}
 
-\begin{lemma}[Restricted norm-class collapse]
+\begin{lemma}[Restricted norm-class representative sum]
 	\label{lem:restricted_norm_class_collapse}
 	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	Let $(\mu_k,A_k)_{k=1}^r$ be a weighted block family with
 	$\mu_k \neq 0$ for every $k$. If equal-norm blocks represent the same
-	MPS family, then one obtains a sector decomposition whose associated total
-	tensor generates the same MPV family as $\bigoplus_{k=1}^r \mu_k A_k$, and
-	whose sector norms are strictly decreasing.
+	MPS family, choose one representative $A_{a}$ for each norm class
+	$\{k\mid |\mu_k|=\rho_a\}$.  Then the MPV expansion
+	\[
+		\sum_{k=1}^r \mu_k^N\ket{V^{(N)}(A_k)}
+	\]
+	is rewritten as a sum over the representatives $A_a$.  The representative
+	norms satisfy $\rho_1>\cdots>\rho_s$; the copies inside a fixed norm class
+	retain the original weights of that class.
 \end{lemma}
 
 \begin{lemma}[Single norm class from phase-related MPVs]
@@ -2938,10 +2975,16 @@ primitivity and normality results to the sector blocks.
 	so the gauge phase must have modulus one.
 \end{proof}
 
-The preceding norm-class collapse is a restricted lemma, not the source BNT
-construction.  The phase-class construction below carries out that grouping step:
-it keeps minimal gauge-phase representatives and records repeated copies through
-sector weights.
+The preceding norm-class representative sum is a restricted lemma, not the
+source BNT construction.  In the source BNT form,
+\[
+	A^i =
+	\bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+	\mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+\]
+repeated copies of the same basis tensor contribute through
+$\sum_q\mu_{j,q}^N$.  The phase-class construction below chooses minimal
+gauge-phase representatives and keeps those repeated weights explicit.
 
 \begin{lemma}[Existential BNT independence from overlap limits]
 	\label{lem:bnt_li_from_overlap_limits_exists}
@@ -3015,16 +3058,21 @@ sector weights.
 	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
 \end{proof}
 
-\begin{definition}[MPV phase class data]
+\begin{definition}[MPV phase classes]
 	\label{def:mpv_phase_class_data}
 	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
 	\leanok
 	For a finite family of blocks, put $j \sim k$ when there is a nonzero
 	scalar factor $\zeta$ such that
 	$\ket{V^{(N)}(B_k)}=\zeta^N\ket{V^{(N)}(B_j)}$ for every length~$N$.
-	The class data enumerate the finite quotient, choose one representative per class,
-	give the scalar relating the representative to each member, and prove that
-	distinct representatives are not gauge-phase equivalent.
+	For each equivalence class choose a representative $j_a$ and scalars
+	$\zeta_{a,k}$ satisfying
+	\[
+		\ket{V^{(N)}(B_k)}
+		=\zeta_{a,k}^N\ket{V^{(N)}(B_{j_a})}.
+	\]
+	Distinct representatives are not related by a phase and a gauge
+	transformation.
 \end{definition}
 
 \begin{theorem}[Phase-class BNT sector construction]
@@ -3034,9 +3082,15 @@ sector weights.
 	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
 	For trace-preserving primitive irreducible blocks of positive bond dimension
 	with nonzero weights, there is a sector decomposition representing the same
-	weighted block sum and satisfying the BNT linear-independence condition.  The
-	construction chooses one representative per MPV phase class and absorbs the
-	nonzero scalar factors into the sector weights.
+	weighted block sum and satisfying the BNT linear-independence condition.  If
+	$B_k$ lies in the class of $B_{j_a}$ with
+	$\ket{V^{(N)}(B_k)}=\zeta_{a,k}^N\ket{V^{(N)}(B_{j_a})}$, then its
+	contribution
+	\[
+		\mu_k^N\ket{V^{(N)}(B_k)}
+		=(\zeta_{a,k}\mu_k)^N\ket{V^{(N)}(B_{j_a})}
+	\]
+	is written using the representative $B_{j_a}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -3052,7 +3106,7 @@ sector weights.
 \end{proof}
 
 
-\begin{theorem}[Phase-class BNT sector construction with one-sided overlap data]
+\begin{theorem}[Phase-class BNT sector construction with one-sided overlap limits]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho}
 	\leanok
@@ -3062,7 +3116,7 @@ sector weights.
 	with nonzero weights, there is a sector decomposition, obtained by choosing
 	one block per MPV phase class, which represents the same weighted block sum,
 	satisfies the BNT linear-independence condition, and has a basis satisfying
-	the single-family overlap-orthogonality data.  If the original blocks are
+	the single-family overlap-orthogonality conditions.  If the original blocks are
 	one-site injective, then the chosen basis blocks are one-site injective.
 \end{theorem}
 
@@ -3077,7 +3131,7 @@ sector weights.
 	separation of distinct chosen phase-class blocks gives off-overlap decay.
 \end{proof}
 
-\begin{theorem}[Phase-class BNT sector construction with overlap data]
+\begin{theorem}[Phase-class BNT sector construction with overlap limits]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
 	\leanok
@@ -3109,7 +3163,7 @@ sector weights.
 	the same finite-length MPV subspace as the original blocks at every system
 	size. Consequently, for trace-preserving primitive irreducible injective
 	blocks with nonzero weights, the one-sided BNT sector construction can be
-	chosen with all overlap data from
+	chosen with all overlap limits from
 	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data} and
 	with this representative-span identity.
 \end{theorem}
@@ -3298,7 +3352,7 @@ sector weights.
 	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
-\begin{theorem}[Sorted TP primitive irreducible data form a normal canonical form]%
+\begin{theorem}[Sorted TP primitive irreducible blocks form a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
 	\leanok
@@ -3312,8 +3366,10 @@ sector weights.
 
 \begin{proof}\leanok
 	\uses{def:is_normal_canonical_form}
-	This is the defining constructor for normal canonical form with all required
-	data supplied by the hypotheses.
+	The hypotheses are exactly the entries in the normal canonical form:
+	left-canonical blocks, primitive transfer maps, irreducibility, positive bond
+	dimensions, nonzero weights, and the order
+	$|\mu_1|\ge \cdots \ge |\mu_r|$.
 \end{proof}
 
 \begin{theorem}[Normal canonical form from an already primitive block decomposition]%
@@ -3348,10 +3404,11 @@ sector weights.
 \end{lemma}
 
 \begin{proof}\leanok
-	This is the block-matching statement for decompositions
-	applied to two decompositions that already satisfy the normal-canonical-form
-	and separated-representative hypotheses. The repeated-copy BNT comparison is
-	handled later by sector-decomposition and multiplicity data.
+	Apply the block-matching theorem to the two normal canonical forms.  This
+	lemma assumes the separated representatives and the coefficientwise limits;
+	the later BNT comparison keeps the copy numbers $r_j$ and the coefficients
+	$\mu_{j,q}$ explicit through the power sums
+	$\sum_q \mu_{j,q}^N$.
 \end{proof}
 
 \begin{theorem}[Common blocking period for two primitive normal tensors]%
@@ -3379,7 +3436,7 @@ sector weights.
 	\leanok
 	\uses{def:blocked_tensor, def:zero_mps_tensor, def:tensor_from_blocks}
 	Each of two tensors admits some blocking after which it decomposes
-	independently into an all-zero tensor of the zero-tail bond dimension
+	independently into an all-zero tensor of the all-zero leftover bond dimension
 	defined in Section~\ref{sec:zero_block_separation}, plus
 	left-canonical blocks with
 	primitive transfer maps, nonzero scalar weights, and positive bond
@@ -3446,7 +3503,7 @@ sector weights.
 	\leanok
 	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	Suppose two tensors have the same MPV family and each is expressed as an
-	all-zero tensor of the zero-tail bond dimension from
+	all-zero tensor of the all-zero leftover bond dimension from
 	Section~\ref{sec:zero_block_separation}, plus a weighted nonzero-block
 	tensor. Then the two nonzero-block tensors agree on every positive system
 	size, and at size $0$ the equality is exactly the equality of the two
@@ -3505,7 +3562,7 @@ sector weights.
 	\leanok
 	\uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:zero_mps_tensor}
 	If two tensors generate the same MPV family, then each tensor admits a blocked
-	decomposition into an all-zero tensor of the zero-tail bond dimension,
+	decomposition into an all-zero tensor of the all-zero leftover bond dimension,
 	plus nonzero left-canonical blocks
 	with primitive transfer maps and positive bond dimensions. The theorem also
 	retains, for each blocking period, the relation that the blocked tensors
@@ -3568,7 +3625,7 @@ sector weights.
 		lem:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	Apply Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}.
 	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
-	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion
+	per-block cyclic-sector decompositions on each side.  The nonzero unit-weight conclusion
 	is Lemma~\ref{lem:common_blocked_cyclic_sector_flat_weight_ne_zero}.
 \end{proof}
 

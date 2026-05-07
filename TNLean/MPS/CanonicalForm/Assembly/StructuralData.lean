@@ -30,7 +30,7 @@ sides have TP-primitive decompositions.
 
 ## Tags
 
-matrix product states, canonical form, common period, fundamental theorem
+matrix product states, canonical form, common period, after-blocking reduction
 -/
 
 namespace MPSTensor
@@ -38,16 +38,15 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## Fundamental Theorem of MPS (arXiv:1606.00608, after blocking)
+## Canonical-form reduction after blocking
 
 ### Overview
 
-The fundamental theorem of MPS (1606.00608 version, after blocking) asserts:
-
-For any MPS tensor `A`, there exists a blocking period `p > 0` such that
-`blockTensor A p` has a decomposition into a trivial block plus a direct sum
-of TP sectors, where each sector is left-canonical and the direct sum is
-`SameMPV₂`-equivalent to the blocked tensor.
+After blocking, the canonical-form reduction writes an MPS tensor as an
+all-zero summand together with a weighted direct sum of nonzero sectors:
+`blockTensor A p ~ zeroMPSTensor d D₀ + toTensorFromBlocks μ sectors`, with
+`p > 0`.  This is the formal counterpart of the source-paper allowance
+`∑ k, D_k ≤ D`, where zero blocks may occur.
 
 The full proof chain is:
 1. Zero-block separation (`exists_irreducible_blockDecomp_nonzeroBlocks`)
@@ -55,7 +54,7 @@ The full proof chain is:
 3. Common blocking to primitive (`exists_common_blocking_all_primitive_of_TP_irr`)
 4. Cyclic sector decomposition per block (`exists_cyclic_sector_decomp_after_blocking`)
 
-### Remaining mathematical inputs
+### Remaining mathematical assumptions
 
 The after-blocking primitive block decomposition provides:
 - A blocking period `p > 0`
@@ -76,18 +75,15 @@ cyclic sectors.
 It deliberately does not identify that period-removal length with the later
 finite blocking length used for common refinement or injectivity.
 
-The current comparison route uses the zero-tail block-span theorem
-`afterBlocking_sectorComparison_zeroTail_of_blockSpan`, and then the common
-phase-cover or BNT-cover theorems, rather than the retired common-block
-formulation. This keeps the formal statement aligned with the paper-level inputs:
-zero-block cancellation, finite-length span comparison, and the BNT
-sector-matching step.
+The formal comparison uses the zero-tail block-span theorem
+`afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common
+phase-cover or BNT-cover theorems.  The mathematical assumptions are:
+zero-block cancellation, finite-length span equality, and BNT sector matching.
 
-The subsequent common-sector step flattens the per-block cyclic-sector data to a
-single common physical blocking level. The remaining paper-level inputs are
-one-site injectivity (or a blocked replacement), finite-length span comparison
-for the flattened family, and the zero-tail length-zero identity from the
-structural after-blocking reduction itself.
+The common-sector theorem then rewrites the cyclic sectors at one common
+physical blocking length.  The remaining assumptions are one-site injectivity
+(or a blocked replacement), finite-length span equality at that length, and
+the length-zero identity for the all-zero leftover block.
 -/
 
 section FundamentalTheoremAfterBlocking

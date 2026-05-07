@@ -8,19 +8,19 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 /-!
-# Multi-block Fundamental Theorem of MPS (block-diagonal assembly)
+# Gauge equivalence for direct sums of block tensors
 
-This file contains the *assembly* step for the multi-block Fundamental Theorem.
+The central identity is the direct-sum conjugation formula
+`B k i = X k * A k i * (X k)⁻¹` for all `k,i`
+implies
+`toTensorFromBlocks μ B i = X * toTensorFromBlocks μ A i * X⁻¹`,
+where `X` is the block-diagonal matrix with diagonal blocks `X k`.
 
-The single-block theorem (`fundamentalTheorem_singleBlock`) shows that if an injective block tensor
-`A` generates the same MPV family as `B`, then `A` and `B` are related by a gauge transform
-(simultaneous similarity by some `X ∈ GL`).
-
-For multi-block canonical forms, the key new ingredient is that blockwise gauge transforms assemble
-into a *block-diagonal* global gauge transform.
-
-To avoid the definitional-equality/cast issues that arise when comparing two `CanonicalForm`s, we
-work with a parametric block-diagonal constructor `toTensorFromBlocks`.
+For each block index `k`, the injective MPV theorem gives an invertible matrix
+`X k` satisfying `B k i = X k * A k i * (X k)⁻¹` whenever the block tensors
+`A k` and `B k` generate the same MPV family.  The direct-sum formula above then
+uses the block-diagonal matrix `⊕_k X k` for
+`toTensorFromBlocks μ A = ⊕_k μ_k A_k`.
 -/
 
 variable {d : ℕ}
@@ -38,7 +38,7 @@ private theorem blockDiagonal'_mul_one
   rw [← Matrix.blockDiagonal'_mul, show (fun k => f k * g k) = 1 from funext hfg,
     Matrix.blockDiagonal'_one]
 
-/-- Assemble blockwise invertible matrices into a block-diagonal element of `GL`. -/
+/-- Form a block-diagonal element of `GL` from a family of invertible matrices. -/
 noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL ((k : Fin r) × Fin (dim k)) ℂ :=
   ⟨Matrix.blockDiagonal' (fun k => (X k : Matrix _ _ ℂ)),
@@ -56,7 +56,7 @@ variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
 end ReindexGL
 
-/-! ## Block-diagonal gauge construction -/
+/-! ## Gauge equivalence for direct sums -/
 
 section GaugeConstruction
 
@@ -64,8 +64,9 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable (μ : Fin r → ℂ)
 variable (A B : (k : Fin r) → MPSTensor d (dim k))
 
-/-- Block-diagonal gauge assembly with an explicit family of gauge matrices. -/
-theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
+/-- If `B_k^i = X_k A_k^i X_k⁻¹` for every block, then the weighted direct sums
+are gauge equivalent by the block-diagonal matrix `⊕_k X_k`. -/
+lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
     (hX : ∀ k : Fin r, ∀ i : Fin d,
       B k i =
@@ -102,8 +103,8 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockConj
   rw [htoB, htoA, hBD]
   simp [map_mul, hXfin, hXfin_inv, Matrix.mul_assoc]
 
-/-- Block-diagonal gauge assembly from blockwise `GaugeEquiv`. -/
-theorem gaugeEquiv_toTensorFromBlocks_of_blockGauge
+/-- Gauge equivalence of weighted direct sums from gauge equivalence of each summand. -/
+lemma gaugeEquiv_toTensorFromBlocks_of_blockGauge
     (hGauge : ∀ k : Fin r, GaugeEquiv (A k) (B k)) :
     GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
       (toTensorFromBlocks (d := d) (μ := μ) B) := by
@@ -111,14 +112,14 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockGauge
   choose X hX using hGauge
   exact gaugeEquiv_toTensorFromBlocks_of_blockConj μ A B X hX
 
-/-- Block-diagonal gauge assembly absorbing per-block gauge phases into weights.
+/-- Gauge equivalence of weighted direct sums after absorbing phases into the weights.
 
-Given blockwise gauge-phase equivalences
+Given per-block gauge-phase equivalences
 `B k i = ζ k • (X k * A k i * (X k)⁻¹)` and weight identities
-`μA k = μB k * ζ k`, this assembles a global `GaugeEquiv` between the
+`μA k = μB k * ζ k`, this gives a global `GaugeEquiv` between the
 weighted block-diagonal tensors `toTensorFromBlocks μA A` and
 `toTensorFromBlocks μB B`. -/
-theorem gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
+lemma gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
     (μA μB : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
@@ -160,22 +161,24 @@ theorem gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
 
 end GaugeConstruction
 
-/-! ## Multi-block Fundamental Theorem (parametric version) -/
+/-! ## Per-block MPV equality and direct sums -/
 
 section FundamentalTheoremMulti
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-/-- Blockwise application of the single-block Fundamental Theorem. -/
-theorem fundamentalTheorem_multiBlock_blocks
+/-- If `A_k` is injective and `𝓥(A_k)=𝓥(B_k)` for every `k`, then
+`A_k` and `B_k` are gauge equivalent for every `k`. -/
+lemma fundamentalTheorem_multiBlock_blocks
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k : Fin r, IsInjective (A k))
     (hSame : ∀ k : Fin r, SameMPV (A k) (B k)) :
     ∀ k : Fin r, GaugeEquiv (A k) (B k) :=
   fun k => fundamentalTheorem_singleBlock (hA k) (hSame k)
 
-/-- Global multi-block Fundamental Theorem (assembly version). -/
-theorem fundamentalTheorem_multiBlock_global
+/-- If `𝓥(A_k)=𝓥(B_k)` for every injective block `A_k`, then
+`⊕_k μ_k A_k` and `⊕_k μ_k B_k` are gauge equivalent. -/
+lemma fundamentalTheorem_multiBlock_global
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : ∀ k : Fin r, IsInjective (A k))

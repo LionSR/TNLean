@@ -400,7 +400,7 @@ private theorem block_separation_core_of_crossOverlap_tendsto_one
 
 end BlockSeparationCoreInduction
 
-/-! ### Block separation core lemma (mixed-transfer / overlap route)
+/-! ### Block separation core lemma (mixed-transfer / overlap argument)
 
 This is the literature-aligned block-separation step in canonical form.
 Compared to the naive statement in `PiAlgebra/BlockSeparation.lean`, we assume:
@@ -509,7 +509,7 @@ lemma block_separation_all_words
     ∀ k, SameMPV (A k) (B k) :=
   block_separation_core μ A B hμ_strict hμ_ne_zero hA_inj hB_inj hA_lc hB_lc hA_overlap h_summed
 
-/-- NT / normal-canonical-form version of `block_separation_all_words`.
+/-- NT / normal-canonical formulation of `block_separation_all_words`.
 
 Besides irreducibility and left-canonical normalization on both block families,
 this lemma also assumes the self-overlap convergence hypothesis on the
@@ -518,12 +518,12 @@ this lemma also assumes the self-overlap convergence hypothesis on the
 The proof is the same peeling / induction argument as `block_separation_core`.
 The geometric decay again comes from the strict weight ordering after dividing by
 the leading weight, while the NT overlap lemmas provide the boundedness and
-contradiction inputs. At the identification step,
+contradiction hypotheses. At the identification step,
 `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` first excludes a
 bond-dimension mismatch, and
 `gaugePhaseEquiv_of_mpvOverlap_tendsto_one_of_irreducible_TP` replaces the
 injective equal-dimension overlap-decay contradiction via the irreducible
-modulus-one-eigenvalue-rigidity route. -/
+modulus-one-eigenvalue-rigidity argument. -/
 lemma block_separation_all_words_of_irreducible_TP
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -589,7 +589,7 @@ private lemma per_block_sameMPV_of_sameMPV₂_of_card_le_one
     simp only [Fin.sum_univ_one, smul_eq_mul] at hEq
     exact mul_left_cancel₀ (pow_ne_zero N (hμ_ne_zero 0)) hEq
 
-/-- Additive split version of `per_block_sameMPV_of_canonical_form`.
+/-- Additive split form of `per_block_sameMPV_of_canonical_form`.
 
 This lemma isolates exactly the pieces of the canonical-form bundle used in the
 block-separation argument: injectivity, left-canonical normalization, strict nonzero weights,
@@ -686,7 +686,7 @@ lemma fundamentalTheorem_of_separated_canonical_data
     hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
   exact fundamentalTheorem_multiBlock_full μ A B hA_inj.block_injective hSep
 
-/-- Explicit gauge-matrix version of `fundamentalTheorem_of_separated_canonical_data`. -/
+/-- Explicit gauge-matrix form of `fundamentalTheorem_of_separated_canonical_data`. -/
 lemma fundamentalTheorem_of_separated_canonical_data_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -705,8 +705,9 @@ lemma fundamentalTheorem_of_separated_canonical_data_explicit
   exact fundamentalTheorem_multiBlock_explicit A B hA_inj.block_injective hSep
 
 /-- Reformulation of `fundamentalTheorem_of_separated_canonical_data` for canonical-form data
-with an explicit strict-ordering witness. -/
-theorem fundamentalTheorem_canonicalForm
+with an explicit strict-ordering witness. This is the strict same-structure
+specialization, not the full source-paper canonical-form theorem. -/
+lemma fundamentalTheorem_canonicalForm
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
     (hA : IsCanonicalForm μ A)
