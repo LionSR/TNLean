@@ -1158,9 +1158,11 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">21.4</span>
-    <span class="theorem_thmtitle">Sum of exponentials</span>
+    <span class="theorem_thmtitle">Sum of exponentials (spectral expansion interface)</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1183,10 +1185,6 @@
         <ul class="uses">
           
           <li><a href="ch-correlations.html#def:connected_correlator">Definition 21.3</a></li>
-          
-          <li><a href="ch-spectral.html#thm:spectral_radius_le_one">Theorem 9.15</a></li>
-          
-          <li><a href="ch-qpf.html#thm:qpf">Theorem 8.10</a></li>
           
         </ul>
     
@@ -1217,11 +1215,17 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For a normal MPS, the connected correlator admits a spectral expansion of the form </p>
+  <p>   If coefficients \(c_j\in \mathbb {C}\) and eigenvalues \(\lambda _j\in \mathbb {C}\) (\(j=1,\dots ,D^2-1\)) satisfy, for all \(n\ge 0\), </p>
 <div class="displaymath" id="a0000050203">
   \[  C(X,Y;n) = \sum _{j=1}^{D^2-1} c_j\, \lambda _j^n,  \]
 </div>
-<p> where \(\lambda _j\) are subleading transfer-matrix eigenvalues. </p>
+<p> then the connected correlator equals the stated sum of exponentials. The source&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Sec.&#160;4.5
+	]
+</span> asserts that such an expansion always exists for a normal MPS via the transfer-map spectral decomposition. </p>
 
   </div>
 </div>
@@ -1233,7 +1237,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The leading eigenvalue contribution (\(\lambda _1=1\)) equals \(\langle X_0\rangle \langle Y_0\rangle \) and cancels in the connected part. Apply spectral decomposition to \(\mathcal{E}_A^n\). </p>
+  <p>Given the expansion hypothesis, the equality is immediate. The source&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Sec.&#160;4.5
+	]
+</span> derives this expansion from the spectral decomposition of \(\mathcal{E}_A^n\) restricted to the complement of the fixed-point eigenspace: the leading eigenvalue \(\lambda _1=1\) contributes \(\langle X_0\rangle \langle Y_0\rangle \), which is subtracted in the connected correlator, leaving the sum over subleading eigenvalues. </p>
 
   </div>
 </div>
@@ -1243,9 +1253,11 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">21.5</span>
-    <span class="theorem_thmtitle">Exponential decay bound</span>
+    <span class="theorem_thmtitle">Exponential decay bound (interface)</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1267,7 +1279,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#thm:correlator_sum_exponentials">Theorem 21.4</a></li>
+          <li><a href="ch-correlations.html#def:connected_correlator">Definition 21.3</a></li>
           
         </ul>
     
@@ -1298,10 +1310,17 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If \(|\lambda _j| \le |\lambda _2| {\lt} 1\) for all subleading eigenvalues, then there exists \(C_{XY}\ge 0\) such that </p>
+  <p>   If a constant \(C_{XY}\in \mathbb {R}\) and \(\lambda _2\in \mathbb {C}\) satisfy, for all \(n\ge 0\), </p>
 <div class="displaymath" id="a0000050205">
-  \[  |C(X,Y;n)| \le C_{XY}\, |\lambda _2|^n.  \]
+  \[  |C(X,Y;n)| \le C_{XY}\, |\lambda _2|^n,  \]
 </div>
+<p> then the connected correlator satisfies that exponential decay bound. The source&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Sec.&#160;4.5
+	]
+</span> obtains this by combining the sum-of-exponentials expansion with the triangle inequality. </p>
 
   </div>
 </div>
@@ -1313,7 +1332,13 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine the sum-of-exponentials expansion with the triangle inequality. </p>
+  <p>Given the bound hypothesis, the estimate is immediate. The source&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	, Sec.&#160;4.5
+	]
+</span> obtains this bound by applying the triangle inequality to the sum-of-exponentials expansion and using the spectral gap condition \(|\lambda _j|\le |\lambda _2|{\lt}1\) for all subleading eigenvalues. </p>
 
   </div>
 </div>
@@ -1348,6 +1373,10 @@
           
           <li><a href="ch-channels.html#thm:primitive_compl_lt_one">Theorem 5.51</a></li>
           
+          <li><a href="ch-spectral.html#thm:spectral_gap_irr_tp">Theorem 9.29</a></li>
+          
+          <li><a href="ch-correlations.html#thm:spectral_gap_wielandt">Theorem 21.11</a></li>
+          
         </ul>
     
       </div>
@@ -1358,7 +1387,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  The hypothesis “\(|\lambda _2| {\lt} 1\)” in Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">21.5</a> is precisely the <em>spectral gap</em> condition for the transfer map \(\mathcal{E}_A\). For primitive channels, the complementary spectral gap \(\rho (\mathcal{E}_A - P) {\lt} 1\) is established in Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">5.51</a> (Chapter&#160;<a href="ch-channels.html">5</a>); for irreducible trace-preserving tensors, the analogous result is Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">9.29</a>. Thus the exponential decay of connected correlations follows directly from the block separation theory once the spectral decomposition is in hand. </p>
+  <p>  The hypothesis “\(|\lambda _2| {\lt} 1\)” in Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">21.5</a> is the source-paper <em>spectral gap</em> condition for the transfer map \(\mathcal{E}_A\). The complementary spectral gap \(\rho (\mathcal{E}_A - P) {\lt} 1\) is established for primitive channels (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">5.51</a>, Chapter&#160;<a href="ch-channels.html">5</a>), for irreducible trace-preserving tensors (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">9.29</a>), and quantitatively for injective tensors (Theorem&#160;<a href="ch-correlations.html#thm:spectral_gap_wielandt">21.11</a>). Thus the analytical input needed to make Theorems&#160;<a href="ch-correlations.html#thm:correlator_sum_exponentials">21.4</a> and&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">21.5</a> unconditional is already present; what remains is extracting the spectral expansion coefficients \(c_j,\lambda _j\) from the eigendecomposition of \(\mathcal{E}_A\) (Issue&#160;#1447). </p>
 
   </div>
 </div>
@@ -1391,7 +1420,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-correlations.html#thm:correlator_exponential_bound">Theorem 21.5</a></li>
+          <li><a href="ch-mps.html#def:transfer_map">Definition 2.5</a></li>
           
         </ul>
     
@@ -1422,7 +1451,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   The correlation length associated with \(\lambda _2\) is </p>
+  <p>   The correlation length associated with a subleading eigenvalue \(\lambda _2\) of the transfer map (\(|\lambda _2|{\lt}1\)) is </p>
 <div class="displaymath" id="a0000050206">
   \[  \xi := -\frac{1}{\log |\lambda _2|}.  \]
 </div>
