@@ -85,7 +85,7 @@ The source BNT characterization selects one representative from each
 phase-gauge equivalence class and compares the power sums of weights.  The
 formalization separates this into overlap decay, eventual linear independence,
 permutation rigidity, sector-weight comparison, and phase absorption.  The
-heterogeneous block-matching theorem is a genuine formal endpoint for the
+heterogeneous block-matching theorem is a genuine formal conclusion for the
 block-matching part, while the final global weighted gauge equivalence remains
 the paper-level equal-MPV target.
 The overlap-to-linear-independence and change-of-basis declarations are
@@ -159,6 +159,49 @@ should not remain as a headline theorem in the paper-level blueprint.
 The non-periodic Fundamental Theorem route should be read with the following
 separation of proof roles.
 
+\subsection{Final target trace-back}
+
+For the non-periodic route, the source target is the Fundamental Theorem for
+canonical-form MPS and its equal-MPV corollary, after the tensor has been put in
+normal form and the periodicity has been removed by blocking.  In the notation
+of \cite[lines~347--356]{Cirac2016MPDO_arXiv}, the proportional statement
+compares two canonical-form tensors with the same family of MPVs up to a scalar
+sequence and concludes a block permutation, phases, and blockwise gauges.  The
+equal-MPV corollary is the special case in which the scalar sequence is
+identically \(1\), but the proof still passes through the BNT coefficient
+comparison.
+
+The formal route currently has three distinct layers that should not be
+identified with one another.
+\begin{enumerate}
+  \item The single-block injective theorem
+    \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
+    gauge theorem.  It is a source-level theorem only for one injective block,
+    not for the multi-block BNT comparison.
+  \item The strict canonical-form BNT declarations
+    \path{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT} and
+    \path{MPSTensor.fundamentalTheorem_equalMPV_CFBNT} are strict
+    representative forms.  Their exact restrictions are recorded in the
+    paragraph on paper-level targets below.
+  \item The sector-decomposition theorem
+    \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
+    is the current formal statement closest to the BNT part of the source
+    proof: from a supplied sector-basis matching, linear independence, and
+    equality of total MPV families, it proves the corresponding equality of
+    sector-weight multisets, up to the phases in the matching.  The source-level
+    equal-MPV corollary is obtained only after the sector-basis matching itself
+    is derived from the source hypotheses.
+\end{enumerate}
+
+Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
+Rather, the paper suppresses the formal separation between deriving the BNT
+comparison data from the source hypotheses and applying the existing comparison
+theorems to that data.  The remaining theorem-level work is to obtain the
+sector matching, copy-count equalities, and fixed-length direct-sum span
+hypotheses from the source assumptions.  Once those inputs are available, the
+existing strict and sector-decomposition statements combine to give the
+paper-level theorem; they are not additional paper theorems.
+
 \paragraph{Paper-level targets.}
 The proportional canonical-form theorem and the equal-MPV corollary are the
 source targets.  Their source proof is formulated after choosing BNT
@@ -169,20 +212,21 @@ representatives and retaining the repeated-copy coefficients
 \]
 The current strict-representative declarations
 \path{fundamentalTheorem_proportionalMPV_CFBNT} and
-\path{fundamentalTheorem_equalMPV_CFBNT} are therefore special-case endpoints:
-they apply after the repeated-copy structure has been eliminated or supplied as
-explicit coefficient data.  They should not be cited as the general
-arXiv:1606.00608 theorem unless the missing BNT multiplicity comparison has
-already been discharged.  Heterogeneous variants that state the permutation,
-phases, gauges, and weight matching for possibly different sector indices are
-legitimate theorem endpoints only when their hypotheses are obtained from the
-same BNT comparison.
+\path{fundamentalTheorem_equalMPV_CFBNT} are therefore special-case statements.
+The proportional comparison assumes explicit coefficient data; the equal-MPV
+common-block comparison assumes the repeated-copy structure has already been
+matched into common weights and dimensions.  Neither statement should be cited
+as the general arXiv:1606.00608 theorem unless the missing BNT multiplicity
+comparison has already been discharged.  Heterogeneous variants that state the
+permutation, phases, gauges, and weight matching for possibly different sector
+indices are legitimate theorem statements only when their hypotheses are
+obtained from the same BNT comparison.
 
-\paragraph{Conditional after-blocking consumers.}
+\paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source
 canonical-form, BNT selection, block-injective span, and BNT matching inputs have
 been supplied.  The common-phase-cover and BNT-cover formulations are
-conditional consumers of those inputs.  They should stay visibly conditional
+conditional statements using those inputs.  They should stay visibly conditional
 until the hypotheses are produced from the paper's assumptions.  In particular,
 the finite-length span or phase-cover assumptions are not extra hypotheses in
 the source theorem; they are the formal names for proof inputs that still have
@@ -250,7 +294,7 @@ paper-level theorems.
       \texttt{perBlock\_sameMPV\_of\_equalMPV\_CFBNT}
     \]
     is only the extraction of the blockwise equality conclusion from the
-    equal-MPV theorem.  Neither should be counted as an additional source-level
+    common-block equal-MPV lemma.  Neither should be counted as an additional source-level
     Fundamental Theorem.
   \item The implication
     \[
