@@ -743,7 +743,9 @@ The scalar conditional expectation $E_\sigma$ is the special case where
 the fixed-point $*$-subalgebra is the scalar algebra $\C\cdot\Id$
 (the primitive-channel case). The general irreducible case with
 nontrivial period requires the Wedderburn block decomposition
-(\cite[Theorem~6.14]{Wolf2012Quantum}, not yet formalized here).
+of \cite[Theorem~6.14]{Wolf2012Quantum}.
+% The nontrivial-period conditional expectation is outside the present
+% formal scope of this section.
 
 \begin{definition}[Conditional expectation]\label{def:is_conditional_expectation}
     \lean{Kraus.IsConditionalExpectation}
@@ -1069,7 +1071,7 @@ sector is positive definite.
 
 \section{Wedderburn decomposition of the fixed-point algebra}
 
-This section formalizes the structure theorem for the fixed-point
+This section proves the structure theorem for the fixed-point
 algebra of a trace-preserving Kraus map, following
 \cite[Theorems~6.12--6.14]{Wolf2012Quantum}. The proof uses the
 Jacobson radical characterization of semisimplicity
@@ -1239,14 +1241,14 @@ used later.
     expectation onto the adjoint fixed-point $*$-subalgebra.
 \end{theorem}
 
-\section{Multi-cycle block-permutation data}
+\section{Multi-cycle block-permutation structure}
 
-This section formalizes the block-permutation structure underlying the
+This section develops the block-permutation structure underlying the
 cycle decomposition of \cite[Theorem~6.16]{Wolf2012Quantum}. The
 multi-cycle decomposition refines the single-cycle case to handle
 arbitrary peripheral periods.
 
-\begin{definition}[Block-permutation data]
+\begin{definition}[Block-permutation structure]
     \label{def:cycle_structure}
     \lean{CycleStructure}
     \leanok
@@ -1263,7 +1265,7 @@ arbitrary peripheral periods.
     for every $k \in \iota$ and $X \in \MN{D}$.
 \end{definition}
 
-\begin{definition}[Multi-cycle block-permutation data]
+\begin{definition}[Multi-cycle block-permutation structure]
     \label{def:multi_cycle_decomposition}
     \lean{MultiCycleDecomposition}
     \leanok
@@ -1319,7 +1321,7 @@ arbitrary peripheral periods.
     Theorem~\ref{thm:multi_cycle_preserves_corner_pow_period}.
 \end{proof}
 
-\begin{definition}[Flattening to single-index block-permutation data]
+\begin{definition}[Flattening to a single-index block-permutation structure]
     \label{def:multi_cycle_to_cycle_structure}
     \lean{MultiCycleDecomposition.toCycleStructure}
     \leanok
@@ -1335,7 +1337,7 @@ arbitrary peripheral periods.
 
 \section{Peripheral eigenvalue group structure}
 
-This section formalizes the peripheral spectrum structure of
+This section proves the peripheral spectrum structure of
 \cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
 the peripheral eigenvalues form a finite cyclic group whose order
 divides the bond dimension.
