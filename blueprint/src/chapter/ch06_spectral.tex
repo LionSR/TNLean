@@ -738,7 +738,9 @@ the Perron--Frobenius fixed point.
 
 \section{Conditional expectation from a faithful fixed point}
 
-This section follows \cite[Section~6.4, Theorem~6.15]{Wolf2012Quantum}.
+This section follows \cite[Section~6.4]{Wolf2012Quantum}; the conditional
+expectation is built from the fixed-point algebra of
+\cite[Theorem~6.14]{Wolf2012Quantum} via \cite[(1.40)]{Wolf2012Quantum}.
 The scalar conditional expectation $E_\sigma$ is the special case where
 the fixed-point $*$-subalgebra is the scalar algebra $\C\cdot\Id$
 (the primitive-channel case). The general irreducible case with
@@ -1074,10 +1076,9 @@ sector is positive definite.
 This section proves the structure theorem for the fixed-point
 algebra of a trace-preserving Kraus map, following
 \cite[Theorems~6.12--6.14]{Wolf2012Quantum}. The proof uses the
-Jacobson radical characterization of semisimplicity
-(\cite[Theorem~6.14]{Wolf2012Quantum}) and the Wedderburn--Artin
-structure theorem for finite-dimensional semisimple algebras over an
-algebraically closed field.
+Jacobson radical characterization of semisimplicity together with the
+Wedderburn--Artin structure theorem for finite-dimensional semisimple
+algebras over an algebraically closed field.
 
 \begin{theorem}[Fixed-point algebra is semisimple]%
     \label{thm:fixedPointAlgebra_isSemisimpleRing}
@@ -1339,8 +1340,10 @@ arbitrary peripheral periods.
 
 This section proves the peripheral spectrum structure of
 \cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
-the peripheral eigenvalues form a finite cyclic group whose order
-divides the bond dimension.
+the peripheral eigenvalues form a finite cyclic group.
+The trace-preserving refinement that the order divides the bond
+dimension is proved in
+Theorem~\ref{thm:peripheral_cyclic_group}.
 
 \begin{lemma}[Peripheral eigenvectors are invertible]%
     \label{lem:isUnit_peripheral_eigenvector}
