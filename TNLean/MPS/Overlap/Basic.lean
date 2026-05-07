@@ -35,7 +35,8 @@ abbrev Cfg (d N : ℕ) := Fin N → Fin d
 /-- The Hilbert space of MPV coefficients, viewed as an `ℓ²` space over configurations. -/
 abbrev MPVSpace (d N : ℕ) := EuclideanSpace ℂ (Cfg d N)
 
-/-- The MPV coefficients of `A` at system size `N`, bundled as a vector in `MPVSpace d N`. -/
+/-- The MPV coefficients of `A` at system size `N`, as an element of the Hilbert space
+`MPVSpace d N`. -/
 noncomputable def mpvState {d D : ℕ} (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
   (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm (fun σ => mpv A σ)
 
