@@ -221,7 +221,6 @@ import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
-import TNLean.MPS.FundamentalTheorem.CoefficientConvergence
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
