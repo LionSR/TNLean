@@ -402,7 +402,8 @@
     \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
     \draw[tn leg] (tnL.east) -- (tnX.west);
     \draw[tn leg] (tnX.east) -- (tnR.west);
-    \draw[tn leg] (tnL.west) .. controls +(-0.60,-0.80) and +(0.60,-0.80) .. (tnR.east);
+    \draw[tn leg] (tnL.west) -- ++(-0.15,0) -- ++(0,-0.78)
+                  -- ++(1.90,0) -- ++(0,0.78) -- (tnR.east);
     \node at (0.80,-0.88) {$\operatorname{Tr}$};
   \end{tikzpicture}%
 }
@@ -417,8 +418,9 @@
     \TN@uplabel{tnL}{\TN@physlabeloff}{#1}
     \TN@uplabel{tnR}{\TN@physlabeloff}{#2}
     \draw[tn leg] (tnL.east) -- (tnR.west);
-    \draw[tn leg] (tnL.west) .. controls +(-0.30,-0.55) and +(-0.30,0.55) .. (tnY.west);
-    \draw[tn leg] (tnY.east) .. controls +(0.30,0.55) and +(0.30,-0.55) .. (tnR.east);
+    \draw[tn leg] (tnL.west) -- ++(-0.15,0) -- ++(0,-0.55) -- (tnY.west);
+    \draw[tn leg] (tnY.east) -- (1.75,-0.55) -- (1.75,0) -- (tnR.east);
+    \node at (0.80,-1.00) {$\operatorname{Tr}$};
   \end{tikzpicture}%
 }
 
