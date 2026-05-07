@@ -124,8 +124,8 @@ statement is
 \texttt{MPSTensor.fundamentalTheorem\_after\_blocking\_commonLength\_commonSector},
 with the one-sided relabeling-compatible zero-tail statement
 \texttt{MPSTensor.zeroTail\_commonFlat\_of\_reindexed}; see
-\path{TNLean/MPS/CanonicalForm/SectorComparison/StructuralTheorem.lean:698--774} and
-\path{TNLean/MPS/CanonicalForm/SectorComparison/StructuralTheorem.lean:902--939}.}
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean} and
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.}
 This is why the canonical-form theorem supplies relabeled common-sector
 families and a conditional label-compatibility statement, rather than immediately
 replacing every canonical nonzero part after blocking by its flattened sector tensor.
@@ -158,7 +158,11 @@ and common-phase-cover overlap-span adapters, and the proportional-decomposition
 specialization. They are located at
 \path{TNLean/MPS/CanonicalForm/PhaseCover.lean},
 \path{TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean}, and
-\path{TNLean/MPS/CanonicalForm/SectorComparison/OverlapSpanComparison.lean}.}
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonPrimitiveProportionalData.lean};
+the main adapter names are
+\path{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq},
+\path{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover}, and
+\path{MPSTensor.exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion}.}
 These lemmas state precisely what comparison data are needed; they do not by
 themselves derive all of that data from an arbitrary equality of total MPV
 families.
