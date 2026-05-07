@@ -535,18 +535,59 @@ private theorem mpvOverlap_blockTensor_self_eq
   rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
   simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
 
-/-- Orthogonal-corner rigidity for compressed cyclic sectors.
+/-- Orthogonal-corner trace rigidity for compressed cyclic sectors.
 
-This is the missing linear-algebra step behind the sector separation statement:
-if two compressed sectors come from orthogonal projections in the same cyclic
-decomposition, their trace functionals cannot be related by a nonzero
-gauge-phase transform.  The proof should use the trace identities
-`mpv(blocks k) = tr(P k · -)`, the cyclic corner structure, and
-`P u * P v = 0`.
+**Gap analysis (Issue #871).**  This lemma asserts that distinct compressed
+sectors from the same cyclic decomposition cannot be gauge-phase equivalent.
+The mathematical proof in arXiv:1708.00029 (Appendix A, lines 930–950) relies
+on the block-diagonal canonical form (BDCF) lemma: distinct cyclic sectors
+have linearly independent MPV families at sufficiently large system sizes.
+A gauge-phase equivalence would force those MPV families to be proportional
+(via `mpv_eq_pow_mul_of_gaugePhase`), contradicting eventual linear
+independence.
 
-Keeping this as a narrow lemma lets the main sector-separation result expose all
-currently available structural facts instead of hiding the projection argument
-behind a top-level `sorry`. -/
+In the current codebase the eventual linear-independence statement is
+available only under the *hypothesis* of non-gauge-equivalence (see
+`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
+in `PhaseClassSectorData.lean`), which gives the direction
+
+  `¬ GaugePhaseEquiv`  →  eventually linear independent.
+
+What is needed here is the converse of that implication for cyclic-sector
+blocks, i.e. a proof that orthogonal cyclic sectors **are** eventually
+linearly independent.  That converse is not yet exported, so this lemma
+remains a documented gap rather than a closed proof.
+
+**Proof sketch when the converse is available.**  Assume a gauge-phase
+equivalence `blocks v = ζ · X · (cast blocks u) · X⁻¹` with `ζ ≠ 0`.
+Then `mpv_eq_pow_mul_of_gaugePhase` gives
+`mpv(blocks v) σ = ζ ^ N · mpv(blocks u) σ` for every configuration
+`σ` of length `N`.  By `hTrace` this becomes
+
+  `trace (P v · W_σ) = ζ ^ N · trace (P u · W_σ)`
+
+for all blocked words `W_σ = evalWord (blockTensor A m) σ`.
+Because `P u` commutes with every blocked letter (`hComm`) and the blocked
+letter products are invariant under cyclic permutations, the single-site
+translation operator `T` (the adjoint transfer map `transferMap Aᴴ`)
+acts on the level of the trace functional by shifting the projection index:
+
+  `trace (P (k+1) · W_σ) = trace (T (P (k+1)) · W_σ) = trace (P k · W_σ)`.
+
+Iterating this shift through the finite cyclic group `Fin m`, the gauge-phase
+equivalence propagates to all shifts `P_{v+l}`, `P_{u+l}`, yielding
+proportionality of the MPV families attached to **every** shifted pair.
+Since `u ≠ v`, some pair of distinct projections would then have proportional
+MPV families, which contradicts eventual linear independence of the cyclic
+sector states (the missing BDCF converse).
+
+**Additional data available at the call site.**  The caller
+`sectorBlocks_not_gaugePhaseEquiv_of_ne` holds `IsCyclicSectorDecomp A blocks`,
+which already supplies the compression `∗`-algebra isomorphisms `φ k` and
+the intertwining condition.  Those data carry the per-sector primitivity and
+irreducibility that make the BDCF converse true.  Once that converse is added
+to the codebase (e.g. as a lemma in `CanonicalForm/BlockDiagonalCommutant`),
+the `sorry` below can be discharged by the procedure outlined above. -/
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
@@ -569,6 +610,10 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     ¬ GaugePhaseEquiv
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim) (blocks u))
       (blocks v) := by
+  -- See the docstring above for the complete proof strategy.
+  -- This `sorry` is the single remaining blocker for the self-overlap chain
+  -- (`sectorOverlap_tendsto_delta_of_cyclicSectorDecomp` ->
+  --  `periodicSelfOverlap_tendsto`).
   sorry
 
 /-- Distinct compressed sectors of a cyclic sector decomposition are not gauge-phase
