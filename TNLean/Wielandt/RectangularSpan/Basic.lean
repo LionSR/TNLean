@@ -12,12 +12,12 @@ import TNLean.Wielandt.RectangularSpan.Ranges
 import Mathlib.Data.Fin.Tuple.Basic
 
 /-!
-# Rectangular Span Foundations and Lemma 2(b) Assembly
+# Rectangular Span Foundations: Lemma 2(b) (conditional and blocked rectangular span)
 
 This module contains the foundational rectangular-span theory used in the Wielandt
 bound: blocking preserves normality, blocked eigenvector transfer, the basic
 one-sided and cumulative rectangular spans, and the conditional and blocked
-assembly steps for Lemma 2(b).
+rectangular-span theorems for Lemma 2(b).
 
 The later growth, stabilization, universality, and sharp quantitative theorems
 live in `TNLean.Wielandt.RectangularSpan.Growth` and
@@ -256,9 +256,9 @@ theorem cumulativeRectSpan_eq_range_of_isNormal [NeZero D]
   cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top P A
     (cumulativeSpan_eq_top A hN)
 
-/-! ## Section 5: Conditional assembly (Lemma 2(b)) -/
+/-! ## Section 5: Conditional rectangular span (Lemma 2(b)) -/
 
-/-- **Lemma 2(b) conditional assembly.**
+/-- **Lemma 2(b) conditional fixed-length matrix spanning.**
 
 If `IsNormal A`, and we have single-index eigenvectors (column and row)
 and a rank-one element in bounded `wordSpan`, then `wordSpan = ⊤`.
@@ -290,9 +290,9 @@ theorem wielandt_lemma2b_conditional [NeZero D]
   exact wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     A φ ψ hVecSpread hRankOne hRowSpread
 
-/-! ## Section 6: Blocked assembly -/
+/-! ## Section 6: Blocked rectangular span -/
 
-/-- **Assembly at the blocked level.**
+/-- **Fixed-length matrix spanning at the blocked level.**
 
 Reduces the Wielandt bound to producing a rank-one element in the word
 span of the **blocked** tensor. The blocking period `L` absorbs the
@@ -330,7 +330,7 @@ theorem wielandt_blocked_assembly [NeZero D]
     exact heigψ
   -- B is normal
   have hNormalB : IsNormal B := isNormal_blockTensor A L hL hNormal
-  -- Apply the conditional assembly to B
+  -- Apply the conditional rectangular span lemma to B
   have hBtop : wordSpan B ((D - 1) + (m_blocked + (D - 1))) = ⊤ :=
     wielandt_lemma2b_conditional B hNormalB i₀ μ hμ φ hφ heigφ_B i₁ ν hν ψ hψ
       heigψ_B hRankOne

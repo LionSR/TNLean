@@ -12,7 +12,7 @@ import Mathlib.Data.List.FinRange
 /-!
 # Rank-one construction (reductions)
 
-`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the **assembly step** of
+`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the **vector-to-matrix spanning step** of
 Wielandt Lemma 2(b): if
 
 * word products of length `n` applied to a vector `φ` span all of `ℂ^D`, and
@@ -391,11 +391,11 @@ theorem vecMulVec_pi_single_mem_wordSpan_of_rankOne
   -- Substitute the chosen `M` so that `ψ ᵥ* M = e_j`.
   simpa [hcalc, hvec] using hprod
 
-/-- **(Optional assembly)** If `vectorSpreadSpan A φ n = ⊤`, and one can build a
+/-- **Rank-one reduction** If `vectorSpreadSpan A φ n = ⊤`, and one can build a
 single rank-one element `|φ⟩⟨ψ|` inside `wordSpan A m` together with a row
 spreading statement `rowSpreadSpan A ψ k = ⊤`, then `wordSpan A (n + (m+k)) = ⊤`.
 
-This composes the reduction above with the assembly lemma from `SpanGrowth/VectorToMatrixSpan.lean`.
+This composes the reduction above with the vector-to-matrix spanning lemma from `SpanGrowth/VectorToMatrixSpan.lean`.
 -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     (A : MPSTensor d D) (φ ψ : Fin D → ℂ) {n m k : ℕ}
@@ -408,7 +408,7 @@ theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
       Matrix.vecMulVec φ (Pi.single j (1 : ℂ)) ∈ wordSpan A (m + k) :=
     vecMulVec_pi_single_mem_wordSpan_of_rankOne (A := A) (φ := φ) (ψ := ψ)
       (m := m) (k := k) hRankOne hRow
-  -- Then apply the existing assembly lemma.
+  -- Then apply the existing vector-to-matrix spanning lemma.
   simpa [Nat.add_assoc] using
     (wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis
       (A := A) (φ := φ) (n := n) (m := m + k) hVec hRankOneBasis)

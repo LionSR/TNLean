@@ -16,7 +16,7 @@ import Mathlib.Analysis.Complex.Polynomial.Basic
 # Eigenvalue Extraction and Rank-One Products (Lemma 2(b) Ingredients)
 
 This file provides the eigenvalue/eigenvector extraction lemmas needed for
-the Quantum Wielandt bound assembly, corresponding to **Lemma 2(b)** of
+the Quantum Wielandt bound, corresponding to **Lemma 2(b)** of
 arXiv:0909.5347 (Sanz, Pérez-García, Wolf, Cirac).
 
 ## Mathematical background
@@ -296,7 +296,7 @@ theorem evalWord_replicate_eigenvector (A : MPSTensor d D)
     -- evalWord A w₀ *ᵥ (μ ^ k • φ) = μ ^ (k + 1) • φ
     rw [Matrix.mulVec_smul, heig, smul_smul, pow_succ]
 
-/-! ### Part 7: Connection lemmas for the Wielandt assembly -/
+/-! ### Part 7: Connection lemmas for the Wielandt fixed-length word span -/
 
 /-- **Word products of a normal tensor eventually span all matrices.**
 

@@ -242,7 +242,7 @@ there exists `n` such that for **every** `ψ`,
 `vecMulVec φ ψ ∈ wordSpan A (D + n)`.
 
 This is the theorem that directly feeds into the paper's Lemma 2(b) conditional
-assembly. -/
+rectangular span. -/
 theorem exists_wordSpan_forall_vecMulVec_eigenvector
     (A : MPSTensor d D) (i₀ : Fin d) (hN : IsNormal A)
     {φ : Fin D → ℂ} {μ : ℂ} (hμ : μ ≠ 0)

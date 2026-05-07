@@ -17,7 +17,7 @@ import Mathlib.LinearAlgebra.Matrix.StdBasis
 This module starts closing the main remaining gap in the Quantum Wielandt proof
 (arXiv:0909.5347, Lemma 2(b)).
 
-We currently formalize the **algebraic assembly** part of Lemma 2(b):
+We currently formalize the **algebraic fixed-length matrix spanning** part of Lemma 2(b):
 
 * If (fixed-length) word products applied to a vector `φ` span all of `ℂ^D`, and
 * If we can produce the rank-one operators `|φ⟩⟨e_j|` as word products of a
@@ -283,9 +283,9 @@ theorem vectorSpreadSpan_eq_top_of_cumulativeVectorSpan_eq_top_of_eigenvector
   simpa [cumulativeVectorSpan_eq_vectorSpreadSpan_of_eigenvector (A := A) (φ := φ) (n := n)
     i₀ μ hμ heig] using htop
 
-/-! ## Vector spanning → fixed-length matrix spanning (assembly step) -/
+/-! ## Vector spanning → fixed-length matrix spanning -/
 
-/-- **Lemma 2(b) (assembly step, rank-one hypothesis)**.
+/-- **Lemma 2(b) (rank-one hypothesis)**.
 
 Assume:
 * `vectorSpreadSpan A φ n = ⊤`, i.e. length-`n` word products applied to `φ`
