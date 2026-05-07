@@ -566,7 +566,7 @@ on published theorem names.
   canonical-form bound.
 \end{itemize}
 
-\section{Current status: Burnside--Jacobson pair-span gap (2026-05-07)}
+\section{Current status: pair-span gap for homogeneous lengths (2026-05-07)}
 
 The formalization now separates the source inputs into three explicit layers.
 
@@ -586,15 +586,15 @@ The formal chain is:
     \;\Rightarrow\; \exists S,\ \text{PairTraceSeparatingUpTo}\ A\ B\ S
     \;\Rightarrow\; \text{PairCumulativeWordTupleSpanTop}\ A\ B\ S
 \]
-and is packaged in
+and is stated in
 \leanid{cumulative_pairSpanData_of_injective_not_gaugePhaseEquiv}
 (equal dimension) and \leanid{cumulative_pairSpanData_of_isCanonicalFormBNT}
 (BNT family).
 
 \subsection{Layer 2: Cumulative $\to$ homogeneous span (gap)}
 
-The remaining Burnside--Jacobson step converts cumulative pair-word fullness
-to homogeneous fixed-length fullness. The conversion theorem
+The remaining step converts cumulative pair-word fullness to homogeneous
+fixed-length fullness. The conversion theorem
 \leanid{pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
 requires identity padding: for every \(l\le S\), the pair identity \((1,1)\)
 must belong to the homogeneous pair-word span at length \(T-l\). This
@@ -603,8 +603,8 @@ identity padding is not yet supplied by the BNT data.
 The source paper (arXiv:1606.00608, lines~317--345) supplies the homogeneous
 conclusion through a different route (the \(3D^5\) block-injective bound
 via Wielandt and the P\'erez-Garc\'ia--Verstraete--Wolf--Cirac result). The
-formalization chose the algebraic subdirect-product $\to$ Burnside--Jacobson
-route, which isolates the identity-padding input as the remaining step.
+formalized subdirect-product route isolates the identity-padding input as the
+remaining step.
 
 \subsection{Layer 3: Conditional downstream theorems}
 
@@ -621,15 +621,14 @@ period-window hypothesis:
     (BNT product-word span, same hypotheses)
 \end{itemize}
 
-The gap connector theorems
+The theorem
 \leanid{pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding}
-and \leanid{gap_exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT}
-make the Burnside--Jacobson hypothesis explicit so that the downstream
-dependency is visible in the theorem statements.
+makes the identity-padding hypothesis explicit in the single-pair cumulative
+route.
 
 \subsection{Next step}
 
-The missing Burnside--Jacobson input has the shape:
+The missing identity-padding input has the shape:
 \begin{quote}
 For each ordered pair of distinct BNT blocks \((A_k, A_j)\), there exist
 \(\text{start}, \text{period}\in\mathbb N\) with \(\text{period}>0\) such
@@ -638,12 +637,13 @@ that \((1,1)\) belongs to the homogeneous pair-word span at length
 \(r<\text{period}\).
 \end{quote}
 
-Once this input is supplied, all downstream theorems close automatically.
-The input is expected to follow either from the 2021 review's normal-tensor
-Wielandt bound (arXiv:2011.12127, lines~1942--1945) together with an
-arithmetic period-window construction, or from a direct Burnside--Jacobson
-argument applied to the pair product algebra after the subdirect-product
-analysis.
+Once this input is supplied, the conditional theorems listed above apply.  The
+complete non-periodic comparison still also depends on the other BNT comparison
+inputs recorded earlier in this note.  A plausible source-faithful route should
+use the 2021 review's normal-tensor Wielandt bound
+(arXiv:2011.12127, lines~1942--1945) together with an arithmetic period-window
+construction, or else state a precise algebraic padding theorem with matching
+hypotheses.
 
 \section{Closing criterion}
 
