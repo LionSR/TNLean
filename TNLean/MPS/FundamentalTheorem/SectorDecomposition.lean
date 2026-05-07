@@ -36,13 +36,13 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- **Predicate asserting a sector decomposition's basis satisfies the BNT
-linear-independence condition.**
+/-- **BNT linear-independence hypothesis for sector bases.**
 
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
 a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127: for all
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
-are linearly independent.  It is a `Prop`; no witness is included.
+are linearly independent.  The statement records only the eventual condition;
+no witness is included.
 
 Mathematically, this is the eventual linear-independence hypothesis on the basis
 sector MPV families. In comparison theorems for two sector decompositions, it
