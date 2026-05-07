@@ -23,15 +23,11 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Lemma 5 (paper proof sketch, now proved):
+/-- A nonzero multiplicative $\C$-linear endomorphism of $\MN{D}$ is bijective.
 
-A nonzero multiplicative `ℂ`-linear endomorphism of `D×D` matrices is bijective.
-
-*Proof idea:* Multiplicativity makes `T` a (non-unital) ring endomorphism; its kernel is a two-sided
-ideal, so by simplicity of the matrix ring it is either `⊥` or `⊤`. The latter would force
-`T = 0`, hence the kernel is `⊥` and `T` is injective; finite-dimensionality upgrades injective to
-surjective.
--/
+The kernel is a two-sided ideal; by simplicity of the matrix ring it is either
+$\{0\}$ or $\MN{D}$.  The latter forces $T = 0$, so $\ker T = \{0\}$.
+Finite-dimensionality upgrades injectivity to bijectivity. -/
 theorem linear_mul_endomorphism_bijective
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hMul : ∀ M N, T (M * N) = T M * T N)
@@ -53,11 +49,9 @@ theorem linear_mul_endomorphism_bijective
       simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
     exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
 
-/-- Lemma 6 (Skolem–Noether for matrices, *proved*): any `ℂ`-algebra automorphism of
-`Matrix n n ℂ` is inner.
-
-We use the Mathlib theorem `AlgEquiv.eq_linearEquivConjAlgEquiv` on endomorphism algebras, and the
-canonical algebra equivalence `Matrix.toLinAlgEquiv'`. -/
+/-- Skolem--Noether for matrices: every $\C$-algebra automorphism of $\MN{D}$ is inner.
+For any $f \in \Aut_{\C\text{-alg}}(\MN{D})$, there exists an invertible $X$ such that
+$f(M) = X M X^{-1}$ for all $M$. -/
 theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
     (f : Matrix n n ℂ ≃ₐ[ℂ] Matrix n n ℂ) :
     ∃ X : GL n ℂ, ∀ M : Matrix n n ℂ,
@@ -97,10 +91,9 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
         rw [← hX_lin, ← hX_lin_inv]; simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
     _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by simp [mul_assoc]
 
-/-- Build an `ℂ`-algebra homomorphism from a multiplicative `ℂ`-linear map.
-
-The only nontrivial field is `map_one'`, which follows from surjectivity: if `T` is surjective, then
-`T 1` acts as a two-sided identity on the codomain, hence must equal `1`. -/
+/-- If $T : \MN{D} \to \MN{D}$ is a multiplicative surjective $\C$-linear map,
+then $T(\Id) = \Id$. This records the fact that a surjective multiplicative linear map
+automatically preserves the unit. -/
 noncomputable def linearMapToAlgHom
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hMul : ∀ M N, T (M * N) = T M * T N)
