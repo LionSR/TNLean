@@ -254,8 +254,9 @@ Every PR touching Lean code should be reviewed against these criteria:
 1. **Proof correctness** -- No unexplained `sorry`. No `axiom` unless discussed.
    Run `rg -n "sorry|axiom" <file>` to verify.
 
-2. **Mathlib style** -- Follow the naming conventions in [naming.md](naming.md)
-   and documentation standards in [doc.md](doc.md). See [pr-review.md](pr-review.md)
+2. **Mathlib style** -- Follow the naming conventions in
+   [MATHLIB_naming.md](MATHLIB_naming.md) and documentation standards in
+   [MATHLIB_doc.md](MATHLIB_doc.md). See [MATHLIB_pr-review.md](MATHLIB_pr-review.md)
    for the full Mathlib review guide. For renames that intentionally omit
    deprecated aliases under the mathematical-language exception, confirm the
    PR body states the reason (see [CONTRIBUTING.md Section Mathematical-language renames](#mathematical-language-renames)).
@@ -285,11 +286,11 @@ This project follows Mathlib conventions with project-specific additions.
 
 ### Reference guides
 
-- **Documentation style**: [doc.md](doc.md) -- module headers, docstrings,
+- **Documentation style**: [MATHLIB_doc.md](MATHLIB_doc.md) -- module headers, docstrings,
   LaTeX in comments, sectioning comments.
-- **Naming conventions**: [naming.md](naming.md) -- capitalization rules,
+- **Naming conventions**: [MATHLIB_naming.md](MATHLIB_naming.md) -- capitalization rules,
   symbol-to-name dictionary, variable conventions.
-- **Review guide**: [pr-review.md](pr-review.md) -- detailed examples of
+- **Review guide**: [MATHLIB_pr-review.md](MATHLIB_pr-review.md) -- detailed examples of
   style, documentation, location, and improvement considerations.
 
 ### Project-specific conventions
@@ -321,7 +322,7 @@ identifiers in backticks.
 **Sectioning comments**: Use `/-! ### Section Title -/` to organize long files
 into logical sections.
 
-**Variable naming**: Follow the conventions in [naming.md](naming.md). For
+**Variable naming**: Follow the conventions in [MATHLIB_naming.md](MATHLIB_naming.md). For
 this project specifically:
 - `A`, `B` for MPS tensors
 - `E` for transfer matrices / quantum channels

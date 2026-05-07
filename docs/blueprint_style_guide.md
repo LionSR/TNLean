@@ -22,6 +22,14 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    quantifier in the surrounding sentence, or use mathematical quantifier
    notation when it is part of the formula. See [`prose_style.md`](prose_style.md)
    for the full rule and examples.
+10. **Paper source first.** When a theorem, lemma, or proof sketch formalizes a
+    cited result, compare against the paper source before introducing local names.
+    Use the source notation and display the defining equations whenever possible.
+    If Lean proves an auxiliary reformulation, state the source result first.
+    Put maintainer-only proof-status notes in LaTeX comments, not displayed
+    mathematical prose. The explicit proof-status markers in
+    [`prose_style.md`](prose_style.md) are for Lean docstrings and comments, not
+    blueprint-visible paragraphs.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -31,9 +39,20 @@ This is the most important rule. Every proof in the blueprint must faithfully de
 - **Don't hand-wave where Lean is specific.** "Standard argument" is not acceptable if Lean uses three specific lemmas. Name them.
 - **Don't be more specific than Lean.** If Lean uses `simp` to close a goal, a one-line sketch is fine.
 - **`\uses` in proofs must be accurate.** Only list what the proof actually uses, not what the statement mentions. If the proof uses `lem:eval_word_gauge` but the statement mentions `def:gauge_equiv`, the proof's `\uses` should list the lemma, not the definition (unless the proof also directly unfolds the definition).
+- **Do not present local auxiliary routes as source mathematics.** If a proof uses
+  a formal auxiliary lemma not stated in the cited source, name the mathematical
+  assertion it proves. Put maintainer-only proof-status notes in LaTeX comments.
+  Do not introduce visible note labels such as `Formalization note.` in
+  blueprint prose.
+  If the auxiliary route is no longer used by the checked proof, delete the entry
+  rather than keeping an unmotivated theorem-like statement in the blueprint.
 
 ## Notation Consistency
 Notation must be **internally consistent** across the entire blueprint and **close to what the Lean code expresses**:
+
+- Use `$...$` for inline mathematics in new blueprint prose. Do not mix `$...$`
+  and `\(...\)` inside a newly edited paragraph; when touching an existing
+  paragraph, prefer converting the local inline math to `$...$`.
 
 - **Indices**: 0 to d−1 (matching `Fin d` in Lean), not 1 to d
 - **Word evaluation**: $A^w$ for a word $w = (i_1, \ldots, i_L)$. The result is $A^{i_1} \cdots A^{i_L} \in \MN{D}$.

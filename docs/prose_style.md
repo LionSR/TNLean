@@ -6,11 +6,12 @@ It is the authoritative source for:
 1. The "no Lean jargon in the leanblueprint" rule.
 2. The banned software-engineering vocabulary.
 3. The banned LLM writing patterns.
+4. Source-faithful terminology and formula-first statements.
 
 It extends — and does not replace — the general mathlib-pasted documentation
-guidance in the "Doc strings" section of [`doc.md`](doc.md) ("Doc strings should
+guidance in the "Doc strings" section of [`MATHLIB_doc.md`](MATHLIB_doc.md) ("Doc strings should
 convey the mathematical meaning of the definition") and the "Comments" section
-of [`style.md`](style.md).
+of [`MATHLIB_style.md`](MATHLIB_style.md).
 Those files are upstream mathlib material and remain unmodified; the project-specific
 extensions below are layered on top of them.
 
@@ -116,7 +117,55 @@ without opening the `.lean` files, the prose has failed.
 - Backticks around genuine Lean references (e.g. ``` `Fin d` ```, ``` `evalWord` ```)
   when explaining how to use the API of *this* declaration. Use sparingly — prefer
   mathematical phrasing.
+- Explicitly marked proof-state notes after the mathematical statement. These
+  notes should record a missing implication, a source comparison, or an extra
+  hypothesis in mathematical terms.  Keep such notes out of displayed blueprint
+  prose; use Lean comments/docstrings or LaTeX comments when the note is only
+  for maintainers.
 - The other software/LLM bans in Section 2 and Section 3 still apply.
+
+### Source-faithful terminology and formulas
+
+When a blueprint entry or Lean docstring corresponds to a result in a paper,
+the paper source controls the mathematical language. Prefer the notation,
+terminology, and hypotheses used in the cited source. If the formalization uses
+a local auxiliary name, describe the mathematical statement first and put the
+local convention in an explicitly marked note only when the reader needs it.
+
+For MPS canonical-form and fundamental-theorem material, this means that formulas
+such as
+```tex
+A^i = \bigoplus_k \mu_k A_k^i,
+\qquad
+\widetilde A_k^i = e^{i\phi_k} X_k A_k^i X_k^{-1},
+\qquad
+\ket{V^{(N)}(A)} = \sum_k \mu_k^N \ket{V^{(N)}(A_k)}
+```
+are preferable to long prose descriptions of "blocks", "classes", or "pieces"
+when the formulas are the actual content.
+
+If a local term is unavoidable because the source has no name for the object,
+define it at its first reader-facing occurrence by a formula or tuple. Do not
+use unexplained shorthand such as "zero tail", "norm-class data", or
+"blockwise construction". Write, for example, "the remaining direct summand is
+the all-zero block" and display the corresponding direct-sum decomposition.
+
+When the Lean statement is stronger, weaker, or differently organized than the
+paper source, separate the two assertions:
+
+- the theorem or lemma statement states the mathematics being formalized;
+- a maintainer-facing note records the extra hypothesis, missing implication,
+  or auxiliary reformulation. In the blueprint this note should be a LaTeX
+  comment, not displayed mathematical prose.
+
+In blueprint files, use `$...$` for inline mathematics in new prose. Do not mix
+`$...$` and `\(...\)` in a newly edited paragraph; when touching an existing
+paragraph, prefer converting it to `$...$` if the change is local.
+
+Do not hide a mathematical difference inside process prose such as "pragmatic
+version", "comparison route", or "assembly step". If the auxiliary result is
+neither a source-paper input nor an indirect dependency of checked formalization,
+remove it instead of documenting it as if it were part of the paper.
 
 ---
 
@@ -137,7 +186,8 @@ or section/namespace names.
 | "Glue layer" / "glue code" | "intermediate construction", "connecting results" |
 | "Re-export" / "reexport" | "provides", "re-states" |
 | "Wiring" / "wire up" | "connecting", "composing", "combining" |
-| "Package" (as noun for a data bundle) | "form", "data", "structure" |
+| "Package" (as noun for a collection of assumptions) | "structure", "tuple", or name the objects explicitly |
+| "Data" (as a vague collection word) | "coefficients", "weights", "phases", "bases", "gauges", "block dimensions", "permutation", "hypotheses", or the displayed tuple |
 | "Stored as an extra field" | "appears as a separate assumption" |
 | "Sorry-free" | acceptable only in Lean-specific technical context |
 | "Physics-oriented" | describe the mathematical property instead |
@@ -231,6 +281,11 @@ categorically: "crucial", "pivotal", "vital", "moreover", "furthermore",
 legitimate mathematical uses. Apply judgment: flag the empty-calorie occurrences,
 leave the genuine ones alone.
 
+The word "data" is also context-sensitive. It is acceptable in established
+mathematical phrases or when naming a formal structure whose fields are listed
+immediately. It should not replace the formula or tuple that the reader needs,
+especially in the MPS fundamental-theorem chapters.
+
 ---
 
 ## 4. Additional rules
@@ -238,13 +293,14 @@ leave the genuine ones alone.
 - **"Assembly" in Lean identifiers**: acceptable ONLY for `wielandt_blocked_assembly`
   and similar mathematical theorem names where "assembly" describes the mathematical
   step (assembling rank-one elements). NOT acceptable for file-organizational names.
-- **"Assembly" in file names**: `Assembly.lean` and `QPF/Assembly.lean` are
-  grandfathered (renaming cascades through too many imports). New files should use
-  mathematical names.
+- **"Assembly" in file names**: new source files should use mathematical names.
+  Existing Lean module paths with this word are temporary exceptions only when
+  renaming the import graph is outside the current PR; open a follow-up issue
+  instead of adding more such names.
 - **Section names in Lean**: use mathematical terms (`section PerronFrobenius`,
   `section GaugeConstruction`, `section FinalConstruction`), not organizational
   terms (`section Assembly`, `section Pipeline`).
-- **Internal LaTeX labels** (e.g. `\label{ch:assembly}`,
+- **Internal LaTeX labels** (e.g. `\label{ch:ft_proof}`,
   `\label{thm:irreducible_block_decomp_with_cfii}`)
   are not reader-facing and need not be renamed if doing so would break
   cross-references. But NEW labels should follow the standard.

@@ -844,9 +844,8 @@ decomposition.
     linear extension.
     It is an algebra automorphism since each $T_k$ is a multiplicative,
     unital, bijective linear map.
-    Diagrammatically, this is the blockwise map on the product algebra
-    obtained by applying the corresponding per-block extension to each
-    summand.
+    Diagrammatically, this is the componentwise map on the product algebra
+    obtained by applying the corresponding extension to each summand.
 \end{definition}
 
 \begin{theorem}[Block-permutation decomposition]%
@@ -918,16 +917,16 @@ decomposition.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{The multi-block Fundamental Theorem}%
+\section{Gauge equivalence for direct sums}%
 \label{sec:multi_block_ft}
 %% ---------------------------------------------------------
 
-\begin{theorem}[Multi-block Fundamental Theorem]%
-    \label{thm:fundamentalTheorem_multiBlock_full}
+\begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
+    \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        lem:perBlockLinearExtension_bijective}
+        def:tensor_from_blocks}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -940,26 +939,28 @@ decomposition.
               $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are
               gauge equivalent.
     \end{enumerate}
-    The second clause is obtained from the first by assembling the
-    per-block gauges into one block-diagonal gauge.
-\end{theorem}
+    Explicitly, for $X=\bigoplus_k X_k$,
+    \[
+        \bigoplus_k \mu_k B_k^i
+        = X \left(\bigoplus_k \mu_k A_k^i\right) X^{-1}.
+    \]
+\end{lemma}
 
-\begin{proof}\leanok\uses{lem:perBlockLinearExtension_bijective,
-        thm:piAlgEquiv_decomposition}
+\begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
-    Fundamental Theorem (existing) to each block, using injectivity of
+    Fundamental Theorem to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
-    Global gauge equivalence is assembled from the per-block gauges via
-    the block-diagonal structure.
+    With $X=\bigoplus_k X_k$, the displayed identity follows by multiplying
+    block-diagonal matrices block by block.
 \end{proof}
 
 \begin{lemma}[Explicit per-block gauges]%
     \label{lem:fundamentalTheorem_multiBlock_explicit}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_explicit}
     \leanok
-    \uses{thm:fundamentalTheorem_multiBlock_full}
+    \uses{lem:fundamentalTheorem_multiBlock_full}
     Under the hypotheses of
-    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}, there exist
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full}, there exist
     invertible matrices $X_k \in \GL_{D_k}(\C)$ such that
     \[
         B_k^i = X_k\, A_k^i\, X_k^{-1}
@@ -969,19 +970,19 @@ decomposition.
 
 \begin{proof}
     \leanok
-    \uses{thm:fundamentalTheorem_multiBlock_full}
+    \uses{lem:fundamentalTheorem_multiBlock_full}
     Extract the gauge matrix from the per-block part of
-    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} for each block.
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} for each block.
 \end{proof}
 
-\begin{lemma}[Product-algebra decomposition of the multi-block theorem]%
+\begin{lemma}[Product-algebra decomposition of per-block MPV equality]%
     \label{lem:fundamentalTheorem_multiBlock_decomposition}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_decomposition}
     \leanok
-    \uses{thm:fundamentalTheorem_multiBlock_full}
+    \uses{lem:fundamentalTheorem_multiBlock_full}
     Assume that every block dimension is nonzero.
     Under the hypotheses of
-    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}, the product-algebra
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full}, the product-algebra
     automorphism determined by the per-block linear extensions decomposes into
     a block permutation together with inner conjugation on each block: there
     exist a permutation $\sigma$ of the blocks, compatible block-dimension
@@ -1008,8 +1009,8 @@ decomposition.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:gauge_equiv}
-    The forward direction is the single-block Fundamental Theorem applied
-    blockwise.
+    The forward direction applies the single-block Fundamental Theorem to
+    each block.
     The reverse direction holds because gauge equivalence preserves all
     traces of word evaluations.
 \end{proof}
@@ -1019,9 +1020,8 @@ decomposition.
 \label{sec:block_separation}
 %% ---------------------------------------------------------
 
-The multi-block Fundamental Theorem
-(Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}) assumes per-block
-$\mc{V}(A_k) = \mc{V}(B_k)$.
+Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} assumes
+$\mc{V}(A_k)=\mc{V}(B_k)$ for every block~$k$.
 In practice, one starts from the weaker global hypothesis that the
 block-diagonal tensors satisfy the same MPV family:
 $\mc{V}\!(\bigoplus_k \mu_k A_k) =
@@ -1153,41 +1153,41 @@ which is then combined with overlap estimates and the leading-block peel.
     \uses{def:same_mpv}
     Suppose the weights are nonzero with strictly decreasing norms, the
     $A$-blocks are injective and left-canonical with normalized self-overlaps,
-    the $B$-blocks are injective and left-canonical, and the assembled
-    block-diagonal tensors generate the same MPV family.
+    the $B$-blocks are injective and left-canonical, and the block-diagonal
+    tensors generate the same MPV family.
     Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:block_separation_all_words}
-    Equality of the assembled MPV families gives the weighted word identity
+    Equality of the block-diagonal MPV families gives the weighted word identity
     required by Lemma~\ref{lem:block_separation_all_words}.
     The separated hypotheses supply exactly the injectivity,
     left-canonicality, strict-weight, and self-overlap assumptions needed
     there.
 \end{proof}
 
-\begin{lemma}[Fundamental Theorem from separated canonical data]%
+\begin{lemma}[Gauge comparison from separated canonical data]%
     \label{lem:fundamentalTheorem_of_separated_canonical_data}
     \lean{MPSTensor.fundamentalTheorem_of_separated_canonical_data}
     \leanok
     \uses{lem:per_block_sameMPV_of_separated_canonical_data}
     Under the hypotheses of
     Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data}, every
-    block pair $A_k,B_k$ is gauge equivalent, and the assembled block-diagonal
+    block pair $A_k,B_k$ is gauge equivalent, and the block-diagonal
     tensors are globally gauge equivalent.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:per_block_sameMPV_of_separated_canonical_data,
-        thm:fundamentalTheorem_multiBlock_full}
+        lem:fundamentalTheorem_multiBlock_full}
     First apply
     Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data} to get
-    $\mc{V}(A_k)=\mc{V}(B_k)$ blockwise.
+    $\mc{V}(A_k)=\mc{V}(B_k)$ for every block~$k$.
     Then apply
-    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full}.
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full}.
 \end{proof}
 
 \begin{lemma}[Explicit gauge from separated canonical data]%
@@ -1207,29 +1207,28 @@ which is then combined with overlap estimates and the leading-block peel.
     \leanok
     \uses{lem:per_block_sameMPV_of_separated_canonical_data,
         lem:fundamentalTheorem_multiBlock_explicit}
-    Combine blockwise MPV equality from
-    Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data} with the
-    explicit-gauge form of the multi-block Fundamental Theorem.
+    Combine Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data} with
+    the matrices $X_k$ from Lemma~\ref{lem:fundamentalTheorem_multiBlock_explicit}.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem from canonical-form data and strict weights]%
-    \label{thm:fundamentalTheorem_canonicalForm}
+\begin{lemma}[Gauge comparison from canonical-form data and strict weights]%
+    \label{lem:fundamentalTheorem_canonicalForm}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
     \uses{lem:per_block_sameMPV_of_canonical_form,
-        thm:fundamentalTheorem_multiBlock_full}
+        lem:fundamentalTheorem_multiBlock_full}
     Under the hypotheses of
     Lemma~\ref{lem:per_block_sameMPV_of_canonical_form},
     every block pair $A_k, B_k$ is gauge equivalent, and the
     block-diagonal tensors are globally gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:per_block_sameMPV_of_canonical_form,
-        thm:fundamentalTheorem_multiBlock_full}
+        lem:fundamentalTheorem_multiBlock_full}
     Lemma~\ref{lem:per_block_sameMPV_of_canonical_form} gives per-block
     $\mc{V}(A_k) = \mc{V}(B_k)$.
-    Theorem~\ref{thm:fundamentalTheorem_multiBlock_full} converts this
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} converts this
     to per-block and global gauge equivalence.
 \end{proof}
 
@@ -1263,12 +1262,12 @@ which is then combined with overlap estimates and the leading-block peel.
     Let $\{\mu_j A_j\}_{j=0}^{r_A-1}$ and $\{\nu_k B_k\}_{k=0}^{r_B-1}$ be
     two canonical-form BNT families, possibly with different block counts and
     different bond dimensions in corresponding blocks.
-    If the assembled block-diagonal tensors generate the same MPV family, then
+    If the block-diagonal tensors generate the same MPV family, then
     the two families have the same number of blocks, the blocks can be matched
     by a permutation preserving the bond dimensions, and each matched pair is
     gauge-phase equivalent.
     This is the block-matching conclusion, not yet the final global weighted
-    gauge-equivalence statement for the assembled tensors.
+    gauge-equivalence statement for the block-diagonal tensors.
 \end{lemma}
 
 \begin{proof}
