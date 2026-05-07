@@ -137,7 +137,7 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHyp
 
 The structural theorem gives the common blocking length and the two primitive irreducible
 common-sector nonzero parts, conditional on the equality after relabeling blocked physical words.
-This statement records, for exactly those families, that either common MPV phase-cover data or a
+This statement records, for exactly those families, that either common MPV phase-cover hypotheses or a
 BNT proportional-decomposition conclusion supplies the finite-length block-span hypothesis used by
 `afterBlocking_sectorComparison_zeroTail_of_blockSpan`.  Thus the remaining mathematical inputs are
 kept explicit: the blocked-word relabeling equality, and the later common-phase or BNT matching
@@ -299,7 +299,7 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
 Assume the blocked-word relabeling statement for cyclic-sector data. The structural
 theorem supplies common primitive nonzero-sector families; if those families carry
 BNT-cover data, then the conversion to phase-cover hypotheses gives the common
-phase-cover hypotheses. The common-phase-cover consumer theorem gives the same
+phase-cover hypotheses. The common-phase-cover comparison theorem then gives the
 sector-weight comparison
 conclusion. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
@@ -455,6 +455,8 @@ theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_
   intro p zeroTailA zeroTailB rA rB dimA dimB _ _ μA μB blocksA blocksB hp
     hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB hPrimA hPrimB
     hIrrA hIrrB hDimA hDimB
+  letI : ∀ x : Fin rA, NeZero (dimA x) := fun x => ⟨Nat.ne_of_gt (hDimA x)⟩
+  letI : ∀ x : Fin rB, NeZero (dimB x) := fun x => ⟨Nat.ne_of_gt (hDimB x)⟩
   obtain ⟨DtotA, DtotB, hPacked⟩ :=
     hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
       hPrimA hPrimB hIrrA hIrrB hDimA hDimB

@@ -415,8 +415,8 @@ noncomputable def ofCommonRepresentatives_zeroTailIdentity
       FB hpB μB hμB hAntiB hNotGpeB)
     hZero hInjA hInjB hDecomp
 
-/-- Representative BNT-cover data convert to the primitive BNT-cover hypotheses for the
-representative common-sector families. -/
+/-- A `CommonRepresentativeBNTCoverHypotheses` structure yields the primitive BNT-cover
+hypotheses for the representative common-sector families. -/
 noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
