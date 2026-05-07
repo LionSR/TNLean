@@ -26,9 +26,10 @@ on-site symmetric under `U`, then for each `g` there exists an invertible matrix
 `X(g)` and a nonzero scalar `φ(g)` such that
 `∑_j U(g)_{ij} A^j = φ(g) • X * A^i * X⁻¹`.
 
-In the single-block (injective) case `φ = 1`, but we include the phase to
-match the general form expected by subsequent projective-representation
-arguments (arXiv:0802.0447 Condition C1, issue #76). -/
+In the single-block (injective) case one can take `φ = 1`, but the statement
+includes the phase because the general symmetry relation allows a nonzero
+scalar factor; this is the form that appears in the paper
+(arXiv:0802.0447 Condition C1). -/
 theorem virtual_symmetry_eq
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hA : IsInjective A) (hSym : IsOnSiteSymmetric A U) (g : G) :
