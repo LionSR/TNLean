@@ -71,15 +71,17 @@ their spectral decomposition, and quantitative bounds on decay rates.
         C(X,Y;n) = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
     \]
     then the connected correlator equals the stated sum of exponentials.
-    The source~\cite[Sec.~4.5]{Cirac2021Matrix} asserts that such an expansion
-    always exists for a normal MPS via the transfer-map spectral decomposition.
+    The source~\cite[Sec.~2.3]{Cirac2021Matrix} states that the connected
+    correlator is a sum of $D^2-1$ pure exponentials
+    $C(X,Y;n) = \sum_{j\ge 2}^{D^2} c_{XY}(j)\lambda_j^n$,
+    which always exists for a normal MPS via the transfer-map spectral decomposition.
     % Constructing $c_j,\lambda_j$ from $\E_A$ is tracked in Issue~\#1447.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Given the expansion hypothesis, the equality is immediate.
-    The source~\cite[Sec.~4.5]{Cirac2021Matrix} derives this expansion
+    The source~\cite[Sec.~2.3]{Cirac2021Matrix} derives this expansion
     from the spectral decomposition of $\E_A^n$ restricted to the
     complement of the fixed-point eigenspace: the leading eigenvalue
     $\lambda_1=1$ contributes $\langle X_0\rangle\langle Y_0\rangle$,
@@ -99,8 +101,10 @@ their spectral decomposition, and quantitative bounds on decay rates.
         |C(X,Y;n)| \le C_{XY}\,|\lambda_2|^n,
     \]
     then the connected correlator satisfies that exponential decay bound.
-    The source~\cite[Sec.~4.5]{Cirac2021Matrix} obtains this by combining
-    the sum-of-exponentials expansion with the triangle inequality.
+    The source~\cite[Sec.~2.3]{Cirac2021Matrix} obtains this by combining
+    the sum-of-exponentials expansion with the triangle inequality, and
+    Sec.~4 provides the spectral gap condition $|\lambda_j|<1$ for the
+    subleading eigenvalues.
     % Extracting $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum
     % is tracked in Issue~\#1447.
 \end{theorem}
@@ -108,7 +112,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \begin{proof}
     \leanok
     Given the bound hypothesis, the estimate is immediate.
-    The source~\cite[Sec.~4.5]{Cirac2021Matrix} obtains this bound
+    The source~\cite[Sec.~2.3]{Cirac2021Matrix} obtains this bound
     by applying the triangle inequality to the sum-of-exponentials
     expansion and using the spectral gap condition
     $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.

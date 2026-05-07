@@ -32,6 +32,11 @@ to zero. This is the mechanism by which the mixed transfer operator
 
 ## References
 
+* CPGSV21: Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States*,
+  Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+  Sec. 2.3 (correlations and transfer matrix), Sec. 4 (spectral gap and
+  mixed transfer operator `F_{jk}`).
 * [Wolf2012Quantum] Wolf, *Quantum Channels & Operations: Guided Tour*,
   Proposition 6.1, Theorem 6.6, Section 6.2.
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
