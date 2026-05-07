@@ -14,14 +14,14 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 
 The algebraic commutant argument for a dependent direct sum is separated into
 finite-dimensional hypotheses.  If the sector projections lie in the span of the
-assembled word products and a boundary matrix commutes with those products, then
+word products of the block-diagonal tensor and a boundary matrix commutes with those products, then
 the boundary matrix commutes with every sector projection, hence has no off-block
 entries.
 
 A second reduction obtains the sector-projection span from a product-word span
-for the blocks, provided the assembly weights are nonzero.  For canonical-form
+for the blocks, provided the weights are nonzero.  For canonical-form
 BNT block families, the results here use only restricted consequences of that
-data: block injectivity, nonzero weights, pair separation, selector words, and
+hypotheses: block injectivity, nonzero weights, pair separation, selector words, and
 homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
 comparison, where multiplicities and sector weights remain explicit data.
 -/
@@ -32,11 +32,11 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
 
-/-- Finite product-word span gives the projection-span input for the assembled tensor.
+/-- Finite product-word span gives the projection-span input for `toTensorFromBlocks μ A`.
 
 Assume that the simultaneous length-`m` word evaluations
 `ω ↦ (k ↦ evalWord (A k) (List.ofFn ω))` span the full product algebra of the
-blocks.  If all assembly weights are nonzero, then after pulling the length-`m`
+blocks.  If all weights `μ k` are nonzero, then after pulling the length-`m`
 word products of `toTensorFromBlocks μ A` back to the dependent direct-sum basis,
 their span contains every sector projection.
 
@@ -104,7 +104,7 @@ Let `B` be a tensor whose bond space is the reindexed direct sum
 `Fin (∑ k, dim k)`.  Pull all length-`m` word products and the boundary matrix
 back to the dependent `Σ`-indexed direct sum via `finSigmaFinEquiv.symm`.  If the
 block projections lie in the span of these pulled-back word products, then any
-matrix on the assembled bond space commuting with all length-`m` word products
+matrix on the block-diagonal bond space commuting with all length-`m` word products
 pulls back to a block-diagonal matrix.
 
 For `B = toTensorFromBlocks μ A`, the pulled-back word products are the matrices
@@ -185,7 +185,7 @@ lemma wordTupleSpanTop_of_isCanonicalFormBNT_of_blockSelectorWords
 product-word span.
 
 The pairwise hypotheses ask only for a word polynomial separating one ordered
-pair of distinct blocks at a time.  The finite selector assembly in
+pair of distinct blocks at a time.  The finite selector construction in
 `hasBlockSelectorWords_of_pairBlockSeparatingWords` turns these pairwise
 separators into full block selectors, and the selector-word reduction then gives
 product-word span. -/
@@ -775,7 +775,7 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_blockSelectorWords
     hCF.toHasInjectiveBlocks hSel
 
 /-- Nonzero weights, block injectivity, and selector words give the projection-span
-input for the assembled tensor. -/
+input for `toTensorFromBlocks μ A`. -/
 theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -790,7 +790,8 @@ theorem blockProjection_mem_span_reindexed_toTensorFromBlocks_of_selectorWords
     (d := d) (dim := dim) μ A hμ
     (wordTupleSpanTop_of_hasInjectiveBlocks_of_blockSelectorWords A hInj hSel)
 
-/-- Canonical-form/BNT data and selector words give the assembled projection-span input. -/
+/-- Canonical-form/BNT hypotheses and selector words give the projection-span input for
+`toTensorFromBlocks μ A`. -/
 lemma blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) {S : ℕ}
@@ -807,7 +808,7 @@ lemma blockProjection_mem_span_reindexed_toTensorFromBlocks_of_bntSelectorWords
 /-- Block injectivity, nonzero weights, and selector words give the commutant criterion.
 
 The finite selectors and block injectivity give the projection-span input; only
-nonzero assembly weights are needed to pass through `toTensorFromBlocks`. -/
+nonzero weights are needed to pass through `toTensorFromBlocks`. -/
 theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hμ : ∀ k : Fin r, μ k ≠ 0)
@@ -825,7 +826,7 @@ theorem isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWor
       (d := d) (dim := dim) μ A hμ hInj hSel)
     hComm
 
-/-- Selector-word version of the assembled-tensor commutant criterion.
+/-- Selector-word version of the block-diagonal commutant criterion.
 
 Under canonical-form/BNT data, finite block selectors replace the product-word
 span hypothesis in the commutant reduction. The construction of those selectors
@@ -865,7 +866,7 @@ theorem offBlock_zero_of_commutes_reindexed_wordSpan
   have hBD := isBlockDiagonal'_of_commutes_reindexed_wordSpan (B := B) hProj hComm
   exact (Matrix.isBlockDiagonal'_iff_offBlock_zero _).mp hBD hij a b
 
-/-- Entrywise off-block-zero form of the assembled-tensor criterion with a finite
+/-- Entrywise off-block-zero form of the block-diagonal criterion with a finite
 product-word span hypothesis. -/
 theorem offBlock_zero_of_commutes_reindexed_toTensorFromBlocks_of_wordTuple_span_eq_top
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) {m : ℕ}
