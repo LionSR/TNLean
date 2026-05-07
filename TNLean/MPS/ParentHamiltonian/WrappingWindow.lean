@@ -56,7 +56,7 @@ proceeds as follows:
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, lines 2013–2094
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section~4.3, lines 1976--2094
 * [FNW92] Sections 3–4
 -/
 
