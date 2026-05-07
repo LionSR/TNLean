@@ -381,25 +381,6 @@ We use this notation throughout the block-separation argument.
     then supplies the self-overlap limit automatically.
 \end{remark}
 
-\begin{theorem}[Vandermonde separation]\label{thm:vandermonde_sep}
-    \lean{MPSTensor.vandermonde_separation}
-    \leanok
-    \uses{def:canonical_form}
-    Let $C$ be a canonical form with block weights $\mu_1,\ldots,\mu_r$,
-    and assume these weights are pairwise distinct.
-    If $c_1,\ldots,c_r \in \C$ satisfy, for $N = 0,1,\ldots,r-1$,
-    \[
-        \sum_{k=1}^r c_k \mu_k^N = 0
-    \]
-    then $c_k = 0$ for all~$k$.
-\end{theorem}
-
-\begin{proof}\leanok
-    The coefficient vector $c$ satisfies $V c = 0$, where $V$ is the
-    Vandermonde matrix of the weights $\mu_k$.
-    Pairwise distinctness makes $V$ invertible, so $c = 0$.
-\end{proof}
-
 \begin{lemma}[Repeated-word evaluation]\label{lem:eval_word_flatten_replicate}
     \lean{MPSTensor.evalWord_flatten_replicate}
     \leanok
@@ -437,13 +418,11 @@ We use this notation throughout the block-separation argument.
 \end{proof}
 
 \begin{remark}
-    Theorems~\ref{thm:vandermonde_sep}
-    and~\ref{thm:repeated_word_trace_identity}
-    give an alternative Newton/Vandermonde route.
-    The proof here instead continues with the
-    mixed-transfer peeling argument of Lemma~\ref{lem:block_sep_core},
-    and the later BNT weight-matching step uses the linear-independence results
-    from Chapter~\ref{ch:bnt} rather than Newton--Girard identities.
+    Lemma~\ref{thm:repeated_word_trace_identity} is a word-evaluation identity.
+    It is not a block-separation theorem: the proof below separates blocks by
+    the mixed-transfer peeling argument of Lemma~\ref{lem:block_sep_core}.
+    The later equal-case BNT weight comparison uses the finite power-sum
+    identity of Chapter~\ref{ch:bnt}.
 \end{remark}
 
 \begin{lemma}[Block separation core]\label{lem:block_sep_core}
@@ -560,6 +539,5 @@ We use this notation throughout the block-separation argument.
     semisimple matrix algebras used in~\cite[Section~IV.A]{Cirac2021Matrix}.
     The separation part follows the induction on blocks from
     \cite[Appendix~E]{PerezGarcia2007Matrix}; the checked proof here uses
-    overlap bounds and mixed-transfer decay rather than the alternative
-    Newton/Vandermonde route recorded above.
+    overlap bounds and mixed-transfer decay.
 \end{remark}
