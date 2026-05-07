@@ -305,7 +305,7 @@ theorem isNormalCanonicalForm_commonFlatBlocks
     F.commonFlatDim_pos
     (F.commonFlatWeight_ne_zero μ hμ)
     F.commonFlatBlocks_irreducible
-    hAnti
+    hAnti.antitone
 
 /-- The derived flattened common-sector family is a normal canonical form when
 expressed at a prescribed common blocking length. -/
