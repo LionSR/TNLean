@@ -269,7 +269,7 @@ section RankOneExtraction
 /-- **Full rank-one extraction for Wielandt Lemma 2(b).**
 
 Under a positive normality witness `N₀ ≥ 1`, produces all data for the blocked
-assembly theorem:
+fixed-length matrix spanning theorem:
 - word functions `σ₀`, `τ₀` of length `N₀` with eigenvector conditions,
 - `vecMulVec φ ψ ∈ wordSpan (blockTensor A N₀) (D + N₀ + D)`.
 
@@ -339,12 +339,12 @@ section WielandtLemma2b
 For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 `wordSpan A N = ⊤`.
 
-This combines the rank-one extraction with the blocked assembly theorem.
+This combines the rank-one extraction with the blocked fixed-length matrix spanning theorem.
 
 - When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
 - When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
   `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
-  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked assembly then
+  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked fixed-length matrix spanning then
   produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
@@ -471,7 +471,7 @@ theorem exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
   exact ⟨D + N₁ + D, by
     simpa [data.hB] using data.rankOne_mem_wordSpan_of_wordSpan_eq_top hBtop⟩
 
-/-- **Wielandt Lemma 2(b) blocked assembly from supplied word-eigenvector data.**
+/-- **Wielandt Lemma 2(b) blocked word-span saturation from supplied word-eigenvector data.**
 
 Given word eigenvectors of length `L` with nonzero eigenvalues and `IsNormal A`,
 produces `wordSpan A N = ⊤` for an explicit `N`.
@@ -494,7 +494,7 @@ theorem wielandt_blocked_assembly_complete [NeZero D]
   obtain ⟨m_blocked, hRankOne⟩ :=
     exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
       A L hL σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ hNormal
-  -- Step 2: Apply the conditional assembly
+  -- Step 2: Apply the blocked fixed-length matrix spanning lemma
   exact ⟨(D - 1 + (m_blocked + (D - 1))) * L,
     wielandt_blocked_assembly A hNormal L hL σ₀ φ hφ μ hμ heigφ
       τ₀ ψ hψ ν hν heigψ hRankOne⟩
