@@ -1054,11 +1054,26 @@ BNT comparison hypotheses for the common primitive sectors.
 	common MPV phase cover for the two block families.
 \end{proof}
 
+\begin{definition}[Proportional-decomposition hypotheses for common primitive sectors]%
+\label{def:common_primitive_proportional_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
+	\leanok
+	\uses{def:common_primitive_phase_cover_hypotheses}
+	For two common primitive nonzero-sector families at one blocking length, this
+	condition is the proportional-decomposition analogue of
+	Definition~\ref{def:common_primitive_phase_cover_hypotheses}: equality of the two
+	leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a
+	BNT proportional-decomposition conclusion for the two block families
+	(a permutation, equal bond dimensions, and gauge-phase equivalences).
+\end{definition}
+
 \begin{definition}[BNT matching hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonPrimitiveData_zeroTailIdentity,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_zeroTailIdentity,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentatives_zeroTailIdentity,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses,
 		MPSTensor.zeroTail_eq_of_proportionalDecompositionConclusion}
 	\leanok
 	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
@@ -1075,6 +1090,21 @@ BNT comparison hypotheses for the common primitive sectors.
 	% Maintainer note: the structure name contains "cover" because the next
 	% step constructs this matching as a common MPV phase cover.  This wording is
 	% not part of the source terminology and is intentionally not displayed.
+\end{definition}
+
+\begin{definition}[BNT-cover inputs for representative common-sector families]%
+\label{def:common_representative_bnt_cover_hypotheses}
+	\lean{MPSTensor.CommonRepresentativeBNTCoverHypotheses}
+	\leanok
+	\uses{def:common_primitive_bnt_cover_hypotheses,
+		def:common_sector_relabeling_hypothesis}
+	For representative common-sector families after choosing one representative
+	per original nonzero block, this structure collects the remaining hypotheses
+	needed for the BNT comparison: nonzero weights, strict weight ordering by norm,
+	BNT separation (no gauge-phase-equivalent distinct representatives), the
+	length-zero identity of the representative nonzero parts, one-site
+	injectivity of each representative block, and proportional-decomposition
+	data linking the two representative families.
 \end{definition}
 
 \begin{lemma}[BNT matching hypotheses produce a common phase cover]%
@@ -1145,6 +1175,24 @@ BNT comparison hypotheses for the common primitive sectors.
 	finite-length nonzero-sector span equality.  These are exactly the additional
 	hypotheses required by the leftover-zero-block comparison theorem.
 \end{proof}
+
+\begin{theorem}[Common primitive irreducible sectors with conditional block-span consequences]%
+\label{thm:afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
+	\lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
+	\leanok
+	\uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
+		lem:mpv_common_phase_cover_span_eq}
+	Let $A$ and $B$ have the same MPV family and assume the blocked-word
+	identification for the common-sector families. The common primitive
+	irreducible-block theorem supplies one positive blocking length and
+	trace-preserving, primitive, irreducible nonzero-sector families on both sides.
+	This theorem records that, for exactly those families, either a common MPV
+	phase cover or a BNT proportional-decomposition conclusion supplies the
+	finite-length block-span equality required by
+	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}.
+	Thus the remaining mathematical inputs -- the blocked-word identification
+	and the later common-phase or BNT matching comparison -- are kept explicit.
+\end{theorem}
 
 \begin{definition}[Blocked-word identification for common sectors]%
 \label{def:common_sector_relabeling_hypothesis}
@@ -1259,6 +1307,24 @@ BNT comparison hypotheses for the common primitive sectors.
 	common-sector comparison lemma with those span hypotheses.
 \end{proof}
 
+\begin{theorem}[Sector comparison from relabeled common sectors and proportional-decomposition data]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
+	\leanok
+	\uses{def:common_primitive_proportional_hypotheses,
+		def:common_sector_relabeling_hypothesis,
+		lem:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
+	Assume the blocked-word identification for the common-sector families.
+	The structural theorem supplies one common positive blocking length with
+	trace-preserving, primitive, irreducible nonzero-sector families on both
+	sides. If the remaining comparison assertions for exactly those families
+	are available -- equality of the two zero-tail dimensions, injectivity at
+	that blocking level, and a BNT proportional-decomposition comparison --
+	then the common-sector families satisfy the proportional-decomposition
+	hypotheses, which convert to common phase-cover hypotheses and give the
+	sector-weight comparison conclusion.
+\end{theorem}
+
 \begin{lemma}[Common sectors from BNT matching hypotheses]%
 \label{lem:afterBlocking_sectorComparison_reindexed_bntCover}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover}
@@ -1280,6 +1346,21 @@ BNT comparison hypotheses for the common primitive sectors.
 	families to common phase-cover hypotheses, and then apply the common-sector
 	comparison lemma with a common phase cover.
 \end{proof}
+
+\begin{theorem}[Sector comparison from normal-CF-BNT common primitive data]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity}
+	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity}
+	\leanok
+	\uses{def:common_primitive_bnt_cover_hypotheses,
+		def:common_sector_relabeling_hypothesis,
+		lem:afterBlocking_sectorComparison_reindexed_bntCover}
+	Assume the blocked-word identification for the common-sector families.
+	The structural theorem supplies common primitive nonzero-sector families;
+	if those families are in normal canonical form with BNT separation and
+	also carry proportional-decomposition data and one-site injectivity, then
+	the zero-tail sector comparison follows. The zero-tail equality is derived
+	from the length-zero identity and the proportional BNT comparison.
+\end{theorem}
 
 \begin{definition}[After-blocking BNT matching hypotheses]%
 	\label{def:after_blocking_sector_comparison_hypotheses}
