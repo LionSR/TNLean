@@ -22,7 +22,7 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
 * **Proposition 2.3** — no information without disturbance: any linear map fixing
   every rank-one self-outer-product is the identity. In particular, a
   quantum channel that leaves every pure state invariant is the identity.
-* **Proposition 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters): two
+* **Proposition 2.4** — equivalence of ensembles (Hughston–Jozsa–Wootters, Wolf Eq. (2.10)): two
   pure-state ensembles are related by an isometric mixing matrix iff they
   induce the same density operator. Both directions are formalised.
 
