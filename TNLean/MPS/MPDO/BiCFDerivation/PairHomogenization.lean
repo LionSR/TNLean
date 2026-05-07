@@ -1378,13 +1378,13 @@ bound; the identity-padding hypotheses below keep that missing input explicit.
 For the unequal-dimension case see
 `exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window`. -/
 
-/-- **BNT-to-cumulative implication.** From BNT injectivity, normalization, and
-non-gauge-equivalence of a same-dimension pair, obtain `PairTraceSeparatingAll`
-and a finite cutoff `S` such that `PairTraceSeparatingUpTo A B S`.
+/-- From injectivity, left-canonical normalization, and non-gauge-equivalence of
+a same-dimension pair, obtain `PairTraceSeparatingAll` and a finite cutoff `S`
+such that `PairTraceSeparatingUpTo A B S`.
 
 The homogeneous fixed-length conclusion additionally requires identity-padding
 hypotheses. -/
-theorem cumulative_pairSpanConsequences_of_injective_not_gaugePhaseEquiv
+theorem pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_injective_not_gaugePhaseEquiv
     {d D : ℕ} [NeZero D]
     (A B : MPSTensor d D)
     (hA_inj : IsInjective A) (hB_inj : IsInjective B)

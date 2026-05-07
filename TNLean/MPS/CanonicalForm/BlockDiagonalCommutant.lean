@@ -669,15 +669,15 @@ lemma
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
 
-/-- **BNT cumulative pair-span consequence.** From `IsCanonicalFormBNT`, obtain
-`PairTraceSeparatingAll` for every ordered pair of distinct blocks and
-`PairTraceSeparatingUpTo S` for a common cutoff `S`.
+/-- From `IsCanonicalFormBNT`, obtain `PairTraceSeparatingAll` for every ordered
+pair of distinct blocks and `PairTraceSeparatingUpTo S` for a common cutoff
+`S`.
 
 The homogeneous trace-separation conclusion still requires a period-window
 identity-padding certificate
 (see `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
 above). -/
-theorem cumulative_pairSpanConsequences_of_isCanonicalFormBNT
+theorem forall_pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_isCanonicalFormBNT
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A) :
