@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
-import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
@@ -37,14 +36,6 @@ dimension equality, and gauge-phase equivalence.
 (`sameMPV₂_implies_proportionalMPV₂`)
 
 Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
-
-### Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
-
-If two sequences of complex numbers have equal power sums for all positive exponents, their
-multisets (as roots) are equal.  This is a **same-cardinality support lemma** for the paper's
-Lemma `Lem:app_simple` — the paper additionally allows different cardinalities and only tests
-powers up to `max{x_a, x_b}`.  See the design note in
-`TNLean.Algebra.ScalarPowerSumIdentity`.
 
 ## References
 
@@ -357,8 +348,6 @@ theorem fundamentalTheorem_equalMPV_full
   obtain ⟨N0, hLI⟩ := hBNTA.eventually_li
   have hμA_ne : ∀ j : Fin rA, μA j ≠ 0 :=
     hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero
-  have hμB_ne : ∀ k : Fin rB, μB k ≠ 0 :=
-    hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero
   have hCoeffEq :
       ∀ N : ℕ, N > N0 →
         ∀ j : Fin rA, μA j ^ N = (μB (perm j) * ζ j) ^ N := by
@@ -465,30 +454,6 @@ theorem fundamentalTheorem_equalMPV_full
     simp only [toTensorFromBlocks, Bweighted, one_smul]
   rw [hA_tot, hB_tot]
   exact hGaugeWeighted
-
-/-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
-
-This wraps `Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`
-to provide a convenience wrapper for the same-cardinality power-sum argument.
-See the design note there for what the exact `Lem:app_simple` statement would require.
--/
-
-/-- **Equal power sums imply equal multisets** (same-cardinality support lemma for
-`Lem:app_simple` of arXiv:1606.00608).
-
-If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
-`∑ i, (α i)^k = ∑ i, (β i)^k` for all positive `k`, then `α` and `β` have the same
-multiset of values (counted with multiplicity).
-
-This is a corollary of Newton's identities via
-`Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`.
-Note: the paper's `Lem:app_simple` additionally allows `α` and `β` to have different
-lengths and only requires equality up to `max{|α|, |β|}`. -/
-theorem power_sum_eq_implies_multiset_eq (n : ℕ)
-    (α β : Fin n → ℂ)
-    (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
-    Finset.univ.val.map α = Finset.univ.val.map β :=
-  Matrix.sum_pow_eq_implies_multiset_eq α β h
 
 /-! ## Combined corollaries -/
 
