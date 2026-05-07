@@ -16,7 +16,7 @@ For constant (translation-invariant) chains `(A, …, A)` and `(B, …, B)` with
 ## Main results
 
 * `ti_reduction_corollary` — from `SameMPV` on combined tensors
-* `ti_reduction_of_sameState` — from `SameState` via the blocking bridge hypothesis
+* `ti_reduction_of_sameState` — from `SameState` via the blocking connection hypothesis
 
 ## References
 
@@ -52,7 +52,8 @@ theorem ti_reduction_corollary
 /-- **TI Reduction from SameState**.
 
 Same conclusion as `ti_reduction_corollary`, from fixed-length `SameState`
-at chain length `n ≥ 3` using the blocking bridge hypothesis. -/
+at chain length `n ≥ 3` using the blocking connection hypothesis
+`SameStateBridgeHyp`. -/
 theorem ti_reduction_of_sameState
     (hBridge : SameStateBridgeHyp d D)
     (A B : MPSTensor d D)

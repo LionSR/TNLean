@@ -5,13 +5,14 @@ import TNLean.MPS.Chain.FundamentalTheorem
 
 If the combined tensors `chainCombinedTensor A` and `chainCombinedTensor B`
 are gauge-phase equivalent, i.e. there exist `X ∈ GL(D, ℂ)` and `ζ ≠ 0` with
-```
-  chainCombinedTensor B = ζ · X · (chainCombinedTensor A) · X⁻¹
-```
+$$
+  (\operatorname{chainCombinedTensor} B)^j
+    = \zeta\, X\,(\operatorname{chainCombinedTensor} A)^j\,X^{-1},
+$$
 then the chains themselves are cyclically gauge equivalent with a common
 nonzero phase `ζ` multiplying every site tensor:
 $$
-  B_k^i = ζ · Z_k · A_k^i · Z_{k+1}^{-1}.
+  B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}.
 $$
 
 ## Main declarations
@@ -46,9 +47,9 @@ variable {d D n : ℕ}
 
 If `GaugePhaseEquiv (chainCombinedTensor A) (chainCombinedTensor B)` and
 `A` is injective, there exist `Z_k ∈ GL(D, ℂ)` and `ζ ≠ 0` such that
-```
-  B_k^i = ζ · Z_k · A_k^i · Z_{k+1}⁻¹
-```
+$$
+  B_k^i = \zeta\, Z_k\, A_k^i\, Z_{k+1}^{-1}
+$$
 for all sites `k` and physical indices `i`. -/
 theorem fundamentalTheorem_injective_chain_gaugePhase
     (A B : MPSChainTensor d D n)

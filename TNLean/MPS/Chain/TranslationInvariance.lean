@@ -42,8 +42,8 @@ theorem ti_tensors_single_gauge
 
 If `A` is injective and the constant chains `(A, …, A)` and `(B, …, B)`
 satisfy `SameMPV` on their combined tensors, there exist
-`Z ∈ GL(D, ℂ)` with `Z⁻¹` invertible and `λ ∈ ℂ^×`, `λ^n = 1` such that
-`B^i = λ · Z⁻¹ · A^i · Z` for all `i`.  The proof yields `λ = 1`. -/
+a matrix `Z` with `IsUnit Z` and a scalar `λ : ℂ` with `λ^n = 1` such that
+`B^i = λ • (Z⁻¹ * A^i * Z)` for all `i`. The proof yields `λ = 1`. -/
 theorem ti_tensors_collapse_to_single_gauge
     (A B : MPSTensor d D)
     (hn : 0 < n)

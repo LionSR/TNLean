@@ -9,10 +9,11 @@ For two 3-site injective periodic MPS chains
 `A = (A₀, A₁, A₂)` and `B = (B₀, B₁, B₂)` whose combined tensors generate
 the same MPV family, the virtual-insertion coefficients on bond 0–1 are
 related by conjugation through an invertible matrix `Z ∈ GL(D, ℂ)`:
-```
-  tr(A₀^{σ₀} · X · A₁^{σ₁} · A₂^{σ₂})
-= tr(B₀^{σ₀} · Z⁻¹ X Z · B₁^{σ₁} · B₂^{σ₂})
-```
+$$
+  \operatorname{tr}(A_0^{\sigma_0} X A_1^{\sigma_1} A_2^{\sigma_2})
+  =
+  \operatorname{tr}(B_0^{\sigma_0} Z^{-1} X Z B_1^{\sigma_1} B_2^{\sigma_2}).
+$$
 for all `X ∈ M_D(ℂ)` and physical configurations `σ`.  The proof uses the
 linear extension from `SameMPV`, multiplicativity, simplicity of `M_D(ℂ)`,
 and Skolem–Noether.
@@ -63,10 +64,11 @@ For two 3-site injective periodic MPS chains `A = (A₀, A₁, A₂)` and
 `B = (B₀, B₁, B₂)` whose combined tensors generate the same MPV family,
 there exists `Z ∈ GL(D, ℂ)` such that for all `X ∈ M_D(ℂ)` and all
 physical configurations `σ : Fin 3 → Fin d`,
-```
-  virtualInsertCoeff A₀ A₁ A₂ σ X
-= virtualInsertCoeff B₀ B₁ B₂ σ (Z⁻¹ · X · Z)
-```
+$$
+  \operatorname{virtualInsertCoeff}(A_0,A_1,A_2;\sigma,X)
+  =
+  \operatorname{virtualInsertCoeff}(B_0,B_1,B_2;\sigma,Z^{-1}XZ).
+$$
 where the hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`
 is trace agreement for all mixed-site words of all lengths. -/
 theorem virtual_bond_gauge [NeZero D]

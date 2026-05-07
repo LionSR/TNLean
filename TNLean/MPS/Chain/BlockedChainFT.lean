@@ -18,8 +18,8 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Equivalence between `L`-block injectivity and injectivity of the blocked
-tensor `blockTensor A L`. -/
+/-- Equivalence between `N`-block injectivity and injectivity of the blocked
+tensor `blockTensor A N`. -/
 lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) :
     IsNBlkInjective A N ↔ IsInjective (blockTensor A N) := by
   classical
