@@ -10,7 +10,7 @@ open scoped Matrix BigOperators
 /-!
 # Norm-class sector regrouping for the canonical form existence reduction
 
-This file provides the **norm sorting and sector regrouping** step that bridges the output of the
+This file provides the **norm sorting and sector regrouping** step that connects the output of the
 canonical form existence reduction (blocks with nonzero weights, not necessarily strictly
 ordered by norm) with the `IsNormalCanonicalForm` predicate (which requires
 `Antitone (fun k => ‖μ k‖)`).
@@ -29,9 +29,10 @@ period `P` the weights become `(μ₀ k)^P`, and two distinct original weights `
 * **(a)** Relax the predicate to match the paper's canonical form definition.
 * **(b)** Add a norm-sorting and sector-regrouping step.
 
-This file implements strategy **(b)** only in the restricted case where equal-modulus
-blocks on one side are already known to collapse to a single basis tensor. It is
-therefore a useful **special-case norm-class collapse** module, not the full
+This file implements strategy **(b)** only in the case where all blocks sharing the same
+norm have the same MPV family, so there is a single representative basis tensor
+per norm class. It therefore handles the **norm-class sector decomposition from a
+single representative basis tensor per norm class**, not the full
 basis-of-normal-tensors construction from
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Proposition A.6 /
 `prop:char-BNT`]. The general one-sided BNT construction remains open.
@@ -50,13 +51,13 @@ basis-of-normal-tensors construction from
   `sameMPV₂_toTensorFromBlocks_perm` to produce a permuted block family that
   (i) has `SameMPV₂` to the original family and (ii) has strictly decreasing norms.
 
-### Section 3 Normal canonical form from unsorted distinct-norm block data
+### Section 3 Normal canonical form from unsorted distinct-norm block families
 
 * `exists_sortedNCF_of_distinct_norms` — If blocks satisfy all `IsNormalCanonicalForm`
   conditions except norm ordering (norms distinct but not yet decreasing), there exists
   a permutation `e` such that `(μ ∘ e, blocks ∘ e)` is a proper `IsNormalCanonicalForm`
   and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
-  bridging step from the reduction output to the canonical form.
+  connection from the reduction output to the canonical form.
 
 ### Section 4 One-sector-per-block sector decomposition for the sorted distinct-norm case
 
@@ -64,11 +65,11 @@ basis-of-normal-tensors construction from
   distinct-norm block family a `SectorDecomposition` with all multiplicities
   `copies j = 1`.
 
-### Section 5 Restricted norm-class collapse for possibly-equal norms
+### Section 5 Sector decomposition from norm-class representatives (possibly equal norms)
 
 * `exists_normClassSectorDecomp_of_equalNorm_sameMPV` — For blocks with possibly equal norms,
-  given the restricted hypothesis that equal-norm blocks have the same MPV function,
-  there exists a
+  given the hypothesis that equal-norm blocks have the same MPV family
+  (`SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`), there exists a
   `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
   and whose sector-level norms are strictly decreasing.  The proof constructs a
   `SectorDecomposition` from norm-class enumeration and uses the representative block's
@@ -175,9 +176,9 @@ theorem exists_sorted_blockDecomp_of_distinct_norms
   -- We need the symmetric direction.
   exact (sameMPV₂_toTensorFromBlocks_perm μ blocks e N σ).symm
 
-/-! ### Section 3. Normal canonical form from unsorted distinct-norm block data -/
+/-! ### Section 3. Normal canonical form from unsorted distinct-norm block families -/
 
-/-- **Lift unsorted distinct-norm block data to `IsNormalCanonicalForm`.**
+/-- **Lift unsorted distinct-norm block families to `IsNormalCanonicalForm`.**
 
 Starting from a weighted block family satisfying all `IsNormalCanonicalForm` conditions
 *except* that the norms `‖μ k‖` are distinct but not yet ordered, this theorem produces:
@@ -185,9 +186,9 @@ Starting from a weighted block family satisfying all `IsNormalCanonicalForm` con
 * a `SameMPV₂` equivalence between the original and the permuted assembled tensors,
 * an `IsNormalCanonicalForm` certificate for the permuted family `(μ ∘ e, blocks ∘ e)`.
 
-This is the key reduction step: it takes output from the TP-gauge / blocking
-reduction (where distinct norms are known but ordering is not guaranteed) and turns
-it into a proper normal canonical form.
+This is the key reduction: the theorem takes a family with distinct but unsorted
+norms (the output of the TP-gauge / blocking reduction) and produces an
+`IsNormalCanonicalForm` for the sorted family via the permutation `e`.
 
 **Note on types**: The permutation changes the bond-dimension type from
 `∑ k, dim k` to `∑ k, dim (e k)`; these are equal as natural numbers (via
@@ -300,7 +301,7 @@ lemma exists_trivialSectorDecomp_of_sorted_distinct_norms
   intro i j hij
   simpa [trivialSectorDecomp] using hAnti hij
 
-/-! ### Section 5. Restricted norm-class collapse for blocks with possibly equal norms -/
+/-! ### Section 5. Sector decomposition from norm-class representatives (possibly equal norms) -/
 
 /-- Shared norm-class enumeration used by the norm-class sector constructions. -/
 structure NormClassGroupingData {r : ℕ} (μ : Fin r → ℂ) where
@@ -386,39 +387,41 @@ noncomputable def normClassGroupingData {r : ℕ} (μ : Fin r → ℂ) :
     regroup := hRegroup
   }
 
-/-- **Restricted norm-class collapse via norm-class enumeration.**
+/-- **Sector decomposition from norm-class representatives.**
 
 Given a weighted block family `(μ, blocks)` where some blocks may share the same norm
-`‖μ j‖ = ‖μ k‖`, and given that equal-norm blocks already share the same MPV function,
+`‖μ j‖ = ‖μ k‖`, and given that blocks of equal norm have the same MPV family
+via `hMPVEq` (`SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`),
 there exists a `SectorDecomposition P` with:
 
 1. `SameMPV₂ P.toTensor (toTensorFromBlocks μ blocks)`.
-2. `StrictAnti` on the sector-level norms (one norm value per group).
+2. `StrictAnti` on the sector-level norms (one distinct norm value per norm class).
 
 **Hypotheses**:
 - `hμne`: all weights are nonzero.
-- `hMPVEq`: equal-norm blocks have the same MPV function, i.e., `SameMPV₂ (blocks j) (blocks k)`.
-  This is needed so `P.basis j` (a single tensor) can stand in for all blocks in
-  norm class `j`.
+- `hMPVEq`: whenever `‖μ j‖ = ‖μ k‖`, the blocks satisfy `SameMPV₂ (blocks j) (blocks k)`.
+  This ensures all blocks in a norm class have the same MPV family, so a single
+  representative `reprFn j` suffices for the class; the remaining blocks are counted
+  as additional copies (`copies j ≥ 1`).
 
-Note that no equal-dimension hypothesis is needed: the sector's bond dimension is
-fixed by the chosen representative `reprFn j`, and other members of the same norm
-class may have different dimensions — their MPV values are matched via `hMPVEq`,
-which uses the heterogeneous `SameMPV₂` to accommodate different bond dimensions.
+**Formalization note.** No equal-dimension hypothesis is needed: the sector's bond
+dimension is fixed by the representative `reprFn j`, and other members of the same
+norm class may have different dimensions. Their MPV values are matched via `hMPVEq`,
+which uses the heterogeneous `SameMPV₂` to compare blocks of different dimensions.
 
-This lemma is intentionally a **restricted collapse statement**. It is not the
-paper's full basis-of-normal-tensors construction: if two distinct basis tensors
-occur at the same modulus, they should survive as different basis elements rather
-than being forced into one norm class.
+**Scope.** This theorem groups blocks by norm class alone; it does not split a
+norm class further into distinct MPV classes. If two blocks have the same norm
+but do not satisfy `SameMPV₂`, they
+should remain as distinct basis elements. The full BNT theory
+(Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3) handles multiple basis
+tensors at the same norm with separate coefficients.
 
-**Where `hMPVEq` comes from**:
-The hypothesis is an extra input for this restricted collapse lemma. The full
-BNT theory of Cirac--Perez-Garcia--Schuch--Verstraete 2017, Section 2.3 does not
-collapse all equal-modulus sectors into one block: repeated basis tensors can
-survive as multiplicities with separate coefficients. Only blocks that are
-already known to be gauge-phase equivalent should collapse to one sector basis
-tensor; the phase-class construction carries this identification data through
-representative sectors and repeated weights.
+**How `hMPVEq` is used.** The construction forms the norm classes from `μ` alone:
+the `j`-th class is `{k | ‖μ k‖ = v_j}`.  The hypothesis `hMPVEq` must already
+hold for every pair in such a class.  Thus this lemma applies only when every
+equal-norm pair satisfies `SameMPV₂`; equal-norm blocks which do not satisfy
+`SameMPV₂` require the full BNT multiplicity theory instead of this
+single-representative norm-class construction.
 
 **Proof:**
 1. Let `S = Finset.univ.image (‖μ ·‖)`, `g = S.card`.
@@ -506,9 +509,13 @@ lemma exists_normClassSectorDecomp_of_equalNorm_sameMPV
       classes.enum_norm i ⟨0, classes.copies_pos i⟩]
     exact classes.vals_strictAnti hij
 
-/-- Collapse a single norm class onto one sector basis tensor, keeping the full sector-weight
-multiplicity data. This is the one-class special case of the norm-class sector-decomposition
-surface. -/
+/-- **Single-phase-class sector decomposition.**
+
+All `r` blocks belong to a single norm class (all weights have the same norm `‖μ k0‖`)
+and a single phase class (each block is phase-equivalent to `blocks k0` via `hPhase`).
+The resulting `SectorDecomposition` has one basis tensor (the representative
+`blocks k0`), `r` copies, and flat weights whose norms all equal `‖μ k0‖`. This is
+the one-class special case of the norm-class sector decomposition construction. -/
 theorem exists_singleNormClassSectorDecomp_of_phaseMPV
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
