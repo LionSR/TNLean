@@ -11,7 +11,7 @@ This chapter develops the periodic equal-case Fundamental Theorem of MPS
 (Theorem~\ref{thm:periodic_ft}) following
 \cite{DeLasCuevas2017Irreducible}, and gives its two applications:
 the symmetry corollary lifting a physical on-site symmetry of a tensor
-in irreducible form to a virtual $Z$-gauge, and the equivalence between
+in irreducible form~II to a virtual $Z$-gauge, and the equivalence between
 $p$-refinability of the matrix-product-vector family and
 $p$-divisibility of the transfer map.
 
@@ -646,7 +646,7 @@ literature theorem is not yet a single unconditional Lean statement.
     \leanok
     \uses{def:irreducible_form, def:z_gauge_equiv, def:on_site_symmetric,
           def:twisted_tensor, thm:periodic_ft}
-    Let $A$ be an MPS tensor in irreducible form and let
+    Let $A$ be an MPS tensor in irreducible form~II and let
     $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
     Assume moreover the periodic equal-case Fundamental Theorem of MPS
@@ -671,7 +671,7 @@ literature theorem is not yet a single unconditional Lean statement.
     The twisted tensor $\widetilde{A}_g$ coincides with the physical-index
     rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
     By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
-    tensor remains in irreducible form, and the on-site symmetry
+    tensor remains in irreducible form~II, and the on-site symmetry
     hypothesis supplies the equality $\mathcal{V}(A) = \mathcal{V}(A_{U(g)})$.
     Apply the periodic equal-case Fundamental Theorem
     (Theorem~\ref{thm:periodic_ft}) to obtain the asserted
@@ -841,21 +841,21 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
     \leanok
     \uses{def:irreducible_form, def:p_refinable}
-    Let $B$ be an MPS tensor in irreducible form. If $B$ is
+    Let $B$ be an MPS tensor in irreducible form~II. If $B$ is
     $p$-refinable, then there exist a tensor $A$, an isometry
     $W : \C^d \to (\C^d)^{\otimes p}$, and the pullback tensor
     $$
         C^{\alpha} := \sum_{i=0}^{d-1} W_{\alpha,i} B^i
         \qquad (\alpha \in \{0,\ldots,d^p-1\})
     $$
-    such that $C$ is again in irreducible form, $\mathcal E_C = \mathcal E_B$,
+    such that $C$ is again in irreducible form~II, $\mathcal E_C = \mathcal E_B$,
     and $C$ has the same MPV family as $A^{[p]}$.
 \end{theorem}
 
 \begin{proof}\leanok
     Choose $(A,W)$ from the refinement data. The pullback construction gives
     $\mathcal E_C = \mathcal E_B$ and equality of MPV families between $C$
-    and $A^{[p]}$. To see that $C$ is still in irreducible form, transport
+    and $A^{[p]}$. To see that $C$ is still in irreducible form~II, transport
     each periodic block $B_j$ of $B$ through the same physical isometry $W$.
     The left-canonical normalization is preserved because $W^{\dagger}W = \Id$,
     while irreducibility and the peripheral spectrum are preserved because the
@@ -870,7 +870,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
     Fix $(d,D,p)$. This hypothesis says that whenever a blocked tensor $C$ in
-    irreducible form has the same MPV family as a blocked root $A^{[p]}$,
+    irreducible form~II has the same MPV family as a blocked root $A^{[p]}$,
     there exists an integer $m \ge 1$ and a $\mathbb Z_m$-gauge equivalence
     between $C$ and $A^{[p]}$.
 \end{definition}
@@ -881,7 +881,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
     Fix $(d,D,p)$. This hypothesis says that if $m \ge 1$ and a blocked tensor
-    $C$ in irreducible form is $\mathbb Z_m$-gauge equivalent to $A^{[p]}$,
+    $C$ in irreducible form~II is $\mathbb Z_m$-gauge equivalent to $A^{[p]}$,
     then there exists a tensor $A'$ with
     $\sum_i (A'^i)^\dagger A'^i = \Id$ and
     $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
@@ -893,7 +893,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \leanok
     \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
     Fix $(d,D,p)$. This states the combined root-existence statement: whenever a
-    blocked tensor $C$ in irreducible form has the same MPV family as a
+    blocked tensor $C$ in irreducible form~II has the same MPV family as a
     blocked root $A^{[p]}$, one can replace $A$ by a left-canonical tensor $A'$
     with $\mathcal E_C = \mathcal E_{A'^{[p]}}$.
 \end{definition}
@@ -924,14 +924,14 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
           def:irreducible_form, def:p_refinable,
           thm:p_refinement_pullback_irreducible_form}
     Assume the blocked equal-case root hypothesis. Then every
-    $p$-refinable tensor $B$ in irreducible form admits a left-canonical root
+    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
     $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
 \end{theorem}
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
     refinement witness of $B$. This produces a blocked tensor $C$ in
-    irreducible form with $\mathcal E_C = \mathcal E_B$ and the same MPV
+    irreducible form~II with $\mathcal E_C = \mathcal E_B$ and the same MPV
     family as $A^{[p]}$. The blocked equal-case root hypothesis then
     gives a left-canonical tensor $A'$ with
     $\mathcal E_C = \mathcal E_{A'^{[p]}}$. Combining the two transfer-map
@@ -946,7 +946,7 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
           def:irreducible_form, def:p_refinable, def:p_divisible_channel,
           thm:p_refinement_forward_equalcase_reduction}
     Assume the blocked equal-case root hypothesis. Then for every tensor
-    $B$ in irreducible form, $p$-refinability of $B$ implies
+    $B$ in irreducible form~II, $p$-refinability of $B$ implies
     $p$-divisibility of $\mathcal E_B$.
 \end{theorem}
 
@@ -967,7 +967,7 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
           thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
           thm:thm_4_1_p_refinement_reverse}
-    Let $B$ be an MPS tensor in irreducible form and let $p \ge 1$.
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume the two root hypotheses used in the one-way statements: the forward
     left-canonical root hypothesis for refinability $\Rightarrow$ divisibility
     and the reverse transfer-map root hypothesis for divisibility
@@ -990,7 +990,7 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.thm_4_1_p_refinement_forward}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form. Assume a left-canonical
+    Let $B$ be an MPS tensor in irreducible form~II. Assume a left-canonical
     root hypothesis: every refinement witness gives a tensor $A$ with
     $\sum_i (A^i)^\dagger A^i = \Id$ and
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$. Then
@@ -1042,7 +1042,7 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form and let $p \ge 1$.
+    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
     $\mathcal{E}_B = \mathcal{E}_{A^{[p]}}$ whenever $\mathcal{E}_B$ is
     $p$-divisible. Then $p$-divisibility of $\mathcal{E}_B$ implies

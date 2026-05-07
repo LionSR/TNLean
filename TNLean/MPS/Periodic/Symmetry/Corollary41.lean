@@ -29,7 +29,7 @@ lemma twistedTensor_eq_rotatePhysical
 
 /-- **Corollary 4.1 (arXiv:1708.00029, Section 4.2): physical symmetry → virtual `Z`-gauge.**
 
-Let `A` be in irreducible form and let `U : G →* Mat_d ℂ` be a representation of a
+Let `A` be in irreducible form II and let `U : G →* Mat_d ℂ` be a representation of a
 group `G` on the physical leg, acting unitarily. If `A` is on-site symmetric under `U`
 (i.e. each twisted tensor `twistedTensor A U g` has the same MPV family as `A`), then
 for each `g ∈ G` there exists a positive period `m_g` and a `Z_{m_g}`-gauge equivalence
@@ -59,7 +59,7 @@ theorem cor_4_1_physical_symmetry_zgauge
   -- Twisting by `U g` is the same as the physical-index rotation by `U g`.
   have hRotEq : twistedTensor A U g = rotatePhysical (U g) A :=
     twistedTensor_eq_rotatePhysical A U g
-  -- The rotated tensor is again in irreducible form (preserved by unitary rotation).
+  -- The rotated tensor is again in irreducible form II (preserved by unitary rotation).
   have hRot : IsIrreducibleForm (rotatePhysical (U g) A) :=
     isIrreducibleForm_rotatePhysical A (U g) (hUnit g) hA
   -- The on-site symmetry hypothesis gives `SameMPV A (rotatePhysical (U g) A)`.
