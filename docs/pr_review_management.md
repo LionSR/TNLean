@@ -141,27 +141,29 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 
 ### Auto-fix labels control review repair
 
-The active review-repair loop is label-gated.  A pull request with
+The active review-repair loop is label-gated. A pull request with
 `auto-fix-claude` or `auto-fix-codex` is already assigned to the corresponding
-auto-fix workflow.  Do not add `@claude auto fix`, `@chatgpt auto fix`, or
+auto-fix workflow. Do not add `@claude auto fix`, `@chatgpt auto fix`, or
 similar trigger comments to a PR that already has one of these labels.
 Do not use PR replies as an auto-fix control surface for labeled PRs.
 
-In particular, the phrase `auto fix` in a PR reply is not the label-gated
-auto-fix trigger.  It starts the ordinary mention-handler lane, which can
-duplicate work or race the labeled auto-fix workflow.
+In particular, a PR reply such as `@claude auto fix ...` is not the
+label-gated auto-fix trigger. The explicit mention starts the ordinary
+mention-handler lane, which can duplicate work or race the labeled auto-fix
+workflow. The words `auto fix` without a mention do nothing.
 
 Use the labels this way:
 
 | Situation | Action |
 |---|---|
 | PR has `auto-fix-claude` or `auto-fix-codex` | Leave the PR to the labeled workflow; monitor checks and review threads. |
-| PR needs automated review repair and has no auto-fix label | Add the appropriate PR label, then wait for the workflow. |
+| PR has unresolved, non-outdated line-level review threads and needs mechanical repair | Add the appropriate PR label, then wait for the workflow. |
+| PR only has PR-level comments or review-summary comments | Fix locally, or open a separate issue/mention task if a new branch is intended; the auto-fix label has no review thread to consume. |
 | Labeled workflow reaches its iteration cap, fails, or stalls | Remove or keep the label deliberately, then fix locally or open a narrow follow-up issue. |
 | PR needs a human mathematical decision | Do not ask auto-fix to decide it; comment with the mathematical obstruction or fix locally. |
 
-The auto-fix labels are PR-only controls.  Adding them to issues does not start
-the review-fix loop.  See `docs/ci-automation.md` for the workflow details.
+The auto-fix labels are PR-only controls. Adding them to issues does not start
+the review-fix loop. See `docs/ci-automation.md` for the workflow details.
 
 ### When to use direct mentions
 
@@ -171,22 +173,23 @@ one-off answer is intended.
 They are not a repair mechanism for a PR that is already on the auto-fix label
 lane.
 
-Putting `@claude` or `@chatgpt` in an issue body is unreliable for activation;
-post a comment after issue creation if a mention-handler task is intended.  For
-new issue-based work, mention comments create fresh work from `main`, so do not
-use them for ordinary nits on an existing PR branch.
+Opening an issue whose body contains `@claude` or `@chatgpt` can trigger the
+mention handler, but editing an existing issue body later does not reliably
+create a new task. Post a new issue comment when an existing issue should start
+a mention-handler task. For new issue-based work, mention comments create fresh
+work from `main`, so do not use them for ordinary nits on an existing PR branch.
 
 ### Branch-name caveat for mention handlers
 
 Old bracketed issue titles such as `[Wolf Chapter 6] ...` can put `]` into bot
-branch names.  Some mention-handler checkouts reject such branch names.  New
+branch names. Some mention-handler checkouts reject such branch names. New
 issues should keep titles bracket-free, for example `Wolf Chapter 6: ...`.
 
 ### Task-size calibration
 
-Mention-handler agents tend to produce small PRs.  Bundle related source-facing
+Mention-handler agents tend to produce small PRs. Bundle related source-facing
 formula or prose repairs into a single issue comment rather than opening many
-tiny tasks.  For substantial formalization work, prefer a local branch or an
+tiny tasks. For substantial formalization work, prefer a local branch or an
 explicitly scoped issue whose output is one reviewable PR.
 
 ## PR Follow-up Wisdom
@@ -195,18 +198,18 @@ explicitly scoped issue whose output is one reviewable PR.
 1. **Get the full open PR list** — `gh pr list --state open`
 2. **For EACH PR**, check all 3 comment types (inline, PR-level, reviews) using the script above
 3. **Identify what's unresolved** — don't just count comments, READ them
-4. If the PR has an auto-fix label, do not post another mention-trigger request; wait for the labeled workflow or fix locally after it fails/stalls.
-5. If the PR has no auto-fix label and the comments are mechanical, add the appropriate auto-fix label.
-6. If the comments require mathematical judgment, fix locally or write a precise issue comment explaining the obstruction.
+4. **Respect existing auto-fix labels** — if the PR has an auto-fix label, do not post another mention-trigger request; wait for the labeled workflow or fix locally after it fails/stalls.
+5. **Use labels only for review threads** — if the PR has no auto-fix label and has mechanical unresolved line-level review threads, add the appropriate auto-fix label.
+6. **Handle PR-level comments separately** — if the comments are PR-level, review-summary, or require mathematical judgment, fix locally or write a precise issue comment explaining the obstruction.
 7. **Merge clean PRs immediately** — don't let them sit. If ALL comments from ALL reviewers (Bugbot, Claude, Codex, Copilot, humans) are addressed, CI green, no unresolved inline/PR-level/review comments across all 3 endpoints → merge right away. No reason to batch or delay.
 
 ### After any fix commit, wait for CI + re-review
-Bugbot and claude-review CI run on every new commit.  After a local or auto-fix
+Bugbot and claude-review CI run on every new commit. After a local or auto-fix
 commit, wait for CI to complete and check for new inline comments before
 declaring the PR ready.
 
 ### Superseded PR chains — don't close prematurely
-When a replacement PR exists, the replacement often has its own issues.  Do not
+When a replacement PR exists, the replacement often has its own issues. Do not
 close the original until the replacement is clean, linked, and ready.
 
 ### Bugbot feedback loops on complex PRs
