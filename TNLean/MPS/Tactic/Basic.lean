@@ -118,6 +118,6 @@ The user is responsible for resolving the `if` by providing the length case (e.g
 `hN : 0 < N` or `hN : N ≠ 0`).
 
 The name "zero tail" is a Lean internal bookkeeping term; the source paper
-(arXiv:1606.00608, Section~2.3) calls these "zero blocks." 
+(arXiv:1606.00608, Section~2.3) calls these "zero blocks."
 -/
 macro "zero_tail_simp" : tactic => `(tactic| simp only [mps_zero_tail])

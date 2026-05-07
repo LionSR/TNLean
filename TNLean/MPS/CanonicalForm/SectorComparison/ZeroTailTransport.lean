@@ -13,7 +13,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 This module contains generic lemmas for transporting decompositions of an MPS
 tensor into a zero block plus a nonzero part.  The Lean formalization uses the
 name "zero tail" (`zeroTailDim`, `zeroMPSTensor`) as an internal bookkeeping
-term; the source paper (arXiv:1606.00608, Section~2.3) calls these "zero blocks." 
+term; the source paper (arXiv:1606.00608, Section~2.3) calls these "zero blocks."
 -/
 
 namespace MPSTensor
