@@ -9,10 +9,11 @@ import TNLean.MPS.Core.BlockingInfrastructure
 /-!
 # Common-period cyclic-sector blocking
 
-The common-period blocking operation for cyclic-sector blocks transports
-per-block primitivity witnesses to a common blocking level. The abbreviation
-`lcmPeriod` is defined in `TNLean.MPS.Core.BlockingInfrastructure`, together
-with its positivity and divisibility lemmas.
+The common-period blocking operation sends each cyclic-sector block to the
+period `lcmPeriod periods`, giving a family with physical dimension
+`blockPhysDim d (lcmPeriod periods)` and the same block-dependent bond
+dimensions. Per-block primitivity witnesses are transported along the
+divisibility `periods i ∣ lcmPeriod periods`.
 -/
 
 namespace MPSTensor
@@ -22,8 +23,8 @@ variable {d k : ℕ}
 /-- Block each family member to the common `lcmPeriod`.
 
 This keeps a uniform physical dimension across the common-period family while
-allowing the bond dimension to vary with the index. The
-resulting family is the basic input for common-period cyclic-sector comparison.
+allowing the bond dimension to vary with the index. The resulting family is the
+basic input for common-period cyclic-sector comparison.
 -/
 noncomputable def commonPeriodBlocking
     {dim : Fin k → ℕ}
