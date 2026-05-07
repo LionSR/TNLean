@@ -5,16 +5,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Algebra.BurnsideTheorem
 import TNLean.Algebra.IrreducibleTensorAction
-import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
 import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
 # Quantum Wielandt: primitivity implies normality under `PosDef`
 
-This file collects results on the primitive-to-normal implication:
-`isNormal_of_isPrimitiveMPS_of_posDef`, together with an exact-word-span
-witness theorem that additionally requires aperiodicity.
+This file contains the primitive-to-normal implication:
+`isNormal_of_isPrimitiveMPS_of_posDef`.
 
 ## Proof route for normality
 
@@ -28,16 +26,9 @@ witness theorem that additionally requires aperiodicity.
 The `(a)→(c)` part is provided by `ImpliesStronglyIrreducible.lean`, while the
 `(c)→(b)` part is provided by `Primitivity/StronglyIrreducibleToFullRank.lean`.
 
-## Aperiodicity
-
-The main theorem `isNormal_of_isPrimitiveMPS_of_posDef` requires only
-`IsPrimitiveMPS A ρ` and `ρ.PosDef` — no aperiodicity assumption. Strong
-irreducibility already yields peripheral spectrum `{1}`.
-
-The witness theorem
-`wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic` takes an
-additional `hAper : 1 ∈ wordSpan A 1` to upgrade `IsNormal A` to monotone
-exact-length word spans.
+The main theorem requires only `IsPrimitiveMPS A ρ` and `ρ.PosDef` —
+no aperiodicity assumption. Strong irreducibility already yields peripheral
+spectrum `{1}`.
 
 This module is intentionally auxiliary. Downstream users who only need
 Proposition 3 / Theorem 1 statements should prefer
@@ -77,24 +68,5 @@ theorem isNormal_of_isPrimitiveMPS_of_posDef
     (hPD : ρ.PosDef) :
     IsNormal A := by
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrim hPD
-
-/-- Under `IsPrimitiveMPS`, `PosDef`, and aperiodicity, exact word spans are eventually `⊤`.
-
-This is the witness form of `isNormal_of_isPrimitiveMPS_of_posDef`: once
-`IsNormal A` is known, the extra aperiodicity hypothesis makes exact word spans
-monotone, so from one full span one gets `wordSpan A n = ⊤` for all sufficiently
-large `n`. -/
-theorem wordSpan_eq_top_eventually_of_isPrimitiveMPS_of_posDef_of_aperiodic
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hPrim : IsPrimitiveMPS A ρ)
-    (hPD : ρ.PosDef)
-    (hAper : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ wordSpan A 1) :
-    ∃ N : ℕ, ∀ n : ℕ, N ≤ n → wordSpan A n = ⊤ := by
-  obtain ⟨N, hN⟩ := isNormal_of_isPrimitiveMPS_of_posDef hPrim hPD
-  rw [← wordSpan_eq_top_iff_isNBlkInjective] at hN
-  refine ⟨N, fun n hn => ?_⟩
-  exact eq_top_iff.mpr <| by
-    simpa [hN] using wordSpan_mono'_of_one_mem_wordSpan_one A hAper hn
-
 
 end MPSTensor
