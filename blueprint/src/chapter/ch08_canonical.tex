@@ -540,11 +540,11 @@ include an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
 The first theorem below derives this from
-blockwise primitive fixed-point data.
+blockwise primitive fixed points.
 The second derives the same conclusion from
 per-block peripheral-spectrum primitivity.
 
-\begin{theorem}[Canonical form from primitive fixed-point data]%
+\begin{theorem}[Canonical form from primitive fixed points]%
 	\label{thm:canonical_from_primitive_fixedpoint}
 	\lean{MPSTensor.isCanonicalForm_of_primitive}
 	\leanok
@@ -807,7 +807,7 @@ per-block peripheral-spectrum primitivity.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
-		Peripheral-spectrum primitivity is part of the data. Together with
+		Peripheral-spectrum primitivity is one of the hypotheses. Together with
 		irreducibility and TP normalization, it yields the spectral-gap
 		primitive theorem needed for overlap convergence, so the self-overlap
 		condition follows from the other hypotheses rather than appearing as
@@ -1475,7 +1475,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{def:irreducible_tensor}
 	Let $A$ be a left-canonical MPS tensor, and let
-	$(P_k)_{k=1}^m$ be orthogonal projections summing to $\Id$
+	$(P_k)_{k=0}^{m-1}$ be orthogonal projections summing to $\Id$
 	that commute with every Kraus operator:
 	$P_k A^i = A^i P_k$ for all $i, k$.
 	Then there exist left-canonical blocks $(C_k)_{k=1}^m$
@@ -1507,7 +1507,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{def:irreducible_tensor}
 	Let $A$ be a left-canonical MPS tensor, and let
-	$(P_k)_{k=1}^m$ be orthogonal projections summing to $\Id$
+	$(P_k)_{k=0}^{m-1}$ be orthogonal projections summing to $\Id$
 	that are fixed by the adjoint transfer map:
 	$\E_A^\dagger(P_k) = P_k$ for every $k$.
 	Then the same block decomposition conclusion holds as in
@@ -1547,8 +1547,8 @@ zero-block dimension; the two terms refer to the same concept.
 	\label{thm:cyclic_projection_periodic_fixed}
 	\lean{MPSTensor.adjointTransferMap_pow_fixes_cyclic_projection}
 	\leanok
-	If a family of projections $(P_k)_{k=1}^m$ satisfies
-	$\E^\dagger(P_{k+1}) = P_k$, then the $m$-th iterate of $\E^\dagger$
+	If a family of projections $(P_k)_{k=0}^{m-1}$ satisfies
+	$\E^\dagger(P_{k+1}) = P_k$ (indices modulo $m$), then the $m$-th iterate of $\E^\dagger$
 	fixes each projection $P_k$.
 \end{theorem}
 
@@ -1585,7 +1585,7 @@ zero-block dimension; the two terms refer to the same concept.
 	Then the blocked tensor $A^{[m]}$ admits:
 	\begin{enumerate}
 		\item left-canonical sector tensors $(C_k)_{k=1}^m$,
-		\item orthogonal projections $(P_k)_{k=1}^m$ summing to $\Id$ and satisfying
+		\item orthogonal projections $(P_k)_{k=0}^{m-1}$ summing to $\Id$ and satisfying
 		      $\E_{A^\dagger}(P_{k+1}) = P_k$,
 		\item compression linear equivalences
 		      $\varphi_k : \MN{\dim C_k} \xrightarrow{\sim} P_k \MN{D} P_k$,
@@ -1643,12 +1643,12 @@ zero-block dimension; the two terms refer to the same concept.
 		thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
 	The proof repeats the cyclic-sector construction of
 	Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keeps the projection and
-	compression data, and applies
+	compression equivalences, and applies
 	Theorem~\ref{thm:blocked_sector_unconditional} to the resulting
 	sector blocks.
 \end{proof}
 
-\begin{definition}[Primitive irreducible cyclic-sector data]%
+\begin{definition}[Primitive irreducible cyclic sectors]%
 \label{def:primitive_irreducible_cyclic_sectors}
 	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
 	\leanok
@@ -2008,7 +2008,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\label{lem:pairwise_ortho_proj_sum}
 	\lean{pairwise_mul_zero_of_orthogonalProjection_sum_one}
 	\leanok
-	Let $(P_k)_{k=1}^m$ be orthogonal projections summing to the identity:
+	Let $(P_k)_{k=0}^{m-1}$ be orthogonal projections summing to the identity:
 	$\sum_k P_k = \Id$.
 	Then for $i \neq j$ we have $P_i P_j = 0$.
 \end{lemma}
@@ -2058,7 +2058,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\label{lem:orbit_iterate_shifted_sector}
 	\lean{MPSTensor.orbit_iterate_supported_on_shifted_sector}
 	\leanok
-	Let $(P_k)_{k=1}^m$ be orthogonal projections with cyclic shift
+	Let $(P_k)_{k=0}^{m-1}$ be orthogonal projections with cyclic shift
 	$T(P_{k+1}) = P_k$, and suppose $T$ is multiplicative on each sector
 	corner.
 	If $Q$ is supported on sector $P_k$ (i.e.\ $QP_k = Q = P_k Q$), then
@@ -2099,7 +2099,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\lean{MPSTensor.orbitSumProjection_eq_one_of_full_sector}
 	\leanok
 	\uses{lem:orbit_sum_fixed}
-	Let $(P_k)_{k=1}^m$ be orthogonal projections with
+	Let $(P_k)_{k=0}^{m-1}$ be orthogonal projections with
 	$\sum_k P_k = \Id$ and cyclic shift $T(P_{k+1}) = P_k$.
 	Then for every sector index $k$,
 	\[
@@ -2119,7 +2119,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{thm:cyclic_sector_decomp_irr_tp}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be the cyclic sector projections.
+	map, and let $(P_k)_{k=0}^{m-1}$ be the cyclic sector projections.
 	Suppose the orbit-sum lift hypothesis holds: for every sector $k$ and
 	every subprojection $Q \le P_k$ fixed by $(\E_A^\dagger)^m$, there exists
 	a global projection $R$ that is invariant under $\E_A^\dagger$ and
@@ -2164,7 +2164,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\label{def:sector_fixed_point_algebra_rigidity}
 	\lean{MPSTensor.SectorFixedPointAlgebraRigidity}
 	\leanok
-	Let $T$ be the adjoint transfer map and $(P_k)_{k=1}^m$ a cyclic family of
+	Let $T$ be the adjoint transfer map and $(P_k)_{k=0}^{m-1}$ a cyclic family of
 	orthogonal sector projections. We say that the sector dynamics satisfies
 	fixed-point-algebra rigidity if, for each $k$, the one-step map $T$ is
 	multiplicative on the $T^m$-fixed operators supported on the corner
@@ -2217,7 +2217,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{def:sector_fixed_point_algebra_rigidity, lem:orbit_sum_fixed}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections with
+	and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections with
 	$\sum_k P_k = \Id$. Then the sector fixed-point-algebra rigidity property
 	holds automatically for $\E_A^\dagger$.
 \end{theorem}
@@ -2247,7 +2247,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{def:sector_fixed_point_algebra_rigidity, thm:sector_fixed_algebra_irred_cyclic}
 	Let $A$ be an irreducible trace-preserving MPS tensor, and let
-	$(P_k)_{k=1}^m$ be cyclic orthogonal sector projections for
+	$(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections for
 	$\E_A^\dagger$ with $\sum_k P_k = \Id$. Then the sector
 	fixed-point-algebra rigidity property holds for $\E_A^\dagger$.
 \end{theorem}
@@ -2269,7 +2269,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\lean{MPSTensor.sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints}
 	\leanok
 	\uses{def:sector_fixed_point_algebra_rigidity}
-	Let $A$ be a left-canonical MPS tensor and let $(P_k)_{k=1}^m$ be cyclic
+	Let $A$ be a left-canonical MPS tensor and let $(P_k)_{k=0}^{m-1}$ be cyclic
 	orthogonal sector projections with $\sum_k P_k = \Id$.
 	Suppose that for each $k$ and each element $X \in P_k \MN{D} P_k$ satisfying
 	$\E_{C_k}^\dagger(X) = X$ (where $C_k$ is the blocked sector tensor), there
@@ -2298,7 +2298,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector,
 	      thm:sector_irred_orbit_lift}
-	Let $A$ be a left-canonical MPS tensor, $(P_k)_{k=1}^m$ a cyclic family
+	Let $A$ be a left-canonical MPS tensor, $(P_k)_{k=0}^{m-1}$ a cyclic family
 	of orthogonal sector projections with $\sum_k P_k = \Id$, and set
 	$T = \E_A^\dagger$. Assume two auxiliary facts, both discharged from the
 	block-diagonal canonical-form analysis of
@@ -2344,7 +2344,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{lem:fix_upgrade_peripheral, lem:orbit_sum_hLift_construction}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	map, and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections.
 	Assume the projection-step hypothesis of
 	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then the orbit-sum lift holds:
 	for every orthogonal subprojection $Q \le P_k$ whose corner is preserved by
@@ -2370,7 +2370,7 @@ zero-block dimension; the two terms refer to the same concept.
 	      lem:sector_fixed_algebra_proj_step,
 	      lem:orbit_sum_hLift_construction}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Assume the
+	and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections. Assume the
 	single fixed-point-algebra rigidity hypothesis from
 	Definition~\ref{def:sector_fixed_point_algebra_rigidity}. Then the orbit-sum
 	lift holds: for every orthogonal subprojection $Q \le P_k$ whose corner is
@@ -2400,7 +2400,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{lem:orbit_sum_hLift_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then for
+	and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections. Then for
 	every orthogonal subprojection $Q \le P_k$ whose corner is preserved by
 	$(\E_A^\dagger)^m$, there is a global projection $R$ invariant under
 	$\E_A^\dagger$ with the same zero/full-sector tests.
@@ -2419,7 +2419,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	map, and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections.
 	Assume the projection-step and fixed-point-upgrade hypotheses of
 	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then $(\E_A^\dagger)^m$
 	is irreducible on each corner $P_k$.
@@ -2437,7 +2437,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
+	map, and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections.
 	Assume only the projection-step hypothesis from
 	Lemma~\ref{lem:orbit_sum_hLift_proj_step}. Then $(\E_A^\dagger)^m$
 	is irreducible on each corner $P_k$.
@@ -2455,7 +2455,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_fixed_algebra}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Assume only
+	and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections. Assume only
 	the fixed-point-algebra rigidity hypothesis from
 	Definition~\ref{def:sector_fixed_point_algebra_rigidity}. Then
 	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
@@ -2473,7 +2473,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then
+	and let $(P_k)_{k=0}^{m-1}$ be cyclic orthogonal sector projections. Then
 	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
 \end{theorem}
 
@@ -2644,7 +2644,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\leanok
 	\uses{def:primitive_mps, def:irreducible_tensor, def:normal}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
-	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	irreducible tensor, and peripheral spectrum $\{1\}$.
 	Then $A$ is normal.
 \end{theorem}
 
@@ -2663,7 +2663,7 @@ zero-block dimension; the two terms refer to the same concept.
 	\uses{thm:normal_tp_primitive_irred,
 		lem:isNBlkInjective_iff_blockTensor_isInjective}
 	Let $A$ be a left-canonical MPS tensor with $D > 0$,
-	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	irreducible tensor, and peripheral spectrum $\{1\}$.
 	Then some blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
@@ -2677,7 +2677,9 @@ zero-block dimension; the two terms refer to the same concept.
 
 \begin{theorem}[Blocking preserves normality]%
 	\label{thm:normal_blocking_preserved}
-	\lean{MPSTensor.isNormal_blockTensor_of_isNormal}
+	\lean{MPSTensor.isNBlkInjective_mul_of_isNBlkInjective,
+		MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective,
+		MPSTensor.isNormal_blockTensor_of_isNormal}
 	\leanok
 	\uses{def:normal, def:blocked_tensor}
 	If $A$ is normal and $p \ge 1$, then $A^{[p]}$ is normal.
@@ -2764,7 +2766,7 @@ zero-block dimension; the two terms refer to the same concept.
 
 \begin{theorem}[BNT grouping theorem]
 	\label{thm:bnt_grouping}
-	\lean{MPSTensor.exists_bnt_grouping}\leanok
+	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
 	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
 	If equal-norm blocks represent the same MPS family, then one obtains a sector
 	decomposition whose sector norms are strictly decreasing.
@@ -2794,14 +2796,14 @@ zero-block dimension; the two terms refer to the same concept.
 
 \begin{theorem}[BNT partition from gauge equivalence]
 	\label{thm:bnt_grouping_gauge_equiv}
-	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
+	\notready
 	\uses{thm:bnt_grouping}
 	If equal-norm blocks are related by gauge equivalence with unit-modulus phase, the phases can be absorbed into sector weights to obtain a BNT grouping with strictly decreasing sector norms.
 \end{theorem}
 
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
-	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
+	\notready
 	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero
 	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
@@ -2882,7 +2884,7 @@ zero-block dimension; the two terms refer to the same concept.
 	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
 \end{proof}
 
-\begin{definition}[MPV phase class data]
+\begin{definition}[MPV phase equivalence class]
 	\label{def:mpv_phase_class_data}
 	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
 	\leanok
@@ -3165,13 +3167,13 @@ zero-block dimension; the two terms refer to the same concept.
 	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
-\begin{theorem}[Sorted TP primitive irreducible data form a normal canonical form]%
+\begin{theorem}[Sorted TP primitive irreducible blocks form a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
 	\leanok
 	\uses{def:is_normal_canonical_form}
-	Let $(\mu_k, A_k)$ be a finite block family with strictly decreasing norms
-	$|\mu_1| > \cdots > |\mu_r|$.
+	Let $(\mu_k, A_k)$ be a finite block family with non-increasing norms
+	$|\mu_1| \ge \cdots \ge |\mu_r|$.
 	If every block $A_k$ is left-canonical, primitive, irreducible, has positive
 	bond dimension, and every $\mu_k \neq 0$, then $(\mu_k,A_k)$ is a normal
 	canonical form.
@@ -3180,7 +3182,7 @@ zero-block dimension; the two terms refer to the same concept.
 \begin{proof}\leanok
 	\uses{def:is_normal_canonical_form}
 	This is the defining constructor for normal canonical form with all required
-	data supplied by the hypotheses.
+	conditions supplied by the hypotheses.
 \end{proof}
 
 \begin{theorem}[Normal canonical form from an already primitive block decomposition]%
@@ -3240,7 +3242,7 @@ zero-block dimension; the two terms refer to the same concept.
 
 \begin{theorem}[Structural after-blocking form of the fundamental theorem]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.afterBlocking_structuralDecompositionData_of_sameMPV₂}
+	\lean{MPSTensor.exists_bilateral_tp_primitive_blockDecomp_after_blocking}
 	\leanok
 	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	If two tensors generate the same MPV family, then each tensor admits some
