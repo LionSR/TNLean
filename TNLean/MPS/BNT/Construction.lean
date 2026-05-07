@@ -12,19 +12,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 /-!
-# Construction of basis-of-normal-tensors data from canonical form
+# Basis of normal tensors from canonical form
 
-This module introduces `IsCanonicalFormBNT`, a restricted already-grouped canonical-form
-predicate. It extends `IsCanonicalForm` with strict ordering of weight moduli and the
-requirement that distinct blocks are not gauge-phase equivalent, so equivalent blocks have
-already been merged and each remaining block is a chosen BNT representative.
+This module introduces `IsCanonicalFormBNT`: hypotheses on a family of tensors
+`A_j` with weights `μ_j` that require
 
-This is not the general BNT normal form of arXiv:1606.00608.  The paper allows repeated
-copies inside a BNT sector, with coefficients `μ_{j,q}` and multiplicities `M_j`; that
-general comparison data is represented by `SectorDecomposition` and the sector-weight
-comparison theorems.  It is also not the paper's "block-injective canonical form" (biCF),
-which is the separate exact-length direct-sum span condition from arXiv:1606.00608,
-lines 317–345.
+* `IsCanonicalForm` — the tensors are in left-canonical form, with antitone weight moduli,
+* strict ordering `‖μ_j‖ > ‖μ_{j+1}‖`, and
+* distinct blocks with equal dimension are not gauge-phase equivalent.
+
+Equivalent blocks are therefore already merged into a single BNT representative.
+This is not the general BNT normal form of arXiv:1606.00608, which allows repeated
+copies inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j`; those are
+obtained from `SectorDecomposition` and the sector-weight comparison theorems.
 
 ## Main results
 
@@ -32,23 +32,25 @@ lines 317–345.
    distinct blocks are gauge-phase equivalent and the representative weight moduli are
    strictly decreasing.
 
-2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`** and the bundled-data formulation
-   **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`**: distinct CF-BNT blocks have decaying
-   cross-overlaps. The proof combines:
+2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`**: distinct CF-BNT blocks have
+   decaying cross-overlaps.  The theorem
+   **`IsCanonicalFormBNT.cross_overlap_tendsto_zero`** states the same conclusion from
+   `IsCanonicalFormBNT`. The proof combines:
    - Dimension-mismatch case: `mpvOverlap_tendsto_zero_of_dim_ne`
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
 
-3. **`isBNT_of_separated_CFBNT_data`** and the bundled-data formulation
-   **`IsCanonicalFormBNT.isBNT`**:
-   the restricted separated block data give a valid `IsBNT`
-   structure, assembling all overlap and independence properties.
+3. **`isBNT_of_separated_CFBNT_data`**: the restricted separated block hypotheses give
+   a valid `IsBNT` structure with the required overlap and independence properties.
+   The lemma **`IsCanonicalFormBNT.isBNT`** states the same implication under
+   `IsCanonicalFormBNT`.
 
-4. **`fundamentalTheorem_of_separated_CFBNT_data`** and the bundled-data formulation
-   **`fundamentalTheorem_of_IsCanonicalFormBNT`**: if two CF-BNT decompositions generate
-   proportional MPVs with convergent nonzero coefficients, then the blocks match up to
-   permutation, dimension equality, and gauge-phase equivalence. This connects
-   canonical/BNT split data to the hypotheses of `BNT/PermutationRigidity`.
+4. **`fundamentalTheorem_of_separated_CFBNT_data`**: if two CF-BNT decompositions
+   generate proportional MPVs with convergent nonzero coefficients, then the blocks
+   match up to permutation, dimension equality, and gauge-phase equivalence. The theorem
+   **`fundamentalTheorem_of_IsCanonicalFormBNT`** states the same implication under
+   `IsCanonicalFormBNT`. This connects the separated canonical/BNT hypotheses to
+   `BNT/PermutationRigidity`.
 
 ## Design note on coefficients
 
@@ -57,10 +59,10 @@ tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
 coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
 proportionality constant. In the grouped setting, the normalized sums can still oscillate: unit-
-modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` predicate
-sidesteps that issue by requiring that the grouping has already been done (each block in the
+modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` hypotheses
+sidestep that issue by requiring that the grouping has already been done (each block in the
 basis of normal tensors corresponds to a single CF block), and the proportional-case theorem
-below takes whatever convergent coefficient data it needs as explicit hypotheses.
+below takes the required convergent coefficient limits as explicit hypotheses.
 -/
 
 open scoped Matrix BigOperators
@@ -77,7 +79,7 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
 
-/-! ### `IsCanonicalFormBNT` predicate -/
+/-! ### `IsCanonicalFormBNT` hypotheses -/
 
 /-- **Canonical form with basis-of-normal-tensors (BNT) separation**: extends
 `IsCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
@@ -106,16 +108,16 @@ namespace IsCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project CF-BNT data to blockwise injectivity. -/
+/-- Project CF-BNT hypotheses to blockwise injectivity. -/
 def toHasInjectiveBlocks (hCF : IsCanonicalFormBNT μ A) : HasInjectiveBlocks (d := d) A :=
   hCF.toIsCanonicalForm.toHasInjectiveBlocks
 
-/-- Project CF-BNT data to left-canonical block-family normalization. -/
+/-- Project CF-BNT hypotheses to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalFormBNT μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   hCF.toIsCanonicalForm.toIsLeftCanonicalBlockFamily
 
-/-- Project restricted CF-BNT data to strict weight data.
+/-- Project restricted CF-BNT hypotheses to strict weight inequalities.
 
 This projection is for the already-grouped single-representative special case, not
 for the full CPSV multiplicity BNT surface. -/
@@ -124,7 +126,7 @@ def toHasStrictOrderedNonzeroWeights (hCF : IsCanonicalFormBNT μ A) :
   mu_strict_anti := hCF.mu_strict_anti
   mu_ne_zero := hCF.toIsCanonicalForm.mu_ne_zero
 
-/-- Project CF-BNT data to self-overlap normalization. -/
+/-- Project CF-BNT hypotheses to self-overlap normalization. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hCF.toIsCanonicalForm.toHasNormalizedSelfOverlap
@@ -161,21 +163,21 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
     hCF.toHasNormalizedSelfOverlap
     (fun _ _ hjk h => absurd (hDistinct h) hjk)
 
-/-! ### `IsNormalCanonicalFormBNT` predicate -/
+/-! ### `IsNormalCanonicalFormBNT` hypotheses -/
 
-/-- Normal canonical form with basis-of-normal-tensors (BNT) separation: extends
-`IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
-and that the block weight moduli are **strictly decreasing**.
+/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with
+the requirement that distinct blocks are not gauge-phase equivalent and that the
+block weight moduli `‖μ_j‖` are **strictly decreasing**.
 
-Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
-normality with non-increasing moduli. This predicate is the restricted,
-already-grouped analogue of the BNT comparison data: it keeps one representative per
-strict norm class and therefore does not represent the full CPSV multiplicity
-BNT surface, where repeated equal-modulus sectors are retained.
+These hypotheses keep one representative per strict weight-modulus class. They do
+not retain repeated equal-modulus sectors; the full multiplicity structure (weights
+`μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
+`SectorDecomposition` and the sector-weight comparison theorems.
 
-The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
-equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal
-implication must be supplied explicitly when passing from this predicate to `IsBNT`. -/
+**Formalization note.** `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map
+version of normality (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask
+for blockwise `IsNormal` (the equivalent algebraic eventual-block-injectivity notion).
+The primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -191,22 +193,22 @@ namespace IsNormalCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Project normal-CF-BNT data to blockwise irreducibility. -/
+/-- Project normal-CF-BNT hypotheses to blockwise irreducibility. -/
 def toHasIrreducibleBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasIrreducibleBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasIrreducibleBlocks
 
-/-- Project normal-CF-BNT data to left-canonical block-family normalization. -/
+/-- Project normal-CF-BNT hypotheses to left-canonical block-family normalization. -/
 def toIsLeftCanonicalBlockFamily (hNCF : IsNormalCanonicalFormBNT μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toIsLeftCanonicalBlockFamily
 
-/-- Project normal-CF-BNT data to blockwise primitive transfer maps. -/
+/-- Project normal-CF-BNT hypotheses to blockwise primitive transfer maps. -/
 def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasPrimitiveBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
 
-/-- Project restricted normal-CF-BNT data to strict weight data.
+/-- Project restricted normal-CF-BNT hypotheses to strict weight inequalities.
 
 This projection is for the already-grouped single-representative special case, not
 for the full CPSV multiplicity BNT surface. -/
@@ -215,7 +217,7 @@ def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalFormBNT μ A) :
   mu_strict_anti := hNCF.mu_strict_anti
   mu_ne_zero := hNCF.toIsNormalCanonicalForm.mu_ne_zero
 
-/-- Project normal-CF-BNT data to self-overlap normalization. -/
+/-- Project normal-CF-BNT hypotheses to self-overlap normalization. -/
 def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
@@ -304,14 +306,14 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
   obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
   exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
 
-/-! ### Cross-overlap decay from separated CF-BNT data -/
+/-! ### Cross-overlap decay from separated CF-BNT hypotheses -/
 
 section SeparatedCFBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Split-data version of CF-BNT cross-overlap decay.
+/-- Separated-hypotheses version of CF-BNT cross-overlap decay.
 
 Only injectivity, left-canonical normalization, and the BNT non-equivalence assumption are used. -/
 theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
@@ -337,7 +339,7 @@ theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
       (hLeft.leftCanonical k)
       hdim
 
-/-- Split-data version of `IsCanonicalFormBNT.isBNT`.
+/-- Separated-hypotheses version of `IsCanonicalFormBNT.isBNT`.
 
 The only role of `μ` is to specify the block-diagonal tensor `toTensorFromBlocks μ A` and its
 obvious coefficient decomposition.  Strict weight ordering is not used here. -/
@@ -369,7 +371,7 @@ variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 /-- **Cross-overlap decay for CF-BNT blocks**: distinct blocks have
 `mpvOverlap (A j) (A k) N → 0` as `N → ∞`.
 
-This bundled-data theorem is a direct consequence of
+This theorem is a direct consequence of
 `cross_overlap_tendsto_zero_of_separated_CFBNT_data`. -/
 theorem cross_overlap_tendsto_zero
     [∀ k, NeZero (dim k)]
@@ -386,7 +388,7 @@ theorem cross_overlap_tendsto_zero
 /-- A canonical-form decomposition into a basis of normal tensors yields a valid `IsBNT`
 structure.
 
-This bundled-data lemma is a direct consequence of `isBNT_of_separated_CFBNT_data`. -/
+This lemma is a direct consequence of `isBNT_of_separated_CFBNT_data`. -/
 lemma isBNT [∀ k, NeZero (dim k)]
     (hCF : IsCanonicalFormBNT μ A) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
@@ -398,14 +400,14 @@ lemma isBNT [∀ k, NeZero (dim k)]
 
 end IsCanonicalFormBNT
 
-/-! ### Cross-overlap decay from separated normal-CF-BNT data -/
+/-! ### Cross-overlap decay from separated normal-CF-BNT hypotheses -/
 
 section SeparatedNormalCFBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Split-data version of normal-CF-BNT cross-overlap decay.
+/-- Separated-hypotheses version of normal-CF-BNT cross-overlap decay.
 
 Only irreducibility, left-canonical normalization, and the BNT non-equivalence
 assumption are used. -/
@@ -432,7 +434,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
       (hLeft.leftCanonical k)
       hdim
 
-/-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` data used by the
+/-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` hypotheses used by the
 proportional-FT / permutation arguments. The only missing ingredient for a full `IsBNT`
 construction is blockwise `IsNormal`. -/
 theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
@@ -455,10 +457,10 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
             hNCF.toIsLeftCanonicalBlockFamily
             hBlocks i j hij)
 
-/-- Split-data version of `IsNormalCanonicalFormBNT.isBNT`.
+/-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
 
 Here `hNCF` supplies normality via the primitive-transfer-map characterization from
-`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` predicate
+`IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` hypotheses
 (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
 Wielandt / primitive-to-normal implication. -/
 theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
@@ -548,12 +550,18 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data comparison lemma for separated CF-BNT-style decompositions.
+/-- **Proportional comparison lemma for CF-BNT decompositions.**
 
-The lemma only needs the separated pieces of data used by the proportional-MPV argument:
-blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
-non-equivalence condition that forces cross-overlap decay. It is a strict
-special case of the CPSV comparison argument, not the full multiplicity BNT theorem. -/
+Given two families of tensors `A_j`, `B_k` in canonical form with BNT separation
+(distinct blocks not gauge-phase equivalent), and a proportional decomposition
+of their MPVs with convergent nonzero coefficients, this lemma concludes that the
+families have the same number of blocks, and blocks match up to permutation,
+dimension equality, and gauge-phase equivalence.
+
+This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
+each block already represents a distinct gauge-phase class; it does not cover the
+full multiplicity theorem where repeated equal-modulus sectors contribute via
+power sums `∑_q μ_{j,q}^N`. -/
 lemma fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -592,19 +600,19 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- **Proportional comparison for restricted CF-BNT decompositions.**
+/-- **Proportional comparison for CF-BNT decompositions.**
 
-If two families of tensors in canonical-form BNT give rise to proportional MPVs
-(with convergent nonzero coefficients), then the families have the same number
-of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
-equivalence.
+If two families of tensors `A_j`, `B_k` satisfy `IsCanonicalFormBNT` and give rise
+to proportional MPVs with convergent nonzero coefficients, then the families have
+the same number of blocks, and blocks match up to permutation, dimension equality,
+and gauge-phase equivalence.
 
-This bundled lemma uses the strict/already-grouped CF-BNT special case. The general
-CPSV BNT comparison keeps repeated sectors through the multiplicity data handled
-elsewhere in the sector-decomposition surface.
+This lemma covers the case where each block represents a single gauge-phase class
+(the blocks are already merged). The general CPSV BNT comparison, where repeated
+equal-modulus sectors contribute via power sums `∑_q μ_{j,q}^N`, is handled by the
+`SectorDecomposition` theorems.
 
-This bundled-data lemma is a direct consequence of
-`fundamentalTheorem_of_separated_CFBNT_data`. -/
+This is a direct consequence of `fundamentalTheorem_of_separated_CFBNT_data`. -/
 lemma fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -644,10 +652,11 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data comparison lemma for separated normal-CF-BNT-style decompositions.
+/-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
-This is the normal-form analogue of the strict comparison above. It is
-not the full CPSV multiplicity BNT theorem. -/
+Normal-form analogue of `fundamentalTheorem_of_separated_CFBNT_data`, using
+`IsNormalCanonicalForm` in place of strict weight ordering. This is not the full
+CPSV multiplicity BNT theorem. -/
 lemma fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

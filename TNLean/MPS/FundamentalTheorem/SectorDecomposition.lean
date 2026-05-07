@@ -36,13 +36,13 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- **Predicate asserting a sector decomposition's basis satisfies the BNT
-linear-independence condition.**
+/-- **BNT linear-independence hypothesis for sector bases.**
 
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
 a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127: for all
 sufficiently large system sizes `N`, the MPV states `mpvState (P.basis j) N`
-are linearly independent.  It is a `Prop`; no data is bundled.
+are linearly independent.  The statement records only the eventual condition;
+no witness is included.
 
 Mathematically, this is the eventual linear-independence hypothesis on the basis
 sector MPV families. In comparison theorems for two sector decompositions, it
@@ -60,26 +60,25 @@ sector coefficient functions, and Newton identities recover the multisets of
 sector weights inside each basis block.
 
 The result formalized here is the BNT coefficient comparison that recovers both
-copy counts and sector weights. A global gauge-equivalence statement for the
+multiplicities and sector weights. A global gauge-equivalence statement for the
 assembled tensors still requires a theorem deriving the coefficient and phase
-data required by the proportional decomposition theorem from bare equality of
-matrix-product vectors. In sector form the coefficients are finite sums of powers
+hypotheses required by the proportional decomposition theorem from bare equality
+of matrix-product vectors. In sector form the coefficients are finite sums of powers
 of unit-modulus weights, so convergence is not automatic without a dominant
 weight, normalization, or an explicit common-phase comparison.
 -/
 
-/-- **Phase matching and total MPV equality recover copy counts and sector weights.**
+/-- **Phase matching and total MPV equality recover multiplicities and sector weights.**
 
 Assume two sector decompositions `P` and `Q` have basis blocks matched by a
 permutation `perm`, and the matched basis MPVs differ by nonzero phase powers.
 If the total tensors are `SameMPV₂` and the basis of `P` is eventually linearly
-independent, then the copy counts are forced to agree. After absorbing the same
+independent, then the multiplicities are forced to agree. After absorbing the same
 phases into the weights of `Q`, the per-basis sector weight multisets agree.
 
-This is the coefficient-extraction part of the heterogeneous sector comparison:
-copy-count equality is not an input, but is recovered from the exponent-zero
-case of the power-sum identity after eventual coefficient equality has been
-extrapolated to all exponents. -/
+This is the coefficient-extraction part of the comparison: equality of multiplicities
+is recovered from the exponent-zero case of the power-sum identity after eventual
+coefficient equality has been extrapolated to all exponents. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -177,10 +176,10 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exist
   have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
   simpa [T, hproof] using hMultiset j
 
-/-- **Heterogeneous sector comparison reduces to the shared-basis case after phase matching.**
+/-- **Sector comparison for different bases reduces to the shared-basis case after phase matching.**
 
 Assume two sector decompositions `P` and `Q` have basis blocks matched by a permutation `perm`,
-matching copy counts, and per-basis MPV relations
+matching multiplicities, and per-basis MPV relations
 `mpv (Q.basis (perm j)) σ = ζ_j^N * mpv (P.basis j) σ`. If the total tensors are
 `SameMPV₂`, then after absorbing the phases `ζ_j` into the sector weights on the `Q` side,
 the per-basis sector weight multisets agree. -/
@@ -209,9 +208,9 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
   have hproof : hCopies' j = hCopies j := Subsingleton.elim _ _
   simpa [hproof] using hMultiset j
 
-/-- **Cast-compatible MPV scaling implies the phase-matched heterogeneous sector comparison.**
+/-- **Cast-compatible MPV scaling gives the phase-matched sector comparison.**
 
-This lemma isolates the weaker data actually consumed by the
+This lemma isolates the weaker hypotheses actually consumed by the
 phase-absorption argument: after matching basis dimensions, each block pair
 only needs a nonzero phase `ζ` relating the MPVs of the matched basis tensors. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
@@ -245,13 +244,13 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_match
   exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch
     P Q perm hCopies hPhase hLI hEqual
 
-/-- **Gauge-phase matched sector bases imply the phase-matched heterogeneous sector comparison.**
+/-- **Gauge-phase matched sector bases give the phase-matched sector comparison.**
 
 This lemma converts blockwise gauge-phase equivalence into the corresponding
-power-law scaling of matrix-product vectors, then consumes the heterogeneous
-sector comparison for a supplied permutation of basis blocks. Thus the
+power-law scaling of matrix-product vectors, then uses the sector comparison for
+a supplied permutation of basis blocks. Thus the
 phase-absorption step is already available once the basis permutation,
-multiplicity equality, and per-block phase data have been supplied. -/
+multiplicity equality, and per-block phase factors have been supplied. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -285,24 +284,23 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
   exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
     P Q perm hCopies hScaling hLI hEqual
 
-/-! ## Witness bundle for the heterogeneous sector comparison
+/-! ## Basis matching witness for two sector decompositions with different bases
 
-The sector-comparison theorems above consume the matching data as four separate
-hypotheses: a permutation of sector bases, equality of copy numbers, per-block
-dimension equality, and per-block gauge-phase equivalence. The matching
-structure below collects these data as a single witness. It is the consumer side
-of the heterogeneous comparison: overlap/span hypotheses or common-cover phase
-data produce the witness, and the sector comparison then recovers the
-corresponding weight multisets.
+The sector-comparison theorems above take four separate hypotheses: a permutation
+of sector bases, equality of multiplicities, per-block dimension equality, and
+per-block gauge-phase equivalence. The structures below collect these into a
+single witness. Overlap/span hypotheses or common-cover phase hypotheses produce the
+witness; the sector comparison then recovers the corresponding weight multisets.
 -/
 
 /-- Basis matching before sector multiplicities have been recovered.
 
-This structure captures the part of the heterogeneous BNT comparison supplied by
-the overlap-dichotomy argument: a permutation of basis blocks, equality of their
-bond dimensions, and gauge-phase equivalence of the matched blocks. It does not
-include copy-count alignment; that alignment is recovered from total MPV equality
-by `SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV`. -/
+This structure captures the part of the BNT comparison for two sector decompositions
+with different bases, supplied by the overlap-dichotomy argument: a permutation of
+basis blocks, equality of their bond dimensions, and gauge-phase equivalence of the
+matched blocks. It does not include equality of multiplicities; that equality is recovered
+from total MPV equality by
+`SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV`. -/
 structure SectorBasisPreMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
   perm : Fin P.basisCount ≃ Fin Q.basisCount
@@ -314,9 +312,9 @@ structure SectorBasisPreMatching (P Q : SectorDecomposition d) where
       (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
       (Q.basis (perm j))
 
-/-- Bundled witness data matching two sector decompositions block-by-block.
+/-- Witness matching two sector decompositions block-by-block.
 
-This structure collects the four pieces of data consumed by
+This structure collects the four hypotheses required by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`:
 
 * a basis permutation,
@@ -324,11 +322,10 @@ This structure collects the four pieces of data consumed by
 * per-block bond-dimension equality, and
 * per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
 
-The overlap/span route produces this witness when the corresponding comparison
-hypotheses are available. For sector decompositions obtained after blocking, the
-producer-side task is to supply overlap/span data, or an equivalent common-phase
-BNT-cover comparison. Once those data are supplied, the heterogeneous sector
-comparison applies directly. -/
+**Formalization note.** The overlap/span route produces this witness when the
+corresponding comparison hypotheses are available. For sector decompositions
+obtained after blocking, those hypotheses may instead be supplied by an equivalent
+common-phase BNT-cover comparison. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
   perm : Fin P.basisCount ≃ Fin Q.basisCount
@@ -361,7 +358,7 @@ namespace SectorBasisMatching
 
 variable {P Q : SectorDecomposition d}
 
-/-- Reformulate the per-block data in the existential form consumed by
+/-- Reformulate the per-block hypotheses in the existential form consumed by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`. -/
 lemma basis_match_exists (M : SectorBasisMatching P Q) :
     ∀ j : Fin P.basisCount,
@@ -377,7 +374,7 @@ namespace SectorBasisPreMatching
 
 variable {P Q : SectorDecomposition d}
 
-/-- Reformulate pre-matching data in the existential form used by the theorem with
+/-- Reformulate pre-matching hypotheses in the existential form used by the theorem with
 a supplied permutation of basis blocks. -/
 lemma basis_match_exists (M : SectorBasisPreMatching P Q) :
     ∀ j : Fin P.basisCount,
@@ -402,7 +399,7 @@ lemma phase_match_exists (M : SectorBasisPreMatching P Q) :
 
 /-- Promote a basis pre-matching to a full sector basis matching.
 
-The new information is the copy-count equality. It follows from total MPV equality
+The new information is equality of multiplicities. It follows from total MPV equality
 and BNT linear independence by recovering the exponent-zero power sums for the
 matched sector coefficients. -/
 lemma exists_sectorBasisMatching_of_sameMPV
@@ -422,7 +419,7 @@ lemma exists_sectorBasisMatching_of_sameMPV
 
 end SectorBasisPreMatching
 
-/-- Single-family primitive overlap-orthogonality data for a sector basis.
+/-- Single-family primitive overlap-orthogonality hypotheses for a sector basis.
 
 This is the part of `SectorBasisOverlapSpanHypotheses` that can be checked one
 sector decomposition at a time: positive basis dimensions, left-canonical
@@ -451,7 +448,7 @@ This structure collects the analytic inputs used by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`: nonzero bond
 dimensions, injectivity, left-canonical normalization, asymptotic self/orthogonal
 overlaps, and equality of the finite-length MPV spans. It deliberately does
-not contain a permutation or copy-count equality; those are produced by the
+not contain a permutation or equality of multiplicities; those are produced by the
 overlap rigidity theorem and the BNT coefficient comparison. -/
 structure SectorBasisOverlapSpanHypotheses (P Q : SectorDecomposition d) : Prop where
   /-- The left basis blocks have nonzero bond dimension. -/
@@ -495,7 +492,7 @@ namespace SectorBasisOverlapOrthoHypotheses
 
 variable {P Q : SectorDecomposition d}
 
-/-- Combine the single-family overlap-orthogonality data for two sector bases
+/-- Combine the single-family overlap-orthogonality hypotheses for two sector bases
 with the one-site injectivity and finite-length span comparison inputs needed by
 the primitive overlap-rigidity theorem. -/
 lemma to_overlapSpan
@@ -527,7 +524,7 @@ end SectorBasisOverlapOrthoHypotheses
 
 The overlap-rigidity theorem gives the basis permutation, dimension equalities,
 and gauge-phase equivalences. The preceding pre-matching result then recovers
-the sector copy-count alignment from total MPV equality. -/
+the equality of sector multiplicities from total MPV equality. -/
 theorem exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV
     (P Q : SectorDecomposition d)
     [∀ j : Fin P.basisCount, NeZero (P.basisDim j)]
@@ -576,7 +573,7 @@ namespace SectorBasisOverlapSpanHypotheses
 
 variable {P Q : SectorDecomposition d}
 
-/-- Convert the bundled primitive overlap-rigidity hypotheses into a sector basis
+/-- Convert the combined primitive overlap-rigidity hypotheses into a sector basis
 matching. The produced witness is not part of the hypotheses: it is obtained by
 `exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV`. -/
 lemma exists_sectorBasisMatching
@@ -594,13 +591,14 @@ lemma exists_sectorBasisMatching
 
 end SectorBasisOverlapSpanHypotheses
 
-/-- **Heterogeneous sector comparison via a bundled basis matching witness.**
+/-- **Sector comparison for two decompositions with different bases, via a basis matching witness.**
 
 Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
-obtained by supplying the matching data in bundled form as a `SectorBasisMatching`.
-The matching can be extracted from `SectorBasisOverlapSpanHypotheses`; for
-after-blocking sector decompositions, the producer-side task is to supply those
-hypotheses, or equivalent common-phase BNT-cover data. -/
+obtained by expressing the matching hypotheses as a `SectorBasisMatching`.
+The matching can be extracted from `SectorBasisOverlapSpanHypotheses`.
+
+**Formalization note.** For after-blocking sector decompositions, those hypotheses may
+instead be supplied by equivalent common-phase BNT-cover hypotheses. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}
     (M : SectorBasisMatching P Q)
