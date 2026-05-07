@@ -137,10 +137,10 @@ This applies in particular to the following families of external input.
     common blocked physical alphabet and the direct-sum matrix algebra that is
     being spanned.  The direct-sum proof input in the older source is recorded
     in \path{docs/paper-gaps/david2006_direct_sum_input.tex}.
-  \item Vandermonde inversion and Newton--Girard identities are elementary, but
-    they are not proved in the MPS source.  When they are used to recover
-    coefficients, multiplicities, or weight multisets, the blueprint should
-    explain the finite linear system or the power-sum recursion.
+  \item Newton--Girard identities are elementary, but they are not proved in the
+    MPS source.  When they are used to recover coefficients, multiplicities, or
+    weight multisets, the blueprint should explain the finite power-sum
+    recursion.
     Declarations that only restate these finite-sequence facts in BNT notation
     should be lemmas, even when they are applied inside a paper-level theorem.
   \item Perron--Frobenius and peripheral-spectrum facts for quantum channels are
@@ -242,8 +242,8 @@ mathematical claims directly.
 
 \paragraph{External finite-dimensional inputs.}
 The formal route also contains named statements for linear algebra that the
-paper uses without proof: Vandermonde separation, Newton--Girard recovery,
-finite-dimensional Perron--Frobenius structure, Burnside--Jacobson algebra
+paper uses without proof: Newton--Girard recovery, finite-dimensional
+Perron--Frobenius structure, Burnside--Jacobson algebra
 generation, and quantum Wielandt bounds.  These may be important mathematical
 theorems in their own right, but in this proof chain they enter as cited inputs.
 Their statements should be explained, and their formal names should normally be
@@ -269,10 +269,10 @@ paper-level theorems.
     coefficient comparison from the proportional MPV hypothesis; that extraction
     is not part of this formal statement.  This is a genuine restriction of the
     formal route, not merely a theorem-versus-lemma presentation choice.
-  \item The unused fixed-size BNT Vandermonde MPV declarations have been
-    removed.  The scalar Vandermonde separation lemma remains because it is a
-    small algebraic input elsewhere, but it is not presented as part of the
-    main BNT comparison route.
+  \item The unused fixed-size BNT Vandermonde MPV declarations and the unused
+    scalar Vandermonde separation lemma have been removed.  The checked
+    block-separation proof uses mixed-transfer peeling, and the equal-case BNT
+    weight recovery uses the finite power-sum identity.
   \item The equal-span permutation rigidity statement with asymptotically
     orthonormal overlaps is a lemma.  It is a useful span route, but the
     proportional BNT permutation theorem is the theorem used by the main

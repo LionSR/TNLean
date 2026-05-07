@@ -1,4 +1,3 @@
-import TNLean.MPS.BNT.BasisNormal
 import TNLean.MPS.Overlap.Basic
 import TNLean.Algebra.GramMatrixLI
 
