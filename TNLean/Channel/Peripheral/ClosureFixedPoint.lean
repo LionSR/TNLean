@@ -15,7 +15,8 @@ import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 # Peripheral eigenvalues closed under powers (fixed-point version)
 
 This file contains the preferred live formulation of peripheral-spectrum
-closure under powers.
+closure under powers, following the proof structure of Wolf Theorem 6.6
+(peripheral spectrum of irreducible Schwarz maps).
 
 Instead of assuming both unitality and trace preservation, we work with a
 unital Kraus family together with a **positive definite fixed point of the
@@ -23,7 +24,9 @@ adjoint map** (a faithful invariant state).
 
 The key new input is the weighted Kadison–Schwarz equality
 `Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint` from
-`TNLean/Channel/Schwarz/Basic.lean`.
+`TNLean/Channel/Schwarz/Basic.lean`, which corresponds to Wolf Theorem 5.3
+(the equality case of the Kadison–Schwarz inequality for peripheral
+eigenvectors).
 
 The older special-case formulation `TNLean/Archive/PeripheralClosure.lean` is
 retained only for compatibility and is intentionally off the stable root

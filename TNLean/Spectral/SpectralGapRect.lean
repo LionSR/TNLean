@@ -19,8 +19,9 @@ dimensions** `D₁ ≠ D₂`, the spectral radius of the rectangular mixed trans
 `mixedTransferMap₂ A B` is strictly less than 1 (assuming both tensors are injective and
 normalized).
 
-This is the "dimension-mismatch" spectral gap: if the bond dimensions differ, then the overlap
-`∑ σ, mpv A σ * conj(mpv B σ)` decays to zero exponentially.
+This is the "dimension-mismatch" spectral gap (cf. Wolf Theorem 6.6 adapted to
+MPS transfer maps with rectangular bond dimensions): if the bond dimensions differ, then
+the overlap `∑ σ, mpv A σ * conj(mpv B σ)` decays to zero exponentially.
 
 ## Main results
 

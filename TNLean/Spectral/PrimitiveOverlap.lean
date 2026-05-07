@@ -16,7 +16,9 @@ This module derives the **primitive/aperiodic overlap normalization**
 
 `mpvOverlap A A N → 1`
 
-from a spectral-gap hypothesis on the transfer map.
+from a spectral-gap hypothesis on the transfer map
+(cf. Wolf Theorem 6.7: a primitive TP map has trivial peripheral spectrum,
+so its powers converge to the rank-one projection onto the stationary state).
 
 More precisely, if a trace-preserving map `E` has a (nonzero) fixed point `ρ`, and the
 spectral radius of the complementary map `N := E - fixedPointProj ρ` is strictly less than `1`,
