@@ -1,6 +1,6 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter reduces a general MPS tensor to block-diagonal data via iterated
+This chapter reduces a general MPS tensor to block-diagonal form via iterated
 invariant-subspace decomposition. Two reduction schemes are relevant.
 The block-injective reduction aims at injective TP-normalized blocks and the
 canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
@@ -9,7 +9,7 @@ primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of \cite{Cirac2017MPDO_AnnPhys}.
 The Perron--Frobenius eigenvector existence and TP-gauge construction
 are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
-left-canonical normalization data and the normal canonical form data.
+left-canonical normalizations and the normal canonical forms.
 The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
@@ -1770,7 +1770,7 @@ zero-block dimension; the two terms refer to the same concept.
 	equality between the iterated and common physical alphabets, and use that a
 	positive power of a nonzero complex number is nonzero.  The normal canonical
 	form statement is Theorem~\ref{thm:ncf_sorted_tp_primitive_irred} applied to
-	these derived sector data.
+	these derived sector blocks.
 \end{proof}
 
 \begin{theorem}[Common-sector representatives form a BNT-separated normal canonical form]%
@@ -2499,7 +2499,7 @@ zero-block dimension; the two terms refer to the same concept.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If the one-step projection-preservation
+	be the blocked cyclic-sector decomposition. If the one-step projection-preservation
 	hypothesis of Lemma~\ref{lem:orbit_sum_hLift_proj_step} holds, then every
 	blocked sector tensor $C_u$ has primitive transfer map and is irreducible.
 \end{theorem}
@@ -2509,7 +2509,7 @@ zero-block dimension; the two terms refer to the same concept.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_proj_step} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provide compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2531,7 +2531,7 @@ zero-block dimension; the two terms refer to the same concept.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If the fixed-point-algebra rigidity
+	be the blocked cyclic-sector decomposition. If the fixed-point-algebra rigidity
 	hypothesis from Definition~\ref{def:sector_fixed_point_algebra_rigidity}
 	holds, then every blocked sector tensor $C_u$ has primitive transfer map and
 	is irreducible.
@@ -2543,7 +2543,7 @@ zero-block dimension; the two terms refer to the same concept.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_fixed_algebra} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provide compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2566,7 +2566,7 @@ zero-block dimension; the two terms refer to the same concept.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. If every $(\E_{C_u}^\dagger)$-fixed element
+	be the blocked cyclic-sector decomposition. If every $(\E_{C_u}^\dagger)$-fixed element
 	in the compressed sector $P_u \MN{D} P_u$ is a scalar multiple of the identity,
 	then every blocked sector tensor $C_u$ has primitive transfer map and is
 	irreducible.
@@ -2591,7 +2591,7 @@ zero-block dimension; the two terms refer to the same concept.
 	peripheral spectrum $\{\gamma^j : 0 \le j < m\}$ for a primitive $m$-th root
 	of unity $\gamma$. Let $(C_u)_{u=1}^m$, $(P_u)_{u=1}^m$, and
 	$\varphi_u : \MN{\dim C_u} \xrightarrow{\sim} P_u \MN{D} P_u$
-	be the blocked cyclic-sector data. Then every blocked sector tensor $C_u$ has
+	be the blocked cyclic-sector decomposition. Then every blocked sector tensor $C_u$ has
 	primitive transfer map and is irreducible.
 \end{theorem}
 
@@ -2600,7 +2600,7 @@ zero-block dimension; the two terms refer to the same concept.
 	      thm:primitive_adjoint_equiv}
 	Theorem~\ref{thm:sector_irred_unconditional} gives irreducibility of
 	$(\E_A^\dagger)^m$ on each corner $P_u$.
-	The blocked cyclic-sector data provide compression equivalences
+	The blocked cyclic-sector decomposition provide compression equivalences
 	$\varphi_u$ intertwining the adjoint transfer map of $C_u$ with the
 	corresponding corner restriction of $(\E_A^\dagger)^m$.
 	The same cyclic peripheral-spectrum argument that produces the sector
@@ -2921,7 +2921,7 @@ zero-block dimension; the two terms refer to the same concept.
 \end{proof}
 
 
-\begin{theorem}[Phase-class BNT sector construction with one-sided overlap data]
+\begin{theorem}[Phase-class BNT sector construction with one-sided overlap conditions]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_ortho}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho}
 	\leanok
@@ -2946,7 +2946,7 @@ zero-block dimension; the two terms refer to the same concept.
 	separation of distinct chosen phase-class blocks gives off-overlap decay.
 \end{proof}
 
-\begin{theorem}[Phase-class BNT sector construction with overlap data]
+\begin{theorem}[Phase-class BNT sector construction with overlap conditions]
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData}
 	\leanok
@@ -2978,7 +2978,7 @@ zero-block dimension; the two terms refer to the same concept.
 	the same finite-length MPV subspace as the original blocks at every system
 	size. Consequently, for trace-preserving primitive irreducible injective
 	blocks with nonzero weights, the one-sided BNT sector construction can be
-	chosen with all overlap data from
+	chosen with all overlap conditions from
 	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed_overlap_data} and
 	with this representative-span identity.
 \end{theorem}
