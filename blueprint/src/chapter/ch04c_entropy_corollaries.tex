@@ -1,8 +1,27 @@
 %% =========================================================
 %% Supplement: entropy corollaries in the trivial-middle case
 %% =========================================================
+%%
+%% Source: [Wolf2012QChannels], see also Chapter~\ref{ch:entropy}.
 
 \section{Trivial-factor corollaries}
+\uses{ch:entropy}
+
+The partial traces and von~Neumann entropy are introduced in
+Chapter~\ref{ch:entropy}.  This supplement collects elementary
+trace-preservation identities and the dimension‑1 entropy bound that
+follow directly from those definitions.  They are listed as separate
+Lean declarations because the proofs require only unfolding
+definitions and re-indexing finite sums.
+
+%% NOTE (issue #1410 cleanup audit):
+%%   trace_eq_trace_traceA_ABC and trace_eq_trace_traceC_ABC are
+%%   not used in any downstream Lean proof.  trace_eq_trace_traceAC_ABC
+%%   is the only symmetric-trace lemma with a consumer
+%%   (subadditivity from SSA with trivial middle B in
+%%   StrongSubadditivity.lean).  The A- and C-only variants are
+%%   therefore flagged as removal candidates.
+
 
 \begin{theorem}[Partial trace over $A$ preserves the full trace]
     \label{thm:trace_tracea_abc}
@@ -15,9 +34,18 @@
     \]
 \end{theorem}
 
+%% REMOVAL CANDIDATE: This lemma is not used downstream.
+%% The proof is the same sum-reordering as trace_eq_trace_traceAC_ABC.
 \begin{proof}\leanok
-    Unfold the definition of $\tr_A$ and reorder the finite sums.
+    Unfolding the definitions,
+    \[
+        \tr(\tr_A(\rho_{ABC}))
+        = \sum_{b,c} \sum_{a}
+            (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
 \end{proof}
+
 
 \begin{theorem}[Partial trace over $C$ preserves the full trace]
     \label{thm:trace_tracec_abc}
@@ -30,9 +58,18 @@
     \]
 \end{theorem}
 
+%% REMOVAL CANDIDATE: This lemma is not used downstream.
+%% The proof is the same sum-reordering as trace_eq_trace_traceAC_ABC.
 \begin{proof}\leanok
-    Unfold the definition of $\tr_C$ and rewrite the trace as the same triple sum.
+    Unfolding the definitions,
+    \[
+        \tr(\tr_C(\rho_{ABC}))
+        = \sum_{a,b} \sum_{c}
+            (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
 \end{proof}
+
 
 \begin{theorem}[Partial trace over $AC$ preserves the full trace]
     \label{thm:trace_traceac_abc}
@@ -45,9 +82,18 @@
     \]
 \end{theorem}
 
+%% This lemma is used in StrongSubadditivity.lean to derive
+%% subadditivity from SSA with trivial middle subsystem B.
 \begin{proof}\leanok
-    Unfold the definition of $\tr_{AC}$ and interchange the outer two finite sums.
+    Unfolding the definitions and interchanging the outer sums,
+    \[
+        \tr(\tr_{AC}(\rho_{ABC}))
+        = \sum_{b} \sum_{a,c}
+            (\rho_{ABC})_{(a,b,c)(a,b,c)}
+        = \tr(\rho_{ABC}).
+    \]
 \end{proof}
+
 
 \begin{theorem}[Entropy vanishes in dimension $1$]
     \label{thm:entropy_fin_one_zero}
@@ -60,7 +106,15 @@
     \]
 \end{theorem}
 
+%% This lemma is used in StrongSubadditivity.lean (together with
+%% trace_eq_trace_traceAC_ABC) to derive subadditivity from SSA.
 \begin{proof}\leanok
-    The unique eigenvalue equals the trace, hence equals $1$, and $-1 \cdot \log 1 = 0$.
+    The unique eigenvalue equals the trace, hence equals $1$, and
+    $-1 \cdot \log 1 = 0$:
+    \[
+        \lambda_0 = \tr(\rho) = 1,
+        \qquad
+        S(\rho) = -\lambda_0 \log \lambda_0 = -1 \cdot \log 1 = 0.
+    \]
 \end{proof}
 
