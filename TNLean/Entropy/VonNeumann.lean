@@ -36,8 +36,10 @@ two spellings are interchangeable in tactics; in particular no
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8,
+  Section 8.2 (Entropies)][Wolf2012QChannels]
 * arXiv:1606.00608 Section 4.4
+* Blueprint `def:entropy_von_neumann_entropy` — entropy formulation
 -/
 
 namespace Entropy
@@ -46,7 +48,9 @@ namespace Entropy
 
 For a Hermitian matrix `ρ` with eigenvalues `λᵢ`, the von Neumann
 entropy is `S(ρ) = ∑ᵢ negMulLog(λᵢ) = -∑ᵢ λᵢ log(λᵢ)`. Definitionally
-equal to `_root_.vonNeumannEntropy`. -/
+equal to `_root_.vonNeumannEntropy`.
+
+Source: blueprint `def:entropy_von_neumann_entropy`. -/
 noncomputable alias vonNeumannEntropy := _root_.vonNeumannEntropy
 
 /-- **Von Neumann entropy is nonneg for density matrices**, namespaced

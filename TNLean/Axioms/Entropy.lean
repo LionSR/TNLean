@@ -42,12 +42,17 @@ case of strong subadditivity. A faithful formalization is expected to require:
 ## References
 
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
-  entropy", JMP 14, 1938 (1973)
-* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208
+  entropy", JMP 14, 1938 (1973) — source of SSA
+* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208 — SSA equality
 * Ruskai, "Inequalities for quantum entropy: A review with conditions for
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
   (the structural formulation cited as `Hay03` in arXiv:1606.00608 Appendix C)
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8
+  (Distance Measures)][Wolf2012QChannels]
+* arXiv:1606.00608 Appendix C — downstream target of MPDO entropy input
+* Blueprint `ch04b_entropy.tex` (Quantum Entropy chapter): `thm:strong_subadditivity`,
+  `def:hayashi_markov_decomposition`, `thm:hayashi_ssa_equality_characterization`
 -/
 
 open scoped Matrix ComplexOrder
@@ -126,7 +131,11 @@ system `B`, an explicit unitary basis change on `B`, probabilities `p_j`, and
 left/right density matrices `ρ_{A B_jᴸ}` and `ρ_{B_jᴿ C}` such that after
 conjugating `ρ_ABC` by `1_A ⊗ U_B ⊗ 1_C` and reindexing `B` along the chosen
 finite decomposition, the state becomes the block-diagonal direct sum
-`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`. -/
+`⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
+
+Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
+blueprint `def:hayashi_markov_decomposition`. -/
 structure HayashiMarkovDecomposition {dA dB dC : ℕ}
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ) where
@@ -174,8 +183,9 @@ This is axiomatized; see the module docstring for the deferred proof plan.
 Hermiticity of reduced states is derived via `traceA_ABC_isHermitian` etc.
 from `hρ_dm.1.isHermitian`.
 
-References:
-* Lieb, Ruskai, JMP 14, 1938 (1973) -/
+Source: Lieb, Ruskai, JMP 14, 1938 (1973);
+[Wolf, Chapter 8, Section 8.7 (Contractivity and the increase of entropy)][Wolf2012QChannels];
+blueprint `thm:strong_subadditivity`. -/
 axiom strong_subadditivity
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -216,10 +226,11 @@ operator-algebra and recovery-map theory that is not yet formalized in
 Mathlib or in this repository. Downstream consumers should import the theorem
 statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
 
-References:
-* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208
-* Ruskai, JMP 43, 4358 (2002)
-* Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004) -/
+Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+Ruskai, JMP 43, 4358 (2002);
+Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
+arXiv:1606.00608 Appendix C;
+blueprint `thm:hayashi_ssa_equality_characterization`. -/
 axiom hayashi_ssa_equality_characterization
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)

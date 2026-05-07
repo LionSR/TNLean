@@ -20,6 +20,10 @@ cross-correlations between distinct blocks decay exponentially.
 
 ## References
 
+* CPGSV21: Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States*,
+  Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+  Sec. 2.3 (correlations and transfer matrix), Sec. 4 (spectral gap).
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
   *Matrix Product State Representations*, 2007.
 -/
