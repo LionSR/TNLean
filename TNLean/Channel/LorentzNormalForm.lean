@@ -8,6 +8,7 @@ import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.NormalForm
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.Topology.Instances.Matrix
 
 /-!
 # Lorentz normal form for quantum channels (Wolf Section 2.3)
