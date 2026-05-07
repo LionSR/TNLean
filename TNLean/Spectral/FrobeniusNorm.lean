@@ -9,7 +9,6 @@ import Mathlib.Analysis.Matrix.Order
 # Frobenius norm squared and Euclidean-space embedding for matrices
 
 Frobenius-norm identities for rectangular matrices. Everything here works for
-*rectangular*
 `Matrix (Fin m) (Fin n) ℂ`; the square case is obtained by setting `m = n`.
 
 The Frobenius (Hilbert--Schmidt) norm gives the rectangular Cauchy--Schwarz
