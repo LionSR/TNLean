@@ -375,7 +375,10 @@ private lemma charpoly_eq_of_charpolyRev_eq
   have := congr_arg (Polynomial.reflect (Fintype.card n)) h_rev_eq
   rwa [Polynomial.reflect_reflect, Polynomial.reflect_reflect] at this
 
-/-- If `tr(A^k) = tr(B^k)` for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`. -/
+/-- If `tr(A^k) = tr(B^k)` for `1 ≤ k ≤ card n`, then `A.charpoly = B.charpoly`.
+
+The all-positive-power statement below is the immediate corollary obtained by restricting its
+hypothesis to this finite range. -/
 theorem charpoly_eq_of_trace_pow_eq_of_le_card
     (A B : Matrix n n R)
     (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → trace (A ^ k) = trace (B ^ k)) :

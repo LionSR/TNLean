@@ -31,7 +31,7 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
   `trace (diagonal a ^ k) = ∑ i, a i ^ k`
 
-## Main results
+## Main results, in declaration order
 
 * `Matrix.trace_diagonal_pow`: `trace (diagonal a ^ k) = ∑ i, a i ^ k`.
 
@@ -45,7 +45,8 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
 * `Matrix.sum_pow_eq_implies_multiset_eq_of_le_card`: Under the finite-range
   hypothesis `1 ≤ k ≤ card n`, the multisets `Finset.univ.val.map a` and
-  `Finset.univ.val.map b` are equal.
+  `Finset.univ.val.map b` are equal. The all-positive-power multiset theorem
+  is its immediate corollary.
 
 * `Matrix.sum_pow_eq_implies_multiset_eq`: If the power sums agree for every
   positive exponent, then the multisets `Finset.univ.val.map a` and
@@ -134,7 +135,8 @@ private lemma roots_prod_X_sub_C (f : n → ℂ) :
 two families indexed by the same finite type.
 
 This is the finite-range, same-cardinality part of Lemma `Lem:app_simple` in
-arXiv:1606.00608. -/
+arXiv:1606.00608. The all-positive-power theorem below is obtained by restricting
+its hypothesis to `1 ≤ k ≤ card n`. -/
 theorem sum_pow_eq_implies_multiset_eq_of_le_card
     (a b : n → ℂ)
     (h : ∀ k : ℕ, 0 < k → k ≤ Fintype.card n → ∑ i, a i ^ k = ∑ i, b i ^ k) :
