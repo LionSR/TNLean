@@ -33,7 +33,7 @@ variable {d D : ℕ}
 /-- The **periodic equal-case Fundamental Theorem of MPS** (Theorem 3.8 of
 arXiv:1708.00029) stated as a Prop, suitable for use as an explicit hypothesis.
 
-Given two tensors of the same physical/bond dimensions in irreducible form II that
+Given two tensors of the same physical/bond dimensions in irreducible form that
 generate the same matrix-product-vector family, this hypothesis asserts the existence
 of a positive period `m` and a `Z_m`-gauge equivalence between the two tensors.
 
