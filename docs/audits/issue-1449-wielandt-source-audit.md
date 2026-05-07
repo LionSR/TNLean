@@ -88,7 +88,7 @@ Below is the complete inventory of Wielandt imports used by the canonical-form, 
 | `FundamentalTheorem/FiniteLength.lean` | `Wielandt.WielandtBound` | `wordSpan_eq_top_of_isInjective` |
 | `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity.ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
 | `CanonicalForm/Existence.lean` | `Primitivity.StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
-| `CanonicalForm/Assembly/TPPrimitiveReduction.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
+| `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
 | | `SpanGrowth.CumulativeSpan` | `cumulativeSpan` API |
 | | `RectangularSpan.Basic` | `wielandt_lemma2b_conditional` |
 | | `Primitivity.ToNormal` | spectral-gap consequences |

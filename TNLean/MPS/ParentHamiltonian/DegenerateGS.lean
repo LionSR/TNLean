@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.BNT.Construction
-import TNLean.MPS.CanonicalForm.Assembly
+import TNLean.MPS.CanonicalForm.SectorComparison
 import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
 import TNLean.MPS.FundamentalTheorem.Multi
 
