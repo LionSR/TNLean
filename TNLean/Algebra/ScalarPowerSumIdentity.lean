@@ -238,4 +238,81 @@ theorem sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
   intro k hk hkcard
   exact h k hk (by simpa using hkcard)
 
+/-- **Full `Lem:app_simple`** from arXiv:1606.00608 (lines 1155–1163).
+
+Given two lists of complex numbers of possibly different lengths, if the power sums
+agree for all `N ≤ max{|la|, |lb|}`, then the two lists have the same multiset.
+
+Uses `N=0` (where `λ^0 = 1`) to deduce cardinality equality, then
+`sum_pow_eq_implies_multiset_eq_of_le_card` for finite-range multiset equality.
+Drops the nonzero-entry hypothesis of
+`sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card`. -/
+theorem app_simple (la lb : List ℂ)
+    (hp : ∀ N, N ≤ max la.length lb.length →
+      (la.map fun z => z ^ N).sum = (lb.map fun z => z ^ N).sum) :
+    (la : Multiset ℂ) = (lb : Multiset ℂ) := by
+  -- N=0 gives cardinality equality
+  have h_card : la.length = lb.length := by
+    have hN0 := hp 0 (Nat.zero_le _)
+    have hsum0 (l : List ℂ) : (l.map fun z => z ^ (0 : ℕ)).sum = (l.length : ℂ) := by simp
+    rw [hsum0 la, hsum0 lb] at hN0
+    exact_mod_cast hN0
+  let m := la.length
+  have hm_card : m = lb.length := h_card
+  -- Convert lists to Fin m → ℂ via `List.get`; `i.val < m` is definitional
+  let a : Fin m → ℂ := fun i => la.get ⟨i.val, i.is_lt⟩
+  let b : Fin m → ℂ := fun i => lb.get ⟨i.val, hm_card ▸ i.is_lt⟩
+  have h_ofFn_a : List.ofFn a = la := by
+    apply List.ext_get
+    · simp [a, m]
+    · intro i hi1 hi2
+      simp [a, m]
+  have h_ofFn_b : List.ofFn b = lb := by
+    apply List.ext_get
+    · simp [b, m, hm_card]
+    · intro i hi1 hi2
+      simp [b, m, hm_card]
+  -- Relate Fin-sum to list-sum
+  have hp_fin : ∀ k, 1 ≤ k → k ≤ m → ∑ i : Fin m, a i ^ k = ∑ i : Fin m, b i ^ k := by
+    intro k hk1 hk2
+    have hsum_a : ∑ i : Fin m, a i ^ k = (la.map fun z => z ^ k).sum := by
+      calc
+        ∑ i : Fin m, a i ^ k = (List.ofFn fun i : Fin m => a i ^ k).sum := by rw [List.sum_ofFn]
+        _ = ((List.ofFn a).map fun z => z ^ k).sum := by
+          show (List.ofFn fun i : Fin m => a i ^ k).sum = ((List.ofFn a).map fun z => z ^ k).sum
+          calc
+            (List.ofFn fun i : Fin m => a i ^ k).sum
+                = (List.ofFn ((fun z : ℂ => z ^ k) ∘ a)).sum := rfl
+            _ = ((List.ofFn a).map fun z => z ^ k).sum := by rw [← List.map_ofFn]
+        _ = (la.map fun z => z ^ k).sum := by rw [h_ofFn_a]
+    have hsum_b : ∑ i : Fin m, b i ^ k = (lb.map fun z => z ^ k).sum := by
+      calc
+        ∑ i : Fin m, b i ^ k = (List.ofFn fun i : Fin m => b i ^ k).sum := by rw [List.sum_ofFn]
+        _ = ((List.ofFn b).map fun z => z ^ k).sum := by
+          show (List.ofFn fun i : Fin m => b i ^ k).sum = ((List.ofFn b).map fun z => z ^ k).sum
+          calc
+            (List.ofFn fun i : Fin m => b i ^ k).sum
+                = (List.ofFn ((fun z : ℂ => z ^ k) ∘ b)).sum := rfl
+            _ = ((List.ofFn b).map fun z => z ^ k).sum := by rw [← List.map_ofFn]
+        _ = (lb.map fun z => z ^ k).sum := by rw [h_ofFn_b]
+    rw [hsum_a, hsum_b]
+    apply hp k
+    -- k ≤ max la.length lb.length: since k ≤ m = la.length
+    exact le_max_of_le_left hk2
+  -- Apply the finite-range same-cardinality lemma
+  have h_mult_eq : Finset.univ.val.map a = Finset.univ.val.map b :=
+    sum_pow_eq_implies_multiset_eq_of_le_card a b (fun k hk hkcard =>
+      hp_fin k (by omega) (by simpa [Fintype.card_fin] using hkcard))
+  -- Convert back to list multisets
+  have h_multiset_a : Finset.univ.val.map a = (la : Multiset ℂ) := by
+    calc
+      Finset.univ.val.map a = (List.ofFn a : Multiset ℂ) := by simp
+      _ = (la : Multiset ℂ) := by rw [h_ofFn_a]
+  have h_multiset_b : Finset.univ.val.map b = (lb : Multiset ℂ) := by
+    calc
+      Finset.univ.val.map b = (List.ofFn b : Multiset ℂ) := by simp
+      _ = (lb : Multiset ℂ) := by rw [h_ofFn_b]
+  rw [h_multiset_a, h_multiset_b] at h_mult_eq
+  exact h_mult_eq
+
 end Matrix
