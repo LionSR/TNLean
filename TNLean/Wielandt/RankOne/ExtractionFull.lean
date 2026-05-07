@@ -339,12 +339,12 @@ section WielandtLemma2b
 For any `IsNormal` MPS tensor `A` with `[NeZero D]`, there exists `N` such that
 `wordSpan A N = ⊤`.
 
-This combines the rank-one extraction with the blocked rectangular span theorem.
+This combines the rank-one extraction with the blocked fixed-length matrix spanning theorem.
 
 - When `N₀ = 0`: `wordSpan A 0 = ⊤` directly.
 - When `N₀ ≥ 1`: writing `B := blockTensor A N₀`, the rank-one extraction gives
   `vecMulVec φ ψ ∈ wordSpan B (D + N₀ + D)`, where the middle `N₀` is the
-  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked rectangular span then
+  blocked-tensor full-span witness `wordSpan B N₀ = ⊤`; the blocked fixed-length matrix spanning then
   produces `wordSpan A ((4D - 2 + N₀) * N₀) = ⊤`.
 
 The bound `N = (4D - 2 + N₀) * N₀` is coarse. -/
@@ -494,7 +494,7 @@ theorem wielandt_blocked_assembly_complete [NeZero D]
   obtain ⟨m_blocked, hRankOne⟩ :=
     exists_rankOne_in_wordSpan_blockTensor_of_wordEigenvectors
       A L hL σ₀ τ₀ φ ψ μ ν hμ hν heigφ heigψ hNormal
-  -- Step 2: Apply the conditional rectangular span
+  -- Step 2: Apply the blocked fixed-length matrix spanning lemma
   exact ⟨(D - 1 + (m_blocked + (D - 1))) * L,
     wielandt_blocked_assembly A hNormal L hL σ₀ φ hφ μ hμ heigφ
       τ₀ ψ hψ ν hν heigψ hRankOne⟩
