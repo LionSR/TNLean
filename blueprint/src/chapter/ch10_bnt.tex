@@ -82,7 +82,7 @@ The main references are
 	representatives; it is not the general BNT normal form and is
 	not the source notion of block-injective canonical form, which is
 	the fixed-length direct-sum span condition discussed in
-	Chapter~\ref{ch:wielandt} and Chapter~\ref{ch:assembly}.
+	Chapter~\ref{ch:wielandt} and Chapter~\ref{ch:ft_proof}.
 \end{definition}
 
 \begin{theorem}[Distinct bond dimensions force BNT separation]
@@ -133,7 +133,7 @@ The main references are
 	as $\bigoplus_k \mu_k A_k$, and whose sector-weight norms are strictly
 	decreasing.  This is a special-case regrouping lemma, not the full BNT
 	characterization of arXiv:1606.00608: the hypothesis that equal-norm
-	blocks already generate the same MPV family is an input here, while the
+	blocks already generate the same MPV family is a hypothesis here, while the
 	source BNT construction obtains the representatives by the minimal
 	phase-gauge equivalence relation.
 \end{lemma}
@@ -376,7 +376,7 @@ The main references are
 	The hypotheses of Theorem~\ref{thm:bnt_perm_prop} require nonzero
 	coefficient limits for every sector being compared. Therefore the
 	geometric strict-dominance normalization
-	$(\mu_j/\mu_0)^N \to 0$ for $j \ge 1$ is not by itself an input to
+	$(\mu_j/\mu_0)^N \to 0$ for $j \ge 1$ is not by itself a hypothesis of
 	that theorem for all blocks at once: it only isolates the currently
 	surviving dominant sector.  The source proof matches such sectors
 	and then removes them, while equal-modulus sectors require the
@@ -428,7 +428,7 @@ The main references are
 
 \begin{proof}\leanok\uses{thm:bnt_perm_prop}
 	The same matching argument applies. The only change is at the two
-	contradiction steps: the overlap-decay inputs for injective blocks are
+	contradiction steps: the overlap-decay estimates for injective blocks are
 	replaced by the corresponding irreducible trace-preserving decay theorems.
 \end{proof}
 
@@ -490,7 +490,7 @@ The main references are
 
 \begin{remark}
 	Lemma~\ref{lem:bnt_perm_simple} is retained for completeness but is
-	not used in the proofs given here; the proportional version
+	not used in the proofs given here; the proportional theorem
 	(Theorem~\ref{thm:bnt_perm_prop}) suffices for the Fundamental Theorem.
 \end{remark}
 
@@ -571,18 +571,18 @@ The main references are
 	hence equal characteristic polynomials.
 \end{proof}
 
-\begin{remark}[How the power-sum input is used]
+\begin{remark}[How the power-sum equality is used]
 	The equal-MPV corollary in the source compares, for each matched basis
 	tensor, the sums
 	\[
 		\sum_q \mu_{j,q}^N
 	\]
-	on the two sides. The Newton--Girard input says that equality of all these
+	on the two sides. Newton--Girard says that equality of all these
 	power sums determines the multiset of weights with multiplicity. It is not
 	a replacement for the BNT matching argument: the block permutation and the
 	phase gauges must already have identified which basis tensor is being
 	compared. Once that matching is available, the power-sum lemma supplies the
-	multiplicity and weight equality needed to assemble the weighted
+	multiplicity and weight equality needed to identify the weighted
 	block-diagonal gauge.
 
 	The statement below is the same-cardinality form with equality for all
@@ -616,8 +616,8 @@ The main references are
 \begin{remark}
 	Theorems~\ref{thm:newton_girard} and~\ref{thm:power_sum_multiset}
 	remain relevant for the equal-MPV source corollary discussed in
-	Section~\ref{sec:assembly_equal}, where the paper uses a power-sum step to
-	recover the multiplicity-weight data. In the current route this recovery is
+	Section~\ref{sec:ft_equal_mpv_comparisons}, where the paper uses a power-sum step to
+	recover the multiplicity-weight data. In the current proof this recovery is
 	kept in the BNT multiplicity lemmas rather than in a separate
 	explicit-coefficient equal-case theorem.
 \end{remark}

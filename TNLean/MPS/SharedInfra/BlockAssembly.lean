@@ -5,12 +5,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.MultiBlock
 
 /-!
-# Shared block-assembly infrastructure for MPS tensors
+# Shared direct-sum tensor infrastructure for MPS tensors
 
 This file factors out the lightweight block-diagonal tensor constructor
 `toTensorFromBlocks`, its word-evaluation expansion, and its MPV expansion
-formula so shared infrastructure can depend on block assembly without importing
-the multi-block Fundamental Theorem.
+formula so shared infrastructure can depend on direct-sum tensor formulas
+without importing gauge-equivalence theorems.
 -/
 
 open scoped Matrix BigOperators
@@ -27,7 +27,7 @@ noncomputable def toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
 
 /-- Word evaluation of `toTensorFromBlocks` is the reindexed block diagonal of
-the blockwise word evaluations, with the scalar weight `μ k` contributing the
+the component word evaluations, with the scalar weight `μ k` contributing the
 factor `(μ k) ^ w.length` on block `k`. -/
 theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
     {r : ℕ} {dim : Fin r → ℕ}

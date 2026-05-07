@@ -32,7 +32,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	placing the scaled block Kraus operators on the diagonal.
 \end{definition}
 
-\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
+\begin{lemma}[Gauge equivalence of block pairs with equal MPVs]\label{lem:multi_block_ft}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
 	\leanok
 	\uses{def:tensor_from_blocks, def:injective}
@@ -40,16 +40,19 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	same-MPV condition holds ($A_k$ and $B_k$ generate the same
 	MPV family for each~$k$),
 	then each pair $(A_k, B_k)$ is gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 	\leanok
 	\uses{thm:ft_single}
-	Apply the single-block fundamental theorem
-	(Theorem~\ref{thm:ft_single}) to each block independently.
+	For every $k$, Theorem~\ref{thm:ft_single} gives an invertible
+	$X_k$ with
+	\[
+		B_k^i = X_k A_k^i X_k^{-1}.
+	\]
 \end{proof}
 
-\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
+\begin{lemma}[MPV equality for weighted direct sums]\label{lem:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
 	\uses{def:tensor_from_blocks, def:same_mpv}
@@ -57,7 +60,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	block~$k$, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
 	also generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition}
 	By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
@@ -65,20 +68,23 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
-\begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
+\begin{lemma}[Gauge equivalence for weighted direct sums]\label{lem:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
-	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, thm:multi_block_ft}
+	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, lem:multi_block_ft}
 	If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
 	the same MPV family, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:multi_block_ft}
-	Apply the per-block single-block fundamental theorem
-	(Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
-	equivalences from injectivity and equality of MPV families, then
-	combine them into a global gauge for the block-diagonal tensors.
+\begin{proof}\leanok\uses{lem:multi_block_ft}
+	Apply Lemma~\ref{lem:multi_block_ft} to obtain matrices
+	$X_k \in \GL_{D_k}(\C)$ with $B_k^i=X_kA_k^iX_k^{-1}$.
+	Then $X=\bigoplus_k X_k$ gives
+	\[
+		\bigoplus_k \mu_k B_k^i
+		= X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1}.
+	\]
 \end{proof}
 
 \section{Transfer map normalization}
