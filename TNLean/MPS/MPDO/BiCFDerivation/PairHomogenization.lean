@@ -1067,7 +1067,7 @@ trace-separating length.
 The hypothesis `hIdentity_pad` supplies the identity padding needed to combine
 the cumulative separation with
 `pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding`. -/
-theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+theorem exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
     (hSepUpTo : PairTraceSeparatingUpTo A B S)
     (hIdentity_pad : ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
@@ -1102,7 +1102,7 @@ theorem exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding
     pairTraceSeparatingAll_of_pairAllWordsSpanTop A B hSpan
   obtain ⟨S, hSepUpTo⟩ :=
     exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B hSepAll
-  exact pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+  exact exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding
     A B hSepUpTo hPad
 
 /-- A finite family of all-words pair-separation hypotheses and eventual identity
@@ -1406,7 +1406,7 @@ certificate, obtain a homogeneous pair trace-separating length.
 
 `hperiod_pos`, `hperiod_pad`, and `hwindow_pad` together give eventual identity
 padding via `pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window`. -/
-theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_period_window
+theorem exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_period_window
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
     (hSepUpTo : PairTraceSeparatingUpTo A B S)
     {start period : ℕ} (hperiod_pos : 0 < period)
@@ -1417,7 +1417,7 @@ theorem pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_period_wind
       ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
         Submodule.span ℂ (Set.range (pairWordTuple A B (start + s)))) :
     ∃ T : ℕ, PairTraceSeparatingAt A B T :=
-  pairTraceSeparatingAt_of_cumulative_bnt_pairSpan_of_identity_padding
+  exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding
     A B hSepUpTo
     (pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window
       A B hperiod_pos hperiod_pad hwindow_pad)
