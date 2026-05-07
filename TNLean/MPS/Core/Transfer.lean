@@ -9,8 +9,8 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 
 This file defines the transfer operator `transferMap` associated to an MPS
 tensor. It proves the basic properties needed later: the evaluation formula, gauge
-covariance, and preservation of positive semidefiniteness. These lemmas bridge
-between tensor data and channel-theoretic arguments.
+covariance, and preservation of positive semidefiniteness. These results connect
+the tensor-level definitions to channel-theoretic arguments.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
