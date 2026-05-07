@@ -742,10 +742,49 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
         τ ⟨k.val + 1, by omega⟩)) = A j * Ymirror τ)
     (η : Fin d) (μ : Fin (N - (L₀ + 1)) → Fin d) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) = Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-  -- Both witnesses arise from the same chain ground state ψ restricted to the
-  -- two wrapped cyclic windows.  The chain ground space condition at the
-  -- intervening positions forces the two restrictions to induce the same
-  -- preimage under the injective groundSpaceMap.
+  set τ1 := wrappedMiddleBackground L₀ N η μ
+  set τ2 := mirrorMiddleBackground L₀ N η μ
+  have hNpos : 0 < N := by omega
+  -- Reduce to window size L₀+1 via antitone property of chain ground space
+  have hred : ψ ∈ chainGroundSpace A (L₀ + 1) N :=
+    chainGroundSpace_le_chainGroundSpace_of_le (A := A) hNpos
+      (by omega : L₀ + 1 ≤ L) hLN hψ
+  rw [chainGroundSpace, dif_pos ⟨hNpos, by omega⟩] at hred
+  simp only [Submodule.mem_iInf, Submodule.mem_comap] at hred
+  -- Extract the ground-space Y‑witnesses from the chain ground space
+  -- at the two wrapping positions
+  have hYw_gs : cyclicRestrictₗ hNpos (L₀ + 1) ⟨N - 1, by omega⟩ τ1 ψ ∈
+      LinearMap.range (groundSpaceMap A (L₀ + 1)) := by
+    simpa [groundSpace] using hred ⟨N - 1, by omega⟩ τ1
+  have hYm_gs : cyclicRestrictₗ hNpos (L₀ + 1) ⟨N - L₀, by omega⟩ τ2 ψ ∈
+      LinearMap.range (groundSpaceMap A (L₀ + 1)) := by
+    simpa [groundSpace] using hred ⟨N - L₀, by omega⟩ τ2
+  obtain ⟨Yw, hYw⟩ := hYw_gs
+  obtain ⟨Ym, hYm⟩ := hYm_gs
+  -- The wrapping‑window block‑strip lemmas identify
+  --   Yw = Ywrap τ1,   Ym = Ymirror τ2
+  -- (see `chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`).
+  -- Thus it suffices to prove Yw = Ym.
+  --
+  -- Both Yw, Ym satisfy trace identities (from the definition of groundSpaceMap):
+  --   tr(evalWord(σ_w) * Yw) = ψ( cyclicCfg(⟨N-1, τ1⟩, σ_w) )
+  --   tr(evalWord(σ_w) * Ym) = ψ( cyclicCfg(⟨N-L₀, τ2⟩, σ_w) )
+  -- where ψ = groundSpaceMap A N X.  The two cyclic configurations are
+  -- cyclically‑equivalent word products involving the same letters (σ_w
+  -- entries and μ entries).  Their traces with X are equal because the
+  -- chain ground‑space constraints at the intermediate N‑2 cyclic positions
+  -- force the boundary matrix X to satisfy the necessary commutation
+  -- relations.
+  --
+  -- This is the closure‑property comparison from CPGSV21 §IV.C
+  -- (lines 2078‑2090 of `Papers/2011.12127/TN-Review-main.tex`).
+  -- The proof applies the padded‑annihilation lemma
+  -- `eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul`
+  -- from `WrappingWindow.lean` to the difference Yw − Ym, after
+  -- establishing that this difference annihilates sufficiently many
+  -- word products using the chain ground‑space identities at the
+  -- L₀ overlapping wrapping windows that link the two extreme positions
+  -- ⟨N‑1, τ1⟩ and ⟨N‑L₀, τ2⟩.
   sorry
 
 /-- Range-reduction bridge for normal tensors.
