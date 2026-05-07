@@ -14,17 +14,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 /-!
 # Construction of basis-of-normal-tensors data from canonical form
 
-This module introduces `IsCanonicalFormBNT`, a restricted already-grouped canonical-form
-predicate. It extends `IsCanonicalForm` with strict ordering of weight moduli and the
-requirement that distinct blocks are not gauge-phase equivalent, so equivalent blocks have
-already been merged and each remaining block is a chosen BNT representative.
+This module introduces `IsCanonicalFormBNT`: a predicate on a family of tensors
+`A_j` with weights `μ_j` that requires
 
-This is not the general BNT normal form of arXiv:1606.00608.  The paper allows repeated
-copies inside a BNT sector, with coefficients `μ_{j,q}` and multiplicities `M_j`; that
-general comparison data is represented by `SectorDecomposition` and the sector-weight
-comparison theorems.  It is also not the paper's "block-injective canonical form" (biCF),
-which is the separate exact-length direct-sum span condition from arXiv:1606.00608,
-lines 317–345.
+* `IsCanonicalForm` — the tensors are in left-canonical form, with antitone weight moduli,
+* strict ordering `‖μ_j‖ > ‖μ_{j+1}‖`, and
+* distinct blocks with equal dimension are not gauge-phase equivalent.
+
+Equivalent blocks are therefore already merged into a single BNT representative.
+This is not the general BNT normal form of arXiv:1606.00608, which allows repeated
+copies inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j` — that data
+is obtained from `SectorDecomposition` and the sector-weight comparison theorems.
 
 ## Main results
 
@@ -163,19 +163,19 @@ theorem IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims
 
 /-! ### `IsNormalCanonicalFormBNT` predicate -/
 
-/-- Normal canonical form with basis-of-normal-tensors (BNT) separation: extends
-`IsNormalCanonicalForm` with the requirement that distinct blocks are not gauge-phase equivalent
-and that the block weight moduli are **strictly decreasing**.
+/-- Normal canonical form with BNT separation: extends `IsNormalCanonicalForm` with
+the requirement that distinct blocks are not gauge-phase equivalent and that the
+block weight moduli `‖μ_j‖` are **strictly decreasing**.
 
-Here `IsNormalCanonicalForm` encodes the spectral / primitive-transfer-map version of
-normality with non-increasing moduli. This predicate is the restricted,
-already-grouped analogue of the BNT comparison data: it keeps one representative per
-strict norm class and therefore does not represent the full CPSV multiplicity
-BNT surface, where repeated equal-modulus sectors are retained.
+This predicate keeps one representative per strict weight-modulus class. It does
+not retain repeated equal-modulus sectors; that full multiplicity data (weights
+`μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
+`SectorDecomposition` and the sector-weight comparison theorems.
 
-The later `IsBNT` predicate instead asks for blockwise `IsNormal`, i.e. the
-equivalent algebraic eventual-block-injectivity notion, so the primitive-to-normal
-implication must be supplied explicitly when passing from this predicate to `IsBNT`. -/
+**Formalization note.** `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map
+version of normality (`IsNormalCanonicalForm`), while the later `IsBNT` predicate asks
+for blockwise `IsNormal` (the equivalent algebraic eventual-block-injectivity notion).
+The primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where
@@ -548,12 +548,18 @@ abbrev ProportionalDecompositionConclusion
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- Split-data comparison lemma for separated CF-BNT-style decompositions.
+/-- **Proportional comparison lemma for CF-BNT decompositions.**
 
-The lemma only needs the separated pieces of data used by the proportional-MPV argument:
-blockwise injectivity, left-canonical normalization, self-overlap normalization, and the BNT
-non-equivalence condition that forces cross-overlap decay. It is a strict
-special case of the CPSV comparison argument, not the full multiplicity BNT theorem. -/
+Given two families of tensors `A_j`, `B_k` in canonical form with BNT separation
+(distinct blocks not gauge-phase equivalent), and a proportional decomposition
+of their MPVs with convergent nonzero coefficients, this lemma concludes that the
+families have the same number of blocks, and blocks match up to permutation,
+dimension equality, and gauge-phase equivalence.
+
+This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
+each block already represents a distinct gauge-phase class; it does not cover the
+full multiplicity theorem where repeated equal-modulus sectors contribute via
+power sums `∑_q μ_{j,q}^N`. -/
 lemma fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -592,19 +598,19 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
     (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
     (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
 
-/-- **Proportional comparison for restricted CF-BNT decompositions.**
+/-- **Proportional comparison for CF-BNT decompositions.**
 
-If two families of tensors in canonical-form BNT give rise to proportional MPVs
-(with convergent nonzero coefficients), then the families have the same number
-of blocks, and blocks match up to permutation, dimension equality, and gauge-phase
-equivalence.
+If two families of tensors `A_j`, `B_k` satisfy `IsCanonicalFormBNT` and give rise
+to proportional MPVs with convergent nonzero coefficients, then the families have
+the same number of blocks, and blocks match up to permutation, dimension equality,
+and gauge-phase equivalence.
 
-This bundled lemma uses the strict/already-grouped CF-BNT special case. The general
-CPSV BNT comparison keeps repeated sectors through the multiplicity data handled
-elsewhere in the sector-decomposition surface.
+This lemma covers the case where each block represents a single gauge-phase class
+(the blocks are already merged). The general CPSV BNT comparison, where repeated
+equal-modulus sectors contribute via power sums `∑_q μ_{j,q}^N`, is handled by the
+`SectorDecomposition` theorems.
 
-This bundled-data lemma is a direct consequence of
-`fundamentalTheorem_of_separated_CFBNT_data`. -/
+This is a direct consequence of `fundamentalTheorem_of_separated_CFBNT_data`. -/
 lemma fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -644,10 +650,11 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
     ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
       hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
 
-/-- Split-data comparison lemma for separated normal-CF-BNT-style decompositions.
+/-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
-This is the normal-form analogue of the strict comparison above. It is
-not the full CPSV multiplicity BNT theorem. -/
+Normal-form analogue of `fundamentalTheorem_of_separated_CFBNT_data`, using
+`IsNormalCanonicalForm` in place of strict weight ordering. This is not the full
+CPSV multiplicity BNT theorem. -/
 lemma fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

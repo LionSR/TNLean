@@ -76,10 +76,9 @@ If the total tensors are `SameMPV₂` and the basis of `P` is eventually linearl
 independent, then the copy counts are forced to agree. After absorbing the same
 phases into the weights of `Q`, the per-basis sector weight multisets agree.
 
-This is the coefficient-extraction part of the heterogeneous sector comparison:
-copy-count equality is not an input, but is recovered from the exponent-zero
-case of the power-sum identity after eventual coefficient equality has been
-extrapolated to all exponents. -/
+This is the coefficient-extraction part of the comparison: copy-count equality
+is recovered from the exponent-zero case of the power-sum identity after eventual
+coefficient equality has been extrapolated to all exponents. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -285,24 +284,23 @@ lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis
   exact fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_mpvScaling_matched_basis
     P Q perm hCopies hScaling hLI hEqual
 
-/-! ## Witness bundle for the heterogeneous sector comparison
+/-! ## Basis matching witness for two sector decompositions with different bases
 
-The sector-comparison theorems above consume the matching data as four separate
-hypotheses: a permutation of sector bases, equality of copy numbers, per-block
-dimension equality, and per-block gauge-phase equivalence. The matching
-structure below collects these data as a single witness. It is the consumer side
-of the heterogeneous comparison: overlap/span hypotheses or common-cover phase
-data produce the witness, and the sector comparison then recovers the
-corresponding weight multisets.
+The sector-comparison theorems above take four separate hypotheses: a permutation
+of sector bases, equality of copy numbers, per-block dimension equality, and
+per-block gauge-phase equivalence. The structures below collect these into a
+single witness. Overlap/span hypotheses or common-cover phase data produce the
+witness; the sector comparison then recovers the corresponding weight multisets.
 -/
 
 /-- Basis matching before sector multiplicities have been recovered.
 
-This structure captures the part of the heterogeneous BNT comparison supplied by
-the overlap-dichotomy argument: a permutation of basis blocks, equality of their
-bond dimensions, and gauge-phase equivalence of the matched blocks. It does not
-include copy-count alignment; that alignment is recovered from total MPV equality
-by `SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV`. -/
+This structure captures the part of the BNT comparison for two sector decompositions
+with different bases, supplied by the overlap-dichotomy argument: a permutation of
+basis blocks, equality of their bond dimensions, and gauge-phase equivalence of the
+matched blocks. It does not include copy-count alignment; that alignment is recovered
+from total MPV equality by
+`SectorBasisPreMatching.exists_sectorBasisMatching_of_sameMPV`. -/
 structure SectorBasisPreMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
   perm : Fin P.basisCount ≃ Fin Q.basisCount
@@ -314,9 +312,9 @@ structure SectorBasisPreMatching (P Q : SectorDecomposition d) where
       (cast (congr_arg (MPSTensor d) (dim_eq j)) (P.basis j))
       (Q.basis (perm j))
 
-/-- Bundled witness data matching two sector decompositions block-by-block.
+/-- Witness matching two sector decompositions block-by-block.
 
-This structure collects the four pieces of data consumed by
+This structure collects the four hypotheses required by
 `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`:
 
 * a basis permutation,
@@ -324,11 +322,10 @@ This structure collects the four pieces of data consumed by
 * per-block bond-dimension equality, and
 * per-block gauge-phase equivalence of the (dimension-transported) basis blocks.
 
-The overlap/span route produces this witness when the corresponding comparison
-hypotheses are available. For sector decompositions obtained after blocking, the
-producer-side task is to supply overlap/span data, or an equivalent common-phase
-BNT-cover comparison. Once those data are supplied, the heterogeneous sector
-comparison applies directly. -/
+**Formalization note.** The overlap/span route produces this witness when the
+corresponding comparison hypotheses are available. For sector decompositions
+obtained after blocking, those hypotheses may instead be supplied by an equivalent
+common-phase BNT-cover comparison. -/
 structure SectorBasisMatching (P Q : SectorDecomposition d) where
   /-- Permutation matching basis indices of `P` and `Q`. -/
   perm : Fin P.basisCount ≃ Fin Q.basisCount
@@ -594,13 +591,14 @@ lemma exists_sectorBasisMatching
 
 end SectorBasisOverlapSpanHypotheses
 
-/-- **Heterogeneous sector comparison via a bundled basis matching witness.**
+/-- **Sector comparison for two decompositions with different bases, via a basis matching witness.**
 
 Corollary of `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis`
-obtained by supplying the matching data in bundled form as a `SectorBasisMatching`.
-The matching can be extracted from `SectorBasisOverlapSpanHypotheses`; for
-after-blocking sector decompositions, the producer-side task is to supply those
-hypotheses, or equivalent common-phase BNT-cover data. -/
+obtained by packaging the matching hypotheses as a `SectorBasisMatching`.
+The matching can be extracted from `SectorBasisOverlapSpanHypotheses`.
+
+**Formalization note.** For after-blocking sector decompositions, those hypotheses may
+instead be supplied by equivalent common-phase BNT-cover data. -/
 theorem fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching
     {P Q : SectorDecomposition d}
     (M : SectorBasisMatching P Q)
