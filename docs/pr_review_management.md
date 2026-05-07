@@ -145,6 +145,7 @@ The active review-repair loop is label-gated.  A pull request with
 `auto-fix-claude` or `auto-fix-codex` is already assigned to the corresponding
 auto-fix workflow.  Do not add `@claude auto fix`, `@chatgpt auto fix`, or
 similar trigger comments to a PR that already has one of these labels.
+Do not use PR replies as an auto-fix control surface for labeled PRs.
 
 In particular, the phrase `auto fix` in a PR reply is not the label-gated
 auto-fix trigger.  It starts the ordinary mention-handler lane, which can
@@ -167,6 +168,8 @@ the review-fix loop.  See `docs/ci-automation.md` for the workflow details.
 Direct `@claude` / `@chatgpt` mentions are separate from labeled auto-fix.
 Use them only for a new delegated task where a separate branch or explicit
 one-off answer is intended.
+They are not a repair mechanism for a PR that is already on the auto-fix label
+lane.
 
 Putting `@claude` or `@chatgpt` in an issue body is unreliable for activation;
 post a comment after issue creation if a mention-handler task is intended.  For
