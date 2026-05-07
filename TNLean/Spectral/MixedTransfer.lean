@@ -32,6 +32,10 @@ multi-block fundamental theorem.
 
 ## References
 
+* CPGSV21: Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States:
+  Concepts, Symmetries, Theorems*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
+  Sec. 2.3 (standard transfer matrix `E`), Sec. 4 (mixed transfer `F_{AB}`).
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac,
   *Matrix Product State Representations*, 2007. (transfer maps, §II.B)
 * [Wolf2012Quantum] Wolf, *Quantum Channels & Operations: Guided Tour*,
@@ -51,7 +55,11 @@ section MixedTransfer
 /-- The **mixed transfer operator** for MPS tensors `A` and `B`:
 $$F_{AB}(X) = \sum_i A^i \, X \, (B^i)^\dagger.$$
 This is a linear map on `D × D` complex matrices. When `A = B`, it
-recovers the standard transfer map `transferMap A`. -/
+recovers the standard transfer map `transferMap A`.
+
+Cf. CPGSV21, Sec. 4: the mixed transfer operator `F_{jk}` is used in
+the basis-of-normal-tensors construction to distinguish gauge-equivalent
+blocks.  The standard transfer matrix `E` is introduced in Sec. 2.3. -/
 noncomputable def mixedTransferMap (A B : MPSTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ i : Fin d,
