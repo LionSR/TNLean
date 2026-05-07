@@ -293,4 +293,88 @@ lemma afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_bntCover
       hPrimA hPrimB hIrrA hIrrB hDimA hDimB
   exact hBNTCover.toCommonPrimitivePhaseCoverHypotheses
 
+/-! ### Unconditional (no blocked-word relabeling) variants
+
+The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place of
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
+`CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
+injectivity, finite-length span equality, BNT-cover data) remain explicitly conditional.
+See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
+
+/-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
+
+The unconditional structural theorem supplies the common primitive nonzero-sector families
+without any blocked-word relabeling hypothesis. If the remaining `CommonPrimitiveSpanHypotheses`
+are supplied for those families, the sector-weight comparison conclusion holds. -/
+lemma unconditional_afterBlocking_sectorComparison_zeroTail_spanHypotheses
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hRemaining : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
+      {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+      {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+      {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+      {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)},
+      0 < p →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₁) A p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) →
+      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
+        mpv (blockTensor (d := d) (D := D₂) B p) σ =
+          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) →
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      SameMPV₂Pos
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) →
+      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
+        (zeroTailA : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+          (zeroTailB : ℂ) +
+            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) →
+      (∀ x, μA x ≠ 0) →
+      (∀ x, μB x ≠ 0) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) →
+      (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) →
+      (∀ x, _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) →
+      (∀ x, IsIrreducibleTensor (blocksA x)) →
+      (∀ x, IsIrreducibleTensor (blocksB x)) →
+      (∀ x, 0 < dimA x) →
+      (∀ x, 0 < dimB x) →
+      CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB) :
+    ∃ p' : ℕ, 0 < p' ∧
+    ∃ P Q : SectorDecomposition (blockPhysDim d p'),
+      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p') P.toTensor ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p') Q.toTensor ∧
+      SameMPV₂ P.toTensor Q.toTensor ∧
+      HasBNTSectorData P ∧ HasBNTSectorData Q ∧
+      ∃ perm : Fin P.basisCount ≃ Fin Q.basisCount,
+      ∃ hCopies : ∀ j, P.copies j = Q.copies (perm j),
+      ∃ ζ : Fin P.basisCount → ℂ,
+        (∀ j, ζ j ≠ 0) ∧
+        ∀ j : Fin P.basisCount,
+          Finset.univ.val.map (P.weight j) =
+            Finset.univ.val.map
+              (fun q => ζ j * Q.weight (perm j) (Fin.cast (hCopies j) q)) := by
+  obtain ⟨p, hp, zeroTailA, zeroTailB, rA, dimA, μA, blocksA,
+      rB, dimB, μB, blocksB, hAblocks, hBblocks, hAPos, hBPos, hNonzeroPos,
+      hZero, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
+    unconditional_commonPrimitiveIrreducibleBlocks A B hSame
+  have hHyp : CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB :=
+    hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
+      hPrimA hPrimB hIrrA hIrrB hDimA hDimB
+  letI : ∀ x : Fin rA, NeZero (dimA x) := fun x => ⟨Nat.ne_of_gt (hDimA x)⟩
+  letI : ∀ x : Fin rB, NeZero (dimB x) := fun x => ⟨Nat.ne_of_gt (hDimB x)⟩
+  exact afterBlocking_sectorComparison_zeroTail_of_blockSpan
+    A B hSame hp μA blocksA μB blocksB hAblocks hBblocks hHyp.zeroTail_eq hTPA hTPB
+    hIrrA hIrrB hPrimA hPrimB hHyp.left_injective hHyp.right_injective
+    hμA hμB hHyp.span_eq
+
 end MPSTensor
