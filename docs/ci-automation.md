@@ -504,6 +504,24 @@ To disable Claude auto-fix globally, set repository variable
 `CLAUDE_AUTO_FIX_ENABLED=false`. Unset it, or set another value, to restore the
 default enabled behavior.
 
+### Human intervention while auto-fix is active
+
+Once a pull request has entered the auto-fix loop, do not manually patch that
+pull request's branch while CI, blueprint, review, or auto-fix jobs are still
+running. Let the automated cycle reach a terminal state first. During the loop,
+human maintainers may still do workflow-control actions:
+
+- add or remove `auto-fix-claude` / `auto-fix-codex`
+- refresh status and inspect review threads
+- merge only after all required checks are complete and every current review
+  thread is resolved or outdated
+- close or supersede the pull request after verifying that no unique
+  mathematical content would be lost
+
+Manual commits to an auto-fix branch are appropriate only after the automated
+cycle has exhausted its iteration budget, failed without a useful follow-up
+commit, or a maintainer explicitly hands the branch back for local repair.
+
 ### To ask Claude for help directly
 
 Write a comment on any issue or PR that includes `@claude` followed by your request. For example:
