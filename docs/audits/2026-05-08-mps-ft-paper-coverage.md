@@ -1,17 +1,19 @@
-# MPS Fundamental Theorem — Paper-to-Code Coverage Audit
+# MPS Fundamental Theorem & Quantum Wielandt — Paper-to-Code Coverage Audit
 
-**Audit date**: 2026-05-08  
+**Audit date**: 2026-05-08
 **Source papers**:
-- **PGVWC07**: D. Pérez-García, F. Verstraete, M.M. Wolf, J.I. Cirac, *Matrix Product State Representations*, Quantum Inf. Comput. **7**, 401–430 (2007), arXiv:quant-ph/0608197.  
+- **PGVWC07**: D. Pérez-García, F. Verstraete, M.M. Wolf, J.I. Cirac, *Matrix Product State Representations*, Quantum Inf. Comput. **7**, 401–430 (2007), arXiv:quant-ph/0608197.
   Source TeX: `Papers/quant-ph_0608197/MPSarchive.tex`
-- **CPSV16**: J.I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories*, Ann. Phys. **378**, 100–149 (2017), arXiv:1606.00608.  
+- **CPSV16**: J.I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories*, Ann. Phys. **378**, 100–149 (2017), arXiv:1606.00608.
   Source TeX: `Papers/1606.00608/MPDO-22-12-17-2.tex`
+- **SPGWC09** (Wielandt): M. Sanz, D. Pérez-García, M.M. Wolf, J.I. Cirac, *A quantum version of Wielandt's inequality*, IEEE Trans. Inf. Theory **56**, 4668–4673 (2010), arXiv:0909.5347.
+  Source TeX: `Papers/0909.5347/main.tex`
 
 **Leaning on** (not audited in detail):
 - **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127 — used in `FundamentalTheorem/EqualProportional.lean` for Theorem 4.4 naming.
 - **DSSPC17**: De las Cuevas, Schuch, Pérez-García, Cirac, *Continuum limits of matrix product states*, arXiv:1708.00029 — used in `Periodic/FundamentalTheorem.lean`.
 
-**Scope**: This audit covers MPS / pure-state sections of both papers. The MPDO / mixed-state sections of CPSV16 (§IV, Appendix C) are listed for completeness but not deeply traced. A separate MPDO coverage audit is recommended.
+**Scope**: This audit covers MPS / pure-state sections of PGVWC07 and CPSV16, plus a full Wielandt source-paper crosswalk (§9). The MPDO / mixed-state sections of CPSV16 (§IV, Appendix C) are listed for completeness but not deeply traced. A separate MPDO coverage audit is recommended.
 
 **Maintainer note** (from #1498, 2026-05-08): "Please please follow CPSV16". For non-periodic FT work, prioritize source-faithful CPSV16 statement/prose and avoid implementation-driven reinterpretations.
 
@@ -279,3 +281,80 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 ---
 
 *This audit follows the CPSV16 source-faithfulness policy from #1498. All references to CPSV16 theorems use source labels (`thm:main-MPS`, `TheoremZCLPure`, `thm:charact-MPS`, `thm:main-simple`, `thm:IV.13`, `prop:char-BNT`, `thm:Fundamental-CFII`) and line ranges from the source `.tex`.*
+
+---
+
+## 9. Coverage crosswalk: SPGWC09 (arXiv:0909.5347) — Quantum Wielandt's Inequality
+
+**Existing audit**: `docs/audits/issue-1449-wielandt-source-audit.md` (2026-05-07) covers the Theorem 1 statement faithfulness and MPS pipeline import inventory. This section provides an expanded source-paper crosswalk.
+
+**Overall status**: **All Wielandt source theorems are `leanok` — zero sorrys, zero axioms** in `TNLean/Wielandt/`. The formalization is fully proved.
+
+### 9.1 Proposition 3 — Equivalence of primitivity notions (l.504–565)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Proposition 3** `prop:equiv` (l.504) | 504–509 | (a) primitive ⇔ (b) eventually full Kraus rank ⇔ (c) strongly irreducible | `TNLean/Wielandt/Primitivity/Equivalence.lean` (full circular equivalence); `Primitivity/EasyDirections.lean` (b→a); `Primitivity/ImpliesStronglyIrreducibleAux.lean` (a→c); `Primitivity/StronglyIrreducibleToFullRank.lean` (c→b) | `leanok` |
+| Prop `prop:iq` (l.447) | 447–449 | q(E_A) ≤ i(A) | `TNLean/Wielandt/SourceTheorems/WielandtInequality.lean` (`qIndex_le_iIndex_of_isPrimitivePaper`) | `leanok` |
+| Prop (l.478) | 478–482 | For classical stochastic A: p(A)=q(A)=i(A) | **out of scope** (classical specialization) | — |
+
+### 9.2 Lemma 1 — Nonzero-trace word (l.572–590)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Lemma 1** `lemma1` (l.572) | 572–576 | Primitive ⇒ ∃ word of length ≤ D²−d+1 with nonzero trace | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp`); internal proof via `SpanGrowth/NonzeroTraceProduct.lean` | `leanok` |
+| Cumulative corollary (l.580–584) | 580–584 | dim[T_{D²−d+1}(A)] = D² | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`cumulativeSpan_eq_top_of_isPrimitivePaper_sharp`) | `leanok` |
+| Positive-length variant | — | For D ≥ 2, positive-length word with nonzero trace exists | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos`) | `leanok` |
+
+### 9.3 Lemma 2 — Spreading and spanning (l.593–641)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Lemma 2(a)** `lemma2` (l.593) | 593–599 | Primitive + A₁ eigenvector ⇒ H_{D−1}(A,φ) = ℂ^D | `TNLean/Wielandt/SourceTheorems/EigenvectorSpreading.lean` (`vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector`); internal proof via `SpanGrowth/EigenvectorSpreading.lean` | `leanok` |
+| **Lemma 2(b)** (l.593) | 593–599 | Primitive + noninvertible A₁ ⇒ |φ⟩⟨ψ| ∈ S_{D²−D+1}(A) | `TNLean/Wielandt/SourceTheorems/MatrixSpanSharpBound.lean` (`vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector`); internal proof via `RectangularSpan/Universality.lean` | `leanok` |
+| Coarse existential 2(b) | — | ∃ N : S_N(A) = M_D(ℂ) | `TNLean/Wielandt/SourceTheorems/MatrixSpanExistence.lean` (`exists_wordSpan_eq_top_of_isPrimitivePaper`) | `leanok` |
+
+### 9.4 Theorem 1 — Quantum Wielandt's inequality (l.645–655)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Theorem 1** `thm:mainthm` (l.645) | 645–655 | Main theorem: i(A) bounds in three cases | `TNLean/Wielandt/SourceTheorems/WielandtInequality.lean` | `leanok` |
+| Case (1) general bound | l.649 | i(A) ≤ (D² − d + 1) D² | `iIndex_le_general_of_isPrimitivePaper` | `leanok` |
+| Case (2) invertible | l.650–651 | i(A) ≤ D² − d + 1 | `iIndex_le_of_mem_wordSpan_one_of_isUnit` (paper-faithful: X ∈ wordSpan A 1) | `leanok` |
+| Case (3) noninvertible | l.652–653 | i(A) ≤ D² | `iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector` (paper-faithful) | `leanok` |
+| q ≤ i bound | l.647 | q(E_A) ≤ i(A) (repeated from Prop. `prop:iq`) | `qIndex_le_iIndex_of_isPrimitivePaper` | `leanok` |
+
+**Deviation note (#1049, resolved)**: The original formalization required the special matrix to be a single Kraus operator `A i₀`. This was resolved via one-step augmentation — the current `_of_mem_wordSpan_one_` variants accept an arbitrary element of `S₁(A)`, matching the paper's hypothesis exactly.
+
+### 9.5 Theorem on zero-error capacity (l.736–771)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Theorem** `thm:zero` (l.736) | 736–741 | Zero-error capacity dichotomy: C₀(E^n) ≥ 1 ∀n or C₀(E^{q(E)}) = 0 | **out of scope** (information theory, not MPS) | — |
+
+### 9.6 Theorems on frustration-free Hamiltonians and MPS (l.828–859)
+
+| Paper label | Lines | Paper description | Lean location | Status |
+|---|---|---|---|---|
+| **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS` / `ParentHamiltonian/UniqueGroundState.lean` (partial, 3 sorrys) | **partial** — see §4.2 |
+| **Theorem** (l.850) | 850–858 | Dichotomy for ground states of frustration-free Hamiltonians: D either O(1) or ≥ Ω(N^{1/5}) | **out of scope** | — |
+
+### 9.7 MPS pipeline usage of Wielandt infrastructure
+
+The MPS pipeline imports a focused subset of Wielandt declarations (detail in `docs/audits/issue-1449-wielandt-source-audit.md`, §4):
+
+| MPS file | Wielandt import | Key declaration |
+|---|---|---|
+| `FundamentalTheorem/FiniteLength.lean` | `WielandtBound` | `wordSpan_eq_top_of_isInjective` |
+| `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity/ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
+| `CanonicalForm/Existence.lean` | `Primitivity/StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
+| `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth/VectorToMatrixSpan`, `SpanGrowth/CumulativeSpan`, `RectangularSpan/Basic`, `Primitivity/ToNormal`, `Primitivity/StronglyIrreducibleToFullRank` | Multiple span and primitivity lemmas |
+| `ParentHamiltonian/UniqueGroundState.lean` | `SpanGrowth/CumulativeToWordSpan` | `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one` |
+| `ParentHamiltonian/IntersectionProperty.lean` | `SpanGrowth/CumulativeToWordSpan` | Same |
+| `ParentHamiltonian/WrappingWindow.lean` | `SpanGrowth/VectorToMatrixSpan` | Vector-to-matrix lemmas |
+
+The `SourceTheorems/` files are **standalone paper-facing** declarations and are not imported by the MPS pipeline — correct design.
+
+### 9.8 Sorry/axiom status for Wielandt
+
+**Zero sorrys, zero axioms** across all 42 Wielandt `.lean` files. The entire quantum Wielandt formalization is fully proved and source-faithful to SPGWC09.
