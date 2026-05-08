@@ -1498,13 +1498,17 @@ proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO
     are gauge equivalent.
 \end{theorem}
 
-\begin{proof}\leanok
-    Absorb each phase $\zeta_k$ into the corresponding weight; after this
-    absorption the per-block identities become ordinary conjugation relations
-    $B_{\sigma(k)}^i = X_k\, (A_k\text{ with bond dimension identified via the
-    dimension equality})^i\, X_k^{-1}$.
-    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the per-block
-    $X_k$ into the global block-diagonal gauge $X = \bigoplus_k X_k$.
+\begin{proof}
+    Let $\tilde A_k$ denote the block $A_k$ transported along the dimension
+    equality $h_k : \dim^A_k = \dim^B_{\sigma(k)}$.
+    Absorb each phase $\zeta_k$ into the corresponding weight via the
+    identity $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  After this absorption
+    each weighted block satisfies an ordinary conjugation relation
+    $\mu_B(\sigma(k)) B_{\sigma(k)}^i
+     = X_k\, \bigl(\mu_A(k)\, \tilde A_k^i\bigr)\, X_k^{-1}$.
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the
+    per-block $X_k$ into the global block-diagonal gauge
+    $X = \bigoplus_k X_k$.
 \end{proof}
 
 %% ---------------------------------------------------------
