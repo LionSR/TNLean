@@ -773,7 +773,7 @@ multiple of its periods the blocked tensor is a unit-weight sum of
 primitive, tensor-irreducible, trace-preserving sector blocks with
 positive bond dimensions.
 
-This packages the unconditional sector-orbit lift into the single
+This encodes the unconditional sector-orbit lift into the single
 result consumed by the downstream common-blocking construction.  It is
 the period-removal counterpart of `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
 strengthened with primitivity and irreducibility. -/

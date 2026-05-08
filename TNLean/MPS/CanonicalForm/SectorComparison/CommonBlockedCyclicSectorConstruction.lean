@@ -12,7 +12,7 @@ open Filter
 
 This file constructs the common blocked cyclic-sector family used in the
 canonical-form reduction.  The cyclic-sector decomposition itself lives in
-`CyclicSectorDecomposition`; this module packages the one-block period-removal
+`CyclicSectorDecomposition`; this module encodes the one-block period-removal
 data and chooses a common physical blocking length for a finite block family.
 -/
 
