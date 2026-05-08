@@ -371,8 +371,8 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:coeff_eventually_eq, lem:copies_eq_of_eventually_coeff_eq,
-		thm:power_sum_multiset}
+	\uses{lem:coeff_eventually_eq, thm:bounded_power_sum_multiset,
+		lem:copies_eq_of_eventually_coeff_eq}
 	BNT linear independence and equality of total MPVs give eventual
 	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}.  Thus, for each
 	basis sector \(j\), the two finite nonzero weight families satisfy
@@ -381,13 +381,15 @@ facts used to recover the lists of weights from those power sums.
 		=
 		\sum_{q=1}^{r_j^T}(\mu_{j,q}^T)^N
 	\]
-	for all sufficiently large \(N\).  Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq}
-	applies the signed-geometric-sequence argument at exponent \(0\), so
-	\(r_j^S=r_j^T\).  After transporting the right-hand index set along this
-	copy-count equality, the identities for positive powers become equality of
-	the power sums of two same-cardinality weight lists.  Newton--Girard
-	(Theorem~\ref{thm:power_sum_multiset}) then recovers equality of the sector
-	weight multisets.
+	for all sufficiently large \(N\).  The signed-geometric-sequence argument
+	extends this to every positive exponent.  Applying the finite-range
+	unequal-cardinality power-sum theorem
+	(Theorem~\ref{thm:bounded_power_sum_multiset}) gives both
+	\(r_j^S=r_j^T\) and equality of the sector weight multisets.  The
+	exponent-zero route of Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq}
+	is kept as an alternative checked proof: it first recovers \(r_j^S=r_j^T\)
+	from the \(N=0\) identity and then applies the same-cardinality
+	Newton--Girard theorem.
 \end{proof}
 
 \begin{lemma}[Phase matching recovers copy counts and sector weights]%
