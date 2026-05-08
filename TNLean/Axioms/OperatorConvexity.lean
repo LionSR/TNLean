@@ -3,41 +3,74 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Basic
-import TNLean.Channel.Schwarz.OperatorJensenAux
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
-import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order
 import Mathlib.LinearAlgebra.Matrix.Trace
-import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
-# Operator convexity and concavity
+# Axiomatized operator convexity and concavity
 
-`posMap_rpow_concave_jensen` is the concave Jensen inequality for `rpow`
-with exponent `p ∈ [0, 1]`.  Together with `posMap_rpow_convex_jensen` (for
-`p ∈ [1, 2]`) and `posMap_log_concave_jensen`, these form the operator
-Jensen package (Wolf Theorem 5.1).
+This module collects the axioms for **operator convexity/concavity** of matrix
+power and logarithm functions, the **operator Jensen inequality** for positive
+maps, and the **Lieb concavity theorem**. These results are deferred pending
+upstream Mathlib work in `CFC.Rpow.Order` and `CFC.ExpLog.Order`.
 
-The core POVM resolvent argument (`povm_resolvent_inv_le`) and the
-spectral-decomposition + projection-property lemmas (`inv_add_spectral_sum`,
-`hP_proj`, `hP_ortho`) are complete.  The CFC-to-resolvent translation
-(`cfcₙ_rpowIntegrand_eq_resolvent`) and the final two steps
-(ordered-matrix scalar rearrangement and Bochner-integral commutation)
-require additional `PosSMulMono ℝ Mat` and integration instances that are
-not yet fully available in the current Mathlib snapshot.  To keep the build
-green while the missing instances are upstreamed, the main theorem is stated
-as an `axiom`.
+## Axioms
 
+The following results are standard in matrix analysis. They are axiomatized
+here because the connecting Mathlib infrastructure is not yet available:
+
+* `posMap_rpow_concave_jensen` — Jensen inequality for concave `rpow`.
+* `posMap_rpow_convex_jensen` — Jensen inequality for convex `rpow`.
+* `posMap_log_concave_jensen` — Jensen inequality for concave `log`.
+* `lieb_concavity_axiom` — Lieb concavity theorem.
+
+The trace concavity/convexity statements for `A ↦ Re Tr(A^p)` that used to
+live here (`trace_rpow_concave_axiom`, `trace_rpow_convex_axiom`) have been
+discharged: see `TNLean.Analysis.OperatorConvexity` for the genuine proofs
+via the spectral theorem and the scalar Jensen inequality.
+
+## Status
+
+All results are axiomatized. The specific Mathlib TODOs blocking proofs:
+
+* `CFC.Rpow.Order`: operator concavity of `rpow` over `[0, 1]`,
+  operator convexity of `rpow` over `[1, 2]`.
+* `CFC.ExpLog.Order`: operator concavity of `log`.
+* General operator Jensen inequality for positive maps: absent from Mathlib.
+* Lieb concavity integral representation: absent from Mathlib.
+
+## Proof plan
+
+1. **Operator concavity of `rpow` for `p ∈ [0, 1]`**: follows from the
+   integral representation `a ^ p = C_p ∫ t^{p-1} a(a + t)⁻¹ dt` (already
+   in Mathlib as `exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁`),
+   once the integrand is shown to be operator concave (parallel to the
+   existing monotonicity proof in `CFC.Rpow.IntegralRepresentation`).
+2. **Operator convexity of `rpow` for `p ∈ [1, 2]`**: uses the
+   decomposition `x^p = x · x^{p-1}` for `p ∈ [1, 2]`, reducing to
+   concavity of `x^{p-1}` for `p - 1 ∈ [0, 1]`.
+3. **Operator concavity of `log`**: follows from rpow concavity via the
+   limit `log x = lim_{p → 0} (x^p - 1)/p`.
+4. **Jensen inequality for positive maps**: follows from operator
+   concavity/convexity via the Hansen--Pedersen 2×2 matrix block trick.
+5. **Lieb concavity**: requires the integral representation
+   `A^s B^{1-s} = (sin πs/π) ∫₀^∞ t^{s-1} A(A+tB)⁻¹ B dt` and
+   resolvent monotonicity.
+
+## References
+
+* [R. Bhatia, *Matrix Analysis*, Springer GTM 169, Chapter V]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 5.1]
+* [F. Hansen, G. K. Pedersen, *Jensen's operator inequality*, 2003]
+* [E. H. Lieb, *Convex trace functions and the Wigner--Yanase--Dyson
+  conjecture*, 1973]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
-open Set
-open scoped NNReal
-open Real
 
 noncomputable section
 
@@ -60,56 +93,71 @@ private local instance instAxiomOCNonnegSpectrumClass : NonnegSpectrumClass ℝ 
 private local instance instAxiomOCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
-/-!
-## CFC-to-resolvent identity (axiom, pending CFC infrastructure)
--/
-
-axiom cfcₙ_rpowIntegrand_eq_resolvent (p t : ℝ) (hp : p ∈ Ioo (0 : ℝ) 1) (ht_pos : 0 < t)
-    (X : Mat) (hX : 0 ≤ X) :
-    cfcₙ (rpowIntegrand₀₁ p t) X =
-      ((t ^ (p - 1) : ℝ) : ℂ) • (1 : Mat) - ((t ^ p : ℝ) : ℂ) • (((t : ℂ) • (1 : Mat)) + X)⁻¹
-
-/-!
-## Spectral decomposition of the inverse (proved)
--/
-
-axiom inv_add_spectral_sum (t : ℝ) (lam : Fin D → ℝ) (P : Fin D → Mat)
-    (h_spectral : A = ∑ j : Fin D, (lam j : ℂ) • P j)
-    (hP_sum : ∑ j : Fin D, P j = (1 : Mat))
-    (hP_proj : ∀ j, (P j) * (P j) = P j) (hP_ortho : ∀ j k, j ≠ k → (P j) * (P k) = 0)
-    (hlam_nonneg : ∀ j, 0 ≤ lam j) (ht_pos : 0 < t) :
-    (((t : ℂ) • (1 : Mat)) + A)⁻¹ = ∑ j : Fin D, (((lam j : ℝ) + t)⁻¹ : ℂ) • P j
-
-/-!
-## Main theorem
--/
+/-! ## Jensen inequality axioms for positive maps -/
 
 /-- **Operator Jensen for concave `rpow`** (Wolf Theorem 5.1, `p ∈ [0, 1]`).
 
-The proof uses the finite-POVM resolvent argument (`povm_resolvent_inv_le`) together
-with the integral representation of `rpow` from Mathlib.  The spectral decomposition
-and projection-property ingredients (`inv_add_spectral_sum`) are complete; the CFC-to-
-resolvent translation, ordered-matrix scalar rearrangement, and Bochner-integral
-commutation are stated as a single axiom until the required `PosSMulMono ℝ Mat` and
-integration instances are upstreamed to Mathlib. -/
+For a positive subunital map `T` and `p ∈ [0, 1]`:
+  `T(A ^ p) ≤ (T A) ^ p`.
+
+Follows from operator concavity of `rpow` (Bhatia, Chapter V) combined with
+the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
+
+References:
+* Wolf, Theorem 5.1
+* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_rpow_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (0 : ℝ) 1) {A : Mat} (hA : 0 ≤ A) :
     T (A ^ p) ≤ (T A) ^ p
 
-/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`). -/
+/-- **Operator Jensen for convex `rpow`** (Wolf Theorem 5.1, `p ∈ [1, 2]`).
+
+For a positive subunital map `T` and `p ∈ [1, 2]`:
+  `(T A) ^ p ≤ T(A ^ p)`.
+
+Follows from operator convexity of `rpow` (Bhatia, Chapter V) combined with
+the Hansen--Pedersen operator Jensen inequality for positive subunital maps.
+
+References:
+* Wolf, Theorem 5.1
+* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_rpow_convex_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hSub : T 1 ≤ (1 : Mat))
     {p : ℝ} (hp : p ∈ Set.Icc (1 : ℝ) 2) {A : Mat} (hA : 0 ≤ A) :
     (T A) ^ p ≤ T (A ^ p)
 
-/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case). -/
+/-- **Operator Jensen for concave `log`** (Wolf Theorem 5.1, log case).
+
+For a positive **unital** map `T` and positive-definite `A`:
+  `T(log A) ≤ log(T A)`.
+
+Follows from operator concavity of `log` (Bhatia, Chapter V) combined with
+the operator Jensen inequality. Requires unitality (`T 1 = 1`), not
+merely subunitality.
+
+References:
+* Wolf, Theorem 5.1
+* Hansen--Pedersen, *Jensen's operator inequality*, 2003 -/
 axiom posMap_log_concave_jensen
     {T : Mat →ₗ[ℂ] Mat} (hT : IsPositiveMap T) (hUnit : T 1 = (1 : Mat))
     {A : Mat} (hA : A.PosDef) :
     T (CFC.log A) ≤ CFC.log (T A)
 
 /-! ## Lieb concavity axiom -/
+
+/-- **Lieb concavity theorem** (Lieb 1973, Ando 1979).
+
+For `s ∈ [0, 1]`, any matrix `K`, and PD matrices `A₁, A₂, B₁, B₂`:
+  the map `(A, B) ↦ Tr(K† A^s K B^{1−s})` is jointly concave.
+
+Requires the integral representation
+`A^s B^{1-s} = (sin πs / π) ∫₀^∞ t^{s-1} A(A + tB)⁻¹ B dt`
+and resolvent monotonicity, which are not yet in Mathlib.
+
+References:
+* Lieb, *Convex trace functions*, Adv. Math. 11, 1973
+* Ando, *Concavity of certain maps on positive definite matrices*, 1979 -/
 axiom lieb_concavity_axiom
     {s : ℝ} (hs : s ∈ Set.Icc (0 : ℝ) 1)
     {A₁ A₂ B₁ B₂ K : Mat}
