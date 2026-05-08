@@ -992,11 +992,11 @@ decomposition.
     \leanok
     \uses{def:tensor_from_blocks}
     Given per-block gauges $X_k \in \GL_{D_k}(\C)$, first form the
-    dependent block-diagonal unit $\bigoplus_k X_k$ and then reindex the
-    dependent sum of block coordinates to the flattened bond index
-    $\Fin(\sum_k D_k)$.  The resulting element of
-    $\GL_{\sum_k D_k}(\C)$ is the global gauge used by the assembled tensor
-    $\bigoplus_k \mu_k A_k$.
+    dependent block-diagonal element $\bigoplus_k X_k$ and then reindex the
+    dependent block-coordinate index to the standard index
+    $\{0,\dots,\sum_k D_k-1\}$ of the assembled tensor.
+    The resulting element of $\GL_{\sum_k D_k}(\C)$ is the global gauge used
+    in the conjugation formula for $\bigoplus_k \mu_k A_k$.
 \end{definition}
 
 \begin{lemma}[Explicit direct-sum conjugation by the flattened gauge]%
@@ -1022,7 +1022,8 @@ decomposition.
     The block-diagonal matrix product is computed blockwise.  The scalar weight
     $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
     the right-hand side is $\mu_k B_k^i$.  Reindexing from the dependent block
-    coordinates to $\Fin(\sum_k D_k)$ preserves multiplication and inverses.
+    coordinates to the standard bond index preserves multiplication and
+    inverses.
 \end{proof}
 
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
@@ -1154,38 +1155,39 @@ decomposition.
 \end{proof}
 
 %% ---------------------------------------------------------
-\subsection{Canonical-form bridge}%
+\subsection{Canonical-form tensor as a weighted direct sum}%
 \label{subsec:canonical_form_bridge}
 %% ---------------------------------------------------------
 
 \begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
     \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
     \uses{def:tensor_from_blocks}
-    For a canonical-form record $C$, the tensor $C.\mathtt{toTensor}$
-    is definitionally equal to the weighted block-diagonal tensor
-    $\bigoplus_k C.\mu_k\; C.\mathtt{blockTensor}_k$.
+    For a canonical-form record $C$, the assembled tensor $T_C$ is
+    definitionally equal to the weighted block-diagonal tensor
+    $\bigoplus_k \mu_k^C\, A_k^C$,
+    where $\mu_k^C$ are the block weights and $A_k^C$ are the block tensors
+    stored in $C$.
 \end{lemma}
 
 \begin{proof}\leanok
-    The equality holds by definition; $C.\mathtt{toTensor}$ is defined as
-    $\mathtt{toTensorFromBlocks}\; C.\mu\; C.\mathtt{blockTensor}$.
+    The equality holds by definition; $T_C$ is defined as the weighted
+    block-diagonal tensor formed from the weights and block tensors of $C$.
 \end{proof}
 
 \begin{theorem}[Fundamental theorem for canonical forms with the same block structure]\label{thm:ft_canonical_form_same_structure}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
     \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
-    Let $C$ be a canonical-form record, let $\{B_k\}$ be a family of MPS
-    tensors on the same block dimensions as $C$, and assume that each
-    $C.\mathtt{blockTensor}_k$ is injective and generates the same MPV
-    family as $B_k$.
-    Then $C.\mathtt{toTensor}$ and $\bigoplus_k C.\mu_k\, B_k$ are gauge
-    equivalent.
+    Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
+    tensors $A_k^C$.  Let $\{B_k\}$ be a family of MPS tensors on the same
+    block dimensions, and assume that each $A_k^C$ is injective and generates
+    the same MPV family as $B_k$.
+    Then $T_C$ and $\bigoplus_k \mu_k^C\, B_k$ are gauge equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
-    Rewrite the canonical-form tensor as a weighted block-diagonal tensor
-    via Lemma~\ref{lem:canonical_toTensor_eq}, then apply the multi-block
+    Rewrite $T_C$ as a weighted block-diagonal tensor via
+    Lemma~\ref{lem:canonical_toTensor_eq}, then apply the multi-block
     global fundamental theorem
     (Theorem~\ref{thm:multi_block_global}).
 \end{proof}
@@ -1486,24 +1488,23 @@ bond space of the weighted direct sum.  This is the \emph{global
 proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
-    \lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-        MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}\leanok
-    \uses{def:block_proportional_gauge_phase_data, def:global_gauge_of_blocks,
+    \uses{thm:block_proportional_globalX_conj, def:global_gauge_of_blocks,
         def:gauge_equiv}
     Let the block weights absorb the per-block phases via
     $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  Then the weighted direct sum of
     the permuted right-side blocks is conjugate to the weighted direct sum of
-    the cast left-side blocks by the flattened global gauge
-    $\mathtt{globalGaugeOfBlocks}(X)$.  Consequently the two assembled tensors
+    the cast left-side blocks by the flattened block-diagonal gauge
+    $X = \bigoplus_k X_k$.  Consequently the two assembled tensors
     are gauge equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
     Absorb each phase $\zeta_k$ into the corresponding weight; after this
     absorption the per-block identities become ordinary conjugation relations
-    $B_{\sigma(k)}^i = X_k (\mathtt{cast}\,A_k)^i X_k^{-1}$.
+    $B_{\sigma(k)}^i = X_k\, (A_k\text{ with bond dimension identified via the
+    dimension equality})^i\, X_k^{-1}$.
     Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the per-block
-    $X_k$ into the global block-diagonal gauge.
+    $X_k$ into the global block-diagonal gauge $X = \bigoplus_k X_k$.
 \end{proof}
 
 %% ---------------------------------------------------------
