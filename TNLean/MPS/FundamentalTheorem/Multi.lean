@@ -46,15 +46,16 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
    blockDiagonal'_mul_one _ _ (fun k => by simp),
    blockDiagonal'_mul_one _ _ (fun k => by simp)⟩
 
+/-- Assemble per-block gauges into the flattened global `GL` element used by
+`toTensorFromBlocks`.  This is the reindexed block-diagonal matrix `⊕ₖ X k` on the
+canonical `Fin (∑ k, dim k)` bond index. -/
+noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
+    GL (Fin (∑ k : Fin r, dim k)) ℂ :=
+  Units.map
+    (Matrix.reindexAlgEquiv ℂ ℂ (finSigmaFinEquiv (n := dim))).toRingEquiv.toMonoidHom
+    (blockDiagonalGL X)
+
 end BlockDiagonalGL
-
-/-! ## Reindexing `GL` -/
-
-section ReindexGL
-
-variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-
-end ReindexGL
 
 /-! ## Gauge equivalence for direct sums -/
 
@@ -64,23 +65,27 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable (μ : Fin r → ℂ)
 variable (A B : (k : Fin r) → MPSTensor d (dim k))
 
-/-- If `B_k^i = X_k A_k^i X_k⁻¹` for every block, then the weighted direct sums
-are gauge equivalent by the block-diagonal matrix `⊕_k X_k`. -/
-lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
+/-- Direct conjugation formula for weighted direct sums using the explicit flattened
+global gauge assembled from the per-block gauges. -/
+theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
     (hX : ∀ k : Fin r, ∀ i : Fin d,
       B k i =
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
-    GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
-      (toTensorFromBlocks (d := d) (μ := μ) B) := by
+    ∀ i : Fin d,
+      toTensorFromBlocks (d := d) (μ := μ) B i =
+        (globalGaugeOfBlocks X : Matrix (Fin (∑ k : Fin r, dim k))
+          (Fin (∑ k : Fin r, dim k)) ℂ) *
+          toTensorFromBlocks (d := d) (μ := μ) A i *
+          (((globalGaugeOfBlocks X)⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
+            Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) := by
   classical
+  intro i
   let α := (k : Fin r) × Fin (dim k)
   let e : α ≃ Fin (∑ k : Fin r, dim k) := finSigmaFinEquiv
   let f : Matrix α α ℂ →* Matrix (Fin _) (Fin _) ℂ :=
     (Matrix.reindexAlgEquiv ℂ ℂ e).toRingEquiv.toMonoidHom
-  let Xfin : GL (Fin _) ℂ := (Units.map f) (blockDiagonalGL X)
-  refine ⟨Xfin, fun i => ?_⟩
   let BD := fun (T : (k : Fin r) → MPSTensor d (dim k)) =>
     Matrix.blockDiagonal' fun k => (μ k) • T k i
   let XBD : Matrix α α ℂ :=
@@ -97,11 +102,29 @@ lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
         fun k => (X k : Matrix _ _ ℂ) * ((μ k) • A k i) * ((X k)⁻¹ : Matrix _ _ ℂ) := by
       funext k; simp [hX k i, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, Matrix.mul_assoc]
     rw [this, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
-  have hXfin : (Xfin : Matrix _ _ ℂ) = f XBD := by simp [Xfin, XBD, blockDiagonalGL]
-  have hXfin_inv : ((Xfin⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) = f XBDinv := by
-    simp [Xfin, XBDinv, blockDiagonalGL]
+  have hXfin :
+      (globalGaugeOfBlocks X : Matrix (Fin (∑ k : Fin r, dim k))
+        (Fin (∑ k : Fin r, dim k)) ℂ) = f XBD := by
+    simp [globalGaugeOfBlocks, XBD, blockDiagonalGL, f, e]
+  have hXfin_inv :
+      (((globalGaugeOfBlocks X)⁻¹ : GL (Fin (∑ k : Fin r, dim k)) ℂ) :
+        Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ k : Fin r, dim k)) ℂ) = f XBDinv := by
+    simp [globalGaugeOfBlocks, XBDinv, blockDiagonalGL, f, e]
   rw [htoB, htoA, hBD]
   simp [map_mul, hXfin, hXfin_inv, Matrix.mul_assoc]
+
+/-- If `B_k^i = X_k A_k^i X_k⁻¹` for every block, then the weighted direct sums
+are gauge equivalent by the block-diagonal matrix `⊕_k X_k`. -/
+lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
+    (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
+    (hX : ∀ k : Fin r, ∀ i : Fin d,
+      B k i =
+        (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
+          (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
+    GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
+      (toTensorFromBlocks (d := d) (μ := μ) B) := by
+  exact ⟨globalGaugeOfBlocks X,
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (μ := μ) (A := A) (B := B) X hX⟩
 
 /-- Gauge equivalence of weighted direct sums from gauge equivalence of each summand. -/
 lemma gaugeEquiv_toTensorFromBlocks_of_blockGauge

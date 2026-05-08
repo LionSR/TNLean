@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem
 import TNLean.MPS.CanonicalForm.PhaseCover
+import TNLean.MPS.FundamentalTheorem.Multi
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -448,7 +449,7 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
-theorem toMPVCommonPhaseCover    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+theorem toMPVCommonPhaseCover {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {zeroTailA zeroTailB DtotA DtotB : ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
@@ -484,15 +485,16 @@ end CommonPrimitiveBNTCoverHypotheses
 The per-block matchers from `ProportionalDecompositionConclusion` produce, for every
 block index `k`, a dimension equality, an invertible matrix `X_k`, and a phase
 `ζ_k ≠ 0` with `B (perm k) i = ζ_k • X_k * (cast (A k)) i * X_k⁻¹`.  The records
-below repackage that data and assemble the per-block `X_k` into a single
-block-diagonal element of `GL`, the global proportionality matrix from CPSV16
-Cor II.2 (`eq:II:A=XAX`). -/
+below store that data and assemble the per-block `X_k` into a single block-diagonal
+element of `GL`, the global proportionality matrix from arXiv:1606.00608,
+lines 1155–1192 (Corollary II.2, `eq:II:A=XAX`). -/
 
 /-- Per-block gauge-phase data attached to a `ProportionalDecompositionConclusion`.
 
-This is the structural record realizing CPSV16 Cor II.2 (eq. `eq:II:A=XAX`):
-a permutation matching the block indices, per-block dimension equalities, and per-block
-gauge matrices `X k` with phases `phase k` satisfying
+This is the structural record realizing arXiv:1606.00608, lines 1155–1192
+(Corollary II.2, eq. `eq:II:A=XAX`): a permutation matching the block indices,
+per-block dimension equalities, and per-block gauge matrices `X k` with phases
+`phase k` satisfying
 `blocksB (perm k) i = phase k • X k * cast (blocksA k) i * (X k)⁻¹`. -/
 structure BlockProportionalGaugePhaseData
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -570,10 +572,62 @@ noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB)
 `GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor. -/
 noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
-  Units.map
-    (Matrix.reindexAlgEquiv ℂ ℂ
-      (finSigmaFinEquiv (n := fun k : Fin rA => dimB (G.perm k)))).toRingEquiv.toMonoidHom
-    G.globalGL
+  globalGaugeOfBlocks G.X
+
+/-- Explicit global-gauge witness for the proportional block assembly.
+
+When per-block phases are absorbed into the block weights via
+`μA k = μB (perm k) * phase k`, the weighted direct sum of the permuted right
+blocks is conjugate to the weighted direct sum of the cast left blocks by
+`G.globalX`. -/
+theorem toTensorFromBlocks_reindexB_eq_globalX_conj
+    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
+    ∀ i : Fin d,
+      toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB i =
+        (G.globalX : Matrix (Fin (∑ k : Fin rA, dimB (G.perm k)))
+          (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) *
+          toTensorFromBlocks (d := d) (μ := μA) G.castA i *
+          (((G.globalX)⁻¹ : GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) :
+            Matrix (Fin (∑ k : Fin rA, dimB (G.perm k)))
+              (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) := by
+  classical
+  have hWeighted :
+      ∀ k : Fin rA, ∀ i : Fin d,
+        (μB (G.perm k)) • G.reindexB k i =
+          (G.X k : Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) *
+            ((μA k) • G.castA k i) *
+            (((G.X k)⁻¹ : GL (Fin (dimB (G.perm k))) ℂ) :
+              Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) := by
+    intro k i
+    change (μB (G.perm k)) • blocksB (G.perm k) i =
+      (G.X k : Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) *
+        ((μA k) • G.castA k i) *
+        (((G.X k)⁻¹ : GL (Fin (dimB (G.perm k))) ℂ) :
+          Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ)
+    rw [G.conj k i, hμ k]
+    simp [castA, smul_smul, Matrix.mul_assoc, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
+  have hFormula :=
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
+      (μ := fun _ : Fin rA => (1 : ℂ))
+      (A := fun k i => μA k • G.castA k i)
+      (B := fun k i => μB (G.perm k) • G.reindexB k i)
+      G.X hWeighted
+  have hLeft :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
+        (fun k i => μA k • G.castA k i) =
+        toTensorFromBlocks (d := d) (μ := μA) G.castA := by
+    funext i
+    simp [toTensorFromBlocks]
+  have hRight :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
+        (fun k i => μB (G.perm k) • G.reindexB k i) =
+        toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB := by
+    funext i
+    simp [toTensorFromBlocks]
+  intro i
+  simpa [globalX, hLeft, hRight] using hFormula i
 
 /-- When per-block phases are absorbed into the block weights via
 `μA k = μB (perm k) * phase k`, the per-block conjugation identities assemble into a
@@ -585,11 +639,8 @@ theorem gaugeEquiv_toTensorFromBlocks
     (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
     GaugeEquiv
       (toTensorFromBlocks (d := d) (μ := μA) G.castA)
-      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) :=
-  gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
-    (μA := μA) (μB := fun k => μB (G.perm k))
-    (A := G.castA) (B := G.reindexB)
-    G.X G.phase G.conj hμ
+      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) := by
+  exact ⟨G.globalX, G.toTensorFromBlocks_reindexB_eq_globalX_conj μA μB hμ⟩
 
 end BlockProportionalGaugePhaseData
 
