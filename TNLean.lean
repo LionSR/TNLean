@@ -164,6 +164,7 @@ import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Overlap.SelfOverlapAux
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.OrthogonalProjectionInvariance
 import TNLean.MPS.Core.BlockingTransfer

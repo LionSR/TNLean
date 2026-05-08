@@ -1,4 +1,5 @@
 import TNLean.MPS.BNT.PermutationRigidity.NonzeroOverlap
+import TNLean.MPS.Overlap.SelfOverlapAux
 
 open scoped BigOperators Matrix
 open Filter Finset
@@ -48,13 +49,6 @@ private lemma gaugePhaseEquiv_of_not_tendsto_zero_mpvOverlap
       (B k) := by
   by_contra hNot
   exact h_nonzero (h_zero_of_not_gauge hNot)
-
-private lemma tendsto_norm_selfOverlap_one
-    {d D : ℕ} (A : MPSTensor d D)
-    (hSelf :
-      Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :
-    Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) atTop (nhds 1) := by
-  simpa using hSelf.norm
 
 private lemma tendsto_norm_mpvOverlap_one_of_scaled_self
     {d D₁ D₂ : ℕ}
@@ -121,11 +115,11 @@ private lemma rightMatching_injective_of_gaugePhaseEquiv
       hk.symm]
   have hAA_norm_tendsto :
       Tendsto (fun N => ‖mpvOverlap (d := d) (A (f k1)) (A (f k1)) N‖) atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := A (f k1)) (hSelf := hA_self (f k1))
+    tendsto_norm_selfOverlap_one (d := d) (A (f k1)) (hA_self (f k1))
   have hBB1_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k1) (B k1) N‖) atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := B k1) (hSelf := hB_self k1)
+    tendsto_norm_selfOverlap_one (d := d) (B k1) (hB_self k1)
   have hBB2_norm : Tendsto (fun N => ‖mpvOverlap (d := d) (B k2) (B k2) N‖) atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := B k2) (hSelf := hB_self k2)
+    tendsto_norm_selfOverlap_one (d := d) (B k2) (hB_self k2)
   have hζ1_norm : ‖ζ1‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale hAA_norm_tendsto hBB1_norm
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul
@@ -221,13 +215,13 @@ private lemma leftMatching_injective_of_gaugePhaseEquiv
       htmp hj.symm
   have hB_norm_tendsto :
       Tendsto (fun N => ‖mpvOverlap (d := d) (B (g j1)) (B (g j1)) N‖) atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := B (g j1)) (hSelf := hB_self (g j1))
+    tendsto_norm_selfOverlap_one (d := d) (B (g j1)) (hB_self (g j1))
   have hA1_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j1) (A j1) N‖)
       atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := A j1) (hSelf := hA_self j1)
+    tendsto_norm_selfOverlap_one (d := d) (A j1) (hA_self j1)
   have hA2_norm_tendsto : Tendsto (fun N => ‖mpvOverlap (d := d) (A j2) (A j2) N‖)
       atTop (nhds 1) :=
-    tendsto_norm_selfOverlap_one (d := d) (A := A j2) (hSelf := hA_self j2)
+    tendsto_norm_selfOverlap_one (d := d) (A j2) (hA_self j2)
   have hζ1_norm : ‖ζ1‖ = 1 :=
     norm_eq_one_of_selfOverlap_scale hA1_norm_tendsto hB_norm_tendsto
       (mpvOverlap_self_scale_of_mpv_eq_pow_mul
