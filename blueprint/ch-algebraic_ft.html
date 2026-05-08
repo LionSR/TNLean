@@ -1043,7 +1043,7 @@
   \[  B_k^i = Z_k A_k^i Z_{k+1}^{-1}  \]
 </div>
 <p> for every site \(k\) and physical index \(i\), with indices understood modulo \(n\) so that \(Z_n = Z_0\). Locally, this gauge relation is represented by </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-945d1b3c20adc057.svg" alt="\TNGaugeConjugation{Z_k}{i}{Z_{k+1}^{-1}}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-592cef74a454b5cd.svg" alt="\TNGaugeConjugation{Z_k}{i}{Z_{k+1}^{-1}}"> </div>
 <p> where the black node denotes the site tensor named in the surrounding formula and the two red side nodes denote the bond gauges on the neighboring virtual legs. </p>
 
   </div>
@@ -1452,7 +1452,7 @@
   \[  O_A(X)_{ij} := (\Psi _A(A^i X))_j,  \]
 </div>
 <p> so that row&#160;\(i\) of \(O_A(X)\) contains the decomposition coefficients of \(A^i X\) in the spanning set \(\{ A^j\} \). Diagrammatically, the inserted virtual matrix is re-expressed as a physical operation on the same local tensor: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-8e8c203bd2dc3664.svg" alt="\TNPhysicalRealization{X}{O_A(X)}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-4ddaed1b5514b8b1.svg" alt="\TNPhysicalRealization{X}{O_A(X)}"> </div>
 <p> The map \(X \mapsto O_A(X)\) is \(\mathbb {C}\)-linear. </p>
 
   </div>
@@ -2020,13 +2020,13 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fa965d59c70>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f0c4b439c70>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-3810ecdd194db8ad.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-94d204c7b461ceb8.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
 <p> while the insertion \(Y\) on the outer trace bond (Eq.&#160;??) is: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-962866c300abe047.svg" alt="\TNExternalTraceInsertion{i}{j}{Y}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-050de7d0449046b7.svg" alt="\TNExternalTraceInsertion{i}{j}{Y}"> </div>
 <p> so the two hypotheses distinguish the internal and external virtual loops of the two-site periodic chain. </p>
 <p>Then there exists a nonzero scalar \(\lambda \in \mathbb {C}^{\times }\) such that </p>
 <div class="displaymath" id="a0000028158">
@@ -2049,7 +2049,7 @@
   \[  \begin{aligned}  A_2^{j} A_1^{i} & = B_2^{j} B_1^{i},\\ A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}. \end{aligned}  \]
 </div>
 <p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-64bbb9b31c6efaae.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-3654065d8b384c8a.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-ba1da95cefb484e1.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-e10ffce40f9e899b.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>
 <p> The first product identity gives \(A_1^i = Z B_1^i\), and the second gives \(A_1^i = B_1^i Z\). Hence \(Z\) commutes with every \(B_1^i\); since \(\{ B_1^i\} \) spans \(M_{D}(\mathbb {C})\), \(Z\) is central. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">17.12</a>, \(Z = \lambda \mathbb {1}_D\) for some \(\lambda \in \mathbb {C}^{\times }\) (nonzero since the tensors are nonzero). Thus \(A_1^i = \lambda B_1^i\), and substituting into the first product identity forces \(A_2^j = \lambda ^{-1} B_2^j\). </p>
 
   </div>
@@ -5384,7 +5384,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Diagrammatically, the hypothesis is that the two local gauges </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-4f3fe373a1352893.svg" alt="\TNGaugeConjugation{X}{i}{X^{-1}}"> &#8195;&#8195;and&#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-0c525d0e63c066d0.svg" alt="\TNGaugeConjugation{Y}{i}{Y^{-1}}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-6abace6d9af8ea22.svg" alt="\TNGaugeConjugation{X}{i}{X^{-1}}"> &#8195;&#8195;and&#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-d1b41252ad338bfb.svg" alt="\TNGaugeConjugation{Y}{i}{Y^{-1}}"> </div>
 <p> produce the same target tensor \(B^i\) from the same source tensor \(A^i\). If \(X, Y \in \mathrm{GL}_D(\mathbb {C})\) both conjugate an MPS tensor \(A\) to the same tensor \(B\) (i.e. \(B^i = X A^i X^{-1} = Y A^i Y^{-1}\) for all \(i\)), then \(Y^{-1} X\) commutes with every \(A^i\). </p>
 
   </div>
@@ -5566,7 +5566,7 @@
   \[  X(h)\,  X(g) = c(g,h)\,  X(g \cdot h).  \]
 </div>
 <p> In fact \(c(g,h) \ne 0\) since both sides are invertible, so \(c(g,h) \in \mathbb {C}^{\times }\). Diagrammatically, the two candidate gauges are competing local replacements for the same twisted tensor: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-915ec3cba18e393b.svg" alt="\TNLocalEqualityStep{X(h)\, X(g)}{X(gh)}{i}"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-a6ab39fc8330d15b.svg" alt="\TNLocalEqualityStep{X(h)\, X(g)}{X(gh)}{i}"> </div>
 <p> and both sides conjugate \(A^i\) to the same twisted tensor \(\widetilde{A}_{gh}^i\). </p>
 
   </div>
