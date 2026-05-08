@@ -1045,7 +1045,7 @@ decomposition.
     \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv,
         def:gauge_phase_equiv}
     Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
-    and nonzero phases $\zeta_k \in \C^\times$ satisfy
+    and scalars $\zeta_k \in \C$ satisfy
     $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
     physical index $i$.  If the weights satisfy $\mu_A(k) = \mu_B(k)\,\zeta_k$,
     then the weighted block-diagonal tensors
@@ -1055,11 +1055,13 @@ decomposition.
 
 \begin{proof}\leanok
     \uses{lem:tensor_from_blocks_globalGauge_conj}
-    Absorb each phase $\zeta_k$ into the weight $\mu_B(k)$ by rescaling the
-    per-block tensors: define $\tilde B_k^i = \zeta_k^{-1} B_k^i$ and
-    $\tilde\mu_B(k) = \mu_B(k)\,\zeta_k = \mu_A(k)$.  Then
-    $\tilde B_k^i = X_k A_k^i X_k^{-1}$ and the two weighted direct sums
-    coincide with those in Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj}.
+    Per-block, the weight identity $\mu_A(k) = \mu_B(k)\,\zeta_k$ rewrites the
+    scaled relation as
+    $\mu_B(k)\,B_k^i = X_k\,(\mu_A(k)\,A_k^i)\,X_k^{-1}$.
+    Each weighted block then satisfies an ordinary conjugation, and the
+    block-diagonal conjugation formula assembles the per-block $X_k$ into the
+    flattened global gauge $\bigoplus_k X_k$ relating
+    $\bigoplus_k \mu_A(k) A_k$ to $\bigoplus_k \mu_B(k) B_k$.
 \end{proof}
 
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
@@ -1192,7 +1194,7 @@ decomposition.
 
 %% ---------------------------------------------------------
 \subsection{Canonical-form tensor as a weighted direct sum}%
-\label{subsec:canonical_form_bridge}
+\label{subsec:canonical_form_block_sum}
 %% ---------------------------------------------------------
 
 \begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
@@ -1524,6 +1526,9 @@ bond space of the weighted direct sum.  This is the \emph{global
 proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
+    \lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+        MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+    \leanok
     \uses{thm:block_proportional_globalX_conj, def:global_gauge_of_blocks,
         def:gauge_equiv}
     Let the block weights absorb the per-block phases via
@@ -1534,9 +1539,9 @@ proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO
     are gauge equivalent.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Let $\tilde A_k$ denote the block $A_k$ transported along the dimension
-    equality $h_k : \dim^A_k = \dim^B_{\sigma(k)}$.
+    equality $\dim^A_k = \dim^B_{\sigma(k)}$.
     Absorb each phase $\zeta_k$ into the corresponding weight via the
     identity $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  After this absorption
     each weighted block satisfies an ordinary conjugation relation

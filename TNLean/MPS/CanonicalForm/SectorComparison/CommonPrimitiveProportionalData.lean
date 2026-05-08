@@ -485,9 +485,10 @@ end CommonPrimitiveBNTCoverHypotheses
 The per-block matchers from `ProportionalDecompositionConclusion` produce, for every
 block index `k`, a dimension equality, an invertible matrix `X_k`, and a phase
 `ζ_k ≠ 0` with `B (perm k) i = ζ_k • X_k * (cast (A k)) i * X_k⁻¹`.  The records
-below store that data and assemble the per-block `X_k` into a single block-diagonal
-element of `GL`, the global proportionality matrix from arXiv:1606.00608,
-lines 1155–1192 (Corollary II.2, `eq:II:A=XAX`). -/
+below package the permutation, per-block dimension equalities, gauge matrices
+`X k`, and phases `ζ k` into a single structure, and assemble the per-block
+`X_k` into a block-diagonal element of `GL`, the global proportionality matrix
+from arXiv:1606.00608, lines 1155–1192 (Corollary II.2, `eq:II:A=XAX`). -/
 
 /-- Per-block gauge-phase data attached to a `ProportionalDecompositionConclusion`.
 
@@ -573,13 +574,13 @@ noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB)
   blockDiagonalGL G.X
 
 /-- The flattened block-diagonal gauge matrix as an element of
-`GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor. -/
+`GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor.
+
+Defined as the canonical reindexing of `G.globalGL`, so that
+`G.globalX = globalGaugeOfBlocks G.X` definitionally. -/
 noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
-  Units.map
-    (Matrix.reindexAlgEquiv ℂ ℂ
-      (finSigmaFinEquiv (n := fun k : Fin rA => dimB (G.perm k)))).toRingEquiv.toMonoidHom
-    G.globalGL
+  globalGaugeOfBlocks G.X
 
 /-- Explicit global-gauge witness for the proportional block assembly.
 
@@ -634,7 +635,7 @@ theorem toTensorFromBlocks_reindexB_eq_globalX_conj
     funext i
     simp [toTensorFromBlocks]
   intro i
-  simpa [globalX, globalGL, globalGaugeOfBlocks, hLeft, hRight] using hFormula i
+  simpa [globalX, hLeft, hRight] using hFormula i
 
 /-- When per-block phases are absorbed into the block weights via
 `μA k = μB (perm k) * phase k`, the per-block conjugation identities assemble into a

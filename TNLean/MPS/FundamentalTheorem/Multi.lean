@@ -48,7 +48,10 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
 
 /-- Assemble per-block gauges into the flattened global `GL` element used by
 `toTensorFromBlocks`.  This is the reindexed block-diagonal matrix `⊕ₖ X k` on the
-canonical `Fin (∑ k, dim k)` bond index. -/
+canonical `Fin (∑ k, dim k)` bond index, naming the global gauge `X = ⊕ₖ X k`
+that arises in the proportional decomposition.
+
+Reference: arXiv:1606.00608, Corollary II.2 (`eq:II:A=XAX`, lines 1155–1192). -/
 noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
     GL (Fin (∑ k : Fin r, dim k)) ℂ :=
   Units.map
@@ -65,8 +68,13 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable (μ : Fin r → ℂ)
 variable (A B : (k : Fin r) → MPSTensor d (dim k))
 
-/-- Direct conjugation formula for weighted direct sums using the explicit flattened
-global gauge assembled from the per-block gauges. -/
+/-- Direct conjugation formula for weighted direct sums.
+
+If `B k i = X k * A k i * (X k)⁻¹` for every `k, i`, then for every `i`,
+`toTensorFromBlocks μ B i = (⊕ X) * toTensorFromBlocks μ A i * (⊕ X)⁻¹`,
+where `⊕ X = globalGaugeOfBlocks X` is the reindexed block-diagonal gauge.
+
+Reference: arXiv:1606.00608, Corollary II.2 (`eq:II:A=XAX`, lines 1155–1192). -/
 theorem toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
     (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
     (hX : ∀ k : Fin r, ∀ i : Fin d,
