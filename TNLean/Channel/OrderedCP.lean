@@ -8,10 +8,10 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
-# Ordered completely positive maps (Wolf Chapter 2, Theorem 2.3)
+# Ordered completely positive maps (Wolf Section 2.1, Theorem 2.3)
 
 This file relates two CP maps `T₁ ≤ T₂` through canonical Stinespring
-realizations. The central statement is Wolf's Theorem 2.3: if `T₂ - T₁` is CP,
+realizations. The central statement is Wolf's Theorem 2.3 (Eq. (2.13)): if `T₂ - T₁` is CP,
 then a Heisenberg-form Stinespring realization for `T₁` factors through one for
 `T₂` via a **contraction** on the dilation space.
 

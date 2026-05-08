@@ -56,8 +56,9 @@ basis-of-normal-tensors construction from
 * `exists_sortedNCF_of_distinct_norms` — If blocks satisfy all `IsNormalCanonicalForm`
   conditions except norm ordering (norms distinct but not yet decreasing), there exists
   a permutation `e` such that `(μ ∘ e, blocks ∘ e)` is a proper `IsNormalCanonicalForm`
-  and the assembled tensor is `SameMPV₂`-equivalent to the original.  This is the key
-  connection from the reduction output to the canonical form.
+  and `toTensorFromBlocks (μ ∘ e) (blocks ∘ e)` is `SameMPV₂`-equivalent to
+  `toTensorFromBlocks μ blocks`.  This is the key connection from the reduction output
+  to the canonical form.
 
 ### Section 4 One-sector-per-block sector decomposition for the sorted distinct-norm case
 
@@ -70,8 +71,9 @@ basis-of-normal-tensors construction from
 * `exists_normClassSectorDecomp_of_equalNorm_sameMPV` — For blocks with possibly equal norms,
   given the hypothesis that equal-norm blocks have the same MPV family
   (`SameMPV₂ (blocks j) (blocks k)` whenever `‖μ j‖ = ‖μ k‖`), there exists a
-  `SectorDecomposition` whose assembled tensor is `SameMPV₂`-equivalent to the original
-  and whose sector-level norms are strictly decreasing.  The proof constructs a
+  `SectorDecomposition` whose tensor is `SameMPV₂`-equivalent to
+  `toTensorFromBlocks μ blocks` and whose sector-level norms are strictly decreasing.
+  The proof constructs a
   `SectorDecomposition` from norm-class enumeration and uses the representative block's
   dimension for the sector `basisDim`.  A same-dimension hypothesis is not needed: the
   choice of representative fixes the sector's bond dimension regardless of other
@@ -183,7 +185,8 @@ theorem exists_sorted_blockDecomp_of_distinct_norms
 Starting from a weighted block family satisfying all `IsNormalCanonicalForm` conditions
 *except* that the norms `‖μ k‖` are distinct but not yet ordered, this theorem produces:
 * a sorting permutation `e : Fin r ≃ Fin r`,
-* a `SameMPV₂` equivalence between the original and the permuted assembled tensors,
+* a `SameMPV₂` equivalence between `toTensorFromBlocks μ blocks` and
+  `toTensorFromBlocks (μ ∘ e) (blocks ∘ e)`,
 * an `IsNormalCanonicalForm` certificate for the permuted family `(μ ∘ e, blocks ∘ e)`.
 
 This is the key reduction: the theorem takes a family with distinct but unsorted
@@ -192,7 +195,7 @@ norms (the output of the TP-gauge / blocking reduction) and produces an
 
 **Note on types**: The permutation changes the bond-dimension type from
 `∑ k, dim k` to `∑ k, dim (e k)`; these are equal as natural numbers (via
-`Equiv.sum_comp`) but the assembled tensors live in different types in Lean.
+`Equiv.sum_comp`) but the two block-diagonal tensors live in different types in Lean.
 `SameMPV₂` is the right heterogeneous equivalence for comparing them.
 
 **Proof**: `exists_sorted_reindexing` gives `e` with `StrictAnti (‖μ ∘ e‖)`.
@@ -253,7 +256,7 @@ def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
 
 /-- **MPV identity for `trivialSectorDecomp`.**
 
-The assembled tensor of `trivialSectorDecomp μ blocks hμne` has the same MPV family
+The tensor of `trivialSectorDecomp μ blocks hμne` has the same MPV family
 as `toTensorFromBlocks μ blocks`.  The proof expands both sides using the
 sector-decomposition formula and the block-sum formula, together with the identity
 `coeff N j = (μ j)^N` because `copies j = 1`. -/
@@ -281,7 +284,7 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
 /-- **One-sector-per-block `SectorDecomposition` from a sorted block family.**
 
 Specialization of `trivialSectorDecomp` to the sorted distinct-norm case: every block
-becomes its own basis tensor with `copies j = 1`, the assembled tensor has
+becomes its own basis tensor with `copies j = 1`, the resulting tensor has
 `SameMPV₂` with `toTensorFromBlocks μ blocks`, and the sector-level norm ordering is
 `StrictAnti` because each basis carries exactly one weight `μ j`, already strictly
 decreasing. -/
@@ -404,10 +407,10 @@ there exists a `SectorDecomposition P` with:
   representative `reprFn j` suffices for the class; the remaining blocks are counted
   as additional copies (`copies j ≥ 1`).
 
-**Formalization note.** No equal-dimension hypothesis is needed: the sector's bond
-dimension is fixed by the representative `reprFn j`, and other members of the same
-norm class may have different dimensions. Their MPV values are matched via `hMPVEq`,
-which uses the heterogeneous `SameMPV₂` to compare blocks of different dimensions.
+No equal-dimension hypothesis is needed: the sector's bond dimension is fixed by the
+representative `reprFn j`, and other members of the same norm class may have different
+dimensions. Their MPV values are matched via `hMPVEq`, which uses the heterogeneous
+`SameMPV₂` to compare blocks of different dimensions.
 
 **Scope.** This theorem groups blocks by norm class alone; it does not split a
 norm class further into distinct MPV classes. If two blocks have the same norm

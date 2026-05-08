@@ -19,7 +19,7 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
   block-span sector comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover` — the
   common-length cyclic-sector output, together with the blocked-word relabeling
-  equality and the remaining zero-tail, injectivity, and common-cover assertions,
+  equality and the remaining zero-tail, injectivity, and common phase-cover assertions,
   implies the sector-weight comparison.
 * `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
   the zero-tail common-cover theorem applied to BNT proportional-decomposition data.
@@ -31,11 +31,11 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional` — the
   same relabeled common-sector output, with the common cover obtained from a BNT
   proportional-decomposition comparison for the produced nonzero-sector families.
-* `CommonPrimitiveBNTCoverHypotheses` — bundles the BNT-level remaining hypotheses
+* `CommonPrimitiveBNTCoverHypotheses` — bundles the remaining BNT comparison hypotheses
   (`IsNormalCanonicalForm`, `BlocksNotGaugePhaseEquiv`, `ProportionalDecompositionData`,
   zero-tail equality, and one-site injectivity) for the common-length cyclic sector families.
   The structure provides `.toMPVCommonPhaseCover` and `.toCommonPrimitivePhaseCoverHypotheses`
-  bridges to the common phase-cover layer.
+  as the corresponding common phase-cover hypotheses.
   See the structure docstring for the explicit mathematical gaps that remain.
 
 ## References
@@ -294,11 +294,11 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
   exact (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
     hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses
 
-/-- **Sector comparison from relabeled common sectors and BNT-cover data.**
+/-- **Sector comparison from relabeled common sectors and BNT comparison hypotheses.**
 
 Assume the blocked-word relabeling statement for cyclic-sector data. The structural
 theorem supplies common primitive nonzero-sector families; if those families carry
-BNT-cover data, then the conversion to phase-cover hypotheses gives the common
+BNT-cover hypotheses, then the conversion to phase-cover hypotheses gives the common
 phase-cover hypotheses. The common-phase-cover comparison theorem then gives the
 sector-weight comparison
 conclusion. -/
@@ -385,6 +385,21 @@ separation, and if they also carry proportional-decomposition hypotheses and
 one-site injectivity, then the zero-tail sector comparison follows.  The zero-tail equality
 is derived from the length-zero identity and the proportional comparison. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity
+
+/-! ### Unconditional (no blocked-word relabeling) variants
+
+The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place of
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
+`CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
+injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
+See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
+
+/-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
+
+The unconditional structural theorem supplies the common primitive nonzero-sector families
+without any blocked-word relabeling hypothesis. If the remaining `CommonPrimitiveSpanHypotheses`
+are supplied for those families, the sector-weight comparison conclusion holds. -/
+lemma unconditional_afterBlocking_sectorComparison_zeroTail_spanHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)

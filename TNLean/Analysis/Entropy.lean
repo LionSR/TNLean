@@ -51,10 +51,13 @@ specialized to `Fin d × Fin d'` indices.
 
 ## References
 
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8
+  (Distance Measures), Section 8.2 (Entropies)][Wolf2012QChannels]
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
-  entropy", JMP 14, 1938 (1973)
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
-* arXiv:1606.00608 Section 4.4
+  entropy", JMP 14, 1938 (1973) — source of SSA
+* arXiv:1606.00608 Section 4.4 — MPDO target paper entropy chapter
+* Blueprint Chapter 4 (Quantum Entropy): `ch04b_entropy.tex`,
+  `ch04c_entropy_corollaries.tex`
 -/
 
 open scoped Matrix ComplexOrder
@@ -71,8 +74,11 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 For a Hermitian matrix `ρ` with eigenvalues `λᵢ`, the von Neumann entropy is
 `S(ρ) = ∑ᵢ negMulLog(λᵢ) = -∑ᵢ λᵢ log(λᵢ)`.
 
-When `ρ` is a density matrix (PSD with trace 1), this gives the standard
-quantum entropy `S(ρ) = -tr(ρ log ρ)`. -/
+When `ρ` is a density matrix (PSD with trace 1), this equals the standard
+quantum entropy `S(ρ) = -tr(ρ log ρ)`.
+
+Source: [Wolf, Chapter 8, Section 8.2 (Entropies), Eq. (8.15)][Wolf2012QChannels];
+blueprint `def:von_neumann_entropy`. -/
 noncomputable def vonNeumannEntropy
     (ρ : Matrix n n ℂ) (hρ : ρ.IsHermitian) : ℝ :=
   ∑ i, negMulLog (hρ.eigenvalues i)
@@ -107,7 +113,10 @@ theorem densityMatrices_eigenvalues_le_one
 /-- Von Neumann entropy is nonneg for density matrices.
 
 Each eigenvalue `λᵢ` of a density matrix satisfies `0 ≤ λᵢ ≤ 1`, and
-`negMulLog` is nonneg on `[0, 1]`. -/
+`negMulLog` is nonneg on `[0, 1]`.
+
+Source: [Wolf, Chapter 8, Section 8.2][Wolf2012QChannels];
+blueprint `thm:entropy_nonneg`. -/
 theorem vonNeumannEntropy_nonneg
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
     0 ≤ vonNeumannEntropy ρ hρ.1.isHermitian := by
@@ -120,7 +129,10 @@ theorem vonNeumannEntropy_nonneg
 
 Proved via Jensen's inequality (`ConcaveOn.le_map_sum` applied to
 `concaveOn_negMulLog`): the entropy is maximized when all eigenvalues
-are equal to `1/D`, giving `S(ρ) ≤ D · negMulLog(1/D) = log D`. -/
+are equal to `1/D`, giving `S(ρ) ≤ D · negMulLog(1/D) = log D`.
+
+Source: [Wolf, Chapter 8, Section 8.2][Wolf2012QChannels];
+blueprint `thm:entropy_le_log_dim`. -/
 theorem vonNeumannEntropy_le_log_dim
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
     (hD : 0 < D) :
@@ -164,7 +176,10 @@ end VonNeumannEntropyFinD
 
 Partial traces for tripartite systems `A ⊗ B ⊗ C`, defined directly via
 summation over the traced-out indices. The tripartite state is indexed by
-`Fin dA × Fin dB × Fin dC` (right-associated: `Fin dA × (Fin dB × Fin dC)`). -/
+`Fin dA × Fin dB × Fin dC` (right-associated: `Fin dA × (Fin dB × Fin dC)`).
+
+Source: blueprint `def:traceA_ABC`, `def:traceC_ABC`, `def:traceAC_ABC`;
+standard quantum-information texts (e.g., [Wolf, Chapter 1][Wolf2012QChannels]). -/
 
 section TripartiteTrace
 
@@ -292,8 +307,12 @@ end BipartiteHermiticity
 /-! ## SSA equality condition
 
 The Hayashi (2003) characterization of equality in strong subadditivity is
-defined as a predicate. The characterization theorem (equality ↔ recovery map
-condition) is deferred.
+defined as a predicate. The theorem (equality ↔ recovery map condition) is the
+sanctioned axiom `hayashi_ssa_equality_characterization` in
+`TNLean/Axioms/Entropy.lean`.
+
+Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+blueprint `def:ssa_equality`.
 
 TODO: Replace with a proof following Hayashi, "Quantum Information: An
 Introduction", Springer 2006, Theorem 5.24. -/
@@ -304,7 +323,13 @@ variable {dA dB dC : ℕ}
 
 /-- Predicate asserting that equality holds in strong subadditivity for a
 tripartite state `ρ_ABC`. Hermiticity of reduced states is derived
-automatically from `hρ_ABC` via partial-trace preservation lemmas. -/
+automatically from `hρ_ABC` via partial-trace preservation lemmas.
+
+Formula: `S(ρ_ABC) + S(ρ_B) = S(ρ_AB) + S(ρ_BC)`.
+
+Source: blueprint `def:ssa_equality`;
+Lieb--Ruskai, JMP 14, 1938 (1973);
+Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208. -/
 def IsSSAEquality
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)
@@ -328,7 +353,10 @@ variable {dA dB : ℕ}
 
 Measures the total correlations (classical + quantum) between A and B.
 Hermiticity of reduced states is derived from `hρ_AB` via partial-trace
-preservation lemmas. -/
+preservation lemmas.
+
+Source: [Wolf, Chapter 8][Wolf2012QChannels];
+blueprint `def:mutual_information`. -/
 noncomputable def mutualInformation
     (ρ_AB : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ_AB : ρ_AB.IsHermitian) : ℝ :=

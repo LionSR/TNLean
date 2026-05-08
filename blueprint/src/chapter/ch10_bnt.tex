@@ -579,11 +579,13 @@ and~\cite{Cirac2021Matrix}.
 \section{Newton--Girard identities}
 
 \begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
-	\lean{Matrix.charpoly_eq_of_forall_trace_pow_eq}
+	\lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
+		Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
 	\leanok
 	If $A, B \in \MN{n}$ satisfy
 	$\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
 	then $A$ and $B$ have the same characteristic polynomial.
+	It is enough to assume this equality for $1 \le k \le n$.
 \end{theorem}
 
 \begin{proof}
@@ -621,18 +623,48 @@ and~\cite{Cirac2021Matrix}.
 	multiplicity and weight equality needed to identify the weighted
 	block-diagonal gauge.
 
-	The statement below is the same-cardinality form with equality for all
-	positive exponents used by the BNT comparison in this section. The Appendix
-	lemma in the source is sharper: the two finite families need not initially
-	have the same cardinality, only finitely many power sums up to the larger
-	cardinality are assumed, and the conclusion is equality of the ordered
-	families.
+	The finite-range statement below includes both the same-cardinality form and
+	the nonzero-entry unequal-cardinality form. The latter pads the shorter
+	family by zeros, applies the same-cardinality result at length
+	\(\max(m,n)\), and then uses the nonzero-entry hypothesis to count the
+	padded zeros. The Appendix lemma in the source also fixes an ordering
+	convention for the two families; here the conclusion is stated as multiset
+	equality, so no sorting hypothesis is needed.
 \end{remark}
+
+\begin{theorem}[Finite-range equal power sums imply equal multisets]
+	\label{thm:bounded_power_sum_multiset}
+	\lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
+		Matrix.sum_pow_eq_implies_multiset_eq_of_le_max_length,
+		Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card,
+		MPSTensor.power_sum_eq_implies_multiset_eq_of_le_card,
+		MPSTensor.power_sum_eq_implies_card_eq_and_multiset_eq_of_le_max_card}
+	\leanok
+	Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
+	If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for $1 \le k \le n$,
+	then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+	More generally, if $\alpha : \{0,\ldots,m-1\}\to\C$ and
+	$\beta : \{0,\ldots,n-1\}\to\C$ have no zero entries and their power sums
+	agree for \(1 \le k \le \max(m,n)\), then \(m=n\) and the two multisets
+	are equal.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:newton_girard}
+	Apply the finite-range Newton--Girard theorem to
+	$\diag(\alpha)$ and $\diag(\beta)$, then extract the roots of
+	$\prod_i (X-\alpha_i)$ and $\prod_i (X-\beta_i)$. For unequal
+	cardinalities, pad both lists with zeros to length \(\max(m,n)\). The
+	equal-root conclusion compares the padded multisets, and the nonzero-entry
+	hypothesis makes the number of padded zeros exactly \(\max(m,n)-m\) and
+	\(\max(m,n)-n\), forcing \(m=n\).
+\end{proof}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
 	\lean{Matrix.sum_pow_eq_implies_multiset_eq}
 	\leanok
-	Let $\alpha, \beta : \{1, \ldots, n\} \to \C$.
+	Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
 	If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
 	then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
 \end{theorem}

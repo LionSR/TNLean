@@ -461,9 +461,9 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
     span_eq := hSpan
   }
 
-/-- **Two-sided overlap-span data from common phase-cover data.**
+/-- **Two-sided overlap-span data from a common MPV phase cover.**
 
-This is the common-cover form of
+This is the common MPV phase-cover form of
 `exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq`.  The cover
 supplies the finite-length span equality for the two nonzero-weight block families,
 and the one-sided BNT representative construction supplies the remaining overlap,

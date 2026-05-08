@@ -14,7 +14,7 @@ open Filter
 # MPV phase covers for canonical-form block families
 
 This file contains the MPV phase-equivalence and phase-cover constructions used by the
-canonical-form equal-norm bridge and sector-comparison layers.
+canonical-form equal-norm comparison and sector-comparison layers.
 -/
 
 namespace MPSTensor
@@ -383,7 +383,7 @@ lemma nonempty_mpvCommonPhaseCover_of_equiv_phase
 /-- A BNT proportional-decomposition conclusion gives finite-length MPV span equality.
 
 The conclusion is obtained by taking the left family as the common MPV phase-cover family and
-then applying the common-cover span lemma. -/
+then applying the common phase-cover span lemma. -/
 lemma mpv_span_eq_of_proportionalDecompositionConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -436,7 +436,8 @@ lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
 /-- Separated normal canonical-form data give finite-length MPV span equality.
 
 The BNT comparison theorem gives a proportional-decomposition conclusion, hence a common
-MPV phase cover, and the common-cover span lemma gives equality of the two block-family spans. -/
+MPV phase cover, and the common phase-cover span lemma gives equality of the two block-family
+spans. -/
 lemma mpv_span_eq_of_separated_normalCFBNT_data
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]

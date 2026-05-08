@@ -15,6 +15,18 @@ import TNLean.Algebra.MatrixOperatorSpace
 This file collects Wolf's spectral characterization of irreducibility for
 completely positive maps on `M_D(ℂ)`.
 
+**Wolf Theorem 6.4** states: for a positive map `T` with spectral radius `%`,
+the following are equivalent:
+1. `T` is irreducible.
+2. The spectral radius `%` is a non-degenerate eigenvalue and the corresponding
+   right and left eigenvectors are positive definite, i.e.,
+   `T(X) = %X > 0` and `T*(Y) = %Y > 0`.
+
+The proof of `1 → 2` follows from Theorem 6.3 applied to `T` and `T*`.
+The converse `2 → 1` uses the similarity transformation Eq. (6.34) with
+`c = 1/%` and `C = Y^{-1/2}` to obtain a TP map with PD fixed point, then
+derives a contradiction from a hypothetical invariant projection.
+
 ## Main declarations
 
 * `HasSpectralProperties`:

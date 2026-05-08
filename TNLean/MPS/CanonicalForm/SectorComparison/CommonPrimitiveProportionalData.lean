@@ -10,10 +10,14 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common primitive proportional data
 
-This file records the span, phase-cover, proportional-comparison, and BNT-cover
-hypotheses for common primitive nonzero-sector families.  These structures express
-the remaining data needed to pass from the common-sector structural theorem to
-the BNT overlap-rigidity comparison.
+This file records the span, phase-cover, proportional-decomposition, and BNT
+comparison hypotheses for common primitive nonzero-sector families.  These structures
+express the remaining hypotheses needed to pass from the common-sector structural
+theorem to the BNT overlap-rigidity comparison.
+
+The zero-tail dimensions below are the total bond dimensions of the separated
+all-zero leftover blocks.  They are the dimension gaps allowed by
+`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 
 ## Tags
 
@@ -70,7 +74,7 @@ end CommonPrimitiveSpanHypotheses
 /-- Remaining two-sided hypotheses for common primitive nonzero-sector families,
 formulated with a common MPV phase cover.
 
-This is the common-cover variant of `CommonPrimitiveSpanHypotheses`: the structural
+This is the common phase-cover variant of `CommonPrimitiveSpanHypotheses`: the structural
 theorem supplies the same primitive nonzero-sector data, while the remaining inputs
 are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
 common phase cover for the two block families. -/
@@ -444,8 +448,7 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
-theorem toMPVCommonPhaseCover
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+theorem toMPVCommonPhaseCover    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {zeroTailA zeroTailB DtotA DtotB : ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}

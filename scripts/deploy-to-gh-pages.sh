@@ -59,6 +59,39 @@ if [ "$WITH_DOCS" = true ]; then
   cp -r "$REPO_ROOT/docbuild/.lake/build/doc" "$WORK_DIR/site/docs"
 fi
 
+# Update paper-gap PDFs (only if built)
+echo "==> Updating paper-gap PDFs..."
+shopt -s nullglob
+GAP_PDFS=("$REPO_ROOT"/docs/paper-gaps/*.pdf)
+if [ ${#GAP_PDFS[@]} -gt 0 ]; then
+  rm -rf "$WORK_DIR/site/paper-gaps"
+  mkdir -p "$WORK_DIR/site/paper-gaps"
+  cp "${GAP_PDFS[@]}" "$WORK_DIR/site/paper-gaps/"
+  {
+    echo "<!doctype html>"
+    echo "<html lang=\"en\">"
+    echo "<head>"
+    echo "  <meta charset=\"utf-8\">"
+    echo "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+    echo "  <title>TNLean paper-gap notes</title>"
+    echo "</head>"
+    echo "<body>"
+    echo "  <h1>TNLean paper-gap notes</h1>"
+    echo "  <ul>"
+    for pdf in "${GAP_PDFS[@]}"; do
+      name="$(basename "$pdf")"
+      echo "    <li><a href=\"$name\">$name</a></li>"
+    done
+    echo "  </ul>"
+    echo "</body>"
+    echo "</html>"
+  } > "$WORK_DIR/site/paper-gaps/index.html"
+  echo "Copied ${#GAP_PDFS[@]} paper-gap PDFs"
+else
+  echo "No paper-gap PDFs found; keeping existing site content"
+fi
+shopt -u nullglob
+
 # Commit and push
 echo "==> Committing and pushing..."
 cd "$WORK_DIR/site"

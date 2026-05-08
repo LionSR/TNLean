@@ -41,6 +41,8 @@ the namespace abbreviation for the quantum-Markov-chain decomposition.
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
 * arXiv:1606.00608 Appendix C (the downstream target of issue #632 / #236)
+* Blueprint `def:entropy_quantum_markov_decomposition`,
+  `thm:entropy_ssa_equality_quantum_markov`
 -/
 
 open scoped Matrix ComplexOrder
@@ -53,7 +55,9 @@ section MarkovChain
 variable {dA dB dC : ℕ}
 
 /-- Namespace abbreviation for the quantum-Markov-chain decomposition witness
-associated to equality in strong subadditivity. -/
+associated to equality in strong subadditivity.
+
+Source: blueprint `def:entropy_quantum_markov_decomposition`. -/
 abbrev QuantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ) : Type :=
@@ -64,7 +68,9 @@ quantum-Markov-chain decomposition on the middle subsystem.
 
 This is a statement of the sanctioned axiom
 `_root_.hayashi_ssa_equality_characterization`; no new axiom is introduced by
-this file. -/
+this file.
+
+Source: blueprint `thm:entropy_ssa_equality_quantum_markov`. -/
 theorem ssaEquality_iff_exists_quantumMarkovDecomposition
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)

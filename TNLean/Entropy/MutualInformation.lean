@@ -32,8 +32,9 @@ entropy namespace used by the Simple MPDO RFP track
 
 ## References
 
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 8][Wolf2012QChannels]
 * arXiv:1606.00608 Section 4.4 (Proposition 4.5)
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*][Wolf2012QChannels]
+* Blueprint `def:entropy_mutual_information`, `thm:mutual_information_nonneg`
 -/
 
 open scoped Matrix ComplexOrder
@@ -45,7 +46,9 @@ namespace Entropy
 namespaced alias.
 
 `I(A:B) = S(ρ_A) + S(ρ_B) − S(ρ_AB)` measures the total correlations
-between A and B. Definitionally equal to `_root_.mutualInformation`. -/
+between A and B. Definitionally equal to `_root_.mutualInformation`.
+
+Source: blueprint `def:entropy_mutual_information`. -/
 noncomputable alias mutualInformation := _root_.mutualInformation
 
 /-! ## Nonnegativity via subadditivity (trivial-middle form)
@@ -65,7 +68,9 @@ variable {dA dC : ℕ}
 
 /-- Mutual information is nonneg in the tripartite trivial-middle
 form: `S(ρ_AB) + S(ρ_BC) − S(ρ_ABC) ≥ 0`. Direct corollary of
-`subadditivity_ssa_trivial_B`. -/
+`subadditivity_ssa_trivial_B`.
+
+Source: blueprint `thm:mutual_information_nonneg`. -/
 theorem mutualInformation_ssa_trivial_B_nonneg
     (ρ_ABC : Matrix (Fin dA × Fin 1 × Fin dC)
       (Fin dA × Fin 1 × Fin dC) ℂ)

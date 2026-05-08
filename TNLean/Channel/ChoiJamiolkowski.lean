@@ -11,10 +11,10 @@ import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
-# Choi–Jamiolkowski isomorphism (Wolf Chapter 2, Proposition 2.1)
+# Choi–Jamiolkowski isomorphism (Wolf Section 2.1, Proposition 2.1)
 
 This file defines the Choi matrix of a linear map and proves the key
-equivalences of the Choi–Jamiolkowski correspondence.
+equivalences of the Choi–Jamiolkowski correspondence (Wolf Eq. (2.1): `τ = (T ⊗ id)(|Ω⟩⟨Ω|)`).
 
 ## Main definitions
 

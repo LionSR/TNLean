@@ -16,7 +16,11 @@ For a quantum channel `E : M_D(ℂ) → M_D(ℂ)`, we prove:
 * any subsequential limit of the Cesàro means is a density-matrix fixed point;
 * if `E` is irreducible, then there is a unique density-matrix fixed point `σ > 0`;
 * consequently, for every density matrix `ρ`,
-  `cesaroMean E ρ (N + 1) → σ` as `N → ∞`.
+
+$$\lim_{N \to \infty} \frac{1}{N} \sum_{t=0}^{N-1} E^t(\rho) = \sigma$$
+
+(Wolf Eq. 6.35). This is the quantum analogue of the classical ergodic theorem:
+the time average converges to a unique full-rank stationary state.
 
 The convergence proof avoids a full spectral/Jordan decomposition. Instead, it uses:
 

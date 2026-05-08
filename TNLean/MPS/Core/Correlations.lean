@@ -12,14 +12,18 @@ import Mathlib.Analysis.SpecialFunctions.Log.Basic
 /-!
 # Correlations for normal MPS in the thermodynamic limit
 
-This file defines connected correlations for a (normalized) MPS tensor
-in the thermodynamic limit. We express one-point and two-point
-observables through the transfer map `transferMap`, and state the standard
-sum-of-exponentials / exponential-decay statements in a form that later
-results use.
+This file defines connected correlations for an MPS tensor in the
+thermodynamic limit.  One-point and two-point observables are expressed
+through the transfer map, and the connected two-point function is obtained
+by subtracting the product of one-point expectations.
 
-The theorems in this file state the exact assumptions needed later while keeping
-the spectral input independent of a particular diagonalization theorem.
+The spectral statements `connectedCorrelator_eq_sum` and
+`connectedCorrelator_bound` take the spectral decomposition or bound
+as an explicit hypothesis; the source (arXiv:2011.12127 [CPGSV21])
+states the connected-correlation formulas in Sec. 2.3
+("Correlations, Entanglement, and the Transfer Matrix") and derives
+the spectral-gap hypotheses in Sec. 4 ("Formal results").
+The definitions here are used by the zero-correlation-length results.
 -/
 
 open scoped Matrix BigOperators
@@ -33,13 +37,16 @@ private abbrev Mat (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 /-- One-site expectation value in terms of a chosen right fixed point `ρR`.
 
 In the thermodynamic limit for a normal MPS, one takes `ρR` to be the positive
-right fixed point of the transfer map. -/
+right fixed point of the transfer map.  Cf. CPGSV21, Sec. 2.3:
+`⟨X⟩ := tr(Xρ^R)`. -/
 noncomputable def onePointExpectation
     (ρR X : Mat D) : ℂ :=
   Matrix.trace (X * ρR)
 
 /-- Two-point function at distance `n`, written by sandwiching `E^n` between
-single-site insertions and evaluating against `ρR`. -/
+single-site insertions and evaluating against `ρR`.
+
+Cf. CPGSV21, Sec. 2.3: `⟨X₀ Yₙ⟩ := tr(Y E_A^n (X ρ^R))`. -/
 noncomputable def twoPointExpectation (A : MPSTensor d D)
     (ρR X Y : Mat D) (n : ℕ) : ℂ :=
   Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR))
@@ -65,9 +72,18 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
       Matrix.trace (Y * ((transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
 
 /--
-Abstract spectral decomposition interface for connected correlators:
-if a spectral expansion is provided, it gives the expected sum-of-exponentials
-formula.
+Spectral expansion of connected correlators (conditional on supplied
+coefficients and eigenvalues).
+
+If coefficients `cⱼ` and eigenvalues `λⱼ` satisfying the spectral expansion
+identity are supplied, then the connected correlator equals the sum of
+exponentials `∑ⱼ cⱼ λⱼⁿ`.
+
+The source CPGSV21, Sec. 2.3, asserts that the connected correlator
+`C(X,Y;n)` is of the form `∑_{j≥2}^{D²} c_{XY}(j) λⱼⁿ`, a sum of
+`D²−1` pure exponentials, where `λⱼ` are the subleading eigenvalues of
+the transfer matrix.  The leading eigenvalue `λ₁=1` contributes
+`⟨X⟩⟨Y⟩` which is subtracted in the connected part.
 -/
 theorem connectedCorrelator_eq_sum
     (A : MPSTensor d D)
@@ -82,8 +98,18 @@ theorem connectedCorrelator_eq_sum
   hdecomp
 
 /--
-Exponential bound for connected correlations once the subleading spectral radius
-bound is supplied.
+Exponential decay bound for connected correlations (conditional on
+supplied constant and subleading eigenvalue).
+
+If a constant `C_X_Y` and a subleading eigenvalue `λ₂` with the
+exponential-decay bound are supplied, then the connected correlator
+satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
+
+The source CPGSV21, Sec. 2.3, notes that `|λ₂| < 1` defines the
+correlation length `ξ = −1/log|λ₂|`.  The exponential decay bound
+follows by applying the triangle inequality to the sum-of-exponentials
+expansion and using `|λⱼ| ≤ |λ₂| < 1` for all subleading eigenvalues
+(the spectral gap proved in Sec. 4).
 -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)
@@ -94,7 +120,9 @@ theorem connectedCorrelator_bound
       ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n :=
   hbound
 
-/-- Correlation length associated with a chosen subleading eigenvalue `λ₂`. -/
+/-- Correlation length associated with a chosen subleading eigenvalue `λ₂`.
+
+Formula from CPGSV21, Sec. 2.3: `ξ := −1/log|λ₂|`. -/
 noncomputable def correlationLength (lam₂ : ℂ) : ℝ :=
   -1 / Real.log ‖lam₂‖
 
