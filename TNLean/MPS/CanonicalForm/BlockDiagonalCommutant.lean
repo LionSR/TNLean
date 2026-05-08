@@ -24,6 +24,18 @@ BNT block families, the results here use only restricted consequences of that
 hypotheses: block injectivity, nonzero weights, pair separation, selector words, and
 homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
 comparison, where multiplicities and sector weights remain explicit data.
+
+## Routing decision (issue #1510)
+
+This module is a **live ParentHamiltonian dependency**, retained specifically for
+`TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`.  The central theorem
+`isBlockDiagonal'_of_commutes_reindexed_wordSpan` provides the commutant reduction
+used in the parent-Hamiltonian ground-space decomposition
+(`groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan`).
+It is **not on the non-periodic Fundamental Theorem path** and is not required by
+the sector-comparison or FT infrastructure.  The CPSV repeated-sector comparison
+(CPSV, arXiv:2011.12127, §V) is handled separately in
+`TNLean/MPS/CanonicalForm/SectorComparison`.
 -/
 
 open scoped Matrix BigOperators
