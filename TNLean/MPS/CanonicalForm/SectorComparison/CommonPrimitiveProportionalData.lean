@@ -576,7 +576,10 @@ noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB)
 `GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor. -/
 noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
-  globalGaugeOfBlocks G.X
+  Units.map
+    (Matrix.reindexAlgEquiv ℂ ℂ
+      (finSigmaFinEquiv (n := fun k : Fin rA => dimB (G.perm k)))).toRingEquiv.toMonoidHom
+    G.globalGL
 
 /-- Explicit global-gauge witness for the proportional block assembly.
 
@@ -631,7 +634,7 @@ theorem toTensorFromBlocks_reindexB_eq_globalX_conj
     funext i
     simp [toTensorFromBlocks]
   intro i
-  simpa [globalX, hLeft, hRight] using hFormula i
+  simpa [globalX, globalGL, globalGaugeOfBlocks, hLeft, hRight] using hFormula i
 
 /-- When per-block phases are absorbed into the block weights via
 `μA k = μB (perm k) * phase k`, the per-block conjugation identities assemble into a
