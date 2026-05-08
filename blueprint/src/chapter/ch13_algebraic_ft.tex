@@ -1002,9 +1002,7 @@ decomposition.
 \begin{lemma}[Explicit direct-sum conjugation by the flattened gauge]%
     \label{lem:tensor_from_blocks_globalGauge_conj}
     \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
-        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj,
-        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge,
-        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}
+        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
     \leanok
     \uses{def:global_gauge_of_blocks, def:tensor_from_blocks, def:gauge_equiv}
     If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
@@ -1014,8 +1012,8 @@ decomposition.
         = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
     \]
     where $X$ is the flattened block-diagonal gauge of
-    Definition~\ref{def:global_gauge_of_blocks}.  Hence the two assembled
-    tensors are gauge equivalent with this explicit witness.
+    Definition~\ref{def:global_gauge_of_blocks}.  Consequently the two
+    assembled tensors are gauge equivalent with this explicit witness.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1023,7 +1021,45 @@ decomposition.
     $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
     the right-hand side is $\mu_k B_k^i$.  Reindexing from the dependent block
     coordinates to the standard bond index preserves multiplication and
-    inverses.
+    inverses.  The gauge equivalence follows directly from the conjugation
+    identity.
+\end{proof}
+
+\begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%
+    \label{lem:gauge_equiv_from_block_gauge}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv}
+    If each pair $(A_k, B_k)$ is gauge equivalent, then the weighted
+    block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
+    $\bigoplus_k \mu_k B_k$ are gauge equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose per-block gauge matrices via the hypothesis; then apply
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj}.
+\end{proof}
+
+\begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
+    \label{lem:gauge_equiv_block_gauge_phase_weight}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv,
+        def:gauge_phase_equiv}
+    Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
+    and nonzero phases $\zeta_k \in \C^\times$ satisfy
+    $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
+    physical index $i$.  If the weights satisfy $\mu_A(k) = \mu_B(k)\,\zeta_k$,
+    then the weighted block-diagonal tensors
+    $\bigoplus_k \mu_A(k) A_k$ and $\bigoplus_k \mu_B(k) B_k$ are gauge
+    equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj}
+    Absorb each phase $\zeta_k$ into the weight $\mu_B(k)$ by rescaling the
+    per-block tensors: define $\tilde B_k^i = \zeta_k^{-1} B_k^i$ and
+    $\tilde\mu_B(k) = \mu_B(k)\,\zeta_k = \mu_A(k)$.  Then
+    $\tilde B_k^i = X_k A_k^i X_k^{-1}$ and the two weighted direct sums
+    coincide with those in Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj}.
 \end{proof}
 
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
