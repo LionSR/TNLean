@@ -562,13 +562,17 @@ noncomputable def castA (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
   fun k => cast (congr_arg (MPSTensor d) (G.hdim k)) (blocksA k)
 
-/-- The global block-diagonal gauge matrix assembled from the per-block `X k`,
-viewed on the dependent total index. -/
+/-- The unflattened block-diagonal gauge assembled from the per-block `X k`.
+
+This lives on the dependent sigma-indexed bond space
+`(k : Fin rA) × Fin (dimB (G.perm k))`, with diagonal block `X k` over the
+matched `B`-side block `G.perm k`.  The flattened/reindexed gauge acting on the
+bond dimension of `toTensorFromBlocks` is `G.globalX`. -/
 noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     GL ((k : Fin rA) × Fin (dimB (G.perm k))) ℂ :=
   blockDiagonalGL G.X
 
-/-- The global block-diagonal gauge matrix as an element of
+/-- The flattened block-diagonal gauge matrix as an element of
 `GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor. -/
 noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=

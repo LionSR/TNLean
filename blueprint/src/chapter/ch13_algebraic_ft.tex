@@ -986,12 +986,49 @@ decomposition.
 \label{sec:multi_block_ft}
 %% ---------------------------------------------------------
 
+\begin{definition}[Flattened block-diagonal gauge]%
+    \label{def:global_gauge_of_blocks}
+    \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}
+    \leanok
+    \uses{def:tensor_from_blocks}
+    Given per-block gauges $X_k \in \GL_{D_k}(\C)$, first form the
+    dependent block-diagonal unit $\bigoplus_k X_k$ and then reindex the
+    dependent sum of block coordinates to the flattened bond index
+    $\Fin(\sum_k D_k)$.  The resulting element of
+    $\GL_{\sum_k D_k}(\C)$ is the global gauge used by the assembled tensor
+    $\bigoplus_k \mu_k A_k$.
+\end{definition}
+
+\begin{lemma}[Explicit direct-sum conjugation by the flattened gauge]%
+    \label{lem:tensor_from_blocks_globalGauge_conj}
+    \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
+        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
+    \leanok
+    \uses{def:global_gauge_of_blocks, def:tensor_from_blocks, def:gauge_equiv}
+    If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
+    direct sums satisfy, for every physical index~$i$,
+    \[
+        \bigoplus_k \mu_k B_k^i
+        = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
+    \]
+    where $X$ is the flattened block-diagonal gauge of
+    Definition~\ref{def:global_gauge_of_blocks}.  Hence the two assembled
+    tensors are gauge equivalent with this explicit witness.
+\end{lemma}
+
+\begin{proof}\leanok
+    The block-diagonal matrix product is computed blockwise.  The scalar weight
+    $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
+    the right-hand side is $\mu_k B_k^i$.  Reindexing from the dependent block
+    coordinates to $\Fin(\sum_k D_k)$ preserves multiplication and inverses.
+\end{proof}
+
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
     \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        def:tensor_from_blocks}
+        def:tensor_from_blocks, lem:tensor_from_blocks_globalGauge_conj}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.

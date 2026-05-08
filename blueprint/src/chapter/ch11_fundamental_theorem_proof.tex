@@ -1107,6 +1107,50 @@ BNT comparison hypotheses for the common primitive sectors.
 	theorem, and the phase-cover hypotheses imply the span hypotheses.
 \end{proof}
 
+\begin{definition}[Per-block proportional gauge-phase data]%
+\label{def:block_proportional_gauge_phase_data}
+	\lean{MPSTensor.BlockProportionalGaugePhaseData,
+		MPSTensor.BlockProportionalGaugePhaseData.ofConclusion,
+		MPSTensor.BlockProportionalGaugePhaseData.reindexB,
+		MPSTensor.BlockProportionalGaugePhaseData.castA,
+		MPSTensor.BlockProportionalGaugePhaseData.globalGL,
+		MPSTensor.BlockProportionalGaugePhaseData.globalX}
+	\leanok
+	\uses{def:common_primitive_proportional_hypotheses, def:gauge_phase_equiv}
+	The proportional-decomposition conclusion can be unpacked into explicit
+	per-block data: a permutation matching the two block families, equalities of
+	matched bond dimensions, gauges $X_k$, and nonzero phases $\zeta_k$ such that
+	\[
+		B_{\sigma(k)}^i=\zeta_k X_k A_k^i X_k^{-1}
+	\]
+	after casting the source block along the dimension equality.  The auxiliary
+	projections name the reindexed target family, the cast source family, and the
+	dependent and flattened block-diagonal gauges assembled from the $X_k$.
+\end{definition}
+
+\begin{theorem}[Per-block gauge phases assemble to an explicit global gauge]%
+\label{thm:block_proportional_globalX_conj}
+	\lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+		MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+	\leanok
+	\uses{def:block_proportional_gauge_phase_data, def:tensor_from_blocks,
+		def:gauge_equiv}
+	If the block weights absorb the per-block phases,
+	$\mu_A(k)=\mu_B(\sigma(k))\zeta_k$, then the weighted direct sum of the
+	permuted right blocks is conjugate to the weighted direct sum of the cast left
+	blocks by the explicit flattened gauge $X=\bigoplus_k X_k$.  Consequently this
+	global matrix witnesses the gauge equivalence of the two assembled tensors.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The scalar identity moves each phase $\zeta_k$ from the tensor relation into
+	the corresponding block weight.  After this absorption, every weighted block
+	satisfies an ordinary conjugation identity by $X_k$; the block-diagonal
+	conjugation formula assembles those identities into the displayed global
+	gauge equivalence.
+\end{proof}
+
 \begin{definition}[BNT matching hypotheses for common primitive sectors]%
 \label{def:common_primitive_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
