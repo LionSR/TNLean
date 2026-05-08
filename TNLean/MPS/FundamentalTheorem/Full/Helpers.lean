@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
+import TNLean.MPS.Overlap.SelfOverlapAux
 
 /-!
 # Auxiliary lemmas for heterogeneous equal-case block matching
@@ -19,9 +20,11 @@ source-paper Fundamental Theorem.
 
 ## Main statements
 
-* `tendsto_norm_selfOverlap_one`: normed form of a self-overlap tending to `1`.
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
 * `eq_one_of_pow_tendsto_nhds_one`: powers converging to `1` force the base to be `1`.
+
+The companion `tendsto_norm_selfOverlap_one`, also used in this file's downstream
+consumers, lives upstream in `TNLean.MPS.Overlap.SelfOverlapAux`.
 
 This file collects public auxiliary lemmas used by heterogeneous equal-case
 block matching.
@@ -46,13 +49,6 @@ namespace MPSTensor
 variable {d : ℕ}
 
 /-! ## Helpers for the heterogeneous equal-case fundamental theorem -/
-
-/-- Norm-convergence form of normalized self-overlap convergence. -/
-lemma tendsto_norm_selfOverlap_one
-    {D : ℕ} (A : MPSTensor d D)
-    (hA : Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :
-    Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) atTop (nhds 1) := by
-  simpa [norm_one] using hA.norm
 
 /-- Swapping a decaying overlap conjugates the corresponding inner product. -/
 lemma tendsto_inner_zero_swap
