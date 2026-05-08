@@ -20,7 +20,7 @@ open Matrix Finset Complex
 /-!
 ## Helper lemmas: adjoint eigenvalues and primitivity
 
-We need a small bridge between the peripheral spectrum of a linear map and that of its adjoint.
+We need a small connection between the peripheral spectrum of a linear map and that of its adjoint.
 For finite-dimensional complex inner product spaces, eigenvalues of `E.adjoint` are complex
 conjugates of eigenvalues of `E`.
 

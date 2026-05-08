@@ -174,10 +174,10 @@ not retain repeated equal-modulus sectors; the full multiplicity structure (weig
 `μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
 `SectorDecomposition` and the sector-weight comparison theorems.
 
-**Formalization note.** `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map
-version of normality (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask
-for blockwise `IsNormal` (the equivalent algebraic eventual-block-injectivity notion).
-The primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
+`IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
+(`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
+`IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
+primitive-to-normal implication must be supplied explicitly when passing to `IsBNT`. -/
 structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsNormalCanonicalForm μ A where

@@ -10,9 +10,10 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 /-!
 # Canonical-form reduction after blocking
 
-The canonical-form reduction after blocking combines sector comparison,
-common-period blocking, zero-block comparison, and weight-comparison statements
-used in the non-periodic fundamental theorem.
+This module is the public entry point for the complete canonical-form
+reduction after blocking. It keeps the historical import path
+`TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
+split across focused supporting modules.
 
 The supporting modules are:
 
@@ -32,16 +33,16 @@ The supporting modules are:
   construction of common-period cyclic-sector families.
 * `TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport` — generic zero-tail
   MPV transport lemmas.
-* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData` — common-sector hypotheses
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData` — common-sector data
   after the zero-tail and TP-gauge structural reduction.
 * `TNLean.MPS.CanonicalForm.SectorComparison.StructuralData` — common-period blocking
-  and structural after-blocking hypotheses.
-* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — structural theorem
-  imports and common-sector transport.
+  and structural after-blocking data.
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — historical re-export
+  path for structural data and common-sector transport.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport` — zero-tail and
   common-sector transport after the structural theorem.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData` —
-  common primitive span, phase-cover, proportional, and BNT-cover hypotheses.
+  common primitive span, phase-cover, proportional, and BNT comparison hypotheses.
 * `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
 * `TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison` — sector comparison
@@ -60,7 +61,7 @@ The imported modules provide the canonical-form reduction theorems, including
 `bilateral_commonPeriod_blocking_tp_primitive_normal`, and
 `afterBlocking_structuralData_of_sameMPV₂`.
 
-This collection also records a conditional formulation of the
+This public entry point also records a conditional formulation of the
 Cirac--Pérez-García--Schuch--Verstraete after-blocking theorem that does not
 invoke the periodic Fundamental Theorem.  The structure
 `BlockedNormalFormHypotheses` names the source proof obligations (blocking
@@ -90,7 +91,7 @@ explicit hypotheses:
   summands at a common blocking length;
 * **Equality of the residual zero-block dimension** — the zero-tail
   contributions of the two blocked tensors must be identified;
-* **Matching of nonzero normal summands** — the BNT-cover comparison data
+* **Matching of nonzero normal summands** — the BNT comparison hypotheses
   links the two families of nonzero blocks; and
 * **The phase-gauge formula** — the conclusion delivers a permutation of
   basis sectors, matched multiplicities, and nonzero phases transforming
@@ -130,7 +131,7 @@ implicitly when the tensors are already in canonical form:
    adding the nonzero-part contributions;
 
 3. **Matching of nonzero normal summands** — for the produced nonzero-block
-   families there exist common primitive BNT-cover hypotheses linking the
+   families there exist common primitive BNT comparison hypotheses linking the
    two decompositions.
 
 The fourth source obligation, the phase-gauge formula, appears as the conclusion
@@ -141,7 +142,7 @@ The field `comparison` is supplied with structural evidence so the remaining
 assumptions cannot be applied to a different decomposition. -/
 structure BlockedNormalFormHypotheses
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop where
-  /-- The remaining BNT-cover comparison data for the produced common primitive
+  /-- The remaining BNT comparison hypotheses for the produced common primitive
   nonzero-sector families, with the structural evidence for trace preservation,
   primitivity, irreducibility, and positive bond dimensions supplied. -/
   comparison : ∀ {p zeroTailA zeroTailB rA rB : ℕ}
@@ -192,7 +193,7 @@ structure BlockedNormalFormHypotheses
 /-- Blocked normal-form sector matching: the conclusion of the after-blocking theorem.
 
 This structure records the fourth source proof obligation (the phase-gauge formula)
-together with the structural data that the blocked tensors admit matching BNT sector
+together with the structural data that the blocked tensors have matching BNT sector
 decompositions: after a common positive blocking length `p`, the two blocked tensors
 are represented by sector decompositions `P` and `Q` that carry BNT data, generate the
 same full MPV family, and agree with the blocked tensors at every positive length.
@@ -243,7 +244,7 @@ Let `A` and `B` generate the same MPV family.  Given the source proof obligation
 collected in `BlockedNormalFormHypotheses` (blocking to normal tensors, matching
 of nonzero normal summands, equality of the residual zero-block dimension), the
 conclusion `BlockedNormalFormSectorMatching` (the phase-gauge formula) follows:
-there is a positive blocking after which the two tensors admit BNT sector
+there is a positive blocking after which the two tensors have BNT sector
 decompositions with the same sector MPV family, matched basis-sector multiplicities,
 and matched sector-weight multisets up to nonzero phases.
 
