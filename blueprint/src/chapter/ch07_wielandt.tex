@@ -439,8 +439,35 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \section{Proof of the cumulative Wielandt bound}
 
+\begin{theorem}[Wielandt chain]\label{thm:wielandt_chain}
+    \lean{MPSTensor.wielandt_chain}
+    \leanok
+    \uses{def:cumulative_vector_span, def:normal, def:cumulative_span}
+    Let $A$ be a normal MPS tensor with bond dimension~$D \ge 1$.
+    Then the following hold simultaneously:
+    \begin{enumerate}
+        \item $T_{D^2}(A) = \MN{D}$ (cumulative span stabilises);
+        \item there exists a word $w_0$ with $|w_0| \le D^2$ and
+              $\tr(A^{w_0}) \ne 0$;
+        \item there exist $w_0, \mu \ne 0, \varphi \ne 0$ with
+              $|w_0| \le D^2$ and $A^{w_0} \varphi = \mu\,\varphi$;
+        \item for every $\varphi \ne 0$,
+              $K_{D^2}(A, \varphi) = \C^D$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cumulative_eq_top, thm:eigenvalue_extraction,
+          thm:eigenvector_spreading}
+    Items (1)--(3) follow from Theorems~\ref{thm:cumulative_eq_top}
+    and~\ref{thm:eigenvalue_extraction}.
+    Item (4) combines these with the eigenvector spreading bound
+    (Theorem~\ref{thm:eigenvector_spreading}).
+\end{proof}
+
 \begin{theorem}[Wielandt bound]\label{thm:wielandt_bound}
-    \lean{MPSTensor.cumulative_wielandt_bound}
+    \lean{MPSTensor.cumulativeSpan_eq_top}
     \leanok
     \uses{def:cumulative_span, def:normal}
     If $A$ is a normal MPS tensor with bond dimension~$D$,

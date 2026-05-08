@@ -1758,7 +1758,7 @@ zero-block dimension; the two terms refer to the same concept.
 	nonzero weights remain nonzero after being transported to the common
 	blocking length and replicated over the flattened sector family.  If the
 	original weights are nonzero and the transported weights are sorted by
-	strictly decreasing norm, the flattened common-sector family is a normal
+	non-increasing norm, the flattened common-sector family is a normal
 	canonical form.
 \end{theorem}
 
@@ -1802,6 +1802,32 @@ zero-block dimension; the two terms refer to the same concept.
 	representative blocks at the prescribed length.  Apply the
 	normal-canonical-form statement for the representative family and include
 	the assumed separation of distinct representatives.
+\end{proof}
+
+\begin{lemma}[Common further blocking for representative sectors]%
+\label{lem:common_representative_common_further_blocking}
+	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_exists_pos_blockTensor_isInjective,
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_blockTensor_isInjective_commonMultiple,
+		MPSTensor.CommonBlockedCyclicSectorFamily.exists_commonRepresentativeBlocksAt_blockTensor_isInjective,
+		MPSTensor.CommonBlockedCyclicSectorFamily.exists_commonRepresentativeBlocksAt_blockTensor_isInjective_of_positive_witnesses}
+	\leanok
+	\uses{thm:common_blocked_cyclic_sector_derived_properties}
+	Each representative common-sector block has a positive further blocking
+	at which it is one-site injective. Since there are finitely many
+	representatives, the product of these local blocking lengths is one
+	positive common further blocking length at which every representative
+	remains one-site injective.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_irred_block_injective,
+		thm:normal_blocking_preserved}
+	First apply the positive-blocking consequence of trace preservation,
+	primitivity, and irreducibility to each representative.  For a fixed
+	representative, factor the common product as its local blocking length times
+	the product of all other local lengths.  Full fixed-length word span persists
+	under positive multiples, so the direct block at the common product remains
+	injective.
 \end{proof}
 
 \begin{theorem}[Weights of common-alphabet sectors]%
@@ -3424,7 +3450,7 @@ zero-block dimension; the two terms refer to the same concept.
 		thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
 	Apply Theorem~\ref{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}.
 	Then apply Theorem~\ref{thm:exists_common_blocked_cyclic_sector_family} to the
-	per-block cyclic-sector data on each side.  The nonzero unit-weight conclusion
+	per-block cyclic-sector decompositions on each side.  The nonzero unit-weight conclusion
 	is Theorem~\ref{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}.
 \end{proof}
 
