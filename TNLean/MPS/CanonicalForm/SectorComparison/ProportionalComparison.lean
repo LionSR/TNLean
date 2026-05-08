@@ -385,21 +385,6 @@ separation, and if they also carry proportional-decomposition hypotheses and
 one-site injectivity, then the zero-tail sector comparison follows.  The zero-tail equality
 is derived from the length-zero identity and the proportional comparison. -/
 theorem afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity
-
-/-! ### Unconditional (no blocked-word relabeling) variants
-
-The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place of
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
-`CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
-injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
-See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
-
-/-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
-
-The unconditional structural theorem supplies the common primitive nonzero-sector families
-without any blocked-word relabeling hypothesis. If the remaining `CommonPrimitiveSpanHypotheses`
-are supplied for those families, the sector-weight comparison conclusion holds. -/
-lemma unconditional_afterBlocking_sectorComparison_zeroTail_spanHypotheses
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B)
@@ -479,6 +464,25 @@ lemma unconditional_afterBlocking_sectorComparison_zeroTail_spanHypotheses
   refine ⟨DtotA, DtotB, ⟨?_⟩⟩
   exact CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_zeroTailIdentity
     hA hB hZero hInjA hInjB hPacked.1
+
+/-! ### Unconditional (no blocked-word relabeling) variants
+
+The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place of
+`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
+`CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
+injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
+See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
+
+/-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
+
+The unconditional structural theorem supplies the common primitive nonzero-sector families
+without any blocked-word relabeling hypothesis. If the remaining `CommonPrimitiveSpanHypotheses`
+are supplied for those families, the sector-weight comparison conclusion holds. -/
+lemma unconditional_afterBlocking_sectorComparison_zeroTail_spanHypotheses
+    {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSame : SameMPV₂ A B)
+    (hRemaining : ∀ {p zeroTailA z
 
 /-- **Sector comparison from relabeled common sectors and proportional-decomposition data.**
 
