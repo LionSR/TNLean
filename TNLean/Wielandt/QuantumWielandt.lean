@@ -75,7 +75,7 @@ properties of a quantum channel `ℰ_A` on `M_D(ℂ)`:
 * (c) strong irreducibility: `ℰ_A` has a unique peripheral eigenvalue `λ = 1`,
   whose corresponding eigenvector `ρ` is positive **definite** (`ρ > 0`).
 
-Property (b) is the formalised `IsNormal A`. The hypothesis used here,
+Property (b) is the predicate `IsNormal A`. The hypothesis used here,
 `IsPrimitiveMPS A ρ ∧ ρ.PosDef`, is precisely (c): the spectral-gap data inside
 `IsPrimitiveMPS` gives the unique peripheral eigenvalue `λ = 1` with fixed
 point `ρ`, and `ρ.PosDef` strengthens the eigenvector from positive semidefinite
