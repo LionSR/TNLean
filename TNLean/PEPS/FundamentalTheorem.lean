@@ -22,18 +22,26 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --   `HasFactorizedLocalGauge`. The edge-blocked coefficient and middle tensor are
 --   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeFormula`
 --   isolates the remaining implication from `SameState` to the explicit local
---   gauge formula.
+--   gauge formula.  Tracked by #780.
 -- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
 --   conditional theorem `fundamentalTheorem_PEPS_of_bondDim`, so that the
 --   bond-dimension equality is orthogonal to `gaugeConsistency`. Its derivation
 --   from `SameState` plus vertex injectivity still requires a boundary-insertion
---   / blocking lemma.
+--   / blocking lemma.  Tracked by #874 (`PEPS: bond-dimension equality from
+--   SameState and vertex injectivity`).
 -- * `gauge_unique_mod_edge_scalars` is the repaired uniqueness statement. Its
 --   proof still requires local tensor-factor uniqueness for the balanced
---   edge-scalar quotient.
+--   edge-scalar quotient.  Tracked by #842 (`Discharge sorry in
+--   gauge_unique_mod_edge_scalars`).
 
 /-!
 # Fundamental Theorem for injective PEPS
+
+**Root-only.** This module is currently not imported downstream — it
+records the full statement of the PEPS Fundamental Theorem
+(arXiv:1804.04964 §3, Theorem 2) with its forward direction fully proved
+and the converse gaps documented explicitly.  See issue #1512 for the
+root-only audit.
 
 This file develops the Fundamental Theorem for injective PEPS on simple graphs
 (arXiv:1804.04964, Theorem 2, Section 3):
@@ -541,6 +549,7 @@ theorem gaugeConsistency (A B : Tensor G d)
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the
   -- orientation convention in `edgeGaugeAt`.
+  -- Proof obligation tracked by #780.
   sorry
 
 /-! ### Main theorem -/
@@ -588,6 +597,7 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
   -- the right local data, while the global comparison still requires a
   -- boundary-insertion / blocking lemma.
+  -- Proof obligation tracked by #874.
   have hDim : A.bondDim = B.bondDim := by
     sorry
   -- With matching bond dimensions, `gaugeConsistency` supplies the global gauges.
@@ -721,6 +731,7 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
   -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
   -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion and
   -- blocking lemmas used for local gauge existence.
+  -- Proof obligation tracked by #842.
   sorry
 
 end PEPS
