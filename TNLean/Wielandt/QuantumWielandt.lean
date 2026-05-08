@@ -61,7 +61,34 @@ one gets `IsStronglyIrreduciblePaper A` (i.e., primitive in Wolf's sense), and
 Wolf's primitivity equivalence (`wolf_theorem_6_8_conjunction`) identifies this
 directly with eventual full Kraus rank, hence normality.
 
-No aperiodicity hypothesis is needed. -/
+No aperiodicity hypothesis is needed.
+
+## Hypothesis boundary
+
+The conjunction `IsPrimitiveMPS A ρ ∧ ρ.PosDef` is the formal counterpart of the
+strongly-irreducible characterisation in arXiv:0909.5347, Proposition 3(c):
+peripheral spectrum `{1}`, irreducibility of the transfer map, and a positive
+*definite* fixed point. Proposition 3 of that paper makes this equivalent to
+both primitivity in the uniform-spreading sense (3(a)) and to eventual full
+Kraus rank `IsNormal A` (3(b)), so the hypothesis used here is mathematically
+equivalent to the conclusion under the paper's normalisation.
+
+The formal proof chain consumes `ρ.PosDef` in two places: the call to
+`isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef` upgrades the
+spectral-gap predicate to Proposition 3(c), and the trace-pairing positivity
+lemma `trace_conjTranspose_posDef_mul_lower` inside the `(c) → (b)` argument
+extracts a uniform constant `c > 0` with `c · ‖B‖² ≤ Re tr(Bᴴ ρ B)`, which is
+unavailable from positive semidefiniteness alone. The peripheral-spectrum
+predicate `IsPrimitiveMPS A ρ` records `ρ` as PSD only, so the formal
+upgrade to PosDef is an explicit hypothesis rather than an automatic
+consequence; in the paper, the upgrade is supplied by Perron–Frobenius for
+irreducible quantum channels.
+
+The fundamental-theorem application of this lemma (arXiv:1606.00608, §2.3)
+also takes Proposition 3(c) as the input characterisation, so passing through
+the `IsPrimitiveMPS + ρ.PosDef` form does not weaken the downstream usage.
+The current formal boundary is recorded in
+`docs/paper-gaps/quantum_wielandt_deviation.tex`. -/
 theorem isNormal_of_isPrimitiveMPS_of_posDef
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hPrim : IsPrimitiveMPS A ρ)
