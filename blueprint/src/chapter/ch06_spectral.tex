@@ -1653,3 +1653,17 @@ this spectral-gap input under explicit hypotheses.
     By Theorem~\ref{thm:trace_pow_one},
     $\Tr(\E_A^N) \to 1$.
 \end{proof}
+
+\begin{lemma}[Norm of self-overlap convergence]\label{lem:norm_selfOverlap_tendsto}
+    \lean{MPSTensor.tendsto_norm_selfOverlap_one}\leanok
+    \uses{def:mpv_overlap}
+    If $A$ is an MPS tensor and $O_{AA}(N) \to 1$ in $\mathbb{C}$ as
+    $N \to \infty$, then $\|O_{AA}(N)\| \to 1$ as
+    $N \to \infty$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Follows from the continuity of the norm:
+    $O_{AA}(N) \to 1$ implies
+    $\|O_{AA}(N)\| \to \|1\| = 1$.
+\end{proof}
