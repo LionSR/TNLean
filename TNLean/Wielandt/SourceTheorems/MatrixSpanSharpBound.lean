@@ -28,16 +28,16 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 ## Quantitative status
 
-Unlike `PaperResults/MatrixSpanExistence.lean` (which provides only a coarse existential `∃ N`
+Unlike `SourceTheorems/MatrixSpanExistence.lean` (which provides only a coarse existential `∃ N`
 witness), this file delivers the **exact paper bound** `D² − D + 1` under
 the additional hypotheses that a specific Kraus operator `A i₀` is
 noninvertible and possesses a nonzero eigenvector `φ`.
 
 These hypotheses match the paper's Lemma 2(b) statement precisely.
 Consequently, this file supplies the exact fixed-length ingredient behind the
-blocked noninvertible branch of `PaperResults/WielandtInequality.lean`; it is
+blocked noninvertible branch of `SourceTheorems/WielandtInequality.lean`; it is
 strictly stronger than the qualitative `∃ N` statement exported by
-`PaperResults/MatrixSpanExistence.lean`.
+`SourceTheorems/MatrixSpanExistence.lean`.
 
 ## Proof strategy
 
@@ -54,6 +54,10 @@ strictly stronger than the qualitative `∃ N` statement exported by
 
 * [SPGWC09] Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Lemma 2.
 * [Wolf12] Wolf, *Quantum Channels & Operations*, Chapter 6.
+
+This file is part of `SourceTheorems/`, the source-facing arXiv:0909.5347 /
+Wolf §6.9 theorem interface, root-imported for citation/exposition, not a
+downstream FT dependency.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

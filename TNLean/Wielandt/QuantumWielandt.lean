@@ -32,7 +32,7 @@ spectrum `{1}`.
 
 This module is intentionally auxiliary. Downstream users who only need
 Proposition 3 / Theorem 1 statements should prefer
-`Primitivity/Equivalence.lean` and `PaperResults/WielandtInequality.lean`.
+`Primitivity/Equivalence.lean` and `SourceTheorems/WielandtInequality.lean`.
 
 ## References
 

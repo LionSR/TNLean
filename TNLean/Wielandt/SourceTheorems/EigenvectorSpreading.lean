@@ -31,6 +31,10 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 This keeps the public statement in the exact fixed-length `H_{D-1}` form of the
 paper/Wolf lemma, while reusing the existing underlying formalization.
+
+This file is part of `SourceTheorems/`, the source-facing arXiv:0909.5347 /
+Wolf §6.9 theorem interface, root-imported for citation/exposition, not a
+downstream FT dependency.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
