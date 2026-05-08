@@ -40,6 +40,9 @@ in the `IsPrimitivePaper` language of the paper.
 Use Proposition 3 to pass from `IsPrimitivePaper A` to eventually full Kraus
 rank, rewrite this as `IsNormal A`, and then apply the nonzero-trace
 result from `NonzeroTraceProduct.lean`.
+
+These statements record Lemma 1 of arXiv:0909.5347 / Wolf Section 6.9
+in the notation of the source; the FT/BNT formalization does not use them.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
