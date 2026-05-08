@@ -46,9 +46,6 @@ but whose transfer maps are still irreducible (e.g., after blocking).
 * [Wolf2012] M. Wolf, *Quantum Channels & Operations: Guided Tour*,
   Section 6.2, Theorem 6.3 (quantum Perron–Frobenius for irreducible positive maps).
 * [EH78] Evans, Høegh-Krohn, *Spectral properties of positive maps*, 1978.
-* [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac,
-  *Matrix Product State Representations*, Quant. Inf. Comput. 7, 401 (2007),
-  arXiv:0802.0447. Source: `Papers/0802.0447/`
 -/
 
 open scoped Matrix ComplexOrder BigOperators

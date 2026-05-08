@@ -25,9 +25,10 @@ cross-correlations between distinct blocks decay exponentially.
   Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
   Sec. 2.3 (correlations and transfer matrix), Sec. 4 (spectral gap).
   Source: `Papers/2011.12127/`
-* [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac,
-  *Matrix Product State Representations*, Quant. Inf. Comput. 7, 401 (2007),
-  arXiv:0802.0447. Source: `Papers/0802.0447/`
+* [PGWSVC08] Pérez-García, Wolf, Sanz, Verstraete, Cirac,
+  *String order and symmetries in quantum spin lattices*,
+  Phys. Rev. Lett. 100, 167202 (2008), arXiv:0802.0447.
+  Source: `Papers/0802.0447/`
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
