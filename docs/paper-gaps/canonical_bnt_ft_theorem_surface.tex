@@ -107,6 +107,27 @@ In this notation, BNT linear independence separates the coefficient arrays, and
 Newton--Girard recovers the weights.  The formal declarations that only package
 these two algebra steps in sector-data notation are support lemmas, even when
 their names mention the Fundamental Theorem.
+One previously used formal route recovered the multiplicities \(r_j^S,r_j^T\)
+by first extrapolating eventual equality of the positive-power sums to the
+exponent-zero identity
+\[
+  \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^0
+  =
+  \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^0,
+\]
+and then applying the same-cardinality Newton--Girard theorem.  This is not a
+gap when all weights are nonzero, because the geometric-sequence extrapolation
+lemma proves the \(N=0\) identity from eventual equality at positive lengths.
+It is nevertheless not the route displayed in
+\cite[Lemma~\texttt{Lem:app\_simple}, lines~1155--1163]{Cirac2016MPDO_arXiv};
+the source applies the unequal-cardinality power-sum lemma after the BNT
+representatives have been matched.  Without the nonzero-weight hypothesis,
+positive powers would only determine the nonzero submultiset, so any use that
+counts zero weights must record an additional \(N=0\) hypothesis or a nonzero
+coefficient hypothesis.
+This classification follows the protocol in
+\path{docs/paper-gaps/policy.tex}; the detailed comparison is recorded in
+\path{docs/paper-gaps/power_sum_alternative_route.tex}.
 
 \section{External lemmas need explanations}
 

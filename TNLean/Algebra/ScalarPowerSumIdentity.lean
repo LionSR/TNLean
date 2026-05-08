@@ -10,12 +10,10 @@ import Mathlib.Data.Matrix.Basic
 /-!
 # Scalar Power-Sum Identity
 
-This file formalizes the **finite-range power-sum identity** from arXiv:1606.00608
-(Appendix A, lines 1155–1163). It provides both the same-cardinality support lemmas used in
-the Appendix argument and the full unequal-cardinality statement
-`sum_pow_eq_implies_multiset_eq_of_le_max_length`, which takes two lists of complex
-numbers of possibly different lengths and deduces multiset equality from equality of
-power sums up to the larger length.
+This file formalizes finite-range power-sum identities used in arXiv:1606.00608
+(Appendix A, lines 1155–1163). It provides the same-cardinality support lemmas
+and two unequal-cardinality forms for finite complex families
+`(λ_{a,k})` and `(λ_{b,k})`.
 
 Given two families of `n` complex scalars whose power sums agree for `1 ≤ k ≤ n`,
 Newton's identities imply their diagonal matrices have equal characteristic polynomials, and
@@ -31,16 +29,18 @@ by observing that the trace of a power of a diagonal matrix equals the correspon
 
   `trace (diagonal a ^ k) = ∑ i, a i ^ k`
 
-The main theorem in this file says that, for nonzero families
+The main unequal-cardinality theorem in this file says that, for nonzero families
 `a : Fin m → ℂ` and `b : Fin n → ℂ`, equality of
 `∑ i : Fin m, a i ^ k` and `∑ i : Fin n, b i ^ k` for
 `1 ≤ k ≤ max m n` implies `m = n` and equality of the two multisets of values.
-The same-cardinality theorems are the corresponding finite-range and
-all-positive-power consequences for families indexed by a single finite type.
+This is the form used when the compared coefficients are known to be nonzero, and
+in some applications the coefficients are explicitly positive. The same-cardinality
+theorems are the corresponding finite-range and all-positive-power consequences for
+families indexed by a single finite type.
 
 ## Relation to the source statement
 
-The paper's Lemma `Lem:app_simple` (arXiv:1606.00608, lines 1155–1163) states:
+The Appendix lemma of arXiv:1606.00608, lines 1155–1163, states:
 
   Let `λ_{a,k}` (k=1,…,x_a) and `λ_{b,k}` (k=1,…,x_b) be two **sorted** finite families
   of complex numbers (sorted by nonincreasing absolute value, then nondecreasing argument).
@@ -48,17 +48,20 @@ The paper's Lemma `Lem:app_simple` (arXiv:1606.00608, lines 1155–1163) states:
     `∑_{k=1}^{x_a} λ_{a,k}^N = ∑_{k=1}^{x_b} λ_{b,k}^N`,
   then `x_a = x_b` and `λ_{a,k} = λ_{b,k}` for all k.
 
-The unequal-cardinality finite-range theorem below differs from the paper's list statement in
-one way:
+The unequal-cardinality finite-range theorem differs from the paper's list statement in
+two formal ways:
 
   1. **No sorting hypothesis**: we work directly with multisets through the characteristic
      polynomial, making lexicographic-phase sorting unnecessary — the polynomial equality
      absorbs the ordering.
+  2. **Nonzero entries for positive powers**: with only positive powers, zero entries cannot
+     be counted; for example `[]` and `[0]` have equal positive power sums. Thus the
+     positive-power theorem assumes all entries are nonzero.
 
-The `Fin`-based unequal-cardinality theorem
-`sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` assumes all entries are
-nonzero; the list-based theorem `sum_pow_eq_implies_multiset_eq_of_le_max_length`
-drops this requirement by using the $N=0$ power sum to deduce equal lengths.
+A second list theorem assumes equality also at exponent $N=0$.  Then
+`∑_k λ_{a,k}^0 = x_a` and `∑_k λ_{b,k}^0 = x_b`, so the lengths are equal before
+Newton--Girard is applied.  This exponent-zero theorem does not replace the
+positive-power theorems in arguments where only positive exponents are available.
 -/
 
 open scoped Matrix BigOperators
@@ -75,8 +78,8 @@ theorem trace_diagonal_pow [DecidableEq n] (a : n → ℂ) (k : ℕ) :
   classical
   simp [diagonal_pow, trace_diagonal]
 
-/-- **Scalar power-sum identity** (same-cardinality support lemma for
-`Lem:app_simple` of arXiv:1606.00608).
+/-- **Scalar power-sum identity** (same-cardinality support lemma for the
+Appendix argument of arXiv:1606.00608).
 
 If two families of complex scalars, indexed by the same finite type, have equal power sums for all
 positive exponents, then their characteristic polynomials (as diagonal matrices) agree. -/
@@ -90,8 +93,8 @@ theorem sum_pow_eq_implies_charpoly_diagonal_eq
   rw [trace_diagonal_pow, trace_diagonal_pow]
   exact h k hk
 
-/-- **Bounded scalar power-sum identity** (same-cardinality part of
-`Lem:app_simple` of arXiv:1606.00608).
+/-- **Bounded scalar power-sum identity** (same-cardinality part of the Appendix
+argument of arXiv:1606.00608).
 
 If two families of complex scalars, indexed by the same finite type `n`, have equal
 power sums for `1 ≤ k ≤ card n`, then their characteristic polynomials as diagonal
@@ -117,7 +120,7 @@ private lemma roots_prod_X_sub_C (f : n → ℂ) :
 /-- Equal power sums through `card n` determine the same multiset of values for
 two families indexed by the same finite type.
 
-This is the finite-range, same-cardinality part of Lemma `Lem:app_simple` in
+This is the finite-range, same-cardinality part of the Appendix lemma in
 arXiv:1606.00608. The all-positive-power theorem below is obtained by restricting
 its hypothesis to `1 ≤ k ≤ card n`. -/
 theorem sum_pow_eq_implies_multiset_eq_of_le_card
@@ -134,10 +137,9 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_card
 /-- Equal power sums of two families indexed by the same finite type imply that the families
 give rise to the same multiset of values.
 
-This all-positive-power statement follows from
-`sum_pow_eq_implies_multiset_eq_of_le_card` by restricting the hypothesis to
-`1 ≤ k ≤ card n`. The theorem is still same-cardinality; Lemma `Lem:app_simple`
-in arXiv:1606.00608 also proves equality of cardinalities when the sizes may
+This all-positive-power statement is the finite-range same-cardinality theorem
+with the hypothesis restricted to `1 ≤ k ≤ card n`. The Appendix lemma in
+arXiv:1606.00608 also proves equality of cardinalities when the sizes may
 differ. -/
 theorem sum_pow_eq_implies_multiset_eq
     (a b : n → ℂ)
@@ -203,8 +205,8 @@ hypothesis.
 
 If two finite families of nonzero complex scalars have equal power sums for
 `1 ≤ k ≤ max m n`, then the indexing cardinalities are equal and the two families give the
-same multiset of values.  The proof pads the shorter family by zeros, applies
-`sum_pow_eq_implies_multiset_eq_of_le_card`, and then counts the padded zeros. -/
+same multiset of values.  The proof pads the shorter family by zeros, applies the
+same-cardinality finite-range theorem, and then counts the padded zeros. -/
 theorem sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card
     (m n : ℕ) (a : Fin m → ℂ) (b : Fin n → ℂ)
     (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
@@ -251,16 +253,95 @@ private lemma list_pow_sum_eq_ofFn (f : Fin m → ℂ) (l : List ℂ)
             = (List.ofFn ((fun z : ℂ => z ^ k) ∘ f)).sum := rfl
         _ = ((List.ofFn f).map fun z => z ^ k).sum := by rw [← List.map_ofFn]
     _ = (l.map fun z => z ^ k).sum := by rw [h_ofFn]
-/-- **Finite-range power-sum identity for possibly unequal cardinalities**
-(from arXiv:1606.00608, Appendix A, lines 1155–1163).
+
+/-- Removing zero entries does not change a positive power sum. -/
+private lemma sum_filter_ne_zero_pow (l : List ℂ) {k : ℕ} (hk : 0 < k) :
+    ((l.filter fun z => z != 0).map fun z => z ^ k).sum =
+      (l.map fun z => z ^ k).sum := by
+  induction l with
+  | nil => simp
+  | cons z zs ih =>
+      by_cases hz : z = 0
+      · have hk0 : k ≠ 0 := Nat.ne_of_gt hk
+        simp [hz, ih, hk0]
+      · simp [hz, ih]
+
+/-- **Positive finite-range power sums determine the nonzero multiset.**
 
 Given two lists of complex numbers of possibly different lengths, if the power sums
-agree for all $N \le \max(|la|, |lb|)$, then the two lists have the same multiset.
+agree for all $1 \le N \le \max(|la|, |lb|)$, then the nonzero entries in the two
+lists have the same multiset.  This is the exact conclusion available from positive
+powers without assuming that all entries are nonzero. -/
+theorem sum_pow_eq_implies_nonzero_multiset_eq_of_le_max_length (la lb : List ℂ)
+    (hp : ∀ N, 0 < N → N ≤ max la.length lb.length →
+      (la.map fun z => z ^ N).sum = (lb.map fun z => z ^ N).sum) :
+    ((la.filter (fun z => z != 0) : List ℂ) : Multiset ℂ) =
+      ((lb.filter (fun z => z != 0) : List ℂ) : Multiset ℂ) := by
+  let la' := la.filter fun z => z != 0
+  let lb' := lb.filter fun z => z != 0
+  let m := la'.length
+  let n := lb'.length
+  let a : Fin m → ℂ := fun i => la'.get ⟨i.val, i.is_lt⟩
+  let b : Fin n → ℂ := fun i => lb'.get ⟨i.val, i.is_lt⟩
+  have h_ofFn_a : List.ofFn a = la' := by
+    apply List.ext_getElem
+    · simp [a, m]
+    · intro i hi1 hi2
+      simp [a, m]
+  have h_ofFn_b : List.ofFn b = lb' := by
+    apply List.ext_getElem
+    · simp [b, n]
+    · intro i hi1 hi2
+      simp [b, n]
+  have ha : ∀ i, a i ≠ 0 := by
+    intro i
+    have hmem : a i ∈ la' := by simp [a]
+    exact by
+      simpa [la'] using (List.mem_filter.mp hmem).2
+  have hb : ∀ i, b i ≠ 0 := by
+    intro i
+    have hmem : b i ∈ lb' := by simp [b]
+    exact by
+      simpa [lb'] using (List.mem_filter.mp hmem).2
+  have hm_le : m ≤ la.length := by
+    dsimp [m, la']
+    exact List.length_filter_le (fun z => z != 0) la
+  have hn_le : n ≤ lb.length := by
+    dsimp [n, lb']
+    exact List.length_filter_le (fun z => z != 0) lb
+  have hp_fin : ∀ k, 0 < k → k ≤ max m n →
+      ∑ i : Fin m, a i ^ k = ∑ i : Fin n, b i ^ k := by
+    intro k hk hkmax
+    have hsum_a := list_pow_sum_eq_ofFn a la' h_ofFn_a k
+    have hsum_b := list_pow_sum_eq_ofFn b lb' h_ofFn_b k
+    have hfilter_a := sum_filter_ne_zero_pow la (k := k) hk
+    have hfilter_b := sum_filter_ne_zero_pow lb (k := k) hk
+    rw [hsum_a, hsum_b, hfilter_a, hfilter_b]
+    apply hp k hk
+    exact le_trans hkmax (max_le_max hm_le hn_le)
+  have h := sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card m n a b ha hb hp_fin
+  have h_mult_eq : Finset.univ.val.map a = Finset.univ.val.map b := h.2
+  have h_multiset_a : Finset.univ.val.map a = (la' : Multiset ℂ) := by
+    calc
+      Finset.univ.val.map a = (List.ofFn a : Multiset ℂ) := by simp
+      _ = (la' : Multiset ℂ) := by rw [h_ofFn_a]
+  have h_multiset_b : Finset.univ.val.map b = (lb' : Multiset ℂ) := by
+    calc
+      Finset.univ.val.map b = (List.ofFn b : Multiset ℂ) := by simp
+      _ = (lb' : Multiset ℂ) := by rw [h_ofFn_b]
+  rw [h_multiset_a, h_multiset_b] at h_mult_eq
+  exact h_mult_eq
 
-Uses $N=0$ (where $\lambda^0 = 1$) to deduce equal lengths, then
-`sum_pow_eq_implies_multiset_eq_of_le_card` for finite-range multiset equality.
-Drops the nonzero-entry hypothesis of
-`sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card`. -/
+/-- **Finite-range power-sum identity with exponent zero.**
+
+Given two lists of complex numbers of possibly different lengths, if the power sums
+agree for all $0 \le N \le \max(|la|, |lb|)$, then the two lists have the same
+multiset.
+
+Uses $N=0$ (where $\lambda^0 = 1$) to deduce equal lengths, then applies the
+same-cardinality finite-range theorem. This removes the nonzero-entry hypothesis
+needed by the positive-power unequal-cardinality theorem, but it is a different
+hypothesis from the Appendix uses that only provide positive powers. -/
 theorem sum_pow_eq_implies_multiset_eq_of_le_max_length (la lb : List ℂ)
     (hp : ∀ N, N ≤ max la.length lb.length →
       (la.map fun z => z ^ N).sum = (lb.map fun z => z ^ N).sum) :
@@ -277,12 +358,12 @@ theorem sum_pow_eq_implies_multiset_eq_of_le_max_length (la lb : List ℂ)
   let a : Fin m → ℂ := fun i => la.get ⟨i.val, i.is_lt⟩
   let b : Fin m → ℂ := fun i => lb.get ⟨i.val, hm_card ▸ i.is_lt⟩
   have h_ofFn_a : List.ofFn a = la := by
-    apply List.ext_get
+    apply List.ext_getElem
     · simp [a, m]
     · intro i hi1 hi2
       simp [a, m]
   have h_ofFn_b : List.ofFn b = lb := by
-    apply List.ext_get
+    apply List.ext_getElem
     · simp [b, m, hm_card]
     · intro i hi1 hi2
       simp [b, m, hm_card]

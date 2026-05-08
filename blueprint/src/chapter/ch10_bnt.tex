@@ -623,18 +623,23 @@ and~\cite{Cirac2021Matrix}.
 	multiplicity and weight equality needed to identify the weighted
 	block-diagonal gauge.
 
-	The finite-range statement below includes both the same-cardinality form and
-	the nonzero-entry unequal-cardinality form. The latter pads the shorter
+	The finite-range statement below includes the same-cardinality form, the
+	nonzero-entry unequal-cardinality form, and the positive-power conclusion
+	after deleting zeros. The nonzero-entry form pads the shorter
 	family by zeros, applies the same-cardinality result at length
 	\(\max(m,n)\), and then uses the nonzero-entry hypothesis to count the
 	padded zeros. The Appendix lemma in the source also fixes an ordering
 	convention for the two families; here the conclusion is stated as multiset
 	equality, so no sorting hypothesis is needed.
+	If equality at exponent \(0\) is also assumed, the nonzero-entry hypothesis
+	can be omitted because \(\sum_k \lambda_{a,k}^0=x_a\) and
+	\(\sum_k \lambda_{b,k}^0=x_b\).
 \end{remark}
 
 \begin{theorem}[Finite-range equal power sums imply equal multisets]
 	\label{thm:bounded_power_sum_multiset}
 	\lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
+		Matrix.sum_pow_eq_implies_nonzero_multiset_eq_of_le_max_length,
 		Matrix.sum_pow_eq_implies_multiset_eq_of_le_max_length,
 		Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card,
 		MPSTensor.power_sum_eq_implies_multiset_eq_of_le_card,
@@ -647,6 +652,19 @@ and~\cite{Cirac2021Matrix}.
 	$\beta : \{0,\ldots,n-1\}\to\C$ have no zero entries and their power sums
 	agree for \(1 \le k \le \max(m,n)\), then \(m=n\) and the two multisets
 	are equal.
+	There is also an exponent-zero list form: for lists
+	\((\lambda_{a,k})_{k=1}^{x_a}\) and
+	\((\lambda_{b,k})_{k=1}^{x_b}\), the hypothesis
+	\(\sum_{k=1}^{x_a}\lambda_{a,k}^N
+	  =\sum_{k=1}^{x_b}\lambda_{b,k}^N\) for
+	\(1\le N\le \max(x_a,x_b)\) implies
+	\[
+		\{\lambda_{a,k}\mid \lambda_{a,k}\neq 0\}_{k=1}^{x_a}
+		=
+		\{\lambda_{b,k}\mid \lambda_{b,k}\neq 0\}_{k=1}^{x_b}
+	\]
+	as multisets. If the equality is also assumed at \(N=0\), then the original
+	lists have the same multiset.
 \end{theorem}
 
 \begin{proof}
@@ -659,6 +677,11 @@ and~\cite{Cirac2021Matrix}.
 	equal-root conclusion compares the padded multisets, and the nonzero-entry
 	hypothesis makes the number of padded zeros exactly \(\max(m,n)-m\) and
 	\(\max(m,n)-n\), forcing \(m=n\).
+	Without a nonzero-entry hypothesis, first delete the zero entries; for
+	positive \(N\), this does not change
+	\(\sum_k\lambda_k^N\).  The nonzero-entry form then compares the remaining
+	multisets. In the exponent-zero list form, the equality at \(N=0\) gives
+	\(x_a=x_b\), so the same-cardinality finite-range theorem applies directly.
 \end{proof}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}

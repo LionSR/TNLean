@@ -2762,14 +2762,6 @@ do not correspond to independent paper-level results.
 	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
 \end{definition}
 
-\begin{theorem}[BNT grouping theorem]
-	\label{thm:bnt_grouping}
-	\lean{MPSTensor.exists_bnt_grouping}\leanok
-	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
-	If equal-norm blocks represent the same MPS family, then one obtains a sector
-	decomposition whose sector norms are strictly decreasing.
-\end{theorem}
-
 \subsection{Equal-Norm Blocks}
 
 \begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
@@ -2792,20 +2784,35 @@ do not correspond to independent paper-level results.
 	so the gauge phase must have modulus one.
 \end{proof}
 
-\begin{theorem}[BNT partition from gauge equivalence]
+\begin{theorem}[Norm-class sector decomposition]
 	\label{thm:bnt_grouping_gauge_equiv}
-	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
-	\uses{thm:bnt_grouping}
-	If equal-norm blocks are related by gauge equivalence with unit-modulus phase, the phases can be absorbed into sector weights to obtain a BNT grouping with strictly decreasing sector norms.
+	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
+	\uses{def:norm_class_grouping}
+	For a weighted block family \((\mu_k,A_k)_{k=1}^r\) with
+	\(\mu_k\neq 0\), assume that
+	\[
+		|\mu_j|=|\mu_k| \quad\Longrightarrow\quad
+		A_j \text{ and } A_k \text{ generate the same MPV family}.
+	\]
+	Then one may choose one representative basis tensor for each norm class and
+	obtain a sector decomposition \(P\) with strictly decreasing sector norms
+	such that
+	\[
+		P_{\mathrm{tot}}
+		\sim
+		\bigoplus_{k=1}^r \mu_k A_k,
+	\]
+	where \(\sim\) denotes equality of the two MPV families.
 \end{theorem}
 
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
-	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
 	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero
-	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
-	sector decomposition with strict norm ordering.
+	weights, quotient the block indices by MPV phase equivalence and absorb the
+	phases into the sector weights. The resulting sector decomposition represents
+	the same weighted block sum and satisfies the BNT sector conditions.
 \end{theorem}
 
 \begin{theorem}[Existential BNT independence from overlap limits]
@@ -3240,7 +3247,7 @@ do not correspond to independent paper-level results.
 
 \begin{theorem}[Structural after-blocking form of the fundamental theorem]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.afterBlocking_structuralDecompositionData_of_sameMPV₂}
+	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
 	\leanok
 	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	If two tensors generate the same MPV family, then each tensor admits some
@@ -3254,7 +3261,13 @@ do not correspond to independent paper-level results.
 		= V^{(N)}(Z_{p_A,z_A})_\sigma
 		  + V^{(N)}\!\left(\bigoplus_k \mu^A_k A_k\right)_\sigma,
 	\]
-	and likewise for $B$.
+	and likewise for $B$. The blocked tensors also preserve the original MPV
+	equality:
+	\[
+		A^{[p_A]} \sim B^{[p_A]},
+		\qquad
+		A^{[p_B]} \sim B^{[p_B]}.
+	\]
 \end{theorem}
 
 \begin{proof}\leanok
