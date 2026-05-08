@@ -12,12 +12,11 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 /-!
 # Martingale-method spectral-gap framework for parent Hamiltonians
 
-**Root-only.** This module is currently not imported downstream — it is a
-source-facing theorem surface that formalizes the martingale-method
-infrastructure for the MPS parent-Hamiltonian spectral gap. The
-Friedrichs-angle estimate needed to close `parentHamiltonian_gapped` is
-tracked by issues #952 and #460 (#190). See issue #1512 for the root-only
-audit.
+**Root-only.** This module is currently not imported downstream — it
+formalizes the martingale-method infrastructure for the MPS
+parent-Hamiltonian spectral gap. The Friedrichs-angle estimate needed
+to close `parentHamiltonian_gapped` is tracked by issues #952 and #460
+(#190). See issue #1512 for the root-only audit.
 
 This file sets up the martingale approach to proving
 that MPS parent Hamiltonians are gapped, following

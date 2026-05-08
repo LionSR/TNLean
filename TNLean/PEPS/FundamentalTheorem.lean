@@ -4,11 +4,11 @@ import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 --
--- **Root-only.**  This module is currently not imported downstream — it is a
--- source-facing theorem surface that records the full statement of the PEPS
--- Fundamental Theorem (arXiv:1804.04964 §3, Theorem 2) with its forward direction
--- fully proved, while exposing the converse gaps in an explicit, factored form.
--- See issue #1512 for the root-only audit.
+-- **Root-only.**  This module is currently not imported downstream — it
+-- records the full statement of the PEPS Fundamental Theorem
+-- (arXiv:1804.04964 §3, Theorem 2) with its forward direction fully proved
+-- and the converse gaps documented explicitly.  See issue #1512 for the
+-- root-only audit.
 --
 -- The forward direction and contraction algebra are formalized. The converse
 -- PEPS fundamental theorem still depends on the mathematical hypotheses listed
@@ -29,8 +29,7 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 --   `HasFactorizedLocalGauge`. The edge-blocked coefficient and middle tensor are
 --   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeFormula`
 --   isolates the remaining implication from `SameState` to the explicit local
---   gauge formula.  Tracked by #780 (`PEPS: local gauge existence, consistency,
---   and main theorem assembly`).
+--   gauge formula.  Tracked by #780.
 -- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
 --   conditional theorem `fundamentalTheorem_PEPS_of_bondDim`, so that the
 --   bond-dimension equality is orthogonal to `gaugeConsistency`. Its derivation
