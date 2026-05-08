@@ -39,13 +39,10 @@ from collections import defaultdict
 from pathlib import Path
 
 
-SORRY_RE = re.compile(r"sorry")
+SORRY_RE = re.compile(r"\bsorry\b")
 AXIOM_RE = re.compile(
     r"(?m)^\s*"
-    r"(?:@\[[^\]
-]*(?:
-\s*[^\]
-]*)*\]\s*)*"
+    r"(?:@\[[^\]\n]*(?:\n\s*[^\]\n]*)*\]\s*)*"
     r"(?:(?:private|protected|noncomputable|unsafe|partial)\s+)*"
     r"axiom\s+[A-Za-z_]"
 )
@@ -74,9 +71,7 @@ def strip_comments_and_strings(source: str) -> str:
                 continue
             if char == '"':
                 in_string = False
-            result.append("
-" if char == "
-" else " ")
+            result.append("\n" if char == "\n" else " ")
             i += 1
             continue
 
@@ -89,15 +84,12 @@ def strip_comments_and_strings(source: str) -> str:
                 block_depth -= 1
                 i += 2
                 continue
-            result.append("
-" if char == "
-" else " ")
+            result.append("\n" if char == "\n" else " ")
             i += 1
             continue
 
         if char == "-" and nxt == "-":
-            while i < len(source) and source[i] != "
-":
+            while i < len(source) and source[i] != "\n":
                 result.append(" ")
                 i += 1
             continue
@@ -302,8 +294,7 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for filename, payload in badge_records.items():
         path = args.output_dir / filename
-        path.write_text(json.dumps(payload, indent=2) + "
-", encoding="utf-8")
+        path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         print(f"Wrote {path}: {payload['message']}")
 
 
