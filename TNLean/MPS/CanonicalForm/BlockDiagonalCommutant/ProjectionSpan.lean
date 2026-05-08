@@ -12,9 +12,9 @@ import TNLean.Algebra.ScalarCommutant
 
 This module contains the algebraic span facts used to turn commutation with a
 family of generators into block diagonality with respect to dependent
-direct-sum sectors.  It is a linear-algebra substrate for the restricted
-block-diagonal commutant interface in `BlockDiagonalCommutant.lean`, supporting
-the parent-Hamiltonian ground-space decomposition route (see issue #1510).
+direct-sum sectors.  These linear-algebra lemmas support the restricted
+block-diagonal commutant theorem in `BlockDiagonalCommutant.lean` and are used
+in the parent-Hamiltonian ground-space decomposition.  (Issue #1510.)
 -/
 
 open scoped Matrix BigOperators
