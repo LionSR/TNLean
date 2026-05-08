@@ -15,7 +15,7 @@ have different physical alphabets.  This file provides the common-reblocking
 data that reblocks every sector to a single shared physical blocking length
 so that all sectors can be compared in a uniform canonical form.
 
-The structure and its derived theorems are internal intermediate construction — they
+The structure and its derived theorems are internal intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
 not paper-level results of 1606.00608 or 2011.12127.
 -/
