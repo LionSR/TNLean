@@ -127,15 +127,15 @@ jobs:
         run: python3 scripts/blueprint_lean_sync.py --root . --ci
 
       - name: Fetch PR base ref for diff
+        id: fetch-base-ref
         if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
         continue-on-error: true
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: git fetch --no-tags origin "$BASE_REF"
 
-      - name: Warn on changed Lean declarations missing blueprint entries
-        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
-        continue-on-error: true
+      - name: Error on changed Lean declarations missing blueprint entries
+        if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success' && steps.fetch-base-ref.outcome == 'success'
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
