@@ -50,9 +50,11 @@ open Filter
 
 namespace MPSTensor
 
-variable {d : ℕ}
-
 /-! ### Overlap / inner-product auxiliary lemmas -/
+
+section AuxLemmas
+
+variable {d : ℕ}
 
 /-- Swapping a decaying overlap conjugates the corresponding inner product. -/
 lemma tendsto_inner_zero_swap
@@ -67,6 +69,8 @@ lemma tendsto_inner_zero_swap
     simp [mpvInner, inner_conj_symm]
   rw [hSwap]
   simpa using hAB.star
+
+end AuxLemmas
 
 /-- If the powers of a complex number converge to `1`, then the number itself is `1`. -/
 lemma eq_one_of_pow_tendsto_nhds_one {c : ℂ}
