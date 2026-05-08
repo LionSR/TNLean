@@ -24,6 +24,35 @@ hypothesis from all-length to finite-length agreement.
 ## References
 
 * Pérez-García, Verstraete, Wolf, Cirac, quant-ph/0608197
+* Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
+  arXiv:0909.5347, Theorem 1
+* Wolf, *Quantum Channels & Operations*, Theorem 6.9
+
+## External input — Quantum Wielandt cumulative span
+
+The proof that `SameMPVFrom N₀ A B` implies `SameMPV A B` relies on the
+Quantum Wielandt cumulative-span machinery (`Wielandt.SpanGrowth.CumulativeSpan`).
+The key mathematical consequence used here is:
+
+> **Quantum Wielandt (arXiv:0909.5347, Theorem 1 / Wolf Theorem 6.9).**
+> For a normal quantum channel $E_A$ on $M_D(\mathbb C)$, the Kraus operators'
+> word products of length $\le D^2$ span the full matrix algebra $M_D(\mathbb C)$
+> **unless** the channel is strictly non-expanding on the complement of its
+> peripheral eigenprojection.
+
+In MPS notation after blocking: for an injective tensor `A` (which is
+automatically normal up to a gauge), the finite-length word span
+`wordSpan A n` reaches the full matrix algebra $M_D(\mathbb C)$ for some explicit
+bound `n`.  This "cumulative span to top" is provided by the Wielandt chain:
+
+> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the transition from
+> the cumulative Wielandt bound to a word-span theorem that `∃ n, wordSpan A n = ⊤`
+> (or more precisely, that `cumulativeSpan A n = ⊤` for some `n`).
+
+The formal Lean import is `TNLean.Wielandt.SpanGrowth.CumulativeSpan`, which
+provides `Wielandt.cumulativeSpan_eq_top_of_...` and the cumulative-to-word-span
+connection `CumulativeToWordSpan`.  These are the declarations that make the
+finite-length word-span conclusion available inside the MPS proof route.
 -/
 
 open scoped Matrix BigOperators

@@ -18,6 +18,30 @@ equivalent to a block-diagonal tensor with two smaller bond dimensions.
 
 This is the "invariant subspace ⇒ direct sum decomposition" step used in canonical-form existence
 arguments before blocking/normalization.
+
+## External input — Perez-Garcia et al. canonical-form recursion
+
+This file formalizes the invariant-subspace decomposition from two sources:
+
+> **Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803).**
+> The recursion on bond dimension: a PSD fixed point of the transfer map yields an
+> invariant support projection; after block-diagonalization, the tensor splits into
+> a direct sum of smaller blocks.  The strict dimension decrease
+> (`exists_strict_twoBlock_decomp_of_lowerZero`) guarantees termination of the
+> canonical-form recursion.
+
+> **Cirac et al., arXiv:1606.00608, Section 2.3.**
+> The same step in the "canonical forms" reduction: invariant projection ⇒
+> block upper-triangular ⇒ drop strict off-diagonal blocks ⇒ explicit 2-block
+> direct sum.  This is the Wolf/Cirac/Verstraete canonical-form reduction.
+
+The formal Lean declarations:
+
+* `exists_twoBlock_decomp_of_lowerZero` — invariant projection ⇒ two-block direct sum
+  with MPV equivalence (`SameMPV₂`)
+* `exists_strict_twoBlock_decomp_of_lowerZero` — the strict dimension decrease variant
+  (both block dimensions strictly smaller than `D`), which is the key ingredient for
+  proving termination of the canonical-form recursion
 -/
 
 open scoped Matrix BigOperators

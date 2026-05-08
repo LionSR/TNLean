@@ -38,6 +38,31 @@ of the parent Hamiltonian (see `UniqueGroundState.lean`).
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section~4.3 (see in particular lines 1976--2000 for the parent Hamiltonian definition, lines 2013--2078 for the intersection property)
 * [MPGSC18] arXiv:1804.04964, Section 3 (one-sided inverse)
 * [FNW92] Sections 3–4
+
+## External input — Quantum Wielandt cumulative-to-word-span
+
+This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies
+the connection from the cumulative Wielandt bound to a concrete word-span theorem:
+
+> **Cumulative-to-word-span connection (Wielandt chain, Lemma 2(b) of arXiv:0909.5347).**
+> The cumulative span `S_n(A)` is the linear span of all word products of length
+> `≤ n`.  `CumulativeToWordSpan` converts the statement "`S_n(A)` reaches the
+> full matrix algebra" into "`wordSpan A n = ⊤`" — i.e., the
+> word products of exactly length `n` (not just up to `n`) span `M_D(ℂ)`.
+
+In the intersection property proof: the injectivity of `groundSpaceMap A L`
+(for `L ≥ 1`) requires that `wordSpan A L = ⊤`.  The Wielandt machinery
+supplies this conclusion from the injectivity hypothesis `IsInjective A`:
+injectivity at length 1 implies word-span fullness at all positive lengths
+via the cumulative span chain, and `CumulativeToWordSpan` upgrades the
+cumulative conclusion to an exact-length word-span theorem.
+
+The formal Lean declaration:
+
+> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the lemma
+> `cumulativeSpan_eq_top_iff_wordSpan_eq_top` and related declarations that
+> connect cumulative and exact-length span.  These are consumed by the
+> ground-space injectivity proof `groundSpaceMap_injective`.
 -/
 
 open scoped Matrix BigOperators
