@@ -107,12 +107,6 @@ private theorem isUnitalKraus_conjTranspose (h : IsTPKraus K) :
   change ∑ i, (K i)ᴴ * ((K i)ᴴ)ᴴ = 1
   simp only [conjTranspose_conjTranspose]; exact h
 
-/-- The conjugate-transposed operators of a unital family form a TP family. -/
-private theorem isTPKraus_conjTranspose (h : IsUnitalKraus K) :
-    IsTPKraus (fun i => (K i)ᴴ) := by
-  change ∑ i, ((K i)ᴴ)ᴴ * (K i)ᴴ = 1
-  simp only [conjTranspose_conjTranspose]; exact h
-
 /-- **Kadison-Schwarz inequality** (Wolf, Chapter 5, Equation (5.2)).
 
 For a unital CP map `E(X) = ∑ᵢ Kᵢ X Kᵢ†` with `∑ᵢ Kᵢ Kᵢ† = I`,
@@ -221,23 +215,5 @@ theorem hilbertSchmidt_contraction (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     rw [← trace_sum, ← Finset.sum_mul, show ∑ i : Fin d, (K i)ᴴ * K i = 1 from h_tp, one_mul]
   rw [h_pres] at h_nonneg
   exact le_of_sub_nonneg h_nonneg
-
-/-- **HS contraction for the adjoint channel** (MPS version).
-
-If `∑ Kᵢ† Kᵢ = I` (TP / left-canonical) and `∑ Kᵢ Kᵢ† = I`
-(unital / right-canonical), then the adjoint map
-`E*(X) = ∑ Kᵢ† X Kᵢ` contracts the Hilbert-Schmidt norm:
-`tr(E*(X)† E*(X)) ≤ tr(X† X)`.
-
-Note: both conditions are needed — Kadison-Schwarz uses unitality of E*
-(which follows from TP of E), while the trace computation uses TP of E*
-(which requires unitality of E). -/
-theorem hilbertSchmidt_contraction_adjoint (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (h_tp : IsTPKraus K) (h_unital : IsUnitalKraus K)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    trace ((krausAdjointMap K X)ᴴ * krausAdjointMap K X) ≤ trace (Xᴴ * X) := by
-  simp only [krausAdjointMap_eq]
-  exact hilbertSchmidt_contraction _ (isUnitalKraus_conjTranspose h_tp)
-    (isTPKraus_conjTranspose h_unital) X
 
 end KadisonSchwarz
