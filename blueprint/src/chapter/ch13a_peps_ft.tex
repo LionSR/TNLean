@@ -1,14 +1,14 @@
 %% =========================================================
-%% Chapter: Fundamental Theorem for Injective PEPS
+%% Chapter: Fundamental Theorems for Injective and Normal PEPS
 %% =========================================================
 
-\chapter{Fundamental Theorem for Injective PEPS}%
+\chapter{Fundamental Theorems for Injective and Normal PEPS}%
 \label{ch:peps_ft}
 \label{sec:peps_ft}
 
 The following definitions and results extend the Fundamental Theorem to
-injective PEPS on simple graphs, following
-Theorem~2 of~\cite{Molnar2018NormalPEPS}.
+injective and normal PEPS, following Theorems~2 and~3 of
+\cite{Molnar2018NormalPEPS}.
 
 \begin{definition}[Graph edge for PEPS]
     \label{def:peps_edge}
@@ -364,6 +364,158 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     reconstructed from those data.
 \end{theorem}
 
+\begin{definition}[Boundary data with an inserted edge matrix]%
+    \label{def:peps_edgeInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.EdgeInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
+    For an edge $e=(u,v)$, inserted-edge boundary data consist of two
+    independent indices on the bond $e$, together with the residual virtual
+    indices incident to $u$ and to $v$. These are the boundary indices used
+    when a matrix is inserted on the distinguished bond.
+\end{definition}
+
+\begin{definition}[Diagonal inserted-edge boundary data]%
+    \label{def:peps_edgeBoundaryToInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.edgeBoundaryToInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    Ordinary edge-centered boundary data determine inserted-edge boundary data
+    by using the same bond index at both endpoints. This is the diagonal
+    boundary datum selected by the identity matrix in the edge-insertion
+    coefficient.
+\end{definition}
+
+\begin{definition}[Diagonal inserted-boundary configurations]%
+    \label{def:peps_edgeDiagonalInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.EdgeDiagonalInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_edgeInsertedBoundaryConfig}
+    The diagonal inserted-boundary configurations are those inserted-edge
+    boundary data for which the two distinguished bond indices agree. This is
+    the support of the identity matrix inside the inserted-boundary sum.
+\end{definition}
+
+\begin{definition}[Diagonal boundary reindexing]%
+    \label{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig,
+        def:peps_edgeDiagonalInsertedBoundaryConfig,
+        def:peps_edgeBoundaryToInsertedBoundaryConfig}
+    Ordinary edge-boundary data are equivalent to diagonal inserted-boundary
+    data. This is the finite reindexing map used after the identity matrix has
+    removed all off-diagonal inserted-boundary summands.
+\end{definition}
+
+\begin{definition}[Open middle tensor at an edge]%
+    \label{def:peps_edgeOpenMiddleWeight}
+    \lean{TNLean.PEPS.edgeOpenMiddleWeight}
+    \leanok
+    \uses{def:peps_edgeInsertedBoundaryConfig, def:peps_edgeMiddleVertices}
+    Fixing the residual endpoint data but leaving the bond $e$ out of the
+    middle region, the open middle tensor is the contraction over all virtual
+    indices away from $e$ that are compatible with those endpoint residual
+    data.
+\end{definition}
+
+\begin{definition}[Restricting middle configurations away from the edge]%
+    \label{def:peps_edgeMiddleConfigToOpenMiddleConfig}
+    \lean{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig}
+    \leanok
+    \uses{def:peps_edgeMiddleConfig, def:peps_edgeOpenMiddleWeight}
+    An ordinary middle configuration for the edge-blocked contraction restricts
+    to a virtual configuration on all edges except the distinguished edge. This
+    is the first reindexing map needed to compare the identity insertion with
+    the ordinary edge-blocked middle tensor.
+\end{definition}
+
+\begin{definition}[Restoring the distinguished edge index]%
+    \label{def:peps_edgeOpenMiddleConfigToMiddleConfig}
+    \lean{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeMiddleConfigToOpenMiddleConfig}
+    Conversely, a compatible open middle configuration becomes an ordinary
+    middle configuration after the fixed edge-boundary index is restored on the
+    distinguished edge. Together with the restriction map, this gives the
+    finite reindexing underlying the identity-insertion specialization.
+\end{definition}
+
+\begin{definition}[Open-middle reindexing equivalence]%
+    \label{def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
+    \lean{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig}
+    \leanok
+    \uses{def:peps_edgeMiddleConfigToOpenMiddleConfig,
+        def:peps_edgeOpenMiddleConfigToMiddleConfig}
+    For fixed edge-boundary data, ordinary middle configurations are equivalent
+    to compatible open-middle configurations. This packages the finite
+    reindexing used when the inserted matrix is the identity.
+\end{definition}
+
+\begin{definition}[Edge insertion coefficient]%
+    \label{def:peps_edgeInsertedCoeff}
+    \lean{TNLean.PEPS.edgeInsertedCoeff}
+    \leanok
+    \uses{def:peps_edgeInsertedBoundaryConfig, def:peps_edgeOpenMiddleWeight}
+    For an edge $e=(u,v)$ and a matrix $X$ acting on the bond space of $e$,
+    the edge insertion coefficient is the contraction obtained by inserting
+    $X$ between the endpoint tensors and the open middle tensor:
+    \begin{center}
+        \TNPEPSEdgeInsertedCoeff
+    \end{center}
+\end{definition}
+
+\begin{theorem}[Middle tensor reindexing for an opened edge]%
+    \label{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
+    \lean{TNLean.PEPS.edgeMiddleWeight_eq_edgeOpenMiddleWeight}
+    \leanok
+    \uses{def:peps_edgeOpenMiddleWeight,
+        def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
+    Restoring the fixed distinguished-edge index identifies the ordinary blocked
+    middle tensor with the open middle tensor. This is the finite reindexing
+    used before the identity matrix collapses the two inserted bond indices to
+    the diagonal.
+\end{theorem}
+
+\begin{theorem}[Diagonal summand of the identity insertion]%
+    \label{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}
+    \leanok
+    \uses{def:peps_edgeBoundaryToInsertedBoundaryConfig,
+        thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
+    On the diagonal boundary datum selected by the identity matrix, the
+    inserted-edge summand is the ordinary edge-blocked summand. Thus the
+    remaining identity-insertion step is purely a finite summation statement:
+    the off-diagonal inserted boundary data vanish and the diagonal data reindex
+    the ordinary edge-boundary sum.
+\end{theorem}
+
+\begin{theorem}[Off-diagonal summands of the identity insertion]%
+    \label{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_identity_offDiagonal_summand}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff}
+    If the two inserted bond indices are distinct, then the corresponding
+    summand in the identity insertion is zero. This is the pointwise
+    off-diagonal vanishing used before the inserted-boundary sum is restricted
+    to its diagonal part.
+\end{theorem}
+
+\begin{theorem}[Identity insertion recovers the edge-blocked coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_identity}
+    \notready
+    \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBlockedCoeff,
+        def:peps_edgeBoundaryToInsertedBoundaryConfig,
+        def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig,
+        thm:peps_edgeInsertedCoeff_identity_diagonal_summand,
+        thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
+    If the inserted matrix on the distinguished edge is the identity, then the
+    edge insertion coefficient is the ordinary edge-blocked coefficient. After
+    the diagonal summand comparison, the remaining proof is the finite
+    reindexing of the inserted-boundary sum along the diagonal and the
+    off-diagonal vanishing of the identity matrix.
+\end{theorem}
+
 \begin{definition}[Blocked middle tensor at an edge]%
     \label{def:peps_edgeMiddleWeight}
     \lean{TNLean.PEPS.edgeMiddleWeight}
@@ -373,6 +525,10 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     Fixing the edge-centered boundary data, the blocked middle tensor is the sum
     over global virtual configurations compatible with those data of the product
     of local tensor entries over the middle region $V\setminus\{u,v\}$.
+    The graph-local contraction is read as a three-site chain:
+    \begin{center}
+        \TNPEPSEdgeBlockingReduction
+    \end{center}
 \end{definition}
 
 \begin{definition}[Edge-blocked PEPS coefficient]%
@@ -417,6 +573,79 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     coefficients and apply the same-state hypothesis.
 \end{proof}
 
+\begin{theorem}[Edge blocking preserves injectivity]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective}
+    \notready
+    \uses{def:IsVertexInjective, def:peps_edgeMiddleWeight,
+        def:peps_edgeBlockedCoeff}
+    If \(A\) is vertex-injective, then for every edge \(e=(u,v)\), the two
+    endpoint tensors together with the tensor obtained by blocking all vertices
+    outside \(u\) and \(v\) form an injective three-site MPS. This is the
+    formal version of the assertion after the diagram
+    \(\textup{eq:block\_to\_mps}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[Virtual insertion realized physically on either endpoint]%
+    \label{thm:peps_virtualInsertionPhysicalRealization}
+    \notready
+    \uses{def:IsVertexInjective, def:peps_edgeInsertedCoeff}
+    In the edge-blocked three-site MPS, injectivity of the endpoint tensors lets
+    an arbitrary virtual matrix \(X\) on the chosen bond be realized by a
+    physical operation on either neighboring particle:
+    \begin{center}
+        \TNPEPSInsertionPhysicalRealization
+    \end{center}
+    This is the diagrammatic step \(X\mapsto O_1,O_2\) in the proof of
+    Lemma~\(\mathrm{inj\_isomorph}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
+    \label{thm:peps_physicalToVirtualInsertion}
+    \notready
+    \uses{def:IsVertexInjective}
+    Conversely, if two physical operations on neighboring particles act in the
+    same way on the three-site state, then injectivity of the adjacent tensors
+    recovers a virtual operation on their shared bond:
+    \begin{center}
+        \TNPEPSPhysicalToVirtualInsertion
+    \end{center}
+    This is the \(O_1,O_2\mapsto W\) step in the proof of
+    Lemma~\(\mathrm{inj\_isomorph}\).
+\end{theorem}
+
+\begin{theorem}[Edge-blocked insertion algebra isomorphism]%
+    \label{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    \notready
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,
+        thm:peps_virtualInsertionPhysicalRealization,
+        thm:peps_physicalToVirtualInsertion,
+        thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
+    Applying the three-site injective-chain theorem to the edge-blocked MPS
+    gives an algebra isomorphism between matrix insertions on the chosen edge in
+    the two PEPS tensors. Equivalently, for every matrix \(X\) inserted on that
+    edge for the first tensor family, there is a uniquely determined matrix
+    \(Y\) inserted on the corresponding edge for the second tensor family that
+    gives the same edge-blocked state:
+    \begin{center}
+        \TNPEPSThreeSiteInsertionComparison
+    \end{center}
+\end{theorem}
+
+\begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
+    \label{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    \notready
+    \uses{thm:peps_edgeBlockedInsertionAlgebraIsomorphism, def:gaugeVertex}
+    The insertion correspondence obtained from the three-site injective-chain
+    theorem is an isomorphism between full matrix algebras on the chosen bond.
+    Hence the two bond dimensions on that edge are equal, and the isomorphism is
+    implemented by conjugation with an invertible edge matrix \(Z_e\):
+    \(Y=Z_e X Z_e^{-1}\). The matrix \(Z_e\) is unique up to multiplication by
+    a nonzero scalar. This is the finite-dimensional matrix-algebra step used in
+    \cite[Section~3]{Molnar2018NormalPEPS} after Lemma~\(\mathrm{inj\_isomorph}\).
+\end{theorem}
+
 \begin{definition}[Factorized local gauge datum]%
     \label{def:peps_hasFactorizedLocalGauge}
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
@@ -456,6 +685,37 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     coefficient kernel, so both parts of the factorized local gauge datum follow.
 \end{proof}
 
+\begin{theorem}[Absorbing edge gauges into the second PEPS]%
+    \label{thm:peps_edgeGaugeAbsorption}
+    \notready
+    \uses{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism, def:gaugeVertex}
+    The edge gauges obtained by applying the three-site injective-chain theorem
+    at each edge can be absorbed into the tensors of the second family. At a
+    vertex \(v\), each incident edge contributes the appropriate oriented gauge
+    or inverse gauge, producing the modified tensor \(\widetilde B_v\):
+    \begin{center}
+        \TNPEPSEdgeGaugeAbsorption
+    \end{center}
+    After this absorption, arbitrary insertions of the same matrix on the same
+    edge are compared in the first PEPS and the modified second PEPS.
+\end{theorem}
+
+\begin{theorem}[Post-absorption edge insertion equality]%
+    \label{thm:peps_postAbsorptionEdgeInsertionEquality}
+    \notready
+    \uses{thm:peps_edgeGaugeAbsorption, def:peps_edgeInsertedCoeff}
+    After the edge gauges have been absorbed into the second tensor family, for
+    every edge and every matrix \(X\), inserting \(X\) on that edge in the first
+    PEPS gives the same state as inserting \(X\) on the same edge in the
+    modified second PEPS:
+    \begin{center}
+        \TNPEPSEdgeInsertionEquality
+    \end{center}
+    This is the blueprint form of the displayed equation
+    \(\textup{eq:inj\_equal\_edge}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
@@ -464,9 +724,14 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     Under the factorized local gauge hypothesis, the local gauge formula follows.
     What remains open is to upgrade equality of the edge-blocked coefficients to
     the blocked-middle formula using the corresponding three-site
-    injective-chain argument.
-    Under that hypothesis, injectivity on the star neighbourhood provides a
-    left inverse that isolates the local edge gauges:
+    injective-chain argument. The physical-realization and physical-to-virtual
+    steps in that argument are recorded separately as
+    Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization} and
+    \ref{thm:peps_physicalToVirtualInsertion}.
+    In the paper route, once the post-absorption insertion equality of
+    Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} has supplied the
+    factorized local gauge hypothesis, injectivity on the star neighborhood
+    provides a left inverse that isolates the local edge gauges:
     \begin{center}
         \TNPEPSLocalGaugeExtraction
     \end{center}
@@ -483,7 +748,7 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     \uses{thm:localGauge_exists, def:gaugeVertex}
     Local gauges extracted at adjacent vertices are consistent across
     shared edges, yielding a global gauge family.
-    On a shared edge, the two neighbouring local extractions match as one
+    On a shared edge, the two neighboring local extractions match as one
     edge gauge:
     \begin{center}
         \TNPEPSGlobalConsistency
@@ -491,31 +756,95 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{remark}
-    The five diagrams above record the gauge steps used in
+    The PEPS diagrams in this section record the gauge steps used in
     \cite[Section~3]{Molnar2018NormalPEPS}. The edge-orientation and
     vertex-action diagrams fix the endpoint convention for the edge gauges
     obtained by blocking the PEPS to a three-site injective MPS. The
     cancellation diagram is the converse contracted identity: inserting
     opposite endpoint actions on an internal edge leaves the PEPS coefficient
-    unchanged. The local-extraction diagram summarizes the comparison of
+    unchanged. The edge-gauge absorption diagram records the formation of
+    \(\widetilde B\) before the post-absorption insertion equality. The
+    local-extraction diagram summarizes the comparison of
     one-site-enlarged injective regions with injective complements, after the
     edge gauges have been absorbed into $\tilde{B}$. The global-consistency
     diagram summarizes repeating the edge blocking over all edges, so the two
-    endpoint actions on a shared edge are one edge gauge. These pictures are
-    schematic orientation and absorption summaries of the proof of the
-    injective and normal PEPS fundamental theorems, not literal copies of the
-    paper's figures.
+    endpoint actions on a shared edge are one edge gauge. The
+    two-injective-tensor diagram records Lemma~\(\mathrm{inj\_equal\_tensors\_2}\)
+    from the paper, and the final one-vertex-complement diagram records its
+    application to one vertex and its complement. These pictures use the
+    blueprint tensor-dot convention, but each one is attached to the same
+    contraction, insertion, or blocking step as the corresponding argument in
+    the paper.
 \end{remark}
+
+\begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
+    \label{thm:peps_twoInjectiveGaugeScalarReduction}
+    \notready
+    \uses{def:IsVertexInjective}
+    In the proof of the generalized two-injective-tensor comparison, applying
+    the inverse of the second injective tensor leaves three possible virtual
+    operators on the exposed legs of the first tensor:
+    \begin{center}
+        \TNPEPSTwoInjectiveGaugeScalarReduction
+    \end{center}
+    Inverting the first injective tensor then shows that the corresponding
+    tensor decompositions
+    \[
+        \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
+        =
+        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes I
+        =
+        \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}
+    \]
+    force the residual virtual operators to be scalar multiples of the
+    identity. This is the scalar step in the proof of
+    Lemma~\(\mathrm{inj\_equal\_tensors\_2}\).
+\end{theorem}
+
+\begin{theorem}[Generalized two-injective-tensor comparison]%
+    \label{thm:peps_twoInjectiveTensorInsertionComparison}
+    \notready
+    \uses{def:IsVertexInjective, thm:peps_twoInjectiveGaugeScalarReduction}
+    Let \(A_1,A_2,B_1,B_2\) be injective tensors with the same virtual boundary
+    spaces. Suppose that inserting an arbitrary matrix \(X\) on any shared
+    virtual bond gives the same two-tensor state for the \(A\)-pair and the
+    \(B\)-pair:
+    \begin{center}
+        \TNPEPSTwoInjectiveTensorInsertionComparison
+    \end{center}
+    Then there is a nonzero scalar \(\lambda\) such that
+    \(A_1=\lambda B_1\) and \(A_2=\lambda^{-1}B_2\). This is the blueprint
+    form of Lemma~\(\mathrm{inj\_equal\_tensors\_2}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[One-vertex versus complement comparison]%
+    \label{thm:peps_oneVertexComplementComparison}
+    \notready
+    \uses{def:IsVertexInjective, thm:peps_postAbsorptionEdgeInsertionEquality,
+        thm:peps_twoInjectiveTensorInsertionComparison}
+    After the edge gauges have been absorbed into the second tensor family,
+    the paper blocks one vertex \(v\) against its injective complement. Applying
+    the generalized two-injective-tensor comparison to two regions that differ
+    by exactly this vertex gives \(A_v\propto \widetilde B_v\):
+    \begin{center}
+        \TNPEPSOneVertexComplementComparison
+    \end{center}
+    This is the final local comparison following the equation
+    \(\textup{eq:inj\_equal\_edge}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
     bond-dimension equality]%
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
     \notready
-    \uses{thm:gaugeConsistency, def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS, def:IsVertexInjective}
     Given matching bond dimensions, two vertex-injective PEPS that generate the
     same state are gauge-equivalent. This conditional form isolates the
-    bond-dimension obligation from the edge-centred consistency obligation of
+    bond-dimension obligation from the edge-centered consistency obligation of
     the global gauge construction.
 \end{theorem}
 
@@ -528,6 +857,98 @@ Theorem~2 of~\cite{Molnar2018NormalPEPS}.
     If two PEPS tensors on a simple graph are both vertex-injective and
     generate the same state, then they are gauge-equivalent
     (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
+\end{theorem}
+
+\section{Normal PEPS}
+
+\begin{lemma}[Union of injective regions]%
+    \label{lem:peps_injectiveRegion_union}
+    \notready
+    \uses{def:IsVertexInjective}
+    If two regions of a PEPS are injective, then their union is injective.
+    The proof in \cite[Section~3]{Molnar2018NormalPEPS} blocks the network into
+    four parts \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
+    \((A\cup B)^c\), and applies the two available left inverses in sequence:
+    \begin{center}
+        \TNPEPSInjectiveRegionUnion
+    \end{center}
+\end{lemma}
+
+\begin{definition}[Normal square-lattice blocking regions]%
+    \label{def:peps_normalSquareBlockingRegions}
+    \notready
+    In the translationally invariant square-lattice proof, the source paper
+    assumes that every \(2\times 3\) and \(3\times 2\) region is injective.
+    Lemma~\ref{lem:peps_injectiveRegion_union} then implies that the regions
+    \(R\), \(S\), and \(T\) below are injective:
+    \begin{center}
+        \TNPEPSNormalRegionsRS
+
+        \vspace{0.5em}
+
+        \TNPEPSNormalRegionT
+    \end{center}
+\end{definition}
+
+\begin{theorem}[Normal edge blocking to a three-site injective chain]%
+    \label{thm:peps_normalEdgeBlockingToInjectiveChain}
+    \notready
+    \uses{lem:peps_injectiveRegion_union,
+        def:peps_normalSquareBlockingRegions,
+        thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    Under the square-lattice normality hypotheses of
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, the tensor network may be blocked
+    around each edge into three injective regions. Hence the same three-site
+    injective-chain insertion argument used in the injective PEPS theorem
+    applies to the blocked normal PEPS:
+    \begin{center}
+        \TNPEPSNormalEdgeBlockingReduction
+    \end{center}
+\end{theorem}
+
+\begin{theorem}[Translationally invariant normal gauge absorption]%
+    \label{thm:peps_tiNormalGaugeAbsorption}
+    \notready
+    \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
+        thm:peps_edgeGaugeAbsorption}
+    In the translationally invariant normal square-lattice case, the edge
+    gauges obtained after blocking are represented by one horizontal matrix
+    \(X\) and one vertical matrix \(Y\), unique up to scalar. Absorbing these
+    matrices into \(B\) gives a tensor \(\widetilde B\), equivalently the final
+    local gauge formula of \cite[Theorem~3]{Molnar2018NormalPEPS}:
+    \begin{center}
+        \TNPEPSTINormalGaugeAbsorption
+    \end{center}
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
+    \label{thm:fundamentalTheorem_normalSquarePEPS}
+    \notready
+    \uses{thm:peps_tiNormalGaugeAbsorption,
+        thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS}
+    Let \(A\) and \(B\) be translationally invariant normal square-lattice PEPS
+    tensors such that every \(2\times 3\) and \(3\times 2\) region is
+    injective. If they generate the same state on an \(n\times m\) region with
+    \(n,m\geq 7\), then they are related by horizontal and vertical gauges
+    \(X,Y\), up to a scalar \(\lambda\) satisfying
+    \(\lambda^{nm}=1\). This is
+    \cite[Theorem~3]{Molnar2018NormalPEPS}.
+\end{theorem}
+
+\begin{theorem}[Fundamental Theorem for normal PEPS]%
+    \label{thm:fundamentalTheorem_normalPEPS}
+    \notready
+    \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
+        thm:peps_oneVertexComplementComparison,
+        def:GaugeEquivPEPS}
+    Suppose two normal PEPS generate the same state, can be blocked into
+    three-site injective chains around every edge, and for every site admit
+    two injective regions with injective complements that differ exactly at
+    that site. Then their defining tensors are related by a local gauge, and
+    the gauges are unique up to the scalar freedom allowed by the graph. This
+    is the general normal-PEPS theorem stated after
+    \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
