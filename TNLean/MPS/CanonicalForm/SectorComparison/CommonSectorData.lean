@@ -606,9 +606,9 @@ exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The current comparison route passes through
+The current comparison uses
 `afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common phase-cover
-or BNT-cover theorems. This avoids keeping separate common-block comparison
+or BNT comparison theorems. This avoids keeping separate common-block comparison
 variants as public waypoints: the formal residue is the paper-level residue,
 namely blocked-word relabeling, finite-length nonzero-block span comparison,
 and BNT sector matching.
@@ -622,7 +622,7 @@ formal work for the completely unconditional
 2. one-site injectivity of the nonzero-weight blocks, or a blocked replacement of the
    rigidity hypothesis; and
 3. equality of the finite-length MPV spans for the original nonzero-weight block families
-   (or directly for the two BNT bases), equivalently a common phase/BNT-cover comparison,
+   (or directly for the two BNT bases), equivalently a common phase/BNT comparison,
    followed by the final global gauge construction of the equal-case FT.
 
 Thus the common-period arithmetic, the blocked-word relabeling, the common

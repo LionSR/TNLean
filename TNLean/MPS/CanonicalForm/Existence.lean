@@ -41,7 +41,7 @@ What is **not** yet proved here:
   handling possible zero blocks exactly under `SameMPV₂` (which remembers the `N = 0` sector).
 * Resolve the post-blocking cyclic-sector / equal-weight issues needed to produce a primitive
   weighted block family with strictly ordered nonzero weights.
-* Pass that data to the block-injective / `IsCanonicalForm` hypotheses needed for the
+* Pass these hypotheses to the block-injective / `IsCanonicalForm` predicates needed for the
   fundamental-theorem results.
 
 Accordingly, this file gives reduction lemmas and explicit conditional statements,
@@ -119,7 +119,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
     -- Existing lemma is stated with `star` rather than `ᴴ`.
     simpa only [Matrix.star_eq_conjTranspose] using
       sameMPV_conj_unitary (d := d) (D := D) A U
-  -- Assemble the collected data under the `let B := ...` binder.
+  -- Collect the statements under the `let B := ...` binder.
   exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
 
 

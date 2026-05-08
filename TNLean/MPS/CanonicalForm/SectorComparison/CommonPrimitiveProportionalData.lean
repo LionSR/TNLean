@@ -10,8 +10,8 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common primitive proportional data
 
-This file records the span, phase-cover, and BNT-cover hypotheses for common
-primitive nonzero-sector families.  These structures express the remaining data
+This file records the span, phase-cover, and BNT comparison hypotheses for common
+primitive nonzero-sector families.  These structures express the remaining hypotheses
 needed to pass from the common-sector structural theorem to the BNT
 overlap-rigidity comparison.
 
@@ -74,7 +74,7 @@ end CommonPrimitiveSpanHypotheses
 /-- Remaining two-sided hypotheses for common primitive nonzero-sector families,
 formulated with a common MPV phase cover.
 
-This is the common-cover variant of `CommonPrimitiveSpanHypotheses`: the structural
+This is the common phase-cover variant of `CommonPrimitiveSpanHypotheses`: the structural
 theorem supplies the same primitive nonzero-sector data, while the remaining inputs
 are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
 common phase cover for the two block families. -/
@@ -181,9 +181,10 @@ with nonzero weights and positive bond dimensions at a common blocking
 length.  The fields below record the additional BNT hypotheses needed
 to compare the two families and obtain a common MPV phase cover.
 
-For non-periodic tensors, the comparison is applied at the BNT-cover level:
-the representative/grouping choices are implementation details of the
-structural construction, not a separate paper-level hypothesis surface. -/
+For non-periodic tensors, these fields are exactly the BNT comparison hypotheses
+for the produced common-length sector families.  The representative and grouping
+choices belong to the structural construction, not to a separate source-paper
+hypothesis. -/
 structure CommonPrimitiveBNTCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -315,7 +316,7 @@ def ofCommonPrimitiveData_zeroTailIdentity
     hAntiA hAntiB hNotGpeA hNotGpeB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
-/-- BNT-cover hypotheses produce a common MPV phase cover. -/
+/-- BNT comparison hypotheses produce a common MPV phase cover. -/
 lemma toMPVCommonPhaseCover
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
@@ -330,7 +331,7 @@ lemma toMPVCommonPhaseCover
     (d := blockPhysDim d p) blocksA blocksB
     h.ncfA h.notGpeA h.ncfB h.notGpeB h.decompData
 
-/-- BNT-cover hypotheses produce the common primitive phase-cover hypotheses. -/
+/-- BNT comparison hypotheses produce the common primitive phase-cover hypotheses. -/
 lemma toCommonPrimitivePhaseCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
