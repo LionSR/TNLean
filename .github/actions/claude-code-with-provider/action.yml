@@ -1,3 +1,5 @@
+# ci-sync-version: claude-provider-deepseek-v1
+# ci-sync-source: shared Lean automation, prompts externalized under .github/prompts
 name: 'Claude Code with Provider'
 description: 'Run anthropics/claude-code-action with automatic Anthropic/DeepSeek provider selection'
 
@@ -51,15 +53,6 @@ inputs:
     description: 'Allowed bots override.'
     required: false
     default: 'claude,chatgpt-codex-connector,cursor[bot],cursor,copilot-pull-request-reviewer'
-  bot-id:
-    description: 'GitHub user ID for Claude Code git operations.'
-    required: false
-    default: '41898282'
-  bot-name:
-    description: 'GitHub username for Claude Code git operations.'
-    required: false
-    default: 'claude[bot]'
-
   allowed_tools:
     description: 'Optional --allowedTools value applied by default.'
     required: false
@@ -73,6 +66,14 @@ inputs:
     description: 'Branch-name template for the checkout branch.'
     required: false
     default: ''
+  bot-id:
+    description: 'GitHub user ID to use for git operations.'
+    required: false
+    default: '41898282'
+  bot-name:
+    description: 'GitHub username to use for git operations.'
+    required: false
+    default: 'claude[bot]'
 
   additional-permissions:
     description: 'Additional permissions for the Claude bot.'
@@ -137,9 +138,9 @@ runs:
         INPUT_DEEPSEEK_SONNET_MODEL: ${{ inputs['deepseek-sonnet-model'] }}
         INPUT_MODEL_TIER: ${{ inputs['model-tier'] }}
         INPUT_ALLOWED_BOTS: ${{ inputs['allowed-bots'] }}
+        INPUT_BRANCH_NAME_TEMPLATE: ${{ inputs['branch-name-template'] }}
         INPUT_BOT_ID: ${{ inputs['bot-id'] }}
         INPUT_BOT_NAME: ${{ inputs['bot-name'] }}
-        INPUT_BRANCH_NAME_TEMPLATE: ${{ inputs['branch-name-template'] }}
         INPUT_ADDITIONAL_PERMISSIONS: ${{ inputs['additional-permissions'] }}
         INPUT_PLUGIN_MARKETPLACES: ${{ inputs.plugin_marketplaces }}
         INPUT_PLUGINS: ${{ inputs['plugins'] }}
@@ -238,9 +239,9 @@ runs:
         fi
 
         allowed_bots="$INPUT_ALLOWED_BOTS"
+        branch_name_template="$INPUT_BRANCH_NAME_TEMPLATE"
         bot_id="$INPUT_BOT_ID"
         bot_name="$INPUT_BOT_NAME"
-        branch_name_template="$INPUT_BRANCH_NAME_TEMPLATE"
         additional_permissions="$INPUT_ADDITIONAL_PERMISSIONS"
         plugin_marketplaces="$INPUT_PLUGIN_MARKETPLACES"
         plugins="$INPUT_PLUGINS"
@@ -373,9 +374,9 @@ runs:
         write_output model "$model"
         write_output provider "$provider"
         write_output allowed_bots "$allowed_bots"
+        write_output branch_name_template "$branch_name_template"
         write_output bot_id "$bot_id"
         write_output bot_name "$bot_name"
-        write_output branch_name_template "$branch_name_template"
         write_output additional_permissions "$additional_permissions"
         write_output plugin_marketplaces "$plugin_marketplaces"
         write_output plugins "$plugins"
@@ -392,9 +393,9 @@ runs:
         claude_code_oauth_token: ${{ steps.resolve.outputs.claude_code_oauth_token }}
         anthropic_api_key: ${{ steps.resolve.outputs.anthropic_api_key }}
         allowed_bots: ${{ steps.resolve.outputs.allowed_bots }}
+        branch_name_template: ${{ steps.resolve.outputs.branch_name_template }}
         bot_id: ${{ steps.resolve.outputs.bot_id }}
         bot_name: ${{ steps.resolve.outputs.bot_name }}
-        branch_name_template: ${{ steps.resolve.outputs.branch_name_template }}
         additional_permissions: ${{ steps.resolve.outputs.additional_permissions }}
         plugin_marketplaces: ${{ steps.resolve.outputs.plugin_marketplaces }}
         plugins: ${{ steps.resolve.outputs.plugins }}

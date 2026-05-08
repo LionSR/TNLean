@@ -4,8 +4,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-# This check is advisory while main still has files above the 1000-line style
-# limit. Remove continue-on-error below once those files have been split.
+# Two known oversized files remain on main and are grandfathered as warnings:
+#   TNLean/MPS/ParentHamiltonian/Martingale.lean (1562 lines)
+#   TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean (1425 lines)
+# These are tracked for future splitting. Once split, remove the corresponding
+# ``--known`` argument below.
+# New oversized files (any file over 1000 lines not listed here) cause the
+# check to fail.
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,5 +33,8 @@ jobs:
           python-version: '3.12'
 
       - name: Run oversized-file guard
-        continue-on-error: true
-        run: python3 scripts/check_oversized_lean_files.py --root .
+        run: >
+          python3 scripts/check_oversized_lean_files.py
+          --root .
+          --known TNLean/MPS/ParentHamiltonian/Martingale.lean
+          --known TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean

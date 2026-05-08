@@ -1,0 +1,38 @@
+name: Badges
+
+on:
+  schedule:
+    # Refresh informational badges weekly on Sunday at 05:30 UTC.
+    - cron: '30 5 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  badges:
+    runs-on: ubuntu-latest
+    name: Generate Lean badges
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Generate badge JSON
+        run: python3 scripts/generate_badges.py --output-dir badge-output
+
+      - name: Deploy badges
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: ./scripts/deploy-to-gh-pages.sh --badges-dir badge-output --badges-only --ci
