@@ -20,7 +20,10 @@ $B^i = X A^i X^{-1}$ for a single `X ∈ GL(D, ℂ)`, so `B` is injective.
 
 ## References
 
-* [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Section 5
+* [MGSSC18] Molnar, Ge, Schuch, Cirac,
+  *A constructive proof of the fundamental theorem for Projected Entangled Pair States*,
+  arXiv:1804.04964, Section 5 (Applications — translation invariance reduction).
+  Source: `Papers/1804.04964/`
 -/
 
 open scoped Matrix

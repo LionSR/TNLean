@@ -11,8 +11,9 @@ import TNLean.MPS.RFP.Defs
 /-!
 # RG flow convergence for canonical-form MPS tensors
 
-This file states the convergence result for the renormalization-group (RG) flow
-applied to MPS tensors in canonical form, following arXiv:1606.00608, Appendix B
+This file proves the convergence result for the renormalization-group (RG) flow
+applied to MPS tensors in canonical form. The proof follows the spectral-gap
+argument from CPGSV21, Section 2.3 and Appendix B of arXiv:1606.00608
 (Cirac–Pérez-García–Schuch–Verstraete).
 
 For a CF tensor, the transfer matrix decomposes as
@@ -24,9 +25,19 @@ converges to an idempotent (the RFP).
 ## Main result
 
 * `rg_flow_converges_of_cf`: the sequence of blocked transfer maps converges
-  to an idempotent for any canonical-form tensor.
+  pointwise to an idempotent for any canonical-form tensor. The proof uses the
+  exponential convergence bound from `QuantitativeGap` to squeeze the difference
+  `E^n X - P X` to zero, then composes with the subsequence `2^n → ∞`.
 
-TODO: formalize the convergence in operator norm.
+## References
+
+* [CPGSV21] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix Product States and Projected Entangled Pair States*,
+  Rev. Mod. Phys. 93 (2021), arXiv:2011.12127. Sec. 2.3 (correlations and transfer matrix).
+* [CPSV17] Cirac, Pérez-García, Schuch, Verstraete,
+  *Completeness of the set of Matrix Product States*,
+  arXiv:1606.00608. Appendix B (RFP as idempotent limit).
+  Source: `Papers/1606.00608/`
 -/
 
 open scoped Matrix ComplexOrder

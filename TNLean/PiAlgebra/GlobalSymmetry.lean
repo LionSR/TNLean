@@ -29,7 +29,10 @@ so `X(g*h)⁻¹ * X(h) * X(g)` commutes with all `A i`, hence is scalar.
 
 ## References
 
-* [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), Section 5
+* [MGSSC18] Molnar, Ge, Schuch, Cirac,
+  *A constructive proof of the fundamental theorem for Projected Entangled Pair States*,
+  arXiv:1804.04964, Section 5 (Applications — global symmetry and projective representations).
+  Source: `Papers/1804.04964/`
 -/
 
 open scoped Matrix BigOperators
