@@ -771,16 +771,16 @@ facts used to recover the lists of weights from those power sums.
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_equiv_phase}
 	\leanok
 	\uses{def:mpv_common_phase_cover, def:mpv_block_phase_equiv}
-	Let \((A_s)_{s \in S}\) and \((B_t)_{t \in T}\) be two finite families of
-	nonzero blocks.  Suppose there is a bijection \(\sigma:S \to T\) and, for
-	each \(s \in S\), a scalar \(\omega_s \in \C^\times\) such that
+	Let \((A_s)_{s \in S}\) and \((B_t)_{t \in T}\) be two finite block
+	families.  Suppose there is a bijection \(\sigma:S \to T\) and, for each
+	\(s \in S\), a scalar \(\omega_s \in \C^\times\) such that
 	\[
 		\ket{V^{(N)}(B_{\sigma(s)})}
 		=
 		\omega_s^N \ket{V^{(N)}(A_s)}
 	\]
-	for every positive length \(N\).  Then the two block families admit a common
-	MPV phase cover.
+	for every length \(N\ge 0\).  The case \(N=0\) records the matching
+	bond dimensions.  Then the two block families admit a common MPV phase cover.
 \end{lemma}
 
 \begin{proof}
@@ -1433,7 +1433,7 @@ BNT comparison hypotheses for the common primitive sectors.
 \end{proof}
 
 \begin{lemma}[Sector comparison from relabelled common sectors and proportional data]%
-\label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
+\label{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
 	\leanok
 	\uses{def:common_primitive_proportional_hypotheses,
@@ -1627,7 +1627,7 @@ BNT comparison hypotheses for the common primitive sectors.
 	are genuine upstream assumptions of the conditional statements here; they are
 	not proved from equality of MPV families in this chapter.
 
-	Common phase covers are an auxiliary way to package the finite-length span
+	Common phase covers are an auxiliary way to express the finite-length span
 	equality needed by the sector-comparison theorem.  They are not a separate
 	form of the source theorem.  Lemma~\ref{lem:mpv_common_phase_cover_span_eq}
 	turns a common phase cover into span equality, while
