@@ -479,5 +479,118 @@ theorem toCommonPrimitivePhaseCoverHypotheses
 
 end CommonPrimitiveBNTCoverHypotheses
 
+/-! ### Per-block to global proportional gauge
+
+The per-block matchers from `ProportionalDecompositionConclusion` produce, for every
+block index `k`, a dimension equality, an invertible matrix `X_k`, and a phase
+`ζ_k ≠ 0` with `B (perm k) i = ζ_k • X_k * (cast (A k)) i * X_k⁻¹`.  The records
+below repackage that data and assemble the per-block `X_k` into a single
+block-diagonal element of `GL`, the global proportionality matrix from CPSV16
+Cor II.2 (`eq:II:A=XAX`). -/
+
+/-- Per-block gauge-phase data attached to a `ProportionalDecompositionConclusion`.
+
+This is the structural record realizing CPSV16 Cor II.2 (eq. `eq:II:A=XAX`):
+a permutation matching the block indices, per-block dimension equalities, and per-block
+gauge matrices `X k` with phases `phase k` satisfying
+`blocksB (perm k) i = phase k • X k * cast (blocksA k) i * (X k)⁻¹`. -/
+structure BlockProportionalGaugePhaseData
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k)) : Type where
+  /-- Permutation matching the two block index sets. -/
+  perm : Fin rA ≃ Fin rB
+  /-- Per-block dimension equality. -/
+  hdim : ∀ k : Fin rA, dimA k = dimB (perm k)
+  /-- Per-block gauge matrix. -/
+  X : (k : Fin rA) → GL (Fin (dimB (perm k))) ℂ
+  /-- Per-block phase. -/
+  phase : Fin rA → ℂ
+  /-- Each per-block phase is nonzero. -/
+  phase_ne : ∀ k, phase k ≠ 0
+  /-- Per-block conjugation identity with phase. -/
+  conj : ∀ k : Fin rA, ∀ i : Fin d,
+    blocksB (perm k) i =
+      phase k • ((X k : Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ) *
+        (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) i *
+        (((X k)⁻¹ : GL (Fin (dimB (perm k))) ℂ) :
+          Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ))
+
+namespace BlockProportionalGaugePhaseData
+
+variable {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+
+/-- Extract per-block gauge-phase data from a `ProportionalDecompositionConclusion`. -/
+noncomputable def ofConclusion
+    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    BlockProportionalGaugePhaseData blocksA blocksB :=
+  let perm := h.choose_spec.choose
+  let hperm := h.choose_spec.choose_spec
+  let hdim : ∀ k : Fin rA, dimA k = dimB (perm k) :=
+    fun k => (hperm k).choose
+  let hGP : ∀ k : Fin rA, GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) (blocksB (perm k)) :=
+    fun k => (hperm k).choose_spec
+  let X : (k : Fin rA) → GL (Fin (dimB (perm k))) ℂ :=
+    fun k => (hGP k).choose
+  let ζ : Fin rA → ℂ := fun k => (hGP k).choose_spec.choose
+  have hζ : ∀ k, ζ k ≠ 0 := fun k => (hGP k).choose_spec.choose_spec.1
+  have hX : ∀ k i, blocksB (perm k) i =
+      ζ k • ((X k : Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ) *
+        (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) i *
+        (((X k)⁻¹ : GL (Fin (dimB (perm k))) ℂ) :
+          Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ)) :=
+    fun k => (hGP k).choose_spec.choose_spec.2
+  { perm := perm
+    hdim := hdim
+    X := X
+    phase := ζ
+    phase_ne := hζ
+    conj := hX }
+
+/-- The reindexed `B`-side block family at the matched dimensions. -/
+noncomputable def reindexB (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
+  fun k => blocksB (G.perm k)
+
+/-- The cast `A`-side block family at the matched dimensions. -/
+noncomputable def castA (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
+  fun k => cast (congr_arg (MPSTensor d) (G.hdim k)) (blocksA k)
+
+/-- The global block-diagonal gauge matrix assembled from the per-block `X k`,
+viewed on the dependent total index. -/
+noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    GL ((k : Fin rA) × Fin (dimB (G.perm k))) ℂ :=
+  blockDiagonalGL G.X
+
+/-- The global block-diagonal gauge matrix as an element of
+`GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor. -/
+noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
+  Units.map
+    (Matrix.reindexAlgEquiv ℂ ℂ
+      (finSigmaFinEquiv (n := fun k : Fin rA => dimB (G.perm k)))).toRingEquiv.toMonoidHom
+    G.globalGL
+
+/-- When per-block phases are absorbed into the block weights via
+`μA k = μB (perm k) * phase k`, the per-block conjugation identities assemble into a
+gauge equivalence between the weighted block-diagonal tensors built from the cast
+left family and the permuted right family. -/
+theorem gaugeEquiv_toTensorFromBlocks
+    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
+    GaugeEquiv
+      (toTensorFromBlocks (d := d) (μ := μA) G.castA)
+      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) :=
+  gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight
+    (μA := μA) (μB := fun k => μB (G.perm k))
+    (A := G.castA) (B := G.reindexB)
+    G.X G.phase G.conj hμ
+
+end BlockProportionalGaugePhaseData
 
 end MPSTensor
