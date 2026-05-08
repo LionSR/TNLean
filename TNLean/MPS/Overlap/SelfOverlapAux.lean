@@ -8,7 +8,7 @@ import TNLean.MPS.Overlap.Basic
 # Self-overlap convergence auxiliaries
 
 This module collects small auxiliary lemmas about the convergence of MPV self-overlaps
-that are shared between `MPS/BNT/PermutationRigidity` and `MPS/FundamentalTheorem/Full`.
+used by both the BNT Permutation Rigidity argument and the Fundamental Theorem helpers.
 
 ## Main statements
 

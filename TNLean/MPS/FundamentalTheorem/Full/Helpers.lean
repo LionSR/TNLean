@@ -23,8 +23,9 @@ source-paper Fundamental Theorem.
 * `tendsto_inner_zero_swap`: swapping a decaying overlap conjugates the inner product.
 * `eq_one_of_pow_tendsto_nhds_one`: powers converging to `1` force the base to be `1`.
 
-The companion `tendsto_norm_selfOverlap_one`, also used in this file's downstream
-consumers, lives upstream in `TNLean.MPS.Overlap.SelfOverlapAux`.
+The companion `tendsto_norm_selfOverlap_one`, which converts self-overlap convergence
+in $\mathbb{C}$ to norm convergence, is proved in `TNLean.MPS.Overlap.SelfOverlapAux`
+and imported here.
 
 This file collects public auxiliary lemmas used by heterogeneous equal-case
 block matching.
