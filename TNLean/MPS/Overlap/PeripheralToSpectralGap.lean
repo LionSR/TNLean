@@ -411,7 +411,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
       (A := A) hNorm hPrim ρ hρ_psd hρ_ne hρ_fix huniq_fp
   exact ⟨ρ, hρ_psd, hρ_ne, hρ_fix, htrρ, hgap⟩
 
-/-! ## Step 3: package as MPS primitivity + overlap -/
+/-! ## Step 3: express as MPS primitivity + overlap -/
 
 /-- Peripheral primitivity of the transfer map implies
 `MPSTensor.HasPrimitiveFixedPoint` (spectral-gap primitivity). -/

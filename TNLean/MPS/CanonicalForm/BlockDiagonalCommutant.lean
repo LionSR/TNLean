@@ -500,7 +500,7 @@ lemma exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injective
   exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
 
 /-- Canonical-form/BNT direct-sum separation gives the block-injective
-horizontal-canonical-form field used by the MPDO bicanonical-form package. -/
+horizontal-canonical-form field used by the MPDO bicanonical-form structure. -/
 lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -513,7 +513,7 @@ lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
   exact hasBiCF_of_wordTupleSpanTop A hSpan
 
 /-- Normal-CF-BNT direct-sum separation gives the block-injective
-horizontal-canonical-form field used by the MPDO bicanonical-form package,
+horizontal-canonical-form field used by the MPDO bicanonical-form structure,
 provided one-site injectivity is supplied explicitly. -/
 lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
     [∀ k, NeZero (dim k)]

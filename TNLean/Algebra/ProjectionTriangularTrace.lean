@@ -37,7 +37,7 @@ abbrev Q (P : Matrix (Fin D) (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
 noncomputable def diagPart (A : MPSTensor d D) (P : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
   fun i => P * A i * P + (1 - P) * A i * (1 - P)
 
-section Helpers
+section Auxiliary
 
 variable (P : Matrix (Fin D) (Fin D) ℂ)
 
@@ -56,7 +56,7 @@ lemma projCompl_mul_projCompl (hP : IsOrthogonalProjection P) : (1 - P) * (1 - P
   -- `(1-P)^2 = (1-P) - (1-P)P`.
   rw [mul_sub, mul_one, projCompl_mul_proj (P := P) hP, sub_zero]
 
-end Helpers
+end Auxiliary
 
 
 /-- If each letter satisfies `(1-P) * A i * P = 0`, then every word evaluation satisfies
