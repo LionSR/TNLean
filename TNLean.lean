@@ -310,9 +310,8 @@ import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.WielandtBound
 
 -- Layer 6b: Preferred paper-facing Proposition 3 / Theorem 1 endpoints.
--- `SourceTheorems/` is the source-facing arXiv:0909.5347 / Wolf §6.9 theorem
--- interface, currently root-imported for citation and exposition and **not**
--- a downstream FT / BNT dependency.
+-- `SourceTheorems/` records the theorems of arXiv:0909.5347 / Wolf §6.9
+-- in the notation of the source; the FT/BNT formalization does not use them.
 -- These wrappers remain standalone with respect to the canonical / FT / BNT
 -- assembly above. `Prop3.lean` is the preferred Proposition 3 entry point; the
 -- direction-specific files `Prop3_ac` and `Prop3_cb` remain available

@@ -3,7 +3,7 @@
 **Audit date**: 2026-05-07
 **Source**: Sanz-Perez-Garcia-Wolf-Cirac, *A quantum version of Wielandt's inequality*, arXiv:0909.5347, Theorem 1
 **Blueprint**: `blueprint/src/chapter/ch07_wielandt.tex`
-**Formal**: `TNLean/Wielandt/PaperResults/WielandtInequality.lean`
+**Formal**: `TNLean/Wielandt/SourceTheorems/WielandtInequality.lean`
 
 ---
 
@@ -104,18 +104,18 @@ These are the **standalone paper-level** declarations -- correct as-is:
 
 | File | Status |
 |---|---|
-| `PaperResults/WielandtInequality.lean` | **Standalone paper-facing** Theorem 1. Not on FT critical path. |
-| `PaperResults/EigenvectorSpreading.lean` | Standalone paper-facing Lemma 2(a). |
-| `PaperResults/MatrixSpanExistence.lean` | Standalone paper-facing Lemma 2(b). |
-| `PaperResults/MatrixSpanSharpBound.lean` | Standalone sharp bound. |
-| `PaperResults/NonzeroTraceWord.lean` | Standalone Lemma 1. |
+| `SourceTheorems/WielandtInequality.lean` | **Standalone paper-facing** Theorem 1. Not on FT critical path. |
+| `SourceTheorems/EigenvectorSpreading.lean` | Standalone paper-facing Lemma 2(a). |
+| `SourceTheorems/MatrixSpanExistence.lean` | Standalone paper-facing Lemma 2(b). |
+| `SourceTheorems/MatrixSpanSharpBound.lean` | Standalone sharp bound. |
+| `SourceTheorems/NonzeroTraceWord.lean` | Standalone Lemma 1. |
 | `Primitivity/Equivalence.lean` | Standalone Proposition 3 full equivalence. |
 | `Primitivity/PaperDefinitions.lean` | Paper-facing definition layer (`iIndex`, `qIndex`, `IsPrimitivePaper`). |
 | `QuantumWielandt.lean` | Backward-compatible auxiliary (uses aperiodicity). |
 | `RankOne/ExtractionFull.lean` | Contains `wielandt_lemma2b` (existential Lemma 2(b)). Not directly imported by MPS pipeline. |
 | `Channel/WolfChapter6Index.lean` | Documentation-only index. |
 
-### Verdict: **Correct separation.** The paper-facing theorems live in `PaperResults/` and are not accidentally imported by the MPS pipeline. The pipeline uses a narrower set of Wielandt lemmas (`CumulativeSpan`, `CumulativeToWordSpan`, `VectorToMatrixSpan`, `ToNormal`, `ImpliesIrreducible`, `StronglyIrreducibleToFullRank`).
+### Verdict: **Correct separation.** The paper-facing theorems live in `SourceTheorems/` and are not accidentally imported by the MPS pipeline. The pipeline uses a narrower set of Wielandt lemmas (`CumulativeSpan`, `CumulativeToWordSpan`, `VectorToMatrixSpan`, `ToNormal`, `ImpliesIrreducible`, `StronglyIrreducibleToFullRank`).
 
 ---
 
@@ -160,7 +160,7 @@ The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength
 | Declaration | File | Used by |
 |---|---|---|
 | `cumulativeSpan_eq_top` | `SpanGrowth/NonzeroTraceProduct.lean` | Pipeline |
-| `eigenvector_spreading` | `SpanGrowth/EigenvectorSpreading.lean` | Pipeline & PaperResults |
+| `eigenvector_spreading` | `SpanGrowth/EigenvectorSpreading.lean` | Pipeline & SourceTheorems |
 | `wielandt_blocked_assembly` | `RectangularSpan/Basic.lean` | `wielandt_lemma2b` |
 | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` | `Primitivity/ImpliesIrreducible.lean` | `ProportionalPrimitive.lean` |
 | `isNormal_of_isPrimitiveMPS_with_posDef` | `Primitivity/StronglyIrreducibleToFullRank.lean` | `Existence.lean`, `TPPrimitiveReduction.lean` |
@@ -187,5 +187,5 @@ The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength
 
 - None required. All three cases of Theorem 1 are correctly formalized with paper-faithful hypotheses.
 - The `_of_isPrimitivePaper_of_isUnit` and `_of_isPrimitivePaper_of_noninvertible_eigenvector` single-generator variants are legitimate convenience corollaries.
-- The `PaperResults/` files correctly serve as standalone documentation entry points.
-- No retirements or renames needed.
+- The `SourceTheorems/` files correctly serve as standalone documentation entry points.
+- No retirements needed. (Issue #1509 renamed the directory from `PaperResults/` to `SourceTheorems/` in PR #1519.)

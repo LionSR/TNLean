@@ -55,9 +55,9 @@ strictly stronger than the qualitative `∃ N` statement exported by
 * [SPGWC09] Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Lemma 2.
 * [Wolf12] Wolf, *Quantum Channels & Operations*, Chapter 6.
 
-This file is part of `SourceTheorems/`, the source-facing arXiv:0909.5347 /
-Wolf §6.9 theorem interface, root-imported for citation/exposition, not a
-downstream FT dependency.
+These statements record Lemma 2(b) (sharp bound) of arXiv:0909.5347 /
+Wolf Section 6.9 in the notation of the source; the FT/BNT formalization
+does not use them.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
