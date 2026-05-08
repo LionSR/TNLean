@@ -926,6 +926,76 @@ theorem pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop {D₁ D₂ : 
   rw [hSpan]
   exact Submodule.mem_top
 
+private theorem pairWordTupleSpanTop_succ_of_pos {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hS : 0 < S) (hSpan : PairWordTupleSpanTop A B S) :
+    PairWordTupleSpanTop A B (S + 1) := by
+  classical
+  rcases S with _ | S
+  · cases hS
+  unfold PairWordTupleSpanTop
+  apply eq_top_iff.mpr
+  intro M _
+  have hM : M ∈ Submodule.span ℂ (Set.range (pairWordTuple A B (S + 1))) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hle : Submodule.span ℂ (Set.range (pairWordTuple A B (S + 1))) ≤
+      Submodule.span ℂ (Set.range (pairWordTuple A B ((S + 1) + 1))) := by
+    apply Submodule.span_le.mpr
+    rintro N ⟨w, rfl⟩
+    let i : Fin d := w 0
+    let tail : Fin S → Fin d := fun j => w j.succ
+    have hletter : pairEvalWordTuple A B [i] ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B 1)) :=
+      pairEvalWordTuple_mem_span_pairWordTuple_length A B [i]
+    have htail : pairEvalWordTuple A B (List.ofFn tail) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B (S + 1))) := by
+      rw [hSpan]
+      exact Submodule.mem_top
+    have hmul :=
+      pair_mul_mem_span_pairWordTuple_add (A := A) (B := B)
+        (L := 1) (S := S + 1)
+        (M := pairEvalWordTuple A B [i])
+        (N := pairEvalWordTuple A B (List.ofFn tail)) hletter htail
+    rw [Nat.add_comm 1 (S + 1)] at hmul
+    have hprod :
+        ((pairEvalWordTuple A B [i]).1 * (pairEvalWordTuple A B (List.ofFn tail)).1,
+          (pairEvalWordTuple A B [i]).2 * (pairEvalWordTuple A B (List.ofFn tail)).2) =
+          pairWordTuple A B (S + 1) w := by
+      ext <;> simp [pairWordTuple, pairEvalWordTuple, i, tail]
+    simpa [hprod] using hmul
+  exact hle hM
+
+private theorem pairWordTupleSpanTop_of_le_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
+    (hS : 0 < S) (hSpan : PairWordTupleSpanTop A B S) (hST : S ≤ T) :
+    PairWordTupleSpanTop A B T := by
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hST
+  have hTopAdd : ∀ k : ℕ, PairWordTupleSpanTop A B (S + k) := by
+    intro k
+    induction k with
+    | zero => simpa using hSpan
+    | succ k ih =>
+        simpa [Nat.add_assoc] using
+          pairWordTupleSpanTop_succ_of_pos (A := A) (B := B)
+            (S := S + k) (Nat.lt_of_lt_of_le hS (Nat.le_add_right S k)) ih
+  exact hTopAdd k
+
+/-- If the homogeneous pair span is full at one positive length, then the
+simultaneous pair identity lies in every sufficiently long homogeneous pair-word
+span. -/
+theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hS : 0 < S) (hSpan : PairWordTupleSpanTop A B S) :
+    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
+      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
+        Submodule.span ℂ (Set.range (pairWordTuple A B n)) := by
+  refine ⟨S, ?_⟩
+  intro n hn
+  exact pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop A B
+    (pairWordTupleSpanTop_of_le_of_pairWordTupleSpanTop (A := A) (B := B)
+      hS hSpan hn)
+
 /-- A finite residue window plus one period supplies identity padding at every
 sufficiently large length. -/
 theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window {D₁ D₂ : ℕ}
