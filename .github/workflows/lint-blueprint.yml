@@ -133,9 +133,8 @@ jobs:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: git fetch --no-tags origin "$BASE_REF"
 
-      - name: Warn on changed Lean declarations missing blueprint entries
+      - name: Error on changed Lean declarations missing blueprint entries
         if: github.event_name == 'pull_request' && steps.lean-setup.outcome == 'success'
-        continue-on-error: true
         env:
           BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
