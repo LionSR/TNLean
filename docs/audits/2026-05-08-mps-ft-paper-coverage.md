@@ -48,7 +48,7 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | §II Defn (l.132) | 132–139 | MPV definition (`MPV`) | `TNLean/MPS/Defs.lean` | `leanok` |
 | Prop (l.249) | 249–251 | After blocking, any tensor can be put in CF generating same MPV | `TNLean/MPS/CanonicalForm/Reduction.lean` (`exists_irreducible_blockDecomp`); `CanonicalForm/Existence.lean` | `leanok` |
 | Prop (l.253) | 253–255 | Characterization of CF (no p-periodic, P Aⁱ = P Aⁱ P ⇒ Aⁱ P = P Aⁱ P) | `TNLean/MPS/CanonicalForm/FromPeripheralPrimitive.lean` (`isCanonicalForm_of_peripheralPrimitive`) | `leanok` |
-| Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case |
+| Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
 | Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | Uses Wielandt; `FundamentalTheorem/FiniteLength.lean` imports `WielandtBound` for word-span results | **needs verification** |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (`fundamentalTheorem_proportionalMPV_CFBNT`, `fundamentalTheorem_proportionalMPV_normalCFBNT`) | `leanok` |
@@ -156,7 +156,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | **Theorem `Th:periodic`** (l.849) | 849–858 | Periodic decomposition: p eigenvalues of modulus 1 ⇒ superposition of p p-periodic states | `TNLean/MPS/Periodic/Symmetry.lean`, `Periodic/ProjectiveRep.lean` | **partial** — periodic symmetry theory formalized; full theorem statement needs verification |
 | Prop `prop-inj` (l.911) | 911–? | C1 condition ⇒ Γ_L injective for L ≥ L₀ | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`), Wielandt span-growth infrastructure | **needs verification** |
 | Theorem "Interpretation of Λ" (l.987) | 987–993 | Λ eigenvalues converge to half-chain density matrix eigenvalues | **out of scope** | — |
-| **Theorem `thm-uniq`** (l.1002) | 1002–1015 | Uniqueness of TI canonical form (under C1, unique OBC CF, N > 2L₀+D⁴) | `TNLean/MPS/FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective` for single-block case); `Chain/FundamentalTheorem.lean` (`fundamentalTheorem_injective_chain`) | **partial** — single-block case fully proved; multi-block TI case with general hypotheses not yet formalized |
+| **Theorem `thm-uniq`** (l.1002) | 1002–1015 | Uniqueness of TI canonical form (under C1, unique OBC CF, N > 2L₀+D⁴) | `TNLean/MPS/FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective` for single-block case); `Chain/FundamentalTheorem.lean` (`fundamentalTheorem_injective_chain`) | **partial** — single-block case fully proved; multi-block TI case with general hypotheses not yet formalized; tracked by #1529 |
 | Lemma `lem-same-matr` (l.1022) | 1022–1040 | Same-matrix lemma for T(Y_k)=S(Y_{k+1}) | **out of scope** (purely linear-algebraic) | — |
 | Lemma `lem-horn` (l.1053) | 1053–1058 | Horn's lemma: solution space of W(C⊗1)=(B⊗1)W is S⊗M_n | **out of scope** | — |
 | Theorem "Obtaining TI canonical form" (l.1154) | 1154–1165 | Solving quadratic equations (S) yields TI D-MPS from unique OBC CF | **out of scope** | — |
@@ -261,9 +261,9 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
-| High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | **no tracked issue** |
-| High | PGVWC07 | Theorem `uniqueGS` (Uniqueness with TI+PBC) | Proof incomplete (3 sorrys) | **part of #1484?** |
-| Medium | CPSV16 | Prop 2.7 (`prop:char-BNT`) | Full BNT construction from CF not yet proved | **no tracked issue** |
+| High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
+| High | PGVWC07 | Theorem `uniqueGS` (Uniqueness with TI+PBC) | Proof incomplete (3 sorrys) | #1475 / #460 |
+| Medium | CPSV16 | Prop 2.7 (`prop:char-BNT`) | Full BNT construction from CF not yet proved | #1501 |
 | Medium | CPSV16 | Theorem IV.13 | MPDO main theorem: algebra structure + idempotent | #1484, #1485 |
 | Medium | PGVWC07 | Theorem `Th:periodic` | Full periodic decomposition formalization | #81 |
 | Low | PGVWC07 | Theorem "Interpretation of Λ" | Λ → density matrix eigenvalues convergence | **out of scope** |
