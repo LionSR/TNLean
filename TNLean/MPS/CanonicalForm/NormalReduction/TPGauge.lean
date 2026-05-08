@@ -25,7 +25,8 @@ Its public outputs are:
   arbitrary-input result obtained after zero-block separation.
 
 The auxiliary declarations stay file-local because they are elementary lemmas for
-rescaling, gauge transport, and the final zero-tail identity.
+rescaling, gauge transport, and the final zero-block identity (the paper calls
+this the ``zero block'' case).
 -/
 
 namespace MPSTensor
@@ -257,13 +258,15 @@ theorem exists_tp_gauge_blockwise
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
-## Zero-block separation + TP gauge threading (1606.00608 Section 2.3 + App. A)
+## Zero-block separation + TP gauge threading (arXiv:1606.00608 Section 2.3 + App. A)
 
 This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
 arbitrary-input result: from any `A : MPSTensor d D`, we obtain:
 
-* an all-zero leftover block of bond dimension `zeroTailDim`, and
+* a zero-block dimension `zeroTailDim` (accumulating all-zero irreducible blocks --
+  the Lean formalization uses "zero tail" as a bookkeeping name; the source paper says
+  "there can be zero blocks"), and
 * a TP-gauged family of irreducible blocks with nonzero weights.
 
 The MPV relationship accounts exactly for both contributions:
@@ -276,10 +279,12 @@ the cyclic-sector and equal-weight arguments.
 
 /-- **Arbitrary-input TP-gauge reduction.**
 
-1606.00608 Section 2.3 and Appendix A, with zero-block separation.
+arXiv:1606.00608 Section 2.3 and Appendix A, with zero-block separation.
 
 From any `A : MPSTensor d D`, produce:
-* an all-zero leftover block of bond dimension `zeroTailDim`;
+* a zero block of dimension `zeroTailDim` accumulating all-zero irreducible blocks
+  (the paper calls these "zero blocks"; the Lean formalization uses "zero tail" as
+  a bookkeeping name);
 * TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
 
 Every nonzero block satisfies:
@@ -288,7 +293,7 @@ Every nonzero block satisfies:
 * positive bond dimension;
 * nonzero weight.
 
-The MPV of `A` equals the all-zero-block contribution plus the weighted nonzero-block sum. -/
+The MPV of `A` equals the zero-block contribution plus the weighted nonzero-block sum. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (μ : Fin r → ℂ)
