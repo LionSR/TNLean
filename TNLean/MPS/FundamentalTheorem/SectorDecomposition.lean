@@ -424,7 +424,15 @@ sector decomposition at a time: positive basis dimensions, left-canonical
 normalization, self-overlap convergence to `1`, and off-diagonal overlap
 convergence to `0`. It intentionally omits one-site injectivity and the
 finite-length span comparison between two different bases, because those are
-separate inputs in the after-blocking comparison. -/
+separate inputs in the after-blocking comparison.
+
+This structure is a deliberate parameterization — the analytic half of the
+overlap-rigidity route.  It records the per-family convergence properties that follow
+from the basis-of-normal-tensors definition in arXiv:1606.00608, Section II, lines 271–274.
+The combined two-family structure `SectorBasisOverlapSpanHypotheses` adds the injectivity
+and span-comparison fields.  When the after-blocking BNT cover is discharged
+(tracker #1498, sub-issue #1501), the fields recorded here are consequences of the
+CF-BNT structure already present in `IsCanonicalFormBNT`. -/
 structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
   /-- The basis blocks have nonzero bond dimension. -/
   dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
