@@ -986,12 +986,90 @@ decomposition.
 \label{sec:multi_block_ft}
 %% ---------------------------------------------------------
 
+\begin{definition}[Flattened block-diagonal gauge]%
+    \label{def:global_gauge_of_blocks}
+    \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}
+    \leanok
+    \uses{def:tensor_from_blocks}
+    Given per-block gauges $X_k \in \GL_{D_k}(\C)$, first form the
+    dependent block-diagonal element $\bigoplus_k X_k$ and then reindex the
+    dependent block-coordinate index to the standard index
+    $\{0,\dots,\sum_k D_k-1\}$ of the assembled tensor.
+    The resulting element of $\GL_{\sum_k D_k}(\C)$ is the global gauge used
+    in the conjugation formula for $\bigoplus_k \mu_k A_k$.
+\end{definition}
+
+\begin{lemma}[Explicit direct-sum conjugation by the flattened gauge]%
+    \label{lem:tensor_from_blocks_globalGauge_conj}
+    \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
+        MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
+    \leanok
+    \uses{def:global_gauge_of_blocks, def:tensor_from_blocks, def:gauge_equiv}
+    If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
+    direct sums satisfy, for every physical index~$i$,
+    \[
+        \bigoplus_k \mu_k B_k^i
+        = X\left(\bigoplus_k \mu_k A_k^i\right)X^{-1},
+    \]
+    where $X$ is the flattened block-diagonal gauge of
+    Definition~\ref{def:global_gauge_of_blocks}.  Consequently the two
+    assembled tensors are gauge equivalent with this explicit witness.
+\end{lemma}
+
+\begin{proof}\leanok
+    The block-diagonal matrix product is computed blockwise.  The scalar weight
+    $\mu_k$ commutes with the per-block conjugation, so each diagonal block of
+    the right-hand side is $\mu_k B_k^i$.  Reindexing from the dependent block
+    coordinates to the standard bond index preserves multiplication and
+    inverses.  The gauge equivalence follows directly from the conjugation
+    identity.
+\end{proof}
+
+\begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%
+    \label{lem:gauge_equiv_from_block_gauge}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv}
+    If each pair $(A_k, B_k)$ is gauge equivalent, then the weighted
+    block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
+    $\bigoplus_k \mu_k B_k$ are gauge equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose per-block gauge matrices via the hypothesis; then apply
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj}.
+\end{proof}
+
+\begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
+    \label{lem:gauge_equiv_block_gauge_phase_weight}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv,
+        def:gauge_phase_equiv}
+    Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
+    and scalars $\zeta_k \in \C$ satisfy
+    $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
+    physical index $i$.  If the weights satisfy $\mu_A(k) = \mu_B(k)\,\zeta_k$,
+    then the weighted block-diagonal tensors
+    $\bigoplus_k \mu_A(k) A_k$ and $\bigoplus_k \mu_B(k) B_k$ are gauge
+    equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj}
+    Per-block, the weight identity $\mu_A(k) = \mu_B(k)\,\zeta_k$ rewrites the
+    scaled relation as
+    $\mu_B(k)\,B_k^i = X_k\,(\mu_A(k)\,A_k^i)\,X_k^{-1}$.
+    Each weighted block then satisfies an ordinary conjugation, and the
+    block-diagonal conjugation formula assembles the per-block $X_k$ into the
+    flattened global gauge $\bigoplus_k X_k$ relating
+    $\bigoplus_k \mu_A(k) A_k$ to $\bigoplus_k \mu_B(k) B_k$.
+\end{proof}
+
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
     \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        def:tensor_from_blocks}
+        def:tensor_from_blocks, lem:tensor_from_blocks_globalGauge_conj}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -1061,6 +1139,95 @@ decomposition.
     \uses{thm:piAlgEquiv_decomposition}
     Apply Theorem~\ref{thm:piAlgEquiv_decomposition} to the product-algebra
     automorphism built from the per-block linear extensions.
+\end{proof}
+
+%% ---------------------------------------------------------
+\subsection{MPV invariance under reindexing}%
+\label{subsec:mpv_reindexing}
+%% ---------------------------------------------------------
+
+\begin{lemma}[MPV invariance under block permutation]\label{lem:mpv_perm_blocks}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
+    \uses{def:tensor_from_blocks, def:same_mpv2}
+    Permuting the block index set and transporting the weights
+    correspondingly does not change the $\mathrm{SameMPV}_2$ family of the
+    weighted block-diagonal tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:tensor_from_blocks}
+    The sum of per-block MPV contributions is invariant under rearrangement
+    of the summands.
+\end{proof}
+
+\begin{lemma}[MPV invariance under dimension cast]\label{lem:mpv_cast_blocks}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_cast}\leanok
+    \uses{def:tensor_from_blocks, def:same_mpv2}
+    If two block-dimension families agree pointwise, the corresponding
+    weighted block-diagonal tensors generate the same $\mathrm{SameMPV}_2$
+    family after transporting the blocks across the dimension equalities.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substituting the equality of dimensions makes the two tensor families
+    identical.
+\end{proof}
+
+%% ---------------------------------------------------------
+\subsection{Converse: gauge equivalence implies same MPV}%
+\label{subsec:converse_gauge_mpv}
+%% ---------------------------------------------------------
+
+\begin{lemma}[Gauge equivalence of direct sums implies same MPV]\label{lem:gauge_equiv_implies_same_mpv}
+    \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_implies_sameMPV}\leanok
+    \uses{def:tensor_from_blocks, def:gauge_equiv, def:same_mpv}
+    If the weighted block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
+    $\bigoplus_k \mu_k B_k$ are gauge equivalent, then they generate the
+    same MPV family.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:gauge_equiv}
+    Gauge equivalence preserves all traces of word evaluations, hence all
+    MPV coefficients.
+\end{proof}
+
+%% ---------------------------------------------------------
+\subsection{Canonical-form tensor as a weighted direct sum}%
+\label{subsec:canonical_form_block_sum}
+%% ---------------------------------------------------------
+
+\begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
+    \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
+    \uses{def:tensor_from_blocks}
+    For a canonical-form record $C$, the assembled tensor $T_C$ is
+    definitionally equal to the weighted block-diagonal tensor
+    $\bigoplus_k \mu_k^C\, A_k^C$,
+    where $\mu_k^C$ are the block weights and $A_k^C$ are the block tensors
+    stored in $C$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The equality holds by definition; $T_C$ is defined as the weighted
+    block-diagonal tensor formed from the weights and block tensors of $C$.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem for canonical forms with the same block structure]\label{thm:ft_canonical_form_same_structure}
+    \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
+    \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
+    Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
+    tensors $A_k^C$.  Let $\{B_k\}$ be a family of MPS tensors on the same
+    block dimensions, and assume that each $A_k^C$ is injective and generates
+    the same MPV family as $B_k$.
+    Then $T_C$ and $\bigoplus_k \mu_k^C\, B_k$ are gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
+    Rewrite $T_C$ as a weighted block-diagonal tensor via
+    Lemma~\ref{lem:canonical_toTensor_eq}, then apply the multi-block
+    global fundamental theorem
+    (Theorem~\ref{thm:multi_block_global}).
 \end{proof}
 
 \begin{lemma}[Per-block equality of MPV families and per-block gauge equivalence]%
@@ -1343,6 +1510,46 @@ which is then combined with overlap estimates and the leading-block peel.
     show that the matched blocks must have equal dimension and differ only by a
     phase gauge, and finally upgrades the resulting matching to a permutation of
     all blocks.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Per-block to global proportional gauge}%
+\label{sec:proportional_gauge}
+%% ---------------------------------------------------------
+
+The proportional-decomposition conclusion (see
+Definition~\ref{def:block_proportional_gauge_phase_data}) provides per-block
+gauge matrices $X_k$ and phases $\zeta_k$.  Using the block-diagonal $\GL$
+construction of Definition~\ref{def:global_gauge_of_blocks}, one assembles
+these per-block gauges into a single global gauge matrix acting on the total
+bond space of the weighted direct sum.  This is the \emph{global
+proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
+
+\begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
+    \lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+        MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+    \leanok
+    \uses{thm:block_proportional_globalX_conj, def:global_gauge_of_blocks,
+        def:gauge_equiv}
+    Let the block weights absorb the per-block phases via
+    $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  Then the weighted direct sum of
+    the permuted right-side blocks is conjugate to the weighted direct sum of
+    the cast left-side blocks by the flattened block-diagonal gauge
+    $X = \bigoplus_k X_k$.  Consequently the two assembled tensors
+    are gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\tilde A_k$ denote the block $A_k$ transported along the dimension
+    equality $\dim^A_k = \dim^B_{\sigma(k)}$.
+    Absorb each phase $\zeta_k$ into the corresponding weight via the
+    identity $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  After this absorption
+    each weighted block satisfies an ordinary conjugation relation
+    $\mu_B(\sigma(k)) B_{\sigma(k)}^i
+     = X_k\, \bigl(\mu_A(k)\, \tilde A_k^i\bigr)\, X_k^{-1}$.
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the
+    per-block $X_k$ into the global block-diagonal gauge
+    $X = \bigoplus_k X_k$.
 \end{proof}
 
 %% ---------------------------------------------------------
