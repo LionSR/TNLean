@@ -1002,36 +1002,37 @@ at length `T - l` for every `l ≤ S` (`hPad`), the homogeneous pair-word span
 at length `T` is the full product algebra.
 
 The identity-padding hypothesis `hPad` cannot be derived from `hCum` alone.
-Section 5 of `docs/paper-gaps/nonperiodic_mps_bnt_comparison_inputs.tex`
-records the obstruction: take `d = 1` and `D₁ = D₂ = 1` with `A₀ = 2` and
-`B₀ = 3`. The cumulative pair span through length one is all of `ℂ ⊕ ℂ`,
-since `(1, 1)` (the empty word) and `(2, 3)` (the length-one word) are
-linearly independent. At each positive homogeneous length `n`, however,
-the pair-word span is the line through `(2ⁿ, 3ⁿ)`, which does not contain
+The section *The homogeneous padding point* in
+`docs/paper-gaps/nonperiodic_mps_bnt_comparison_inputs.tex` records the
+obstruction: take `d = 1` and `D₁ = D₂ = 1` with `A₀ = 2` and `B₀ = 3`.
+The cumulative pair span through length one is all of `ℂ ⊕ ℂ`, since
+`(1, 1)` (the empty word) and `(2, 3)` (the length-one word) are linearly
+independent. At each positive homogeneous length `n`, however, the
+pair-word span is the line through `(2ⁿ, 3ⁿ)`, which does not contain
 `(1, 1)`. The cumulative-to-homogeneous implication is therefore false in
 general, so the hypothesis here is genuinely needed.
 
-The source paper (arXiv:1606.00608, lines 317–345) supplies a homogeneous
-fixed-length span by a different route: after `3 D⁵` blockings, the
-canonical-form tensor is block-injective in the sense that the length-`L`
-word products span the full direct-sum matrix algebra. This step uses the
-quantum Wielandt bound for normal tensors (arXiv:2011.12127, lines
-1942–1945) together with the Pérez-García–Verstraete–Wolf–Cirac
-block-injective bound. Either bound, combined with an arithmetic
-period-window construction, supplies the identity-padding certificates
-that discharge `hPad`.
+The source paper (arXiv:1606.00608, lines 317–345) instead obtains a
+homogeneous fixed-length span by a different construction: after `3 D⁵`
+blockings, the canonical-form tensor is block-injective, in the sense
+that its length-`L` word products span the full direct-sum matrix
+algebra. The argument there combines the original `D⁴` quantum Wielandt
+bound for normal tensors with the Pérez-García–Verstraete–Wolf–Cirac
+block-injective bound. A sharper MPS-specific Wielandt bound
+`2 D² (6 + log₂ D)` was later proved by Michalek and is recorded in
+arXiv:2011.12127, lines 1942–1945. Either bound, combined with an
+arithmetic period-window construction, yields the identity-padding
+certificates required by `hPad`.
 
-The hypothesis is kept explicit because the Wielandt route is not yet
-formalized in this development. Downstream theorems isolate the missing
-data into a period-window hypothesis on the homogeneous pair span and
-discharge it once such a window is supplied:
+(Maintainer note.) The hypothesis is stated explicitly because the
+Wielandt-bound construction is not formalized here. The auxiliary results
 `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window`
-for the single-pair, same-dimension case, and
+(single-pair, same-dimension case) and
 `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
-for the canonical-form BNT family. When a Wielandt-route theorem becomes
-available it should produce the period-window hypothesis from
-canonical-form data and thereby fully discharge the identity-padding
-input. -/
+(canonical-form BNT family) reduce the missing implication to a
+period-window hypothesis on the homogeneous pair span. A formal
+Wielandt-bound theorem would produce that period-window hypothesis from
+the canonical-form hypotheses and thereby establish `hPad`. -/
 theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)
