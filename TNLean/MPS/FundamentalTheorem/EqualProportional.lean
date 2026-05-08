@@ -40,11 +40,10 @@ Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`)
 
 ### Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
 
-If two sequences of complex numbers have equal power sums for all positive exponents, their
-multisets (as roots) are equal.  This is a **same-cardinality support lemma** for the paper's
-Lemma `Lem:app_simple` — the paper additionally allows different cardinalities and only tests
-powers up to `max{x_a, x_b}`.  See the design note in
-`TNLean.Algebra.ScalarPowerSumIdentity`.
+If two same-cardinality sequences of complex numbers have equal power sums for all positive
+exponents, their multisets are equal.  For different cardinalities, the positive-power
+theorem needs nonzero entries; otherwise positive powers determine only the multiset after
+zero entries are deleted.  See `TNLean.Algebra.ScalarPowerSumIdentity`.
 
 ## References
 
@@ -468,9 +467,11 @@ theorem fundamentalTheorem_equalMPV_full
 
 /-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
 
-This provides the same-cardinality power-sum lemmas from `ScalarPowerSumIdentity.lean`.
-The bounded version is the same-cardinality part of the paper's Lemma `Lem:app_simple`;
-the nonzero-entry version below also compares possibly unequal cardinalities.
+This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
+The bounded same-cardinality version is the common Newton--Girard input.
+The nonzero-entry version below compares possibly unequal cardinalities using
+positive powers only; without a nonzero-entry hypothesis, positive powers do not
+count zero entries.
 -/
 
 /-- **Equal power sums imply equal multisets** (same-cardinality support lemma for
@@ -482,8 +483,7 @@ multiset of values (counted with multiplicity).
 
 This is a corollary of Newton's identities via
 `Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`.
-Note: the paper's `Lem:app_simple` additionally allows `α` and `β` to have different
-lengths and only requires equality up to `max{|α|, |β|}`. -/
+The unequal-cardinality Appendix use requires the nonzero-entry version below. -/
 theorem power_sum_eq_implies_multiset_eq (n : ℕ)
     (α β : Fin n → ℂ)
     (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
@@ -505,12 +505,15 @@ theorem power_sum_eq_implies_multiset_eq_of_le_card (n : ℕ)
   intro k hk hkcard
   exact h k hk (by simpa using hkcard)
 
-/-- **Bounded unequal-cardinality power sums imply equal cardinality and equal multisets**
-under a nonzero-entry hypothesis.
+/-- **Bounded unequal-cardinality power sums imply equal cardinality and equal
+multisets** under a nonzero-entry hypothesis.
 
 If two nonzero finite sequences `α : Fin m → ℂ` and `β : Fin n → ℂ` satisfy
 `∑ i, (α i)^k = ∑ i, (β i)^k` for `1 ≤ k ≤ max m n`, then `m = n` and the two
-sequences have the same multiset of values counted with multiplicity. -/
+sequences have the same multiset of values counted with multiplicity.
+
+The nonzero-entry hypothesis is mathematically necessary for this positive-power
+statement: zero entries have no effect on the sums for `k > 0`. -/
 theorem power_sum_eq_implies_card_eq_and_multiset_eq_of_le_max_card
     (m n : ℕ) (α : Fin m → ℂ) (β : Fin n → ℂ)
     (hα : ∀ i, α i ≠ 0) (hβ : ∀ i, β i ≠ 0)
