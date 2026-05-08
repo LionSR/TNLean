@@ -25,7 +25,7 @@ comparison; there is no standalone ``cyclic-sector theory'' in
 
 The file therefore
 1. derives the channel-level cyclic decomposition from the adjoint
-   transfer map (Wolf 2012, Theorem 6.6);
+   transfer map (Wolf 2012, Theorem 6.6);
 2. feeds it into the blocked-sector infrastructure to obtain the
    MPS-level period-removal decomposition for an irreducible
    trace-preserving tensor;
