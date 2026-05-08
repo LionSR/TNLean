@@ -1,29 +1,61 @@
 \chapter{Introduction}\label{ch:intro}
 
-We study the fundamental theorem for periodic, translation-invariant matrix product vectors. The basic object is a family of matrices $\{A^i\}$, viewed as a tensor that generates vectors $\ket{V^{(N)}(A)}$ on chains of length $N$.
+This blueprint formalizes the Fundamental Theorem for translation-invariant
+matrix product vectors.  The basic object is a family of matrices
+$A=(A^i)_{i=0}^{d-1}$, which assigns to each chain length $N$ the vector
+$\ket{V^{(N)}(A)}$ with coefficients
+\[
+    \langle i_1,\ldots,i_N\mid V^{(N)}(A)\rangle
+    = \tr(A^{i_1}\cdots A^{i_N}).
+\]
+The main non-periodic route follows the canonical-form and basis-of-normal-
+tensors argument of \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}, with the
+single-block injective case anchored in the earlier representation theorem
+of \cite{PerezGarcia2007Matrix}.
 
-The standard MPS form of the theorem is the following.  Put two tensors in
-canonical form,
+In canonical form one writes
 \[
     A^i = \bigoplus_{j=1}^{g} \mu_j A_j^i,
     \qquad
     B^i = \bigoplus_{k=1}^{h} \nu_k B_k^i,
 \]
-with normal blocks forming bases of normal tensors
-\cite{PerezGarcia2007Matrix,Cirac2021Matrix}.  If
-$\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every chain length~$N$, then
-$g=h$ and, after permuting the blocks of~$B$, for each block $j$ there are
-an invertible matrix $X_j$ and a nonzero scalar $\zeta_j$ such that
+where the displayed blocks are normal tensors.  If
+$\ket{V^{(N)}(A)}=\ket{V^{(N)}(B)}$ for every positive chain length $N$, then
+the bases of normal tensors have the same size.  After relabelling the blocks
+of $B$, each matched pair satisfies
 \[
-    B_j^i = \zeta_j X_j A_j^i X_j^{-1},
-    \qquad
-    \mu_j = \nu_j \zeta_j .
+    B_j^i = \zeta_j X_j A_j^i X_j^{-1}
 \]
-Equivalently, after the block permutation and phase absorption, the two
-weighted block-diagonal tensors are gauge equivalent.  In the single
-injective-block case this reduces to the familiar conclusion
-$B^i=X A^i X^{-1}$ for all physical indices~$i$.
+for some invertible matrix $X_j$ and nonzero scalar $\zeta_j$, and the equal
+case compares the coefficient power sums attached to this matched basis.  The
+block gauges and the weight comparison then assemble into a single gauge
+conjugacy of the two weighted block-diagonal tensors.  For a single injective
+block this reduces to the familiar conclusion
+$B^i=X A^i X^{-1}$ for all physical indices $i$.
 
-Chapters~\ref{ch:mps} and~\ref{ch:single} describe the algebraic core. Chapter~\ref{ch:mps} introduces word evaluation, MPV coefficients, gauge equivalence, injectivity, blocking, overlap, and the block-injective canonical-form data. Chapter~\ref{ch:single} proves the single-block fundamental theorem by a purely algebraic argument through trace pairings, linear extension, simplicity of matrix algebras, and Skolem--Noether.
+Chapters~\ref{ch:mps}--\ref{ch:ft_proof} contain the aperiodic proof route.
+Chapter~\ref{ch:mps} fixes the matrix product vector notation, word
+evaluations, transfer maps, gauge equivalence, injectivity, blocking, and
+periodic-chain tensor families.  Chapter~\ref{ch:single} proves the
+single-block theorem by trace pairings, linear extension, simplicity of matrix
+algebras, and Skolem--Noether.  Chapters~\ref{ch:channels}, \ref{ch:schwarz},
+\ref{ch:qpf}, and~\ref{ch:spectral} develop the positive-map, multiplicative-
+domain, Perron--Frobenius, and overlap-decay tools used to control normal
+blocks.  Chapters~\ref{ch:wielandt} and~\ref{ch:canonical} supply the blocking,
+primitivity, irreducibility, and canonical-form reductions.  Chapters~\ref{ch:block_perm}
+and~\ref{ch:bnt} isolate block permutation, block separation, bases of normal
+tensors, and the power-sum comparison.  Chapter~\ref{ch:ft_proof} records the
+current non-periodic theorem surface; the remaining BNT matching and fixed-
+length span inputs are kept as explicit hypotheses until the corresponding
+source steps are formalized.
 
-The later chapters develop the spectral and canonical-form machinery needed for the full multi-block theorem. Chapter~\ref{ch:channels} studies positive maps and quantum channels. Chapters~\ref{ch:qpf} and~\ref{ch:spectral} supply Perron--Frobenius theory and overlap decay. Chapters~\ref{ch:wielandt} and~\ref{ch:canonical} connect blocking, primitivity, irreducibility, and the normal/canonical-form reductions. Chapters~\ref{ch:block_perm} and~\ref{ch:bnt} carry out block permutation and BNT theory; Chapter~\ref{ch:ft_proof} proves the blocking-based Fundamental Theorem, while Chapter~\ref{ch:periodic_ft_apps} develops the direct periodic extension.
+The chapters after Chapter~\ref{ch:ft_proof} collect applications,
+alternative formulations, and later tensor-network material.  Chapter~\ref{ch:periodic_ft_apps}
+develops the direct periodic theorem in irreducible form.  Chapter~\ref{ch:symmetry}
+uses the Fundamental Theorem to obtain virtual symmetry gauges, projective bond
+representations, and string-order criteria.  Chapter~\ref{ch:algebraic_ft}
+gives the fixed-length algebraic Fundamental Theorem of \cite{Molnar2018NormalPEPS},
+and Chapter~\ref{ch:peps_ft} records the PEPS analogues.  The later chapters
+cover dynamical semigroups, entropy, matrix product density operators, parent
+Hamiltonians, correlations, and examples; these are downstream of the
+aperiodic proof rather than part of its dependency chain.
