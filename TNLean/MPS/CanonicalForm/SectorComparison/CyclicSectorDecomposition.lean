@@ -13,44 +13,34 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Cyclic sector decomposition after blocking
+# Period removal (cyclic-sector decomposition) after blocking
 
-This file contains the cyclic-sector part of the canonical-form reduction. It
-relates powers of the adjoint transfer map to blocked transfer maps, applies the
-channel-level cyclic decomposition to a blocked periodic tensor, and then derives
-its MPS-formulation for irreducible TP tensors.
+This file performs the **period-removal step** of the canonical-form
+reduction.  In arXiv:1606.00608 the only required input is that after
+blocking by the least common multiple of the per-block periods, the
+resulting tensor has no nontrivial $p$-periodic vectors (1606.00608,
+§2.3).  The non-periodic route then proceeds to the normal/BNT
+comparison; there is no standalone ``cyclic-sector theory'' in
+1606.00608.
 
-A periodic irreducible block becomes a family of normal blocks after blocking by
-its period.  In the cyclic order used in arXiv:1708.00029, the cyclic
-projections satisfy
-$$
-  \mathcal E_A^*(P_u) = P_{u+1},
-  \qquad A^i = \sum_u P_u A^i P_{u+1},
-  \qquad C_u = P_u A^{[m]} P_u.
-$$
-Reversing the cyclic order gives the equivalent convention
-$\mathcal E_A^*(P_{u+1}) = P_u$, which is the indexing used by the cyclic
-iteration lemmas.  In that reversed convention, the off-diagonal support is
-$A^i = \sum_u P_{u+1} A^i P_u$.
-For a finite family of original blocks, a further common blocking length puts all
-cyclic sectors over one physical alphabet.
+The file therefore
+1. derives the channel-level cyclic decomposition from the adjoint
+   transfer map (Wolf 2012, Theorem 6.6);
+2. feeds it into the blocked-sector infrastructure to obtain the
+   MPS-level period-removal decomposition for an irreducible
+   trace-preserving tensor;
+3. proves that the resulting sector blocks are primitive and
+   tensor-irreducible.
 
-## Main statements
-
-The first theorem derives the MPS-level cyclic-sector decomposition for an
-irreducible trace-preserving tensor.  The remaining results lift primitive and
-irreducible structure from the blocked tensor to each cyclic sector, first under
-explicit orbit-lift or fixed-point-algebra hypotheses and finally without those
-extra assumptions.
+The bulk of the projection-multiplicativity and orbit-lift
+arguments are internal to the period-removal step; they are not
+exposed as independent paper-level results.
 
 ## References
 
-* [Wolf, *Quantum Channels & Operations*, Chapter 6]
-* [De las Cuevas et al., arXiv:1708.00029, periodic-block decomposition]
-
-## Tags
-
-matrix product states, cyclic sectors, peripheral spectrum, blocking
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, §2.3/App.A]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
+* [Wolf, Quantum Channels & Operations (2012), §6.5–6.6]
 -/
 
 namespace MPSTensor
@@ -74,17 +64,18 @@ section CyclicSectorFromMPS
 
 open KadisonSchwarz
 
-/-- **Derivation of cyclic sector decomposition from an irreducible TP tensor.**
+/-- **Period removal for an irreducible TP tensor (1606.00608, §2.3).**
 
 For an irreducible TP tensor `A` with `0 < D`, there exists a period `m > 0`
-such that after blocking by `m`, the blocked tensor admits a decomposition
-into `m` left-canonical (TP) blocks via cyclic spectral projections.
+such that after blocking by `m`, the blocked tensor admits a unit-weight
+decomposition into `m` left-canonical (TP) blocks via cyclic spectral
+projections.  This is the period-removal step needed before the
+normal/BNT comparison in the non-periodic route of arXiv:1606.00608.
 
-This establishes the connection from the MPS-level hypotheses
-(`IsIrreducibleTensor` + TP) to the channel-level cyclic decomposition,
-deriving all intermediate hypotheses (`ρ.PosDef`, `Kraus.adjointMap` fixed
-point, `IsIrreducibleMap`, peripheral spectrum structure) automatically via
-`conjTranspose_kraus_setup`. -/
+The proof derives all intermediate channel-level hypotheses
+(`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`,
+peripheral spectrum structure) from `conjTranspose_kraus_setup` and
+passes them to `exists_cyclic_sector_decomp_after_blocking`. -/
 theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -116,6 +107,23 @@ theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
 end CyclicSectorFromMPS
 
 section SectorOrbitLift
+
+/-!
+## Sector primitivity and irreducibility after period removal
+
+The remaining theorems in this section prove that the cyclic-sector
+blocks produced by period removal are primitive and tensor-irreducible.
+These are internal lemmas that close the orbit-sum / corner-compression
+argument; they are not independent paper-level results.
+
+The sequence of theorems proceeds through progressively weaker
+hypotheses (corner-irreducible → proj-step → fixed-algebra-rigidity
+→ scalar-blocked-fixed-points) until the unconditional form
+`primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
+is reached.  Only the unconditional form and the top-level packaging
+`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+are consumed by the downstream canonical-form pipeline.
+-/
 
 open KadisonSchwarz
 
@@ -700,11 +708,13 @@ theorem
       A hTP hIrr hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar
       hNondeg hRigidity
 
-/-- Unconditional cyclic-sector block primitivity and irreducibility after blocking.
+/-- Unconditional: cyclic-sector blocks after period removal are primitive and
+tensor-irreducible.
 
-This uses `isIrreducibleOnCorner_of_cyclic_decomp_mps`, so the older
-projection-step and fixed-point-algebra rigidity assumptions are no longer needed
-once the ambient tensor is irreducible and trace-preserving. -/
+This is the internal lemma that closes the orbit-sum / corner-compression
+argument.  It uses `isIrreducibleOnCorner_of_cyclic_decomp_mps` so that no
+extra projection-step or fixed-point-algebra hypotheses are needed when the
+ambient tensor is irreducible and trace-preserving. -/
 theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
@@ -756,13 +766,17 @@ theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking
     A hTP hγprim hperiph blocks P φ hPproj hPsum hcyclic hIntertwine hMul hStar hNondeg
     hCornerIrr
 
-/-- Cyclic sector decomposition with primitive and tensor-irreducible sector blocks.
+/-- **Period removal with primitive, irreducible sectors.**
 
-This strengthens `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` by
-exposing the primitive and irreducible conclusions already available from the
-unconditional sector-orbit lift. It is the one-block result used in the later
-multi-block construction before the sectors of all nonzero-weight blocks are flattened to
-a common period. -/
+For an irreducible TP tensor `A`, after blocking by the least common
+multiple of its periods the blocked tensor is a unit-weight sum of
+primitive, tensor-irreducible, trace-preserving sector blocks with
+positive bond dimensions.
+
+This packages the unconditional sector-orbit lift into the single
+result consumed by the downstream common-blocking construction.  It is
+the period-removal counterpart of `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+strengthened with primitivity and irreducibility. -/
 theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
