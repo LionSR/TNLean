@@ -161,8 +161,6 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
         (fun N => mpvOverlap (d := blockPhysDim d m)
           (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
-  -- Missing step: expand the globally non-decaying blocked overlap as a
-  -- finite sum of mixed sector overlaps and use finite-sum convergence.
   sorry
 
 /-- Missing compressed-sector uniqueness statement after blocking.
@@ -384,11 +382,12 @@ theorem periodicOverlap_tendsto_zero_of_no_sector_match
           (blocksA u))
         (blocksB v)) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-  -- PROOF STRUCTURE: see lemma
-  -- `not_gaugePhaseEquiv_of_no_sector_match` for the planned proof route.
-  -- Currently sorry-backed pending discharge of
-  -- `exists_sector_match_of_gaugePhaseEquiv`.
-  sorry
+  have h_notGPE : ¬ GaugePhaseEquiv A B :=
+    not_gaugePhaseEquiv_of_no_sector_match A B hA hB blocksA blocksB
+      hA_blocks_lc hB_blocks_lc hA_mpv hB_mpv hA_cyclic hB_cyclic
+      hNondegA hNondegB hNoMatch
+  exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
+    hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical h_notGPE
 
 
 end MPSTensor
