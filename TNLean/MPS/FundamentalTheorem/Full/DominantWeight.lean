@@ -82,6 +82,8 @@ lemma eq_one_of_pow_tendsto_nhds_one {c : ℂ}
   have hlim := tendsto_nhds_unique (h_eq_fun ▸ h_shift) h_mul
   simpa using hlim.symm
 
+/-! ### Dominant-weight comparison -/
+
 section HeteroEqualCase
 
 /-- Dominant BNT block weights have equal norms for equal total MPVs. -/
