@@ -2762,14 +2762,6 @@ do not correspond to independent paper-level results.
 	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
 \end{definition}
 
-\begin{theorem}[BNT grouping theorem]
-	\label{thm:bnt_grouping}
-	\lean{MPSTensor.exists_bnt_grouping}\leanok
-	\uses{def:norm_class_grouping, thm:bnt_trivial_sector}
-	If equal-norm blocks represent the same MPS family, then one obtains a sector
-	decomposition whose sector norms are strictly decreasing.
-\end{theorem}
-
 \subsection{Equal-Norm Blocks}
 
 \begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
@@ -2795,10 +2787,17 @@ do not correspond to independent paper-level results.
 \begin{theorem}[Norm-class sector decomposition]
 	\label{thm:bnt_grouping_gauge_equiv}
 	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
-	\uses{thm:bnt_grouping}
-	If equal-norm blocks give the same MPV family, one may choose one
-	representative basis tensor for each norm class and obtain a sector
-	decomposition with strictly decreasing sector norms.
+	\uses{def:norm_class_grouping}
+	For a weighted block family \((\mu_k,A_k)_{k=1}^r\) with
+	\(\mu_k\neq 0\), assume that
+	\[
+		|\mu_j|=|\mu_k| \quad\Longrightarrow\quad
+		A_j \text{ and } A_k \text{ generate the same MPV family}.
+	\]
+	Then one may choose one representative basis tensor for each norm class and
+	obtain a sector decomposition \(P\) with strictly decreasing sector norms
+	such that \(P\) generates the same MPV family as
+	\(\bigoplus_k \mu_k A_k\).
 \end{theorem}
 
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
@@ -3257,7 +3256,13 @@ do not correspond to independent paper-level results.
 		= V^{(N)}(Z_{p_A,z_A})_\sigma
 		  + V^{(N)}\!\left(\bigoplus_k \mu^A_k A_k\right)_\sigma,
 	\]
-	and likewise for $B$.
+	and likewise for $B$. The blocked tensors also preserve the original MPV
+	equality:
+	\[
+		A^{[p_A]} \sim B^{[p_A]},
+		\qquad
+		A^{[p_B]} \sim B^{[p_B]}.
+	\]
 \end{theorem}
 
 \begin{proof}\leanok
