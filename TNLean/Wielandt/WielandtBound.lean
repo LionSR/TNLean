@@ -15,7 +15,7 @@ consequences of normality that feed into the fixed-length Wielandt bound
 (Theorem 1 of arXiv:0909.5347).
 
 The paper-facing Theorem 1 statements (case (1), (2), (3) bounds on the
-Kraus-rank index $i(A)$) are in `PaperResults/WielandtInequality.lean`.
+Kraus-rank index $i(A)$) are in `SourceTheorems/WielandtInequality.lean`.
 This file only provides the cumulative-span and eigenvector-spreading
 inputs needed by the primitivity/normality bridge and the blueprint.
 
@@ -59,7 +59,7 @@ the four standard cumulative consequences hold simultaneously.
 upgrade in Lemma 2(b).
 
 The fixed-length paper-facing bounds on `i(A)` (cases (1), (2), (3)) are
-assembled in `PaperResults/WielandtInequality.lean`.
+assembled in `SourceTheorems/WielandtInequality.lean`.
 -/
 theorem wielandt_chain [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :

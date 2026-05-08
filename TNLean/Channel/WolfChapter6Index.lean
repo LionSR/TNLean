@@ -166,7 +166,7 @@ Other items: PARTIALLY via spectral gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current paper-level statements live in `TNLean.Wielandt.PaperResults.WielandtInequality`:
+Current paper-level statements live in `TNLean.Wielandt.SourceTheorems.WielandtInequality`:
 * `qIndex_le_iIndex_of_isPrimitivePaper`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
   `iIndex_le_of_isPrimitivePaper_of_isUnit`

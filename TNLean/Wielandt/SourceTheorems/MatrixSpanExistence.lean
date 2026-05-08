@@ -32,8 +32,8 @@ claiming the paper's exact bound.
 They state only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
 particular, they do **not** track the explicit `D²` blocked noninvertible bound
 or the sharp `D² − D + 1` fixed-length bound. Those quantitative statements are
-formalized separately in `PaperResults/MatrixSpanSharpBound.lean` and in the
-case analysis of `PaperResults/WielandtInequality.lean`.
+formalized separately in `SourceTheorems/MatrixSpanSharpBound.lean` and in the
+case analysis of `SourceTheorems/WielandtInequality.lean`.
 
 ## Proof strategy
 
@@ -41,6 +41,9 @@ case analysis of `PaperResults/WielandtInequality.lean`.
    rank (`HasEventuallyFullKrausRank A`).
 2. Rewrite as `IsNormal A`.
 3. Apply the existential theorem `wielandt_lemma2b`.
+
+These statements record Lemma 2(b) of arXiv:0909.5347 / Wolf Section 6.9
+in the notation of the source; the FT/BNT formalization does not use them.
 -/
 
 open scoped Matrix ComplexOrder BigOperators

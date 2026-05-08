@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Wielandt.PaperResults.EigenvectorSpreading
-import TNLean.Wielandt.PaperResults.MatrixSpanSharpBound
-import TNLean.Wielandt.PaperResults.NonzeroTraceWord
+import TNLean.Wielandt.SourceTheorems.EigenvectorSpreading
+import TNLean.Wielandt.SourceTheorems.MatrixSpanSharpBound
+import TNLean.Wielandt.SourceTheorems.NonzeroTraceWord
 import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
 import TNLean.Wielandt.RankOne.Products
 
@@ -66,6 +66,9 @@ word-span invariance lemmas from `SpanGrowth/InvertibleWordSpan.lean`.
 
 Within TNLean these results are currently standalone paper-level theorem statements:
 the canonical / FT / BNT development does not import them directly.
+
+These statements record Theorem 1 of arXiv:0909.5347 / Wolf Section 6.9 in the
+notation of the source; the FT/BNT formalization does not use them.
 
 This file is the preferred public entry point for the currently formalized
 Theorem 1 statements. The auxiliary module `QuantumWielandt.lean` keeps a
