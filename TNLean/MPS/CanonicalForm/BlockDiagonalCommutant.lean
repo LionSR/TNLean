@@ -24,6 +24,16 @@ BNT block families, the results here use only restricted consequences of that
 hypotheses: block injectivity, nonzero weights, pair separation, selector words, and
 homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
 comparison, where multiplicities and sector weights remain explicit data.
+
+## Implementation notes
+
+The commutant theorem `isBlockDiagonal'_of_commutes_reindexed_wordSpan` is used
+in the parent-Hamiltonian ground-space decomposition
+`groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan`
+in `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`.  It is a restricted
+block-diagonal commutant statement: the CPSV repeated-sector comparison
+(CPSV, arXiv:2011.12127, §V) is stated in
+`TNLean/MPS/CanonicalForm/SectorComparison`.  (Issue #1510.)
 -/
 
 open scoped Matrix BigOperators
