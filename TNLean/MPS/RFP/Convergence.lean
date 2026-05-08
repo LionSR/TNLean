@@ -35,6 +35,7 @@ converges to an idempotent (the RFP).
   *Matrix Product States and Projected Entangled Pair States*,
   Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
   Sec. 2.3 (correlations and transfer matrix).
+  Source: `Papers/2011.12127/`
 * [CPSV17] Cirac, Pérez-García, Schuch, Verstraete,
   *Matrix Product Density Operators: Renormalization Fixed Points
   and Boundary Theories*, arXiv:1606.00608.
