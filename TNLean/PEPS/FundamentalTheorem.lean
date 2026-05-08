@@ -3,13 +3,6 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
---
--- **Root-only.**  This module is currently not imported downstream — it
--- records the full statement of the PEPS Fundamental Theorem
--- (arXiv:1804.04964 §3, Theorem 2) with its forward direction fully proved
--- and the converse gaps documented explicitly.  See issue #1512 for the
--- root-only audit.
---
 -- The forward direction and contraction algebra are formalized. The converse
 -- PEPS fundamental theorem still depends on the mathematical hypotheses listed
 -- below.
@@ -43,6 +36,12 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
 # Fundamental Theorem for injective PEPS
+
+**Root-only.** This module is currently not imported downstream — it
+records the full statement of the PEPS Fundamental Theorem
+(arXiv:1804.04964 §3, Theorem 2) with its forward direction fully proved
+and the converse gaps documented explicitly.  See issue #1512 for the
+root-only audit.
 
 This file develops the Fundamental Theorem for injective PEPS on simple graphs
 (arXiv:1804.04964, Theorem 2, Section 3):
