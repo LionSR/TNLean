@@ -27,7 +27,7 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
   `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed` transport zero-tail
   decompositions through the common-sector relabeling data.
 * `CommonSectorRelabelingHypothesis` and
-  `CommonGroupedBlockCastHypothesis` package the remaining blocked-word
+  `CommonGroupedBlockCastHypothesis` encode the remaining blocked-word
   comparison data.
 * `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
   and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural

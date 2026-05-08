@@ -15,7 +15,7 @@ have different physical alphabets.  This file provides the common-reblocking
 data that reblocks every sector to a single shared physical blocking length
 so that all sectors can be compared in a uniform canonical form.
 
-The structure and its derived theorems are internal plumbing — they
+The structure and its derived theorems are internal intermediate construction — they
 record reindexing, flattening, and common-alphabet transport.  They are
 not paper-level results of 1606.00608 or 2011.12127.
 -/
@@ -405,7 +405,7 @@ theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
           exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
-/-! ### Direct-vs-iterated blocking identifications (internal plumbing)
+/-! ### Direct-vs-iterated blocking identifications (internal intermediate construction)
 
 The remaining theorems compare the directly-blocked and iteratively-blocked
 forms of each nonzero-weight block.  They verify that the canonical
