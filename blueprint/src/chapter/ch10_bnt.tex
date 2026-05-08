@@ -647,6 +647,11 @@ and~\cite{Cirac2021Matrix}.
 	$\beta : \{0,\ldots,n-1\}\to\C$ have no zero entries and their power sums
 	agree for \(1 \le k \le \max(m,n)\), then \(m=n\) and the two multisets
 	are equal.
+	For lists \((\lambda_{a,k})_{k=1}^{x_a}\) and
+	\((\lambda_{b,k})_{k=1}^{x_b}\), the hypothesis
+	\(\sum_{k=1}^{x_a}\lambda_{a,k}^N
+	  =\sum_{k=1}^{x_b}\lambda_{b,k}^N\) for
+	\(0\le N\le \max(x_a,x_b)\) implies equality of the two multisets.
 \end{theorem}
 
 \begin{proof}
@@ -659,6 +664,8 @@ and~\cite{Cirac2021Matrix}.
 	equal-root conclusion compares the padded multisets, and the nonzero-entry
 	hypothesis makes the number of padded zeros exactly \(\max(m,n)-m\) and
 	\(\max(m,n)-n\), forcing \(m=n\).
+	In the list form, the \(N=0\) power sum first gives \(x_a=x_b\), so the
+	same-cardinality finite-range theorem applies directly.
 \end{proof}
 
 \begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}

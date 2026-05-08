@@ -2792,20 +2792,23 @@ do not correspond to independent paper-level results.
 	so the gauge phase must have modulus one.
 \end{proof}
 
-\begin{theorem}[BNT partition from gauge equivalence]
+\begin{theorem}[Norm-class sector decomposition]
 	\label{thm:bnt_grouping_gauge_equiv}
-	\lean{MPSTensor.exists_bnt_grouping_of_gaugePhaseEquiv}\leanok
+	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
 	\uses{thm:bnt_grouping}
-	If equal-norm blocks are related by gauge equivalence with unit-modulus phase, the phases can be absorbed into sector weights to obtain a BNT grouping with strictly decreasing sector norms.
+	If equal-norm blocks give the same MPV family, one may choose one
+	representative basis tensor for each norm class and obtain a sector
+	decomposition with strictly decreasing sector norms.
 \end{theorem}
 
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
-	\lean{MPSTensor.exists_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
 	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero
-	weights and non-decaying cross-overlaps for equal-norm blocks, one obtains a
-	sector decomposition with strict norm ordering.
+	weights, quotient the block indices by MPV phase equivalence and absorb the
+	phases into the sector weights. The resulting sector decomposition represents
+	the same weighted block sum and satisfies the BNT sector conditions.
 \end{theorem}
 
 \begin{theorem}[Existential BNT independence from overlap limits]
@@ -3240,7 +3243,7 @@ do not correspond to independent paper-level results.
 
 \begin{theorem}[Structural after-blocking form of the fundamental theorem]%
 	\label{thm:ft_after_blocking_structural}
-	\lean{MPSTensor.afterBlocking_structuralDecompositionData_of_sameMPV₂}
+	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
 	\leanok
 	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
 	If two tensors generate the same MPV family, then each tensor admits some
