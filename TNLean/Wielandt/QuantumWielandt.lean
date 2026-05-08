@@ -63,7 +63,7 @@ directly with eventual full Kraus rank, hence normality.
 
 No aperiodicity hypothesis is needed.
 
-## Comparison with arXiv:0909.5347, Proposition 3
+## Spreading-primitivity equivalence and the `PosDef` hypothesis
 
 Proposition 3 of arXiv:0909.5347 establishes the equivalence of three
 properties of a quantum channel `ℰ_A` on `M_D(ℂ)`:
