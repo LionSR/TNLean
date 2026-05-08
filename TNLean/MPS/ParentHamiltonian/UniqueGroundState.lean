@@ -54,6 +54,62 @@ with the periodic boundary condition:
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section~4.3, lines 1976--2094 (parent Hamiltonian definition and uniqueness argument)
 * [FNW92] Sections 3–4
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
+
+## External inputs
+
+### CPGSV closure property (§IV.C of arXiv:2011.12127)
+
+The theorem `wrapped_mirror_witness_agree_of_chainGroundSpace` is the formalization of the
+**closure-property comparison** from Cirac–Pérez-García–Schuch–Verstraete (2021), §IV.C:
+
+> **CPGSV21, Section IV.C (lines 2049–2078).**  On a periodic chain, the two
+> wrapped-boundary witnesses extracted from a chain ground state (one from the
+> left-cyclic window, one from the right-cyclic window) must agree when their
+> complements are reindexed to a common middle word.  This agreement follows
+> because the two cyclic restrictions differ only by a cyclic shift, and the
+> boundary matrix is simultaneously constrained by all interior windows.
+
+In MPS notation after blocking: for an `L₀`-block-injective tensor `A` on a
+periodic chain of `N` sites with window size `L > L₀`, a chain ground state
+`ψ = groundSpaceMap A N X` induces two families of boundary matrices
+`Y_wrap, Y_mirror` satisfying universal word compatibility relations.  The CPGSV
+closure property states that these two families must agree on every common middle
+word `μ`, yielding the key comparison identity needed to close the range-reduction
+argument.
+
+The formal Lean declaration:
+
+> `wrapped_mirror_witness_agree_of_chainGroundSpace` is the **unproven gap**
+> at line 786 of this file.  It is the remaining hard step in the proof of
+> `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`.  Once supplied,
+> it yields the normal-range reduction
+> `chainGroundSpace A L N = mpvSubmodule A N` for `L > L₀` (instead of `2L₀`).
+
+The supplementary files providing the open-chain build-up to this closure property are:
+
+* `TNLean.MPS.ParentHamiltonian.ExtendRight` — the right-extension (grow-back) step
+  that extracts a common right factor from universal word compatibility
+  (CPGSV21, lines 2049–2078).
+* `TNLean.MPS.ParentHamiltonian.SuffixWindow` — suffix-window restrictions and
+  the existence of left-tail compatibility families.
+
+### Quantum Wielandt cumulative-to-word-span
+
+This file imports `TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan`, which supplies:
+
+> **Wielandt cumulative-to-word-span connection.**  The Wielandt chain
+> (`WielandtBound.lean`) proves that under normality, the cumulative span
+> `S_n(A)` reaches the full matrix algebra for some `n ≤ D²`.
+> `CumulativeToWordSpan` converts this cumulative conclusion to a word-span
+> theorem: `∃ n, wordSpan A n = ⊤`.  This is used in the unique-ground-state
+> argument to deduce that sufficiently long word products of the Kraus operators
+> span `M_D(ℂ)`, which forces the boundary matrix to be a scalar.
+
+The formal Lean declaration:
+
+> `Wielandt.SpanGrowth.CumulativeToWordSpan` supplies the connection from
+> `cumulativeSpan_eq_top` to `wordSpan_eq_top`, the concrete word-span conclusion
+> consumed by the parent-Hamiltonian ground-space uniqueness argument.
 -/
 
 open scoped Matrix BigOperators
