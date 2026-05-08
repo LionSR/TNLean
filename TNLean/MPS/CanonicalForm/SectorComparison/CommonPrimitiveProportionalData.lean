@@ -34,12 +34,13 @@ irreducibility, and positive bond dimensions. To pass to the overlap-rigidity se
 one still needs equality of zero-tail dimensions, one-site injectivity for the two block families,
 and equality of their finite-length MPV spans.
 
-This structure is a deliberate parameterization — the lightest boundary wrapping the span-level
-inputs needed to proceed from the structural theorem to the BNT overlap-rigidity comparison.
-It cites the CPSV16 §II decomposition (arXiv:1606.00608, lines 283–302) where the block families
-and their MPV spans are matched after the canonical-form reduction.  When the BNT-cover data in
-`CommonPrimitiveBNTCoverHypotheses` have been discharged (tracker #1498, sub-issue #1501), this
-structure is automatically satisfied via `toSpanHypotheses`. -/
+This structure is a deliberate parameterization — the lightest boundary that collects the
+span-level inputs needed to proceed from the structural theorem to the BNT overlap-rigidity
+comparison.  It records the decomposition of arXiv:1606.00608, Section II, lines 283–302
+where the block families and their MPV spans are matched after the canonical-form reduction.
+When the BNT-cover data in `CommonPrimitiveBNTCoverHypotheses` have been discharged
+(tracker #1498, sub-issue #1501), this structure is automatically satisfied via
+`toSpanHypotheses`. -/
 structure CommonPrimitiveSpanHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (zeroTailA zeroTailB : ℕ)
@@ -123,13 +124,14 @@ structural theorem supplies the same primitive nonzero-sector data, while the re
 are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
 BNT comparison conclusion for the two block families.
 
-This structure is a deliberate parameterization.  It wraps the proportional Fundamental Theorem
-conclusion (CPSV16 Thm II.1, arXiv:1606.00608 lines 283–345): after the block-injective span
-is established, the two block families are compared by a permutation of the BNT representatives
-with equal dimensions.  The `proportional` field records that conclusion; the remaining fields
-(`zeroTail_eq`, injectivity) ensure the comparison is well-typed.  Once the BNT-cover data in
-`CommonPrimitiveBNTCoverHypotheses` are discharged (tracker #1498, sub-issue #1501), this
-structure follows from `fundamentalTheorem_of_separated_normalCFBNT_data`. -/
+This structure is a deliberate parameterization.  It records the proportional Fundamental
+Theorem conclusion (arXiv:1606.00608, Theorem II.1, lines 283–352): after the
+block-injective span is established, the two block families are compared by a permutation
+of the BNT representatives with equal dimensions.  The `proportional` field records that
+conclusion; the remaining fields (`zeroTail_eq`, injectivity) ensure the dimensions are
+compatible.  Once the BNT-cover data in `CommonPrimitiveBNTCoverHypotheses` are discharged
+(tracker #1498, sub-issue #1501), this structure follows from
+`fundamentalTheorem_of_separated_normalCFBNT_data`. -/
 structure CommonPrimitiveProportionalHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (zeroTailA zeroTailB : ℕ)
