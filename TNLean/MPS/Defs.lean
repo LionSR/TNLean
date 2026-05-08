@@ -91,8 +91,10 @@ def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
 
 /-- Positive-length MPV equality for possibly different bond dimensions.
 
-This is useful when compressions or zero-tail removals change the `N = 0`
-coefficient but preserve all nonempty-chain coefficients. -/
+This is useful when compressions or zero-block removals change the `N = 0`
+coefficient but preserve all nonempty-chain coefficients.  The source paper
+discusses "zero blocks" (arXiv:1606.00608, Section~2.3); the Lean formalization
+refers to these as the "zero tail" for bookkeeping. -/
 def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv B σ
 
