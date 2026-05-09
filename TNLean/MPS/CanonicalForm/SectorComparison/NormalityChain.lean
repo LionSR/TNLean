@@ -34,6 +34,11 @@ shows that blocking keeps normality.
 * `isNormal_live_block_of_primitive` — the same conclusion for a single
   nonzero-weight block from the reduction data.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
+* `IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective` — a finite
+  normal-canonical BNT family admits one positive blocking length at which all
+  blocks are injective.
+* `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT` — the
+  same common-blocking conclusion simultaneously for two finite BNT families.
 
 ## References
 
@@ -392,5 +397,88 @@ theorem isNormal_blockTensor_of_isNormal
   exact (wordSpan_eq_top_iff_isNBlkInjective
     (blockTensor (d := d) (D := D) A P) N).mp (eq_top_iff.mpr hle)
 
+
+namespace IsNormalCanonicalFormBNT
+
+variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ} {blocks : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- **Uniform finite-family injective blocking for normal-CF-BNT blocks.**
+
+Every block in a normal canonical form with BNT separation is left-canonical,
+irreducible, and has primitive transfer map.  Hence each block is normal, and
+the bounded Wielandt injective-blocking theorem gives a positive injective
+blocking length for that block.  Taking the product of these finitely many
+positive lengths gives one common positive length; fixed-length injectivity
+persists at positive multiples. -/
+theorem exists_common_blockTensor_isInjective
+    [∀ k, NeZero (dim k)]
+    (h : IsNormalCanonicalFormBNT (d := d) μ blocks) :
+    ∃ L : ℕ, 0 < L ∧
+      ∀ k : Fin r,
+        IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+  classical
+  have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+    intro k
+    exact MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
+      (blocks k) (h.leftCanonical k)
+      (MPSTensor.isNormal_of_tp_primitive_irreducible (blocks k)
+        (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k))
+  let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
+  have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
+  have hL_inj : ∀ k,
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+    fun k => (Classical.choose_spec (hBlock k)).2.2
+  refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
+  intro k
+  have hcommon : (∏ j : Fin r, L j) = (∏ j ∈ Finset.univ.erase k, L j) * L k := by
+    simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
+      (Finset.mem_univ k)).symm
+  have hmult_pos : 0 < ∏ j ∈ Finset.univ.erase k, L j :=
+    Finset.prod_pos fun j _ => hL_pos j
+  have hmul := MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective
+    (blocks k) hmult_pos (hL_inj k)
+  rw [hcommon]
+  exact hmul
+
+end IsNormalCanonicalFormBNT
+
+/-- **Two-sided uniform injective blocking for normal-CF-BNT block families.**
+
+Given two normal canonical BNT block families with the same physical dimension,
+there is a single positive blocking length at which every block on both sides is
+one-site injective. -/
+theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
+    (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB) :
+    ∃ L : ℕ, 0 < L ∧
+      (∀ j : Fin rA,
+        IsInjective (blockTensor (d := d) (D := dimA j) (blocksA j) L)) ∧
+      (∀ k : Fin rB,
+        IsInjective (blockTensor (d := d) (D := dimB k) (blocksB k) L)) := by
+  obtain ⟨LA, hLA_pos, hLA⟩ :=
+    IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective hA
+  obtain ⟨LB, hLB_pos, hLB⟩ :=
+    IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective hB
+  refine ⟨LA * LB, Nat.mul_pos hLA_pos hLB_pos, ?_, ?_⟩
+  · intro j
+    have hmulN : IsNBlkInjective (blocksA j) (LB * LA) :=
+      MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
+        ((MPSTensor.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
+          (hLA j))
+    have hmulN' : IsNBlkInjective (blocksA j) (LA * LB) := by
+      simpa [Nat.mul_comm LB LA] using hmulN
+    exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective
+      (blocksA j) (LA * LB)).1 hmulN'
+  · intro k
+    exact MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective
+      (blocksB k) hLA_pos (hLB k)
 
 end MPSTensor
