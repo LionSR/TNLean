@@ -1068,7 +1068,8 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Blocking distributes over MPV equivalence]%
 	\label{thm:samempv_blocking_distributes}
-	\lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}
+	\lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks,
+		MPSTensor.sameMPV₂_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{def:blocked_tensor}
 	If $A$ generates the same MPV family as $\bigoplus_k \mu_k B_k$,
@@ -3295,7 +3296,8 @@ do not correspond to independent paper-level results.
 
 \begin{theorem}[Zero-tail weighted block decomposition after blocking]%
 	\label{thm:zero_tail_to_tensor_from_blocks_block_power}
-	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
+	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower,
+		MPSTensor.zeroTail_identity_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
 	      def:tensor_from_blocks}

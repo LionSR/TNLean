@@ -439,7 +439,7 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
   hc := tendsto_const_nhds
   hcLim_ne := one_ne_zero
 
-private theorem tendsto_blockPowerCoeff_of_tendsto_pow
+theorem tendsto_blockPowerCoeff_of_tendsto_pow
     {μ a : ℂ} {L : ℕ} (hL : 0 < L)
     (h : Filter.Tendsto (fun N : ℕ => μ ^ N) Filter.atTop (nhds a)) :
     Filter.Tendsto (fun N : ℕ => (μ ^ L) ^ N) Filter.atTop (nhds a) := by
