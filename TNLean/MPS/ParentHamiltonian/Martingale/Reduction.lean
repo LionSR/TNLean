@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import TNLean.Analysis.ProjectionGeometry
 
 /-!
 # Martingale quadratic-form reduction chain
