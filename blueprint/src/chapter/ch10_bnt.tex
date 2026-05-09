@@ -603,36 +603,30 @@ and~\cite{Cirac2021Matrix}.
 \end{proof}
 
 \begin{remark}[How the power-sum equality is used]
-	The equal-MPV corollary in the source compares, for each matched basis
-	tensor, the power sums
-	\[
-		\sum_q \mu_{j,q}^N
-	\]
-	on the two sides.  After the BNT permutation has matched \(A_j\) with
-	\(B_j = e^{i\phi_j}Y_jA_jY_j^{-1}\), the source comparison is
-	\[
-		\sum_{q=1}^{r_{a,j}} \mu_{j,q}^N
-		=
-		\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N .
-	\]
-	The Newton--Girard input says that equality of all these power sums
-	determines the multiset of weights with multiplicity. It is not a
-	replacement for the BNT matching argument: the block permutation and the
-	phase gauges must already have identified which basis tensor is being
-	compared. Once that matching is available, the power-sum lemma supplies the
-	multiplicity and weight equality needed to identify the weighted
+	The equal-MPV corollary in the source compares scalar power sums only after
+	the BNT representatives have already been matched.  If the matched basis
+	tensors satisfy $B_j=e^{i\phi_j}Y_jA_jY_j^{-1}$, then for every positive
+	length $N$ the coefficient $\sum_q \mu_{j,q}^N$ of
+	$\ket{V^{(N)}(A_j)}$ in the BNT expansion of $A$ equals the coefficient
+	$\sum_q(\nu_{j,q}e^{i\phi_j})^N$ coming from $B$.  This scalar equality
+	is the input to the Newton--Girard step.
+
+	Thus the power-sum lemma determines the multiset of weights with
+	multiplicity, but it is not a replacement for the BNT matching argument.  The
+	block permutation and the phase gauges must first identify which basis tensor
+	is being compared.  Once that matching is available, the power-sum lemma
+	supplies the multiplicity and weight equality needed to identify the weighted
 	block-diagonal gauge.
 
 	The finite-range statement below includes the same-cardinality form, the
 	nonzero-entry unequal-cardinality form, and the positive-power conclusion
-	after deleting zeros. The nonzero-entry form pads the shorter
-	family by zeros, applies the same-cardinality result at length
-	\(\max(m,n)\), and then uses the nonzero-entry hypothesis to count the
-	padded zeros. The Appendix lemma in the source also fixes an ordering
-	convention for the two families; here the conclusion is stated as multiset
-	equality, so no sorting hypothesis is needed.
-	If equality at exponent \(0\) is also assumed, the nonzero-entry hypothesis
-	can be omitted because \(\sum_k \lambda_{a,k}^0=x_a\) and
+	after deleting zeros.  The nonzero-entry form pads the shorter family by zeros,
+	applies the same-cardinality result at length \(\max(m,n)\), and then uses the
+	nonzero-entry hypothesis to count the padded zeros.  The Appendix lemma in the
+	source fixes an ordering convention for the two families; here the conclusion
+	is stated as multiset equality, so no sorting hypothesis is needed.  If
+	equality at exponent \(0\) is also assumed, the nonzero-entry hypothesis can be
+	omitted because \(\sum_k \lambda_{a,k}^0=x_a\) and
 	\(\sum_k \lambda_{b,k}^0=x_b\).
 \end{remark}
 
