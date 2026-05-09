@@ -439,6 +439,15 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
   hc := tendsto_const_nhds
   hcLim_ne := one_ne_zero
 
+private theorem tendsto_blockPowerCoeff_of_tendsto_pow
+    {μ a : ℂ} {L : ℕ} (hL : 0 < L)
+    (h : Filter.Tendsto (fun N : ℕ => μ ^ N) Filter.atTop (nhds a)) :
+    Filter.Tendsto (fun N : ℕ => (μ ^ L) ^ N) Filter.atTop (nhds a) := by
+  have hMul : Filter.Tendsto (fun N : ℕ => L * N) Filter.atTop Filter.atTop :=
+    Filter.tendsto_atTop_atTop.mpr fun b =>
+      ⟨b, fun N hN => le_trans hN (Nat.le_mul_of_pos_left N hL)⟩
+  simpa [Function.comp, ← pow_mul] using h.comp hMul
+
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
 assembled block-diagonal tensors.
 
@@ -479,6 +488,124 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     (proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
       (d := blockPhysDim d p) (μA := μA) (μB := μB)
       blocksA blocksB aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame)
+
+/-- Fixed-blocking adapter for the same-MPV/toTensorFromBlocks constructor.
+
+Starting from unblocked normal-CF-BNT data, a positive common blocking length `L`,
+explicit blocked BNT-separation, and one-site injectivity of the blocked blocks,
+this transports the normal-form, SameMPV₂, zero-length, and coefficient-limit data
+and then applies `ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity`
+at blocking period `L`. -/
+noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
+    (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
+    (L : ℕ) (hL : 0 < L)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (haCoeff : ∀ j,
+      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k,
+      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB))
+    (hZero : ∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hNotGpeA : BlocksNotGaugePhaseEquiv (d := blockPhysDim d L)
+      (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) L))
+    (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d L)
+      (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L))
+    (hInjA : ∀ j, IsInjective (blockTensor (d := d) (D := dimA j) (blocksA j) L))
+    (hInjB : ∀ k, IsInjective (blockTensor (d := d) (D := dimB k) (blocksB k) L)) :
+    CommonPrimitiveBNTCoverHypotheses (d := d) (p := L)
+      (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := ∑ j : Fin rA, dimA j) (DtotB := ∑ k : Fin rB, dimB k)
+      (fun j => (μA j) ^ L) (fun k => (μB k) ^ L)
+      (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) L)
+      (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L) := by
+  exact ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity
+    (d := d) (p := L)
+    (μA := fun j => (μA j) ^ L) (μB := fun k => (μB k) ^ L)
+    (blocksA := fun j => blockTensor (d := d) (D := dimA j) (blocksA j) L)
+    (blocksB := fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L)
+    (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hA hL hNotGpeA)
+    (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hB hL hNotGpeB)
+    aLim bLim
+    (fun j => tendsto_blockPowerCoeff_of_tendsto_pow hL (haCoeff j))
+    (fun k => tendsto_blockPowerCoeff_of_tendsto_pow hL (hbCoeff k))
+    haLim_ne hbLim_ne
+    (sameMPV₂_toTensorFromBlocks_blockPower
+      (d := d) μA blocksA μB blocksB hSame L)
+    (zeroTail_identity_toTensorFromBlocks_blockPower
+      (d := d) μA blocksA μB blocksB hZero)
+    hInjA hInjB
+
+/-- Existential common-injective blocking wrapper for the same-MPV/toTensorFromBlocks
+constructor.
+
+The common positive blocking length and one-site injectivity hypotheses are supplied by
+`exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT`.  Blocked
+BNT separation and the power-limit data remain explicit inputs.  Since
+`CommonPrimitiveBNTCoverHypotheses` is Type-valued, this returns a dependent sigma
+rather than a Prop-valued existential. -/
+noncomputable def
+    exists_commonInjectiveBlock_ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+    {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+    (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
+    (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (haCoeff : ∀ j,
+      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k,
+      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB))
+    (hZero : ∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
+    (hNotGpeA : ∀ L, 0 < L → BlocksNotGaugePhaseEquiv (d := blockPhysDim d L)
+      (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) L))
+    (hNotGpeB : ∀ L, 0 < L → BlocksNotGaugePhaseEquiv (d := blockPhysDim d L)
+      (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L)) :
+    Σ L : ℕ, PLift (0 < L) ×
+      CommonPrimitiveBNTCoverHypotheses (d := d) (p := L)
+        (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+        (DtotA := ∑ j : Fin rA, dimA j) (DtotB := ∑ k : Fin rB, dimB k)
+        (fun j => (μA j) ^ L) (fun k => (μB k) ^ L)
+        (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) L)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L) := by
+  classical
+  let hExists :=
+    MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT hA hB
+  let L : ℕ := Classical.choose hExists
+  have hSpec := Classical.choose_spec hExists
+  have hL : 0 < L := hSpec.1
+  have hInjA : ∀ j : Fin rA,
+      IsInjective (blockTensor (d := d) (D := dimA j) (blocksA j) L) := hSpec.2.1
+  have hInjB : ∀ k : Fin rB,
+      IsInjective (blockTensor (d := d) (D := dimB k) (blocksB k) L) := hSpec.2.2
+  exact ⟨L, PLift.up hL,
+    ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
+      hA hB L hL aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame hZero
+      (hNotGpeA L hL) (hNotGpeB L hL) hInjA hInjB⟩
 
 /-- Representative common-sector families give the BNT-cover hypotheses once the
 representative weights are strictly ordered, representatives are BNT-separated, and the

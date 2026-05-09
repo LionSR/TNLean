@@ -86,6 +86,77 @@ theorem zeroTail_toTensorFromBlocks_blockPower
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           rw [hNonzeroPart N σ]
 
+/-- Transport the length-zero identity for assembled nonzero block sums through
+physical blocking, with weights raised to the blocking power. -/
+theorem zeroTail_identity_toTensorFromBlocks_blockPower
+    {d rA rB zeroTailA zeroTailB p : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (μA : Fin rA → ℂ) (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hZero : ∀ σ : Fin 0 → Fin d,
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :
+    ∀ σ : Fin 0 → Fin (blockPhysDim d p),
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun j => (μA j) ^ p)
+            (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) p)) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p)
+            (fun k => (μB k) ^ p)
+            (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := by
+  intro σ
+  let σflat := blockedFlatConfig (d := d) p σ
+  have hA := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimA) μA blocksA p
+  have hB := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimB) μB blocksB p
+  calc
+    (zeroTailA : ℂ) +
+        mpv (toTensorFromBlocks (d := blockPhysDim d p)
+          (fun j => (μA j) ^ p)
+          (fun j => blockTensor (d := d) (D := dimA j) (blocksA j) p)) σ
+        = (zeroTailA : ℂ) +
+            mpv (blockTensor (d := d) (D := ∑ j : Fin rA, dimA j)
+              (toTensorFromBlocks (d := d) (μ := μA) blocksA) p) σ := by
+          rw [← hA 0 σ]
+    _ = (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σflat := by
+          rw [mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d)
+            (toTensorFromBlocks (d := d) (μ := μA) blocksA) p σ]
+    _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σflat := by
+          let σ0 : Fin 0 → Fin d := fun i => Fin.elim0 i
+          have hA0 :
+              mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σflat =
+                mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ0 := by
+            simp [mpv, coeff]
+          have hB0 :
+              mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σflat =
+                mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ0 := by
+            simp [mpv, coeff]
+          calc
+            (zeroTailA : ℂ) +
+                mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σflat
+                = (zeroTailA : ℂ) +
+                    mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ0 := by
+                  rw [hA0]
+            _ = (zeroTailB : ℂ) +
+                    mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ0 := hZero σ0
+            _ = (zeroTailB : ℂ) +
+                    mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σflat := by
+                  rw [hB0]
+    _ = (zeroTailB : ℂ) +
+            mpv (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+              (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) σ := by
+          rw [mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d)
+            (toTensorFromBlocks (d := d) (μ := μB) blocksB) p σ]
+    _ = (zeroTailB : ℂ) +
+        mpv (toTensorFromBlocks (d := blockPhysDim d p)
+          (fun k => (μB k) ^ p)
+          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := by
+          rw [hB 0 σ]
+
 /-- Transport a zero-tail decomposition along an MPV equivalence of its nonzero part. -/
 theorem zeroTail_eq_of_sameMPV₂
     {d D L L' z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)

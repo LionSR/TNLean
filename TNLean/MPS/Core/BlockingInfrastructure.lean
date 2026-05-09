@@ -175,6 +175,49 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
     μ blocks (by mpv_ext; rfl) p
 
+/-- Full MPV equality of weighted nonzero-block tensors is preserved after a common
+physical blocking, with each weight transported to the corresponding power. -/
+theorem sameMPV₂_toTensorFromBlocks_blockPower
+    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
+    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB))
+    (p : ℕ) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μA k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μB k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) := by
+  have hA := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimA) μA blocksA p
+  have hB := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dimB) μB blocksB p
+  have hBlock : SameMPV₂
+      (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+        (toTensorFromBlocks (d := d) (μ := μA) blocksA) p)
+      (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+        (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) :=
+    sameMPV₂_blockTensor
+      (d := d)
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) hSame p
+  mpv_ext
+  calc
+    mpv (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μA k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ
+        = mpv (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+            (toTensorFromBlocks (d := d) (μ := μA) blocksA) p) σ := (hA N σ).symm
+    _ = mpv (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+            (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) σ := hBlock N σ
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μB k) ^ p)
+        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := hB N σ
+
 /-- Positive-length MPV equality is preserved by positive physical blocking. -/
 theorem sameMPV₂Pos_blockTensor
     {D₁ D₂ : ℕ}
