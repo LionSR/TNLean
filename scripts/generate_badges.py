@@ -52,7 +52,13 @@ def tracked_lean_files(repo_root: Path) -> list[Path]:
     output = subprocess.check_output(
         ["git", "ls-files", "*.lean"], cwd=repo_root, text=True
     )
-    return [repo_root / line for line in output.splitlines() if line]
+    return [
+        repo_root / line
+        for line in output.splitlines()
+        if line
+        and "TNLean/Archive/" not in line
+        and not line.startswith("scripts/")
+    ]
 
 
 def strip_comments_and_strings(source: str) -> str:
@@ -171,8 +177,7 @@ def _blueprint_badge_counts(
     """Return (no_leanok_count, not_ready_count) for **unique declarations**.
 
     The caller must pass a list of objects with attributes lean_decl,
-    has_leanok, proof_has_leanok, and env_type (the
-    :class: protocol).
+    has_leanok, proof_has_leanok, and env_type (a protocol — see source for the expected attributes).
 
     no_leanok_count
        Number of unique lean_decl values that have **no** \leanok
@@ -181,7 +186,7 @@ def _blueprint_badge_counts(
 
     not_ready_count
        Number of unique lean_decl values that are **not fully
-       formalized** per the :ref::
+       formalized** by the following rules:
 
        * Proof-bearing declarations (theorem, lemma, proposition,
          corollary) require **both** statement-level and proof-level
