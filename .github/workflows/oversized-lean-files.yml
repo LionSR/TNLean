@@ -4,10 +4,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-# Two known oversized files remain on main and are grandfathered as warnings:
-#   TNLean/MPS/ParentHamiltonian/Martingale.lean (1562 lines)
-#   TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean (1425 lines)
-# These are tracked for future splitting. Once split, remove the corresponding
+# One known oversized file remains on main and is grandfathered as a warning:
+#   TNLean/MPS/ParentHamiltonian/Martingale.lean (1569 lines)
+# This is tracked for future splitting. Once split, remove the corresponding
 # ``--known`` argument below.
 # New oversized files (any file over 1000 lines not listed here) cause the
 # check to fail.
@@ -37,4 +36,3 @@ jobs:
           python3 scripts/check_oversized_lean_files.py
           --root .
           --known TNLean/MPS/ParentHamiltonian/Martingale.lean
-          --known TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean

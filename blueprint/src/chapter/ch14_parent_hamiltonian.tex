@@ -3288,6 +3288,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.not_pairAlgSpan_eq_graph_algEquiv_of_not_gaugePhaseEquiv}
     \lean{MPSTensor.subdirect_matrix_pair_eq_top_of_dim_ne}
     \lean{MPSTensor.pairAlgSpan_eq_top_of_injective_dim_ne}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_axes}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top}
+    \lean{MPSTensor.matrixPairSubalgebra_eq_graph_algEquiv_of_axisIdeals_eq_bot}
+    \lean{MPSTensor.subdirect_matrix_pair_eq_top_or_eq_graph_algEquiv}
     \lean{MPSTensor.pairTraceSeparatingAll_of_injective_dim_ne}
     \leanok
     \uses{def:pair_trace_separation_words}
@@ -3321,12 +3326,27 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \label{lem:pair_trace_separation_homogenization_with_padding}
     \lean{MPSTensor.pairEvalWordTuple_mem_span_pairWordTuple_length}
     \lean{MPSTensor.pair_mul_mem_span_pairWordTuple_add}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_zero}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_mul}
     \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_add}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_add_mul}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_period_window}
     \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window}
+    \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAllWordsSpanTop_period_window}
+    \lean{MPSTensor.pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding}
+    \lean{MPSTensor.pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairAllWordsSpanTop_of_identity_padding}
+    \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_period_windows}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows}
     \lean{MPSTensor.exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window}
     \lean{MPSTensor.exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window}
+    \lean{MPSTensor.pairAlgSpan_eq_top_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.pairTraceSeparatingAll_of_injective_not_gaugePhaseEquiv_cast_left}
+    \lean{MPSTensor.pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_injective_not_gaugePhaseEquiv}
+    \lean{MPSTensor.exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_period_window}
     \leanok
     \uses{def:pair_trace_separation_words, lem:all_length_pair_trace_separation_finite_cutoff}
     Homogeneous identity-padding witnesses multiply by concatenation of words.
