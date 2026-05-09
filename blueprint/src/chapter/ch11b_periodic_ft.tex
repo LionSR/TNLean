@@ -58,15 +58,9 @@ $p$-divisibility of the transfer map.
     blocks such as the antiferromagnet, which are $2$-periodic.
 \end{remark}
 
-\begin{definition}[Physical-index rotation]%
-    \label{def:rotate_physical}
-    \lean{MPSTensor.rotatePhysical}
-    \leanok
-    \uses{def:mps_tensor}
-    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
-    the \emph{physical-index rotation} is the tensor
-    $(A_u)^i := \sum_j u_{ij}\, A^j$.
-\end{definition}
+\noindent Physical-index rotation was introduced in
+Definition~\ref{def:rotate_physical} (Chapter~\ref{ch:symmetry}).
+The following compatibility theorems are proved in the present chapter.
 
 \begin{theorem}[Transfer map preserved by physical rotation]%
     \label{thm:transfer_map_rotate_physical}
