@@ -4,12 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-# One known oversized file remains on main and is grandfathered as a warning:
-#   TNLean/MPS/ParentHamiltonian/Martingale.lean (1569 lines)
-# This is tracked for future splitting. Once split, remove the corresponding
-# ``--known`` argument below.
-# New oversized files (any file over 1000 lines not listed here) cause the
-# check to fail.
+# New oversized files (any Lean file over 1000 lines) cause this check to fail.
+# The previous grandfathered files have been split into submodules.
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -35,4 +31,3 @@ jobs:
         run: >
           python3 scripts/check_oversized_lean_files.py
           --root .
-          --known TNLean/MPS/ParentHamiltonian/Martingale.lean
