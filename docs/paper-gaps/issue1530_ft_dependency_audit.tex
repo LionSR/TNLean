@@ -17,83 +17,101 @@
 \section{Scope}
 
 This note records the source-faithful answer to the organizational questions in
-\href{https://github.com/LionSR/TNLean/issues/1530}{issue~1530}.  It concerns
+\href{https://github.com/LionSR/TNLean/issues/1530}{issue~1530}. It concerns
 the non-periodic Fundamental Theorem route based on
 \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix}, not the direct periodic theorem of
 \cite{DeLasCuevas2017Irreducible} and not the fixed-length algebraic theorem of
-\cite{Molnar2018NormalPEPS}.  It also records which assumptions in the current
-conditional theorem surface are source inputs that still have to be produced,
-rather than conclusions already proved in the blueprint.
+\cite{Molnar2018NormalPEPS}. It also records which assumptions in the current
+conditional after-blocking statements are source inputs that still have to be
+produced, rather than conclusions already proved in the blueprint.
 
-The guiding source passages are the BNT definition and characterization, the
-block-injective canonical-form input, the proportional Fundamental Theorem, and
-the equal-MPV corollary in \cite[lines~271--352]{Cirac2016MPDO_arXiv}, together
-with the proof appendix \cite[lines~1155--1192]{Cirac2016MPDO_arXiv}.  The
-review version is \cite[Section~IV]{Cirac2021Matrix}.  This note follows the
-same convention as the previous paper-gap notes: the source theorem is the
-standard of comparison, while formal helper structures are acceptable only when
-they are identified as helper structures.
+The guiding source passages are the BNT definition, Proposition~\texttt{prop:char-BNT},
+the expansion \texttt{eq:II\_ABasicTensors}, the block-injective input
+Proposition~\texttt{propblockinj}, the proportional Fundamental Theorem
+\texttt{thm1}, and the equal-MPV Corollary~\texttt{II\_cor2} in
+\cite[lines~271--356]{Cirac2016MPDO_arXiv}, together with the proof appendix
+\cite[lines~1155--1192]{Cirac2016MPDO_arXiv}, which repeats \texttt{thm1} and
+proves the global gauge formula \texttt{eq:II:A=XAX}. The review version is
+\cite[Section~IV]{Cirac2021Matrix}. This note follows the same convention as
+the previous paper-gap notes: the source theorem is the standard of comparison,
+while formal helper structures are acceptable only when they are identified as
+helper structures.
+
+\paragraph{Notation.}
+Let $d$ be the physical dimension. For a tensor $A=(A^i)_{i=1}^d$, write
+$A^{[p]}$ for its length-$p$ blocking, whose physical dimension is $d^p$. For a
+word $w=i_1\cdots i_L$, write $|w|=L$ and $A^w=A^{i_1}\cdots A^{i_L}$. If
+$(A_j)_{j=1}^g$ is a basis of normal tensors, set
+$\tilde A^i=\bigoplus_{j=1}^g A_j^i$ and
+$\tilde A^w=\tilde A^{i_1}\cdots\tilde A^{i_L}$. The tensor
+$\mathbf{0}_{d^p,z}$ is the zero tensor of physical dimension $d^p$ and bond
+dimension $z$, and $A_{\mathrm{nz}}$ denotes the nonzero part after removing a
+zero direct summand. The symbol $\sim$ denotes the canonical-form direct-sum
+decomposition, up to the usual gauge change. In BNT comparisons, $\pi$ denotes
+a permutation of the representative normal tensors, $X_j$ an invertible gauge,
+and $\zeta_j\in\mathbb C^\times$ the nonzero phase factor in the derived
+relation $B_{\pi(j)}^i=\zeta_j X_j A_j^i X_j^{-1}$.
 
 \section{Block permutation and separation}
 
 The blueprint chapter titled ``Block Permutation and Separation'' contains more
-than one mathematical ingredient.  The product-algebra part proves that an
+than one mathematical ingredient. The product-algebra part proves that an
 automorphism of
 \[
   \prod_{j=1}^g M_{D_j}(\mathbb C)
 \]
-permutes the simple factors and is inner on each factor.  This is the algebraic
+permutes the simple factors and is inner on each factor. This is the algebraic
 mechanism used by same-structure and block-injective comparison statements.
-The invariant-projection material belongs to canonical-form reduction.  The
+The invariant-projection material belongs to canonical-form reduction. The
 block-separation lemmas prove that, under strict canonical-form hypotheses, a
 same-MPV identity for two block-diagonal tensors separates into same-MPV
 identities for the individual blocks.
 
-For the current non-periodic Fundamental Theorem surface, this chapter is not
-used wholesale.  Its visible downstream uses are the canonical-form condition
-for BNT data and the same-structure comparison lemma.  The latter is the special
-case in which the two tensors already have the same number of blocks, the same
-bond dimensions, and the same weights; it is not the CPSV BNT matching step.  In
-the source proof, the general non-periodic theorem instead proceeds through BNT
-representatives, eventual linear independence, block-injective fixed-length
-span, and scalar power sums.
+For the current conditional non-periodic Fundamental Theorem statements, this
+chapter is not used wholesale. Its visible downstream uses are the
+canonical-form condition for BNT data and the same-structure comparison lemma.
+The latter is the special case in which the two tensors already have the same
+number of blocks, the same bond dimensions, and the same weights; it is not the
+CPSV BNT matching step. In the source proof, the general non-periodic theorem
+instead proceeds through BNT representatives, eventual linear independence,
+block-injective fixed-length span, and scalar power sums.
 
 Thus the block-permutation chapter should stay before the non-periodic theorem,
 but the blueprint should not suggest that all of its material is a required
-input for the remaining CPSV comparison.  The required source input still
+input for the remaining CPSV comparison. The required source input still
 missing from the general route is the homogeneous block-injective direct-sum
 span after blocking,
 \[
   \operatorname{span}\{\tilde A^w: |w|=L\}
   = \bigoplus_{j=1}^g M_{D_j}(\mathbb C),
 \]
-or its trace-dual separation form.  This is the input recorded separately in
+or its trace-dual separation form. This is the input recorded separately in
 \path{docs/paper-gaps/nonperiodic_mps_bnt_comparison_inputs.tex} and
 \path{docs/paper-gaps/david2006_direct_sum_input.tex}.
 
 \section{Multiplicative domain versus operator convexity}
 
 The Kadison--Schwarz and multiplicative-domain part of the Schwarz chapter is a
-real dependency of the aperiodic route.  It is used to turn peripheral
+real dependency of the aperiodic route. It is used to turn peripheral
 eigenvectors of normalized completely positive maps into multiplicative-domain
 relations, and then into the commutation and phase-gauge rigidity needed in the
-spectral and canonical-form chapters.  Consequently this material should remain
+spectral and canonical-form chapters. Consequently this material should remain
 before Perron--Frobenius theory and the non-periodic Fundamental Theorem.
 
-The operator convexity, Jensen, and Lieb-concavity material is different.  A
+The operator convexity, Jensen, and Lieb-concavity material is different. A
 label audit finds no current use of that section in the non-periodic Fundamental
-Theorem chapter or its BNT comparison chain.  Its natural downstream uses are
+Theorem chapter or its BNT comparison chain. Its natural downstream uses are
 entropy, MPDO, and parent-Hamiltonian arguments, especially the open
 operator-convexity and POVM-resolution work around the parent-Hamiltonian gap.
-Therefore the safe first step is not to move the whole Schwarz chapter.  The
+Therefore the safe first step is not to move the whole Schwarz chapter. The
 safe split, if desired in a later PR, is to keep Kadison--Schwarz and the
 multiplicative domain upstream, and to move only the operator-convexity/Jensen
 section to a downstream analytic chapter after the Fundamental Theorem.
 
 \section{Which assumptions are extra}
 
-In the conditional after-blocking theorem surface, the following data are not
-extra mathematical assumptions relative to the source theorem once the upstream
+In the conditional after-blocking statements, the following data are not extra
+mathematical assumptions relative to the source theorem once the upstream
 canonical-form reduction has been proved: a common positive blocking length,
 zero-tail equality
 \[
@@ -102,35 +120,45 @@ zero-tail equality
   B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}},
   \qquad z_A=z_B,
 \]
-and trace-preserving, primitive, irreducible nonzero sectors.  These are the
+and trace-preserving, primitive, irreducible nonzero sectors. These are the
 formal names for the canonical-form and period-removal output in the source
 route.
 
-The remaining hypotheses are genuine proof obligations at the current theorem
-surface.  They are one-site injectivity at the chosen blocking length, the BNT
-representative comparison, and the proportional-decomposition data which match
-representatives by a permutation, gauges, and nonzero phases,
+The remaining hypotheses are genuine proof obligations in the current
+conditional after-blocking statements. They are one-site injectivity at the
+chosen blocking length and the proportional-decomposition input needed for the
+BNT representative comparison. This input consists of total tensors whose
+finite-length MPV families decompose over the representative BNT families with
+coefficient functions converging to nonzero limits, together with lengthwise
+proportionality
+\[
+  \ket{V^{(N)}(A_{\mathrm{tot}})}
+  = c_N\ket{V^{(N)}(B_{\mathrm{tot}})},
+  \qquad c_N\to c\ne 0.
+\]
+The BNT comparison theorem then derives the permutation, matched bond
+dimensions, gauges, and nonzero phases satisfying
 \[
   B_{\pi(j)}^i=\zeta_j X_j A_j^i X_j^{-1}.
 \]
-The formal statements which assume these data do not prove them from equality
-of MPV families.  They only transport them through the common blocking and then
-recover the sector weights.  This is why the blueprint and the paper-gap notes
-must continue to mark the passage as conditional.  In particular, this audit
-does not claim that the proof gaps tracked by issues~1499, 1500, or 1501 have
-been solved.
+The formal statements which assume the proportional-decomposition input do not
+prove it from equality of MPV families. They only transport it through the
+common blocking and then recover the sector weights. This is why the blueprint
+and the paper-gap notes must continue to mark the passage as conditional. In
+particular, this audit does not claim that the proof gaps tracked by
+issues~1499, 1500, or 1501 have been solved.
 
 \section{Staged blueprint organization}
 
-The chapter order can be improved without changing theorem statements.  A safe
+The chapter order can be improved without changing theorem statements. A safe
 organization is to keep the aperiodic proof dependencies first, ending with the
-proof of the Fundamental Theorem.  The direct periodic theorem, symmetries and
+proof of the Fundamental Theorem. The direct periodic theorem, symmetries and
 string order, and the algebraic fixed-length theorem then form the first
-post-FT block.  Entropy and MPDO material should be placed before parent
+post-FT block. Entropy and MPDO material should be placed before parent
 Hamiltonians, since the parent-Hamiltonian chapter depends conceptually on
 state and density-operator technology rather than conversely.
 
-The larger split of the Schwarz chapter should be staged separately.  It is a
+The larger split of the Schwarz chapter should be staged separately. It is a
 pure organization change once the operator-convexity section is isolated, but it
 touches many labels and should not be combined with proof-gap claims.
 

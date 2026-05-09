@@ -779,8 +779,10 @@ facts used to recover the lists of weights from those power sums.
 		=
 		\omega_s^N \ket{V^{(N)}(A_s)}
 	\]
-	for every length \(N\ge 0\).  The case \(N=0\) records the matching
-	bond dimensions.  Then the two block families admit a common MPV phase cover.
+	for every length \(N\ge 0\), with \(\ket{V^{(0)}(C)}\) interpreted as the
+	bond dimension of \(C\).  For each matched pair, the case \(N=0\) records
+	equality of bond dimensions.  Then the two block families admit a common MPV
+	phase cover.
 \end{lemma}
 
 \begin{proof}
@@ -1222,14 +1224,13 @@ BNT comparison hypotheses for the common primitive sectors.
 	nonzero phase-gauge class.  Assume the representative weights are nonzero and
 	strictly ordered by norm, distinct representatives are not gauge equivalent up
 	to phase, the length-zero identity for the representative nonzero parts holds,
-	each representative block is one-site injective, and the proportional
-	comparison supplies a permutation $\pi$, equal matched bond dimensions, gauges
-	$X_j$, and phases $\zeta_j \in \C^\times$ with
-	\[
-		B_{\pi(j)}^i=\zeta_j X_j A_j^i X_j^{-1}.
-	\]
-	Then these representative families satisfy the BNT matching hypotheses for
-	common primitive sectors.
+	and each representative block is one-site injective.  Assume also the
+	proportional-decomposition input for these representative families: total
+	tensors decompose at every length over the two representative BNT families with
+	coefficient functions converging to nonzero limits, and the two total MPV
+	families are proportional at every length by scalars converging to a nonzero
+	limit.  Then these representative families satisfy the BNT matching hypotheses
+	for common primitive sectors.
 \end{theorem}
 
 \begin{theorem}[BNT matching hypotheses produce a common phase cover]%
@@ -1432,8 +1433,8 @@ BNT comparison hypotheses for the common primitive sectors.
 	common-sector comparison theorem with those span hypotheses.
 \end{proof}
 
-\begin{lemma}[Sector comparison from relabelled common sectors and proportional data]%
-\label{lem:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
+\begin{theorem}[Sector comparison from relabelled common sectors and proportional data]%
+\label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
 	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_proportional}
 	\leanok
 	\uses{def:common_primitive_proportional_hypotheses,
@@ -1458,7 +1459,7 @@ BNT comparison hypotheses for the common primitive sectors.
 	for a permutation $\pi$, gauges $X_j$, and nonzero phases
 	$\zeta_j \in \C^\times$, then the blocked sector decompositions have the
 	matched sector-weight conclusion of the source theorem.
-\end{lemma}
+\end{theorem}
 
 \begin{theorem}[Common sectors from BNT matching hypotheses]%
 \label{thm:afterBlocking_sectorComparison_reindexed_bntCover}
