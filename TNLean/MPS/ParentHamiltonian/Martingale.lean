@@ -16,7 +16,7 @@ parent-Hamiltonian spectral gap. The Friedrichs-angle estimate needed
 to close `parentHamiltonian_gapped` is tracked by issues #952 and #460
 (#190). See issue #1512 for the root-only audit.
 
-This file is a re-export hub that imports the four submodules:
+This file collects the four submodules:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form ⟹ norm bound);
