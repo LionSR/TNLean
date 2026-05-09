@@ -412,6 +412,95 @@ lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_inj
         (hCF.toHasInjectiveBlocks.block_injective k))
   · norm_num
 
+/-- Direct-sum BNT comparison supplies a finite period window of full homogeneous
+pair spans.
+
+Specializing the three-block comparison to `L = 2` gives homogeneous pair trace
+separation at length `6`.  The trace-separation criterion is dual to full pair
+span, and full homogeneous pair span at a positive length propagates to all later
+lengths by multiplying by one-letter words.  Thus we can take `start = period = 6`. -/
+lemma forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∀ k j : Fin r, j ≠ k → ∃ start period : ℕ, 0 < period ∧
+      PairWordTupleSpanTop (A k) (A j) period ∧
+      ∀ s : ℕ, s < period → PairWordTupleSpanTop (A k) (A j) (start + s) := by
+  classical
+  have hSep6 : ∀ k j : Fin r, j ≠ k →
+      PairTraceSeparatingAt (A k) (A j) (2 + (2 + 2)) := by
+    refine forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+      (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
+    · intro k
+      simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
+        (by norm_num) (isNBlkInjective_one_of_isInjective
+          (hCF.toHasInjectiveBlocks.block_injective k))
+    · intro k
+      simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 6)
+        (by norm_num) (isNBlkInjective_one_of_isInjective
+          (hCF.toHasInjectiveBlocks.block_injective k))
+    · norm_num
+  intro k j hneq
+  let S : ℕ := 2 + (2 + 2)
+  have hSpos : 0 < S := by norm_num [S]
+  have hSpanS : PairWordTupleSpanTop (A k) (A j) S := by
+    dsimp [S]
+    exact pairWordTupleSpanTop_of_pairTraceSeparatingAt (A k) (A j) (hSep6 k j hneq)
+  have hsucc : ∀ {T : ℕ}, 0 < T → PairWordTupleSpanTop (A k) (A j) T →
+      PairWordTupleSpanTop (A k) (A j) (T + 1) := by
+    intro T hT hTop
+    rcases T with _ | T
+    · cases hT
+    unfold PairWordTupleSpanTop
+    apply eq_top_iff.mpr
+    intro M _
+    have hM : M ∈ Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T + 1))) := by
+      rw [hTop]
+      exact Submodule.mem_top
+    have hle : Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T + 1))) ≤
+        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) ((T + 1) + 1))) := by
+      apply Submodule.span_le.mpr
+      rintro N ⟨w, rfl⟩
+      let i : Fin d := w 0
+      let tail : Fin T → Fin d := fun j => w j.succ
+      have hletter : pairEvalWordTuple (A k) (A j) [i] ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) 1)) :=
+        pairEvalWordTuple_mem_span_pairWordTuple_length (A k) (A j) [i]
+      have htail : pairEvalWordTuple (A k) (A j) (List.ofFn tail) ∈
+          Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) (T + 1))) := by
+        rw [hTop]
+        exact Submodule.mem_top
+      have hmul :=
+        pair_mul_mem_span_pairWordTuple_add (A := A k) (B := A j)
+          (L := 1) (S := T + 1)
+          (M := pairEvalWordTuple (A k) (A j) [i])
+          (N := pairEvalWordTuple (A k) (A j) (List.ofFn tail)) hletter htail
+      rw [Nat.add_comm 1 (T + 1)] at hmul
+      have hprod :
+          ((pairEvalWordTuple (A k) (A j) [i]).1 *
+              (pairEvalWordTuple (A k) (A j) (List.ofFn tail)).1,
+            (pairEvalWordTuple (A k) (A j) [i]).2 *
+              (pairEvalWordTuple (A k) (A j) (List.ofFn tail)).2) =
+            pairWordTuple (A k) (A j) (T + 1) w := by
+        ext <;> simp [pairWordTuple, pairEvalWordTuple, i, tail]
+      simpa [hprod] using hmul
+    exact hle hM
+  have hTopOfLe : ∀ {T : ℕ}, S ≤ T → PairWordTupleSpanTop (A k) (A j) T := by
+    intro T hST
+    obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hST
+    have hTopAdd : ∀ m : ℕ, PairWordTupleSpanTop (A k) (A j) (S + m) := by
+      intro m
+      induction m with
+      | zero => simpa using hSpanS
+      | succ m ih =>
+          simpa [Nat.add_assoc] using
+            hsucc (Nat.lt_of_lt_of_le hSpos (Nat.le_add_right S m)) ih
+    exact hTopAdd m
+  refine ⟨S, S, hSpos, hSpanS, ?_⟩
+  intro s _hs
+  exact hTopOfLe (Nat.le_add_right S s)
+
 /-- Positive-length product-word span from canonical-form/BNT separation and
 one-site injectivity of the BNT blocks.
 
