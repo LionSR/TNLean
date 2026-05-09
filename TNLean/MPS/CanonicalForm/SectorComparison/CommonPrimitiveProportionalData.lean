@@ -390,22 +390,26 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
 /-- Construct `ProportionalDecompositionData` for two normal-CF-BNT block families
-whose assembled block-diagonal tensors generate the same MPV family.
+whose assembled block-diagonal tensors generate the same MPV family, once the
+block-weight power coefficient families have specified nonzero limits.
 
-For the equal-MPV case the proportional decomposition uses constant data:
-the per-block coefficients are the block-weight families `μA`, `μB`
-themselves (nonzero by `IsNormalCanonicalForm.mu_ne_zero`), the proportionality
-ratio is identically `1`, and the substantive content is the block-diagonal MPV
-identity `mpv (toTensorFromBlocks μ A) σ = ∑_k μ_k * mpv (A_k) σ` together with
-the `SameMPV₂` hypothesis. -/
+The block-diagonal MPV expansion has coefficients `(μA j) ^ N` and `(μB k) ^ N` at
+length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this constructor keeps
+the required coefficient convergence as an explicit input; it does not replace the
+spectral/power-sum comparison needed to obtain such nonzero limits in the general
+BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`. -/
 noncomputable def proportionalDecompositionData_of_sameMPV_of_isNormalCanonicalFormBNT
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
-    (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
+    (_hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
+    (_hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (haCoeff : ∀ j, Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB)) :
@@ -413,20 +417,20 @@ noncomputable def proportionalDecompositionData_of_sameMPV_of_isNormalCanonicalF
       (∑ j : Fin rA, dimA j) (∑ k : Fin rB, dimB k) where
   A_total := toTensorFromBlocks (d := d) (μ := μA) blocksA
   B_total := toTensorFromBlocks (d := d) (μ := μB) blocksB
-  aCoeff := fun _ j => μA j
-  bCoeff := fun _ k => μB k
-  aLim := μA
-  bLim := μB
+  aCoeff := fun N j => (μA j) ^ N
+  bCoeff := fun N k => (μB k) ^ N
+  aLim := aLim
+  bLim := bLim
   c := fun _ => 1
   cLim := 1
   hA_decomp := fun _ σ => by
     simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μA blocksA σ
   hB_decomp := fun _ σ => by
     simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μB blocksB σ
-  haCoeff := fun _ => tendsto_const_nhds
-  hbCoeff := fun _ => tendsto_const_nhds
-  haLim_ne := hA.toIsNormalCanonicalForm.mu_ne_zero
-  hbLim_ne := hB.toIsNormalCanonicalForm.mu_ne_zero
+  haCoeff := haCoeff
+  hbCoeff := hbCoeff
+  haLim_ne := haLim_ne
+  hbLim_ne := hbLim_ne
   hProp := fun N σ => by
     rw [one_mul]
     exact hSame N σ
