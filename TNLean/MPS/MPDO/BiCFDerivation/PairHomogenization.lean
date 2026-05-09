@@ -9,9 +9,9 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.BurnsideJacobson
 /-!
 # Pair-span homogenization for MPDO biCF
 
-This module re-exports the homogeneous pair-span padding criteria and the
-Burnside-Jacobson pair-algebra placeholders used to turn all-length pair trace
-separation into a fixed homogeneous word length.
+This module collects the homogeneous pair-span padding criteria and the
+Burnside-Jacobson pair-algebra density results used to convert all-length pair
+trace separation into a fixed homogeneous word length.
 
 The content is organized across three submodules:
 
@@ -19,6 +19,6 @@ The content is organized across three submodules:
   detection, two-sided axis ideals, `subdirect_matrix_pair_eq_top_or_eq_graph_algEquiv`.
 * `Span` — homogeneous word-tuple multiplication, identity padding,
   cumulative-to-homogeneous conversion lemmas.
-* `BurnsideJacobson` — finite-family separation and Burnside–Jacobson bridge to
-  `PairTraceSeparatingAt`.
+* `BurnsideJacobson` — finite-family separation and the Burnside–Jacobson
+  connection to `PairTraceSeparatingAt`.
 -/

@@ -160,7 +160,7 @@ theorem pairIdentity_mem_pairWordTupleSpan_mul {D₁ D₂ : ℕ}
 
 /-- A residue-window padding certificate extends along any number of period
 steps. This is the arithmetic shell needed by the corrected Burnside-Jacobson
-identity-padding route. -/
+identity-padding argument. -/
 theorem pairIdentity_mem_pairWordTupleSpan_add_mul {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {base period : ℕ}
     (hbase :
@@ -311,8 +311,8 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_pe
     (fun r hr =>
       pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop A B (hwindow r hr))
 
-/-- The Burnside-Jacobson all-words span route reduces to producing one
-period and a full residue window of homogeneous span-top certificates. -/
+/-- For the Burnside–Jacobson all-words span argument, it suffices to produce
+one period and a full residue window of homogeneous span-top certificates. -/
 theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAllWordsSpanTop_period_window
     {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

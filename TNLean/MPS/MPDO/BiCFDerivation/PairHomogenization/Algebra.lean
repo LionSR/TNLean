@@ -236,8 +236,8 @@ theorem pairTraceSeparatingAll_of_pairAlgSpan_eq_top {D₁ D₂ : ℕ}
 /-- If the pair algebra is the graph of an automorphism of the matrix algebra,
 then the two tensors are gauge-phase equivalent.
 
-This is the Skolem-Noether endpoint of the graph branch in the subdirect-product
-proof route for the pair algebra. -/
+By the Skolem–Noether theorem, the graph branch of the subdirect-product
+argument yields gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_of_pairAlgSpan_eq_graph_algEquiv
     {d D : ℕ} [NeZero D] (A B : MPSTensor d D)
     (φ : MatD D ≃ₐ[ℂ] MatD D)
@@ -285,7 +285,7 @@ private theorem subalgebra_prod_eq_top_of_axes {R A B : Type*}
 
 /-- If both coordinate axes lie in a matrix-pair subalgebra, the subalgebra is
 the whole product. This is the top branch of the subdirect-product dichotomy
-used in the pair-algebra density route. -/
+used in the pair-algebra density argument. -/
 theorem matrixPairSubalgebra_eq_top_of_axes {D : ℕ}
     (S : Subalgebra ℂ (MatD D × MatD D))
     (hfst : ∀ x : MatD D, (x, 0) ∈ S)
