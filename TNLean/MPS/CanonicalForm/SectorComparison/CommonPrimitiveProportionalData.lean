@@ -392,8 +392,8 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
 /-- Construct `ProportionalDecompositionData` for two normal-CF-BNT block families
 whose assembled block-diagonal tensors generate the same MPV family.
 
-For the equal-MPV case the proportional decomposition is essentially trivial:
-the per-block coefficients are the constant block-weight families `μA`, `μB`
+For the equal-MPV case the proportional decomposition uses constant data:
+the per-block coefficients are the block-weight families `μA`, `μB`
 themselves (nonzero by `IsNormalCanonicalForm.mu_ne_zero`), the proportionality
 ratio is identically `1`, and the substantive content is the block-diagonal MPV
 identity `mpv (toTensorFromBlocks μ A) σ = ∑_k μ_k * mpv (A_k) σ` together with
