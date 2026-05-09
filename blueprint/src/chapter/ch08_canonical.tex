@@ -1068,8 +1068,7 @@ The following results separate the zero blocks from the nonzero blocks.
 
 \begin{theorem}[Blocking distributes over MPV equivalence]%
 	\label{thm:samempv_blocking_distributes}
-	\lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks,
-		MPSTensor.sameMPV₂_toTensorFromBlocks_blockPower}
+	\lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}
 	\leanok
 	\uses{def:blocked_tensor}
 	If $A$ generates the same MPV family as $\bigoplus_k \mu_k B_k$,
@@ -1084,6 +1083,22 @@ The following results separate the zero blocks from the nonzero blocks.
 	holds for any tensor by definition of blocking.
 	The MPV equivalence of $A$ and $\bigoplus_k \mu_k B_k$ at length $Np$
 	then gives the equivalence at length $N$ with weights $\mu_k^p$.
+\end{proof}
+
+\begin{theorem}[Blocking preserves equality of assembled weighted blocks]%
+	\label{thm:samempv_toTensorFromBlocks_block_power}
+	\lean{MPSTensor.sameMPV₂_toTensorFromBlocks_blockPower}
+	\leanok
+	\uses{thm:samempv_blocking_distributes, thm:block_tensor_to_tensor_from_blocks}
+	If two assembled weighted block tensors generate the same MPV family, then
+	after any common blocking length $p \ge 0$, the assembled blocked families with
+	weights transported to the powers $\mu_k^p$ again generate the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply Theorem~\ref{thm:samempv_blocking_distributes} to both assembled
+	tensors and rewrite each blocked assembled tensor by
+	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
 \begin{theorem}[Blocking assembled weighted blocks]%
@@ -3296,8 +3311,7 @@ do not correspond to independent paper-level results.
 
 \begin{theorem}[Zero-tail weighted block decomposition after blocking]%
 	\label{thm:zero_tail_to_tensor_from_blocks_block_power}
-	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower,
-		MPSTensor.zeroTail_identity_toTensorFromBlocks_blockPower}
+	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
 	      def:tensor_from_blocks}
@@ -3311,6 +3325,22 @@ do not correspond to independent paper-level results.
 	Apply Theorem~\ref{thm:zero_tail_decomp_block_tensor} to the assembled
 	weighted nonzero tensor and rewrite the blocked assembled tensor using
 	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
+\end{proof}
+
+\begin{theorem}[Length-zero identity after blocking weighted blocks]%
+	\label{thm:zero_tail_identity_to_tensor_from_blocks_block_power}
+	\lean{MPSTensor.zeroTail_identity_toTensorFromBlocks_blockPower}
+	\leanok
+	\uses{thm:block_tensor_to_tensor_from_blocks}
+	If the length-zero zero-tail identity holds for two assembled weighted block
+	tensors, then after any blocking length $p \ge 0$ the same identity holds for
+	the blocked families with weights transported to the powers $\mu_k^p$.
+\end{theorem}
+
+\begin{proof}\leanok
+	At blocked length zero the flattened configuration is empty.  The blocked
+	assembled tensors are rewritten by Theorem~\ref{thm:block_tensor_to_tensor_from_blocks},
+	and the original length-zero identity is applied to the empty configuration.
 \end{proof}
 
 \begin{theorem}[Zero-tail identity for nonzero block tensors]%

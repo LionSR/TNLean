@@ -265,7 +265,7 @@ theorem blockTensor_of_notGpe
           intro j k hjk
           have hbase : ‖μ k‖ < ‖μ j‖ := h.mu_strict_anti hjk
           simpa [norm_pow] using
-            pow_lt_pow_left₀ hbase (norm_nonneg (μ k)) (Nat.ne_of_gt hL)
+            pow_lt_pow_left₀ hbase (norm_nonneg (μ k)) (hL.ne')
         mu_ne_zero := fun k => pow_ne_zero L (h.mu_ne_zero k) }
   · exact h.dim_pos
 
