@@ -4,17 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-<<<<<<< HEAD
 # New oversized files (any Lean file over 1000 lines) cause this check to fail.
 # The previous grandfathered files have been split into submodules.
-=======
-# One known oversized file remains on main and is grandfathered as a warning:
-#   TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization.lean
-# This is tracked for future splitting. Once split, remove the corresponding
-# ``--known`` argument below.
-# New oversized files (any file over 1000 lines not listed here) cause the
-# check to fail.
->>>>>>> b88fccb9 ([claude-review-fix] doc(Martingale): trim packaging framing from module docs)
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
