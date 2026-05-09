@@ -1007,11 +1007,14 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical}
-    Let $(A_x)_{x \in X}$ be a finite normal-canonical BNT family.  Then
-    there is a positive integer $L$ such that every blocked tensor
-    $A_x^{[L]}$ is one-site injective.  The same conclusion holds
-    simultaneously for two finite normal-canonical BNT families.
+    \uses{thm:normal_tp_primitive_irred,
+        thm:bounded_injective_blocking_normal_left_canonical}
+    Let $(A_x)_{x \in X}$ be a finite normal-canonical BNT family whose
+    blocks have positive virtual bond dimension.  Then there is a positive
+    integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
+    injective.  The same conclusion holds simultaneously for two finite
+    normal-canonical BNT families whose blocks have positive virtual bond
+    dimension.
 \end{corollary}
 
 \begin{proof}
