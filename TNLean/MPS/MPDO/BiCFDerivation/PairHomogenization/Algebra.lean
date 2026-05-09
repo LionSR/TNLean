@@ -19,7 +19,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
+variable {d : ℕ}
 
 abbrev MatD (D : ℕ) := Matrix (Fin D) (Fin D) ℂ
 
