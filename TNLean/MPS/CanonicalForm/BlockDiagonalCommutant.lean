@@ -735,6 +735,37 @@ lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_window
       A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
   exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
 
+/-- Direct-sum pair-span windows discharge the conditional period-window `WordTupleSpanTop`
+route for canonical-form/BNT block families. -/
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ T : ℕ, WordTupleSpanTop A (1 + (r - 1) * T) := by
+  obtain ⟨start, period, hperiod_pos, hWindow⟩ :=
+    exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
+    μ A hCF (fun k j hj => ⟨start, period, hperiod_pos, hWindow k j hj⟩)
+
+/-- Product-span spelling of the direct-sum pair-span period-window route. -/
+lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ m : ℕ, 0 < m ∧
+      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
+        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
+      (⊤ : Submodule ℂ
+        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
+  obtain ⟨T, hT⟩ :=
+    exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
+      μ A hCF hIrr
+  exact ⟨1 + (r - 1) * T, Nat.add_pos_left Nat.zero_lt_one _, by
+    simpa [WordTupleSpanTop, wordTuple] using hT⟩
+
 /-- Canonical-form/BNT data and period-window padding give positive product-word span.
 
 For a block family in canonical BNT form, it suffices to provide the finite
