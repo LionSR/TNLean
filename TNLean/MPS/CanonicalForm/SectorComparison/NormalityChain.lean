@@ -34,6 +34,11 @@ shows that blocking keeps normality.
 * `isNormal_live_block_of_primitive` — the same conclusion for a single
   nonzero-weight block from the reduction data.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
+* `IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective` — a finite
+  normal-canonical BNT family admits one positive blocking length at which all
+  blocks are injective.
+* `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT` — the
+  same common-blocking conclusion simultaneously for two finite BNT families.
 
 ## References
 
