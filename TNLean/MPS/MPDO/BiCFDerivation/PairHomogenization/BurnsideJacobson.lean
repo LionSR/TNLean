@@ -9,8 +9,9 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.Span
 # Burnside–Jacobson homogenization for MPDO biCF
 
 This module contains the finite-family separation and the Burnside–Jacobson
-connection to `PairTraceSeparatingAt`.  It imports `Algebra` and `Span` from
-the pair-homogenization subpackage and completes the pair-span homogenization
+connection to the existence of a homogeneous trace-separating length.  It
+imports the algebra-density and identity-padding parts of the
+pair-homogenization subpackage and completes the pair-span homogenization
 layer.
 -/
 
@@ -246,22 +247,22 @@ theorem exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpan
 /-! ### Cumulative pair separation and homogeneous padding
 
 BNT injectivity, left-canonical normalization, and non-gauge-equivalence imply
-all-length trace separation for the simultaneous pair words:
-`PairTraceSeparatingAll A B`. Finite-dimensional stabilization then gives a
-cutoff `S` with `PairTraceSeparatingUpTo A B S`.
+all-length trace separation for the simultaneous pair words.
+Finite-dimensional stabilization then gives a finite cutoff $S$ up to which
+trace separation holds simultaneously.
 
-A homogeneous fixed-length conclusion `PairTraceSeparatingAt A B T` also
-requires identity padding: the pair identity `(1, 1)` must lie in appropriate
-homogeneous pair-word spans. The source paper (arXiv:1606.00608, lines 317--345)
-gets fixed-length span from the Wielandt/Pérez-García--Verstraete--Wolf--Cirac
-bound; the identity-padding hypotheses below keep that missing input explicit.
+A homogeneous fixed-length conclusion additionally requires identity padding:
+the pair identity $(1, 1)$ must lie in appropriate homogeneous pair-word spans.
+The source paper (arXiv:1606.00608, lines 317--345) obtains fixed-length span
+from the Wielandt/Pérez-García--Verstraete--Wolf--Cirac bound; the
+identity-padding hypotheses below keep that missing input explicit.
 
-For the unequal-dimension case see
+For the unequal-dimension case see the theorem
 `exists_pairTraceSeparatingAt_of_injective_dim_ne_of_pairWordTupleSpanTop_period_window`. -/
 
 /-- From injectivity, left-canonical normalization, and non-gauge-equivalence of
-a same-dimension pair, obtain `PairTraceSeparatingAll` and a finite cutoff `S`
-such that `PairTraceSeparatingUpTo A B S`.
+a same-dimension pair, obtain all-length pair trace separation together with a
+finite cutoff up to which the pair words remain trace-separating.
 
 The homogeneous fixed-length conclusion additionally requires identity-padding
 hypotheses. -/

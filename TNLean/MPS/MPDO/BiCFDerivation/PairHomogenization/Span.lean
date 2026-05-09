@@ -431,9 +431,9 @@ BNT applications should use fixed-length or period-window hypotheses.
 separation and eventual identity padding, obtain a homogeneous pair
 trace-separating length.
 
-The hypothesis `hIdentity_pad` supplies the identity padding needed to combine
-the cumulative separation with
-`pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_identity_padding`. -/
+The eventual identity-padding hypothesis and the cumulative separation together
+yield a single homogeneous trace-separating length via the identity-padding
+implication. -/
 theorem exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_identity_padding
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
     (hSepUpTo : PairTraceSeparatingUpTo A B S)
@@ -450,10 +450,10 @@ theorem exists_pairTraceSeparatingAt_of_pairTraceSeparatingUpTo_of_eventual_iden
 /-- All-words pair separation plus eventual homogeneous identity padding gives
 one homogeneous pair-trace separating length.
 
-This is the proved interface between the pair-product algebra density theorem
-(`PairAllWordsSpanTop`) and the Burnside-Jacobson identity-padding theorem.
-It records that once the two independent inputs are available, no additional
-BNT-specific argument is needed to obtain `PairTraceSeparatingAt`.
+Given that the simultaneous pair words span the full product algebra over all
+lengths, and that the pair identity belongs to every sufficiently long
+homogeneous pair-word span, there exists a single homogeneous length at which
+the pair words are trace-separating.
 
 This lemma is conditional on identity padding; it is not the
 David/Perez-Garcia direct-sum input. In BNT applications the homogeneous
