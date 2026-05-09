@@ -192,7 +192,8 @@ are not developed elsewhere in this blueprint.
     \lean{posMap_rpow_concave_jensen}
     \notready
     \uses{def:positive_map, lem:operator_jensen_povm_resolvent}
-    For a positive subunital map $T$ and $p\in[0,1]$:
+    For a positive subunital map $T$, a positive semidefinite matrix~$A$,
+    and $p\in[0,1]$:
     \[
         T(A^p) \le (TA)^p.
     \]
@@ -201,15 +202,13 @@ are not developed elsewhere in this blueprint.
 
 \begin{theorem}[Map form of Jensen for concave real powers]\label{thm:rpow_concave_jensen}
     \lean{IsPositiveMap.rpow_concave_jensen}
-    \notready
+    \leanok
     \uses{thm:posMap_rpow_concave_jensen}
     This is the corresponding map-form statement of
     Theorem~\ref{thm:posMap_rpow_concave_jensen}.
-    Its proof is deferred until
-    Theorem~\ref{thm:posMap_rpow_concave_jensen} is proved.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Direct application of the axiom.
 \end{proof}
 
@@ -217,7 +216,8 @@ are not developed elsewhere in this blueprint.
     \lean{posMap_rpow_convex_jensen}
     \notready
     \uses{def:positive_map}
-    For a positive subunital map $T$ and $p\in[1,2]$:
+    For a positive subunital map $T$, a positive semidefinite matrix~$A$,
+    and $p\in[1,2]$:
     \[
         (TA)^p \le T(A^p).
     \]
@@ -226,15 +226,13 @@ are not developed elsewhere in this blueprint.
 
 \begin{theorem}[Map form of Jensen for convex real powers]\label{thm:rpow_convex_jensen}
     \lean{IsPositiveMap.rpow_convex_jensen}
-    \notready
+    \leanok
     \uses{thm:posMap_rpow_convex_jensen}
     This is the corresponding map-form statement of
     Theorem~\ref{thm:posMap_rpow_convex_jensen}.
-    Its proof is deferred until
-    Theorem~\ref{thm:posMap_rpow_convex_jensen} is proved.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Direct application of the axiom.
 \end{proof}
 
@@ -252,15 +250,13 @@ are not developed elsewhere in this blueprint.
 
 \begin{theorem}[Map form of Jensen for the concave logarithm]\label{thm:log_concave_jensen}
     \lean{IsPositiveMap.log_concave_jensen}
-    \notready
+    \leanok
     \uses{thm:posMap_log_concave_jensen}
     This is the corresponding map-form statement of
     Theorem~\ref{thm:posMap_log_concave_jensen}.
-    Its proof is deferred until
-    Theorem~\ref{thm:posMap_log_concave_jensen} is proved.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Direct application of the axiom.
 \end{proof}
 
@@ -279,20 +275,18 @@ are not developed elsewhere in this blueprint.
         \le
         \Re\tr\!(K^\dagger(tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}).
     \]
-    See Lieb (1973) and Ando (1979).
+    See \cite{Lieb1973Convex,Ando1979Concavity}.
 \end{theorem}
 
 \begin{theorem}[Map form of Lieb concavity]\label{thm:lieb_concavity}
     \lean{lieb_concavity}
-    \notready
+    \leanok
     \uses{thm:lieb_concavity_axiom}
     This is the corresponding map-form statement of
     Theorem~\ref{thm:lieb_concavity_axiom}.
-    Its proof is deferred until
-    Theorem~\ref{thm:lieb_concavity_axiom} is proved.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Direct application of the axiom.
 \end{proof}
 
