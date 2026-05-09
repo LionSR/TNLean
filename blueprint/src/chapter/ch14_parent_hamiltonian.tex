@@ -3308,48 +3308,6 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     equivalence with scalar $1$.
 \end{proof}
 
-\begin{lemma}[Identity pair from full homogeneous pair-word span]\label{lem:pair_identity_span_top}
-  \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop}
-  \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop}
-  \leanok
-  \uses{def:pair_trace_separation_words}
-  Let \(A\) and \(B\) be MPS tensors of bond dimensions \(D_1\) and \(D_2\).
-  \begin{enumerate}
-    \item If the homogeneous pair-word span is the full product algebra at some
-      length \(n\), i.e.\
-      \[
-        \operatorname{span}\{(A^w,B^w)\mid |w|=n\} = \MN{D_1}\times\MN{D_2},
-      \]
-      then the simultaneous identity pair \((I_{D_1},I_{D_2})\) belongs to that
-      same homogeneous span.
-    \item If the span is full at one positive length \(S>0\), then the identity
-      pair lies in the homogeneous pair-word span at every sufficiently large
-      length:
-      \[
-        \exists L\in\mathbb N,\;
-        \forall n\ge L,\;
-        (I_{D_1},I_{D_2})\in
-        \operatorname{span}\{(A^w,B^w)\mid |w|=n\}.
-      \]
-  \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-  \leanok
-  \uses{lem:pair_trace_separation_homogenization_with_padding}
-  Statement~(1) is immediate: if the span is already the whole product algebra,
-  then it contains the identity pair.
-  For~(2), the proof first shows that fullness at a positive length \(T\)
-  propagates to \(T+1\): split a word of length \(T+1\) into its first letter
-  and a suffix of length \(T\), write each as a linear combination in the
-  respective homogeneous spans (using the one-letter span membership and the
-  induction hypothesis), and multiply the two components via
-  Lemma~\ref{lem:pair_trace_separation_homogenization_with_padding}.
-  By induction on the offset \(k\), the span is full at every length \(S+k\),
-  hence at every \(n\ge S\).  Applying~(1) at each such length gives the
-  conclusion with \(L=S\).
-\end{proof}
-
 \begin{lemma}[Conditional padding from exact homogeneous identity witnesses]
     \label{lem:pair_trace_separation_homogenization_with_padding}
     \lean{MPSTensor.pairEvalWordTuple_mem_span_pairWordTuple_length}
