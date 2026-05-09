@@ -33,6 +33,8 @@ open scoped BigOperators InnerProductSpace
 
 namespace MPSTensor
 
+variable {d D : ℕ}
+
 /-! ### Martingale quadratic-form reduction -/
 
 /-- A uniform quadratic-form estimate for the transported parent Hamiltonians

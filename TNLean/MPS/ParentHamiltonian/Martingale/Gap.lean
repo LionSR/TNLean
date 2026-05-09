@@ -25,6 +25,8 @@ open scoped BigOperators InnerProductSpace
 
 namespace MPSTensor
 
+variable {d D : ℕ}
+
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
 /- Scout report (2026-04-19, Layer 4 KL martingale).
