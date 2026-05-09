@@ -513,6 +513,29 @@ noncomputable def reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂
     (A : MPSTensor d₂ D) : MPSTensor d₁ D :=
   fun i => A (f i)
 
+/-- Word evaluation after physical reindexing is word evaluation on the mapped word. -/
+theorem evalWord_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
+    (A : MPSTensor d₂ D) (w : List (Fin d₁)) :
+    evalWord (reindexPhysical f A) w = evalWord A (w.map f) := by
+  induction w with
+  | nil => simp
+  | cons i w ih => simp [evalWord, reindexPhysical, ih]
+
+/-- MPVs after physical reindexing are MPVs on the reindexed configuration. -/
+theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
+    (A : MPSTensor d₂ D) {N : ℕ} (σ : Fin N → Fin d₁) :
+    mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
+  simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
+
+/-- Physical reindexing preserves heterogeneous MPV equality. -/
+theorem sameMPV₂_reindexPhysical {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
+    {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
+    (hSame : SameMPV₂ A B) :
+    SameMPV₂ (reindexPhysical f A) (reindexPhysical f B) := by
+  intro N σ
+  rw [mpv_reindexPhysical, mpv_reindexPhysical]
+  exact hSame N (fun n => f (σ n))
+
 /-- Iterated physical blocking agrees with direct blocking after the canonical
 index relabeling from iterated blocks to flattened blocks. -/
 @[mps_block_words]
@@ -568,6 +591,86 @@ theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
     _ = blockTensor (d := d) (D := D) A (m * n) := by
       ext i
       simp [reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
+
+/-- Refine a tensor already blocked by `p` through a further length-`L` blocking, but expose
+the resulting physical alphabet as the direct length-`p * L` alphabet.
+
+This is the small conceptual interface for flattened iterated blocking: it is ordinary blocking
+over the already blocked alphabet, followed by the canonical grouping map from direct
+length-`p * L` physical indices to iterated length-`L` indices. -/
+noncomputable def flattenedIteratedBlockTensor
+    {d p D : ℕ}
+    (A : MPSTensor (blockPhysDim d p) D) (L : ℕ) :
+    MPSTensor (blockPhysDim d (p * L)) D :=
+  reindexPhysical (directToIteratedBlockIndex d p L)
+    (blockTensor (d := blockPhysDim d p) (D := D) A L)
+
+/-- Evaluating a flattened iterated block is evaluating the iterated block on the grouped
+physical configuration. -/
+theorem mpv_flattenedIteratedBlockTensor
+    {d p D L N : ℕ} (A : MPSTensor (blockPhysDim d p) D)
+    (σ : Fin N → Fin (blockPhysDim d (p * L))) :
+    mpv (flattenedIteratedBlockTensor (d := d) (p := p) (D := D) A L) σ =
+      mpv (blockTensor (d := blockPhysDim d p) (D := D) A L)
+        (fun n => directToIteratedBlockIndex d p L (σ n)) := by
+  simpa [flattenedIteratedBlockTensor] using
+    (mpv_reindexPhysical (directToIteratedBlockIndex d p L)
+      (blockTensor (d := blockPhysDim d p) (D := D) A L) σ)
+
+/-- Flattened iterated blocking of an already `p`-blocked tensor agrees with direct blocking by
+`p * L` of the original tensor. -/
+theorem flattenedIteratedBlockTensor_blockTensor
+    {d D : ℕ} (A : MPSTensor d D) (p L : ℕ) :
+    flattenedIteratedBlockTensor
+        (d := d) (p := p) (D := D)
+        (blockTensor (d := d) (D := D) A p) L =
+      blockTensor (d := d) (D := D) A (p * L) := by
+  exact reindexPhysical_directToIteratedBlockIndex_blockTensor (d := d) A p L
+
+/-- Assembling flattened iterated blocks is the physical reindexing of assembling the
+iterated blocked tensors. -/
+theorem toTensorFromBlocks_flattenedIteratedBlockTensor
+    {d p r L : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)) :
+    toTensorFromBlocks (d := blockPhysDim d (p * L)) (μ := μ)
+        (fun k => flattenedIteratedBlockTensor
+          (d := d) (p := p) (D := dim k) (blocks k) L) =
+      reindexPhysical (directToIteratedBlockIndex d p L)
+        (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d p) L) (μ := μ)
+          (fun k => blockTensor (d := blockPhysDim d p) (D := dim k) (blocks k) L)) := by
+  funext i
+  rfl
+
+/-- Full MPV equality of assembled weighted block tensors is preserved after a further
+flattened iterated blocking, with the direct length-`p * L` physical alphabet exposed.
+
+This is the reusable bridge to the existing iterated-blocking results: the proof applies
+`sameMPV₂_toTensorFromBlocks_blockPower` over the already blocked alphabet and uses the
+grouping map to return to direct length-`p * L` indices. -/
+theorem sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower
+    {d p rA rB L : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (μA : Fin rA → ℂ)
+    (blocksA : (k : Fin rA) → MPSTensor (blockPhysDim d p) (dimA k))
+    (μB : Fin rB → ℂ)
+    (blocksB : (k : Fin rB) → MPSTensor (blockPhysDim d p) (dimB k))
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB)) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d (p * L))
+        (fun k => (μA k) ^ L)
+        (fun k => flattenedIteratedBlockTensor
+          (d := d) (p := p) (D := dimA k) (blocksA k) L))
+      (toTensorFromBlocks (d := blockPhysDim d (p * L))
+        (fun k => (μB k) ^ L)
+        (fun k => flattenedIteratedBlockTensor
+          (d := d) (p := p) (D := dimB k) (blocksB k) L)) := by
+  have hIter := sameMPV₂_toTensorFromBlocks_blockPower
+    (d := blockPhysDim d p) μA blocksA μB blocksB hSame L
+  rw [toTensorFromBlocks_flattenedIteratedBlockTensor,
+    toTensorFromBlocks_flattenedIteratedBlockTensor]
+  exact sameMPV₂_reindexPhysical (directToIteratedBlockIndex d p L) hIter
 
 /-- Iterated blocking expressed with the block-grouping bijection equals direct blocking.
 This is the tensor-level version of the blocked-word identity that underlies

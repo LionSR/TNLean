@@ -1100,6 +1100,45 @@ The following results separate the zero blocks from the nonzero blocks.
 	blocked assembled tensor by Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
+\begin{definition}[Flattened iterated blocking]%
+	\label{def:flattened_iterated_block_tensor}
+	\lean{MPSTensor.reindexPhysical,
+		MPSTensor.evalWord_reindexPhysical,
+		MPSTensor.mpv_reindexPhysical,
+		MPSTensor.sameMPV₂_reindexPhysical,
+		MPSTensor.flattenedIteratedBlockTensor,
+		MPSTensor.mpv_flattenedIteratedBlockTensor}
+	\leanok
+	\uses{def:blocked_tensor}
+	If a tensor $A$ already has physical alphabet $d^p$, its flattened iterated blocking by
+	a further length $L$ block is the tensor on the direct alphabet $d^{pL}$ obtained
+	by first taking the ordinary length-$L$ block over the alphabet $d^p$ and then
+	grouping each direct length-$pL$ word into $L$ consecutive length-$p$ words.
+	The same physical reindexing formula applies to MPVs and preserves heterogeneous
+	MPV equality.
+\end{definition}
+
+\begin{theorem}[Flattened iterated blocking agrees with direct blocking]%
+	\label{thm:flattened_iterated_blocking}
+	\lean{MPSTensor.flattenedIteratedBlockTensor_blockTensor,
+		MPSTensor.toTensorFromBlocks_flattenedIteratedBlockTensor,
+		MPSTensor.sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower}
+	\leanok
+	\uses{def:flattened_iterated_block_tensor, thm:samempv_toTensorFromBlocks_block_power}
+	For a tensor first blocked by $p$, flattened iterated blocking by $L$ agrees with direct
+	blocking by $pL$.  The same statement holds for assembled weighted block sums:
+	flattened iterated blocking is the physical reindexing of the iterated blocked assembled
+	family, and full MPV equality of two assembled families is preserved after this
+	blocking with weights transported to the powers $\mu_k^L$.
+\end{theorem}
+
+\begin{proof}\leanok
+	The proof is the combinatorial identity identifying a direct length-$pL$ word
+	with an $L$-tuple of length-$p$ words.  For assembled block sums, apply the
+	ordinary blocking theorem over the already blocked alphabet and then reindex the
+	physical alphabet by this grouping map.
+\end{proof}
+
 \begin{theorem}[Blocking assembled weighted blocks]%
 	\label{thm:block_tensor_to_tensor_from_blocks}
 	\lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}
