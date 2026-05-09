@@ -17,15 +17,30 @@ controls string-order phenomena.
 
 \section{Physical Symmetries Give Virtual Gauges}
 
-For periodic tensors, the physical-index rotation track is developed in
-Chapter~\ref{ch:periodic_ft_apps}: Definition~\ref{def:rotate_physical}
-and Theorems~\ref{thm:transfer_map_rotate_physical},
+For periodic tensors we use the following physical-index rotation, both
+in this chapter and in Chapter~\ref{ch:periodic_ft_apps}.
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_u)^i := \sum_j u_{ij}\, A^j$.
+\end{definition}
+
+The compatibility theorems for this definition ---
+Theorems~\ref{thm:transfer_map_rotate_physical},
 \ref{thm:left_canonical_rotate_physical},
 \ref{thm:irreducible_tensor_rotate_physical},
 \ref{thm:periodic_rotate_physical}, \ref{thm:same_mpv_rotate_physical},
 \ref{thm:rotate_physical_blocks}, and
-\ref{thm:irreducible_form_rotate_physical}. We use these results here
-when deriving symmetry consequences, without restating their proofs.
+\ref{thm:irreducible_form_rotate_physical} ---
+are proved in Chapter~\ref{ch:periodic_ft_apps} (which follows this
+chapter).
+% Maintainer note: these compatibility theorems are internal to the periodic
+% MPS rotation convention; they are not part of the Molnar algebraic-FT chapter.
 
 \begin{corollary}[Periodic symmetry yields gauge equivalence up to a root of unity]%
     \label{cor:symmetry_periodic_assembly}
