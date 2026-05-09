@@ -330,6 +330,16 @@ structure CommonRepresentativeBNTCoverHypotheses
     (FA.commonRepresentativeBlocksAt hpA)
     (FB.commonRepresentativeBlocksAt hpB) DtotA DtotB
 
+/-- A positive arithmetic subsequence of a convergent power sequence has the same limit. -/
+theorem tendsto_blockPowerCoeff_of_tendsto_pow
+    {μ a : ℂ} {L : ℕ} (hL : 0 < L)
+    (h : Filter.Tendsto (fun N : ℕ => μ ^ N) Filter.atTop (nhds a)) :
+    Filter.Tendsto (fun N : ℕ => (μ ^ L) ^ N) Filter.atTop (nhds a) := by
+  have hMul : Filter.Tendsto (fun N : ℕ => L * N) Filter.atTop Filter.atTop :=
+    Filter.tendsto_atTop_atTop.mpr fun b =>
+      ⟨b, fun N hN => le_trans hN (Nat.le_mul_of_pos_left N hL)⟩
+  simpa [Function.comp, ← pow_mul] using h.comp hMul
+
 namespace CommonPrimitiveBNTCoverHypotheses
 
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and the remaining
@@ -439,15 +449,6 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
   hc := tendsto_const_nhds
   hcLim_ne := one_ne_zero
 
-theorem tendsto_blockPowerCoeff_of_tendsto_pow
-    {μ a : ℂ} {L : ℕ} (hL : 0 < L)
-    (h : Filter.Tendsto (fun N : ℕ => μ ^ N) Filter.atTop (nhds a)) :
-    Filter.Tendsto (fun N : ℕ => (μ ^ L) ^ N) Filter.atTop (nhds a) := by
-  have hMul : Filter.Tendsto (fun N : ℕ => L * N) Filter.atTop Filter.atTop :=
-    Filter.tendsto_atTop_atTop.mpr fun b =>
-      ⟨b, fun N hN => le_trans hN (Nat.le_mul_of_pos_left N hL)⟩
-  simpa [Function.comp, ← pow_mul] using h.comp hMul
-
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
 assembled block-diagonal tensors.
 
@@ -489,13 +490,12 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
       (d := blockPhysDim d p) (μA := μA) (μB := μB)
       blocksA blocksB aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame)
 
-/-- Fixed-blocking adapter for the same-MPV/toTensorFromBlocks constructor.
+/-- BNT-cover hypotheses after a fixed positive reblocking.
 
 Starting from unblocked normal-CF-BNT data, a positive common blocking length `L`,
 explicit blocked BNT-separation, and one-site injectivity of the blocked blocks,
 this transports the normal-form, SameMPV₂, zero-length, and coefficient-limit data
-and then applies `ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity`
-at blocking period `L`. -/
+and gives `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
 noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
@@ -540,8 +540,8 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hA hL hNotGpeA)
     (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hB hL hNotGpeB)
     aLim bLim
-    (fun j => tendsto_blockPowerCoeff_of_tendsto_pow hL (haCoeff j))
-    (fun k => tendsto_blockPowerCoeff_of_tendsto_pow hL (hbCoeff k))
+    (fun j => MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow hL (haCoeff j))
+    (fun k => MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow hL (hbCoeff k))
     haLim_ne hbLim_ne
     (sameMPV₂_toTensorFromBlocks_blockPower
       (d := d) μA blocksA μB blocksB hSame L)
@@ -549,14 +549,13 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
       (d := d) μA blocksA μB blocksB hZero)
     hInjA hInjB
 
-/-- Existential common-injective blocking wrapper for the same-MPV/toTensorFromBlocks
-constructor.
+/-- Common-injective reblocking form for the same-MPV/toTensorFromBlocks construction.
 
 The common positive blocking length and one-site injectivity hypotheses are supplied by
 `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT`.  Blocked
-BNT separation and the power-limit data remain explicit inputs.  Since
-`CommonPrimitiveBNTCoverHypotheses` is Type-valued, this returns a dependent sigma
-rather than a Prop-valued existential. -/
+BNT separation and the power-limit data remain explicit inputs.  The returned value
+bundles the chosen positive blocking length together with the corresponding
+`CommonPrimitiveBNTCoverHypotheses`. -/
 noncomputable def
     exists_commonInjectiveBlock_ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

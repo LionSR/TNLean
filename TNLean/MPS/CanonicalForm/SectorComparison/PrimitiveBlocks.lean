@@ -247,29 +247,19 @@ theorem blockTensor_of_notGpe
     IsNormalCanonicalFormBNT (d := blockPhysDim d L)
       (fun k => (μ k) ^ L)
       (fun k => blockTensor (d := d) (D := dim k) (blocks k) L) := by
+  have hBlocked (k : Fin r) := by
+    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (h.dim_pos k)⟩
+    exact tp_primitive_irreducible_extra_blocking
+      (d := d) (D := dim k) (A := blocks k)
+      (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k) hL
   refine IsNormalCanonicalFormBNT.ofSeparatedData
     (d := blockPhysDim d L)
     (μ := fun k => (μ k) ^ L)
     (A := fun k => blockTensor (d := d) (D := dim k) (blocks k) L)
     ?_ ?_ ?_ ?_ ?_ hNotGpe
-  · refine HasIrreducibleBlocks.ofForall ?_
-    intro k
-    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (h.dim_pos k)⟩
-    exact (tp_primitive_irreducible_extra_blocking
-      (d := d) (D := dim k) (A := blocks k)
-      (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k) hL).2.2
-  · refine IsLeftCanonicalBlockFamily.ofForall ?_
-    intro k
-    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (h.dim_pos k)⟩
-    exact (tp_primitive_irreducible_extra_blocking
-      (d := d) (D := dim k) (A := blocks k)
-      (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k) hL).1
-  · refine HasPrimitiveBlocks.ofForall ?_
-    intro k
-    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (h.dim_pos k)⟩
-    exact (tp_primitive_irreducible_extra_blocking
-      (d := d) (D := dim k) (A := blocks k)
-      (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k) hL).2.1
+  · exact HasIrreducibleBlocks.ofForall fun k => (hBlocked k).2.2
+  · exact IsLeftCanonicalBlockFamily.ofForall fun k => (hBlocked k).1
+  · exact HasPrimitiveBlocks.ofForall fun k => (hBlocked k).2.1
   · exact
       { mu_strict_anti := by
           intro j k hjk
