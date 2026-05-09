@@ -16,7 +16,7 @@ are not developed elsewhere in this document.
     \lean{Matrix.diagonal_jensen_of_convexOn}
     \leanok
     Let $f:\R\to\R$ be convex on $[0,\infty)$, let $A$ be a positive
-    semidefinite matrix indexed by a finite type $n$, and let $v\in\C^n$
+    semidefinite matrix on a finite-dimensional space indexed by $n$, and let $v\in\C^n$
     satisfy $\langle v,v\rangle=1$. Then
     \[
         f\!(\Re\langle v, A v\rangle)
@@ -205,8 +205,9 @@ are not developed elsewhere in this document.
     \lean{IsPositiveMap.rpow_concave_jensen}
     \leanok
     \uses{thm:posMap_rpow_concave_jensen}
-    This is the corresponding map-form statement of
-    Theorem~\ref{thm:posMap_rpow_concave_jensen}.
+    For a positive subunital map $T$, a positive semidefinite matrix~$A$,
+    and $p\in[0,1]$, the inequality
+    $T(A^p) \le (TA)^p$ holds.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -229,8 +230,9 @@ are not developed elsewhere in this document.
     \lean{IsPositiveMap.rpow_convex_jensen}
     \leanok
     \uses{thm:posMap_rpow_convex_jensen}
-    This is the corresponding map-form statement of
-    Theorem~\ref{thm:posMap_rpow_convex_jensen}.
+    For a positive subunital map $T$, a positive semidefinite matrix~$A$,
+    and $p\in[1,2]$, the inequality
+    $(TA)^p \le T(A^p)$ holds.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -253,8 +255,8 @@ are not developed elsewhere in this document.
     \lean{IsPositiveMap.log_concave_jensen}
     \leanok
     \uses{thm:posMap_log_concave_jensen}
-    This is the corresponding map-form statement of
-    Theorem~\ref{thm:posMap_log_concave_jensen}.
+    For a positive unital map $T$ and a positive-definite matrix~$A$,
+    the inequality $T(\log A) \le \log(TA)$ holds.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -283,8 +285,10 @@ are not developed elsewhere in this document.
     \lean{lieb_concavity}
     \leanok
     \uses{thm:lieb_concavity_axiom}
-    This is the corresponding map-form statement of
-    Theorem~\ref{thm:lieb_concavity_axiom}.
+    For $s\in[0,1]$, any matrix~$K$, and positive-definite matrices
+    $A_1,A_2,B_1,B_2$, the function
+    $(A,B)\mapsto\Re\tr(K^\dagger A^s K B^{1-s})$ is jointly concave,
+    with the same inequality as Theorem~\ref{thm:lieb_concavity_axiom}.
 \end{theorem}
 
 \begin{proof}\leanok
