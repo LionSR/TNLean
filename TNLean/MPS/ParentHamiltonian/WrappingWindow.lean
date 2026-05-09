@@ -674,8 +674,9 @@ theorem commutes_words_of_two_sided_middle_compatibility
 with all words whose length is any multiple of `m`.
 
 The proof chunks a list of length `q * m` into a length-`m` prefix and a shorter
-multiple-length suffix. This formalizes the amplification observation used to
-feed positive-length commutation into the block-injective long-word endgame. -/
+multiple-length suffix. This formalizes the amplification step that promotes
+fixed-length commutation to the long-word commutation hypothesis required by
+the block-injective boundary-contraction theorem. -/
 theorem commutes_words_mul_of_commutes_words {A : MPSTensor d D}
     {m q : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
     (hComm : ∀ ω : Fin m → Fin d,
