@@ -973,6 +973,35 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
 \end{proof}
 
+
+\begin{theorem}[Bounded injective blocking for left-canonical normal tensors]%
+\label{thm:bounded_injective_blocking_normal_left_canonical}
+    \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
+    \leanok
+    \uses{def:normal, def:blocked_tensor, thm:wielandt_bound}
+    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
+    Then there is a positive blocking length $L \le D^4$ such that the blocked
+    tensor $A^{[L]}$ is one-site injective.
+
+    This is the blocked-injectivity form of the quantum Wielandt input used in
+    the non-periodic Fundamental Theorem chain.  It corresponds to the statement
+    in \cite[Section~II, line~332]{Cirac2016MPDO_arXiv} that every normal tensor
+    becomes injective after at most $D^4$ blockings, using the index estimate of
+    \cite[Theorem~1]{Sanz2010Quantum}.  The Lean statement includes the
+    left-canonical/trace-preserving hypothesis because that is the canonical-form
+    context in which the blocked-injectivity input is consumed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The proof uses the full-Kraus-rank index bound from the quantum Wielandt
+    inequality.  Since $A$ is normal, the index is attained; the one-step Kraus
+    rank is nonzero in the left-canonical case, so the bound
+    $(D^2-\operatorname{rank}S_1(A)+1)D^2$ is at most $D^4$.  The bridge from
+    exact word-span fullness to injectivity of the blocked tensor is
+    Lemma~\ref{lem:blocking_transfer}.
+\end{proof}
+
 \begin{remark}[Relation with the rank-one extraction lemma]\label{rem:lemma2b_status}\leanok
     In~\cite{Sanz2010Quantum}, Lemma~2(b) combines a rank-one
     extraction for fixed-length spans with a product

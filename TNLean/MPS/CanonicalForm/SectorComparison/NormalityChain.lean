@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction
 import TNLean.MPS.Chain.BlockedChainFT
+import TNLean.Wielandt.SourceTheorems.WielandtInequality
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -217,6 +218,74 @@ For the pre-blocking blocks (which ARE irreducible), the chain to IsNormal
 works directly. This shows that the original nonzero-weight blocks become
 normal once we know their transfer maps are primitive.
 -/
+
+
+/-- **Left-canonical normal tensor → bounded positive injective blocking**.
+
+This is the blocked-injectivity form of the quantum Wielandt bound needed by the
+canonical-form comparison chain.  The trace-preserving/left-canonical hypothesis rules out the
+scalar zero-physical-letter edge case and supplies a nonzero one-step Kraus matrix, which makes
+the general index bound `(D ^ 2 - krausRank A + 1) * D ^ 2` at most `D ^ 4`.
+
+The conclusion is stated for `blockTensor` because this is the form consumed by the BNT-sector
+comparison infrastructure. -/
+theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical [NeZero D]
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hN : IsNormal A) :
+    ∃ L : ℕ, 0 < L ∧ L ≤ D ^ 4 ∧ IsInjective (blockTensor A L) := by
+  by_cases hD1 : D = 1
+  · subst D
+    have hInj : IsInjective A :=
+      isInjective_of_dim_one_of_exists_nonzero A (exists_nonzero_kraus_of_tp A hTP)
+    refine ⟨1, Nat.zero_lt_one, by norm_num, ?_⟩
+    exact (isNBlkInjective_iff_blockTensor_isInjective A 1).1
+      (isNBlkInjective_one_of_isInjective hInj)
+  · have hDpos : 0 < D := NeZero.pos D
+    have hD2 : 2 ≤ D := by omega
+    let L : ℕ := iIndex A
+    have hNonempty : ({n : ℕ | wordSpan A n = ⊤}).Nonempty := by
+      obtain ⟨N, hNblk⟩ := hN
+      exact ⟨N, (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk⟩
+    have hTop : wordSpan A L = ⊤ := by
+      simpa [L, iIndex] using Nat.sInf_mem hNonempty
+    have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
+      simpa [L] using
+        iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
+    have hKraus_pos : 1 ≤ krausRank A := by
+      rw [krausRank, Nat.one_le_iff_ne_zero]
+      intro hzero
+      have hbot : wordSpan A 1 = (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+        Submodule.finrank_eq_zero.mp hzero
+      obtain ⟨i₀, hi₀⟩ := exists_nonzero_kraus_of_tp A hTP
+      have hmem : A i₀ ∈ wordSpan A 1 := by
+        have := evalWord_mem_wordSpan A ([i₀] : List (Fin d))
+        simpa [evalWord] using this
+      rw [hbot] at hmem
+      exact hi₀ hmem
+    have hDsq_pos : 1 ≤ D ^ 2 := by
+      nlinarith
+    have hFactor : D ^ 2 - krausRank A + 1 ≤ D ^ 2 := by
+      by_cases hKraus_le : krausRank A ≤ D ^ 2
+      · omega
+      · have hsub : D ^ 2 - krausRank A = 0 :=
+          Nat.sub_eq_zero_of_le (le_of_not_ge hKraus_le)
+        rw [hsub]
+        exact hDsq_pos
+    have hBound : L ≤ D ^ 4 := by
+      calc
+        L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := hIndexBound
+        _ ≤ D ^ 2 * D ^ 2 := Nat.mul_le_mul_right _ hFactor
+        _ = D ^ 4 := by ring
+    have hLpos : 0 < L := by
+      by_contra hnot
+      have hL0 : L = 0 := Nat.eq_zero_of_not_pos hnot
+      have hzeroTop : wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
+        simpa [hL0] using hTop
+      exact wordSpan_zero_ne_top_of_two_le A hD2 hzeroTop
+    refine ⟨L, hLpos, hBound, ?_⟩
+    exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
+      ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
 
 /-- **Pre-blocking blocks are normal once primitive.**
 
