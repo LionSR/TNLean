@@ -175,7 +175,7 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
     μ blocks (by mpv_ext; rfl) p
 
-/-- Full MPV equality of weighted nonzero-block tensors is preserved after a common
+/-- Full MPV equality of assembled weighted block tensors is preserved after a common
 physical blocking, with each weight transported to the corresponding power. -/
 theorem sameMPV₂_toTensorFromBlocks_blockPower
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

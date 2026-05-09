@@ -405,7 +405,7 @@ families with the same MPV family, once the block-weight power coefficient famil
 have specified nonzero limits.
 
 The block-diagonal MPV expansion has coefficients `(μA j) ^ N` and `(μB k) ^ N` at
-length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this constructor keeps
+length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this construction keeps
 the required coefficient convergence as an explicit input; it does not replace the
 spectral/power-sum comparison needed to obtain such nonzero limits in the general
 BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`.
@@ -495,7 +495,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
 Starting from unblocked normal-CF-BNT data, a positive common blocking length `L`,
 explicit blocked BNT-separation, and one-site injectivity of the blocked blocks,
 this transports the normal-form, SameMPV₂, zero-length, and coefficient-limit data
-and gives `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
+and yields `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
 noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
@@ -549,7 +549,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
       (d := d) μA blocksA μB blocksB hZero)
     hInjA hInjB
 
-/-- Common-injective reblocking form for the same-MPV/toTensorFromBlocks construction.
+/-- Common-injective reblocking statement for the same-MPV/toTensorFromBlocks construction.
 
 The common positive blocking length and one-site injectivity hypotheses are supplied by
 `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT`.  Blocked
