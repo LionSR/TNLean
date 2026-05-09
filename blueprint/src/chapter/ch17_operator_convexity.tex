@@ -3,11 +3,12 @@
 This chapter collects the operator convexity/concavity results, trace
 inequalities, the operator Jensen inequality for positive maps, and the
 Lieb concavity theorem. These are standard results in matrix analysis
-(Bhatia's \emph{Matrix Analysis}, Chapter~V; \cite[Theorem~5.1]{Wolf2012Quantum};
-Hansen--Pedersen's Jensen inequality; and Lieb's concavity theorem). They are
+(\cite[Chapter~V]{Bhatia1997Matrix}; \cite[Theorem~5.1]{Wolf2012Quantum};
+Hansen--Pedersen's Jensen inequality~\cite{HansenPedersen1982Jensen};
+and Lieb's concavity theorem~\cite{Lieb1973Convex}). They are
 provided here as cited inputs, since the corresponding matrix-analysis proofs for
 real powers $x\mapsto x^p$ on the Loewner order and for the matrix logarithm
-are not developed elsewhere in this blueprint.
+are not developed elsewhere in this document.
 
 \section{Diagonal Jensen inequality}
 
@@ -35,7 +36,7 @@ are not developed elsewhere in this blueprint.
     $\Re\langle v,Av\rangle=\sum_i p_i\mu_i$ and
     $\Re\langle v,f(A)v\rangle=\sum_i p_i f(\mu_i)$, so the scalar Jensen
     inequality applied to the weights $(p_i)$ and points $(\mu_i)$ gives
-    the conclusion. See Bhatia, \emph{Matrix Analysis}, Chapter~V.
+    the conclusion. See \cite[Chapter~V]{Bhatia1997Matrix}.
 \end{proof}
 
 \section{Trace concavity and convexity of matrix powers}
@@ -68,7 +69,7 @@ are not developed elsewhere in this blueprint.
     $a_j^p\le\Re\langle\psi_j,A_1^p\psi_j\rangle$ (and similarly for
     $b_j$). Summing over $j$ and using
     $\sum_j\Re\langle\psi_j,M\psi_j\rangle=\Re\tr M$ yields the
-    conclusion. See Bhatia, \emph{Matrix Analysis}, Chapter~V.
+    conclusion. See \cite[Chapter~V]{Bhatia1997Matrix}.
 \end{proof}
 
 \begin{theorem}[Trace convexity of real powers]\label{thm:trace_rpow_convex}
@@ -94,7 +95,7 @@ are not developed elsewhere in this blueprint.
 
 \section{Operator Jensen inequality for positive maps}
 
-\begin{definition}[Finite-POVM dilation data]\label{def:operator_jensen_povm_aux}
+\begin{definition}[Finite-POVM dilation construction]\label{def:operator_jensen_povm_aux}
     \lean{TNLean.OperatorJensen.povmIsometry, TNLean.OperatorJensen.povmDiagonal}
     \leanok
     For a finite family of matrices $\{C_i\}_{i \in \iota}$ and a defect block
