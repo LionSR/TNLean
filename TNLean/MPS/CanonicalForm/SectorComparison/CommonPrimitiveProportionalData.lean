@@ -389,23 +389,24 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
   exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
-/-- Construct `ProportionalDecompositionData` for two normal-CF-BNT block families
-whose assembled block-diagonal tensors generate the same MPV family, once the
-block-weight power coefficient families have specified nonzero limits.
+/-- Construct `ProportionalDecompositionData` for two assembled block-diagonal tensor
+families with the same MPV family, once the block-weight power coefficient families
+have specified nonzero limits.
 
 The block-diagonal MPV expansion has coefficients `(μA j) ^ N` and `(μB k) ^ N` at
 length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this constructor keeps
 the required coefficient convergence as an explicit input; it does not replace the
 spectral/power-sum comparison needed to obtain such nonzero limits in the general
-BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`. -/
-noncomputable def proportionalDecompositionData_of_sameMPV_of_isNormalCanonicalFormBNT
+BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`.
+
+This construction is formal in the block families and does not use normal-CF-BNT
+hypotheses; callers add those hypotheses when assembling `CommonPrimitiveBNTCoverHypotheses`. -/
+noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (_hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
-    (_hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
     (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
     (haCoeff : ∀ j, Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
     (hbCoeff : ∀ k, Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
