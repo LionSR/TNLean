@@ -24,6 +24,16 @@ BNT block families, the results here use only restricted consequences of that
 hypotheses: block injectivity, nonzero weights, pair separation, selector words, and
 homogeneous padding hypotheses.  They are not the general CPSV repeated-sector
 comparison, where multiplicities and sector weights remain explicit data.
+
+## Implementation notes
+
+The commutant theorem `isBlockDiagonal'_of_commutes_reindexed_wordSpan` is used
+in the parent-Hamiltonian ground-space decomposition
+`groundSpaceMap_toTensorFromBlocks_mem_iSup_chainGroundSpace_of_reindexed_projectionSpan`
+in `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`.  It is a restricted
+block-diagonal commutant statement: the CPSV repeated-sector comparison
+(CPSV, arXiv:2011.12127, §V) is stated in
+`TNLean/MPS/CanonicalForm/SectorComparison`.  (Issue #1510.)
 -/
 
 open scoped Matrix BigOperators
@@ -379,18 +389,17 @@ lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock
   exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt
     μ A hCF hSep
 
-/-- One-site injectivity of the BNT blocks gives one homogeneous pair-separation
-length for all ordered pairs of distinct blocks.
+/-- One-site injectivity of the BNT blocks gives homogeneous pair separation at length `6`.
 
-The proof specializes the three-block direct-sum theorem to `L = 2`; one-site
+This specializes the three-block direct-sum theorem to `L = 2`; one-site
 injectivity gives the length-`2` and length-`6` fixed-length inputs. -/
-lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+lemma forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (hCF : IsCanonicalFormBNT μ A)
     (hIrr : HasIrreducibleBlocks (d := d) A) :
-    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S := by
-  refine exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
+    ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) (2 + (2 + 2)) := by
+  refine forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock
     (d := d) (dim := dim) μ A hCF hIrr (L := 2) ?_ ?_ ?_
   · intro k
     simpa using isNBlkInjective_mul_of_isNBlkInjective (A k) (N := 1) (m := 2)
@@ -401,6 +410,43 @@ lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_inj
       (by norm_num) (isNBlkInjective_one_of_isInjective
         (hCF.toHasInjectiveBlocks.block_injective k))
   · norm_num
+
+/-- Existential form of
+`forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks`. -/
+lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S :=
+  ⟨2 + (2 + 2),
+    forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr⟩
+
+/-- From BNT direct-sum comparison at `L = 2`, get a uniform `start = period = 6`
+full homogeneous pair-span window for all ordered pairs of distinct blocks. -/
+lemma exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ start period : ℕ, 0 < period ∧
+      ∀ k j : Fin r, j ≠ k →
+        PairWordTupleSpanTop (A k) (A j) period ∧
+        ∀ s : ℕ, s < period → PairWordTupleSpanTop (A k) (A j) (start + s) := by
+  let S : ℕ := 2 + (2 + 2)
+  have hSpos : 0 < S := by norm_num [S]
+  refine ⟨S, S, hSpos, ?_⟩
+  intro k j hneq
+  have hSpanS : PairWordTupleSpanTop (A k) (A j) S := by
+    dsimp [S]
+    exact pairWordTupleSpanTop_of_pairTraceSeparatingAt (A k) (A j)
+      (forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+        μ A hCF hIrr k j hneq)
+  refine ⟨hSpanS, ?_⟩
+  intro s _hs
+  exact pairWordTupleSpanTop_of_le_of_pos (A k) (A j) hSpos
+    (Nat.le_add_right S s) hSpanS
 
 /-- Positive-length product-word span from canonical-form/BNT separation and
 one-site injectivity of the BNT blocks.
@@ -500,7 +546,7 @@ lemma exists_wordTupleSpanTop_of_isNormalCanonicalFormBNT_of_directSum_injective
   exact ⟨m, hm, by simpa [WordTupleSpanTop, wordTuple] using hSpan⟩
 
 /-- Canonical-form/BNT direct-sum separation gives the block-injective
-horizontal-canonical-form field used by the MPDO bicanonical-form package. -/
+horizontal-canonical-form field used by the MPDO bicanonical-form structure. -/
 lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -513,7 +559,7 @@ lemma hasBiCF_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
   exact hasBiCF_of_wordTupleSpanTop A hSpan
 
 /-- Normal-CF-BNT direct-sum separation gives the block-injective
-horizontal-canonical-form field used by the MPDO bicanonical-form package,
+horizontal-canonical-form field used by the MPDO bicanonical-form structure,
 provided one-site injectivity is supplied explicitly. -/
 lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
     [∀ k, NeZero (dim k)]
@@ -688,6 +734,21 @@ lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_window
     exists_forall_pairTraceSeparatingAt_of_pairSpanTop_period_windows
       A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
   exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
+
+/-- Direct-sum pair-span windows give the conditional period-window `WordTupleSpanTop`
+conclusion for canonical-form/BNT block families. -/
+lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
+    [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hCF : IsCanonicalFormBNT μ A)
+    (hIrr : HasIrreducibleBlocks (d := d) A) :
+    ∃ T : ℕ, WordTupleSpanTop A (1 + (r - 1) * T) := by
+  obtain ⟨start, period, hperiod_pos, hWindow⟩ :=
+    exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks
+      μ A hCF hIrr
+  exact exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
+    μ A hCF (fun k j hj => ⟨start, period, hperiod_pos, hWindow k j hj⟩)
+
 
 /-- Canonical-form/BNT data and period-window padding give positive product-word span.
 

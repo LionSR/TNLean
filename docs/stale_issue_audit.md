@@ -1,160 +1,152 @@
-# Stale-issue audit for theorem and proof-obligation issues
+# Stale Issue Audit
 
-This document describes the periodic triage workflow for open formalization
-issues in this repo, and how to run
-[`scripts/audit_stale_issues.py`](../scripts/audit_stale_issues.py).
+The stale-issue audit (`scripts/audit_stale_issues.py`) scans open GitHub issues
+for citations that may have drifted out of sync with the current state of the
+repository. It is **report-only** — it never edits, closes, or comments on
+issues. Flagged items are triage signals for a human maintainer, who decides
+whether the citation is genuinely stale or the issue body just needs updating.
 
-## Motivation
+## What the audit checks
 
-Issue trackers that name specific `sorry` sites, file/line locations, or
-declaration names drift out of date whenever `main` moves:
+For each open issue, the audit scans its body for three categories of citation
+and checks each against the current `main` branch:
 
-- a referenced file is split, renamed, or deleted;
-- the cited line number is no longer a `sorry` after a proof lands;
-- a named declaration is inlined, renamed, or removed.
+1. **`TNLean/**/*.lean` file paths.** A path that no longer exists on `main` is
+   flagged as a *missing file* (e.g., a file that was renamed, moved, or
+   removed).
 
-This is the inaugural audit tool for TNLean.  New formalization issues
-should therefore cite the mathematical source at the time they are opened:
-paper or blueprint path, line number, theorem label, and a short quotation
-or precise paraphrase.  The audit checks repository citations; it does not
-replace this mathematical source citation.
+2. **Line-number citations.** When an issue body cites a file together with a
+   line number — either with the `file.lean:LINE` suffix or the separate
+   `` line NNN `` idiom — the audit checks whether that line still contains a
+   `sorry` or `admit`. A line is flagged when:
+   - the line exists but no longer has `sorry`/`admit` (someone filled the
+     proof), or
+   - the line number is past the end of the file (the file was shortened).
+   Single-line `--` comments are stripped before matching, so a commented-out
+   `-- sorry` does not count as an active sorry site.
 
-## What the script does
+3. **Backtick-quoted declaration names.** A token like `` `someLemma` `` that
+   looks like a Lean identifer is checked against the set of `def`, `theorem`,
+   `lemma`, `structure`, `instance`, `class`, `abbrev`, `inductive`, and
+   `opaque` declarations currently present in `TNLean/`. A declaration is
+   flagged when it cannot be resolved at all — neither by short name nor by
+   namespace-qualified name. Common English words and Lean keywords (e.g.,
+   `sorry`, `main`, `simp`, `Nat`) are excluded by a built-in stoplist.
 
-Given a JSON dump of open issues, the script extracts three kinds of
-citations from each issue body and checks them against the current
-working tree:
+GitHub blob URLs of the form
+`https://github.com/OWNER/REPO/blob/REF/TNLean/...` are automatically
+normalized to plain `TNLean/...` citations before scanning.
 
-| Citation pattern | Example | Stale if … |
-|------------------|---------|------------|
-| `TNLean/.../X.lean`        | `TNLean/MPS/Core/Basic.lean`           | the file no longer exists |
-| `TNLean/.../X.lean:LINE`   | `TNLean/MPS/Core/Basic.lean:131`       | the line is no longer a `sorry`/`admit` |
-| `` `declName` `` (backtick) | `` `transferMap` `` | no matching `def`/`theorem`/`lemma`/`instance`/`class`/`structure`/`abbrev`/`inductive`/`opaque` exists under `TNLean/` |
+## Report-only contract
 
-The tool is **report-only** — it never edits or closes issues and never
-posts comments.  Its output is intended for human review by a maintainer
-doing periodic triage before launching a proof-closing round.
+The audit tool **never writes to GitHub**. It reads exported issue JSON (produced
+by `gh issue list --json ...`) and writes analysis output to stdout or to a
+local file. The CI workflow summarises the results and uploads them as artifacts,
+but does not modify issue bodies, close issues, or post comments. Every flag is
+a suggestion for human review.
 
-## Offline-first inputs and scheduled audit
+## Running the audit locally
 
-The script reads pre-exported JSON from `gh issue list` instead of calling
-GitHub directly.  That keeps the audit easy to run locally, easy to test
-without credentials, and safe to wrap in automation.
-
-The weekly GitHub Actions wrapper
-[`.github/workflows/stale-issue-audit.yml`](../.github/workflows/stale-issue-audit.yml)
-automates exactly that documented export-and-audit sequence: it lists open
-issues with `gh issue list`, writes a JSON audit report, and uploads the
-report as an artifact only when at least one stale citation is flagged.  The
-workflow has read-only `contents` and `issues` permissions and preserves the
-script's report-only contract: it never closes, labels, edits, or comments on
-issues.
-
-## Usage
-
-### One-shot local audit
+First export open issues with the GitHub CLI:
 
 ```bash
-# 1. Export open issues that plausibly reference code.
-gh issue list --repo LionSR/TNLean --state open --limit 500 \
+gh issue list \
+  --repo OWNER/REPO \
+  --state open \
+  --limit 500 \
   --json number,title,body,url,labels \
-  > /tmp/tnlean-open-issues.json
-
-# 2. Run the audit.  Default output lists only flagged issues.
-python3 scripts/audit_stale_issues.py \
-  --issues /tmp/tnlean-open-issues.json
+  > open-issues.json
 ```
 
-### Narrower scope (sorry trackers only)
+Then run the audit:
 
 ```bash
-gh issue list --repo LionSR/TNLean --state open --limit 500 \
-  --label sorry-elimination \
-  --json number,title,body,url,labels \
-  > /tmp/tnlean-sorry-issues.json
-
-python3 scripts/audit_stale_issues.py \
-  --issues /tmp/tnlean-sorry-issues.json
+python3 scripts/audit_stale_issues.py --issues open-issues.json
 ```
 
-### Machine-readable output
+### CLI options
 
-```bash
-python3 scripts/audit_stale_issues.py \
-  --issues /tmp/tnlean-open-issues.json \
-  --format json \
-  --output /tmp/audit.json
-```
+| Option          | Description |
+|-----------------|-------------|
+| `--issues PATH` | JSON file from `gh issue list --json number,title,body,url,labels`. Required unless `--self-test` is used. |
+| `--repo-root PATH` | Repository root (default: parent of the script's directory). Must contain a `TNLean/` subdirectory. |
+| `--format text\|json` | Output format (default: `text`). |
+| `--all` | Include non-flagged issues in text reports (default: only flagged issues). |
+| `--output PATH` | Write report to a file instead of stdout. |
+| `--self-test` | Run a credentials-free smoke test against a synthetic issue. Exits 0 on success. |
 
-### Credentials-free self-test
+### Self-test
+
+The `--self-test` flag runs a smoke test without talking to GitHub:
 
 ```bash
 python3 scripts/audit_stale_issues.py --self-test
 ```
 
-The self-test constructs a synthetic issue that references a non-existent
-file and a non-existent declaration, runs the audit against the current
-checkout, and exits 0 only if both flags fire.  Use this to verify the
-tool still works after editing the script or changing the repository
-layout.
+It constructs a synthetic issue referencing a bogus file
+(`TNLean/Does/Not/Exist.lean:10`) and a bogus declaration
+(`` `definitely_not_a_real_declaration` ``), then verifies both are flagged.
+Exits 0 if everything works.
 
-## Output format
+## CI workflow
 
-Text mode groups each flagged issue:
+The `.github/workflows/stale-issue-audit.yml` workflow runs the audit
+automatically:
+
+- **Schedule:** Every Monday at 08:30 UTC (cron `30 8 * * 1`), aligned with
+  the standup window.
+- **Manual dispatch:** Supported via `workflow_dispatch`.
+- **Permissions:** `contents: read`, `issues: read`. The workflow never pushes
+  code or modifies issues.
+
+The workflow pipeline:
+
+1. Checkout `main` and set up Python 3.12.
+2. Export all open issues with `gh issue list` (up to 500).
+3. Run the audit twice: once with `--format json` (for the summary) and once in
+   text mode (for the human-readable log).
+4. Summarise the results and write them to the job's step summary.
+5. When flagged issues exist, upload the full audit report as a workflow
+   artifact (`stale-issue-audit-report`).
+
+## Maintainer triage policy
+
+When the audit flags an issue, a maintainer should:
+
+1. **Read the flagged citations.** Determine whether the issue body is genuinely
+   stale (the cited file, line, or declaration no longer matches the current
+   codebase) or whether the audit flag is a false positive (e.g., a declaration
+   exists but was missed by the index, or a file path is correct but the script
+   misinterpreted a prose sentence).
+
+2. **Update the issue body** to keep the mathematical source citation precise.
+   A well-maintained citation includes:
+   - **Paper or blueprint path** (e.g., `blueprint/src/chapter/ch02_algebra.tex`,
+     or the paper arXiv ID and section number)
+   - **Line** (the `file.lean:LINE` of the relevant Lean code, or a
+     `` line NNN `` reference when the file path is nearby)
+   - **Label** (the Lean declaration name, backtick-quoted, e.g.
+     `` `someLemma` ``)
+   - **Short quotation** or precise paraphrase of the mathematical statement
+
+3. **Close the issue** only when the mathematical work is done or superseded —
+   not merely because a citation became stale. Staleness is a triage signal,
+   not a reason to close.
+
+4. **Ignore false positives** from the audit. The tool uses conservative
+   heuristics; it may flag items that a human would recognise as still valid.
+   The audit is an aid, not a gate.
+
+## Updating issue citations
+
+When you update an issue body, keep the source citation block precise and
+machine-scannable. Preferred format:
 
 ```
-Stale-issue audit report
-========================
-issues scanned        : 147
-issues with citations : 92
-issues flagged stale  : 6
-triage note           : keep mathematical source citations precise
-                       (paper/blueprint path, line, label, and
-                       short quotation or precise paraphrase)
-
-#42 — Audit: MPS/Core — prove transferMap fixed-point lemma
-------
-  https://github.com/LionSR/TNLean/issues/42
-  declarations not found under TNLean/:
-    - transferMap
-    - isPeripheralEigenvalue
+- Paper:  arXiv:XXXX.YYYYY §3.2
+- Blueprint: blueprint/src/chapter/ch04_canonical.tex (Lemma 4.3)
+- Lean:    TNLean/MPS/CanonicalForm/Basic.lean:142 (`someLemma`)
+- Statement: "every block-diagonal sector decomposes as ..."
 ```
 
-JSON mode emits an array with the same information keyed by issue number
-and suitable for downstream automation.
-
-## Recommended cadence and follow-up
-
-1. Let the scheduled GitHub Actions workflow run weekly, and also run the
-   audit manually before starting a new proof-closing round (monthly
-   or before a campaign, whichever is sooner).
-2. For each flagged issue, open it and decide:
-   - close it as resolved, optionally with a comment like
-     `resolved in #...` or `stale on current main; close after audit`;
-   - update the body so the cited file/line/declaration matches current
-     `main`, and keep the paper or blueprint path, line, label, and source
-     paraphrase accurate;
-   - leave it open if the flag is a false positive (e.g. a backticked
-     word that happens to look like an identifier).
-3. Do **not** let the script close issues automatically.  Flags are a
-   starting point for human review, not a decision.
-
-## Known limitations
-
-- Backtick-quoted tokens are matched against unqualified declaration
-  names.  A false positive is possible when an issue cites a plain
-  English word that happens to look like a Lean identifier; the
-  stoplist in `_DECL_STOPLIST` suppresses the most common offenders.
-- Line-number checks only consider whether the cited line currently
-  contains `sorry` or `admit`.  A `sorry` that moved a few lines up or
-  down will be flagged even though the tracker is still basically
-  valid — in practice, triage that as "issue body wants a line-number
-  refresh".
-- The script does not consult `git log`; it only inspects the checkout
-  it runs against.  Run it from a clean checkout of current `main` for
-  the most meaningful report.
-
-## Related scripts
-
-- [`scripts/blueprint_lean_sync.py`](../scripts/blueprint_lean_sync.py)
-  — blueprint ↔ Lean declaration sync.
+This makes the citation both human-readable and auditable by the script.

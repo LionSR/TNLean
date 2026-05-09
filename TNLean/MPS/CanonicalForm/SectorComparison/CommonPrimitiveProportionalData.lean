@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem
 import TNLean.MPS.CanonicalForm.PhaseCover
+import TNLean.MPS.FundamentalTheorem.Multi
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -32,7 +33,15 @@ The common-sector structural theorem supplies zero-tail decompositions, positive
 nonzero-part equality, nonzero weights, trace-preserving normalization, primitive transfer maps,
 irreducibility, and positive bond dimensions. To pass to the overlap-rigidity sector comparison
 one still needs equality of zero-tail dimensions, one-site injectivity for the two block families,
-and equality of their finite-length MPV spans. -/
+and equality of their finite-length MPV spans.
+
+This structure is a deliberate parameterization — the lightest boundary that collects the
+span-level inputs needed to proceed from the structural theorem to the BNT overlap-rigidity
+comparison.  It records the decomposition of arXiv:1606.00608, Section II, lines 283–302
+where the block families and their MPV spans are matched after the canonical-form reduction.
+When the BNT-cover data in `CommonPrimitiveBNTCoverHypotheses` have been discharged
+(tracker #1498, sub-issue #1501), this structure is automatically satisfied via
+`toSpanHypotheses`. -/
 structure CommonPrimitiveSpanHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (zeroTailA zeroTailB : ℕ)
@@ -114,7 +123,16 @@ formulated with a BNT proportional-decomposition comparison.
 This is the proportional-comparison version of `CommonPrimitivePhaseCoverHypotheses`: the
 structural theorem supplies the same primitive nonzero-sector data, while the remaining inputs
 are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
-BNT comparison conclusion for the two block families. -/
+BNT comparison conclusion for the two block families.
+
+This structure is a deliberate parameterization.  It records the proportional Fundamental
+Theorem conclusion (arXiv:1606.00608, Theorem II.1, lines 283–352): after the
+block-injective span is established, the two block families are compared by a permutation
+of the BNT representatives with equal dimensions.  The `proportional` field records that
+conclusion; the remaining fields (`zeroTail_eq`, injectivity) ensure the dimensions are
+compatible.  Once the BNT-cover data in `CommonPrimitiveBNTCoverHypotheses` are discharged
+(tracker #1498, sub-issue #1501), this structure follows from
+`fundamentalTheorem_of_separated_normalCFBNT_data`. -/
 structure CommonPrimitiveProportionalHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (zeroTailA zeroTailB : ℕ)
@@ -353,7 +371,8 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
     (hA : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA)
     (hB : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB)
     (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
         (zeroTailB : ℂ) +
           mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
     (hInjA : ∀ x, IsInjective (blocksA x))
@@ -370,6 +389,96 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
       hDecomp
   exact ofNormalCanonicalFormBNT hA hB
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
+
+/-- Construct `ProportionalDecompositionData` for two assembled block-diagonal tensor
+families with the same MPV family, once the block-weight power coefficient families
+have specified nonzero limits.
+
+The block-diagonal MPV expansion has coefficients `(μA j) ^ N` and `(μB k) ^ N` at
+length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this constructor keeps
+the required coefficient convergence as an explicit input; it does not replace the
+spectral/power-sum comparison needed to obtain such nonzero limits in the general
+BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`.
+
+This construction is formal in the block families and does not use normal-CF-BNT
+hypotheses; callers add those hypotheses when assembling `CommonPrimitiveBNTCoverHypotheses`. -/
+noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (haCoeff : ∀ j, Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k, Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB)) :
+    ProportionalDecompositionData (d := d) blocksA blocksB
+      (∑ j : Fin rA, dimA j) (∑ k : Fin rB, dimB k) where
+  A_total := toTensorFromBlocks (d := d) (μ := μA) blocksA
+  B_total := toTensorFromBlocks (d := d) (μ := μB) blocksB
+  aCoeff := fun N j => (μA j) ^ N
+  bCoeff := fun N k => (μB k) ^ N
+  aLim := aLim
+  bLim := bLim
+  c := fun _ => 1
+  cLim := 1
+  hA_decomp := fun _ σ => by
+    simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μA blocksA σ
+  hB_decomp := fun _ σ => by
+    simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μB blocksB σ
+  haCoeff := haCoeff
+  hbCoeff := hbCoeff
+  haLim_ne := haLim_ne
+  hbLim_ne := hbLim_ne
+  hProp := fun N σ => by
+    rw [one_mul]
+    exact hSame N σ
+  hc := tendsto_const_nhds
+  hcLim_ne := one_ne_zero
+
+/-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
+assembled block-diagonal tensors.
+
+The block-diagonal MPV expansion has coefficient families `(μA j) ^ N` and `(μB k) ^ N`.
+Accordingly the convergence and nonzero-limit data for those power families remain explicit
+inputs; the `SameMPV₂` hypothesis supplies only the proportionality field with ratio `1`.
+The length-zero identity is used, as in `ofNormalCanonicalFormBNT_zeroTailIdentity`, to derive
+zero-tail equality after applying the proportional BNT comparison. -/
+noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity
+    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {zeroTailA zeroTailB : ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
+    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
+    (hA : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA)
+    (hB : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB)
+    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
+    (haCoeff : ∀ j,
+      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
+    (hbCoeff : ∀ k,
+      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
+    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
+    (hSame : SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
+    (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
+      (zeroTailA : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
+        (zeroTailB : ℂ) +
+          mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ)
+    (hInjA : ∀ x, IsInjective (blocksA x))
+    (hInjB : ∀ x, IsInjective (blocksB x)) :
+    CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
+      (DtotA := ∑ j : Fin rA, dimA j) (DtotB := ∑ k : Fin rB, dimB k)
+      μA μB blocksA blocksB := by
+  exact ofNormalCanonicalFormBNT_zeroTailIdentity hA hB hZero hInjA hInjB
+    (proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
+      (d := blockPhysDim d p) (μA := μA) (μB := μB)
+      blocksA blocksB aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame)
 
 /-- Representative common-sector families give the BNT-cover hypotheses once the
 representative weights are strictly ordered, representatives are BNT-separated, and the
@@ -448,7 +557,7 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
-theorem toMPVCommonPhaseCover    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+theorem toMPVCommonPhaseCover {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {zeroTailA zeroTailB DtotA DtotB : ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
@@ -479,5 +588,176 @@ theorem toCommonPrimitivePhaseCoverHypotheses
 
 end CommonPrimitiveBNTCoverHypotheses
 
+/-! ### Per-block to global proportional gauge
+
+The per-block matchers from `ProportionalDecompositionConclusion` produce, for every
+block index `k`, a dimension equality, an invertible matrix `X_k`, and a phase
+`ζ_k ≠ 0` with `B (perm k) i = ζ_k • X_k * (cast (A k)) i * X_k⁻¹`.  The records
+below package the permutation, per-block dimension equalities, gauge matrices
+`X k`, and phases `ζ k` into a single structure, and assemble the per-block
+`X_k` into a block-diagonal element of `GL`, the global proportionality matrix
+from arXiv:1606.00608, lines 1155–1192 (Corollary II.2, `eq:II:A=XAX`). -/
+
+/-- Per-block gauge-phase data attached to a `ProportionalDecompositionConclusion`.
+
+This is the structural record realizing arXiv:1606.00608, lines 1155–1192
+(Corollary II.2, eq. `eq:II:A=XAX`): a permutation matching the block indices,
+per-block dimension equalities, and per-block gauge matrices `X k` with phases
+`phase k` satisfying
+`blocksB (perm k) i = phase k • X k * cast (blocksA k) i * (X k)⁻¹`. -/
+structure BlockProportionalGaugePhaseData
+    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
+    (blocksB : (k : Fin rB) → MPSTensor d (dimB k)) : Type where
+  /-- Permutation matching the two block index sets. -/
+  perm : Fin rA ≃ Fin rB
+  /-- Per-block dimension equality. -/
+  hdim : ∀ k : Fin rA, dimA k = dimB (perm k)
+  /-- Per-block gauge matrix. -/
+  X : (k : Fin rA) → GL (Fin (dimB (perm k))) ℂ
+  /-- Per-block phase. -/
+  phase : Fin rA → ℂ
+  /-- Each per-block phase is nonzero. -/
+  phase_ne : ∀ k, phase k ≠ 0
+  /-- Per-block conjugation identity with phase. -/
+  conj : ∀ k : Fin rA, ∀ i : Fin d,
+    blocksB (perm k) i =
+      phase k • ((X k : Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ) *
+        (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) i *
+        (((X k)⁻¹ : GL (Fin (dimB (perm k))) ℂ) :
+          Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ))
+
+namespace BlockProportionalGaugePhaseData
+
+variable {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
+variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
+
+/-- Extract per-block gauge-phase data from a `ProportionalDecompositionConclusion`. -/
+noncomputable def ofConclusion
+    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    BlockProportionalGaugePhaseData blocksA blocksB :=
+  let perm := h.choose_spec.choose
+  let hperm := h.choose_spec.choose_spec
+  let hdim : ∀ k : Fin rA, dimA k = dimB (perm k) :=
+    fun k => (hperm k).choose
+  let hGP : ∀ k : Fin rA, GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) (blocksB (perm k)) :=
+    fun k => (hperm k).choose_spec
+  let X : (k : Fin rA) → GL (Fin (dimB (perm k))) ℂ :=
+    fun k => (hGP k).choose
+  let ζ : Fin rA → ℂ := fun k => (hGP k).choose_spec.choose
+  have hζ : ∀ k, ζ k ≠ 0 := fun k => (hGP k).choose_spec.choose_spec.1
+  have hX : ∀ k i, blocksB (perm k) i =
+      ζ k • ((X k : Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ) *
+        (cast (congr_arg (MPSTensor d) (hdim k)) (blocksA k)) i *
+        (((X k)⁻¹ : GL (Fin (dimB (perm k))) ℂ) :
+          Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ)) :=
+    fun k => (hGP k).choose_spec.choose_spec.2
+  { perm := perm
+    hdim := hdim
+    X := X
+    phase := ζ
+    phase_ne := hζ
+    conj := hX }
+
+/-- The reindexed `B`-side block family at the matched dimensions. -/
+noncomputable def reindexB (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
+  fun k => blocksB (G.perm k)
+
+/-- The cast `A`-side block family at the matched dimensions. -/
+noncomputable def castA (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
+  fun k => cast (congr_arg (MPSTensor d) (G.hdim k)) (blocksA k)
+
+/-- The unflattened block-diagonal gauge assembled from the per-block `X k`.
+
+This lives on the dependent sigma-indexed bond space
+`(k : Fin rA) × Fin (dimB (G.perm k))`, with diagonal block `X k` over the
+matched `B`-side block `G.perm k`.  The flattened/reindexed gauge acting on the
+bond dimension of `toTensorFromBlocks` is `G.globalX`. -/
+noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    GL ((k : Fin rA) × Fin (dimB (G.perm k))) ℂ :=
+  blockDiagonalGL G.X
+
+/-- The flattened block-diagonal gauge matrix as an element of
+`GL (Fin (∑ k, dimB (perm k))) ℂ`, the bond dimension of the assembled tensor.
+
+Defined as the canonical reindexing of `G.globalGL`, so that
+`G.globalX = globalGaugeOfBlocks G.X` definitionally. -/
+noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+    GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
+  globalGaugeOfBlocks G.X
+
+/-- Explicit global-gauge witness for the proportional block assembly.
+
+When per-block phases are absorbed into the block weights via
+`μA k = μB (perm k) * phase k`, the weighted direct sum of the permuted right
+blocks is conjugate to the weighted direct sum of the cast left blocks by
+`G.globalX`. -/
+theorem toTensorFromBlocks_reindexB_eq_globalX_conj
+    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
+    ∀ i : Fin d,
+      toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB i =
+        (G.globalX : Matrix (Fin (∑ k : Fin rA, dimB (G.perm k)))
+          (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) *
+          toTensorFromBlocks (d := d) (μ := μA) G.castA i *
+          (((G.globalX)⁻¹ : GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) :
+            Matrix (Fin (∑ k : Fin rA, dimB (G.perm k)))
+              (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ) := by
+  classical
+  have hWeighted :
+      ∀ k : Fin rA, ∀ i : Fin d,
+        (μB (G.perm k)) • G.reindexB k i =
+          (G.X k : Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) *
+            ((μA k) • G.castA k i) *
+            (((G.X k)⁻¹ : GL (Fin (dimB (G.perm k))) ℂ) :
+              Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) := by
+    intro k i
+    change (μB (G.perm k)) • blocksB (G.perm k) i =
+      (G.X k : Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ) *
+        ((μA k) • G.castA k i) *
+        (((G.X k)⁻¹ : GL (Fin (dimB (G.perm k))) ℂ) :
+          Matrix (Fin (dimB (G.perm k))) (Fin (dimB (G.perm k))) ℂ)
+    rw [G.conj k i, hμ k]
+    simp [castA, smul_smul, Matrix.mul_assoc, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
+  have hFormula :=
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
+      (μ := fun _ : Fin rA => (1 : ℂ))
+      (A := fun k i => μA k • G.castA k i)
+      (B := fun k i => μB (G.perm k) • G.reindexB k i)
+      G.X hWeighted
+  have hLeft :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
+        (fun k i => μA k • G.castA k i) =
+        toTensorFromBlocks (d := d) (μ := μA) G.castA := by
+    funext i
+    simp [toTensorFromBlocks]
+  have hRight :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin rA => (1 : ℂ))
+        (fun k i => μB (G.perm k) • G.reindexB k i) =
+        toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB := by
+    funext i
+    simp [toTensorFromBlocks]
+  intro i
+  simpa [globalX, hLeft, hRight] using hFormula i
+
+/-- When per-block phases are absorbed into the block weights via
+`μA k = μB (perm k) * phase k`, the per-block conjugation identities assemble into a
+gauge equivalence between the weighted block-diagonal tensors built from the cast
+left family and the permuted right family. -/
+theorem gaugeEquiv_toTensorFromBlocks
+    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
+    (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
+    GaugeEquiv
+      (toTensorFromBlocks (d := d) (μ := μA) G.castA)
+      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) := by
+  exact ⟨G.globalX, G.toTensorFromBlocks_reindexB_eq_globalX_conj μA μB hμ⟩
+
+end BlockProportionalGaugePhaseData
 
 end MPSTensor

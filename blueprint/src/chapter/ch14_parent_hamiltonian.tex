@@ -1181,7 +1181,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Apply Theorem~\ref{thm:block_word_strip_central} with $M = A^i$.
 \end{proof}
 
-\begin{theorem}[MPV-line endgame from long-word commutation]
+\begin{theorem}[Boundary contraction in the MPV span from long-word commutation]
     \label{thm:ground_space_map_mpv_of_long_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
@@ -1198,7 +1198,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
-\begin{theorem}[MPV-line endgame from positive-length commutation]
+\begin{theorem}[Boundary contraction in the MPV span from positive-length commutation]
     \label{thm:ground_space_map_mpv_of_positive_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes}
     \leanok
@@ -1216,7 +1216,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} applies.
 \end{proof}
 
-\begin{theorem}[MPV-line endgame from a same-witness common middle]
+\begin{theorem}[Boundary contraction in the MPV span from a common-middle witness]
     \label{thm:ground_space_map_mpv_of_common_middle}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}
     \leanok
@@ -1231,11 +1231,11 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{proof}
     \leanok
     The common-middle identities give commutation with all words of length
-    $|\mu|+2$, a positive length. The positive-length MPV-line endgame then
-    finishes.
+    $|\mu|+2$, a positive length. The positive-length containment theorem then
+    applies.
 \end{proof}
 
-\begin{theorem}[MPV-line endgame from compared wrapped witnesses]
+\begin{theorem}[Boundary contraction in the MPV span from wrapped-witness comparison]
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -3156,7 +3156,10 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_threeBlock}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
+    \lean{MPSTensor.forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
+    \lean{MPSTensor.exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}
     \lean{MPSTensor.exists_forall_pairTraceSeparatingAt_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
     \lean{MPSTensor.exists_pos_productWordSpan_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks}
@@ -3200,7 +3203,13 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     product-word span required by the selector construction.  Since
     canonical-form/BNT blocks are one-site injective, one may take \(L=2\);
     injectivity at lengths \(2\) and \(6\) then follows by passing from a
-    fixed injective length to positive multiples.  The same conclusion applies
+    fixed injective length to positive multiples.  This length-\(6\) trace
+    separation is equivalently a full homogeneous pair span; concatenating
+    one-letter words propagates fullness to all later homogeneous lengths, so
+    the direct-sum witness also gives a uniform finite pair-span period window.
+    Combining this window with the conditional period-window homogenization
+    theorem gives the selector-format homogeneous word span without separately
+    assuming homogeneous identity pairs.  The same conclusion applies
     to normal-CF-BNT data once one-site injectivity is supplied explicitly,
     since the normal-CF-BNT predicate carries the irreducibility and
     normalization hypotheses used in the direct-sum comparison.
@@ -3554,7 +3563,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     Lemma~\ref{lem:conditional_boundary_matrix_block_split_projection_span} then
     gives the reverse inclusion.  The equality and BNT-span forms are the
     corresponding projection-span results after this product-word-to-projection-span
-    reduction, followed by the blockwise uniqueness endgame already built into the
+    reduction, followed by the blockwise uniqueness argument already built into the
     projection-span theorem.
 \end{proof}
 
