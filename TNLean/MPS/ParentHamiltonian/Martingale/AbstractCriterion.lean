@@ -8,15 +8,12 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 /-!
 # Abstract martingale criterion (quadratic form → norm bound)
 
-**Root-only.** This file isolates the operator-theoretic step of the
-martingale-method spectral-gap framework: the quadratic-form inequality
-`H² ≥ γ H` for a positive operator `H` implies the norm lower bound
-`γ ‖v‖ ≤ ‖H v‖` on the orthogonal complement of `ker H`.
-
-This step is purely operator-theoretic and has no MPS content in its
-signature, so it lives in its own `FrustrationFree` namespace. The
-MPS-specific theorem `MPSTensor.parentHamiltonian_gapped` (in
-`Martingale.Gap`) instantiates it for the parent Hamiltonian.
+For a positive operator `H` on a finite-dimensional complex Hilbert space, the
+quadratic-form inequality `H² ≥ γ H` (with `γ > 0`) implies the norm lower bound
+`γ ‖v‖ ≤ ‖H v‖` on the orthogonal complement of `ker H`. This is the
+operator-theoretic kernel of the Kastoryano–Lucia / Nachtergaele martingale
+method for spectral gaps; the MPS-specific instance is
+`MPSTensor.parentHamiltonian_gapped`.
 -/
 
 open scoped BigOperators InnerProductSpace

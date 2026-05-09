@@ -10,8 +10,8 @@ import TNLean.Analysis.ProjectionGeometry
 /-!
 # Euclidean local projectors and ground-space / Hamiltonian transport
 
-**Root-only.** This file provides the `EuclideanSpace`-based definitions
-and supporting lemmas for the parent-Hamiltonian martingale method:
+The `EuclideanSpace`-based formulation of the parent-Hamiltonian martingale
+method:
 
 * `parentInteractionES` — the `L`-site parent interaction as an orthogonal
   projector on the Hilbert-space model `EuclideanSpace ℂ (Cfg d L)`;
@@ -23,10 +23,6 @@ and supporting lemmas for the parent-Hamiltonian martingale method:
   transported local terms;
 * commutation and non-overlap positivity for disjoint cyclic windows;
 * kernel identification: the transported ground space equals `ker(H_ES)`.
-
-The private lemmas in this file handle the technical cyclic-window and
-`SameOutsideWindow` combinatorics needed by the public theorems; they
-are not exposed to downstream modules.
 -/
 
 open scoped BigOperators InnerProductSpace

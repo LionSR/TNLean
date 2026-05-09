@@ -29,40 +29,10 @@ variable {d D : ℕ}
 
 /-! ### Uniform spectral gap for the MPS parent Hamiltonian -/
 
-/- Scout report (2026-04-19, Layer 4 KL martingale).
-
-1. **Friedrichs-angle surface:** TNLean currently has no dedicated
-`FriedrichsAngle`/principal-angle development in `TNLean/Analysis`. Mathlib provides
-orthogonal-projection structure (for example
-`Mathlib.Analysis.InnerProductSpace.Projection.Basic` and
-`Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional`, exposing
-`Submodule.starProjection` and `orthogonalProjection`) but not a ready-made
-Kastoryano–Lucia-style angle-to-anticommutator bound. This is a real blocker
-for quantitative overlap constants.
-2. **Projection/positivity formulation:** the local `EuclideanSpace` projector
-`parentInteractionES A L` and each transported local term are now available as
-symmetric projections, and the conjugated cyclic-restriction summands
-`localTermESSummand A hN L i τ = Rᵢ,τ† P_L Rᵢ,τ` plus the full transported
-Hamiltonian are available as positive operators.
-3. **Quadratic-form reduction:**
-`parentHamiltonianES_norm_bound_of_quadratic_form` and
-`parentHamiltonianES_gap_bound_of_quadratic_form` reduce the gap statement to a
-uniform estimate `γ * re ⟪H_N v, v⟫ ≤ re ⟪H_N v, H_N v⟫`.
-4. **Projection-geometry row reduction:**
-`ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum`,
-`parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds`, and
-`parentHamiltonianES_gap_bound_of_ordered_local_term_bounds` now formalize the
-finite-sum algebra turning explicit ordered cross-term row bounds for local
-symmetric projections into the quadratic-form hypothesis above.
-5. **Remaining local analytic step:** local projection structure, cyclic-window
-row cardinality, and non-overlap positivity are now formalized above. The remaining
-hypothesis is the Friedrichs-angle estimate for overlapping cyclic windows with the
-coefficient required by the finite-overlap row reduction.
-6. **Spectral-gap theorem:** `parentHamiltonian_gapped` is the subsequent
-existential theorem, now proved by applying the Friedrichs-angle theorem
-below. The theorem `parentHamiltonianES_gap_bound_of_friedrichs` still depends
-on the missing Friedrichs-angle formulation; this is the blocker and should not
-be replaced with axioms or unrelated sorrys. -/
+-- Maintainer note: the proof of `parentHamiltonianES_gap_bound_of_friedrichs` reduces to
+-- a Friedrichs-angle estimate for pairs of overlapping cyclic-window projectors with the
+-- coefficient required by the finite-overlap row reduction in `Martingale.Reduction`.
+-- Tracked by issues #952 and #460 (#190).
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
