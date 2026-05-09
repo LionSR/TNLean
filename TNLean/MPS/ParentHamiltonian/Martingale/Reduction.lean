@@ -167,7 +167,7 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
     A L N hγle (c N) (hRow N hLN) (hCross N hLN) v
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
-Friedrichs data.
+Friedrichs-angle hypotheses.
 
 This is the local-window specialization of
 `ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap`.  The
@@ -201,7 +201,7 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_friedrichs
       hFriedrichs v)
 
 /-- Fixed-chain martingale quadratic-form estimate from finite-overlap
-norm-compression Friedrichs data.
+norm-compression Friedrichs-angle hypotheses.
 
 For each overlapping pair, it is enough to bound the compressed product
 `‖hᵢ (hⱼ v)‖` by `(1 - γ) / m` times `‖hᵢ v‖`.  The abstract projection-geometry
@@ -263,7 +263,8 @@ theorem parentHamiltonianES_quadratic_form_of_finite_overlap_norm_bound_of_le
       (fun i : Fin N => localTermES_isSymmetricProjection A L i) overlaps hm hCard
       hDisjoint hηle hOverlapNorm v)
 
-/-- Uniform explicit gap-bound reduction from finite-overlap Friedrichs data.
+/-- Uniform explicit gap-bound reduction from finite-overlap Friedrichs-angle
+hypotheses.
 
 For parent-Hamiltonian windows of length `L`, the expected finite-range bound is
 `m = 2 * (L - 1)`: each local term overlaps at most that many other cyclic
