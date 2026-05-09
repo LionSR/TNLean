@@ -42,7 +42,8 @@ with the periodic boundary condition:
 * `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` — cyclic
   normal-range constraints imply open-chain ground-space membership
 * `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
-  — the algebraic MPV-line endgame once long-word commutation is known
+  — once a boundary matrix commutes with all long-enough word products, its
+  boundary contraction lies in the MPV span
 * `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
   — same-witness common-middle compatibilities imply MPV-line membership
 * `MPSTensor.groundSpace_unique_periodic` — uniqueness on the periodic chain
@@ -655,7 +656,8 @@ theorem groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes
   simp only [groundSpaceMap_apply, Pi.smul_apply, smul_eq_mul, mpv, coeff]
   rw [hX_eq, Algebra.mul_smul_comm, mul_one, Matrix.trace_smul, smul_eq_mul]
 
-/-- Positive-length word commutation is enough for the MPV-line endgame.
+/-- Boundary contraction lies in the MPV span when `X` commutes with words of
+some positive length.
 
 If `X` commutes with all words of any positive length `m`, then chunking gives
 commutation at the multiple `L₀ * m`, which is at least `L₀`.  The long-word
