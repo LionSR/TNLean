@@ -17,17 +17,28 @@ controls string-order phenomena.
 
 \section{Physical Symmetries Give Virtual Gauges}
 
-For periodic tensors, Chapter~\ref{ch:periodic_ft_apps} (which follows this
-chapter) introduces the bookkeeping of physical-index rotation:
-Definition~\ref{def:rotate_physical} defines the rotated tensor
-$(A_u)^i = \sum_j u_{ij} A^j$, a formal cyclic-index relabelling for MPV
-words, and Theorems~\ref{thm:transfer_map_rotate_physical},
+For periodic tensors we use the following physical-index rotation, both
+in this chapter and in Chapter~\ref{ch:periodic_ft_apps}.
+
+\begin{definition}[Physical-index rotation]%
+    \label{def:rotate_physical}
+    \lean{MPSTensor.rotatePhysical}
+    \leanok
+    \uses{def:mps_tensor}
+    Given a matrix $u \in M_d(\C)$ and an MPS tensor~$A$,
+    the \emph{physical-index rotation} is the tensor
+    $(A_u)^i := \sum_j u_{ij}\, A^j$.
+\end{definition}
+
+The compatibility theorems for this definition ---
+Theorems~\ref{thm:transfer_map_rotate_physical},
 \ref{thm:left_canonical_rotate_physical},
 \ref{thm:irreducible_tensor_rotate_physical},
 \ref{thm:periodic_rotate_physical}, \ref{thm:same_mpv_rotate_physical},
 \ref{thm:rotate_physical_blocks}, and
-\ref{thm:irreducible_form_rotate_physical} record its compatibility with
-the periodic FT.  These are internal formal consequences of the periodic
+\ref{thm:irreducible_form_rotate_physical} ---
+are proved in Chapter~\ref{ch:periodic_ft_apps} (which follows this
+chapter).  These are internal formal consequences of the periodic
 definition; they are not related to the algebraic FT of
 \cite{Molnar2018NormalPEPS}.
 
