@@ -735,8 +735,8 @@ lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_window
       A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hWindow
   exact ⟨T, wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT⟩
 
-/-- Direct-sum pair-span windows discharge the conditional period-window `WordTupleSpanTop`
-route for canonical-form/BNT block families. -/
+/-- Direct-sum pair-span windows give the conditional period-window `WordTupleSpanTop`
+conclusion for canonical-form/BNT block families. -/
 lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -749,7 +749,7 @@ lemma exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_per
   exact exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_pairSpanTop_period_windows
     μ A hCF (fun k j hj => ⟨start, period, hperiod_pos, hWindow k j hj⟩)
 
-/-- Product-span spelling of the direct-sum pair-span period-window route. -/
+/-- Product-span form of the direct-sum pair-span period-window conclusion. -/
 lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows
     [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
