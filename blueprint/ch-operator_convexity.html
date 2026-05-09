@@ -12,9 +12,9 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Block Permutation and Separation</title>
-<link rel="next" href="ch-bnt.html" title="Basis of Normal Tensors" />
-<link rel="prev" href="ch-canonical.html" title="Canonical Form Reduction" />
+<title>Operator Convexity and Jensen Inequalities</title>
+<link rel="next" href="ch-entropy.html" title="Quantum Entropy" />
+<link rel="prev" href="ch-semigroup.html" title="Quantum Dynamical Semigroups" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -450,10 +450,10 @@
 
   </ul>
  </li>
-<li class=" active current">
+<li class="">
   <a href="ch-block_perm.html"><span class="toc_ref">10</span> <span class="toc_entry">Block Permutation and Separation</span></a>
-  <span class="expand-toc">▼</span>
-  <ul class="sub-toc-1 active">
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
      <li class="">
   <a href="ch-block_perm.html#a0000024211"><span class="toc_ref">10.1</span> <span class="toc_entry">Block permutation algebra</span></a>
  </li>
@@ -766,10 +766,10 @@
 
   </ul>
  </li>
-<li class="">
+<li class=" active current">
   <a href="ch-operator_convexity.html"><span class="toc_ref">18</span> <span class="toc_entry">Operator Convexity and Jensen Inequalities</span></a>
-  <span class="expand-toc">▶</span>
-  <ul class="sub-toc-1">
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
      <li class="">
   <a href="ch-operator_convexity.html#a0000024248"><span class="toc_ref">18.1</span> <span class="toc_entry">Diagonal Jensen inequality</span></a>
  </li>
@@ -960,76 +960,1084 @@
 
 
 <div class="main-text">
-<h1 id="ch:block_perm">10 Block Permutation and Separation</h1>
+<h1 id="ch:operator_convexity">18 Operator Convexity and Jensen Inequalities</h1>
 
-<p>This chapter develops the algebra of block permutations, the product-algebra maps built from per-block same-MPV data, the invariant-projection splitting step that reduces a tensor to smaller blocks, and the block-separation argument that recovers the individual blocks from a block-diagonal same-MPV hypothesis. The results correspond to the canonical-form uniqueness of&#160;<span class="cite">
+<p>This chapter collects the operator convexity/concavity results, trace inequalities, the operator Jensen inequality for positive maps, and the Lieb concavity theorem. These are standard results in matrix analysis (<span class="cite">
 	[
 	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	<a href="sect0001.html#Bhatia1997Matrix" >Bha97</a>
+	, Chapter&#160;V
+	]
+</span>; <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.1
+	]
+</span>; Hansen–Pedersen’s Jensen inequality&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#HansenPedersen1982Jensen" >HP82</a>
 	
 	]
-</span> and the block-separation results of&#160;<span class="cite">
+</span>; and Lieb’s concavity theorem&#160;<span class="cite">
 	[
 	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
+	<a href="sect0001.html#Lieb1973Convex" >Lie73</a>
+	
+	]
+</span>). They are provided here as cited inputs, since the corresponding matrix-analysis proofs for real powers \(x\mapsto x^p\) on the Loewner order and for the matrix logarithm are not developed elsewhere in this document. </p>
+<h1 id="a0000024248">18.1 Diagonal Jensen inequality</h1>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:diagonal_jensen_of_convexOn">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.1</span>
+    <span class="lemma_thmtitle">Diagonal Jensen inequality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:diagonal_jensen_of_convexOn">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024790"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.diagonal_jensen_of_convexOn" class="lean_decl">Matrix.diagonal_jensen_of_convexOn</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(f:\mathbb {R}\to \mathbb {R}\) be convex on \([0,\infty )\), let \(A\) be a positive semidefinite matrix on a finite-dimensional space indexed by \(n\), and let \(v\in \mathbb {C}^n\) satisfy \(\langle v,v\rangle =1\). Then </p>
+<div class="displaymath" id="a0000024791">
+  \[  f\! (\Re \langle v, A v\rangle ) \le \Re \langle v, f(A)\, v\rangle ,  \]
+</div>
+<p> where \(f(A)\) is defined by the Hermitian continuous functional calculus. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024790">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Write \(A=U\, \operatorname {diag}(\mu )\, U^{\ast }\) by the spectral theorem and set \(w=U^{\ast }v\). Since \(U\) is unitary, \(p_i:=\lvert w_i\rvert ^2\) satisfies \(\sum _i p_i=\lVert v\rVert ^2=1\), so \((p_i)\) is a probability distribution on \(n\). The eigenvalues \(\mu _i\) lie in \([0,\infty )\) because \(A\) is positive semidefinite. A direct computation yields \(\Re \langle v,Av\rangle =\sum _i p_i\mu _i\) and \(\Re \langle v,f(A)v\rangle =\sum _i p_i f(\mu _i)\), so the scalar Jensen inequality applied to the weights \((p_i)\) and points \((\mu _i)\) gives the conclusion. See <span class="cite">
+	[
+	
+	<a href="sect0001.html#Bhatia1997Matrix" >Bha97</a>
+	, Chapter&#160;V
+	]
+</span>. </p>
+
+  </div>
+</div>
+<h1 id="a0000024249">18.2 Trace concavity and convexity of matrix powers</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_rpow_concave">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.2</span>
+    <span class="theorem_thmtitle">Trace concavity of real powers</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:trace_rpow_concave">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024792"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#lem:diagonal_jensen_of_convexOn">Lemma 18.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.trace_rpow_concave" class="lean_decl">TNLean.trace_rpow_concave</a></li>
+          
+          <li><a href="../docs/find/#doc/trace_rpow_concave" class="lean_decl">trace_rpow_concave</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For \(p\in [0,1]\), PSD matrices \(A_1,A_2\), and \(t\in [0,1]\): </p>
+<div class="displaymath" id="a0000024793">
+  \[  t\, \Re \operatorname{tr}(A_1^p)+(1-t) \Re \operatorname{tr}(A_2^p) \le \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^p).  \]
+</div>
+<p> Follows from operator concavity of \(x\mapsto x^p\) composed with trace monotonicity on the Loewner order. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024792">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Let \(A=tA_1+(1-t)A_2\) and let \(\{ \psi _j\} \) with eigenvalues \(\mu _j\ge 0\) be an orthonormal eigenbasis of \(A\). A direct computation gives \(\Re \operatorname{tr}(A^p)=\sum _j \mu _j^p\) and \(\mu _j=t\, a_j+(1-t)\, b_j\) where \(a_j=\Re \langle \psi _j,A_1\psi _j\rangle \), \(b_j=\Re \langle \psi _j,A_2\psi _j\rangle \). Scalar concavity of \(x\mapsto x^p\) on \([0,\infty )\) yields \(\mu _j^p\ge t\, a_j^p+(1-t)\, b_j^p\), and the diagonal Jensen inequality (Lemma&#160;<a href="ch-operator_convexity.html#lem:diagonal_jensen_of_convexOn">18.1</a>, concave form) gives \(a_j^p\le \Re \langle \psi _j,A_1^p\psi _j\rangle \) (and similarly for \(b_j\)). Summing over \(j\) and using \(\sum _j\Re \langle \psi _j,M\psi _j\rangle =\Re \operatorname{tr}M\) yields the conclusion. See <span class="cite">
+	[
+	
+	<a href="sect0001.html#Bhatia1997Matrix" >Bha97</a>
+	, Chapter&#160;V
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_rpow_convex">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.3</span>
+    <span class="theorem_thmtitle">Trace convexity of real powers</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:trace_rpow_convex">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024794"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#lem:diagonal_jensen_of_convexOn">Lemma 18.1</a></li>
+          
+          <li><a href="ch-operator_convexity.html#thm:trace_rpow_concave">Theorem 18.2</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.trace_rpow_convex" class="lean_decl">TNLean.trace_rpow_convex</a></li>
+          
+          <li><a href="../docs/find/#doc/trace_rpow_convex" class="lean_decl">trace_rpow_convex</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For \(p\in [1,2]\), PSD matrices \(A_1,A_2\), and \(t\in [0,1]\): </p>
+<div class="displaymath" id="a0000024795">
+  \[  \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^p) \le t\, \Re \operatorname{tr}(A_1^p)+(1-t) \Re \operatorname{tr}(A_2^p).  \]
+</div>
+<p> Follows from operator convexity of \(x\mapsto x^p\) composed with trace monotonicity on the Loewner order. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024794">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Identical eigenbasis reduction as in Theorem&#160;<a href="ch-operator_convexity.html#thm:trace_rpow_concave">18.2</a>, with scalar convexity (rather than concavity) of \(x\mapsto x^p\) on \([0,\infty )\) for \(p\ge 1\) and the convex form of the diagonal Jensen inequality. </p>
+
+  </div>
+</div>
+<h1 id="a0000024250">18.3 Operator Jensen inequality for positive maps</h1>
+<div class="definition_thmwrapper theorem-style-definition" id="def:operator_jensen_povm_aux">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">18.4</span>
+    <span class="definition_thmtitle">Finite-POVM dilation construction</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#def:operator_jensen_povm_aux">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmIsometry" class="lean_decl">TNLean.OperatorJensen.povmIsometry</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmDiagonal" class="lean_decl">TNLean.OperatorJensen.povmDiagonal</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  For a finite family of matrices \(\{ C_i\} _{i \in \iota }\) and a defect block \(S\), one forms an isometric dilation whose rows are the adjoints of the matrices \(C_i\) together with the adjoint of \(S\). One also forms the scalar block-diagonal matrix whose \(\iota \)-blocks carry prescribed weights and whose defect block carries a single scalar. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_inverse_compression">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.5</span>
+    <span class="lemma_thmtitle">Compression auxiliary for Jensen</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:operator_jensen_inverse_compression">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024796"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/Matrix.PosDef.inverse_compression_le" class="lean_decl">Matrix.PosDef.inverse_compression_le</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(Y\) be positive definite and let \(W\) be an isometry. Then </p>
+<div class="displaymath" id="a0000024797">
+  \[  (W^\ast Y W)^{-1} \le W^\ast Y^{-1} W.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024796">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the Schur-complement criterion to the block matrix \(\begin{psmallmatrix} \end{psmallmatrix} Y^{-1} &  W \\ W^\ast &  W^\ast Y W \end{psmallmatrix}\). The lower-right Schur complement is zero, hence positive semidefinite, and compressing the resulting upper-left Schur complement by \(W\) gives the stated inequality. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_povm_compression">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.6</span>
+    <span class="lemma_thmtitle">Finite-POVM compression identities</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:operator_jensen_povm_compression">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024798"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmIsometry_star_mul" class="lean_decl">TNLean.OperatorJensen.povmIsometry_star_mul</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmIsometry_compress_diagonal" class="lean_decl">TNLean.OperatorJensen.povmIsometry_compress_diagonal</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povm_sum_add_defect" class="lean_decl">TNLean.OperatorJensen.povm_sum_add_defect</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmDiagonal_posDef" class="lean_decl">TNLean.OperatorJensen.povmDiagonal_posDef</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmDiagonal_inv" class="lean_decl">TNLean.OperatorJensen.povmDiagonal_inv</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv" class="lean_decl">TNLean.OperatorJensen.povmIsometry_compress_diagonal_inv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If the defect block satisfies </p>
+<div class="displaymath" id="a0000024799">
+  \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
+</div>
+<p> then the dilation is an isometry, compressing the weighted scalar block-diagonal matrix gives </p>
+<div class="displaymath" id="a0000024800">
+  \[  \sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\,  S S^\ast ,  \]
+</div>
+<p> the defect relation rewrites as </p>
+<div class="displaymath" id="a0000024801">
+  \[  \sum _{i \in \iota } C_i C_i^\ast + S S^\ast = \mathbb {1},  \]
+</div>
+<p> and strict positivity of all weights together with \(t{\gt}0\) implies positive definiteness of the scalar block-diagonal matrix. If all weights are nonzero and the defect scalar is nonzero, the inverse diagonal has reciprocal weights, and compressing this inverse gives </p>
+<div class="displaymath" id="a0000024802">
+  \[  \sum _{i \in \iota } w_i^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024798">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Expand the block matrix multiplication entrywise. The defect identity gives the isometry relation after summing the \(\iota \)-blocks and the defect block, and the weighted compression identity follows from the same expansion with the scalar diagonal inserted. Positive definiteness uses strict positivity of every diagonal entry, while the inverse formula uses the nonvanishing of every diagonal entry. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:operator_jensen_povm_resolvent">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">18.7</span>
+    <span class="lemma_thmtitle">Finite-POVM resolvent inequality</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#lem:operator_jensen_povm_resolvent">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024803"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_povm_compression">Lemma 18.6</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_inverse_compression">Lemma 18.5</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_povm_compression">Lemma 18.6</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_inverse_compression">Lemma 18.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.OperatorJensen.povm_resolvent_inv_le" class="lean_decl">TNLean.OperatorJensen.povm_resolvent_inv_le</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(w_i\ge 0\) and \(t{\gt}0\). If the defect block satisfies </p>
+<div class="displaymath" id="a0000024804">
+  \[  S S^\ast = \mathbb {1}- \sum _{i \in \iota } C_i C_i^\ast ,  \]
+</div>
+<p> then </p>
+<div class="displaymath" id="a0000024805">
+  \[  \left(\sum _{i \in \iota } w_i\,  C_i C_i^\ast + t\, \mathbb {1}\right)^{-1} \le \sum _{i \in \iota } (w_i+t)^{-1}\,  C_i C_i^\ast + t^{-1}\,  S S^\ast .  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024803">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Apply the compression inequality to the positive definite scalar block-diagonal matrix with entries \(w_i+t\) and defect entry \(t\). The compression identities rewrite the compressed matrix as \(\sum _i w_i C_i C_i^\ast + t\mathbb {1}\) and its inverse compression as the displayed upper bound. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:posMap_rpow_concave_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.8</span>
+    <span class="theorem_thmtitle">Jensen for concave real powers</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:posMap_rpow_concave_jensen">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
+          
+          <li><a href="ch-operator_convexity.html#lem:operator_jensen_povm_resolvent">Lemma 18.7</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/posMap_rpow_concave_jensen" class="lean_decl">posMap_rpow_concave_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [0,1]\): </p>
+<div class="displaymath" id="a0000024806">
+  \[  T(A^p) \le (TA)^p.  \]
+</div>
+<p> This is <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.1
+	]
+</span> for concave&#160;\(f(x)=x^p\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:rpow_concave_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.9</span>
+    <span class="theorem_thmtitle">Map form of Jensen for concave real powers</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:rpow_concave_jensen">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024807"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_concave_jensen">Theorem 18.8</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/IsPositiveMap.rpow_concave_jensen" class="lean_decl">IsPositiveMap.rpow_concave_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [0,1]\), the inequality \(T(A^p) \le (TA)^p\) holds. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024807">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Direct application of the axiom. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:posMap_rpow_convex_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.10</span>
+    <span class="theorem_thmtitle">Jensen for convex real powers</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:posMap_rpow_convex_jensen">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/posMap_rpow_convex_jensen" class="lean_decl">posMap_rpow_convex_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [1,2]\): </p>
+<div class="displaymath" id="a0000024808">
+  \[  (TA)^p \le T(A^p).  \]
+</div>
+<p> This is <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.1
+	]
+</span> for convex&#160;\(f(x)=x^p\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:rpow_convex_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.11</span>
+    <span class="theorem_thmtitle">Map form of Jensen for convex real powers</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:rpow_convex_jensen">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#thm:posMap_rpow_convex_jensen">Theorem 18.10</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/IsPositiveMap.rpow_convex_jensen" class="lean_decl">IsPositiveMap.rpow_convex_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive subunital map \(T\), a positive semidefinite matrix&#160;\(A\), and \(p\in [1,2]\), the inequality \((TA)^p \le T(A^p)\) holds. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024809">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Direct application of the axiom. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:posMap_log_concave_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.12</span>
+    <span class="theorem_thmtitle">Jensen for concave log</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:posMap_log_concave_jensen">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-channels.html#def:positive_map">Definition 4.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/posMap_log_concave_jensen" class="lean_decl">posMap_log_concave_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive <em>unital</em> map \(T\) and positive-definite&#160;\(A\): </p>
+<div class="displaymath" id="a0000024810">
+  \[  T(\log A) \le \log (TA).  \]
+</div>
+<p> This is <span class="cite">
+	[
+	
+	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
+	, Theorem&#160;5.1
+	]
+</span> for&#160;\(f=\log \). Requires unitality (\(T(\mathbb {1})=\mathbb {1}\)), not merely subunitality. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:log_concave_jensen">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.13</span>
+    <span class="theorem_thmtitle">Map form of Jensen for the concave logarithm</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:log_concave_jensen">#</a>
+    
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024811"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-operator_convexity.html#thm:posMap_log_concave_jensen">Theorem 18.12</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/IsPositiveMap.log_concave_jensen" class="lean_decl">IsPositiveMap.log_concave_jensen</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For a positive unital map \(T\) and a positive-definite matrix&#160;\(A\), the inequality \(T(\log A) \le \log (TA)\) holds. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024811">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Direct application of the axiom. </p>
+
+  </div>
+</div>
+<h1 id="a0000024251">18.4 Lieb concavity theorem</h1>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:lieb_concavity_axiom">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">18.14</span>
+    <span class="theorem_thmtitle">Lieb concavity</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity_axiom">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/lieb_concavity_axiom" class="lean_decl">lieb_concavity_axiom</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave: </p>
+<div class="displaymath" id="a0000024812">
+  \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K (tB_1+(1-t)B_2)^{1-s}).  \]
+</div>
+<p> See <span class="cite">
+	[
+	
+	<a href="sect0001.html#Lieb1973Convex" >Lie73</a>
+	; 
+	<a href="sect0001.html#Ando1979Concavity" >And79</a>
 	
 	]
 </span>. </p>
-<h1 id="a0000024211">10.1 Block permutation algebra</h1>
-<div class="definition_thmwrapper theorem-style-definition" id="def:block_ideal">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">10.1</span>
-    <span class="definition_thmtitle">Block ideal</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#def:block_ideal">#</a>
-    
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.blockIdeal" class="lean_decl">MPSTensor.blockIdeal</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>  Let \(\{ R_k\} _{k=1}^r\) be simple rings. The \(k\)-th <em>block ideal</em> in \(\prod _{j=1}^r R_j\) is </p>
-<div class="displaymath" id="a0000024291">
-  \[  I_k := \{ x \in \prod _{j=1}^r R_j : x_j = 0 \text{ for } j \neq k\} .  \]
-</div>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:block_ideal_atom">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:lieb_concavity">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">10.2</span>
-    <span class="theorem_thmtitle">Each block ideal is an atom</span>
+    <span class="theorem_thmlabel">18.15</span>
+    <span class="theorem_thmtitle">Map form of Lieb concavity</span>
     <div class="thm_header_extras">
 
     
@@ -1037,9 +2045,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-block_perm.html#thm:block_ideal_atom">#</a>
+    <a class="icon proof" href="ch-operator_convexity.html#thm:lieb_concavity">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000024292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024813"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1055,7 +2063,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-block_perm.html#def:block_ideal">Definition 10.1</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">Theorem 18.14</a></li>
           
         </ul>
     
@@ -1075,7 +2083,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.isAtom_blockIdeal" class="lean_decl">MPSTensor.isAtom_blockIdeal</a></li>
+          <li><a href="../docs/find/#doc/lieb_concavity" class="lean_decl">lieb_concavity</a></li>
           
         </ul>
     
@@ -1086,11 +2094,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Each block ideal \(I_k\) is an atom in the lattice of two-sided ideals of \(\prod _{j=1}^r R_j\). </p>
+  <p>   For \(s\in [0,1]\), any matrix&#160;\(K\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the function \((A,B)\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is jointly concave, with the same inequality as Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity_axiom">18.14</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024292">
+<div class="proof_wrapper" id="a0000024813">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1098,17 +2106,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Under the order isomorphism between two-sided ideals of \(\prod _{j=1}^r R_j\) and products of two-sided ideal lattices, \(I_k\) corresponds to the tuple with \(\top \) in the \(k\)-th coordinate and \(\bot \) elsewhere. This tuple is an atom, hence so is \(I_k\). </p>
+  <p>Direct application of the axiom. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ring_perm">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:lieb_concavity_id">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
     </span>
-    <span class="theorem_thmlabel">10.3</span>
-    <span class="theorem_thmtitle">Ring isomorphisms permute block ideals</span>
+    <span class="corollary_thmlabel">18.16</span>
+    <span class="corollary_thmtitle">Lieb concavity, \(K=\mathbb {1}\) case</span>
     <div class="thm_header_extras">
 
     
@@ -1116,9 +2124,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-block_perm.html#thm:ring_perm">#</a>
+    <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_id">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000024293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1134,9 +2142,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-block_perm.html#def:block_ideal">Definition 10.1</a></li>
-          
-          <li><a href="ch-block_perm.html#thm:block_ideal_atom">Theorem 10.2</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.15</a></li>
           
         </ul>
     
@@ -1156,7 +2162,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals" class="lean_decl">MPSTensor.ringEquiv_pi_simple_permutes_blockIdeals</a></li>
+          <li><a href="../docs/find/#doc/lieb_concavity_id" class="lean_decl">lieb_concavity_id</a></li>
           
         </ul>
     
@@ -1166,12 +2172,16 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(\{ R_k\} _{k=1}^r\) be simple rings. Every ring isomorphism \(T : \prod _k R_k \to \prod _k R_k\) permutes the block ideals: there exists a permutation \(\pi \) such that \(T\) maps the \(k\)-th block ideal to the \(\pi (k)\)-th block ideal. </p>
+  <div class="corollary_thmcontent">
+  <p>   For \(s\in [0,1]\), \(t\in [0,1]\), and positive-definite matrices \(A_1,A_2,B_1,B_2\), the map \((A,B)\mapsto \Re \operatorname{tr}(A^s B^{1-s})\) is jointly concave: </p>
+<div class="displaymath" id="a0000024815">
+  \[  t\, \Re \operatorname{tr}(A_1^s B_1^{1-s})+(1-t) \Re \operatorname{tr}(A_2^s B_2^{1-s}) \le \Re \operatorname{tr}\! ((tA_1+(1-t)A_2)^s (tB_1+(1-t)B_2)^{1-s}).  \]
+</div>
+<p> Obtained from Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.15</a> by taking \(K=\mathbb {1}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024293">
+<div class="proof_wrapper" id="a0000024814">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1179,40 +2189,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Theorem&#160;<a href="ch-block_perm.html#thm:block_ideal_atom">10.2</a>, each block ideal is an atom in the lattice of two-sided ideals of \(\prod _k R_k\). A ring isomorphism induces an order automorphism of this lattice, so it permutes the atoms. Since the atoms are exactly the block ideals, this gives the required permutation&#160;\(\pi \). </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.15</a> at \(K=\mathbb {1}\) and simplify \(\mathbb {1}^{\dagger }=\mathbb {1}\) together with \(\mathbb {1}\cdot X=X\cdot \mathbb {1}=X\). </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:ring_vs_alg">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:lieb_concavity_in_fst">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
     </span>
-    <span class="remark_thmlabel">10.4</span>
-    <span class="remark_thmtitle">Ring level versus algebra level</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#rem:ring_vs_alg">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> Theorem&#160;<a href="ch-block_perm.html#thm:ring_perm">10.3</a> is a ring-level statement: it only uses the ideal structure of \(\prod _k R_k\). Theorem&#160;<a href="ch-block_perm.html#thm:component_map_bijective">10.6</a> stays at this ring level: once the block ideals are permuted, one can extract the corresponding single-block maps without using scalar multiplication. Theorems&#160;<a href="ch-block_perm.html#thm:dim_preserved">10.5</a> and&#160;<a href="ch-block_perm.html#thm:pi_auto_decomp">10.7</a> require an upgrade to \(\mathbb {C}\)-algebra automorphisms. The reason is threefold: dimension preservation compares the blocks as \(\mathbb {C}\)-vector spaces; Skolem–Noether applies to the resulting central simple \(\mathbb {C}\)-algebras; and the final per-block maps must commute with scalar multiplication. Thus the argument separates the ring-level permutation step from the later algebra-level decomposition. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:dim_preserved">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">10.5</span>
-    <span class="theorem_thmtitle">Dimension preservation</span>
+    <span class="corollary_thmlabel">18.17</span>
+    <span class="corollary_thmtitle">Concavity of Lieb’s map in the first argument</span>
     <div class="thm_header_extras">
 
     
@@ -1220,68 +2207,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-block_perm.html#thm:dim_preserved">#</a>
+    <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_fst">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000024294"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.dim_preserved" class="lean_decl">MPSTensor.dim_preserved</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>  Assume \(D_k \ge 1\) for all&#160;\(k\). If \(T\) is an algebra automorphism of \(\prod _{k=1}^r M_{D_k}(\mathbb {C})\), and \(\pi \) is the induced permutation, then \(D_{\pi (k)} = D_k\) for all&#160;\(k\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024294">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The restriction of \(T\) to the \(k\)-th block ideal induces a \(\mathbb {C}\)-algebra isomorphism \(M_{D_k}(\mathbb {C}) \cong M_{D_{\pi (k)}}(\mathbb {C})\), which forces \(D_k = D_{\pi (k)}\) by comparing dimensions as \(\mathbb {C}\)-vector spaces. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:component_map_bijective">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">10.6</span>
-    <span class="theorem_thmtitle">Per-block component maps are bijections</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#thm:component_map_bijective">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024295"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024816"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1297,7 +2225,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-block_perm.html#thm:ring_perm">Theorem 10.3</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.15</a></li>
           
         </ul>
     
@@ -1317,7 +2245,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.componentMap_bijective" class="lean_decl">MPSTensor.componentMap_bijective</a></li>
+          <li><a href="../docs/find/#doc/lieb_concavity_in_fst" class="lean_decl">lieb_concavity_in_fst</a></li>
           
         </ul>
     
@@ -1327,16 +2255,15 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   Assume \(D_k \ge 1\) for all&#160;\(k\). Let \(T\) be a ring automorphism of \(\prod _{k=1}^r M_{D_k}(\mathbb {C})\), and let \(\pi \) be the induced permutation from Theorem&#160;<a href="ch-block_perm.html#thm:ring_perm">10.3</a>. For each block index \(k\), the map </p>
-<div class="displaymath" id="a0000024296">
-  \[  M \mapsto (T(0,\ldots ,0,M,0,\ldots ,0))_{\pi (k)}  \]
+  <div class="corollary_thmcontent">
+  <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A_1,A_2,B\), the map \(A\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
+<div class="displaymath" id="a0000024817">
+  \[  t\, \Re \operatorname{tr}(K^\dagger A_1^s K B^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A_2^s K B^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger (tA_1+(1-t)A_2)^s K B^{1-s}).  \]
 </div>
-<p> from \(M_{D_k}(\mathbb {C})\) to \(M_{D_{\pi (k)}}(\mathbb {C})\) is bijective. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024295">
+<div class="proof_wrapper" id="a0000024816">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1344,17 +2271,17 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Theorem&#160;<a href="ch-block_perm.html#thm:ring_perm">10.3</a> forces a single-support element in the \(k\)-th block ideal to remain supported on the \(\pi (k)\)-th block after applying&#160;\(T\). Injectivity follows from injectivity of&#160;\(T\). For surjectivity, apply the same argument to \(T^{-1}\) and the inverse permutation. </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.15</a> at \(B_1=B_2=B\), so that the convex combination collapses: \(tB+(1-t)B=B\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:pi_auto_decomp">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="corollary_thmwrapper theorem-style-plain" id="cor:lieb_concavity_in_snd">
+  <div class="corollary_thmheading">
+    <span class="corollary_thmcaption">
+    Corollary
     </span>
-    <span class="theorem_thmlabel">10.7</span>
-    <span class="theorem_thmtitle">Decomposition of automorphisms of \(\prod M_{D_k}(\mathbb {C})\)</span>
+    <span class="corollary_thmlabel">18.18</span>
+    <span class="corollary_thmtitle">Concavity of Lieb’s map in the second argument</span>
     <div class="thm_header_extras">
 
     
@@ -1362,206 +2289,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-block_perm.html#thm:pi_auto_decomp">#</a>
+    <a class="icon proof" href="ch-operator_convexity.html#cor:lieb_concavity_in_snd">#</a>
     
-    <a class="icon proof" href="ch-block_perm.html#a0000024297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.algEquiv_pi_matrix_decomposition" class="lean_decl">MPSTensor.algEquiv_pi_matrix_decomposition</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>  Assume \(D_k \ge 1\) for all&#160;\(k\). Every \(\mathbb {C}\)-algebra automorphism \(T\) of \(\prod _{k=1}^r M_{D_k}(\mathbb {C})\) decomposes as a block permutation&#160;\(\pi \) followed by per-block inner automorphisms: there exist \(\pi \in S_r\) with \(D_{\pi (k)} = D_k\) and invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that, for every tuple \(M = (M_1,\ldots ,M_r)\), \(T(M)_k = X_k M_{\pi (k)} X_k^{-1}\), where \(T(M)_k\) denotes the \(k\)-th block component of \(T(M)\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024297">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-block_perm.html#thm:ring_perm">10.3</a> gives the permutation \(\pi \). Theorem&#160;<a href="ch-block_perm.html#thm:dim_preserved">10.5</a> identifies the matrix sizes \(D_{\pi (k)} = D_k\). For each \(k\), Theorem&#160;<a href="ch-block_perm.html#thm:component_map_bijective">10.6</a> gives a bijective multiplicative map from \(M_{D_k}(\mathbb {C})\) to \(M_{D_{\pi (k)}}(\mathbb {C})\) extracted from the elements supported on one factor of&#160;\(T\); after reindexing by the dimension equality, this is a \(\mathbb {C}\)-algebra automorphism of \(M_{D_k}(\mathbb {C})\). Skolem–Noether (Theorem&#160;<a href="ch-single.html#thm:skolem_noether">3.9</a>) makes each such automorphism inner. </p>
-<p>This is a standard result in the theory of semisimple algebras; see <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;IV.A
-	]
-</span> for the MPS context. </p>
-
-  </div>
-</div>
-<h1 id="a0000024212">10.2 Product algebra linear extension</h1>
-<div class="definition_thmwrapper theorem-style-definition" id="def:per_block_linear_ext">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">10.8</span>
-    <span class="definition_thmtitle">Per-block linear extension</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#def:per_block_linear_ext">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.perBlockLinearExtension" class="lean_decl">MPSTensor.perBlockLinearExtension</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   Given injective tensors \(A_k, B_k\) of bond dimension&#160;\(D_k\) with the same MPV for each block&#160;\(k\), the <em>per-block linear extension</em> \(T_k\) is the unique linear map \(M_{D_k}(\mathbb {C})\to M_{D_k}(\mathbb {C})\) satisfying \(T_k(A_k^i)=B_k^i\) for all&#160;\(i\). It exists (and is unique) because \(\{ A_k^i\} \) spans \(M_{D_k}(\mathbb {C})\) by injectivity. </p>
-
-  </div>
-</div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:pi_alg_equiv">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">10.9</span>
-    <span class="definition_thmtitle">Product algebra automorphism</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#def:pi_alg_equiv">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:per_block_linear_ext">Definition 10.8</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.piAlgEquiv" class="lean_decl">MPSTensor.piAlgEquiv</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   The <em>product algebra automorphism</em> is the componentwise map \(T:\prod _kM_{D_k}(\mathbb {C})\to \prod _kM_{D_k}(\mathbb {C})\) defined by \(T(M)_k := T_k(M_k)\). Theorem&#160;<a href="ch-block_perm.html#thm:pi_linear_ext">10.10</a> shows that each \(T_k\) is a \(\mathbb {C}\)-algebra homomorphism and that this map is a \(\mathbb {C}\)-algebra automorphism. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:pi_linear_ext">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">10.10</span>
-    <span class="theorem_thmtitle">Per-block linear extensions define a product algebra automorphism</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#thm:pi_linear_ext">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024298"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-operator_convexity.html#a0000024818"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1577,17 +2307,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-block_perm.html#def:per_block_linear_ext">Definition 10.8</a></li>
-          
-          <li><a href="ch-single.html#thm:linear_ext">Theorem 3.6</a></li>
-          
-          <li><a href="ch-single.html#thm:linear_ext_mul">Theorem 3.7</a></li>
-          
-          <li><a href="ch-single.html#lem:linear_map_to_alg">Lemma 3.10</a></li>
-          
-          <li><a href="ch-block_perm.html#thm:pi_auto_decomp">Theorem 10.7</a></li>
+          <li><a href="ch-operator_convexity.html#thm:lieb_concavity">Theorem 18.15</a></li>
           
         </ul>
     
@@ -1607,7 +2327,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.piAlgEquiv_decomposition" class="lean_decl">MPSTensor.piAlgEquiv_decomposition</a></li>
+          <li><a href="../docs/find/#doc/lieb_concavity_in_snd" class="lean_decl">lieb_concavity_in_snd</a></li>
           
         </ul>
     
@@ -1617,12 +2337,15 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(A_k\) and \(B_k\) be injective tensors of bond dimension \(D_k\) for \(k = 1, \ldots , r\), and suppose the per-block same-MPV condition holds. Then the per-block linear extensions \(T_k : A_k^i \mapsto B_k^i\) define an algebra automorphism of \(\prod _k M_{D_k}(\mathbb {C})\), which decomposes as a permutation \(\pi \) with \(D_{\pi (k)} = D_k\) and per-block conjugation matrices \(X_k\). </p>
+  <div class="corollary_thmcontent">
+  <p>    For \(s\in [0,1]\), \(t\in [0,1]\), matrix \(K\), and positive-definite matrices \(A,B_1,B_2\), the map \(B\mapsto \Re \operatorname{tr}(K^\dagger A^s K B^{1-s})\) is concave: </p>
+<div class="displaymath" id="a0000024819">
+  \[  t\, \Re \operatorname{tr}(K^\dagger A^s K B_1^{1-s}) +(1-t) \Re \operatorname{tr}(K^\dagger A^s K B_2^{1-s}) \le \Re \operatorname{tr}\! (K^\dagger A^s K (tB_1+(1-t)B_2)^{1-s}).  \]
+</div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024298">
+<div class="proof_wrapper" id="a0000024818">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1630,1055 +2353,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Each \(T_k\) exists uniquely and is multiplicative by Theorems&#160;<a href="ch-single.html#thm:linear_ext">3.6</a> and&#160;<a href="ch-single.html#thm:linear_ext_mul">3.7</a>. Promotion to algebra homomorphisms (Lemma&#160;<a href="ch-single.html#lem:linear_map_to_alg">3.10</a>) and componentwise composition give an algebra automorphism of \(\prod _k M_{D_k}(\mathbb {C})\). Theorem&#160;<a href="ch-block_perm.html#thm:pi_auto_decomp">10.7</a> then decomposes this automorphism as a block permutation together with per-block inner automorphisms. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:per_block_gauge">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.11</span>
-    <span class="lemma_thmtitle">Per-block same MPV gives global gauge equivalence</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:per_block_gauge">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
-          
-          <li><a href="ch-canonical.html#def:tensor_from_blocks">Definition 9.1</a></li>
-          
-          <li><a href="ch-single.html#thm:ft_single">Theorem 3.11</a></li>
-          
-          <li><a href="ch-canonical.html#thm:multi_block_global">Theorem 9.4</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_multiBlock_full" class="lean_decl">MPSTensor.fundamentalTheorem_multiBlock_full</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   If all block tensors \(A_k\) are injective, and \(B_k\) are block tensors of the same bond dimensions such that per-block same-MPV holds, then each pair \((A_k, B_k)\) is gauge equivalent, and the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are globally gauge equivalent. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024299">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Per-block gauge equivalence follows from the single-block FT (Theorem&#160;<a href="ch-single.html#thm:ft_single">3.11</a>) applied to each block. Global gauge equivalence follows by placing the per-block gauge matrices on the block diagonal (Theorem&#160;<a href="ch-canonical.html#thm:multi_block_global">9.4</a>). </p>
-
-  </div>
-</div>
-<h1 id="a0000024213">10.3 Burnside and invariant projections</h1>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:algspan_cumulative_span">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.12</span>
-    <span class="lemma_thmtitle">The algebra span reaches a finite cumulative span</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:algspan_cumulative_span">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:alg_span">Definition 9.18</a></li>
-          
-          <li><a href="ch-wielandt.html#def:cumulative_span">Definition 8.2</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top" class="lean_decl">MPSTensor.exists_cumulativeSpan_eq_top_of_algSpan_eq_top</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   If the generated unital algebra satisfies \(\operatorname{alg}(A) = M_{D}(\mathbb {C})\), then there exists \(N\) such that \(T_N(A) = M_{D}(\mathbb {C})\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024300">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Every element of \(\operatorname{alg}(A)\) lies in some cumulative span \(T_n(A)\): the generators lie in \(T_1(A)\), scalar multiples of the identity lie in \(T_0(A)\), and the family \(\{ T_n(A)\} _{n \ge 0}\) is closed under addition and under multiplication with lengths adding. Since \(M_{D}(\mathbb {C})\) is finite-dimensional, the ascending chain \(T_0(A) \subseteq T_1(A) \subseteq \cdots \) stabilizes, so one can choose a single \(N\) with \(T_N(A) = M_{D}(\mathbb {C})\). </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:irreducible_action_to_tensor">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.13</span>
-    <span class="lemma_thmtitle">Irreducible action gives an irreducible tensor</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:irreducible_action_to_tensor">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024301"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:irreducible_action">Definition 9.20</a></li>
-          
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.isIrreducibleTensor_of_isIrreducibleAction" class="lean_decl">MPSTensor.isIrreducibleTensor_of_isIrreducibleAction</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   If the letters of \(A\) act irreducibly on \(\mathbb {C}^D\), then \(A\) has no nontrivial invariant orthogonal projection. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024301">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>If \(P\) were a nontrivial invariant orthogonal projection, then its range would be invariant under every letter of \(A\). Irreducibility of the action forces this range to be either \(0\) or all of \(\mathbb {C}^D\), so \(P\) must be \(0\) or \(\mathbb {1}\), a contradiction. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:lowerzero_two_block">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">10.14</span>
-    <span class="theorem_thmtitle">Invariant projection gives a two-block decomposition</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#thm:lowerzero_two_block">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-canonical.html#thm:samempv_unitary">Theorem 9.10</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_twoBlock_decomp_of_lowerZero" class="lean_decl">MPSTensor.exists_twoBlock_decomp_of_lowerZero</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Suppose \(P\) is an orthogonal projection satisfying, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000024303">
-  \[  (\mathbb {1}- P) A^i P = 0.  \]
-</div>
-<p> Then there exist \(n,m\) with \(n + m = D\) and MPS tensors \(A_1, A_2\) of bond dimensions \(n\) and \(m\) such that \(A\) and the two-block tensor \(A_1 \oplus A_2\) generate the same MPV family in the sense of Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024302">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Diagonalize \(P\) by a unitary \(U\). Since \(P^2 = P\), the diagonal form of \(P\) has only \(0\)- and \(1\)-eigenvalues, so the basis splits as \(n + m = D\). Conjugating \(A\) by \(U\) preserves the MPV family by Theorem&#160;<a href="ch-canonical.html#thm:samempv_unitary">9.10</a>. In this basis the relation \((\mathbb {1}- P) A^i P = 0\) makes each letter upper block triangular. Discarding the off-diagonal blocks does not change the trace of any word product, so the resulting block-diagonal tensor has the same MPV coefficients. Reindex the two diagonal blocks by \(\{ 0,\ldots ,n{-}1\} \) and \(\{ 0,\ldots ,m{-}1\} \). </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:lowerzero_two_block_strict">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">10.15</span>
-    <span class="theorem_thmtitle">Nontrivial invariant projection gives strict two-block reduction</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#thm:lowerzero_two_block_strict">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-block_perm.html#thm:lowerzero_two_block">Theorem 10.14</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict" class="lean_decl">MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>    Under the hypotheses of Theorem&#160;<a href="ch-block_perm.html#thm:lowerzero_two_block">10.14</a>, assume in addition that \(P \neq 0\) and \(P \neq \mathbb {1}\). Then there exist \(n,m\) with \(n + m = D\), \(n {\lt} D\), and \(m {\lt} D\), together with block tensors \(A_1, A_2\), such that \(A\) and \(A_1 \oplus A_2\) generate the same MPV family in the sense of Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024304">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-block_perm.html#thm:lowerzero_two_block">10.14</a>. In the diagonal form of \(P\), the \(1\)-eigenspace is nonempty because \(P \neq 0\), and the \(0\)-eigenspace is nonempty because \(P \neq \mathbb {1}\). Hence both block sizes are positive. Since \(n + m = D\), this implies \(n {\lt} D\) and \(m {\lt} D\). </p>
-
-  </div>
-</div>
-<h1 id="a0000024214">10.4 Block separation</h1>
-<p>Recall from Definition&#160;<a href="ch-mps.html#def:mpv_overlap">2.43</a> and Theorem&#160;<a href="ch-spectral.html#thm:overlap_trace">7.7</a> that the bilinear overlap is </p>
-<div class="displaymath" id="a0000024305">
-  \[  O_{AB}(N) = \sum _{\sigma \in \{ 0,\ldots ,d{-}1\} ^N} V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma } = \operatorname{Tr}(F_{AB}^N).  \]
-</div>
-<p> We use this notation throughout the block-separation argument. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:is_canonical_form">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">10.16</span>
-    <span class="definition_thmtitle">Canonical form conditions</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#def:is_canonical_form">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalForm" class="lean_decl">MPSTensor.IsCanonicalForm</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   A collection of scaling factors \((\mu _k)_{k=1}^r\) and block tensors \((A_k)_{k=1}^r\) satisfies the <em>canonical form conditions</em> if: </p>
-<ol class="enumerate">
-  <li><p>each \(A_k\) is injective, </p>
-</li>
-  <li><p>each \(A_k\) satisfies the TP normalization \(\sum _i (A_k^i)^\dagger A_k^i = \mathbb {1}\), </p>
-</li>
-  <li><p>the moduli are non-increasing: \(|\mu _1| \ge |\mu _2| \ge \cdots \ge |\mu _r|\), </p>
-</li>
-  <li><p>all \(\mu _k \neq 0\), </p>
-</li>
-  <li><p>the self-overlap converges: \(O_{A_k A_k}(N) \to 1\) for each&#160;\(k\). </p>
-</li>
-</ol>
-<p> Only this one-sided normalization is assumed; no unital condition is assumed here. Condition&#160;(5) is a primitivity hypothesis: for a primitive channel (<span class="cite">
-	[
-	
-	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Theorem&#160;6.7, item&#160;3
-	]
-</span>), \(T^n(\rho )\to \rho _\infty \) for every initial state, which forces the self-overlap to converge to&#160;\(1\). See also <span class="cite">
-	[
-	
-	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Theorem&#160;6.8
-	]
-</span> for the completely-positive characterisation and Chapter&#160;<a href="ch-spectral.html">7</a> for the spectral-gap proof. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:tp_vs_unital">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">10.17</span>
-    <span class="remark_thmtitle">Normalization convention</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#rem:tp_vs_unital">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> The convention here differs from <span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;4
-	]
-</span>, which uses the unital gauge \(\sum _i A_k^i (A_k^i)^\dagger = \mathbb {1}\). This chapter instead works in the dual TP gauge \(\sum _i (A_k^i)^\dagger A_k^i = \mathbb {1}\). A positive-definite fixed point of the adjoint transfer map provides a gauge transformation between these two normalizations (Theorem&#160;<a href="ch-qpf.html#thm:left_canonical_gauge">6.12</a>). </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:overlap_hypothesis">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">10.18</span>
-    <span class="remark_thmtitle">Overlap hypothesis</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#rem:overlap_hypothesis">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> In the literature&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	
-	]
-</span>, condition&#160;(5) is derived from primitivity of the transfer map (peripheral spectrum \(= \{ 1\} \)). Theorem&#160;<a href="ch-canonical.html#thm:canonical_from_primitive">9.28</a> gives this implication: per-block primitivity implies overlap convergence, so condition&#160;(5) is redundant when primitivity holds. The canonical form conditions retain condition&#160;(5) explicitly because it can be verified independently of primitivity. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:normal_cf_companion">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">10.19</span>
-    <span class="remark_thmtitle">Normal-canonical companion</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#rem:normal_cf_companion">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">10.16</a> gives the block-injective conditions. The normal-canonical analogue instead uses Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.38</a>: injectivity and the explicit self-overlap hypothesis are replaced by irreducibility, TP normalization, and primitive transfer maps. Theorem&#160;<a href="ch-canonical.html#thm:ncf_overlap_tendsto_one">9.39</a> then supplies the self-overlap limit automatically. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:eval_word_flatten_replicate">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.20</span>
-    <span class="lemma_thmtitle">Repeated-word evaluation</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:eval_word_flatten_replicate">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:eval_word">Definition 2.2</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.evalWord_flatten_replicate" class="lean_decl">MPSTensor.evalWord_flatten_replicate</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   For any word \(w\) and any \(L \ge 0\), the evaluation of \(A\) on the \(L\)-fold concatenation \(w^L\) is \((A^w)^L\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024306">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>By induction on \(L\), using the multiplicativity of word evaluation under concatenation. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_sep_core">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.21</span>
-    <span class="lemma_thmtitle">Block separation core</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:block_sep_core">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024307"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.16</a></li>
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.23</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 7.25</a></li>
-          
-          <li><a href="ch-spectral.html#thm:overlap_decay_rect">Theorem 7.23</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.block_separation_core" class="lean_decl">MPSTensor.block_separation_core</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   Let \(((\mu _k), (A_k))\) satisfy the canonical form conditions, and let \((B_k)\) be injective tensors satisfying the same TP normalization \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\). If \(\sum _k \mu _k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma ) = 0\) for all \(N,\sigma \), then each pair \((A_k, B_k)\) generates the same MPV family. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024307">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> By induction on the number of blocks&#160;\(r\). In the inductive step, take bilinear overlaps with the leading block \(A_0\): from \(\sum _k \mu _k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma ) = 0\) one obtains </p>
-<div class="displaymath" id="a0000024308">
-  \[  \sum _k \overline{\mu _k}^N \bigl(O_{A_0 A_k}(N) - O_{A_0 B_k}(N)\bigr) = 0.  \]
-</div>
-<p> After division by \(\overline{\mu _0}^N\), the contributions from \(k \ge 1\) decay because \(|\mu _k / \mu _0| {\lt} 1\) (strict weight ordering) and the bilinear overlaps \(O_{A_0 A_k}(N)\) and \(O_{A_0 B_k}(N)\) are bounded (Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">7.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">7.25</a> supply the relevant bounds), leaving \(O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0\). Condition&#160;(5) gives \(O_{A_0 A_0}(N) \to 1\), hence \(O_{A_0 B_0}(N) \to 1\). Since \(O_{A_0 B_0}(N) \to 1 \neq 0\), the bond dimensions must match: \(D_{A_0} = D_{B_0}\); otherwise Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">7.23</a> would give \(O_{A_0 B_0}(N) \to 0\), a contradiction. With equal bond dimensions established, the contrapositive of Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">7.25</a> forces \(A_0\) and \(B_0\) to be gauge-phase equivalent; the limit \(O_{A_0 B_0}(N) \to 1\) then makes the phase trivial, so \(A_0\) and \(B_0\) generate the same MPV family. Peeling off the leading block and dividing by \(\mu _0^N\), the induction hypothesis applies. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_sep">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.22</span>
-    <span class="lemma_thmtitle">Block separation from canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:block_sep">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024309"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.16</a></li>
-          
-          <li><a href="ch-block_perm.html#lem:block_sep_core">Lemma 10.21</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.per_block_sameMPV_of_canonical_form" class="lean_decl">MPSTensor.per_block_sameMPV_of_canonical_form</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   Let \(((\mu _k), (A_k))\) satisfy the canonical form conditions, and let \((B_k)\) be injective tensors satisfying the same TP normalization \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\). If the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) generate the same MPV family, then each pair \((A_k, B_k)\) generates the same MPV family. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024309">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-block_perm.html#lem:block_sep_core">10.21</a> to the identity obtained from the equality of the two block-diagonal MPV families. The induction peels off the dominant block and treats the remainder as a decaying tail. Concretely, one isolates the leading term \(\mu _1^N V(A_1)\) and bounds the remaining contribution by \(O(|\mu _2/\mu _1|^N)\) after dividing by \(\mu _1^N\). The canonical form conditions supply injectivity, TP normalization, strict nonzero weights, and self-overlap convergence for \((A_k)\), while the hypotheses on \((B_k)\) supply the comparison injectivity and TP normalization. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_sep_normal">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.23</span>
-    <span class="lemma_thmtitle">Block separation from normal canonical form</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:block_sep_normal">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024310"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 9.38</a></li>
-          
-          <li><a href="ch-canonical.html#thm:ncf_overlap_tendsto_one">Theorem 9.39</a></li>
-          
-          <li><a href="ch-canonical.html#thm:nt_modulus_one_gauge">Theorem 9.40</a></li>
-          
-          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 10.22</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.per_block_sameMPV_of_normal_canonical_form" class="lean_decl">MPSTensor.per_block_sameMPV_of_normal_canonical_form</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>  Let \(((\mu _k), (A_k))\) satisfy the normal canonical form conditions, and let \((B_k)\) be irreducible tensors of the same bond dimensions, satisfying the same TP normalization \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\). If the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) generate the same MPV family, then each pair \((A_k, B_k)\) generates the same MPV family. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024310">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The proof follows the same peeling argument as Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">10.22</a>, with Theorem&#160;<a href="ch-canonical.html#thm:nt_modulus_one_gauge">9.40</a> (modulus-one eigenvalue rigidity for irreducible tensors) replacing the injective overlap-decay argument at the identification step, since the blocks are irreducible rather than injective. Theorem&#160;<a href="ch-canonical.html#thm:ncf_overlap_tendsto_one">9.39</a> replaces the explicit self-overlap hypothesis on the leading block. Since both block families already use the same dimension function, the conclusion is direct per-block same MPV. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:ft_canonical">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">10.24</span>
-    <span class="lemma_thmtitle">Canonical-form gauge comparison, same-structure case</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#lem:ft_canonical">#</a>
-    
-    <a class="icon proof" href="ch-block_perm.html#a0000024311"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.16</a></li>
-          
-          <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
-          
-          <li><a href="ch-canonical.html#def:tensor_from_blocks">Definition 9.1</a></li>
-          
-          <li><a href="ch-block_perm.html#lem:block_sep">Lemma 10.22</a></li>
-          
-          <li><a href="ch-block_perm.html#lem:per_block_gauge">Lemma 10.11</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_canonicalForm" class="lean_decl">MPSTensor.fundamentalTheorem_canonicalForm</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   Under the hypotheses of Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">10.22</a>, each pair \((A_k, B_k)\) is gauge equivalent. Hence the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are gauge equivalent. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000024311">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">10.22</a> gives per-block same MPV. Lemma&#160;<a href="ch-block_perm.html#lem:per_block_gauge">10.11</a> then converts this to per-block gauge equivalence and then to global gauge equivalence of the block-diagonal tensors. </p>
-
-  </div>
-</div>
-<div class="remark_thmwrapper theorem-style-remark" id="rem:block_perm_literature">
-  <div class="remark_thmheading">
-    <span class="remark_thmcaption">
-    Remark
-    </span>
-    <span class="remark_thmlabel">10.25</span>
-    <span class="remark_thmtitle">Relation to the literature</span>
-    <div class="thm_header_extras">
-
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-block_perm.html#rem:block_perm_literature">#</a>
-    
-    
-    
-        </div>
-  </div>
-  <div class="remark_thmcontent">
-  <p> The block-permutation part follows the decomposition of automorphisms of semisimple matrix algebras used in&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
-	, Section&#160;IV.A
-	]
-</span>. The separation part follows the induction on blocks from <span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Appendix&#160;E
-	]
-</span>; the checked proof here uses overlap bounds and mixed-transfer decay. </p>
+  <p>Specialize Theorem&#160;<a href="ch-operator_convexity.html#thm:lieb_concavity">18.15</a> at \(A_1=A_2=A\), so that the convex combination collapses: \(tA+(1-t)A=A\). </p>
 
   </div>
 </div>
@@ -2693,11 +2368,11 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-canonical.html" title="Canonical Form Reduction"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-semigroup.html" title="Quantum Dynamical Semigroups"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
 </a>
-  <a href="ch-bnt.html" title="Basis of Normal Tensors"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+  <a href="ch-entropy.html" title="Quantum Entropy"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
 </a>
 </nav>
 
