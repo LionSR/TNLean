@@ -48,10 +48,11 @@ trace inequality forces $|\lambda|<1$ or $|\lambda|=1$, and the latter case
 yields $A_b^i X = \alpha X A_a^i$ with $|\alpha|=1$ and $X$ an isometry,
 which after a dimension argument gives the structural conclusion.
 
-\section{The Lean situation}
+\section{Formal decomposition of the structural conclusion}
 
-The TNLean codebase has the dichotomy, the bond-dimension recovery, and the
-same-bond-dimension gauge recovery, split into multiple theorems.
+The TNLean codebase represents the structural part of Lemma~\texttt{equalMPS}
+by two separate theorems: one rectangular dimension theorem and one
+same-bond-dimension gauge theorem.
 
 The self-overlap convergence is faithfully formalized in
 \leanid{MPSTensor.overlap\_tendsto\_one\_of\_peripheralPrimitive\_of\_irreducible}.\footnote{%
@@ -60,13 +61,18 @@ The dichotomy in the decay direction is faithfully formalized in
 \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_irreducible\_TP}.\footnote{%
 \path{TNLean/Spectral/SpectralGapNT.lean}, around line~290.}
 
-There is also a rectangular dimension-recovery theorem
+The rectangular dimension-recovery theorem
 \leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}.\footnote{%
 \path{TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean}, near the equalMPS
 theorems.}
-For irreducible trace-preserving tensors of possibly different bond dimensions,
-it proves $D_a=D_b$ from
-$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$.
+handles the case in which the two normal tensors may have different bond
+dimensions.  Under the left-canonical irreducible hypotheses used in
+\cite[lines~1093--1117]{Cirac2016MPDO_arXiv}, it proves $D_a=D_b$ from
+$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$.  Its proof uses the
+rectangular decay theorem
+\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
+if the bond dimensions differed, then the mixed overlap would tend to zero,
+contradicting the assumed limiting modulus.
 
 The gauge-recovery theorem
 \leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}\footnote{%
@@ -75,35 +81,20 @@ theorems.}
 has the source hypothesis shape: for two irreducible trace-preserving tensors
 of the same bond dimension, the assumption
 $\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$ implies
-\leanid{GaugePhaseEquiv}.  The source-facing record does not treat a theorem
-with an additional \leanid{ProportionalMPV₂} hypothesis as a version of
-\texttt{equalMPS}.
-
-Together, the rectangular dimension theorem and the same-bond-dimension gauge
-theorem cover the structural conclusion of the left-canonical
-\texttt{equalMPS} argument: the $1$ case first forces $D_a=D_b$, and then gives
-the gauge-phase relation.
-
-\section{Formal decomposition of the structural conclusion}
-
-The formalization represents the structural part of Lemma~\texttt{equalMPS} by
-two separate theorems.  First,
-\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
-handles the rectangular case: under the left-canonical normal-tensor
-hypotheses used in \cite[lines~1093--1117]{Cirac2016MPDO_arXiv},
-asymptotically unit-modulus overlap forces $D_a=D_b$.  Its proof uses the
-rectangular decay theorem
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
-if the bond dimensions differed, the mixed overlap would tend to zero,
-contradicting the assumed limiting modulus.
-
-Second, after the bond dimensions are identified,
-\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
-gives the gauge-phase relation from the same asymptotic-overlap hypothesis.
-This theorem derives the mixed-transfer spectral-radius condition using
+\leanid{GaugePhaseEquiv}.  It derives the mixed-transfer spectral-radius
+condition using
 \leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one}
 and then applies the modulus-one rigidity theorem
 \leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP}.
+The spectral-radius theorem formalizes the corresponding step in the proof of
+Lemma~\texttt{equalMPS}, \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}; the
+gauge theorem formalizes the source statement in
+\cite[lines~1080--1091]{Cirac2016MPDO_arXiv} together with its proof in
+\cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.
+
+The source-facing record does not treat a theorem with an additional
+\leanid{ProportionalMPV₂} hypothesis as a version of Lemma~\texttt{equalMPS},
+because the source does not assume proportional MPV families.
 
 \section{Why this matters for the Fundamental Theorem proof}
 
@@ -120,7 +111,7 @@ each non-decaying per-block mixed overlap: the rectangular theorem first
 identifies the relevant bond dimensions, and the square theorem then supplies
 the gauge-phase equivalence.
 
-\section{Conclusion}
+\section{Status}
 
 The structural conclusion of Lemma~\texttt{equalMPS} is represented in the
 left-canonical irreducible formulation used by the proof: asymptotically

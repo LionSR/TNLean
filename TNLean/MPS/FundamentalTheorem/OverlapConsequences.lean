@@ -150,9 +150,9 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
 
 /-- **Spectral radius lower bound from unit-modulus overlap.**
 
-Source: arXiv:1606.00608, Lemma `equalMPS` (lines 1085-1117). Establishes the
-spectral side of the dichotomy `lim |⟨V_b, V_a⟩| ∈ {0, 1}`: if the modulus of
-the overlap tends to `1`, the cross-transfer spectral radius is at least `1`.
+Source: arXiv:1606.00608, proof of Lemma `equalMPS`, lines 1093-1117.
+This is the spectral-radius step inside the proof: if the modulus of the
+overlap tends to `1`, the cross-transfer spectral radius is at least `1`.
 
 The proof is the contrapositive of
 `mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`: if the
@@ -236,7 +236,8 @@ theorem dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP
 
 /-- **Source-faithful equalMPS gauge recovery.**
 
-Source: arXiv:1606.00608, Lemma `equalMPS`, lines 1085-1117. If two
+Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080-1091 and
+proof lines 1093-1117. If two
 irreducible trace-preserving (left-canonical) blocks of the same bond
 dimension have asymptotically unit-modulus overlap, then they are
 gauge-phase equivalent.
