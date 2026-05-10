@@ -83,11 +83,22 @@ out a proper missing subspace, forcing equality of dimensions
 \cite[lines~1115--1117]{Cirac2016MPDO_arXiv}.
 
 This rectangular dimension recovery is genuinely needed in the proof of
-Theorem~\texttt{thm1}.  There the relevant overlaps are per-block overlaps
+\cite[Theorem~II.1, lines~1170--1192]{Cirac2016MPDO_arXiv}.  There the relevant
+overlaps are per-block overlaps
 \(\langle V^{(N)}(B_k)\,|\,V^{(N)}(A_j)\rangle\), and the source proof applies
 Lemma~\texttt{equalMPS} before the matching of bond dimensions has been
 established.  The same-dimension theorem therefore covers the gauge step only
 after the rectangular dimension conclusion has been supplied separately.
+
+\section{Verdict}
+
+The same-bond-dimension gauge component is formalized without the
+source-absent MPV proportionality hypothesis.  The rectangular
+bond-dimension conclusion \(D_a=D_b\) remains a hypothesis-level gap in this
+branch: the source proves it from unit-modulus overlap, while the present gauge
+theorem assumes a common bond dimension before it applies.  This remaining
+component is still needed for the proof of
+\cite[Theorem~II.1, lines~1170--1192]{Cirac2016MPDO_arXiv}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

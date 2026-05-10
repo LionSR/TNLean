@@ -287,8 +287,9 @@ together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP` from
 `TNLean/Spectral/SpectralGapNT.lean`.
 
-Closes the gap recorded in
-`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+Closes the same-bond-dimension component of the gap recorded in
+`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`; the rectangular
+bond-dimension conclusion is separate. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
