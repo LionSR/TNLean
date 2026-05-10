@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Common Sector Relabeling as an Explicit Hypothesis}
+\author{}
+\date{2026-05-10}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Several after-blocking sector-comparison theorems in the formalization take an explicit
+hypothesis \leanid{CommonSectorRelabelingHypothesis} of type \texttt{Prop}.  The hypothesis
+asserts: for every common blocked cyclic-sector family \(F\) with blocking period \(p\) and
+block families \((A_k)_k\), the weighted block-diagonal tensor assembled from the
+physically blocked blocks agrees, as an MPV family, with the same family assembled from the
+explicitly reindexed blocks of \(F\):
+\[
+  \forall F,\quad
+  \bigoplus_k \mu_k^p \cdot A_k^{[p]} \sim_{\mathrm{MPV}}
+  \bigoplus_k \mu_k^p \cdot F.\text{commonReindexedBlock}(k).
+\]
+Here \(A_k^{[p]}\) denotes the length-\(p\) blocking of the \(k\)-th primitive block, and
+\(F.\text{commonReindexedBlock}(k)\) is the same tensor read through the explicit word
+relabeling of blocked physical indices.
+
+\section{Relation to the paper}
+
+The paper arXiv:1606.00608 does not state this as a separate hypothesis.
+In the source argument the blocked-word identification is an automatic consequence of the
+canonical blocking construction: blocking a tensor and then reading the result through the
+explicit multi-index grouping of \(\{1,\ldots,d\}^p\) is definitionally the same operation.
+The paper therefore treats the equality as transparent and does not name it.
+
+\section{Status in the formalization}
+
+The hypothesis is always provable.  The Lean declaration
+\leanid{CommonGroupedBlockCastHypothesis.of\_flattenWordOfBlock\_cast\_eq} proves the
+stronger coordinate-grouping assertion \leanid{CommonGroupedBlockCastHypothesis}
+unconditionally, and
+\leanid{CommonGroupedBlockCastHypothesis.toRelabelingHypothesis}
+derives \leanid{CommonSectorRelabelingHypothesis} from it.%
+\footnote{%
+  Both declarations are in
+  \doclink{TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean}.
+  The after-blocking sector-comparison theorems are in
+  \doclink{TNLean/MPS/CanonicalForm/SectorComparison/ProportionalComparison.lean}.
+}
+
+The explicit parameterization is therefore a \emph{formalization design choice}, not a
+genuine extra mathematical assumption.  Taking the hypothesis as an argument
+exposes the logical boundary between the common-sector structural theorem and the
+downstream comparison, making the dependency explicit at the type level.  Every caller can
+discharge it with the one-line proof
+\texttt{CommonGroupedBlockCastHypothesis.of\_flattenWordOfBlock\_cast\_eq d
+  |>.toRelabelingHypothesis}.
+
+\section{Verdict}
+
+No deviation from the source paper: the hypothesis is always true and the proof is
+available.  The formalization makes an implicit paper convention explicit at the
+type level; this is a recognized formalization pattern, not a scope restriction or
+an error.  No corrective action is required, but callers of the parameterized theorems
+should discharge this hypothesis using the available lemma rather than treating it as
+an open obligation.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

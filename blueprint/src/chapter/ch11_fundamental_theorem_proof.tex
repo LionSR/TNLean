@@ -889,44 +889,30 @@ facts used to recover the lists of weights from those power sums.
 \begin{lemma}[Separated normal canonical-form hypotheses produce a common phase cover]%
 \label{lem:common_phase_cover_of_separated_normal_bnt}
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
-	\leanok
 	\uses{def:mpv_common_phase_cover, def:is_normal_canonical_form,
 		def:blocks_not_gauge_phase_equiv, thm:bnt_perm_prop_nt}
 	For two normal canonical-form block families with no gauge-phase-equivalent
-	distinct equal-dimension blocks, proportional decompositions whose coefficient
-	limits are nonzero give a common MPV phase cover of the two basis families.
+	distinct equal-dimension blocks, a proportional-decomposition witness
+	(per-length coefficient arrays with unit-modulus dominant block and
+	per-length non-zero proportionality scalar) gives a common MPV phase cover
+	of the two basis families.
 	This is the BNT construction of the common cover; it does not assume equality of
 	finite-length spans.
+
+	\textbf{Unfaithful:} This lemma is stated and callable, but its proof inherits
+	two admitted sub-lemmas from
+	\texttt{fundamentalTheorem\_of\_separated\_normalCFBNT\_data} in
+	\texttt{NonzeroOverlap.lean}.  See \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex}
+	and issue \#1559.
 \end{lemma}
 
 \begin{proof}
-	\leanok
 	\uses{lem:common_phase_cover_of_proportional_decomposition,
 		thm:bnt_perm_prop_nt}
 	The irreducible trace-preserving BNT permutation theorem gives the permutation
 	matching the basis blocks, bond-dimension equalities, and gauge-phase
 	equivalences. Applying the previous lemma to that conclusion yields the
 	common phase cover.
-\end{proof}
-
-\begin{lemma}[Separated normal canonical-form hypotheses give nonzero-block span equality]%
-\label{lem:separated_normal_bnt_span_eq}
-	\lean{MPSTensor.mpv_span_eq_of_separated_normalCFBNT_data}
-	\leanok
-	\uses{lem:common_phase_cover_of_separated_normal_bnt,
-		lem:mpv_common_phase_cover_span_eq}
-	For two separated normal canonical-form block families as in
-	Lemma~\ref{lem:common_phase_cover_of_separated_normal_bnt}, the BNT
-	comparison implies equality, at every system size, of the finite-length
-	MPV spans of the two basis families.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:common_phase_cover_of_separated_normal_bnt,
-		lem:mpv_common_phase_cover_span_eq}
-	The separated normal-form comparison first gives a common MPV phase cover.
-	Applying the common phase-cover span lemma to that cover gives the span equality.
 \end{proof}
 
 \begin{theorem}[Sector comparison via a sector-basis matching]%
@@ -1536,20 +1522,6 @@ BNT comparison hypotheses for the common primitive sectors.
 	comparison theorem with a common phase cover.
 \end{proof}
 
-\begin{theorem}[Sector comparison from normal-CF-BNT common primitive data]%
-\label{thm:afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity}
-	\lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_commonPrimitiveNormalBNTData_zeroTailIdentity}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis,
-		thm:afterBlocking_sectorComparison_reindexed_bntCover}
-	Assume the blocked-word identification for the common-sector families.
-	The structural theorem supplies common primitive nonzero-sector families;
-	if those families are in normal canonical form with BNT separation and
-	also carry proportional-decomposition data and one-site injectivity, then
-	the zero-tail sector comparison follows. The zero-tail equality is derived
-	from the length-zero identity and the proportional BNT comparison.
-\end{theorem}
 
 \begin{definition}[After-blocking BNT matching hypotheses]%
 	\label{def:after_blocking_sector_comparison_hypotheses}

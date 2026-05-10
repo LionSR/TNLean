@@ -433,29 +433,6 @@ lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
     (fundamentalTheorem_of_separated_normalCFBNT_data
       blocksA blocksB hA_ncf hA_blocks hB_ncf hB_blocks hDecomp)
 
-/-- Separated normal canonical-form data give finite-length MPV span equality.
-
-The BNT comparison theorem gives a proportional-decomposition conclusion, hence a common
-MPV phase cover, and the common phase-cover span lemma gives equality of the two block-family
-spans. -/
-lemma mpv_span_eq_of_separated_normalCFBNT_data
-    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ} {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
-    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA_ncf : IsNormalCanonicalForm μA blocksA)
-    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksA)
-    (hB_ncf : IsNormalCanonicalForm μB blocksB)
-    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksB)
-    (hDecomp : ProportionalDecompositionData (d := d) blocksA blocksB DtotA DtotB)
-    (N : ℕ) :
-    Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
-    Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
-  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
-    (d := d) blocksA blocksB hA_ncf hA_blocks hB_ncf hB_blocks hDecomp
-  exact cover.span_eq N
-
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
