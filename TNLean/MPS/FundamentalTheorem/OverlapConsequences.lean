@@ -159,7 +159,7 @@ The proof is the contrapositive of
 spectral radius were strictly less than `1`, the overlap (and hence its
 modulus) would tend to `0`, contradicting the hypothesis.
 
-This routes through the existing trace identity
+The proof uses the trace identity
 `trace_mixedTransferMap_pow_eq_mpvOverlap` and is paper-faithful (no
 proportionality hypothesis required). -/
 theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
@@ -247,11 +247,11 @@ itself; no proportionality of MPVs is assumed. The proof uses the
 cross-transfer-matrix spectral radius, computed via
 `mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`
 together with the rigidity theorem
-`modulus_one_eigenvalue_implies_gauge_of_irreducible_TP` from
-`TNLean/Spectral/SpectralGapNT.lean`.
+`modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
 
-Closes the gap recorded in
-`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+Closes the same-bond-dimension component of the equalMPS gap
+(arXiv:1606.00608, Lemma `equalMPS`); the rectangular bond-dimension conclusion
+is separate. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
