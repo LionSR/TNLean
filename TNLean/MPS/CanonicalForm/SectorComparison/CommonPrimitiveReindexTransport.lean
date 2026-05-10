@@ -82,6 +82,7 @@ def reindexPhysical_equiv
   toIsNormalCanonicalForm := h.toIsNormalCanonicalForm.reindexPhysical_equiv e
   mu_strict_anti := h.mu_strict_anti
   blocks_not_equiv := BlocksNotGaugePhaseEquiv.reindexPhysical_equiv h.blocks_not_equiv e
+  mu_dom_norm_one := h.mu_dom_norm_one
 
 end IsNormalCanonicalFormBNT
 

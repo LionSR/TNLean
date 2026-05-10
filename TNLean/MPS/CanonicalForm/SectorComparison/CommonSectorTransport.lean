@@ -58,13 +58,15 @@ lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     (hμ : ∀ k, μ k ≠ 0)
     (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖))
     (hNotGpe : BlocksNotGaugePhaseEquiv
-      (d := blockPhysDim d p) (F.commonRepresentativeBlocksAt hp)) :
+      (d := blockPhysDim d p) (F.commonRepresentativeBlocksAt hp))
+    (hμDom : ∀ h : 0 < r, ‖F.commonRepresentativeWeight μ ⟨0, h⟩‖ = 1) :
     IsNormalCanonicalFormBNT (d := blockPhysDim d p)
       (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
   toIsNormalCanonicalForm :=
     F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti.antitone
   mu_strict_anti := hAnti
   blocks_not_equiv := hNotGpe
+  mu_dom_norm_one := hμDom
 
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/

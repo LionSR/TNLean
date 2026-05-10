@@ -256,7 +256,7 @@ theorem blockTensor_of_notGpe
     (d := blockPhysDim d L)
     (μ := fun k => (μ k) ^ L)
     (A := fun k => blockTensor (d := d) (D := dim k) (blocks k) L)
-    ?_ ?_ ?_ ?_ ?_ hNotGpe
+    ?_ ?_ ?_ ?_ ?_ hNotGpe ?_
   · exact HasIrreducibleBlocks.ofForall fun k => (hBlocked k).2.2
   · exact IsLeftCanonicalBlockFamily.ofForall fun k => (hBlocked k).1
   · exact HasPrimitiveBlocks.ofForall fun k => (hBlocked k).2.1
@@ -268,6 +268,8 @@ theorem blockTensor_of_notGpe
             pow_lt_pow_left₀ hbase (norm_nonneg (μ k)) (hL.ne')
         mu_ne_zero := fun k => pow_ne_zero L (h.mu_ne_zero k) }
   · exact h.dim_pos
+  · intro hr
+    simp [norm_pow, h.mu_dom_norm_one hr]
 
 end IsNormalCanonicalFormBNT
 

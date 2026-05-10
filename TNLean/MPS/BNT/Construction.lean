@@ -187,6 +187,15 @@ structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
     ∀ (h : dim j = dim k),
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
+  /-- The dominant block weight has unit modulus.
+
+  Source convention from arXiv:1606.00608 (paragraph after `eq:II_CF1`): one can always
+  renormalize the canonical form so that `|μ_k| ≤ 1` and at least one weight equals one.
+  This is a definitional choice rather than an extra restriction: an MPS state is invariant
+  under overall rescaling of the underlying tensor, so any canonical form can be adjusted
+  to satisfy `‖μ 0‖ = 1`. Combined with `mu_strict_anti`, this fixes `‖μ 0‖ = 1` and
+  `‖μ k‖ < 1` for `k ≥ 1`. -/
+  mu_dom_norm_one : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1
 
 namespace IsNormalCanonicalFormBNT
 
@@ -224,19 +233,21 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus the BNT separation
-assumption. -/
+assumption and the source-faithful dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)
     (hμ : HasStrictOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hμDom : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1) :
     IsNormalCanonicalFormBNT μ A where
   toIsNormalCanonicalForm :=
     IsNormalCanonicalForm.ofStrictSeparatedData hIrr hLeft hPrim hμ hDim
   mu_strict_anti := hμ.mu_strict_anti
   blocks_not_equiv := hBlocks
+  mu_dom_norm_one := hμDom
 
 end IsNormalCanonicalFormBNT
 

@@ -126,3 +126,38 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Do not leave unrelated new sorrys
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
+
+### Paper-realignment mode
+
+When the formalization has drifted from the cited source and the work is
+**realigning the Lean development to the paper** (replacing wrong hypotheses,
+removing divergent structures, restating theorems to match the source), the
+default `sorry`/`axiom` blockers from `docs/PROOF_INTEGRITY.md` are temporarily
+relaxed. The priority is **getting the statements right**; proofs are
+restored after.
+
+A paper-realignment PR may:
+
+- Delete fields, hypotheses, or whole theorems that are documented as
+  divergent from the cited source (with the divergence recorded in
+  `docs/paper-gaps/`).
+- Leave `sorry` in proof bodies whose old proof depended on the deleted
+  data, when the paper-faithful replacement is the next step.
+- Cascade signature changes through downstream consumers, also using
+  `sorry` if necessary, rather than reverting to keep the build proof-clean.
+
+A paper-realignment PR must:
+
+- Cite the relevant `docs/paper-gaps/*.tex` note documenting the divergence
+  in the PR description.
+- Identify, in the PR description, every `sorry` introduced and the
+  paper-faithful theorem that will discharge it.
+- Be scoped tightly — no unrelated refactors or feature additions.
+- Be followed by tracked implementation issues for the missing
+  paper-faithful proofs.
+
+In paper-realignment mode the standard "do not add sorry" rule is the
+*wrong* heuristic: keeping a divergent proof intact to avoid `sorry`
+preserves a result the source does not assert. Reviewers should evaluate
+paper-realignment PRs against the paper-gap note and the planned
+follow-up, not against the temporary `sorry` count.

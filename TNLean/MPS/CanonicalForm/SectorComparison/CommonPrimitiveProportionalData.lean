@@ -313,6 +313,13 @@ structure CommonRepresentativeBNTCoverHypotheses
   /-- Distinct right representatives are not gauge-phase equivalent. -/
   notGpeB :
     BlocksNotGaugePhaseEquiv (d := blockPhysDim d p) (FB.commonRepresentativeBlocksAt hpB)
+  /-- The dominant left representative weight has unit modulus (source convention from
+  arXiv:1606.00608, paragraph after `eq:II_CF1`). -/
+  left_weight_dom_norm_one :
+    ∀ h : 0 < rA, ‖FA.commonRepresentativeWeight μA ⟨0, h⟩‖ = 1
+  /-- The dominant right representative weight has unit modulus. -/
+  right_weight_dom_norm_one :
+    ∀ h : 0 < rB, ‖FB.commonRepresentativeWeight μB ⟨0, h⟩‖ = 1
   /-- The length-zero identity for the representative nonzero parts. -/
   zero_length_identity : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
     (zeroTailA : ℂ) +
@@ -593,6 +600,8 @@ noncomputable def ofCommonRepresentatives_zeroTailIdentity
       (FA.commonRepresentativeBlocksAt hpA))
     (hNotGpeB : BlocksNotGaugePhaseEquiv (d := blockPhysDim d p)
       (FB.commonRepresentativeBlocksAt hpB))
+    (hμDomA : ∀ h : 0 < rA, ‖FA.commonRepresentativeWeight μA ⟨0, h⟩‖ = 1)
+    (hμDomB : ∀ h : 0 < rB, ‖FB.commonRepresentativeWeight μB ⟨0, h⟩‖ = 1)
     (hZero : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
       (zeroTailA : ℂ) +
           mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := FA.commonRepresentativeWeight μA)
@@ -614,9 +623,9 @@ noncomputable def ofCommonRepresentatives_zeroTailIdentity
       (FB.commonRepresentativeBlocksAt hpB) := by
   exact ofNormalCanonicalFormBNT_zeroTailIdentity
     (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-      FA hpA μA hμA hAntiA hNotGpeA)
+      FA hpA μA hμA hAntiA hNotGpeA hμDomA)
     (isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-      FB hpB μB hμB hAntiB hNotGpeB)
+      FB hpB μB hμB hAntiB hNotGpeB hμDomB)
     hZero hInjA hInjB hDecomp
 
 /-- A `CommonRepresentativeBNTCoverHypotheses` structure yields the primitive BNT-cover
@@ -645,6 +654,7 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.left_weight_ne_zero h.right_weight_ne_zero
     h.left_weight_strict_anti h.right_weight_strict_anti
     h.notGpeA h.notGpeB
+    h.left_weight_dom_norm_one h.right_weight_dom_norm_one
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
 /-- BNT-cover hypotheses produce a common MPV phase cover. -/
