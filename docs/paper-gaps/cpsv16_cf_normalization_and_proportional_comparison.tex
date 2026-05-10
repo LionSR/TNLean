@@ -65,7 +65,7 @@ $N$-indexed quantity is invoked.
 
 The formal counterpart of the canonical form for the BNT route is the structure
 \texttt{IsNormalCanonicalFormBNT}.\footnote{%
-\path{TNLean/MPS/BNT/Construction.lean}, lines 181--195.}
+\path{TNLean/MPS/BNT/Construction.lean}, lines 181--189.}
 Its mathematical content is: a strict-modulus ordering on the weight family
 $\mu : \mathrm{Fin}\,r\to\mathbb C$, the nonvanishing $\mu_k\ne 0$ for every
 $k$, and the per-block normality data inherited from the underlying canonical
@@ -73,12 +73,16 @@ form. The dominant weight is unconstrained in modulus.
 
 Comparing this with the source definition, the field
 $|\mu_1|=1$ (in source enumeration; index $0$ in the formal one) is missing.
-The blueprint chapter on canonical forms records the strict-modulus ordering
-and the decomposition $\mu_k=\eta_k|\mu_k|$ with $\eta_k$ on the unit circle,
-but does not impose $|\mu_1|=1$ either.\footnote{%
-\path{blueprint/src/chapter/ch08_canonical.tex}, definitions
-\texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt}, and the surrounding
-remarks on weight normalization.}
+The blueprint BNT chapter records the strict-modulus ordering in the
+BNT-separated canonical-form definitions. Separately, the canonical-form
+chapter records the decomposition $\mu_k=\eta_k|\mu_k|$ with $\eta_k$ on the
+unit circle. Neither place imposes $|\mu_1|=1$.\footnote{%
+The BNT-separated definitions are
+\texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt} in
+\path{blueprint/src/chapter/ch10_bnt.tex}, lines 70--100 and 119--141,
+respectively. The phase--modulus decomposition is
+\texttt{thm:mpv\_normalize} in
+\path{blueprint/src/chapter/ch08_canonical.tex}, lines 125--139.}
 
 The omission is mathematically meaningful, because the source definition is
 used in two ways downstream: it fixes the dominant block on the unit circle,
@@ -93,7 +97,7 @@ identity \texttt{eq:II\_cor2\_power\_sum} by a different mathematical object:
 two coefficient sequences indexed by chain length, together with the assumption
 that they converge to nonzero limits. Concretely, the structure
 \texttt{ProportionalDecompositionData}\footnote{%
-\path{TNLean/MPS/BNT/Construction.lean}, lines 512--542.}
+\path{TNLean/MPS/BNT/Construction.lean}, lines 512--537.}
 packages, for each block index $j$, a function
 $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit $a_j^\infty\in\mathbb C$
 satisfying
@@ -107,19 +111,28 @@ identification of the scalars is then derived from these convergence
 hypotheses by a comparison of limits, rather than from the source
 power-sum identity.
 
-For the natural realization in which the BNT representative on the $j$th block
-is one-dimensional ($r_j=1$) and the coefficient is the source weight
-itself, the formal choice of array is
+For the natural realization in which the $j$th source sector has one selected
+representative, or one copy in the coefficient multiplicity notation
+($r_j=1$), and the coefficient is the source weight itself, the formal choice
+of array is
 \[
   a_{N,j}=(\mu_j^A)^N.
 \]
 \footnote{The corresponding blueprint passage is the remark
 \texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex}.} With this
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
+lines 172--202.} With this
 choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$ becomes a
 condition on the powers $(\mu_j^A)^N$.
 
 \section{The mathematical incompatibility}
+
+Throughout this section, the comparison is restricted to the strict-weight,
+one-representative-per-block specialization just described, namely
+$a_{N,j}=(\mu_j^A)^N$ and $b_{N,k}=(\mu_k^B)^N$. It is not a claim about the
+more general sector coefficient arrays
+$c_{S,j}^{(N)}=\sum_q \mu_{j,q}^N$ that retain repeated copies within a BNT
+sector.
 
 Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
 the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
@@ -128,8 +141,9 @@ the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
 \]
 so the only candidate limit is $a_j^\infty=0$, contradicting the formal
 hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on
-the unit circle, and the sequence $(\mu_1^A)^N$ converges only if $\mu_1^A$
-is a root of unity; for a generic phase the limit does not exist.
+the unit circle, and the sequence $(\mu_1^A)^N$ converges only in the special
+case $\mu_1^A=1$; nontrivial roots of unity are periodic rather than
+convergent, and a generic phase has no limit.
 
 The conclusion is a structural mismatch. With the source normalization in
 force, the formal data $\texttt{ProportionalDecompositionData}$ cannot be
@@ -153,25 +167,31 @@ The blueprint statements of \texttt{lem:ft\_proportional} and
 \texttt{lem:ft\_proportional\_nt} carry the same convergence-and-nonzero-limit
 data as the formal structure, with the symbols $a_j^\infty,b_k^\infty,c^\infty$
 in place of \texttt{aLim}, \texttt{bLim}, \texttt{cLim}. The accompanying
-remark \texttt{rem:cf\_coeff\_arrays} acknowledges the strict-weight
-specialization $a_{N,j}=(\mu_j^A)^N$ but does not flag the incompatibility
-described above. The remark \texttt{rem:normalcf\_bnt\_gap} in the same
-chapter discusses a different point (spectral versus algebraic normality of a
-single block), so it does not fill in the missing comparison.
+remark \texttt{rem:cf\_coeff\_arrays} in the Fundamental Theorem proof chapter
+acknowledges the strict-weight specialization $a_{N,j}=(\mu_j^A)^N$ and the
+more general sector arrays $c_{S,j}^{(N)}=\sum_q\mu_{j,q}^N$, but does not flag
+the restricted-specialization incompatibility described above. The remark
+\texttt{rem:normalcf\_bnt\_gap} in the BNT chapter discusses a different point
+(spectral versus algebraic normality of a single block), so it does not fill in
+the missing comparison.
 
-The blueprint canonical-form chapter is symmetric with the formal definition:
-the strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
+The blueprint BNT definitions are symmetric with the formal definition: the
+strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
 
 \section{What a corrected formalization would say}
 
 Two changes are needed to bring the formal development into agreement with the
 source.
 
-The first change is to record the source convention $|\mu_1|=1$ (with the
-implicit $|\mu_k|\le 1$ on the remaining blocks following from
-\texttt{mu\_strict\_anti}) as a field of \texttt{IsNormalCanonicalFormBNT} and
-of the corresponding blueprint definition. This is a transcription of the
-source definition, not an additional assumption.
+The first change is to record the source convention $|\mu_1|=1$. Once this
+normalization is present, the implicit bounds $|\mu_k|\le 1$ on the remaining
+blocks follow from the strict modulus ordering.\footnote{%
+The formal field carrying this ordering is \texttt{mu\_strict\_anti} in
+\texttt{IsNormalCanonicalFormBNT}; see
+\path{TNLean/MPS/BNT/Construction.lean}, lines 184--185.} This should be a
+field of \texttt{IsNormalCanonicalFormBNT} and of the corresponding blueprint
+definition. It is a transcription of the source definition, not an additional
+assumption.
 
 The second change is to reformulate the proportional comparison so that it
 extracts coefficients from a single sufficiently large witness length $N_0$.
