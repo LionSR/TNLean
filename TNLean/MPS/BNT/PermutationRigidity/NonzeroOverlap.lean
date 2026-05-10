@@ -58,6 +58,96 @@ dominant-block normalization. Lemma Lem1 supplies eventual linear independence
 from asymptotic orthonormality; the contradiction step applies this after showing
 that the relevant joint family is asymptotically orthonormal. -/
 
+/-- Translate a fixed-length pointwise MPV decomposition into an equality of
+state vectors.
+
+Source: arXiv:1606.00608, lines 1170--1192. This is the Hilbert-space form of
+the displayed BNT expansion used when the proof takes inner products with a
+single block vector. -/
+lemma mpvState_eq_sum_of_decomp
+    {d g Dtot : ℕ} {dim : Fin g → ℕ}
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A_total : MPSTensor d Dtot)
+    (coeff : Fin g → ℂ)
+    {N : ℕ}
+    (hdecomp : ∀ σ : Fin N → Fin d,
+      mpv A_total σ = ∑ j : Fin g, coeff j * mpv (A j) σ) :
+    mpvState (d := d) A_total N =
+      ∑ j : Fin g, coeff j • mpvState (d := d) (A j) N := by
+  apply PiLp.ext
+  intro σ
+  simp only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply,
+    smul_eq_mul, mpvState_apply]
+  exact hdecomp σ
+
+/-- Expand the inner product against the right side of a fixed-length BNT
+decomposition.
+
+Source: arXiv:1606.00608, lines 1170--1192. This is the algebraic step used
+when projecting the full proportionality relation onto one block MPV. -/
+lemma mpvInner_eq_sum_of_decomp_right
+    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
+    (X : MPSTensor d D)
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A_total : MPSTensor d Dtot)
+    (coeff : Fin g → ℂ)
+    {N : ℕ}
+    (hdecomp : ∀ σ : Fin N → Fin d,
+      mpv A_total σ = ∑ j : Fin g, coeff j * mpv (A j) σ) :
+    mpvInner (d := d) X A_total N =
+      ∑ j : Fin g, coeff j * mpvInner (d := d) X (A j) N := by
+  have hstate :=
+    mpvState_eq_sum_of_decomp (d := d) A A_total coeff (N := N) hdecomp
+  have h := congr_arg (fun v => @inner ℂ _ _ (mpvState (d := d) X N) v) hstate
+  simpa [mpvInner] using h
+
+/-- Expand the inner product against the left side of a fixed-length BNT
+decomposition.
+
+Source: arXiv:1606.00608, lines 1170--1192. This is the conjugate-linear
+companion of `mpvInner_eq_sum_of_decomp_right`, used for the symmetric
+projection in the block-matching argument. -/
+lemma mpvInner_eq_sum_of_decomp_left
+    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A_total : MPSTensor d Dtot)
+    (X : MPSTensor d D)
+    (coeff : Fin g → ℂ)
+    {N : ℕ}
+    (hdecomp : ∀ σ : Fin N → Fin d,
+      mpv A_total σ = ∑ j : Fin g, coeff j * mpv (A j) σ) :
+    mpvInner (d := d) A_total X N =
+      ∑ j : Fin g, mpvInner (d := d) (A j) X N * star (coeff j) := by
+  have hstate :=
+    mpvState_eq_sum_of_decomp (d := d) A A_total coeff (N := N) hdecomp
+  have h := congr_arg (fun v => @inner ℂ _ _ v (mpvState (d := d) X N)) hstate
+  simpa [mpvInner] using h
+
+/-- If the right tensor in an overlap has a fixed-length BNT decomposition,
+then the overlap expands with conjugated coefficients.
+
+Source: arXiv:1606.00608, lines 1170--1192. This is the right-hand companion
+to `mpvOverlap_eq_sum_of_decomp_left` used when projecting onto a block from
+the decomposed family. -/
+lemma mpvOverlap_eq_sum_of_decomp_right
+    {d g D Dtot : ℕ} {dim : Fin g → ℕ}
+    (X : MPSTensor d D)
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    (A_total : MPSTensor d Dtot)
+    (coeff : Fin g → ℂ)
+    {N : ℕ}
+    (hdecomp : ∀ σ : Fin N → Fin d,
+      mpv A_total σ = ∑ j : Fin g, coeff j * mpv (A j) σ) :
+    mpvOverlap (d := d) X A_total N =
+      ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (coeff j) := by
+  calc
+    mpvOverlap (d := d) X A_total N = star (mpvInner (d := d) X A_total N) := by
+      exact mpvOverlap_eq_star_mpvInner X A_total N
+    _ = star (∑ j : Fin g, coeff j * mpvInner (d := d) X (A j) N) := by
+      rw [mpvInner_eq_sum_of_decomp_right (d := d) X A A_total coeff hdecomp]
+    _ = ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (coeff j) := by
+      simp [mpvOverlap_eq_star_mpvInner, star_mul, mul_comm]
+
 /--
 **Key step of Theorem 4.4 (paper route).**
 
