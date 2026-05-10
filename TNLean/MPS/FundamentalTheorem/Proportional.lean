@@ -217,6 +217,94 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_irreduci
       mpvOverlap_tendsto_zero_of_irreducible_TP
         (A := A) (B := B) hA_irr hB_irr hA_norm hB_norm hNot)
 
+/-! ## Source-faithful equalMPS: gauge-phase from `|overlap| → 1` alone -/
+
+/-- **Bridge from `‖mpvOverlap‖ → 1` to mixed-transfer spectral radius `≥ 1`.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS` (lines 1085-1117). Establishes the
+spectral side of the dichotomy `lim |⟨V_b, V_a⟩| ∈ {0, 1}`: if the modulus of
+the overlap tends to `1`, the cross-transfer spectral radius is at least `1`.
+
+The proof is the contrapositive of
+`mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`: if the
+spectral radius were strictly less than `1`, the overlap (and hence its
+modulus) would tend to `0`, contradicting the hypothesis.
+
+This routes through the existing trace identity
+`trace_mixedTransferMap_pow_eq_mpvOverlap` and is paper-faithful (no
+proportionality hypothesis required). -/
+theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
+    [NeZero D]
+    (A B : MPSTensor d D)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    1 ≤ mixedTransferSpectralRadius A B := by
+  by_contra hlt
+  push_neg at hlt
+  -- Unpack mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
+  have hlt' :
+      spectralRadius ℂ
+          ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+            (mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
+    have hsq :
+        spectralRadius ℂ
+            ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+              (mixedTransferMap (d := d) (D := D) A B)) < 1 := by
+      simpa [mixedTransferSpectralRadius] using hlt
+    -- `mixedTransferMap` and `mixedTransferMap₂` agree on `D × D` matrices.
+    have hagree :
+        mixedTransferMap (d := d) (D := D) A B =
+          mixedTransferMap₂ (d := d) (D₁ := D) (D₂ := D) A B := by
+      ext X
+      simp [mixedTransferMap_apply, mixedTransferMap₂_apply]
+    rw [← hagree]; exact hsq
+  have hzero :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+        (nhds (0 : ℂ)) :=
+    mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
+      (A := A) (B := B) hlt'
+  have hnorm_zero :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (0 : ℝ)) := by
+    simpa using hzero.norm
+  have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
+  exact one_ne_zero h01
+
+/-- **Source-faithful equalMPS gauge recovery.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS`, lines 1085-1117. If two
+irreducible trace-preserving (left-canonical) blocks of the same bond
+dimension have asymptotically unit-modulus overlap, then they are
+gauge-phase equivalent.
+
+This is the **proportionality-free** version of the gauge recovery — the
+counterpart to `gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_irreducible_TP`
+without the extra `ProportionalMPV₂` hypothesis. The proof uses the
+cross-transfer-matrix spectral radius (computed via
+`mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`)
+together with the rigidity theorem
+`modulus_one_eigenvalue_implies_gauge_of_irreducible_TP` from
+`TNLean/Spectral/SpectralGapNT.lean`.
+
+Closes the gap recorded in
+`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
+theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
+    [NeZero D]
+    (A B : MPSTensor d D)
+    (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    GaugePhaseEquiv A B :=
+  modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
+    A B hA_irr hB_irr hA_norm hB_norm
+    (mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
+      (A := A) (B := B) hOverlap)
+
 /-- Non-gauge-phase-equivalent irreducible trace-preserving blocks cannot have
 proportional MPV states at all sufficiently large lengths. -/
 theorem exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
