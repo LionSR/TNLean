@@ -8,21 +8,16 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Primitive blocked tensors and conditional block matching
+# Primitive blocked tensors
 
-This file proves two consequences for TP-primitive irreducible blocks after
-blocking. First, blocking preserves tensor irreducibility under the primitive
-hypothesis. Second, once two separated normal-canonical-form families are in the
-TP-primitive setting, proportional MPVs force the usual permutation and
-blockwise gauge-phase matching.
+This file proves that blocking preserves tensor irreducibility for TP-primitive
+irreducible blocks, and derives related structural properties of blocked tensors
+in the normal-canonical-form setting.
 
 ## Main statements
 
 * `isIrreducibleTensor_blockTensor_of_tp_primitive_irr` — blocking a
   TP-primitive irreducible tensor preserves irreducibility.
-* `weakFundamentalTheorem_conditional` — proportional MPVs imply block matching
-  for restricted separated representative TP-primitive normal canonical form
-  data.
 
 ## References
 
@@ -272,67 +267,6 @@ theorem blockTensor_of_notGpe
     simp [norm_pow, h.mu_dom_norm_one hr]
 
 end IsNormalCanonicalFormBNT
-
-/-!
-## Conditional block matching: proportional MPVs → matched blocks
-
-This combines the full reduction data with the block-matching conclusions
-available for restricted normal-CF-BNT data.
-
-For two arbitrary tensors A, B with proportional MPVs, the reduction produces
-blocked TP-primitive decompositions. Under the additional hypotheses needed
-for `IsNormalCanonicalForm` (irreducibility and distinct weight norms), one obtains
-permutation + gauge-phase matching of blocks.
--/
-
-/-- **Conditional block matching for restricted normal-CF-BNT data.**
-
-For two restricted separated representative families in TP-primitive normal canonical form,
-if their blocked versions have proportional MPVs (with convergent coefficients), then the
-block counts match and blocks are pairwise gauge-phase equivalent (up to permutation). The
-full repeated-copy BNT comparison is supplied separately by sector-decomposition and
-multiplicity data. -/
-lemma weakFundamentalTheorem_conditional
-    {d' rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d' (dimA j))
-    (B : (k : Fin rB) → MPSTensor d' (dimB k))
-    (hA_ncf : IsNormalCanonicalForm μA A)
-    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
-      ∀ (h : dimA j = dimA k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d') h) (A j)) (A k))
-    (hB_ncf : IsNormalCanonicalForm μB B)
-    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
-      ∀ (h : dimB j = dimB k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d') h) (B j)) (B k))
-    (A_total : MPSTensor d' DtotA)
-    (B_total : MPSTensor d' DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (c : ℕ → ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d'),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d'),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (hProp : ∀ N (σ : Fin N → Fin d'), mpv A_total σ = c N * mpv B_total σ)
-    (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d')
-              (cast (congr_arg (MPSTensor d') hdim) (A j))
-              (B (perm j)) :=
-  MPSTensor.fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data A B
-    hA_ncf hA_blocks hB_ncf hB_blocks
-    A_total B_total aCoeff bCoeff c
-    hA_decomp hB_decomp hProp hc_ne a_top_norm_one b_top_norm_one a_norm_le_one b_norm_le_one
 
 
 end MPSTensor
