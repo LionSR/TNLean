@@ -56,14 +56,14 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. Lemma `Lem1` supplies eventual linear independence
+dominant-block normalization. Lemma Lem1 supplies eventual linear independence
 from asymptotic orthonormality; the contradiction step applies this after showing
 that the relevant joint family is asymptotically orthonormal. -/
 
 /-- Eventual linear independence for the union of two asymptotically orthonormal
 MPV families whose mixed overlaps vanish.
 
-Source: arXiv:1606.00608, lines 1170--1192, where Corollary `Lem1` is applied
+Source: arXiv:1606.00608, lines 1170--1192, where Corollary Lem1 is applied
 to the joint family obtained by adjoining a block from one BNT family to the
 other side.  This is the direct joint-family form of that linear-independence
 input. -/
@@ -87,7 +87,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
         | Sum.inl j => mpvState (d := d) (A j) N
         | Sum.inr k => mpvState (d := d) (B k) N) := by
   classical
-  let V : Type := lp (fun N : ℕ => MPVSpace d N) 2
+  let V := lp (fun N : ℕ => MPVSpace d N) 2
   let v : Sum (Fin gA) (Fin gB) → ℕ → V := fun x N =>
     match x with
     | Sum.inl j => lp.single 2 N (mpvState (d := d) (A j) N)
@@ -106,12 +106,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
                   Tendsto (fun N =>
                     ⟪mpvState (d := d) (A i) N, mpvState (d := d) (A i) N⟫_ℂ)
                     atTop (nhds (1 : ℂ)) := by
-                have hov :
-                    Tendsto (fun N => star (mpvInner (d := d) (A i) (A i) N))
-                      atTop (nhds 1) :=
-                  (hA_self i).congr fun N =>
-                    mpvOverlap_eq_star_mpvInner (A := A i) (B := A i) N
-                simpa [mpvInner] using hov.star
+                simpa [mpvInner] using tendsto_inner_one (A i) (hA_self i)
               have h2 :
                   Tendsto (fun N => ⟪v (Sum.inl i) N, v (Sum.inl i) N⟫_ℂ)
                     atTop (nhds (1 : ℂ)) := by
@@ -123,12 +118,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
                   Tendsto (fun N =>
                     ⟪mpvState (d := d) (A i) N, mpvState (d := d) (A j) N⟫_ℂ)
                     atTop (nhds (0 : ℂ)) := by
-                have hov :
-                    Tendsto (fun N => star (mpvInner (d := d) (A i) (A j) N))
-                      atTop (nhds 0) :=
-                  (hA_off i j h).congr fun N =>
-                    mpvOverlap_eq_star_mpvInner (A := A i) (B := A j) N
-                simpa [mpvInner] using hov.star
+                simpa [mpvInner] using tendsto_inner_zero (A i) (A j) (hA_off i j h)
               have h2 :
                   Tendsto (fun N => ⟪v (Sum.inl i) N, v (Sum.inl j) N⟫_ℂ)
                     atTop (nhds (0 : ℂ)) := by
@@ -181,12 +171,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
                   Tendsto (fun N =>
                     ⟪mpvState (d := d) (B k) N, mpvState (d := d) (B k) N⟫_ℂ)
                     atTop (nhds (1 : ℂ)) := by
-                have hov :
-                    Tendsto (fun N => star (mpvInner (d := d) (B k) (B k) N))
-                      atTop (nhds 1) :=
-                  (hB_self k).congr fun N =>
-                    mpvOverlap_eq_star_mpvInner (A := B k) (B := B k) N
-                simpa [mpvInner] using hov.star
+                simpa [mpvInner] using tendsto_inner_one (B k) (hB_self k)
               have h2 :
                   Tendsto (fun N => ⟪v (Sum.inr k) N, v (Sum.inr k) N⟫_ℂ)
                     atTop (nhds (1 : ℂ)) := by
@@ -198,12 +183,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
                   Tendsto (fun N =>
                     ⟪mpvState (d := d) (B k) N, mpvState (d := d) (B l) N⟫_ℂ)
                     atTop (nhds (0 : ℂ)) := by
-                have hov :
-                    Tendsto (fun N => star (mpvInner (d := d) (B k) (B l) N))
-                      atTop (nhds 0) :=
-                  (hB_off k l h).congr fun N =>
-                    mpvOverlap_eq_star_mpvInner (A := B k) (B := B l) N
-                simpa [mpvInner] using hov.star
+                simpa [mpvInner] using tendsto_inner_zero (B k) (B l) (hB_off k l h)
               have h2 :
                   Tendsto (fun N => ⟪v (Sum.inr k) N, v (Sum.inr l) N⟫_ℂ)
                     atTop (nhds (0 : ℂ)) := by
@@ -299,7 +279,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
   -- Paper-faithful proof pending. The CPSV16 lines 1170-1192 argument follows
-  -- Cor `Lem1` (asymptotically orthonormal NMPVs are eventually LI):
+  -- Cor Lem1 (asymptotically orthonormal NMPVs are eventually LI):
   -- assuming all `mpvOverlap (A j) (B k) → 0`, the joint family
   -- `{V^N(A_j)}_j ∪ {V^N(B_k)}` is asymptotically orthonormal hence eventually
   -- LI; proportionality `V^N(A_total) = c_N V^N(B_total)` then forces

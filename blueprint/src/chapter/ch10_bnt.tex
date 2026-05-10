@@ -57,6 +57,30 @@ and~\cite{Cirac2021Matrix}.
 	large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
+\begin{lemma}[Overlap-orthonormality for two families]%
+\label{lem:bnt_two_family_overlap_orthonormal_li}
+	\lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
+	\leanok
+	\uses{def:mpv_overlap, lem:bnt_overlap_orthonormal_li}
+	Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be finite families of
+	tensors.  Suppose the overlaps inside each family are asymptotically
+	orthonormal, and suppose every mixed overlap
+	$O_{A_jB_k}(N)$ tends to~$0$.  Then the combined MPV family
+	\[
+		\{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A}
+		\cup
+		\{\ket{V^{(N)}(B_k)}\}_{k=1}^{g_B}
+	\]
+	is linearly independent for all sufficiently large~$N$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the Gram-matrix argument of Lemma~\ref{lem:bnt_overlap_orthonormal_li}
+	to the disjoint union of the two index sets.  The within-family hypotheses
+	give the diagonal and off-diagonal limits inside each block, and the mixed
+	overlap hypothesis gives the off-diagonal limits between the two blocks.
+\end{proof}
+
 \begin{definition}[No gauge-phase-equivalent distinct blocks]%
 \label{def:blocks_not_gauge_phase_equiv}
 	\lean{MPSTensor.BlocksNotGaugePhaseEquiv}
