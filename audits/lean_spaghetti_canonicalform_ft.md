@@ -45,7 +45,8 @@
 
 - `TNLean/MPS/CanonicalForm/NormalReduction.lean` imports `TNLean.MPS.FundamentalTheorem.TransferNormalization`.
 - `TNLean/MPS/CanonicalForm/BNTGrouping.lean` imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition`.
-- `TNLean/MPS/CanonicalForm/EqualNormBridge.lean` imports `TNLean.MPS.FundamentalTheorem.Proportional`.
+- The former `TNLean/MPS/CanonicalForm/EqualNormBridge.lean` branch has been retired; the
+  surviving common-sector comparison code imports the source-facing FT modules directly.
 - `TNLean/MPS/CanonicalForm/Assembly.lean` imports `TNLean.MPS.FundamentalTheorem.Full`.
 - `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` imports both `TNLean.MPS.FundamentalTheorem.Full` and `TNLean.MPS.CanonicalForm.Assembly`.
 
@@ -172,29 +173,13 @@ Both appear removable.
 - `simp` style:
   - acceptable
 
-### `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`
+### Retired equal-norm bridge branch
 
-- Size: 309 lines
-- Actual `sorry`: 0
-- Long proofs:
-  - `exists_bnt_grouping_of_gaugePhaseEquiv` at `152-248` (~97 lines)
-  - `exists_sectorDecomp_of_tp_primitive_irr_blocks` at `249-309` (~61 lines)
-- Dead code / stale comments:
-  - none
-- Duplicated logic:
-  - gauge-phase-to-grouping flow overlaps with FT-side proportionality packaging
-- Unnecessary imports:
-  - not confirmed
-- Dependency tangle:
-  - imports `FundamentalTheorem.Proportional`, another canonical-form -> FT inversion
-- Closable `sorry`:
-  - none
-- Naming:
-  - mostly readable, but theorems are long and mixed-case
-- `decide` / `native_decide`:
-  - none
-- `simp` style:
-  - fine
+The old equal-norm bridge file is no longer part of the present development.
+Its bridge belonged to the former proportional-MPV branch and should not be
+treated as a source-facing formalization of the heterogeneous Fundamental
+Theorem. The surviving common-sector comparison material now lives under
+`TNLean/MPS/CanonicalForm/SectorComparison/`.
 
 ### `TNLean/MPS/CanonicalForm/SectorIrreducibility.lean`
 
@@ -391,14 +376,14 @@ Both appear removable.
 - `simp` style:
   - clean
 
-### `TNLean/MPS/FundamentalTheorem/Proportional.lean`
+### `TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean`
 
-- Size: 329 lines
+- Size: 253 lines
 - Actual `sorry`: 0
 - Long proofs:
-  - `gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_tendsto_zero` at `199-289` (~91 lines)
+  - the private eventually-proportional overlap argument occupies the main proof block
 - Dead code / stale comments:
-  - none
+  - none known after the public proportional-overlap corollaries were deleted
 - Duplicated logic:
   - some overlap/spectral normalization arguments are repeated in wrapper files
 - Unnecessary imports:
@@ -408,34 +393,18 @@ Both appear removable.
 - Closable `sorry`:
   - none
 - Naming:
-  - mixed-case theorem names throughout
+  - mixed-case theorem names remain in inherited declarations
 - `decide` / `native_decide`:
   - none
 - `simp` style:
   - mostly fine
 
-### `TNLean/MPS/FundamentalTheorem/ProportionalPrimitive.lean`
+### Retired proportional primitive wrapper
 
-- Size: 66 lines
-- Actual `sorry`: 0
-- Long proofs:
-  - none
-- Dead code / stale comments:
-  - none
-- Duplicated logic:
-  - none significant; this is just a convenience wrapper
-- Unnecessary imports:
-  - none obvious
-- Dependency tangle:
-  - low
-- Closable `sorry`:
-  - none
-- Naming:
-  - mixed-case theorem name
-- `decide` / `native_decide`:
-  - none
-- `simp` style:
-  - fine
+This wrapper file has been deleted. Its old purpose was tied to the
+proportional-MPV branch, which is now separated from the source-facing
+formalization rather than being presented as part of arXiv:1606.00608,
+Theorem II.1.
 
 ### `TNLean/MPS/FundamentalTheorem/Multi.lean`
 
