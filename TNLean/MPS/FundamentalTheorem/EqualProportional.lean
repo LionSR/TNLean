@@ -154,25 +154,17 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA_inj hA_left hA_overlap hA_blocks
     hB_inj hB_left hB_overlap hB_blocks
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
 
 /-- **Proportional-MPV Fundamental Theorem for CF-BNT (Theorem 4.4).**
 
@@ -201,22 +193,15 @@ theorem fundamentalTheorem_proportionalMPV_CFBNT
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     BlockPermutationGaugeWitness (d := d) A B :=
-  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff aLim bLim c
-    cLim hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+  fundamentalTheorem_of_IsCanonicalFormBNT A B hA hB A_total B_total aCoeff bCoeff c
+    hA_decomp hB_decomp hProp
 
 /-- Split-data proportional-MPV Fundamental Theorem for normal-CF-BNT-style data. -/
 theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
@@ -238,24 +223,16 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
 
 /-- Fundamental Theorem (proportional case) for normal canonical form blocks. -/
 theorem fundamentalTheorem_proportionalMPV_normalCFBNT
@@ -271,23 +248,16 @@ theorem fundamentalTheorem_proportionalMPV_normalCFBNT
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     BlockPermutationGaugeWitness (d := d) A B :=
   fundamentalTheorem_of_IsNormalCanonicalFormBNT A B hA hB
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
+    A_total B_total aCoeff bCoeff c
+    hA_decomp hB_decomp hProp
 
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
@@ -323,15 +293,10 @@ theorem fundamentalTheorem_equalMPV_full
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv (toTensorFromBlocks μA A) σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv (toTensorFromBlocks μB B) σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
     ∃ perm : Fin rA ≃ Fin rB,
       ∃ hdim : ∀ j : Fin rA, dimA j = dimB (perm j),
@@ -347,9 +312,8 @@ theorem fundamentalTheorem_equalMPV_full
   obtain ⟨_hcount, perm, hperm⟩ :=
     fundamentalTheorem_proportionalMPV_CFBNT A B hA hB
       (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)
-      aCoeff bCoeff aLim bLim (fun _ => (1 : ℂ)) (1 : ℂ)
-      hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne
-      hProp tendsto_const_nhds one_ne_zero
+      aCoeff bCoeff (fun _ => (1 : ℂ))
+      hA_decomp hB_decomp hProp
   choose hdim hGP using hperm
   choose X ζ hζ hX using hGP
   have hBNTA := hA.isBNT

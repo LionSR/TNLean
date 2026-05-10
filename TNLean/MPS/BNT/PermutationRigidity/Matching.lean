@@ -321,19 +321,12 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
-    (aLim : Fin gA → ℂ) (bLim : Fin gB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (_haLim_ne : ∀ j, aLim j ≠ 0)
-    (_hbLim_ne : ∀ k, bLim k ≠ 0)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (_hcLim_ne : cLim ≠ 0)
     (h_zero_of_dim_ne : ∀ {j : Fin gA} {k : Fin gB},
       dimA j ≠ dimB k →
         Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0))
@@ -354,14 +347,10 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
     exists_nonzero_overlap_of_proportional_decomp
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hB_self := hB_self) (hB_off := hB_off)
+      (A := A) (B := B) (_A_total := A_total) (_B_total := B_total)
+      (_aCoeff := aCoeff) (_bCoeff := bCoeff) (_c := c)
+      (_hA_decomp := hA_decomp) (_hB_decomp := hB_decomp)
+      (_hProp := hProp) (_hB_self := hB_self) (_hB_off := hB_off)
   let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
   have hf_spec : ∀ k : Fin gB,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A (f k)) (B k) N) atTop (nhds 0) :=
@@ -389,14 +378,10 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       ∃ k : Fin gB,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
     exists_nonzero_overlap_of_proportional_decomp_left
-      (A := A) (B := B) (A_total := A_total) (B_total := B_total)
-      (aCoeff := aCoeff) (bCoeff := bCoeff) (aLim := aLim) (bLim := bLim)
-      (c := c) (cLim := cLim)
-      (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-      (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-      (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-      (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
-      (hA_self := hA_self) (hA_off := hA_off)
+      (A := A) (B := B) (_A_total := A_total) (_B_total := B_total)
+      (_aCoeff := aCoeff) (_bCoeff := bCoeff) (_c := c)
+      (_hA_decomp := hA_decomp) (_hB_decomp := hB_decomp)
+      (_hProp := hProp) (_hA_self := hA_self) (_hA_off := hA_off)
   let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
   have hg_spec : ∀ j : Fin gA,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B (g j)) N) atTop (nhds 0) :=
@@ -462,19 +447,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
-    (aLim : Fin gA → ℂ) (bLim : Fin gB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (_haLim_ne : ∀ j, aLim j ≠ 0)
-    (_hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (_hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     ∃ _h : gA = gB,
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
@@ -489,12 +467,9 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     (hB_self := hB_self) (hB_off := hB_off)
     (A_total := A_total) (B_total := B_total)
     (aCoeff := aCoeff) (bCoeff := bCoeff)
-    (aLim := aLim) (bLim := bLim)
-    (c := c) (cLim := cLim)
+    (c := c)
     (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-    (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-    (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+    (hProp := hProp)
     ?_ ?_
   · intro j k hne
     exact mpvOverlap_tendsto_zero_of_dim_ne
@@ -535,19 +510,12 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
-    (aLim : Fin gA → ℂ) (bLim : Fin gB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (_haLim_ne : ∀ j, aLim j ≠ 0)
-    (_hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (_hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     ∃ _h : gA = gB,
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
@@ -562,12 +530,9 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
     (hB_self := hB_self) (hB_off := hB_off)
     (A_total := A_total) (B_total := B_total)
     (aCoeff := aCoeff) (bCoeff := bCoeff)
-    (aLim := aLim) (bLim := bLim)
-    (c := c) (cLim := cLim)
+    (c := c)
     (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
-    (haCoeff := haCoeff) (hbCoeff := hbCoeff)
-    (_haLim_ne := _haLim_ne) (_hbLim_ne := _hbLim_ne)
-    (hProp := hProp) (hc := hc) (_hcLim_ne := _hcLim_ne)
+    (hProp := hProp)
     ?_ ?_
   · intro j k hne
     exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP

@@ -103,10 +103,7 @@ noncomputable def reindexPhysical_equiv
   B_total := reindexPhysical e h.B_total
   aCoeff := h.aCoeff
   bCoeff := h.bCoeff
-  aLim := h.aLim
-  bLim := h.bLim
   c := h.c
-  cLim := h.cLim
   hA_decomp := fun N σ => by
     rw [mpv_reindexPhysical]
     calc
@@ -125,15 +122,9 @@ noncomputable def reindexPhysical_equiv
       _ = ∑ k : Fin rB, h.bCoeff N k * mpv (reindexPhysical e (B k)) σ := by
         refine Finset.sum_congr rfl fun k _ => ?_
         rw [mpv_reindexPhysical]
-  haCoeff := h.haCoeff
-  hbCoeff := h.hbCoeff
-  haLim_ne := h.haLim_ne
-  hbLim_ne := h.hbLim_ne
   hProp := fun N σ => by
     rw [mpv_reindexPhysical, mpv_reindexPhysical]
     exact h.hProp N (fun n => e (σ n))
-  hc := h.hc
-  hcLim_ne := h.hcLim_ne
 
 end ProportionalDecompositionData
 

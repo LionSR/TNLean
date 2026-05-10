@@ -508,7 +508,17 @@ end IsNormalCanonicalFormBNT
 
 /-! ### Connection with BNT/PermutationRigidity -/
 
-/-- Common proportional-decomposition hypotheses used by the BNT comparison theorems. -/
+/-- Proportional-decomposition data used by the BNT comparison theorems.
+
+The abstract `Tendsto`-based convergence-to-nonzero-limits hypotheses
+(`aLim`, `bLim`, `cLim`, `haCoeff`, `hbCoeff`, `haLim_ne`, `hbLim_ne`, `hc`, `hcLim_ne`)
+that previously sat on this structure deviated from arXiv:1606.00608 in a way recorded in
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`: those limits
+are uninstantiable on the source's intended canonical-form class once the source
+normalization `‖μ_1‖ = 1` is in force. They have been removed. The paper-faithful
+replacement, which extracts coefficient information at a fixed witness length, is being
+introduced incrementally; in the interim, the BNT comparison theorems carry temporary
+`sorry`s where the old proof bodies consumed those fields. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -520,21 +530,12 @@ structure ProportionalDecompositionData
   B_total : MPSTensor d DtotB
   aCoeff : ℕ → Fin rA → ℂ
   bCoeff : ℕ → Fin rB → ℂ
-  aLim : Fin rA → ℂ
-  bLim : Fin rB → ℂ
   c : ℕ → ℂ
-  cLim : ℂ
   hA_decomp : ∀ N (σ : Fin N → Fin d),
     mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ
   hB_decomp : ∀ N (σ : Fin N → Fin d),
     mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ
-  haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j))
-  hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k))
-  haLim_ne : ∀ j, aLim j ≠ 0
-  hbLim_ne : ∀ k, bLim k ≠ 0
   hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ
-  hc : Tendsto c atTop (nhds cLim)
-  hcLim_ne : cLim ≠ 0
 
 /-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
 abbrev ProportionalDecompositionConclusion
@@ -593,12 +594,9 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
       cross_overlap_tendsto_zero_of_separated_CFBNT_data B hB_inj hB_left hB_blocks i j hij)
     (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
     (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
-    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
-    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
-    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
+    (hProp := hDecomp.hProp)
 
 /-- **Proportional comparison for CF-BNT decompositions.**
 
@@ -626,19 +624,12 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA.toHasInjectiveBlocks
@@ -649,8 +640,7 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
     hB.toIsLeftCanonicalBlockFamily
     hB.toHasNormalizedSelfOverlap
     hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
 
 /-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
@@ -691,12 +681,9 @@ lemma fundamentalTheorem_of_separated_normalCFBNT_data
         hB_blocks i j hij)
     (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
     (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
-    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
-    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
-    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
+    (hProp := hDecomp.hProp)
 
 /-- Proportional comparison lemma for restricted normal-CF-BNT decompositions. -/
 lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
@@ -712,24 +699,16 @@ lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
     (A_total : MPSTensor d DtotA)
     (B_total : MPSTensor d DtotB)
     (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
+    (c : ℕ → ℂ)
     (hA_decomp : ∀ N (σ : Fin N → Fin d),
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
     ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA.toIsNormalCanonicalForm hA.blocks_not_equiv
     hB.toIsNormalCanonicalForm hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
 
 end MPSTensor

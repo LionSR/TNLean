@@ -418,10 +418,6 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (haCoeff : ∀ j, Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB)) :
@@ -431,23 +427,14 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
   B_total := toTensorFromBlocks (d := d) (μ := μB) blocksB
   aCoeff := fun N j => (μA j) ^ N
   bCoeff := fun N k => (μB k) ^ N
-  aLim := aLim
-  bLim := bLim
   c := fun _ => 1
-  cLim := 1
   hA_decomp := fun _ σ => by
     simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μA blocksA σ
   hB_decomp := fun _ σ => by
     simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum (d := d) μB blocksB σ
-  haCoeff := haCoeff
-  hbCoeff := hbCoeff
-  haLim_ne := haLim_ne
-  hbLim_ne := hbLim_ne
   hProp := fun N σ => by
     rw [one_mul]
     exact hSame N σ
-  hc := tendsto_const_nhds
-  hcLim_ne := one_ne_zero
 
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
 assembled block-diagonal tensors.
@@ -466,12 +453,6 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
     (hA : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μA blocksA)
     (hB : IsNormalCanonicalFormBNT (d := blockPhysDim d p) μB blocksB)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (haCoeff : ∀ j,
-      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k,
-      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
       (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB))
@@ -488,7 +469,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
   exact ofNormalCanonicalFormBNT_zeroTailIdentity hA hB hZero hInjA hInjB
     (proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
       (d := blockPhysDim d p) (μA := μA) (μB := μB)
-      blocksA blocksB aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame)
+      blocksA blocksB hSame)
 
 /-- BNT-cover hypotheses after a fixed positive reblocking.
 
@@ -506,12 +487,6 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
     (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
     (L : ℕ) (hL : 0 < L)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (haCoeff : ∀ j,
-      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k,
-      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB))
@@ -539,10 +514,6 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     (blocksB := fun k => blockTensor (d := d) (D := dimB k) (blocksB k) L)
     (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hA hL hNotGpeA)
     (IsNormalCanonicalFormBNT.blockTensor_of_notGpe hB hL hNotGpeB)
-    aLim bLim
-    (fun j => MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow hL (haCoeff j))
-    (fun k => MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow hL (hbCoeff k))
-    haLim_ne hbLim_ne
     (sameMPV₂_toTensorFromBlocks_blockPower
       (d := d) μA blocksA μB blocksB hSame L)
     (zeroTail_identity_toTensorFromBlocks_blockPower
@@ -566,12 +537,6 @@ noncomputable def
     {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
     (hA : IsNormalCanonicalFormBNT (d := d) μA blocksA)
     (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (haCoeff : ∀ j,
-      Filter.Tendsto (fun N : ℕ => (μA j) ^ N) Filter.atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k,
-      Filter.Tendsto (fun N : ℕ => (μB k) ^ N) Filter.atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0) (hbLim_ne : ∀ k, bLim k ≠ 0)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB))
@@ -603,7 +568,7 @@ noncomputable def
       IsInjective (blockTensor (d := d) (D := dimB k) (blocksB k) L) := hSpec.2.2
   exact ⟨L, PLift.up hL,
     ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
-      hA hB L hL aLim bLim haCoeff hbCoeff haLim_ne hbLim_ne hSame hZero
+      hA hB L hL hSame hZero
       (hNotGpeA L hL) (hNotGpeB L hL) hInjA hInjB⟩
 
 /-- Representative common-sector families give the BNT-cover hypotheses once the
