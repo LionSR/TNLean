@@ -10,13 +10,13 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 # Fundamental Theorem support lemmas
 
 This module contains the witness type used for BNT block matching and the
-Newton--Girard power-sum lemmas needed for the multiplicity-recovery part of
-CPSV16, Lemma `Lem:app_simple`.
+Newton--Girard power-sum lemmas needed for the multiplicity-recovery argument
+in arXiv:1606.00608.
 
 Earlier restricted wrappers for the equal and proportional Fundamental Theorem
 branches lived here.  They assumed common block structure or explicit
 coefficient arrays as hypotheses.  Those hypotheses are not present in
-arXiv:1606.00608, Theorem `thm1` or Corollary `II_cor2`, so the wrappers are no
+arXiv:1606.00608, Theorem II.1 or Corollary II.2, so the wrappers are no
 longer part of the source-facing theorem surface.
 
 ## Main results
@@ -27,7 +27,7 @@ longer part of the source-facing theorem surface.
 bond-dimension, and gauge-phase data produced by the heterogeneous equal-MPV
 block-matching theorem.
 
-### Power-sum multiset equality (Lem:app_simple support lemma)
+### Power-sum multiset equality
 
 If two same-cardinality sequences of complex numbers have equal power sums for all positive
 exponents, their multisets are equal.  For different cardinalities, the positive-power
@@ -72,7 +72,7 @@ abbrev BlockPermutationGaugeWitness
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-! ## Power-sum multiset equality (Lem:app_simple support lemma)
+/-! ## Power-sum multiset equality
 
 This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded same-cardinality version is the common Newton--Girard input.
@@ -81,8 +81,8 @@ positive powers only; without a nonzero-entry hypothesis, positive powers do not
 count zero entries.
 -/
 
-/-- **Equal power sums imply equal multisets** (same-cardinality support lemma for
-`Lem:app_simple` of arXiv:1606.00608).
+/-- **Equal power sums imply equal multisets** (same-cardinality support lemma
+for the power-sum argument in arXiv:1606.00608, lines 1155--1163).
 
 If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
 `∑ i, (α i)^k = ∑ i, (β i)^k` for all positive `k`, then `α` and `β` have the same
@@ -98,7 +98,7 @@ theorem power_sum_eq_implies_multiset_eq (n : ℕ)
   Matrix.sum_pow_eq_implies_multiset_eq α β h
 
 /-- **Bounded equal power sums imply equal multisets** (same-cardinality part of
-Lemma `Lem:app_simple`).
+the power-sum argument in arXiv:1606.00608, lines 1155--1163).
 
 If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
 `∑ i, (α i)^k = ∑ i, (β i)^k` for `1 ≤ k ≤ n`, then `α` and `β` have the same
