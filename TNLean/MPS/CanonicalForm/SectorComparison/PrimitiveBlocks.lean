@@ -316,7 +316,12 @@ lemma weakFundamentalTheorem_conditional
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d'),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (hProp : ∀ N (σ : Fin N → Fin d'), mpv A_total σ = c N * mpv B_total σ) :
+    (hProp : ∀ N (σ : Fin N → Fin d'), mpv A_total σ = c N * mpv B_total σ)
+    (hc_ne : ∀ N, c N ≠ 0)
+    (a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
     ∃ _h : rA = rB,
       ∃ perm : Fin rA ≃ Fin rB,
         ∀ j : Fin rA,
@@ -327,7 +332,7 @@ lemma weakFundamentalTheorem_conditional
   MPSTensor.fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data A B
     hA_ncf hA_blocks hB_ncf hB_blocks
     A_total B_total aCoeff bCoeff c
-    hA_decomp hB_decomp hProp
+    hA_decomp hB_decomp hProp hc_ne a_top_norm_one b_top_norm_one a_norm_le_one b_norm_le_one
 
 
 end MPSTensor

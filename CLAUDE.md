@@ -136,6 +136,25 @@ default `sorry`/`axiom` blockers from `docs/PROOF_INTEGRITY.md` are temporarily
 relaxed. The priority is **getting the statements right**; proofs are
 restored after.
 
+#### Source-citation requirement
+
+In paper-realignment mode every restated definition, hypothesis field, or
+theorem **must carry a docstring referencing the source by paper label or line
+range**. The minimum acceptable forms:
+
+- `arXiv:1606.00608, eq:II_CF1` — equation/theorem label
+- `arXiv:1606.00608, lines 1170–1192` — line range in the local source PDF/tex
+- `CPSV16, Lemma Lem1` — paper short name plus internal label
+- `Wolf §6.2` — published section reference
+
+For Lean fields and theorems whose mathematical content is being aligned to a
+specific paper passage, the docstring must say *which* passage. Inline
+identifiers without a source reference are unreviewable in this mode: a
+reviewer cannot tell whether the field/theorem is faithful or invented.
+
+This rule applies whether or not the proof is `sorry` — the *statement* is
+the load-bearing artifact during realignment.
+
 A paper-realignment PR may:
 
 - Delete fields, hypotheses, or whole theorems that are documented as

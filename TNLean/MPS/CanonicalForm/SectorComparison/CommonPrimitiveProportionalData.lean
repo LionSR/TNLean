@@ -408,23 +408,27 @@ def ofNormalCanonicalFormBNT_zeroTailIdentity
     (zeroTail_eq_of_proportionalDecompositionConclusion hZero hMatch) hInjA hInjB hDecomp
 
 /-- Construct `ProportionalDecompositionData` for two assembled block-diagonal tensor
-families with the same MPV family, once the block-weight power coefficient families
-have specified nonzero limits.
+families with the same MPV family.
+
+Source: arXiv:1606.00608, paragraph after `eq:II_CF1` for the dominant-block
+normalization, and `eq:II_CF1` itself for the canonical-form decomposition.
 
 The block-diagonal MPV expansion has coefficients `(μA j) ^ N` and `(μB k) ^ N` at
-length `N`, as in `mpv_toTensorFromBlocks_eq_sum`.  Therefore this construction keeps
-the required coefficient convergence as an explicit input; it does not replace the
-spectral/power-sum comparison needed to obtain such nonzero limits in the general
-BNT setting.  The proportionality ratio is identically `1`, supplied by `SameMPV₂`.
-
-This construction is formal in the block families and does not use normal-CF-BNT
-hypotheses; callers add those hypotheses when assembling `CommonPrimitiveBNTCoverHypotheses`. -/
+length `N`, as in `mpv_toTensorFromBlocks_eq_sum`. The proportionality ratio is
+identically `1`, supplied by `SameMPV₂`. The dominant-block normalization
+hypotheses (`hμA0`, `hμB0`) and sub-dominant bounds (`hμAle`, `hμBle`) discharge
+the new norm-bound fields on `ProportionalDecompositionData`; callers supply them
+from `IsNormalCanonicalFormBNT.mu_dom_norm_one` and `mu_strict_anti`. -/
 noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
+    (hμA0 : ∀ h : 0 < rA, ‖μA ⟨0, h⟩‖ = 1)
+    (hμB0 : ∀ h : 0 < rB, ‖μB ⟨0, h⟩‖ = 1)
+    (hμAle : ∀ j, ‖μA j‖ ≤ 1)
+    (hμBle : ∀ k, ‖μB k‖ ≤ 1)
     (hSame : SameMPV₂
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
       (toTensorFromBlocks (d := d) (μ := μB) blocksB)) :
@@ -442,6 +446,17 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
   hProp := fun N σ => by
     rw [one_mul]
     exact hSame N σ
+  hc_ne := fun _ => one_ne_zero
+  a_top_norm_one := fun N h => by
+    simp [norm_pow, hμA0 h]
+  b_top_norm_one := fun N h => by
+    simp [norm_pow, hμB0 h]
+  a_norm_le_one := fun N j => by
+    rw [norm_pow]
+    exact pow_le_one₀ (norm_nonneg _) (hμAle j)
+  b_norm_le_one := fun N k => by
+    rw [norm_pow]
+    exact pow_le_one₀ (norm_nonneg _) (hμBle k)
 
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
 assembled block-diagonal tensors.
@@ -473,10 +488,33 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
       (DtotA := ∑ j : Fin rA, dimA j) (DtotB := ∑ k : Fin rB, dimB k)
       μA μB blocksA blocksB := by
+  -- Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The dominant-block
+  -- normalization `‖μ 0‖ = 1` from `IsNormalCanonicalFormBNT.mu_dom_norm_one`
+  -- supplies the unit-modulus hypothesis for the constructor; the bound
+  -- `‖μ k‖ ≤ 1` for all `k` follows from `mu_strict_anti` plus the unit-modulus
+  -- dominant block (and is vacuous for `r = 0`).
+  have hμAle : ∀ j, ‖μA j‖ ≤ 1 := by
+    intro j
+    by_cases hr : 0 < rA
+    · have hdom : ‖μA ⟨0, hr⟩‖ = 1 := hA.mu_dom_norm_one hr
+      have hle : (⟨0, hr⟩ : Fin rA) ≤ j := Fin.mk_le_of_le_val (Nat.zero_le _)
+      have hanti : ‖μA j‖ ≤ ‖μA ⟨0, hr⟩‖ := hA.mu_strict_anti.antitone hle
+      rw [hdom] at hanti
+      exact hanti
+    · exact absurd j.isLt (by omega)
+  have hμBle : ∀ k, ‖μB k‖ ≤ 1 := by
+    intro k
+    by_cases hr : 0 < rB
+    · have hdom : ‖μB ⟨0, hr⟩‖ = 1 := hB.mu_dom_norm_one hr
+      have hle : (⟨0, hr⟩ : Fin rB) ≤ k := Fin.mk_le_of_le_val (Nat.zero_le _)
+      have hanti : ‖μB k‖ ≤ ‖μB ⟨0, hr⟩‖ := hB.mu_strict_anti.antitone hle
+      rw [hdom] at hanti
+      exact hanti
+    · exact absurd k.isLt (by omega)
   exact ofNormalCanonicalFormBNT_zeroTailIdentity hA hB hZero hInjA hInjB
     (proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
       (d := blockPhysDim d p) (μA := μA) (μB := μB)
-      blocksA blocksB hSame)
+      blocksA blocksB hA.mu_dom_norm_one hB.mu_dom_norm_one hμAle hμBle hSame)
 
 /-- BNT-cover hypotheses after a fixed positive reblocking.
 

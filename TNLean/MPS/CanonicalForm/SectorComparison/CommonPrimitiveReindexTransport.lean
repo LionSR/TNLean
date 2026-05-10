@@ -126,6 +126,11 @@ noncomputable def reindexPhysical_equiv
   hProp := fun N σ => by
     rw [mpv_reindexPhysical, mpv_reindexPhysical]
     exact h.hProp N (fun n => e (σ n))
+  hc_ne := h.hc_ne
+  a_top_norm_one := h.a_top_norm_one
+  b_top_norm_one := h.b_top_norm_one
+  a_norm_le_one := h.a_norm_le_one
+  b_norm_le_one := h.b_norm_le_one
 
 end ProportionalDecompositionData
 

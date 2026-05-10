@@ -547,6 +547,35 @@ structure ProportionalDecompositionData
   hB_decomp : ∀ N (σ : Fin N → Fin d),
     mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ
   hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ
+  /-- The proportionality scalar `c N` is nonzero at every length.
+
+  Source: arXiv:1606.00608, lines 1170–1192. The proof of Theorem `thm1` uses
+  `c_N` to rewrite `⟨V^{(N)}(A_total), V^{(N)}(B_k)⟩ = c_N · ⟨V^{(N)}(B_total),
+  V^{(N)}(B_k)⟩` at every `N` and needs `c_N ≠ 0` to derive the contradiction;
+  this is a per-`N` statement, not a limit. -/
+  hc_ne : ∀ N, c N ≠ 0
+  /-- The dominant `A`-side coefficient has unit modulus at every length.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. With `aCoeff N j =
+  (μA j)^N` (the strict-weight specialization), this reads
+  `‖(μA 0)^N‖ = ‖μA 0‖^N = 1^N = 1`, using
+  `IsNormalCanonicalFormBNT.mu_dom_norm_one`. -/
+  a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1
+  /-- The dominant `B`-side coefficient has unit modulus at every length.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric to
+  `a_top_norm_one`). -/
+  b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1
+  /-- Sub-dominant `A`-side coefficients are bounded above by the dominant block in modulus.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. Combined with
+  `IsNormalCanonicalFormBNT.mu_strict_anti` and `mu_dom_norm_one`, this gives
+  `‖(μA j)^N‖ = ‖μA j‖^N ≤ ‖μA 0‖^N = 1`. -/
+  a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1
+  /-- Sub-dominant `B`-side coefficients are bounded above by the dominant block in modulus.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric). -/
+  b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1
 
 /-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
 abbrev ProportionalDecompositionConclusion
@@ -640,7 +669,12 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc_ne : ∀ N, c N ≠ 0)
+    (a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
     ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_CFBNT_data A B
     hA.toHasInjectiveBlocks
@@ -651,7 +685,8 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
     hB.toIsLeftCanonicalBlockFamily
     hB.toHasNormalizedSelfOverlap
     hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp,
+      hc_ne, a_top_norm_one, b_top_norm_one, a_norm_le_one, b_norm_le_one⟩
 
 /-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
@@ -715,11 +750,17 @@ lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
       mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ) :
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc_ne : ∀ N, c N ≠ 0)
+    (a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
     ProportionalDecompositionConclusion (d := d) A B :=
   fundamentalTheorem_of_separated_normalCFBNT_data A B
     hA.toIsNormalCanonicalForm hA.blocks_not_equiv
     hB.toIsNormalCanonicalForm hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp⟩
+    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp,
+      hc_ne, a_top_norm_one, b_top_norm_one, a_norm_le_one, b_norm_le_one⟩
 
 end MPSTensor
