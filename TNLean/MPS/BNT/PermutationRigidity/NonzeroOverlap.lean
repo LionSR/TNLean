@@ -33,14 +33,14 @@ proportionality constant.
 ## Paper-faithfulness note
 
 Both `exists_nonzero_overlap_of_proportional_decomp` and the `_left` companion take the
-**full symmetric hypothesis set** — A-side and B-side dominant-block normalization
-(`a_top_norm_one`, `b_top_norm_one`), uniform sub-dominant bounds (`a_norm_le_one`,
-`b_norm_le_one`), per-side asymptotic block-orthonormality (`hA_self`, `hA_off`,
-`hB_self`, `hB_off`), per-`N` nonzero proportionality (`hc_ne`), and the BNT
-decomposition identities. This matches CPSV16's hypothesis "$A$ and $B$ in canonical
-form" (arXiv:1606.00608, statement of Theorem `thm1`) — the paper's CF concept
-implicitly carries the dominant-block normalization and the per-block primitivity that
-gives asymptotic orthonormality. Thus the displayed hypotheses are the explicit
+full symmetric hypothesis set: dominant-block normalization on each side,
+uniform sub-dominant coefficient bounds, per-side asymptotic block-orthonormality
+(diagonal overlaps tend to `1`, off-diagonal overlaps tend to `0`), per-length
+nonzero proportionality, and the BNT decomposition identities. This matches
+CPSV16's hypothesis "$A$ and $B$ in canonical form" (arXiv:1606.00608, statement
+of Theorem `thm1`) — the paper's CF concept implicitly carries the
+dominant-block normalization and the per-block primitivity that gives
+asymptotic orthonormality. Thus the displayed hypotheses are the explicit
 A-side and B-side components of the source's canonical-form assumption; no
 hypothesis is added beyond what the paper provides.
 -/
@@ -78,7 +78,7 @@ class once `‖μ_1‖ = 1` is in force. Documented in
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
 
 The CPSV16 proof (lines 1170-1192) gives the lower-bound argument cleanly only
-for the dominant block `k = 0` (where `b_top_norm_one` keeps
+for the dominant block `k = 0` (where `hB_top_norm_one` keeps
 `‖bCoeff N 0‖ = 1` away from zero). For sub-dominant `k ≥ 1`, the source
 matches blocks iteratively: after the dominant block is matched, peel it off
 and re-apply the argument to the residual. The "∀ k, ∃ j" form of the
@@ -88,7 +88,7 @@ bound on `‖bCoeff N k‖` is not available for sub-dominant blocks under the
 source normalization.
 
 Elimination: rewrite using the source-faithful lower-bound + iterative
-peeling with `b_top_norm_one`, `b_norm_le_one`, and `hc_ne` from the now
+peeling with `hB_top_norm_one`, `hB_norm_le_one`, and `hc_ne` from the now
 threaded-through `ProportionalDecompositionData` data; tracked in #1559
 Stage C. -/
 theorem exists_nonzero_overlap_of_proportional_decomp
@@ -108,10 +108,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
+    (hA_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (hB_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
     (hA_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
@@ -129,8 +129,8 @@ theorem exists_nonzero_overlap_of_proportional_decomp
   -- `{V^N(A_j)}_j ∪ {V^N(B_k)}` is asymptotically orthonormal hence eventually
   -- LI; proportionality `V^N(A_total) = c_N V^N(B_total)` then forces
   -- linearly-dependent coefficient relations contradicting LI.
-  -- The argument requires BOTH dominant-block normalizations (`a_top_norm_one`
-  -- and `b_top_norm_one`) to derive the contradiction; iterative peeling
+  -- The argument requires BOTH dominant-block normalizations (`hA_top_norm_one`
+  -- and `hB_top_norm_one`) to derive the contradiction; iterative peeling
   -- handles sub-dominant blocks.
   -- See `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
   sorry
@@ -181,10 +181,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
+    (hA_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (hB_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
     (hA_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
