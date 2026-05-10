@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Canonical-Form Weight Normalization and the Proportional MPV Comparison}
+\author{}
+\date{2026-05-10}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 builds the multi-block route to
+the Fundamental Theorem on top of the canonical form
+\cite[Section~II]{Cirac2016MPDO_arXiv}. A tensor $A=(A^i)_{i=1}^d$ is in
+canonical form when, after a basis change of the bond, it decomposes as
+\begin{equation}
+  A^i=\bigoplus_{k=1}^r \mu_k\,A_k^i,
+  \tag{\path{eq:II_CF1}}
+\end{equation}
+where each block tensor $A_k$ is normal and the scalars $\mu_k$ are nonzero.
+The text immediately fixes a normalization on the weights:
+\begin{quote}
+  ``we can always choose $|\mu_k|\le 1$ and at least one of them equals one,
+  something which we will assume from now on.''
+  \cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}
+\end{quote}
+This is a definitional convention applied throughout the rest of the paper; it
+is not derived later. Combined with the strict modulus ordering used by the BNT
+arrangement, it implies that the dominant block has $|\mu_1|=1$ and every
+sub-dominant block has $|\mu_k|<1$.
+
+The same paper proves the proportional Fundamental Theorem
+\cite[Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2}]{Cirac2016MPDO_arXiv}.
+Suppose two tensors $A$ and $B$ are presented in their basis-of-normal-tensor
+expansions, with representative families $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$
+and BNT coefficients $\mu_{j,q_a}$ and $\nu_{j,q_b}$ for
+$q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After Theorem~\texttt{thm1}
+identifies the representatives, $B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the
+trace-pair argument in the proof of Corollary~\texttt{II\_cor2} reduces to the
+scalar identity
+\begin{equation}
+  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
+    =\sum_{q=1}^{r_{b,j}}\bigl(\nu_{j,q}e^{i\phi_j}\bigr)^N,
+  \qquad\text{for all }j\text{ and all }N.
+  \tag{\path{eq:II_cor2_power_sum}}
+\end{equation}
+The cited Lemma~\texttt{Lem:app\_simple} then concludes that
+$r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
+$\mu_{j,q}=\nu_{j,q}e^{i\phi_j}$. The matching dimensions and the global gauge
+formula follow.
+
+The mathematical structure of this proof is that the coefficient information
+is read off at the level of power sums, using all $N$ simultaneously as input
+to a separation lemma for sums of $N$th powers. No convergence of any
+$N$-indexed quantity is invoked.
+
+\section{The formal canonical form}
+
+The formal counterpart of the canonical form for the BNT route is the structure
+\texttt{IsNormalCanonicalFormBNT}.\footnote{%
+\path{TNLean/MPS/BNT/Construction.lean}, lines 181--195.}
+Its mathematical content is: a strict-modulus ordering on the weight family
+$\mu : \mathrm{Fin}\,r\to\mathbb C$, the nonvanishing $\mu_k\ne 0$ for every
+$k$, and the per-block normality data inherited from the underlying canonical
+form. The dominant weight is unconstrained in modulus.
+
+Comparing this with the source definition, the field
+$|\mu_1|=1$ (in source enumeration; index $0$ in the formal one) is missing.
+The blueprint chapter on canonical forms records the strict-modulus ordering
+and the decomposition $\mu_k=\eta_k|\mu_k|$ with $\eta_k$ on the unit circle,
+but does not impose $|\mu_1|=1$ either.\footnote{%
+\path{blueprint/src/chapter/ch08_canonical.tex}, definitions
+\texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt}, and the surrounding
+remarks on weight normalization.}
+
+The omission is mathematically meaningful, because the source definition is
+used in two ways downstream: it fixes the dominant block on the unit circle,
+which is what the spectral and irreducibility arguments need, and it forces
+every sub-dominant block strictly inside the unit disk. The latter is the
+conventional content used by the proportional MPV comparison below.
+
+\section{The formal proportional comparison}
+
+The formal route to the proportional Fundamental Theorem replaces the source
+identity \texttt{eq:II\_cor2\_power\_sum} by a different mathematical object:
+two coefficient sequences indexed by chain length, together with the assumption
+that they converge to nonzero limits. Concretely, the structure
+\texttt{ProportionalDecompositionData}\footnote{%
+\path{TNLean/MPS/BNT/Construction.lean}, lines 512--542.}
+packages, for each block index $j$, a function
+$N\mapsto a_{N,j}\in\mathbb C$ and a designated limit $a_j^\infty\in\mathbb C$
+satisfying
+\[
+  a_{N,j}\to a_j^\infty\text{ as }N\to\infty,
+  \qquad a_j^\infty\ne 0,
+\]
+together with the analogous data on the $B$-side and a sequence of
+proportionality scalars $c_N$ converging to a nonzero limit $c$. The
+identification of the scalars is then derived from these convergence
+hypotheses by a comparison of limits, rather than from the source
+power-sum identity.
+
+For the natural realization in which the BNT representative on the $j$th block
+is one-dimensional ($r_j=1$) and the coefficient is the source weight
+itself, the formal choice of array is
+\[
+  a_{N,j}=(\mu_j^A)^N.
+\]
+\footnote{The corresponding blueprint passage is the remark
+\texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
+\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex}.} With this
+choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$ becomes a
+condition on the powers $(\mu_j^A)^N$.
+
+\section{The mathematical incompatibility}
+
+Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
+the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
+\[
+  |(\mu_j^A)^N|=|\mu_j^A|^N\to 0\quad\text{as }N\to\infty,
+\]
+so the only candidate limit is $a_j^\infty=0$, contradicting the formal
+hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on
+the unit circle, and the sequence $(\mu_1^A)^N$ converges only if $\mu_1^A$
+is a root of unity; for a generic phase the limit does not exist.
+
+The conclusion is a structural mismatch. With the source normalization in
+force, the formal data $\texttt{ProportionalDecompositionData}$ cannot be
+instantiated for a multi-block ($r>1$) family using $a_{N,j}=(\mu_j^A)^N$,
+because the limit hypothesis fails on every sub-dominant block. Without the
+source normalization, the formal hypothesis is sometimes satisfiable, but the
+resulting object is no longer the canonical-form datum from
+\cite{Cirac2016MPDO_arXiv}.
+
+The paper does not face this difficulty, because it never asks for the
+$N\to\infty$ limit of $(\mu_j^A)^N$. The proof reads off the multiset of
+weights from the polynomial identity \texttt{eq:II\_cor2\_power\_sum} viewed
+as an identity in $N$. With the BNT linear independence supplied by the
+direct-sum span theorem, the same identity, restricted to a single
+sufficiently large witness $N=N_0$, is enough to recover the multiset
+equality and the $g_a=g_b$ statement.
+
+\section{Cross-check with the blueprint}
+
+The blueprint statements of \texttt{lem:ft\_proportional} and
+\texttt{lem:ft\_proportional\_nt} carry the same convergence-and-nonzero-limit
+data as the formal structure, with the symbols $a_j^\infty,b_k^\infty,c^\infty$
+in place of \texttt{aLim}, \texttt{bLim}, \texttt{cLim}. The accompanying
+remark \texttt{rem:cf\_coeff\_arrays} acknowledges the strict-weight
+specialization $a_{N,j}=(\mu_j^A)^N$ but does not flag the incompatibility
+described above. The remark \texttt{rem:normalcf\_bnt\_gap} in the same
+chapter discusses a different point (spectral versus algebraic normality of a
+single block), so it does not fill in the missing comparison.
+
+The blueprint canonical-form chapter is symmetric with the formal definition:
+the strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
+
+\section{What a corrected formalization would say}
+
+Two changes are needed to bring the formal development into agreement with the
+source.
+
+The first change is to record the source convention $|\mu_1|=1$ (with the
+implicit $|\mu_k|\le 1$ on the remaining blocks following from
+\texttt{mu\_strict\_anti}) as a field of \texttt{IsNormalCanonicalFormBNT} and
+of the corresponding blueprint definition. This is a transcription of the
+source definition, not an additional assumption.
+
+The second change is to reformulate the proportional comparison so that it
+extracts coefficients from a single sufficiently large witness length $N_0$.
+The mathematical input is the BNT linear independence at length $N_0$, which
+is supplied by the direct-sum span theorem on a basis of normal tensors. The
+output is, blockwise,
+\[
+  (\mu_j^A)^{N_0}=c^{N_0}\,(\mu_j^B)^{N_0},\qquad j=1,\ldots,g,
+\]
+which fixes $\mu_j^A$ in terms of $\mu_j^B$ and $c$ up to an $N_0$th root of
+unity. The phase ambiguity is then absorbed into the per-block phase $\phi_j$
+already present in the source statement
+$B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$. No convergence statement is needed; in
+particular no nonzero limit hypothesis on $(\mu_j^A)^N$ is required.
+
+The reformulated comparison is what the source actually proves
+\cite[proof of Corollary~\texttt{II\_cor2}]{Cirac2016MPDO_arXiv}, transposed
+into the BNT-direct-sum-span input that the formal route already isolates
+elsewhere in the development.
+
+\section{Conclusion}
+
+The verdict is that the canonical-form definition and the proportional MPV
+comparison currently differ from
+\cite{Cirac2016MPDO_arXiv} in two coupled ways. The canonical-form definition
+omits the source convention $|\mu_1|=1$. The proportional comparison replaces
+the source's fixed-length power-sum identity by a limit hypothesis on
+$(\mu_j^A)^N$ that fails on the sub-dominant blocks under the very
+normalization the source imposes.
+
+Each change can be made independently of the other, but they are most
+naturally addressed together: adding the missing normalization makes the
+mismatch between the two proof models visible at the level of types, since the
+limit model becomes uninstantiable on the source's intended class of inputs.
+Once both changes are in place, the formal proportional Fundamental Theorem
+can be aligned with the source argument without weakening the statement and
+without introducing convergence hypotheses absent from
+\cite{Cirac2016MPDO_arXiv}.
+
+The corresponding tracked items are
+\href{https://github.com/LionSR/TNLean/issues/1554}{issue~\#1554} for the
+canonical-form normalization and
+\href{https://github.com/LionSR/TNLean/issues/1555}{issue~\#1555} for the
+fixed-length reformulation of the proportional comparison.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
