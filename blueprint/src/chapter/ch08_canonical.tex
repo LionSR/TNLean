@@ -848,6 +848,50 @@ per-block peripheral-spectrum primitivity.
 		That intertwiner is exactly the required gauge-phase equivalence.
 \end{proof}
 
+\begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
+		\label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
+		\lean{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
+		\leanok
+		\uses{def:mpv_overlap}
+		Let $A$ and $B$ be MPS tensors of the same bond dimension.  If
+		$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$ as $N\to\infty$,
+		then the mixed transfer map has spectral radius at least $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+		Contrapositive of the overlap-decay theorem: if the mixed transfer
+		spectral radius were strictly less than~$1$, the iterated mixed transfer
+		map would tend to zero in operator norm, hence so would its trace, and
+		via the trace identity $\text{LinearMap.trace}((F_{AB})^N) = \langle V^{(N)}(A), V^{(N)}(B)\rangle$
+		the overlap itself would tend to~$0$, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Source-faithful equalMPS gauge recovery]%
+		\label{thm:nt_overlap_norm_one_gauge}
+		\lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+		\leanok
+		\uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
+			def:mpv_overlap}
+		Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension
+		satisfying $\sum_i (A^i)^\dagger A^i = \Id$ and
+		$\sum_i (B^i)^\dagger B^i = \Id$.  If
+		$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$, then $A$ and~$B$
+		are gauge-phase equivalent.
+
+		This is the source-faithful direction of \cite[Lemma~equalMPS,
+		lines~1085--1117]{Cirac2016MPDO_arXiv} for tensors of equal bond
+		dimension; no proportionality of MPVs is required.
+\end{theorem}
+
+\begin{proof}\leanok
+		\uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
+			thm:nt_modulus_one_gauge}
+		By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one},
+		the mixed transfer spectral radius is at least~$1$.
+		Theorem~\ref{thm:nt_modulus_one_gauge} then gives gauge-phase
+		equivalence.
+\end{proof}
+
 \section{Steps toward canonical form existence}%
 \label{sec:canonical_pipeline_1606}
 
