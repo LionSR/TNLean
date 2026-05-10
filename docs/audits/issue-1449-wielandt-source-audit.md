@@ -86,7 +86,6 @@ Below is the complete inventory of Wielandt imports used by the canonical-form, 
 | MPS file | Wielandt import | Key declaration used |
 |---|---|---|
 | `FundamentalTheorem/FiniteLength.lean` | `Wielandt.WielandtBound` | `wordSpan_eq_top_of_isInjective` |
-| `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity.ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
 | `CanonicalForm/Existence.lean` | `Primitivity.StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth.VectorToMatrixSpan` | vector-to-matrix lemmas |
 | | `SpanGrowth.CumulativeSpan` | `cumulativeSpan` API |
@@ -162,7 +161,6 @@ The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength
 | `cumulativeSpan_eq_top` | `SpanGrowth/NonzeroTraceProduct.lean` | Pipeline |
 | `eigenvector_spreading` | `SpanGrowth/EigenvectorSpreading.lean` | Pipeline & SourceTheorems |
 | `wielandt_blocked_assembly` | `RectangularSpan/Basic.lean` | `wielandt_lemma2b` |
-| `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` | `Primitivity/ImpliesIrreducible.lean` | `ProportionalPrimitive.lean` |
 | `isNormal_of_isPrimitiveMPS_with_posDef` | `Primitivity/StronglyIrreducibleToFullRank.lean` | `Existence.lean`, `TPPrimitiveReduction.lean` |
 
 ### Verdict: **No retirements needed.** Every declaration has a clear role: paper-facing theorem, convenience corollary, or pipeline internal. No dead declarations found.

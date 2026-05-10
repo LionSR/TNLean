@@ -1,7 +1,7 @@
 import TNLean.PiAlgebra.CanonicalFormSep
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
-import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.OverlapConsequences
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Overlap.CastDecay

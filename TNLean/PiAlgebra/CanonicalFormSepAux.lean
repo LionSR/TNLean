@@ -11,7 +11,7 @@ import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.OverlapConsequences
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.Channel.Peripheral.Spectrum

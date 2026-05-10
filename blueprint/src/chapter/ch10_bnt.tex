@@ -341,8 +341,11 @@ and~\cite{Cirac2021Matrix}.
 \begin{theorem}[Permutation rigidity for proportional MPV decompositions]\label{thm:bnt_perm_prop}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp}
 	\uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
-	Source: \cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}; the
-	formulation uses the dominant-block normalization
+	This is the restricted comparison step used inside the proof of
+	\cite[Theorem~\texttt{thm1}, lines~1170--1192]{Cirac2016MPDO_arXiv};
+	it is not the theorem itself.  The formulation assumes the decomposition
+	coefficients that the source proof derives from BNT form, and uses the
+	dominant-block normalization
 	$\|\mu_1\| = 1$ from
 	\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}.
 	Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be injective
@@ -502,7 +505,6 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{lemma}[Restricted CF-BNT proportional comparison]
 	\label{lem:cf_bnt_ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\uses{def:cf_bnt, thm:bnt_perm_prop}
 	If two families in canonical form with BNT separation admit a
 	proportional MPV decomposition with the dominant-block normalization

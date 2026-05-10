@@ -191,7 +191,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.OverlapConsequences
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs

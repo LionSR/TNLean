@@ -7,39 +7,27 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
-# Equal and Proportional MPV Fundamental Theorems
+# Fundamental Theorem support lemmas
 
-This module collects the **equal-case** and **proportional-case** fundamental theorems for
-matrix product states in canonical form with basis-of-normal-tensors (BNT) separation,
-together with supporting corollaries.
+This module contains the witness type used for BNT block matching and the
+Newton--Girard power-sum lemmas needed for the multiplicity-recovery part of
+CPSV16, Lemma `Lem:app_simple`.
+
+Earlier restricted wrappers for the equal and proportional Fundamental Theorem
+branches lived here.  They assumed common block structure or explicit
+coefficient arrays as hypotheses.  Those hypotheses are not present in
+arXiv:1606.00608, Theorem `thm1` or Corollary `II_cor2`, so the wrappers are no
+longer part of the source-facing theorem surface.
 
 ## Main results
 
-### Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
-(`fundamentalTheorem_equalMPV_CFBNT`)
+### Block matching witness
 
-**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation share the same `μ`-weights, same block count `r`, and
-same block dimensions, and
-generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
-with a global gauge equivalence of the block-diagonal tensors.
+`BlockPermutationGaugeWitness` records the block-count, permutation,
+bond-dimension, and gauge-phase data produced by the heterogeneous equal-MPV
+block-matching theorem.
 
-### Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
-(`fundamentalTheorem_proportionalMPV_CFBNT`)
-
-**Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation generate proportional MPVs (encoded by per-`N`
-coefficient arrays with the source-faithful dominant-block normalization
-`‖aCoeff N 0‖ = ‖bCoeff N 0‖ = 1` and per-`N` nonzero proportionality scalar `c N`),
-then the block counts are equal and blocks match up to permutation, dimension
-equality, and gauge-phase equivalence.
-
-### Theorem 3: Equal MPVs imply proportional MPVs
-(`sameMPV₂_implies_proportionalMPV₂`)
-
-Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
-
-### Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
+### Power-sum multiset equality (Lem:app_simple support lemma)
 
 If two same-cardinality sequences of complex numbers have equal power sums for all positive
 exponents, their multisets are equal.  For different cardinalities, the positive-power
@@ -70,64 +58,6 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
-
-This is the content of Corollary II_cor2 from arXiv:2011.12127 / arXiv:1606.00608,
-specialized to the case where both families share the same block structure (same `r`,
-same `dim`, same `μ`).
--/
-
-/-- **Equal-MPV Fundamental Theorem for CF-BNT (Corollary II_cor2, same structure).**
-
-If two families of tensors in canonical form with BNT separation share the same
-block weights `μ`, the same number of blocks `r`, and the same block dimensions
-`dim`, and generate equal MPV families for all system sizes, then:
-
-(i)  per-block gauge equivalence: `GaugeEquiv (A k) (B k)` for all `k`;
-(ii) global gauge equivalence of the block-diagonal tensors.
-
-**Scope restriction (one-copy-per-sector)**: Both families must share the same block
-structure `(r, dim, μ)`.  This is the multiplicity-free special case of Cor II.2; the
-paper's general theorem does not assume identical block structures as a hypothesis —
-it derives them.  The multiplicity recovery (`Lem:app_simple` on `∑_q μ_{j,q}^N`) is
-absent.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
--- SCOPE(one-copy-per-sector): requires same (r, dim, μ); paper derives this from BNT.
-theorem fundamentalTheorem_equalMPV_CFBNT
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A)
-    (hB : IsCanonicalFormBNT μ B)
-    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    (∀ k, GaugeEquiv (A k) (B k)) ∧
-    GaugeEquiv (toTensorFromBlocks μ A) (toTensorFromBlocks μ B) :=
-  fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hA.mu_strict_anti
-    hB.block_injective hB.leftCanonical hSame
-
-/-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.**
-
-**Scope restriction (one-copy-per-sector)**: same-structure restriction as
-`fundamentalTheorem_equalMPV_CFBNT`; see that theorem's note. -/
--- SCOPE(one-copy-per-sector): same-structure restriction.
-theorem fundamentalTheorem_equalMPV_CFBNT_explicit
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A)
-    (hB : IsCanonicalFormBNT μ B)
-    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∃ (X : ∀ k, GL (Fin (dim k)) ℂ),
-    ∀ k i, B k i = (X k : Matrix _ _ ℂ) * A k i *
-      (((X k)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
-  fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
-    hB.block_injective hB.leftCanonical hSame
-
-/-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
-
-This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
-The theorem takes convergent coefficient data as explicit hypotheses.
--/
-
 /-- Conclusion type for the BNT proportional-MPV comparison theorems. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
@@ -142,74 +72,7 @@ abbrev BlockPermutationGaugeWitness
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
 
-/-- **Proportional-MPV Fundamental Theorem for CF-BNT (Theorem 4.4).**
-
-If two families of tensors in canonical form with BNT separation generate proportional
-MPV families (with explicitly supplied decomposition coefficients), then:
-
-(i)  same block count: `rA = rB`;
-(ii) there exists a permutation `σ : Fin rA ≃ Fin rB` such that for each block `j`,
-     the bond dimensions match and the blocks are gauge-phase equivalent.
-
-**Scope restriction (one-copy-per-sector)**: The caller must supply coefficient arrays
-`aCoeff`, `bCoeff` explicitly.  In the paper (arXiv:1606.00608 Thm II.1 / Cor II.2) no
-such arrays are supplied as hypotheses — they are derived from the BNT decomposition
-(the sum `∑_q μ_{j,q}^N` over copies in each sector).  Additionally, `IsCanonicalFormBNT`
-forces `r_j = 1`, so the Newton–Girard multiplicity recovery (`Lem:app_simple`) is never
-invoked.  This theorem has two `sorry`s in its proof chain at `NonzeroOverlap.lean` from
-the paper-realignment PR.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
--- SCOPE(one-copy-per-sector): explicit coefficient arrays are extra hypotheses not in paper;
--- r_j = 1 forced by IsCanonicalFormBNT; sorry'd chain at NonzeroOverlap.lean.
-theorem fundamentalTheorem_proportionalMPV_CFBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (c : ℕ → ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
-    BlockPermutationGaugeWitness (d := d) A B :=
-  fundamentalTheorem_of_separated_CFBNT_data A B
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hA.blocks_not_equiv
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
-    hB.toHasNormalizedSelfOverlap
-    hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, c, hA_decomp, hB_decomp, hProp,
-      hc_ne, a_top_norm_one, b_top_norm_one, a_norm_le_one, b_norm_le_one⟩
-
-/-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
-
-/-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
-
-This is useful for reducing Corollary II_cor2 to the proportional case of Theorem 4.4. -/
-theorem sameMPV₂_implies_proportionalMPV₂
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (h : SameMPV₂ A B) :
-    ProportionalMPV₂ A B := by
-  intro N
-  exact ⟨1, fun σ => by simpa using h N σ⟩
-
-/-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
+/-! ## Power-sum multiset equality (Lem:app_simple support lemma)
 
 This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded same-cardinality version is the common Newton--Girard input.
@@ -265,24 +128,5 @@ theorem power_sum_eq_implies_card_eq_and_multiset_eq_of_le_max_card
       ∑ i : Fin m, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
     m = n ∧ Finset.univ.val.map α = Finset.univ.val.map β :=
   Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card m n α β hα hβ h
-
-/-! ## Combined corollaries -/
-
-section Corollaries
-
-/-- **Per-block SameMPV from CF-BNT equal MPVs.**
-
-Extracts the per-block `SameMPV` conclusion from the equal-MPV theorem. -/
-theorem perBlock_sameMPV_of_equalMPV_CFBNT
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    {μ : Fin r → ℂ}
-    (A B : (k : Fin r) → MPSTensor d (dim k))
-    (hA : IsCanonicalFormBNT μ A)
-    (hB : IsCanonicalFormBNT μ B)
-    (hSame : SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks μ B)) :
-    ∀ k, SameMPV (A k) (B k) :=
-  fun k => GaugeEquiv.sameMPV ((fundamentalTheorem_equalMPV_CFBNT A B hA hB hSame).1 k)
-
-end Corollaries
 
 end MPSTensor

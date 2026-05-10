@@ -10,7 +10,7 @@
   Source TeX: `Papers/0909.5347/main.tex`
 
 **Leaning on** (not audited in detail):
-- **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127 — used in `FundamentalTheorem/EqualProportional.lean` for Theorem 4.4 naming.
+- **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127.
 - **DSSPC17**: De las Cuevas, Schuch, Pérez-García, Cirac, *Continuum limits of matrix product states*, arXiv:1708.00029 — used in `Periodic/FundamentalTheorem.lean`.
 
 **Scope**: This audit covers MPS / pure-state sections of PGVWC07 and CPSV16, plus a full Wielandt source-paper crosswalk (§9). The MPDO / mixed-state sections of CPSV16 (§IV, Appendix C) are listed for completeness but not deeply traced. A separate MPDO coverage audit is recommended.
@@ -51,8 +51,8 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
 | Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | Uses Wielandt; `FundamentalTheorem/FiniteLength.lean` imports `WielandtBound` for word-span results | **needs verification** |
-| **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (`fundamentalTheorem_proportionalMPV_CFBNT`, `fundamentalTheorem_proportionalMPV_normalCFBNT`) | `leanok` |
-| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (`fundamentalTheorem_equalMPV_CFBNT`); `FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective`) | `leanok` |
+| **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | Components in `MPS/BNT/PermutationRigidity/*`, `MPS/FundamentalTheorem/OverlapConsequences.lean`, and sector-comparison files | **partial** — old strict wrappers with extra supplied coefficient data were removed from the source-facing theorem surface |
+| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | `FundamentalTheorem/Full.lean` (`fundamentalTheorem_equalMPV_CFBNT_hetero`) for block matching; `FundamentalTheorem/Basic.lean` for the single-block injective case | **partial** — heterogeneous block matching is formalized; full global gauge/multiplicity conclusion remains tracked separately |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
 
@@ -92,11 +92,11 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Defn CFII (l.1058) | 1058–1060 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Existence.lean` (`CFII` data) | `leanok` |
-| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/CanonicalForm/` (distributed); `CanonicalForm/GaugePhaseFromOverlap.lean` | **needs verification** |
+| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean`; spectral-gap components | **partial** — structural equalMPS components are formalized; a packaged theorem remains future work |
 | **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | Used in BNT construction | **needs verification** |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
 | **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean` (imported by `FundamentalTheorem/EqualProportional.lean`) | `leanok` |
-| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (CFII variant of fundamental theorem) | **needs verification** |
+| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | Sector-decomposition and block-matching components | **needs verification** |
 
 ### 2.5 Appendix B — Proofs of Section III (pure RFP)
 
@@ -232,14 +232,12 @@ The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.le
 
 ---
 
-## 5. Note on Theorem 4.4 (CPSV21) naming
+## 5. Retired strict wrappers
 
-The `FundamentalTheorem/EqualProportional.lean` module uses "Theorem 4.4" to refer to CPSV21 (arXiv:2011.12127) Section IV.A, which is the CPSV21 restatement of the CPSV16 Fundamental Theorem of MPV (Theorem II.1 / `thm1`). The code correctly follows CPSV21 numbering for the combined BNT + proportional case:
-
-| Lean declaration | Paper | CPSV16 label |
-|---|---|---|
-| `fundamentalTheorem_proportionalMPV_CFBNT` | CPSV21 Theorem 4.4 | CPSV16 Theorem II.1 (`thm1`) |
-| `fundamentalTheorem_equalMPV_CFBNT` | CPSV21 Corollary after Theorem 4.4 | CPSV16 Corollary II.2 (`II_cor2`) |
+The older strict wrappers formerly housed in `FundamentalTheorem/EqualProportional.lean`
+are no longer counted as formalizations of CPSV16 Theorem II.1 or Corollary II.2.
+They assumed common block data or supplied coefficient arrays as hypotheses. The source
+theorem derives those data from the BNT decomposition and the MPV hypothesis.
 
 ---
 
@@ -346,7 +344,6 @@ The MPS pipeline imports a focused subset of Wielandt declarations (detail in `d
 | MPS file | Wielandt import | Key declaration |
 |---|---|---|
 | `FundamentalTheorem/FiniteLength.lean` | `WielandtBound` | `wordSpan_eq_top_of_isInjective` |
-| `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity/ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
 | `CanonicalForm/Existence.lean` | `Primitivity/StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth/VectorToMatrixSpan`, `SpanGrowth/CumulativeSpan`, `RectangularSpan/Basic`, `Primitivity/ToNormal`, `Primitivity/StronglyIrreducibleToFullRank` | Multiple span and primitivity lemmas |
 | `ParentHamiltonian/UniqueGroundState.lean` | `SpanGrowth/CumulativeToWordSpan` | `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one` |

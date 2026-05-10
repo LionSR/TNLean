@@ -199,10 +199,9 @@ identified with one another.
     \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
     gauge theorem.  It is a source-level theorem only for one injective block,
     not for the multi-block BNT comparison.
-  \item The strict canonical-form BNT declarations
-    \path{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT} and
-    \path{MPSTensor.fundamentalTheorem_equalMPV_CFBNT} are strict
-    representative forms.  Their exact restrictions are recorded in the
+  \item The older strict canonical-form BNT wrappers, which assumed explicit
+    coefficient arrays or common block data, are no longer part of the
+    source-facing theorem surface.  Their restrictions are recorded in the
     paragraph on paper-level targets below.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
@@ -231,14 +230,11 @@ representatives and retaining the repeated-copy coefficients
 \[
   \sum_q \mu_{j,q}^N.
 \]
-The current strict-representative declarations
-\path{fundamentalTheorem_proportionalMPV_CFBNT} and
-\path{fundamentalTheorem_equalMPV_CFBNT} are therefore special-case statements.
-The proportional comparison assumes explicit coefficient data; the equal-MPV
-common-block comparison assumes the repeated-copy structure has already been
-matched into common weights and dimensions.  Neither statement should be cited
-as the general arXiv:1606.00608 theorem unless the missing BNT multiplicity
-comparison has already been discharged.  Heterogeneous variants that state the
+The retired strict-representative declarations were therefore special-case
+statements: the proportional comparison assumed explicit coefficient data, and
+the equal-MPV common-block comparison assumed the repeated-copy structure had
+already been matched into common weights and dimensions.  They should not be
+cited as the general arXiv:1606.00608 theorem.  Heterogeneous variants that state the
 permutation, phases, gauges, and weight matching for possibly different sector
 indices are legitimate theorem statements only when their hypotheses are
 obtained from the same BNT comparison.

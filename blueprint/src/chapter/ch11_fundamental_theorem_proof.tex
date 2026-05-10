@@ -124,7 +124,6 @@ used in this chapter.
 \label{sec:ft_restricted_proportional}
 
 \begin{lemma}[Proportional comparison for restricted CF-BNT hypotheses]\label{lem:ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
 	in canonical form with BNT separation, with associated families
@@ -218,42 +217,15 @@ coincide and the full tensors are related by one invertible gauge
 obtained after the proportional Fundamental Theorem by matching the BNT blocks,
 then comparing the sector-weight power sums.
 
-We record the comparison statements in the two forms needed below. The
-restricted heterogeneous equal-case lemma, stated as
+The restricted heterogeneous equal-case lemma, stated as
 Lemma~\ref{lem:fundamentalTheorem_equalMPV_CFBNT_hetero}, gives the
 block-count, bond-dimension, and gauge-phase matching directly from equality of
-the block-diagonal MPV families. The common-structure lemma below proves the
-global gauge statement when the two sides already share the same block structure.
-The general CPSV theorem still passes through sector decompositions, copy-count
-recovery, and sector-weight multiset comparison before one obtains a global
-block-diagonal gauge.
-
-\begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
-	\leanok
-	\uses{def:cf_bnt, def:gauge_equiv}
-	Fix a common block structure: the same number of blocks~$g$,
-	the same bond dimensions $(D_k)_{k=1}^g$, and the same weights
-	$(\mu_k)_{k=1}^g$.
-	Let $(\mu_k, A_k)_{k=1}^g$ and $(\mu_k, B_k)_{k=1}^g$ be two families in
-	canonical form with BNT separation on this common structure.
-	If the block-diagonal tensors
-	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-	generate the same MPV family, then each pair $(A_k, B_k)$ is
-	gauge equivalent, and hence the corresponding block-diagonal tensors
-	are gauge equivalent.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:ft_canonical}
-	Since both families share the canonical-form hypotheses, the BNT separation
-	condition is not needed.
-	The same-structure canonical-form comparison
-	(Lemma~\ref{lem:ft_canonical}) then applies directly to this
-	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
-	equivalence and hence global gauge equivalence.
-\end{proof}
+the block-diagonal MPV families.  The former common-structure wrapper is not
+recorded as a formalization of Corollary~\texttt{II\_cor2}: it assumed common
+weights, common block count, and common bond dimensions, while the source
+theorem derives the matching data.  The general CPSV theorem still passes
+through sector decompositions, copy-count recovery, and sector-weight multiset
+comparison before one obtains a global block-diagonal gauge.
 
 \subsection{Sector multiplicities and weight recovery}%
 \label{sec:bnt_power_sum_recovery}
