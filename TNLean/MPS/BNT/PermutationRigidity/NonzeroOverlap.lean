@@ -156,7 +156,14 @@ are asymptotically orthonormal, then for each `j` it is impossible that
 **Unfaithful:** Same situation as the companion theorem — proof body is
 `sorry`, the deleted limit hypotheses are documented in
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`,
-elimination tracked in #1559 Stage C. -/
+elimination tracked in #1559 Stage C.
+
+The two nonzero-overlap conclusions are related by interchanging the two
+decompositions and replacing the proportionality scalar `c N` by `(c N)⁻¹`.
+This direction remains a separate Stage C statement until that interchange is
+formalized as a single symmetric argument; the planned elimination is to prove
+the joint right- and left-indexed conclusion at once, or derive one side from
+the other after this scalar inversion step is available. -/
 theorem exists_nonzero_overlap_of_proportional_decomp_left
     {d : ℕ}
     {gA gB : ℕ}
@@ -189,7 +196,8 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     ∀ j : Fin gA,
       ∃ k : Fin gB,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
-  -- Paper-faithful proof pending; symmetric to the right-indexed version.
+  -- Paper-faithful proof pending. Mathematically this is the A/B-swapped
+  -- direction, with the proportionality scalar inverted at each length.
   sorry
 
 end MPSTensor
