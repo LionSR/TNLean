@@ -155,6 +155,60 @@ reviewer cannot tell whether the field/theorem is faithful or invented.
 This rule applies whether or not the proof is `sorry` — the *statement* is
 the load-bearing artifact during realignment.
 
+#### Marking unfaithful theorems
+
+A theorem or lemma is **unfaithful** when its proof relies on a hypothesis or
+intermediate lemma that is known to deviate from the cited source — typically
+because the hypothesis was smuggled into the formalization, the proof
+shortcuts a load-bearing source step, or the result is restated more weakly
+than the paper would prove. Unfaithful theorems must carry a docstring
+marker so a future reader (or a follow-up PR) can locate them.
+
+The marker is a docstring section starting with `**Unfaithful:**` that names
+the load-bearing deviation, cites the paper-gap note documenting it, and
+sketches the elimination plan. Minimum form:
+
+```
+**Unfaithful:** This proof currently relies on `<hypothesis or lemma>`,
+which deviates from `<paper, label or line range>`. Documented in
+`docs/paper-gaps/<note>.tex`. Elimination: replace by `<faithful
+substitute>`; tracked in `<issue or PR>`.
+```
+
+The marker propagates to wrappers: any theorem whose proof transitively
+calls an unfaithful one is itself unfaithful and must carry its own marker.
+The marker is removed only when every transitively-cited dependency is
+faithful.
+
+Reviewers should not approve a paper-realignment PR that introduces an
+unfaithful theorem without the marker. The marker makes the deviation
+auditable and keeps the elimination plan visible.
+
+#### Locally-fixable deviations
+
+Not every paper deviation rises to **Unfaithful**. When the cited source
+contains a small typo, a locally-fixable gap (a missing or off-by-one
+constant, a clarification needed at one step), or a scope restriction that
+the paper proves more generally but the local result handles only a
+sub-case, the formalization may proceed without the full **Unfaithful**
+ceremony. These cases must still:
+
+- Cite a paper-gap document (under `docs/paper-gaps/`) that records the
+  deviation in mathematical terms; if no note exists, write a short one
+  before merging.
+- Use a lighter-weight in-source marker. The recommended forms are
+  `**Scope restriction (...):**` for sub-case proofs, or
+  `**Local fix (...):**` for typo/constant adjustments. Both forms must
+  reference the paper-gap document by file path.
+- Be inline-readable: the marker should let a reader recognize the
+  deviation without leaving the file.
+
+The **Unfaithful** marker is reserved for deviations that would be
+mathematically wrong without follow-up work (the proof is unprovable, or
+the statement smuggles an unwarranted hypothesis). The lighter markers
+are for deviations that are mathematically correct as stated, just
+narrower or differently phrased than the source.
+
 A paper-realignment PR may:
 
 - Delete fields, hypotheses, or whole theorems that are documented as

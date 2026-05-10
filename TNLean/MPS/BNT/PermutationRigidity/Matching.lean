@@ -303,6 +303,14 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_rightMatching
       (A := A) (B := B) (i₁ := f (e.symm j)) (i₂ := j)
       (k := e.symm j) hfe (hf_dim (e.symm j)) (hf_gauge (e.symm j)))
 
+/--
+**Unfaithful:** This proof transitively calls
+`exists_nonzero_overlap_of_proportional_decomp` and its `_left` variant,
+both of which are currently `sorry`. Documented in
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
+Elimination: when the two `_overlap_*` lemmas are proved per
+\#1559 Stage C, this `_core` theorem is automatically faithful (its body
+is forwarding-only). -/
 private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_core
     {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
@@ -424,7 +432,10 @@ absorbed into the proportionality constant.
 
 This is the span-equality-free analogue of
 `exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho`.
--/
+
+**Unfaithful:** Transitively `sorry` via the `_core` theorem and the two
+`_overlap_*` lemmas it calls. See those for elimination plan; tracked in
+\#1559 Stage C. -/
 theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
@@ -487,7 +498,10 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
 This is the same permutation-matching argument, but the two contradiction steps that formerly
 used injective overlap decay are replaced by the NT lemmas
 `mpvOverlap_tendsto_zero_of_irreducible_TP` and
-`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`. -/
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`.
+
+**Unfaithful:** Transitively `sorry` via the `_core` theorem; same
+elimination plan as the public wrapper. Tracked in \#1559 Stage C. -/
 theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP
     {d gA gB : ℕ}
     {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}

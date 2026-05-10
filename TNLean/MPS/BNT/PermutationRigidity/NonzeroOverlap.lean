@@ -41,17 +41,24 @@ namespace MPSTensor
 /--
 **Key step of Theorem 4.4 (paper route).**
 
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`).
+
 Assume we have two families `A j` and `B k` whose within-family overlaps are
 asymptotically orthonormal, and that the *full* tensors `A_total` and `B_total`
-are proportional MPV families and admit expansions in those families with
-coefficients converging to nonzero limits.
+are proportional MPV families with explicit decompositions into the families.
 
 Then for each `k`, it is impossible that `mpvOverlap (A j) (B k)` tends to `0`
 for all `j`.
 
-This lemma is the replacement for the span-equality-based argument
-`exists_nonzero_overlap` in `PermutationRigidityPrimitive.lean`.
--/
+**Unfaithful:** The proof body is currently `sorry`. The earlier proof relied
+on the convergence-to-nonzero-limit hypotheses (`aLim`, `bLim`, `cLim`,
+`haCoeff`, `hbCoeff`, `hc`, `haLim_ne`, `hbLim_ne`, `hcLim_ne`) — these were
+removed because they are uninstantiable on the source's intended canonical-form
+class once `‖μ_1‖ = 1` is in force. Documented in
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
+Elimination: rewrite using the source-faithful lower-bound argument with
+`b_top_norm_one` and `b_norm_le_one` from `ProportionalDecompositionData`
+(now available as caller-supplied data); tracked in #1559 Stage C. -/
 theorem exists_nonzero_overlap_of_proportional_decomp
     {d : ℕ}
     {gA gB : ℕ}
@@ -90,11 +97,18 @@ with a `B k` does not decay.
 /--
 **Key step of Theorem 4.4 (paper route), opposite direction.**
 
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`,
+symmetric to `exists_nonzero_overlap_of_proportional_decomp`).
+
 Under the same proportionality + decomposition hypotheses as
-`exists_nonzero_overlap_of_proportional_decomp`, if the `A`-family overlaps are asymptotically
-orthonormal, then for each `j` it is impossible that
+`exists_nonzero_overlap_of_proportional_decomp`, if the `A`-family overlaps
+are asymptotically orthonormal, then for each `j` it is impossible that
 `mpvOverlap (A j) (B k) → 0` for all `k`.
--/
+
+**Unfaithful:** Same situation as the companion theorem — proof body is
+`sorry`, the deleted limit hypotheses are documented in
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`,
+elimination tracked in #1559 Stage C. -/
 theorem exists_nonzero_overlap_of_proportional_decomp_left
     {d : ℕ}
     {gA gB : ℕ}

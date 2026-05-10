@@ -92,11 +92,24 @@ equal-modulus family into a single strict-norm representative.
 
 In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
 each basis element has already been represented by one CF block. It is not the paper's biCF
-condition; block-injectivity is a further fixed-length span input. -/
+condition; block-injectivity is a further fixed-length span input.
+
+**Scope restriction (one-copy-per-sector)**: Every theorem whose hypothesis includes
+`IsCanonicalFormBNT` is restricted to the special case where every sector contains exactly
+one BNT block (multiplicity `r_j = 1` for all `j`).  The paper's general Corollary II.2
+(arXiv:1606.00608) allows `r_j ≥ 1` copies per sector with weights `μ_{j,1}, …, μ_{j,r_j}`,
+and recovers multiplicities via Newton–Girard (`Lem:app_simple`) applied to the identity
+`∑_q μ_{j,q}^N = ∑_q (ν_{j,q} e^{iφ_j})^N`.  That recovery step is absent from the
+current formalization.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+-- SCOPE(one-copy-per-sector): mu_strict_anti forces r_j = 1; all downstream FT theorems
+-- are restricted to this special case. See ft_one_copy_scope_restriction.tex.
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
-  /-- Strict ordering of the block weights by modulus (strengthened from `Antitone`). -/
+  /-- Strict ordering of block weight moduli.  This forces one representative per modulus
+  class (multiplicity `r_j = 1`); the general BNT allows equal-modulus copies within a
+  sector.  See the scope-restriction note on `IsCanonicalFormBNT`. -/
+  -- SCOPE(one-copy-per-sector): this field is the load-bearing restriction.
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
@@ -602,7 +615,11 @@ dimension equality, and gauge-phase equivalence.
 This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
 each block already represents a distinct gauge-phase class; it does not cover the
 full multiplicity theorem where repeated equal-modulus sectors contribute via
-power sums `∑_q μ_{j,q}^N`. -/
+power sums `∑_q μ_{j,q}^N`.
+
+**Unfaithful:** Transitively `sorry` via
+`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`. Tracked in
+\#1559 Stage C. -/
 lemma fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -650,7 +667,10 @@ This lemma covers the case where each block represents a single gauge-phase clas
 equal-modulus sectors contribute via power sums `∑_q μ_{j,q}^N`, is handled by the
 `SectorDecomposition` theorems.
 
-This is a direct consequence of `fundamentalTheorem_of_separated_CFBNT_data`. -/
+This is a direct consequence of `fundamentalTheorem_of_separated_CFBNT_data`.
+
+**Unfaithful:** Transitively `sorry` via the called wrapper. Tracked in
+\#1559 Stage C. -/
 lemma fundamentalTheorem_of_IsCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -692,7 +712,11 @@ lemma fundamentalTheorem_of_IsCanonicalFormBNT
 
 Normal-form analogue of `fundamentalTheorem_of_separated_CFBNT_data`, using
 `IsNormalCanonicalForm` in place of strict weight ordering. This is not the full
-CPSV multiplicity BNT theorem. -/
+CPSV multiplicity BNT theorem.
+
+**Unfaithful:** Transitively `sorry` via
+`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP`.
+Tracked in \#1559 Stage C. -/
 lemma fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -731,7 +755,10 @@ lemma fundamentalTheorem_of_separated_normalCFBNT_data
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
     (hProp := hDecomp.hProp)
 
-/-- Proportional comparison lemma for restricted normal-CF-BNT decompositions. -/
+/-- Proportional comparison lemma for restricted normal-CF-BNT decompositions.
+
+**Unfaithful:** Transitively `sorry` via the called wrapper. Tracked in
+\#1559 Stage C. -/
 lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

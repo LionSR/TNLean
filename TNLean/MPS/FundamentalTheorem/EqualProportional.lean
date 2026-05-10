@@ -82,7 +82,14 @@ block weights `μ`, the same number of blocks `r`, and the same block dimensions
 `dim`, and generate equal MPV families for all system sizes, then:
 
 (i)  per-block gauge equivalence: `GaugeEquiv (A k) (B k)` for all `k`;
-(ii) global gauge equivalence of the block-diagonal tensors. -/
+(ii) global gauge equivalence of the block-diagonal tensors.
+
+**Scope restriction (one-copy-per-sector)**: Both families must share the same block
+structure `(r, dim, μ)`.  This is the multiplicity-free special case of Cor II.2; the
+paper's general theorem does not assume identical block structures as a hypothesis —
+it derives them.  The multiplicity recovery (`Lem:app_simple` on `∑_q μ_{j,q}^N`) is
+absent.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+-- SCOPE(one-copy-per-sector): requires same (r, dim, μ); paper derives this from BNT.
 theorem fundamentalTheorem_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
@@ -95,7 +102,11 @@ theorem fundamentalTheorem_equalMPV_CFBNT
   fundamentalTheorem_canonicalForm μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.** -/
+/-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.**
+
+**Scope restriction (one-copy-per-sector)**: same-structure restriction as
+`fundamentalTheorem_equalMPV_CFBNT`; see that theorem's note. -/
+-- SCOPE(one-copy-per-sector): same-structure restriction.
 theorem fundamentalTheorem_equalMPV_CFBNT_explicit
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
@@ -175,17 +186,21 @@ theorem fundamentalTheorem_proportionalMPV_of_separated_CFBNT_data
 /-- **Proportional-MPV Fundamental Theorem for CF-BNT (Theorem 4.4).**
 
 If two families of tensors in canonical form with BNT separation generate proportional
-MPV families (with explicitly convergent nonzero decomposition coefficients), then:
+MPV families (with explicitly supplied decomposition coefficients), then:
 
 (i)  same block count: `rA = rB`;
 (ii) there exists a permutation `σ : Fin rA ≃ Fin rB` such that for each block `j`,
      the bond dimensions match and the blocks are gauge-phase equivalent.
 
-**Coefficient convergence**: The caller must supply the decomposition coefficients
-`aCoeff`, `bCoeff` and their limits. In a strict-dominance specialization one may take
-`aCoeff N j = μA_j^N / μA_0^N` after normalizing so that `|μA_0| = |μB_0| = 1`,
-and then the subdominant ratios decay. In the general paper-level BNT setup, however,
-the coefficients are sums `Σ_q μ_{j,q}^N` and need not converge without extra input. -/
+**Scope restriction (one-copy-per-sector)**: The caller must supply coefficient arrays
+`aCoeff`, `bCoeff` explicitly.  In the paper (arXiv:1606.00608 Thm II.1 / Cor II.2) no
+such arrays are supplied as hypotheses — they are derived from the BNT decomposition
+(the sum `∑_q μ_{j,q}^N` over copies in each sector).  Additionally, `IsCanonicalFormBNT`
+forces `r_j = 1`, so the Newton–Girard multiplicity recovery (`Lem:app_simple`) is never
+invoked.  This theorem has two `sorry`s in its proof chain at `NonzeroOverlap.lean` from
+the paper-realignment PR.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+-- SCOPE(one-copy-per-sector): explicit coefficient arrays are extra hypotheses not in paper;
+-- r_j = 1 forced by IsCanonicalFormBNT; sorry'd chain at NonzeroOverlap.lean.
 theorem fundamentalTheorem_proportionalMPV_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -297,14 +312,18 @@ theorem sameMPV₂_implies_proportionalMPV₂
 
 The literature-level equal-MPV FT (`thm:ft_equal` in the blueprint) should start from only the
 CF-BNT data and `SameMPV₂`.  The current local results are weaker: the available proportional FT
-`fundamentalTheorem_proportionalMPV_CFBNT` still requires explicit decomposition coefficients with
-nonzero limits, and its conclusion is a block permutation together with per-block
-`GaugePhaseEquiv` data.
+`fundamentalTheorem_proportionalMPV_CFBNT` still requires explicit decomposition coefficients,
+and its conclusion is a block permutation together with per-block `GaugePhaseEquiv` data.
 
-This theorem states the equal-case conclusion that *is* derivable from those results.  Under the
-same coefficient hypotheses as the proportional theorem, equal MPVs force the phase-corrected
-weights to match blockwise.  After reindexing the `B`-family by the permutation from the
-proportional FT, the assembled weighted block tensors are globally gauge equivalent. -/
+This theorem states the equal-case conclusion derivable from those results.  Under the same
+coefficient hypotheses, equal MPVs force the phase-corrected weights to match blockwise.  After
+reindexing the `B`-family by the permutation, the assembled tensors are globally gauge equivalent.
+
+**Scope restriction (one-copy-per-sector)**: Inherits all restrictions of
+`fundamentalTheorem_proportionalMPV_CFBNT`: `IsCanonicalFormBNT` forces `r_j = 1`, explicit
+coefficient arrays are extra hypotheses, and the sorry'd chain from `NonzeroOverlap.lean`
+propagates here.  Not the paper's Cor II.2.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+-- SCOPE(one-copy-per-sector): inherits sorry'd chain and r_j=1 restriction from proportional FT.
 theorem fundamentalTheorem_equalMPV_full
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

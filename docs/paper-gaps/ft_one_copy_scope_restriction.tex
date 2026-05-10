@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{One-Copy-Per-Sector Scope Restriction in the\\Fundamental Theorem Formalization}
+\author{}
+\date{2026-05-10}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 states the general
+proportional Fundamental Theorem as Corollary~\texttt{II\_cor2} of
+\cite{Cirac2016MPDO_arXiv}. The theorem applies to two tensors $A$ and $B$
+whose matrix-product vectors are proportional, each presented in its
+basis-of-normal-tensor (BNT) canonical form. The canonical form for $A$ is a
+direct-sum decomposition
+\[
+  A^i = \bigoplus_{j=1}^{g_A} I_{r_{A,j}} \otimes \mu_{A,j} \bigl(
+    A_{j,1}^i \oplus \cdots \oplus A_{j,r_{A,j}}^i\bigr),
+\]
+where each modulus class $j$ contains $r_{A,j} \ge 1$ representative blocks
+$A_{j,1},\ldots,A_{j,r_{A,j}}$ all sharing the same weight modulus
+$|\mu_{A,j}|$, and the moduli are strictly ordered across classes:
+$|\mu_{A,1}| > |\mu_{A,2}| > \cdots > |\mu_{A,g_A}|$. The same structure
+applies to $B$ with multiplicity counts $r_{B,j}$.
+
+The proof of Corollary~\texttt{II\_cor2} in \cite{Cirac2016MPDO_arXiv}
+proceeds in several steps. Step~3 (lines~1156--1163 of the arXiv version)
+derives the blockwise power-sum identity
+\begin{equation}
+  \sum_{q=1}^{r_{A,j}} \mu_{A,j,q}^N
+    = \sum_{q=1}^{r_{B,j}} (\nu_{B,j,q}\,e^{i\phi_j})^N,
+  \qquad \text{for all } j \text{ and all } N \ge 1,
+  \label{eq:power-sum-id}
+\end{equation}
+from the BNT linear-independence input together with the equal-MPV hypothesis
+(so the equality of matrix-product vectors forces the equality of the sums of
+$N$th powers). Step~4 invokes Lemma~\texttt{Lem:app\_simple} of the same
+paper: if two finite sequences $(\lambda_{a,k})_{k=1}^{x_a}$ and
+$(\lambda_{b,k})_{k=1}^{x_b}$ satisfy
+\[
+  \sum_{k=1}^{x_a} \lambda_{a,k}^N = \sum_{k=1}^{x_b} \lambda_{b,k}^N
+  \qquad \text{for } N = 1, \ldots, \max(x_a, x_b),
+\]
+then $x_a = x_b$ and the two sequences are equal as multisets. Applied to
+\eqref{eq:power-sum-id}, this recovers $r_{A,j} = r_{B,j} =: r_j$ and the
+multiset equality $\{\mu_{A,j,q}\} = \{e^{i\phi_j}\nu_{B,j,q}\}$ for each
+modulus class $j$. Step~6 then assembles the global gauge isomorphism as
+$Y = \bigoplus_j I_{r_j} \otimes Y_j$, using the per-class dimension matching
+$r_{A,j} = r_{B,j}$ from Step~4.
+
+The mathematical structure of this argument is that the multiplicities $r_j$
+and the weight multisets are recovered from a finite family of polynomial
+identities in $N$, without any passage to a limit.
+
+\section{The one-copy-per-sector restriction}
+
+The formal canonical form structures\footnote{%
+\path{TNLean/MPS/BNT/Construction.lean}: \leanid{IsCanonicalFormBNT} at lines
+96--104, \leanid{IsNormalCanonicalFormBNT} at lines 181--198.} impose
+\emph{strict} decreasing moduli across the entire index set: every block has a
+distinct modulus. This is a stronger condition than the source structure, which
+only requires strict ordering of the modulus \emph{classes} while allowing
+$r_j \ge 1$ representatives within each class. The effect is to force $r_j = 1$
+for every modulus class $j$: the formal canonical forms are restricted to the
+one-copy-per-sector special case.
+
+In this special case, the source decomposition reduces to
+$A^i = \bigoplus_{j=1}^{g} \mu_j A_j^i$ with a single block per weight, and
+the general multiplicity structure $(r_{j,1},\ldots,r_{j,r_j})$ collapses to a
+single representative. The identity~\eqref{eq:power-sum-id} becomes the
+single-term equality $\mu_{A,j}^N = (e^{i\phi_j}\nu_{B,j})^N$, Steps~3--4 of
+the source proof become vacuous (there is nothing to separate), and the global
+gauge in Step~6 takes the simpler form $Y = \bigoplus_j Y_j$ (no identity
+tensor factor). The formalization thus covers only the one-copy-per-sector
+instance of Corollary~\texttt{II\_cor2}.
+
+\section{Missing components for the general case}
+
+Four items are currently absent from the formalization; each is required to
+lift the scope from $r_j = 1$ to $r_j \ge 1$.
+
+\textbf{Lemma~\texttt{Lem:app\_simple} (finite Newton--Girard uniqueness).}
+The source paper states, in its appendix, that two finite sequences whose
+power sums agree for $N = 1, \ldots, \max(x_a, x_b)$ must be equal as
+multisets. This is a finite algebraic fact, provable by Newton--Girard
+identities: the power sums determine the elementary symmetric polynomials,
+which determine the multiset of roots. A module named
+\leanid{ScalarPowerSumIdentity}\footnote{Introduced in commit
+\texttt{dd54b79e}.} was added at an early stage of the project, but it does
+not specialize to this particular fixed-length statement in the form needed by
+Step~4 of the source proof. The lemma needs to be formalized as a standalone
+result, separate from any BNT context.
+
+\textbf{BNT power-sum identity.}
+The identity~\eqref{eq:power-sum-id} requires a proof: starting from the
+BNT structure on $A$ and $B$ and the equal-MPV hypothesis, one must derive,
+for each modulus class $j$, the equality of the two power sums in
+\eqref{eq:power-sum-id}. In the current formalization the coefficient arrays
+\leanid{aCoeff} and \leanid{bCoeff} in \leanid{ProportionalDecompositionData}
+are explicit hypotheses supplied by the caller.\footnote{%
+\leanid{ProportionalDecompositionData}, fields \leanid{hA\_decomp} and
+\leanid{hB\_decomp}, \path{TNLean/MPS/BNT/Construction.lean} lines 544--548.}
+The source derivation of \eqref{eq:power-sum-id} from the BNT linear-independence
+data and the equal-MPV condition is not yet carried out. This derivation is
+logically prior to applying \texttt{Lem:app\_simple}.
+
+\textbf{Multi-copy sector structure.}
+The formal structures \leanid{IsCanonicalFormBNT} and
+\leanid{IsNormalCanonicalFormBNT} would need a field allowing equal-modulus
+groups: rather than a global strict ordering on the full index set, the
+condition should be a strict ordering on the set of modulus classes, with each
+class admitting an arbitrary finite number of representative blocks. Relaxing
+\leanid{mu\_strict\_anti} to this weaker form is the necessary type-level
+change. Without it, the general-multiplicity versions of
+Corollary~\texttt{II\_cor2} and of the gauge assembly step cannot be stated.
+
+\textbf{Global gauge assembly.}
+With $r_j \ge 1$ copies per sector, the global gauge isomorphism takes the
+form $Y = \bigoplus_j I_{r_j} \otimes Y_j$, where $I_{r_j}$ is the identity
+on the multiplicity space and $Y_j$ is the per-block gauge on the bond
+dimension. Constructing and verifying this more general gauge requires the
+dimension match $r_{A,j} = r_{B,j}$ from Step~4, which in turn requires
+\texttt{Lem:app\_simple} and the power-sum identity. The simpler
+$Y = \bigoplus_j Y_j$ gauge used in the one-copy case is already present.
+
+\section{What the current formalization does prove}
+
+Within the one-copy-per-sector restriction, the formalization establishes
+the full chain of the Fundamental Theorem argument. The BNT separation
+hypotheses yield cross-block overlap decay, and the equal-MPV hypothesis at
+a single witness length is used to match the per-block gauge. The proportional
+comparison is packaged in \leanid{ProportionalDecompositionData},\footnote{%
+\path{TNLean/MPS/BNT/Construction.lean}, lines 533--578.} which carries the
+coefficient arrays, the decomposition identities, and the modulus bounds
+directly as hypotheses rather than deriving them from the BNT structure. The
+resulting theorems are therefore conditional on those coefficient hypotheses
+being supplied by the caller.
+
+The source normalization $\|\mu_1\| = 1$ is now recorded as the field
+\leanid{mu\_dom\_norm\_one} in \leanid{IsNormalCanonicalFormBNT},\footnote{%
+\leanid{IsNormalCanonicalFormBNT.mu\_dom\_norm\_one},
+\path{TNLean/MPS/BNT/Construction.lean} lines 192--198.} which
+brings the dominant-block normalization into alignment with the source
+convention. Under this normalization and the strict modulus ordering, every
+sub-dominant block has $\|\mu_j\| < 1$.
+
+\section{Conclusion}
+
+The present formalization proves the proportional Fundamental Theorem in the
+one-copy-per-sector special case ($r_j = 1$ for every modulus class $j$). The
+general case of Corollary~\texttt{II\_cor2} in \cite{Cirac2016MPDO_arXiv},
+which allows $r_j \ge 1$, requires three additional components not yet in the
+formalization: the standalone Newton--Girard uniqueness lemma
+(\texttt{Lem:app\_simple}), the derivation of the blockwise power-sum
+identity from the BNT structure and the equal-MPV hypothesis, and the global
+gauge assembly with multiplicity identity factors. Supplying these components
+would also require relaxing the \leanid{mu\_strict\_anti} field from a global
+strict ordering to a class-level ordering.
+
+The corresponding tracked items are
+\href{https://github.com/LionSR/TNLean/issues/1560}{issue~\#1560} for the
+standalone \texttt{Lem:app\_simple} lemma,
+\href{https://github.com/LionSR/TNLean/issues/1561}{issue~\#1561} for the
+BNT power-sum identity derivation, and
+\href{https://github.com/LionSR/TNLean/issues/1562}{issue~\#1562} for the
+general multi-copy route tracking the full relaxation.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
