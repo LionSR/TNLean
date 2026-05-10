@@ -13,10 +13,10 @@ This module contains the witness type used for BNT block matching and the
 Newton--Girard power-sum lemmas needed for the multiplicity-recovery argument
 in arXiv:1606.00608.
 
-Earlier restricted wrappers for the equal and proportional Fundamental Theorem
+Earlier restricted formulations of the equal and proportional Fundamental Theorem
 branches lived here.  They assumed common block structure or explicit
 coefficient arrays as hypotheses.  Those hypotheses are not present in
-arXiv:1606.00608, Theorem II.1 or Corollary II.2, so the wrappers are no
+arXiv:1606.00608, Theorem II.1 or Corollary II.2, so those formulations are no
 longer part of the source-facing theorem surface.
 
 ## Main results
@@ -41,15 +41,6 @@ zero entries are deleted.  See `TNLean.Algebra.ScalarPowerSumIdentity`.
 - Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair
   states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
 
-## Design notes
-
-The **coefficient packaging**: the proportional-case theorem takes the per-`N`
-coefficient arrays `aCoeff`, `bCoeff` and proportionality scalar `c` as explicit
-data, together with the source-faithful dominant-block normalization
-(`‖aCoeff N 0‖ = ‖bCoeff N 0‖ = 1` and `‖aCoeff N j‖, ‖bCoeff N k‖ ≤ 1`) and a
-per-`N` nonzero condition `c N ≠ 0`. The earlier convergence-to-nonzero-limit
-formulation deviated from arXiv:1606.00608; the deviation is recorded in
-`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
 -/
 open scoped Matrix BigOperators
 open Filter
