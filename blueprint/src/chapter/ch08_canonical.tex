@@ -476,62 +476,6 @@ For Burnside-style arguments it is more natural to work with invariant
 	$N$ with $T_N(A) = \MN{D}$.
 \end{proof}
 
-\section{Proportional single-block theorem}
-
-\begin{theorem}[Proportional MPV implies gauge-phase equivalence]\label{thm:proportional_ft}
-	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
-	\leanok
-	\uses{def:gauge_phase_equiv, def:injective, def:tp_kraus}
-	Let $A$ and $B$ be injective MPS tensors satisfying
-	$\sum_i (A^i)^\dagger A^i = \Id$ and
-	$\sum_i (B^i)^\dagger B^i = \Id$.
-	If $A$ and $B$ generate proportional MPV families
-	($V^{(N)}(A)_\sigma = c_N V^{(N)}(B)_\sigma$
-	for some $c_N \in \C$) and
-	$O_{AA}(N) \to 1$, $O_{BB}(N) \to 1$,
-	then $A$ and $B$ are gauge-phase equivalent.
-\end{theorem}
-
-\begin{proof}
-	\leanok
-	\uses{thm:overlap_decay}
-	By contradiction.
-	If $A$ and $B$ are not gauge-phase equivalent, then
-	$O_{AB}(N) \to 0$ (Theorem~\ref{thm:overlap_decay}).
-	From the proportionality hypothesis,
-	$O_{AB}(N) = c_N O_{BB}(N)$.
-	Since $O_{BB}(N) \to 1$, it follows that $c_N \to 0$.
-	But $O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0$,
-	contradicting $O_{AA}(N) \to 1$.
-
-	In~\cite{PerezGarcia2007Matrix}, the proportional case
-	is handled as part of the canonical form argument.
-	Here it is obtained directly from the overlap-decay theorem.
-\end{proof}
-
-\begin{theorem}[Proportional MPV + primitive implies gauge-phase equivalence]%
-	\label{thm:proportional_ft_primitive}
-	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_isPrimitiveMPS}
-	\leanok
-	\uses{def:gauge_phase_equiv, def:primitive_mps, thm:proportional_ft}
-	Let $A$ and $B$ be MPS tensors with primitive transfer maps
-	$E_A, E_B$ and positive definite fixed points $\rho_A, \rho_B$.
-	If $A$ and $B$ generate proportional MPV families, then
-	$A$ and $B$ are gauge-phase equivalent.
-	This strengthens Theorem~\ref{thm:proportional_ft}:
-	primitivity supplies left-canonicality, irreducibility, and overlap
-	convergence, reducing the hypothesis count from seven to four.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:proportional_ft, thm:primitive_implies_irreducible}
-	From primitivity, extract a left-canonical normalization
-	($\sum_i (A^i)^\dagger A^i = \Id$), overlap convergence
-	($O_{AA}(N) \to 1$), and irreducibility
-	(Theorem~\ref{thm:primitive_implies_irreducible}).
-	Apply Theorem~\ref{thm:proportional_ft}.
-\end{proof}
-
 \section{Canonical form from primitivity}
 
 The canonical form conditions
@@ -864,6 +808,31 @@ per-block peripheral-spectrum primitivity.
 		map would tend to zero in operator norm, hence so would its trace, and
 		via the trace identity $\text{LinearMap.trace}((F_{AB})^N) = \langle V^{(N)}(A), V^{(N)}(B)\rangle$
 		the overlap itself would tend to~$0$, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Rectangular equalMPS dimension recovery]%
+		\label{thm:nt_overlap_norm_one_dim_eq}
+		\lean{MPSTensor.dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP}
+		\leanok
+		\uses{def:irreducible_tensor, def:tp_kraus, def:mpv_overlap}
+		Let $A$ and $B$ be irreducible MPS tensors of bond dimensions $D_1$
+		and $D_2$, satisfying
+		$\sum_i (A^i)^\dagger A^i = \Id$ and
+		$\sum_i (B^i)^\dagger B^i = \Id$.  If
+		$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$, then
+		$D_1=D_2$.
+
+		This is the bond-dimension conclusion of \cite[Lemma~equalMPS,
+		lines~1085--1117]{Cirac2016MPDO_arXiv}, in the left-canonical
+		normal-tensor form used in the proof there.
+\end{theorem}
+
+\begin{proof}\leanok
+		\uses{thm:overlap_decay_rect_irr_tp}
+		If $D_1\neq D_2$, Theorem~\ref{thm:overlap_decay_rect_irr_tp}
+		gives $\langle V^{(N)}(A),V^{(N)}(B)\rangle\to0$.  Taking norms
+		gives convergence to~$0$, contradicting the assumed convergence
+		of the norm to~$1$.
 \end{proof}
 
 \begin{theorem}[Source-faithful equalMPS gauge recovery]%
