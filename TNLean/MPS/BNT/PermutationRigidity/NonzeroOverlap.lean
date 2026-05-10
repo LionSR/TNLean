@@ -148,6 +148,33 @@ lemma mpvOverlap_eq_sum_of_decomp_right
     _ = ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (coeff j) := by
       simp [mpvOverlap_eq_star_mpvInner, star_mul, mul_comm]
 
+/-- A finite sum of uniformly bounded coefficients times terms converging to
+zero also converges to zero.
+
+Source: arXiv:1606.00608, lines 1170--1192. This is the finite-sum estimate
+used after expanding the overlap of a total MPV with a block MPV. -/
+lemma tendsto_finset_sum_mul_zero_of_norm_le_one
+    {ι : Type*} [Fintype ι]
+    (coeff : ℕ → ι → ℂ)
+    (f : ι → ℕ → ℂ)
+    (hcoeff : ∀ N i, ‖coeff N i‖ ≤ 1)
+    (hf : ∀ i, Tendsto (f i) atTop (nhds 0)) :
+    Tendsto (fun N => ∑ i : ι, coeff N i * f i N) atTop (nhds 0) := by
+  have hterm : ∀ i : ι,
+      Tendsto (fun N => coeff N i * f i N) atTop (nhds 0) := by
+    intro i
+    have hnorm : Tendsto (fun N => ‖f i N‖) atTop (nhds (0 : ℝ)) := by
+      simpa only [norm_zero] using (hf i).norm
+    apply squeeze_zero_norm (fun N => ?_) hnorm
+    calc
+      ‖coeff N i * f i N‖ = ‖coeff N i‖ * ‖f i N‖ := norm_mul _ _
+      _ ≤ 1 * ‖f i N‖ :=
+        mul_le_mul_of_nonneg_right (hcoeff N i) (norm_nonneg _)
+      _ = ‖f i N‖ := one_mul _
+  simpa using
+    tendsto_finset_sum (Finset.univ : Finset ι)
+      (fun i _ => hterm i)
+
 /--
 **Key step of Theorem 4.4 (paper route).**
 
