@@ -865,24 +865,22 @@ facts used to recover the lists of weights from those power sums.
 \end{proof}
 
 \begin{lemma}[Separated normal canonical-form hypotheses produce a common phase cover]%
-\label{lem:common_phase_cover_of_separated_normal_bnt}
-	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
-	\uses{def:mpv_common_phase_cover, def:is_normal_canonical_form,
-		def:blocks_not_gauge_phase_equiv, thm:bnt_perm_prop_nt}
+	\label{lem:common_phase_cover_of_separated_normal_bnt}
+		\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
+		\leanok
+		\uses{def:mpv_common_phase_cover, def:is_normal_canonical_form,
+			def:blocks_not_gauge_phase_equiv, thm:bnt_perm_prop_nt}
 	For two normal canonical-form block families with no gauge-phase-equivalent
 	distinct equal-dimension blocks, a proportional-decomposition witness
 	(per-length coefficient arrays with unit-modulus dominant block and
 	per-length non-zero proportionality scalar) gives a common MPV phase cover
 	of the two basis families.
-	This is the BNT construction of the common cover; it does not assume equality of
-	finite-length spans.
-
-	\textbf{Unfaithful:} This lemma is stated and callable, but its proof inherits
-	two admitted sub-lemmas from
-	\texttt{fundamentalTheorem\_of\_separated\_normalCFBNT\_data} in
-	\texttt{NonzeroOverlap.lean}.  See \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex}
-	and issue \#1559.
-\end{lemma}
+		This is the BNT construction of the common cover; it does not assume equality of
+		finite-length spans.
+% The proof currently depends on the pending nonzero-overlap argument recorded in
+% docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex and
+% tracked in issue #1559.
+	\end{lemma}
 
 \begin{proof}
 	\uses{lem:common_phase_cover_of_proportional_decomposition,

@@ -219,7 +219,7 @@ theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_irreduci
 
 /-! ## Source-faithful equalMPS: gauge-phase from `|overlap| → 1` alone -/
 
-/-- **Bridge from `‖mpvOverlap‖ → 1` to mixed-transfer spectral radius `≥ 1`.**
+/-- **Spectral radius lower bound from unit-modulus overlap.**
 
 Source: arXiv:1606.00608, Lemma `equalMPS` (lines 1085-1117). Establishes the
 spectral side of the dichotomy `lim |⟨V_b, V_a⟩| ∈ {0, 1}`: if the modulus of
@@ -234,14 +234,13 @@ This routes through the existing trace identity
 `trace_mixedTransferMap_pow_eq_mpvOverlap` and is paper-faithful (no
 proportionality hypothesis required). -/
 theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
-    [NeZero D]
     (A B : MPSTensor d D)
     (hOverlap :
       Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
         (nhds (1 : ℝ))) :
     1 ≤ mixedTransferSpectralRadius A B := by
   by_contra hlt
-  push_neg at hlt
+  push Not at hlt
   -- Unpack mixedTransferSpectralRadius and pass to the rectangular form (D₁ = D₂ = D).
   have hlt' :
       spectralRadius ℂ
@@ -290,7 +289,6 @@ together with the rigidity theorem
 Closes the gap recorded in
 `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
-    [NeZero D]
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
     (hB_irr : IsIrreducibleTensor (d := d) (D := D) B)

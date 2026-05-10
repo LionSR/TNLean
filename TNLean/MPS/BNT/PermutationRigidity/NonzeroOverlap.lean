@@ -40,8 +40,9 @@ Both `exists_nonzero_overlap_of_proportional_decomp` and the `_left` companion t
 decomposition identities. This matches CPSV16's hypothesis "$A$ and $B$ in canonical
 form" (arXiv:1606.00608, statement of Theorem `thm1`) — the paper's CF concept
 implicitly carries the dominant-block normalization and the per-block primitivity that
-gives asymptotic orthonormality. The Lean theorems unbundle these into explicit
-per-side hypotheses; no hypothesis is added beyond what the paper provides.
+gives asymptotic orthonormality. Thus the displayed hypotheses are the explicit
+A-side and B-side components of the source's canonical-form assumption; no
+hypothesis is added beyond what the paper provides.
 -/
 
 open scoped BigOperators Matrix
@@ -53,12 +54,9 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. Lemma `Lem1` (asymptotic linear independence) is
-not used directly in the contradiction step — the paper's "by Lem1" citation is
-shorthand for the per-`N` inner-product calculation that the contradiction
-actually requires. The Lean form of Lem1, namely
-`MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal` in
-`TNLean/MPS/BNT/Basic.lean:91`, is available if needed elsewhere. -/
+dominant-block normalization. Lemma `Lem1` supplies eventual linear independence
+from asymptotic orthonormality; the contradiction step applies this after showing
+that the relevant joint family is asymptotically orthonormal. -/
 
 /--
 **Key step of Theorem 4.4 (paper route).**

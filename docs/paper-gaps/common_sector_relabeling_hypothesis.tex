@@ -20,16 +20,18 @@ Several after-blocking sector-comparison theorems in the formalization take an e
 hypothesis \leanid{CommonSectorRelabelingHypothesis} of type \texttt{Prop}.  The hypothesis
 asserts: for every common blocked cyclic-sector family \(F\) with blocking period \(p\) and
 block families \((A_k)_k\), the weighted block-diagonal tensor assembled from the
-physically blocked blocks agrees, as an MPV family, with the same family assembled from the
-explicitly reindexed blocks of \(F\):
+physically blocked blocks agrees, as an MPV family, with the same family assembled after
+the explicit blocked-word relabeling carried by \(F\):
 \[
   \forall F,\quad
   \bigoplus_k \mu_k^p \cdot A_k^{[p]} \sim_{\mathrm{MPV}}
-  \bigoplus_k \mu_k^p \cdot F.\text{commonReindexedBlock}(k).
+  \bigoplus_k \mu_k^p \cdot R_F(A_k^{[p]}).
 \]
 Here \(A_k^{[p]}\) denotes the length-\(p\) blocking of the \(k\)-th primitive block, and
-\(F.\text{commonReindexedBlock}(k)\) is the same tensor read through the explicit word
-relabeling of blocked physical indices.
+\(R_F(A_k^{[p]})\) is the same tensor read through the explicit word relabeling of
+blocked physical indices.\footnote{%
+  In the formal statement this relabeled block is the field
+  \leanid{CommonBlockedCyclicSectorFamily.commonReindexedBlock}.}
 
 \section{Relation to the paper}
 
