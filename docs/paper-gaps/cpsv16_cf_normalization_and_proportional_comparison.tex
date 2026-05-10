@@ -125,6 +125,81 @@ lines 172--202.} With this
 choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$ becomes a
 condition on the powers $(\mu_j^A)^N$.
 
+\section{The design history of the limit hypothesis}
+
+The convergence-to-nonzero-limits hypothesis is not present in
+\cite{Cirac2016MPDO_arXiv}. It is also not present in the formalization's
+own planning record. A proof-plan memo committed on 2026-02-22 sets out the
+intended route for Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2} of
+\cite{Cirac2016MPDO_arXiv}.\footnote{%
+\path{audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
+\texttt{64c018ab} the day before the introducing implementation
+\texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
+together with a finite-length scalar power-sum identity for the
+$\mu$-coefficient matching.
+
+The memo records the source identity in the form
+\[
+  \sum_{k=1}^{x_a}\lambda_{a,k}^N
+    =\sum_{k=1}^{x_b}\lambda_{b,k}^N
+  \qquad\text{for all }N=1,\ldots,\max(x_a,x_b),
+\]
+and proposes formalizing it as a fixed-length theorem requiring only finitely
+many values of $N$. The planned application to the BNT
+$\mu$-coefficients reads, in the memo's own notation,
+\[
+  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
+    =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
+\]
+to be applied via this fixed-length scalar identity to obtain
+$r_{a,j}=r_{b,j}$ and the multiset equality. No convergence statement appears
+in the memo's plan, and no nonzero-limit hypothesis is contemplated.
+
+The memo also identifies an apparent circularity in the span-equality route:
+to deduce span equality from proportionality, one wants linear independence
+at the witness length, while the surrounding BNT permutation step uses span
+equality to extract the linear independence it needs. The memo's own
+resolution is to weaken the global span-equality hypothesis to its eventual
+form,
+\[
+  \forall^{\infty} N,\quad
+  \operatorname{span}\{\,V^{(N)}(A_j)\,\}_j
+    =\operatorname{span}\{\,V^{(N)}(B_k)\,\}_k,
+\]
+and to observe that the surrounding step already only consumes the eventual
+form. The memo records this as a backward-compatible weakening that
+discharges the circularity at the type level.
+
+The implementation committed the following day departs from both directions
+of the memo. It does not formalize the fixed-length scalar power-sum identity
+proposed for the $\mu$-coefficient step. It also does not adopt the eventual
+span-equality form proposed for the bridge. Instead it introduces, on the
+BNT bridge theorems and later on the structure
+\texttt{ProportionalDecompositionData}, a global convergence hypothesis on
+the coefficient sequences and a separate hypothesis that those limits are
+nonzero. The mathematical object packaged by these fields is not the
+power-sum identity from the source proof of Corollary~\texttt{II\_cor2}, and
+it is not the eventual span equality from the memo's bridge plan. It is a
+third object, introduced without a corresponding written rationale. A later
+commit on 2026-05-09 describes the structure as ``MPV-level Newton--Girard
+convergence data, not a §II 283--302 Wedderburn-style similarity,'' but this
+description records what the structure became, not why the change from the
+memo's plan was made.\footnote{%
+The introducing commit is \texttt{dd54b79e}, ``Add ScalarPowerSumIdentity,
+BNTConstruction, BNTPermutationThm44.'' Despite the name, the
+\texttt{ScalarPowerSumIdentity} module added by that commit does not
+correspond to the memo's planned fixed-length scalar identity from
+\cite[Lemma~\texttt{Lem:app\_simple}]{Cirac2016MPDO_arXiv}. The
+structure refactor that bundled the limit fields into
+\texttt{ProportionalDecompositionData} is \texttt{9e096a14} (2026-03-22),
+and the post-hoc Newton--Girard description is in the message of
+\texttt{dca8b74f} (2026-05-09).}
+
+The recorded design history therefore shows that the limit hypothesis was
+not chosen to follow the source argument and was not the route the
+formalization itself planned for. It is a third route whose introduction is
+not explained in the project record.
+
 \section{The mathematical incompatibility}
 
 Throughout this section, the comparison is restricted to the strict-weight,
@@ -210,7 +285,13 @@ particular no nonzero limit hypothesis on $(\mu_j^A)^N$ is required.
 The reformulated comparison is what the source actually proves
 \cite[proof of Corollary~\texttt{II\_cor2}]{Cirac2016MPDO_arXiv}, transposed
 into the BNT-direct-sum-span input that the formal route already isolates
-elsewhere in the development.
+elsewhere in the development. It also coincides with what the
+2026-02-22 proof-plan memo originally planned, before the implementation
+substituted the limit hypothesis. The circularity worry that the memo flagged
+in connection with the span-equality bridge does not arise for the
+fixed-length route, because the BNT linear independence at $N_0$ is supplied
+as an input from the direct-sum span theorem, not extracted from the
+proportional comparison itself.
 
 \section{Conclusion}
 
@@ -220,7 +301,11 @@ comparison currently differ from
 omits the source convention $|\mu_1|=1$. The proportional comparison replaces
 the source's fixed-length power-sum identity by a limit hypothesis on
 $(\mu_j^A)^N$ that fails on the sub-dominant blocks under the very
-normalization the source imposes.
+normalization the source imposes. The proof-plan memo of 2026-02-22 already
+proposed the source-faithful route; the implementation diverged from both
+the memo and the source in a single direction, by introducing a
+convergence-to-nonzero-limits hypothesis that has no counterpart in either
+record.
 
 Each change can be made independently of the other, but they are most
 naturally addressed together: adding the missing normalization makes the
