@@ -14,8 +14,8 @@ namespace MPSTensor
 This file contains overlap consequences used in the single-block and BNT parts
 of the Fundamental Theorem of Matrix Product States.
 
-The source-facing results are the `equalMPS` consequences from
-arXiv:1606.00608, Lemma `equalMPS`, lines 1085-1117:
+The source-facing results are the unit-overlap consequences from
+arXiv:1606.00608, Lemma equalMPS, lines 1085-1117:
 
 * asymptotically unit-modulus overlap gives a mixed-transfer spectral radius
   lower bound;
@@ -146,11 +146,59 @@ private theorem gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_deca
     hZero hNot
   exact (hCrossNorm.ne_nhds one_ne_zero) (by simpa using hto0.norm)
 
-/-! ## Source-faithful equalMPS: gauge-phase from `|overlap| → 1` alone -/
+/-- **Proportional Fundamental Theorem (primitive case).**
+
+If `A` and `B` are injective, left-canonical / trace-preserving, both self-overlaps tend to `1`,
+and `V_N(A)` is proportional to `V_N(B)` for every `N`, then `A` and `B` are gauge-phase
+equivalent.
+
+The proof is by contradiction: proportionality forces `‖mpvOverlap A B N‖ → 1`, while
+`¬ GaugePhaseEquiv A B` implies `mpvOverlap A B N → 0` by overlap decay.
+-/
+theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one
+    (A B : MPSTensor d D)
+    (hA : IsInjective A) (hB : IsInjective B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hA_self :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
+    (hB_self :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
+    (hProp : ProportionalMPV₂ (d := d) A B) :
+    GaugePhaseEquiv A B :=
+  gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
+    A B hA_self hB_self
+    (Filter.Eventually.of_forall fun N => hProp N)
+    (fun hNot => mpvOverlap_tendsto_zero (A := A) (B := B) hA hB hA_norm hB_norm hNot)
+
+/-- NT / irreducible version of
+`gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one`.
+
+The proof is identical, replacing the injective overlap-decay theorem by
+`mpvOverlap_tendsto_zero_of_irreducible_TP`. -/
+theorem gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one_of_irreducible_TP
+    (A B : MPSTensor d D)
+    (hA_irr : IsIrreducibleTensor A) (hB_irr : IsIrreducibleTensor B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hA_self :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
+    (hB_self :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
+    (hProp : ProportionalMPV₂ (d := d) A B) :
+    GaugePhaseEquiv A B :=
+  gaugePhaseEquiv_of_eventually_proportionalMPV₂_of_overlap_decay
+    A B hA_self hB_self
+    (Filter.Eventually.of_forall fun N => hProp N)
+    (fun hNot =>
+      mpvOverlap_tendsto_zero_of_irreducible_TP
+        (A := A) (B := B) hA_irr hB_irr hA_norm hB_norm hNot)
+
+/-! ## Gauge-phase equivalence from unit-modulus overlap -/
 
 /-- **Spectral radius lower bound from unit-modulus overlap.**
 
-Source: arXiv:1606.00608, proof of Lemma `equalMPS`, lines 1093-1117.
+Source: arXiv:1606.00608, proof of Lemma equalMPS, lines 1093-1117.
 This is the spectral-radius step inside the proof: if the modulus of the
 overlap tends to `1`, the cross-transfer spectral radius is at least `1`.
 
@@ -199,9 +247,9 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
   have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
   exact one_ne_zero h01
 
-/-- **Rectangular equalMPS dimension recovery.**
+/-- **Bond-dimension equality from unit-modulus overlap.**
 
-Source: arXiv:1606.00608, Lemma `equalMPS`, lines 1085-1117, especially the
+Source: arXiv:1606.00608, Lemma equalMPS, lines 1085-1117, especially the
 dimension conclusion in line 1090 and the final dimension argument in
 lines 1115-1117.  If two irreducible trace-preserving (left-canonical) blocks
 have asymptotically unit-modulus overlap, then their bond dimensions agree.
@@ -234,9 +282,9 @@ theorem dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP
   have h10 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
   exact one_ne_zero h10
 
-/-- **Source-faithful equalMPS gauge recovery.**
+/-- **Gauge-phase equivalence from unit-modulus overlap.**
 
-Source: arXiv:1606.00608, Lemma `equalMPS`, statement lines 1080-1091 and
+Source: arXiv:1606.00608, Lemma equalMPS, statement lines 1080-1091 and
 proof lines 1093-1117. If two
 irreducible trace-preserving (left-canonical) blocks of the same bond
 dimension have asymptotically unit-modulus overlap, then they are
@@ -250,7 +298,7 @@ together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
 
 Closes the same-bond-dimension component of the equalMPS gap
-(arXiv:1606.00608, Lemma `equalMPS`); the rectangular bond-dimension conclusion
+(arXiv:1606.00608, Lemma equalMPS); the rectangular bond-dimension conclusion
 is separate. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
