@@ -45,12 +45,11 @@ obtained from `SectorDecomposition` and the sector-weight comparison theorems.
    The lemma **`IsCanonicalFormBNT.isBNT`** states the same implication under
    `IsCanonicalFormBNT`.
 
-4. **`fundamentalTheorem_of_separated_CFBNT_data`**: if two CF-BNT decompositions
+4. **`fundamentalTheorem_of_separated_CFBNT_data`** /
+   **`fundamentalTheorem_of_separated_normalCFBNT_data`**: if two CF-BNT decompositions
    generate proportional MPVs with convergent nonzero coefficients, then the blocks
-   match up to permutation, dimension equality, and gauge-phase equivalence. The theorem
-   **`fundamentalTheorem_of_IsCanonicalFormBNT`** states the same implication under
-   `IsCanonicalFormBNT`. This connects the separated canonical/BNT hypotheses to
-   `BNT/PermutationRigidity`.
+   match up to permutation, dimension equality, and gauge-phase equivalence.
+   This connects the separated canonical/BNT hypotheses to `BNT/PermutationRigidity`.
 
 ## Design note on coefficients
 
@@ -92,11 +91,24 @@ equal-modulus family into a single strict-norm representative.
 
 In the language of arXiv:2011.12127 Definition 4.2, this corresponds to a canonical form where
 each basis element has already been represented by one CF block. It is not the paper's biCF
-condition; block-injectivity is a further fixed-length span input. -/
+condition; block-injectivity is a further fixed-length span input.
+
+**Scope restriction (one-copy-per-sector)**: Every theorem whose hypothesis includes
+`IsCanonicalFormBNT` is restricted to the special case where every sector contains exactly
+one BNT block (multiplicity `r_j = 1` for all `j`).  The paper's general Corollary II.2
+(arXiv:1606.00608) allows `r_j ≥ 1` copies per sector with weights `μ_{j,1}, …, μ_{j,r_j}`,
+and recovers multiplicities via Newton–Girard (`Lem:app_simple`) applied to the identity
+`∑_q μ_{j,q}^N = ∑_q (ν_{j,q} e^{iφ_j})^N`.  That recovery step is absent from the
+current formalization.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+-- SCOPE(one-copy-per-sector): mu_strict_anti forces r_j = 1; all downstream FT theorems
+-- are restricted to this special case. See ft_one_copy_scope_restriction.tex.
 structure IsCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop extends
     IsCanonicalForm μ A where
-  /-- Strict ordering of the block weights by modulus (strengthened from `Antitone`). -/
+  /-- Strict ordering of block weight moduli.  This forces one representative per modulus
+  class (multiplicity `r_j = 1`); the general BNT allows equal-modulus copies within a
+  sector.  See the scope-restriction note on `IsCanonicalFormBNT`. -/
+  -- SCOPE(one-copy-per-sector): this field is the load-bearing restriction.
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
   /-- Distinct blocks are not gauge-phase equivalent (BNT separation). -/
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
@@ -187,6 +199,15 @@ structure IsNormalCanonicalFormBNT {r : ℕ} {dim : Fin r → ℕ}
   blocks_not_equiv : ∀ j k : Fin r, j ≠ k →
     ∀ (h : dim j = dim k),
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
+  /-- The dominant block weight has unit modulus.
+
+  Source convention from arXiv:1606.00608 (paragraph after `eq:II_CF1`): one can always
+  renormalize the canonical form so that `|μ_k| ≤ 1` and at least one weight equals one.
+  This is a definitional choice rather than an extra restriction: an MPS state is invariant
+  under overall rescaling of the underlying tensor, so any canonical form can be adjusted
+  to satisfy `‖μ 0‖ = 1`. Combined with `mu_strict_anti`, this fixes `‖μ 0‖ = 1` and
+  `‖μ k‖ < 1` for `k ≥ 1`. -/
+  mu_dom_norm_one : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1
 
 namespace IsNormalCanonicalFormBNT
 
@@ -223,20 +244,37 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
     HasNormalizedSelfOverlap (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
+/-- Each block weight has modulus at most `1`.
+
+Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The dominant block
+weight has unit modulus (`mu_dom_norm_one`); the remaining blocks have
+strictly smaller modulus by `mu_strict_anti`, hence are bounded by `1`. -/
+lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
+    ‖μ k‖ ≤ 1 := by
+  by_cases hr : 0 < r
+  · have hdom : ‖μ ⟨0, hr⟩‖ = 1 := hNCF.mu_dom_norm_one hr
+    have hle : (⟨0, hr⟩ : Fin r) ≤ k := Fin.mk_le_of_le_val (Nat.zero_le _)
+    have hanti : ‖μ k‖ ≤ ‖μ ⟨0, hr⟩‖ := hNCF.mu_strict_anti.antitone hle
+    rw [hdom] at hanti
+    exact hanti
+  · exact absurd k.isLt (by omega)
+
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus the BNT separation
-assumption. -/
+assumption and the source-faithful dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
     (hPrim : HasPrimitiveBlocks (d := d) A)
     (hμ : HasStrictOrderedNonzeroWeights μ)
     (hDim : ∀ k, 0 < dim k)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hμDom : ∀ h : 0 < r, ‖μ ⟨0, h⟩‖ = 1) :
     IsNormalCanonicalFormBNT μ A where
   toIsNormalCanonicalForm :=
     IsNormalCanonicalForm.ofStrictSeparatedData hIrr hLeft hPrim hμ hDim
   mu_strict_anti := hμ.mu_strict_anti
   blocks_not_equiv := hBlocks
+  mu_dom_norm_one := hμDom
 
 end IsNormalCanonicalFormBNT
 
@@ -508,7 +546,23 @@ end IsNormalCanonicalFormBNT
 
 /-! ### Connection with BNT/PermutationRigidity -/
 
-/-- Common proportional-decomposition hypotheses used by the BNT comparison theorems. -/
+-- Removal history (paper-realignment, see CLAUDE.md): an earlier version of this
+-- structure carried convergence-to-nonzero-limit fields `aLim`, `bLim`, `cLim`,
+-- `haCoeff`, `hbCoeff`, `haLim_ne`, `hbLim_ne`, `hc`, `hcLim_ne`. They were removed
+-- as paper-divergent (uninstantiable on the source's intended canonical-form class
+-- under `‖μ 0‖ = 1`); the paper-gap note is
+-- `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. The
+-- replacement carries the source-faithful per-`N` norm-bound fields below.
+
+/-- Proportional-decomposition data used by the BNT comparison theorems
+(arXiv:1606.00608, proof of Theorem `thm1`, lines 1170–1192).
+
+For two block families `A : Fin rA → MPSTensor d _` and `B : Fin rB → MPSTensor d _`,
+this structure packages a pair of total tensors `A_total`, `B_total`, coefficient
+sequences `aCoeff`, `bCoeff`, a per-`N` proportionality scalar `c`, and the source's
+dominant-block normalization (`‖μ 0‖ = 1`, with sub-dominant coefficients of norm at
+most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching CPSV16's
+post-normalization labelling. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -520,21 +574,41 @@ structure ProportionalDecompositionData
   B_total : MPSTensor d DtotB
   aCoeff : ℕ → Fin rA → ℂ
   bCoeff : ℕ → Fin rB → ℂ
-  aLim : Fin rA → ℂ
-  bLim : Fin rB → ℂ
   c : ℕ → ℂ
-  cLim : ℂ
   hA_decomp : ∀ N (σ : Fin N → Fin d),
     mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ
   hB_decomp : ∀ N (σ : Fin N → Fin d),
     mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ
-  haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j))
-  hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k))
-  haLim_ne : ∀ j, aLim j ≠ 0
-  hbLim_ne : ∀ k, bLim k ≠ 0
   hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ
-  hc : Tendsto c atTop (nhds cLim)
-  hcLim_ne : cLim ≠ 0
+  /-- The proportionality scalar `c N` is nonzero at every length.
+
+  Source: arXiv:1606.00608, lines 1170–1192. The proof of Theorem `thm1` uses
+  `c_N` to rewrite `⟨V^{(N)}(A_total), V^{(N)}(B_k)⟩ = c_N · ⟨V^{(N)}(B_total),
+  V^{(N)}(B_k)⟩` at every `N` and needs `c_N ≠ 0` to derive the contradiction;
+  this is a per-`N` statement, not a limit. -/
+  hc_ne : ∀ N, c N ≠ 0
+  /-- The dominant `A`-side coefficient has unit modulus at every length.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. With `aCoeff N j =
+  (μA j)^N` (the strict-weight specialization), this reads
+  `‖(μA 0)^N‖ = ‖μA 0‖^N = 1^N = 1`, using
+  `IsNormalCanonicalFormBNT.mu_dom_norm_one`. -/
+  a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1
+  /-- The dominant `B`-side coefficient has unit modulus at every length.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric to
+  `a_top_norm_one`). -/
+  b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1
+  /-- Sub-dominant `A`-side coefficients are bounded above by the dominant block in modulus.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. Combined with
+  `IsNormalCanonicalFormBNT.mu_strict_anti` and `mu_dom_norm_one`, this gives
+  `‖(μA j)^N‖ = ‖μA j‖^N ≤ ‖μA 0‖^N = 1`. -/
+  a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1
+  /-- Sub-dominant `B`-side coefficients are bounded above by the dominant block in modulus.
+
+  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric). -/
+  b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1
 
 /-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
 abbrev ProportionalDecompositionConclusion
@@ -553,15 +627,20 @@ abbrev ProportionalDecompositionConclusion
 /-- **Proportional comparison lemma for CF-BNT decompositions.**
 
 Given two families of tensors `A_j`, `B_k` in canonical form with BNT separation
-(distinct blocks not gauge-phase equivalent), and a proportional decomposition
-of their MPVs with convergent nonzero coefficients, this lemma concludes that the
-families have the same number of blocks, and blocks match up to permutation,
-dimension equality, and gauge-phase equivalence.
+(distinct blocks not gauge-phase equivalent), and a `ProportionalDecompositionData`
+input — per-`N` coefficient arrays, a nonzero per-`N` proportionality scalar, and
+the source dominant-block normalization — this lemma concludes that the families
+have the same number of blocks, and blocks match up to permutation, dimension
+equality, and gauge-phase equivalence.
 
 This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
 each block already represents a distinct gauge-phase class; it does not cover the
 full multiplicity theorem where repeated equal-modulus sectors contribute via
-power sums `∑_q μ_{j,q}^N`. -/
+power sums `∑_q μ_{j,q}^N`.
+
+**Unfaithful:** Transitively `sorry` via
+`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`. Tracked in
+\#1559 Stage C. -/
 lemma fundamentalTheorem_of_separated_CFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -593,70 +672,24 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
       cross_overlap_tendsto_zero_of_separated_CFBNT_data B hB_inj hB_left hB_blocks i j hij)
     (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
     (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
-    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
-    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
-    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
-
-/-- **Proportional comparison for CF-BNT decompositions.**
-
-If two families of tensors `A_j`, `B_k` satisfy `IsCanonicalFormBNT` and give rise
-to proportional MPVs with convergent nonzero coefficients, then the families have
-the same number of blocks, and blocks match up to permutation, dimension equality,
-and gauge-phase equivalence.
-
-This lemma covers the case where each block represents a single gauge-phase class
-(the blocks are already merged). The general CPSV BNT comparison, where repeated
-equal-modulus sectors contribute via power sums `∑_q μ_{j,q}^N`, is handled by the
-`SectorDecomposition` theorems.
-
-This is a direct consequence of `fundamentalTheorem_of_separated_CFBNT_data`. -/
-lemma fundamentalTheorem_of_IsCanonicalFormBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ProportionalDecompositionConclusion (d := d) A B :=
-  fundamentalTheorem_of_separated_CFBNT_data A B
-    hA.toHasInjectiveBlocks
-    hA.toIsLeftCanonicalBlockFamily
-    hA.toHasNormalizedSelfOverlap
-    hA.blocks_not_equiv
-    hB.toHasInjectiveBlocks
-    hB.toIsLeftCanonicalBlockFamily
-    hB.toHasNormalizedSelfOverlap
-    hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    (hProp := hDecomp.hProp)
+    (hc_ne := hDecomp.hc_ne)
+    (a_top_norm_one := hDecomp.a_top_norm_one)
+    (b_top_norm_one := hDecomp.b_top_norm_one)
+    (a_norm_le_one := hDecomp.a_norm_le_one)
+    (b_norm_le_one := hDecomp.b_norm_le_one)
 
 /-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
 Normal-form analogue of `fundamentalTheorem_of_separated_CFBNT_data`, using
 `IsNormalCanonicalForm` in place of strict weight ordering. This is not the full
-CPSV multiplicity BNT theorem. -/
+CPSV multiplicity BNT theorem.
+
+**Unfaithful:** Transitively `sorry` via
+`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP`.
+Tracked in \#1559 Stage C. -/
 lemma fundamentalTheorem_of_separated_normalCFBNT_data
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -691,45 +724,13 @@ lemma fundamentalTheorem_of_separated_normalCFBNT_data
         hB_blocks i j hij)
     (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
     (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (aLim := hDecomp.aLim) (bLim := hDecomp.bLim)
-    (c := hDecomp.c) (cLim := hDecomp.cLim)
+    (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (haCoeff := hDecomp.haCoeff) (hbCoeff := hDecomp.hbCoeff)
-    (_haLim_ne := hDecomp.haLim_ne) (_hbLim_ne := hDecomp.hbLim_ne)
-    (hProp := hDecomp.hProp) (hc := hDecomp.hc) (_hcLim_ne := hDecomp.hcLim_ne)
-
-/-- Proportional comparison lemma for restricted normal-CF-BNT decompositions. -/
-lemma fundamentalTheorem_of_IsNormalCanonicalFormBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsNormalCanonicalFormBNT μA A)
-    (hB : IsNormalCanonicalFormBNT μB B)
-    (A_total : MPSTensor d DtotA)
-    (B_total : MPSTensor d DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ProportionalDecompositionConclusion (d := d) A B :=
-  fundamentalTheorem_of_separated_normalCFBNT_data A B
-    hA.toIsNormalCanonicalForm hA.blocks_not_equiv
-    hB.toIsNormalCanonicalForm hB.blocks_not_equiv
-    ⟨A_total, B_total, aCoeff, bCoeff, aLim, bLim, c, cLim,
-      hA_decomp, hB_decomp, haCoeff, hbCoeff, haLim_ne, hbLim_ne, hProp, hc, hcLim_ne⟩
+    (hProp := hDecomp.hProp)
+    (hc_ne := hDecomp.hc_ne)
+    (a_top_norm_one := hDecomp.a_top_norm_one)
+    (b_top_norm_one := hDecomp.b_top_norm_one)
+    (a_norm_le_one := hDecomp.a_norm_le_one)
+    (b_norm_le_one := hDecomp.b_norm_le_one)
 
 end MPSTensor

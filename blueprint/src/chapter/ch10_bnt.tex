@@ -126,7 +126,9 @@ and~\cite{Cirac2021Matrix}.
 		\item the moduli are strictly decreasing
 		      (strengthened from non-increasing),
 		\item distinct blocks of the same bond dimension are
-		      not gauge-phase equivalent.
+		      not gauge-phase equivalent,
+		\item the dominant block has unit modulus, $\|\mu_1\| = 1$
+		      (\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
 	\end{enumerate}
 	As in Definition~\ref{def:cf_bnt}, the strict ordering describes an
 	already selected or grouped representative family.  It is not the source
@@ -338,18 +340,20 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{theorem}[Permutation rigidity for proportional MPV decompositions]\label{thm:bnt_perm_prop}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp}
-	\leanok
 	\uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
+	Source: \cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}; the
+	formulation uses the dominant-block normalization
+	$\|\mu_1\| = 1$ from
+	\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}.
 	Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be injective
 	families satisfying the TP normalization
 	$\sum_i (A_j^i)^\dagger A_j^i = \Id$ and
 	$\sum_i (B_k^i)^\dagger B_k^i = \Id$, whose self-overlaps
 	converge to~$1$ and whose cross-overlaps within each family
 	converge to~$0$.
-	Assume moreover that there exist MPS tensors $A_{\mathrm{tot}}$
-	and $B_{\mathrm{tot}}$, coefficient arrays $a_{N,j}$ and $b_{N,k}$,
-	and a sequence $c_N$ with nonzero limits $a_j^\infty$, $b_k^\infty$,
-	$c^\infty$ such that for every $N$,
+	Assume there exist MPS tensors $A_{\mathrm{tot}}$
+	and $B_{\mathrm{tot}}$, coefficient arrays $a_{N,j}$, $b_{N,k}$, and
+	a sequence $c_N$ such that for every $N$,
 	\[
 		\ket{V^{(N)}(A_{\mathrm{tot}})}
 		= \sum_{j=1}^{g_A} a_{N,j} \ket{V^{(N)}(A_j)},
@@ -357,32 +361,43 @@ and~\cite{Cirac2021Matrix}.
 		\ket{V^{(N)}(B_{\mathrm{tot}})}
 		= \sum_{k=1}^{g_B} b_{N,k} \ket{V^{(N)}(B_k)},
 	\]
-	with $a_{N,j} \to a_j^\infty \neq 0$ and
-	$b_{N,k} \to b_k^\infty \neq 0$, and also
+	together with the proportionality
 	\[
 		\ket{V^{(N)}(A_{\mathrm{tot}})}
 		= c_N \ket{V^{(N)}(B_{\mathrm{tot}})}
 	\]
-	with $c_N \to c^\infty \neq 0$.
+	and $c_N \neq 0$ at every $N$.  Suppose further the
+	dominant-block normalization
+	\[
+		\|a_{N,1}\| = \|b_{N,1}\| = 1,
+		\qquad
+		\|a_{N,j}\|, \|b_{N,k}\| \le 1
+		\quad (\forall N, j, k).
+	\]
 	Then $g_A = g_B$, and there is a permutation $\pi$ of the common
 	block index set such that $A_{\pi(k)}$ and $B_k$ have the same bond
 	dimension and are gauge-phase equivalent for each~$k$.
-	The canonical-form application of these hypotheses is described in
-	the following remark.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:overlap_decay, thm:overlap_decay_rect}
-	The proportional decomposition implies that, for each block on the
-	$B$-side, the mixed overlaps with $A_{\mathrm{tot}}$ are linear
-	combinations of the overlaps with the $A$-family. If every mixed overlap
-	with a fixed $B_k$ decayed to $0$, then the coefficient limits would force
-	the limiting coefficient $b_k^\infty$ to vanish, contrary to the
-	hypotheses. Thus every $B_k$ matches some $A_j$ with non-decaying mixed
-	overlap. Theorems~\ref{thm:overlap_decay_rect}
+\begin{proof}\uses{thm:overlap_decay, thm:overlap_decay_rect}
+	Following \cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
+	If, for some fixed $B_k$, every mixed overlap with the $A$-family decayed
+	to $0$, then $\|\langle V^{(N)}(A_{\mathrm{tot}}), V^{(N)}(B_k)\rangle\|$
+	would also decay to $0$ via the $A$-decomposition and the uniform bound
+	$\|a_{N,j}\|\le 1$.  But the same overlap equals
+	$c_N \langle V^{(N)}(B_{\mathrm{tot}}), V^{(N)}(B_k)\rangle$, and the
+	$B$-decomposition together with the dominant unit-modulus
+	$\|b_{N,1}\|=1$, the convergence of self-overlap to $1$, and the decay of
+	off-diagonal $B$-overlaps gives a positive lower bound on the
+	$\|\langle V^{(N)}(B_{\mathrm{tot}}), V^{(N)}(B_k)\rangle\|$ for $k=1$
+	eventually.  Together with $c_N\neq 0$ this contradicts the supposed
+	decay.  Thus the dominant block on each side must match some block on
+	the other; Theorems~\ref{thm:overlap_decay_rect}
 	and~\ref{thm:overlap_decay} then force equal bond dimension and
-	gauge-phase equivalence for each match. Repeating the same argument in the
-	opposite direction gives an injective matching from the $A$-family to the
-	$B$-family. Comparing the two injective matchings yields the permutation.
+	gauge-phase equivalence for each match.  Iterating the argument on the
+	remaining sub-dominant blocks (whose coefficient norms are now strictly
+	less than the new dominant) yields an injective matching from each side
+	to the other, hence the permutation.
 \end{proof}
 
 \begin{remark}\label{rem:bnt_perm_prop_canonical}
@@ -451,7 +466,6 @@ and~\cite{Cirac2021Matrix}.
 \begin{theorem}[Permutation rigidity for irreducible TP decompositions]
 	\label{thm:bnt_perm_prop_nt}
 	\lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP}
-	\leanok
 	\uses{def:irreducible_tensor, def:mpv_overlap, def:gauge_phase_equiv}
 	Under the hypotheses of Theorem~\ref{thm:bnt_perm_prop}, replace
 	injectivity of each block by irreducibility while keeping
@@ -459,7 +473,7 @@ and~\cite{Cirac2021Matrix}.
 	permutation conclusion holds.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:bnt_perm_prop}
+\begin{proof}\uses{thm:bnt_perm_prop}
 	The same matching argument applies. The only change is at the two
 	contradiction steps: the overlap-decay estimates for injective blocks are
 	replaced by the corresponding irreducible trace-preserving decay theorems.
@@ -488,34 +502,36 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{lemma}[Restricted CF-BNT proportional comparison]
 	\label{lem:cf_bnt_ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_of_IsCanonicalFormBNT}
-	\leanok
+	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\uses{def:cf_bnt, thm:bnt_perm_prop}
-	If two families in canonical form with BNT separation admit proportional
-	MPV decompositions with convergent nonzero coefficients, then they have
-	the same number of blocks and match blockwise up to permutation,
-	bond-dimension equality, and gauge-phase equivalence.
+	If two families in canonical form with BNT separation admit a
+	proportional MPV decomposition with the dominant-block normalization
+	$\|a_{N,1}\| = \|b_{N,1}\| = 1$ and $\|a_{N,j}\|, \|b_{N,k}\| \le 1$,
+	then they have the same number of blocks and match
+	blockwise up to permutation, bond-dimension equality, and gauge-phase
+	equivalence.
 \end{lemma}
 
-\begin{proof}\leanok\uses{thm:bnt_perm_prop, thm:cross_overlap_zero}
+\begin{proof}\uses{thm:bnt_perm_prop, thm:cross_overlap_zero}
 	Project the two canonical-form hypotheses to blockwise injectivity,
 	left-canonical normalization, self-overlap convergence, and BNT
-	separation. Then Theorem~\ref{thm:bnt_perm_prop} applies to the resulting
-	proportional MPV decompositions and their convergent nonzero coefficients.
+	separation. Then Theorem~\ref{thm:bnt_perm_prop} applies to the supplied
+	proportional MPV decomposition and its dominant-block normalization.
 \end{proof}
 
 \begin{lemma}[Restricted normal-CF-BNT proportional comparison]
 	\label{lem:normal_cf_bnt_ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_of_IsNormalCanonicalFormBNT}
-	\leanok
+	\lean{MPSTensor.fundamentalTheorem_of_separated_normalCFBNT_data}
 	\uses{def:normal_cf_bnt, thm:bnt_perm_prop_nt}
-	If two families in normal canonical form with BNT separation admit
-	proportional MPV decompositions with convergent nonzero coefficients,
-	then they have the same number of blocks and match blockwise up to
-	permutation, bond-dimension equality, and gauge-phase equivalence.
+	If two families in normal canonical form with BNT separation admit a
+	proportional MPV decomposition with the dominant-block normalization
+	$\|a_{N,1}\| = \|b_{N,1}\| = 1$ and $\|a_{N,j}\|, \|b_{N,k}\| \le 1$,
+	then they have the same number of blocks and match
+	blockwise up to permutation, bond-dimension equality, and gauge-phase
+	equivalence.
 \end{lemma}
 
-\begin{proof}\leanok\uses{thm:bnt_perm_prop_nt}
+\begin{proof}\uses{thm:bnt_perm_prop_nt}
 	Project the two normal-canonical hypotheses to irreducibility,
 	left-canonical normalization, self-overlap convergence, and BNT
 	separation, and then apply Theorem~\ref{thm:bnt_perm_prop_nt}.

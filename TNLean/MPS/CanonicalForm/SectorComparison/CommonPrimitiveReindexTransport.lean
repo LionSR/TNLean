@@ -82,6 +82,7 @@ def reindexPhysical_equiv
   toIsNormalCanonicalForm := h.toIsNormalCanonicalForm.reindexPhysical_equiv e
   mu_strict_anti := h.mu_strict_anti
   blocks_not_equiv := BlocksNotGaugePhaseEquiv.reindexPhysical_equiv h.blocks_not_equiv e
+  mu_dom_norm_one := h.mu_dom_norm_one
 
 end IsNormalCanonicalFormBNT
 
@@ -103,10 +104,7 @@ noncomputable def reindexPhysical_equiv
   B_total := reindexPhysical e h.B_total
   aCoeff := h.aCoeff
   bCoeff := h.bCoeff
-  aLim := h.aLim
-  bLim := h.bLim
   c := h.c
-  cLim := h.cLim
   hA_decomp := fun N σ => by
     rw [mpv_reindexPhysical]
     calc
@@ -125,15 +123,14 @@ noncomputable def reindexPhysical_equiv
       _ = ∑ k : Fin rB, h.bCoeff N k * mpv (reindexPhysical e (B k)) σ := by
         refine Finset.sum_congr rfl fun k _ => ?_
         rw [mpv_reindexPhysical]
-  haCoeff := h.haCoeff
-  hbCoeff := h.hbCoeff
-  haLim_ne := h.haLim_ne
-  hbLim_ne := h.hbLim_ne
   hProp := fun N σ => by
     rw [mpv_reindexPhysical, mpv_reindexPhysical]
     exact h.hProp N (fun n => e (σ n))
-  hc := h.hc
-  hcLim_ne := h.hcLim_ne
+  hc_ne := h.hc_ne
+  a_top_norm_one := h.a_top_norm_one
+  b_top_norm_one := h.b_top_norm_one
+  a_norm_le_one := h.a_norm_le_one
+  b_norm_le_one := h.b_norm_le_one
 
 end ProportionalDecompositionData
 

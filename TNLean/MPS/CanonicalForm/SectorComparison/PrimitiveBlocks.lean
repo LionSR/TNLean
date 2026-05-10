@@ -8,21 +8,16 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Primitive blocked tensors and conditional block matching
+# Primitive blocked tensors
 
-This file proves two consequences for TP-primitive irreducible blocks after
-blocking. First, blocking preserves tensor irreducibility under the primitive
-hypothesis. Second, once two separated normal-canonical-form families are in the
-TP-primitive setting, proportional MPVs force the usual permutation and
-blockwise gauge-phase matching.
+This file proves that blocking preserves tensor irreducibility for TP-primitive
+irreducible blocks, and derives related structural properties of blocked tensors
+in the normal-canonical-form setting.
 
 ## Main statements
 
 * `isIrreducibleTensor_blockTensor_of_tp_primitive_irr` — blocking a
   TP-primitive irreducible tensor preserves irreducibility.
-* `weakFundamentalTheorem_conditional` — proportional MPVs imply block matching
-  for restricted separated representative TP-primitive normal canonical form
-  data.
 
 ## References
 
@@ -256,7 +251,7 @@ theorem blockTensor_of_notGpe
     (d := blockPhysDim d L)
     (μ := fun k => (μ k) ^ L)
     (A := fun k => blockTensor (d := d) (D := dim k) (blocks k) L)
-    ?_ ?_ ?_ ?_ ?_ hNotGpe
+    ?_ ?_ ?_ ?_ ?_ hNotGpe ?_
   · exact HasIrreducibleBlocks.ofForall fun k => (hBlocked k).2.2
   · exact IsLeftCanonicalBlockFamily.ofForall fun k => (hBlocked k).1
   · exact HasPrimitiveBlocks.ofForall fun k => (hBlocked k).2.1
@@ -268,71 +263,10 @@ theorem blockTensor_of_notGpe
             pow_lt_pow_left₀ hbase (norm_nonneg (μ k)) (hL.ne')
         mu_ne_zero := fun k => pow_ne_zero L (h.mu_ne_zero k) }
   · exact h.dim_pos
+  · intro hr
+    simp [norm_pow, h.mu_dom_norm_one hr]
 
 end IsNormalCanonicalFormBNT
-
-/-!
-## Conditional block matching: proportional MPVs → matched blocks
-
-This combines the full reduction data with the block-matching conclusions
-available for restricted normal-CF-BNT data.
-
-For two arbitrary tensors A, B with proportional MPVs, the reduction produces
-blocked TP-primitive decompositions. Under the additional hypotheses needed
-for `IsNormalCanonicalForm` (irreducibility and distinct weight norms), one obtains
-permutation + gauge-phase matching of blocks.
--/
-
-/-- **Conditional block matching for restricted normal-CF-BNT data.**
-
-For two restricted separated representative families in TP-primitive normal canonical form,
-if their blocked versions have proportional MPVs (with convergent coefficients), then the
-block counts match and blocks are pairwise gauge-phase equivalent (up to permutation). The
-full repeated-copy BNT comparison is supplied separately by sector-decomposition and
-multiplicity data. -/
-lemma weakFundamentalTheorem_conditional
-    {d' rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d' (dimA j))
-    (B : (k : Fin rB) → MPSTensor d' (dimB k))
-    (hA_ncf : IsNormalCanonicalForm μA A)
-    (hA_blocks : ∀ j k : Fin rA, j ≠ k →
-      ∀ (h : dimA j = dimA k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d') h) (A j)) (A k))
-    (hB_ncf : IsNormalCanonicalForm μB B)
-    (hB_blocks : ∀ j k : Fin rB, j ≠ k →
-      ∀ (h : dimB j = dimB k),
-        ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d') h) (B j)) (B k))
-    (A_total : MPSTensor d' DtotA)
-    (B_total : MPSTensor d' DtotB)
-    (aCoeff : ℕ → Fin rA → ℂ) (bCoeff : ℕ → Fin rB → ℂ)
-    (aLim : Fin rA → ℂ) (bLim : Fin rB → ℂ)
-    (c : ℕ → ℂ) (cLim : ℂ)
-    (hA_decomp : ∀ N (σ : Fin N → Fin d'),
-      mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ)
-    (hB_decomp : ∀ N (σ : Fin N → Fin d'),
-      mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ)
-    (haCoeff : ∀ j, Tendsto (fun N => aCoeff N j) atTop (nhds (aLim j)))
-    (hbCoeff : ∀ k, Tendsto (fun N => bCoeff N k) atTop (nhds (bLim k)))
-    (haLim_ne : ∀ j, aLim j ≠ 0)
-    (hbLim_ne : ∀ k, bLim k ≠ 0)
-    (hProp : ∀ N (σ : Fin N → Fin d'), mpv A_total σ = c N * mpv B_total σ)
-    (hc : Tendsto c atTop (nhds cLim))
-    (hcLim_ne : cLim ≠ 0) :
-    ∃ _h : rA = rB,
-      ∃ perm : Fin rA ≃ Fin rB,
-        ∀ j : Fin rA,
-          ∃ hdim : dimA j = dimB (perm j),
-            GaugePhaseEquiv (d := d')
-              (cast (congr_arg (MPSTensor d') hdim) (A j))
-              (B (perm j)) :=
-  MPSTensor.fundamentalTheorem_proportionalMPV_of_separated_normalCFBNT_data A B
-    hA_ncf hA_blocks hB_ncf hB_blocks
-    A_total B_total aCoeff bCoeff aLim bLim c cLim
-    hA_decomp hB_decomp haCoeff hbCoeff haLim_ne hbLim_ne hProp hc hcLim_ne
 
 
 end MPSTensor
