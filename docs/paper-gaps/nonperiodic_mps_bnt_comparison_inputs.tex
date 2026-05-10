@@ -567,121 +567,73 @@ on published theorem names.
 \end{itemize}
 
 
-\section{Current status as of 2026-05-10}
 
-This section updates the 2026-05-07 pair-span note against the current
-\path{origin/main} snapshot used for the audit.  The short version is that the
-formalization has closed the already-injective BNT direct-sum route, while the
-after-blocking canonical-form pipeline still has a smaller number of explicit
-transport and coefficient-comparison boundaries.
+\section{Present formal boundary}
 
-\begin{center}
-\begin{tabular}{p{0.22\linewidth}p{0.36\linewidth}p{0.34\linewidth}}
-\hline
-Paper input or formal surface & Current Lean status & Extra-assumption verdict \\
-\hline
-Identity padding and pair-span period windows for injective BNT representatives
-& Discharged on main for the already-injective
-  \leanid{IsCanonicalFormBNT} surface by the direct-sum injective-block route
-  of \ghpr{1534} and \ghpr{1535}.  The relevant declarations include
-  \path{forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_directSum_injectiveBlocks},
-  \path{exists_forall_pairSpanTop_period_window_of_isCanonicalFormBNT_of_directSum_injectiveBlocks},
-  \path{exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_injectiveBlocks}, and
-  \path{exists_wordTupleSpanTop_of_isCanonicalFormBNT_of_directSum_pairSpanTop_period_windows}.
-& No longer a genuine source gap for an already-injective canonical BNT family.
-  It remains an interface boundary only when callers have not yet produced the
-  direct-sum injective-block hypotheses for the final reblocked family. \\
-\hline
-Bounded injective blocking and uniform common injective blocking
-& Discharged on main by \ghpr{1545} and \ghpr{1550}.  The bounded single-block
-  surface is
-  \path{exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical};
-  the finite-family surfaces are
-  \path{IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective} and
-  \path{exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}.
-& Not an additional paper hypothesis at the normal-left-canonical or
-  normal-CF-BNT level.  The remaining work is to use these results at the exact
-  sectors and blocking length chosen by the after-blocking construction. \\
-\hline
-Power-limit and proportional-decomposition data
-& Still explicit in the proportional comparison surface, especially through
-  \path{ProportionalDecompositionData} and the separated-data comparison
-  theorems.  The data record coefficient limits and nonzero-limit information
-  used to separate BNT representatives and compare the power sums of weights.
-& A real theorem-surface restriction.  It is not derivable from
-  \leanid{IsNormalCanonicalFormBNT} alone; it represents the still-unproved
-  BNT coefficient-comparison part of the CPSV argument when the statement is
-  not specialized to already supplied decomposition data. \\
-\hline
-Blocked not-GPE and reblocking transport into
-\path{CommonPrimitiveBNTCoverHypotheses}
-& The mathematical injective-blocking input is present, but current main has
-  not yet plugged the blocked not-gauge-phase-equivalence data, BNT separation,
-  and nested-to-flat reblocking transports into the common primitive BNT-cover
-  construction.  \ghpr{1551} was still open and not merged at the time of this
-  audit.
-& Pending/in flight, not merged.  This is the main remaining after-blocking
-  transport boundary and should not be described as closed on main. \\
-\hline
-Zero-tail equality and common-sector relabeling
-& Common-sector relabeling is a coordinate-packaging issue handled by the
-  grouped-block cast and common-sector transport route.  Zero-tail equality is
-  a length-zero artifact of $\mathrm{SameMPV}_2$; it is partly
-  discharged by the zero-tail-identity constructors and by results such as
-  \path{zeroTail_eq_of_proportionalDecompositionConclusion} and
-  \path{sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂}.
-& Packaging rather than a paper hypothesis.  The source works at positive
-  lengths and treats zero blocks as unused dimension; Lean must still transport
-  the length-zero identity through the chosen common-sector coordinates. \\
-\hline
-\end{tabular}
-\end{center}
+The comparison with CPSV16 should be read by separating the mathematical layers
+of the paper proof, rather than by following implementation history.  The present formalization has closed the exact-length
+span input for the already-injective BNT surface, and it has also formalized the
+Wielandt blocking input needed to make normal blocks injective after a further
+blocking.  What remains is the transport of the final reblocked BNT cover and
+the coefficient comparison that CPSV16 carries out by power sums.
 
-The key formal surfaces for the two source papers are as follows.
+For an already-injective canonical BNT family, the identity-padding and pairwise
+trace-separation input is no longer a separate paper assumption.  The formal
+result specializes the three-block direct-sum argument to the case in which the
+selected BNT blocks are one-site injective: one-site injectivity supplies the
+fixed length-two and length-six span inputs used by the selector construction.
+Thus the theorem proves the exact-length direct-sum span needed in this
+specialized surface, but it should not be read as the general statement with an
+arbitrary pre-existing injectivity length \(L_0\).  Passing from normal
+canonical blocks to such an injective surface is a distinct Wielandt-type
+blocking step.
 
-\begin{itemize}
-  \item \textbf{CPSV16 proportional and equal-MPV theorem surfaces.}
-  The strict already-grouped statements are
-  \path{fundamentalTheorem_proportionalMPV_CFBNT},
-  \path{fundamentalTheorem_proportionalMPV_normalCFBNT},
-  \path{fundamentalTheorem_equalMPV_CFBNT},
-  \path{fundamentalTheorem_equalMPV_full}, and
-  \path{fundamentalTheorem_equalMPV_CFBNT_hetero}.  Their common comparison
-  cores include
-  \path{fundamentalTheorem_of_separated_CFBNT_data},
-  \path{fundamentalTheorem_of_separated_normalCFBNT_data}, and
-  \path{exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP}.
+That Wielandt step is now formalized in the canonical-form context.  A
+left-canonical normal tensor has a positive injective blocking length bounded by
+\(D^4\), and a finite normal-CF-BNT family has one common positive blocking
+length for all of its blocks.  These theorems remove the injectivity hypothesis
+as a mathematical gap, but they do not by themselves identify the iterated
+blocked alphabet with the direct alphabet used by the after-blocking comparison.
+The remaining transport problem is to carry the BNT separation and zero-tail
+bookkeeping through this refinement of the blocking length.
 
-  \item \textbf{CPSV16 after-blocking surfaces.}
-  The conditional pipeline is represented by
-  \path{BlockedNormalFormHypotheses},
-  \path{BlockedNormalFormSectorMatching},
-  \path{fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses}, and
-  \path{CommonPrimitiveBNTCoverHypotheses}.  These are packaging surfaces for
-  the final common primitive nonzero sectors, not extra hypotheses in the paper
-  statement itself.
+The proportional-decomposition coefficient limits remain a genuine theorem-surface
+restriction.  CPSV16 compares the weights by the power-sum argument in the BNT
+proof; the formal structure \leanid{ProportionalDecompositionData}\footnote{The
+main consumers are the separated-data BNT comparison theorems and the
+\leanid{CommonPrimitiveBNTCoverHypotheses} constructions.} still asks explicitly
+for coefficient limits and nonzero-limit hypotheses.  This is not a harmless
+coordinate convention: the block-diagonal expansion involves the powers
+\((\mu_j)^N\), and nonzero weights alone do not give nonzero full-sequence
+limits.  A source-faithful removal of this hypothesis therefore has to formalize
+the relevant power-sum/phase comparison, or replace the present limit-based
+surface by an equivalent one.
 
-  \item \textbf{PGVWC07 injective-chain Fundamental Theorem surfaces.}
-  The already formalized injective-block route includes
-  \path{fundamentalTheorem_singleBlock},
-  \path{sameMPV_iff_gaugeEquiv_of_injective},
-  \path{MPSChainTensor.fundamentalTheorem_injective_chain},
-  \path{MPSChainTensor.SameStateBridgeHyp},
-  \path{fundamentalTheorem_injective_chain_of_sameState}, and
-  \path{fundamentalTheorem_blockedChain}.  The full multi-block
-  translationally invariant uniqueness theorem of PGVWC07 remains outside this
-  closed single-block/injective-chain surface.
+By contrast, zero-tail equality and common-sector relabeling are mostly formal
+bookkeeping.  CPSV16 works at positive lengths and treats zero blocks as unused
+bond dimension.  Lean's \(N=0\) convention for \(\mathrm{SameMPV}_2\) forces an
+explicit zero-tail identity, and the common-sector construction must also track
+casts between grouped and flat blocked words.  These conventions are not extra
+paper hypotheses, but the final after-blocking theorem still has to transport
+these identities through the same reblocking coordinates used for the nonzero
+BNT sectors.
 
-  \item \textbf{PGVWC07 direct-sum input surfaces.}
-  The exact-length algebraic input is represented by
-  \path{Matrix.span_range_mul_nonzero_mul_eq_top},
-  \path{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}, the
-  pair-trace separation wrappers in
-  \path{TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean}, and the
-  injective-block direct-sum BNT declarations listed in the first row of the
-  table.  This is the formal version of the fixed-length direct-sum span used
-  by CPSV16's block-injective canonical-form citation.
-\end{itemize}
+The remaining main boundary is therefore the following.  Starting from the
+normal-CF-BNT sectors produced by canonical-form reduction, one must transport
+blocked not-gauge-phase equivalence, zero-tail identities, and the common
+injective blocking length through the nested-to-flat reblocking map, and then
+feed the resulting families into the common primitive BNT-cover hypotheses.  The
+paper suppresses this bookkeeping in notation; Lean must make it explicit.
+
+The key Lean statements involved in this boundary are the conditional
+\leanid{BlockedNormalFormHypotheses} interface, the
+\leanid{fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses}
+statement, the \leanid{CommonPrimitiveBNTCoverHypotheses} cover structure, the
+bounded/common injective-blocking theorems for normal-CF-BNT blocks, and the
+already-injective direct-sum trace-separation theorems.  These names are listed
+here only to identify the formal surface; the mathematical comparison above is
+the intended classification of which source-paper inputs have become theorems
+and which remain conditional.
 
 \section{Closing criterion}
 
