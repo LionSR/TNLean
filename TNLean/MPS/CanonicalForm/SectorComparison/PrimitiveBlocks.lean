@@ -225,6 +225,52 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
   · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
       (d := d) (D := D) A hTP hPrim hIrr hk
 
+namespace IsNormalCanonicalFormBNT
+
+variable {d r : ℕ} {dim : Fin r → ℕ}
+variable {μ : Fin r → ℂ}
+variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
+
+/-- Positive blocking preserves normal-CF-BNT structure, provided the blocked
+BNT separation hypothesis is supplied explicitly.
+
+The structural fields (left-canonical normalization, primitive transfer maps, and
+irreducibility) are transported blockwise by
+`tp_primitive_irreducible_extra_blocking`; the strict weight ordering is transported by
+monotonicity of positive powers on nonnegative norms.  The gauge-phase separation
+of the blocked family is deliberately an explicit input. -/
+theorem blockTensor_of_notGpe
+    (h : IsNormalCanonicalFormBNT (d := d) μ blocks)
+    {L : ℕ} (hL : 0 < L)
+    (hNotGpe : BlocksNotGaugePhaseEquiv (d := blockPhysDim d L)
+      (fun k => blockTensor (d := d) (D := dim k) (blocks k) L)) :
+    IsNormalCanonicalFormBNT (d := blockPhysDim d L)
+      (fun k => (μ k) ^ L)
+      (fun k => blockTensor (d := d) (D := dim k) (blocks k) L) := by
+  have hBlocked (k : Fin r) := by
+    haveI : NeZero (dim k) := ⟨Nat.ne_of_gt (h.dim_pos k)⟩
+    exact tp_primitive_irreducible_extra_blocking
+      (d := d) (D := dim k) (A := blocks k)
+      (h.leftCanonical k) (h.block_primitive k) (h.block_irreducible k) hL
+  refine IsNormalCanonicalFormBNT.ofSeparatedData
+    (d := blockPhysDim d L)
+    (μ := fun k => (μ k) ^ L)
+    (A := fun k => blockTensor (d := d) (D := dim k) (blocks k) L)
+    ?_ ?_ ?_ ?_ ?_ hNotGpe
+  · exact HasIrreducibleBlocks.ofForall fun k => (hBlocked k).2.2
+  · exact IsLeftCanonicalBlockFamily.ofForall fun k => (hBlocked k).1
+  · exact HasPrimitiveBlocks.ofForall fun k => (hBlocked k).2.1
+  · exact
+      { mu_strict_anti := by
+          intro j k hjk
+          have hbase : ‖μ k‖ < ‖μ j‖ := h.mu_strict_anti hjk
+          simpa [norm_pow] using
+            pow_lt_pow_left₀ hbase (norm_nonneg (μ k)) (hL.ne')
+        mu_ne_zero := fun k => pow_ne_zero L (h.mu_ne_zero k) }
+  · exact h.dim_pos
+
+end IsNormalCanonicalFormBNT
+
 /-!
 ## Conditional block matching: proportional MPVs → matched blocks
 
