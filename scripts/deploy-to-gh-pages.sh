@@ -50,11 +50,14 @@ if [ "$BADGES_ONLY" = true ]; then
   # Deploy pre-generated badges
   if [ -n "$BADGES_DIR" ]; then
     echo "==> Copying pre-generated badges from $BADGES_DIR..."
+    json_count=$(find "$BADGES_DIR" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$json_count" -eq 0 ]; then
+      echo "::error::No badge JSON files found in $BADGES_DIR — refusing to deploy empty badges directory"
+      exit 1
+    fi
     rm -rf "$WORK_DIR/site/badges"
     mkdir -p "$WORK_DIR/site/badges"
-    cp -r "$BADGES_DIR"/*.json "$WORK_DIR/site/badges/" 2>/dev/null || {
-      echo "::warning::No badge JSON files found in $BADGES_DIR"
-    }
+    cp "$BADGES_DIR"/*.json "$WORK_DIR/site/badges/"
   else
     # Fall back to regenerating badges live
     echo "==> Regenerating badge endpoints..."
