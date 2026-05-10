@@ -364,8 +364,9 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       (aCoeff := aCoeff) (bCoeff := bCoeff) (c := c)
       (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
       (hProp := hProp) (hc_ne := hc_ne)
-      (b_top_norm_one := b_top_norm_one)
+      (a_top_norm_one := a_top_norm_one) (b_top_norm_one := b_top_norm_one)
       (a_norm_le_one := a_norm_le_one) (b_norm_le_one := b_norm_le_one)
+      (hA_self := hA_self) (hA_off := hA_off)
       (hB_self := hB_self) (hB_off := hB_off)
   let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
   have hf_spec : ∀ k : Fin gB,
@@ -398,9 +399,10 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       (aCoeff := aCoeff) (bCoeff := bCoeff) (c := c)
       (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
       (hProp := hProp) (hc_ne := hc_ne)
-      (a_top_norm_one := a_top_norm_one)
+      (a_top_norm_one := a_top_norm_one) (b_top_norm_one := b_top_norm_one)
       (a_norm_le_one := a_norm_le_one) (b_norm_le_one := b_norm_le_one)
       (hA_self := hA_self) (hA_off := hA_off)
+      (hB_self := hB_self) (hB_off := hB_off)
   let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
   have hg_spec : ∀ j : Fin gA,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B (g j)) N) atTop (nhds 0) :=
