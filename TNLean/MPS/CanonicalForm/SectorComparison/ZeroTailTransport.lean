@@ -86,7 +86,7 @@ theorem zeroTail_toTensorFromBlocks_blockPower
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           rw [hNonzeroPart N σ]
 
-/-- Transport the length-zero identity for assembled nonzero block sums through
+/-- Transport the length-zero identity for assembled weighted block sums through
 physical blocking, with weights raised to the blocking power. -/
 theorem zeroTail_identity_toTensorFromBlocks_blockPower
     {d rA rB zeroTailA zeroTailB p : ℕ}

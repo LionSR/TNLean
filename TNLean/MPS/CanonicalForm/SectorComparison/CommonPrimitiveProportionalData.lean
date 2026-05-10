@@ -494,8 +494,8 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
 
 Starting from unblocked normal-CF-BNT data, a positive common blocking length `L`,
 explicit blocked BNT-separation, and one-site injectivity of the blocked blocks,
-this transports the normal-form, SameMPV₂, zero-length, and coefficient-limit data
-and yields `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
+this transports the normal-form, MPV-equality, zero-length, and coefficient-limit
+conditions and yields `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
 noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
@@ -553,7 +553,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
 
 The common positive blocking length and one-site injectivity hypotheses are supplied by
 `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT`.  Blocked
-BNT separation and the power-limit data remain explicit inputs.  The returned value
+BNT separation and the power-limit hypotheses remain explicit inputs.  The returned value
 bundles the chosen positive blocking length together with the corresponding
 `CommonPrimitiveBNTCoverHypotheses`. -/
 noncomputable def
