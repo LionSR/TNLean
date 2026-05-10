@@ -155,11 +155,16 @@ combines the same-dimension BNT branch with the strict-size branch for all
 ordered pairs of distinct blocks at the common length \(3L\), and
 \leanid{MPSTensor.exists_pos_productWordSpan_of_isCanonicalFormBNT_of_directSum_threeBlock}
 feeds that common pair separation into the selector/product-span construction.
-This is still conditional on the direct-sum hypotheses: a caller must supply the
-fixed block-injectivity lengths after the prescribed blocking.
+The already-injective BNT surface is now closed by the later direct-sum wrappers
+\leanid{MPSTensor.forall\_pairTraceSeparatingAt\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks},
+\leanid{MPSTensor.exists\_pos\_productWordSpan\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks}, and
+\leanid{MPSTensor.exists\_wordTupleSpanTop\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks}:
+when the selected BNT blocks are already injective at the required common
+length, the exact-length direct-sum span is a theorem rather than a remaining
+identity-padding assumption.
 
-The current formal development also includes downstream lemmas that depend on
-the remaining direct-sum input.
+The current formal development also includes downstream lemmas that use
+the direct-sum input.
 \begin{itemize}
   \item \leanid{WordTupleSpanTop} expresses exact-length span of a direct-sum
         block family.
@@ -177,22 +182,28 @@ the remaining direct-sum input.
 
 \section{Conclusion}
 
-The present status is a theorem-level gap.  The source-paper theorem itself has
-not yet been formalized in MPS notation: from the canonical-form BNT
-representatives, their injectivity after the prescribed blocking, and their
-phase-gauge inequivalence, one must derive the exact-length direct-sum span, or
-equivalently the homogeneous trace-dual separation statement at one positive
-length.  Until that theorem is formalized, the final BNT pair-separation theorem
-should remain conditional on an explicit period-window or fixed-length span
-input.  A candidate formal theorem is too weak if it only records cumulative
-span fullness, and it is misleading if it claims homogeneous identity padding
-from the empty-word identity or from cumulative identity membership alone.
+The exact-length direct-sum input from the older representation paper has now
+been formalized for the already-injective BNT theorem surface.  In that setting,
+the BNT representatives, their pairwise not-gauge-phase-equivalence data, and a
+common injective length imply the homogeneous pair-trace separation and
+product-word-span conclusions needed downstream.  Thus the old warning against
+replacing exact-length span by cumulative span remains mathematically important,
+but it is no longer an open gap for an already-injective
+\leanid{IsCanonicalFormBNT} family.
 
-Accordingly, the blueprint no longer presents cumulative or all-word
-identity-padding consequences as BNT separation theorems.  Those Lean
-declarations may be used after a homogeneous padding or period-window
-hypothesis has been supplied, but they are not substitutes for the
-David/Perez-Garcia exact-length direct-sum input.
+For the full after-blocking normal-CF-BNT pipeline, the conclusion is still more
+conditional.  The bounded and common injective-blocking results now supply the
+Wielandt part of the input, but the final CPSV theorem is not yet unconditional
+on main: the proof still has to transport the blocked BNT separation data through
+the chosen reblocking/reindexing maps and feed the blocked not-GPE facts into
+\leanid{CommonPrimitiveBNTCoverHypotheses}.  That transport is the remaining
+bridge between the already-injective direct-sum theorem surface and the
+canonical-form after-blocking comparison.
+
+Accordingly, the blueprint should present the David/P\'erez-Garc\'ia
+exact-length direct-sum input as formalized for already-injective BNT data, while
+keeping the after-blocking CPSV statement visibly conditional until the
+reblocking transport and blocked BNT-separation handling have landed.
 
 \bibliographystyle{alpha}
 \bibliography{references}
