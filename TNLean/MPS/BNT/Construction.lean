@@ -661,6 +661,11 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
     (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
     (hProp := hDecomp.hProp)
+    (hc_ne := hDecomp.hc_ne)
+    (a_top_norm_one := hDecomp.a_top_norm_one)
+    (b_top_norm_one := hDecomp.b_top_norm_one)
+    (a_norm_le_one := hDecomp.a_norm_le_one)
+    (b_norm_le_one := hDecomp.b_norm_le_one)
 
 /-- **Proportional comparison for CF-BNT decompositions.**
 
@@ -762,6 +767,11 @@ lemma fundamentalTheorem_of_separated_normalCFBNT_data
     (c := hDecomp.c)
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
     (hProp := hDecomp.hProp)
+    (hc_ne := hDecomp.hc_ne)
+    (a_top_norm_one := hDecomp.a_top_norm_one)
+    (b_top_norm_one := hDecomp.b_top_norm_one)
+    (a_norm_le_one := hDecomp.a_norm_le_one)
+    (b_norm_le_one := hDecomp.b_norm_le_one)
 
 /-- Proportional comparison lemma for restricted normal-CF-BNT decompositions.
 

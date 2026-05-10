@@ -75,6 +75,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc_ne : ∀ N, c N ≠ 0)
+    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
     (hB_self : ∀ k,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
@@ -82,7 +86,11 @@ theorem exists_nonzero_overlap_of_proportional_decomp
     ∀ k : Fin gB,
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
-  -- Paper-faithful proof pending: replaces the deleted abstract-limit argument.
+  -- Paper-faithful proof pending. The CPSV16 lower-bound argument
+  -- (lines 1170-1192) consumes hc_ne (per-N nonzero proportionality),
+  -- b_top_norm_one (dominant block kept on the unit circle), a_norm_le_one
+  -- (to push the A-side overlap to 0 via finite sum × bounded), and
+  -- b_norm_le_one (uniform bound for the B-block lower-bound triangle).
   -- See `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
   sorry
 
@@ -124,6 +132,10 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     (hB_decomp : ∀ N (σ : Fin N → Fin d),
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hc_ne : ∀ N, c N ≠ 0)
+    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
     (hA_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
@@ -131,7 +143,9 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     ∀ j : Fin gA,
       ∃ k : Fin gB,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
-  -- Paper-faithful proof pending. See companion theorem and the gap note.
+  -- Paper-faithful proof pending. Symmetric to the right-indexed version;
+  -- consumes the same norm-bound data on the A-side (a_top_norm_one) and
+  -- on the B-side (b_norm_le_one) for the bound argument.
   sorry
 
 end MPSTensor
