@@ -49,84 +49,16 @@ open Filter Finset
 
 namespace MPSTensor
 
-/-! ## Helper lemmas for the CPSV16 lines 1170–1192 lower-bound argument -/
+/-! ## Key paper step: some mixed overlap does not decay
 
-/-- Dominant-block lower bound on the total-vs-block overlap.
-
-Source: arXiv:1606.00608, lines 1170–1192. Used in the proof of Theorem `thm1`
-to anchor the dominant block's overlap with the total tensor away from zero,
-which propagates through proportionality to constrain the proportionality
-scalar `c N`.
-
-Eventually `‖mpvOverlap total (block_dom) N‖ ≥ 1/2` whenever the dominant
-coefficient stays at unit norm, the off-diagonal coefficients are uniformly
-bounded by `1`, and the within-family overlaps are asymptotically orthonormal.
-
-**Sorry:** to be discharged via `mpvOverlap_eq_sum_of_decomp_left` plus
-triangle inequality from `hSelf k` and `hOff k k'`. Tracked in #1559 Stage C. -/
-private lemma mpvOverlap_total_block_eventually_ge_half
-    {d g : ℕ} {dim : Fin g → ℕ} {Dtot : ℕ}
-    (X : (k : Fin g) → MPSTensor d (dim k))
-    (X_total : MPSTensor d Dtot)
-    (xCoeff : ℕ → Fin g → ℂ)
-    (hX_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv X_total σ = ∑ k : Fin g, (xCoeff N k) * mpv (X k) σ)
-    (k : Fin g)
-    (xCoeff_at_k_norm_one : ∀ N, ‖xCoeff N k‖ = 1)
-    (_xCoeff_norm_le_one : ∀ N k', ‖xCoeff N k'‖ ≤ 1)
-    (_hSelf : Tendsto (fun N => mpvOverlap (d := d) (X k) (X k) N) atTop (nhds (1 : ℂ)))
-    (_hOff : ∀ k', k ≠ k' →
-      Tendsto (fun N => mpvOverlap (d := d) (X k') (X k) N) atTop (nhds 0)) :
-    ∃ N₀, ∀ N ≥ N₀,
-      (1 : ℝ) / 2 ≤ ‖mpvOverlap (d := d) X_total (X k) N‖ := by
-  sorry
-
-/-- Self-overlap lower bound for a total tensor with a unit-norm dominant block.
-
-Source: arXiv:1606.00608, lines 1170–1192. The self-overlap is dominated by
-the (0, 0) diagonal term `|x_0(N)|² · ⟨V^N(X_0), V^N(X_0)⟩`, which tends to
-the real value `1` when the dominant coefficient is on the unit circle and
-the dominant self-overlap tends to `1`.
-
-**Sorry:** to be discharged via `mpvOverlap_eq_sum_of_decomp_left` applied
-twice (once for each factor of the self-overlap). Tracked in #1559 Stage C. -/
-private lemma mpvOverlap_total_self_eventually_ge_half
-    {d g : ℕ} {dim : Fin g → ℕ} {Dtot : ℕ}
-    (X : (k : Fin g) → MPSTensor d (dim k))
-    (X_total : MPSTensor d Dtot)
-    (xCoeff : ℕ → Fin g → ℂ)
-    (_hX_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv X_total σ = ∑ k : Fin g, (xCoeff N k) * mpv (X k) σ)
-    (hr : 0 < g)
-    (_xCoeff_top_norm_one : ∀ N, ‖xCoeff N ⟨0, hr⟩‖ = 1)
-    (_xCoeff_norm_le_one : ∀ N k, ‖xCoeff N k‖ ≤ 1)
-    (_hSelf : ∀ k, Tendsto (fun N => mpvOverlap (d := d) (X k) (X k) N) atTop (nhds (1 : ℂ)))
-    (_hOff : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (X i) (X j) N) atTop (nhds 0)) :
-    ∃ N₀, ∀ N ≥ N₀,
-      (1 : ℝ) / 2 ≤ ‖mpvOverlap (d := d) X_total X_total N‖ := by
-  sorry
-
-/-- Upper bound for the norm of a total-tensor MPV state via its
-decomposition with bounded coefficients.
-
-`‖V^N(X_total)‖ ≤ √g · max_k ‖V^N(X k)‖` when `‖xCoeff N k‖ ≤ 1`.
-A weaker bound `≤ g` suffices for the contradiction step here.
-
-**Sorry:** triangle inequality on `mpvOverlap_eq_sum_of_decomp_left`. -/
-private lemma mpvOverlap_total_self_le_card
-    {d g : ℕ} {dim : Fin g → ℕ} {Dtot : ℕ}
-    (X : (k : Fin g) → MPSTensor d (dim k))
-    (X_total : MPSTensor d Dtot)
-    (xCoeff : ℕ → Fin g → ℂ)
-    (_hX_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv X_total σ = ∑ k : Fin g, (xCoeff N k) * mpv (X k) σ)
-    (_xCoeff_norm_le_one : ∀ N k, ‖xCoeff N k‖ ≤ 1)
-    (_hSelf : ∀ k, Tendsto (fun N => mpvOverlap (d := d) (X k) (X k) N) atTop (nhds (1 : ℂ))) :
-    ∃ M : ℝ, ∀ N, ‖mpvOverlap (d := d) X_total X_total N‖ ≤ M := by
-  sorry
-
-/-! ## Key paper step: some mixed overlap does not decay -/
+The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
+manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
+dominant-block normalization. Lemma `Lem1` (asymptotic linear independence) is
+not used directly in the contradiction step — the paper's "by Lem1" citation is
+shorthand for the per-`N` inner-product calculation that the contradiction
+actually requires. The Lean form of Lem1, namely
+`MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal` in
+`TNLean/MPS/BNT/Basic.lean:91`, is available if needed elsewhere. -/
 
 /--
 **Key step of Theorem 4.4 (paper route).**
