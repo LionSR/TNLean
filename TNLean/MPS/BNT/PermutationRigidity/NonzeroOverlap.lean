@@ -33,8 +33,8 @@ proportionality constant.
 
 ## Paper-faithfulness note
 
-Both `exists_nonzero_overlap_of_proportional_decomp` and the `_left` companion take the
-full symmetric hypothesis set: dominant-block normalization on each side,
+Both directions of the key non-decay step take the full symmetric hypothesis
+set: dominant-block normalization on each side,
 uniform sub-dominant coefficient bounds, per-side asymptotic block-orthonormality
 (diagonal overlaps tend to `1`, off-diagonal overlaps tend to `0`), per-length
 nonzero proportionality, and the BNT decomposition identities. This matches
@@ -160,7 +160,7 @@ are asymptotically orthonormal, then for each `j` it is impossible that
 elimination tracked in #1559 Stage C.
 
 The two nonzero-overlap conclusions are related by interchanging the two
-decompositions and replacing the proportionality scalar `c N` by `(c N)⁻¹`.
+decompositions and replacing the proportionality scalar $c_N$ by $c_N^{-1}$.
 This direction remains a separate Stage C statement until that interchange is
 formalized as a single symmetric argument; the planned elimination is to prove
 the joint right- and left-indexed conclusion at once, or derive one side from
