@@ -1089,16 +1089,15 @@ The following results separate the zero blocks from the nonzero blocks.
 	\label{thm:samempv_toTensorFromBlocks_block_power}
 	\lean{MPSTensor.sameMPV₂_toTensorFromBlocks_blockPower}
 	\leanok
-	\uses{thm:samempv_blocking_distributes, thm:block_tensor_to_tensor_from_blocks}
+	\uses{thm:block_tensor_to_tensor_from_blocks}
 	If two assembled weighted block tensors generate the same MPV family, then
 	after any common blocking length $p \ge 0$, the assembled blocked families with
 	weights transported to the powers $\mu_k^p$ again generate the same MPV family.
 \end{theorem}
 
 \begin{proof}\leanok
-	Apply Theorem~\ref{thm:samempv_blocking_distributes} to both assembled
-	tensors and rewrite each blocked assembled tensor by
-	Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
+	Apply the MPV equality to the flattened blocked word, then rewrite each
+	blocked assembled tensor by Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
 \begin{theorem}[Blocking assembled weighted blocks]%
