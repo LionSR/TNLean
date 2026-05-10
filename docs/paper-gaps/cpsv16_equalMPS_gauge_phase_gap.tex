@@ -75,34 +75,35 @@ theorems.}
 has the source hypothesis shape: for two irreducible trace-preserving tensors
 of the same bond dimension, the assumption
 $\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$ implies
-\leanid{GaugePhaseEquiv}.  The older public proportionality-based wrappers
-have been removed, so the source-facing record no longer treats an extra
-\leanid{ProportionalMPV₂} hypothesis as a version of \texttt{equalMPS}.
+\leanid{GaugePhaseEquiv}.  The source-facing record does not treat a theorem
+with an additional \leanid{ProportionalMPV₂} hypothesis as a version of
+\texttt{equalMPS}.
 
 Together, the rectangular dimension theorem and the same-bond-dimension gauge
 theorem cover the structural conclusion of the left-canonical
 \texttt{equalMPS} argument: the $1$ case first forces $D_a=D_b$, and then gives
 the gauge-phase relation.
 
-\section{Origin of the former residual gap}
+\section{Formal decomposition of the structural conclusion}
 
-The proportionality-based theorem extracts the gauge-phase structure from MPV
-proportionality plus overlap-decay control.  That route is mathematically
-valid, but it is a specialization rather than the source's unconditional
-gauge-recovery direction.
+The formalization represents the structural part of Lemma~\texttt{equalMPS} by
+two separate theorems.  First,
+\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
+handles the rectangular case: under the left-canonical normal-tensor
+hypotheses used in \cite[lines~1093--1117]{Cirac2016MPDO_arXiv},
+asymptotically unit-modulus overlap forces $D_a=D_b$.  Its proof uses the
+rectangular decay theorem
+\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
+if the bond dimensions differed, the mixed overlap would tend to zero,
+contradicting the assumed limiting modulus.
 
-The newer same-dimension theorem follows the source's cross-transfer-matrix
-route in the equal-dimension setting.  The formerly missing part was the rectangular
-dimension argument from the end of \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}:
-once the limiting case gives an isometry between the bond spaces, the normality
-of the larger tensor rules out a proper kernel and forces the two bond
-dimensions to be equal.
-
-This part is now represented by
-\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}.
-The formal proof uses the already established rectangular decay theorem:
-if $D_a\neq D_b$, the overlap tends to zero, which contradicts convergence of
-its norm to one.
+Second, after the bond dimensions are identified,
+\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
+gives the gauge-phase relation from the same asymptotic-overlap hypothesis.
+This theorem derives the mixed-transfer spectral-radius condition using
+\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one}
+and then applies the modulus-one rigidity theorem
+\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP}.
 
 \section{Why this matters for the Fundamental Theorem proof}
 
@@ -114,67 +115,19 @@ proportionality of the \emph{total} tensors,
 $V^{(N)}(A_{\mathrm{tot}}) = c_N V^{(N)}(B_{\mathrm{tot}})$, but not of the
 individual blocks.
 
-The proportionality-free same-dimension theorem is enough once equality of the
-two relevant block dimensions is known.  The rectangular dimension-recovery
-theorem now supplies exactly this equality from the same asymptotic-overlap
-hypothesis.
-
-\section{Resolution paths}
-
-\paragraph{Completed: same-dimension \texttt{equalMPS} without proportionality.}
-The formalization now derives the cross-transfer spectral-radius condition
-from asymptotically unit-modulus overlap and then applies the existing
-modulus-one rigidity theorem.  This proves the source's gauge recovery for
-equal bond dimensions and does not assume MPV proportionality.
-
-\paragraph{Completed: rectangular dimension recovery.}
-The formalization now derives $D_a=D_b$ from asymptotically unit-modulus
-overlap for irreducible trace-preserving tensors of possibly different bond
-dimensions.  This is the rectangular dimension part of
-\cite[\texttt{equalMPS}, lines~1085--1117]{Cirac2016MPDO_arXiv}.
-
-\section{Status: closure of the equalMPS structural gap}
-
-The same-bond-dimension half of the gap is now closed.  The Lean theorem
-\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP},
-introduced in
-\path{TNLean/MPS/FundamentalTheorem/Proportional.lean}, takes only the
-hypotheses present in
-\cite[\texttt{equalMPS}]{Cirac2016MPDO_arXiv} for that direction:
-irreducibility, the trace-preserving relation, and
-$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$.  The theorem
-\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one}
-shows that this hypothesis forces the cross-transfer spectral radius
-$\ge 1$, after which the existing rigidity theorem
-\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP}
-in \path{TNLean/Spectral/SpectralGapNT.lean} delivers the gauge-phase
-equivalence.  The cross-transfer-matrix Cauchy--Schwarz argument from
-\cite[lines~1093--1117]{Cirac2016MPDO_arXiv} was already encoded inside
-that rigidity theorem; only the transit from
-``$|\text{overlap}|\to 1$'' (the source hypothesis) to ``spectral
-radius $\ge 1$'' (the existing theorem's hypothesis form) was missing,
-and that transit is the contrapositive of an existing decay theorem
-chained through \leanid{trace\_mixedTransferMap\_pow\_eq\_mpvOverlap}.
-No proportionality hypothesis is required.
-
-The rectangular direction is also now formalized.  The Lean theorem
-\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
-does not assume a common bond dimension: from irreducibility, the
-trace-preserving relation, and
-$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to1$, it concludes $D_a=D_b$.
-Its proof is the contrapositive of
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP},
-the rectangular decay theorem whose proof contains the rectangular
-mixed-transfer and dimension-equality argument.
+In the proof of Theorem~\texttt{thm1}, these two theorems can be applied to
+each non-decaying per-block mixed overlap: the rectangular theorem first
+identifies the relevant bond dimensions, and the square theorem then supplies
+the gauge-phase equivalence.
 
 \section{Conclusion}
 
-The structural part of the \texttt{equalMPS} gap is closed in the
+The structural conclusion of Lemma~\texttt{equalMPS} is represented in the
 left-canonical irreducible formulation used by the proof: asymptotically
 unit-modulus overlap gives $D_a=D_b$, and in the resulting common bond
 dimension gives gauge-phase equivalence.  A future wrapper theorem may package
 these two conclusions into one statement, but the two mathematical components
-are now present as separate Lean theorems.
+are already present as separate Lean theorems.
 
 \bibliographystyle{alpha}
 \bibliography{references}

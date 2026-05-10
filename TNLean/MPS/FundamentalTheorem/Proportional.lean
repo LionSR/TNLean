@@ -244,7 +244,7 @@ gauge-phase equivalent.
 This is the gauge recovery from the paper's asymptotic overlap hypothesis
 itself; no proportionality of MPVs is assumed. The proof uses the
 cross-transfer-matrix spectral radius, computed via
-`mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`)
+`mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one`
 together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP` from
 `TNLean/Spectral/SpectralGapNT.lean`.
