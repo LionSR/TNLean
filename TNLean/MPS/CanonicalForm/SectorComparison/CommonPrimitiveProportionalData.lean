@@ -453,7 +453,7 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
 assembled block-diagonal tensors.
 
 The block-diagonal MPV expansion has coefficient families `(μA j) ^ N` and `(μB k) ^ N`.
-Accordingly the convergence and nonzero-limit data for those power families remain explicit
+Accordingly the convergence and nonzero-limit conditions for those power families remain explicit
 inputs; the `SameMPV₂` hypothesis supplies only the proportionality field with ratio `1`.
 The length-zero identity is used, as in `ofNormalCanonicalFormBNT_zeroTailIdentity`, to derive
 zero-tail equality after applying the proportional BNT comparison. -/

@@ -3188,6 +3188,26 @@ do not correspond to independent paper-level results.
 	from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
+\begin{theorem}[Positive blocking preserves normal-CF-BNT structure]%
+	\label{thm:block_tensor_of_notGpe}
+	\lean{MPSTensor.IsNormalCanonicalFormBNT.blockTensor_of_notGpe}
+	\leanok
+	\uses{thm:tp_primitive_irreducible_extra_blocking, def:normal_cf_bnt,
+		def:blocks_not_gauge_phase_equiv}
+	If a block family $(\mu_k, A_k)$ is in normal canonical form with BNT separation
+	and $L \ge 1$, and the blocked family $(A_k^{[L]})$ is pairwise not gauge-phase
+	equivalent, then $(\mu_k^L, A_k^{[L]})$ is in normal canonical form with BNT
+	separation at physical dimension $\operatorname{blockPhysDim}(d, L)$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:tp_primitive_irreducible_extra_blocking}
+	Apply Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} blockwise to
+	transport trace preservation, primitivity, and irreducibility.  The strict norm
+	ordering of weights is preserved because $|\mu_k^L| = |\mu_k|^L$ and the map
+	$t \mapsto t^L$ is strictly monotone on positive reals for $L \ge 1$.
+\end{proof}
+
 \begin{theorem}[Sorted TP primitive irreducible data form a normal canonical form]%
 	\label{thm:ncf_sorted_tp_primitive_irred}
 	\lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
