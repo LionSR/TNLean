@@ -679,36 +679,6 @@ noncomputable def ofCommonRepresentativeBNTCoverHypotheses
     h.left_weight_dom_norm_one h.right_weight_dom_norm_one
     h.zero_length_identity h.left_injective h.right_injective h.decompData
 
-/-- BNT-cover hypotheses produce a common MPV phase cover. -/
-theorem toMPVCommonPhaseCover {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB) :
-    Nonempty (MPVCommonPhaseCover blocksA blocksB) :=
-  nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
-    (d := blockPhysDim d p) blocksA blocksB
-    h.ncfA h.notGpeA h.ncfB h.notGpeB h.decompData
-
-/-- BNT-cover hypotheses produce the common primitive phase-cover hypotheses. -/
-theorem toCommonPrimitivePhaseCoverHypotheses
-    {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {zeroTailA zeroTailB DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
-      (DtotA := DtotA) (DtotB := DtotB) μA μB blocksA blocksB) :
-    CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB where
-  zeroTail_eq := h.zeroTail_eq
-  left_injective := h.left_injective
-  right_injective := h.right_injective
-  cover := h.toMPVCommonPhaseCover
-
 end CommonPrimitiveBNTCoverHypotheses
 
 /-! ### Per-block to global proportional gauge

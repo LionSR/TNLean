@@ -496,42 +496,6 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover
     (d := d) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB hPrimA hPrimB
     hInjA hInjB hμA hμB (fun N => cover.span_eq N)
 
-/-- **Two-sided overlap-span data from BNT proportional-decomposition data.**
-
-A proportional-decomposition comparison gives a common MPV phase cover of the two
-nonzero-weight block families. Therefore it supplies the finite-length span equality
-needed by the two-sided BNT representative construction, without assuming that span
-equality as a separate hypothesis. -/
-theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_proportionalDecompositionConclusion
-    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    (μA : Fin rA → ℂ)
-    (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ)
-    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hTPA : ∀ k, ∑ i : Fin d, (blocksA k i)ᴴ * blocksA k i = 1)
-    (hTPB : ∀ k, ∑ i : Fin d, (blocksB k i)ᴴ * blocksB k i = 1)
-    (hIrrA : ∀ k, IsIrreducibleTensor (blocksA k))
-    (hIrrB : ∀ k, IsIrreducibleTensor (blocksB k))
-    (hPrimA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dimA k) (blocksA k)))
-    (hPrimB : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dimB k) (blocksB k)))
-    (hInjA : ∀ k, IsInjective (blocksA k))
-    (hInjB : ∀ k, IsInjective (blocksB k))
-    (hμA : ∀ k, μA k ≠ 0)
-    (hμB : ∀ k, μB k ≠ 0)
-    (hMatch : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
-    ∃ P Q : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μA) blocksA) ∧
-      SameMPV₂ Q.toTensor (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
-      HasBNTSectorData (d := d) P ∧
-      HasBNTSectorData (d := d) Q ∧
-      SectorBasisOverlapSpanHypotheses P Q := by
-  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
-    (d := d) blocksA blocksB hMatch
-  exact exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover
-    (d := d) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB hPrimA hPrimB
-    hInjA hInjB hμA hμB cover
-
 /-! ### Conditional sector construction under BNT linear independence -/
 
 /-- **One-sector-per-block sector decomposition carrying current `HasBNTSectorData`.**
