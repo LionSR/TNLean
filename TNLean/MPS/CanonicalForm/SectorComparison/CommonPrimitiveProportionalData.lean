@@ -492,7 +492,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
 
 /-- BNT-cover hypotheses after a fixed positive reblocking.
 
-Starting from unblocked normal-CF-BNT data, a positive common blocking length `L`,
+Starting from unblocked normal-CF-BNT hypotheses, a positive common blocking length `L`,
 explicit blocked BNT-separation, and one-site injectivity of the blocked blocks,
 this transports the normal-form, MPV-equality, zero-length, and coefficient-limit
 conditions and yields `CommonPrimitiveBNTCoverHypotheses` at blocking period `L`. -/
@@ -549,7 +549,7 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
       (d := d) μA blocksA μB blocksB hZero)
     hInjA hInjB
 
-/-- Common-injective reblocking statement for the same-MPV/toTensorFromBlocks construction.
+/-- Common-injective reblocking statement for the same-MPV/`toTensorFromBlocks` construction.
 
 The common positive blocking length and one-site injectivity hypotheses are supplied by
 `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT`.  Blocked
