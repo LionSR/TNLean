@@ -500,11 +500,11 @@ from the source-facing theorem surface for this reason.
 
 The after-blocking theorem is stated in conditional form.\footnote{%
 \path{TNLean/MPS/CanonicalForm/SectorComparison.lean}.}
-One structure collects the comparison data for the common primitive
-nonzero-sector families produced from the two original
-tensors,\footnote{\leanid{BlockedNormalFormHypotheses}.}
-and the conclusion states the BNT sector matching after one positive common
-blocking length.\footnote{\leanid{BlockedNormalFormSectorMatching}.}
+Its hypotheses collect the comparison data for the common primitive
+nonzero-sector families produced from the two original tensors, and its
+conclusion states the BNT sector matching after one positive common blocking
+length.  The former named blocked-normal-form records have been removed from
+the formal development; this note now records only the mathematical boundary.
 
 The route from produced primitive sectors to the BNT-level comparison theorem
 passes through a common-primitive BNT cover
@@ -625,10 +625,7 @@ normal-CF-BNT sectors produced by canonical-form reduction, one must transport
 blocked not-gauge-phase equivalence, zero-tail identities, and the common
 injective blocking length through the nested-to-flat reblocking map, and then
 feed the resulting families into the common primitive BNT-cover hypotheses.\footnote{%
-The formal interface for this boundary is the conditional
-\leanid{BlockedNormalFormHypotheses} structure and the
-\leanid{fundamentalTheorem_afterBlocking_from_blockedNormalFormHypotheses}
-statement; the target side is the \leanid{CommonPrimitiveBNTCoverHypotheses}
+The target side is the \leanid{CommonPrimitiveBNTCoverHypotheses}
 cover constructor; the now-available inputs are the bounded and common
 injective-blocking theorems for normal-CF-BNT blocks and the already-injective
 direct-sum trace-separation theorems.}  The
