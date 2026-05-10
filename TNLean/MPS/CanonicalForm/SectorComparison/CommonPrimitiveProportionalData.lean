@@ -447,14 +447,14 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
     rw [one_mul]
     exact hSame N σ
   hc_ne := fun _ => one_ne_zero
-  a_top_norm_one := fun N h => by
+  hA_top_norm_one := fun N h => by
     simp [norm_pow, hμA0 h]
-  b_top_norm_one := fun N h => by
+  hB_top_norm_one := fun N h => by
     simp [norm_pow, hμB0 h]
-  a_norm_le_one := fun N j => by
+  hA_norm_le_one := fun N j => by
     rw [norm_pow]
     exact pow_le_one₀ (norm_nonneg _) (hμAle j)
-  b_norm_le_one := fun N k => by
+  hB_norm_le_one := fun N k => by
     rw [norm_pow]
     exact pow_le_one₀ (norm_nonneg _) (hμBle k)
 
