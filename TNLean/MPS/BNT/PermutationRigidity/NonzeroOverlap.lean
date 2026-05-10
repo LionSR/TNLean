@@ -40,7 +40,7 @@ uniform sub-dominant coefficient bounds, per-side asymptotic block-orthonormalit
 (diagonal overlaps tend to `1`, off-diagonal overlaps tend to `0`), per-length
 nonzero proportionality, and the BNT decomposition identities. This matches
 CPSV16's hypothesis "$A$ and $B$ in canonical form" (arXiv:1606.00608, statement
-of Theorem `thm1`) — the paper's CF concept implicitly carries the
+of Theorem thm1) — the paper's CF concept implicitly carries the
 dominant-block normalization and the per-block primitivity that gives
 asymptotic orthonormality. Thus the displayed hypotheses are the explicit
 A-side and B-side components of the source's canonical-form assumption; no
@@ -216,7 +216,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
 /--
 **Key step of Theorem 4.4 (paper route).**
 
-Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`).
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem thm1).
 
 Assume we have two families `A j` and `B k` whose within-family overlaps are
 asymptotically orthonormal, and that the *full* tensors `A_total` and `B_total`
@@ -300,7 +300,7 @@ with a `B k` does not decay.
 /--
 **Key step of Theorem 4.4 (paper route), opposite direction.**
 
-Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`,
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem thm1,
 symmetric to `exists_nonzero_overlap_of_proportional_decomp`).
 
 Under the same proportionality + decomposition hypotheses as
