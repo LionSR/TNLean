@@ -1243,6 +1243,34 @@ BNT comparison hypotheses for the common primitive sectors.
 	% not part of the source terminology and is intentionally not displayed.
 \end{definition}
 
+\begin{lemma}[Physical relabelling of common primitive BNT hypotheses]%
+	\label{lem:common_primitive_bnt_reindex_transport}
+	\lean{MPSTensor.IsNormalCanonicalForm.reindexPhysical_equiv,
+		MPSTensor.BlocksNotGaugePhaseEquiv.reindexPhysical_equiv,
+		MPSTensor.IsNormalCanonicalFormBNT.reindexPhysical_equiv,
+		MPSTensor.ProportionalDecompositionData.reindexPhysical_equiv,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.reindexPhysical_equiv,
+		MPSTensor.CommonPrimitiveBNTCoverHypotheses.reindexPhysical_directIteratedBlockEquiv}
+	\leanok
+	\uses{def:common_primitive_bnt_cover_hypotheses,
+		def:flattened_iterated_block_tensor, lem:physical_reindex_equiv_transport}
+	A bijection of physical alphabets transports the common primitive BNT
+	hypotheses by relabelling every block in both families.  Normal canonical
+	form, BNT separation, proportional decomposition, one-site injectivity, and
+	zero-tail equality are preserved.  Applying this to the canonical bijection
+	between the direct length-$pL$ alphabet and the iterated length-$L$ alphabet
+	over length-$p$ blocks transports the iterated blocked hypotheses to the
+	flattened iterated families on the direct alphabet.
+\end{lemma}
+
+\begin{proof}\leanok
+	Each assertion is transported along the same relabelling.  BNT separation uses the
+	iff for gauge-phase equivalence under physical reindexing, while the
+	proportional-decomposition equalities are evaluated on the relabelled physical
+	configuration.  The final statement is the specialization to the
+	length-$pL$ grouping bijection used in flattened iterated blocking.
+\end{proof}
+
 \begin{definition}[BNT matching inputs for representative common-sector families]%
 \label{def:common_representative_bnt_cover_hypotheses}
 	\lean{MPSTensor.CommonRepresentativeBNTCoverHypotheses}

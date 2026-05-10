@@ -1128,6 +1128,32 @@ The following results separate the zero blocks from the nonzero blocks.
 	the iterated block on the grouped physical configuration.
 \end{lemma}
 
+\begin{lemma}[Transport across a physical alphabet equivalence]%
+	\label{lem:physical_reindex_equiv_transport}
+	\lean{MPSTensor.reindexPhysical_cast_dim,
+		MPSTensor.transferMap_reindexPhysical_equiv,
+		MPSTensor.leftCanonical_reindexPhysical_equiv,
+		MPSTensor.isPrimitive_transferMap_reindexPhysical_equiv,
+		MPSTensor.hasInvariantProj_reindexPhysical_equiv,
+		MPSTensor.isIrreducibleTensor_reindexPhysical_equiv,
+		MPSTensor.isInjective_reindexPhysical_equiv,
+		MPSTensor.gaugePhaseEquiv_reindexPhysical_equiv}
+	\leanok
+	\uses{def:transfer_map, def:primitive_channel}
+	A bijection between physical alphabets of sizes $d_1$ and $d_2$ merely
+	relabels the Kraus summation.  Therefore physical reindexing commutes with
+	bond-dimension casts, leaves the transfer map unchanged, and carries
+	left-canonical normalization, transfer-map primitivity, invariant
+	projections, irreducibility, injectivity, and gauge-phase equivalence back
+	and forth across the bijection.
+\end{lemma}
+
+\begin{proof}\leanok
+	The transfer-map and left-canonical identities are reindexings of finite sums
+	by the chosen bijection.  The primitive-transfer statement follows from equality
+	of the transfer maps.
+\end{proof}
+
 \begin{theorem}[Flattened iterated blocking agrees with direct blocking]%
 	\label{thm:flattened_iterated_blocking}
 	\lean{MPSTensor.flattenedIteratedBlockTensor_blockTensor,
