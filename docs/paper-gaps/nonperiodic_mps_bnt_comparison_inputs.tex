@@ -482,35 +482,37 @@ The source comparison above translates into the following formal targets.
 The present formalization already separates the source theorem into the same
 mathematical layers.
 
-\begin{itemize}
-  \item \path{TNLean/MPS/BNT/Construction.lean} defines
-  \leanid{IsCanonicalFormBNT} as canonical form plus strict weight ordering and
-  non-equivalence of distinct representatives. This is a restricted
-  already-grouped surface: it suppresses the repeated-copy data
-  \(r_j,\mu_{j,q}\) that appear in the BNT expansion and Appendix BNT
-  characterization of \cite{Cirac2016MPDO_arXiv}.
-  In the same file, \leanid{ProportionalDecompositionData} records explicit
-  decomposition coefficients used by a conditional proportional comparison.
-  The split comparison theorems
-  \path{fundamentalTheorem_of_separated_CFBNT_data} and
-  \path{fundamentalTheorem_of_separated_normalCFBNT_data} are therefore
-  strict-representative special cases, not the general BNT theorem stated in
-  the source paper.
+The canonical-form BNT surface is encoded as canonical form plus strict weight
+ordering and non-equivalence of distinct
+representatives.\footnote{\leanid{IsCanonicalFormBNT},
+\path{TNLean/MPS/BNT/Construction.lean}.}
+This is a restricted already-grouped surface: it suppresses the repeated-copy
+data \(r_j,\mu_{j,q}\) that appear in the BNT expansion and Appendix BNT
+characterization of \cite{Cirac2016MPDO_arXiv}.
+Explicit decomposition coefficients for a conditional proportional comparison
+are recorded separately.\footnote{\leanid{ProportionalDecompositionData},
+same file.}
+The corresponding conditional proportional comparison theorems are therefore
+strict-representative special cases, not the general BNT theorem stated in
+the source paper.\footnote{\leanid{fundamentalTheorem_proportionalMPV_CFBNT}
+and \leanid{fundamentalTheorem_proportionalMPV_normalCFBNT},
+\path{TNLean/MPS/FundamentalTheorem/EqualProportional.lean}.}
 
-  \item \path{TNLean/MPS/CanonicalForm/SectorComparison.lean} records the
-  after-blocking theorem in conditional form. The structure
-  \leanid{BlockedNormalFormHypotheses} supplies the remaining
-  comparison data for the common primitive nonzero-sector families produced from
-  the two original tensors. The conclusion
-  \leanid{BlockedNormalFormSectorMatching} states the BNT sector
-  matching after one positive common blocking length.
+The after-blocking theorem is stated in conditional form.\footnote{%
+\path{TNLean/MPS/CanonicalForm/SectorComparison.lean}.}
+One structure collects the comparison data for the common primitive
+nonzero-sector families produced from the two original
+tensors,\footnote{\leanid{BlockedNormalFormHypotheses}.}
+and the conclusion states the BNT sector matching after one positive common
+blocking length.\footnote{\leanid{BlockedNormalFormSectorMatching}.}
 
-  \item \path{TNLean/MPS/CanonicalForm/SectorComparison/ProportionalComparison.lean}
-  gives the current route from produced primitive sectors to the BNT-level
-  comparison theorem. Its \leanid{CommonPrimitiveBNTCoverHypotheses} boundary is
-  paper-facing only if those hypotheses are supplied for the selected
-  representative BNT families.
-\end{itemize}
+The route from produced primitive sectors to the BNT-level comparison theorem
+passes through a common-primitive BNT cover
+boundary.\footnote{\leanid{CommonPrimitiveBNTCoverHypotheses},
+\path{TNLean/MPS/CanonicalForm/SectorComparison/ProportionalComparison.lean}.}
+That boundary is paper-facing only when its hypotheses are supplied for the
+selected representative BNT families rather than for an intermediate
+cyclic-sector list.
 
 \section{Named formal gaps}
 
