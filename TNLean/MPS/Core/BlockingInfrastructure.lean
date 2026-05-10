@@ -527,7 +527,7 @@ theorem mpv_reindexPhysical {d₁ d₂ D : ℕ} (f : Fin d₁ → Fin d₂)
     mpv (reindexPhysical f A) σ = mpv A (fun n => f (σ n)) := by
   simp [mpv, coeff, evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
 
-/-- Physical reindexing preserves heterogeneous MPV equality. -/
+/-- Physical reindexing preserves MPV equality for tensors of arbitrary bond dimensions. -/
 theorem sameMPV₂_reindexPhysical {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
     {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
     (hSame : SameMPV₂ A B) :
@@ -595,9 +595,9 @@ theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
 /-- Refine a tensor already blocked by `p` through a further length-`L` blocking, but expose
 the resulting physical alphabet as the direct length-`p * L` alphabet.
 
-This is the small conceptual interface for flattened iterated blocking: it is ordinary blocking
-over the already blocked alphabet, followed by the canonical grouping map from direct
-length-`p * L` physical indices to iterated length-`L` indices. -/
+It is ordinary length-`L` blocking over the already blocked alphabet, followed by
+physical reindexing along the canonical grouping map from direct length-`p * L`
+indices to iterated length-`L` indices. -/
 noncomputable def flattenedIteratedBlockTensor
     {d p D : ℕ}
     (A : MPSTensor (blockPhysDim d p) D) (L : ℕ) :
@@ -645,9 +645,9 @@ theorem toTensorFromBlocks_flattenedIteratedBlockTensor
 /-- Full MPV equality of assembled weighted block tensors is preserved after a further
 flattened iterated blocking, with the direct length-`p * L` physical alphabet exposed.
 
-This is the reusable bridge to the existing iterated-blocking results: the proof applies
-`sameMPV₂_toTensorFromBlocks_blockPower` over the already blocked alphabet and uses the
-grouping map to return to direct length-`p * L` indices. -/
+The proof applies `sameMPV₂_toTensorFromBlocks_blockPower` over the already blocked
+alphabet and uses the grouping map to express the result on direct length-`p * L`
+indices. -/
 theorem sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower
     {d p rA rB L : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (μA : Fin rA → ℂ)

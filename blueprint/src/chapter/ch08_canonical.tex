@@ -1103,20 +1103,30 @@ The following results separate the zero blocks from the nonzero blocks.
 \begin{definition}[Flattened iterated blocking]%
 	\label{def:flattened_iterated_block_tensor}
 	\lean{MPSTensor.reindexPhysical,
-		MPSTensor.evalWord_reindexPhysical,
-		MPSTensor.mpv_reindexPhysical,
-		MPSTensor.sameMPV₂_reindexPhysical,
-		MPSTensor.flattenedIteratedBlockTensor,
-		MPSTensor.mpv_flattenedIteratedBlockTensor}
+		MPSTensor.flattenedIteratedBlockTensor}
 	\leanok
 	\uses{def:blocked_tensor}
-	If a tensor $A$ already has physical alphabet $d^p$, its flattened iterated blocking by
-	a further length $L$ block is the tensor on the direct alphabet $d^{pL}$ obtained
+	If a tensor $A$ already has physical alphabet $d^p$, its flattened iterated
+	blocking by a further length $L$ block is the tensor on the direct alphabet
+	$d^{pL}$ obtained
 	by first taking the ordinary length-$L$ block over the alphabet $d^p$ and then
 	grouping each direct length-$pL$ word into $L$ consecutive length-$p$ words.
-	The same physical reindexing formula applies to MPVs and preserves heterogeneous
-	MPV equality.
 \end{definition}
+
+\begin{lemma}[MPVs under physical reindexing and flattened iterated blocking]%
+	\label{lem:mpv_flattened_iterated_blocking}
+	\lean{MPSTensor.evalWord_reindexPhysical,
+		MPSTensor.mpv_reindexPhysical,
+		MPSTensor.sameMPV₂_reindexPhysical,
+		MPSTensor.mpv_flattenedIteratedBlockTensor}
+	\leanok
+	\uses{def:flattened_iterated_block_tensor, def:same_mpv2}
+	Word evaluation and MPV evaluation after physical reindexing are obtained by
+	applying the index map to every physical letter.  Therefore MPV equality between
+	two tensors of arbitrary bond dimensions is preserved by the same physical
+	reindexing.  For flattened iterated blocking, evaluation is the evaluation of
+	the iterated block on the grouped physical configuration.
+\end{lemma}
 
 \begin{theorem}[Flattened iterated blocking agrees with direct blocking]%
 	\label{thm:flattened_iterated_blocking}
@@ -1124,11 +1134,14 @@ The following results separate the zero blocks from the nonzero blocks.
 		MPSTensor.toTensorFromBlocks_flattenedIteratedBlockTensor,
 		MPSTensor.sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower}
 	\leanok
-	\uses{def:flattened_iterated_block_tensor, thm:samempv_toTensorFromBlocks_block_power}
-	For a tensor first blocked by $p$, flattened iterated blocking by $L$ agrees with direct
-	blocking by $pL$.  The same statement holds for assembled weighted block sums:
-	flattened iterated blocking is the physical reindexing of the iterated blocked assembled
-	family, and full MPV equality of two assembled families is preserved after this
+	\uses{def:flattened_iterated_block_tensor, lem:mpv_flattened_iterated_blocking,
+		thm:samempv_toTensorFromBlocks_block_power}
+	For a tensor first blocked by $p$, flattened iterated blocking by $L$ agrees
+	with direct blocking by $pL$.  The same statement holds for assembled weighted
+	block sums:
+	flattened iterated blocking is the physical reindexing of the iterated blocked
+	assembled family, and full MPV equality of two assembled families is preserved
+	after this
 	blocking with weights transported to the powers $\mu_k^L$.
 \end{theorem}
 
