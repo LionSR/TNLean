@@ -862,7 +862,8 @@ per-block peripheral-spectrum primitivity.
 		Contrapositive of the overlap-decay theorem: if the mixed transfer
 		spectral radius were strictly less than~$1$, the iterated mixed transfer
 		map would tend to zero in operator norm, hence so would its trace, and
-		via the trace identity $\text{LinearMap.trace}((F_{AB})^N) = \langle V^{(N)}(A), V^{(N)}(B)\rangle$
+		via the trace identity
+		$\operatorname{tr}(F_{AB}^N) = \langle V^{(N)}(A), V^{(N)}(B)\rangle$
 		the overlap itself would tend to~$0$, contradicting the hypothesis.
 \end{proof}
 
@@ -2940,7 +2941,7 @@ do not correspond to independent paper-level results.
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
-	\uses{thm:nt_overlap_norm_one_gauge, thm:bnt_grouping_gauge_equiv}
+	\uses{thm:overlap_decay, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero
 	weights, quotient the block indices by MPV phase equivalence and absorb the
 	phases into the sector weights. The resulting sector decomposition represents
