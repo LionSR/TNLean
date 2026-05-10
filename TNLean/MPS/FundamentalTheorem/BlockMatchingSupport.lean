@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.BNT.Construction
 import TNLean.Algebra.ScalarPowerSumIdentity
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
 # BNT block-matching support
@@ -42,11 +41,8 @@ zero entries are deleted.  See `TNLean.Algebra.ScalarPowerSumIdentity`.
 
 -/
 open scoped Matrix BigOperators
-open Filter
 
 namespace MPSTensor
-
-variable {d : ℕ}
 
 /-- Conclusion type for the BNT proportional-MPV comparison theorems. -/
 abbrev BlockPermutationGaugeWitness
@@ -70,22 +66,6 @@ The nonzero-entry version below compares possibly unequal cardinalities using
 positive powers only; without a nonzero-entry hypothesis, positive powers do not
 count zero entries.
 -/
-
-/-- **Equal power sums imply equal multisets** (same-cardinality support lemma
-for the power-sum argument in arXiv:1606.00608, lines 1155--1163).
-
-If two sequences of complex numbers `α : Fin n → ℂ` and `β : Fin n → ℂ` satisfy
-`∑ i, (α i)^k = ∑ i, (β i)^k` for all positive `k`, then `α` and `β` have the same
-multiset of values (counted with multiplicity).
-
-This is a corollary of Newton's identities via
-`Matrix.sum_pow_eq_implies_multiset_eq` from `ScalarPowerSumIdentity.lean`.
-The unequal-cardinality Appendix use requires the nonzero-entry version below. -/
-theorem power_sum_eq_implies_multiset_eq (n : ℕ)
-    (α β : Fin n → ℂ)
-    (h : ∀ k : ℕ, 0 < k → ∑ i : Fin n, (α i) ^ k = ∑ i : Fin n, (β i) ^ k) :
-    Finset.univ.val.map α = Finset.univ.val.map β :=
-  Matrix.sum_pow_eq_implies_multiset_eq α β h
 
 /-- **Bounded equal power sums imply equal multisets** (same-cardinality part of
 the power-sum argument in arXiv:1606.00608, lines 1155--1163).
