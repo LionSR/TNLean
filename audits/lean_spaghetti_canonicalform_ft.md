@@ -60,7 +60,9 @@ The same simplification and limit-comparison idioms recur many times:
   - `simp only [Fin.lt_def]` positivity boilerplate
   - `intro N; simp only [mpvOverlap]`
 - `FiniteLength.lean` repeats long `Matrix.trace` linearization `simp only` blocks.
-- `EqualProportional.lean` and `Full.lean` both repeat the same `WithLp.ofLp_sum` / `Finset.sum_apply` / `Pi.smul_apply` expansion pattern.
+- The retired equal/proportional Fundamental Theorem file and `Full.lean`
+  both repeated the same `WithLp.ofLp_sum` / `Finset.sum_apply` /
+  `Pi.smul_apply` expansion pattern.
 - `SectorIrreducibility.lean` repeats orbit/shift `pow_succ'` arguments.
 
 These are good candidates for local helper lemmas.
@@ -574,7 +576,7 @@ Both appear removable.
 - `simp` style:
   - wide `simp only` expansion at `433-434`
 
-### `TNLean/MPS/FundamentalTheorem/EqualProportional.lean`
+### Retired equal/proportional Fundamental Theorem file
 
 - Size: 506 lines
 - Actual `sorry`: 0
@@ -747,7 +749,9 @@ Both appear removable.
 3. Finish or isolate `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean`.
    - At minimum, push the incomplete case-2/case-3 helpers into a dedicated “work in progress” module so the file stops pretending to be near-finished theory.
 
-4. Extract proof helpers for repeated limit/overlap boilerplate from `Full.lean`, `EqualProportional.lean`, and `FiniteLength.lean`.
+4. Extract proof helpers for repeated limit/overlap boilerplate from
+   `Full.lean`, the retired equal/proportional Fundamental Theorem file, and
+   `FiniteLength.lean`.
 
 5. Clean the stale and redundant comments:
    - `NormalReduction.lean:139-145`

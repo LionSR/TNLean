@@ -54,38 +54,38 @@ The TNLean codebase represents the structural part of this lemma by two
 separate theorems: one rectangular dimension theorem and one
 same-bond-dimension gauge theorem.
 
-The self-overlap convergence is faithfully formalized in
-\leanid{MPSTensor.overlap\_tendsto\_one\_of\_peripheralPrimitive\_of\_irreducible}.\footnote{%
-\path{TNLean/MPS/Overlap/PeripheralToSpectralGap.lean}, around line~506.}
-The dichotomy in the decay direction is faithfully formalized in
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_irreducible\_TP}.\footnote{%
+The self-overlap convergence of a single irreducible trace-preserving tensor
+and the decay theorem for two inequivalent such tensors are both formalized
+separately.\footnote{%
+\leanid{MPSTensor.overlap\_tendsto\_one\_of\_peripheralPrimitive\_of\_irreducible},
+\path{TNLean/MPS/Overlap/PeripheralToSpectralGap.lean}, around line~506;
+\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_irreducible\_TP},
 \path{TNLean/Spectral/SpectralGapNT.lean}, around line~290.}
 
-The rectangular dimension-recovery theorem
-\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}.\footnote{%
-\path{TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean}, near the equalMPS
-theorems.}
-handles the case in which the two normal tensors may have different bond
+The rectangular dimension-recovery theorem handles the case in which the two
+normal tensors may have different bond
 dimensions.  Under the left-canonical irreducible hypotheses used in
 \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}, it proves $D_a=D_b$ from
 $\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$.  Its proof uses the
-rectangular decay theorem
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
-if the bond dimensions differed, then the mixed overlap would tend to zero,
+rectangular decay theorem: if the bond dimensions differed, then the mixed
+overlap would tend to zero,
 contradicting the assumed limiting modulus.
+\footnote{\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
+and
+\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP},
+\path{TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean}.}
 
-The gauge-recovery theorem
-\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}\footnote{%
-\path{TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean}, near the equalMPS
-theorems.}
-has the source hypothesis shape: for two irreducible trace-preserving tensors
+The gauge-recovery theorem has the source hypothesis shape: for two
+irreducible trace-preserving tensors
 of the same bond dimension, the assumption
 $\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$ implies
-\leanid{GaugePhaseEquiv}.  It derives the mixed-transfer spectral-radius
-condition using
-\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one}
-and then applies the modulus-one rigidity theorem
-\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP}.
+gauge-phase equivalence.  It derives the mixed-transfer spectral-radius
+condition from the asymptotically unit-modulus overlap and then applies the
+modulus-one rigidity theorem.
+\footnote{\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP},
+\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one},
+\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP},
+and \leanid{GaugePhaseEquiv}.}
 The spectral-radius theorem formalizes the corresponding step in the proof of
 the source lemma, \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}; the
 gauge theorem formalizes the source statement in
@@ -93,8 +93,8 @@ gauge theorem formalizes the source statement in
 \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.
 
 The source-facing record does not treat a theorem with an additional
-\leanid{ProportionalMPV₂} hypothesis as a version of the source lemma,
-because the source does not assume proportional MPV families.
+proportional-MPV hypothesis as a version of the source lemma, because the source
+does not assume proportional MPV families.\footnote{\leanid{ProportionalMPV₂}.}
 
 \section{Why this matters for the Fundamental Theorem proof}
 

@@ -95,7 +95,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean`; spectral-gap components | **partial** — structural equalMPS components are formalized; a packaged theorem remains future work |
 | **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | Used in BNT construction | **needs verification** |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
-| **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean` (imported by `FundamentalTheorem/EqualProportional.lean`) | `leanok` |
+| **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean` and `TNLean/MPS/FundamentalTheorem/BlockMatchingSupport.lean` | `leanok` |
 | **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | Sector-decomposition and block-matching components | **needs verification** |
 
 ### 2.5 Appendix B — Proofs of Section III (pure RFP)
@@ -234,7 +234,7 @@ The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.le
 
 ## 5. Retired strict wrappers
 
-The older strict wrappers formerly housed in `FundamentalTheorem/EqualProportional.lean`
+The older strict equal- and proportional-MPV special cases
 are no longer counted as formalizations of CPSV16 Theorem II.1 or Corollary II.2.
 They assumed common block data or supplied coefficient arrays as hypotheses. The source
 theorem derives those data from the BNT decomposition and the MPV hypothesis.

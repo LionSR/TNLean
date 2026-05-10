@@ -589,7 +589,7 @@ Likely work:
   norm-class proof.
 - Reconnect to `BNT/Construction.lean`, `BNT/PermutationRigidity.lean`, and
   `FundamentalTheorem/SectorDecomposition.lean`.
-- Update downstream wrappers in `EqualProportional.lean`, `Assembly.lean`,
+- Update downstream special cases in the Fundamental Theorem files, `Assembly.lean`,
   parent-Hamiltonian files, and blueprint tags.
 
 The lower end of this range is plausible if the FT is restated at the

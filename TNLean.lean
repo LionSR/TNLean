@@ -214,7 +214,7 @@ import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPrimitive
-import TNLean.MPS.FundamentalTheorem.EqualProportional
+import TNLean.MPS.FundamentalTheorem.BlockMatchingSupport
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap

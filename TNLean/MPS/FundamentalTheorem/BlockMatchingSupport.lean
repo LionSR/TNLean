@@ -7,17 +7,16 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
-# Fundamental Theorem support lemmas
+# BNT block-matching support
 
 This module contains the witness type used for BNT block matching and the
 Newton--Girard power-sum lemmas needed for the multiplicity-recovery argument
 in arXiv:1606.00608.
 
-Earlier restricted formulations of the equal and proportional Fundamental Theorem
-branches lived here.  They assumed common block structure or explicit
-coefficient arrays as hypotheses.  Those hypotheses are not present in
-arXiv:1606.00608, Theorem II.1 or Corollary II.2, so those formulations are no
-longer part of the source-facing theorem surface.
+It deliberately contains no equal- or proportional-MPV Fundamental Theorem
+formulation: statements with common block structure or explicit coefficient
+arrays as hypotheses are stricter than arXiv:1606.00608, Theorem II.1 and
+Corollary II.2.
 
 ## Main results
 
