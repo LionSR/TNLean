@@ -38,7 +38,7 @@ uniform sub-dominant coefficient bounds, per-side asymptotic block-orthonormalit
 (diagonal overlaps tend to `1`, off-diagonal overlaps tend to `0`), per-length
 nonzero proportionality, and the BNT decomposition identities. This matches
 CPSV16's hypothesis "$A$ and $B$ in canonical form" (arXiv:1606.00608, statement
-of Theorem `thm1`) — the paper's CF concept implicitly carries the
+of Theorem thm1) — the paper's CF concept implicitly carries the
 dominant-block normalization and the per-block primitivity that gives
 asymptotic orthonormality. Thus the displayed hypotheses are the explicit
 A-side and B-side components of the source's canonical-form assumption; no
@@ -54,14 +54,14 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. Lemma `Lem1` supplies eventual linear independence
+dominant-block normalization. Lemma Lem1 supplies eventual linear independence
 from asymptotic orthonormality; the contradiction step applies this after showing
 that the relevant joint family is asymptotically orthonormal. -/
 
 /--
 **Key step of Theorem 4.4 (paper route).**
 
-Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`).
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem thm1).
 
 Assume we have two families `A j` and `B k` whose within-family overlaps are
 asymptotically orthonormal, and that the *full* tensors `A_total` and `B_total`
@@ -124,7 +124,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
   -- Paper-faithful proof pending. The CPSV16 lines 1170-1192 argument follows
-  -- Cor `Lem1` (asymptotically orthonormal NMPVs are eventually LI):
+  -- Cor Lem1 (asymptotically orthonormal NMPVs are eventually LI):
   -- assuming all `mpvOverlap (A j) (B k) → 0`, the joint family
   -- `{V^N(A_j)}_j ∪ {V^N(B_k)}` is asymptotically orthonormal hence eventually
   -- LI; proportionality `V^N(A_total) = c_N V^N(B_total)` then forces
@@ -145,7 +145,7 @@ with a `B k` does not decay.
 /--
 **Key step of Theorem 4.4 (paper route), opposite direction.**
 
-Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem `thm1`,
+Source: arXiv:1606.00608, lines 1170–1192 (proof of Theorem thm1,
 symmetric to `exists_nonzero_overlap_of_proportional_decomp`).
 
 Under the same proportionality + decomposition hypotheses as
