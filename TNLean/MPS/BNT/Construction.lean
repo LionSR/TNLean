@@ -244,6 +244,21 @@ def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
     HasNormalizedSelfOverlap (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
 
+/-- Each block weight has modulus at most `1`.
+
+Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The dominant block
+weight has unit modulus (`mu_dom_norm_one`); the remaining blocks have
+strictly smaller modulus by `mu_strict_anti`, hence are bounded by `1`. -/
+lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
+    ‖μ k‖ ≤ 1 := by
+  by_cases hr : 0 < r
+  · have hdom : ‖μ ⟨0, hr⟩‖ = 1 := hNCF.mu_dom_norm_one hr
+    have hle : (⟨0, hr⟩ : Fin r) ≤ k := Fin.mk_le_of_le_val (Nat.zero_le _)
+    have hanti : ‖μ k‖ ≤ ‖μ ⟨0, hr⟩‖ := hNCF.mu_strict_anti.antitone hle
+    rw [hdom] at hanti
+    exact hanti
+  · exact absurd k.isLt (by omega)
+
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus the BNT separation
 assumption and the source-faithful dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
 def ofSeparatedData

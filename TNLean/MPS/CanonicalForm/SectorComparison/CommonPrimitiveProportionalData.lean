@@ -490,33 +490,15 @@ noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailId
     CommonPrimitiveBNTCoverHypotheses (zeroTailA := zeroTailA) (zeroTailB := zeroTailB)
       (DtotA := ∑ j : Fin rA, dimA j) (DtotB := ∑ k : Fin rB, dimB k)
       μA μB blocksA blocksB := by
-  -- Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The dominant-block
-  -- normalization `‖μ 0‖ = 1` from `IsNormalCanonicalFormBNT.mu_dom_norm_one`
-  -- supplies the unit-modulus hypothesis for the constructor; the bound
-  -- `‖μ k‖ ≤ 1` for all `k` follows from `mu_strict_anti` plus the unit-modulus
-  -- dominant block (and is vacuous for `r = 0`).
-  have hμAle : ∀ j, ‖μA j‖ ≤ 1 := by
-    intro j
-    by_cases hr : 0 < rA
-    · have hdom : ‖μA ⟨0, hr⟩‖ = 1 := hA.mu_dom_norm_one hr
-      have hle : (⟨0, hr⟩ : Fin rA) ≤ j := Fin.mk_le_of_le_val (Nat.zero_le _)
-      have hanti : ‖μA j‖ ≤ ‖μA ⟨0, hr⟩‖ := hA.mu_strict_anti.antitone hle
-      rw [hdom] at hanti
-      exact hanti
-    · exact absurd j.isLt (by omega)
-  have hμBle : ∀ k, ‖μB k‖ ≤ 1 := by
-    intro k
-    by_cases hr : 0 < rB
-    · have hdom : ‖μB ⟨0, hr⟩‖ = 1 := hB.mu_dom_norm_one hr
-      have hle : (⟨0, hr⟩ : Fin rB) ≤ k := Fin.mk_le_of_le_val (Nat.zero_le _)
-      have hanti : ‖μB k‖ ≤ ‖μB ⟨0, hr⟩‖ := hB.mu_strict_anti.antitone hle
-      rw [hdom] at hanti
-      exact hanti
-    · exact absurd k.isLt (by omega)
+  -- The unit-modulus dominant block and ‖μ k‖ ≤ 1 bounds come from
+  -- `IsNormalCanonicalFormBNT.mu_dom_norm_one` and the helper
+  -- `IsNormalCanonicalFormBNT.mu_norm_le_one` (Construction.lean).
+  -- Source: arXiv:1606.00608, paragraph after `eq:II_CF1`.
   exact ofNormalCanonicalFormBNT_zeroTailIdentity hA hB hZero hInjA hInjB
     (proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
       (d := blockPhysDim d p) (μA := μA) (μB := μB)
-      blocksA blocksB hA.mu_dom_norm_one hB.mu_dom_norm_one hμAle hμBle hSame)
+      blocksA blocksB hA.mu_dom_norm_one hB.mu_dom_norm_one
+      hA.mu_norm_le_one hB.mu_norm_le_one hSame)
 
 /-- BNT-cover hypotheses after a fixed positive reblocking.
 

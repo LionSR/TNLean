@@ -56,9 +56,21 @@ on the convergence-to-nonzero-limit hypotheses (`aLim`, `bLim`, `cLim`,
 removed because they are uninstantiable on the source's intended canonical-form
 class once `‖μ_1‖ = 1` is in force. Documented in
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
-Elimination: rewrite using the source-faithful lower-bound argument with
-`b_top_norm_one` and `b_norm_le_one` from `ProportionalDecompositionData`
-(now available as caller-supplied data); tracked in #1559 Stage C. -/
+
+The CPSV16 proof (lines 1170-1192) gives the lower-bound argument cleanly only
+for the dominant block `k = 0` (where `b_top_norm_one` keeps
+`‖bCoeff N 0‖ = 1` away from zero). For sub-dominant `k ≥ 1`, the source
+matches blocks iteratively: after the dominant block is matched, peel it off
+and re-apply the argument to the residual. The "∀ k, ∃ j" form of the
+conclusion as stated bundles this iteration; the actual proof will need to
+implement the residual-and-recurse step, since a literal one-shot lower
+bound on `‖bCoeff N k‖` is not available for sub-dominant blocks under the
+source normalization.
+
+Elimination: rewrite using the source-faithful lower-bound + iterative
+peeling with `b_top_norm_one`, `b_norm_le_one`, and `hc_ne` from the now
+threaded-through `ProportionalDecompositionData` data; tracked in #1559
+Stage C. -/
 theorem exists_nonzero_overlap_of_proportional_decomp
     {d : ℕ}
     {gA gB : ℕ}
