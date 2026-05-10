@@ -77,3 +77,27 @@ lemma sum_tendsto_one_of_diag
         (hcross j (Finset.ne_of_mem_erase hj)))
     simpa using this
   convert h1.add h2 using 1; simp only [add_zero]
+
+/-- A finite sum of uniformly bounded coefficients times terms converging to
+zero also converges to zero. -/
+lemma tendsto_finset_sum_mul_zero_of_norm_le_one
+    {ι : Type*} [Fintype ι]
+    (coeff : ℕ → ι → ℂ)
+    (f : ι → ℕ → ℂ)
+    (hcoeff : ∀ N i, ‖coeff N i‖ ≤ 1)
+    (hf : ∀ i, Tendsto (f i) atTop (nhds 0)) :
+    Tendsto (fun N => ∑ i : ι, coeff N i * f i N) atTop (nhds 0) := by
+  have hterm : ∀ i : ι,
+      Tendsto (fun N => coeff N i * f i N) atTop (nhds 0) := by
+    intro i
+    have hnorm : Tendsto (fun N => ‖f i N‖) atTop (nhds (0 : ℝ)) := by
+      simpa only [norm_zero] using (hf i).norm
+    apply squeeze_zero_norm (fun N => ?_) hnorm
+    calc
+      ‖coeff N i * f i N‖ = ‖coeff N i‖ * ‖f i N‖ := norm_mul _ _
+      _ ≤ 1 * ‖f i N‖ :=
+        mul_le_mul_of_nonneg_right (hcoeff N i) (norm_nonneg _)
+      _ = ‖f i N‖ := one_mul _
+  simpa using
+    tendsto_finset_sum (Finset.univ : Finset ι)
+      (fun i _ => hterm i)
