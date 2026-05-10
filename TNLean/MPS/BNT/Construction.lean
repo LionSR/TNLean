@@ -593,22 +593,22 @@ structure ProportionalDecompositionData
   (μA j)^N` (the strict-weight specialization), this reads
   `‖(μA 0)^N‖ = ‖μA 0‖^N = 1^N = 1`, using
   `IsNormalCanonicalFormBNT.mu_dom_norm_one`. -/
-  a_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1
+  hA_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1
   /-- The dominant `B`-side coefficient has unit modulus at every length.
 
   Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric to
-  `a_top_norm_one`). -/
-  b_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1
+  `hA_top_norm_one`). -/
+  hB_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1
   /-- Sub-dominant `A`-side coefficients are bounded above by the dominant block in modulus.
 
   Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. Combined with
   `IsNormalCanonicalFormBNT.mu_strict_anti` and `mu_dom_norm_one`, this gives
   `‖(μA j)^N‖ = ‖μA j‖^N ≤ ‖μA 0‖^N = 1`. -/
-  a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1
+  hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1
   /-- Sub-dominant `B`-side coefficients are bounded above by the dominant block in modulus.
 
   Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric). -/
-  b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1
+  hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1
 
 /-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
 abbrev ProportionalDecompositionConclusion
@@ -676,10 +676,10 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
     (hProp := hDecomp.hProp)
     (hc_ne := hDecomp.hc_ne)
-    (hA_top_norm_one := hDecomp.a_top_norm_one)
-    (hB_top_norm_one := hDecomp.b_top_norm_one)
-    (hA_norm_le_one := hDecomp.a_norm_le_one)
-    (hB_norm_le_one := hDecomp.b_norm_le_one)
+    (hA_top_norm_one := hDecomp.hA_top_norm_one)
+    (hB_top_norm_one := hDecomp.hB_top_norm_one)
+    (hA_norm_le_one := hDecomp.hA_norm_le_one)
+    (hB_norm_le_one := hDecomp.hB_norm_le_one)
 
 /-- **Proportional comparison lemma for normal CF-BNT decompositions.**
 
@@ -728,9 +728,9 @@ lemma fundamentalTheorem_of_separated_normalCFBNT_data
     (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
     (hProp := hDecomp.hProp)
     (hc_ne := hDecomp.hc_ne)
-    (hA_top_norm_one := hDecomp.a_top_norm_one)
-    (hB_top_norm_one := hDecomp.b_top_norm_one)
-    (hA_norm_le_one := hDecomp.a_norm_le_one)
-    (hB_norm_le_one := hDecomp.b_norm_le_one)
+    (hA_top_norm_one := hDecomp.hA_top_norm_one)
+    (hB_top_norm_one := hDecomp.hB_top_norm_one)
+    (hA_norm_le_one := hDecomp.hA_norm_le_one)
+    (hB_norm_le_one := hDecomp.hB_norm_le_one)
 
 end MPSTensor
