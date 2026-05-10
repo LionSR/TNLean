@@ -182,19 +182,22 @@ the direct-sum input.
 
 \section{Conclusion}
 
-The exact-length direct-sum input from the older representation paper has now
-been formalized for the already-injective BNT theorem surface in the
-one-site-injective specialization used by the current canonical-form API.  In
-that setting, the BNT representatives, their pairwise not-gauge-phase-equivalence
-hypotheses, and the fixed lengths supplied by one-site injectivity imply the
-homogeneous pair-trace separation and product-word-span conclusions needed
-downstream.  This does not claim the full paper statement with an arbitrary
-pre-existing injectivity length \(L_0\), nor does it reproduce the paper's
-ordered block-size hypotheses verbatim; those features are replaced here by the
-\leanid{IsCanonicalFormBNT} and irreducible-block assumptions of the formal
-surface.  The old warning against replacing exact-length span by cumulative span
-therefore remains mathematically important, but it is no longer an open gap for
-this already-injective \leanid{IsCanonicalFormBNT} specialization.
+The formalized wrappers cover the \(L_0=1\) case: when the selected BNT blocks
+are already injective at length one (as supplied by \leanid{IsCanonicalFormBNT}
+combined with irreducible-block hypotheses), their pairwise
+not-gauge-phase-equivalence data and the fixed lengths from one-site injectivity
+imply the homogeneous pair-trace separation and product-word-span conclusions
+needed downstream.  For this special case the formal result matches the
+paper's conclusion: distinct BNT representatives yield a direct-sum span at a
+common finite length.  However, it does not formalize the full generality of the
+paper's direct-sum theorem.  The older representation paper states the result for
+arbitrary \(L_0\), ordered block sizes, and \(b\ge2\) blocks; those features are
+replaced here by the \leanid{IsCanonicalFormBNT} assumptions.  The general-\(L_0\)
+case, in which each normal block needs a Wielandt-type blocking step to reach
+length-\(L_0\) injectivity, is not covered by these wrappers alone; it requires
+the separate bounded and common injective-blocking results.  The old warning
+against replacing exact-length span by cumulative span therefore remains
+mathematically important for that general setting.
 
 For the full after-blocking normal-CF-BNT pipeline, the conclusion is still
 conditional.  The bounded and common injective-blocking results now supply the
