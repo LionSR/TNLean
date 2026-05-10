@@ -336,10 +336,10 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
+    (hA_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (hB_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1)
     (h_zero_of_dim_ne : ∀ {j : Fin gA} {k : Fin gB},
       dimA j ≠ dimB k →
         Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0))
@@ -364,8 +364,8 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       (aCoeff := aCoeff) (bCoeff := bCoeff) (c := c)
       (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
       (hProp := hProp) (hc_ne := hc_ne)
-      (hA_top_norm_one := a_top_norm_one) (hB_top_norm_one := b_top_norm_one)
-      (hA_norm_le_one := a_norm_le_one) (hB_norm_le_one := b_norm_le_one)
+      (hA_top_norm_one := hA_top_norm_one) (hB_top_norm_one := hB_top_norm_one)
+      (hA_norm_le_one := hA_norm_le_one) (hB_norm_le_one := hB_norm_le_one)
       (hA_self := hA_self) (hA_off := hA_off)
       (hB_self := hB_self) (hB_off := hB_off)
   let f : Fin gB → Fin gA := fun k => (hExistsB k).choose
@@ -399,8 +399,8 @@ private theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_
       (aCoeff := aCoeff) (bCoeff := bCoeff) (c := c)
       (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
       (hProp := hProp) (hc_ne := hc_ne)
-      (hA_top_norm_one := a_top_norm_one) (hB_top_norm_one := b_top_norm_one)
-      (hA_norm_le_one := a_norm_le_one) (hB_norm_le_one := b_norm_le_one)
+      (hA_top_norm_one := hA_top_norm_one) (hB_top_norm_one := hB_top_norm_one)
+      (hA_norm_le_one := hA_norm_le_one) (hB_norm_le_one := hB_norm_le_one)
       (hA_self := hA_self) (hA_off := hA_off)
       (hB_self := hB_self) (hB_off := hB_off)
   let g : Fin gA → Fin gB := fun j => (hExistsA j).choose
@@ -478,10 +478,10 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
+    (hA_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (hB_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
     ∃ _h : gA = gB,
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
@@ -500,8 +500,8 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
     (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
     (hProp := hProp)
     (hc_ne := hc_ne)
-    (a_top_norm_one := a_top_norm_one) (b_top_norm_one := b_top_norm_one)
-    (a_norm_le_one := a_norm_le_one) (b_norm_le_one := b_norm_le_one)
+    (hA_top_norm_one := hA_top_norm_one) (hB_top_norm_one := hB_top_norm_one)
+    (hA_norm_le_one := hA_norm_le_one) (hB_norm_le_one := hB_norm_le_one)
     ?_ ?_
   · intro j k hne
     exact mpvOverlap_tendsto_zero_of_dim_ne
@@ -552,10 +552,10 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
       mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
     (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
     (hc_ne : ∀ N, c N ≠ 0)
-    (a_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
-    (b_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
-    (a_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
-    (b_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
+    (hA_top_norm_one : ∀ N (h : 0 < gA), ‖aCoeff N ⟨0, h⟩‖ = 1)
+    (hB_top_norm_one : ∀ N (h : 0 < gB), ‖bCoeff N ⟨0, h⟩‖ = 1)
+    (hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1)
+    (hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1) :
     ∃ _h : gA = gB,
       ∃ perm : Fin gA ≃ Fin gB,
         ∀ j : Fin gA,
@@ -574,8 +574,8 @@ theorem exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irred
     (hA_decomp := hA_decomp) (hB_decomp := hB_decomp)
     (hProp := hProp)
     (hc_ne := hc_ne)
-    (a_top_norm_one := a_top_norm_one) (b_top_norm_one := b_top_norm_one)
-    (a_norm_le_one := a_norm_le_one) (b_norm_le_one := b_norm_le_one)
+    (hA_top_norm_one := hA_top_norm_one) (hB_top_norm_one := hB_top_norm_one)
+    (hA_norm_le_one := hA_norm_le_one) (hB_norm_le_one := hB_norm_le_one)
     ?_ ?_
   · intro j k hne
     exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
