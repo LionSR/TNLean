@@ -532,17 +532,23 @@ end IsNormalCanonicalFormBNT
 
 /-! ### Connection with BNT/PermutationRigidity -/
 
-/-- Proportional-decomposition data used by the BNT comparison theorems.
+-- Removal history (paper-realignment, see CLAUDE.md): an earlier version of this
+-- structure carried convergence-to-nonzero-limit fields `aLim`, `bLim`, `cLim`,
+-- `haCoeff`, `hbCoeff`, `haLim_ne`, `hbLim_ne`, `hc`, `hcLim_ne`. They were removed
+-- as paper-divergent (uninstantiable on the source's intended canonical-form class
+-- under `‖μ 0‖ = 1`); the paper-gap note is
+-- `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. The
+-- replacement carries the source-faithful per-`N` norm-bound fields below.
 
-The abstract `Tendsto`-based convergence-to-nonzero-limits hypotheses
-(`aLim`, `bLim`, `cLim`, `haCoeff`, `hbCoeff`, `haLim_ne`, `hbLim_ne`, `hc`, `hcLim_ne`)
-that previously sat on this structure deviated from arXiv:1606.00608 in a way recorded in
-`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`: those limits
-are uninstantiable on the source's intended canonical-form class once the source
-normalization `‖μ_1‖ = 1` is in force. They have been removed. The paper-faithful
-replacement, which extracts coefficient information at a fixed witness length, is being
-introduced incrementally; in the interim, the BNT comparison theorems carry temporary
-`sorry`s where the old proof bodies consumed those fields. -/
+/-- Proportional-decomposition data used by the BNT comparison theorems
+(arXiv:1606.00608, proof of Theorem `thm1`, lines 1170–1192).
+
+For two block families `A : Fin rA → MPSTensor d _` and `B : Fin rB → MPSTensor d _`,
+this structure packages a pair of total tensors `A_total`, `B_total`, coefficient
+sequences `aCoeff`, `bCoeff`, a per-`N` proportionality scalar `c`, and the source's
+dominant-block normalization (`‖μ 0‖ = 1`, with sub-dominant coefficients of norm at
+most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching CPSV16's
+post-normalization labelling. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -607,10 +613,11 @@ abbrev ProportionalDecompositionConclusion
 /-- **Proportional comparison lemma for CF-BNT decompositions.**
 
 Given two families of tensors `A_j`, `B_k` in canonical form with BNT separation
-(distinct blocks not gauge-phase equivalent), and a proportional decomposition
-of their MPVs with convergent nonzero coefficients, this lemma concludes that the
-families have the same number of blocks, and blocks match up to permutation,
-dimension equality, and gauge-phase equivalence.
+(distinct blocks not gauge-phase equivalent), and a `ProportionalDecompositionData`
+input — per-`N` coefficient arrays, a nonzero per-`N` proportionality scalar, and
+the source dominant-block normalization — this lemma concludes that the families
+have the same number of blocks, and blocks match up to permutation, dimension
+equality, and gauge-phase equivalence.
 
 This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
 each block already represents a distinct gauge-phase class; it does not cover the
@@ -658,9 +665,10 @@ lemma fundamentalTheorem_of_separated_CFBNT_data
 /-- **Proportional comparison for CF-BNT decompositions.**
 
 If two families of tensors `A_j`, `B_k` satisfy `IsCanonicalFormBNT` and give rise
-to proportional MPVs with convergent nonzero coefficients, then the families have
-the same number of blocks, and blocks match up to permutation, dimension equality,
-and gauge-phase equivalence.
+to proportional MPVs (encoded by per-`N` coefficient arrays, a nonzero per-`N`
+proportionality scalar, and the source dominant-block normalization), then the
+families have the same number of blocks, and blocks match up to permutation,
+dimension equality, and gauge-phase equivalence.
 
 This lemma covers the case where each block represents a single gauge-phase class
 (the blocks are already merged). The general CPSV BNT comparison, where repeated

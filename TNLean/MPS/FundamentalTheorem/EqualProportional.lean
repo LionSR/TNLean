@@ -28,10 +28,11 @@ with a global gauge equivalence of the block-diagonal tensors.
 (`fundamentalTheorem_proportionalMPV_CFBNT`)
 
 **Theorem 4.4 (proportional case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation generate proportional MPVs, and the decomposition
-coefficients converge to
-nonzero limits, then the block counts are equal and blocks match up to permutation,
-dimension equality, and gauge-phase equivalence.
+basis-of-normal-tensors (BNT) separation generate proportional MPVs (encoded by per-`N`
+coefficient arrays with the source-faithful dominant-block normalization
+`‖aCoeff N 0‖ = ‖bCoeff N 0‖ = 1` and per-`N` nonzero proportionality scalar `c N`),
+then the block counts are equal and blocks match up to permutation, dimension
+equality, and gauge-phase equivalence.
 
 ### Theorem 3: Equal MPVs imply proportional MPVs
 (`sameMPV₂_implies_proportionalMPV₂`)
@@ -54,12 +55,13 @@ zero entries are deleted.  See `TNLean.Algebra.ScalarPowerSumIdentity`.
 
 ## Design notes
 
-The **coefficient convergence** question: In the full paper, the decomposition into a basis of
-normal tensors uses coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
-These coefficients need not converge in general after normalization, because unit-modulus
-terms can still oscillate. The `IsCanonicalFormBNT` predicate sidesteps this by requiring the
-BNT grouping already done, and the proportional-case theorem takes whatever convergent
-coefficient data it needs as explicit hypotheses.
+The **coefficient packaging**: the proportional-case theorem takes the per-`N`
+coefficient arrays `aCoeff`, `bCoeff` and proportionality scalar `c` as explicit
+data, together with the source-faithful dominant-block normalization
+(`‖aCoeff N 0‖ = ‖bCoeff N 0‖ = 1` and `‖aCoeff N j‖, ‖bCoeff N k‖ ≤ 1`) and a
+per-`N` nonzero condition `c N ≠ 0`. The earlier convergence-to-nonzero-limit
+formulation deviated from arXiv:1606.00608; the deviation is recorded in
+`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
 -/
 open scoped Matrix BigOperators
 open Filter

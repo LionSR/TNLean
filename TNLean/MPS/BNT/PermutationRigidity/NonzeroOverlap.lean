@@ -66,24 +66,23 @@ theorem exists_nonzero_overlap_of_proportional_decomp
     {DtotA DtotB : ℕ}
     (A : (j : Fin gA) → MPSTensor d (dimA j))
     (B : (k : Fin gB) → MPSTensor d (dimB k))
-    (_A_total : MPSTensor d DtotA)
-    (_B_total : MPSTensor d DtotB)
-    (_aCoeff : ℕ → Fin gA → ℂ) (_bCoeff : ℕ → Fin gB → ℂ)
-    (_c : ℕ → ℂ)
-    (_hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv _A_total σ = ∑ j : Fin gA, (_aCoeff N j) * mpv (A j) σ)
-    (_hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv _B_total σ = ∑ k : Fin gB, (_bCoeff N k) * mpv (B k) σ)
-    (_hProp : ∀ N (σ : Fin N → Fin d), mpv _A_total σ = _c N * mpv _B_total σ)
-    (_hB_self : ∀ k,
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
+    (c : ℕ → ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hB_self : ∀ k,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
-    (_hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
       Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0)) :
     ∀ k : Fin gB,
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
-  -- Paper-faithful proof pending: replaces the deleted abstract-limit argument that consumed
-  -- `aLim`, `bLim`, `cLim`, `haCoeff`, `hbCoeff`, `hc`, `_haLim_ne`, `_hbLim_ne`, `_hcLim_ne`.
+  -- Paper-faithful proof pending: replaces the deleted abstract-limit argument.
   -- See `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
   sorry
 
@@ -116,18 +115,18 @@ theorem exists_nonzero_overlap_of_proportional_decomp_left
     {DtotA DtotB : ℕ}
     (A : (j : Fin gA) → MPSTensor d (dimA j))
     (B : (k : Fin gB) → MPSTensor d (dimB k))
-    (_A_total : MPSTensor d DtotA)
-    (_B_total : MPSTensor d DtotB)
-    (_aCoeff : ℕ → Fin gA → ℂ) (_bCoeff : ℕ → Fin gB → ℂ)
-    (_c : ℕ → ℂ)
-    (_hA_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv _A_total σ = ∑ j : Fin gA, (_aCoeff N j) * mpv (A j) σ)
-    (_hB_decomp : ∀ N (σ : Fin N → Fin d),
-      mpv _B_total σ = ∑ k : Fin gB, (_bCoeff N k) * mpv (B k) σ)
-    (_hProp : ∀ N (σ : Fin N → Fin d), mpv _A_total σ = _c N * mpv _B_total σ)
-    (_hA_self : ∀ j,
+    (A_total : MPSTensor d DtotA)
+    (B_total : MPSTensor d DtotB)
+    (aCoeff : ℕ → Fin gA → ℂ) (bCoeff : ℕ → Fin gB → ℂ)
+    (c : ℕ → ℂ)
+    (hA_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv A_total σ = ∑ j : Fin gA, (aCoeff N j) * mpv (A j) σ)
+    (hB_decomp : ∀ N (σ : Fin N → Fin d),
+      mpv B_total σ = ∑ k : Fin gB, (bCoeff N k) * mpv (B k) σ)
+    (hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ)
+    (hA_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
-    (_hA_off : ∀ i j, i ≠ j →
+    (hA_off : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0)) :
     ∀ j : Fin gA,
       ∃ k : Fin gB,

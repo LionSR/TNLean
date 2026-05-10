@@ -461,11 +461,13 @@ noncomputable def proportionalDecompositionData_of_sameMPV_toTensorFromBlocks
 /-- Form `CommonPrimitiveBNTCoverHypotheses` from normal-CF-BNT data and same MPVs of the
 assembled block-diagonal tensors.
 
-The block-diagonal MPV expansion has coefficient families `(μA j) ^ N` and `(μB k) ^ N`.
-Accordingly the convergence and nonzero-limit data for those power families remain explicit
-inputs; the `SameMPV₂` hypothesis supplies only the proportionality field with ratio `1`.
-The length-zero identity is used, as in `ofNormalCanonicalFormBNT_zeroTailIdentity`, to derive
-zero-tail equality after applying the proportional BNT comparison. -/
+Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The block-diagonal MPV expansion
+has coefficient families `(μA j) ^ N` and `(μB k) ^ N`; the dominant-block normalization
+`‖μA 0‖ = ‖μB 0‖ = 1` and the sub-dominant bounds are derived inside the constructor
+from `IsNormalCanonicalFormBNT.mu_dom_norm_one` and `mu_strict_anti.antitone`. The
+`SameMPV₂` hypothesis supplies the per-`N` proportionality with ratio `1`. The
+length-zero identity is used, as in `ofNormalCanonicalFormBNT_zeroTailIdentity`, to
+derive zero-tail equality after applying the proportional BNT comparison. -/
 noncomputable def ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
