@@ -311,10 +311,10 @@ comparison itself.
 \section{Conclusion}
 
 The verdict is that the canonical-form definition and the proportional MPV
-comparison currently differ from
+comparison originally differed from
 \cite{Cirac2016MPDO_arXiv} in two coupled ways. The canonical-form definition
-omits the source convention $|\mu_1|=1$. The proportional comparison replaces
-the source's fixed-length power-sum identity by a limit hypothesis on
+omitted the source convention $|\mu_1|=1$. The proportional comparison
+replaced the source's fixed-length power-sum identity by a limit hypothesis on
 $(\mu_j^A)^N$ that fails on the sub-dominant blocks under the very
 normalization the source imposes. The proof-plan memo of 2026-02-22 already
 proposed the source-faithful route; the implementation diverged from both
@@ -322,20 +322,47 @@ the memo and the source in a single direction, by introducing a
 convergence-to-nonzero-limits hypothesis that has no counterpart in either
 record.
 
-Each change can be made independently of the other, but they are most
-naturally addressed together: adding the missing normalization makes the
-mismatch between the two proof models visible at the level of types, since the
-limit model becomes uninstantiable on the source's intended class of inputs.
-Once both changes are in place, the formal proportional Fundamental Theorem
-can be aligned with the source argument without weakening the statement and
-without introducing convergence hypotheses absent from
-\cite{Cirac2016MPDO_arXiv}.
+\paragraph{Status as of the paper-realignment PR.}
+The structural realignment has been done. The canonical-form definition now
+carries the source convention $|\mu_1|=1$ as a field
+of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.
+The convergence-to-nonzero-limit fields have been removed from
+\leanid{ProportionalDecompositionData}, replaced by source-faithful per-$N$
+fields: a per-$N$ nonzero proportionality scalar
+$c_N\ne 0$, the dominant-block normalization
+$\|a_{N,1}\|=\|b_{N,1}\|=1$, and the sub-dominant bounds
+$\|a_{N,j}\|, \|b_{N,k}\|\le 1$. These hypotheses are threaded through the
+matching-layer signatures in
+\path{TNLean/MPS/BNT/PermutationRigidity/Matching.lean} so that the two
+nonzero-overlap theorems
+\leanid{exists_nonzero_overlap_of_proportional_decomp} and
+\leanid{exists_nonzero_overlap_of_proportional_decomp_left} now carry the
+source-faithful hypothesis set verbatim. The blueprint statements of
+\texttt{lem:ft\_proportional}, \texttt{lem:ft\_proportional\_nt},
+\texttt{thm:bnt\_perm\_prop}, \texttt{thm:bnt\_perm\_prop\_nt},
+\texttt{lem:weak\_ft\_conditional}, and \texttt{def:normal\_cf\_bnt}
+have been updated to match.
+
+What remains is the proof itself. The two nonzero-overlap theorems are
+currently \texttt{sorry}, and the matching-layer wrappers that consume them
+are transitively \texttt{sorry} as well; each carries an
+\verb|**Unfaithful:**| marker citing the elimination plan. The
+paper-faithful proof following \cite[lines~1170--1192]{Cirac2016MPDO_arXiv}
+will consume exactly the per-$N$ hypothesis set now exposed: the lower-bound
+argument uses $\|b_{N,1}\|=1$ together with $\|b_{N,k}\|\le 1$ and
+$c_N\ne 0$ to keep the dominant-block overlap away from zero, and the
+finite power-sum identification of weights either at one witness length
+(the strict-weight specialization) or at finitely many witness lengths
+(the multi-multiplicity case). That work is tracked as Stage~C of
+\href{https://github.com/LionSR/TNLean/issues/1559}{issue~\#1559}.
 
 The corresponding tracked items are
 \href{https://github.com/LionSR/TNLean/issues/1554}{issue~\#1554} for the
-canonical-form normalization and
+canonical-form normalization (structurally addressed by the paper-realignment
+PR; closes when the proofs land) and
 \href{https://github.com/LionSR/TNLean/issues/1555}{issue~\#1555} for the
-fixed-length reformulation of the proportional comparison.
+fixed-length reformulation of the proportional comparison (structurally
+addressed; closes with Stage~C).
 
 \bibliographystyle{alpha}
 \bibliography{references}

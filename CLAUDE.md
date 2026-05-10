@@ -126,3 +126,111 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Do not leave unrelated new sorrys
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
+
+### Paper-realignment mode
+
+When the formalization has drifted from the cited source and the work is
+**realigning the Lean development to the paper** (replacing wrong hypotheses,
+removing divergent structures, restating theorems to match the source), the
+default `sorry`/`axiom` blockers from `docs/PROOF_INTEGRITY.md` are temporarily
+relaxed. The priority is **getting the statements right**; proofs are
+restored after.
+
+#### Source-citation requirement
+
+In paper-realignment mode every restated definition, hypothesis field, or
+theorem **must carry a docstring referencing the source by paper label or line
+range**. The minimum acceptable forms:
+
+- `arXiv:1606.00608, eq:II_CF1` — equation/theorem label
+- `arXiv:1606.00608, lines 1170–1192` — line range in the local source PDF/tex
+- `CPSV16, Lemma Lem1` — paper short name plus internal label
+- `Wolf §6.2` — published section reference
+
+For Lean fields and theorems whose mathematical content is being aligned to a
+specific paper passage, the docstring must say *which* passage. Inline
+identifiers without a source reference are unreviewable in this mode: a
+reviewer cannot tell whether the field/theorem is faithful or invented.
+
+This rule applies whether or not the proof is `sorry` — the *statement* is
+the load-bearing artifact during realignment.
+
+#### Marking unfaithful theorems
+
+A theorem or lemma is **unfaithful** when its proof relies on a hypothesis or
+intermediate lemma that is known to deviate from the cited source — typically
+because the hypothesis was smuggled into the formalization, the proof
+shortcuts a load-bearing source step, or the result is restated more weakly
+than the paper would prove. Unfaithful theorems must carry a docstring
+marker so a future reader (or a follow-up PR) can locate them.
+
+The marker is a docstring section starting with `**Unfaithful:**` that names
+the load-bearing deviation, cites the paper-gap note documenting it, and
+sketches the elimination plan. Minimum form:
+
+```
+**Unfaithful:** This proof currently relies on `<hypothesis or lemma>`,
+which deviates from `<paper, label or line range>`. Documented in
+`docs/paper-gaps/<note>.tex`. Elimination: replace by `<faithful
+substitute>`; tracked in `<issue or PR>`.
+```
+
+The marker propagates to wrappers: any theorem whose proof transitively
+calls an unfaithful one is itself unfaithful and must carry its own marker.
+The marker is removed only when every transitively-cited dependency is
+faithful.
+
+Reviewers should not approve a paper-realignment PR that introduces an
+unfaithful theorem without the marker. The marker makes the deviation
+auditable and keeps the elimination plan visible.
+
+#### Locally-fixable deviations
+
+Not every paper deviation rises to **Unfaithful**. When the cited source
+contains a small typo, a locally-fixable gap (a missing or off-by-one
+constant, a clarification needed at one step), or a scope restriction that
+the paper proves more generally but the local result handles only a
+sub-case, the formalization may proceed without the full **Unfaithful**
+ceremony. These cases must still:
+
+- Cite a paper-gap document (under `docs/paper-gaps/`) that records the
+  deviation in mathematical terms; if no note exists, write a short one
+  before merging.
+- Use a lighter-weight in-source marker. The recommended forms are
+  `**Scope restriction (...):**` for sub-case proofs, or
+  `**Local fix (...):**` for typo/constant adjustments. Both forms must
+  reference the paper-gap document by file path.
+- Be inline-readable: the marker should let a reader recognize the
+  deviation without leaving the file.
+
+The **Unfaithful** marker is reserved for deviations that would be
+mathematically wrong without follow-up work (the proof is unprovable, or
+the statement smuggles an unwarranted hypothesis). The lighter markers
+are for deviations that are mathematically correct as stated, just
+narrower or differently phrased than the source.
+
+A paper-realignment PR may:
+
+- Delete fields, hypotheses, or whole theorems that are documented as
+  divergent from the cited source (with the divergence recorded in
+  `docs/paper-gaps/`).
+- Leave `sorry` in proof bodies whose old proof depended on the deleted
+  data, when the paper-faithful replacement is the next step.
+- Cascade signature changes through downstream consumers, also using
+  `sorry` if necessary, rather than reverting to keep the build proof-clean.
+
+A paper-realignment PR must:
+
+- Cite the relevant `docs/paper-gaps/*.tex` note documenting the divergence
+  in the PR description.
+- Identify, in the PR description, every `sorry` introduced and the
+  paper-faithful theorem that will discharge it.
+- Be scoped tightly — no unrelated refactors or feature additions.
+- Be followed by tracked implementation issues for the missing
+  paper-faithful proofs.
+
+In paper-realignment mode the standard "do not add sorry" rule is the
+*wrong* heuristic: keeping a divergent proof intact to avoid `sorry`
+preserves a result the source does not assert. Reviewers should evaluate
+paper-realignment PRs against the paper-gap note and the planned
+follow-up, not against the temporary `sorry` count.

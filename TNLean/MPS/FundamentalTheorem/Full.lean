@@ -73,9 +73,13 @@ forces:
 3. Blockwise gauge-phase equivalence: for each `j`, `dimA j = dimB (perm j)` and
    `GaugePhaseEquiv (cast … (A j)) (B (perm j))`.
 
-This lemma is not the full equal-MPV corollary of the source paper.  It does not compare
-the repeated-copy coefficient power sums and does not construct one global gauge for the
-original canonical-form tensors.  Instead, the BNT decomposition identity
+**Scope restriction (one-copy-per-sector)**: This is not the full equal-MPV Corollary II.2 of
+arXiv:1606.00608.  The `IsCanonicalFormBNT` hypothesis forces `mu_strict_anti`, which fixes one
+block per modulus class (`r_j = 1`).  Consequently: (a) the Newton–Girard multiplicity recovery
+(`Lem:app_simple` on `∑_q μ_{j,q}^N`) is bypassed; (b) the global gauge `Y = ⊕_j Id_{r_j} ⊗ Y_j`
+is never assembled; the conclusion is per-block `GaugePhaseEquiv` only.  The proof of this
+restricted version is **complete (no sorry)**.  For the general route see issue #1559 and
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.  The BNT decomposition identity
   `∑_j (μA j)^N * mpv(A j) σ = ∑_k (μB k)^N * mpv(B k) σ`
 is analyzed directly via the overlap dichotomy (CPSV17 Appendix A), yielding per-block
 gauge-phase matching.
@@ -93,6 +97,8 @@ The proof delegates to `blocks_match_of_sameMPV₂_CFBNT`, which is fully proved
 - Matching injectivity (BNT separation + GPE cross-overlap norm → 1): fully proved.
 - `rA = rB` (injective maps on finite types): fully proved.
 - Permutation construction and per-block data extraction: fully proved. -/
+-- SCOPE(one-copy-per-sector): r_j=1 via IsCanonicalFormBNT; complete but restricted.
+-- Multiplicity recovery (Lem:app_simple) and global gauge assembly absent. See #1559.
 lemma fundamentalTheorem_equalMPV_CFBNT_hetero
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

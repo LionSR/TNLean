@@ -6,6 +6,16 @@ rather than duplicating the rules inline.
 
 > **Lean version**: 4.x (Lean 3 keywords like `constant` do not apply)
 
+> **Paper-realignment exception**: When the formalization is being realigned
+> to a cited source (replacing wrong hypotheses, restating divergent theorems
+> to match the paper), the `sorry` blocker below is temporarily relaxed for
+> the *specific* theorems whose old proof depended on the deviating
+> hypotheses. The protocol — including the required `**Unfaithful:**` marker
+> on every such theorem and a paper-gap note documenting the deviation — is
+> in `CLAUDE.md` §"Paper-realignment mode". Reviewers should evaluate
+> paper-realignment PRs against the gap note and the planned follow-up, not
+> against the `sorry` count alone.
+
 ---
 
 ## Blockers

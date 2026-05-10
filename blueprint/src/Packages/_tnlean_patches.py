@@ -41,11 +41,9 @@ from plastexdepgraph.Packages import depgraph as _depgraph
 
 
 _HISTORICAL_DECL_REPLACEMENTS = {
-    # These two names were observed in #398 with underscores stripped by a
+    # These names were observed in #398 with underscores stripped by a
     # plasTeX parsing corner case. The generic string coercion below avoids the
     # common failure mode; this mapping is kept as a narrow last-resort guard.
-    "MPSTensor.weakFundamentalTheoremconditional":
-        "MPSTensor.weakFundamentalTheorem_conditional",
     "MPSTensor.exponentialconvergenceofprimitive":
         "MPSTensor.exponential_convergence_of_primitive",
 }

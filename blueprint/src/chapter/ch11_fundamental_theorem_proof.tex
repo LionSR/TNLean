@@ -85,8 +85,6 @@ used in this chapter.
 
 \begin{lemma}[Conditional block matching from restricted normal-CF-BNT hypotheses]%
     \label{lem:weak_ft_conditional}
-    \lean{MPSTensor.weakFundamentalTheorem_conditional}
-    \leanok
     \uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
     Let $(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$
     be two families in normal canonical form,
@@ -100,16 +98,16 @@ used in this chapter.
         \quad
         V^{(N)}(B_\mathrm{tot})_\sigma = \sum_k b_{N,k}\, V^{(N)}(B_k)_\sigma,
     \]
-    with $a_{N,j} \to a_j \neq 0$ and $b_{N,k} \to b_k \neq 0$.
-    Suppose moreover that
+    and the proportionality
     $V^{(N)}(A_\mathrm{tot})_\sigma = c_N\, V^{(N)}(B_\mathrm{tot})_\sigma$
-    with $c_N \to c \neq 0$.
+    with $c_N \neq 0$ at every $N$, and the dominant-block normalization
+    $\|a_{N,1}\| = \|b_{N,1}\| = 1$ and $\|a_{N,j}\|, \|b_{N,k}\| \le 1$.
     Then $g_A = g_B$ and there is a permutation $\pi$ such that
     $D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
     $B_{\pi(j)}$ for every~$j$.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{lem:ft_proportional_nt}
     This is the restricted normal-CF-BNT proportional comparison
     (Lemma~\ref{lem:ft_proportional_nt}).
@@ -127,13 +125,11 @@ used in this chapter.
 
 \begin{lemma}[Proportional comparison for restricted CF-BNT hypotheses]\label{lem:ft_proportional}
 	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
-	\leanok
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
 	in canonical form with BNT separation, with associated families
 	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
-	nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
+	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$, $c_N$ such that
 	\[
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
 		= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
@@ -141,20 +137,21 @@ used in this chapter.
 		V^{(N)}(B_{\mathrm{tot}})_\sigma
 		= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
 	\]
-	with $a_{N,j} \to a_j^\infty \neq 0$ and
-	$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
+	and the proportionality
 	\[
 		V^{(N)}(A_{\mathrm{tot}})_\sigma
 		= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
 	\]
-	for a sequence $c_N \to c^\infty \neq 0$.
+	with $c_N \neq 0$ at every $N$, and the normalization
+	$\|a_{N,1}\|=\|b_{N,1}\|=1$ and $\|a_{N,j}\|, \|b_{N,k}\|\le 1$
+	at every $N$ (the dominant-block convention from
+	\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
 	Then $g_A = g_B$, and there is a permutation $\pi$ such that
 	$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
 	$B_{\pi(j)}$ for each~$j$.
 \end{lemma}
 
 \begin{proof}
-	\leanok
 	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
 	Apply Theorem~\ref{thm:bnt_perm_prop} to the two canonical-form
 	decompositions with BNT separation.
@@ -163,52 +160,19 @@ used in this chapter.
 	These hypotheses provide injectivity, TP normalization,
 	diagonal overlap limits, and off-diagonal decay via
 	Theorem~\ref{thm:cross_overlap_zero}.
-	With the supplied decomposition identities and convergence
-	hypotheses, Theorem~\ref{thm:bnt_perm_prop} yields the equality of
-	block counts, the permutation, and the per-block gauge-phase
-	equivalence.
+	With the supplied decomposition identities and the per-$N$
+	proportionality and norm-bound hypotheses, Theorem~\ref{thm:bnt_perm_prop}
+	yields the equality of block counts, the permutation, and the per-block
+	gauge-phase equivalence.
 \end{proof}
 
-\begin{remark}[Coefficient arrays for canonical-form decompositions]
-	\label{rem:cf_coeff_arrays}
-	In applications the coefficient arrays in
-	Lemma~\ref{lem:ft_proportional} come from the block-diagonal
-	decomposition itself. If
-	\[
-		A_{\mathrm{tot}} = \bigoplus_{j=1}^{g_A} \mu_j^A A_j,
-		\qquad
-		B_{\mathrm{tot}} = \bigoplus_{k=1}^{g_B} \mu_k^B B_k,
-	\]
-	then Theorem~\ref{thm:mpv_decomposition} gives, in the one-copy
-	strict-weight case,
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g_A} (\mu_j^A)^N V^{(N)}(A_j)_\sigma,
-		\qquad
-		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{k=1}^{g_B} (\mu_k^B)^N V^{(N)}(B_k)_\sigma.
-	\]
-	Thus one takes $a_{N,j} = (\mu_j^A)^N$ and
-	$b_{N,k} = (\mu_k^B)^N$ in that specialization. In the
-	basis-of-normal-tensors theorem of \cite{Cirac2016MPDO_arXiv}, where one
-	allows repeated copies of the same basis tensor, the coefficient attached to
-	a basis sector is instead a repeated-copy power sum
-	$c_{S,j}^{(N)}=\sum_q \mu_{j,q}^N$, exactly as in the BNT decomposition
-	of \cite{Cirac2016MPDO_arXiv}. The sequence
-	$c_N$ is the global proportionality factor from the hypothesis
-	$V^{(N)}(A_{\mathrm{tot}}) = c_N V^{(N)}(B_{\mathrm{tot}})$.
-	Lemma~\ref{lem:ft_proportional} keeps these arrays explicit because
-	Theorem~\ref{thm:bnt_perm_prop} is formulated in that abstract form.
-\end{remark}
-
 \begin{lemma}[Proportional comparison for restricted normal-CF-BNT hypotheses]\label{lem:ft_proportional_nt}
-		\lean{MPSTensor.fundamentalTheorem_proportionalMPV_normalCFBNT}\leanok
+		\lean{MPSTensor.fundamentalTheorem_of_separated_normalCFBNT_data}
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
 		in normal canonical form with BNT separation, with associated families
 		$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-		Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$ and
-		nonzero limits $a_j^\infty$, $b_k^\infty$, $c^\infty$ such that
+		Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$, $c_N$ such that
 		\[
 			V^{(N)}(A_{\mathrm{tot}})_\sigma
 			= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
@@ -216,19 +180,21 @@ used in this chapter.
 			V^{(N)}(B_{\mathrm{tot}})_\sigma
 			= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
 		\]
-		with $a_{N,j} \to a_j^\infty \neq 0$ and
-		$b_{N,k} \to b_k^\infty \neq 0$, and suppose also that
+		and the proportionality
 		\[
 			V^{(N)}(A_{\mathrm{tot}})_\sigma
 			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
 		\]
-		for a sequence $c_N \to c^\infty \neq 0$.
+		with $c_N \neq 0$ at every $N$, and the normalization
+		$\|a_{N,1}\|=\|b_{N,1}\|=1$ and $\|a_{N,j}\|, \|b_{N,k}\|\le 1$
+		at every $N$ (the dominant-block convention from
+		\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
 		Then $g_A = g_B$, and there is a permutation $\pi$ such that
 		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
 		$B_{\pi(j)}$ for each~$j$.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
 		\uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, rem:normalcf_bnt_gap}
 		Normal canonical form with BNT separation provides irreducibility,
 		TP normalization, and primitive self-overlap convergence via
