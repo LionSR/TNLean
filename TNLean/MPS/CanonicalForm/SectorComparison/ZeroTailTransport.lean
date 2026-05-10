@@ -127,22 +127,18 @@ theorem zeroTail_identity_toTensorFromBlocks_blockPower
             (toTensorFromBlocks (d := d) (μ := μA) blocksA) p σ]
     _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σflat := by
           let σ0 : Fin 0 → Fin d := fun i => Fin.elim0 i
+          let σ0' : Fin (0 * p) → Fin d := fun i => σ0 (Fin.cast (by simp) i)
+          have hσ : σflat = σ0' := by
+            funext i
+            exact Fin.elim0 (Fin.cast (by simp) i)
           have hA0 :
               mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σflat =
                 mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ0 := by
-            let σ0' : Fin (0 * p) → Fin d := fun i => σ0 (Fin.cast (by simp) i)
-            have hσ : σflat = σ0' := by
-              funext i
-              exact Fin.elim0 (Fin.cast (by simp) i)
             rw [hσ]
             simp [σ0']
           have hB0 :
               mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σflat =
                 mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ0 := by
-            let σ0' : Fin (0 * p) → Fin d := fun i => σ0 (Fin.cast (by simp) i)
-            have hσ : σflat = σ0' := by
-              funext i
-              exact Fin.elim0 (Fin.cast (by simp) i)
             rw [hσ]
             simp [σ0']
           calc
