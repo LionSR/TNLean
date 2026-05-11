@@ -149,10 +149,12 @@ theorem NonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
     _ = c⁻¹ * mpv A σ := by
       rw [← hN σ]
 
-/-- MPV equality is nonzero MPV proportionality with scalar `1`.
+/-- MPV equality gives nonzero MPV proportionality with scalar `1`.
 
-Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, viewed as the
-equal-MPV specialization of the proportional hypothesis in Theorem `thm1`. -/
+Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, supplies an
+equal-MPV hypothesis. This lemma only packages that hypothesis as the
+corresponding instance of the proportional hypothesis in Theorem `thm1`, lines
+1170--1192. It is not a formalization of Corollary `II_cor2` itself. -/
 theorem SameMPV₂.toNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : SameMPV₂ A B) :
