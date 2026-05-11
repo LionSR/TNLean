@@ -48,6 +48,10 @@ lemma tendsto_norm_scalar_of_tendsto_norm_one
     exact mul_div_cancel_right₀ (‖c N‖) hN
   exact Tendsto.congr' hRatio_eq hRatio
 
+-- The two scalar-convergence statements below are named separately because
+-- issue #1563 uses them as analytic steps in the CPSV16 lines 1170--1192
+-- block-selection contradiction.
+
 /-- **Norm convergence for the proportional scalar sequence.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the

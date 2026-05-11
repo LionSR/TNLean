@@ -107,6 +107,10 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
   choose c hc hEq using h
   exact ⟨c, hc, hEq⟩
 
+-- The fixed-length projection statement below is retained separately because
+-- issue #1563 uses it before passing to the scalar sequence in the CPSV16
+-- lines 1170--1192 block-selection contradiction.
+
 /-- **Weighted inner-product proportionality from proportional assembled block tensors.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
