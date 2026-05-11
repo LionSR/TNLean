@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.SectorComparison.BlockMatchingComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveReindexTransport
 import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
@@ -42,13 +42,13 @@ The supporting modules are:
   path for structural data and common-sector transport.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport` — zero-tail and
   common-sector transport after the structural theorem.
-* `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData` —
-  common primitive span, phase-cover, proportional, and BNT comparison hypotheses.
+* `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData` —
+  common primitive span, phase-cover, and BNT block-matching hypotheses.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveReindexTransport` —
   physical-reindex transport for primitive BNT-cover hypotheses.
 * `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
-  comparisons from block-span, phase-cover, and proportional data.
-* `TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison` — sector comparison
+  comparisons from block-span and phase-cover data.
+* `TNLean.MPS.CanonicalForm.SectorComparison.BlockMatchingComparison` — sector comparison
   from BNT block-permutation gauge-phase data.
 
 ## Main statements

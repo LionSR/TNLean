@@ -98,7 +98,7 @@ theorem HetRepeatedBlocks.of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
 
 /-- Witness for periodic block matching: equal block counts, a bijection, and per-block
 heterogeneous `RepeatedBlocks` equivalence. This is the periodic analogue of
-`BlockPermutationGaugeWitness`. -/
+`BlockPermutationGaugePhaseConclusion`. -/
 abbrev PeriodicBlockMatchingWitness
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

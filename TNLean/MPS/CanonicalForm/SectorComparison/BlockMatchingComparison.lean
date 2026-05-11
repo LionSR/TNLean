@@ -292,7 +292,7 @@ The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place o
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
 `CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
 injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
-See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
+See `CommonPrimitiveBlockMatchingData` for the paper-source references for each missing input. -/
 
 /-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
 

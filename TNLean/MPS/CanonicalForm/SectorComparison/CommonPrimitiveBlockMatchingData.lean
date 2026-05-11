@@ -9,7 +9,7 @@ import TNLean.MPS.FundamentalTheorem.Multi
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 /-!
-# Common primitive proportional data
+# Common primitive block-matching data
 
 This file records the span and phase-cover hypotheses for common primitive
 nonzero-sector families. These structures express the remaining hypotheses
@@ -118,7 +118,7 @@ end CommonPrimitivePhaseCoverHypotheses
 /-- Remaining two-sided hypotheses for common primitive nonzero-sector families,
 formulated with a BNT block-matching comparison.
 
-This is the proportional-comparison version of `CommonPrimitivePhaseCoverHypotheses`: the
+This is the block-matching version of `CommonPrimitivePhaseCoverHypotheses`: the
 structural theorem supplies the same primitive nonzero-sector data, while the remaining inputs
 are equality of the zero-tail dimensions, one-site injectivity on both sides, and a
 BNT comparison conclusion for the two block families.
@@ -126,12 +126,12 @@ BNT comparison conclusion for the two block families.
 This structure is a deliberate parameterization.  It records the block-matching
 conclusion (arXiv:1606.00608, Theorem II.1, lines 283–352): after the
 block-injective span is established, the two block families are compared by a permutation
-of the BNT representatives with equal dimensions.  The `proportional` field records that
+of the BNT representatives with equal dimensions.  The `block_match` field records that
 conclusion; the remaining fields (`zeroTail_eq`, injectivity) ensure the dimensions are
 compatible. The theorem deriving this conclusion directly from proportional MPV
 families is intentionally not stated here; CPSV16 supplies it from canonical-form
 BNT data, not from externally supplied coefficient arrays. -/
-structure CommonPrimitiveProportionalHypotheses
+structure CommonPrimitiveBlockMatchingHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (zeroTailA zeroTailB : ℕ)
     (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x))
@@ -145,7 +145,7 @@ structure CommonPrimitiveProportionalHypotheses
   /-- The two nonzero-sector block families satisfy the BNT block-matching conclusion. -/
   block_match : BlockPermutationGaugePhaseConclusion (d := blockPhysDim d p) blocksA blocksB
 
-namespace CommonPrimitiveProportionalHypotheses
+namespace CommonPrimitiveBlockMatchingHypotheses
 
 /-- A BNT block-matching comparison gives the corresponding phase-cover hypotheses. -/
 theorem toPhaseCoverHypotheses
@@ -153,7 +153,7 @@ theorem toPhaseCoverHypotheses
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
     {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB) :
+    (h : CommonPrimitiveBlockMatchingHypotheses zeroTailA zeroTailB blocksA blocksB) :
     CommonPrimitivePhaseCoverHypotheses zeroTailA zeroTailB blocksA blocksB where
   zeroTail_eq := h.zeroTail_eq
   left_injective := h.left_injective
@@ -167,13 +167,13 @@ theorem toSpanHypotheses
     {zeroTailA zeroTailB : ℕ}
     {blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)}
     {blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)}
-    (h : CommonPrimitiveProportionalHypotheses zeroTailA zeroTailB blocksA blocksB) :
+    (h : CommonPrimitiveBlockMatchingHypotheses zeroTailA zeroTailB blocksA blocksB) :
     CommonPrimitiveSpanHypotheses zeroTailA zeroTailB blocksA blocksB :=
   h.toPhaseCoverHypotheses.toSpanHypotheses
 
-end CommonPrimitiveProportionalHypotheses
+end CommonPrimitiveBlockMatchingHypotheses
 
-/-! ### Zero-tail equality from proportional block matching -/
+/-! ### Zero-tail equality from block matching -/
 
 /-- At length zero, a block-diagonal tensor contributes the sum of the block dimensions. -/
 private theorem mpv_toTensorFromBlocks_zero_eq_sum_dim
@@ -206,7 +206,7 @@ private theorem sum_dim_eq_of_blockPermutationGaugePhaseConclusion
           have hfg : ∀ x, f x = g (perm x) := fun _ => rfl
           simpa [f, g] using (Fintype.sum_equiv perm f g hfg)
 
-/-- The length-zero identity and proportional block matching force equal zero-tail dimensions.
+/-- The length-zero identity and block matching force equal zero-tail dimensions.
 
 The structural theorem already supplies the length-zero equation for the two zero-tail plus
 nonzero-sector decompositions. A BNT block-matching conclusion matches the nonzero blocks by
@@ -253,7 +253,7 @@ This is the structural record realizing arXiv:1606.00608, lines 1155–1192
 per-block dimension equalities, and per-block gauge matrices `X k` with phases
 `phase k` satisfying
 `blocksB (perm k) i = phase k • X k * cast (blocksA k) i * (X k)⁻¹`. -/
-structure BlockProportionalGaugePhaseData
+structure BlockMatchingGaugePhaseData
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k)) : Type where
@@ -275,7 +275,7 @@ structure BlockProportionalGaugePhaseData
         (((X k)⁻¹ : GL (Fin (dimB (perm k))) ℂ) :
           Matrix (Fin (dimB (perm k))) (Fin (dimB (perm k))) ℂ))
 
-namespace BlockProportionalGaugePhaseData
+namespace BlockMatchingGaugePhaseData
 
 variable {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
@@ -284,7 +284,7 @@ variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
 /-- Extract per-block gauge-phase data from a `BlockPermutationGaugePhaseConclusion`. -/
 noncomputable def ofConclusion
     (h : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
-    BlockProportionalGaugePhaseData blocksA blocksB :=
+    BlockMatchingGaugePhaseData blocksA blocksB :=
   let perm := h.choose_spec.choose
   let hperm := h.choose_spec.choose_spec
   let hdim : ∀ k : Fin rA, dimA k = dimB (perm k) :=
@@ -310,12 +310,12 @@ noncomputable def ofConclusion
     conj := hX }
 
 /-- The reindexed `B`-side block family at the matched dimensions. -/
-noncomputable def reindexB (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+noncomputable def reindexB (G : BlockMatchingGaugePhaseData blocksA blocksB) :
     (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
   fun k => blocksB (G.perm k)
 
 /-- The cast `A`-side block family at the matched dimensions. -/
-noncomputable def castA (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+noncomputable def castA (G : BlockMatchingGaugePhaseData blocksA blocksB) :
     (k : Fin rA) → MPSTensor d (dimB (G.perm k)) :=
   fun k => cast (congr_arg (MPSTensor d) (G.hdim k)) (blocksA k)
 
@@ -325,7 +325,7 @@ This lives on the dependent sigma-indexed bond space
 `(k : Fin rA) × Fin (dimB (G.perm k))`, with diagonal block `X k` over the
 matched `B`-side block `G.perm k`.  The flattened/reindexed gauge acting on the
 bond dimension of `toTensorFromBlocks` is `G.globalX`. -/
-noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+noncomputable def globalGL (G : BlockMatchingGaugePhaseData blocksA blocksB) :
     GL ((k : Fin rA) × Fin (dimB (G.perm k))) ℂ :=
   blockDiagonalGL G.X
 
@@ -334,18 +334,18 @@ noncomputable def globalGL (G : BlockProportionalGaugePhaseData blocksA blocksB)
 
 Defined as the canonical reindexing of `G.globalGL`, so that
 `G.globalX = globalGaugeOfBlocks G.X` definitionally. -/
-noncomputable def globalX (G : BlockProportionalGaugePhaseData blocksA blocksB) :
+noncomputable def globalX (G : BlockMatchingGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
   globalGaugeOfBlocks G.X
 
-/-- Explicit global-gauge witness for the proportional block assembly.
+/-- Explicit global-gauge witness for the matched block assembly.
 
 When per-block phases are absorbed into the block weights via
 `μA k = μB (perm k) * phase k`, the weighted direct sum of the permuted right
 blocks is conjugate to the weighted direct sum of the cast left blocks by
 `G.globalX`. -/
 theorem toTensorFromBlocks_reindexB_eq_globalX_conj
-    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (G : BlockMatchingGaugePhaseData blocksA blocksB)
     (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
     (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
     ∀ i : Fin d,
@@ -398,7 +398,7 @@ theorem toTensorFromBlocks_reindexB_eq_globalX_conj
 gauge equivalence between the weighted block-diagonal tensors built from the cast
 left family and the permuted right family. -/
 theorem gaugeEquiv_toTensorFromBlocks
-    (G : BlockProportionalGaugePhaseData blocksA blocksB)
+    (G : BlockMatchingGaugePhaseData blocksA blocksB)
     (μA : Fin rA → ℂ) (μB : Fin rB → ℂ)
     (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
     GaugeEquiv
@@ -406,6 +406,6 @@ theorem gaugeEquiv_toTensorFromBlocks
       (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) := by
   exact ⟨G.globalX, G.toTensorFromBlocks_reindexB_eq_globalX_conj μA μB hμ⟩
 
-end BlockProportionalGaugePhaseData
+end BlockMatchingGaugePhaseData
 
 end MPSTensor

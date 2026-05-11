@@ -627,7 +627,7 @@ facts used to recover the lists of weights from those power sums.
 \end{proof}
 
 \begin{lemma}[Common phase cover from a BNT block-matching conclusion]%
-\label{lem:common_phase_cover_of_proportional_decomposition}
+\label{lem:common_phase_cover_of_block_matching}
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion}
 	\leanok
 	\uses{def:mpv_common_phase_cover}
@@ -672,10 +672,10 @@ facts used to recover the lists of weights from those power sums.
 \end{proof}
 
 \begin{lemma}[Span equality from a BNT block-matching comparison]%
-\label{lem:nonzero_block_span_eq_of_proportional_decomposition}
+\label{lem:nonzero_block_span_eq_of_block_matching}
 	\lean{MPSTensor.mpv_span_eq_of_blockPermutationGaugePhaseConclusion}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition,
+	\uses{lem:common_phase_cover_of_block_matching,
 		lem:mpv_common_phase_cover_span_eq}
 	A BNT block-matching comparison gives equality, for every system
 	size, of the finite-length MPV spans of the two nonzero-weight block families.
@@ -683,7 +683,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition,
+	\uses{lem:common_phase_cover_of_block_matching,
 		lem:mpv_common_phase_cover_span_eq}
 	First form the common MPV phase cover from the block-matching
 	comparison. The common phase-cover span lemma then gives the stated span equality.
@@ -879,8 +879,8 @@ block-matching conclusions for the common primitive sectors.
 \end{proof}
 
 \begin{definition}[Block-matching hypotheses for common primitive sectors]%
-\label{def:common_primitive_proportional_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
+\label{def:common_primitive_block_matching_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses}
 	For two common primitive nonzero-sector families at one blocking length, this
@@ -892,30 +892,30 @@ block-matching conclusions for the common primitive sectors.
 \end{definition}
 
 \begin{theorem}[Block-matching hypotheses imply phase-cover hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toPhaseCoverHypotheses}
+\label{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses}
 	\leanok
-	\uses{def:common_primitive_proportional_hypotheses,
+	\uses{def:common_primitive_block_matching_hypotheses,
 		def:common_primitive_phase_cover_hypotheses}
 	If the block-matching hypotheses of
-	Definition~\ref{def:common_primitive_proportional_hypotheses} hold, then the
+	Definition~\ref{def:common_primitive_block_matching_hypotheses} hold, then the
 	phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses} hold.
 \end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition}
+	\uses{lem:common_phase_cover_of_block_matching}
 	The zero-block dimension equality and injectivity assumptions transfer directly.
 	The common MPV phase cover is provided by the general block-matching lemma
 	applied to the two block families.
 \end{proof}
 
 \begin{theorem}[Block-matching hypotheses imply span hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_span_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
+\label{thm:common_primitive_block_matching_hypotheses_to_span_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+	\uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
 		def:common_primitive_span_hypotheses}
 	If the block-matching hypotheses hold, then the span hypotheses
 	hold by passing through the phase-cover hypotheses.
@@ -923,22 +923,22 @@ block-matching conclusions for the common primitive sectors.
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+	\uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
 		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-	The proportional hypotheses give the phase-cover hypotheses via the preceding
+	The block-matching hypotheses give the phase-cover hypotheses via the preceding
 	theorem, and the phase-cover hypotheses imply the span hypotheses.
 \end{proof}
 
-\begin{definition}[Per-block proportional gauge-phase data]%
-\label{def:block_proportional_gauge_phase_data}
-	\lean{MPSTensor.BlockProportionalGaugePhaseData,
-		MPSTensor.BlockProportionalGaugePhaseData.ofConclusion,
-		MPSTensor.BlockProportionalGaugePhaseData.reindexB,
-		MPSTensor.BlockProportionalGaugePhaseData.castA,
-		MPSTensor.BlockProportionalGaugePhaseData.globalGL,
-		MPSTensor.BlockProportionalGaugePhaseData.globalX}
+\begin{definition}[Per-block block-matching gauge-phase data]%
+\label{def:block_matching_gauge_phase_data}
+	\lean{MPSTensor.BlockMatchingGaugePhaseData,
+		MPSTensor.BlockMatchingGaugePhaseData.ofConclusion,
+		MPSTensor.BlockMatchingGaugePhaseData.reindexB,
+		MPSTensor.BlockMatchingGaugePhaseData.castA,
+		MPSTensor.BlockMatchingGaugePhaseData.globalGL,
+		MPSTensor.BlockMatchingGaugePhaseData.globalX}
 	\leanok
-	\uses{def:common_primitive_proportional_hypotheses, def:gauge_phase_equiv}
+	\uses{def:common_primitive_block_matching_hypotheses, def:gauge_phase_equiv}
 	The block-matching conclusion can be unpacked into explicit
 	per-block data: a permutation matching the two block families, equalities of
 	matched bond dimensions, gauges $X_k$, and nonzero phases $\zeta_k$ such that
@@ -951,11 +951,11 @@ block-matching conclusions for the common primitive sectors.
 \end{definition}
 
 \begin{theorem}[Per-block gauge phases assemble to an explicit global gauge]%
-\label{thm:block_proportional_globalX_conj}
-	\lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-		MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+\label{thm:block_matching_globalX_conj}
+	\lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+		MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
 	\leanok
-	\uses{def:block_proportional_gauge_phase_data, def:tensor_from_blocks,
+	\uses{def:block_matching_gauge_phase_data, def:tensor_from_blocks,
 		def:gauge_equiv}
 	If the block weights absorb the per-block phases,
 	$\mu_A(k)=\mu_B(\sigma(k))\zeta_k$, then the weighted direct sum of the
@@ -1221,7 +1221,7 @@ block-matching conclusions for the common primitive sectors.
 	equality needed by the sector-comparison theorem.  They are not a separate
 	form of the source theorem.  Lemma~\ref{lem:mpv_common_phase_cover_span_eq}
 	turns a common phase cover into span equality, while
-	Lemma~\ref{lem:common_phase_cover_of_proportional_decomposition} constructs
+	Lemma~\ref{lem:common_phase_cover_of_block_matching} constructs
 	such covers from BNT block-matching data.  Establishing the missing
 	representative BNT comparison and exact-length block-injective span remains the
 	open source-faithful passage from equality of total MPV vectors to the

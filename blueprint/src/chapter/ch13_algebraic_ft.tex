@@ -1518,7 +1518,7 @@ which is then combined with overlap estimates and the leading-block peel.
 %% ---------------------------------------------------------
 
 The block-permutation gauge-phase conclusion (see
-Definition~\ref{def:block_proportional_gauge_phase_data}) provides per-block
+Definition~\ref{def:block_matching_gauge_phase_data}) provides per-block
 gauge matrices $X_k$ and phases $\zeta_k$.  Using the block-diagonal $\GL$
 construction of Definition~\ref{def:global_gauge_of_blocks}, one assembles
 these per-block gauges into a single global gauge matrix acting on the total
@@ -1526,10 +1526,10 @@ bond space of the weighted direct sum.  This is the \emph{global
 proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
-    \lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-        MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+    \lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+        MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
     \leanok
-    \uses{thm:block_proportional_globalX_conj, def:global_gauge_of_blocks,
+    \uses{thm:block_matching_globalX_conj, def:global_gauge_of_blocks,
         def:gauge_equiv}
     Let the block weights absorb the per-block phases via
     $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  Then the weighted direct sum of
