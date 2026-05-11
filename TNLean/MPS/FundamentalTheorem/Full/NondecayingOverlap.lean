@@ -15,7 +15,8 @@ heterogeneous equal-case fundamental theorem — the block matching stage that f
 
 It also states the corresponding proportional-MPV paper-realignment step
 `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`, using the
-nonzero projective proportionality hypothesis from CPSV16 Theorem `thm1`.
+nonzero projective proportionality hypothesis from arXiv:1606.00608,
+Theorem `thm1`.
 That proportional statement currently carries the intentional proof obligation
 for issue #1563.
 

@@ -169,10 +169,11 @@ with an extra $Z$-gauge degree of freedom.
 	\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
 	\lean{MPSTensor.normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul}
 	\leanok
-	If the weighted projections of two assembled block tensors are related by a
-	scalar sequence \(c_N\), then after division by nonzero scalars
-	\(\mu^N\) and \(\nu^N\) the normalized projections are related by the
-	adjusted scalar \(c_N(\nu/\mu)^N\).
+	For any tensor \(X\), if the weighted projections of two assembled block
+	tensors against \(\ket{V^{(N)}(X)}\) are related by a scalar sequence
+	\(c_N\), then after division by nonzero scalars \(\mu^N\) and \(\nu^N\)
+	the normalized projections are related by the adjusted scalar
+	\(c_N(\nu/\mu)^N\).
 \end{lemma}
 
 \begin{proof}\leanok
@@ -186,10 +187,11 @@ with an extra $Z$-gauge degree of freedom.
 	\leanok
 	\uses{lem:proportional_tensor_from_blocks_weighted_inner_sequence,
 		lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
-	For proportional assembled block tensors and any nonzero scalars
-	\(\mu,\nu\in\C\), one may choose a nonzero scalar sequence \(c_N\)
-	such that the normalized weighted projections are related by the adjusted
-	scalar \(c_N(\nu/\mu)^N\).
+	For proportional assembled block tensors, any tensor \(X\), and any nonzero
+	scalars \(\mu,\nu\in\C\), one may choose a nonzero scalar sequence \(c_N\)
+	such that the normalized weighted projections against
+	\(\ket{V^{(N)}(X)}\) are related by the adjusted scalar
+	\(c_N(\nu/\mu)^N\).
 \end{lemma}
 
 \begin{proof}\leanok
