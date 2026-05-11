@@ -86,8 +86,8 @@ with an extra $Z$-gauge degree of freedom.
 \end{lemma}
 
 \begin{proof}\leanok
-	The self-overlap is the conjugate of the Lean inner product of the MPV state
-	with itself.  Hence its limit gives convergence of the squared state norm to
+	The self-overlap is the conjugate of the inner product of the MPV state with
+	itself.  Hence its limit gives convergence of the squared state norm to
 	\(1\), and taking square roots gives the norm convergence.
 \end{proof}
 
@@ -96,7 +96,7 @@ with an extra $Z$-gauge degree of freedom.
 	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
 	\leanok
 	\uses{lem:proportional_scalar_norm_core}
-	Suppose the weighted state sums for the two assembled BNT tensors are
+	Suppose the weighted state sums for the two assembled block tensors are
 	related by a scalar sequence \(c_N\). If the norms of both weighted state
 	sums converge to \(1\), then \(|c_N|\to 1\).
 \end{lemma}
@@ -111,7 +111,7 @@ with an extra $Z$-gauge degree of freedom.
 	\lean{MPSTensor.tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one}
 	\leanok
 	\uses{lem:proportional_scalar_norm_core}
-	Suppose the weighted state sums for the two assembled BNT tensors are
+	Suppose the weighted state sums for the two assembled block tensors are
 	related by a scalar sequence \(c_N\). If, after division by nonzero
 	scalars \(\mu^N\) and \(\nu^N\), the two normalized state sums have norms
 	converging to \(1\), then \(|c_N(\nu/\mu)^N|\to 1\).
@@ -169,7 +169,7 @@ with an extra $Z$-gauge degree of freedom.
 	\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
 	\lean{MPSTensor.normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul}
 	\leanok
-	If the weighted projections of two assembled BNT tensors are related by a
+	If the weighted projections of two assembled block tensors are related by a
 	scalar sequence \(c_N\), then after division by nonzero scalars
 	\(\mu^N\) and \(\nu^N\) the normalized projections are related by the
 	adjusted scalar \(c_N(\nu/\mu)^N\).
@@ -186,7 +186,7 @@ with an extra $Z$-gauge degree of freedom.
 	\leanok
 	\uses{lem:proportional_tensor_from_blocks_weighted_inner_sequence,
 		lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
-	For proportional assembled BNT tensors and any nonzero scalars
+	For proportional assembled block tensors and any nonzero scalars
 	\(\mu,\nu\in\C\), one may choose a nonzero scalar sequence \(c_N\)
 	such that the normalized weighted projections are related by the adjusted
 	scalar \(c_N(\nu/\mu)^N\).
@@ -206,9 +206,10 @@ with an extra $Z$-gauge degree of freedom.
 	\uses{def:cf_bnt, def:mpv_overlap, def:nonzero_proportional_mpv}
 	Let \(A=\bigoplus_j \mu_j A_j\) and
 	\(B=\bigoplus_k \nu_k B_k\) be canonical-form tensors with already
-	selected one-copy BNT representatives. Suppose that for every system size
-	the two MPV families are proportional by a nonzero scalar depending on the
-	size. Then every block \(A_j\) has a block \(B_k\) such that
+	selected one-copy BNT representatives, with \(r_A\ge 1\) and
+	\(r_B\ge 1\). Suppose that for every system size the two MPV families are
+	proportional by a nonzero scalar depending on the size. Then every block
+	\(A_j\) has a block \(B_k\) such that
 	\(O_{A_j,B_k}(N)\) does not tend to zero, and conversely every block \(B_k\)
 	has such a block \(A_j\).
 \end{theorem}
