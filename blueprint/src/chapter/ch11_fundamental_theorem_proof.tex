@@ -134,6 +134,30 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the eventual state identity on each basis word.
 \end{proof}
 
+\begin{lemma}[Selected coefficient extraction after one phase substitution]%
+\label{lem:selected_coefficient_from_two_family_linear_independence}
+	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}
+	\leanok
+	\uses{def:mpv_state}
+	Let \(v_i^{(N)}\) and \(w_k^{(N)}\) be two finite families which, together,
+	are linearly independent for all sufficiently large \(N\).  Suppose that
+	for all sufficiently large \(N\),
+	\[
+		\sum_i a_i^{(N)} v_i^{(N)}
+		=
+		b_0^{(N)} v_{i_0}^{(N)}
+		+\sum_k b_k^{(N)} w_k^{(N)}.
+	\]
+	Then \(a_{i_0}^{(N)}=b_0^{(N)}\) for all sufficiently large \(N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Regard both sides as linear combinations of the single family indexed by
+	the disjoint union of the two finite index sets.  Linear independence
+	forces equality of every coefficient, in particular the coefficient of
+	\(v_{i_0}^{(N)}\).
+\end{proof}
+
 \begin{lemma}[Selected weighted summand from phase and coefficient equality]%
 \label{lem:selected_weighted_summand_from_phase_coeff}
 	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff}
