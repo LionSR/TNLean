@@ -162,6 +162,29 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
       LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
   eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A h_self h_cross
 
+/-- **Eventual coefficient extraction from eventual linear independence.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1` to rule out a vanishing-overlap alternative. Once Lemma `Lem1` gives
+linear independence for all sufficiently large lengths, equality of two finite
+linear combinations forces equality of the corresponding coefficients for all
+sufficiently large lengths. -/
+lemma coefficient_eventually_eq_of_eventually_linearIndependent
+    {ι : Type*} [Fintype ι]
+    {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
+    (v : (N : ℕ) → ι → E N) (a b : ℕ → ι → ℂ)
+    (hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (v N))
+    (hEq : ∀ᶠ N in atTop, ∑ i : ι, a N i • v N i = ∑ i : ι, b N i • v N i) :
+    ∀ᶠ N in atTop, ∀ i : ι, a N i = b N i := by
+  refine (hLI.and hEq).mono ?_
+  intro N hN i
+  rcases hN with ⟨hLIN, hEqN⟩
+  have hdiff : ∑ j : ι, (a N j - b N j) • v N j = 0 := by
+    simpa [Finset.sum_sub_distrib, sub_smul] using sub_eq_zero.mpr hEqN
+  have hzero := Fintype.linearIndependent_iff.mp hLIN
+    (fun j : ι => a N j - b N j) hdiff
+  exact sub_eq_zero.mp (hzero i)
+
 /-- Eventual linear independence for the union of two asymptotically orthonormal
 MPV families whose mixed overlaps vanish.
 
