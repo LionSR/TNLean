@@ -283,6 +283,88 @@ lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
       (A a0) B b0 hμB_ne hζ (by simpa [a0, b0] using hPhase)
       hdiag hoff hratio
 
+/-- **Dominant adjusted scalar has asymptotic modulus one.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+dominant-block projection comparison, eventual nonzero proportionality of the
+assembled weighted BNT sums gives a scalar sequence `c_N`. After normalizing
+the two sums by their leading weights, this scalar is adjusted by
+`(μB₀ / μA₀)^N`; the normalized dominant terms on both sides have norm tending
+to one, and therefore the adjusted scalar has modulus tending to one.
+
+**Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
+selects one BNT representative in each sector. The general CPSV16 BNT
+canonical form allows multiplicities inside a sector. This restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ c : ℕ → ℂ,
+      (∀ᶠ N in atTop, c N ≠ 0) ∧
+      (∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) ∧
+      Tendsto
+        (fun N : ℕ =>
+          ‖c N * (μB ⟨0, Nat.pos_of_ne_zero hrB⟩ /
+            μA ⟨0, Nat.pos_of_ne_zero hrA⟩) ^ N‖)
+        atTop (nhds (1 : ℝ)) := by
+  let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
+  let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
+  have hA_self : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
+    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hB_self : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
+    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  obtain ⟨c, hc, hState⟩ :=
+    exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
+      A B hProp
+  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
+  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
+  have hA_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μA a0 ^ N)⁻¹ •
+            (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      A a0 hμA_ne hA_self (fun j hj => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
+          (hA.mu_strict_anti (by
+            simp only [a0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
+  have hB_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μB b0 ^ N)⁻¹ •
+            (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      B b0 hμB_ne hB_self (fun k hk => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
+          (hB.mu_strict_anti (by
+            simp only [b0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
+  have hAdjustedScalar_dom :
+      Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
+        (nhds (1 : ℝ)) :=
+    tendsto_norm_adjusted_weighted_mpvState_scalar_of_eventually_tendsto_norm_one
+      A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
+      hA_norm_dominant hB_norm_dominant
+  exact ⟨c, hc, hState, by simpa [a0, b0] using hAdjustedScalar_dom⟩
+
 /-- **Dominant-block projection contradiction for proportional BNT families.**
 
 Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. If the normalized
@@ -539,52 +621,14 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
         Tendsto
           (fun N => mpvOverlap (d := d)
             (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k) N)
-          atTop (nhds 0)) → False) := by
+        atTop (nhds 0)) → False) := by
   let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
   let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
-  have hA_self : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hB_self : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  obtain ⟨c, _hc, hState⟩ :=
-    exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
-      A B hProp
+  obtain ⟨c, _hc, hState, hAdjustedScalar_dom⟩ :=
+    exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp
   have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
   have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
-  have hA_norm_dominant :
-      Tendsto
-        (fun N : ℕ =>
-          ‖(μA a0 ^ N)⁻¹ •
-            (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
-        atTop (nhds (1 : ℝ)) := by
-    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
-      A a0 hμA_ne hA_self (fun j hj => by
-        rw [norm_div]
-        exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-          (hA.mu_strict_anti (by
-            simp only [a0, Fin.lt_def]
-            exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
-  have hB_norm_dominant :
-      Tendsto
-        (fun N : ℕ =>
-          ‖(μB b0 ^ N)⁻¹ •
-            (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
-        atTop (nhds (1 : ℝ)) := by
-    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
-      B b0 hμB_ne hB_self (fun k hk => by
-        rw [norm_div]
-        exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-          (hB.mu_strict_anti (by
-            simp only [b0, Fin.lt_def]
-            exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
-  have hAdjustedScalar_dom :
-      Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
-        (nhds (1 : ℝ)) :=
-    tendsto_norm_adjusted_weighted_mpvState_scalar_of_eventually_tendsto_norm_one
-      A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
-      hA_norm_dominant hB_norm_dominant
   have hInner :
       ∀ {D : ℕ} (X : MPSTensor d D),
         ∀ᶠ N in atTop,

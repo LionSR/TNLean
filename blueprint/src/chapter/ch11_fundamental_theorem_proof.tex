@@ -605,6 +605,35 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:eventual_proportional_scalar_norm_core}.
 \end{proof}
 
+\begin{lemma}[Dominant adjusted proportional scalar has unit limiting modulus]%
+\label{lem:dominant_adjusted_scalar_norm}
+	\lean{MPSTensor.exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_adjusted_scalar_norm,
+		lem:dominant_weight_normalized_bnt_state_sum_norm}
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
+	canonical-form families with nonempty index sets, and suppose that the
+	assembled weighted MPV families are eventually nonzero proportional.  Then
+	there is an eventual nonzero scalar sequence \(c_N\) relating the two
+	assembled weighted sums, and, for the leading indices \(a_0,b_0\),
+	\[
+		\left|c_N\left(\frac{\mu^B_{b_0}}{\mu^A_{a_0}}\right)^N\right|
+		\longrightarrow 1 .
+	\]
+	This is the leading-weight normalization step in the dominant projection
+	argument.  \cite[Theorem~\texttt{thm1}, lines~1170--1192]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Eventual proportionality supplies the scalar sequence \(c_N\).  Divide the
+	two weighted sums by the leading powers \((\mu^A_{a_0})^N\) and
+	\((\mu^B_{b_0})^N\).  Strict ordering of the BNT weight moduli and
+	normalized self-overlap give norm convergence to \(1\) for both normalized
+	sums, so
+	Lemma~\ref{lem:eventual_proportional_tensor_from_blocks_adjusted_scalar_norm}
+	applies.
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
