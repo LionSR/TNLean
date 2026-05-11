@@ -63,6 +63,21 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
 \end{proof}
 
+\begin{lemma}[Norm convergence of the proportional scalar sequence]%
+\label{lem:proportional_tensor_from_blocks_scalar_norm}
+	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	Suppose the weighted state sums for the two assembled BNT tensors are
+	related by a scalar sequence \(c_N\). If the norms of both weighted state
+	sums converge to \(1\), then \(|c_N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Take norms in the identity \(x_N=c_N y_N\), divide by \(\|y_N\|\), and
+	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
