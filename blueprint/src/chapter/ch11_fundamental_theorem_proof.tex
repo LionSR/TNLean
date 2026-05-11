@@ -181,6 +181,38 @@ with an extra $Z$-gauge degree of freedom.
 	\((\mu_B\zeta)^N=\mu_B^N\zeta^N\).
 \end{proof}
 
+\begin{lemma}[Selected weighted summand from phase substitution and Lemma Lem1]%
+\label{lem:selected_weighted_summand_from_phase_sum_li}
+	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li}
+	\leanok
+	\uses{lem:selected_coefficient_from_two_family_linear_independence,
+		lem:selected_weighted_summand_from_phase_coeff}
+	Suppose a total weighted-state identity has the form
+	\[
+		\sum_i \mu_i^N \ket{V^{(N)}(A_i)}
+		=
+		c_N\left(\nu_0^N\ket{V^{(N)}(B_0)}
+		+\sum_k \nu_k^N\ket{V^{(N)}(B_k)}\right)
+	\]
+	for all sufficiently large \(N\).  If
+	\(\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_{i_0})}\) for every \(N\), and
+	the family consisting of the \(A_i\) together with the remaining \(B_k\)
+	is eventually linearly independent, then
+	\[
+		\mu_{i_0}^N\ket{V^{(N)}(A_{i_0})}
+		=
+		c_N\nu_0^N\ket{V^{(N)}(B_0)}
+	\]
+	for all sufficiently large \(N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Substitute the phase relation for \(B_0\) and apply coefficient
+	extraction to the eventually linearly independent disjoint family.  The
+	resulting coefficient equality gives the selected weighted-summand
+	identity.
+\end{proof}
+
 \begin{lemma}[Subtracting a proportional selected summand]%
 \label{lem:proportional_weighted_state_tail_subtraction}
 	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
