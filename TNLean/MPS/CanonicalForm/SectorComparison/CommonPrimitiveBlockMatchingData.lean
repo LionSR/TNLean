@@ -233,7 +233,7 @@ theorem zeroTail_eq_of_blockPermutationGaugePhaseConclusion
       (zeroTailA : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) =
         (zeroTailB : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) := by
     simpa [hsum] using hzero
-  exact (Nat.cast_injective (R := ℂ)) (add_right_cancel hzero')
+  exact Nat.cast_inj.mp (add_right_cancel hzero')
 
 
 /-! ### Per-block to global proportional gauge

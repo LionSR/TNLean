@@ -165,10 +165,10 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
 /-- Eventual linear independence for the union of two asymptotically orthonormal
 MPV families whose mixed overlaps vanish.
 
-Source: arXiv:1606.00608, lines 1170--1192, where the linear-independence
-corollary is applied after adjoining a single block from one BNT family to the
-other family.  This is the symmetric two-family generalization of that
-linear-independence input. -/
+Source context: arXiv:1606.00608, lines 1170--1192, where the
+linear-independence corollary is applied after adjoining one block from one BNT
+family to the other family.  This auxiliary lemma records the symmetric
+two-family strengthening of that Gram-matrix input. -/
 lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     {d : ℕ} {gA gB : ℕ} {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
     (A : (j : Fin gA) → MPSTensor d (dimA j))
