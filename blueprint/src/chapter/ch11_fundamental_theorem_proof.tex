@@ -106,6 +106,22 @@ with an extra $Z$-gauge degree of freedom.
 	the selected-summand identity, and cancel the common selected term.
 \end{proof}
 
+\begin{lemma}[Reindexing a leading-erased weighted state tail]%
+\label{lem:proportional_weighted_state_tail_reindex}
+	\lean{MPSTensor.weighted_mpvState_sum_erase_zero_eq_sum_succ}
+	\leanok
+	\uses{def:mpv_state}
+	Let \(A_0,A_1,\ldots,A_{r-1}\) be a nonempty finite weighted block family.
+	After erasing the leading block \(A_0\), the weighted MPV-state tail can
+	be reindexed by \(j\mapsto j+1\) as a family indexed by
+	\(\{0,\ldots,r-2\}\).
+\end{lemma}
+
+\begin{proof}\leanok
+	The image of \(j\mapsto j+1\) is exactly the finite set obtained by
+	erasing the leading index.  Rewrite the finite sum along this bijection.
+\end{proof}
+
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
 \label{lem:proportional_scalar_norm_core}
 	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
