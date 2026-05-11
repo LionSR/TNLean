@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -25,7 +25,7 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
 
 ## Tags
 
-matrix product states, canonical form, BNT, proportional decomposition
+matrix product states, canonical form, BNT, block matching
 -/
 
 namespace MPSTensor

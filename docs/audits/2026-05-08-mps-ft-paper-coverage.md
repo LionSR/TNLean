@@ -51,7 +51,7 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
 | Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | Uses Wielandt; `FundamentalTheorem/FiniteLength.lean` imports `WielandtBound` for word-span results | **needs verification** |
-| **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | No faithful Lean declaration yet; former strict proportional wrappers were deleted because their one-shot coefficient hypotheses did not imply the full BNT matching conclusion | **gap** |
+| **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | No faithful Lean theorem at present. The former restricted proportional-comparison declarations were deleted because their coefficient-array hypotheses are not part of the source statement. | **open** |
 | **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (`fundamentalTheorem_equalMPV_CFBNT`); `FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective`) | `leanok` |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
@@ -234,7 +234,15 @@ The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.le
 
 ## 5. Note on Theorem 4.4 (CPSV21) naming
 
-The `FundamentalTheorem/EqualProportional.lean` module previously used "Theorem 4.4" to refer to CPSV21 (arXiv:2011.12127) Section IV.A, which is the CPSV21 restatement of the CPSV16 Fundamental Theorem of MPV (Theorem II.1 / `thm1`). The proportional wrapper has since been removed; only the restricted equal-MPV statement remains formalized:
+The `FundamentalTheorem/EqualProportional.lean` module now records the equal-MPV route and the
+power-sum ingredients.  A faithful Lean statement for the CPSV21 proportional theorem, i.e. the
+CPSV16 Fundamental Theorem of MPV (Theorem II.1 / `thm1`), remains open after removal of the
+restricted coefficient-array theorem surface.
+
+Open target:
+
+- Faithful proportional theorem: CPSV21 Theorem 4.4, corresponding to CPSV16
+  Theorem II.1 (`thm1`).
 
 | Lean declaration | Paper | CPSV16 label |
 |---|---|---|

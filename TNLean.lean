@@ -249,7 +249,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralData
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveProportionalData
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
 import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover

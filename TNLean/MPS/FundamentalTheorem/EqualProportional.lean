@@ -7,11 +7,11 @@ import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
-# Equal and Proportional MPV Fundamental Theorems
+# Equal MPV Fundamental Theorems
 
-This module collects the **equal-case** and **proportional-case** fundamental theorems for
-matrix product states in canonical form with basis-of-normal-tensors (BNT) separation,
-together with supporting corollaries.
+This module collects the equal-case fundamental theorem for matrix product states
+in canonical form with basis-of-normal-tensors (BNT) separation, together with
+supporting power-sum corollaries.
 
 ## Main results
 
@@ -32,12 +32,12 @@ not by themselves imply the full block matching conclusion.  The retained
 formal theorem in this file is the equal-MPV route below, whose hypotheses
 produce nondecaying block overlaps directly.
 
-### Theorem 3: Equal MPVs imply proportional MPVs
+### Theorem 2: Equal MPVs imply proportional MPVs
 (`sameMPV₂_implies_proportionalMPV₂`)
 
 Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
 
-### Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
+### Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
 
 If two same-cardinality sequences of complex numbers have equal power sums for all positive
 exponents, their multisets are equal.  For different cardinalities, the positive-power
@@ -51,15 +51,12 @@ zero entries are deleted.  See `TNLean.Algebra.ScalarPowerSumIdentity`.
 - Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair
   states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
 
-## Design notes
+## Paper-realignment note
 
-The **coefficient packaging**: the proportional-case theorem takes the per-`N`
-coefficient arrays `aCoeff`, `bCoeff` and proportionality scalar `c` as explicit
-data, together with the source-faithful dominant-block normalization
-(`‖aCoeff N 0‖ = ‖bCoeff N 0‖ = 1` and `‖aCoeff N j‖, ‖bCoeff N k‖ ≤ 1`) and a
-per-`N` nonzero condition `c N ≠ 0`. The earlier convergence-to-nonzero-limit
-formulation deviated from arXiv:1606.00608; the deviation is recorded in
-`docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
+The former proportional-case theorem with explicit coefficient arrays has been
+deleted.  CPSV16 Theorem II.1 assumes proportional MPV families for canonical-form
+BNT tensors; it does not assume an externally supplied coefficient-array
+decomposition.
 -/
 open scoped Matrix BigOperators
 open Filter
@@ -120,7 +117,7 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
+/-! ## Theorem 2: Equal MPVs imply proportional MPVs -/
 
 /-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
 
@@ -132,7 +129,7 @@ theorem sameMPV₂_implies_proportionalMPV₂
   intro N
   exact ⟨1, fun σ => by simpa using h N σ⟩
 
-/-! ## Theorem 4: Power-sum multiset equality (Lem:app_simple support lemma)
+/-! ## Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
 
 This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded same-cardinality version is the common Newton--Girard input.

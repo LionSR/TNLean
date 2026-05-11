@@ -71,141 +71,6 @@ pair-span step.
   \(L=S\).
 \end{proof}
 
-\section{Conditional Block Matching}%
-\label{sec:ft_conditional_block_matching}
-
-The following lemma combines the reduction to canonical form
-(zero-block separation, TP gauge, blocking, primitivity)
-with the restricted normal-CF-BNT proportional comparison.
-It is still conditional on the two post-blocking hypotheses left open in
-Chapter~\ref{ch:canonical}: irreducibility for the blocked sectors and
-pairwise distinct nonzero weight norms.
-The direct periodic theorem of Chapter~\ref{ch:periodic_ft_apps} is not
-used in this chapter.
-
-\begin{lemma}[Conditional block matching from restricted normal-CF-BNT hypotheses]%
-    \label{lem:weak_ft_conditional}
-    \uses{def:is_normal_canonical_form, def:gauge_phase_equiv}
-    Let $(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$
-    be two families in normal canonical form,
-    each satisfying the non-degeneracy condition
-    that no two distinct blocks in the same family are gauge-phase
-    equivalent.
-    Let $A_\mathrm{tot}$ and $B_\mathrm{tot}$ be tensors with
-    MPV decompositions
-    \[
-        V^{(N)}(A_\mathrm{tot})_\sigma = \sum_j a_{N,j}\, V^{(N)}(A_j)_\sigma,
-        \quad
-        V^{(N)}(B_\mathrm{tot})_\sigma = \sum_k b_{N,k}\, V^{(N)}(B_k)_\sigma,
-    \]
-    and the proportionality
-    $V^{(N)}(A_\mathrm{tot})_\sigma = c_N\, V^{(N)}(B_\mathrm{tot})_\sigma$
-    with $c_N \neq 0$ at every $N$, and the dominant-block normalization
-    $\|a_{N,1}\| = \|b_{N,1}\| = 1$ and $\|a_{N,j}\|, \|b_{N,k}\| \le 1$.
-    Then $g_A = g_B$ and there is a permutation $\pi$ such that
-    $D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
-    $B_{\pi(j)}$ for every~$j$.
-\end{lemma}
-
-\begin{proof}
-    \uses{lem:ft_proportional_nt}
-    This is the restricted normal-CF-BNT proportional comparison
-    (Lemma~\ref{lem:ft_proportional_nt}).
-    The proof uses split hypotheses.  Normal canonical form supplies
-    irreducibility, trace-preserving normalization, primitivity, and the
-    self-overlap limit via Theorem~\ref{thm:ncf_overlap_tendsto_one}.  The
-    separation of distinct blocks is not derived from normal canonical form; it
-    is the explicit no-phase-gauge-equivalence hypothesis in the statement.  The
-    nondecaying mixed overlap is then converted to phase-gauge equivalence by
-    Theorem~\ref{thm:nt_modulus_one_gauge}.
-\end{proof}
-
-\section{Restricted Proportional Comparisons}%
-\label{sec:ft_restricted_proportional}
-
-\begin{lemma}[Proportional comparison for restricted CF-BNT hypotheses]\label{lem:ft_proportional}
-	\uses{def:cf_bnt, def:gauge_phase_equiv}
-	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-	in canonical form with BNT separation, with associated families
-	$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-	Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$, $c_N$ such that
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
-		\qquad
-		V^{(N)}(B_{\mathrm{tot}})_\sigma
-		= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
-	\]
-	and the proportionality
-	\[
-		V^{(N)}(A_{\mathrm{tot}})_\sigma
-		= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
-	\]
-	with $c_N \neq 0$ at every $N$, and the normalization
-	$\|a_{N,1}\|=\|b_{N,1}\|=1$ and $\|a_{N,j}\|, \|b_{N,k}\|\le 1$
-	at every $N$ (the dominant-block convention from
-	\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
-	Then $g_A = g_B$, and there is a permutation $\pi$ such that
-	$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
-	$B_{\pi(j)}$ for each~$j$.
-\end{lemma}
-
-\begin{proof}
-	\uses{thm:cross_overlap_zero, thm:bnt_perm_prop}
-	Apply Theorem~\ref{thm:bnt_perm_prop} to the two canonical-form
-	decompositions with BNT separation.
-	This yields the permutation $\pi$ that reindexes the separated sectors
-	before comparing them one by one.
-	These hypotheses provide injectivity, TP normalization,
-	diagonal overlap limits, and off-diagonal decay via
-	Theorem~\ref{thm:cross_overlap_zero}.
-	With the supplied decomposition identities and the per-$N$
-	proportionality and norm-bound hypotheses, Theorem~\ref{thm:bnt_perm_prop}
-	yields the equality of block counts, the permutation, and the per-block
-	gauge-phase equivalence.
-\end{proof}
-
-\begin{lemma}[Proportional comparison for restricted normal-CF-BNT hypotheses]\label{lem:ft_proportional_nt}
-		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
-		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
-		in normal canonical form with BNT separation, with associated families
-		$(\mu_j^A, A_j)_{j=1}^{g_A}$ and $(\mu_k^B, B_k)_{k=1}^{g_B}$.
-		Suppose there exist coefficient arrays $a_{N,j}$, $b_{N,k}$, $c_N$ such that
-		\[
-			V^{(N)}(A_{\mathrm{tot}})_\sigma
-			= \sum_{j=1}^{g_A} a_{N,j} V^{(N)}(A_j)_\sigma,
-			\qquad
-			V^{(N)}(B_{\mathrm{tot}})_\sigma
-			= \sum_{k=1}^{g_B} b_{N,k} V^{(N)}(B_k)_\sigma,
-		\]
-		and the proportionality
-		\[
-			V^{(N)}(A_{\mathrm{tot}})_\sigma
-			= c_N V^{(N)}(B_{\mathrm{tot}})_\sigma
-		\]
-		with $c_N \neq 0$ at every $N$, and the normalization
-		$\|a_{N,1}\|=\|b_{N,1}\|=1$ and $\|a_{N,j}\|, \|b_{N,k}\|\le 1$
-		at every $N$ (the dominant-block convention from
-		\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
-		Then $g_A = g_B$, and there is a permutation $\pi$ such that
-		$D_j^A = D_{\pi(j)}^B$ and $A_j$ is gauge-phase equivalent to
-		$B_{\pi(j)}$ for each~$j$.
-\end{lemma}
-
-\begin{proof}
-		\uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, rem:normalcf_bnt_gap}
-		Normal canonical form with BNT separation provides irreducibility,
-		TP normalization, and primitive self-overlap convergence via
-		Theorem~\ref{thm:ncf_overlap_tendsto_one}.
-		Theorem~\ref{thm:nt_modulus_one_gauge} supplies the leading-block
-		identification step: a nondecaying mixed overlap forces the
-		corresponding comparison block to be gauge-phase equivalent.
-		The same peeling argument as in the block-injective case therefore
-		yields the block permutation and gauge-phase equivalence.
-		Remark~\ref{rem:normalcf_bnt_gap} explains why the argument stops at
-		this separated normal-canonical level.
-\end{proof}
-
 \section{Equal-MPV Comparisons}%
 \label{sec:ft_equal_mpv_comparisons}
 
@@ -213,8 +78,8 @@ The source corollary for equal MPVs says that if two canonical-form tensors
 generate the same MPV family for all system sizes, then their matrix dimensions
 coincide and the full tensors are related by one invertible gauge
 \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}. In the proof, this corollary is
-obtained after the proportional Fundamental Theorem by matching the BNT blocks,
-then comparing the sector-weight power sums.
+obtained by matching the BNT blocks and then comparing the sector-weight power
+sums.
 
 We record the comparison statements in the two forms needed below. The
 restricted heterogeneous equal-case lemma, stated as
@@ -761,12 +626,12 @@ facts used to recover the lists of weights from those power sums.
 	Lemma~\ref{lem:sector_basis_overlap_ortho_to_span}.
 \end{proof}
 
-\begin{lemma}[Common phase cover from a BNT proportional-decomposition conclusion]%
-\label{lem:common_phase_cover_of_proportional_decomposition}
-	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion}
+\begin{lemma}[Common phase cover from a BNT block-matching conclusion]%
+\label{lem:common_phase_cover_of_block_matching}
+	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion}
 	\leanok
 	\uses{def:mpv_common_phase_cover}
-	If a BNT proportional-decomposition comparison has produced a permutation of
+	If a BNT block-matching comparison has produced a permutation of
 	the two basis families together with matched bond dimensions and gauge-phase
 	equivalences, then the two basis families have a common MPV phase cover.
 \end{lemma}
@@ -806,21 +671,21 @@ facts used to recover the lists of weights from those power sums.
 	family.
 \end{proof}
 
-\begin{lemma}[Span equality from a proportional-decomposition comparison]%
-\label{lem:nonzero_block_span_eq_of_proportional_decomposition}
-	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
+\begin{lemma}[Span equality from a BNT block-matching comparison]%
+\label{lem:nonzero_block_span_eq_of_block_matching}
+	\lean{MPSTensor.mpv_span_eq_of_blockPermutationGaugePhaseConclusion}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition,
+	\uses{lem:common_phase_cover_of_block_matching,
 		lem:mpv_common_phase_cover_span_eq}
-	A BNT proportional-decomposition comparison gives equality, for every system
+	A BNT block-matching comparison gives equality, for every system
 	size, of the finite-length MPV spans of the two nonzero-weight block families.
 \end{lemma}
 
 \begin{proof}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition,
+	\uses{lem:common_phase_cover_of_block_matching,
 		lem:mpv_common_phase_cover_span_eq}
-	First form the common MPV phase cover from the proportional-decomposition
+	First form the common MPV phase cover from the block-matching
 	comparison. The common phase-cover span lemma then gives the stated span equality.
 \end{proof}
 
@@ -860,32 +725,6 @@ facts used to recover the lists of weights from those power sums.
 	block families. The phase-class representative construction then transports
 	this span equality to the BNT sector bases and supplies the remaining
 	one-family overlap hypotheses.
-\end{proof}
-
-\begin{lemma}[Separated normal canonical-form hypotheses produce a common phase cover]%
-	\label{lem:common_phase_cover_of_separated_normal_bnt}
-		\uses{def:mpv_common_phase_cover, def:is_normal_canonical_form,
-			def:blocks_not_gauge_phase_equiv, thm:bnt_perm_prop_nt}
-	For two normal canonical-form block families with no gauge-phase-equivalent
-	distinct equal-dimension blocks, a proportional-decomposition witness
-	(per-length coefficient arrays, a per-length nonzero proportionality
-	scalar, unit-modulus dominant blocks on each side, uniform sub-dominant
-	coefficient bounds, and the two BNT decomposition identities) gives a
-	common MPV phase cover of the two basis families.
-		This is the BNT construction of the common cover; it does not assume equality of
-		finite-length spans.
-	\end{lemma}
-
-% The proof currently depends on the pending nonzero-overlap argument recorded in
-% docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex and
-% tracked in issue #1559.
-\begin{proof}
-	\uses{lem:common_phase_cover_of_proportional_decomposition,
-		thm:bnt_perm_prop_nt}
-	The irreducible trace-preserving BNT permutation theorem gives the permutation
-	matching the basis blocks, bond-dimension equalities, and gauge-phase
-	equivalences. Applying the previous lemma to that conclusion yields the
-	common phase cover.
 \end{proof}
 
 \begin{theorem}[Sector comparison via a sector-basis matching]%
@@ -970,7 +809,7 @@ facts used to recover the lists of weights from those power sums.
 The following common-primitive hypotheses are not separate statements in
 arXiv:1606.00608.  They name the extra formal assumptions used here before the
 zero-block sector comparison: span equality, phase-cover hypotheses, and
-BNT comparison hypotheses for the common primitive sectors.
+block-matching conclusions for the common primitive sectors.
 
 \begin{definition}[Span hypotheses for common primitive sectors]%
 \label{def:common_primitive_span_hypotheses}
@@ -1039,68 +878,68 @@ BNT comparison hypotheses for the common primitive sectors.
 	common MPV phase cover for the two block families.
 \end{proof}
 
-\begin{definition}[Proportional-decomposition hypotheses for common primitive sectors]%
-\label{def:common_primitive_proportional_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses}
+\begin{definition}[Block-matching hypotheses for common primitive sectors]%
+\label{def:common_primitive_block_matching_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses}
 	\leanok
 	\uses{def:common_primitive_phase_cover_hypotheses}
 	For two common primitive nonzero-sector families at one blocking length, this
-	condition is the proportional-decomposition analogue of
+	condition is the block-matching analogue of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses}: equality of the two
 	leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a
-	BNT proportional-decomposition conclusion for the two block families
+	BNT block-matching conclusion for the two block families
 	(a permutation, equal bond dimensions, and gauge-phase equivalences).
 \end{definition}
 
-\begin{theorem}[Proportional-decomposition hypotheses imply phase-cover hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toPhaseCoverHypotheses}
+\begin{theorem}[Block-matching hypotheses imply phase-cover hypotheses]%
+\label{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses}
 	\leanok
-	\uses{def:common_primitive_proportional_hypotheses,
+	\uses{def:common_primitive_block_matching_hypotheses,
 		def:common_primitive_phase_cover_hypotheses}
-	If the proportional-decomposition hypotheses of
-	Definition~\ref{def:common_primitive_proportional_hypotheses} hold, then the
+	If the block-matching hypotheses of
+	Definition~\ref{def:common_primitive_block_matching_hypotheses} hold, then the
 	phase-cover hypotheses of
 	Definition~\ref{def:common_primitive_phase_cover_hypotheses} hold.
 \end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{lem:common_phase_cover_of_proportional_decomposition}
+	\uses{lem:common_phase_cover_of_block_matching}
 	The zero-block dimension equality and injectivity assumptions transfer directly.
-	The common MPV phase cover is provided by the general proportional-decomposition
-	lemma applied to the two block families.
+	The common MPV phase cover is provided by the general block-matching lemma
+	applied to the two block families.
 \end{proof}
 
-\begin{theorem}[Proportional-decomposition hypotheses imply span hypotheses]%
-\label{thm:common_primitive_proportional_hypotheses_to_span_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveProportionalHypotheses.toSpanHypotheses}
+\begin{theorem}[Block-matching hypotheses imply span hypotheses]%
+\label{thm:common_primitive_block_matching_hypotheses_to_span_hypotheses}
+	\lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+	\uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
 		def:common_primitive_span_hypotheses}
-	If the proportional-decomposition hypotheses hold, then the span hypotheses
+	If the block-matching hypotheses hold, then the span hypotheses
 	hold by passing through the phase-cover hypotheses.
 \end{theorem}
 
 \begin{proof}
 	\leanok
-	\uses{thm:common_primitive_proportional_hypotheses_to_phase_cover_hypotheses,
+	\uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
 		thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-	The proportional hypotheses give the phase-cover hypotheses via the preceding
+	The block-matching hypotheses give the phase-cover hypotheses via the preceding
 	theorem, and the phase-cover hypotheses imply the span hypotheses.
 \end{proof}
 
-\begin{definition}[Per-block proportional gauge-phase data]%
-\label{def:block_proportional_gauge_phase_data}
-	\lean{MPSTensor.BlockProportionalGaugePhaseData,
-		MPSTensor.BlockProportionalGaugePhaseData.ofConclusion,
-		MPSTensor.BlockProportionalGaugePhaseData.reindexB,
-		MPSTensor.BlockProportionalGaugePhaseData.castA,
-		MPSTensor.BlockProportionalGaugePhaseData.globalGL,
-		MPSTensor.BlockProportionalGaugePhaseData.globalX}
+\begin{definition}[Per-block block-matching gauge-phase data]%
+\label{def:block_matching_gauge_phase_data}
+	\lean{MPSTensor.BlockMatchingGaugePhaseData,
+		MPSTensor.BlockMatchingGaugePhaseData.ofConclusion,
+		MPSTensor.BlockMatchingGaugePhaseData.reindexB,
+		MPSTensor.BlockMatchingGaugePhaseData.castA,
+		MPSTensor.BlockMatchingGaugePhaseData.globalGL,
+		MPSTensor.BlockMatchingGaugePhaseData.globalX}
 	\leanok
-	\uses{def:common_primitive_proportional_hypotheses, def:gauge_phase_equiv}
-	The proportional-decomposition conclusion can be unpacked into explicit
+	\uses{def:common_primitive_block_matching_hypotheses, def:gauge_phase_equiv}
+	The block-matching conclusion can be unpacked into explicit
 	per-block data: a permutation matching the two block families, equalities of
 	matched bond dimensions, gauges $X_k$, and nonzero phases $\zeta_k$ such that
 	\[
@@ -1112,11 +951,11 @@ BNT comparison hypotheses for the common primitive sectors.
 \end{definition}
 
 \begin{theorem}[Per-block gauge phases assemble to an explicit global gauge]%
-\label{thm:block_proportional_globalX_conj}
-	\lean{MPSTensor.BlockProportionalGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-		MPSTensor.BlockProportionalGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
+\label{thm:block_matching_globalX_conj}
+	\lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
+		MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
 	\leanok
-	\uses{def:block_proportional_gauge_phase_data, def:tensor_from_blocks,
+	\uses{def:block_matching_gauge_phase_data, def:tensor_from_blocks,
 		def:gauge_equiv}
 	If the block weights absorb the per-block phases,
 	$\mu_A(k)=\mu_B(\sigma(k))\zeta_k$, then the weighted direct sum of the
@@ -1134,122 +973,21 @@ BNT comparison hypotheses for the common primitive sectors.
 	gauge equivalence.
 \end{proof}
 
-\begin{definition}[BNT matching hypotheses for common primitive sectors]%
-\label{def:common_primitive_bnt_cover_hypotheses}
-	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_zeroTailIdentity,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.proportionalDecompositionData_of_sameMPV_toTensorFromBlocks,
-		MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow,
-		MPSTensor.IsNormalCanonicalFormBNT.blockTensor_of_notGpe,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentatives_zeroTailIdentity,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses,
-		MPSTensor.zeroTail_eq_of_proportionalDecompositionConclusion}
-	\leanok
-	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv,
-		def:injective, thm:ncf_sorted_tp_primitive_irred}
-	For two common primitive nonzero-sector families at one blocking length, this
-	condition states the hypotheses needed to apply the BNT comparison theorem:
-	normal canonical form on both sides, no phase-gauge-equivalent distinct
-	blocks in either family, equality \(z_A=z_B\) of the leftover all-zero block
-	dimensions, one-site injectivity, and proportionality of the two block MPV
-	families.  The construction from equal MPVs is formal in the assembled
-	block-diagonal tensors and uses the correct expansion coefficients \(\mu_j^N\), so the convergence
-	conditions and nonzero-limit hypotheses for those coefficient families remain explicit inputs.
-	Its output is the source-form matching
-	\(B_{\pi(j)}^i=e^{i\phi_j}X_jA_j^iX_j^{-1}\), hence
-	\(\ket{V^{(N)}(B_{\pi(j)})}=e^{iN\phi_j}\ket{V^{(N)}(A_j)}\).
-
-	% Maintainer note: the structure name contains "cover" because the next
-	% step constructs this matching as a common MPV phase cover.  This wording is
-	% not part of the source terminology and is intentionally not displayed.
-\end{definition}
-
-\begin{lemma}[Physical relabelling of common primitive BNT hypotheses]%
-	\label{lem:common_primitive_bnt_reindex_transport}
+\begin{lemma}[Physical relabelling of normal-form and BNT hypotheses]%
+	\label{lem:normal_form_bnt_reindex_transport}
 	\lean{MPSTensor.IsNormalCanonicalForm.reindexPhysical_equiv,
 		MPSTensor.BlocksNotGaugePhaseEquiv.reindexPhysical_equiv,
-		MPSTensor.IsNormalCanonicalFormBNT.reindexPhysical_equiv,
-		MPSTensor.ProportionalDecompositionData.reindexPhysical_equiv,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.reindexPhysical_equiv,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.reindexPhysical_directIteratedBlockEquiv}
+		MPSTensor.IsNormalCanonicalFormBNT.reindexPhysical_equiv}
 	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:flattened_iterated_block_tensor, lem:physical_reindex_equiv_transport}
-	A bijection of physical alphabets transports the common primitive BNT
-	hypotheses by relabelling every block in both families.  Normal canonical
-	form, BNT separation, proportional decomposition, one-site injectivity, and
-	equality of the residual all-zero block dimensions are preserved.  Applying
-	this to the canonical bijection
-	between the direct length-$pL$ alphabet and the iterated length-$L$ alphabet
-	over length-$p$ blocks transports the iterated blocked hypotheses to the
-	flattened iterated families on the direct alphabet.
+	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
+	A bijection of physical alphabets transports normal canonical form and BNT
+	separation by relabelling every physical index in every block.
 \end{lemma}
 
 \begin{proof}\leanok
 	Each assertion is transported along the same relabelling.  BNT separation uses the
-	iff for gauge-phase equivalence under physical reindexing, while the
-	proportional-decomposition equalities are evaluated on the relabelled physical
-	configuration.  The final statement is the specialization to the
-	length-$pL$ grouping bijection used in flattened iterated blocking.
+	iff for gauge-phase equivalence under physical reindexing.
 \end{proof}
-
-\begin{definition}[BNT matching inputs for representative common-sector families]%
-\label{def:common_representative_bnt_cover_hypotheses}
-	\lean{MPSTensor.CommonRepresentativeBNTCoverHypotheses}
-	\leanok
-	\uses{def:common_primitive_bnt_cover_hypotheses,
-		def:common_sector_relabeling_hypothesis}
-	For representative common-sector families after choosing one representative
-	per original nonzero block, this structure collects the remaining hypotheses
-	needed for the BNT comparison: nonzero weights, strict weight ordering by norm,
-	BNT separation (no gauge-phase-equivalent distinct representatives), unit
-	modulus of the dominant representative weight on each side as in the source
-	normalization after \(\eqref{eq:II_CF1}\), the length-zero identity of
-	the representative nonzero parts, one-site
-	injectivity of each representative block, proportional-decomposition data
-	linking the two representative families, and the resulting BNT comparison
-	conclusion: a permutation of representatives, equality of the matched bond
-	dimensions, and gauge-phase equivalences for the matched blocks.
-\end{definition}
-
-\begin{theorem}[Representative common-sector families supply BNT matching hypotheses]%
-\label{thm:ofCommonRepresentatives_zeroTailIdentity}
-	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentatives_zeroTailIdentity}
-	\leanok
-	\uses{def:common_representative_bnt_cover_hypotheses}
-	Given representative common-sector families, if the representative weights
-	are strictly ordered by norm, distinct representatives are BNT-separated,
-	the dominant representative weight on each side has unit modulus as in the
-	source normalization after \(\eqref{eq:II_CF1}\), the length-zero identity
-	holds for the representative nonzero parts, each
-	representative block is one-site injective, proportional-decomposition data
-	links the two representative families, and the BNT comparison conclusion
-	supplies a permutation, matched bond dimensions, and gauge-phase equivalences,
-	then the length-zero identity for the residual all-zero block and the
-	normal-CF-BNT conditions produce BNT matching hypotheses for the
-	representative blocks.
-\end{theorem}
-
-\begin{theorem}[Representative common-sector data give BNT matching hypotheses]%
-\label{thm:ofCommonRepresentativeBNTCoverHypotheses}
-	\lean{MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses}
-	\leanok
-	\uses{def:common_representative_bnt_cover_hypotheses}
-	Let $(A_j)_{j \in J}$ and $(B_j)_{j \in J}$ be the representative
-	common-sector families obtained after choosing one representative from each
-	nonzero phase-gauge class.  Assume the representative weights are nonzero and
-	strictly ordered by norm, distinct representatives are not gauge equivalent up
-	to phase, the dominant representative weight on each side has unit modulus,
-	the length-zero identity for the representative nonzero parts holds, and each
-	representative block is one-site injective.  Assume also the
-	proportional-decomposition input for these representative families: total
-	tensors decompose at every length over the two representative BNT families with
-	coefficient functions converging to nonzero limits, and the two total MPV
-	families are proportional at every length by scalars converging to a nonzero
-	limit.  Then these representative families satisfy the BNT matching hypotheses
-	for common primitive sectors.
-\end{theorem}
 
 \begin{theorem}[Common primitive sectors with span hypotheses]%
 \label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
@@ -1295,7 +1033,7 @@ BNT comparison hypotheses for the common primitive sectors.
 	irreducible-block theorem supplies one positive blocking length and
 	trace-preserving, primitive, irreducible nonzero-sector families on both sides.
 	This theorem records that, for exactly those families, either a common MPV
-	phase cover or a BNT proportional-decomposition conclusion supplies the
+	phase cover or a BNT block-matching conclusion supplies the
 	finite-length block-span equality required by
 	Theorem~\ref{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}.
 	Thus the remaining mathematical inputs -- the blocked-word identification
@@ -1474,8 +1212,8 @@ BNT comparison hypotheses for the common primitive sectors.
 		\qquad z_A=z_B,
 	\]
 	with trace-preserving, primitive, irreducible nonzero sectors.  The remaining
-	inputs are the one-site injectivity of those sectors and the BNT
-	proportional-decomposition comparison for the representative families.  These
+	inputs are the one-site injectivity of those sectors and the BNT block-matching
+	comparison for the representative families.  These
 	are genuine upstream assumptions of the conditional statements here; they are
 	not proved from equality of MPV families in this chapter.
 
@@ -1483,9 +1221,8 @@ BNT comparison hypotheses for the common primitive sectors.
 	equality needed by the sector-comparison theorem.  They are not a separate
 	form of the source theorem.  Lemma~\ref{lem:mpv_common_phase_cover_span_eq}
 	turns a common phase cover into span equality, while
-	Lemmas~\ref{lem:common_phase_cover_of_proportional_decomposition}
-	and~\ref{lem:common_phase_cover_of_separated_normal_bnt} construct such
-	covers from BNT proportional-decomposition data.  Establishing the missing
+	Lemma~\ref{lem:common_phase_cover_of_block_matching} constructs
+	such covers from BNT block-matching data.  Establishing the missing
 	representative BNT comparison and exact-length block-injective span remains the
 	open source-faithful passage from equality of total MPV vectors to the
 	componentwise power-sum identities.

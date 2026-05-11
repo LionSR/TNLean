@@ -104,14 +104,11 @@ result, separate from any BNT context.
 The identity~\eqref{eq:power-sum-id} requires a proof: starting from the
 BNT structure on $A$ and $B$ and the equal-MPV hypothesis, one must derive,
 for each modulus class $j$, the equality of the two power sums in
-\eqref{eq:power-sum-id}. In the current formalization the coefficient arrays
-\leanid{aCoeff} and \leanid{bCoeff} in \leanid{ProportionalDecompositionData}
-are explicit hypotheses supplied by the caller.\footnote{%
-\leanid{ProportionalDecompositionData}, fields \leanid{hA\_decomp} and
-\leanid{hB\_decomp}, \path{TNLean/MPS/BNT/Construction.lean} lines 544--548.}
-The source derivation of \eqref{eq:power-sum-id} from the BNT linear-independence
-data and the equal-MPV condition is not yet carried out. This derivation is
-logically prior to applying \texttt{Lem:app\_simple}.
+\eqref{eq:power-sum-id}.  The formal development no longer packages
+coefficient arrays for the discarded proportional branch as standalone
+hypotheses.  The source derivation of \eqref{eq:power-sum-id} from the BNT
+linear-independence data and the equal-MPV condition is still not carried out.
+This derivation is logically prior to applying \texttt{Lem:app\_simple}.
 
 \textbf{Multi-copy sector structure.}
 The formal structures \leanid{IsCanonicalFormBNT} and
@@ -135,15 +132,14 @@ $Y = \bigoplus_j Y_j$ gauge used in the one-copy case is already present.
 \section{What the current formalization does prove}
 
 Within the one-copy-per-sector restriction, the formalization establishes
-the full chain of the Fundamental Theorem argument. The BNT separation
+the equal-MPV branch of the Fundamental Theorem argument. The BNT separation
 hypotheses yield cross-block overlap decay, and the equal-MPV hypothesis at
-a single witness length is used to match the per-block gauge. The proportional
-comparison is packaged in \leanid{ProportionalDecompositionData},\footnote{%
-\path{TNLean/MPS/BNT/Construction.lean}, lines 533--578.} which carries the
-coefficient arrays, the decomposition identities, and the modulus bounds
-directly as hypotheses rather than deriving them from the BNT structure. The
-resulting theorems are therefore conditional on those coefficient hypotheses
-being supplied by the caller.
+a single witness length is used to match the per-block gauge.  The former
+one-shot proportional branch has been deleted: the surviving block-matching
+boundary uses the explicit conclusion
+\leanid{BlockPermutationGaugePhaseConclusion} only where the BNT comparison
+has already been supplied.  Thus no current theorem is presented as deriving
+the source proportional comparison from the discarded coefficient hypotheses.
 
 The source normalization $\|\mu_1\| = 1$ is now recorded as the field
 \leanid{mu\_dom\_norm\_one} in \leanid{IsNormalCanonicalFormBNT},\footnote{%
