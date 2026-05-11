@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 
 /-!
-# Non-decaying overlap existence for equal-MPV BNT families
+# Non-decaying overlap existence for BNT families
 
 This module proves `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, the existence of
 non-decaying cross-overlaps between blocks of two `IsCanonicalFormBNT` families with
@@ -13,10 +13,19 @@ equal total matrix product vectors (`SameMPV₂`). This is **Layer 1a** of the
 heterogeneous equal-case fundamental theorem — the block matching stage that feeds
 `blocks_match_of_sameMPV₂_CFBNT` in `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch`.
 
+It also states the corresponding proportional-MPV paper-realignment step
+`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`, using the
+nonzero projective proportionality hypothesis from CPSV16 Theorem `thm1`.
+That proportional statement currently carries the intentional proof obligation
+for issue #1563.
+
 ## Main statements
 
 * `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`: For every block of one family there
   exists a block of the other family whose cross-overlap does not decay to zero.
+* `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`: The analogous
+  block-selection statement from nonzero proportionality of the assembled MPV
+  families, stated without external coefficient-array hypotheses.
 
 ## Implementation notes
 
@@ -791,7 +800,7 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
-    (hrA : 0 < rA) (hrB : 0 < rB)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
     (hProp : NonzeroProportionalMPV₂
       (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
     (∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
