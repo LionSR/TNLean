@@ -1227,12 +1227,71 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:bnt_two_family_overlap_orthonormal_li">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:eventual_coeff_eq_of_eventual_li">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">11.4</span>
+    <span class="lemma_thmtitle">Eventual coefficient extraction from linear independence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-bnt.html#lem:eventual_coeff_eq_of_eventual_li">#</a>
+    
+    <a class="icon proof" href="ch-bnt.html#a0000024562"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent" class="lean_decl">MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If a finite family of vectors is linearly independent for all sufficiently large \(N\), and two finite linear combinations of that family are equal for all sufficiently large \(N\), then the corresponding coefficients are equal for all sufficiently large \(N\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000024562">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Move the two linear combinations to one side. Linear independence forces each coefficient difference to vanish at every sufficiently large length. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:bnt_two_family_overlap_orthonormal_li">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">11.5</span>
     <span class="lemma_thmtitle">Overlap-orthonormality for two families</span>
     <div class="thm_header_extras">
 
@@ -1243,7 +1302,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:bnt_two_family_overlap_orthonormal_li">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024562"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024563"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1293,14 +1352,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((A_j)_{j=1}^{g_A}\) and \((B_k)_{k=1}^{g_B}\) be finite families of tensors. Suppose the overlaps inside each family are asymptotically orthonormal, and suppose every mixed overlap \(O_{A_jB_k}(N)\) tends to&#160;\(0\). Then the combined MPV family </p>
-<div class="displaymath" id="a0000024563">
+<div class="displaymath" id="a0000024564">
   \[  \{ |V^{(N)}(A_j)\rangle \} _{j=1}^{g_A} \cup \{ |V^{(N)}(B_k)\rangle \} _{k=1}^{g_B}  \]
 </div>
 <p> is linearly independent for all sufficiently large&#160;\(N\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024562">
+<div class="proof_wrapper" id="a0000024563">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1317,7 +1376,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.5</span>
+    <span class="definition_thmlabel">11.6</span>
     <span class="definition_thmtitle">No gauge-phase-equivalent distinct blocks</span>
     <div class="thm_header_extras">
 
@@ -1381,7 +1440,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.6</span>
+    <span class="definition_thmlabel">11.7</span>
     <span class="definition_thmtitle">Canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1407,7 +1466,7 @@
           
           <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.16</a></li>
           
-          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 11.5</a></li>
+          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 11.6</a></li>
           
         </ul>
     
@@ -1452,7 +1511,7 @@
 	, Section&#160;2.3
 	]
 </span>, repeated copies of a selected basis tensor appear as </p>
-<div class="displaymath" id="a0000024564">
+<div class="displaymath" id="a0000024565">
   \[  A^i = \bigoplus _{j=1}^g \bigoplus _{q=1}^{r_j} \mu _{j,q} X_{j,q} A_j^i X_{j,q}^{-1}.  \]
 </div>
 <p> The coefficients \(\mu _{j,q}\), multiplicities \(r_j\), and gauges \(X_{j,q}\) are not part of this restricted single-representative definition. This definition therefore records only strict weight ordering and the absence of phase-gauge equivalence among the selected blocks. It is not the source notion of block-injective canonical form, which is the fixed-length direct-sum span condition discussed in Chapter&#160;<a href="ch-wielandt.html">8</a> and Chapter&#160;<a href="ch-ft_proof.html">12</a>. </p>
@@ -1464,7 +1523,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.7</span>
+    <span class="theorem_thmlabel">11.8</span>
     <span class="theorem_thmtitle">Distinct bond dimensions force BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1475,7 +1534,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:cf_bnt_distinct_dims">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024565"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024566"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1493,7 +1552,7 @@
           
           <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.16</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
         </ul>
     
@@ -1528,7 +1587,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024565">
+<div class="proof_wrapper" id="a0000024566">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1536,7 +1595,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The only new clause in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.6</a> is the prohibition on gauge-phase equivalence between distinct blocks of the same bond dimension. When the bond dimensions are pairwise distinct, this clause is vacuous. </p>
+  <p>The only new clause in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.7</a> is the prohibition on gauge-phase equivalence between distinct blocks of the same bond dimension. When the bond dimensions are pairwise distinct, this clause is vacuous. </p>
 
   </div>
 </div>
@@ -1545,7 +1604,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">11.8</span>
+    <span class="definition_thmlabel">11.9</span>
     <span class="definition_thmtitle">Normal canonical form with BNT separation</span>
     <div class="thm_header_extras">
 
@@ -1571,7 +1630,7 @@
           
           <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 9.37</a></li>
           
-          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 11.5</a></li>
+          <li><a href="ch-bnt.html#def:blocks_not_gauge_phase_equiv">Definition 11.6</a></li>
           
         </ul>
     
@@ -1617,8 +1676,8 @@
 </span>). </p>
 </li>
 </ol>
-<p> As in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.6</a>, the strict ordering describes an already selected or grouped representative family. It is not the source BNT expansion </p>
-<div class="displaymath" id="a0000024566">
+<p> As in Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.7</a>, the strict ordering describes an already selected or grouped representative family. It is not the source BNT expansion </p>
+<div class="displaymath" id="a0000024567">
   \[  A^i = \bigoplus _{j=1}^g \bigoplus _{q=1}^{r_j} \mu _{j,q} X_{j,q} A_j^i X_{j,q}^{-1},  \]
 </div>
 <p> where repeated copies of the same basis tensor remain visible through their coefficients, multiplicities, and gauges. </p>
@@ -1630,7 +1689,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.9</span>
+    <span class="lemma_thmlabel">11.10</span>
     <span class="lemma_thmtitle">Restricted norm-class collapse</span>
     <div class="thm_header_extras">
 
@@ -1641,7 +1700,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:restricted_norm_class_collapse_bnt">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024567"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1698,7 +1757,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024567">
+<div class="proof_wrapper" id="a0000024568">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1715,7 +1774,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.10</span>
+    <span class="theorem_thmlabel">11.11</span>
     <span class="theorem_thmtitle">Cross-overlap decay from explicit BNT hypotheses</span>
     <div class="thm_header_extras">
 
@@ -1726,7 +1785,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:cross_overlap_zero_split">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024568"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1783,7 +1842,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024568">
+<div class="proof_wrapper" id="a0000024569">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1800,7 +1859,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.11</span>
+    <span class="theorem_thmlabel">11.12</span>
     <span class="theorem_thmtitle">Cross-overlap decay for BNT-separated blocks</span>
     <div class="thm_header_extras">
 
@@ -1811,7 +1870,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:cross_overlap_zero">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024569"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1827,13 +1886,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.46</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 11.10</a></li>
+          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 11.11</a></li>
           
         </ul>
     
@@ -1868,7 +1927,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024569">
+<div class="proof_wrapper" id="a0000024570">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1876,7 +1935,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.6</a> supplies injectivity, left-canonical normalization, and the BNT separation hypothesis, so Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">11.10</a> applies directly. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.7</a> supplies injectivity, left-canonical normalization, and the BNT separation hypothesis, so Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">11.11</a> applies directly. </p>
 
   </div>
 </div>
@@ -1885,7 +1944,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.12</span>
+    <span class="lemma_thmlabel">11.13</span>
     <span class="lemma_thmtitle">BNT from explicit blockwise hypotheses</span>
     <div class="thm_header_extras">
 
@@ -1896,7 +1955,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:cf_bnt_is_bnt_split">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024570"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024571"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1920,7 +1979,7 @@
           
           <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 11.3</a></li>
           
-          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 11.10</a></li>
+          <li><a href="ch-bnt.html#thm:cross_overlap_zero_split">Theorem 11.11</a></li>
           
         </ul>
     
@@ -1955,7 +2014,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024570">
+<div class="proof_wrapper" id="a0000024571">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1963,7 +2022,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Injective blocks are normal. The block-diagonal decomposition theorem gives the MPV expansion of \(\bigoplus _k \mu _k A_k\) in terms of the block MPVs. The self-overlap limits are part of the hypotheses, and Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">11.10</a> supplies the off-diagonal decay. Therefore Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a> gives the eventual linear independence required in Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a>. </p>
+  <p> Injective blocks are normal. The block-diagonal decomposition theorem gives the MPV expansion of \(\bigoplus _k \mu _k A_k\) in terms of the block MPVs. The self-overlap limits are part of the hypotheses, and Theorem&#160;<a href="ch-bnt.html#thm:cross_overlap_zero_split">11.11</a> supplies the off-diagonal decay. Therefore Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a> gives the eventual linear independence required in Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a>. </p>
 
   </div>
 </div>
@@ -1972,7 +2031,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.13</span>
+    <span class="lemma_thmlabel">11.14</span>
     <span class="lemma_thmtitle">Restricted CF-BNT hypotheses yield a basis of normal tensors</span>
     <div class="thm_header_extras">
 
@@ -1983,7 +2042,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:cf_bnt_is_bnt">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024571"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024572"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1999,13 +2058,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 11.1</a></li>
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
-          <li><a href="ch-bnt.html#lem:cf_bnt_is_bnt_split">Lemma 11.12</a></li>
+          <li><a href="ch-bnt.html#lem:cf_bnt_is_bnt_split">Lemma 11.13</a></li>
           
         </ul>
     
@@ -2040,7 +2099,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024571">
+<div class="proof_wrapper" id="a0000024572">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2048,7 +2107,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.6</a> provides injective blocks, left-canonical normalization, normalized self-overlaps, and BNT separation. Hence Lemma&#160;<a href="ch-bnt.html#lem:cf_bnt_is_bnt_split">11.12</a> applies. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:cf_bnt">11.7</a> provides injective blocks, left-canonical normalization, normalized self-overlaps, and BNT separation. Hence Lemma&#160;<a href="ch-bnt.html#lem:cf_bnt_is_bnt_split">11.13</a> applies. </p>
 
   </div>
 </div>
@@ -2057,7 +2116,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.14</span>
+    <span class="remark_thmlabel">11.15</span>
     <span class="remark_thmtitle">Comparing the two normality conditions</span>
     <div class="thm_header_extras">
 
@@ -2071,7 +2130,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">11.8</a> references the normal canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.37</a>), which encode normality via the spectral characterization (primitive transfer map). Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a> requires normality via the algebraic characterization (eventual block injectivity, Definition&#160;<a href="ch-mps.html#def:normal">2.29</a>). These are equivalent by Remark&#160;2.20, but the equivalence must be invoked explicitly: the Wielandt theory of Chapter&#160;<a href="ch-wielandt.html">8</a> provides the implication from primitivity to eventual block injectivity needed here. </p>
+  <p> Definition&#160;<a href="ch-bnt.html#def:normal_cf_bnt">11.9</a> references the normal canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.37</a>), which encode normality via the spectral characterization (primitive transfer map). Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a> requires normality via the algebraic characterization (eventual block injectivity, Definition&#160;<a href="ch-mps.html#def:normal">2.29</a>). These are equivalent by Remark&#160;2.20, but the equivalence must be invoked explicitly: the Wielandt theory of Chapter&#160;<a href="ch-wielandt.html">8</a> provides the implication from primitivity to eventual block injectivity needed here. </p>
 
   </div>
 </div>
@@ -2080,7 +2139,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.15</span>
+    <span class="lemma_thmlabel">11.16</span>
     <span class="lemma_thmtitle">Restricted normal-CF-BNT hypotheses give a BNT</span>
     <div class="thm_header_extras">
 
@@ -2091,7 +2150,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:normal_cf_bnt_is_bnt">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024572"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2107,11 +2166,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 11.8</a></li>
+          <li><a href="ch-bnt.html#def:normal_cf_bnt">Definition 11.9</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 11.1</a></li>
           
-          <li><a href="ch-bnt.html#rem:normalcf_bnt_gap">Remark 11.14</a></li>
+          <li><a href="ch-bnt.html#rem:normalcf_bnt_gap">Remark 11.15</a></li>
           
         </ul>
     
@@ -2146,7 +2205,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024572">
+<div class="proof_wrapper" id="a0000024573">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2164,7 +2223,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.16</span>
+    <span class="lemma_thmlabel">11.17</span>
     <span class="lemma_thmtitle">Invertible change of basis</span>
     <div class="thm_header_extras">
 
@@ -2175,7 +2234,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:bnt_invertible_change_basis">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024573"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024574"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2203,14 +2262,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(v_1, \ldots , v_g\) and \(w_1, \ldots , w_g\) be two linearly independent families in a complex vector space with the same span. Then there exists an invertible matrix \(U \in \mathrm{GL}_g(\mathbb {C})\) such that </p>
-<div class="displaymath" id="a0000024574">
+<div class="displaymath" id="a0000024575">
   \[  w_j = \sum _{i=1}^g U_{ij} v_i  \]
 </div>
 <p> for every \(j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024573">
+<div class="proof_wrapper" id="a0000024574">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2227,7 +2286,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.17</span>
+    <span class="lemma_thmlabel">11.18</span>
     <span class="lemma_thmtitle">Eventual change of basis from equal spans</span>
     <div class="thm_header_extras">
 
@@ -2238,7 +2297,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:bnt_eventual_change_basis">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024575"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024576"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2254,13 +2313,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#lem:bnt_invertible_change_basis">Lemma 11.16</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_invertible_change_basis">Lemma 11.17</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.46</a></li>
           
           <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 11.3</a></li>
           
-          <li><a href="ch-bnt.html#lem:bnt_invertible_change_basis">Lemma 11.16</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_invertible_change_basis">Lemma 11.17</a></li>
           
         </ul>
     
@@ -2295,7 +2354,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024575">
+<div class="proof_wrapper" id="a0000024576">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2303,7 +2362,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the span equality lets us apply Lemma&#160;<a href="ch-bnt.html#lem:bnt_invertible_change_basis">11.16</a>. </p>
+  <p> By Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the span equality lets us apply Lemma&#160;<a href="ch-bnt.html#lem:bnt_invertible_change_basis">11.17</a>. </p>
 
   </div>
 </div>
@@ -2312,7 +2371,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.18</span>
+    <span class="theorem_thmlabel">11.19</span>
     <span class="theorem_thmtitle">Permutation rigidity for equal block counts</span>
     <div class="thm_header_extras">
 
@@ -2323,7 +2382,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:bnt_perm_same_card">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024576"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2345,7 +2404,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.21</a></li>
           
-          <li><a href="ch-bnt.html#lem:bnt_eventual_change_basis">Lemma 11.17</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_eventual_change_basis">Lemma 11.18</a></li>
           
           <li><a href="ch-spectral.html#thm:overlap_decay">Theorem 7.25</a></li>
           
@@ -2384,7 +2443,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024576">
+<div class="proof_wrapper" id="a0000024577">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2392,7 +2451,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For large \(N\), Lemma&#160;<a href="ch-bnt.html#lem:bnt_eventual_change_basis">11.17</a> gives an invertible matrix \(U_N\) relating the two MPV families. Fix \(j\). If every mixed overlap \(O_{A_iB_j}(N)\) tended to \(0\), then taking inner products of the relation with the \(A_i\) and using that the Gram matrix of the \(A\)-family tends to the identity would force the \(j\)th column of \(U_N\) to vanish asymptotically, contradicting the self-overlap limit of \(B_j\). Thus each \(B_j\) has a matched block \(A_{f(j)}\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">7.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">7.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Off-diagonal decay within the \(B\)-family makes \(f\) injective, hence bijective, and its inverse is the required permutation. </p>
+  <p> For large \(N\), Lemma&#160;<a href="ch-bnt.html#lem:bnt_eventual_change_basis">11.18</a> gives an invertible matrix \(U_N\) relating the two MPV families. Fix \(j\). If every mixed overlap \(O_{A_iB_j}(N)\) tended to \(0\), then taking inner products of the relation with the \(A_i\) and using that the Gram matrix of the \(A\)-family tends to the identity would force the \(j\)th column of \(U_N\) to vanish asymptotically, contradicting the self-overlap limit of \(B_j\). Thus each \(B_j\) has a matched block \(A_{f(j)}\) with non-decaying mixed overlap. Theorems&#160;<a href="ch-spectral.html#thm:overlap_decay_rect">7.23</a> and&#160;<a href="ch-spectral.html#thm:overlap_decay">7.25</a> then force equal bond dimension and gauge-phase equivalence for each match. Off-diagonal decay within the \(B\)-family makes \(f\) injective, hence bijective, and its inverse is the required permutation. </p>
 
   </div>
 </div>
@@ -2401,7 +2460,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.19</span>
+    <span class="lemma_thmlabel">11.20</span>
     <span class="lemma_thmtitle">Permutation rigidity with asymptotically orthonormal overlaps</span>
     <div class="thm_header_extras">
 
@@ -2412,7 +2471,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:bnt_perm_simple">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024577"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024578"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2438,7 +2497,7 @@
           
           <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 11.3</a></li>
           
-          <li><a href="ch-bnt.html#thm:bnt_perm_same_card">Theorem 11.18</a></li>
+          <li><a href="ch-bnt.html#thm:bnt_perm_same_card">Theorem 11.19</a></li>
           
         </ul>
     
@@ -2470,14 +2529,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((A_j)_{j=1}^{g_A}\) and \((B_k)_{k=1}^{g_B}\) be two families of injective tensors satisfying the TP normalization \(\sum _i (A_j^i)^\dagger A_j^i = \mathbb {1}\) and \(\sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}\), whose self-overlaps converge to&#160;\(1\) and whose cross-overlaps within each family converge to&#160;\(0\). If for every system size&#160;\(N\), </p>
-<div class="displaymath" id="a0000024578">
+<div class="displaymath" id="a0000024579">
   \[  \operatorname{span}_{\mathbb {C}}\{ |V^{(N)}(A_j)\rangle  : 1 \le j \le g_A\}  = \operatorname{span}_{\mathbb {C}}\{ |V^{(N)}(B_k)\rangle  : 1 \le k \le g_B\} ,  \]
 </div>
 <p> then \(g_A = g_B\), and there is a permutation \(\pi \) of the common block index set such that \(A_j\) and \(B_{\pi (j)}\) have the same bond dimension and are gauge-phase equivalent for each&#160;\(j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024577">
+<div class="proof_wrapper" id="a0000024578">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2485,7 +2544,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the common span has the same dimension when computed from the \(A\)-family or the \(B\)-family, so \(g_A = g_B\). After identifying the two index sets, Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_same_card">11.18</a> yields the permutation conclusion. </p>
+  <p> By Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">11.3</a>, both families are linearly independent for all sufficiently large \(N\). At such an \(N\), the common span has the same dimension when computed from the \(A\)-family or the \(B\)-family, so \(g_A = g_B\). After identifying the two index sets, Theorem&#160;<a href="ch-bnt.html#thm:bnt_perm_same_card">11.19</a> yields the permutation conclusion. </p>
 
   </div>
 </div>
@@ -2494,7 +2553,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.20</span>
+    <span class="theorem_thmlabel">11.21</span>
     <span class="theorem_thmtitle">Non-equivalent irreducible TP blocks are eventually non-proportional</span>
     <div class="thm_header_extras">
 
@@ -2505,7 +2564,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:not_gauge_phase_eventually_not_proportional">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024579"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2562,7 +2621,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024579">
+<div class="proof_wrapper" id="a0000024580">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2580,7 +2639,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.21</span>
+    <span class="lemma_thmlabel">11.22</span>
     <span class="lemma_thmtitle">Strict-dominance coefficient ratios</span>
     <div class="thm_header_extras">
 
@@ -2589,7 +2648,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:strict_dominance_coefficient_ratios">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024580"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024581"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2605,7 +2664,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.6</a></li>
+          <li><a href="ch-bnt.html#def:cf_bnt">Definition 11.7</a></li>
           
         </ul>
     
@@ -2621,7 +2680,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024580">
+<div class="proof_wrapper" id="a0000024581">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2638,7 +2697,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">11.22</span>
+    <span class="lemma_thmlabel">11.23</span>
     <span class="lemma_thmtitle">Dominant-weight normalization</span>
     <div class="thm_header_extras">
 
@@ -2647,7 +2706,7 @@
 
     <a class="icon proof" href="ch-bnt.html#lem:dominant_weight_normalization">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024581"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024582"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2681,7 +2740,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024581">
+<div class="proof_wrapper" id="a0000024582">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2693,19 +2752,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000024582">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000024583">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.23</span>
+    <span class="remark_thmlabel">11.24</span>
     <span class="remark_thmtitle">Strict-dominance regime</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#a0000024582">#</a>
+    <a class="icon proof" href="ch-bnt.html#a0000024583">#</a>
     
     
     
@@ -2728,7 +2787,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.24</span>
+    <span class="theorem_thmlabel">11.25</span>
     <span class="theorem_thmtitle">Newton–Girard trace recursion</span>
     <div class="thm_header_extras">
 
@@ -2739,7 +2798,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:newton_girard">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024583"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024584"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2772,7 +2831,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024583">
+<div class="proof_wrapper" id="a0000024584">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2781,26 +2840,26 @@
   </div>
   <div class="proof_content">
   <p>Let \(e_m\) denote the \(m\)th elementary symmetric polynomial in the eigenvalues, with \(e_0 = 1\). The Newton–Girard recursion </p>
-<div class="displaymath" id="a0000024584">
+<div class="displaymath" id="a0000024585">
   \[  m e_m = \sum _{i=1}^m (-1)^{i-1} e_{m-i} \operatorname{tr}(A^i)  \]
 </div>
 <p> expresses the coefficients of the characteristic polynomial in terms of the power-sum traces \(\operatorname{tr}(A^i)\). Equal power sums for \(A\) and \(B\) therefore give equal coefficients, hence equal characteristic polynomials. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000024585">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000024586">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.25</span>
+    <span class="remark_thmlabel">11.26</span>
     <span class="remark_thmtitle">How the power-sum equality is used</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#a0000024585">#</a>
+    <a class="icon proof" href="ch-bnt.html#a0000024586">#</a>
     
     
     
@@ -2818,7 +2877,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.26</span>
+    <span class="theorem_thmlabel">11.27</span>
     <span class="theorem_thmtitle">Finite-range equal power sums imply equal multisets</span>
     <div class="thm_header_extras">
 
@@ -2829,7 +2888,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:bounded_power_sum_multiset">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024586"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024587"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2867,14 +2926,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(\alpha , \beta : \{ 0, \ldots , n-1\}  \to \mathbb {C}\). If \(\sum _i \alpha _i^k = \sum _i \beta _i^k\) for \(1 \le k \le n\), then the multisets \(\{ \alpha _i\} \) and \(\{ \beta _i\} \) are equal. More generally, if \(\alpha : \{ 0,\ldots ,m-1\} \to \mathbb {C}\) and \(\beta : \{ 0,\ldots ,n-1\} \to \mathbb {C}\) have no zero entries and their power sums agree for \(1 \le k \le \max (m,n)\), then \(m=n\) and the two multisets are equal. There is also an exponent-zero list form: for lists \((\lambda _{a,k})_{k=1}^{x_a}\) and \((\lambda _{b,k})_{k=1}^{x_b}\), the hypothesis \(\sum _{k=1}^{x_a}\lambda _{a,k}^N =\sum _{k=1}^{x_b}\lambda _{b,k}^N\) for \(1\le N\le \max (x_a,x_b)\) implies </p>
-<div class="displaymath" id="a0000024587">
+<div class="displaymath" id="a0000024588">
   \[  \{ \lambda _{a,k}\mid \lambda _{a,k}\neq 0\} _{k=1}^{x_a} = \{ \lambda _{b,k}\mid \lambda _{b,k}\neq 0\} _{k=1}^{x_b}  \]
 </div>
 <p> as multisets. If the equality is also assumed at \(N=0\), then the original lists have the same multiset. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024586">
+<div class="proof_wrapper" id="a0000024587">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2891,7 +2950,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">11.27</span>
+    <span class="theorem_thmlabel">11.28</span>
     <span class="theorem_thmtitle">Equal power sums imply equal multisets</span>
     <div class="thm_header_extras">
 
@@ -2902,7 +2961,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:power_sum_multiset">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000024588"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000024589"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2933,7 +2992,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000024588">
+<div class="proof_wrapper" id="a0000024589">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2941,29 +3000,29 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Construct diagonal matrices \(\operatorname{diag}(\alpha )\) and \(\operatorname{diag}(\beta )\). The power-sum hypothesis gives \(\operatorname{tr}(\operatorname{diag}(\alpha )^k) = \operatorname{tr}(\operatorname{diag}(\beta )^k)\). By Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">11.24</a>, the characteristic polynomials agree: \(\prod _i (X - \alpha _i) = \prod _i (X - \beta _i)\). Extracting roots gives multiset equality. </p>
+  <p> Construct diagonal matrices \(\operatorname{diag}(\alpha )\) and \(\operatorname{diag}(\beta )\). The power-sum hypothesis gives \(\operatorname{tr}(\operatorname{diag}(\alpha )^k) = \operatorname{tr}(\operatorname{diag}(\beta )^k)\). By Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">11.25</a>, the characteristic polynomials agree: \(\prod _i (X - \alpha _i) = \prod _i (X - \beta _i)\). Extracting roots gives multiset equality. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000024589">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000024590">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">11.28</span>
+    <span class="remark_thmlabel">11.29</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-bnt.html#a0000024589">#</a>
+    <a class="icon proof" href="ch-bnt.html#a0000024590">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>Theorems&#160;<a href="ch-bnt.html#thm:newton_girard">11.24</a> and&#160;<a href="ch-bnt.html#thm:power_sum_multiset">11.27</a> remain relevant for the equal-MPV source corollary discussed in Section&#160;<a href="ch-ft_proof.html#sec:ft_equal_mpv_comparisons">12.2</a>, where the paper uses a power-sum step to recover the multiplicities \(r_j\) and the weights \(\mu _{j,q}\). The BNT multiplicity lemmas handle this recovery directly rather than through a separate explicit-coefficient equal-case theorem. </p>
+  <p>Theorems&#160;<a href="ch-bnt.html#thm:newton_girard">11.25</a> and&#160;<a href="ch-bnt.html#thm:power_sum_multiset">11.28</a> remain relevant for the equal-MPV source corollary discussed in Section&#160;<a href="ch-ft_proof.html#sec:ft_equal_mpv_comparisons">12.2</a>, where the paper uses a power-sum step to recover the multiplicities \(r_j\) and the weights \(\mu _{j,q}\). The BNT multiplicity lemmas handle this recovery directly rather than through a separate explicit-coefficient equal-case theorem. </p>
 
   </div>
 </div>
