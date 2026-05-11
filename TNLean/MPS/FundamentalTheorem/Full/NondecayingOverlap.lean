@@ -787,6 +787,69 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
       B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
   simpa [Asingle] using hLI
 
+/-- **Fixed-right all-overlaps-decay contradiction for proportional BNT families.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, line 1182. In the proof, after
+fixing a block `B_k`, the authors say that it is impossible for all overlaps
+with the `A_j` blocks to tend to zero, because otherwise the total MPV families
+could not be proportional by Lemma `Lem1`.
+
+This statement names the cancellation step implicit in that sentence. The
+local Lemma `Lem1` input is
+`eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT`.
+The remaining formal proof obligation is documented in
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
+#1607. -/
+lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (k₀ : Fin rB)
+    (hAllDecay : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
+    False := by
+  sorry
+
+/-- **Fixed-left all-overlaps-decay contradiction for proportional BNT families.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185. The proof repeats
+the fixed-block argument with the two tensor families interchanged to obtain
+the opposite block-count inequality. Thus, for a fixed block `A_j`, it is
+impossible for all overlaps with the `B_k` blocks to tend to zero under
+eventual nonzero proportionality of the total MPV families.
+
+This statement names the symmetric cancellation step implicit in the source.
+The local Lemma `Lem1` input is
+`eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT`.
+The remaining formal proof obligation is documented in
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
+#1607. -/
+lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (j₀ : Fin rA)
+    (hAllDecay : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
+    False := by
+  sorry
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
@@ -801,10 +864,9 @@ form used in this development. CPSV16 Theorem II.1 is stated for the general
 BNT canonical form with possible multiplicities. This restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
 
-The proof body first derives the four BNT self- and cross-overlap convergence
-facts and the lengthwise nonzero proportional scalar sequence from the stated
-hypotheses. The remaining proof step is the dominant-block contradiction from
-the normalized proportional projection identity; see issue #1563. -/
+The proof reduces the two quantified non-decaying-overlap claims to the named
+fixed-block contradictions corresponding to the two directions of the source
+argument. Those fixed-block cancellation proofs are tracked in issue #1607. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -821,25 +883,17 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
     (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
-  have hrA_pos : 0 < rA := Nat.pos_of_ne_zero hrA
-  have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB
-  let a0 : Fin rA := ⟨0, hrA_pos⟩
-  let b0 : Fin rB := ⟨0, hrB_pos⟩
-  have hDominant_contra :=
-    dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-      A B hA hB hrA hrB hProp.eventually
-  have hDominantB_contra :
-      (∀ j : Fin rA, Tendsto (fun N => mpvOverlap (d := d) (A j) (B b0) N)
-        atTop (nhds 0)) → False := by
-    simpa [b0] using hDominant_contra.1
-  have hDominantA_contra :
-      (∀ k : Fin rB, Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k) N)
-        atTop (nhds 0)) → False := by
-    simpa [a0] using hDominant_contra.2
-  -- Remaining CPSV16 line 1170--1192 step: lift the dominant contradictions
-  -- `hDominantA_contra` and `hDominantB_contra` to arbitrary blocks by the
-  -- same tail-reduction argument used in the equal-MPV theorem above.
-  sorry
+  constructor
+  · intro j₀
+    by_contra h
+    push Not at h
+    exact fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp.eventually j₀ h
+  · intro k₀
+    by_contra h
+    push Not at h
+    exact fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp.eventually k₀ h
 
 end HeteroEqualCase
 
