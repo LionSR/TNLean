@@ -27,7 +27,7 @@ with a global gauge equivalence of the block-diagonal tensors.
 ### Proportional-MPV Fundamental Theorem (Theorem 4.4)
 
 The proportional case is not restated here as a Lean theorem.  The former
-one-shot proportional-decomposition wrapper used coefficient hypotheses that do
+one-shot proportional-decomposition theorem used coefficient hypotheses that do
 not by themselves imply the full block matching conclusion.  The retained
 formal theorem in this file is the equal-MPV route below, whose hypotheses
 produce nondecaying block overlaps directly.
