@@ -107,6 +107,93 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
   choose c hc hEq using h
   exact ⟨c, hc, hEq⟩
 
+/-- **Nonzero proportionality from a weighted MPV-state scalar sequence.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+block-selection proof, after expanding canonical-form tensors into weighted
+BNT block sums, a lengthwise nonzero scalar identity of the weighted MPV-state
+sums is exactly the corresponding projective proportionality of the assembled
+tensors. This is the converse bookkeeping direction to
+`exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks`. -/
+lemma nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_sequence
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (hc : ∀ N : ℕ, c N ≠ 0)
+    (hState : ∀ N : ℕ,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B) := by
+  intro N
+  refine ⟨c N, hc N, fun σ => ?_⟩
+  have hAstate :
+      mpvState (d := d) (toTensorFromBlocks μA A) N =
+        ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μA A) A
+      (N := N) (fun j : Fin rA => (μA j) ^ N) ?_
+    intro τ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μA) (A := A) τ
+  have hBstate :
+      mpvState (d := d) (toTensorFromBlocks μB B) N =
+        ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μB B) B
+      (N := N) (fun k : Fin rB => (μB k) ^ N) ?_
+    intro τ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μB) (A := B) τ
+  have hN := congrArg (fun v : MPVSpace d N => v σ) (hState N)
+  have hAcoeff :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μA) (A := A) σ
+  have hBcoeff :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μB) (A := B) σ
+  calc
+    mpv (toTensorFromBlocks μA A) σ =
+        ∑ j : Fin rA, (μA j) ^ N * mpv (A j) σ := by
+          simpa [smul_eq_mul] using hAcoeff
+    _ = c N * (∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ) := by
+      simpa [mpvState_apply, hAstate, hBstate, Pi.smul_apply, smul_eq_mul] using hN
+    _ = c N * (∑ k : Fin rB, (μB k) ^ N • mpv (B k) σ) := by
+      simp [smul_eq_mul]
+    _ = c N * mpv (toTensorFromBlocks μB B) σ := by
+      rw [← hBcoeff]
+
+/-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof removes
+the already matched leading BNT component and continues with the remaining
+blocks. This lemma isolates the linear algebra: if the total weighted MPV-state
+sums are related by the scalar `c_N`, and the selected summands are related by
+the same scalar, then the erased tails are related by the same scalar. -/
+lemma weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin rA) (b0 : Fin rB)
+    (hState : ∀ N : ℕ,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
+    (hSelected : ∀ N : ℕ,
+      (μA a0) ^ N • mpvState (d := d) (A a0) N =
+        c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N)) :
+    ∀ N : ℕ,
+      ∑ j ∈ Finset.univ.erase a0, (μA j) ^ N • mpvState (d := d) (A j) N =
+        c N •
+          (∑ k ∈ Finset.univ.erase b0, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  intro N
+  have hN := hState N
+  rw [← Finset.add_sum_erase _ _ (Finset.mem_univ a0),
+    ← Finset.add_sum_erase _ _ (Finset.mem_univ b0), smul_add] at hN
+  rw [hSelected N] at hN
+  exact add_left_cancel hN
+
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Once the
