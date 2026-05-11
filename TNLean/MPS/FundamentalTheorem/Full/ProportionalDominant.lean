@@ -26,9 +26,10 @@ section ProportionalDominant
 /-- **Dominant-block projection contradiction for proportional BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. If the normalized
-proportional projection identity has an adjusted scalar whose modulus tends to
-one, then the dominant block on either side cannot have all cross-overlaps
-tending to zero. This is the dominant case of the CPSV16 line 1182 argument. -/
+proportional projection identity eventually holds and has an adjusted scalar
+whose modulus tends to one, then the dominant block on either side cannot have
+all cross-overlaps tending to zero. This is the dominant case of the CPSV16
+line 1182 argument after applying Lemma `Lem1`. -/
 lemma dominant_projection_contradictions_of_normalized_proportional_inner
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -42,7 +43,7 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
     (c : ℕ → ℂ)
     (hNormalizedInner :
       ∀ {D : ℕ} (X : MPSTensor d D) (μ ν : ℂ),
-        μ ≠ 0 → ν ≠ 0 → ∀ N : ℕ,
+        μ ≠ 0 → ν ≠ 0 → ∀ᶠ N in atTop,
           (μ ^ N)⁻¹ *
               (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
             (c N * (ν / μ) ^ N) *
@@ -185,8 +186,20 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
                   mpvInner (d := d) (B b0) (A j) N)‖)
             atTop (nhds (0 : ℝ)) := by
         simpa using hnorm
-      refine hnorm_zero.congr (fun N => ?_)
-      rw [hNormalizedInner (B b0) (μA a0) (μB b0) hμA_ne hμB_ne N]
+      have hEq :
+          (fun N : ℕ =>
+            ‖(μA a0 ^ N)⁻¹ *
+              (∑ j : Fin rA, (μA j) ^ N *
+                mpvInner (d := d) (B b0) (A j) N)‖) =ᶠ[atTop]
+          (fun N : ℕ =>
+            ‖(c N * (μB b0 / μA a0) ^ N) *
+              ((μB b0 ^ N)⁻¹ *
+                (∑ k : Fin rB, (μB k) ^ N *
+                  mpvInner (d := d) (B b0) (B k) N))‖) := by
+        filter_upwards [hNormalizedInner (B b0) (μA a0) (μB b0) hμA_ne hμB_ne]
+          with N hN
+        rw [hN]
+      exact Tendsto.congr' hEq hnorm_zero
     exact zero_ne_one (tendsto_nhds_unique hRHS_norm_zero hRHS_norm_one)
   have hDominantA_contra :
       (∀ k : Fin rB, Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k) N)
@@ -281,8 +294,20 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
                   mpvInner (d := d) (A a0) (A j) N)‖)
             atTop (nhds (1 : ℝ)) := by
         simpa using hnorm
-      refine hnorm_one.congr (fun N => ?_)
-      rw [hNormalizedInner (A a0) (μA a0) (μB b0) hμA_ne hμB_ne N]
+      have hEq :
+          (fun N : ℕ =>
+            ‖(μA a0 ^ N)⁻¹ *
+              (∑ j : Fin rA, (μA j) ^ N *
+                mpvInner (d := d) (A a0) (A j) N)‖) =ᶠ[atTop]
+          (fun N : ℕ =>
+            ‖(c N * (μB b0 / μA a0) ^ N) *
+              ((μB b0 ^ N)⁻¹ *
+                (∑ k : Fin rB, (μB k) ^ N *
+                  mpvInner (d := d) (A a0) (B k) N))‖) := by
+        filter_upwards [hNormalizedInner (A a0) (μA a0) (μB b0) hμA_ne hμB_ne]
+          with N hN
+        rw [hN]
+      exact Tendsto.congr' hEq hnorm_one
     exact zero_ne_one (tendsto_nhds_unique hRHS_norm_zero hRHS_norm_one)
   exact ⟨by simpa [b0] using hDominantB_contra, by simpa [a0] using hDominantA_contra⟩
 
