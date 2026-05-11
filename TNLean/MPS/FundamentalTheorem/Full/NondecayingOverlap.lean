@@ -841,16 +841,10 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     intro D X μ ν hμ hν
     exact normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
       A B X c μ ν hμ hν (hInner X)
-  have hRemaining :
-      (∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
-      (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
-    -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
-    -- and the BNT self/cross-overlap convergence facts above to rule out simultaneous
-    -- decay against a fixed block, then repeat with A and B interchanged.
-    sorry
-  exact hRemaining
+  -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
+  -- and the BNT self/cross-overlap convergence facts above to rule out simultaneous
+  -- decay against a fixed block, then repeat with A and B interchanged.
+  sorry
 
 end HeteroEqualCase
 

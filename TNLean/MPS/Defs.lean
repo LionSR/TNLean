@@ -112,7 +112,12 @@ Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
 formal reading of the source phrase that two tensors generate MPV that are
 proportional to each other: at each length the two MPV vectors lie on the same
 nonzero projective line, with proportionality scalar allowed to depend on the
-length. -/
+length.
+
+**Local fix (projective proportionality):** The source phrase
+"proportional to each other" is read projectively, so the scalar is nonzero.
+This reading is documented in
+`docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex`. -/
 def NonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
@@ -152,7 +157,7 @@ theorem NonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
 /-- MPV equality gives nonzero MPV proportionality with scalar `1`.
 
 Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, supplies an
-equal-MPV hypothesis. This lemma only packages that hypothesis as the
+equal-MPV hypothesis. This lemma only re-states that hypothesis as the
 corresponding instance of the proportional hypothesis in Theorem `thm1`, lines
 1170--1192. It is not a formalization of Corollary `II_cor2` itself. -/
 theorem SameMPV₂.toNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
