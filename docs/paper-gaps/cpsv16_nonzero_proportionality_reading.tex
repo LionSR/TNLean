@@ -38,6 +38,12 @@ to contradict proportionality.  If \(c_N\) were allowed to be zero at a
 length where the vector on the left also vanished, the identity
 \(V^{(N)}(A)=0\cdot V^{(N)}(B)\) would not express equality of projective
 MPV families and would not supply the nonzero scalar used in the contradiction.
+Under the canonical-form hypotheses used in the source argument, the selected
+BNT block states have nonzero norm on the tail of lengths used in the
+contradiction; in that range the weak scalar-multiple predicate already forces
+the proportionality scalar to be nonzero.  Thus the formal predicate records
+the projective form needed at the use site, rather than adding a separate
+asymptotic assumption to the block-selection argument.
 
 \section{Effect on the theorem}
 
@@ -50,13 +56,13 @@ for the proportional Fundamental Theorem.
 
 \section{Elimination plan}
 
-No extra mathematical theorem is needed if reviewers accept the projective
-reading as the faithful interpretation of CPSV16 lines~1170--1192.  If a
-literal weak-scalar reading is later required, it should be formalized as a
-separate theorem: prove from the source canonical-form hypotheses that the
-relevant MPV vectors do not vanish at each length used in the argument, then
-derive \leanid{NonzeroProportionalMPV2} from the weak predicate before applying
-the block-selection proof.
+No extra mathematical theorem is needed for the present projective reading of
+CPSV16 lines~1170--1192.  If a literal weak-scalar reading is later required,
+it should be formalized as a separate bridge theorem: prove from the source
+canonical-form hypotheses that the relevant MPV vectors do not vanish at the
+lengths used in the argument, then derive
+\leanid{NonzeroProportionalMPV2} from the weak predicate before applying the
+block-selection proof.
 
 \bibliographystyle{alpha}
 \bibliography{references}

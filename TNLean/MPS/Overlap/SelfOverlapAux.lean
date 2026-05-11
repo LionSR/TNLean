@@ -62,7 +62,7 @@ lemma tendsto_norm_mpvState_one
     rw [heq, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
   have hSq_tendsto :
       Tendsto (fun N => ‖mpvState (d := d) A N‖ ^ 2) atTop (nhds (1 : ℝ)) :=
-    hNormInner.congr' (Filter.Eventually.of_forall fun N => (hSq ▸ rfl : _))
+    hSq ▸ hNormInner
   have hSqrt :
       Tendsto (fun N => Real.sqrt (‖mpvState (d := d) A N‖ ^ 2))
         atTop (nhds (Real.sqrt (1 : ℝ))) :=
