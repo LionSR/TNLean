@@ -74,11 +74,13 @@ tensors with the same bond dimension.\footnote{%
 The theorem is
 \leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP};
 it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
-In this same-dimension component the formal theorem is slightly stronger than
-the cited normal-tensor statement: the source's normal tensor hypothesis
-packages irreducibility, trace preservation, and primitivity, while the
+In this same-dimension component the formal theorem has weaker normal-tensor
+assumptions than the cited normal-tensor statement: the source's normal tensor
+hypothesis packages injectivity, trace preservation, and primitivity, while the
 spectral-radius and Cauchy--Schwarz argument used here consumes only
-irreducibility and trace preservation.
+irreducibility and trace preservation.  This is a generalization of the
+same-bond-dimension gauge step, not a formalization of the rectangular
+dimension conclusion.
 
 The proportionality-based theorem in the same file is a correct corollary for a
 stronger hypothesis.  It is not a formalization of Lemma~\texttt{equalMPS},
