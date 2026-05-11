@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalDominant
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -878,10 +878,22 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
       A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
       hA_norm_dominant hB_norm_dominant
-  -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
-  -- `hAdjustedScalar_dom`, and the BNT self/cross-overlap convergence facts
-  -- above to rule out simultaneous decay against a fixed block, then repeat
-  -- with A and B interchanged.
+  have hDominant_contra :=
+    dominant_projection_contradictions_of_normalized_proportional_inner
+      A B hA hB hrA hrB c hNormalizedInner
+      (by simpa [a0, b0] using hAdjustedScalar_dom)
+      hA_self hB_self hA_cross hB_cross
+  have hDominantB_contra :
+      (∀ j : Fin rA, Tendsto (fun N => mpvOverlap (d := d) (A j) (B b0) N)
+        atTop (nhds 0)) → False := by
+    simpa [b0] using hDominant_contra.1
+  have hDominantA_contra :
+      (∀ k : Fin rB, Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k) N)
+        atTop (nhds 0)) → False := by
+    simpa [a0] using hDominant_contra.2
+  -- Remaining CPSV16 line 1170--1192 step: lift the dominant contradictions
+  -- `hDominantA_contra` and `hDominantB_contra` to arbitrary blocks by the
+  -- same tail-reduction argument used in the equal-MPV theorem above.
   sorry
 
 end HeteroEqualCase
