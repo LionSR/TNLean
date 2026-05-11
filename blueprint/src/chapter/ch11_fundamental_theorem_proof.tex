@@ -458,6 +458,22 @@ with an extra $Z$-gauge degree of freedom.
 	identities give the two dominant-block contradictions.
 \end{proof}
 
+\begin{lemma}[Dominant blocks have non-decaying partners]%
+\label{lem:dominant_nondecaying_partner_eventual_proportional}
+	\lean{MPSTensor.exists_nondecaying_overlap_dominant_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:dominant_projection_contradiction_eventual_proportional}
+	Under eventual nonzero proportionality of the assembled BNT block tensors,
+	the leading block of each family has a block in the other family whose
+	overlap does not tend to zero.
+\end{lemma}
+
+\begin{proof}\leanok
+	If every overlap from a leading block to the other family vanished, this
+	would contradict
+	Lemma~\ref{lem:dominant_projection_contradiction_eventual_proportional}.
+\end{proof}
+
 \begin{lemma}[Leading-erased tails preserve restricted BNT canonical form]%
 \label{lem:cf_bnt_tail_succ}
 	\lean{MPSTensor.isCanonicalFormBNT_tail_succ}
