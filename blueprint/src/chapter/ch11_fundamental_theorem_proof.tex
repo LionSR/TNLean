@@ -91,6 +91,32 @@ with an extra $Z$-gauge degree of freedom.
 	\(1\), and taking square roots gives the norm convergence.
 \end{proof}
 
+\begin{lemma}[Dominant-weight normalized BNT state sums have unit norm]%
+\label{lem:dominant_weight_normalized_bnt_state_sum_norm}
+	\lean{MPSTensor.tendsto_norm_weighted_mpvState_sum_of_dominant_ratio}
+	\lean{MPSTensor.tendsto_norm_normalized_weighted_mpvState_sum_of_dominant}
+	\leanok
+	\uses{lem:self_overlap_to_mpv_state_norm}
+	Let \(A_j\) be a finite BNT family whose self-overlaps tend to \(1\).
+	Fix a dominant weight \(\mu_{j_0}\ne 0\), and assume that every other
+	weight ratio satisfies \(|\mu_j/\mu_{j_0}|<1\). Then
+	\[
+		\left\|
+			\mu_{j_0}^{-N}
+			\sum_j \mu_j^N\, \ket{V^{(N)}(A_j)}
+		\right\|
+		\longrightarrow 1 .
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	After division by the dominant weight, the \(j_0\)-term has coefficient
+	one.  Each remaining coefficient is geometrically damped, while
+	Lemma~\ref{lem:self_overlap_to_mpv_state_norm} bounds the corresponding
+	MPV-state norms.  The tail therefore has norm tending to \(0\), and the
+	dominant term has norm tending to \(1\).
+\end{proof}
+
 \begin{lemma}[Norm convergence of the proportional scalar sequence]%
 \label{lem:proportional_tensor_from_blocks_scalar_norm}
 	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
