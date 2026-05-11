@@ -139,6 +139,45 @@ lemma tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
     _ = c N * ν ^ N * (μ ^ N * μ⁻¹ ^ N) := by rw [hpow]
     _ = c N * ν ^ N * μ ^ N * μ⁻¹ ^ N := by ring
 
+/-- **Normalized weighted projections use the adjusted proportional scalar.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+block-selection argument the proportional weighted projection identity is used
+after division by selected nonzero dominant weights. This lemma records the
+algebraic rewrite: if the unnormalized projected sums are related by `c_N`,
+then the normalized projected sums are related by `c_N(\nu/\mu)^N`. -/
+lemma normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (X : MPSTensor d D) (c : ℕ → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (hInner : ∀ N : ℕ,
+      (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+        c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) :
+    ∀ N : ℕ,
+      (μ ^ N)⁻¹ *
+          (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+        (c N * (ν / μ) ^ N) *
+          ((ν ^ N)⁻¹ *
+            (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
+  intro N
+  rw [hInner N]
+  field_simp [hμ, hν, pow_ne_zero N hμ, pow_ne_zero N hν]
+  ring_nf
+  have hpow : μ ^ N * μ⁻¹ ^ N = 1 := by
+    rw [← mul_pow, mul_inv_cancel₀ hμ, one_pow]
+  calc
+    (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) * ν ^ N =
+        (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
+          ν ^ N * 1 := by rw [mul_one]
+    _ = (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
+        ν ^ N * (μ ^ N * μ⁻¹ ^ N) := by rw [hpow]
+    _ = (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
+        ν ^ N * μ ^ N * μ⁻¹ ^ N := by ring
+
 end ProportionalScalar
 
 end MPSTensor
