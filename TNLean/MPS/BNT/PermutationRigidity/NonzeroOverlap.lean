@@ -1,14 +1,12 @@
 import TNLean.Analysis.ConvergenceHelpers
 import TNLean.MPS.FundamentalTheorem.Proportional
+import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
+import TNLean.MPS.BNT.Basic
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay
-
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Data.Fintype.Card
-import Mathlib.Data.Fintype.EquivFin
 
 /-!
 # Permutation rigidity for basis-of-normal-tensors (BNT) decompositions — Theorem 4.4
@@ -46,7 +44,7 @@ A-side and B-side components of the source's canonical-form assumption; no
 hypothesis is added beyond what the paper provides.
 -/
 
-open scoped BigOperators Matrix
+open scoped BigOperators InnerProductSpace Matrix
 open Filter Finset
 
 namespace MPSTensor
@@ -55,9 +53,78 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. Lemma Lem1 supplies eventual linear independence
-from asymptotic orthonormality; the contradiction step applies this after showing
-that the relevant joint family is asymptotically orthonormal. -/
+dominant-block normalization. The linear-independence corollary supplies eventual
+linear independence from asymptotic orthonormality; the contradiction step applies
+this after showing that the relevant joint family is asymptotically orthonormal. -/
+
+/-- Eventual linear independence for the union of two asymptotically orthonormal
+MPV families whose mixed overlaps vanish.
+
+Source: arXiv:1606.00608, lines 1170--1192, where the linear-independence
+corollary is applied after adjoining a single block from one BNT family to the
+other family.  This is the symmetric two-family generalization of that
+linear-independence input. -/
+lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
+    {d : ℕ} {gA gB : ℕ} {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0))
+    (hAB : ∀ j k,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    ∀ᶠ N in atTop,
+      LinearIndependent ℂ (fun x : Sum (Fin gA) (Fin gB) =>
+        match x with
+        | Sum.inl j => mpvState (d := d) (A j) N
+        | Sum.inr k => mpvState (d := d) (B k) N) := by
+  classical
+  let C : (x : Sum (Fin gA) (Fin gB)) → MPSTensor d (Sum.elim dimA dimB x)
+    | Sum.inl j => A j
+    | Sum.inr k => B k
+  have h_self : ∀ x,
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
+        (nhds (1 : ℂ)) := by
+    intro x
+    cases x with
+    | inl j => simpa [C] using hA_self j
+    | inr k => simpa [C] using hB_self k
+  have h_cross : ∀ x y, x ≠ y →
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N) atTop
+        (nhds (0 : ℂ)) := by
+    intro x y hxy
+    cases x with
+    | inl i =>
+        cases y with
+        | inl j =>
+            have hij : i ≠ j := by
+              intro hij
+              apply hxy
+              simp [hij]
+            simpa [C] using hA_off i j hij
+        | inr k =>
+            simpa [C] using hAB i k
+    | inr k =>
+        cases y with
+        | inl i =>
+            simpa [C] using tendsto_mpvOverlap_zero_swap (A i) (B k) (hAB i k)
+        | inr l =>
+            have hkl : k ≠ l := by
+              intro hkl
+              apply hxy
+              simp [hkl]
+            simpa [C] using hB_off k l hkl
+  have hLI :=
+    MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal C h_self h_cross
+  refine hLI.mono ?_
+  intro N hN
+  convert hN with x
+  cases x <;> rfl
 
 /--
 **Key step of Theorem 4.4 (paper route).**
@@ -125,7 +192,7 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
   -- Paper-faithful proof pending. The CPSV16 lines 1170-1192 argument follows
-  -- Cor Lem1 (asymptotically orthonormal NMPVs are eventually LI):
+  -- Linear-independence corollary for asymptotically orthonormal MPV states:
   -- assuming all `mpvOverlap (A j) (B k) → 0`, the joint family
   -- `{V^N(A_j)}_j ∪ {V^N(B_k)}` is asymptotically orthonormal hence eventually
   -- LI; proportionality `V^N(A_total) = c_N V^N(B_total)` then forces
