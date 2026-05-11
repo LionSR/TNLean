@@ -21,7 +21,7 @@ all-zero leftover blocks.  They are the dimension gaps allowed by
 
 ## Tags
 
-matrix product states, canonical form, BNT, phase cover
+matrix product states, canonical form, BNT, block matching
 -/
 
 namespace MPSTensor

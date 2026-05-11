@@ -25,9 +25,8 @@ normal tensors which
 We also provide a convenient lemma: if pairwise overlaps of a finite family of MPV states
 converge to the Kronecker delta (i.e. the Gram matrix tends to the identity), then the
 states are eventually linearly independent.
-The finite-index and two-family forms of this criterion are retained as the Stage-C
-linear-independence inputs for the source-faithful proof of arXiv:1606.00608,
-Theorem II.1.
+The finite-index and two-family forms of this criterion are the linear-independence
+conditions used in the source-faithful proof of arXiv:1606.00608, Theorem II.1.
 
 ## Part 2: BNT matching theory (from `BNTMatching`)
 
@@ -185,14 +184,13 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     (hAB : ∀ j k,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
     ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun x : Sum (Fin gA) (Fin gB) =>
-        match x with
-        | Sum.inl j => mpvState (d := d) (A j) N
-        | Sum.inr k => mpvState (d := d) (B k) N) := by
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun j : Fin gA => mpvState (d := d) (A j) N)
+          (fun k : Fin gB => mpvState (d := d) (B k) N)) := by
   classical
-  let C : (x : Sum (Fin gA) (Fin gB)) → MPSTensor d (Sum.elim dimA dimB x)
-    | Sum.inl j => A j
-    | Sum.inr k => B k
+  let C : (x : Sum (Fin gA) (Fin gB)) → MPSTensor d (Sum.elim dimA dimB x) :=
+    Sum.rec (motive := fun x => MPSTensor d (Sum.elim dimA dimB x)) A B
   have h_self : ∀ x,
       Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
         (nhds (1 : ℂ)) := by
@@ -230,8 +228,15 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
       h_self h_cross
   refine hLI.mono ?_
   intro N hN
-  convert hN with x
-  cases x <;> rfl
+  have key :
+      (fun x : Sum (Fin gA) (Fin gB) => mpvState (d := d) (C x) N) =
+        Sum.elim
+          (fun j : Fin gA => mpvState (d := d) (A j) N)
+          (fun k : Fin gB => mpvState (d := d) (B k) N) := by
+    funext x
+    cases x <;> rfl
+  rw [← key]
+  exact hN
 
 end MPSTensor
 
