@@ -840,9 +840,48 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     intro D X μ ν hμ hν
     exact normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
       A B X c μ ν hμ hν (hInner X)
+  have hrA_pos : 0 < rA := Nat.pos_of_ne_zero hrA
+  have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB
+  let a0 : Fin rA := ⟨0, hrA_pos⟩
+  let b0 : Fin rB := ⟨0, hrB_pos⟩
+  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
+  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
+  have hA_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μA a0 ^ N)⁻¹ •
+            (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      A a0 hμA_ne hA_self (fun j hj => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
+          (hA.mu_strict_anti (by
+            simp only [a0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
+  have hB_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μB b0 ^ N)⁻¹ •
+            (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      B b0 hμB_ne hB_self (fun k hk => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
+          (hB.mu_strict_anti (by
+            simp only [b0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
+  have hAdjustedScalar_dom :
+      Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
+        (nhds (1 : ℝ)) :=
+    tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
+      A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
+      hA_norm_dominant hB_norm_dominant
   -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
-  -- and the BNT self/cross-overlap convergence facts above to rule out simultaneous
-  -- decay against a fixed block, then repeat with A and B interchanged.
+  -- `hAdjustedScalar_dom`, and the BNT self/cross-overlap convergence facts
+  -- above to rule out simultaneous decay against a fixed block, then repeat
+  -- with A and B interchanged.
   sorry
 
 end HeteroEqualCase
