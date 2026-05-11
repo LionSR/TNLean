@@ -75,12 +75,14 @@ The theorem is
 \leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP};
 it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
 In this same-dimension component the formal theorem changes the normal-tensor
-hypothesis set in a controlled way: in CPSV16 a normal tensor is irreducible
-and primitive, while trace preservation is supplied by the canonical-form
-normalization.  The spectral-radius and Cauchy--Schwarz argument used here
-drops primitivity and takes irreducibility together with trace preservation
-as explicit hypotheses.  This is a generalization of the same-bond-dimension
-gauge step, not a formalization of the rectangular dimension conclusion.
+hypothesis set in a controlled way: in CPSV16 a normal tensor has no
+non-trivial invariant projector, and its associated completely positive map
+has a unique peripheral eigenvalue, equal to its spectral radius and normalized
+to one.  The spectral-radius and Cauchy--Schwarz argument used here drops this
+peripheral-simplicity assumption and takes irreducibility together with
+trace-preserving normalization as explicit hypotheses.  This is a
+generalization of the same-bond-dimension gauge step, not a formalization of
+the rectangular dimension conclusion.
 
 The proportionality-based theorem in the same file is a correct corollary for a
 stronger hypothesis.  It is not a formalization of Lemma~\texttt{equalMPS},
