@@ -14,7 +14,7 @@ proportional non-decaying-overlap step of the fundamental theorem.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Theorem `thm1`, lines 1170--1192.
+  Theorem thm1, lines 1170--1192.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -26,7 +26,7 @@ section ProportionalDominant
 
 /-- **Dominant normalized inner-product concentration.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. In the
 fixed-block argument, after expanding a canonical-form tensor into weighted BNT
 blocks, one projects the weighted sum against a selected dominant block. If all
 other weights have strictly smaller modulus and the selected block is
@@ -64,14 +64,14 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_dominant
 
 /-- **Leading BNT normalized inner-product concentration.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This is
 the preceding dominant projection estimate specialized to the leading block of
 an `IsCanonicalFormBNT` family. The strict ordering of BNT weight moduli
 supplies the required strict dominance of the leading weight.
 
 **Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
-is the single-representative BNT surface. The general CPSV16 BNT canonical form
-allows multiplicities inside a sector. This restriction is documented in
+selects one BNT representative in each sector. The general CPSV16 BNT
+canonical form allows multiplicities inside a sector. This restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
     {d r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -107,7 +107,7 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
 
 /-- **Dominant-block projection contradiction for proportional BNT families.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. If the normalized
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. If the normalized
 proportional projection identity eventually holds and has an adjusted scalar
 whose modulus tends to one, then the dominant block on either side cannot have
 all cross-overlaps tending to zero. This is the dominant case of the CPSV16
@@ -335,7 +335,7 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
 
 /-- **Dominant-block projection contradiction from eventual proportionality.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After expanding
 the two canonical-form tensors into their BNT block sums, eventual nonzero
 proportionality supplies the scalar sequence used in the dominant-block
 projection contradiction. This is the dominant case of the line 1182 argument,
@@ -447,7 +447,7 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
 
 /-- **Dominant blocks have non-decaying partners under eventual proportionality.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The dominant
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The dominant
 projection contradiction rules out the alternative that the leading block on
 one side has vanishing overlap with every block on the other side. Hence each
 leading block admits a non-decaying overlap partner. -/
