@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Residual Bond-Dimension Gap in CPSV16 Lemma~\texttt{equalMPS}}
+\title{CPSV16 Lemma~\texttt{equalMPS} Gauge-Phase Components}
 \author{}
 \date{2026-05-10}
 
@@ -88,7 +88,7 @@ The proportionality-based theorem in the same file is a correct corollary for a
 stronger hypothesis.  It is not a formalization of Lemma~\texttt{equalMPS},
 because the source does not assume proportional MPV families.
 
-\section{Remaining rectangular component}
+\section{Formalized rectangular component}
 
 Lemma~\texttt{equalMPS} also concludes \(D_a=D_b\) in the unit-overlap case.
 This is a rectangular statement: before the conclusion is known, the two normal
@@ -96,6 +96,14 @@ tensors may have different bond dimensions.  The proof derives an isometry
 between the two bond spaces and then uses normality of the larger tensor to rule
 out a proper missing subspace, forcing equality of dimensions
 \cite[lines~1115--1117]{Cirac2016MPDO_arXiv}.
+
+The formalization records this conclusion as
+\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
+in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.  Its proof uses the
+contrapositive of the rectangular overlap-decay theorem
+\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
+if the bond dimensions differ, the overlap tends to zero, contradicting the
+unit-modulus overlap hypothesis.
 
 This rectangular dimension recovery is genuinely needed in the proof of
 \cite[Theorem~II.1, lines~1170--1192]{Cirac2016MPDO_arXiv}.  There the relevant
@@ -109,11 +117,10 @@ after the rectangular dimension conclusion has been supplied separately.
 
 The same-bond-dimension gauge component is formalized without the
 source-absent MPV proportionality hypothesis.  The rectangular
-bond-dimension conclusion \(D_a=D_b\) remains a hypothesis-level gap in this
-branch: the source proves it from unit-modulus overlap, while the present gauge
-theorem assumes a common bond dimension before it applies.  This remaining
-component is still needed for the proof of
-\cite[Theorem~II.1, lines~1170--1192]{Cirac2016MPDO_arXiv}.
+bond-dimension conclusion \(D_a=D_b\) is now formalized as a separate theorem.
+Together these two components recover the structural conclusion of the
+unit-overlap branch of Lemma~\texttt{equalMPS}, though the upstream normal-tensor
+periodicity and dichotomy statements remain separate from this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}
