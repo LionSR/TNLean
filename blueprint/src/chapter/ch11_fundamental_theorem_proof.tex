@@ -187,6 +187,27 @@ with an extra $Z$-gauge degree of freedom.
 	erasing the leading index.  Rewrite the finite sum along this bijection.
 \end{proof}
 
+\begin{lemma}[Eventual proportionality of reindexed weighted tails]%
+\label{lem:eventual_proportional_weighted_tail_package}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected}
+	\leanok
+	\uses{lem:eventual_proportional_weighted_state_tail_subtraction,
+		lem:proportional_weighted_state_tail_reindex,
+		lem:eventual_weighted_state_sequence_to_proportional_tensor_from_blocks}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence and the leading selected summands are eventually related by
+	the same sequence.  Then, after erasing the leading blocks and reindexing
+	the remaining families by \(j\mapsto j+1\), the assembled tail tensors are
+	eventually nonzero proportional.
+\end{lemma}
+
+\begin{proof}\leanok
+	First subtract the selected summands from the eventual total identity.
+	Then reindex both erased finite sums by \(j\mapsto j+1\), and convert the
+	eventual weighted tail identity back into eventual proportionality of the
+	assembled tail tensors.
+\end{proof}
+
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
 \label{lem:proportional_scalar_norm_core}
 	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
