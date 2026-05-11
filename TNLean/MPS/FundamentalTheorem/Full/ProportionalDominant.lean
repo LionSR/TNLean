@@ -66,9 +66,13 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_dominant
 
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is
 the preceding dominant projection estimate specialized to the leading block of
-an `IsCanonicalFormBNT` family in the present one-copy-per-sector formalization.
-The strict ordering of BNT weight moduli supplies the required strict
-dominance of the leading weight. -/
+an `IsCanonicalFormBNT` family. The strict ordering of BNT weight moduli
+supplies the required strict dominance of the leading weight.
+
+**Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
+is the single-representative BNT surface. The general CPSV16 BNT canonical form
+allows multiplicities inside a sector. This restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
     {d r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
