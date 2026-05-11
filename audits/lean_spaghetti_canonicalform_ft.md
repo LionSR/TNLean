@@ -378,7 +378,7 @@ Theorem. The surviving common-sector comparison material now lives under
 
 ### `TNLean/MPS/FundamentalTheorem/OverlapConsequences.lean`
 
-- Size: 253 lines
+- Size: 300 lines
 - Actual `sorry`: 0
 - Long proofs:
   - the private eventually-proportional overlap argument occupies the main proof block
