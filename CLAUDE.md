@@ -148,6 +148,11 @@ paper-realignment. The check is on hypotheses, not just conclusions:
   separate blueprint entry with `\leanok` only after a faithful Lean
   version exists.
 
+Scope-restricted theorems may be marked `\leanok` only against a blueprint
+statement that explicitly states the restriction. Such an entry must not be
+presented as the source theorem itself. The unrestricted source theorem remains
+unformalized until a Lean statement with the source's hypothesis set exists.
+
 A paper-gap note in `docs/paper-gaps/` is required whenever a
 stricter-hypothesis Lean version is the *only* available formalization of
 a source theorem. The note must identify the missing hypothesis and the
@@ -207,10 +212,10 @@ which deviates from `<paper, label or line range>`. Documented in
 substitute>`; tracked in `<issue or PR>`.
 ```
 
-The marker propagates to wrappers: any theorem whose proof transitively
-calls an unfaithful one is itself unfaithful and must carry its own marker.
-The marker is removed only when every transitively-cited dependency is
-faithful.
+The marker propagates to dependent theorems: any theorem whose proof
+transitively calls an unfaithful one is itself unfaithful and must carry its
+own marker. The marker is removed only when every transitively-cited
+dependency is faithful.
 
 Reviewers should not approve a paper-realignment PR that introduces an
 unfaithful theorem without the marker. The marker makes the deviation
