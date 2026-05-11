@@ -880,7 +880,8 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
       hA_norm_dominant hB_norm_dominant
   have hDominant_contra :=
     dominant_projection_contradictions_of_normalized_proportional_inner
-      A B hA hB hrA hrB c hNormalizedInner
+      A B hA hB hrA hrB c
+      (fun X μ ν hμ hν => Filter.Eventually.of_forall (hNormalizedInner X μ ν hμ hν))
       (by simpa [a0, b0] using hAdjustedScalar_dom)
       hA_self hB_self hA_cross hB_cross
   have hDominantB_contra :
