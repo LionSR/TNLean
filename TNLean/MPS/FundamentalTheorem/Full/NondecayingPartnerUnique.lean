@@ -77,12 +77,11 @@ lemma gaugePhaseEquiv_of_nondecaying_overlap_CFBNT
 
 /-- **Uniqueness of a non-decaying left partner for a BNT block.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After the
-proof finds a block whose overlap with a fixed block does not decay, Corollary
-`eqV` and Lemma `equalMPS` identify the two blocks up to gauge and phase. Hence
-a fixed block on one side cannot have two distinct non-decaying partners on the
-other side, because that would force two distinct BNT blocks on the latter side
-to have a non-decaying mutual overlap. -/
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+Lean proof, each non-decaying overlap is converted to a gauge-phase equivalence
+by the overlap-decay dichotomy. Two distinct partners for the same fixed block
+would then force two distinct BNT blocks on the other side to have a
+non-decaying mutual overlap, contradicting BNT block separation. -/
 lemma unique_left_nondecaying_overlap_partner_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
