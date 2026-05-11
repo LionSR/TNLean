@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
+import TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton
 
 /-!
 # Heterogeneous BNT block matching
@@ -47,6 +48,8 @@ The proof is split across supporting sub-modules for readability:
 * `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap` — Layer 1a,
   `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, a strong induction on `rA + rB` using a
   dominant-weight projection argument.
+* `TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton` — no-tail fixed-block
+  cancellation base cases for the CPSV16 Lemma `Lem1` peeling step.
 * `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch` — Layer 1b,
   `blocks_match_of_sameMPV₂_CFBNT`, which converts the non-decaying overlap data into a
   full `BlockPermutationGaugePhaseConclusion` via the overlap dichotomy.
