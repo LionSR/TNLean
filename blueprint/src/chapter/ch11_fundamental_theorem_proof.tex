@@ -815,6 +815,42 @@ with an extra $Z$-gauge degree of freedom.
 	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} applies.
 \end{proof}
 
+\begin{lemma}[Leading fixed-right all-overlaps-decay contradiction]%
+\label{lem:fixed_right_leading_all_overlaps_decay_contradiction}
+	\lean{MPSTensor.fixed_right_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
+		lem:dominant_projection_contradiction_eventual_proportional}
+	Under eventual nonzero proportionality of the two total weighted MPV
+	families, the leading block \(B_0\) of the \(B\)-family cannot have
+	\(O_{A_j,B_0}(N)\to 0\) for every block \(A_j\).  This is the
+	leading-block instance of the fixed-\(B_k\) sentence in
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	This is exactly the \(B\)-leading half of the dominant projection
+	contradiction.
+\end{proof}
+
+\begin{lemma}[Leading fixed-left all-overlaps-decay contradiction]%
+\label{lem:fixed_left_leading_all_overlaps_decay_contradiction}
+	\lean{MPSTensor.fixed_left_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
+		lem:dominant_projection_contradiction_eventual_proportional}
+	Under eventual nonzero proportionality of the two total weighted MPV
+	families, the leading block \(A_0\) of the \(A\)-family cannot have
+	\(O_{A_0,B_k}(N)\to 0\) for every block \(B_k\).  This is the
+	symmetric leading-block instance of the fixed-block argument in
+	\cite[Theorem~II.1, lines~1182--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	This is exactly the \(A\)-leading half of the dominant projection
+	contradiction.
+\end{proof}
+
 \begin{lemma}[Fixed-right all-overlaps-decay contradiction]%
 \label{lem:fixed_right_all_overlaps_decay_contradiction}
 	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}

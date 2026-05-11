@@ -787,6 +787,60 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
       B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
   simpa [Asingle] using hLI
 
+/-- **Leading fixed-right all-overlaps-decay contradiction.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the fixed-block
+cancellation step for the leading block of the `B`-family. In the
+one-copy-per-sector surface used here, the dominant projection argument already
+rules out decay of all overlaps with that leading `B`-block under eventual
+nonzero proportionality of the total MPV families. -/
+lemma fixed_right_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (hAllDecay : ∀ j : Fin rA,
+      Tendsto
+        (fun N => mpvOverlap (d := d) (A j) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N)
+        atTop (nhds 0)) :
+    False :=
+  (dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    A B hA hB hrA hrB hProp).1 hAllDecay
+
+/-- **Leading fixed-left all-overlaps-decay contradiction.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185. This is the
+symmetric leading-block cancellation step for the leading block of the
+`A`-family. The dominant projection argument rules out simultaneous decay of
+all overlaps with that leading `A`-block under eventual nonzero proportionality
+of the total MPV families. -/
+lemma fixed_left_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (hAllDecay : ∀ k : Fin rB,
+      Tendsto
+        (fun N => mpvOverlap (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k) N)
+        atTop (nhds 0)) :
+    False :=
+  (dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    A B hA hB hrA hrB hProp).2 hAllDecay
+
 /-- **Fixed-right all-overlaps-decay contradiction for proportional BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, line 1182. In the proof, after
