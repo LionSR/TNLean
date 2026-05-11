@@ -20,32 +20,32 @@ external coefficient-array hypotheses are introduced.
 -/
 
 open scoped BigOperators InnerProductSpace
+open Filter
 
 namespace MPSTensor
 
 section ProportionalExpansion
 
-/-- **Weighted MPV-state proportionality from proportional assembled block tensors.**
+/-- **Fixed-length weighted MPV-state proportionality from assembled block tensors.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof of the
-block-selection step expands the two canonical-form tensors into their BNT
-block sums and then uses proportionality of the total MPV families. This lemma
-formalizes exactly that expansion, without adding coefficient-array hypotheses:
-the scalar is the one supplied by the proportionality of the assembled tensors
-at the fixed length `N`. -/
-lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. At a fixed length
+`N`, proportionality of the two assembled tensors expands into proportionality
+of the two weighted BNT block sums at that same length. This is the fixed-length
+form used before passing to scalar sequences or eventual tail reductions. -/
+lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensorFromBlocks
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hProp : NonzeroProportionalMPV₂
-      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
-    (N : ℕ) :
+    (N : ℕ)
+    (hN : ∃ c : ℂ, c ≠ 0 ∧
+      ∀ σ : Fin N → Fin d,
+        mpv (toTensorFromBlocks μA A) σ = c * mpv (toTensorFromBlocks μB B) σ) :
     ∃ c : ℂ, c ≠ 0 ∧
       (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
         c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
-  rcases hProp N with ⟨c, hc, hN⟩
+  rcases hN with ⟨c, hc, hN⟩
   have hAstate :
       mpvState (d := d) (toTensorFromBlocks μA A) N =
         ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N := by
@@ -78,6 +78,29 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
     _ = c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
       rw [hBstate]
 
+/-- **Weighted MPV-state proportionality from proportional assembled block tensors.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof of the
+block-selection step expands the two canonical-form tensors into their BNT
+block sums and then uses proportionality of the total MPV families. This lemma
+formalizes exactly that expansion, without adding coefficient-array hypotheses:
+the scalar is the one supplied by the proportionality of the assembled tensors
+at the fixed length `N`. -/
+lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (N : ℕ) :
+    ∃ c : ℂ, c ≠ 0 ∧
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  exact exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensorFromBlocks
+    A B N (hProp N)
+
 /-- **A scalar sequence for proportional weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof uses
@@ -106,6 +129,49 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
         A B hProp N
   choose c hc hEq using h
   exact ⟨c, hc, hEq⟩
+
+/-- **An eventual scalar sequence for eventually proportional weighted MPV-state sums.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 uses Lemma
+`Lem1`, hence only sufficiently large chain lengths enter the contradiction.
+This lemma is the eventual version of the preceding scalar-sequence
+bookkeeping: eventual nonzero proportionality of the assembled tensors gives an
+eventual nonzero scalar sequence for the expanded weighted BNT block sums. -/
+lemma exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ c : ℕ → ℂ, (∀ᶠ N in atTop, c N ≠ 0) ∧
+      ∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  classical
+  let P : ℕ → Prop := fun N =>
+    ∃ c : ℂ, c ≠ 0 ∧
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)
+  have hWeighted : ∀ᶠ N in atTop, P N := by
+    refine hProp.mono ?_
+    intro N hN
+    exact
+      exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensorFromBlocks
+        A B N hN
+  let c : ℕ → ℂ := fun N => if hN : P N then Classical.choose hN else 1
+  refine ⟨c, ?_, ?_⟩
+  · refine hWeighted.mono ?_
+    intro N hN
+    dsimp [c]
+    rw [dif_pos hN]
+    exact (Classical.choose_spec hN).1
+  · refine hWeighted.mono ?_
+    intro N hN
+    dsimp [c]
+    rw [dif_pos hN]
+    exact (Classical.choose_spec hN).2
 
 /-- **Nonzero proportionality from a weighted MPV-state scalar sequence.**
 
@@ -163,6 +229,63 @@ lemma nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_
     _ = c N * mpv (toTensorFromBlocks μB B) σ := by
       rw [← hBcoeff]
 
+/-- **Eventual proportionality from an eventual weighted MPV-state scalar sequence.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After a finite
+number of leading BNT components has been removed, Lemma `Lem1` supplies
+linear independence only for sufficiently large lengths. This bookkeeping lemma
+turns an eventual weighted MPV-state identity into eventual nonzero
+proportionality of the assembled tail tensors. -/
+lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B) := by
+  refine (hc.and hState).mono ?_
+  intro N hN
+  rcases hN with ⟨hcN, hStateN⟩
+  refine ⟨c N, hcN, fun σ => ?_⟩
+  have hAstate :
+      mpvState (d := d) (toTensorFromBlocks μA A) N =
+        ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μA A) A
+      (N := N) (fun j : Fin rA => (μA j) ^ N) ?_
+    intro τ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μA) (A := A) τ
+  have hBstate :
+      mpvState (d := d) (toTensorFromBlocks μB B) N =
+        ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μB B) B
+      (N := N) (fun k : Fin rB => (μB k) ^ N) ?_
+    intro τ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μB) (A := B) τ
+  have hNσ := congrArg (fun v : MPVSpace d N => v σ) hStateN
+  have hAcoeff :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μA) (A := A) σ
+  have hBcoeff :=
+    mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μB) (A := B) σ
+  calc
+    mpv (toTensorFromBlocks μA A) σ =
+        ∑ j : Fin rA, (μA j) ^ N * mpv (A j) σ := by
+          simpa [smul_eq_mul] using hAcoeff
+    _ = c N * (∑ k : Fin rB, (μB k) ^ N * mpv (B k) σ) := by
+      simpa [mpvState_apply, hAstate, hBstate, Pi.smul_apply, smul_eq_mul] using hNσ
+    _ = c N * (∑ k : Fin rB, (μB k) ^ N • mpv (B k) σ) := by
+      simp [smul_eq_mul]
+    _ = c N * mpv (toTensorFromBlocks μB B) σ := by
+      rw [← hBcoeff]
+
 /-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof removes
@@ -193,6 +316,38 @@ lemma weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
     ← Finset.add_sum_erase _ _ (Finset.mem_univ b0), smul_add] at hN
   rw [hSelected N] at hN
   exact add_left_cancel hN
+
+/-- **Eventual subtraction of a proportional selected summand.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. The recursive
+block-selection argument uses Lemma `Lem1`, so tail identities produced after
+coefficient extraction are needed only for sufficiently large lengths. This is
+the eventual analogue of
+`weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected`. -/
+lemma eventually_weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin rA) (b0 : Fin rB)
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
+    (hSelected : ∀ᶠ N in atTop,
+      (μA a0) ^ N • mpvState (d := d) (A a0) N =
+        c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N)) :
+    ∀ᶠ N in atTop,
+      ∑ j ∈ Finset.univ.erase a0, (μA j) ^ N • mpvState (d := d) (A j) N =
+        c N •
+          (∑ k ∈ Finset.univ.erase b0, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  refine (hState.and hSelected).mono ?_
+  intro N hN
+  rcases hN with ⟨hStateN, hSelectedN⟩
+  rw [← Finset.add_sum_erase _ _ (Finset.mem_univ a0),
+    ← Finset.add_sum_erase _ _ (Finset.mem_univ b0), smul_add] at hStateN
+  rw [hSelectedN] at hStateN
+  exact add_left_cancel hStateN
 
 /-- **Reindexing a leading-erased weighted MPV-state tail.**
 

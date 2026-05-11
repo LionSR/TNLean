@@ -22,11 +22,27 @@ irreducible-form framework of \cite{DeLasCuevas2017Irreducible},
 which gives a fundamental theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
+\begin{lemma}[Fixed-length proportional assembled blocks give weighted states]%
+\label{lem:proportional_tensor_from_blocks_weighted_states_at_length}
+	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensorFromBlocks}
+	\leanok
+	\uses{def:tensor_from_blocks, def:mpv_state}
+	At a fixed length \(N\), if the two assembled block tensors have
+	proportional MPV vectors with nonzero scalar \(c\), then their expanded
+	weighted BNT state sums at length \(N\) are related by the same scalar.
+\end{lemma}
+
+\begin{proof}\leanok
+	Expand the MPV state of each assembled tensor into its weighted block sum
+	and use the fixed-length proportionality identity.
+\end{proof}
+
 \begin{lemma}[Proportional assembled blocks give proportional weighted states]%
 \label{lem:proportional_tensor_from_blocks_weighted_states}
 	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
 	\leanok
-	\uses{def:nonzero_proportional_mpv, def:tensor_from_blocks, def:mpv_state}
+	\uses{def:nonzero_proportional_mpv,
+		lem:proportional_tensor_from_blocks_weighted_states_at_length}
 	Let \(A=\bigoplus_j \mu_j A_j\) and
 	\(B=\bigoplus_k \nu_k B_k\) be assembled block tensors. If their MPV
 	families are nonzero proportional, then for every length \(N\) there is a
@@ -63,6 +79,23 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
 \end{proof}
 
+\begin{lemma}[An eventual scalar sequence for proportional weighted states]%
+\label{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence}
+	\lean{MPSTensor.exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂}
+	\leanok
+	\uses{def:eventually_nonzero_proportional_mpv,
+		lem:proportional_tensor_from_blocks_weighted_states_at_length}
+	If two assembled block tensors are eventually nonzero proportional, then
+	one may choose a scalar sequence \(c_N\), nonzero for all sufficiently large
+	\(N\), such that the expanded weighted state sums are related by \(c_N\) for
+	all sufficiently large \(N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the fixed-length expansion at every sufficiently large length and
+	choose one scalar for each such length.
+\end{proof}
+
 \begin{lemma}[Weighted state sequences are exactly assembled proportionality]%
 \label{lem:weighted_state_sequence_to_proportional_tensor_from_blocks}
 	\lean{MPSTensor.nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_sequence}
@@ -85,6 +118,22 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the state identity on each basis word.
 \end{proof}
 
+\begin{lemma}[Eventual weighted state sequences give eventual proportionality]%
+\label{lem:eventual_weighted_state_sequence_to_proportional_tensor_from_blocks}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState}
+	\leanok
+	\uses{def:eventually_nonzero_proportional_mpv, def:tensor_from_blocks,
+		def:mpv_state}
+	If the expanded weighted block-state sums are related by a scalar sequence
+	for all sufficiently large lengths, and the scalar is eventually nonzero,
+	then the assembled tail tensors are eventually nonzero proportional.
+\end{lemma}
+
+\begin{proof}\leanok
+	Expand the MPV state of each assembled tensor into its weighted block sum
+	and evaluate the eventual state identity on each basis word.
+\end{proof}
+
 \begin{lemma}[Subtracting a proportional selected summand]%
 \label{lem:proportional_weighted_state_tail_subtraction}
 	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
@@ -104,6 +153,22 @@ with an extra $Z$-gauge degree of freedom.
 \begin{proof}\leanok
 	Split both finite sums into the selected summand and the erased tail, use
 	the selected-summand identity, and cancel the common selected term.
+\end{proof}
+
+\begin{lemma}[Eventual subtraction of a proportional selected summand]%
+\label{lem:eventual_proportional_weighted_state_tail_subtraction}
+	\lean{MPSTensor.eventually_weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence}
+	If two weighted block-state sums are eventually related by a scalar sequence
+	\(c_N\), and selected summands are eventually related by the same scalar
+	sequence, then the erased tails are eventually related by \(c_N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	At every sufficiently large length, split both finite sums into the selected
+	summand and the erased tail, use the selected-summand identity, and cancel
+	the common selected term.
 \end{proof}
 
 \begin{lemma}[Reindexing a leading-erased weighted state tail]%

@@ -228,22 +228,38 @@ boundary conditions (PBC).
     % docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex.
 \end{definition}
 
+\begin{definition}[Eventually nonzero proportional MPV]%
+\label{def:eventually_nonzero_proportional_mpv}
+    \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂}
+    \leanok
+    \uses{def:mpv}
+    Two tensors \(A\) and \(B\) are eventually nonzero proportional if, for all
+    sufficiently large \(N\), there is a nonzero scalar \(c_N\in\C\) such that
+    \(\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}\). This auxiliary form is used with
+    the eventual linear-independence statement
+    Lemma~\ref{lem:bnt_overlap_orthonormal_li}.
+\end{definition}
+
 \begin{lemma}[Elementary nonzero proportionality rules]%
 \label{lem:nonzero_proportional_mpv_basic}
     \lean{MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂,
+        MPSTensor.NonzeroProportionalMPV₂.eventually,
         MPSTensor.NonzeroProportionalMPV₂.symm,
         MPSTensor.SameMPV₂.toNonzeroProportionalMPV₂}
     \leanok
-    \uses{def:proportional_mpv, def:nonzero_proportional_mpv, def:same_mpv2}
-    Nonzero proportionality implies weak proportionality, is symmetric, and
-    equality of MPV families is the special case with scalar \(1\).
+    \uses{def:proportional_mpv, def:nonzero_proportional_mpv,
+        def:eventually_nonzero_proportional_mpv, def:same_mpv2}
+    Nonzero proportionality implies weak proportionality and eventual nonzero
+    proportionality, is symmetric, and equality of MPV families is the special
+    case with scalar \(1\).
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Forgetting the nonvanishing condition gives weak proportionality.  Symmetry
-    follows by inverting the scalar \(c_N\) at each length, and equality is the
-    case \(c_N=1\).
+    Forgetting the nonvanishing condition gives weak proportionality. The
+    eventual form follows by viewing an all-length statement as an eventual one.
+    Symmetry follows by inverting the scalar \(c_N\) at each length, and equality
+    is the case \(c_N=1\).
 \end{proof}
 
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
