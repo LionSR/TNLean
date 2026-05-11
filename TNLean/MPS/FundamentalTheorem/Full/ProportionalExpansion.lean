@@ -475,6 +475,33 @@ lemma weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
     congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hState N)
   simpa [mpvInner, inner_sum, inner_smul_right] using hinner
 
+/-- **Eventual projection of a weighted MPV-state scalar sequence.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After Lemma
+`Lem1` is used, the relevant weighted-state identity is only needed for all
+sufficiently large lengths; projection against a fixed block MPV preserves the
+same eventual scalar sequence. -/
+lemma eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ)
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    ∀ {D : ℕ} (X : MPSTensor d D),
+      ∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+          c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+  intro D X
+  refine hState.mono ?_
+  intro N hN
+  have hinner :=
+    congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) hN
+  simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+
 -- The fixed-length projection statement below is retained separately because
 -- issue #1563 uses it before passing to the scalar sequence in the CPSV16
 -- lines 1170--1192 block-selection contradiction.
@@ -531,6 +558,31 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
     weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
       A B c hstate X⟩
 
+/-- **An eventual scalar sequence for proportional weighted MPV projections.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the
+projection form of the eventual weighted-state scalar sequence obtained after
+applying the sufficiently-large-length linear-independence input `Lem1`. -/
+lemma exists_eventually_weighted_mpvInner_eq_mul_sequence_of_eventuallyNonzeroProportionalMPV₂
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (X : MPSTensor d D) :
+    ∃ c : ℕ → ℂ, (∀ᶠ N in atTop, c N ≠ 0) ∧
+      ∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+          c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+  obtain ⟨c, hc, hstate⟩ :=
+    exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
+      A B hProp
+  exact ⟨c, hc,
+    eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence
+      A B c hstate X⟩
+
 /-- **A scalar sequence for normalized proportional weighted projections.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This records
@@ -559,6 +611,45 @@ lemma exists_normalized_weighted_mpvInner_eq_mul_adjusted_sequence_of_nonzeroPro
       A B hProp X
   exact ⟨c, hc,
     normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul A B X c μ ν hμ hν hinner⟩
+
+/-- **An eventual scalar sequence for normalized proportional weighted projections.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. In the recursive
+tail-reduction stage the proportionality of the assembled tail tensors is only
+eventual. After choosing the eventual scalar sequence, the normalized projected
+weighted sums are still related by the same adjusted scalar for all
+sufficiently large lengths. -/
+lemma exists_eventually_adjusted_weighted_mpvInner_sequence_of_eventuallyNonzeroProportionalMPV₂
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (X : MPSTensor d D) (μ ν : ℂ) (hμ : μ ≠ 0) (hν : ν ≠ 0) :
+    ∃ c : ℕ → ℂ, (∀ᶠ N in atTop, c N ≠ 0) ∧
+      ∀ᶠ N in atTop,
+        (μ ^ N)⁻¹ *
+            (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+          (c N * (ν / μ) ^ N) *
+            ((ν ^ N)⁻¹ *
+              (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
+  obtain ⟨c, hc, hinner⟩ :=
+    exists_eventually_weighted_mpvInner_eq_mul_sequence_of_eventuallyNonzeroProportionalMPV₂
+      A B hProp X
+  refine ⟨c, hc, ?_⟩
+  refine hinner.mono ?_
+  intro N hN
+  let S : ℂ := ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N
+  rw [hN]
+  change (μ ^ N)⁻¹ * (c N * S) =
+    (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S)
+  calc
+    (μ ^ N)⁻¹ * (c N * S) = ((μ ^ N)⁻¹ * c N) * S := by ring
+    _ = ((c N * (ν / μ) ^ N) * (ν ^ N)⁻¹) * S := by
+      rw [adjusted_scalar_factor_eq (c N) μ ν N hμ hν]
+    _ = (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S) := by ring
 
 end ProportionalExpansion
 
