@@ -838,6 +838,29 @@ with an extra $Z$-gauge degree of freedom.
 	where the other \(B\)-summands are still present.
 \end{proof}
 
+\begin{lemma}[Fixed-right no-tail cancellation]%
+\label{lem:fixed_right_all_overlaps_decay_contradiction_fin_one}
+	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
+	\leanok
+	\uses{def:cf_bnt, lem:fixed_right_lem1_input_eventual_proportional,
+		lem:eventual_coeff_eq_of_eventual_li}
+	If \(A\) and \(B\) are BNT canonical-form families and the \(B\)-family
+	consists only of the fixed block \(B_0\), then the fixed-right
+	all-overlaps-decay alternative contradicts eventual nonzero proportionality
+	of the total weighted MPV families.  This is the no-tail case of the
+	fixed-block cancellation step in
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Lemma~\ref{lem:fixed_right_lem1_input_eventual_proportional} gives eventual
+	linear independence of all \(A_j\) together with \(B_0\).  Since there are
+	no other \(B\)-summands, coefficient extraction in the full proportional
+	weighted-state identity forces the nonzero coefficient
+	\(c_N\nu_0^N\) of \(B_0\) to vanish for all sufficiently large \(N\), a
+	contradiction.
+\end{proof}
+
 \begin{lemma}[Fixed-left all-overlaps-decay contradiction]%
 \label{lem:fixed_left_all_overlaps_decay_contradiction}
 	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
@@ -858,6 +881,28 @@ with an extra $Z$-gauge degree of freedom.
 	linear independence of all \(B_k\) together with \(A_{j_0}\); the remaining
 	point is the same isolation of the selected summand from the full
 	proportional weighted-state identity.
+\end{proof}
+
+\begin{lemma}[Fixed-left no-tail cancellation]%
+\label{lem:fixed_left_all_overlaps_decay_contradiction_fin_one}
+	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
+	\leanok
+	\uses{def:cf_bnt, lem:fixed_left_lem1_input_eventual_proportional,
+		lem:eventual_coeff_eq_of_eventual_li}
+	If \(A\) and \(B\) are BNT canonical-form families and the \(A\)-family
+	consists only of the fixed block \(A_0\), then the fixed-left
+	all-overlaps-decay alternative contradicts eventual nonzero proportionality
+	of the total weighted MPV families.  This is the no-tail case of the
+	symmetric fixed-block cancellation step in
+	\cite[Theorem~II.1, lines~1182--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Lemma~\ref{lem:fixed_left_lem1_input_eventual_proportional} gives eventual
+	linear independence of all \(B_k\) together with \(A_0\).  Since there are
+	no other \(A\)-summands, coefficient extraction in the full proportional
+	weighted-state identity forces the nonzero coefficient \(\mu_0^N\) of
+	\(A_0\) to vanish for all sufficiently large \(N\), a contradiction.
 \end{proof}
 
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
