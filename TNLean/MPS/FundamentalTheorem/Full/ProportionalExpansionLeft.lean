@@ -28,8 +28,8 @@ section ProportionalExpansionLeft
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. This is the symmetric bookkeeping form of
 `eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li`: the
-eventual linear-independence input is taken for the family consisting of the
-remaining `A`-blocks together with all `B`-blocks. The phase is assumed
+eventual linear-independence input is taken for the family consisting of all
+`B`-blocks together with the remaining `A`-blocks. The phase is assumed
 nonzero so that the selected `A`-summand can be rewritten in terms of the
 selected `B`-summand before coefficient extraction. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left
