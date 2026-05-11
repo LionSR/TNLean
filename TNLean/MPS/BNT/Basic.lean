@@ -82,28 +82,29 @@ structure IsBNT {d Dtot : ℕ} (A_total : MPSTensor d Dtot)
       LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A_bnt j) N)
 
 /--
-If the MPV overlaps of a finite family `A j` converge to an orthonormal Gram matrix,
-then the MPV states `mpvState (A j) N` are eventually linearly independent.
+If the MPV overlaps of a finite index family `A j` converge to an orthonormal
+Gram matrix, then the MPV states `mpvState (A j) N` are eventually linearly
+independent.
 
-This is a convenient formulation around
+This is the finite-index formulation of
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
-lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
-    {d : ℕ} {g : ℕ} {dim : Fin g → ℕ}
-    (A : (j : Fin g) → MPSTensor d (dim j))
+lemma eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal
+    {d : ℕ} {ι : Type} [Finite ι] {dim : ι → ℕ}
+    (A : (j : ι) → MPSTensor d (dim j))
     (h_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (h_cross : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∀ᶠ N in atTop,
-      LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) := by
+      LinearIndependent ℂ (fun j : ι => mpvState (d := d) (A j) N) := by
   classical
   -- Work in a fixed Hilbert space containing all `MPVSpace d N` as orthogonal summands.
-  let V : Type := lp (fun N : ℕ => MPVSpace d N) 2
+  let V := lp (fun N : ℕ => MPVSpace d N) 2
   -- Embed each `mpvState (A j) N : MPVSpace d N` into the `N`-th summand of `V`.
-  let v : Fin g → ℕ → V := fun j N => lp.single 2 N (mpvState (d := d) (A j) N)
+  let v : ι → ℕ → V := fun j N => lp.single 2 N (mpvState (d := d) (A j) N)
   -- First show convergence of the inner products `⟪mpvState (A i) N, mpvState (A j) N⟫`.
-  have hInnerState : ∀ i j : Fin g,
+  have hInnerState : ∀ i j : ι,
       Tendsto (fun N =>
         ⟪mpvState (d := d) (A i) N, mpvState (d := d) (A j) N⟫_ℂ)
         atTop (nhds (if i = j then (1 : ℂ) else 0)) := by
@@ -120,7 +121,7 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
           mpvOverlap_eq_star_mpvInner (A := A i) (B := A j) N
       simpa [mpvInner, if_neg h] using h1.star
   -- Translate the Gram convergence to the embedded vectors `v` in the fixed space `V`.
-  have hGram : ∀ i j : Fin g,
+  have hGram : ∀ i j : ι,
       Tendsto (fun N => ⟪v i N, v j N⟫_ℂ)
         atTop (nhds (if i = j then (1 : ℂ) else 0)) := fun i j =>
     -- `⟪v i N, v j N⟫ = ⟪lp.single 2 N (mpvState A i N), ...⟫ = ⟪mpvState A i N, ...⟫`
@@ -129,7 +130,7 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
       simp only [v]
       rw [lp.inner_single_left, lp.single_apply_self]
   -- Apply the Gram-matrix criterion in the fixed inner product space `V`.
-  have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun j : Fin g => v j N) :=
+  have hLI_emb : ∀ᶠ N in atTop, LinearIndependent ℂ (fun j : ι => v j N) :=
     MPSTensor.eventually_linearIndependent_of_gram_tendsto_id (v := v) hGram
   -- Pull back linear independence along the linear map `lp.lsingle 2 N`.
   refine hLI_emb.mono ?_
@@ -137,9 +138,27 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
   -- `lp.lsingle 2 N` is the linear map `MPVSpace d N →ₗ[ℂ] V` sending `x` to `lp.single 2 N x`.
   let fN : MPVSpace d N →ₗ[ℂ] V := lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 N
   -- Rewrite the embedded family as `fN ∘ mpvState` and apply `LinearIndependent.of_comp`.
-  have hN' : LinearIndependent ℂ (fun j : Fin g => fN (mpvState (d := d) (A j) N)) := by
+  have hN' : LinearIndependent ℂ (fun j : ι => fN (mpvState (d := d) (A j) N)) := by
     simpa [v, fN, lp.lsingle_apply] using hN
   exact LinearIndependent.of_comp fN hN'
+
+/--
+If the MPV overlaps of a finite family `A j` converge to an orthonormal Gram matrix,
+then the MPV states `mpvState (A j) N` are eventually linearly independent.
+
+This is a convenient `Fin g` formulation around
+`MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal`.
+-/
+lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
+    {d : ℕ} {g : ℕ} {dim : Fin g → ℕ}
+    (A : (j : Fin g) → MPSTensor d (dim j))
+    (h_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (h_cross : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+    ∀ᶠ N in atTop,
+      LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
+  eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal A h_self h_cross
 
 end MPSTensor
 
