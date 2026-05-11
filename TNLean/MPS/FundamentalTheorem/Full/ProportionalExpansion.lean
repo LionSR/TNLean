@@ -18,8 +18,7 @@ external coefficient-array hypotheses are introduced.
   arXiv:1606.00608 (2017), Theorem `thm1`, lines 1170--1192.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace
-open Filter
+open scoped BigOperators InnerProductSpace
 
 namespace MPSTensor
 
