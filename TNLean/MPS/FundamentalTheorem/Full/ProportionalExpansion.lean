@@ -354,6 +354,63 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
       congr 1
       ring
 
+/-- **Selected weighted summand from phase substitution and linear independence.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`. After a non-decaying block pair has supplied the phase relation for
+the selected block, Lemma `Lem1` gives eventual linear independence of the
+family obtained by replacing that selected block by its phase-matched partner.
+The total weighted-state relation then identifies the selected coefficient,
+and hence the selected weighted summand. -/
+lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
+    {d : ℕ} {ι κ : Type*} [Fintype ι] [Fintype κ]
+    {dimA : ι → ℕ} {dimB₀ : ℕ} {dimB : κ → ℕ}
+    {μA : ι → ℂ} {μB₀ ζ : ℂ} {μB : κ → ℂ} {c : ℕ → ℂ}
+    (A : (i : ι) → MPSTensor d (dimA i))
+    (B₀ : MPSTensor d dimB₀)
+    (B : (k : κ) → MPSTensor d (dimB k))
+    (i₀ : ι)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) B₀ N = ζ ^ N • mpvState (d := d) (A i₀) N)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun i : ι => mpvState (d := d) (A i) N)
+          (fun k : κ => mpvState (d := d) (B k) N)))
+    (hState : ∀ᶠ N in atTop,
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+        c N •
+          ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+            ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    ∀ᶠ N in atTop,
+      (μA i₀) ^ N • mpvState (d := d) (A i₀) N =
+        c N • (μB₀ ^ N • mpvState (d := d) B₀ N) := by
+  classical
+  have hCoeff :
+      ∀ᶠ N in atTop, (μA i₀) ^ N = c N * (μB₀ * ζ) ^ N := by
+    refine eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum
+      (fun N i => mpvState (d := d) (A i) N)
+      (fun N k => mpvState (d := d) (B k) N)
+      (fun N i => (μA i) ^ N)
+      (fun N => c N * (μB₀ * ζ) ^ N)
+      (fun N k => c N * (μB k) ^ N)
+      i₀ hLI ?_
+    refine hState.mono ?_
+    intro N hN
+    calc
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+          c N •
+            ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+              ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N) := hN
+      _ =
+          (c N * (μB₀ * ζ) ^ N) • mpvState (d := d) (A i₀) N +
+            ∑ k : κ,
+              (c N * (μB k) ^ N) • mpvState (d := d) (B k) N := by
+        rw [hPhase N, smul_add, Finset.smul_sum]
+        simp [smul_smul, mul_pow]
+  exact eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
+    (A i₀) B₀ hPhase hCoeff
+
 /-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof removes
