@@ -474,6 +474,24 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:dominant_projection_contradiction_eventual_proportional}.
 \end{proof}
 
+\begin{lemma}[Non-decaying BNT overlap gives a gauge phase]%
+\label{lem:bnt_nondecaying_overlap_gauge_phase}
+	\lean{MPSTensor.dim_eq_of_nondecaying_overlap_CFBNT,
+		MPSTensor.gaugePhaseEquiv_of_nondecaying_overlap_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:mpv_overlap}
+	If two blocks from BNT canonical-form families have an overlap which does
+	not tend to zero, then their bond dimensions agree and the two blocks are
+	gauge-phase equivalent.
+\end{lemma}
+
+\begin{proof}\leanok
+	The overlap dichotomy says that dimension mismatch forces the overlap to
+	decay to zero, and that non-equivalent blocks of the same dimension also
+	have decaying overlap.  The two contrapositive applications give the
+	claimed dimension equality and gauge-phase equivalence.
+\end{proof}
+
 \begin{lemma}[Non-decaying BNT partners are unique]%
 \label{lem:bnt_nondecaying_partner_unique}
 	\lean{MPSTensor.unique_left_nondecaying_overlap_partner_CFBNT,

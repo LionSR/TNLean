@@ -18,6 +18,63 @@ namespace MPSTensor
 
 section HeteroEqualCase
 
+/-- **Bond dimension equality from a non-decaying BNT overlap.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof
+uses the overlap dichotomy before applying Corollary `eqV`: if two injective
+left-canonical BNT blocks have a cross-overlap which does not tend to zero, then
+their bond dimensions must agree. -/
+lemma dim_eq_of_nondecaying_overlap_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (j : Fin rA) (k : Fin rB)
+    (hnd : ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    dimA j = dimB k := by
+  by_contra hdim
+  exact hnd (mpvOverlap_tendsto_zero_of_dim_ne (A j) (B k)
+    (hA.toHasInjectiveBlocks.block_injective j)
+    (hB.toHasInjectiveBlocks.block_injective k)
+    (hA.toIsLeftCanonicalBlockFamily.leftCanonical j)
+    (hB.toIsLeftCanonicalBlockFamily.leftCanonical k)
+    hdim)
+
+/-- **Gauge-phase equivalence from a non-decaying BNT overlap.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After a
+non-decaying overlap partner is found, the overlap dichotomy and Corollary
+`eqV` identify the two BNT blocks up to gauge and phase. This lemma packages
+the Lean form of that extraction. -/
+lemma gaugePhaseEquiv_of_nondecaying_overlap_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (j : Fin rA) (k : Fin rB)
+    (hnd : ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    GaugePhaseEquiv (d := d)
+      (cast (congr_arg (MPSTensor d)
+        (dim_eq_of_nondecaying_overlap_CFBNT A B hA hB j k hnd)) (A j))
+      (B k) := by
+  let hdim := dim_eq_of_nondecaying_overlap_CFBNT A B hA hB j k hnd
+  by_contra hNot
+  exact hnd (mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left
+    hdim (A j) (B k)
+    (hA.toHasInjectiveBlocks.block_injective j)
+    (hB.toHasInjectiveBlocks.block_injective k)
+    (hA.toIsLeftCanonicalBlockFamily.leftCanonical j)
+    (hB.toIsLeftCanonicalBlockFamily.leftCanonical k)
+    hNot)
+
 /-- **Uniqueness of a non-decaying left partner for a BNT block.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After the
