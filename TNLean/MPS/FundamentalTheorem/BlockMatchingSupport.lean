@@ -6,7 +6,7 @@ import TNLean.MPS.BNT.Construction
 import TNLean.Algebra.ScalarPowerSumIdentity
 
 /-!
-# BNT block-matching support
+# BNT block matching and power sums
 
 This module contains the witness type used for BNT block matching and the
 Newton--Girard power-sum lemmas needed for the multiplicity-recovery argument
@@ -44,7 +44,11 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-/-- Conclusion type for the BNT proportional-MPV comparison theorems. -/
+/-- Conclusion type for BNT block-matching statements.
+
+Source: arXiv:1606.00608, Theorem II.1, lines 349--352 and 1165--1192.  This is
+the permutation, dimension-equality, and gauge-phase part of the conclusion; it
+does not assert the hypotheses from which that conclusion follows. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
