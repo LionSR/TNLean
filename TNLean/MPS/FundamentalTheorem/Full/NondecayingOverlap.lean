@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalDominant
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingPartnerUnique
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -54,6 +54,7 @@ open Filter
 namespace MPSTensor
 
 section HeteroEqualCase
+
 
 /-- **Non-decaying overlap existence for equal-MPV BNT families.**
 
