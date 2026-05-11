@@ -555,8 +555,8 @@ For two block families `A : Fin rA → MPSTensor d _` and `B : Fin rB → MPSTen
 this structure packages a pair of total tensors `A_total`, `B_total`, coefficient
 sequences `aCoeff`, `bCoeff`, a per-`N` proportionality scalar `c`, and the source's
 dominant-block normalization (`‖μ 0‖ = 1`, with sub-dominant coefficients of norm at
-most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching CPSV16's
-post-normalization labelling. -/
+most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching the
+post-normalization labelling in arXiv:1606.00608. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
