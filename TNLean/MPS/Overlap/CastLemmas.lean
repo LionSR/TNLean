@@ -13,7 +13,7 @@ the cast `cast (congr_arg (MPSTensor d) h) A` preserves all relevant MPS quantit
 matrix product vectors, overlaps, injectivity, irreducibility, the left-canonical /
 trace-preserving condition `∑ Aᵢ† Aᵢ = I`, and gauge-phase equivalence.
 
-These lemmas were previously duplicated as private helpers in
+These lemmas were previously duplicated as private auxiliary results in
 `BNT/PermutationRigidityPrimitive` and `BNT/Construction`.
 -/
 

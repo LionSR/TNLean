@@ -51,23 +51,34 @@ which after a dimension argument gives the structural conclusion.
 \section{The formalized same-dimension component}
 
 The formalization represents the same-bond-dimension part of the $1$ case by
-separating two mathematical steps.  First,
-\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one}
-shows that asymptotically unit-modulus overlap forces the cross-transfer
-spectral radius to be at least \(1\).\footnote{%
-This theorem is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean};
-it formalizes a step in the proof of Lemma~\texttt{equalMPS},
+separating two mathematical steps.  First, the spectral-radius theorem shows
+that asymptotically unit-modulus overlap forces the cross-transfer spectral
+radius to be at least \(1\).\footnote{%
+This theorem is
+\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean} and formalizes
+a step in the proof of Lemma~\texttt{equalMPS},
 \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
 This is the contrapositive of the already formalized decay theorem for mixed
 transfer spectral radius \(<1\).
 
-Second,
-\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP}
-turns the modulus-one spectral situation into gauge-phase equivalence by the
-Cauchy--Schwarz argument with the positive fixed point.  The resulting theorem
-\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
-has the source's overlap hypothesis and no MPV proportionality hypothesis,
-but it is stated for two tensors with the same bond dimension.
+Second, the modulus-one spectral theorem turns the modulus-one spectral
+situation into gauge-phase equivalence by the Cauchy--Schwarz argument with the
+positive fixed point.\footnote{%
+This theorem is
+\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
+The resulting same-dimension gauge-phase theorem has the source's overlap
+hypothesis and no MPV proportionality hypothesis, but it is stated for two
+tensors with the same bond dimension.\footnote{%
+The theorem is
+\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
+In this same-dimension component the formal theorem is slightly stronger than
+the cited normal-tensor statement: the source's normal tensor hypothesis
+packages irreducibility, trace preservation, and primitivity, while the
+spectral-radius and Cauchy--Schwarz argument used here consumes only
+irreducibility and trace preservation.
 
 The proportionality-based theorem in the same file is a correct corollary for a
 stronger hypothesis.  It is not a formalization of Lemma~\texttt{equalMPS},

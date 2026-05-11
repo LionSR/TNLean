@@ -331,29 +331,26 @@ The convergence-to-nonzero-limit fields have been removed from
 fields: a per-$N$ nonzero proportionality scalar
 $c_N\ne 0$, the dominant-block normalization
 $\|a_{N,1}\|=\|b_{N,1}\|=1$, and the sub-dominant bounds
-$\|a_{N,j}\|, \|b_{N,k}\|\le 1$. These hypotheses are threaded through the
-matching-layer signatures in
-\path{TNLean/MPS/BNT/PermutationRigidity/Matching.lean} so that the two
-nonzero-overlap theorems
-\leanid{exists_nonzero_overlap_of_proportional_decomp} and
-\leanid{exists_nonzero_overlap_of_proportional_decomp_left} now carry the
-source-faithful hypothesis set verbatim. The blueprint statements of
-\texttt{lem:ft\_proportional}, \texttt{lem:ft\_proportional\_nt},
-\texttt{thm:bnt\_perm\_prop}, \texttt{thm:bnt\_perm\_prop\_nt},
-\texttt{lem:weak\_ft\_conditional}, and \texttt{def:normal\_cf\_bnt}
-have been updated to match.
+$\|a_{N,j}\|, \|b_{N,k}\|\le 1$.
 
-What remains is the proof itself. The two nonzero-overlap theorems are
-currently \texttt{sorry}, and the matching-layer wrappers that consume them
-are transitively \texttt{sorry} as well; each carries an
-\verb|**Unfaithful:**| marker citing the elimination plan. The
-paper-faithful proof following \cite[lines~1170--1192]{Cirac2016MPDO_arXiv}
-will consume exactly the per-$N$ hypothesis set now exposed: the lower-bound
-argument uses $\|b_{N,1}\|=1$ together with $\|b_{N,k}\|\le 1$ and
-$c_N\ne 0$ to keep the dominant-block overlap away from zero, and the
-finite power-sum identification of weights either at one witness length
-(the strict-weight specialization) or at finitely many witness lengths
-(the multi-multiplicity case). That work is tracked as Stage~C of
+The earlier one-shot nonzero-overlap theorems and the matching wrappers built
+on them have now been deleted.  Their statements asserted a full
+``for every block'' nondecay conclusion from arbitrary bounded coefficient
+arrays, but that conclusion is stronger than the exposed hypotheses: a
+non-dominant coefficient can vanish identically unless the source's residual
+peeling argument or the power-sum sector structure has already been encoded.
+The remaining Lean interfaces keep the proportional matching conclusion as an
+explicit input until the source-faithful residual comparison theorem is
+available.
+
+What remains is the proof itself. The paper-faithful proof following
+\cite[lines~1170--1192]{Cirac2016MPDO_arXiv} will consume the per-$N$
+hypothesis set together with the missing residual comparison data: the
+lower-bound argument uses $\|b_{N,1}\|=1$ together with
+$\|b_{N,k}\|\le 1$ and $c_N\ne 0$ for the currently dominant surviving
+sector, and the finite power-sum identification of weights either at one
+witness length (the strict-weight specialization) or at finitely many witness
+lengths (the multi-multiplicity case). That work is tracked as Stage~C of
 \href{https://github.com/LionSR/TNLean/issues/1559}{issue~\#1559}.
 
 The corresponding tracked items are
