@@ -770,11 +770,34 @@ with an extra $Z$-gauge degree of freedom.
 	family.
 \end{proof}
 
+\begin{lemma}[Fixed-block Lemma Lem1 input for proportional BNT families]%
+\label{lem:fixed_right_lem1_input_eventual_proportional}
+	\lean{MPSTensor.eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT}
+	\leanok
+	\uses{lem:bnt_two_family_overlap_orthonormal_li}
+	Fix one block \(B_{k_0}\) of a BNT canonical-form family.  If
+	\(O_{A_j,B_{k_0}}(N)\to 0\) for every block \(A_j\) in the other BNT
+	family, then the combined MPV family consisting of all \(A_j\) and the
+	single block \(B_{k_0}\) is linearly independent for all sufficiently large
+	\(N\).  This is the fixed-block application of
+	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} in the proof of
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	The assumed mixed overlaps, the BNT asymptotic orthonormality of the
+	\(A\)-family, and the normalized self-overlap of \(B_{k_0}\) make the Gram
+	matrix of the combined family tend to the identity.  Apply the two-family
+	orthonormal-overlap form of
+	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv}.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}
 	\leanok
-	\uses{def:cf_bnt, def:mpv_overlap, def:nonzero_proportional_mpv}
+	\uses{def:cf_bnt, def:mpv_overlap, def:nonzero_proportional_mpv,
+		lem:fixed_right_lem1_input_eventual_proportional}
 	Let \(A=\bigoplus_j \mu_j A_j\) and
 	\(B=\bigoplus_k \nu_k B_k\) be canonical-form tensors with already
 	selected one-copy BNT representatives, with \(r_A\ge 1\) and
