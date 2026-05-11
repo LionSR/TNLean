@@ -14,6 +14,8 @@ For the non-periodic MPS Fundamental Theorem route:
   sources.
 - `david2006_direct_sum_input.tex` explains the older MPS representation
   paper's direct-sum input behind block-injective canonical form.
+- `cpsv16_fixed_block_cancellation.tex` records the fixed-block cancellation
+  step implicit in CPSV16 Theorem II.1, line 1182.
 - `quantum_wielandt_deviation.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 
