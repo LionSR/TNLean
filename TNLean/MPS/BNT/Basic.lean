@@ -92,7 +92,7 @@ This is the finite-index formulation of
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
 lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
-    {d : ℕ} {ι : Type} [Finite ι] {dim : ι → ℕ}
+    {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ}
     (A : (j : ι) → MPSTensor d (dim j))
     (h_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))

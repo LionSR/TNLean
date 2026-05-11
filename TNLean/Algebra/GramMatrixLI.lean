@@ -30,7 +30,7 @@ and `L.det ≠ 0`, then for `N` large enough the Gram matrix is invertible and
 the vectors `{v i N}` are linearly independent.
 -/
 theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
-    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
     {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
     (v : ι → ℕ → V) (L : Matrix ι ι ℂ) (hL : L.det ≠ 0)
     (h : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j))) :
@@ -65,7 +65,7 @@ where the limit matrix is the identity. For a finite family of vectors
 then for `N` large enough the vectors are linearly independent.
 -/
 theorem eventually_linearIndependent_of_gram_tendsto_id
-    {ι : Type} [Finite ι] [DecidableEq ι]
+    {ι : Type*} [Finite ι] [DecidableEq ι]
     {V : Type} [NormedAddCommGroup V] [InnerProductSpace ℂ V]
     (v : ι → ℕ → V)
     (h : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop
