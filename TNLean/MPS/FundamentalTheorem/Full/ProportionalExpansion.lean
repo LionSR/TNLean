@@ -2,6 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.Defs
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 
 /-!
@@ -80,7 +81,7 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
 /-- **A scalar sequence for proportional weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof uses
-one proportionality scalar at each chain length. This lemma packages those
+one proportionality scalar at each chain length. This lemma collects those
 lengthwise scalars into a single nonzero sequence so that later convergence
 arguments can refer to the same scalar at each occurrence of the fixed length. -/
 lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
@@ -162,7 +163,7 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
 
 /-- **A scalar sequence for normalized proportional weighted projections.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This packages
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This records
 the projected weighted-sum identity supplied by proportional assembled tensors
 in the normalized form used in the block-selection contradiction. The same
 nonzero scalar sequence is corrected by the factor `(\nu/\mu)^N` after

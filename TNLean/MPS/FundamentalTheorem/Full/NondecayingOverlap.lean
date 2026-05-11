@@ -788,10 +788,10 @@ form used in this development. CPSV16 Theorem II.1 is stated for the general
 BNT canonical form with possible multiplicities. This restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
 
-The proof body first derives the BNT self/cross-overlap data and the lengthwise
-nonzero proportional scalar sequence from the stated hypotheses. The remaining
-proof step is the dominant-block contradiction from the normalized proportional
-projection identity; see issue #1563. -/
+The proof body first derives the four BNT self- and cross-overlap convergence
+facts and the lengthwise nonzero proportional scalar sequence from the stated
+hypotheses. The remaining proof step is the dominant-block contradiction from
+the normalized proportional projection identity; see issue #1563. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -847,7 +847,7 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
       (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
     -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
-    -- and the BNT self/cross-overlap data above to rule out simultaneous
+    -- and the BNT self/cross-overlap convergence facts above to rule out simultaneous
     -- decay against a fixed block, then repeat with A and B interchanged.
     sorry
   exact hRemaining
