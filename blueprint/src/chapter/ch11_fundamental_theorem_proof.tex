@@ -134,6 +134,29 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the eventual state identity on each basis word.
 \end{proof}
 
+\begin{lemma}[Selected weighted summand from phase and coefficient equality]%
+\label{lem:selected_weighted_summand_from_phase_coeff}
+	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff}
+	\leanok
+	\uses{def:mpv_state}
+	Suppose a pair of blocks satisfies
+	\(\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}\) for every \(N\), and suppose
+	that the corresponding coefficients satisfy
+	\(\mu_A^N=c_N(\mu_B\zeta)^N\) for all sufficiently large \(N\).  Then the
+	selected weighted summands are eventually related by the same scalar
+	sequence:
+	\[
+		\mu_A^N\ket{V^{(N)}(A)}
+		=
+		c_N\mu_B^N\ket{V^{(N)}(B)}.
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	Substitute the phase relation into the right-hand side and use
+	\((\mu_B\zeta)^N=\mu_B^N\zeta^N\).
+\end{proof}
+
 \begin{lemma}[Subtracting a proportional selected summand]%
 \label{lem:proportional_weighted_state_tail_subtraction}
 	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}

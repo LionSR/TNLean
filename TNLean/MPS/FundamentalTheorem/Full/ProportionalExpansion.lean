@@ -286,6 +286,34 @@ lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weigh
     _ = c N * mpv (toTensorFromBlocks μB B) σ := by
       rw [← hBcoeff]
 
+/-- **Selected weighted summand from phase and coefficient equality.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After a
+non-decaying block pair has supplied a phase relation between the two MPV
+families, the coefficient comparison identifies the corresponding weighted
+summands. This is only the algebraic bridge from the phase relation and the
+eventual coefficient identity to the selected-summand identity used before
+erasing matched blocks. -/
+lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
+    {d DA DB : ℕ} {μA μB ζ : ℂ} {c : ℕ → ℂ}
+    (A : MPSTensor d DA) (B : MPSTensor d DB)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N)
+    (hCoeff : ∀ᶠ N in atTop, μA ^ N = c N * (μB * ζ) ^ N) :
+    ∀ᶠ N in atTop,
+      μA ^ N • mpvState (d := d) A N =
+        c N • (μB ^ N • mpvState (d := d) B N) := by
+  refine hCoeff.mono ?_
+  intro N hN
+  calc
+    μA ^ N • mpvState (d := d) A N =
+        (c N * (μB * ζ) ^ N) • mpvState (d := d) A N := by
+          rw [hN]
+    _ = c N • (μB ^ N • mpvState (d := d) B N) := by
+      rw [hPhase N, mul_pow, smul_smul, smul_smul]
+      congr 1
+      ring
+
 /-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof removes
