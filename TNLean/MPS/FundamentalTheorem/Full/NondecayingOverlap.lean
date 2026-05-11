@@ -775,6 +775,38 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [hk0_eq]; exact hall (succA j')
 termination_by rA + rB
 
+/-- **Leading-erased tails of restricted BNT canonical forms.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof
+removes a matched leading BNT block and repeats the argument on the remaining
+blocks. In the one-copy-per-sector restricted surface used here, the inherited
+tail family is again in restricted BNT canonical form. -/
+lemma isCanonicalFormBNT_tail_succ
+    {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hA : IsCanonicalFormBNT μ A) (hr : 0 < r) :
+    IsCanonicalFormBNT
+      (fun j : Fin (r - 1) => μ ⟨j.val + 1, by omega⟩)
+      (fun j : Fin (r - 1) => A ⟨j.val + 1, by omega⟩) := by
+  let succ : Fin (r - 1) → Fin r := fun j => ⟨j.val + 1, by omega⟩
+  have succ_inj : Function.Injective succ := fun j₁ j₂ h => by
+    simp [succ, Fin.ext_iff] at h
+    exact Fin.ext (by omega)
+  have succ_strictMono : StrictMono succ := fun a b h => by
+    simp only [succ, Fin.mk_lt_mk]
+    omega
+  exact
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall (fun k => hA.toHasInjectiveBlocks.block_injective (succ k)))
+      (IsLeftCanonicalBlockFamily.ofForall
+        (fun k => hA.toIsLeftCanonicalBlockFamily.leftCanonical (succ k)))
+      ⟨hA.mu_strict_anti.comp_strictMono succ_strictMono,
+       fun k => hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero (succ k)⟩
+      (HasNormalizedSelfOverlap.ofForall
+        (fun k => hA.toHasNormalizedSelfOverlap.overlap_tendsto_one (succ k)))
+      (fun j k hjk hdim => hA.blocks_not_equiv (succ j) (succ k)
+        (fun h => hjk (succ_inj h)) hdim)
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
