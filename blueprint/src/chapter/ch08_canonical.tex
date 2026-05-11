@@ -848,6 +848,49 @@ per-block peripheral-spectrum primitivity.
 		That intertwiner is exactly the required gauge-phase equivalence.
 \end{proof}
 
+\begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
+		\label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
+		\lean{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
+		\leanok
+		\uses{def:mpv_overlap}
+		Let $A$ and $B$ be MPS tensors of the same bond dimension.  If
+		$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$ as $N\to\infty$,
+		then the mixed transfer map has spectral radius at least $1$.
+\end{lemma}
+
+\begin{proof}\leanok
+		If the mixed transfer
+		spectral radius were strictly less than~$1$, the iterated mixed transfer
+		map would tend to zero in operator norm, hence so would its trace, and
+		via the trace identity
+		$\operatorname{tr}(F_{AB}^N) = \langle V^{(N)}(A), V^{(N)}(B)\rangle$
+		the overlap itself would tend to~$0$, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Gauge-phase equivalence from unit-modulus overlap]%
+		\label{thm:nt_overlap_norm_one_gauge}
+		\lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
+		\leanok
+		\uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv,
+			def:mpv_overlap}
+		Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension
+		satisfying $\sum_i (A^i)^\dagger A^i = \Id$ and
+		$\sum_i (B^i)^\dagger B^i = \Id$.  If
+		$\|\langle V^{(N)}(A)\,|\,V^{(N)}(B)\rangle\|\to 1$, then $A$ and~$B$
+		are gauge-phase equivalent.
+		% Same-bond-dimension case of \cite[Lemma~equalMPS,
+		% lines~1080--1091]{Cirac2016MPDO_arXiv}; proportionality of MPVs is not assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+		\uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
+			thm:nt_modulus_one_gauge}
+		By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one},
+		the mixed transfer spectral radius is at least~$1$.
+		Theorem~\ref{thm:nt_modulus_one_gauge} then gives gauge-phase
+		equivalence.
+\end{proof}
+
 \section{Steps toward canonical form existence}%
 \label{sec:canonical_pipeline_1606}
 
@@ -2858,12 +2901,6 @@ do not correspond to independent paper-level results.
 
 \subsection{Equal-Norm Blocks}
 
-\begin{theorem}[Gauge equivalence from non-decaying cross-overlap]
-	\label{thm:gauge_equiv_nondecay}
-	\lean{MPSTensor.gaugePhaseEquiv_of_nonDecaying_overlap}\leanok
-	For trace-preserving irreducible blocks, a non-decaying cross-overlap forces equal bond dimensions and gauge equivalence up to a unit-modulus phase.
-\end{theorem}
-
 \begin{theorem}[Gauge phases have unit modulus for primitive irreducible blocks]
 	\label{thm:unit_modulus_phase_tp_prim_irred}
 	\lean{MPSTensor.norm_gaugePhase_eq_one_of_irr_TP_primitive}\leanok
@@ -2902,7 +2939,7 @@ do not correspond to independent paper-level results.
 \begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
 	\label{thm:sector_decomp_tp_prim_irr}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
-	\uses{thm:gauge_equiv_nondecay, thm:bnt_grouping_gauge_equiv}
+	\uses{thm:overlap_decay_irr_tp, thm:bnt_grouping_gauge_equiv}
 	From a trace-preserving primitive irreducible block decomposition with nonzero
 	weights, quotient the block indices by MPV phase equivalence and absorb the
 	phases into the sector weights. The resulting sector decomposition represents
