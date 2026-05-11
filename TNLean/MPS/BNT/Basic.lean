@@ -90,7 +90,7 @@ This is the finite-index formulation of
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
 lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
-    {d : ℕ} {ι : Type} [Finite ι] {dim : ι → ℕ}
+    {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ}
     (A : (j : ι) → MPSTensor d (dim j))
     (h_self : ∀ j,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
@@ -159,6 +159,82 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
     ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
   eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A h_self h_cross
+
+/-- Eventual linear independence for the union of two asymptotically orthonormal
+MPV families whose mixed overlaps vanish.
+
+Source: arXiv:1606.00608, lines 1170--1192, where the linear-independence
+corollary is applied after adjoining a single block from one BNT family to the
+other family.  This is the symmetric two-family generalization of that
+linear-independence input. -/
+lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
+    {d : ℕ} {gA gB : ℕ} {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
+    (A : (j : Fin gA) → MPSTensor d (dimA j))
+    (B : (k : Fin gB) → MPSTensor d (dimB k))
+    (hA_self : ∀ j,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ k,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0))
+    (hAB : ∀ j k,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun j : Fin gA => mpvState (d := d) (A j) N)
+          (fun k : Fin gB => mpvState (d := d) (B k) N)) := by
+  classical
+  let C : (x : Sum (Fin gA) (Fin gB)) → MPSTensor d (Sum.elim dimA dimB x) :=
+    Sum.rec (motive := fun x => MPSTensor d (Sum.elim dimA dimB x)) A B
+  have h_self : ∀ x,
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
+        (nhds (1 : ℂ)) := by
+    intro x
+    cases x with
+    | inl j => simpa [C] using hA_self j
+    | inr k => simpa [C] using hB_self k
+  have h_cross : ∀ x y, x ≠ y →
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N) atTop
+        (nhds (0 : ℂ)) := by
+    intro x y hxy
+    cases x with
+    | inl i =>
+        cases y with
+        | inl j =>
+            have hij : i ≠ j := by
+              intro hij
+              apply hxy
+              simp [hij]
+            simpa [C] using hA_off i j hij
+        | inr k =>
+            simpa [C] using hAB i k
+    | inr k =>
+        cases y with
+        | inl i =>
+            simpa [C] using tendsto_mpvOverlap_zero_swap (A i) (B k) (hAB i k)
+        | inr l =>
+            have hkl : k ≠ l := by
+              intro hkl
+              apply hxy
+              simp [hkl]
+            simpa [C] using hB_off k l hkl
+  have hLI :=
+    MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal C
+      h_self h_cross
+  refine hLI.mono ?_
+  intro N hN
+  have key :
+      (fun x : Sum (Fin gA) (Fin gB) => mpvState (d := d) (C x) N) =
+        Sum.elim
+          (fun j : Fin gA => mpvState (d := d) (A j) N)
+          (fun k : Fin gB => mpvState (d := d) (B k) N) := by
+    funext x
+    cases x <;> rfl
+  rw [← key]
+  exact hN
 
 end MPSTensor
 

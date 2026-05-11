@@ -3,7 +3,6 @@ import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Basic
-import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Overlap.CastDecay
 
 /-
@@ -45,12 +44,6 @@ obtained from `SectorDecomposition` and the sector-weight comparison theorems.
    The lemma **`IsCanonicalFormBNT.isBNT`** states the same implication under
    `IsCanonicalFormBNT`.
 
-4. **`fundamentalTheorem_of_separated_CFBNT_data`** /
-   **`fundamentalTheorem_of_separated_normalCFBNT_data`**: if two CF-BNT decompositions
-   generate proportional MPVs with convergent nonzero coefficients, then the blocks
-   match up to permutation, dimension equality, and gauge-phase equivalence.
-   This connects the separated canonical/BNT hypotheses to `BNT/PermutationRigidity`.
-
 ## Design note on coefficients
 
 In the full paper (arXiv:1606.00608, eq. decBSV), the decomposition into a basis of normal
@@ -60,8 +53,9 @@ coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed
 proportionality constant. In the grouped setting, the normalized sums can still oscillate: unit-
 modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` hypotheses
 sidestep that issue by requiring that the grouping has already been done (each block in the
-basis of normal tensors corresponds to a single CF block), and the proportional-case theorem
-below takes the required convergent coefficient limits as explicit hypotheses.
+basis of normal tensors corresponds to a single CF block).  Matching data are
+therefore kept as an explicit `ProportionalDecompositionConclusion` until the
+source-faithful residual comparison theorem is formalized.
 -/
 
 open scoped Matrix BigOperators
@@ -544,7 +538,7 @@ lemma isBNT [∀ k, NeZero (dim k)]
 
 end IsNormalCanonicalFormBNT
 
-/-! ### Connection with BNT/PermutationRigidity -/
+/-! ### Source-faithful BNT comparison data -/
 
 -- Removal history (paper-realignment, see CLAUDE.md): an earlier version of this
 -- structure carried convergence-to-nonzero-limit fields `aLim`, `bLim`, `cLim`,
@@ -561,8 +555,8 @@ For two block families `A : Fin rA → MPSTensor d _` and `B : Fin rB → MPSTen
 this structure packages a pair of total tensors `A_total`, `B_total`, coefficient
 sequences `aCoeff`, `bCoeff`, a per-`N` proportionality scalar `c`, and the source's
 dominant-block normalization (`‖μ 0‖ = 1`, with sub-dominant coefficients of norm at
-most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching CPSV16's
-post-normalization labelling. -/
+most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching the
+post-normalization labelling in arXiv:1606.00608. -/
 structure ProportionalDecompositionData
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -623,114 +617,5 @@ abbrev ProportionalDecompositionConclusion
           GaugePhaseEquiv (d := d)
             (cast (congr_arg (MPSTensor d) hdim) (A j))
             (B (perm j))
-
-/-- **Proportional comparison lemma for CF-BNT decompositions.**
-
-Given two families of tensors `A_j`, `B_k` in canonical form with BNT separation
-(distinct blocks not gauge-phase equivalent), and a `ProportionalDecompositionData`
-input — per-`N` coefficient arrays, a nonzero per-`N` proportionality scalar, and
-the source dominant-block normalization — this lemma concludes that the families
-have the same number of blocks, and blocks match up to permutation, dimension
-equality, and gauge-phase equivalence.
-
-This is a special case of the CPSV comparison argument (arXiv:1606.00608) where
-each block already represents a distinct gauge-phase class; it does not cover the
-full multiplicity theorem where repeated equal-modulus sectors contribute via
-power sums `∑_q μ_{j,q}^N`.
-
-**Unfaithful:** Transitively `sorry` via
-`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp`. Tracked in
-\#1559 Stage C. -/
-lemma fundamentalTheorem_of_separated_CFBNT_data
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA_inj : HasInjectiveBlocks (d := d) A)
-    (hA_left : IsLeftCanonicalBlockFamily (d := d) A)
-    (hA_overlap : HasNormalizedSelfOverlap (d := d) A)
-    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hB_inj : HasInjectiveBlocks (d := d) B)
-    (hB_left : IsLeftCanonicalBlockFamily (d := d) B)
-    (hB_overlap : HasNormalizedSelfOverlap (d := d) B)
-    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
-    (hDecomp : ProportionalDecompositionData (d := d) A B DtotA DtotB) :
-    ProportionalDecompositionConclusion (d := d) A B :=
-  exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp
-    (A := A) (B := B)
-    (hA_inj := hA_inj.block_injective)
-    (hB_inj := hB_inj.block_injective)
-    (hA_norm := hA_left.leftCanonical)
-    (hB_norm := hB_left.leftCanonical)
-    (hA_self := hA_overlap.overlap_tendsto_one)
-    (hA_off := fun i j hij =>
-      cross_overlap_tendsto_zero_of_separated_CFBNT_data A hA_inj hA_left hA_blocks i j hij)
-    (hB_self := hB_overlap.overlap_tendsto_one)
-    (hB_off := fun i j hij =>
-      cross_overlap_tendsto_zero_of_separated_CFBNT_data B hB_inj hB_left hB_blocks i j hij)
-    (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
-    (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (c := hDecomp.c)
-    (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (hProp := hDecomp.hProp)
-    (hc_ne := hDecomp.hc_ne)
-    (hA_top_norm_one := hDecomp.hA_top_norm_one)
-    (hB_top_norm_one := hDecomp.hB_top_norm_one)
-    (hA_norm_le_one := hDecomp.hA_norm_le_one)
-    (hB_norm_le_one := hDecomp.hB_norm_le_one)
-
-/-- **Proportional comparison lemma for normal CF-BNT decompositions.**
-
-Normal-form analogue of `fundamentalTheorem_of_separated_CFBNT_data`, using
-`IsNormalCanonicalForm` in place of strict weight ordering. This is not the full
-CPSV multiplicity BNT theorem.
-
-**Unfaithful:** Transitively `sorry` via
-`exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP`.
-Tracked in \#1559 Stage C. -/
-lemma fundamentalTheorem_of_separated_normalCFBNT_data
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA_ncf : IsNormalCanonicalForm μA A)
-    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) A)
-    (hB_ncf : IsNormalCanonicalForm μB B)
-    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) B)
-    (hDecomp : ProportionalDecompositionData (d := d) A B DtotA DtotB) :
-    ProportionalDecompositionConclusion (d := d) A B :=
-  exists_eq_numBlocks_and_equiv_gaugePhase_of_proportional_decomp_of_irreducible_TP
-    (A := A) (B := B)
-    (hA_irr := hA_ncf.block_irreducible)
-    (hB_irr := hB_ncf.block_irreducible)
-    (hA_norm := hA_ncf.leftCanonical)
-    (hB_norm := hB_ncf.leftCanonical)
-    (hA_self := fun j => hA_ncf.overlap_tendsto_one j)
-    (hA_off := fun i j hij =>
-      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
-        hA_ncf.toHasIrreducibleBlocks
-        hA_ncf.toIsLeftCanonicalBlockFamily
-        hA_blocks i j hij)
-    (hB_self := fun j => hB_ncf.overlap_tendsto_one j)
-    (hB_off := fun i j hij =>
-      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data B
-        hB_ncf.toHasIrreducibleBlocks
-        hB_ncf.toIsLeftCanonicalBlockFamily
-        hB_blocks i j hij)
-    (A_total := hDecomp.A_total) (B_total := hDecomp.B_total)
-    (aCoeff := hDecomp.aCoeff) (bCoeff := hDecomp.bCoeff)
-    (c := hDecomp.c)
-    (hA_decomp := hDecomp.hA_decomp) (hB_decomp := hDecomp.hB_decomp)
-    (hProp := hDecomp.hProp)
-    (hc_ne := hDecomp.hc_ne)
-    (hA_top_norm_one := hDecomp.hA_top_norm_one)
-    (hB_top_norm_one := hDecomp.hB_top_norm_one)
-    (hA_norm_le_one := hDecomp.hA_norm_le_one)
-    (hB_norm_le_one := hDecomp.hB_norm_le_one)
 
 end MPSTensor

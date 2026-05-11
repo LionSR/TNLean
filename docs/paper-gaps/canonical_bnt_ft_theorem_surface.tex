@@ -199,11 +199,11 @@ identified with one another.
     \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
     gauge theorem.  It is a source-level theorem only for one injective block,
     not for the multi-block BNT comparison.
-  \item The strict canonical-form BNT declarations
-    \path{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT} and
-    \path{MPSTensor.fundamentalTheorem_equalMPV_CFBNT} are strict
-    representative forms.  Their exact restrictions are recorded in the
-    paragraph on paper-level targets below.
+  \item The strict canonical-form BNT equal-MPV declaration
+    \path{MPSTensor.fundamentalTheorem_equalMPV_CFBNT} is a strict
+    representative form.  The former proportional wrapper has been removed
+    because its one-shot coefficient hypotheses did not imply the full BNT
+    matching conclusion.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is the current formal statement closest to the BNT part of the source
@@ -231,14 +231,15 @@ representatives and retaining the repeated-copy coefficients
 \[
   \sum_q \mu_{j,q}^N.
 \]
-The current strict-representative declarations
-\path{fundamentalTheorem_proportionalMPV_CFBNT} and
-\path{fundamentalTheorem_equalMPV_CFBNT} are therefore special-case statements.
-The proportional comparison assumes explicit coefficient data; the equal-MPV
-common-block comparison assumes the repeated-copy structure has already been
-matched into common weights and dimensions.  Neither statement should be cited
-as the general arXiv:1606.00608 theorem unless the missing BNT multiplicity
-comparison has already been discharged.  Heterogeneous variants that state the
+The current strict-representative equal-MPV declaration
+\path{fundamentalTheorem_equalMPV_CFBNT} is therefore a special-case statement.
+The proportional wrapper that formerly assumed explicit coefficient data has
+been deleted; such data do not by themselves encode the residual peeling or
+power-sum comparison in the source proof.  The equal-MPV common-block comparison
+assumes the repeated-copy structure has already been matched into common
+weights and dimensions.  It should not be cited as the general
+arXiv:1606.00608 theorem unless the missing BNT multiplicity comparison has
+already been discharged.  Heterogeneous variants that state the
 permutation, phases, gauges, and weight matching for possibly different sector
 indices are legitimate theorem statements only when their hypotheses are
 obtained from the same BNT comparison.

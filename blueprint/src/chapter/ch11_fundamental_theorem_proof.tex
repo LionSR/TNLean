@@ -124,7 +124,6 @@ used in this chapter.
 \label{sec:ft_restricted_proportional}
 
 \begin{lemma}[Proportional comparison for restricted CF-BNT hypotheses]\label{lem:ft_proportional}
-	\lean{MPSTensor.fundamentalTheorem_proportionalMPV_CFBNT}
 	\uses{def:cf_bnt, def:gauge_phase_equiv}
 	Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
 	in canonical form with BNT separation, with associated families
@@ -167,7 +166,6 @@ used in this chapter.
 \end{proof}
 
 \begin{lemma}[Proportional comparison for restricted normal-CF-BNT hypotheses]\label{lem:ft_proportional_nt}
-		\lean{MPSTensor.fundamentalTheorem_of_separated_normalCFBNT_data}
 		\uses{def:normal_cf_bnt, def:gauge_phase_equiv}
 		Let $A_{\mathrm{tot}}$ and $B_{\mathrm{tot}}$ be MPS tensors
 		in normal canonical form with BNT separation, with associated families
@@ -866,8 +864,6 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{lemma}[Separated normal canonical-form hypotheses produce a common phase cover]%
 	\label{lem:common_phase_cover_of_separated_normal_bnt}
-		\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data}
-		\leanok
 		\uses{def:mpv_common_phase_cover, def:is_normal_canonical_form,
 			def:blocks_not_gauge_phase_equiv, thm:bnt_perm_prop_nt}
 	For two normal canonical-form block families with no gauge-phase-equivalent
@@ -1145,9 +1141,6 @@ BNT comparison hypotheses for the common primitive sectors.
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_zeroTailIdentity,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.proportionalDecompositionData_of_sameMPV_toTensorFromBlocks,
 		MPSTensor.tendsto_blockPowerCoeff_of_tendsto_pow,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity_blockPower,
-		MPSTensor.CommonPrimitiveBNTCoverHypotheses.exists_commonInjectiveBlock_ofNormalCanonicalFormBNT_sameMPV_toTensorFromBlocks_zeroTailIdentity,
 		MPSTensor.IsNormalCanonicalFormBNT.blockTensor_of_notGpe,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentatives_zeroTailIdentity,
 		MPSTensor.CommonPrimitiveBNTCoverHypotheses.ofCommonRepresentativeBNTCoverHypotheses,
@@ -1186,7 +1179,8 @@ BNT comparison hypotheses for the common primitive sectors.
 	A bijection of physical alphabets transports the common primitive BNT
 	hypotheses by relabelling every block in both families.  Normal canonical
 	form, BNT separation, proportional decomposition, one-site injectivity, and
-	zero-tail equality are preserved.  Applying this to the canonical bijection
+	equality of the residual all-zero block dimensions are preserved.  Applying
+	this to the canonical bijection
 	between the direct length-$pL$ alphabet and the iterated length-$L$ alphabet
 	over length-$p$ blocks transports the iterated blocked hypotheses to the
 	flattened iterated families on the direct alphabet.
@@ -1209,10 +1203,14 @@ BNT comparison hypotheses for the common primitive sectors.
 	For representative common-sector families after choosing one representative
 	per original nonzero block, this structure collects the remaining hypotheses
 	needed for the BNT comparison: nonzero weights, strict weight ordering by norm,
-	BNT separation (no gauge-phase-equivalent distinct representatives), the
-	length-zero identity of the representative nonzero parts, one-site
-	injectivity of each representative block, and proportional-decomposition
-	data linking the two representative families.
+	BNT separation (no gauge-phase-equivalent distinct representatives), unit
+	modulus of the dominant representative weight on each side as in the source
+	normalization after \(\eqref{eq:II_CF1}\), the length-zero identity of
+	the representative nonzero parts, one-site
+	injectivity of each representative block, proportional-decomposition data
+	linking the two representative families, and the resulting BNT comparison
+	conclusion: a permutation of representatives, equality of the matched bond
+	dimensions, and gauge-phase equivalences for the matched blocks.
 \end{definition}
 
 \begin{theorem}[Representative common-sector families supply BNT matching hypotheses]%
@@ -1222,10 +1220,14 @@ BNT comparison hypotheses for the common primitive sectors.
 	\uses{def:common_representative_bnt_cover_hypotheses}
 	Given representative common-sector families, if the representative weights
 	are strictly ordered by norm, distinct representatives are BNT-separated,
-	the length-zero identity holds for the representative nonzero parts, each
-	representative block is one-site injective, and proportional-decomposition
-	data links the two representative families, then the zero-tail identity
-	and normal-CF-BNT conditions produce BNT matching hypotheses for the
+	the dominant representative weight on each side has unit modulus as in the
+	source normalization after \(\eqref{eq:II_CF1}\), the length-zero identity
+	holds for the representative nonzero parts, each
+	representative block is one-site injective, proportional-decomposition data
+	links the two representative families, and the BNT comparison conclusion
+	supplies a permutation, matched bond dimensions, and gauge-phase equivalences,
+	then the length-zero identity for the residual all-zero block and the
+	normal-CF-BNT conditions produce BNT matching hypotheses for the
 	representative blocks.
 \end{theorem}
 
@@ -1238,8 +1240,9 @@ BNT comparison hypotheses for the common primitive sectors.
 	common-sector families obtained after choosing one representative from each
 	nonzero phase-gauge class.  Assume the representative weights are nonzero and
 	strictly ordered by norm, distinct representatives are not gauge equivalent up
-	to phase, the length-zero identity for the representative nonzero parts holds,
-	and each representative block is one-site injective.  Assume also the
+	to phase, the dominant representative weight on each side has unit modulus,
+	the length-zero identity for the representative nonzero parts holds, and each
+	representative block is one-site injective.  Assume also the
 	proportional-decomposition input for these representative families: total
 	tensors decompose at every length over the two representative BNT families with
 	coefficient functions converging to nonzero limits, and the two total MPV
