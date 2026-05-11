@@ -842,12 +842,13 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:fixed_right_all_overlaps_decay_contradiction_fin_one}
 	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
 	\leanok
-	\uses{lem:fixed_right_lem1_input_eventual_proportional,
+	\uses{def:cf_bnt, lem:fixed_right_lem1_input_eventual_proportional,
 		lem:eventual_coeff_eq_of_eventual_li}
-	If the \(B\)-family consists only of the fixed block \(B_0\), then the
-	fixed-right all-overlaps-decay alternative contradicts eventual nonzero
-	proportionality of the total weighted MPV families.  This is the no-tail
-	case of the fixed-block cancellation step in
+	If \(A\) and \(B\) are BNT canonical-form families and the \(B\)-family
+	consists only of the fixed block \(B_0\), then the fixed-right
+	all-overlaps-decay alternative contradicts eventual nonzero proportionality
+	of the total weighted MPV families.  This is the no-tail case of the
+	fixed-block cancellation step in
 	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
@@ -886,12 +887,13 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:fixed_left_all_overlaps_decay_contradiction_fin_one}
 	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
 	\leanok
-	\uses{lem:fixed_left_lem1_input_eventual_proportional,
+	\uses{def:cf_bnt, lem:fixed_left_lem1_input_eventual_proportional,
 		lem:eventual_coeff_eq_of_eventual_li}
-	If the \(A\)-family consists only of the fixed block \(A_0\), then the
-	fixed-left all-overlaps-decay alternative contradicts eventual nonzero
-	proportionality of the total weighted MPV families.  This is the no-tail
-	case of the symmetric fixed-block cancellation step in
+	If \(A\) and \(B\) are BNT canonical-form families and the \(A\)-family
+	consists only of the fixed block \(A_0\), then the fixed-left
+	all-overlaps-decay alternative contradicts eventual nonzero proportionality
+	of the total weighted MPV families.  This is the no-tail case of the
+	symmetric fixed-block cancellation step in
 	\cite[Theorem~II.1, lines~1182--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 

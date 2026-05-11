@@ -133,7 +133,7 @@ lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂
   have hLI :=
     eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT
       A B hA hB 0 hAllDecay
-  obtain ⟨c, hc, hState⟩ :=
+  obtain ⟨c, _hc, hState⟩ :=
     exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
       A B hProp
   let lhs : (N : ℕ) → Sum (Fin rB) (Fin 1) → ℂ := fun N =>
@@ -174,9 +174,8 @@ lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂
         (fun _ : Fin 1 => mpvState (d := d) (A 0) N))
       lhs rhs hLI hEqSum
   have hContradiction : ∀ᶠ N in (atTop : Filter ℕ), False := by
-    refine (hCoeff.and hc).mono ?_
-    intro N hN
-    rcases hN with ⟨hCoeffN, _hcN⟩
+    refine hCoeff.mono ?_
+    intro N hCoeffN
     have hCoeff0 : (0 : ℂ) = (μA 0) ^ N := by
       simpa [lhs, rhs] using hCoeffN (Sum.inr (0 : Fin 1))
     exact (pow_ne_zero N (hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero 0)) hCoeff0.symm
