@@ -210,6 +210,22 @@ with an extra $Z$-gauge degree of freedom.
 	erasing the leading index.  Rewrite the finite sum along this bijection.
 \end{proof}
 
+\begin{lemma}[Reindexing an arbitrary erased weighted state tail]%
+\label{lem:proportional_weighted_state_tail_reindex_succAbove}
+	\lean{MPSTensor.weighted_mpvState_sum_erase_eq_sum_succAbove}
+	\leanok
+	\uses{def:mpv_state}
+	Let \(A_0,\ldots,A_n\) be a finite weighted block family and let \(a\)
+	be any selected index.  The weighted MPV-state sum over all indices
+	different from \(a\) can be reindexed over \(\{0,\ldots,n-1\}\) by the
+	order-preserving insertion map whose image is the complement of \(a\).
+\end{lemma}
+
+\begin{proof}\leanok
+	The image of the insertion map is exactly the complement of the selected
+	index.  Rewrite the finite sum along this bijection.
+\end{proof}
+
 \begin{lemma}[Eventual proportionality of reindexed weighted tails]%
 \label{lem:eventual_proportional_weighted_tail_package}
 	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected}
@@ -228,6 +244,27 @@ with an extra $Z$-gauge degree of freedom.
 	First subtract the selected summands from the eventual total identity.
 	Then reindex both erased finite sums by \(j\mapsto j+1\), and convert the
 	eventual weighted tail identity back into eventual proportionality of the
+	assembled tail tensors.
+\end{proof}
+
+\begin{lemma}[Eventual proportionality of arbitrary reindexed weighted tails]%
+\label{lem:eventual_proportional_weighted_tail_succAbove_package}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected}
+	\leanok
+	\uses{lem:eventual_proportional_weighted_state_tail_subtraction,
+		lem:proportional_weighted_state_tail_reindex_succAbove,
+		lem:eventual_weighted_state_sequence_to_proportional_tensor_from_blocks}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence, and suppose a selected pair of summands is eventually
+	related by the same sequence.  Then, after erasing that pair and reindexing
+	both complements, the assembled tail tensors are eventually nonzero
+	proportional.
+\end{lemma}
+
+\begin{proof}\leanok
+	Subtract the selected summands from the eventual total identity.  Reindex
+	the two erased finite sums by the complement insertion maps, and convert the
+	eventual weighted tail identity into eventual proportionality of the
 	assembled tail tensors.
 \end{proof}
 
