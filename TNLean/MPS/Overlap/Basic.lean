@@ -171,10 +171,7 @@ lemma mpvInner_eq_sum_of_decomp_left
   refine Finset.sum_congr rfl ?_
   intro j _
   rw [inner_smul_left]
-  unfold mpvInner
-  change star (c j) * ⟪mpvState (d := d) (A j) N, mpvState (d := d) X N⟫_ℂ =
-    ⟪mpvState (d := d) (A j) N, mpvState (d := d) X N⟫_ℂ * star (c j)
-  rw [mul_comm (star (c j))]
+  simp [mpvInner, mul_comm]
 
 /-- If the right tensor in an overlap has a fixed-length MPV decomposition,
 then the overlap expands with conjugated coefficients. -/

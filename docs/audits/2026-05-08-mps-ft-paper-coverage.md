@@ -239,9 +239,13 @@ power-sum ingredients.  A faithful Lean statement for the CPSV21 proportional th
 CPSV16 Fundamental Theorem of MPV (Theorem II.1 / `thm1`), remains open after removal of the
 restricted coefficient-array theorem surface.
 
+Open target:
+
+- Faithful proportional theorem: CPSV21 Theorem 4.4, corresponding to CPSV16
+  Theorem II.1 (`thm1`).
+
 | Lean declaration | Paper | CPSV16 label |
 |---|---|---|
-| Faithful proportional theorem | CPSV21 Theorem 4.4 | CPSV16 Theorem II.1 (`thm1`) |
 | `fundamentalTheorem_equalMPV_CFBNT` | CPSV21 Corollary after Theorem 4.4 | CPSV16 Corollary II.2 (`II_cor2`) |
 
 ---
