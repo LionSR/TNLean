@@ -120,13 +120,15 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 2: Proportional-MPV Fundamental Theorem (Theorem 4.4)
+/-! ## Conclusion type for block-permutation/gauge witnesses
 
-This is the content of Theorem 4.4 from arXiv:1606.00608 (primitive branch).
-The theorem takes convergent coefficient data as explicit hypotheses.
+The proportional-MPV fundamental theorem is not restated in this file.  The
+following abbreviation names only the conclusion shape used by downstream
+assembly steps: a permutation of block indices, matching bond dimensions, and
+per-block gauge-phase equivalences.
 -/
 
-/-- Conclusion type for the BNT proportional-MPV comparison theorems. -/
+/-- Conclusion type for block-permutation and gauge-phase matching. -/
 abbrev BlockPermutationGaugeWitness
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
