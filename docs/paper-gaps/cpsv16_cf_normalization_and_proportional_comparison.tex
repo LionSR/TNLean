@@ -89,17 +89,14 @@ which is what the spectral and irreducibility arguments need, and it forces
 every sub-dominant block strictly inside the unit disk. The latter is the
 conventional content used by the proportional MPV comparison below.
 
-\section{The formal proportional comparison}
+\section{The discarded formal proportional comparison}
 
-The formal route to the proportional Fundamental Theorem replaces the source's
-unlabeled power-sum identity by a different mathematical object:
+The discarded formal route to the proportional Fundamental Theorem replaced the
+source's unlabeled power-sum identity by a different mathematical object:
 two coefficient sequences indexed by chain length, together with the assumption
-that they converge to nonzero limits. Concretely, the structure
-\leanid{ProportionalDecompositionData}\footnote{%
-\path{TNLean/MPS/BNT/Construction.lean}, lines 512--537.}
-packages, for each block index $j$, a function
-$N\mapsto a_{N,j}\in\mathbb C$ and a designated limit $a_j^\infty\in\mathbb C$
-satisfying
+that they converge to nonzero limits. In that route, each block index $j$ had a
+function $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit
+$a_j^\infty\in\mathbb C$ satisfying
 \[
   a_{N,j}\to a_j^\infty\text{ as }N\to\infty,
   \qquad a_j^\infty\ne 0,
@@ -171,11 +168,10 @@ discharges the circularity at the type level.
 The implementation committed later the same day departs from both directions
 of the memo. It does not formalize the fixed-length scalar power-sum identity
 proposed for the $\mu$-coefficient step. It also does not adopt the eventual
-span-equality form proposed for the bridge. Instead it introduces, on the
-BNT bridge theorems and later on the structure
-\leanid{ProportionalDecompositionData}, a global convergence hypothesis on
-the coefficient sequences and a separate hypothesis that those limits are
-nonzero. The mathematical object packaged by these fields is not the
+span-equality form proposed for the bridge. Instead it introduced, on the
+BNT bridge theorems and later in a single formal data structure, a global
+convergence hypothesis on the coefficient sequences and a separate hypothesis
+that those limits are nonzero. The mathematical object packaged by these fields is not the
 power-sum identity from the source proof of Corollary~\texttt{II\_cor2}, and
 it is not the eventual span equality from the memo's bridge plan. It is a
 third object, introduced without a corresponding written rationale. A later
@@ -188,10 +184,9 @@ BNTConstruction, BNTPermutationThm44.'' Despite the name, the
 \leanid{ScalarPowerSumIdentity} module added by that commit does not
 correspond to the memo's planned fixed-length scalar identity from
 \cite[Lemma~\texttt{Lem:app\_simple}]{Cirac2016MPDO_arXiv}. The
-structure refactor that bundled the limit fields into
-\leanid{ProportionalDecompositionData} is \texttt{9e096a14} (2026-03-22),
-and the post-hoc Newton--Girard description is in the message of
-\texttt{8ab1a5db} (2026-05-09).}
+structure refactor that bundled the limit fields is \texttt{9e096a14}
+(2026-03-22), and the post-hoc Newton--Girard description is in the message
+of \texttt{8ab1a5db} (2026-05-09).}
 
 The recorded design history therefore shows that the limit hypothesis was
 not chosen to follow the source argument and was not the route the
@@ -219,12 +214,11 @@ case $\mu_1^A=1$; nontrivial roots of unity are periodic rather than
 convergent, and a generic phase has no limit.
 
 The conclusion is a structural mismatch. With the source normalization in
-force, the formal data \leanid{ProportionalDecompositionData} cannot be
-instantiated for a multi-block ($r>1$) family using $a_{N,j}=(\mu_j^A)^N$,
-because the limit hypothesis fails on every sub-dominant block. Without the
-source normalization, the formal hypothesis is sometimes satisfiable, but the
-resulting object is no longer the canonical-form datum from
-\cite{Cirac2016MPDO_arXiv}.
+force, the discarded formal data cannot be instantiated for a multi-block
+($r>1$) family using $a_{N,j}=(\mu_j^A)^N$, because the limit hypothesis fails
+on every sub-dominant block. Without the source normalization, the formal
+hypothesis is sometimes satisfiable, but the resulting object is no longer the
+canonical-form datum from \cite{Cirac2016MPDO_arXiv}.
 
 The paper does not face this difficulty, because it never asks for the
 $N\to\infty$ limit of $(\mu_j^A)^N$. The proof reads off the multiset of
@@ -239,17 +233,12 @@ $N\le\max(r_{a,j},r_{b,j})$ used by the source separation lemma and by the
 
 \section{Cross-check with the blueprint}
 
-The blueprint statements of \texttt{lem:ft\_proportional} and
-\texttt{lem:ft\_proportional\_nt} carry the same convergence-and-nonzero-limit
-data as the formal structure, with the symbols $a_j^\infty,b_k^\infty,c^\infty$
-in place of \leanid{aLim}, \leanid{bLim}, \leanid{cLim}. The accompanying
-remark \texttt{rem:cf\_coeff\_arrays} in the Fundamental Theorem proof chapter
-acknowledges the strict-weight specialization $a_{N,j}=(\mu_j^A)^N$ and the
-more general sector arrays $c_{S,j}^{(N)}=\sum_q\mu_{j,q}^N$, but does not flag
-the restricted-specialization incompatibility described above. The remark
-\texttt{rem:normalcf\_bnt\_gap} in the BNT chapter discusses a different point
-(spectral versus algebraic normality of a single block), so it does not fill in
-the missing comparison.
+The blueprint entries that formerly paralleled this convergence-and-nonzero-limit
+surface have been demoted or removed from the source-labelled theorem route.
+They must not be marked as formalizations of Theorem~\texttt{thm1} or
+Corollary~\texttt{II\_cor2}. The active blueprint now treats the source
+comparison as an open block-matching step whose proof must come from the BNT
+power-sum argument, not from external coefficient limits.
 
 The blueprint BNT definitions are symmetric with the formal definition: the
 strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
@@ -326,12 +315,10 @@ record.
 The structural realignment has been done. The canonical-form definition now
 carries the source convention $|\mu_1|=1$ as a field
 of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.
-The convergence-to-nonzero-limit fields have been removed from
-\leanid{ProportionalDecompositionData}, replaced by source-faithful per-$N$
-fields: a per-$N$ nonzero proportionality scalar
-$c_N\ne 0$, the dominant-block normalization
-$\|a_{N,1}\|=\|b_{N,1}\|=1$, and the sub-dominant bounds
-$\|a_{N,j}\|, \|b_{N,k}\|\le 1$.
+The convergence-to-nonzero-limit fields and the later per-$N$ coefficient
+package have been removed from the formal development.  The surviving boundary
+keeps the block-permutation and gauge-phase comparison as an explicit input
+until the source-faithful residual comparison theorem is available.
 
 The earlier one-shot nonzero-overlap theorems and the matching wrappers built
 on them have now been deleted.  Their statements asserted a full

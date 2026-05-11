@@ -11,7 +11,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 The results here give after-blocking sector-comparison consequences from finite-length span
 comparisons and common MPV phase covers, and record the special case where the cover comes from a
-BNT proportional-decomposition comparison of the nonzero-weight block families.
+BNT block-permutation gauge-phase comparison of the nonzero-weight block families.
 
 ## Main statements
 
@@ -21,8 +21,9 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
   common-length cyclic-sector output, together with the blocked-word relabeling
   equality and the remaining zero-tail, injectivity, and common-cover assertions,
   implies the sector-weight comparison.
-* `afterBlocking_sectorComparison_zeroTail_of_proportionalDecompositionConclusion` —
-  the zero-tail common-cover theorem applied to BNT proportional-decomposition data.
+* `afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts` —
+  the common primitive block theorem together with the remaining phase-cover or
+  block-permutation gauge-phase comparison input.
 * `afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses` —
   the common primitive nonzero-sector theorem, followed by the remaining zero-tail,
   injectivity, and finite-length span hypotheses.
@@ -36,7 +37,7 @@ BNT proportional-decomposition comparison of the nonzero-weight block families.
 
 ## Tags
 
-matrix product states, canonical form, BNT, proportional decomposition
+matrix product states, canonical form, BNT, block matching
 -/
 
 namespace MPSTensor
@@ -128,11 +129,11 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHyp
 
 The structural theorem gives the common blocking length and the two primitive irreducible
 common-sector nonzero parts, conditional on the equality after relabeling blocked physical words.
-This statement records, for exactly those families, that either common MPV phase-cover hypotheses or a
-BNT proportional-decomposition conclusion supplies the finite-length block-span hypothesis used by
-`afterBlocking_sectorComparison_zeroTail_of_blockSpan`.  Thus the remaining mathematical inputs are
-kept explicit: the blocked-word relabeling equality, and the later common-phase or BNT matching
-comparison. -/
+This statement records, for exactly those families, that either common MPV phase-cover
+hypotheses or a BNT block-permutation gauge-phase conclusion supplies the finite-length
+block-span hypothesis used by `afterBlocking_sectorComparison_zeroTail_of_blockSpan`.
+Thus the remaining mathematical inputs are kept explicit: the blocked-word relabeling
+equality, and the later common-phase or BNT matching comparison. -/
 theorem afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -182,7 +183,7 @@ theorem afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts
             mpvState (d := blockPhysDim d p) (blocksA x) N)) =
           Submodule.span ℂ (Set.range (fun y : Fin rB =>
             mpvState (d := blockPhysDim d p) (blocksB y) N))) ∧
-      (ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB →
+      (BlockPermutationGaugePhaseConclusion (d := blockPhysDim d p) blocksA blocksB →
         ∀ N,
           Submodule.span ℂ (Set.range (fun x : Fin rA =>
             mpvState (d := blockPhysDim d p) (blocksA x) N)) =
@@ -201,7 +202,7 @@ theorem afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts
   · intro cover N
     exact cover.span_eq N
   · intro hMatch N
-    exact mpv_span_eq_of_proportionalDecompositionConclusion
+    exact mpv_span_eq_of_blockPermutationGaugePhaseConclusion
       (d := blockPhysDim d p) blocksA blocksB hMatch N
 
 /-- **Sector comparison from relabeled common sectors and a common phase cover.**
@@ -291,7 +292,7 @@ The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place o
 `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
 `CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
 injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
-See `CommonPrimitiveProportionalData` for the paper-source references for each missing input. -/
+See `CommonPrimitiveBlockMatchingData` for the paper-source references for each missing input. -/
 
 /-- **Sector comparison from unconditional common primitive blocks and span hypotheses.**
 

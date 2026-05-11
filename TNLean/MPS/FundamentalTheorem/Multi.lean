@@ -49,7 +49,7 @@ noncomputable def blockDiagonalGL (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
 /-- Assemble per-block gauges into the flattened global `GL` element used by
 `toTensorFromBlocks`.  This is the reindexed block-diagonal matrix `⊕ₖ X k` on the
 canonical `Fin (∑ k, dim k)` bond index, naming the global gauge `X = ⊕ₖ X k`
-that arises in the proportional decomposition.
+that arises after the BNT block matching.
 
 Reference: arXiv:1606.00608, Corollary II.2 (`eq:II:A=XAX`, lines 1155–1192). -/
 noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ) :
