@@ -361,9 +361,10 @@ directly to periodic tensors.
 \subsection{Statement of the periodic Fundamental Theorem}
 
 The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducible}.
-The Lean entries listed here are conditional components of that theorem: the final
-entry still assumes periodic-overlap and power-equality hypotheses, so the
-literature theorem is not yet a single unconditional Lean statement.
+The statements recorded here are conditional components of that theorem: the
+final comparison still assumes periodic-overlap and power-equality hypotheses,
+so the literature theorem has not yet been obtained here as a single
+unconditional result.
 
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
@@ -619,9 +620,9 @@ literature theorem is not yet a single unconditional Lean statement.
     \label{rem:periodic_ft_proportional}
     There is also a proportional periodic Fundamental Theorem
     (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
-    The former Lean statement of this remark used coefficient arrays with
-    nonzero limits as hypotheses.  That is not the hypothesis set of the
-    source theorem, and the corresponding Lean declaration has been removed.
+    The former formulation of this theorem assumed externally supplied
+    coefficient arrays with nonzero limits as hypotheses.  That is not the
+    hypothesis set of the source theorem.
     A faithful statement must instead derive the nondecaying cross-overlap
     witnesses from the proportional MPV hypothesis and the periodic BNT
     structure.
