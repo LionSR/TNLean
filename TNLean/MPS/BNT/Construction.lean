@@ -3,7 +3,6 @@ import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Basic
-import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.Overlap.CastDecay
 
 /-
@@ -539,7 +538,7 @@ lemma isBNT [∀ k, NeZero (dim k)]
 
 end IsNormalCanonicalFormBNT
 
-/-! ### Connection with BNT/PermutationRigidity -/
+/-! ### Source-faithful BNT comparison data -/
 
 -- Removal history (paper-realignment, see CLAUDE.md): an earlier version of this
 -- structure carried convergence-to-nonzero-limit fields `aLim`, `bLim`, `cLim`,
