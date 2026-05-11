@@ -18,6 +18,7 @@ overlap argument.
   arXiv:1606.00608 (2017), Theorem `thm1`, lines 1170--1192.
 -/
 
+open scoped BigOperators
 open Filter
 
 namespace MPSTensor
@@ -84,6 +85,165 @@ lemma tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one
     (fun N : ℕ =>
       ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)
     c hState hA_norm hB_norm
+
+/-- **Geometrically damped vectors tend to zero.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+analytic estimate behind the dominant-weight normalization: a non-dominant
+weight ratio has modulus strictly less than one, while the corresponding MPV
+state norms remain bounded because their self-overlaps tend to one. -/
+lemma tendsto_geometric_smul_of_tendsto_norm_one
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    (c : ℂ) (v : ℕ → E) (hc : ‖c‖ < 1)
+    (hv : Tendsto (fun N : ℕ => ‖v N‖) atTop (nhds (1 : ℝ))) :
+    Tendsto (fun N : ℕ => c ^ N • v N) atTop (nhds 0) := by
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  obtain ⟨C, hC⟩ := (Metric.isBounded_range_of_tendsto _ hv).exists_norm_le
+  have hgeom : Tendsto (fun N : ℕ => ‖c‖ ^ N * C) atTop (nhds 0) := by
+    have hpow : Tendsto (fun N : ℕ => (‖c‖ : ℝ) ^ N) atTop (nhds 0) :=
+      tendsto_pow_atTop_nhds_zero_of_norm_lt_one (by
+        rwa [Real.norm_of_nonneg (norm_nonneg c)])
+    simpa only [zero_mul] using hpow.mul_const C
+  apply squeeze_zero (fun N => norm_nonneg _) ?_ hgeom
+  intro N
+  calc
+    ‖c ^ N • v N‖ = ‖c ^ N‖ * ‖v N‖ := norm_smul _ _
+    _ ≤ ‖c ^ N‖ * C := mul_le_mul_of_nonneg_left
+      (by
+        simpa [Real.norm_of_nonneg (norm_nonneg (v N))] using
+          hC _ (Set.mem_range_self N))
+      (norm_nonneg _)
+    _ = ‖c‖ ^ N * C := by rw [norm_pow]
+
+/-- **Dominant-weight-normalized BNT state sums have norm one asymptotically.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After dividing a
+weighted BNT MPV-state sum by a selected dominant weight, the dominant block
+has coefficient one, all other coefficients have modulus strictly less than
+one, and the BNT overlap normalization makes the tail vanish. Hence the
+normalized sum has norm tending to one. -/
+lemma tendsto_norm_weighted_mpvState_sum_of_dominant_ratio
+    {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (j₀ : Fin r) (hμ0 : μ j₀ ≠ 0)
+    (h_self : ∀ j : Fin r,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1))
+    (h_ratio : ∀ j : Fin r, j ≠ j₀ → ‖μ j / μ j₀‖ < 1) :
+    Tendsto
+      (fun N : ℕ =>
+        ‖∑ j : Fin r, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N‖)
+      atTop (nhds (1 : ℝ)) := by
+  classical
+  let tail := fun N : ℕ =>
+    ∑ j ∈ Finset.univ.erase j₀, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N
+  have htail_norm : Tendsto (fun N : ℕ => ‖tail N‖) atTop (nhds (0 : ℝ)) := by
+    have hmajor :
+        Tendsto
+          (fun N : ℕ =>
+            ∑ j ∈ Finset.univ.erase j₀,
+              ‖μ j / μ j₀‖ ^ N * ‖mpvState (d := d) (A j) N‖)
+          atTop (nhds (0 : ℝ)) := by
+      have hterm : ∀ j ∈ Finset.univ.erase j₀,
+          Tendsto
+            (fun N : ℕ => ‖μ j / μ j₀‖ ^ N * ‖mpvState (d := d) (A j) N‖)
+            atTop (nhds (0 : ℝ)) := by
+        intro j hj
+        obtain ⟨C, hC⟩ :=
+          (Metric.isBounded_range_of_tendsto _
+            (tendsto_norm_mpvState_one (d := d) (A j) (h_self j))).exists_norm_le
+        have hgeom : Tendsto (fun N : ℕ => ‖μ j / μ j₀‖ ^ N * C) atTop
+            (nhds (0 : ℝ)) := by
+          have hpow : Tendsto (fun N : ℕ => ‖μ j / μ j₀‖ ^ N) atTop
+              (nhds (0 : ℝ)) :=
+            tendsto_pow_atTop_nhds_zero_of_norm_lt_one (by
+              simpa [Real.norm_of_nonneg (norm_nonneg (μ j / μ j₀))] using
+                h_ratio j (Finset.ne_of_mem_erase hj))
+          simpa only [zero_mul] using hpow.mul_const C
+        apply squeeze_zero (fun N => mul_nonneg (pow_nonneg (norm_nonneg _) _) (norm_nonneg _))
+          ?_ hgeom
+        intro N
+        exact mul_le_mul_of_nonneg_left
+          (by
+            simpa [Real.norm_of_nonneg (norm_nonneg (mpvState (d := d) (A j) N))] using
+              hC _ (Set.mem_range_self N))
+          (pow_nonneg (norm_nonneg _) _)
+      simpa using tendsto_finset_sum (Finset.univ.erase j₀) hterm
+    apply squeeze_zero (fun N => norm_nonneg _) ?_ hmajor
+    intro N
+    calc
+      ‖tail N‖
+          ≤ ∑ j ∈ Finset.univ.erase j₀,
+              ‖(μ j / μ j₀) ^ N • mpvState (d := d) (A j) N‖ := by
+            simpa [tail] using norm_sum_le (Finset.univ.erase j₀)
+              (fun j => (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N)
+      _ = ∑ j ∈ Finset.univ.erase j₀,
+              ‖μ j / μ j₀‖ ^ N * ‖mpvState (d := d) (A j) N‖ := by
+            apply Finset.sum_congr rfl
+            intro j hj
+            rw [norm_smul, norm_pow]
+  have hv0 : Tendsto (fun N : ℕ => ‖mpvState (d := d) (A j₀) N‖)
+      atTop (nhds (1 : ℝ)) :=
+    tendsto_norm_mpvState_one (d := d) (A j₀) (h_self j₀)
+  have hdiff :
+      Tendsto
+        (fun N : ℕ =>
+          ‖∑ j : Fin r, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N‖ -
+            ‖mpvState (d := d) (A j₀) N‖)
+        atTop (nhds (0 : ℝ)) := by
+    rw [tendsto_zero_iff_abs_tendsto_zero]
+    apply squeeze_zero
+      (fun N => abs_nonneg _)
+      ?_
+      (show Tendsto (fun N : ℕ => ‖tail N‖) atTop (nhds (0 : ℝ)) from htail_norm)
+    intro N
+    have hsplit :
+        ∑ j : Fin r, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N =
+          mpvState (d := d) (A j₀) N + tail N := by
+      rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j₀)]
+      simp [tail, div_self hμ0]
+    calc
+      |‖∑ j : Fin r, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N‖ -
+          ‖mpvState (d := d) (A j₀) N‖|
+          ≤ ‖(∑ j : Fin r, (μ j / μ j₀) ^ N • mpvState (d := d) (A j) N) -
+              mpvState (d := d) (A j₀) N‖ := abs_norm_sub_norm_le _ _
+      _ = ‖tail N‖ := by
+            rw [hsplit]
+            simp
+  have hnorm_sum := hdiff.add hv0
+  simpa only [sub_add_cancel, zero_add] using hnorm_sum
+
+/-- **Dominant-weight-normalized BNT state sums have norm one asymptotically.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+same estimate as
+`tendsto_norm_weighted_mpvState_sum_of_dominant_ratio`, written in the form
+used directly after expanding a canonical-form tensor: divide the weighted
+state sum by the selected dominant weight raised to the chain length. -/
+lemma tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+    {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (j₀ : Fin r) (hμ0 : μ j₀ ≠ 0)
+    (h_self : ∀ j : Fin r,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1))
+    (h_ratio : ∀ j : Fin r, j ≠ j₀ → ‖μ j / μ j₀‖ < 1) :
+    Tendsto
+      (fun N : ℕ =>
+        ‖(μ j₀ ^ N)⁻¹ •
+          (∑ j : Fin r, (μ j) ^ N • mpvState (d := d) (A j) N)‖)
+      atTop (nhds (1 : ℝ)) := by
+  have hratio :=
+    tendsto_norm_weighted_mpvState_sum_of_dominant_ratio
+      A j₀ hμ0 h_self h_ratio
+  convert hratio using 1
+  ext N
+  congr 1
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [smul_smul]
+  congr 1
+  rw [div_pow]
+  field_simp [pow_ne_zero N hμ0]
 
 /-- **Scalar factor identity for dominant-weight normalization.**
 
