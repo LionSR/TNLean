@@ -794,7 +794,6 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
     ∃ c : ℂ, c ≠ 0 ∧
       (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
         c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
-  classical
   rcases hProp N with ⟨c, hc, hN⟩
   have hAstate :
       mpvState (d := d) (toTensorFromBlocks μA A) N =
@@ -875,7 +874,6 @@ lemma exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromB
     ∃ c : ℂ, c ≠ 0 ∧
       (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
         c * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
-  classical
   obtain ⟨c, hc, hstate⟩ :=
     exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
       A B hProp N
@@ -903,7 +901,6 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
       ∀ N : ℕ,
         (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
           c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
-  classical
   obtain ⟨c, hc, hstate⟩ :=
     exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
       A B hProp
