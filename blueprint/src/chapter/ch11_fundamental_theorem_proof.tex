@@ -22,6 +22,30 @@ irreducible-form framework of \cite{DeLasCuevas2017Irreducible},
 which gives a fundamental theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
+\begin{lemma}[Proportional assembled blocks give proportional weighted states]%
+\label{lem:proportional_tensor_from_blocks_weighted_states}
+	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{def:nonzero_proportional_mpv, def:tensor_from_blocks, def:mpv_state}
+	Let \(A=\bigoplus_j \mu_j A_j\) and
+	\(B=\bigoplus_k \nu_k B_k\) be assembled block tensors. If their MPV
+	families are nonzero proportional, then for every length \(N\) there is a
+	nonzero scalar \(c_N\) such that
+	\[
+		\sum_j \mu_j^N \ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k \nu_k^N \ket{V^{(N)}(B_k)}.
+	\]
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Expand the MPV state of each assembled tensor into its block sum, using the
+	definition of the weighted direct sum. The proportionality hypothesis then
+	supplies the scalar \(c_N\) for the two total MPV states at the fixed
+	length \(N\).
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}

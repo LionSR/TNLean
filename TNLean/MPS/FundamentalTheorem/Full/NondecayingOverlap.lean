@@ -774,6 +774,60 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [hk0_eq]; exact hall (succA j')
 termination_by rA + rB
 
+/-- **Weighted MPV-state proportionality from proportional assembled block tensors.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof of the
+block-selection step expands the two canonical-form tensors into their BNT
+block sums and then uses proportionality of the total MPV families. This lemma
+formalizes exactly that expansion, without adding coefficient-array hypotheses:
+the scalar is the one supplied by the proportionality of the assembled tensors
+at the fixed length `N`. -/
+lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (N : ℕ) :
+    ∃ c : ℂ, c ≠ 0 ∧
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  classical
+  rcases hProp N with ⟨c, hc, hN⟩
+  have hAstate :
+      mpvState (d := d) (toTensorFromBlocks μA A) N =
+        ∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μA A) A
+      (N := N) (fun j : Fin rA => (μA j) ^ N) ?_
+    intro σ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μA) (A := A) σ
+  have hBstate :
+      mpvState (d := d) (toTensorFromBlocks μB B) N =
+        ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N := by
+    refine mpvState_eq_sum_of_decomp
+      (d := d) (toTensorFromBlocks μB B) B
+      (N := N) (fun k : Fin rB => (μB k) ^ N) ?_
+    intro σ
+    simpa [smul_eq_mul] using
+      mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μB) (A := B) σ
+  have hTotal :
+      mpvState (d := d) (toTensorFromBlocks μA A) N =
+        c • mpvState (d := d) (toTensorFromBlocks μB B) N := by
+    apply PiLp.ext
+    intro σ
+    simpa [mpvState_apply, mpv, smul_eq_mul] using hN σ
+  refine ⟨c, hc, ?_⟩
+  calc
+    (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        mpvState (d := d) (toTensorFromBlocks μA A) N := hAstate.symm
+    _ = c • mpvState (d := d) (toTensorFromBlocks μB B) N := hTotal
+    _ = c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+      rw [hBstate]
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
