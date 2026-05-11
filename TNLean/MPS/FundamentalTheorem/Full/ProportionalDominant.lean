@@ -285,11 +285,11 @@ lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
 
 /-- **Dominant adjusted scalar has asymptotic modulus one.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+Source: arXiv:1606.00608, lines 1170--1192. In the
 dominant-block projection comparison, eventual nonzero proportionality of the
-assembled weighted BNT sums gives a scalar sequence `c_N`. After normalizing
+assembled weighted BNT sums gives a scalar sequence. After normalizing
 the two sums by their leading weights, this scalar is adjusted by
-`(μB₀ / μA₀)^N`; the normalized dominant terms on both sides have norm tending
+the leading-weight ratio; the normalized dominant terms on both sides have norm tending
 to one, and therefore the adjusted scalar has modulus tending to one.
 
 **Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
@@ -621,14 +621,12 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
         Tendsto
           (fun N => mpvOverlap (d := d)
             (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k) N)
-        atTop (nhds 0)) → False) := by
+          atTop (nhds 0)) → False) := by
   let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
   let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
   obtain ⟨c, _hc, hState, hAdjustedScalar_dom⟩ :=
     exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT
       A B hA hB hrA hrB hProp
-  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
-  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
   have hInner :
       ∀ {D : ℕ} (X : MPSTensor d D),
         ∀ᶠ N in atTop,
