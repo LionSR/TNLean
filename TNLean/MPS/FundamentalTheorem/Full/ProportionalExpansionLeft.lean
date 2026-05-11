@@ -12,8 +12,9 @@ phase relation is substituted on the left side of the weighted BNT block sum.
 
 ## References
 
-* Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
-  arXiv:1606.00608 (2017), Theorem `thm1`, lines 1181--1185.
+* Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
+  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
+  Theorem `thm1`, lines 1181--1185.
 -/
 
 open scoped BigOperators InnerProductSpace
