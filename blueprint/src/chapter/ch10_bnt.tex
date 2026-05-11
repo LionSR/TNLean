@@ -44,17 +44,17 @@ and~\cite{Cirac2021Matrix}.
 	\lean{MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal}
 	\leanok
 	\uses{def:mpv_overlap}
-	Let \(I\) be a finite index set and let \((A_i)_{i\in I}\) be a finite
-	family of tensors such that \(O_{A_iA_i}(N)\to 1\) for each \(i\), and
-	\(O_{A_iA_j}(N)\to 0\) whenever \(i\neq j\).  Then the MPV states
-	\(\{\ket{V^{(N)}(A_i)}\}_{i\in I}\) are linearly independent for all
-	sufficiently large~\(N\).
+	Let $I$ be a finite index set and let $(A_i)_{i\in I}$ be a finite
+	family of tensors such that $O_{A_iA_i}(N)\to 1$ for each $i$, and
+	$O_{A_iA_j}(N)\to 0$ whenever $i\neq j$.  Then the MPV states
+	$\{\ket{V^{(N)}(A_i)}\}_{i\in I}$ are linearly independent for all
+	sufficiently large~$N$.
 \end{lemma}
 
 \begin{proof}\leanok
-	The Gram matrix of the family \(\{\ket{V^{(N)}(A_i)}\}_{i\in I}\)
+	The Gram matrix of the family $\{\ket{V^{(N)}(A_i)}\}_{i\in I}$
 	converges entrywise to the identity matrix. Hence for all sufficiently
-	large \(N\) it is invertible, so the MPV states are linearly independent.
+	large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
 \begin{lemma}[Overlap-orthonormality implies eventual linear independence]
@@ -71,7 +71,7 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{proof}\leanok
 	Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
-	\(I=\{1,\ldots,g\}\).
+	$I=\{1,\ldots,g\}$.
 \end{proof}
 
 \begin{lemma}[Overlap-orthonormality for two families]%

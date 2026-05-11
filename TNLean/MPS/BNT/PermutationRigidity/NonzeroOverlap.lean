@@ -145,20 +145,23 @@ removed because they are uninstantiable on the source's intended canonical-form
 class once `‖μ_1‖ = 1` is in force. Documented in
 `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
 
-The CPSV16 proof (lines 1170-1192) gives the lower-bound argument cleanly only
-for the dominant block `k = 0` (where `hB_top_norm_one` keeps
-`‖bCoeff N 0‖ = 1` away from zero). For sub-dominant `k ≥ 1`, the source
-matches blocks iteratively: after the dominant block is matched, peel it off
-and re-apply the argument to the residual. The "∀ k, ∃ j" form of the
-conclusion as stated bundles this iteration; the actual proof will need to
-implement the residual-and-recurse step, since a literal one-shot lower
-bound on `‖bCoeff N k‖` is not available for sub-dominant blocks under the
-source normalization.
+The source proof applies the linear-independence corollary directly: if all
+overlaps with a fixed block `B k` decayed to zero, the joint family consisting
+of the `A`-blocks together with that `B k` would be asymptotically orthonormal,
+hence eventually linearly independent, contradicting the proportionality of the
+full states.
 
-Elimination: rewrite using the source-faithful lower-bound + iterative
-peeling with `hB_top_norm_one`, `hB_norm_le_one`, and `hc_ne` from the now
-threaded-through `ProportionalDecompositionData` data; tracked in #1559
-Stage C. -/
+The formal gap is the coefficient nonvanishing consumed by that argument.  The
+current `ProportionalDecompositionData` records dominant normalization and
+uniform bounds, but it does not yet record or derive, for each surviving block,
+the per-length nonvanishing of the coefficient multiplying that block.  The
+proof must recover this either from the canonical-form nonzero-weight data
+(for the source's direct argument) or by first matching a dominant block and
+then applying the argument to the remaining family.
+
+Elimination: supply the missing coefficient nonvanishing from the
+canonical-form data, or implement the dominant-block residual argument; tracked
+in #1559 Stage C. -/
 theorem exists_nonzero_overlap_of_proportional_decomp
     {d : ℕ}
     {gA gB : ℕ}
@@ -192,14 +195,14 @@ theorem exists_nonzero_overlap_of_proportional_decomp
       ∃ j : Fin gA,
         ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) := by
   -- Paper-faithful proof pending. The CPSV16 lines 1170-1192 argument follows
-  -- Linear-independence corollary for asymptotically orthonormal MPV states:
+  -- The linear-independence corollary for asymptotically orthonormal MPV states:
   -- assuming all `mpvOverlap (A j) (B k) → 0`, the joint family
   -- `{V^N(A_j)}_j ∪ {V^N(B_k)}` is asymptotically orthonormal hence eventually
   -- LI; proportionality `V^N(A_total) = c_N V^N(B_total)` then forces
   -- linearly-dependent coefficient relations contradicting LI.
-  -- The argument requires BOTH dominant-block normalizations (`hA_top_norm_one`
-  -- and `hB_top_norm_one`) to derive the contradiction; iterative peeling
-  -- handles sub-dominant blocks.
+  -- The missing formal input is coefficient nonvanishing for the fixed block:
+  -- either derive it from the canonical-form nonzero-weight data, or match a
+  -- dominant block first and apply the argument to the remaining family.
   -- See `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`.
   sorry
 
