@@ -7,8 +7,9 @@ import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
 /-!
 # Left phase-substituted tail proportionality
 
-This module records the symmetric tail-peeling wrapper used when the selected
-phase relation is substituted on the left side of the weighted BNT block sum.
+This module records the symmetric formulation of the tail-peeling step when the
+selected phase relation is substituted on the left side of the weighted BNT block
+sum.
 
 ## References
 
