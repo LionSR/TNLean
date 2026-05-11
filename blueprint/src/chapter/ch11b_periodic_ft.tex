@@ -361,9 +361,10 @@ directly to periodic tensors.
 \subsection{Statement of the periodic Fundamental Theorem}
 
 The following is Theorem~3.8 (``equal case'') of \cite{DeLasCuevas2017Irreducible}.
-The Lean entries listed here are conditional components of that theorem: the final
-entry still assumes periodic-overlap and power-equality hypotheses, so the
-literature theorem is not yet a single unconditional Lean statement.
+The statements recorded here are conditional components of that theorem: the
+final comparison still assumes periodic-overlap and power-equality hypotheses,
+so the literature theorem has not yet been obtained here as a single
+unconditional result.
 
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
@@ -615,21 +616,16 @@ literature theorem is not yet a single unconditional Lean statement.
     equivalent up to repeated blocks, and transitivity gives the claim.
 \end{proof}
 
-\begin{remark}[Proportional periodic FT]\leanok
+\begin{remark}[Proportional periodic FT]\notready
     \label{rem:periodic_ft_proportional}
-    \lean{MPSTensor.fundamentalTheorem_periodic_proportional_ofProportionalDecomp}
     There is also a proportional periodic Fundamental Theorem
     (Theorem~3.4, ``proportional case'', in \cite{DeLasCuevas2017Irreducible}).
-    In the form stated here, if one has periodic
-    block families whose distinct blocks are pairwise non-repeating, together with
-    explicit decompositions of two total MPV families into those blocks, coefficient
-    arrays converging to nonzero limits, and
-    proportionality $\mathcal{V}(A_{\mathrm{tot}}) = \lambda_N
-    \mathcal{V}(B_{\mathrm{tot}})$ with $\lambda_N \to \lambda \neq 0$, then the
-    bases of periodic tensors match up to the same repeated-block/gauge freedom as
-    above.  This extends Lemmas~\ref{lem:ft_proportional}
-    and~\ref{lem:ft_proportional_nt} to the periodic setting while isolating the
-    remaining coefficient-extraction assumption from the irreducible-form theorem.
+    The former formulation of this theorem assumed externally supplied
+    coefficient arrays with nonzero limits as hypotheses.  That is not the
+    hypothesis set of the source theorem.
+    A faithful statement must instead derive the nondecaying cross-overlap
+    witnesses from the proportional MPV hypothesis and the periodic BNT
+    structure.
 \end{remark}
 
 \section{Physical symmetries on periodic MPS}\label{sec:periodic_symmetry}

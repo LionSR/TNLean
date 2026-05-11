@@ -53,9 +53,9 @@ coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed
 proportionality constant. In the grouped setting, the normalized sums can still oscillate: unit-
 modulus terms may survive inside a single group. The present `IsCanonicalFormBNT` hypotheses
 sidestep that issue by requiring that the grouping has already been done (each block in the
-basis of normal tensors corresponds to a single CF block).  Matching data are
-therefore kept as an explicit `ProportionalDecompositionConclusion` until the
-source-faithful residual comparison theorem is formalized.
+basis of normal tensors corresponds to a single CF block).  The previous theorem layer that took
+explicit proportional-decomposition coefficient arrays as hypotheses has been removed: those
+arrays are not the source statement of CPSV16 Theorem II.1.
 -/
 
 open scoped Matrix BigOperators
@@ -538,74 +538,15 @@ lemma isBNT [∀ k, NeZero (dim k)]
 
 end IsNormalCanonicalFormBNT
 
-/-! ### Source-faithful BNT comparison data -/
+/-! ### Block-matching conclusion -/
 
--- Removal history (paper-realignment, see CLAUDE.md): an earlier version of this
--- structure carried convergence-to-nonzero-limit fields `aLim`, `bLim`, `cLim`,
--- `haCoeff`, `hbCoeff`, `haLim_ne`, `hbLim_ne`, `hc`, `hcLim_ne`. They were removed
--- as paper-divergent (uninstantiable on the source's intended canonical-form class
--- under `‖μ 0‖ = 1`); the paper-gap note is
--- `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. The
--- replacement carries the source-faithful per-`N` norm-bound fields below.
+/-- Conclusion of the CPSV16 BNT block-matching step.
 
-/-- Proportional-decomposition data used by the BNT comparison theorems
-(arXiv:1606.00608, proof of Theorem `thm1`, lines 1170–1192).
-
-For two block families `A : Fin rA → MPSTensor d _` and `B : Fin rB → MPSTensor d _`,
-this structure packages a pair of total tensors `A_total`, `B_total`, coefficient
-sequences `aCoeff`, `bCoeff`, a per-`N` proportionality scalar `c`, and the source's
-dominant-block normalization (`‖μ 0‖ = 1`, with sub-dominant coefficients of norm at
-most `1`). Index `0` in `Fin rA`/`Fin rB` is the dominant block, matching the
-post-normalization labelling in arXiv:1606.00608. -/
-structure ProportionalDecompositionData
-    {rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (DtotA DtotB : ℕ) : Type where
-  A_total : MPSTensor d DtotA
-  B_total : MPSTensor d DtotB
-  aCoeff : ℕ → Fin rA → ℂ
-  bCoeff : ℕ → Fin rB → ℂ
-  c : ℕ → ℂ
-  hA_decomp : ∀ N (σ : Fin N → Fin d),
-    mpv A_total σ = ∑ j : Fin rA, (aCoeff N j) * mpv (A j) σ
-  hB_decomp : ∀ N (σ : Fin N → Fin d),
-    mpv B_total σ = ∑ k : Fin rB, (bCoeff N k) * mpv (B k) σ
-  hProp : ∀ N (σ : Fin N → Fin d), mpv A_total σ = c N * mpv B_total σ
-  /-- The proportionality scalar `c N` is nonzero at every length.
-
-  Source: arXiv:1606.00608, lines 1170–1192. The proof of Theorem `thm1` uses
-  `c_N` to rewrite `⟨V^{(N)}(A_total), V^{(N)}(B_k)⟩ = c_N · ⟨V^{(N)}(B_total),
-  V^{(N)}(B_k)⟩` at every `N` and needs `c_N ≠ 0` to derive the contradiction;
-  this is a per-`N` statement, not a limit. -/
-  hc_ne : ∀ N, c N ≠ 0
-  /-- The dominant `A`-side coefficient has unit modulus at every length.
-
-  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. With `aCoeff N j =
-  (μA j)^N` (the strict-weight specialization), this reads
-  `‖(μA 0)^N‖ = ‖μA 0‖^N = 1^N = 1`, using
-  `IsNormalCanonicalFormBNT.mu_dom_norm_one`. -/
-  hA_top_norm_one : ∀ N (h : 0 < rA), ‖aCoeff N ⟨0, h⟩‖ = 1
-  /-- The dominant `B`-side coefficient has unit modulus at every length.
-
-  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric to
-  `hA_top_norm_one`). -/
-  hB_top_norm_one : ∀ N (h : 0 < rB), ‖bCoeff N ⟨0, h⟩‖ = 1
-  /-- Sub-dominant `A`-side coefficients are bounded above by the dominant block in modulus.
-
-  Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. Combined with
-  `IsNormalCanonicalFormBNT.mu_strict_anti` and `mu_dom_norm_one`, this gives
-  `‖(μA j)^N‖ = ‖μA j‖^N ≤ ‖μA 0‖^N = 1`. -/
-  hA_norm_le_one : ∀ N j, ‖aCoeff N j‖ ≤ 1
-  /-- Sub-dominant `B`-side coefficients are bounded above by the dominant block in modulus.
-
-  Source: arXiv:1606.00608, paragraph after `eq:II_CF1` (symmetric). -/
-  hB_norm_le_one : ∀ N k, ‖bCoeff N k‖ ≤ 1
-
-/-- Conclusion shared by the BNT proportional-MPV comparison theorems. -/
-abbrev ProportionalDecompositionConclusion
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.  The source proves
+this conclusion from canonical-form BNT data and proportional MPV families.  This
+abbreviation records only the conclusion, not a theorem asserting it from extra
+coefficient-array hypotheses. -/
+abbrev BlockPermutationGaugePhaseConclusion
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : (j : Fin rA) → MPSTensor d (dimA j))
