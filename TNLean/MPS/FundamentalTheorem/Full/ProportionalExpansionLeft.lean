@@ -25,7 +25,7 @@ namespace MPSTensor
 
 section ProportionalExpansionLeft
 
-/-- **Conditional tail proportionality from the left phase-substituted family.**
+/-- **Tail proportionality from the left phase-substituted family.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. This is the symmetric bookkeeping form of
@@ -35,10 +35,10 @@ eventual linear-independence input is taken for the family consisting of all
 nonzero so that the selected `A`-summand can be rewritten in terms of the
 selected `B`-summand before coefficient extraction.
 
-This is conditional bookkeeping: the eventual linear-independence hypothesis is
-not a global consequence of the BNT hypotheses for an arbitrary remaining
-family.  In the proof of Theorem `thm1` it must be supplied by the fixed-block
-application of Lemma `Lem1` at the current peeling step. -/
+The assumption is that the displayed combined MPV family is linearly independent
+for all sufficiently large lengths. In the proof of Theorem `thm1` this
+assumption is supplied by the fixed-block application of Lemma `Lem1` at the
+current peeling step. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left
     {d nA nB : ℕ}
     {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
