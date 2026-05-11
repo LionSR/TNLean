@@ -123,19 +123,25 @@ power sums over a common index type:
 The proof then applies the same-cardinality Newton--Girard theorem to recover
 the weight multiset.
 
-This route is still present as checked Lean code:
-\begin{itemize}
-  \item \path{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq};
-  \item \path{MPSTensor.SectorWeightData.eventually_coeff_eq_implies_all_pos_eq_after_copies};
-  \item \path{MPSTensor.SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq}.
-\end{itemize}
-It is an alternative formal proof, not the route displayed in the source.
+This route was previously present as checked Lean code through the declarations
+\[
+\begin{gathered}
+  \text{\leanid{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}},\\
+  \text{\leanid{MPSTensor.SectorWeightData.eventually_coeff_eq_implies_all_pos_eq_after_copies}},\\
+  \text{\leanid{MPSTensor.SectorWeightData.weight_multiset_eq_of_copies_eq_of_coeff_eq}}.
+\end{gathered}
+\]
+Those declarations have been removed from the current source tree because the
+proportional Fundamental Theorem route no longer uses this same-cardinality
+detour.  The calculation above records the removed argument for comparison
+with the paper, not a present Lean proof.
 
 \section{Conclusion}
 
-There is no proof gap in the alternative route under the nonzero-weight
-hypotheses used in the formal sector-weight data: the extrapolation theorem
-proves the \(N=0\) identity, so the copy count is justified.  Nevertheless, the
+There is no mathematical gap in the removed alternative route under the
+nonzero-weight hypotheses used in the former sector-weight data: the
+extrapolation theorem proves the \(N=0\) identity, so the copy count is
+justified.  Nevertheless, this is no longer a present Lean route.  The
 source-facing theorem surface should use the unequal-cardinality power-sum
 lemma, because that is the lemma invoked in the paper after BNT representative
 matching.

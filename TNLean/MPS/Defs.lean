@@ -98,9 +98,74 @@ refers to these as the "zero tail" for bookkeeping. -/
 def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv B σ
 
-/-- Proportionality of MPVs: for each N there exists c_N with V_N(A) = c_N · V_N(B). -/
+/-- Weak scalar proportionality of MPVs.
+
+For each `N` there exists `c_N` with `V_N(A) = c_N · V_N(B)`.  The scalar is
+not required to be nonzero.  Use `NonzeroProportionalMPV₂` for the projective
+proportionality hypothesis in arXiv:1606.00608, Theorem `thm1`. -/
 def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
+
+/-- Nonzero proportionality of MPV families.
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+formal reading of the source phrase that two tensors generate MPV that are
+proportional to each other: at each length the two MPV vectors lie on the same
+nonzero projective line, with proportionality scalar allowed to depend on the
+length.
+
+**Local fix (projective proportionality):** The source phrase
+"proportional to each other" is read projectively, so the scalar is nonzero.
+This reading is documented in
+`docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex`. -/
+def NonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ N : ℕ, ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
+
+/-- Nonzero MPV proportionality forgets to weak MPV proportionality.
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+forgetful implication from the projective, nonzero reading of the paper's
+proportionality hypothesis to the weaker scalar-multiple predicate used by older
+single-block lemmas. -/
+theorem NonzeroProportionalMPV₂.toProportionalMPV₂ {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : NonzeroProportionalMPV₂ A B) :
+    ProportionalMPV₂ A B := by
+  intro N
+  rcases h N with ⟨c, _hc, hN⟩
+  exact ⟨c, hN⟩
+
+/-- Nonzero MPV proportionality is symmetric.
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The scalar at each
+length is inverted, using the nonvanishing part of the proportionality
+hypothesis. -/
+theorem NonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : NonzeroProportionalMPV₂ A B) :
+    NonzeroProportionalMPV₂ B A := by
+  intro N
+  rcases h N with ⟨c, hc, hN⟩
+  refine ⟨c⁻¹, inv_ne_zero hc, fun σ => ?_⟩
+  calc
+    mpv B σ = c⁻¹ * (c * mpv B σ) := by
+      rw [inv_mul_cancel_left₀ hc]
+    _ = c⁻¹ * mpv A σ := by
+      rw [← hN σ]
+
+/-- MPV equality gives nonzero MPV proportionality with scalar `1`.
+
+Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, supplies an
+equal-MPV hypothesis. This lemma only re-states that hypothesis as the
+corresponding instance of the proportional hypothesis in Theorem `thm1`, lines
+1170--1192. It is not a formalization of Corollary `II_cor2` itself. -/
+theorem SameMPV₂.toNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂ A B) :
+    NonzeroProportionalMPV₂ A B := by
+  intro N
+  exact ⟨1, one_ne_zero, fun σ => by simpa using h N σ⟩
 
 /-- Gauge equivalence up to a nonzero global scalar (a phase after normalization). -/
 def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=

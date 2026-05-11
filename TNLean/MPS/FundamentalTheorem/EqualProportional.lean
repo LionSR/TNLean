@@ -15,14 +15,15 @@ supporting power-sum corollaries.
 
 ## Main results
 
-### Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+### Theorem 1: Same-structure equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
 (`fundamentalTheorem_equalMPV_CFBNT`)
 
-**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation share the same `μ`-weights, same block count `r`, and
-same block dimensions, and
-generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
-with a global gauge equivalence of the block-diagonal tensors.
+**Same-structure specialization of Corollary II_cor2 (equal case)**: If two
+families of tensors in canonical form with basis-of-normal-tensors (BNT)
+separation share the same `μ`-weights, same block count `r`, and same block
+dimensions, and generate *equal* MPVs for all system sizes, then per-block gauge
+equivalence holds together with a global gauge equivalence of the block-diagonal
+tensors.
 
 ### Proportional-MPV Fundamental Theorem (Theorem 4.4)
 
@@ -32,12 +33,7 @@ not by themselves imply the full block matching conclusion.  The retained
 formal theorem in this file is the equal-MPV route below, whose hypotheses
 produce nondecaying block overlaps directly.
 
-### Theorem 2: Equal MPVs imply proportional MPVs
-(`sameMPV₂_implies_proportionalMPV₂`)
-
-Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
-
-### Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
+### Theorem 2: Power-sum multiset equality (Lem:app_simple support lemma)
 
 If two same-cardinality sequences of complex numbers have equal power sums for all positive
 exponents, their multisets are equal.  For different cardinalities, the positive-power
@@ -65,14 +61,15 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+/-! ## Theorem 1: Same-structure equal-MPV theorem for `IsCanonicalFormBNT`
 
-This is the content of Corollary II_cor2 from arXiv:2011.12127 / arXiv:1606.00608,
-specialized to the case where both families share the same block structure (same `r`,
-same `dim`, same `μ`).
+This is only the same-structure specialization of Corollary II_cor2 from
+arXiv:2011.12127 / arXiv:1606.00608: both families are assumed to share the
+same block structure (same `r`, same `dim`, same `μ`). The source corollary
+derives that matching instead of assuming it.
 -/
 
-/-- **Equal-MPV Fundamental Theorem for CF-BNT (Corollary II_cor2, same structure).**
+/-- **Same-structure equal-MPV theorem for CF-BNT.**
 
 If two families of tensors in canonical form with BNT separation share the same
 block weights `μ`, the same number of blocks `r`, and the same block dimensions
@@ -117,19 +114,7 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 2: Equal MPVs imply proportional MPVs -/
-
-/-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
-
-This is useful for reducing Corollary II_cor2 to the proportional case of Theorem 4.4. -/
-theorem sameMPV₂_implies_proportionalMPV₂
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (h : SameMPV₂ A B) :
-    ProportionalMPV₂ A B := by
-  intro N
-  exact ⟨1, fun σ => by simpa using h N σ⟩
-
-/-! ## Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
+/-! ## Theorem 2: Power-sum multiset equality (Lem:app_simple support lemma)
 
 This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded same-cardinality version is the common Newton--Girard input.

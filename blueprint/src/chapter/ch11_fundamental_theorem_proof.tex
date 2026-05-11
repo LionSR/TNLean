@@ -22,6 +22,210 @@ irreducible-form framework of \cite{DeLasCuevas2017Irreducible},
 which gives a fundamental theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
+\begin{lemma}[Proportional assembled blocks give proportional weighted states]%
+\label{lem:proportional_tensor_from_blocks_weighted_states}
+	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{def:nonzero_proportional_mpv, def:tensor_from_blocks, def:mpv_state}
+	Let \(A=\bigoplus_j \mu_j A_j\) and
+	\(B=\bigoplus_k \nu_k B_k\) be assembled block tensors. If their MPV
+	families are nonzero proportional, then for every length \(N\) there is a
+	nonzero scalar \(c_N\) such that
+	\[
+		\sum_j \mu_j^N \ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k \nu_k^N \ket{V^{(N)}(B_k)}.
+	\]
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Expand the MPV state of each assembled tensor into its block sum, using the
+	definition of the weighted direct sum. The proportionality hypothesis then
+	supplies the scalar \(c_N\) for the two total MPV states at the fixed
+	length \(N\).
+\end{proof}
+
+\begin{lemma}[A nonzero scalar sequence for proportional weighted states]%
+\label{lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_states}
+	Under the hypotheses of
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, one may
+	choose the proportionality scalars simultaneously as a sequence
+	\((c_N)_{N\ge 0}\), with \(c_N\ne 0\) for every \(N\), such that the
+	weighted state identity holds for every length.
+\end{lemma}
+
+\begin{proof}\leanok
+	Choose, for each length, one nonzero scalar supplied by
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
+\end{proof}
+
+\begin{lemma}[Norm convergence for scalar-related normalized vectors]%
+\label{lem:proportional_scalar_norm_core}
+	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
+	\leanok
+	Suppose \(x_N=c_N y_N\) in a sequence of normed complex vector spaces.
+	If \(\|x_N\|\to 1\) and \(\|y_N\|\to 1\), then \(|c_N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Take norms in the identity \(x_N=c_N y_N\), divide by \(\|y_N\|\), and
+	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
+\end{proof}
+
+\begin{lemma}[Self-overlap normalization gives MPV-state norm normalization]%
+\label{lem:self_overlap_to_mpv_state_norm}
+	\lean{MPSTensor.tendsto_norm_mpvState_one}
+	\leanok
+	\uses{def:mpv_overlap, def:mpv_state}
+	If the self-overlap of an MPV family tends to \(1\), then the Hilbert-space
+	norm of the corresponding MPV state tends to \(1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	The self-overlap is the conjugate of the inner product of the MPV state with
+	itself.  Hence its limit gives convergence of the squared state norm to
+	\(1\), and taking square roots gives the norm convergence.
+\end{proof}
+
+\begin{lemma}[Norm convergence of the proportional scalar sequence]%
+\label{lem:proportional_tensor_from_blocks_scalar_norm}
+	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
+	\leanok
+	\uses{lem:proportional_scalar_norm_core}
+	Suppose the weighted state sums for the two assembled block tensors are
+	related by a scalar sequence \(c_N\). If the norms of both weighted state
+	sums converge to \(1\), then \(|c_N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply Lemma~\ref{lem:proportional_scalar_norm_core} to the two weighted
+	state sums.
+\end{proof}
+
+\begin{lemma}[Norm convergence of the normalized proportional scalar sequence]%
+\label{lem:proportional_tensor_from_blocks_adjusted_scalar_norm}
+	\lean{MPSTensor.tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one}
+	\leanok
+	\uses{lem:proportional_scalar_norm_core}
+	Suppose the weighted state sums for the two assembled block tensors are
+	related by a scalar sequence \(c_N\). If, after division by nonzero
+	scalars \(\mu^N\) and \(\nu^N\), the two normalized state sums have norms
+	converging to \(1\), then \(|c_N(\nu/\mu)^N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Rewrite the proportionality identity after multiplying the two sides by
+	\(\mu^{-N}\) and \(\nu^{-N}\). The corrected scalar is
+	\(c_N(\nu/\mu)^N\), and Lemma~\ref{lem:proportional_scalar_norm_core}
+	applies to the two normalized state sums.
+\end{proof}
+
+\begin{lemma}[Proportional weighted states give proportional weighted projections]%
+\label{lem:proportional_tensor_from_blocks_weighted_inner}
+	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_states, def:mpv_inner}
+	Under the hypotheses of
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, for any
+	tensor \(X\) and any length \(N\) there is a nonzero scalar \(c_N\) such
+	that
+	\[
+		\sum_j \mu_j^N \langle V^{(N)}(X),V^{(N)}(A_j)\rangle
+		=
+		c_N\sum_k \nu_k^N
+			\langle V^{(N)}(X),V^{(N)}(B_k)\rangle .
+	\]
+\end{lemma}
+
+\begin{proof}
+	\leanok
+	Apply the inner product with \(V^{(N)}(X)\) to the weighted state identity
+	of Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, and use
+	linearity in the second argument.
+\end{proof}
+
+\begin{lemma}[A nonzero scalar sequence for proportional weighted projections]%
+\label{lem:proportional_tensor_from_blocks_weighted_inner_sequence}
+	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence,
+		def:mpv_inner}
+	Under the hypotheses of
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, for each
+	fixed tensor \(X\) the same sequence \((c_N)_{N\ge 0}\) relates the
+	weighted projections against \(V^{(N)}(X)\) at every length.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the inner product with \(V^{(N)}(X)\) to the weighted state identity
+	for the chosen scalar sequence.
+\end{proof}
+
+\begin{lemma}[Normalized proportional weighted projections]%
+	\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
+	\lean{MPSTensor.normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul}
+	\leanok
+	For any tensor \(X\), if the weighted projections of two assembled block
+	tensors against \(\ket{V^{(N)}(X)}\) are related by a scalar sequence
+	\(c_N\), then after division by nonzero scalars \(\mu^N\) and \(\nu^N\)
+	the normalized projections are related by the adjusted scalar
+	\(c_N(\nu/\mu)^N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Multiply the projection identity by \(\mu^{-N}\), rewrite the right-hand
+	side by inserting \(\nu^N\nu^{-N}\), and collect the scalar factors.
+\end{proof}
+
+\begin{lemma}[Normalized projection sequence from proportional assembled blocks]%
+\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner_sequence}
+	\lean{MPSTensor.exists_normalized_weighted_mpvInner_eq_mul_adjusted_sequence_of_nonzeroProportionalMPV₂}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_inner_sequence,
+		lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
+	For proportional assembled block tensors, any tensor \(X\), and any nonzero
+	scalars \(\mu,\nu\in\C\), one may choose a nonzero scalar sequence \(c_N\)
+	such that the normalized weighted projections against
+	\(\ket{V^{(N)}(X)}\) are related by the adjusted scalar
+	\(c_N(\nu/\mu)^N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Choose the scalar sequence from
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_inner_sequence}
+	and apply
+	Lemma~\ref{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}.
+\end{proof}
+
+\begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
+\label{thm:proportional_bnt_nondecaying_overlap}
+	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:mpv_overlap, def:nonzero_proportional_mpv}
+	Let \(A=\bigoplus_j \mu_j A_j\) and
+	\(B=\bigoplus_k \nu_k B_k\) be canonical-form tensors with already
+	selected one-copy BNT representatives, with \(r_A\ge 1\) and
+	\(r_B\ge 1\). Suppose that for every system size the two MPV families are
+	proportional by a nonzero scalar depending on the size. Then every block
+	\(A_j\) has a block \(B_k\) such that
+	\(O_{A_j,B_k}(N)\) does not tend to zero, and conversely every block \(B_k\)
+	has such a block \(A_j\).
+\end{theorem}
+
+\begin{proof}
+	\uses{lem:bnt_overlap_orthonormal_li}
+	This is the first block-selection step in the proof of
+	\cite[Theorem~II.1]{Cirac2016MPDO_arXiv}. If a fixed block on one side had
+	vanishing overlaps with every block on the other side, the BNT expansion of
+	the total MPV and Lemma~\ref{lem:bnt_overlap_orthonormal_li} would contradict
+	the assumed proportionality of the total MPV families. The same argument
+	with the two tensor families interchanged gives the symmetric assertion.
+\end{proof}
+
 
 \section{Homogeneous Pair-Span Padding}\label{sec:ft_pair_span_padding}
 
@@ -206,29 +410,6 @@ facts used to recover the lists of weights from those power sums.
 	\]
 \end{lemma}
 
-\begin{lemma}[Eventual coefficient equality recovers copy counts]%
-\label{lem:copies_eq_of_eventually_coeff_eq}
-	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
-	\leanok
-	\uses{def:paper_sector_data}
-	If two sector-weight tuples $S,T$ over the same basis have
-	\[
-		c_{S,j}^{(N)}=c_{T,j}^{(N)}
-	\]
-	for every basis block $j$ and all sufficiently large $N$, then
-	$r_j^S=r_j^T$ for every~$j$.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	For a fixed basis sector \(j\), the coefficient equality is equality of
-	the power sums of the two nonzero weight families for all sufficiently large
-	exponents.  Moving one side to the other gives a finite signed sum of
-	nonzero geometric sequences which vanishes eventually.  The resulting
-	linear recurrence extends the identity to exponent \(0\), where the two
-	power sums are \(r_j^S\) and \(r_j^T\).
-\end{proof}
-
 \begin{lemma}[BNT recovery of copy counts and sector weights]%
 \label{lem:bnt_power_sum_recover_copies_weights}
 	\lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
@@ -249,8 +430,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:coeff_eventually_eq, thm:bounded_power_sum_multiset,
-		lem:copies_eq_of_eventually_coeff_eq}
+	\uses{lem:coeff_eventually_eq, thm:bounded_power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
 	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}.  Thus, for each
 	basis sector \(j\), the two finite nonzero weight families satisfy
@@ -263,11 +443,7 @@ facts used to recover the lists of weights from those power sums.
 	extends this to every positive exponent.  Applying the finite-range
 	unequal-cardinality power-sum theorem
 	(Theorem~\ref{thm:bounded_power_sum_multiset}) gives both
-	\(r_j^S=r_j^T\) and equality of the sector weight multisets.  The
-	exponent-zero route of Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq}
-	is kept as an alternative checked proof: it first recovers \(r_j^S=r_j^T\)
-	from the \(N=0\) identity and then applies the same-cardinality
-	Newton--Girard theorem.
+	\(r_j^S=r_j^T\) and equality of the sector weight multisets.
 \end{proof}
 
 \begin{lemma}[Phase matching recovers copy counts and sector weights]%

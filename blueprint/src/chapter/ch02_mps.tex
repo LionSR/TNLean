@@ -209,10 +209,42 @@ boundary conditions (PBC).
     \leanok
     \uses{def:mpv}
     Two tensors $A$ and $B$ (of possibly different bond dimensions)
-    generate \emph{proportional MPV families} if for every~$N$ there
+    generate weakly proportional MPV families if for every~$N$ there
     exists $c_N \in \C$ such that
     $\ket{V^{(N)}(A)} = c_N \, \ket{V^{(N)}(B)}$.
 \end{definition}
+
+\begin{definition}[Nonzero proportional MPV]\label{def:nonzero_proportional_mpv}
+    \lean{MPSTensor.NonzeroProportionalMPV₂}
+    \leanok
+    \uses{def:mpv}
+    Two tensors $A$ and $B$ (of possibly different bond dimensions)
+    generate nonzero proportional MPV families if for every~$N$ there is a
+    nonzero scalar $c_N \in \C$ such that
+    $\ket{V^{(N)}(A)} = c_N \, \ket{V^{(N)}(B)}$.
+    This is the projective reading of the proportionality hypothesis in
+    \cite[Theorem~II.1]{Cirac2016MPDO_arXiv}.
+    % Maintainer note: projective reading documented in
+    % docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex.
+\end{definition}
+
+\begin{lemma}[Elementary nonzero proportionality rules]%
+\label{lem:nonzero_proportional_mpv_basic}
+    \lean{MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂,
+        MPSTensor.NonzeroProportionalMPV₂.symm,
+        MPSTensor.SameMPV₂.toNonzeroProportionalMPV₂}
+    \leanok
+    \uses{def:proportional_mpv, def:nonzero_proportional_mpv, def:same_mpv2}
+    Nonzero proportionality implies weak proportionality, is symmetric, and
+    equality of MPV families is the special case with scalar \(1\).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Forgetting the nonvanishing condition gives weak proportionality.  Symmetry
+    follows by inverting the scalar \(c_N\) at each length, and equality is the
+    case \(c_N=1\).
+\end{proof}
 
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
     \lean{MPSTensor.evalWord_smul}

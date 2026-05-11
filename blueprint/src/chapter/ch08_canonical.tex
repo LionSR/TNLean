@@ -509,29 +509,6 @@ For Burnside-style arguments it is more natural to work with invariant
 	Here it is obtained directly from the overlap-decay theorem.
 \end{proof}
 
-\begin{theorem}[Proportional MPV + primitive implies gauge-phase equivalence]%
-	\label{thm:proportional_ft_primitive}
-	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_isPrimitiveMPS}
-	\leanok
-	\uses{def:gauge_phase_equiv, def:primitive_mps, thm:proportional_ft}
-	Let $A$ and $B$ be MPS tensors with primitive transfer maps
-	$E_A, E_B$ and positive definite fixed points $\rho_A, \rho_B$.
-	If $A$ and $B$ generate proportional MPV families, then
-	$A$ and $B$ are gauge-phase equivalent.
-	This strengthens Theorem~\ref{thm:proportional_ft}:
-	primitivity supplies left-canonicality, irreducibility, and overlap
-	convergence, reducing the hypothesis count from seven to four.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:proportional_ft, thm:primitive_implies_irreducible}
-	From primitivity, extract a left-canonical normalization
-	($\sum_i (A^i)^\dagger A^i = \Id$), overlap convergence
-	($O_{AA}(N) \to 1$), and irreducibility
-	(Theorem~\ref{thm:primitive_implies_irreducible}).
-	Apply Theorem~\ref{thm:proportional_ft}.
-\end{proof}
-
 \section{Canonical form from primitivity}
 
 The canonical form conditions
@@ -3336,23 +3313,6 @@ do not correspond to independent paper-level results.
 	\uses{thm:exists_normal_canonical_form}
 	Apply Theorem~\ref{thm:exists_normal_canonical_form} to the given primitive
 	block decomposition.
-\end{proof}
-
-\begin{theorem}[Conditional block matching after blocking]%
-	\label{thm:weak_ft_conditional_ch8}
-	\uses{def:is_normal_canonical_form}
-	Consider two block families in normal canonical form, with no two distinct
-	blocks of the same dimension related by gauge-phase equivalence.
-	If two tensors decompose into these families with coefficient sequences having
-	nonzero limits, and the two tensors are asymptotically proportional
-	coefficientwise, then the numbers of blocks agree and the blocks match up to
-	permutation and gauge-phase equivalence.
-\end{theorem}
-
-\begin{proof}
-	This is the block-matching statement from the multi-block fundamental theorem
-	applied to two decompositions that already satisfy the normal-canonical-form
-	and BNT-separation hypotheses.
 \end{proof}
 
 \begin{theorem}[Common blocking period for two primitive normal tensors]%
