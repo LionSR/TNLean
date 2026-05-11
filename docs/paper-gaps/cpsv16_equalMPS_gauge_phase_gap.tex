@@ -54,13 +54,39 @@ The TNLean codebase represents the structural part of this lemma by two
 separate theorems: one rectangular dimension theorem and one
 same-bond-dimension gauge theorem.
 
-The self-overlap convergence of a single irreducible trace-preserving tensor
-and the decay theorem for two inequivalent such tensors are both formalized
-separately.\footnote{%
-\leanid{MPSTensor.overlap\_tendsto\_one\_of\_peripheralPrimitive\_of\_irreducible},
-\path{TNLean/MPS/Overlap/PeripheralToSpectralGap.lean}, around line~506;
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_irreducible\_TP},
-\path{TNLean/Spectral/SpectralGapNT.lean}, around line~290.}
+The formalization represents the same-bond-dimension part of the $1$ case by
+separating two mathematical steps.  First, the spectral-radius theorem shows
+that asymptotically unit-modulus overlap forces the cross-transfer spectral
+radius to be at least \(1\).\footnote{%
+This theorem is
+\leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean} and formalizes
+a step in the proof of Lemma equalMPS,
+\cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
+This is the contrapositive of the already formalized decay theorem for mixed
+transfer spectral radius \(<1\).
+
+Second, the modulus-one spectral theorem turns the modulus-one spectral
+situation into gauge-phase equivalence by the Cauchy--Schwarz argument with the
+positive fixed point.\footnote{%
+This theorem is
+\leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
+The resulting same-dimension gauge-phase theorem has the source's overlap
+hypothesis and no MPV proportionality hypothesis, but it is stated for two
+tensors with the same bond dimension.\footnote{%
+The theorem is
+\leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP};
+it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
+In this same-dimension component the formal theorem changes the normal-tensor
+hypothesis set in a controlled way: in CPSV16 a normal tensor has no
+non-trivial invariant projector, and its associated completely positive map
+has a unique peripheral eigenvalue, equal to its spectral radius and normalized
+to one.  The spectral-radius and Cauchy--Schwarz argument used here drops this
+peripheral-simplicity assumption and takes irreducibility together with
+trace-preserving normalization as explicit hypotheses.  This is a
+generalization of the same-bond-dimension gauge step, not a formalization of
+the rectangular dimension conclusion.
 
 The rectangular dimension-recovery theorem handles the case in which the two
 normal tensors may have different bond

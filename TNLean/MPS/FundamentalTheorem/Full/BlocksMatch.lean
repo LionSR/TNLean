@@ -3,12 +3,13 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
+import TNLean.MPS.BNT.Construction
 
 /-!
 # Block matching for equal-MPV BNT families
 
 `blocks_match_of_sameMPV₂_CFBNT`: from `SameMPV₂` on two assembled
-`IsCanonicalFormBNT` families, obtain a `BlockPermutationGaugeWitness`:
+`IsCanonicalFormBNT` families, obtain a `ProportionalDecompositionConclusion`:
 equal block counts, a block permutation, and per-block gauge-phase equivalence.
 
 ## References
@@ -44,7 +45,7 @@ lemma blocks_match_of_sameMPV₂_CFBNT
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    BlockPermutationGaugeWitness (d := d) A B := by
+    ProportionalDecompositionConclusion A B := by
   have hμA_ne := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero
   have hμB_ne := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero
   obtain ⟨N0A, hLIA⟩ := hA.isBNT.eventually_li

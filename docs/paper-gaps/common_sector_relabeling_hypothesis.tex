@@ -21,18 +21,20 @@ canonically identified with words of length \(p\):
 \[
   \operatorname{Fin}(d^p) \simeq (\operatorname{Fin} p \to \operatorname{Fin} d).
 \]
-The cyclic-sector construction fixes an explicit version of this identification
-for every common blocked sector family \(F\).  The mathematical assertion is
-that assembling the weighted block-diagonal tensor before this relabeling gives
-the same MPV family as assembling after the relabeling:
+The cyclic-sector construction uses the canonical multi-index relabeling
+blockwise.  Write \(X \sim_{\mathrm{MPV}} Y\) when two tensors generate the
+same matrix product vector family at every length and every word.  Write
+\(R(A_k^{[p]})\) for the length-\(p\) blocked tensor \(A_k^{[p]}\) read
+through this canonical word relabeling.
+
+The mathematical assertion is that assembling the weighted block-diagonal
+tensor before this relabeling gives the same MPV family as assembling after
+the relabeling:
 \[
-  \forall F,\quad
   \bigoplus_k \mu_k^p \cdot A_k^{[p]} \sim_{\mathrm{MPV}}
-  \bigoplus_k \mu_k^p \cdot R_F(A_k^{[p]}).
+  \bigoplus_k \mu_k^p \cdot R(A_k^{[p]}).
 \]
-Here \(A_k^{[p]}\) denotes the length-\(p\) blocking of the \(k\)-th primitive block, and
-\(R_F(A_k^{[p]})\) is the same tensor read through the explicit word relabeling of
-blocked physical indices.
+Here \(A_k^{[p]}\) denotes the length-\(p\) blocking of the \(k\)-th primitive block.
 
 \section{Relation to the paper}
 

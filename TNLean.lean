@@ -209,7 +209,6 @@ import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
-import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToSpectralGap

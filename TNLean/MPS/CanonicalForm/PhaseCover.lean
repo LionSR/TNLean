@@ -410,29 +410,6 @@ lemma mpv_span_eq_of_equiv_phase
     (d := d) blocksA blocksB e hPhase
   exact cover.span_eq N
 
-/-- Separated normal canonical-form data and a proportional decomposition produce a common MPV
-phase cover.
-
-The proof uses the BNT comparison theorem to obtain a permutation and gauge phases between the
-basis blocks; applying the proportional-decomposition cover lemma to that matching yields the
-common MPV phase cover. It does not use a finite-length span equality hypothesis. -/
-lemma nonempty_mpvCommonPhaseCover_of_separated_normalCFBNT_data
-    {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {DtotA DtotB : ℕ} {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
-    (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA_ncf : IsNormalCanonicalForm μA blocksA)
-    (hA_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksA)
-    (hB_ncf : IsNormalCanonicalForm μB blocksB)
-    (hB_blocks : BlocksNotGaugePhaseEquiv (d := d) blocksB)
-    (hDecomp : ProportionalDecompositionData (d := d) blocksA blocksB DtotA DtotB) :
-    Nonempty (MPVCommonPhaseCover blocksA blocksB) :=
-  nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
-    (d := d) blocksA blocksB
-    (fundamentalTheorem_of_separated_normalCFBNT_data
-      blocksA blocksB hA_ncf hA_blocks hB_ncf hB_blocks hDecomp)
-
 /-- Equivalence relation on block indices given by MPV phase equivalence. -/
 def mpvPhaseSetoid {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) : Setoid (Fin r) where
