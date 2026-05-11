@@ -25,6 +25,9 @@ normal tensors which
 We also provide a convenient lemma: if pairwise overlaps of a finite family of MPV states
 converge to the Kronecker delta (i.e. the Gram matrix tends to the identity), then the
 states are eventually linearly independent.
+The finite-index and two-family forms of this criterion are retained as the Stage-C
+linear-independence inputs for the source-faithful proof of arXiv:1606.00608,
+Theorem II.1.
 
 ## Part 2: BNT matching theory (from `BNTMatching`)
 
