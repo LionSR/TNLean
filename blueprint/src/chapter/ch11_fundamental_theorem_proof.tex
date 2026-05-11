@@ -474,6 +474,24 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:dominant_projection_contradiction_eventual_proportional}.
 \end{proof}
 
+\begin{lemma}[Non-decaying BNT partners are unique]%
+\label{lem:bnt_nondecaying_partner_unique}
+	\lean{MPSTensor.unique_left_nondecaying_overlap_partner_CFBNT,
+		MPSTensor.unique_right_nondecaying_overlap_partner_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:mpv_overlap}
+	Fix one block of a BNT canonical-form family.  There is at most one block
+	of the other family whose overlap with it does not tend to zero.  The same
+	statement holds after interchanging the two families.
+\end{lemma}
+
+\begin{proof}\leanok
+	Two non-decaying overlaps give two gauge-phase identifications by the
+	overlap dichotomy and the equal-MPV lemma.  Their composition would make
+	two distinct BNT blocks in the same family have a non-decaying mutual
+	overlap, contradicting BNT block separation.
+\end{proof}
+
 \begin{lemma}[Leading-erased tails preserve restricted BNT canonical form]%
 \label{lem:cf_bnt_tail_succ}
 	\lean{MPSTensor.isCanonicalFormBNT_tail_succ}
