@@ -416,6 +416,39 @@ lemma weighted_mpvState_sum_erase_zero_eq_sum_succ
       exact Finset.mem_erase.mpr ⟨succ_ne_zero j, Finset.mem_univ _⟩
   rw [h_eq, Finset.sum_image (fun j _ k _ h => succ_inj h)]
 
+/-- **Reindexing an arbitrary erased weighted MPV-state tail.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof may
+remove a matched block pair that is not the leading pair, because the theorem
+allows a permutation of BNT blocks. This lemma identifies the weighted
+MPV-state sum over the complement of an arbitrary selected block with the
+corresponding sum over `Fin n`, using `Fin.succAbove` to preserve the remaining
+order. -/
+lemma weighted_mpvState_sum_erase_eq_sum_succAbove
+    {d n : ℕ} {dim : Fin (n + 1) → ℕ} {μ : Fin (n + 1) → ℂ}
+    (A : (j : Fin (n + 1)) → MPSTensor d (dim j))
+    (a0 : Fin (n + 1)) :
+    ∀ N : ℕ,
+      ∑ j ∈ Finset.univ.erase a0,
+          (μ j) ^ N • mpvState (d := d) (A j) N =
+        ∑ j : Fin n,
+          (μ (a0.succAbove j)) ^ N •
+            mpvState (d := d) (A (a0.succAbove j)) N := by
+  intro N
+  have h_eq :
+      Finset.univ.erase a0 =
+        (Finset.univ : Finset (Fin n)).image a0.succAbove := by
+    ext x
+    constructor
+    · intro hx
+      rw [Finset.mem_erase] at hx
+      obtain ⟨j, hj⟩ := Fin.exists_succAbove_eq hx.1
+      exact Finset.mem_image.mpr ⟨j, Finset.mem_univ _, hj⟩
+    · intro hx
+      obtain ⟨j, _, rfl⟩ := Finset.mem_image.mp hx
+      exact Finset.mem_erase.mpr ⟨Fin.succAbove_ne _ _, Finset.mem_univ _⟩
+  rw [h_eq, Finset.sum_image (fun _ _ _ _ h => Fin.succAbove_right_injective h)]
+
 /-- **Eventual proportionality of reindexed tails after removing the leading summand.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After a leading
@@ -477,6 +510,64 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected
     eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState
       (fun j : Fin (rA - 1) => A ⟨j.val + 1, by omega⟩)
       (fun k : Fin (rB - 1) => B ⟨k.val + 1, by omega⟩)
+      c hc hTailReindex
+
+/-- **Eventual proportionality of reindexed tails after an arbitrary matched block.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The
+source proof permits a permutation of BNT blocks: after a block pair has been
+matched and its weighted summands have been identified, one removes that pair
+and repeats the argument on the two complements. This lemma packages only the
+finite reindexing and eventual-proportionality bookkeeping for that step. -/
+lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
+    {d nA nB : ℕ}
+    {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
+    {μA : Fin (nA + 1) → ℂ} {μB : Fin (nB + 1) → ℂ}
+    (A : (j : Fin (nA + 1)) → MPSTensor d (dimA j))
+    (B : (k : Fin (nB + 1)) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin (nA + 1)) (b0 : Fin (nB + 1))
+    (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N •
+          (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N))
+    (hSelected : ∀ᶠ N in atTop,
+      (μA a0) ^ N • mpvState (d := d) (A a0) N =
+        c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks
+        (fun j : Fin nA => μA (a0.succAbove j))
+        (fun j : Fin nA => A (a0.succAbove j)))
+      (toTensorFromBlocks
+        (fun k : Fin nB => μB (b0.succAbove k))
+        (fun k : Fin nB => B (b0.succAbove k))) := by
+  have hTailErase :
+      ∀ᶠ N in atTop,
+        ∑ j ∈ Finset.univ.erase a0,
+            (μA j) ^ N • mpvState (d := d) (A j) N =
+          c N •
+            (∑ k ∈ Finset.univ.erase b0,
+              (μB k) ^ N • mpvState (d := d) (B k) N) := by
+    exact eventually_weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
+      A B c a0 b0 hState hSelected
+  have hTailReindex :
+      ∀ᶠ N in atTop,
+        (∑ j : Fin nA,
+            (μA (a0.succAbove j)) ^ N •
+              mpvState (d := d) (A (a0.succAbove j)) N) =
+          c N •
+            (∑ k : Fin nB,
+              (μB (b0.succAbove k)) ^ N •
+                mpvState (d := d) (B (b0.succAbove k)) N) := by
+    refine hTailErase.mono ?_
+    intro N hN
+    rw [weighted_mpvState_sum_erase_eq_sum_succAbove A a0 N] at hN
+    rw [weighted_mpvState_sum_erase_eq_sum_succAbove B b0 N] at hN
+    exact hN
+  exact
+    eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState
+      (fun j : Fin nA => A (a0.succAbove j))
+      (fun k : Fin nB => B (b0.succAbove k))
       c hc hTailReindex
 
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
