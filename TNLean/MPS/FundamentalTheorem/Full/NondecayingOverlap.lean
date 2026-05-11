@@ -765,6 +765,41 @@ lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
       rw [hk0_eq]; exact hall (succA j')
 termination_by rA + rB
 
+/-- **Non-decaying overlap existence for proportional-MPV BNT families.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
+fixing a block `B_k`, the authors rule out the possibility that all overlaps
+`⟪V^{(N)}(B_k), V^{(N)}(A_j)⟫` tend to zero: otherwise the BNT expansion and
+Lemma `Lem1` would contradict proportionality of the total MPV families. The
+same argument with the two tensors interchanged gives the symmetric statement.
+
+**Scope restriction (one-copy-per-sector):** The local hypothesis
+`IsCanonicalFormBNT` is the already-grouped one-copy-per-sector canonical
+form used in this development. CPSV16 Theorem II.1 is stated for the general
+BNT canonical form with possible multiplicities. This restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
+Remaining proof step: derive the dominant-block contradiction directly from
+`NonzeroProportionalMPV₂`, not from externally supplied coefficient-array
+decompositions; see issue #1563. -/
+lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : 0 < rA) (hrB : 0 < rB)
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    (∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
+    (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
+  sorry
+
 end HeteroEqualCase
 
 end MPSTensor

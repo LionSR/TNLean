@@ -102,6 +102,17 @@ def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D�
 def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
 
+/-- Nonzero proportionality of MPV families.
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+formal reading of the source phrase that two tensors generate MPV that are
+proportional to each other: at each length the two MPV vectors lie on the same
+nonzero projective line, with proportionality scalar allowed to depend on the
+length. -/
+def NonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ N : ℕ, ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
+
 /-- Gauge equivalence up to a nonzero global scalar (a phase after normalization). -/
 def GaugePhaseEquiv {d D : ℕ} (A B : MPSTensor d D) : Prop :=
   ∃ (X : GL (Fin D) ℂ) (ζ : ℂ), ζ ≠ 0 ∧ ∀ i : Fin d,
