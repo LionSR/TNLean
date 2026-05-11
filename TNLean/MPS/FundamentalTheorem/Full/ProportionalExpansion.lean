@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
+import TNLean.MPS.BNT.Basic
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 
 /-!
@@ -285,6 +286,45 @@ lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weigh
       simp [smul_eq_mul]
     _ = c N * mpv (toTensorFromBlocks μB B) σ := by
       rw [← hBcoeff]
+
+/-- **Selected coefficient extraction from an eventual two-family relation.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`. Once the selected block on one side has been rewritten as a phase
+multiple of the selected block on the other side, Lemma `Lem1` supplies
+eventual linear independence for the remaining two-family list. This lemma is
+the coefficient bookkeeping for that step: equality of the two finite linear
+combinations forces the coefficient of the selected vector to agree
+eventually. -/
+lemma eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
+    (v : (N : ℕ) → ι → E N) (w : (N : ℕ) → κ → E N)
+    (a : ℕ → ι → ℂ) (b₀ : ℕ → ℂ) (b : ℕ → κ → ℂ)
+    (i₀ : ι)
+    (hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (Sum.elim (v N) (w N)))
+    (hEq : ∀ᶠ N in atTop,
+      ∑ i : ι, a N i • v N i =
+        b₀ N • v N i₀ + ∑ k : κ, b N k • w N k) :
+    ∀ᶠ N in atTop, a N i₀ = b₀ N := by
+  classical
+  let lhs : (N : ℕ) → Sum ι κ → ℂ := fun N =>
+    Sum.elim (a N) (fun _ => 0)
+  let rhs : (N : ℕ) → Sum ι κ → ℂ := fun N =>
+    Sum.elim (fun i => if i = i₀ then b₀ N else 0) (b N)
+  have hEqSum :
+      ∀ᶠ N in atTop,
+        ∑ x : Sum ι κ, lhs N x • Sum.elim (v N) (w N) x =
+          ∑ x : Sum ι κ, rhs N x • Sum.elim (v N) (w N) x := by
+    refine hEq.mono ?_
+    intro N hN
+    simp [lhs, rhs, Fintype.sum_sum_type, hN]
+  have hCoeff :=
+    coefficient_eventually_eq_of_eventually_linearIndependent
+      (fun N => Sum.elim (v N) (w N)) lhs rhs hLI hEqSum
+  refine hCoeff.mono ?_
+  intro N hN
+  simpa [lhs, rhs] using hN (Sum.inl i₀)
 
 /-- **Selected weighted summand from phase and coefficient equality.**
 
