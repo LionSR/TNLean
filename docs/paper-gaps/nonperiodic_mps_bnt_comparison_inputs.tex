@@ -489,15 +489,14 @@ representatives.\footnote{\leanid{IsCanonicalFormBNT},
 This is a restricted already-grouped surface: it suppresses the repeated-copy
 data \(r_j,\mu_{j,q}\) that appear in the BNT expansion and Appendix BNT
 characterization of \cite{Cirac2016MPDO_arXiv}.
-Explicit decomposition coefficients for a conditional proportional comparison
-are recorded separately.\footnote{\leanid{ProportionalDecompositionData},
-same file.}
-The former conditional proportional comparison wrappers have been deleted:
-their one-shot bounded coefficient hypotheses did not encode the residual
-peeling or power-sum comparison in the source paper.
+The former coefficient-array structures and conditional proportional comparison
+theorems have been deleted.  Their one-shot bounded coefficient hypotheses did
+not encode the residual peeling or power-sum comparison in the source paper.
+This branch keeps as live anchors only the after-blocking block-matching
+theorems described below.
 
 The after-blocking theorem is stated in conditional form.\footnote{%
-\path{TNLean/MPS/CanonicalForm/SectorComparison/ProportionalComparison.lean}.}
+\path{TNLean/MPS/CanonicalForm/SectorComparison/BlockMatchingComparison.lean}.}
 Its hypotheses collect the comparison data for the common primitive
 nonzero-sector families produced from the two original tensors, and its
 conclusion states the BNT sector matching after one positive common blocking
@@ -505,9 +504,9 @@ length.  The former named blocked-normal-form records have been removed from
 the formal development; this note now records only the mathematical boundary.
 
 The route from produced primitive sectors to the BNT-level comparison theorem
-passes through a common-primitive BNT cover
-boundary.\footnote{\leanid{CommonPrimitiveBNTCoverHypotheses},
-\path{TNLean/MPS/CanonicalForm/SectorComparison/BlockMatchingComparison.lean}.}
+passes through a common-primitive BNT block-matching
+boundary.\footnote{\leanid{CommonPrimitiveBlockMatchingHypotheses},
+\path{TNLean/MPS/CanonicalForm/SectorComparison/CommonPrimitiveBlockMatchingData.lean}.}
 That boundary is paper-facing only when its hypotheses are supplied for the
 selected representative BNT families rather than for an intermediate
 cyclic-sector list.
@@ -597,17 +596,15 @@ blocked alphabet with the direct alphabet used by the after-blocking comparison.
 The remaining transport problem is to carry the BNT separation and zero-tail
 bookkeeping through this refinement of the blocking length.
 
-The proportional-decomposition coefficient limits remain a genuine theorem-surface
-restriction.  CPSV16 compares the weights by the power-sum argument in the BNT
-proof; the formal structure \leanid{ProportionalDecompositionData}\footnote{The
-main consumers are the separated-data BNT comparison theorems and the
-\leanid{CommonPrimitiveBNTCoverHypotheses} constructions.} still asks explicitly
-for coefficient limits and nonzero-limit hypotheses.  This is not a harmless
-coordinate convention: the block-diagonal expansion involves the powers
-\((\mu_j)^N\), and nonzero weights alone do not give nonzero full-sequence
-limits.  A source-faithful removal of this hypothesis therefore has to formalize
-the relevant power-sum/phase comparison, or replace the present limit-based
-surface by an equivalent one.
+The former proportional-decomposition coefficient-limit surface has been
+deleted rather than treated as a source theorem.  CPSV16 compares the weights by
+the power-sum argument in the BNT proof; this step remains a genuine proof
+obligation.  It is not a harmless coordinate convention: the block-diagonal
+expansion involves the powers \((\mu_j)^N\), and nonzero weights alone do not
+give nonzero full-sequence limits.  A source-faithful proof must formalize the
+relevant power-sum and phase comparison before feeding the result into the
+\leanid{BlockPermutationGaugePhaseConclusion} and
+\leanid{CommonPrimitiveBlockMatchingHypotheses} boundary.
 
 By contrast, zero-tail equality and common-sector relabeling are mostly formal
 bookkeeping.  CPSV16 works at positive lengths and treats zero blocks as unused
@@ -622,9 +619,9 @@ The remaining main boundary is therefore the following.  Starting from the
 normal-CF-BNT sectors produced by canonical-form reduction, one must transport
 blocked not-gauge-phase equivalence, zero-tail identities, and the common
 injective blocking length through the nested-to-flat reblocking map, and then
-feed the resulting families into the common primitive BNT-cover hypotheses.\footnote{%
-The target side is the \leanid{CommonPrimitiveBNTCoverHypotheses}
-cover constructor; the now-available inputs are the bounded and common
+feed the resulting families into the common primitive BNT block-matching hypotheses.\footnote{%
+The target side is the \leanid{CommonPrimitiveBlockMatchingHypotheses}
+boundary; the now-available inputs are the bounded and common
 injective-blocking theorems for normal-CF-BNT blocks and the already-injective
 direct-sum trace-separation theorems.}  The
 paper suppresses this bookkeeping in notation; Lean must make it explicit.
