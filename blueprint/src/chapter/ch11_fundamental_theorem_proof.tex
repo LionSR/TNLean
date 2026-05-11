@@ -815,13 +815,60 @@ with an extra $Z$-gauge degree of freedom.
 	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} applies.
 \end{proof}
 
+\begin{lemma}[Fixed-right all-overlaps-decay contradiction]%
+\label{lem:fixed_right_all_overlaps_decay_contradiction}
+	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
+		lem:fixed_right_lem1_input_eventual_proportional}
+	Fix a block \(B_{k_0}\) in a BNT canonical-form family.  Under eventual
+	nonzero proportionality of the two total weighted MPV families, it is
+	impossible that
+	\(O_{A_j,B_{k_0}}(N)\to 0\) for every block \(A_j\).
+	This is the fixed-\(B_{k_0}\) cancellation step implicit in
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}
+	If all displayed overlaps vanished asymptotically, Lemma
+	\ref{lem:fixed_right_lem1_input_eventual_proportional} would make the
+	family consisting of all \(A_j\) and the fixed \(B_{k_0}\) eventually
+	linearly independent.  The remaining point is to isolate the fixed
+	\(B_{k_0}\)-summand from the full proportional weighted-state identity,
+	where the other \(B\)-summands are still present.
+\end{proof}
+
+\begin{lemma}[Fixed-left all-overlaps-decay contradiction]%
+\label{lem:fixed_left_all_overlaps_decay_contradiction}
+	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
+		lem:fixed_left_lem1_input_eventual_proportional}
+	Fix a block \(A_{j_0}\) in a BNT canonical-form family.  Under eventual
+	nonzero proportionality of the two total weighted MPV families, it is
+	impossible that
+	\(O_{A_{j_0},B_k}(N)\to 0\) for every block \(B_k\).
+	This is the symmetric fixed-block cancellation step used in
+	\cite[Theorem~II.1, lines~1182--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}
+	This is the preceding fixed-block argument with the two BNT families
+	interchanged.  The fixed-left Lemma~\texttt{Lem1} input gives eventual
+	linear independence of all \(B_k\) together with \(A_{j_0}\); the remaining
+	point is the same isolation of the selected summand from the full
+	proportional weighted-state identity.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}
 	\leanok
 	\uses{def:cf_bnt, def:mpv_overlap, def:nonzero_proportional_mpv,
 		lem:fixed_right_lem1_input_eventual_proportional,
-		lem:fixed_left_lem1_input_eventual_proportional}
+		lem:fixed_left_lem1_input_eventual_proportional,
+		lem:fixed_right_all_overlaps_decay_contradiction,
+		lem:fixed_left_all_overlaps_decay_contradiction}
 	Let \(A=\bigoplus_j \mu_j A_j\) and
 	\(B=\bigoplus_k \nu_k B_k\) be canonical-form tensors with already
 	selected one-copy BNT representatives, with \(r_A\ge 1\) and
@@ -833,13 +880,14 @@ with an extra $Z$-gauge degree of freedom.
 \end{theorem}
 
 \begin{proof}
-	\uses{lem:bnt_overlap_orthonormal_li}
+	\uses{lem:fixed_right_all_overlaps_decay_contradiction,
+		lem:fixed_left_all_overlaps_decay_contradiction}
 	This is the first block-selection step in the proof of
 	\cite[Theorem~II.1]{Cirac2016MPDO_arXiv}. If a fixed block on one side had
-	vanishing overlaps with every block on the other side, the BNT expansion of
-	the total MPV and Lemma~\ref{lem:bnt_overlap_orthonormal_li} would contradict
-	the assumed proportionality of the total MPV families. The same argument
-	with the two tensor families interchanged gives the symmetric assertion.
+	vanishing overlaps with every block on the other side, the corresponding
+	fixed-block contradiction lemma would contradict the assumed proportionality
+	of the total MPV families. Applying the two fixed-block contradictions gives
+	the two quantified non-decaying-overlap assertions.
 \end{proof}
 
 
