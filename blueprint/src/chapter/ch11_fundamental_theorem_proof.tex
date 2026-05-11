@@ -277,29 +277,6 @@ facts used to recover the lists of weights from those power sums.
 	\]
 \end{lemma}
 
-\begin{lemma}[Eventual coefficient equality recovers copy counts]%
-\label{lem:copies_eq_of_eventually_coeff_eq}
-	\lean{MPSTensor.SectorWeightData.copies_eq_of_eventually_coeff_eq}
-	\leanok
-	\uses{def:paper_sector_data}
-	If two sector-weight tuples $S,T$ over the same basis have
-	\[
-		c_{S,j}^{(N)}=c_{T,j}^{(N)}
-	\]
-	for every basis block $j$ and all sufficiently large $N$, then
-	$r_j^S=r_j^T$ for every~$j$.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	For a fixed basis sector \(j\), the coefficient equality is equality of
-	the power sums of the two nonzero weight families for all sufficiently large
-	exponents.  Moving one side to the other gives a finite signed sum of
-	nonzero geometric sequences which vanishes eventually.  The resulting
-	linear recurrence extends the identity to exponent \(0\), where the two
-	power sums are \(r_j^S\) and \(r_j^T\).
-\end{proof}
-
 \begin{lemma}[BNT recovery of copy counts and sector weights]%
 \label{lem:bnt_power_sum_recover_copies_weights}
 	\lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
@@ -320,8 +297,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:coeff_eventually_eq, thm:bounded_power_sum_multiset,
-		lem:copies_eq_of_eventually_coeff_eq}
+	\uses{lem:coeff_eventually_eq, thm:bounded_power_sum_multiset}
 	BNT linear independence and equality of total MPVs give eventual
 	coefficient equality by Lemma~\ref{lem:coeff_eventually_eq}.  Thus, for each
 	basis sector \(j\), the two finite nonzero weight families satisfy
@@ -334,11 +310,7 @@ facts used to recover the lists of weights from those power sums.
 	extends this to every positive exponent.  Applying the finite-range
 	unequal-cardinality power-sum theorem
 	(Theorem~\ref{thm:bounded_power_sum_multiset}) gives both
-	\(r_j^S=r_j^T\) and equality of the sector weight multisets.  The
-	exponent-zero route of Lemma~\ref{lem:copies_eq_of_eventually_coeff_eq}
-	is kept as an alternative checked proof: it first recovers \(r_j^S=r_j^T\)
-	from the \(N=0\) identity and then applies the same-cardinality
-	Newton--Girard theorem.
+	\(r_j^S=r_j^T\) and equality of the sector weight multisets.
 \end{proof}
 
 \begin{lemma}[Phase matching recovers copy counts and sector weights]%

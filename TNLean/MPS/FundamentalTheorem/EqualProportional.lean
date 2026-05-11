@@ -32,12 +32,7 @@ not by themselves imply the full block matching conclusion.  The retained
 formal theorem in this file is the equal-MPV route below, whose hypotheses
 produce nondecaying block overlaps directly.
 
-### Theorem 2: Equal MPVs imply proportional MPVs
-(`sameMPV₂_implies_proportionalMPV₂`)
-
-Trivial but useful: `SameMPV₂ A B → ProportionalMPV₂ A B` (take `c_N = 1`).
-
-### Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
+### Theorem 2: Power-sum multiset equality (Lem:app_simple support lemma)
 
 If two same-cardinality sequences of complex numbers have equal power sums for all positive
 exponents, their multisets are equal.  For different cardinalities, the positive-power
@@ -117,19 +112,7 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Theorem 2: Equal MPVs imply proportional MPVs -/
-
-/-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
-
-This is useful for reducing Corollary II_cor2 to the proportional case of Theorem 4.4. -/
-theorem sameMPV₂_implies_proportionalMPV₂
-    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (h : SameMPV₂ A B) :
-    ProportionalMPV₂ A B := by
-  intro N
-  exact ⟨1, fun σ => by simpa using h N σ⟩
-
-/-! ## Theorem 3: Power-sum multiset equality (Lem:app_simple support lemma)
+/-! ## Theorem 2: Power-sum multiset equality (Lem:app_simple support lemma)
 
 This provides the power-sum lemmas from `ScalarPowerSumIdentity.lean`.
 The bounded same-cardinality version is the common Newton--Girard input.

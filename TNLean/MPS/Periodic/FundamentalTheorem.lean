@@ -456,7 +456,7 @@ Given two sector weight families where:
 produces: weight multiset equality, a diagonal Z with `Z^m = 1`, and `Z · diag(ν) = diag(μ)`.
 
 In the full Theorem 3.8 proof, hypothesis (3) follows from BNT linear independence + equal
-MPVs (via `power_sums_eq_of_eventually_eq`), and hypothesis (1) is the Newton-Girard
+MPVs (via `power_sums_eq_of_eventually_eq_hetero`), and hypothesis (1) is the Newton-Girard
 consequence of (3) restricted to multiples of `m`. -/
 theorem equalCase_zgauge_of_power_sums
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
