@@ -221,6 +221,20 @@ with an extra $Z$-gauge degree of freedom.
 	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
 \end{proof}
 
+\begin{lemma}[Eventual norm convergence for scalar-related normalized vectors]%
+\label{lem:eventual_proportional_scalar_norm_core}
+	\lean{MPSTensor.tendsto_norm_scalar_of_eventually_tendsto_norm_one}
+	\leanok
+	\uses{lem:proportional_scalar_norm_core}
+	Suppose \(x_N=c_N y_N\) for all sufficiently large \(N\). If
+	\(\|x_N\|\to 1\) and \(\|y_N\|\to 1\), then \(|c_N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	The proof of Lemma~\ref{lem:proportional_scalar_norm_core} is unchanged
+	after discarding finitely many lengths.
+\end{proof}
+
 \begin{lemma}[Self-overlap normalization gives MPV-state norm normalization]%
 \label{lem:self_overlap_to_mpv_state_norm}
 	\lean{MPSTensor.tendsto_norm_mpvState_one}
@@ -295,6 +309,24 @@ with an extra $Z$-gauge degree of freedom.
 	applies to the two normalized state sums.
 \end{proof}
 
+\begin{lemma}[Eventual norm convergence of the normalized proportional scalar]%
+\label{lem:eventual_proportional_tensor_from_blocks_adjusted_scalar_norm}
+	\lean{MPSTensor.tendsto_norm_adjusted_weighted_mpvState_scalar_of_eventually_tendsto_norm_one}
+	\leanok
+	\uses{lem:eventual_proportional_scalar_norm_core}
+	Suppose the weighted state sums for the two assembled block tensors are
+	related by a scalar sequence \(c_N\) for all sufficiently large \(N\). If,
+	after division by nonzero scalars \(\mu^N\) and \(\nu^N\), the two
+	normalized state sums have norms converging to \(1\), then
+	\(|c_N(\nu/\mu)^N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	For all sufficiently large lengths, rewrite the proportionality identity
+	after multiplying the two sides by \(\mu^{-N}\) and \(\nu^{-N}\), and apply
+	Lemma~\ref{lem:eventual_proportional_scalar_norm_core}.
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
@@ -336,6 +368,23 @@ with an extra $Z$-gauge degree of freedom.
 	for the chosen scalar sequence.
 \end{proof}
 
+\begin{lemma}[Eventual weighted projections from eventual weighted states]%
+\label{lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence}
+	\lean{MPSTensor.eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence}
+	\lean{MPSTensor.exists_eventually_weighted_mpvInner_eq_mul_sequence_of_eventuallyNonzeroProportionalMPV₂}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence,
+		def:mpv_inner}
+	If the weighted state sums are eventually related by a scalar sequence,
+	then, for each fixed tensor \(X\), the corresponding weighted projections
+	against \(V^{(N)}(X)\) are eventually related by the same scalar sequence.
+\end{lemma}
+
+\begin{proof}\leanok
+	For all sufficiently large lengths, apply the inner product with
+	\(V^{(N)}(X)\) to the weighted state identity.
+\end{proof}
+
 \begin{lemma}[Normalized proportional weighted projections]%
 	\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
 	\lean{MPSTensor.normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul}
@@ -370,6 +419,25 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_inner_sequence}
 	and apply
 	Lemma~\ref{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}.
+\end{proof}
+
+\begin{lemma}[Eventual normalized projection sequence from proportional tails]%
+\label{lem:eventual_proportional_tensor_from_blocks_adjusted_weighted_inner_sequence}
+	\lean{MPSTensor.exists_eventually_adjusted_weighted_mpvInner_sequence_of_eventuallyNonzeroProportionalMPV₂}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence,
+		lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
+	For eventually proportional assembled block tensors, any tensor \(X\), and
+	any nonzero scalars \(\mu,\nu\in\C\), one may choose a scalar sequence
+	\(c_N\), nonzero for all sufficiently large \(N\), such that the normalized
+	weighted projections against \(\ket{V^{(N)}(X)}\) are eventually related by
+	the adjusted scalar \(c_N(\nu/\mu)^N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Choose the eventual scalar sequence from
+	Lemma~\ref{lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence}
+	and apply the normalized scalar rewrite at every sufficiently large length.
 \end{proof}
 
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
