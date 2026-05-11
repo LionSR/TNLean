@@ -780,7 +780,8 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
       Tendsto (fun N => mpvOverlap (d := d) (B k) (Asingle j) N) atTop
         (nhds 0) := by
     intro k j
-    simpa [Asingle] using tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
+    simpa [Asingle] using
+      tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
   have hLI :=
     eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
       B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
