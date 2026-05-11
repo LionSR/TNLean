@@ -424,6 +424,45 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
       (by simpa [a0, b0] using hAdjustedScalar_dom)
       hA_self hB_self hA_cross hB_cross
 
+/-- **Dominant blocks have non-decaying partners under eventual proportionality.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The dominant
+projection contradiction rules out the alternative that the leading block on
+one side has vanishing overlap with every block on the other side. Hence each
+leading block admits a non-decaying overlap partner. -/
+lemma exists_nondecaying_overlap_dominant_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    (∃ k₀ : Fin rB,
+      ¬ Tendsto
+        (fun N => mpvOverlap (d := d)
+          (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k₀) N)
+        atTop (nhds 0)) ∧
+    (∃ j₀ : Fin rA,
+      ¬ Tendsto
+        (fun N => mpvOverlap (d := d)
+          (A j₀) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N)
+        atTop (nhds 0)) := by
+  have hContra :=
+    dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp
+  constructor
+  · by_contra h
+    push Not at h
+    exact hContra.2 h
+  · by_contra h
+    push Not at h
+    exact hContra.1 h
+
 end ProportionalDominant
 
 end MPSTensor
