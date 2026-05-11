@@ -295,6 +295,27 @@ The general CPSV theorem still passes through sector decompositions, copy-count
 recovery, and sector-weight multiset comparison before one obtains a global
 block-diagonal gauge.
 
+\begin{theorem}[Bond dimension equality from unit overlap]%
+\label{thm:equalMPS_dimension_from_unit_overlap}
+	\lean{MPSTensor.dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP}
+	\leanok
+	\uses{def:mpv_overlap}
+	Let \(A\) and \(B\) be irreducible trace-preserving blocks, possibly with
+	different bond dimensions.  If
+	\[
+		\lim_{N\to\infty}
+		\left|\left\langle V^{(N)}(B)\mid V^{(N)}(A)\right\rangle\right|=1,
+	\]
+	then the two bond dimensions are equal.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	The proof is the contrapositive of rectangular overlap decay: if the two
+	bond dimensions differ, the mixed overlap tends to \(0\), contradicting
+	the assumed convergence of its modulus to \(1\).
+\end{proof}
+
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
 	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
 	\leanok
