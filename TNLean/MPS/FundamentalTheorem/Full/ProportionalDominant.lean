@@ -136,15 +136,7 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
         (fun N : ℕ =>
           ‖c N * (μB ⟨0, Nat.pos_of_ne_zero hrB⟩ /
             μA ⟨0, Nat.pos_of_ne_zero hrA⟩) ^ N‖)
-        atTop (nhds (1 : ℝ)))
-    (hA_self : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1))
-    (hB_self : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1))
-    (hA_cross : ∀ j k : Fin rA, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0))
-    (hB_cross : ∀ j k : Fin rB, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0)) :
+        atTop (nhds (1 : ℝ))) :
     ((∀ j : Fin rA,
         Tendsto
           (fun N => mpvOverlap (d := d) (A j)
@@ -159,18 +151,6 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
   let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
   have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
   have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
-  have hA_inner_diag : ∀ j : Fin rA,
-      Tendsto (fun N => mpvInner (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    fun j => tendsto_inner_one (A j) (hA_self j)
-  have hA_inner_off : ∀ i j : Fin rA, i ≠ j →
-      Tendsto (fun N => mpvInner (d := d) (A i) (A j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (A i) (A j) (hA_cross i j hij)
-  have hB_inner_diag : ∀ k : Fin rB,
-      Tendsto (fun N => mpvInner (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    fun k => tendsto_inner_one (B k) (hB_self k)
-  have hB_inner_off : ∀ i j : Fin rB, i ≠ j →
-      Tendsto (fun N => mpvInner (d := d) (B i) (B j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (B i) (B j) (hB_cross i j hij)
   have hAdjustedScalar :
       Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
         (nhds (1 : ℝ)) := by
@@ -220,27 +200,7 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
             (μB b0 ^ N)⁻¹ *
               (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (B b0) (B k) N))
           atTop (nhds 1) := by
-      have hsum :
-          Tendsto
-            (fun N : ℕ =>
-              ∑ k : Fin rB, (μB k / μB b0) ^ N *
-                mpvInner (d := d) (B b0) (B k) N)
-            atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμB_ne) (j0 := b0) rfl (hB_inner_diag b0)
-          (fun k hk => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.mu_strict_anti (by
-                simp only [b0, Fin.lt_def]
-                exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
-          (fun k hk => hB_inner_off b0 k hk.symm)
-      convert hsum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro k _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμB_ne]
+      simpa [b0] using tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT B hB hrB
     have hRHS_norm_one :
         Tendsto
           (fun N : ℕ =>
@@ -296,27 +256,7 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
             (μA a0 ^ N)⁻¹ *
               (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N))
           atTop (nhds 1) := by
-      have hsum :
-          Tendsto
-            (fun N : ℕ =>
-              ∑ j : Fin rA, (μA j / μA a0) ^ N *
-                mpvInner (d := d) (A a0) (A j) N)
-            atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμA_ne) (j0 := a0) rfl (hA_inner_diag a0)
-          (fun j hj => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.mu_strict_anti (by
-                simp only [a0, Fin.lt_def]
-                exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
-          (fun j hj => hA_inner_off a0 j hj.symm)
-      convert hsum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμA_ne]
+      simpa [a0] using tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT A hA hrA
     have hB_proj_sum :
         Tendsto
           (fun N : ℕ =>
@@ -504,7 +444,6 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
     dominant_projection_contradictions_of_normalized_proportional_inner
       A B hA hB hrA hrB c hNormalizedInner
       (by simpa [a0, b0] using hAdjustedScalar_dom)
-      hA_self hB_self hA_cross hB_cross
 
 /-- **Dominant blocks have non-decaying partners under eventual proportionality.**
 
