@@ -24,10 +24,9 @@ asymptotic orthonormality into eventual linear independence.
 
 | Formal declaration or blueprint entry | Source role | Verdict | Reason |
 |---|---|---|---|
-| `MPSTensor.dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP` | Dimension part of `equalMPS` in the unit-overlap branch | FAITHFUL | The Lean hypotheses are the CFII-normalized form used in the proof: irreducible trace-preserving tensors with positive bond dimensions and unit-modulus overlap. The conclusion is exactly `D_a = D_b`, and no same-dimension hypothesis is assumed. |
 | `MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP` | Gauge part of `equalMPS` after dimensions have been identified | SCOPE RESTRICTION | The Lean theorem assumes a common bond dimension, so it is not the full rectangular `equalMPS` statement. The blueprint entry states this same-dimension hypothesis, and the Lean docstring points to `docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`. Thus the `\leanok` tag is valid only for the restricted blueprint statement. |
-| `MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one` | Spectral-radius step inside the proof of the unit-overlap branch | SCOPE RESTRICTION | The statement is a proof component for common bond dimension. The rectangular dimension conclusion is handled separately by `dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP`, so this lemma should not be cited as the full source lemma. Current Chapter 8 prose presents it only as a same-bond proof step. |
-| `MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP` | Contrapositive of the same-dimension zero-or-gauge alternative | FAITHFUL TO THE FORMALIZED BRANCH | Under the CFII-normalized hypotheses, non-gauge-phase-equivalence excludes the unit-overlap branch and forces overlap decay. This is a derived branch of `equalMPS`, not a separately labelled source theorem. |
+| `MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one` | Spectral-radius step inside the proof of the unit-overlap branch | SCOPE RESTRICTION | The statement is a proof component for common bond dimension. The rectangular dimension conclusion is still tracked by #1567/#1568, so this lemma should not be cited as the full source lemma. Current Chapter 8 prose presents it only as a same-bond proof step. |
+| `MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP` | Contrapositive of the same-dimension zero-or-gauge alternative | FAITHFUL | Under the CFII-normalized hypotheses, non-gauge-phase-equivalence excludes the unit-overlap branch and forces overlap decay. This is a derived branch of `equalMPS`, not a separately labelled source theorem. |
 | `MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` | Rectangular decay used to prove the dimension conclusion | FAITHFUL | Different bond dimensions contradict the unit-overlap branch in the source proof. The Lean theorem gives the corresponding decay statement under the CFII-normalized irreducible trace-preserving hypotheses. |
 | `MPSTensor.mpvOverlap_tendsto_zero` and `MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne` | Injective versions used in auxiliary BNT block-separation arguments | SCOPE RESTRICTION | These are stronger, injective-block variants used in Chapter 10 auxiliary statements. They are not paired with the unrestricted CPSV16 `equalMPS` source label. The Chapter 10 entries explicitly state injectivity and trace-preserving normalization. |
 | `MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho` | BNT permutation-rigidity lemma consuming overlap orthonormality | SCOPE RESTRICTION | This theorem assumes equal finite block counts and span equality. It is an auxiliary block-matching statement, not CPSV16 Theorem II.1 itself. Chapter 10 states these hypotheses explicitly, so the `\leanok` pairing is not source-facing for the unrestricted theorem. |
@@ -36,8 +35,9 @@ asymptotic orthonormality into eventual linear independence.
 
 No blueprint tag needs to be removed in this slice.  The Chapter 8 entries
 for the unit-overlap gauge theorem and spectral-radius lemma explicitly state
-the common-bond-dimension restriction.  The rectangular dimension theorem is
-the source-faithful Lean statement for the missing dimension conclusion.
+the common-bond-dimension restriction.  The rectangular dimension conclusion
+itself remains tracked separately by #1567/#1568 and by
+`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`.
 
 The remaining source-level gap is not overlap decay.  It is the assembly of
 CPSV16 Theorem II.1 and Corollary II.2 after block matching: matching the
