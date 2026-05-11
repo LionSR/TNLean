@@ -52,7 +52,7 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. The linear-independence corollary supplies eventual
+dominant-block normalization. The eventual linear-independence corollary supplies
 linear independence from asymptotic orthonormality; the contradiction step applies
 this after showing that the relevant joint family is asymptotically orthonormal. -/
 
@@ -119,7 +119,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
               simp [hkl]
             simpa [C] using hB_off k l hkl
   have hLI :=
-    MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal C h_self h_cross
+    MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal C h_self h_cross
   refine hLI.mono ?_
   intro N hN
   convert hN with x
