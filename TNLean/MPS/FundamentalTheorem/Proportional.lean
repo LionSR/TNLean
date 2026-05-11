@@ -230,9 +230,10 @@ The proof is the contrapositive of
 spectral radius were strictly less than `1`, the overlap (and hence its
 modulus) would tend to `0`, contradicting the hypothesis.
 
-The proof uses the trace identity
-`trace_mixedTransferMap_pow_eq_mpvOverlap` and is paper-faithful (no
-proportionality hypothesis required). -/
+The proof uses the rectangular overlap-decay theorem
+`mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`, whose proof rests on the
+mixed-transfer trace identity, and is paper-faithful (no proportionality hypothesis
+required). -/
 theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     (A B : MPSTensor d D)
     (hOverlap :
