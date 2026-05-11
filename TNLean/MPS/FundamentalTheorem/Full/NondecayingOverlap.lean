@@ -649,6 +649,34 @@ lemma isCanonicalFormBNT_tail_succ
       (fun j k hjk hdim => hA.blocks_not_equiv (succ j) (succ k)
         (fun h => hjk (succ_inj h)) hdim)
 
+/-- **Arbitrary-erased tails of restricted BNT canonical forms.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The
+proof removes matched BNT block pairs and repeats the argument on the
+remaining blocks. Since the source theorem permits a permutation of blocks, the
+removed block need not be the leading one. In the one-copy-per-sector
+restricted surface used here, the complement indexed by `Fin.succAbove` is
+again in restricted BNT canonical form. -/
+lemma isCanonicalFormBNT_tail_succAbove
+    {d n : ℕ} {dim : Fin (n + 1) → ℕ} {μ : Fin (n + 1) → ℂ}
+    (A : (j : Fin (n + 1)) → MPSTensor d (dim j))
+    (hA : IsCanonicalFormBNT μ A) (a0 : Fin (n + 1)) :
+    IsCanonicalFormBNT
+      (fun j : Fin n => μ (a0.succAbove j))
+      (fun j : Fin n => A (a0.succAbove j)) := by
+  exact
+    IsCanonicalFormBNT.ofSeparatedData
+      (HasInjectiveBlocks.ofForall
+        (fun k => hA.toHasInjectiveBlocks.block_injective (a0.succAbove k)))
+      (IsLeftCanonicalBlockFamily.ofForall
+        (fun k => hA.toIsLeftCanonicalBlockFamily.leftCanonical (a0.succAbove k)))
+      ⟨hA.mu_strict_anti.comp_strictMono (Fin.succAboveOrderEmb a0).strictMono,
+       fun k => hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero (a0.succAbove k)⟩
+      (HasNormalizedSelfOverlap.ofForall
+        (fun k => hA.toHasNormalizedSelfOverlap.overlap_tendsto_one (a0.succAbove k)))
+      (fun j k hjk hdim => hA.blocks_not_equiv (a0.succAbove j) (a0.succAbove k)
+        (fun h => hjk (Fin.succAbove_right_injective h)) hdim)
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
