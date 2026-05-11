@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalDominant
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -821,18 +821,6 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
   have hB_cross : ∀ j k : Fin rB, j ≠ k →
       Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
     hB.cross_overlap_tendsto_zero
-  have hA_inner_diag : ∀ j : Fin rA,
-      Tendsto (fun N => mpvInner (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    fun j => tendsto_inner_one (A j) (hA_self j)
-  have hA_inner_off : ∀ i j : Fin rA, i ≠ j →
-      Tendsto (fun N => mpvInner (d := d) (A i) (A j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (A i) (A j) (hA_cross i j hij)
-  have hB_inner_diag : ∀ k : Fin rB,
-      Tendsto (fun N => mpvInner (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    fun k => tendsto_inner_one (B k) (hB_self k)
-  have hB_inner_off : ∀ i j : Fin rB, i ≠ j →
-      Tendsto (fun N => mpvInner (d := d) (B i) (B j) N) atTop (nhds 0) :=
-    fun i j hij => tendsto_inner_zero (B i) (B j) (hB_cross i j hij)
   obtain ⟨c, hc, hState⟩ :=
     exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
       A B hProp
@@ -890,198 +878,19 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
       A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
       hA_norm_dominant hB_norm_dominant
+  have hDominant_contra :=
+    dominant_projection_contradictions_of_normalized_proportional_inner
+      A B hA hB hrA hrB c hNormalizedInner
+      (by simpa [a0, b0] using hAdjustedScalar_dom)
+      hA_self hB_self hA_cross hB_cross
   have hDominantB_contra :
       (∀ j : Fin rA, Tendsto (fun N => mpvOverlap (d := d) (A j) (B b0) N)
         atTop (nhds 0)) → False := by
-    intro hall
-    have hall_inner : ∀ j : Fin rA,
-        Tendsto (fun N => mpvInner (d := d) (B b0) (A j) N) atTop (nhds 0) :=
-      fun j => tendsto_inner_zero_swap (d := d) (A j) (B b0) (hall j)
-    have hA_proj_sum :
-        Tendsto
-          (fun N : ℕ =>
-            ∑ j : Fin rA, (μA j / μA a0) ^ N *
-              mpvInner (d := d) (B b0) (A j) N)
-          atTop (nhds 0) := by
-      have := tendsto_finset_sum (Finset.univ : Finset (Fin rA))
-        (fun (j : Fin rA) _ => show
-          Tendsto
-            (fun N : ℕ =>
-              (μA j / μA a0) ^ N * mpvInner (d := d) (B b0) (A j) N)
-            atTop (nhds (0 : ℂ)) from
-          bounded_mul_tendsto_zero _ _ (by
-            rw [norm_div]
-            exact (div_le_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.toIsCanonicalForm.mu_antitone
-                (show a0 ≤ j from Fin.mk_le_mk.mpr (Nat.zero_le _))))
-            (hall_inner j))
-      simpa using this
-    have hA_proj :
-        Tendsto
-          (fun N : ℕ =>
-            (μA a0 ^ N)⁻¹ *
-              (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (B b0) (A j) N))
-          atTop (nhds 0) := by
-      convert hA_proj_sum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμA_ne]
-    have hB_proj :
-        Tendsto
-          (fun N : ℕ =>
-            (μB b0 ^ N)⁻¹ *
-              (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (B b0) (B k) N))
-          atTop (nhds 1) := by
-      have hsum :
-          Tendsto
-            (fun N : ℕ =>
-              ∑ k : Fin rB, (μB k / μB b0) ^ N *
-                mpvInner (d := d) (B b0) (B k) N)
-            atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμB_ne) (j0 := b0) rfl (hB_inner_diag b0)
-          (fun k hk => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.mu_strict_anti (by
-                simp only [b0, Fin.lt_def]
-                exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
-          (fun k hk => hB_inner_off b0 k hk.symm)
-      convert hsum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro k _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμB_ne]
-    have hRHS_norm_one :
-        Tendsto
-          (fun N : ℕ =>
-            ‖(c N * (μB b0 / μA a0) ^ N) *
-              ((μB b0 ^ N)⁻¹ *
-                (∑ k : Fin rB, (μB k) ^ N *
-                  mpvInner (d := d) (B b0) (B k) N))‖)
-          atTop (nhds (1 : ℝ)) := by
-      have hmul := hAdjustedScalar_dom.mul hB_proj.norm
-      simpa [norm_mul] using hmul
-    have hRHS_norm_zero :
-        Tendsto
-          (fun N : ℕ =>
-            ‖(c N * (μB b0 / μA a0) ^ N) *
-              ((μB b0 ^ N)⁻¹ *
-                (∑ k : Fin rB, (μB k) ^ N *
-                  mpvInner (d := d) (B b0) (B k) N))‖)
-          atTop (nhds (0 : ℝ)) := by
-      have hnorm := hA_proj.norm
-      have hnorm_zero :
-          Tendsto
-            (fun N : ℕ =>
-              ‖(μA a0 ^ N)⁻¹ *
-                (∑ j : Fin rA, (μA j) ^ N *
-                  mpvInner (d := d) (B b0) (A j) N)‖)
-            atTop (nhds (0 : ℝ)) := by
-        simpa using hnorm
-      refine hnorm_zero.congr (fun N => ?_)
-      rw [hNormalizedInner (B b0) (μA a0) (μB b0) hμA_ne hμB_ne N]
-    exact zero_ne_one (tendsto_nhds_unique hRHS_norm_zero hRHS_norm_one)
+    simpa [b0] using hDominant_contra.1
   have hDominantA_contra :
       (∀ k : Fin rB, Tendsto (fun N => mpvOverlap (d := d) (A a0) (B k) N)
         atTop (nhds 0)) → False := by
-    intro hall
-    have hall_inner : ∀ k : Fin rB,
-        Tendsto (fun N => mpvInner (d := d) (A a0) (B k) N) atTop (nhds 0) :=
-      fun k => tendsto_inner_zero (A a0) (B k) (hall k)
-    have hA_proj :
-        Tendsto
-          (fun N : ℕ =>
-            (μA a0 ^ N)⁻¹ *
-              (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N))
-          atTop (nhds 1) := by
-      have hsum :
-          Tendsto
-            (fun N : ℕ =>
-              ∑ j : Fin rA, (μA j / μA a0) ^ N *
-                mpvInner (d := d) (A a0) (A j) N)
-            atTop (nhds 1) :=
-        sum_tendsto_one_of_diag (hμ0 := hμA_ne) (j0 := a0) rfl (hA_inner_diag a0)
-          (fun j hj => by
-            rw [norm_div]
-            exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-              (hA.mu_strict_anti (by
-                simp only [a0, Fin.lt_def]
-                exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
-          (fun j hj => hA_inner_off a0 j hj.symm)
-      convert hsum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμA_ne]
-    have hB_proj_sum :
-        Tendsto
-          (fun N : ℕ =>
-            ∑ k : Fin rB, (μB k / μB b0) ^ N *
-              mpvInner (d := d) (A a0) (B k) N)
-          atTop (nhds 0) := by
-      have := tendsto_finset_sum (Finset.univ : Finset (Fin rB))
-        (fun (k : Fin rB) _ => show
-          Tendsto
-            (fun N : ℕ =>
-              (μB k / μB b0) ^ N * mpvInner (d := d) (A a0) (B k) N)
-            atTop (nhds (0 : ℂ)) from
-          bounded_mul_tendsto_zero _ _ (by
-            rw [norm_div]
-            exact (div_le_one (norm_pos_iff.mpr hμB_ne)).mpr
-              (hB.toIsCanonicalForm.mu_antitone
-                (show b0 ≤ k from Fin.mk_le_mk.mpr (Nat.zero_le _))))
-            (hall_inner k))
-      simpa using this
-    have hB_proj :
-        Tendsto
-          (fun N : ℕ =>
-            (μB b0 ^ N)⁻¹ *
-              (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N))
-          atTop (nhds 0) := by
-      convert hB_proj_sum using 1
-      ext N
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro k _
-      rw [div_pow]
-      field_simp [pow_ne_zero N hμB_ne]
-    have hRHS_norm_zero :
-        Tendsto
-          (fun N : ℕ =>
-            ‖(c N * (μB b0 / μA a0) ^ N) *
-              ((μB b0 ^ N)⁻¹ *
-                (∑ k : Fin rB, (μB k) ^ N *
-                  mpvInner (d := d) (A a0) (B k) N))‖)
-          atTop (nhds (0 : ℝ)) := by
-      have hmul := hAdjustedScalar_dom.mul hB_proj.norm
-      simpa [norm_mul] using hmul
-    have hRHS_norm_one :
-        Tendsto
-          (fun N : ℕ =>
-            ‖(c N * (μB b0 / μA a0) ^ N) *
-              ((μB b0 ^ N)⁻¹ *
-                (∑ k : Fin rB, (μB k) ^ N *
-                  mpvInner (d := d) (A a0) (B k) N))‖)
-          atTop (nhds (1 : ℝ)) := by
-      have hnorm := hA_proj.norm
-      have hnorm_one :
-          Tendsto
-            (fun N : ℕ =>
-              ‖(μA a0 ^ N)⁻¹ *
-                (∑ j : Fin rA, (μA j) ^ N *
-                  mpvInner (d := d) (A a0) (A j) N)‖)
-            atTop (nhds (1 : ℝ)) := by
-        simpa using hnorm
-      refine hnorm_one.congr (fun N => ?_)
-      rw [hNormalizedInner (A a0) (μA a0) (μB b0) hμA_ne hμB_ne N]
-    exact zero_ne_one (tendsto_nhds_unique hRHS_norm_zero hRHS_norm_one)
+    simpa [a0] using hDominant_contra.2
   -- Remaining CPSV16 line 1170--1192 step: lift the dominant contradictions
   -- `hDominantA_contra` and `hDominantB_contra` to arbitrary blocks by the
   -- same tail-reduction argument used in the equal-MPV theorem above.
