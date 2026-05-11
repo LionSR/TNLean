@@ -271,6 +271,41 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
   have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
   exact one_ne_zero h01
 
+/-- **Bond-dimension equality from unit-modulus overlap.**
+
+Source: arXiv:1606.00608, Lemma equalMPS, lines 1085--1117, especially the
+dimension conclusion in line 1090 and the final dimension argument in
+lines 1115--1117. If two irreducible trace-preserving left-canonical blocks
+have asymptotically unit-modulus overlap, then their bond dimensions agree.
+
+The proof is the contrapositive of the rectangular overlap-decay theorem
+`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP`: different bond
+dimensions force the overlap to tend to `0`, contradicting the assumed limit
+of its modulus to `1`. -/
+theorem dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP
+    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_irr : IsIrreducibleTensor (d := d) (D := D₁) A)
+    (hB_irr : IsIrreducibleTensor (d := d) (D := D₂) B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+    (hOverlap :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (1 : ℝ))) :
+    D₁ = D₂ := by
+  by_contra hD
+  have hzero :
+      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+        (nhds (0 : ℂ)) :=
+    mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+      A B hA_irr hB_irr hA_norm hB_norm hD
+  have hnorm_zero :
+      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+        (nhds (0 : ℝ)) := by
+    simpa using hzero.norm
+  have h10 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
+  exact one_ne_zero h10
+
 /-- **Gauge-phase equivalence from unit-modulus overlap.**
 
 Source: arXiv:1606.00608, Lemma equalMPS, statement lines 1080-1091 and
@@ -290,8 +325,9 @@ together with the rigidity theorem
 **Scope restriction (same bond dimension):** The source Lemma equalMPS also
 concludes equality of the two bond dimensions in the unit-overlap case; this
 theorem assumes a common bond dimension as a hypothesis instead. The
-rectangular component is recorded in
-docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex. -/
+rectangular component is proved separately as
+`dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP` in this file; together
+the two theorems recover the full structural conclusion of the source lemma. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
