@@ -49,6 +49,30 @@ lemma tendsto_norm_scalar_of_tendsto_norm_one
     exact mul_div_cancel_right₀ (‖c N‖) hN
   exact Tendsto.congr' hRatio_eq hRatio
 
+/-- **Eventual norm convergence for a scalar sequence between normalized vectors.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. Lemma `Lem1`
+only supplies linear independence for all sufficiently large lengths, so the
+scalar-normalization argument must tolerate replacing a lengthwise identity by
+an eventual one. -/
+lemma tendsto_norm_scalar_of_eventually_tendsto_norm_one
+    {E : ℕ → Type*} [∀ N, NormedAddCommGroup (E N)] [∀ N, NormedSpace ℂ (E N)]
+    (x y : (N : ℕ) → E N) (c : ℕ → ℂ)
+    (hxy : ∀ᶠ N in atTop, x N = c N • y N)
+    (hx_norm : Tendsto (fun N : ℕ => ‖x N‖) atTop (nhds (1 : ℝ)))
+    (hy_norm : Tendsto (fun N : ℕ => ‖y N‖) atTop (nhds (1 : ℝ))) :
+    Tendsto (fun N : ℕ => ‖c N‖) atTop (nhds (1 : ℝ)) := by
+  have hRatio :
+      Tendsto (fun N : ℕ => ‖x N‖ / ‖y N‖) atTop (nhds (1 : ℝ)) := by
+    simpa using hx_norm.div hy_norm one_ne_zero
+  have hy_norm_ne : ∀ᶠ N in atTop, ‖y N‖ ≠ (0 : ℝ) :=
+    hy_norm.eventually_ne one_ne_zero
+  have hRatio_eq : (fun N : ℕ => ‖x N‖ / ‖y N‖) =ᶠ[atTop] fun N : ℕ => ‖c N‖ := by
+    filter_upwards [hxy, hy_norm_ne] with N hN hN_ne
+    rw [hN, norm_smul]
+    exact mul_div_cancel_right₀ (‖c N‖) hN_ne
+  exact Tendsto.congr' hRatio_eq hRatio
+
 -- The two scalar-convergence statements below are named separately because
 -- issue #1563 uses them as analytic steps in the CPSV16 lines 1170--1192
 -- block-selection contradiction.
@@ -308,6 +332,55 @@ lemma tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
         ((ν ^ N)⁻¹ •
           (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
   rw [hState N]
+  rw [smul_smul, smul_smul]
+  congr 1
+  exact adjusted_scalar_factor_eq (c N) μ ν N hμ hν
+
+/-- **Eventual norm convergence for the adjusted proportional scalar.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. In the
+tail-reduction stage only sufficiently large lengths remain after applying
+Lemma `Lem1`. The same dominant-weight normalization therefore yields modulus
+convergence for the adjusted scalar from an eventual weighted-state identity. -/
+lemma tendsto_norm_adjusted_weighted_mpvState_scalar_of_eventually_tendsto_norm_one
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (μ ν : ℂ)
+    (hμ : μ ≠ 0) (hν : ν ≠ 0)
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
+    (hA_norm : Tendsto
+      (fun N : ℕ =>
+        ‖(μ ^ N)⁻¹ •
+          (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
+      atTop (nhds (1 : ℝ)))
+    (hB_norm : Tendsto
+      (fun N : ℕ =>
+        ‖(ν ^ N)⁻¹ •
+          (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
+      atTop (nhds (1 : ℝ))) :
+    Tendsto (fun N : ℕ => ‖c N * (ν / μ) ^ N‖) atTop (nhds (1 : ℝ)) := by
+  refine tendsto_norm_scalar_of_eventually_tendsto_norm_one
+    (fun N : ℕ =>
+      (μ ^ N)⁻¹ •
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N))
+    (fun N : ℕ =>
+      (ν ^ N)⁻¹ •
+        (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
+    (fun N : ℕ => c N * (ν / μ) ^ N) ?_ hA_norm hB_norm
+  refine hState.mono ?_
+  intro N hN
+  change
+    (μ ^ N)⁻¹ •
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+      (c N * (ν / μ) ^ N) •
+        ((ν ^ N)⁻¹ •
+          (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
+  rw [hN]
   rw [smul_smul, smul_smul]
   congr 1
   exact adjusted_scalar_factor_eq (c N) μ ν N hμ hν
