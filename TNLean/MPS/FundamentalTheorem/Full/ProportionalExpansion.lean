@@ -668,14 +668,19 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
       (fun k : Fin nB => B (b0.succAbove k))
       c hc hTailReindex
 
-/-- **Eventual proportionality of tails from phase substitution and Lemma `Lem1`.**
+/-- **Conditional tail proportionality from phase substitution and Lemma `Lem1`.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. Once a selected non-decaying block pair has been converted into a
 phase relation, Lemma `Lem1` gives eventual linear independence for the family
 obtained by replacing the selected block by its phase-matched partner. This
 lemma packages the resulting coefficient extraction, selected-summand
-subtraction, and arbitrary-tail reindexing. -/
+subtraction, and arbitrary-tail reindexing.
+
+This is conditional bookkeeping: the eventual linear-independence hypothesis is
+not a global consequence of the BNT hypotheses for an arbitrary remaining
+family.  In the proof of Theorem `thm1` it must be supplied by the fixed-block
+application of Lemma `Lem1` at the current peeling step. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li
     {d nA nB : ℕ}
     {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}

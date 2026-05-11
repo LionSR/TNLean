@@ -25,7 +25,7 @@ namespace MPSTensor
 
 section ProportionalExpansionLeft
 
-/-- **Eventual proportionality of tails from the left phase-substituted family.**
+/-- **Conditional tail proportionality from the left phase-substituted family.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. This is the symmetric bookkeeping form of
@@ -33,7 +33,12 @@ Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 eventual linear-independence input is taken for the family consisting of all
 `B`-blocks together with the remaining `A`-blocks. The phase is assumed
 nonzero so that the selected `A`-summand can be rewritten in terms of the
-selected `B`-summand before coefficient extraction. -/
+selected `B`-summand before coefficient extraction.
+
+This is conditional bookkeeping: the eventual linear-independence hypothesis is
+not a global consequence of the BNT hypotheses for an arbitrary remaining
+family.  In the proof of Theorem `thm1` it must be supplied by the fixed-block
+application of Lemma `Lem1` at the current peeling step. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left
     {d nA nB : ℕ}
     {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}

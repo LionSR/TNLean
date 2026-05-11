@@ -360,12 +360,17 @@ with an extra $Z$-gauge degree of freedom.
 	\leanok
 	\uses{lem:selected_weighted_summand_from_phase_sum_li,
 		lem:eventual_proportional_weighted_tail_succAbove_package}
-	Suppose the total weighted state sums are eventually related by a nonzero
+	This is a conditional bookkeeping lemma.  Suppose the total weighted state
+	sums are eventually related by a nonzero
 	scalar sequence.  If a selected pair satisfies
 	\(\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}\) for every \(N\),
 	and the family consisting of all \(A\)-blocks together with the remaining
 	\(B\)-blocks is eventually linearly independent, then the two complements,
 	reindexed by the insertion maps, are eventually nonzero proportional.
+	The linear-independence hypothesis is not a global consequence of the BNT
+	hypotheses for an arbitrary remaining family; in the proof of the theorem
+	it must be supplied by the fixed-block application of Lemma
+	\texttt{Lem1} at the current peeling step.
 	This combines \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} and
 	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} at the recursive
 	peeling point of
@@ -385,13 +390,18 @@ with an extra $Z$-gauge degree of freedom.
 	\leanok
 	\uses{lem:selected_coefficient_from_two_family_linear_independence,
 		lem:eventual_proportional_weighted_tail_succAbove_package}
-	Suppose the total weighted state sums are eventually related by a nonzero
+	This is a conditional bookkeeping lemma.  Suppose the total weighted state
+	sums are eventually related by a nonzero
 	scalar sequence, and suppose
 	\(\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}\) for every \(N\),
 	with \(\zeta\ne 0\).  If the family consisting of all \(B\)-blocks together
 	with the remaining \(A\)-blocks is eventually linearly independent, then the
 	two complements, reindexed by the insertion maps, are eventually nonzero
 	proportional.
+	The linear-independence hypothesis is not a global consequence of the BNT
+	hypotheses for an arbitrary remaining family; in the proof of the theorem
+	it must be supplied by the fixed-block application of Lemma
+	\texttt{Lem1} at the current peeling step.
 	This is the same recursive peeling step with the linearly independent
 	family ordered as all \(B\)-blocks together with the remaining
 	\(A\)-blocks; it is used for the symmetric half of
