@@ -120,28 +120,6 @@ theorem fundamentalTheorem_equalMPV_CFBNT_explicit
   fundamentalTheorem_canonicalForm_explicit μ A B hA.toIsCanonicalForm hA.mu_strict_anti
     hB.block_injective hB.leftCanonical hSame
 
-/-! ## Conclusion type for block-permutation/gauge witnesses
-
-The proportional-MPV fundamental theorem is not restated in this file.  The
-following abbreviation names only the conclusion shape used by downstream
-assembly steps: a permutation of block indices, matching bond dimensions, and
-per-block gauge-phase equivalences.
--/
-
-/-- Conclusion type for block-permutation and gauge-phase matching. -/
-abbrev BlockPermutationGaugeWitness
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
-  ∃ _h : rA = rB,
-    ∃ perm : Fin rA ≃ Fin rB,
-      ∀ j : Fin rA,
-        ∃ hdim : dimA j = dimB (perm j),
-          GaugePhaseEquiv (d := d)
-            (cast (congr_arg (MPSTensor d) hdim) (A j))
-            (B (perm j))
-
 /-! ## Theorem 3: Equal MPVs imply proportional MPVs -/
 
 /-- **Equal MPVs imply proportional MPVs** (trivially, with proportionality constant `1`).
