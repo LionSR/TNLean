@@ -62,6 +62,102 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_dominant
   rw [div_pow]
   field_simp [pow_ne_zero N hμ0]
 
+/-- **Phase-normalized dominant inner-product concentration.**
+
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After
+Corollary eqV supplies a phase relation
+\(|V^{(N)}(B_{k_0})\rangle = \zeta^N |V^{(N)}(A_0)\rangle\), the weighted
+projection of the \(B\)-family against \(A_0\) is normalized by the combined
+weight \((\mu_{k_0}\zeta)^N\). Under strict dominance of \(\mu_{k_0}\) and
+decay of the remaining projected overlaps, the normalized projection tends to
+one. -/
+lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_dominant
+    {d r D₀ : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ} {ζ : ℂ}
+    (A₀ : MPSTensor d D₀)
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (k₀ : Fin r) (hμ0 : μ k₀ ≠ 0) (hζ : ‖ζ‖ = 1)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B k₀) N = ζ ^ N • mpvState (d := d) A₀ N)
+    (hdiag :
+      Tendsto (fun N => mpvInner (d := d) A₀ A₀ N) atTop (nhds 1))
+    (hoff : ∀ k : Fin r, k ≠ k₀ →
+      Tendsto (fun N => mpvInner (d := d) A₀ (B k) N) atTop (nhds 0))
+    (hratio : ∀ k : Fin r, k ≠ k₀ → ‖μ k / μ k₀‖ < 1) :
+    Tendsto
+      (fun N : ℕ =>
+        ((μ k₀ * ζ) ^ N)⁻¹ *
+          (∑ k : Fin r, (μ k) ^ N * mpvInner (d := d) A₀ (B k) N))
+      atTop (nhds 1) := by
+  classical
+  have hζ_ne : ζ ≠ 0 := by
+    intro hzero
+    have : ‖ζ‖ = 0 := by simp [hzero]
+    linarith
+  have hμζ_ne : μ k₀ * ζ ≠ 0 := mul_ne_zero hμ0 hζ_ne
+  have hterms : ∀ k : Fin r,
+      Tendsto
+        (fun N : ℕ =>
+          (μ k / (μ k₀ * ζ)) ^ N * mpvInner (d := d) A₀ (B k) N)
+        atTop (nhds (if k = k₀ then (1 : ℂ) else 0)) := by
+    intro k
+    by_cases hk : k = k₀
+    · subst k
+      have hdiag_phase :
+          Tendsto
+            (fun N : ℕ =>
+              (μ k₀ / (μ k₀ * ζ)) ^ N * mpvInner (d := d) A₀ (B k₀) N)
+            atTop (nhds 1) := by
+        refine Tendsto.congr' ?_ hdiag
+        filter_upwards with N
+        have hinner :
+            mpvInner (d := d) A₀ (B k₀) N =
+              ζ ^ N * mpvInner (d := d) A₀ A₀ N := by
+          dsimp [mpvInner]
+          rw [hPhase N]
+          simp [inner_smul_right]
+        rw [hinner]
+        have hcancel : (μ k₀ / (μ k₀ * ζ)) ^ N * ζ ^ N = 1 := by
+          rw [← mul_pow]
+          field_simp [hμ0, hζ_ne]
+          simp
+        symm
+        calc
+          (μ k₀ / (μ k₀ * ζ)) ^ N *
+              (ζ ^ N * mpvInner (d := d) A₀ A₀ N) =
+              ((μ k₀ / (μ k₀ * ζ)) ^ N * ζ ^ N) *
+                mpvInner (d := d) A₀ A₀ N := by ring
+          _ = mpvInner (d := d) A₀ A₀ N := by simp [hcancel]
+      simpa using hdiag_phase
+    · have hratio_phase : ‖μ k / (μ k₀ * ζ)‖ < 1 := by
+        rw [norm_div, norm_mul, hζ, mul_one]
+        simpa [norm_div] using hratio k hk
+      simpa [hk] using
+        bounded_mul_tendsto_zero
+          (μ k / (μ k₀ * ζ))
+          (fun N : ℕ => mpvInner (d := d) A₀ (B k) N)
+          (le_of_lt hratio_phase) (hoff k hk)
+  have hsum :
+      Tendsto
+        (fun N : ℕ =>
+          ∑ k : Fin r,
+            (μ k / (μ k₀ * ζ)) ^ N * mpvInner (d := d) A₀ (B k) N)
+        atTop (nhds (∑ k : Fin r, if k = k₀ then (1 : ℂ) else 0)) := by
+    exact tendsto_finset_sum Finset.univ (fun k _ => hterms k)
+  have hsum_one :
+      Tendsto
+        (fun N : ℕ =>
+          ∑ k : Fin r,
+            (μ k / (μ k₀ * ζ)) ^ N * mpvInner (d := d) A₀ (B k) N)
+        atTop (nhds 1) := by
+    simpa using hsum
+  convert hsum_one using 1
+  ext N
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k _
+  rw [div_pow]
+  field_simp [pow_ne_zero N hμζ_ne]
+
 /-- **Leading BNT normalized inner-product concentration.**
 
 Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This is
@@ -104,6 +200,88 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
   simpa [j₀] using
     tendsto_normalized_weighted_mpvInner_sum_of_dominant
       A j₀ hμ0 hdiag hoff hratio
+
+/-- **Leading phase-normalized BNT inner-product concentration.**
+
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This is
+the phase-normalized projection estimate specialized to a leading \(B\)-block
+which Corollary eqV has identified with the leading \(A\)-block up to the phase
+\(\zeta^N\). The strict BNT ordering supplies dominance of the leading
+\(B\)-weight, while BNT separation makes the remaining projected overlaps
+vanish.
+
+**Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
+selects one BNT representative in each sector. The general CPSV16 BNT
+canonical form allows multiplicities inside a sector. This restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ} {ζ : ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hζ : ‖ζ‖ = 1)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N =
+        ζ ^ N • mpvState (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) N) :
+    Tendsto
+      (fun N : ℕ =>
+        ((μB ⟨0, Nat.pos_of_ne_zero hrB⟩ * ζ) ^ N)⁻¹ *
+          (∑ k : Fin rB,
+            (μB k) ^ N *
+              mpvInner (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k) N))
+      atTop (nhds 1) := by
+  let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
+  let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
+  have hζ_ne : ζ ≠ 0 := by
+    intro hzero
+    have : ‖ζ‖ = 0 := by simp [hzero]
+    linarith
+  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
+  have hdiag :
+      Tendsto (fun N => mpvInner (d := d) (A a0) (A a0) N) atTop (nhds 1) :=
+    tendsto_inner_one (A a0) (hA.toHasNormalizedSelfOverlap.overlap_tendsto_one a0)
+  have hoff : ∀ k : Fin rB, k ≠ b0 →
+      Tendsto (fun N => mpvInner (d := d) (A a0) (B k) N) atTop (nhds 0) := by
+    intro k hk
+    have hB_inner :
+        Tendsto (fun N => mpvInner (d := d) (B b0) (B k) N) atTop (nhds 0) :=
+      tendsto_inner_zero (B b0) (B k)
+        (hB.cross_overlap_tendsto_zero b0 k (fun h => hk h.symm))
+    have hscale :
+        Tendsto
+          (fun N : ℕ => ((star ζ)⁻¹) ^ N * mpvInner (d := d) (B b0) (B k) N)
+          atTop (nhds 0) := by
+      refine bounded_mul_tendsto_zero ((star ζ)⁻¹)
+        (fun N : ℕ => mpvInner (d := d) (B b0) (B k) N) ?_ hB_inner
+      rw [norm_inv, norm_star, hζ]
+      simp
+    refine Tendsto.congr' ?_ hscale
+    filter_upwards with N
+    have hA_eq :
+        mpvState (d := d) (A a0) N =
+          (ζ ^ N)⁻¹ • mpvState (d := d) (B b0) N := by
+      rw [hPhase N]
+      rw [smul_smul]
+      rw [inv_mul_cancel₀ (pow_ne_zero N hζ_ne), one_smul]
+    dsimp [mpvInner]
+    rw [hA_eq]
+    simp [inner_smul_left, inv_pow]
+  have hratio : ∀ k : Fin rB, k ≠ b0 → ‖μB k / μB b0‖ < 1 := by
+    intro k hk
+    rw [norm_div]
+    exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
+      (hB.mu_strict_anti (by
+        simp only [b0, Fin.lt_def]
+        exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h))))
+  simpa [a0, b0] using
+    tendsto_phase_normalized_weighted_mpvInner_sum_of_dominant
+      (A a0) B b0 hμB_ne hζ (by simpa [a0, b0] using hPhase)
+      hdiag hoff hratio
 
 /-- **Dominant-block projection contradiction for proportional BNT families.**
 
