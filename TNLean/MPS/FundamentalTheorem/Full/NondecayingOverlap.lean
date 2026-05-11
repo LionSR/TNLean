@@ -732,6 +732,60 @@ lemma eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_C
       A Bsingle hA_self hA_cross hBsingle_self hBsingle_cross hAB
   simpa [Bsingle] using hLI
 
+/-- **Symmetric fixed-block Lemma `Lem1` input for the proportional BNT theorem.**
+
+Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, lines
+1182--1185. The proof of Theorem `thm1` repeats the fixed-block argument with
+the two tensor families interchanged. If one fixes a block `A_j` and assumes
+that all overlaps with the `B_k` tend to zero, Corollary `Lem1` gives linear
+independence, for all sufficiently large lengths, of the combined family
+consisting of all `B_k` and this one fixed block `A_j`. -/
+lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (j₀ : Fin rA)
+    (hAllDecay : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
+    ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun k : Fin rB => mpvState (d := d) (B k) N)
+          (fun _ : Fin 1 => mpvState (d := d) (A j₀) N)) := by
+  classical
+  let dimAsingle : Fin 1 → ℕ := fun _ => dimA j₀
+  let Asingle : (j : Fin 1) → MPSTensor d (dimAsingle j) := fun _ => A j₀
+  have hB_self : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
+    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hB_cross : ∀ i j : Fin rB, i ≠ j →
+      Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0) :=
+    hB.cross_overlap_tendsto_zero
+  have hAsingle_self : ∀ j : Fin 1,
+      Tendsto (fun N => mpvOverlap (d := d) (Asingle j) (Asingle j) N) atTop
+        (nhds 1) := by
+    intro j
+    simpa [Asingle] using hA.toHasNormalizedSelfOverlap.overlap_tendsto_one j₀
+  have hAsingle_cross : ∀ j₁ j₂ : Fin 1, j₁ ≠ j₂ →
+      Tendsto (fun N => mpvOverlap (d := d) (Asingle j₁) (Asingle j₂) N)
+        atTop (nhds 0) := by
+    intro j₁ j₂ hj
+    exact (hj (Subsingleton.elim j₁ j₂)).elim
+  have hBA : ∀ k : Fin rB, ∀ j : Fin 1,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (Asingle j) N) atTop
+        (nhds 0) := by
+    intro k j
+    simpa [Asingle] using tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
+  have hLI :=
+    eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
+      B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
+  simpa [Asingle] using hLI
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
