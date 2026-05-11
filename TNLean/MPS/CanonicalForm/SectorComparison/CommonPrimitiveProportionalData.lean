@@ -283,8 +283,10 @@ The common cyclic-sector family can contain several sectors from the same origin
 the same transported weight.  This structure collects the representative-sector hypotheses:
 one representative per original nonzero block, strict ordering of the representative weights,
 BNT separation among representatives, the length-zero identity for the representative nonzero
-parts, one-site injectivity, and proportional decomposition data for the two representative
-families. -/
+parts, one-site injectivity, the proportional comparison conclusion for the representative
+block families, and proportional decomposition data for those families.  These are the
+representative-sector inputs for the CPSV16 canonical-form comparison after the decomposition
+displayed in arXiv:1606.00608, around equation `eq:II_CF1`. -/
 structure CommonRepresentativeBNTCoverHypotheses
     {d p rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {blocksA : (k : Fin rA) → MPSTensor d (dimA k)}
