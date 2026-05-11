@@ -40,8 +40,8 @@ and small overlap/inner-product auxiliary lemmas live in
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled
   pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
-* Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
-  arXiv:1606.00608 (2017).
+* Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
+  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017).
 
 ## Tags
 

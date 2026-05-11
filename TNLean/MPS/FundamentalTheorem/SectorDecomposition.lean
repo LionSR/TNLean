@@ -22,8 +22,9 @@ needed to match sectors up to permutation and nonzero phase factors.
 
 - [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac, *Matrix Product State Representations*,
   Quantum Inf. Comput. 7 (2007), arXiv:quant-ph/0608197.
-- [CPSV17] Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
-  arXiv:1606.00608 (2017).
+- [CPSV17] Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density
+  Operators: Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608
+  (2017).
 - [CPSV21] Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected
   entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021),
   arXiv:2011.12127.
