@@ -1,5 +1,4 @@
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.BNT.Basic
 import TNLean.Spectral.SpectralGapRect
 import TNLean.Spectral.SpectralGapNT
@@ -122,8 +121,16 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal C h_self h_cross
   refine hLI.mono ?_
   intro N hN
-  convert hN with x
-  cases x <;> rfl
+  have key :
+      (fun x : Sum (Fin gA) (Fin gB) =>
+        match x with
+        | Sum.inl j => mpvState (d := d) (A j) N
+        | Sum.inr k => mpvState (d := d) (B k) N) =
+        fun x => mpvState (d := d) (C x) N := by
+    funext x
+    cases x <;> rfl
+  rw [key]
+  exact hN
 
 /--
 **Key step of Theorem 4.4 (paper route).**
