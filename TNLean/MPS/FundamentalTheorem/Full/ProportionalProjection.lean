@@ -7,7 +7,7 @@ import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
 /-!
 # Adjusted scalar projections for proportional BNT expansions
 
-This module packages the scalar-norm and projection identities obtained from
+This module records the scalar-norm and projection identities obtained from
 eventual proportionality of assembled BNT block tensors. It deliberately stops
 before any fixed-block coefficient isolation or tail linear-independence
 argument.
@@ -33,7 +33,7 @@ block-selection argument, one first obtains an eventual scalar sequence relating
 the assembled weighted MPV sums, then divides by selected nonzero weights, and
 then projects against a fixed block. If the two normalized weighted state sums
 have norms tending to one, the same scalar sequence also has adjusted modulus
-tending to one. This lemma packages exactly these two consequences; it does
+tending to one. This lemma records exactly these two consequences; it does
 not assert any fixed-block coefficient identity or any linear independence of
 the remaining tail. -/
 lemma exists_adjusted_scalar_norm_and_inner_sequence_of_eventuallyNonzeroProportionalMPV₂
