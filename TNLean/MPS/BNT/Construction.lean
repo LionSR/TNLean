@@ -546,7 +546,7 @@ Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.  The source proves
 this conclusion from canonical-form BNT data and proportional MPV families.  This
 abbreviation records only the conclusion, not a theorem asserting it from extra
 coefficient-array hypotheses. -/
-abbrev ProportionalDecompositionConclusion
+abbrev BlockPermutationGaugePhaseConclusion
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : (j : Fin rA) → MPSTensor d (dimA j))

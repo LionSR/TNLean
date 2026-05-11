@@ -148,13 +148,13 @@ common phase cover consists of a common family of nonzero blocks, surjective map
 from the two block families onto that common family, and phase equivalences between
 each block and its common representative. Such data imply that, for every system
 size, the spans of the two nonzero-block MPV families are equal. When a BNT
-proportional-decomposition comparison has already produced a permutation, matched
+block-permutation gauge-phase comparison has already produced a permutation, matched
 bond dimensions, and gauge phases, the formal construction gives the common phase
 cover from that comparison and then obtains the span equality needed by the sector
 comparison theorem.\footnote{See
 \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex:755--923}. The corresponding formal
 objects include the common phase-cover structure and span lemmas, the block-span
-and common-phase-cover overlap-span adapters, and the proportional-decomposition
+and common-phase-cover overlap-span adapters, and the block-permutation gauge-phase
 specialization. They are located at
 \path{TNLean/MPS/CanonicalForm/PhaseCover.lean},
 \path{TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean}, and
@@ -162,7 +162,7 @@ specialization. They are located at
 the main adapter names have prefix
 \texttt{MPSTensor.exists\_bnt\_sectorDecomp\_pair\_with\_overlapSpan\_of\_}
 and suffixes \texttt{block\_span\_eq}, \texttt{commonPhaseCover}, and
-\texttt{proportionalDecompositionConclusion}.}
+\texttt{blockPermutationGaugePhaseConclusion}.}
 These lemmas state precisely what comparison data are needed; they do not by
 themselves derive all of that data from an arbitrary equality of total MPV
 families.
@@ -175,7 +175,7 @@ zero-tail convention determines what is known at length zero after each blocking
 The common blocking construction determines the physical alphabet and the relabeled
 sector families to which the later comparison must apply. The injectivity
 refinement may further change the final block length before the overlap-rigidity
-hypotheses are available. The common phase-cover or BNT proportional-decomposition
+hypotheses are available. The common phase-cover or BNT block-permutation gauge-phase
 data then have to be constructed for those final nonzero-sector families, not for
 an earlier family before relabeling or before injectivity blocking.
 

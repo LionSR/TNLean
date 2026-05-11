@@ -312,12 +312,12 @@ lemma to_overlapSpan (M : SectorBasisPreMatching P Q)
 
 end SectorBasisPreMatching
 
-/-- A proportional-decomposition BNT comparison conclusion produces a common MPV phase cover. -/
-lemma nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
+/-- A BNT block-permutation gauge-phase conclusion produces a common MPV phase cover. -/
+lemma nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    (h : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
     Nonempty (MPVCommonPhaseCover blocksA blocksB) := by
   rcases h with ⟨_hcount, perm, hmatch⟩
   refine ⟨?_⟩
@@ -348,8 +348,8 @@ lemma nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
 /-- A bijective MPV-phase matching gives a common MPV phase cover.
 
 This is the direct implication used when a comparison theorem has already identified
-the phase classes by a bijection, without restating the data as a proportional
-decomposition conclusion. -/
+the phase classes by a bijection, without restating the data as a block-permutation
+gauge-phase conclusion. -/
 lemma nonempty_mpvCommonPhaseCover_of_equiv_phase
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
@@ -380,19 +380,19 @@ lemma nonempty_mpvCommonPhaseCover_of_equiv_phase
   · intro j
     exact ⟨e j, by simp⟩
 
-/-- A BNT proportional-decomposition conclusion gives finite-length MPV span equality.
+/-- A BNT block-permutation gauge-phase conclusion gives finite-length MPV span equality.
 
 The conclusion is obtained by taking the left family as the common MPV phase-cover family and
 then applying the common phase-cover span lemma. -/
-lemma mpv_span_eq_of_proportionalDecompositionConclusion
+lemma mpv_span_eq_of_blockPermutationGaugePhaseConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (blocksA : (j : Fin rA) → MPSTensor d (dimA j))
     (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB)
+    (h : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB)
     (N : ℕ) :
     Submodule.span ℂ (Set.range (fun j : Fin rA => mpvState (d := d) (blocksA j) N)) =
     Submodule.span ℂ (Set.range (fun k : Fin rB => mpvState (d := d) (blocksB k) N)) := by
-  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
+  obtain ⟨cover⟩ := nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion
     (d := d) blocksA blocksB h
   exact cover.span_eq N
 

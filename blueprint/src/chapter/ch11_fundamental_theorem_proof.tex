@@ -628,7 +628,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{lemma}[Common phase cover from a BNT block-matching conclusion]%
 \label{lem:common_phase_cover_of_proportional_decomposition}
-	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion}
 	\leanok
 	\uses{def:mpv_common_phase_cover}
 	If a BNT block-matching comparison has produced a permutation of
@@ -673,7 +673,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{lemma}[Span equality from a BNT block-matching comparison]%
 \label{lem:nonzero_block_span_eq_of_proportional_decomposition}
-	\lean{MPSTensor.mpv_span_eq_of_proportionalDecompositionConclusion}
+	\lean{MPSTensor.mpv_span_eq_of_blockPermutationGaugePhaseConclusion}
 	\leanok
 	\uses{lem:common_phase_cover_of_proportional_decomposition,
 		lem:mpv_common_phase_cover_span_eq}

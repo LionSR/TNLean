@@ -49,7 +49,7 @@ The supporting modules are:
 * `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
   comparisons from block-span, phase-cover, and proportional data.
 * `TNLean.MPS.CanonicalForm.SectorComparison.ProportionalComparison` — sector comparison
-  from BNT proportional-decomposition data.
+  from BNT block-permutation gauge-phase data.
 
 ## Main statements
 

@@ -114,8 +114,8 @@ lemma mpvState_eq_sum_of_decomp
     {d g Dtot : ℕ} {dim : Fin g → ℕ}
     (A_total : MPSTensor d Dtot)
     (A : (j : Fin g) → MPSTensor d (dim j))
-    (c : Fin g → ℂ)
     {N : ℕ}
+    (c : Fin g → ℂ)
     (hdecomp : ∀ σ : Fin N → Fin d,
       mpv A_total σ = ∑ j : Fin g, c j * mpv (A j) σ) :
     mpvState (d := d) A_total N =
@@ -144,7 +144,7 @@ lemma mpvInner_eq_sum_of_decomp_right
     mpvInner (d := d) X A_total N =
       ∑ j : Fin g, c j * mpvInner (d := d) X (A j) N := by
   have hstate :=
-    mpvState_eq_sum_of_decomp (d := d) A_total A c (N := N) hdecomp
+    mpvState_eq_sum_of_decomp (d := d) A_total A (N := N) c hdecomp
   rw [mpvInner, hstate]
   simp only [mpvInner, inner_sum, inner_smul_right]
 
@@ -166,7 +166,7 @@ lemma mpvInner_eq_sum_of_decomp_left
     mpvInner (d := d) A_total X N =
       ∑ j : Fin g, mpvInner (d := d) (A j) X N * star (c j) := by
   have hstate :=
-    mpvState_eq_sum_of_decomp (d := d) A_total A c (N := N) hdecomp
+    mpvState_eq_sum_of_decomp (d := d) A_total A (N := N) c hdecomp
   rw [mpvInner, hstate, sum_inner]
   refine Finset.sum_congr rfl ?_
   intro j _

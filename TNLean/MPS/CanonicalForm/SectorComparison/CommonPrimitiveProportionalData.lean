@@ -143,7 +143,7 @@ structure CommonPrimitiveProportionalHypotheses
   /-- The right nonzero-sector blocks are one-site injective. -/
   right_injective : ∀ x : Fin rB, IsInjective (blocksB x)
   /-- The two nonzero-sector block families satisfy the BNT block-matching conclusion. -/
-  proportional : ProportionalDecompositionConclusion (d := blockPhysDim d p) blocksA blocksB
+  block_match : BlockPermutationGaugePhaseConclusion (d := blockPhysDim d p) blocksA blocksB
 
 namespace CommonPrimitiveProportionalHypotheses
 
@@ -158,8 +158,8 @@ theorem toPhaseCoverHypotheses
   zeroTail_eq := h.zeroTail_eq
   left_injective := h.left_injective
   right_injective := h.right_injective
-  cover := nonempty_mpvCommonPhaseCover_of_proportionalDecompositionConclusion
-    (d := blockPhysDim d p) blocksA blocksB h.proportional
+  cover := nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion
+    (d := blockPhysDim d p) blocksA blocksB h.block_match
 
 /-- A BNT block-matching comparison gives the corresponding span hypotheses. -/
 theorem toSpanHypotheses
@@ -187,11 +187,11 @@ private theorem mpv_toTensorFromBlocks_zero_eq_sum_dim
   simp [mpv, coeff, Matrix.trace_one]
 
 /-- A BNT block matching identifies the total nonzero bond dimensions. -/
-private theorem sum_dim_eq_of_proportionalDecompositionConclusion
+private theorem sum_dim_eq_of_blockPermutationGaugePhaseConclusion
     {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {blocksA : (x : Fin rA) → MPSTensor d (dimA x)}
     {blocksB : (x : Fin rB) → MPSTensor d (dimB x)}
-    (hMatch : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    (hMatch : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
     (∑ x : Fin rA, (dimA x : ℂ)) = ∑ y : Fin rB, (dimB y : ℂ) := by
   rcases hMatch with ⟨_, perm, hmatch⟩
   calc
@@ -211,7 +211,7 @@ private theorem sum_dim_eq_of_proportionalDecompositionConclusion
 The structural theorem already supplies the length-zero equation for the two zero-tail plus
 nonzero-sector decompositions. A BNT block-matching conclusion matches the nonzero blocks by
 a permutation with equal bond dimensions, so the nonzero length-zero contributions cancel. -/
-theorem zeroTail_eq_of_proportionalDecompositionConclusion
+theorem zeroTail_eq_of_blockPermutationGaugePhaseConclusion
     {d rA rB zeroTailA zeroTailB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
@@ -220,11 +220,11 @@ theorem zeroTail_eq_of_proportionalDecompositionConclusion
     (hZero : ∀ σ : Fin 0 → Fin d,
       (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
         (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
-    (hMatch : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    (hMatch : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
     zeroTailA = zeroTailB := by
   let σ : Fin 0 → Fin d := Fin.elim0
   have hsum :=
-    sum_dim_eq_of_proportionalDecompositionConclusion
+    sum_dim_eq_of_blockPermutationGaugePhaseConclusion
       (d := d) (blocksA := blocksA) (blocksB := blocksB) hMatch
   have hzero := hZero σ
   rw [mpv_toTensorFromBlocks_zero_eq_sum_dim μA blocksA σ,
@@ -238,7 +238,7 @@ theorem zeroTail_eq_of_proportionalDecompositionConclusion
 
 /-! ### Per-block to global proportional gauge
 
-The per-block matchers from `ProportionalDecompositionConclusion` produce, for every
+The per-block matchers from `BlockPermutationGaugePhaseConclusion` produce, for every
 block index `k`, a dimension equality, an invertible matrix `X_k`, and a phase
 `ζ_k ≠ 0` with `B (perm k) i = ζ_k • X_k * (cast (A k)) i * X_k⁻¹`.  The records
 below package the permutation, per-block dimension equalities, gauge matrices
@@ -246,7 +246,7 @@ below package the permutation, per-block dimension equalities, gauge matrices
 `X_k` into a block-diagonal element of `GL`, the global proportionality matrix
 from arXiv:1606.00608, lines 1155–1192 (Corollary II.2, `eq:II:A=XAX`). -/
 
-/-- Per-block gauge-phase data attached to a `ProportionalDecompositionConclusion`.
+/-- Per-block gauge-phase data attached to a `BlockPermutationGaugePhaseConclusion`.
 
 This is the structural record realizing arXiv:1606.00608, lines 1155–1192
 (Corollary II.2, eq. `eq:II:A=XAX`): a permutation matching the block indices,
@@ -281,9 +281,9 @@ variable {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
 variable {blocksA : (j : Fin rA) → MPSTensor d (dimA j)}
 variable {blocksB : (k : Fin rB) → MPSTensor d (dimB k)}
 
-/-- Extract per-block gauge-phase data from a `ProportionalDecompositionConclusion`. -/
+/-- Extract per-block gauge-phase data from a `BlockPermutationGaugePhaseConclusion`. -/
 noncomputable def ofConclusion
-    (h : ProportionalDecompositionConclusion (d := d) blocksA blocksB) :
+    (h : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
     BlockProportionalGaugePhaseData blocksA blocksB :=
   let perm := h.choose_spec.choose
   let hperm := h.choose_spec.choose_spec
