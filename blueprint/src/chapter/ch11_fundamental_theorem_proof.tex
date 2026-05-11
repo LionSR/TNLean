@@ -46,6 +46,23 @@ with an extra $Z$-gauge degree of freedom.
 	length \(N\).
 \end{proof}
 
+\begin{lemma}[A nonzero scalar sequence for proportional weighted states]%
+\label{lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_states}
+	Under the hypotheses of
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, one may
+	choose the proportionality scalars simultaneously as a sequence
+	\((c_N)_{N\ge 0}\), with \(c_N\ne 0\) for every \(N\), such that the
+	weighted state identity holds for every length.
+\end{lemma}
+
+\begin{proof}\leanok
+	Choose, for each length, one nonzero scalar supplied by
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
@@ -68,6 +85,23 @@ with an extra $Z$-gauge degree of freedom.
 	Apply the inner product with \(V^{(N)}(X)\) to the weighted state identity
 	of Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, and use
 	linearity in the second argument.
+\end{proof}
+
+\begin{lemma}[A nonzero scalar sequence for proportional weighted projections]%
+\label{lem:proportional_tensor_from_blocks_weighted_inner_sequence}
+	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence,
+		def:mpv_inner}
+	Under the hypotheses of
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}, for each
+	fixed tensor \(X\) the same sequence \((c_N)_{N\ge 0}\) relates the
+	weighted projections against \(V^{(N)}(X)\) at every length.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the inner product with \(V^{(N)}(X)\) to the weighted state identity
+	for the chosen scalar sequence.
 \end{proof}
 
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%

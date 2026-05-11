@@ -828,6 +828,35 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
     _ = c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
       rw [hBstate]
 
+/-- **A scalar sequence for proportional weighted MPV-state sums.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof uses
+one proportionality scalar at each chain length. This lemma packages those
+lengthwise scalars into a single nonzero sequence so that later convergence
+arguments can refer to the same scalar at each occurrence of the fixed length. -/
+lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ c : ℕ → ℂ, (∀ N, c N ≠ 0) ∧
+      ∀ N : ℕ,
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
+  classical
+  have h :
+      ∀ N : ℕ, ∃ c : ℂ, c ≠ 0 ∧
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) :=
+    fun N =>
+      exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+        A B hProp N
+  choose c hc hEq using h
+  exact ⟨c, hc, hEq⟩
+
 /-- **Weighted inner-product proportionality from proportional assembled block tensors.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
@@ -853,6 +882,35 @@ lemma exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromB
   refine ⟨c, hc, ?_⟩
   have hinner :=
     congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) hstate
+  simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+
+/-- **A scalar sequence for proportional weighted MPV projections.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+projection form of the previous scalar-sequence lemma: after projecting the
+weighted state sums against a fixed block MPV, the same nonzero scalar sequence
+relates the projected weighted sums at every length. -/
+lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (X : MPSTensor d D) :
+    ∃ c : ℕ → ℂ, (∀ N, c N ≠ 0) ∧
+      ∀ N : ℕ,
+        (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+          c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+  classical
+  obtain ⟨c, hc, hstate⟩ :=
+    exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+      A B hProp
+  refine ⟨c, hc, ?_⟩
+  intro N
+  have hinner :=
+    congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hstate N)
   simpa [mpvInner, inner_sum, inner_smul_right] using hinner
 
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
