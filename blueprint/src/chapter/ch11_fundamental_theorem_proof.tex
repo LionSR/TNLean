@@ -484,6 +484,36 @@ with an extra $Z$-gauge degree of freedom.
 	dominant term has norm tending to \(1\).
 \end{proof}
 
+\begin{lemma}[Dominant-weight normalized BNT projections concentrate]%
+\label{lem:dominant_weight_normalized_bnt_projection}
+	\lean{MPSTensor.tendsto_normalized_weighted_mpvInner_sum_of_dominant}
+	\lean{MPSTensor.tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT}
+	\leanok
+	\uses{def:mpv_inner}
+	Let \(A_j\) be a finite BNT family.  Fix a dominant weight
+	\(\mu_{j_0}\ne 0\), and assume that every other weight ratio satisfies
+	\(|\mu_j/\mu_{j_0}|<1\).  If the selected self-projection tends to \(1\)
+	and all off-diagonal projections from the selected block tend to \(0\),
+	then
+	\[
+		\mu_{j_0}^{-N}
+		\sum_j \mu_j^N
+		\langle V^{(N)}(A_{j_0}),V^{(N)}(A_j)\rangle
+		\longrightarrow 1 .
+	\]
+	In particular, this holds for the leading block of a one-copy BNT
+	canonical-form family.  \cite[Theorem~\texttt{thm1},
+	lines~1170--1192]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	After division by the dominant weight, the selected term has coefficient
+	one.  The selected self-projection tends to \(1\), and every other term is
+	a geometrically damped off-diagonal projection.  Summing these limits gives
+	the asserted concentration.  In the BNT-leading case, strict ordering of
+	the weight moduli supplies the geometric damping.
+\end{proof}
+
 \begin{lemma}[Norm convergence of the proportional scalar sequence]%
 \label{lem:proportional_tensor_from_blocks_scalar_norm}
 	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
