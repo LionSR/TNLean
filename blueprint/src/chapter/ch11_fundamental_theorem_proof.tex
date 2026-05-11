@@ -458,6 +458,23 @@ with an extra $Z$-gauge degree of freedom.
 	identities give the two dominant-block contradictions.
 \end{proof}
 
+\begin{lemma}[Leading-erased tails preserve restricted BNT canonical form]%
+\label{lem:cf_bnt_tail_succ}
+	\lean{MPSTensor.isCanonicalFormBNT_tail_succ}
+	\leanok
+	\uses{def:cf_bnt}
+	If a finite one-copy BNT canonical-form family has a leading block, then
+	after deleting that leading block and reindexing the remaining blocks by
+	\(j\mapsto j+1\), the tail is again a one-copy BNT canonical-form family.
+\end{lemma}
+
+\begin{proof}\leanok
+	Each blockwise hypothesis restricts to the subfamily.  Strict decrease of
+	the weights is preserved because the reindexing map \(j\mapsto j+1\) is
+	strictly monotone, and block separation is inherited from the original
+	family.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}
