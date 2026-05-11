@@ -791,7 +791,7 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
 
 Source: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the fixed-block
 cancellation step for the leading block of the `B`-family. In the
-one-copy-per-sector surface used here, the dominant projection argument already
+one-copy-per-sector setting, the dominant projection argument already
 rules out decay of all overlaps with that leading `B`-block under eventual
 nonzero proportionality of the total MPV families. -/
 lemma fixed_right_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
