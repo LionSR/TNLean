@@ -233,17 +233,12 @@ $N\le\max(r_{a,j},r_{b,j})$ used by the source separation lemma and by the
 
 \section{Cross-check with the blueprint}
 
-The blueprint statements of \texttt{lem:ft\_proportional} and
-\texttt{lem:ft\_proportional\_nt} carry the same convergence-and-nonzero-limit
-data as the formal structure, with the symbols $a_j^\infty,b_k^\infty,c^\infty$
-in place of \leanid{aLim}, \leanid{bLim}, \leanid{cLim}. The accompanying
-remark \texttt{rem:cf\_coeff\_arrays} in the Fundamental Theorem proof chapter
-acknowledges the strict-weight specialization $a_{N,j}=(\mu_j^A)^N$ and the
-more general sector arrays $c_{S,j}^{(N)}=\sum_q\mu_{j,q}^N$, but does not flag
-the restricted-specialization incompatibility described above. The remark
-\texttt{rem:normalcf\_bnt\_gap} in the BNT chapter discusses a different point
-(spectral versus algebraic normality of a single block), so it does not fill in
-the missing comparison.
+The blueprint entries that formerly paralleled this convergence-and-nonzero-limit
+surface have been demoted or removed from the source-labelled theorem route.
+They must not be marked as formalizations of Theorem~\texttt{thm1} or
+Corollary~\texttt{II\_cor2}. The active blueprint now treats the source
+comparison as an open block-matching step whose proof must come from the BNT
+power-sum argument, not from external coefficient limits.
 
 The blueprint BNT definitions are symmetric with the formal definition: the
 strict-modulus ordering is recorded; the normalization $|\mu_1|=1$ is not.
