@@ -16,8 +16,8 @@ it compares the repeated-copy coefficients and obtains one global gauge for the 
 canonical-form tensors.  The lemma in this file proves the block-count, dimension, and
 gauge-phase matching part only.
 
-The conclusion type and power-sum lemmas used by the surrounding block-matching
-arguments are collected in `TNLean.MPS.FundamentalTheorem.BlockMatchingSupport`.
+The block-matching conclusion is the shared
+`ProportionalDecompositionConclusion` from `TNLean.MPS.BNT.Construction`.
 
 ## Main statements
 

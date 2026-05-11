@@ -253,8 +253,9 @@ together with the rigidity theorem
 **Scope restriction (same bond dimension):** The source Lemma equalMPS also
 concludes equality of the two bond dimensions in the unit-overlap case; this
 theorem assumes a common bond dimension as a hypothesis instead. The
-rectangular component is recorded in
-docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex. -/
+rectangular component is proved separately as
+`dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP` in this file; together
+the two theorems recover the full structural conclusion of the source lemma. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
