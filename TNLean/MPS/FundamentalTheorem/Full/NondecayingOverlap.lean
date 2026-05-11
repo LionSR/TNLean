@@ -47,7 +47,7 @@ and small overlap/inner-product auxiliary lemmas live in
 matrix product states, fundamental theorem, BNT, overlap, induction
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators InnerProductSpace
 open Filter
 
 namespace MPSTensor
@@ -827,6 +827,33 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
     _ = c • mpvState (d := d) (toTensorFromBlocks μB B) N := hTotal
     _ = c • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N) := by
       rw [hBstate]
+
+/-- **Weighted inner-product proportionality from proportional assembled block tensors.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
+the proportional assembled MPV states into weighted BNT block sums, the proof
+projects the equality against a single block MPV. This lemma records that
+projection for an arbitrary tensor `X`. -/
+lemma exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (X : MPSTensor d D) (N : ℕ) :
+    ∃ c : ℂ, c ≠ 0 ∧
+      (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+        c * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+  classical
+  obtain ⟨c, hc, hstate⟩ :=
+    exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+      A B hProp N
+  refine ⟨c, hc, ?_⟩
+  have hinner :=
+    congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) hstate
+  simpa [mpvInner, inner_sum, inner_smul_right] using hinner
 
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
