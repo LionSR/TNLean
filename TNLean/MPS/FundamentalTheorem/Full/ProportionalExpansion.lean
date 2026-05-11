@@ -667,6 +667,71 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
       (fun k : Fin nB => B (b0.succAbove k))
       c hc hTailReindex
 
+/-- **Eventual proportionality of tails from phase substitution and Lemma `Lem1`.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`. Once a selected non-decaying block pair has been converted into a
+phase relation, Lemma `Lem1` gives eventual linear independence for the family
+obtained by replacing the selected block by its phase-matched partner. This
+lemma packages the resulting coefficient extraction, selected-summand
+subtraction, and arbitrary-tail reindexing. -/
+lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li
+    {d nA nB : ℕ}
+    {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
+    {μA : Fin (nA + 1) → ℂ} {μB : Fin (nB + 1) → ℂ}
+    {ζ : ℂ}
+    (A : (j : Fin (nA + 1)) → MPSTensor d (dimA j))
+    (B : (k : Fin (nB + 1)) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin (nA + 1)) (b0 : Fin (nB + 1))
+    (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B b0) N = ζ ^ N • mpvState (d := d) (A a0) N)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun j : Fin (nA + 1) => mpvState (d := d) (A j) N)
+          (fun k : Fin nB => mpvState (d := d) (B (b0.succAbove k)) N)))
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N •
+          (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks
+        (fun j : Fin nA => μA (a0.succAbove j))
+        (fun j : Fin nA => A (a0.succAbove j)))
+      (toTensorFromBlocks
+        (fun k : Fin nB => μB (b0.succAbove k))
+        (fun k : Fin nB => B (b0.succAbove k))) := by
+  have hStateSplit :
+      ∀ᶠ N in atTop,
+        (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N •
+            (((μB b0) ^ N • mpvState (d := d) (B b0) N) +
+              ∑ k : Fin nB,
+                (μB (b0.succAbove k)) ^ N •
+                  mpvState (d := d) (B (b0.succAbove k)) N) := by
+    refine hState.mono ?_
+    intro N hN
+    have hBsplit :
+        (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N) =
+          ((μB b0) ^ N • mpvState (d := d) (B b0) N) +
+            ∑ k : Fin nB,
+              (μB (b0.succAbove k)) ^ N •
+                mpvState (d := d) (B (b0.succAbove k)) N := by
+      rw [← Finset.add_sum_erase _ _ (Finset.mem_univ b0)]
+      congr 1
+      exact weighted_mpvState_sum_erase_eq_sum_succAbove B b0 N
+    rw [hBsplit] at hN
+    exact hN
+  have hSelected :
+      ∀ᶠ N in atTop,
+        (μA a0) ^ N • mpvState (d := d) (A a0) N =
+          c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N) :=
+    eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
+      A (B b0) (fun k : Fin nB => B (b0.succAbove k)) a0 hPhase hLI hStateSplit
+  exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
+    A B c a0 b0 hc hState hSelected
+
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Once the

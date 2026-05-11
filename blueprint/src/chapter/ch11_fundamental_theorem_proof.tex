@@ -324,6 +324,27 @@ with an extra $Z$-gauge degree of freedom.
 	assembled tail tensors.
 \end{proof}
 
+\begin{lemma}[Eventual tail proportionality from phase substitution and Lemma Lem1]%
+\label{lem:eventual_tail_proportional_from_phase_sum_li}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li}
+	\leanok
+	\uses{lem:selected_weighted_summand_from_phase_sum_li,
+		lem:eventual_proportional_weighted_tail_succAbove_package}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence.  If a selected pair satisfies
+	\(\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}\) for every \(N\),
+	and the family consisting of all \(A\)-blocks together with the remaining
+	\(B\)-blocks is eventually linearly independent, then the two complements,
+	reindexed by the insertion maps, are eventually nonzero proportional.
+\end{lemma}
+
+\begin{proof}\leanok
+	Rewrite the \(B\)-side weighted sum as the selected summand plus its
+	complement.  The phase-substitution coefficient lemma gives the selected
+	weighted summand identity.  Subtract that identity from the total relation
+	and reindex the two complements.
+\end{proof}
+
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
 \label{lem:proportional_scalar_norm_core}
 	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
