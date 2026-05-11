@@ -65,7 +65,7 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_dominant
 /-- **Phase-normalized dominant inner-product concentration.**
 
 Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After
-Corollary `eqV` supplies a phase relation
+Corollary eqV supplies a phase relation
 \(|V^{(N)}(B_{k_0})\rangle = \zeta^N |V^{(N)}(A_0)\rangle\), the weighted
 projection of the `B`-family against \(A_0\) is normalized by the combined
 weight \((\mu_{k_0}\zeta)^N\). Under strict dominance of \(\mu_{k_0}\) and
@@ -205,7 +205,7 @@ lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
 
 Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This is
 the phase-normalized projection estimate specialized to a leading `B`-block
-which Corollary `eqV` has identified with the leading `A`-block up to the phase
+which Corollary eqV has identified with the leading `A`-block up to the phase
 \(\zeta^N\). The strict BNT ordering supplies dominance of the leading
 `B`-weight, while BNT separation makes the remaining projected overlaps
 vanish. -/

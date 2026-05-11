@@ -514,19 +514,19 @@ with an extra $Z$-gauge degree of freedom.
 	the weight moduli supplies the geometric damping.
 \end{proof}
 
-\begin{lemma}[Phase-normalized dominant BNT projections concentrate]%
+\begin{lemma}[Phase-normalized dominant projections concentrate]%
 \label{lem:phase_normalized_dominant_bnt_projection}
 	\lean{MPSTensor.tendsto_phase_normalized_weighted_mpvInner_sum_of_dominant}
 	\lean{MPSTensor.tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT}
 	\leanok
 	\uses{def:mpv_inner}
-	Let \(A_0\) be an MPV block and let \(B_k\) be a finite BNT family with
-	dominant block \(B_{k_0}\).  Suppose
+	Let \(A_0\) be an MPV block and let \(B_k\) be a finite family with
+	distinguished block \(B_{k_0}\).  Suppose that \(|\zeta|=1\) and that, for
+	every \(N\),
 	\[
 		\ket{V^{(N)}(B_{k_0})}
 		=
-		\zeta^N \ket{V^{(N)}(A_0)}
-		\qquad\text{for all }N,\qquad |\zeta|=1 .
+		\zeta^N \ket{V^{(N)}(A_0)} .
 	\]
 	If every remaining weight ratio satisfies \(|\mu_k/\mu_{k_0}|<1\),
 	the self-projection of \(A_0\) tends to \(1\), and the projections
@@ -538,8 +538,11 @@ with an extra $Z$-gauge degree of freedom.
 		\langle V^{(N)}(A_0),V^{(N)}(B_k)\rangle
 		\longrightarrow 1 .
 	\]
-	In the leading one-copy BNT case, BNT separation supplies the off-diagonal
-	decay and strict ordering supplies the geometric damping.
+	In the leading one-copy BNT case, assume also that both the \(A\)-family and
+	the \(B\)-family are in BNT canonical form and take \(A_0\) and \(B_{k_0}\)
+	to be their leading blocks.  The \(A\)-side BNT normalization supplies the
+	self-projection limit, while \(B\)-side BNT separation supplies the
+	off-diagonal decay and strict ordering supplies the geometric damping.
 	\cite[Theorem~\texttt{thm1}, lines~1170--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
