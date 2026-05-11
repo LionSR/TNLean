@@ -15,14 +15,15 @@ supporting power-sum corollaries.
 
 ## Main results
 
-### Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+### Theorem 1: Same-structure equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
 (`fundamentalTheorem_equalMPV_CFBNT`)
 
-**Corollary II_cor2 (equal case)**: If two families of tensors in canonical form with
-basis-of-normal-tensors (BNT) separation share the same `μ`-weights, same block count `r`, and
-same block dimensions, and
-generate *equal* MPVs for all system sizes, then per-block gauge equivalence holds together
-with a global gauge equivalence of the block-diagonal tensors.
+**Same-structure specialization of Corollary II_cor2 (equal case)**: If two
+families of tensors in canonical form with basis-of-normal-tensors (BNT)
+separation share the same `μ`-weights, same block count `r`, and same block
+dimensions, and generate *equal* MPVs for all system sizes, then per-block gauge
+equivalence holds together with a global gauge equivalence of the block-diagonal
+tensors.
 
 ### Proportional-MPV Fundamental Theorem (Theorem 4.4)
 
@@ -60,14 +61,15 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Theorem 1: Equal-MPV Fundamental Theorem for `IsCanonicalFormBNT`
+/-! ## Theorem 1: Same-structure equal-MPV theorem for `IsCanonicalFormBNT`
 
-This is the content of Corollary II_cor2 from arXiv:2011.12127 / arXiv:1606.00608,
-specialized to the case where both families share the same block structure (same `r`,
-same `dim`, same `μ`).
+This is only the same-structure specialization of Corollary II_cor2 from
+arXiv:2011.12127 / arXiv:1606.00608: both families are assumed to share the
+same block structure (same `r`, same `dim`, same `μ`). The source corollary
+derives that matching instead of assuming it.
 -/
 
-/-- **Equal-MPV Fundamental Theorem for CF-BNT (Corollary II_cor2, same structure).**
+/-- **Same-structure equal-MPV theorem for CF-BNT.**
 
 If two families of tensors in canonical form with BNT separation share the same
 block weights `μ`, the same number of blocks `r`, and the same block dimensions

@@ -38,6 +38,12 @@ The proof is split across supporting sub-modules for readability:
 * `TNLean.MPS.FundamentalTheorem.Full.DominantWeight` — the largest-weight norm
   comparison used by the dominant-block projection, together with small
   overlap / inner-product auxiliary lemmas.
+* `TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar` — scalar normalization
+  identities used to compare weighted block sums without assuming normalized
+  canonical-form weights.
+* `TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion` — expansion of
+  proportional assembled tensors into weighted BNT block sums, with the
+  lengthwise nonzero scalar sequence supplied by the source proportionality.
 * `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap` — Layer 1a,
   `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, a strong induction on `rA + rB` using a
   dominant-weight projection argument.
