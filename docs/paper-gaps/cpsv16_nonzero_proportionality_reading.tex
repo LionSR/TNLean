@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Projective Reading of Proportional MPVs in CPSV16}
+\author{}
+\date{2026-05-11}
+
+\begin{document}
+\maketitle
+
+\section{Source phrase}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state Theorem~\texttt{thm1}
+in \cite{Cirac2016MPDO_arXiv}, lines~1170--1192, for tensors whose
+matrix-product vectors are ``proportional to each other''.  The displayed
+source statement does not spell out whether the proportionality scalar at a
+fixed length is required to be nonzero.
+
+\section{Formal reading}
+
+The formal predicate \leanid{NonzeroProportionalMPV2} requires, at each
+length \(N\), a scalar \(c_N \neq 0\) such that
+\[
+  V^{(N)}(A) = c_N V^{(N)}(B).
+\]
+This is the projective reading of proportionality: the two vectors determine
+the same point in projective space.  It is the reading used by the proof of
+Theorem~\texttt{thm1}.  In the block-selection step, the paper assumes that all
+overlaps of a fixed block on one side with the blocks on the other side tend
+to zero, expands the two BNT decompositions, and invokes Lemma~\texttt{Lem1}
+to contradict proportionality.  If \(c_N\) were allowed to be zero at a
+length where the vector on the left also vanished, the identity
+\(V^{(N)}(A)=0\cdot V^{(N)}(B)\) would not express equality of projective
+MPV families and would not supply the nonzero scalar used in the contradiction.
+Under the canonical-form hypotheses used in the source argument, the selected
+BNT block states have nonzero norm on the tail of lengths used in the
+contradiction; in that range the weak scalar-multiple predicate already forces
+the proportionality scalar to be nonzero.  Thus the formal predicate records
+the projective form needed at the use site, rather than adding a separate
+asymptotic assumption to the block-selection argument.
+
+\section{Effect on the theorem}
+
+The nonzero condition does not change the intended conclusion of the source
+theorem.  It records the conventional mathematical meaning of proportional
+nonzero vectors in the source argument.  The weaker scalar-multiple predicate
+\leanid{ProportionalMPV2}, where \(c_N\) may vanish, remains available for
+older auxiliary lemmas, but it is not used as the paper-faithful hypothesis
+for the proportional Fundamental Theorem.
+
+\section{Elimination plan}
+
+No extra mathematical theorem is needed for the present projective reading of
+CPSV16 lines~1170--1192.  If a literal weak-scalar reading is later required,
+it should be formalized as a separate bridge theorem: prove from the source
+canonical-form hypotheses that the relevant MPV vectors do not vanish at the
+lengths used in the argument, then derive
+\leanid{NonzeroProportionalMPV2} from the weak predicate before applying the
+block-selection proof.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

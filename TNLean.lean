@@ -192,7 +192,6 @@ import TNLean.MPS.ParentHamiltonian.Martingale
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.MPS.FundamentalTheorem.ProportionalPrimitive
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 -- Symmetry
 import TNLean.MPS.Symmetry.Defs
@@ -217,6 +216,8 @@ import TNLean.MPS.CanonicalForm.FromPrimitive
 import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux

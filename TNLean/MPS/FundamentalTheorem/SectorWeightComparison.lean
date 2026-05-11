@@ -22,14 +22,9 @@ geometric extrapolation and Newton--Girard steps below are the finite-sequence
 algebra needed to recover the weight lists from those power sums once the basis
 blocks have been matched.
 
-The earlier formal route recovered the multiplicities by extrapolating the
-eventual positive-power identities to exponent `0`, where the coefficient is
-the number of copies, and then used the same-cardinality Newton--Girard lemma.
-Under the nonzero-weight hypotheses in `SectorWeightData` this is not a gap:
-the extrapolation lemma proves the exponent-zero identity.  The endpoint below
-now uses the unequal-cardinality finite-range power-sum theorem directly, closer
-to the Appendix argument.  Without nonzero weights, positive powers would only
-determine the nonzero submultiset.
+The endpoint below uses the unequal-cardinality finite-range power-sum theorem
+directly, as in the Appendix comparison.  Without nonzero weights, positive
+powers would only determine the nonzero submultiset.
 
 ## References
 
@@ -92,33 +87,6 @@ lemma coeff_eventually_eq_of_sameMPV
   have hzero := Fintype.linearIndependent_iff.mp hLI_N
     (fun j => S.coeff N j - T.coeff N j) hdiff
   exact sub_eq_zero.mp (hzero j)
-
-/-- **Weight multiset recovery from equal multiplicities and power sums.**
-
-If two sector weight data have the same multiplicities and their power sum coefficients
-agree for every positive system size, then the sector weight multisets are equal for each
-basis block. Uses `Fin.cast (hCopies j)` to align the two families over the same index type.
-
-This is a direct application of Newton–Girard
-(`Matrix.sum_pow_eq_implies_multiset_eq`). -/
-lemma weight_multiset_eq_of_copies_eq_of_coeff_eq
-    (S T : SectorWeightData g)
-    (hCopies : ∀ j, S.copies j = T.copies j)
-    (hCoeff : ∀ (k : ℕ), 0 < k → ∀ j : Fin g,
-      S.coeff k j = T.coeff k j) :
-    ∀ j : Fin g,
-      Finset.univ.val.map (S.weight j) =
-        Finset.univ.val.map (fun q => T.weight j (Fin.cast (hCopies j) q)) := by
-  intro j
-  apply Matrix.sum_pow_eq_implies_multiset_eq
-  intro k hk
-  have h := hCoeff k hk j
-  simp only [SectorWeightData.coeff] at h
-  convert h using 1
-  exact Fintype.sum_equiv (Fin.castOrderIso (hCopies j)).toEquiv
-    (fun q => (T.weight j (Fin.cast (hCopies j) q)) ^ k)
-    (fun q => (T.weight j q) ^ k)
-    (fun q => by simp [Fin.castOrderIso_apply])
 
 /-! ### Extrapolation of power-sum sequences
 
@@ -229,82 +197,6 @@ lemma power_sums_eq_of_eventually_eq_hetero
   have hk := hAll k
   rw [hDecomp] at hk
   exact sub_eq_zero.mp hk
-
-/-- If two equal-cardinality families of nonzero complex scalars have equal power sums for all
-sufficiently large exponents, then their power sums agree for every exponent.
-
-This is the equal-cardinality specialization of
-`power_sums_eq_of_eventually_eq_hetero`. -/
-lemma power_sums_eq_of_eventually_eq
-    {m : ℕ} (a b : Fin m → ℂ)
-    (ha : ∀ i, a i ≠ 0) (hb : ∀ i, b i ≠ 0)
-    {M : ℕ}
-    (hEv : ∀ N, M ≤ N → ∑ i, a i ^ N = ∑ i, b i ^ N) :
-    ∀ k, ∑ i, a i ^ k = ∑ i, b i ^ k := by
-  exact power_sums_eq_of_eventually_eq_hetero
-    (m := m) (n := m) a b ha hb (M := M) hEv
-
-/-- Alternative exponent-zero route: eventual equality of coefficient power sums forces
-equality of multiplicities.
-
-This is the route used by an earlier formal proof.  It is mathematically valid under the
-nonzero-weight hypotheses in `SectorWeightData`: eventual equality at positive system sizes
-is extrapolated to exponent `0`, and then
-`∑ q : Fin (S.copies j), (S.weight j q)^0 = S.copies j`.
-
-The source-facing proof below uses the unequal-cardinality finite-range power-sum theorem
-instead, but this lemma is kept as a checked reference for the alternative Lean proof. -/
-lemma copies_eq_of_eventually_coeff_eq
-    (S T : SectorWeightData g)
-    {N0 : ℕ}
-    (hEv : ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j) :
-    ∀ j : Fin g, S.copies j = T.copies j := by
-  intro j
-  have hEvj : ∀ N, N0 + 1 ≤ N →
-      ∑ q : Fin (S.copies j), (S.weight j q) ^ N =
-        ∑ q : Fin (T.copies j), (T.weight j q) ^ N := by
-    intro N hN
-    have h := hEv N (by omega) j
-    simpa only [SectorWeightData.coeff] using h
-  have h0 := power_sums_eq_of_eventually_eq_hetero
-    (S.weight j) (T.weight j)
-    (fun q => S.weight_ne_zero j q)
-    (fun q => T.weight_ne_zero j q)
-    (M := N0 + 1) hEvj 0
-  exact (Nat.cast_injective (R := ℂ)) (by simpa using h0)
-
-/-- Alternative exponent-zero route: after multiplicities are known, eventual equality of
-coefficient power sums gives equality at every positive exponent over a common index type.
-
-Together with `copies_eq_of_eventually_coeff_eq` and
-`weight_multiset_eq_of_copies_eq_of_coeff_eq`, this recovers the same weight-multiset
-conclusion as the source-facing finite-range theorem below. -/
-lemma eventually_coeff_eq_implies_all_pos_eq_after_copies
-    (S T : SectorWeightData g)
-    (hCopies : ∀ j, S.copies j = T.copies j)
-    {N0 : ℕ}
-    (hEv : ∀ N > N0, ∀ j : Fin g, S.coeff N j = T.coeff N j) :
-    ∀ k : ℕ, 0 < k → ∀ j : Fin g, S.coeff k j = T.coeff k j := by
-  intro k _ j
-  set b : Fin (S.copies j) → ℂ := fun q => T.weight j (Fin.cast (hCopies j) q) with hb_def
-  have hReindex : ∀ N, ∑ q : Fin (S.copies j), b q ^ N =
-                        ∑ q : Fin (T.copies j), (T.weight j q) ^ N := by
-    intro N
-    exact Fintype.sum_equiv (Fin.castOrderIso (hCopies j)).toEquiv
-      (fun q => b q ^ N) (fun q => (T.weight j q) ^ N)
-      (fun q => by simp [hb_def, Fin.castOrderIso_apply])
-  have hEvAB : ∀ N, N0 + 1 ≤ N →
-      ∑ q : Fin (S.copies j), (S.weight j q) ^ N = ∑ q : Fin (S.copies j), b q ^ N := by
-    intro N hN
-    have h := hEv N (by omega) j
-    simp only [SectorWeightData.coeff] at h
-    rw [h, (hReindex N).symm]
-  have hAll := power_sums_eq_of_eventually_eq (S.weight j) b
-    (fun i => S.weight_ne_zero j i)
-    (fun i => T.weight_ne_zero j (Fin.cast (hCopies j) i))
-    hEvAB k
-  simp only [SectorWeightData.coeff]
-  exact hAll.trans (hReindex k)
 
 /-- Eventual equality of coefficient power sums forces equality of multiplicities and
 weight multisets.
