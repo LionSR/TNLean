@@ -42,7 +42,7 @@ The proof is split across supporting sub-modules for readability:
   dominant-weight projection argument.
 * `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch` — Layer 1b,
   `blocks_match_of_sameMPV₂_CFBNT`, which converts the non-decaying overlap data into a
-  full `BlockPermutationGaugeWitness` via the overlap dichotomy.
+  full `ProportionalDecompositionConclusion` via the overlap dichotomy.
 
 ## References
 
@@ -109,7 +109,7 @@ lemma fundamentalTheorem_equalMPV_CFBNT_hetero
     (hA : IsCanonicalFormBNT μA A)
     (hB : IsCanonicalFormBNT μB B)
     (hEqual : SameMPV₂ (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    BlockPermutationGaugeWitness (d := d) A B :=
+    ProportionalDecompositionConclusion A B :=
   blocks_match_of_sameMPV₂_CFBNT A B hA hB hEqual
 
 end MPSTensor

@@ -127,6 +127,43 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
 
+### Faithfulness rule
+
+**A theorem is "formalized" only when its Lean signature has no hypothesis
+absent from the cited source's statement.** Adding hypotheses — even
+mathematically natural ones — produces a *different* theorem and must
+not be marked `\leanok` against the source's blueprint label.
+
+This applies to every formalized result, not only those undergoing active
+paper-realignment. The check is on hypotheses, not just conclusions:
+
+- A Lean theorem whose conclusion matches the source but whose hypotheses
+  are stricter than the source's is **not** the formalization of the source
+  theorem. It is a different theorem (a corollary or specialization).
+- The blueprint label citing the source must point to a Lean statement
+  with the source's hypothesis set, not to a stronger-hypothesis variant.
+- If the only available Lean theorem has extra hypotheses, the blueprint
+  must either: (a) drop the `\leanok` and `\lean{...}` tags from the
+  source-labelled entry, or (b) state the source's theorem as a
+  separate blueprint entry with `\leanok` only after a faithful Lean
+  version exists.
+
+Scope-restricted theorems may be marked `\leanok` only against a blueprint
+statement that explicitly states the restriction. Such an entry must not be
+presented as the source theorem itself. The unrestricted source theorem remains
+unformalized until a Lean statement with the source's hypothesis set exists.
+
+A paper-gap note in `docs/paper-gaps/` is required whenever a
+stricter-hypothesis Lean version is the *only* available formalization of
+a source theorem. The note must identify the missing hypothesis and the
+elimination plan (formalize the source-faithful version, derive the
+stricter version inside a particular argument, etc.).
+
+This rule was retroactively codified after the equalMPS audit
+(`docs/paper-gaps/cpsv16_equalMPS_gauge_phase_gap.tex`) found that the
+proportionality-conditional Lean theorem was being treated as the
+formalization of the proportionality-free source lemma.
+
 ### Paper-realignment mode
 
 When the formalization has drifted from the cited source and the work is
@@ -175,10 +212,10 @@ which deviates from `<paper, label or line range>`. Documented in
 substitute>`; tracked in `<issue or PR>`.
 ```
 
-The marker propagates to wrappers: any theorem whose proof transitively
-calls an unfaithful one is itself unfaithful and must carry its own marker.
-The marker is removed only when every transitively-cited dependency is
-faithful.
+The marker propagates to dependent theorems: any theorem whose proof
+transitively calls an unfaithful one is itself unfaithful and must carry its
+own marker. The marker is removed only when every transitively-cited
+dependency is faithful.
 
 Reviewers should not approve a paper-realignment PR that introduces an
 unfaithful theorem without the marker. The marker makes the deviation

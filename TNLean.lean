@@ -210,7 +210,6 @@ import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
-import TNLean.MPS.BNT.PermutationRigidity
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
@@ -255,7 +254,6 @@ import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
-import TNLean.MPS.CanonicalForm.GaugePhaseFromOverlap
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
