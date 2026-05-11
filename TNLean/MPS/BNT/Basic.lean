@@ -92,7 +92,7 @@ independent.
 This is the finite-index formulation of
 `MPSTensor.eventually_linearIndependent_of_gram_tendsto_id`.
 -/
-lemma eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal
+lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
     {d : ℕ} {ι : Type} [Finite ι] {dim : ι → ℕ}
     (A : (j : ι) → MPSTensor d (dim j))
     (h_self : ∀ j,
@@ -150,7 +150,7 @@ If the MPV overlaps of a finite family `A j` converge to an orthonormal Gram mat
 then the MPV states `mpvState (A j) N` are eventually linearly independent.
 
 This is a convenient `Fin g` formulation around
-`MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal`.
+`MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal`.
 -/
 lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
     {d : ℕ} {g : ℕ} {dim : Fin g → ℕ}
@@ -161,7 +161,7 @@ lemma eventually_linearIndependent_of_overlap_tendsto_orthonormal
       Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : Fin g => mpvState (d := d) (A j) N) :=
-  eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal A h_self h_cross
+  eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal A h_self h_cross
 
 /-- Eventual linear independence for the union of two asymptotically orthonormal
 MPV families whose mixed overlaps vanish.
@@ -226,7 +226,7 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
               simp [hkl]
             simpa [C] using hB_off k l hkl
   have hLI :=
-    MPSTensor.eventually_linearIndependent_of_fintype_overlap_tendsto_orthonormal C
+    MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal C
       h_self h_cross
   refine hLI.mono ?_
   intro N hN
