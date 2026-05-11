@@ -194,6 +194,45 @@ lemma weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
   rw [hSelected N] at hN
   exact add_left_cancel hN
 
+/-- **Reindexing a leading-erased weighted MPV-state tail.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After removing
+the already matched leading BNT component, the remaining components are viewed
+again as a finite BNT family indexed by `Fin (r - 1)`. This lemma isolates the
+finite reindexing of the corresponding weighted MPV-state sum. -/
+lemma weighted_mpvState_sum_erase_zero_eq_sum_succ
+    {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j)) (hr : 0 < r) :
+    ∀ N : ℕ,
+      ∑ j ∈ Finset.univ.erase (⟨0, hr⟩ : Fin r),
+          (μ j) ^ N • mpvState (d := d) (A j) N =
+        ∑ j : Fin (r - 1),
+          (μ ⟨j.val + 1, by omega⟩) ^ N •
+            mpvState (d := d) (A ⟨j.val + 1, by omega⟩) N := by
+  intro N
+  let succ : Fin (r - 1) → Fin r := fun j => ⟨j.val + 1, by omega⟩
+  have succ_ne_zero : ∀ j, succ j ≠ (⟨0, hr⟩ : Fin r) := fun j => by
+    simp [succ]
+  have succ_inj : Function.Injective succ := fun j₁ j₂ h => by
+    simp [succ, Fin.ext_iff] at h
+    exact Fin.ext (by omega)
+  have h_eq :
+      Finset.univ.erase (⟨0, hr⟩ : Fin r) =
+        (Finset.univ : Finset (Fin (r - 1))).image succ := by
+    ext x
+    constructor
+    · intro hx
+      rw [Finset.mem_erase] at hx
+      have hx_ne : x ≠ (⟨0, hr⟩ : Fin r) := hx.1
+      have hx_pos : 0 < x.val := Nat.pos_of_ne_zero (fun h => hx_ne (Fin.ext h))
+      exact Finset.mem_image.mpr
+        ⟨⟨x.val - 1, by omega⟩, Finset.mem_univ _,
+          Fin.ext (by simp [succ]; omega)⟩
+    · intro hx
+      obtain ⟨j, _, rfl⟩ := Finset.mem_image.mp hx
+      exact Finset.mem_erase.mpr ⟨succ_ne_zero j, Finset.mem_univ _⟩
+  rw [h_eq, Finset.sum_image (fun j _ k _ h => succ_inj h)]
+
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Once the
