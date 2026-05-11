@@ -63,19 +63,52 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
 \end{proof}
 
+\begin{lemma}[Norm convergence for scalar-related normalized vectors]%
+\label{lem:proportional_scalar_norm_core}
+	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
+	\leanok
+	Suppose \(x_N=c_N y_N\) in a sequence of normed complex vector spaces.
+	If \(\|x_N\|\to 1\) and \(\|y_N\|\to 1\), then \(|c_N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Take norms in the identity \(x_N=c_N y_N\), divide by \(\|y_N\|\), and
+	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
+\end{proof}
+
 \begin{lemma}[Norm convergence of the proportional scalar sequence]%
 \label{lem:proportional_tensor_from_blocks_scalar_norm}
 	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
 	\leanok
-	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence,
+		lem:proportional_scalar_norm_core}
 	Suppose the weighted state sums for the two assembled BNT tensors are
 	related by a scalar sequence \(c_N\). If the norms of both weighted state
 	sums converge to \(1\), then \(|c_N|\to 1\).
 \end{lemma}
 
 \begin{proof}\leanok
-	Take norms in the identity \(x_N=c_N y_N\), divide by \(\|y_N\|\), and
-	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
+	Apply Lemma~\ref{lem:proportional_scalar_norm_core} to the two weighted
+	state sums.
+\end{proof}
+
+\begin{lemma}[Norm convergence of the normalized proportional scalar sequence]%
+\label{lem:proportional_tensor_from_blocks_adjusted_scalar_norm}
+	\lean{MPSTensor.tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one}
+	\leanok
+	\uses{lem:proportional_scalar_norm_core,
+		lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	Suppose the weighted state sums for the two assembled BNT tensors are
+	related by a scalar sequence \(c_N\). If, after division by nonzero
+	scalars \(\mu^N\) and \(\nu^N\), the two normalized state sums have norms
+	converging to \(1\), then \(|c_N(\nu/\mu)^N|\to 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Rewrite the proportionality identity after multiplying the two sides by
+	\(\mu^{-N}\) and \(\nu^{-N}\). The corrected scalar is
+	\(c_N(\nu/\mu)^N\), and Lemma~\ref{lem:proportional_scalar_norm_core}
+	applies to the two normalized state sums.
 \end{proof}
 
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%

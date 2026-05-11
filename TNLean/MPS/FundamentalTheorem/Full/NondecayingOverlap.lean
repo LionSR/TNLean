@@ -2,7 +2,7 @@
 Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -856,53 +856,6 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
         A B hProp N
   choose c hc hEq using h
   exact ⟨c, hc, hEq⟩
-
-/-- **Norm convergence for the proportional scalar sequence.**
-
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
-proportional block-selection argument the scalar relating the two total MPV
-families cannot vanish asymptotically once both weighted BNT state sums have
-asymptotic norm one. This lemma isolates the purely analytic step: from
-`x_N = c_N y_N`, `‖x_N‖ → 1`, and `‖y_N‖ → 1`, one gets `‖c_N‖ → 1`. -/
-lemma tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (c : ℕ → ℂ)
-    (hState : ∀ N : ℕ,
-      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
-        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N))
-    (hA_norm : Tendsto
-      (fun N : ℕ =>
-        ‖∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N‖)
-      atTop (nhds (1 : ℝ)))
-    (hB_norm : Tendsto
-      (fun N : ℕ =>
-        ‖∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N‖)
-      atTop (nhds (1 : ℝ))) :
-    Tendsto (fun N : ℕ => ‖c N‖) atTop (nhds (1 : ℝ)) := by
-  have hRatio :
-      Tendsto
-        (fun N : ℕ =>
-          ‖∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N‖ /
-            ‖∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N‖)
-        atTop (nhds (1 : ℝ)) := by
-    simpa using hA_norm.div hB_norm one_ne_zero
-  have hB_norm_ne :
-      ∀ᶠ N in atTop,
-        ‖∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N‖ ≠ (0 : ℝ) :=
-    hB_norm.eventually_ne one_ne_zero
-  have hRatio_eq :
-      (fun N : ℕ =>
-        ‖∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N‖ /
-          ‖∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N‖) =ᶠ[atTop]
-        fun N : ℕ => ‖c N‖ := by
-    filter_upwards [hB_norm_ne] with N hN
-    rw [hState N, norm_smul]
-    exact mul_div_cancel_right₀ (‖c N‖) hN
-  exact Tendsto.congr' hRatio_eq hRatio
 
 /-- **Weighted inner-product proportionality from proportional assembled block tensors.**
 
