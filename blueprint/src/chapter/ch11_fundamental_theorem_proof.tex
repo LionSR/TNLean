@@ -168,6 +168,24 @@ with an extra $Z$-gauge degree of freedom.
 	side by inserting \(\nu^N\nu^{-N}\), and collect the scalar factors.
 \end{proof}
 
+\begin{lemma}[Normalized projection sequence from proportional assembled blocks]%
+\label{lem:proportional_tensor_from_blocks_adjusted_weighted_inner_sequence}
+	\lean{MPSTensor.exists_normalized_weighted_mpvInner_eq_mul_adjusted_sequence_of_nonzeroProportionalMPV₂}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_inner_sequence,
+		lem:proportional_tensor_from_blocks_adjusted_weighted_inner}
+	For proportional assembled BNT tensors, one may choose a nonzero scalar
+	sequence \(c_N\) such that the normalized weighted projections are related
+	by the adjusted scalar \(c_N(\nu/\mu)^N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Choose the scalar sequence from
+	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_inner_sequence}
+	and apply
+	Lemma~\ref{lem:proportional_tensor_from_blocks_adjusted_weighted_inner}.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}

@@ -910,6 +910,35 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
     congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hstate N)
   simpa [mpvInner, inner_sum, inner_smul_right] using hinner
 
+/-- **A scalar sequence for normalized proportional weighted projections.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This packages
+the projected weighted-sum identity supplied by proportional assembled tensors
+in the normalized form used in the block-selection contradiction. The same
+nonzero scalar sequence is corrected by the factor `(\nu/\mu)^N` after
+division by the chosen nonzero weights. -/
+lemma exists_normalized_weighted_mpvInner_eq_mul_adjusted_sequence_of_nonzeroProportionalMPV₂
+    {d rA rB D : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
+    (X : MPSTensor d D) (μ ν : ℂ) (hμ : μ ≠ 0) (hν : ν ≠ 0) :
+    ∃ c : ℕ → ℂ, (∀ N, c N ≠ 0) ∧
+      ∀ N : ℕ,
+        (μ ^ N)⁻¹ *
+            (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+          (c N * (ν / μ) ^ N) *
+            ((ν ^ N)⁻¹ *
+              (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
+  obtain ⟨c, hc, hinner⟩ :=
+    exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+      A B hProp X
+  exact ⟨c, hc,
+    normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul A B X c μ ν hμ hν hinner⟩
+
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
