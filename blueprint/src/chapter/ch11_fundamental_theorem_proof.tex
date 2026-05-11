@@ -63,6 +63,49 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:proportional_tensor_from_blocks_weighted_states}.
 \end{proof}
 
+\begin{lemma}[Weighted state sequences are exactly assembled proportionality]%
+\label{lem:weighted_state_sequence_to_proportional_tensor_from_blocks}
+	\lean{MPSTensor.nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_sequence}
+	\leanok
+	\uses{def:nonzero_proportional_mpv, def:tensor_from_blocks, def:mpv_state}
+	Conversely, suppose that for assembled block tensors
+	\(A=\bigoplus_j \mu_j A_j\) and \(B=\bigoplus_k \nu_k B_k\) there is a
+	sequence of nonzero scalars \(c_N\) such that
+	\[
+		\sum_j \mu_j^N \ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k \nu_k^N \ket{V^{(N)}(B_k)}
+	\]
+	for every \(N\).  Then the assembled MPV families are nonzero
+	proportional.
+\end{lemma}
+
+\begin{proof}\leanok
+	Expand the MPV state of each assembled tensor into its weighted block sum
+	and evaluate the state identity on each basis word.
+\end{proof}
+
+\begin{lemma}[Subtracting a proportional selected summand]%
+\label{lem:proportional_weighted_state_tail_subtraction}
+	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
+	\leanok
+	\uses{lem:proportional_tensor_from_blocks_weighted_state_sequence}
+	Suppose two weighted block-state sums are related by a scalar sequence
+	\(c_N\).  If selected summands \(A_{j_0}\) and \(B_{k_0}\) are themselves
+	related by the same scalar sequence, then the sums over the erased tails
+	are also related by \(c_N\):
+	\[
+		\sum_{j\ne j_0}\mu_j^N\ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_{k\ne k_0}\nu_k^N\ket{V^{(N)}(B_k)}.
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	Split both finite sums into the selected summand and the erased tail, use
+	the selected-summand identity, and cancel the common selected term.
+\end{proof}
+
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
 \label{lem:proportional_scalar_norm_core}
 	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}
