@@ -74,6 +74,21 @@ and~\cite{Cirac2021Matrix}.
 	$I=\{1,\ldots,g\}$.
 \end{proof}
 
+\begin{lemma}[Eventual coefficient extraction from linear independence]%
+\label{lem:eventual_coeff_eq_of_eventual_li}
+	\lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
+	\leanok
+	If a finite family of vectors is linearly independent for all sufficiently
+	large \(N\), and two finite linear combinations of that family are equal
+	for all sufficiently large \(N\), then the corresponding coefficients are
+	equal for all sufficiently large \(N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Move the two linear combinations to one side. Linear independence forces
+	each coefficient difference to vanish at every sufficiently large length.
+\end{proof}
+
 \begin{lemma}[Overlap-orthonormality for two families]%
 	\label{lem:bnt_two_family_overlap_orthonormal_li}
 	\lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
