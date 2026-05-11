@@ -604,6 +604,24 @@ with an extra $Z$-gauge degree of freedom.
 	family.
 \end{proof}
 
+\begin{lemma}[Arbitrary-erased tails preserve restricted BNT canonical form]%
+\label{lem:cf_bnt_tail_succAbove}
+	\lean{MPSTensor.isCanonicalFormBNT_tail_succAbove}
+	\leanok
+	\uses{def:cf_bnt}
+	If a finite one-copy BNT canonical-form family has a selected block, then
+	after deleting that block and reindexing the complement by the
+	order-preserving insertion map, the remaining family is again a one-copy
+	BNT canonical-form family.
+\end{lemma}
+
+\begin{proof}\leanok
+	Each blockwise hypothesis restricts to the complementary subfamily.  The
+	complement insertion map is strictly monotone, so strict decrease of the
+	weights is preserved; block separation is inherited from the original
+	family.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}
