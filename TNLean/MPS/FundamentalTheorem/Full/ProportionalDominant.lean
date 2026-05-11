@@ -208,7 +208,12 @@ the phase-normalized projection estimate specialized to a leading `B`-block
 which Corollary eqV has identified with the leading `A`-block up to the phase
 \(\zeta^N\). The strict BNT ordering supplies dominance of the leading
 `B`-weight, while BNT separation makes the remaining projected overlaps
-vanish. -/
+vanish.
+
+**Scope restriction (one-copy-per-sector):** The predicate `IsCanonicalFormBNT`
+selects one BNT representative in each sector. The general CPSV16 BNT
+canonical form allows multiplicities inside a sector. This restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
