@@ -788,9 +788,10 @@ form used in this development. CPSV16 Theorem II.1 is stated for the general
 BNT canonical form with possible multiplicities. This restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
 
-Remaining proof step: derive the dominant-block contradiction directly from
-`NonzeroProportionalMPV₂`, not from externally supplied coefficient-array
-decompositions; see issue #1563. -/
+The proof body first derives the BNT self/cross-overlap data and the lengthwise
+nonzero proportional scalar sequence from the stated hypotheses. The remaining
+proof step is the dominant-block contradiction from the normalized proportional
+projection identity; see issue #1563. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -807,7 +808,49 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
     (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
-  sorry
+  have hA_self : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
+    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hB_self : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
+    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hA_cross : ∀ j k : Fin rA, j ≠ k →
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
+    hA.cross_overlap_tendsto_zero
+  have hB_cross : ∀ j k : Fin rB, j ≠ k →
+      Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
+    hB.cross_overlap_tendsto_zero
+  obtain ⟨c, hc, hState⟩ :=
+    exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
+      A B hProp
+  have hInner : ∀ {D : ℕ} (X : MPSTensor d D) (N : ℕ),
+      (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+        c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+    intro D X N
+    have hinner :=
+      congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hState N)
+    simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+  have hNormalizedInner :
+      ∀ {D : ℕ} (X : MPSTensor d D) (μ ν : ℂ),
+        μ ≠ 0 → ν ≠ 0 → ∀ N : ℕ,
+          (μ ^ N)⁻¹ *
+              (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+            (c N * (ν / μ) ^ N) *
+              ((ν ^ N)⁻¹ *
+                (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
+    intro D X μ ν hμ hν
+    exact normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
+      A B X c μ ν hμ hν (hInner X)
+  have hRemaining :
+      (∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
+        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
+      (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
+        ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
+    -- Remaining CPSV16 line 1170--1192 step: use `hNormalizedInner`, `hc`,
+    -- and the BNT self/cross-overlap data above to rule out simultaneous
+    -- decay against a fixed block, then repeat with A and B interchanged.
+    sorry
+  exact hRemaining
 
 end HeteroEqualCase
 
