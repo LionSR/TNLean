@@ -218,6 +218,7 @@ import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansionLeft
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux

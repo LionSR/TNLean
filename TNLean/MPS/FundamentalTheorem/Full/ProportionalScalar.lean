@@ -14,8 +14,9 @@ overlap argument.
 
 ## References
 
-* Cirac, Pérez-García, Schuch, Verstraete, *Fundamental Theorems for PEPS*,
-  arXiv:1606.00608 (2017), Theorem `thm1`, lines 1170--1192.
+* Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
+  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
+  Theorem `thm1`, lines 1170--1192.
 -/
 
 open scoped BigOperators
