@@ -76,6 +76,21 @@ with an extra $Z$-gauge degree of freedom.
 	use that \(\|y_N\|\to 1\), so the denominator is eventually nonzero.
 \end{proof}
 
+\begin{lemma}[Self-overlap normalization gives MPV-state norm normalization]%
+\label{lem:self_overlap_to_mpv_state_norm}
+	\lean{MPSTensor.tendsto_norm_mpvState_one}
+	\leanok
+	\uses{def:mpv_overlap, def:mpv_state}
+	If the self-overlap of an MPV family tends to \(1\), then the Hilbert-space
+	norm of the corresponding MPV state tends to \(1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	The self-overlap is the conjugate of the Lean inner product of the MPV state
+	with itself.  Hence its limit gives convergence of the squared state norm to
+	\(1\), and taking square roots gives the norm convergence.
+\end{proof}
+
 \begin{lemma}[Norm convergence of the proportional scalar sequence]%
 \label{lem:proportional_tensor_from_blocks_scalar_norm}
 	\lean{MPSTensor.tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one}
