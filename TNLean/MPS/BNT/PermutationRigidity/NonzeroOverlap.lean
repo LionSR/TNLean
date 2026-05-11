@@ -60,8 +60,8 @@ this after showing that the relevant joint family is asymptotically orthonormal.
 MPV families whose mixed overlaps vanish.
 
 Source: arXiv:1606.00608, lines 1170--1192, where the linear-independence
-corollary is applied to the joint family obtained by adjoining a block from one
-BNT family to the other side.  This is the direct joint-family form of that
+corollary is applied after adjoining a single block from one BNT family to the
+other family.  This is the symmetric two-family generalization of that
 linear-independence input. -/
 lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     {d : ℕ} {gA gB : ℕ} {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
