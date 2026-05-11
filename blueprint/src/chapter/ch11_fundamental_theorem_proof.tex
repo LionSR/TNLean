@@ -492,6 +492,23 @@ with an extra $Z$-gauge degree of freedom.
 	claimed dimension equality and gauge-phase equivalence.
 \end{proof}
 
+\begin{lemma}[Non-decaying BNT overlap gives an MPV phase relation]%
+\label{lem:bnt_nondecaying_overlap_mpv_phase}
+	\lean{MPSTensor.exists_phase_mpvState_eq_smul_of_nondecaying_overlap_CFBNT}
+	\leanok
+	\uses{lem:bnt_nondecaying_overlap_gauge_phase}
+	If two BNT blocks have an overlap which does not tend to zero, then there
+	is a unit complex number \(\zeta\) such that the MPV state of the second
+	block is \(\zeta^N\) times the MPV state of the first block at every
+	length \(N\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the gauge-phase equivalence obtained from the non-decaying overlap.
+	The gauge cancels under the trace defining the MPV, leaving only the phase
+	\(\zeta^N\); normalized self-overlap convergence gives \(|\zeta|=1\).
+\end{proof}
+
 \begin{lemma}[Non-decaying BNT partners are unique]%
 \label{lem:bnt_nondecaying_partner_unique}
 	\lean{MPSTensor.unique_left_nondecaying_overlap_partner_CFBNT,

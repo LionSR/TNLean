@@ -75,6 +75,46 @@ lemma gaugePhaseEquiv_of_nondecaying_overlap_CFBNT
     (hB.toIsLeftCanonicalBlockFamily.leftCanonical k)
     hNot)
 
+/-- **MPV-state phase relation from a non-decaying BNT overlap.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After
+Corollary `eqV` gives a phase relation
+\(|V^{(N)}(B_k)\rangle = e^{i\phi N}|V^{(N)}(A_j)\rangle\), the selected
+summand in the weighted BNT expansion can be compared coefficientwise. This
+lemma packages the corresponding Lean consequence of a non-decaying overlap. -/
+lemma exists_phase_mpvState_eq_smul_of_nondecaying_overlap_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (j : Fin rA) (k : Fin rB)
+    (hnd : ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+    ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+      ∀ N : ℕ, mpvState (d := d) (B k) N = ζ ^ N • mpvState (d := d) (A j) N := by
+  let hdim := dim_eq_of_nondecaying_overlap_CFBNT A B hA hB j k hnd
+  obtain ⟨X, ζ, _, hX⟩ := gaugePhaseEquiv_of_nondecaying_overlap_CFBNT A B hA hB j k hnd
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (B k) σ = ζ ^ N * mpv (A j) σ := fun N σ => by
+    rw [mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hX N σ, mpv_cast_dim hdim]
+  have hBB_norm :
+      Tendsto (fun N => ‖mpvOverlap (d := d) (B k) (B k) N‖) atTop (nhds 1) :=
+    tendsto_norm_selfOverlap_one (d := d) (B k)
+      (hB.toHasNormalizedSelfOverlap.overlap_tendsto_one k)
+  have hAA_norm :
+      Tendsto (fun N => ‖mpvOverlap (d := d) (A j) (A j) N‖) atTop (nhds 1) :=
+    tendsto_norm_selfOverlap_one (d := d) (A j)
+      (hA.toHasNormalizedSelfOverlap.overlap_tendsto_one j)
+  refine ⟨ζ, ?_, ?_⟩
+  · exact norm_eq_one_of_selfOverlap_scale hAA_norm hBB_norm
+      (mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := A j) (B := B k) (ζ := ζ) hmpv)
+  · intro N
+    ext σ
+    simp only [PiLp.smul_apply, smul_eq_mul, mpvState_apply, hmpv]
+
 /-- **Uniqueness of a non-decaying left partner for a BNT block.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
