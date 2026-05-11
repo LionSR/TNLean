@@ -85,6 +85,23 @@ lemma tendsto_norm_weighted_mpvState_scalar_of_tendsto_norm_one
       ∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)
     c hState hA_norm hB_norm
 
+/-- **Scalar factor identity for dominant-weight normalization.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Dividing the two
+sides of a proportional weighted sum by nonzero weights \(\mu^N\) and
+\(\nu^N\) changes the proportionality scalar from `c` to `c * (ν / μ) ^ N`. -/
+lemma adjusted_scalar_factor_eq
+    (c μ ν : ℂ) (N : ℕ) (hμ : μ ≠ 0) (hν : ν ≠ 0) :
+    (μ ^ N)⁻¹ * c = (c * (ν / μ) ^ N) * (ν ^ N)⁻¹ := by
+  field_simp [hμ, hν, pow_ne_zero N hμ, pow_ne_zero N hν]
+  ring_nf
+  have hpow : μ ^ N * μ⁻¹ ^ N = 1 := by
+    rw [← mul_pow, mul_inv_cancel₀ hμ, one_pow]
+  calc
+    c * ν ^ N = c * ν ^ N * 1 := by rw [mul_one]
+    _ = c * ν ^ N * (μ ^ N * μ⁻¹ ^ N) := by rw [hpow]
+    _ = c * ν ^ N * μ ^ N * μ⁻¹ ^ N := by ring
+
 /-- **Norm convergence for the dominant-weight-normalized proportional scalar.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The canonical-form
@@ -133,14 +150,7 @@ lemma tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
   rw [hState N]
   rw [smul_smul, smul_smul]
   congr 1
-  field_simp [hμ, hν, pow_ne_zero N hμ, pow_ne_zero N hν]
-  ring_nf
-  have hpow : μ ^ N * μ⁻¹ ^ N = 1 := by
-    rw [← mul_pow, mul_inv_cancel₀ hμ, one_pow]
-  calc
-    c N * ν ^ N = c N * ν ^ N * 1 := by rw [mul_one]
-    _ = c N * ν ^ N * (μ ^ N * μ⁻¹ ^ N) := by rw [hpow]
-    _ = c N * ν ^ N * μ ^ N * μ⁻¹ ^ N := by ring
+  exact adjusted_scalar_factor_eq (c N) μ ν N hμ hν
 
 /-- **Normalized weighted projections use the adjusted proportional scalar.**
 
@@ -167,19 +177,15 @@ lemma normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
           ((ν ^ N)⁻¹ *
             (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
   intro N
+  let S : ℂ := ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N
   rw [hInner N]
-  field_simp [hμ, hν, pow_ne_zero N hμ, pow_ne_zero N hν]
-  ring_nf
-  have hpow : μ ^ N * μ⁻¹ ^ N = 1 := by
-    rw [← mul_pow, mul_inv_cancel₀ hμ, one_pow]
+  change (μ ^ N)⁻¹ * (c N * S) =
+    (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S)
   calc
-    (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) * ν ^ N =
-        (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
-          ν ^ N * 1 := by rw [mul_one]
-    _ = (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
-        ν ^ N * (μ ^ N * μ⁻¹ ^ N) := by rw [hpow]
-    _ = (c N * ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) *
-        ν ^ N * μ ^ N * μ⁻¹ ^ N := by ring
+    (μ ^ N)⁻¹ * (c N * S) = ((μ ^ N)⁻¹ * c N) * S := by ring
+    _ = ((c N * (ν / μ) ^ N) * (ν ^ N)⁻¹) * S := by
+      rw [adjusted_scalar_factor_eq (c N) μ ν N hμ hν]
+    _ = (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S) := by ring
 
 end ProportionalScalar
 
