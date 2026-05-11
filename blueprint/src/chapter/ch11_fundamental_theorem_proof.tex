@@ -149,6 +149,9 @@ with an extra $Z$-gauge degree of freedom.
 		+\sum_k b_k^{(N)} w_k^{(N)}.
 	\]
 	Then \(a_{i_0}^{(N)}=b_0^{(N)}\) for all sufficiently large \(N\).
+	This is the coefficient-comparison step in the proof of
+	\cite[Theorem~II.1, lines~1181--1182]{Cirac2016MPDO_arXiv}, after applying
+	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -174,6 +177,9 @@ with an extra $Z$-gauge degree of freedom.
 		=
 		c_N\mu_B^N\ket{V^{(N)}(B)}.
 	\]
+	This is the algebraic form of the phase relation supplied by
+	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} in the proof of
+	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -204,6 +210,12 @@ with an extra $Z$-gauge degree of freedom.
 		c_N\nu_0^N\ket{V^{(N)}(B_0)}
 	\]
 	for all sufficiently large \(N\).
+	This corresponds to the step in the proof of
+	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv} where
+	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} rules out the
+	vanishing-overlap alternative and
+	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} supplies the phase
+	relation for the selected block.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -227,6 +239,9 @@ with an extra $Z$-gauge degree of freedom.
 		=
 		c_N\sum_{k\ne k_0}\nu_k^N\ket{V^{(N)}(B_k)}.
 	\]
+	This is the finite-sum bookkeeping for the recursive deletion of a matched
+	block pair in the proof of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -242,6 +257,10 @@ with an extra $Z$-gauge degree of freedom.
 	If two weighted block-state sums are eventually related by a scalar sequence
 	\(c_N\), and selected summands are eventually related by the same scalar
 	sequence, then the erased tails are eventually related by \(c_N\).
+	This is the eventual form of the preceding deletion step in the proof of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}, used after
+	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} supplies linear
+	independence only for sufficiently large lengths.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -259,6 +278,9 @@ with an extra $Z$-gauge degree of freedom.
 	After erasing the leading block \(A_0\), the weighted MPV-state tail can
 	be reindexed by \(j\mapsto j+1\) as a family indexed by
 	\(\{0,\ldots,r-2\}\).
+	This is the reindexing of the remaining BNT blocks after one matched block
+	has been removed in the proof of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -275,6 +297,9 @@ with an extra $Z$-gauge degree of freedom.
 	be any selected index.  The weighted MPV-state sum over all indices
 	different from \(a\) can be reindexed over \(\{0,\ldots,n-1\}\) by the
 	order-preserving insertion map whose image is the complement of \(a\).
+	This is the same reindexing step for a matched block that is not
+	necessarily the leading block; the source permits relabeling of the BNT
+	blocks in \cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -294,6 +319,8 @@ with an extra $Z$-gauge degree of freedom.
 	the same sequence.  Then, after erasing the leading blocks and reindexing
 	the remaining families by \(j\mapsto j+1\), the assembled tail tensors are
 	eventually nonzero proportional.
+	This is the leading-block version of the recursive deletion step in
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -315,6 +342,9 @@ with an extra $Z$-gauge degree of freedom.
 	related by the same sequence.  Then, after erasing that pair and reindexing
 	both complements, the assembled tail tensors are eventually nonzero
 	proportional.
+	This is the arbitrary-block version of the same recursive deletion step,
+	after the matched pair has been identified up to the relabeling allowed in
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -336,6 +366,10 @@ with an extra $Z$-gauge degree of freedom.
 	and the family consisting of all \(A\)-blocks together with the remaining
 	\(B\)-blocks is eventually linearly independent, then the two complements,
 	reindexed by the insertion maps, are eventually nonzero proportional.
+	This combines \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} and
+	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} at the recursive
+	peeling point of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -343,6 +377,33 @@ with an extra $Z$-gauge degree of freedom.
 	complement.  The phase-substitution coefficient lemma gives the selected
 	weighted summand identity.  Subtract that identity from the total relation
 	and reindex the two complements.
+\end{proof}
+
+\begin{lemma}[Eventual tail proportionality from the left substituted family]%
+\label{lem:eventual_tail_proportional_from_phase_sum_li_left}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left}
+	\leanok
+	\uses{lem:selected_coefficient_from_two_family_linear_independence,
+		lem:eventual_proportional_weighted_tail_succAbove_package}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence, and suppose
+	\(\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}\) for every \(N\),
+	with \(\zeta\ne 0\).  If the family consisting of all \(B\)-blocks together
+	with the remaining \(A\)-blocks is eventually linearly independent, then the
+	two complements, reindexed by the insertion maps, are eventually nonzero
+	proportional.
+	This is the same recursive peeling step with the linearly independent
+	family ordered as all \(B\)-blocks together with the remaining
+	\(A\)-blocks; it is used for the symmetric half of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Use \(\zeta\ne 0\) to rewrite the selected \(A\)-summand in terms of
+	\(B_{b_0}\).  Coefficient extraction in the eventually linearly
+	independent family identifies the selected summands, and the preceding
+	tail-subtraction lemma gives eventual proportionality of the two
+	complements.
 \end{proof}
 
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
