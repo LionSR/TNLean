@@ -2,6 +2,7 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.Order.Filter.AtTopBot.Basic
 
 /-!
 # Basic definitions for matrix product state tensors
@@ -122,6 +123,22 @@ def NonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ N : ℕ, ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ
 
+/-- Eventual nonzero proportionality of MPV families.
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`, an eventual linear-independence statement. This auxiliary predicate is
+the corresponding eventual version of the projective proportionality relation:
+for all sufficiently large lengths, the two MPV vectors lie on the same nonzero
+projective line. The theorem hypothesis in line 1169 gives the stronger
+all-length predicate `NonzeroProportionalMPV₂`; this predicate is used only for
+tail reductions where finitely many initial lengths are irrelevant to the
+asymptotic conclusion. -/
+def EventuallyNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  Filter.Eventually
+    (fun N : ℕ => ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ)
+    Filter.atTop
+
 /-- Nonzero MPV proportionality forgets to weak MPV proportionality.
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
@@ -135,6 +152,18 @@ theorem NonzeroProportionalMPV₂.toProportionalMPV₂ {d D₁ D₂ : ℕ}
   intro N
   rcases h N with ⟨c, _hc, hN⟩
   exact ⟨c, hN⟩
+
+/-- All-length nonzero MPV proportionality gives eventual nonzero MPV proportionality.
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1169--1182. The theorem assumes
+proportionality at every length; the proof later invokes the eventual
+linear-independence Lemma `Lem1`, so the same hypothesis may be used in eventual
+form. -/
+theorem NonzeroProportionalMPV₂.eventually {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : NonzeroProportionalMPV₂ A B) :
+    EventuallyNonzeroProportionalMPV₂ A B :=
+  Filter.Eventually.of_forall h
 
 /-- Nonzero MPV proportionality is symmetric.
 
