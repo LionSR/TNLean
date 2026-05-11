@@ -370,12 +370,6 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
   have hB_self : ∀ k : Fin rB,
       Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
     hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hA_cross : ∀ j k : Fin rA, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
-    hA.cross_overlap_tendsto_zero
-  have hB_cross : ∀ j k : Fin rB, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
-    hB.cross_overlap_tendsto_zero
   obtain ⟨c, _hc, hState⟩ :=
     exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
       A B hProp
