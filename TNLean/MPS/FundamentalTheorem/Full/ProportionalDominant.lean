@@ -24,6 +24,83 @@ namespace MPSTensor
 
 section ProportionalDominant
 
+/-- **Dominant normalized inner-product concentration.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+fixed-block argument, after expanding a canonical-form tensor into weighted BNT
+blocks, one projects the weighted sum against a selected dominant block. If all
+other weights have strictly smaller modulus and the selected block is
+asymptotically normalized while the off-diagonal overlaps decay, the normalized
+projection tends to one. This is the inner-product concentration step used
+before comparing the two proportional block sums. -/
+lemma tendsto_normalized_weighted_mpvInner_sum_of_dominant
+    {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (j₀ : Fin r) (hμ0 : μ j₀ ≠ 0)
+    (hdiag :
+      Tendsto (fun N => mpvInner (d := d) (A j₀) (A j₀) N) atTop (nhds 1))
+    (hoff : ∀ j : Fin r, j ≠ j₀ →
+      Tendsto (fun N => mpvInner (d := d) (A j₀) (A j) N) atTop (nhds 0))
+    (hratio : ∀ j : Fin r, j ≠ j₀ → ‖μ j / μ j₀‖ < 1) :
+    Tendsto
+      (fun N : ℕ =>
+        (μ j₀ ^ N)⁻¹ *
+          (∑ j : Fin r, (μ j) ^ N * mpvInner (d := d) (A j₀) (A j) N))
+      atTop (nhds 1) := by
+  have hsum :
+      Tendsto
+        (fun N : ℕ =>
+          ∑ j : Fin r, (μ j / μ j₀) ^ N *
+            mpvInner (d := d) (A j₀) (A j) N)
+        atTop (nhds 1) :=
+    sum_tendsto_one_of_diag (hμ0 := hμ0) (j0 := j₀) rfl hdiag hratio hoff
+  convert hsum using 1
+  ext N
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [div_pow]
+  field_simp [pow_ne_zero N hμ0]
+
+/-- **Leading BNT normalized inner-product concentration.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is
+the preceding dominant projection estimate specialized to the leading block of
+an `IsCanonicalFormBNT` family in the present one-copy-per-sector formalization.
+The strict ordering of BNT weight moduli supplies the required strict
+dominance of the leading weight. -/
+lemma tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
+    {d r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    {μ : Fin r → ℂ}
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (hA : IsCanonicalFormBNT μ A) (hr : r ≠ 0) :
+    Tendsto
+      (fun N : ℕ =>
+        (μ ⟨0, Nat.pos_of_ne_zero hr⟩ ^ N)⁻¹ *
+          (∑ j : Fin r,
+            (μ j) ^ N *
+              mpvInner (d := d) (A ⟨0, Nat.pos_of_ne_zero hr⟩) (A j) N))
+      atTop (nhds 1) := by
+  let j₀ : Fin r := ⟨0, Nat.pos_of_ne_zero hr⟩
+  have hμ0 : μ j₀ ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero j₀
+  have hdiag :
+      Tendsto (fun N => mpvInner (d := d) (A j₀) (A j₀) N) atTop (nhds 1) :=
+    tendsto_inner_one (A j₀) (hA.toHasNormalizedSelfOverlap.overlap_tendsto_one j₀)
+  have hoff : ∀ j : Fin r, j ≠ j₀ →
+      Tendsto (fun N => mpvInner (d := d) (A j₀) (A j) N) atTop (nhds 0) := by
+    intro j hj
+    exact tendsto_inner_zero (A j₀) (A j) (hA.cross_overlap_tendsto_zero j₀ j hj.symm)
+  have hratio : ∀ j : Fin r, j ≠ j₀ → ‖μ j / μ j₀‖ < 1 := by
+    intro j hj
+    rw [norm_div]
+    exact (div_lt_one (norm_pos_iff.mpr hμ0)).mpr
+      (hA.mu_strict_anti (by
+        simp only [j₀, Fin.lt_def]
+        exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h))))
+  simpa [j₀] using
+    tendsto_normalized_weighted_mpvInner_sum_of_dominant
+      A j₀ hμ0 hdiag hoff hratio
+
 /-- **Dominant-block projection contradiction for proportional BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. If the normalized
