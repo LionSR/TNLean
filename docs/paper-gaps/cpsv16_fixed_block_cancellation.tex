@@ -72,16 +72,28 @@ selected coefficient to vanish.  The corresponding declarations are
 \end{aligned}
 \]
 
+The leading-block cases are also formalized.  They are discharged by the
+dominant projection contradiction already available for eventually nonzero
+proportional BNT families:
+\[
+\begin{aligned}
+&\leanid{MPSTensor.fixed\_right\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT},\\
+&\leanid{MPSTensor.fixed\_left\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{aligned}
+\]
+
 \section{Elimination plan}
 
 The intended elimination is to prove the two fixed-block contradiction
 declarations from the BNT hypotheses, eventual nonzero proportionality, and the
 already formalized fixed-block Lemma~\texttt{Lem1} inputs.  A proof may use an
-induction through matched block removal or a direct argument isolating the
-selected summand in the quotient by the span of the opposite family.  It must
-not assume global linear independence of all remaining blocks, since that is
-not a consequence of the BNT hypotheses once a block on one side may be
-phase-equivalent to a block on the other.
+induction through matched block removal, using the leading-block
+contradictions above as the case in which the selected block has become
+dominant, or a direct argument isolating the selected summand in the quotient
+by the span of the opposite family.  It must not assume global linear
+independence of all remaining blocks, since that is not a consequence of the
+BNT hypotheses once a block on one side may be phase-equivalent to a block on
+the other.
 
 \bibliographystyle{alpha}
 \bibliography{references}
