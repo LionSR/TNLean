@@ -826,10 +826,8 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
   have hInner : ∀ {D : ℕ} (X : MPSTensor d D) (N : ℕ),
       (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
         c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
-    intro D X N
-    have hinner :=
-      congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hState N)
-    simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+    exact weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
+      A B c hState
   have hNormalizedInner :
       ∀ {D : ℕ} (X : MPSTensor d D) (μ ν : ℂ),
         μ ≠ 0 → ν ≠ 0 → ∀ N : ℕ,

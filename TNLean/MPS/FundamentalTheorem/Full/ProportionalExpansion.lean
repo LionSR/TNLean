@@ -107,6 +107,30 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
   choose c hc hEq using h
   exact ⟨c, hc, hEq⟩
 
+/-- **Projection of a fixed weighted MPV-state scalar sequence.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Once the
+proportionality scalars for the weighted assembled MPV-state sums have been
+chosen, projecting against a fixed block MPV preserves the same scalar
+sequence at every length. -/
+lemma weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ)
+    (hState : ∀ N : ℕ,
+      (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    ∀ {D : ℕ} (X : MPSTensor d D) (N : ℕ),
+      (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+        c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
+  intro D X N
+  have hinner :=
+    congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hState N)
+  simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+
 -- The fixed-length projection statement below is retained separately because
 -- issue #1563 uses it before passing to the scalar sequence in the CPSV16
 -- lines 1170--1192 block-selection contradiction.
@@ -159,11 +183,9 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
   obtain ⟨c, hc, hstate⟩ :=
     exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
       A B hProp
-  refine ⟨c, hc, ?_⟩
-  intro N
-  have hinner :=
-    congrArg (fun v : MPVSpace d N => ⟪mpvState (d := d) X N, v⟫_ℂ) (hstate N)
-  simpa [mpvInner, inner_sum, inner_smul_right] using hinner
+  exact ⟨c, hc,
+    weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
+      A B c hstate X⟩
 
 /-- **A scalar sequence for normalized proportional weighted projections.**
 
