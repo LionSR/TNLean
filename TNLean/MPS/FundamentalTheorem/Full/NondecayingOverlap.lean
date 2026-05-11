@@ -809,81 +809,13 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
     (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
-  have hA_self : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hB_self : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hA_cross : ∀ j k : Fin rA, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
-    hA.cross_overlap_tendsto_zero
-  have hB_cross : ∀ j k : Fin rB, j ≠ k →
-      Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
-    hB.cross_overlap_tendsto_zero
-  obtain ⟨c, hc, hState⟩ :=
-    exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toTensorFromBlocks
-      A B hProp
-  have hInner : ∀ {D : ℕ} (X : MPSTensor d D) (N : ℕ),
-      (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
-        c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) := by
-    exact weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
-      A B c hState
-  have hNormalizedInner :
-      ∀ {D : ℕ} (X : MPSTensor d D) (μ ν : ℂ),
-        μ ≠ 0 → ν ≠ 0 → ∀ N : ℕ,
-          (μ ^ N)⁻¹ *
-              (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
-            (c N * (ν / μ) ^ N) *
-              ((ν ^ N)⁻¹ *
-                (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
-    intro D X μ ν hμ hν
-    exact normalized_weighted_mpvInner_eq_mul_adjusted_of_eq_mul
-      A B X c μ ν hμ hν (hInner X)
   have hrA_pos : 0 < rA := Nat.pos_of_ne_zero hrA
   have hrB_pos : 0 < rB := Nat.pos_of_ne_zero hrB
   let a0 : Fin rA := ⟨0, hrA_pos⟩
   let b0 : Fin rB := ⟨0, hrB_pos⟩
-  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
-  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
-  have hA_norm_dominant :
-      Tendsto
-        (fun N : ℕ =>
-          ‖(μA a0 ^ N)⁻¹ •
-            (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
-        atTop (nhds (1 : ℝ)) := by
-    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
-      A a0 hμA_ne hA_self (fun j hj => by
-        rw [norm_div]
-        exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
-          (hA.mu_strict_anti (by
-            simp only [a0, Fin.lt_def]
-            exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
-  have hB_norm_dominant :
-      Tendsto
-        (fun N : ℕ =>
-          ‖(μB b0 ^ N)⁻¹ •
-            (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
-        atTop (nhds (1 : ℝ)) := by
-    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
-      B b0 hμB_ne hB_self (fun k hk => by
-        rw [norm_div]
-        exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
-          (hB.mu_strict_anti (by
-            simp only [b0, Fin.lt_def]
-            exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
-  have hAdjustedScalar_dom :
-      Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
-        (nhds (1 : ℝ)) :=
-    tendsto_norm_adjusted_weighted_mpvState_scalar_of_tendsto_norm_one
-      A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
-      hA_norm_dominant hB_norm_dominant
   have hDominant_contra :=
-    dominant_projection_contradictions_of_normalized_proportional_inner
-      A B hA hB hrA hrB c
-      (fun X μ ν hμ hν => Filter.Eventually.of_forall (hNormalizedInner X μ ν hμ hν))
-      (by simpa [a0, b0] using hAdjustedScalar_dom)
-      hA_self hB_self hA_cross hB_cross
+    dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp.eventually
   have hDominantB_contra :
       (∀ j : Fin rA, Tendsto (fun N => mpvOverlap (d := d) (A j) (B b0) N)
         atTop (nhds 0)) → False := by

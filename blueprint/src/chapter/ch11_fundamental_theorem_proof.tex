@@ -440,6 +440,24 @@ with an extra $Z$-gauge degree of freedom.
 	and apply the normalized scalar rewrite at every sufficiently large length.
 \end{proof}
 
+\begin{lemma}[Dominant-block contradiction from eventual proportionality]%
+\label{lem:dominant_projection_contradiction_eventual_proportional}
+	\lean{MPSTensor.dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_adjusted_scalar_norm,
+		lem:eventual_proportional_tensor_from_blocks_adjusted_weighted_inner_sequence}
+	Suppose the assembled weighted BNT block tensors are eventually
+	proportional by nonzero scalars.  Then the dominant block on either side
+	cannot have vanishing overlaps with every block on the other side.
+\end{lemma}
+
+\begin{proof}\leanok
+	Expand eventual proportionality into an eventual scalar sequence for the
+	weighted state sums.  Dominant-weight normalization gives modulus
+	convergence for the adjusted scalar, and the normalized projected
+	identities give the two dominant-block contradictions.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}

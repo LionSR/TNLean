@@ -311,6 +311,119 @@ lemma dominant_projection_contradictions_of_normalized_proportional_inner
     exact zero_ne_one (tendsto_nhds_unique hRHS_norm_zero hRHS_norm_one)
   exact ⟨by simpa [b0] using hDominantB_contra, by simpa [a0] using hDominantA_contra⟩
 
+/-- **Dominant-block projection contradiction from eventual proportionality.**
+
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
+the two canonical-form tensors into their BNT block sums, eventual nonzero
+proportionality supplies the scalar sequence used in the dominant-block
+projection contradiction. This is the dominant case of the line 1182 argument,
+with Lemma `Lem1` accounting for the sufficiently-large-length formulation. -/
+lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ((∀ j : Fin rA,
+        Tendsto
+          (fun N => mpvOverlap (d := d) (A j)
+            (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N)
+          atTop (nhds 0)) → False) ∧
+    ((∀ k : Fin rB,
+        Tendsto
+          (fun N => mpvOverlap (d := d)
+            (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k) N)
+          atTop (nhds 0)) → False) := by
+  let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
+  let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
+  have hA_self : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
+    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hB_self : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
+    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
+  have hA_cross : ∀ j k : Fin rA, j ≠ k →
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
+    hA.cross_overlap_tendsto_zero
+  have hB_cross : ∀ j k : Fin rB, j ≠ k →
+      Tendsto (fun N => mpvOverlap (d := d) (B j) (B k) N) atTop (nhds 0) :=
+    hB.cross_overlap_tendsto_zero
+  obtain ⟨c, _hc, hState⟩ :=
+    exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
+      A B hProp
+  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
+  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
+  have hA_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μA a0 ^ N)⁻¹ •
+            (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      A a0 hμA_ne hA_self (fun j hj => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμA_ne)).mpr
+          (hA.mu_strict_anti (by
+            simp only [a0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hj (Fin.ext h)))))
+  have hB_norm_dominant :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μB b0 ^ N)⁻¹ •
+            (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)‖)
+        atTop (nhds (1 : ℝ)) := by
+    exact tendsto_norm_normalized_weighted_mpvState_sum_of_dominant
+      B b0 hμB_ne hB_self (fun k hk => by
+        rw [norm_div]
+        exact (div_lt_one (norm_pos_iff.mpr hμB_ne)).mpr
+          (hB.mu_strict_anti (by
+            simp only [b0, Fin.lt_def]
+            exact Nat.pos_of_ne_zero (fun h => hk (Fin.ext h)))))
+  have hAdjustedScalar_dom :
+      Tendsto (fun N : ℕ => ‖c N * (μB b0 / μA a0) ^ N‖) atTop
+        (nhds (1 : ℝ)) :=
+    tendsto_norm_adjusted_weighted_mpvState_scalar_of_eventually_tendsto_norm_one
+      A B c (μA a0) (μB b0) hμA_ne hμB_ne hState
+      hA_norm_dominant hB_norm_dominant
+  have hInner :
+      ∀ {D : ℕ} (X : MPSTensor d D),
+        ∀ᶠ N in atTop,
+          (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+            c N * (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N) :=
+    eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence
+      A B c hState
+  have hNormalizedInner :
+      ∀ {D : ℕ} (X : MPSTensor d D) (μ ν : ℂ),
+        μ ≠ 0 → ν ≠ 0 → ∀ᶠ N in atTop,
+          (μ ^ N)⁻¹ *
+              (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) X (A j) N) =
+            (c N * (ν / μ) ^ N) *
+              ((ν ^ N)⁻¹ *
+                (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N)) := by
+    intro D X μ ν hμ hν
+    refine (hInner X).mono ?_
+    intro N hN
+    let S : ℂ := ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) X (B k) N
+    rw [hN]
+    change (μ ^ N)⁻¹ * (c N * S) =
+      (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S)
+    calc
+      (μ ^ N)⁻¹ * (c N * S) = ((μ ^ N)⁻¹ * c N) * S := by ring
+      _ = ((c N * (ν / μ) ^ N) * (ν ^ N)⁻¹) * S := by
+        rw [adjusted_scalar_factor_eq (c N) μ ν N hμ hν]
+      _ = (c N * (ν / μ) ^ N) * ((ν ^ N)⁻¹ * S) := by ring
+  simpa [a0, b0] using
+    dominant_projection_contradictions_of_normalized_proportional_inner
+      A B hA hB hrA hrB c hNormalizedInner
+      (by simpa [a0, b0] using hAdjustedScalar_dom)
+      hA_self hB_self hA_cross hB_cross
+
 end ProportionalDominant
 
 end MPSTensor
