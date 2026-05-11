@@ -54,9 +54,9 @@ namespace MPSTensor
 
 The argument follows arXiv:1606.00608 lines 1170-1192. The proof uses inner-product
 manipulation of the BNT decompositions, asymptotic block-orthonormality, and the
-dominant-block normalization. Lemma Lem1 supplies eventual linear independence
-from asymptotic orthonormality; the contradiction step applies this after showing
-that the relevant joint family is asymptotically orthonormal. -/
+dominant-block normalization. The eventual linear-independence corollary supplies
+linear independence from asymptotic orthonormality; the contradiction step applies
+this after showing that the relevant joint family is asymptotically orthonormal. -/
 
 /--
 **Key step of Theorem 4.4 (paper route).**

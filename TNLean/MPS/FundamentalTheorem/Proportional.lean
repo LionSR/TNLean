@@ -286,9 +286,9 @@ cross-transfer-matrix spectral radius (computed via
 together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
 
-Closes the same-bond-dimension component of the equalMPS gap
-(arXiv:1606.00608, Lemma equalMPS); the rectangular bond-dimension conclusion
-is separate. -/
+Closes the same-bond-dimension component of the gap in arXiv:1606.00608,
+Lemma equalMPS, lines 1080-1091; the rectangular bond-dimension conclusion is
+separate. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (A B : MPSTensor d D)
     (hA_irr : IsIrreducibleTensor (d := d) (D := D) A)
