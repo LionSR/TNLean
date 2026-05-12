@@ -84,8 +84,7 @@ proportional BNT families:
 
 The first partner-identification step for peeling is now also formalized:
 \begin{flushleft}\small
-\leanid{MPSTensor.leading\_right\_nondecaying\_partner\_eq\_leading\_left}\\
-\leanid{\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\leanid{MPSTensor.leading\_right\_nondecaying\_partner\_eq\_leading\_left\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
 \end{flushleft}
 It proves that, under eventual nonzero proportionality, a non-decaying partner
 of the leading \(B\)-block must be the leading \(A\)-block.  This is still only
@@ -96,15 +95,14 @@ cancellation statements.
 The resulting leading phase relation and asymptotic leading-tail estimate are
 recorded in:
 \begin{flushleft}\small
-\leanid{MPSTensor.exists\_leading\_phase\_tail\_diff\_tendsto\_zero}\\
-\leanid{\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\leanid{MPSTensor.exists\_leading\_phase\_tail\_diff\_tendsto\_zero\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
 \end{flushleft}
 This lemma supplies the phase relation for \(A_0,B_0\) and proves that the
 normalized leading-erased tail difference tends to zero.  It is not the missing
 exact selected-summand cancellation: the remaining proof must still extract the
 leading coefficient identity, or an equivalent tail proportionality statement,
 without assuming residual-family linear independence beyond the fixed-block
-Lemma~\(\mathrm{Lem1}\) input.
+Lemma~\texttt{Lem1} input.
 
 There are also conditional tail-peeling auxiliary lemmas:
 \[
