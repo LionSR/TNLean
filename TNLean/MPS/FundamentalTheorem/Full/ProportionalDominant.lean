@@ -283,6 +283,136 @@ lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
       (A a0) B b0 hμB_ne hζ (by simpa [a0, b0] using hPhase)
       hdiag hoff hratio
 
+/-- **Leading phase-adjusted scalar convergence.**
+
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. In the
+dominant phase-matched situation, projecting the proportional weighted BNT
+sums against the leading \(A\)-block and using the phase relation
+\(|V^{(N)}(B_0)\rangle=\zeta^N |V^{(N)}(A_0)\rangle\) shows that the same
+eventual proportionality scalar satisfies
+\[
+  c_N\left(\frac{\mu^B_0\zeta}{\mu^A_0}\right)^N \longrightarrow 1 .
+\]
+This is a projection consequence only; it does not assert exact selected
+coefficient equality or any residual-family linear independence.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ} {ζ : ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hζ : ‖ζ‖ = 1)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N =
+        ζ ^ N • mpvState (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) N)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ c : ℕ → ℂ,
+      (∀ᶠ N in atTop, c N ≠ 0) ∧
+      (∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) ∧
+      Tendsto
+        (fun N : ℕ =>
+          c N *
+            ((μB ⟨0, Nat.pos_of_ne_zero hrB⟩ * ζ) /
+              μA ⟨0, Nat.pos_of_ne_zero hrA⟩) ^ N)
+        atTop (nhds (1 : ℂ)) := by
+  let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
+  let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
+  obtain ⟨c, hc, hState⟩ :=
+    exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂
+      A B hProp
+  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
+  have hμB_ne : μB b0 ≠ 0 := hB.toHasStrictOrderedNonzeroWeights.mu_ne_zero b0
+  have hζ_ne : ζ ≠ 0 := by
+    intro hzero
+    have : ‖ζ‖ = 0 := by simp [hzero]
+    linarith
+  have hμBζ_ne : μB b0 * ζ ≠ 0 := mul_ne_zero hμB_ne hζ_ne
+  have hA_proj :
+      Tendsto
+        (fun N : ℕ =>
+          (μA a0 ^ N)⁻¹ *
+            (∑ j : Fin rA,
+              (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N))
+        atTop (nhds (1 : ℂ)) := by
+    simpa [a0] using
+      tendsto_normalized_weighted_mpvInner_sum_of_leading_CFBNT
+        A hA hrA
+  have hB_proj :
+      Tendsto
+        (fun N : ℕ =>
+          ((μB b0 * ζ) ^ N)⁻¹ *
+            (∑ k : Fin rB,
+              (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N))
+        atTop (nhds (1 : ℂ)) := by
+    simpa [a0, b0] using
+      tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
+        A B hA hB hrA hrB hζ hPhase
+  have hInner :
+      ∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N) =
+          c N *
+            (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N) :=
+    eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence
+      A B c hState (A a0)
+  have hProjected :
+      ∀ᶠ N in atTop,
+        (μA a0 ^ N)⁻¹ *
+            (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N) =
+          (c N * ((μB b0 * ζ) / μA a0) ^ N) *
+            (((μB b0 * ζ) ^ N)⁻¹ *
+              (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N)) := by
+    refine hInner.mono ?_
+    intro N hN
+    let S : ℂ := ∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N
+    rw [hN]
+    change (μA a0 ^ N)⁻¹ * (c N * S) =
+      (c N * ((μB b0 * ζ) / μA a0) ^ N) * (((μB b0 * ζ) ^ N)⁻¹ * S)
+    calc
+      (μA a0 ^ N)⁻¹ * (c N * S) = ((μA a0 ^ N)⁻¹ * c N) * S := by ring
+      _ = ((c N * ((μB b0 * ζ) / μA a0) ^ N) *
+            ((μB b0 * ζ) ^ N)⁻¹) * S := by
+        rw [adjusted_scalar_factor_eq (c N) (μA a0) (μB b0 * ζ) N hμA_ne hμBζ_ne]
+      _ = (c N * ((μB b0 * ζ) / μA a0) ^ N) *
+            (((μB b0 * ζ) ^ N)⁻¹ * S) := by ring
+  have hQuot :
+      Tendsto
+        (fun N : ℕ =>
+          ((μA a0 ^ N)⁻¹ *
+            (∑ j : Fin rA,
+              (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N)) /
+            (((μB b0 * ζ) ^ N)⁻¹ *
+              (∑ k : Fin rB,
+                (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N)))
+        atTop (nhds (1 : ℂ)) := by
+    simpa using hA_proj.div hB_proj one_ne_zero
+  have hPhaseAdjusted :
+      Tendsto (fun N : ℕ => c N * ((μB b0 * ζ) / μA a0) ^ N)
+        atTop (nhds (1 : ℂ)) := by
+    refine Tendsto.congr' ?_ hQuot
+    filter_upwards [hProjected, hB_proj.eventually_ne one_ne_zero] with N hN hB_ne
+    let T : ℂ :=
+      ((μB b0 * ζ) ^ N)⁻¹ *
+        (∑ k : Fin rB, (μB k) ^ N * mpvInner (d := d) (A a0) (B k) N)
+    change
+      ((μA a0 ^ N)⁻¹ *
+        (∑ j : Fin rA, (μA j) ^ N * mpvInner (d := d) (A a0) (A j) N)) / T =
+        c N * ((μB b0 * ζ) / μA a0) ^ N
+    rw [hN]
+    exact mul_div_cancel_right₀ (c N * ((μB b0 * ζ) / μA a0) ^ N) hB_ne
+  exact ⟨c, hc, hState, by simpa [a0, b0] using hPhaseAdjusted⟩
+
 /-- **Dominant adjusted scalar has asymptotic modulus one.**
 
 Source: arXiv:1606.00608, lines 1170--1192. In the

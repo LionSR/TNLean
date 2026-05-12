@@ -646,6 +646,42 @@ with an extra $Z$-gauge degree of freedom.
 	applies.
 \end{proof}
 
+\begin{lemma}[Dominant phase-adjusted proportional scalar converges to one]%
+\label{lem:dominant_phase_adjusted_scalar_convergence}
+	\lean{MPSTensor.exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence,
+		lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence,
+		lem:dominant_weight_normalized_bnt_projection,
+		lem:phase_normalized_dominant_bnt_projection}
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
+	canonical-form families with nonempty index sets, and suppose that the
+	assembled weighted MPV families are eventually nonzero proportional.  If
+	for every \(N\), the leading blocks satisfy
+	\[
+		\ket{V^{(N)}(B_{b_0})}
+		= \zeta^N \ket{V^{(N)}(A_{a_0})}
+	\]
+	with \(|\zeta|=1\), then there is an eventual nonzero scalar sequence
+	\(c_N\) relating the assembled weighted sums such that
+	\[
+		c_N\left(\frac{\mu^B_{b_0}\zeta}{\mu^A_{a_0}}\right)^N
+		\longrightarrow 1 .
+	\]
+	This is only the leading projected scalar convergence; it is not the exact
+	selected-summand equality needed for tail subtraction.
+	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Project the eventual weighted-state proportionality against the leading
+	\(A\)-block and divide by \((\mu^A_{a_0})^N\).  The \(A\)-side normalized
+	projection tends to \(1\), while the phase relation makes the
+	\(B\)-side projection normalized by \((\mu^B_{b_0}\zeta)^N\) tend to
+	\(1\).  Dividing the two limiting identities gives the stated convergence
+	of \(c_N((\mu^B_{b_0}\zeta)/\mu^A_{a_0})^N\).
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
