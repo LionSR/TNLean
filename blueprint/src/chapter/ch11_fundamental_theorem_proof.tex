@@ -159,7 +159,6 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:eventual_selected_coefficient_from_residual_span}
 	\lean{MPSTensor.eventually_selected_coefficient_eq_of_residual_span}
 	\leanok
-	\uses{lem:selected_coefficient_from_residual_span}
 	Suppose that, for all sufficiently large \(N\), the residual terms \(R_N\)
 	and \(S_N\) lie in the span of a residual family \(\{u_{N,k}\}_k\), the
 	identity
@@ -167,13 +166,14 @@ with an extra $Z$-gauge degree of freedom.
 		a_N v_N+R_N=b_N v_N+S_N
 	\]
 	holds, and \(v_N\) is not in that residual span.  Then \(a_N=b_N\) for
-	all sufficiently large \(N\).  This records the weaker coefficient
-	extraction target needed before replacing the conditional residual
-	linear-independence route
+	all sufficiently large \(N\).  This is the weaker form of coefficient
+	extraction that applies when only the span-exclusion condition is available,
+	before linear independence of the full family has been established
 	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
+	\uses{lem:selected_coefficient_from_residual_span}
 	Apply Lemma~\ref{lem:selected_coefficient_from_residual_span} at every
 	sufficiently large length.
 \end{proof}
