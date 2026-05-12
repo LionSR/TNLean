@@ -7,6 +7,20 @@ canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
 reduction uses a weighted family of irreducible TP-normalized blocks with
 primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of \cite{Cirac2017MPDO_AnnPhys}.
+Thus the reductions recorded here are conditional
+primitive-block results. They should not be read as the full
+translation-invariant canonical-form theorem of
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+The normalization convention is also dual to the one used in the cited theorem:
+the blocks are written in the unital orientation
+$\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
+$\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~754--758]{PerezGarcia2007Matrix},
+whereas this chapter uses
+the trace-preserving, or left-canonical, orientation
+$\sum_i (A_k^i)^\dagger A_k^i=\Id$.
+Passing to the conjugate-transposed Kraus family exchanges the two
+orientations by Lemma~\ref{lem:transfer_conjtranspose_adjoint}.
 The Perron--Frobenius eigenvector existence and TP-gauge construction
 are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
 left-canonical normalization data and the normal canonical form data.
@@ -539,6 +553,10 @@ per-block peripheral-spectrum primitivity.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form conditions.
 \end{theorem}
+% Scope restriction (primitive block hypotheses): not the full source theorem
+% (Theorem Th:TIcanonical, lines 742--763), which starts from an arbitrary
+% translation-invariant MPS representation. See
+% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}\leanok
 	\uses{thm:primitive_overlap}
@@ -558,14 +576,19 @@ per-block peripheral-spectrum primitivity.
 		\item each $A_k$ is injective,
 		\item each $A_k$ satisfies the TP normalization
 		      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
-		\item $|\mu_1| \ge \cdots \ge |\mu_r|$ (non-increasing),
+		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
 		\item all $\mu_k \neq 0$,
+		\item each block has positive bond dimension,
 		\item each transfer map $\E_{A_k}$ is primitive,
 		      i.e. has peripheral spectrum $\{1\}$.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form
 	conditions (Definition~\ref{def:is_canonical_form}).
 \end{theorem}
+% Scope restriction (peripheral-primitive block hypotheses): not the full
+% source theorem (lines 742--763), which starts from an
+% arbitrary translation-invariant MPS representation. See
+% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}
 	\leanok
@@ -965,6 +988,10 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		$\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
 		form conditions.
 \end{theorem}
+% Scope restriction (prepared primitive block decomposition): not the
+% full source theorem (lines 742--763), which starts from
+% an arbitrary translation-invariant MPS representation. See
+% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
