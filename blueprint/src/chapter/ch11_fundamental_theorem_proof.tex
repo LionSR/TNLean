@@ -695,17 +695,23 @@ with an extra $Z$-gauge degree of freedom.
 		\ket{V^{(N)}(B_{b_0})}
 		= \zeta^N \ket{V^{(N)}(A_{a_0})}
 	\]
-	with \(|\zeta|=1\), then there is an eventual nonzero scalar sequence
-	\(c_N\) relating the assembled weighted sums such that
+	with \(|\zeta|=1\), then there is a scalar sequence \(c_N\), eventually
+	nonzero, such that
+	\[
+		\sum_j(\mu^A_j)^N\ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k(\mu^B_k)^N\ket{V^{(N)}(B_k)}
+	\]
+	for all sufficiently large \(N\), and
 	\[
 		\left\|(\mu^A_{a_0})^{-N}
 		\Big((\mu^A_{a_0})^N \ket{V^{(N)}(A_{a_0})}
 		- c_N(\mu^B_{b_0})^N \ket{V^{(N)}(B_{b_0})}\Big)\right\|
 		\longrightarrow 0 .
 	\]
-	This is an asymptotic selected-summand cancellation. It is not the exact
-	selected-summand equality needed for tail subtraction.
 	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
+	% This is an asymptotic selected-summand cancellation; it does not give
+	% the exact selected-summand equality needed for tail subtraction.
 \end{lemma}
 
 \begin{proof}\leanok

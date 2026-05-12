@@ -499,7 +499,6 @@ lemma exists_dominant_selected_diff_tendsto_zero_of_eventuallyNonzeroProportiona
         atTop (nhds (0 : ℝ)) := by
     refine Tendsto.congr' ?_ hProduct
     filter_upwards with N
-    let v := mpvState (d := d) (A a0) N
     have hμA_pow_ne : μA a0 ^ N ≠ 0 := pow_ne_zero N hμA_ne
     have hvec :
         (μA a0 ^ N)⁻¹ •
