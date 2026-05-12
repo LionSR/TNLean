@@ -82,7 +82,7 @@ proportional BNT families:
 \end{aligned}
 \]
 
-There are also conditional tail-peeling helpers:
+There are also conditional tail-peeling auxiliary lemmas:
 \[
 \begin{aligned}
 &\leanid{MPSTensor.eventually\_selected\_weighted\_mpvState\_eq\_smul\_of\_phase\_sum\_and\_li},\\
@@ -92,13 +92,13 @@ There are also conditional tail-peeling helpers:
 \]
 These are correct algebraic statements, but their linear-independence
 hypotheses are stronger than the fixed-block application of
-Lemma~\texttt{Lem1}.  The right-handed helper assumes eventual linear
+Lemma~\texttt{Lem1}.  The right-handed auxiliary lemma assumes eventual linear
 independence of all \(A\)-blocks together with the whole remaining \(B\)-tail;
-the left-handed helper assumes the symmetric condition.  In contrast, the
-source sentence at line 1182 supplies only the family consisting of all blocks
-on one side together with the single fixed block on the other side.  These
-helpers are therefore conditional local tools, not formalizations of the
-fixed-block cancellation step.
+the left-handed auxiliary lemma assumes the symmetric condition.  In contrast,
+the source sentence at line 1182 supplies only the family consisting of all
+blocks on one side together with the single fixed block on the other side.
+These auxiliary lemmas are therefore conditional local tools, not
+formalizations of the fixed-block cancellation step.
 
 \section{Elimination plan}
 

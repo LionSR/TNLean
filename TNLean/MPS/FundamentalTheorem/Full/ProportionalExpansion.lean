@@ -364,7 +364,7 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. After a non-decaying block pair has supplied the phase relation for
-the selected block, this conditional helper uses an explicit eventual
+the selected block, this auxiliary lemma uses an explicit eventual
 linear-independence hypothesis for the displayed residual family. The total
 weighted-state relation then identifies the selected coefficient, and hence the
 selected weighted summand.
@@ -682,7 +682,7 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. Once a selected non-decaying block pair has been converted into a
-phase relation, this conditional helper records the coefficient extraction,
+phase relation, this auxiliary lemma records the coefficient extraction,
 selected-summand subtraction, and arbitrary-tail reindexing under an explicit
 eventual linear-independence hypothesis for the displayed residual family.
 
@@ -691,7 +691,7 @@ eventual linear-independence hypothesis for the displayed residual family.
 off-diagonal overlaps tend to zero. In the fixed-block step of Theorem `thm1`,
 lines 1181--1185, the local application gives independence for all blocks on
 one side together with one fixed block on the other side, not for the whole
-remaining tail appearing in this lemma. This conditional helper must therefore
+remaining tail appearing in this lemma. This auxiliary lemma must therefore
 not be used as the source-faithful discharge of fixed-block cancellation unless
 that residual-family independence has first been proved in the current
 argument. See `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/

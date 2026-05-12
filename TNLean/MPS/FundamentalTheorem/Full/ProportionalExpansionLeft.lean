@@ -40,7 +40,7 @@ of the selected `B`-summand before coefficient extraction.
 off-diagonal overlaps tend to zero. In the fixed-block step of Theorem `thm1`,
 lines 1181--1185, the local application gives independence for all blocks on
 one side together with one fixed block on the other side, not for the whole
-remaining tail appearing in this lemma. This conditional helper must therefore
+remaining tail appearing in this lemma. This auxiliary lemma must therefore
 not be used as the source-faithful discharge of fixed-block cancellation unless
 that residual-family independence has first been proved in the current
 argument. See `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
