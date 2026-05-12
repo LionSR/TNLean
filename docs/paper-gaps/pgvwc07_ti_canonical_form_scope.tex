@@ -81,14 +81,14 @@ The currently checked statements in the canonical-form reduction chapter
 prove conditional reductions from prior block hypotheses. In particular,
 the primitive fixed-point reduction assumes
 that the blocks are injective, trace-preserving in the chosen gauge, strictly
-ordered by weight modulus, nonzero, and primitive. The peripheral-spectrum
-variant assumes the same injectivity, normalization, and strict weight
-ordering, together with the statement that each block transfer map has
-peripheral spectrum $\{1\}$. The normal-canonical-form reduction starts
-from a weighted block decomposition already equivalent to the original
-state and assumes irreducibility, trace-preserving normalization,
-primitivity, pairwise distinct weight moduli, nonzero weights, and positive
-bond dimensions.
+ordered by weight modulus, nonzero, positive-dimensional, and primitive. The
+peripheral-spectrum variant assumes the same injectivity, normalization,
+strict weight ordering, nonzero weights, and positive block dimensions,
+together with the statement that each block transfer map has peripheral
+spectrum $\{1\}$. The normal-canonical-form reduction starts from a weighted
+block decomposition already equivalent to the original state and assumes
+irreducibility, trace-preserving normalization, primitivity, pairwise distinct
+weight moduli, nonzero weights, and positive bond dimensions.
 
 These are correct conditional consequences, but they are not formalizations
 of the full PGVWC07 translation-invariant canonical-form theorem. Their
@@ -98,16 +98,12 @@ assumptions into any later argument that cites canonical-form existence.
 
 \section{Formal boundary}
 
-The following declarations should therefore be read as conditional
-canonical-form theorems rather than as PGVWC07
-Theorem~\texttt{Th:TIcanonical}:
-\[
-\begin{gathered}
-  \texttt{MPSTensor.isCanonicalForm\_of\_primitive},\\
-  \texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive},\\
-  \texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.
-\end{gathered}
-\]
+The currently checked primitive and peripheral-primitive reductions should
+therefore be read as conditional canonical-form theorems rather than as
+PGVWC07 Theorem~\texttt{Th:TIcanonical}.\footnote{The formal declarations are
+\texttt{MPSTensor.isCanonicalForm\_of\_primitive},
+\texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}, and
+\texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.}
 They may be used after their hypotheses have been proved from earlier
 source-faithful reductions, but they should not be cited as giving canonical
 form directly from an arbitrary translation-invariant MPS representation.
