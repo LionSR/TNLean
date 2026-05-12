@@ -1661,7 +1661,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">12.9</span>
-    <span class="lemma_thmtitle">Selected weighted summand from phase substitution and Lemma Lem1</span>
+    <span class="lemma_thmtitle">Selected weighted summand from phase substitution and a linear-independence hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -1728,25 +1728,19 @@
 <div class="displaymath" id="a0000024605">
   \[  \mu _{i_0}^N|V^{(N)}(A_{i_0})\rangle  = c_N\nu _0^N|V^{(N)}(B_0)\rangle   \]
 </div>
-<p> for all sufficiently large \(N\). This corresponds to the step in the proof of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Theorem&#160;II.1, lines&#160;1181–1183
-	]
-</span> where <span class="cite">
+<p> for all sufficiently large \(N\). This is a conditional coefficient-extraction statement. In the fixed-block step, <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Lemma&#160;<span class="ttfamily">Lem1</span>
 	]
-</span> rules out the vanishing-overlap alternative and <span class="cite">
+</span> does not by itself supply the displayed residual-family linear independence <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Corollary&#160;<span class="ttfamily">eqV</span>
+	, Theorem&#160;II.1, lines&#160;1181–1183
 	]
-</span> supplies the phase relation for the selected block. </p>
+</span>. </p>
 
   </div>
 </div>
@@ -1914,19 +1908,13 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   If two weighted block-state sums are eventually related by a scalar sequence \(c_N\), and selected summands are eventually related by the same scalar sequence, then the erased tails are eventually related by \(c_N\). This is the eventual form of the preceding deletion step in the proof of <span class="cite">
+  <p>   If two weighted block-state sums are eventually related by a scalar sequence \(c_N\), and selected summands are eventually related by the same scalar sequence, then the erased tails are eventually related by \(c_N\). This is the eventual form of the preceding deletion step, used at the sufficiently-large-length stage of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Theorem&#160;II.1, lines&#160;1181–1185
 	]
-</span>, used after <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Lemma&#160;<span class="ttfamily">Lem1</span>
-	]
-</span> supplies linear independence only for sufficiently large lengths. </p>
+</span>. </p>
 
   </div>
 </div>
@@ -2296,7 +2284,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">12.16</span>
-    <span class="lemma_thmtitle">Eventual tail proportionality from phase substitution and Lemma Lem1</span>
+    <span class="lemma_thmtitle">Eventual tail proportionality from phase substitution and a linear-independence hypothesis</span>
     <div class="thm_header_extras">
 
     
@@ -2355,19 +2343,13 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Suppose the total weighted state sums are eventually related by a nonzero scalar sequence. If a selected pair satisfies \(|V^{(N)}(B_{b_0})\rangle =\zeta ^N|V^{(N)}(A_{a_0})\rangle \) for every \(N\), and the family consisting of all \(A\)-blocks together with the remaining \(B\)-blocks is eventually linearly independent, then the two complements, reindexed by the insertion maps, are eventually nonzero proportional. This combines <span class="cite">
+  <p>   Suppose the total weighted state sums are eventually related by a nonzero scalar sequence. If a selected pair satisfies \(|V^{(N)}(B_{b_0})\rangle =\zeta ^N|V^{(N)}(A_{a_0})\rangle \) for every \(N\), and the family consisting of all \(A\)-blocks together with the remaining \(B\)-blocks is eventually linearly independent, then the two complements, reindexed by the insertion maps, are eventually nonzero proportional. This is a conditional algebraic peeling statement. The displayed residual-family independence is not supplied by the fixed-block step; in that step <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
 	, Lemma&#160;<span class="ttfamily">Lem1</span>
 	]
-</span> and <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
-	, Corollary&#160;<span class="ttfamily">eqV</span>
-	]
-</span> at the recursive peeling point of <span class="cite">
+</span> is applied only to the fixed-block family <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
@@ -2454,7 +2436,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Suppose the total weighted state sums are eventually related by a nonzero scalar sequence, and suppose \(|V^{(N)}(B_{b_0})\rangle =\zeta ^N|V^{(N)}(A_{a_0})\rangle \) for every \(N\), with \(\zeta \ne 0\). If the family consisting of all \(B\)-blocks together with the remaining \(A\)-blocks is eventually linearly independent, then the two complements, reindexed by the insertion maps, are eventually nonzero proportional. This is the same recursive peeling step with the linearly independent family ordered as all \(B\)-blocks together with the remaining \(A\)-blocks; it is used for the symmetric half of <span class="cite">
+  <p>   Suppose the total weighted state sums are eventually related by a nonzero scalar sequence, and suppose \(|V^{(N)}(B_{b_0})\rangle =\zeta ^N|V^{(N)}(A_{a_0})\rangle \) for every \(N\), with \(\zeta \ne 0\). If the family consisting of all \(B\)-blocks together with the remaining \(A\)-blocks is eventually linearly independent, then the two complements, reindexed by the insertion maps, are eventually nonzero proportional. This is the same conditional algebraic peeling statement with the linearly independent family ordered as all \(B\)-blocks together with the remaining \(A\)-blocks <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
