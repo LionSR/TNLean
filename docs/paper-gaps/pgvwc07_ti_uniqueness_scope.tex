@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{Scope of the Formal Block-Separation Lemmas Relative to PGVWC07 Uniqueness}
+\author{}
+\date{2026-05-12}
+
+\begin{document}
+\maketitle
+
+\section{Source theorem}
+
+The translation-invariant canonical-form uniqueness theorem of
+P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac starts with two TI canonical
+\(D\)-MPS representations of the same finite-ring state
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+Its hypotheses are:
+\begin{enumerate}
+  \item condition C1 holds;
+  \item the OBC canonical representation is unique;
+  \item the length satisfies \(N > 2L_0 + D^4\).
+\end{enumerate}
+The conclusion is the existence of a unitary matrix \(U\) such that
+\[
+  B_i = U C_i U^\dagger
+\]
+for every physical index \(i\), with the usual permutation-and-phase
+interpretation when the Schmidt weights are non-degenerate.
+
+\section{Formal boundary}
+
+The checked block-separation lemmas in Chapter~9 are not formalizations of
+PGVWC07 Theorem~\texttt{thm-uniq}. They are conditional same-structure
+comparison results. Their hypotheses include blockwise normalization, injective
+or irreducible block hypotheses, a common block index set and dimension
+function, and strict ordering of the weight moduli.
+
+These assumptions are useful local inputs for later MPS arguments, but they are
+not the hypothesis set of the PGVWC07 uniqueness theorem. In particular, the
+source theorem does not assume a same-structure block decomposition of the two
+representations, nor does it assume the Chapter~9 strict-modulus separation
+lemma as an input. Its proof uses the OBC canonical representation and the
+Horn--Johnson matrix lemma route described after
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+
+\section{Required formalization}
+
+A source-faithful formalization of PGVWC07 Theorem~\texttt{thm-uniq} should
+state the finite-ring hypotheses C1, uniqueness of the OBC canonical
+representation, and \(N > 2L_0 + D^4\), and should conclude a single unitary
+intertwiner between the two TI canonical \(D\)-MPS representations. The current
+Chapter~9 block-separation lemmas may be used only as local consequences after
+their stronger hypotheses have been proved in the argument at hand.
+
+\section{Tracked consequences}
+
+Blueprint statements that point to Chapter~9 block separation must explicitly
+state the strict weight-modulus hypothesis when their Lean declarations require
+it. Downstream CPSV16 uses should not cite these statements as PGVWC07
+canonical-form uniqueness unless the C1, OBC uniqueness, finite-size bound, and
+unitary-conclusion theorem have been formalized separately.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
