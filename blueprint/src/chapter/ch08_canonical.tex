@@ -7,6 +7,10 @@ canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
 reduction uses a weighted family of irreducible TP-normalized blocks with
 primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of \cite{Cirac2017MPDO_AnnPhys}.
+Thus the normal-canonical reductions recorded here are conditional
+primitive-block results. They should not be read as the full
+translation-invariant canonical-form theorem of
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 The Perron--Frobenius eigenvector existence and TP-gauge construction
 are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
 left-canonical normalization data and the normal canonical form data.
@@ -538,6 +542,10 @@ per-block peripheral-spectrum primitivity.
 		\item each block admits a primitive fixed point.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form conditions.
+	This is a conditional primitive-block consequence; it is not the full
+	translation-invariant canonical-form existence theorem, whose hypotheses
+	start from an arbitrary translation-invariant representation
+	\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -558,13 +566,18 @@ per-block peripheral-spectrum primitivity.
 		\item each $A_k$ is injective,
 		\item each $A_k$ satisfies the TP normalization
 		      $\sum_i (A_k^i)^\dagger A_k^i = \Id$,
-		\item $|\mu_1| \ge \cdots \ge |\mu_r|$ (non-increasing),
+		\item $|\mu_1| > \cdots > |\mu_r|$ (strictly decreasing),
 		\item all $\mu_k \neq 0$,
+		\item each block has positive bond dimension,
 		\item each transfer map $\E_{A_k}$ is primitive,
 		      i.e. has peripheral spectrum $\{1\}$.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form
 	conditions (Definition~\ref{def:is_canonical_form}).
+	This is a conditional peripheral-primitive consequence; it is not the full
+	translation-invariant canonical-form existence theorem, whose hypotheses
+	start from an arbitrary translation-invariant representation
+	\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
@@ -964,6 +977,11 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
 		$\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
 		form conditions.
+		This is a conditional result from a primitive block decomposition
+		satisfying the listed hypotheses; it is not the full
+		translation-invariant canonical-form existence theorem, whose
+		hypotheses start from an arbitrary translation-invariant representation
+		\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
