@@ -178,6 +178,50 @@ with an extra $Z$-gauge degree of freedom.
 	sufficiently large length.
 \end{proof}
 
+\begin{lemma}[Fixed-right Lemma Lem1 span exclusion]%
+\label{lem:fixed_right_lem1_span_exclusion}
+	\lean{MPSTensor.eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, lem:fixed_right_lem1_input_eventual_proportional}
+	Let \((\mu^A_j,A_j)_j\) and \((\mu^B_k,B_k)_k\) be BNT canonical-form
+	families.  Fix \(B_{k_0}\).  If
+	\(O_{A_jB_{k_0}}(N)\to 0\) for every \(A_j\), then, for all sufficiently
+	large \(N\), the vector \(\ket{V^{(N)}(B_{k_0})}\) is not in the span of
+	the vectors \(\ket{V^{(N)}(A_j)}\).  This is the residual-span consequence
+	of applying Lemma~\texttt{Lem1} to the family consisting of all \(A\)-blocks
+	and the fixed block \(B_{k_0}\)
+	\cite[Lemma~\texttt{Lem1}; Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:fixed_right_lem1_input_eventual_proportional}
+	Lemma~\texttt{Lem1} gives eventual linear independence of the family
+	\(\{A_j\}_j\cup\{B_{k_0}\}\).  A linearly independent family has no member
+	in the span of the remaining members.
+\end{proof}
+
+\begin{lemma}[Fixed-left Lemma Lem1 span exclusion]%
+\label{lem:fixed_left_lem1_span_exclusion}
+	\lean{MPSTensor.eventually_fixed_left_notMem_right_span_of_all_overlaps_decay_CFBNT}
+	\leanok
+	\uses{def:cf_bnt, lem:fixed_left_lem1_input_eventual_proportional}
+	Let \((\mu^A_j,A_j)_j\) and \((\mu^B_k,B_k)_k\) be BNT canonical-form
+	families.  Fix \(A_{j_0}\).  If
+	\(O_{A_{j_0}B_k}(N)\to 0\) for every \(B_k\), then, for all sufficiently
+	large \(N\), the vector \(\ket{V^{(N)}(A_{j_0})}\) is not in the span of
+	the vectors \(\ket{V^{(N)}(B_k)}\).  This is the symmetric
+	residual-span consequence used when the proof of Theorem~II.1 is repeated
+	with the two tensor families interchanged
+	\cite[Lemma~\texttt{Lem1}; Theorem~II.1, lines~1182--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:fixed_left_lem1_input_eventual_proportional}
+	Apply the fixed-left form of Lemma~\texttt{Lem1}.  Eventual linear
+	independence of \(\{B_k\}_k\cup\{A_{j_0}\}\) excludes the fixed vector
+	from the span of the other side.
+\end{proof}
+
 \begin{lemma}[Selected coefficient extraction after one phase substitution]%
 \label{lem:selected_coefficient_from_two_family_linear_independence}
 	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}
