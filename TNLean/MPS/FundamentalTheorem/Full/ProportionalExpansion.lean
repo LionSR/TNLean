@@ -18,7 +18,7 @@ external coefficient-array hypotheses are introduced.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Theorem `thm1`, lines 1170--1192.
+  Theorem thm1, lines 1170--1192.
 -/
 
 open scoped BigOperators InnerProductSpace
@@ -30,7 +30,7 @@ section ProportionalExpansion
 
 /-- **Fixed-length weighted MPV-state proportionality from assembled block tensors.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. At a fixed length
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. At a fixed length
 `N`, proportionality of the two assembled tensors expands into proportionality
 of the two weighted BNT block sums at that same length. This is the fixed-length
 form used before passing to scalar sequences or eventual tail reductions. -/
@@ -82,7 +82,7 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensor
 
 /-- **Weighted MPV-state proportionality from proportional assembled block tensors.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof of the
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The proof of the
 block-selection step expands the two canonical-form tensors into their BNT
 block sums and then uses proportionality of the total MPV families. This lemma
 formalizes exactly that expansion, without adding coefficient-array hypotheses:
@@ -105,7 +105,7 @@ lemma exists_weighted_mpvState_eq_smul_of_nonzeroProportionalMPV₂_toTensorFrom
 
 /-- **A scalar sequence for proportional weighted MPV-state sums.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof uses
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The proof uses
 one proportionality scalar at each chain length. This lemma collects those
 lengthwise scalars into a single nonzero sequence so that later convergence
 arguments can refer to the same scalar at each occurrence of the fixed length. -/
@@ -134,8 +134,8 @@ lemma exists_weighted_mpvState_eq_smul_sequence_of_nonzeroProportionalMPV₂_toT
 
 /-- **An eventual scalar sequence for eventually proportional weighted MPV-state sums.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 uses Lemma
-`Lem1`, hence only sufficiently large chain lengths enter the contradiction.
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 uses Lemma
+Lem1, hence only sufficiently large chain lengths enter the contradiction.
 This lemma is the eventual version of the preceding scalar-sequence
 bookkeeping: eventual nonzero proportionality of the assembled tensors gives an
 eventual nonzero scalar sequence for the expanded weighted BNT block sums. -/
@@ -177,7 +177,7 @@ lemma exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroP
 
 /-- **Nonzero proportionality from a weighted MPV-state scalar sequence.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. In the
 block-selection proof, after expanding canonical-form tensors into weighted
 BNT block sums, a lengthwise nonzero scalar identity of the weighted MPV-state
 sums is exactly the corresponding projective proportionality of the assembled
@@ -233,7 +233,7 @@ lemma nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_
 
 /-- **Eventual proportionality from an eventual weighted MPV-state scalar sequence.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. At recursive
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. At recursive
 stages in the block-deletion argument the available weighted MPV-state identity
 may hold only for sufficiently large lengths. This bookkeeping lemma turns such
 an eventual weighted identity into eventual nonzero proportionality of the
@@ -290,14 +290,14 @@ lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weigh
 
 /-- **Selected coefficient extraction from an eventual two-family relation.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1181--1183. This
+Source context: arXiv:1606.00608, Theorem thm1, lines 1181--1183. This
 lemma is conditional algebra: once the selected block on one side has been
 rewritten as a phase multiple of the selected block on the other side, an
 explicit eventual linear-independence hypothesis for the displayed two-family
 list lets one compare the selected coefficient.
 
 **Scope restriction (explicit residual-family independence):** In the
-fixed-block step of CPSV16 Theorem `thm1`, Lemma `Lem1` supplies linear
+fixed-block step of CPSV16 Theorem thm1, Lemma Lem1 supplies linear
 independence for the family made from all blocks on one side together with one
 fixed block on the other side; it does not directly supply the residual
 two-family hypothesis appearing here. The missing source-faithful isolation
@@ -334,7 +334,7 @@ lemma eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum
 
 /-- **Selected weighted summand from phase and coefficient equality.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After a
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After a
 non-decaying block pair has supplied a phase relation between the two MPV
 families, the coefficient comparison identifies the corresponding weighted
 summands. This is only the algebraic bridge from the phase relation and the
@@ -362,15 +362,15 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
 
 /-- **Selected weighted summand from phase substitution and linear independence.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
-`Lem1`. After a non-decaying block pair has supplied the phase relation for
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma
+Lem1. After a non-decaying block pair has supplied the phase relation for
 the selected block, this auxiliary lemma uses an explicit eventual
 linear-independence hypothesis for the displayed residual family. The total
 weighted-state relation then identifies the selected coefficient, and hence the
 selected weighted summand.
 
 **Scope restriction (explicit residual-family independence):** In the
-fixed-block step of CPSV16 Theorem `thm1`, lines 1181--1185, Lemma `Lem1`
+fixed-block step of CPSV16 Theorem thm1, lines 1181--1185, Lemma Lem1
 does not by itself supply the residual-family independence assumed here. See
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
@@ -424,7 +424,7 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
 
 /-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof removes
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The proof removes
 the already matched leading BNT component and continues with the remaining
 blocks. This lemma isolates the linear algebra: if the total weighted MPV-state
 sums are related by the scalar `c_N`, and the selected summands are related by
@@ -455,8 +455,8 @@ lemma weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
 
 /-- **Eventual subtraction of a proportional selected summand.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. The recursive
-block-selection argument uses Lemma `Lem1`, so tail identities produced after
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. The recursive
+block-selection argument uses Lemma Lem1, so tail identities produced after
 coefficient extraction are needed only for sufficiently large lengths. This is
 the eventual analogue of
 `weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected`. -/
@@ -487,7 +487,7 @@ lemma eventually_weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected
 
 /-- **Reindexing a leading-erased weighted MPV-state tail.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After removing
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After removing
 the already matched leading BNT component, the remaining components are viewed
 again as a finite BNT family indexed by `Fin (r - 1)`. This lemma isolates the
 finite reindexing of the corresponding weighted MPV-state sum. -/
@@ -526,7 +526,7 @@ lemma weighted_mpvState_sum_erase_zero_eq_sum_succ
 
 /-- **Reindexing an arbitrary erased weighted MPV-state tail.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof may
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The proof may
 remove a matched block pair that is not the leading pair, because the theorem
 allows a permutation of BNT blocks. This lemma identifies the weighted
 MPV-state sum over the complement of an arbitrary selected block with the
@@ -559,7 +559,7 @@ lemma weighted_mpvState_sum_erase_eq_sum_succAbove
 
 /-- **Eventual proportionality of reindexed tails after removing the leading summand.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After a leading
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. After a leading
 matched BNT component has been removed, the remaining components are reindexed
 and the argument is repeated. This lemma records that bookkeeping in eventual
 form: an eventual total weighted-state identity, together with an eventual
@@ -622,7 +622,7 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected
 
 /-- **Eventual proportionality of reindexed tails after an arbitrary matched block.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The
 source proof permits a permutation of BNT blocks: after a block pair has been
 matched and its weighted summands have been identified, one removes that pair
 and repeats the argument on the two complements. This lemma records only the
@@ -680,15 +680,15 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
 
 /-- **Tail proportionality from phase substitution and a linear-independence hypothesis.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
-`Lem1`. Once a selected non-decaying block pair has been converted into a
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma
+Lem1. Once a selected non-decaying block pair has been converted into a
 phase relation, this auxiliary lemma records the coefficient extraction,
 selected-summand subtraction, and arbitrary-tail reindexing under an explicit
 eventual linear-independence hypothesis for the displayed residual family.
 
 **Scope restriction (explicit residual-family independence):** CPSV16 Lemma
-`Lem1` gives this kind of independence only for the family in which all
-off-diagonal overlaps tend to zero. In the fixed-block step of Theorem `thm1`,
+Lem1 gives this kind of independence only for the family in which all
+off-diagonal overlaps tend to zero. In the fixed-block step of Theorem thm1,
 lines 1181--1185, the local application gives independence for all blocks on
 one side together with one fixed block on the other side, not for the whole
 remaining tail appearing in this lemma. This auxiliary lemma must therefore
@@ -754,7 +754,7 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li
 
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Once the
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. Once the
 proportionality scalars for the weighted assembled MPV-state sums have been
 chosen, projecting against a fixed block MPV preserves the same scalar
 sequence at every length. -/
@@ -778,8 +778,8 @@ lemma weighted_mpvInner_eq_mul_sequence_of_weighted_mpvState_eq_smul_sequence
 
 /-- **Eventual projection of a weighted MPV-state scalar sequence.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After Lemma
-`Lem1` is used, the relevant weighted-state identity is only needed for all
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. After Lemma
+Lem1 is used, the relevant weighted-state identity is only needed for all
 sufficiently large lengths; projection against a fixed block MPV preserves the
 same eventual scalar sequence. -/
 lemma eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvState_eq_smul_sequence
@@ -809,7 +809,7 @@ lemma eventually_weighted_mpvInner_eq_mul_sequence_of_eventually_weighted_mpvSta
 
 /-- **Weighted inner-product proportionality from proportional assembled block tensors.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After expanding
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After expanding
 the proportional assembled MPV states into weighted BNT block sums, the proof
 projects the equality against a single block MPV. This lemma records that
 projection for an arbitrary tensor `X`. -/
@@ -835,7 +835,7 @@ lemma exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromB
 
 /-- **A scalar sequence for proportional weighted MPV projections.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This is the
 projection form of the previous scalar-sequence lemma: after projecting the
 weighted state sums against a fixed block MPV, the same nonzero scalar sequence
 relates the projected weighted sums at every length. -/
@@ -861,9 +861,9 @@ lemma exists_weighted_mpvInner_eq_mul_sequence_of_nonzeroProportionalMPV₂_toTe
 
 /-- **An eventual scalar sequence for proportional weighted MPV projections.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. This is the
 projection form of the eventual weighted-state scalar sequence obtained after
-applying the sufficiently-large-length linear-independence input `Lem1`. -/
+applying the sufficiently-large-length linear-independence input Lem1. -/
 lemma exists_eventually_weighted_mpvInner_eq_mul_sequence_of_eventuallyNonzeroProportionalMPV₂
     {d rA rB D : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -886,7 +886,7 @@ lemma exists_eventually_weighted_mpvInner_eq_mul_sequence_of_eventuallyNonzeroPr
 
 /-- **A scalar sequence for normalized proportional weighted projections.**
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This records
+Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. This records
 the projected weighted-sum identity supplied by proportional assembled tensors
 in the normalized form used in the block-selection contradiction. The same
 nonzero scalar sequence is corrected by the factor `(\nu/\mu)^N` after
@@ -915,7 +915,7 @@ lemma exists_normalized_weighted_mpvInner_eq_mul_adjusted_sequence_of_nonzeroPro
 
 /-- **An eventual scalar sequence for normalized proportional weighted projections.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. In the recursive
+Source context: arXiv:1606.00608, Theorem thm1, line 1182. In the recursive
 tail-reduction stage the proportionality of the assembled tail tensors is only
 eventual. After choosing the eventual scalar sequence, the normalized projected
 weighted sums are still related by the same adjusted scalar for all
