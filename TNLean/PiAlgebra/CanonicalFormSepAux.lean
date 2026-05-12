@@ -60,15 +60,29 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 
 /-! ### Additive split conditions for canonical-form hypotheses
 
-The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility.  The
+The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility. The
 structures below expose weaker pieces of data so theorem signatures can migrate gradually without
 forcing an immediate project-wide refactor.
+
+Source context: PGVWC07, Theorem `Th:TIcanonical`, lines 742--763, constructs
+translation-invariant canonical form from an arbitrary TI representation. The split predicates
+below are conditional local hypotheses, not that existence theorem.
 -/
 
-/-- Each block in the family is algebraically injective. -/
+/-- Each block in the family is algebraically injective.
+
+Source context: PGVWC07 defines the finite injectivity condition C1 at lines 888--908; it is not a
+hypothesis of Theorem `Th:TIcanonical`, lines 742--763.
+
+**Scope restriction (local block hypothesis):** This predicate records a blockwise injectivity
+assumption for later conditional comparison theorems. It should not be read as a field supplied by
+PGVWC07 canonical-form existence; see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure HasInjectiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
+  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`).
+
+  Source context: PGVWC07 C1, lines 888--908. This is a conditional hypothesis, not part of
+  Theorem `Th:TIcanonical`, lines 742--763. -/
   block_injective : ∀ k, IsInjective (A k)
 
 namespace HasInjectiveBlocks
@@ -82,10 +96,20 @@ def ofForall (hA : ∀ k, IsInjective (A k)) : HasInjectiveBlocks (d := d) A whe
 
 end HasInjectiveBlocks
 
-/-- Each block in the family is irreducible in the invariant-projection sense. -/
+/-- Each block in the family is irreducible in the invariant-projection sense.
+
+Source context: CPSV16 uses normal tensors in Section II; PGVWC07 `Th:TIcanonical`, lines 742--763,
+does not state this condition as an input.
+
+**Scope restriction (normal-block hypothesis):** This predicate is a local condition for the
+normal-canonical-form route, not a source-faithful statement of PGVWC07 canonical-form existence;
+see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure HasIrreducibleBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block has no nontrivial invariant orthogonal projection. -/
+  /-- Each block has no nontrivial invariant orthogonal projection.
+
+  Source context: this is a local normal-block hypothesis, not a hypothesis of PGVWC07
+  `Th:TIcanonical`, lines 742--763. -/
   block_irreducible : ∀ k, IsIrreducibleTensor (A k)
 
 namespace HasIrreducibleBlocks
@@ -104,10 +128,18 @@ end HasIrreducibleBlocks
 
 This is intentionally stored separately from `HasIrreducibleBlocks`: under the repository's
 current definition, peripheral-spectrum primitivity alone does not imply irreducibility for an
-arbitrary transfer map. -/
+arbitrary transfer map.
+
+Source context: PGVWC07 `Th:TIcanonical`, lines 742--763, states that the identity is the only
+fixed point of the block transfer map, but it does not state peripheral-spectrum primitivity as a
+hypothesis. This predicate is a conditional strengthening used by the formal normal-block route;
+see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
+  /-- Each block transfer map has `1` as its unique peripheral eigenvalue.
+
+  Source context: this is a formal primitive-block hypothesis, stronger than the fixed-point
+  clause in PGVWC07 `Th:TIcanonical`, lines 742--763. -/
   block_primitive : ∀ k,
     _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
 
@@ -124,11 +156,19 @@ def ofForall (hA : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) 
 end HasPrimitiveBlocks
 
 /-- Left-canonical block-family normalization: each block satisfies
-`∑ᵢ Aᵢ† Aᵢ = I`. -/
+`∑ᵢ Aᵢ† Aᵢ = I`.
+
+Source context: PGVWC07 `Th:TIcanonical`, lines 752--758, uses the unital orientation
+`∑ᵢ Aᵢ Aᵢ† = I` together with a full-rank invariant density. This predicate records the dual
+trace-preserving orientation used locally; see
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure IsLeftCanonicalBlockFamily {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Preferred field name using the project's terminology: left-canonical =
-  `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  `∑ᵢ Aᵢ† Aᵢ = I`.
+
+  Source context: this is the dual trace-preserving orientation of PGVWC07
+  `Th:TIcanonical`, lines 752--758. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
 
 namespace IsLeftCanonicalBlockFamily
@@ -151,13 +191,19 @@ end IsLeftCanonicalBlockFamily
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
 
 This is the relaxed weight-ordering condition matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021): block weights are non-increasing by modulus, but ties are
+(PGVWC07, Theorem `Th:TIcanonical`, lines 742--763; CPSV16 Section II): block
+weights are non-increasing by modulus, but ties are
 permitted. The strictly decreasing variant `HasStrictOrderedNonzeroWeights`
 is used internally by the block-separation and coefficient-convergence proofs. -/
 structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
-  /-- Non-increasing ordering of the block weights by modulus. -/
+  /-- Non-increasing ordering of the block weights by modulus.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has positive block weights; this
+  field records the local ordering convention. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
+  /-- No block weight vanishes.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has `1 ≥ λ_j > 0`. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
 
 /-- Strict weight ordering together with nonvanishing coefficients.
@@ -165,11 +211,20 @@ structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
 This is the strengthened weight-ordering condition used in the block-separation
 proofs: `StrictAnti` on moduli guarantees a spectral gap between the dominant
 block and all others, which drives the geometric convergence. At the BNT level,
-the grouping step ensures this holds. -/
+the grouping step ensures this holds.
+
+Source context: PGVWC07 `Th:TIcanonical`, lines 742--763, and CPSV16 BNT canonical form allow
+equal-modulus classes before grouping. Strict ordering is therefore a local grouped-weight
+hypothesis; see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure HasStrictOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
-  /-- Strict ordering of the block weights by modulus. -/
+  /-- Strict ordering of the block weights by modulus.
+
+  Source context: this is stricter than the positive-weight canonical form in PGVWC07
+  `Th:TIcanonical`, lines 751--752, and is used only after grouping equal-modulus classes. -/
   mu_strict_anti : StrictAnti (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
+  /-- No block weight vanishes.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has `1 ≥ λ_j > 0`. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
 
 namespace HasStrictOrderedNonzeroWeights
@@ -196,10 +251,17 @@ theorem mu_norm_injective (hμ : HasStrictOrderedNonzeroWeights μ) :
 
 end HasStrictOrderedNonzeroWeights
 
-/-- Self-overlap normalization for each block: `mpvOverlap (A k) (A k) N → 1`. -/
+/-- Self-overlap normalization for each block: `mpvOverlap (A k) (A k) N → 1`.
+
+Source context: PGVWC07 `Th:TIcanonical`, lines 742--763, states canonical block fixed-point
+conditions, not this MPV-overlap limit. This predicate records the analytic conclusion needed by
+the local peeling proof; see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Literature-normalized aperiodicity / overlap normalization. -/
+  /-- Literature-normalized aperiodicity / overlap normalization.
+
+  Source context: this is a local overlap-limit hypothesis derived from stronger spectral
+  conditions, not a hypothesis of PGVWC07 `Th:TIcanonical`, lines 742--763. -/
   overlap_tendsto_one :
     ∀ k,
       Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
@@ -226,24 +288,45 @@ end HasNormalizedSelfOverlap
 `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization in a single proposition.
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli. The strictly decreasing variant
-is enforced at the BNT level (`IsCanonicalFormBNT`) after the grouping step. -/
+(PGVWC07, Theorem `Th:TIcanonical`, lines 742--763; CPSV16 Section II) which allow blocks with
+equal moduli. The strictly decreasing variant is enforced at the BNT level (`IsCanonicalFormBNT`)
+after the grouping step.
+
+**Scope restriction (conditional canonical-form predicate):** This structure includes blockwise
+injectivity and self-overlap normalization, and it uses the local trace-preserving orientation.
+PGVWC07 `Th:TIcanonical`, lines 742--763, starts from an arbitrary TI representation and constructs
+canonical blocks without assuming these local hypotheses. See
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/
+  /-- Each block is algebraically injective (`span (range (A k)) = ⊤`).
+
+  Source context: PGVWC07 C1, lines 888--908; this is extra structure relative to
+  `Th:TIcanonical`, lines 742--763. -/
   block_injective : ∀ k, IsInjective (A k)
-  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`.
+
+  Source context: this is the dual orientation of the unital normalization in PGVWC07
+  `Th:TIcanonical`, lines 752--758. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-  /-- Non-increasing ordering of the block weights by modulus. -/
+  /-- Non-increasing ordering of the block weights by modulus.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 742--763, writes positive block weights
+  `λ_j`; CPSV16 groups weights by modulus in the BNT route. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
+  /-- No block weight vanishes.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has `1 ≥ λ_j > 0`. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
   This field is kept for backward compatibility with the original separated FT interface. In the
-  normal-canonical-form formulation the same conclusion is derived from irreducibility, left-canonical
-  normalization, and peripheral-spectrum primitivity via
-  `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
+  normal-canonical-form formulation the same conclusion is derived from irreducibility,
+  left-canonical normalization, and peripheral-spectrum primitivity via
+  `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`.
+
+  Source context: this is a local analytic input, not stated as a hypothesis in PGVWC07
+  `Th:TIcanonical`, lines 742--763. -/
   overlap_tendsto_one :
     ∀ k,
       Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
@@ -313,21 +396,42 @@ is enforced at the BNT level (`IsNormalCanonicalFormBNT`).
 The irreducibility field is stored separately on purpose: the repository's peripheral-spectrum
 primitive condition does not by itself imply irreducibility for arbitrary transfer maps.
 The self-overlap normalization is intended to be derived from primitivity rather than stored as a
-field. -/
+field.
+
+Source context: PGVWC07 `Th:TIcanonical`, lines 742--763, is a canonical-form existence theorem;
+CPSV16 Section II uses normal tensors and BNTs after canonical reduction. This structure is a
+conditional normal-block predicate, not the source existence theorem; see
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
-  /-- Each block is irreducible in the invariant-projection sense. -/
+  /-- Each block is irreducible in the invariant-projection sense.
+
+  Source context: local normal-block hypothesis, not PGVWC07 `Th:TIcanonical`, lines 742--763. -/
   block_irreducible : ∀ k, IsIrreducibleTensor (A k)
-  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`. -/
+  /-- Left-canonical normalization: `∑ᵢ Aᵢ† Aᵢ = I`.
+
+  Source context: dual orientation of PGVWC07 `Th:TIcanonical`, lines 752--758. -/
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
-  /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
+  /-- Each block transfer map is primitive in the peripheral-spectrum sense.
+
+  Source context: a formal strengthening used in the normal-block route, not a hypothesis of
+  PGVWC07 `Th:TIcanonical`, lines 742--763. -/
   block_primitive : ∀ k,
     _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k))
-  /-- Non-increasing ordering of the block weights by modulus. -/
+  /-- Non-increasing ordering of the block weights by modulus.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has positive weights; CPSV16 BNTs
+  group equal-modulus classes before strict comparisons. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
-  /-- No block weight vanishes. -/
+  /-- No block weight vanishes.
+
+  Source context: PGVWC07 `Th:TIcanonical`, lines 751--752, has `1 ≥ λ_j > 0`. -/
   mu_ne_zero : ∀ k, μ k ≠ 0
-  /-- All block bond dimensions are positive. -/
+  /-- All block bond dimensions are positive.
+
+  Source context: this is a formal typing condition for the block family; PGVWC07
+  `Th:TIcanonical`, lines 742--763, bounds the total canonical bond dimension by the original
+  bond dimension. -/
   dim_pos : ∀ k, 0 < dim k
 
 namespace IsNormalCanonicalForm
