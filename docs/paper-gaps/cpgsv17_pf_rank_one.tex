@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -34,7 +34,7 @@ The paper constructs positive neighboring operators $\eta_{k,h}$ and defines
 \[
   T_{k,h}=\operatorname{tr}(\eta_{k,h}).
 \]
-Thus $T$ is entrywise nonnegative. Under the strong area law the source argues
+Thus $T$ is entrywise non-negative. Under the strong area law the source argues
 that $T$ is primitive, in the sense that some power of $T$ has all entries
 strictly positive. Under zero correlation length it obtains
 \[
@@ -42,7 +42,7 @@ strictly positive. Under zero correlation length it obtains
 \]
 for every positive integer $N$, with $\operatorname{tr}(T)=1$ after
 normalization. The proof then invokes fixed-point theory for primitive
-nonnegative matrices and concludes that $T$ has one eigenvalue equal to $1$
+non-negative matrices and concludes that $T$ has one eigenvalue equal to $1$
 and all other eigenvalues equal to $0$. From this it concludes the desired
 factorization
 \[
@@ -66,7 +66,7 @@ Consider the real $3\times 3$ matrix
     \tfrac13 & \tfrac13 & \tfrac13
   \end{pmatrix}.
 \]
-All entries are nonnegative, and
+All entries are non-negative, and
 \[
   T^2=
   P:=\frac13
@@ -92,7 +92,7 @@ matrix implication
   \text{primitive} + \text{constant positive-power traces}
   \Longrightarrow \text{rank one}
 \]
-is false for finite entrywise nonnegative real matrices.
+is false for finite entrywise non-negative real matrices.
 \footnote{The formal counterexample is
 \path{TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean}, especially the
 matrix definition at lines 63--65 and the theorem \texttt{counterexample} at
@@ -120,9 +120,9 @@ Primitivity is not needed for this corrected matrix theorem once positive
 semidefiniteness and trace normalization are assumed.
 
 The proof is spectral. Positive semidefiniteness makes $T$ Hermitian and
-diagonalizable with nonnegative real eigenvalues $\lambda_i$. The trace
+diagonalizable with non-negative real eigenvalues $\lambda_i$. The trace
 normalization gives $\sum_i \lambda_i=1$. The trace-power hypothesis at
-$N=2$ gives $\sum_i \lambda_i^2=1$. For nonnegative numbers with sum one,
+$N=2$ gives $\sum_i \lambda_i^2=1$. For non-negative numbers with sum one,
 this forces exactly one $\lambda_i$ to be $1$ and all the others to be
 $0$. Therefore the diagonal form has rank one, and unitary conjugation gives
 an outer-product factorization of $T$.
@@ -147,14 +147,14 @@ blueprint discussion is
 \section{Conclusion}
 
 The proof in Appendix C.2 contains an unjustified matrix step as written: a
-primitive entrywise nonnegative matrix with constant traces of positive powers
+primitive entrywise non-negative matrix with constant traces of positive powers
 need not have rank one. The obstruction is a nilpotent Jordan component at the
 zero eigenvalue, which is not detected by the trace identities.
 
 The formal development proves a corrected sufficient theorem: positive
 semidefiniteness, trace normalization, and the same trace-power hypothesis imply
 the required rank-one factorization. What remains for the unconditional MPDO
-argument is not another Perron--Frobenius statement for arbitrary nonnegative
+argument is not another Perron--Frobenius statement for arbitrary non-negative
 matrices, but an MPDO-specific proof that the trace matrix obtained from the
 $\eta$-operators has the Hermitian or positive-semidefinite structure needed by
 the corrected theorem. Thus the source proof has a genuine unsupported

@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -18,9 +18,9 @@
 
 The non-periodic matrix product vector Fundamental Theorem in
 \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys,Cirac2021Matrix} is not stated
-with the auxiliary hypotheses used in the conditional Lean theorem.  It is stated
+with the auxiliary hypotheses used in the conditional Lean theorem. It is stated
 after the tensors have already been put in canonical form and after bases of
-normal tensors have been chosen.  This note records that distinction for the
+normal tensors have been chosen. This note records that distinction for the
 after-blocking theorem in \ghpr{1104}, which is part of the discussion in
 \ghissue{1093}.
 
@@ -82,17 +82,17 @@ in the derivation considered here.
 \section{The conditional Lean theorem}
 
 The theorem added in \ghpr{1104} starts from two tensors $A$ and $B$ with the
-same formal matrix product vector family.  Its conclusion has the same shape as
+same formal matrix product vector family. Its conclusion has the same shape as
 the sector-comparison part of the CPSV statement: after a positive blocking,
 there are sector decompositions $P$ and $Q$ with basis-of-normal-tensor data, the
 blocked tensors agree with these sector decompositions at positive lengths, the
 sector decompositions have the same full matrix product vector family, and the
 sector multiplicities and weights match up to a permutation and nonzero phases.
 The former blocked-normal-form records that packaged this boundary have been
-removed from the formal development.  Mathematically, the remaining hypotheses
+removed from the formal development. Mathematically, the remaining hypotheses
 are the comparison field for the common primitive nonzero-sector families
 produced by the preceding structural theorem; the blocked-word relabeling
-assertion for cyclic-sector data is derived in the formal theorem.  The comparison
+assertion for cyclic-sector data is derived in the formal theorem. The comparison
 field is supplied with trace-preserving, primitive, and irreducible structural
 data and positive bond dimensions for the produced families; it then returns
 BNT-cover data containing the zero-tail, injectivity, normal-form separation,
@@ -152,7 +152,7 @@ now derived from the grouped-block cast construction.
 
 The zero-tail condition has a similar origin. The source definition of matrix
 product vectors is for positive lengths, and zero blocks are invisible there.
-The formal relation $\mathrm{SameMPV}_2$ also includes the empty word. A zero
+The formal relation \leanid{SameMPV₂} also includes the empty word. A zero
 block of bond dimension $D_0$ contributes nothing at positive length but
 contributes $D_0$ at length zero. Hence the formal proof records a zero-tail
 dimension and must either identify the two zero tails or keep the length-zero

@@ -694,13 +694,13 @@ lemma isCanonicalFormBNT_tail_succAbove
 
 /-- **Fixed-block Lemma `Lem1` input for the proportional BNT theorem.**
 
-Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, line 1182.
-In the proof of Theorem `thm1`, one fixes a block `B_k` and assumes, for
-contradiction, that all overlaps with the `A_j` tend to zero. Together with
-the BNT asymptotic orthonormality inside the `A`-family and the normalized
-self-overlap of `B_k`, Corollary `Lem1` gives linear independence, for all
-sufficiently large lengths, of the combined family consisting of all `A_j`
-and this one fixed block `B_k`.
+Source: arXiv:1606.00608, Corollary `Lem1`, lines 1130--1133, and Theorem
+`thm1`, line 1182. In the proof of Theorem `thm1`, one fixes a block `B_k`
+and assumes, for contradiction, that all overlaps with the `A_j` tend to zero.
+Together with the BNT asymptotic orthonormality inside the `A`-family and the
+normalized self-overlap of `B_k`, Corollary `Lem1` gives linear independence,
+for all sufficiently large lengths, of the combined family consisting of all
+`A_j` and this one fixed block `B_k`.
 
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
@@ -754,12 +754,12 @@ lemma eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_C
 
 /-- **Symmetric fixed-block Lemma `Lem1` input for the proportional BNT theorem.**
 
-Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, lines
-1182--1185. The proof of Theorem `thm1` repeats the fixed-block argument with
-the two tensor families interchanged. If one fixes a block `A_j` and assumes
-that all overlaps with the `B_k` tend to zero, Corollary `Lem1` gives linear
-independence, for all sufficiently large lengths, of the combined family
-consisting of all `B_k` and this one fixed block `A_j`.
+Source: arXiv:1606.00608, Corollary `Lem1`, lines 1130--1133, and Theorem
+`thm1`, lines 1182--1185. The proof of Theorem `thm1` repeats the fixed-block
+argument with the two tensor families interchanged. If one fixes a block `A_j`
+and assumes that all overlaps with the `B_k` tend to zero, Corollary `Lem1`
+gives linear independence, for all sufficiently large lengths, of the combined
+family consisting of all `B_k` and this one fixed block `A_j`.
 
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
