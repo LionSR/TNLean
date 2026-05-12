@@ -346,7 +346,7 @@ hypothesis must be derived from CPSV16 Lemma Lem1 and the BNT separation
 argument. It is not an additional hypothesis of Theorem thm1. See
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
-    {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
     {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
     (v : (N : ℕ) → ι → E N) (w : (N : ℕ) → κ → E N)
     (a : ℕ → ι → ℂ) (b₀ : ℕ → ℂ) (b : ℕ → κ → ℂ)
@@ -501,7 +501,7 @@ must be obtained from the source's BNT separation argument. This lemma does
 not assert that CPSV16 Lemma Lem1 directly gives the displayed residual span;
 see `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_notMem_residual_span
-    {d : ℕ} {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
+    {d : ℕ} {ι κ : Type*} [Fintype ι] [Fintype κ]
     {dimA : ι → ℕ} {dimB₀ : ℕ} {dimB : κ → ℕ}
     {μA : ι → ℂ} {μB₀ ζ : ℂ} {μB : κ → ℂ} {c : ℕ → ℂ}
     (A : (i : ι) → MPSTensor d (dimA i))

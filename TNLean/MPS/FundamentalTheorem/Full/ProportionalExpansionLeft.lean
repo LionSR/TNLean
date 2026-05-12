@@ -137,6 +137,115 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left
   exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
     A B c a0 b0 hc hState hSelected
 
+/-- **Tail proportionality from the left phase-substituted residual span.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`. This is the symmetric residual-span form of
+`eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_residual_span`:
+the selected `B`-state is assumed to be outside the span of the remaining
+`B`-states together with the remaining `A`-states, after using the nonzero
+phase to substitute the selected `A`-state.
+
+**Scope restriction (residual-span exclusion):** The displayed span-exclusion
+hypothesis must be derived from the fixed-block BNT separation argument before
+this lemma is used as a source-faithful step. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_residual_span_left
+    {d nA nB : ℕ}
+    {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
+    {μA : Fin (nA + 1) → ℂ} {μB : Fin (nB + 1) → ℂ}
+    {ζ : ℂ}
+    (A : (j : Fin (nA + 1)) → MPSTensor d (dimA j))
+    (B : (k : Fin (nB + 1)) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin (nA + 1)) (b0 : Fin (nB + 1))
+    (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hζ : ζ ≠ 0)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B b0) N = ζ ^ N • mpvState (d := d) (A a0) N)
+    (hnot : ∀ᶠ N in atTop,
+      mpvState (d := d) (B b0) N ∉
+        Submodule.span ℂ
+          (Set.range
+            (Sum.elim
+              (fun k : {k : Fin (nB + 1) // k ≠ b0} =>
+                mpvState (d := d) (B k.1) N)
+              (fun j : Fin nA => mpvState (d := d) (A (a0.succAbove j)) N))))
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N •
+          (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks
+        (fun j : Fin nA => μA (a0.succAbove j))
+        (fun j : Fin nA => A (a0.succAbove j)))
+      (toTensorFromBlocks
+        (fun k : Fin nB => μB (b0.succAbove k))
+        (fun k : Fin nB => B (b0.succAbove k))) := by
+  classical
+  have hA0_phase_inv : ∀ N : ℕ,
+      mpvState (d := d) (A a0) N =
+        (ζ ^ N)⁻¹ • mpvState (d := d) (B b0) N := by
+    intro N
+    rw [hPhase N, smul_smul]
+    rw [inv_mul_cancel₀ (pow_ne_zero N hζ), one_smul]
+  have hCoeff :
+      ∀ᶠ N in atTop,
+        c N * (μB b0) ^ N = (μA a0) ^ N * (ζ ^ N)⁻¹ := by
+    refine eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
+      (fun N k => mpvState (d := d) (B k) N)
+      (fun N j => mpvState (d := d) (A (a0.succAbove j)) N)
+      (fun N k => c N * (μB k) ^ N)
+      (fun N => (μA a0) ^ N * (ζ ^ N)⁻¹)
+      (fun N j => (μA (a0.succAbove j)) ^ N)
+      b0 hnot ?_
+    refine hState.mono ?_
+    intro N hN
+    have hAsplit :
+        (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+          ((μA a0) ^ N • mpvState (d := d) (A a0) N) +
+            ∑ j : Fin nA,
+              (μA (a0.succAbove j)) ^ N •
+                mpvState (d := d) (A (a0.succAbove j)) N := by
+      rw [← Finset.add_sum_erase _ _ (Finset.mem_univ a0)]
+      congr 1
+      exact weighted_mpvState_sum_erase_eq_sum_succAbove A a0 N
+    calc
+      (∑ k : Fin (nB + 1),
+          (c N * (μB k) ^ N) • mpvState (d := d) (B k) N) =
+          c N •
+            (∑ k : Fin (nB + 1),
+              (μB k) ^ N • mpvState (d := d) (B k) N) := by
+        rw [Finset.smul_sum]
+        simp [smul_smul]
+      _ = ∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N := hN.symm
+      _ =
+          ((μA a0) ^ N • mpvState (d := d) (A a0) N) +
+            ∑ j : Fin nA,
+              (μA (a0.succAbove j)) ^ N •
+                mpvState (d := d) (A (a0.succAbove j)) N := hAsplit
+      _ =
+          ((μA a0) ^ N * (ζ ^ N)⁻¹) • mpvState (d := d) (B b0) N +
+            ∑ j : Fin nA,
+              (μA (a0.succAbove j)) ^ N •
+                mpvState (d := d) (A (a0.succAbove j)) N := by
+        rw [hA0_phase_inv N, smul_smul]
+  have hSelected :
+      ∀ᶠ N in atTop,
+        (μA a0) ^ N • mpvState (d := d) (A a0) N =
+          c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N) := by
+    refine hCoeff.mono ?_
+    intro N hN
+    calc
+      (μA a0) ^ N • mpvState (d := d) (A a0) N =
+          ((μA a0) ^ N * (ζ ^ N)⁻¹) • mpvState (d := d) (B b0) N := by
+        rw [hA0_phase_inv N, smul_smul]
+      _ = (c N * (μB b0) ^ N) • mpvState (d := d) (B b0) N := by
+        rw [← hN]
+      _ = c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N) := by
+        rw [smul_smul]
+  exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
+    A B c a0 b0 hc hState hSelected
+
 end ProportionalExpansionLeft
 
 end MPSTensor
