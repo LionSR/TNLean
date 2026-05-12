@@ -1341,6 +1341,9 @@ which is then combined with overlap estimates and the leading-block peel.
     The proof isolates the leading block and treats the remaining blocks
     as an exponentially decaying tail with
     $\rho = |\mu_1|/|\mu_0| < 1$.
+    This is a strict same-structure comparison theorem, not the full
+    PGVWC07 canonical-form uniqueness theorem
+    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1388,6 +1391,11 @@ which is then combined with overlap estimates and the leading-block peel.
     the $B$-blocks are injective and left-canonical, and the block-diagonal
     tensors generate the same MPV family.
     Then $\mc{V}(A_k)=\mc{V}(B_k)$ for every block $k$.
+    This statement assumes the separated block data needed for the local
+    peeling argument; it is not the PGVWC07 theorem, whose hypotheses are
+    C1, uniqueness of the OBC canonical representation, and
+    $N>2L_0+D^4$
+    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1409,6 +1417,9 @@ which is then combined with overlap estimates and the leading-block peel.
     Lemma~\ref{lem:per_block_sameMPV_of_separated_canonical_data}, every
     block pair $A_k,B_k$ is gauge equivalent, and the block-diagonal
     tensors are globally gauge equivalent.
+    This is the gauge consequence of the same-structure separated-data
+    comparison above, not the PGVWC07 uniqueness theorem
+    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1433,6 +1444,10 @@ which is then combined with overlap estimates and the leading-block peel.
         B_k^i = X_k\, A_k^i\, X_k^{-1}
     \]
     for every block $k$ and physical index $i$.
+    This is the explicit-matrix form of the preceding same-structure
+    comparison theorem, not a formalization of PGVWC07
+    Theorem~\texttt{thm-uniq}
+    \cite[lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -1453,6 +1468,10 @@ which is then combined with overlap estimates and the leading-block peel.
     Lemma~\ref{lem:per_block_sameMPV_of_canonical_form},
     every block pair $A_k, B_k$ is gauge equivalent, and the
     block-diagonal tensors are globally gauge equivalent.
+    The common block structure and strict weight ordering are hypotheses
+    here; PGVWC07 derives uniqueness from C1, OBC uniqueness, and the
+    finite-size bound instead
+    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1473,6 +1492,9 @@ which is then combined with overlap estimates and the leading-block peel.
     $X_k \in \GL_{D_k}(\C)$ such that
     $B_k^i = X_k\, A_k^i\, X_k^{-1}$
     for every block $k$ and physical index $i$.
+    This is the explicit strict same-structure form of the preceding
+    gauge comparison, not PGVWC07 Theorem~\texttt{thm-uniq}
+    \cite[lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok
