@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -19,12 +19,12 @@
 The finite-length block-separation step in Proposition IV.3 of Cirac,
 P\'erez-Garc\'ia, Schuch, and Verstraete is the point at issue
 \cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}.\footnote{For traceability,
-this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
-Related formal work is recorded in
-\href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
-\href{https://github.com/LionSR/TNLean/issues/822}{issue \#822}; earlier proof attempts are
-\href{https://github.com/LionSR/TNLean/pull/682}{PR \#682} and
-\href{https://github.com/LionSR/TNLean/pull/813}{PR \#813}.}
+    this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
+    Related formal work is recorded in
+    \href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
+    \href{https://github.com/LionSR/TNLean/issues/822}{issue \#822}; earlier proof attempts are
+    \href{https://github.com/LionSR/TNLean/pull/682}{PR \#682} and
+    \href{https://github.com/LionSR/TNLean/pull/813}{PR \#813}.}
 
 Let $A$ be a tensor in canonical form with bond-dimension parameter $D$, and
 let $A_1,\ldots,A_g$ be a basis of normal tensors for $A$. The paper characterizes
@@ -33,7 +33,7 @@ invertible similarity together with a phase. It then defines block-injective
 canonical form as the statement that, after passing to these blocks, simultaneous
 word evaluations span the whole product algebra
 \[
-  \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
+    \bigoplus_{j=1}^g M_{D_j}(\mathbb C).
 \]
 Equivalently, for every block tuple $X=(X_j)_j$ there should be a linear
 combination of common physical words whose evaluation on block $j$ gives $X_j$
@@ -61,8 +61,8 @@ finite-length conclusion explicit. The horizontal canonical-form data record
 the following trace-separation assumption: there is a length $N$ such that, if
 matrices $\Delta_j\in M_{D_j}(\mathbb C)$ satisfy
 \[
-  \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
-  \qquad\text{for every word } w \text{ of length } N,
+    \sum_{j=1}^g \operatorname{tr}(\Delta_j A_j^w)=0
+    \qquad\text{for every word } w \text{ of length } N,
 \]
 then $\Delta_j=0$ for every $j$. By nondegeneracy of the trace pairing on the
 product algebra, this is the dual form of the finite-length spanning property
@@ -71,7 +71,7 @@ above.
 Several exact sufficient hypotheses have been proved. The first is the
 finite-length product-algebra span itself: the tuples
 \[
-  w \longmapsto (A_1^w,\ldots,A_g^w)
+    w \longmapsto (A_1^w,\ldots,A_g^w)
 \]
 span $\bigoplus_j M_{D_j}(\mathbb C)$ for one common length. The second is an
 entrywise linear-independence criterion: the scalar functions
@@ -86,17 +86,17 @@ full product-algebra span.
 
 In the formal files, these three finite-length criteria suffice to produce the
 horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
-named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
-\texttt{PropBlockInjective}. The trace-separation assumption is
-\texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
-horizontal canonical-form data are in
-\path{TNLean/MPS/MPDO/BiCFDerivation.lean}. Relevant implications include
-\texttt{hasBiCF\_of\_wordTupleSpanTop},
-\texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
-\texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
-\texttt{HorizontalCFData} constructors such as
-\texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
-state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.}
+    named \texttt{WordTupleSpanTop}, \texttt{wordEntryFamily}, and
+    \texttt{PropBlockInjective}. The trace-separation assumption is
+    \texttt{HorizontalCFData.biCF}. The constructors from these hypotheses to
+    horizontal canonical-form data are in
+    \path{TNLean/MPS/MPDO/BiCFDerivation.lean}. Relevant implications include
+    \texttt{hasBiCF\_of\_wordTupleSpanTop},
+    \texttt{hasBiCF\_of\_wordEntryFamily\_linearIndependent},
+    \texttt{hasBiCF\_of\_propBlockInjective}, and corresponding
+    \texttt{HorizontalCFData} constructors such as
+    \texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
+    state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.}
 Thus Proposition IV.3 has not been asserted without proof. The formal statements
 prove that several finite-length witnesses are sufficient, while the derivation
 of such a witness from the full canonical-form and basis-of-normal-tensors

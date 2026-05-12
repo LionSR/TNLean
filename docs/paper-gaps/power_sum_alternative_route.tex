@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -16,136 +16,136 @@
 \section{The source lemma}
 
 This note concerns the scalar power-sum step in the non-periodic Fundamental
-Theorem proof for matrix product states in canonical form.  The source is
+Theorem proof for matrix product states in canonical form. The source is
 \cite[Lemma~\texttt{Lem:app\_simple}, lines~1155--1163]{Cirac2016MPDO_arXiv}.
 It considers two finite families
 \[
-  (\lambda_{a,k})_{k=1}^{x_a},
-  \qquad
-  (\lambda_{b,k})_{k=1}^{x_b},
+    (\lambda_{a,k})_{k=1}^{x_a},
+    \qquad
+    (\lambda_{b,k})_{k=1}^{x_b},
 \]
 ordered by modulus and phase, and assumes
 \[
-  \sum_{k=1}^{x_a}\lambda_{a,k}^{N}
-  =
-  \sum_{k=1}^{x_b}\lambda_{b,k}^{N},
-  \qquad N\le \max\{x_a,x_b\}.        \tag{\texttt{eq:app\_aux}}
+    \sum_{k=1}^{x_a}\lambda_{a,k}^{N}
+    =
+    \sum_{k=1}^{x_b}\lambda_{b,k}^{N},
+    \qquad N\le \max\{x_a,x_b\}.      \tag{\texttt{eq:app\_aux}}
 \]
-The conclusion is \(x_a=x_b\) and equality of the ordered lists.  In the
+The conclusion is $x_a=x_b$ and equality of the ordered lists. In the
 equal-case corollary of the Fundamental Theorem, this lemma is applied after
 the BNT representatives have been matched, to the coefficient families
 \[
-  (\mu_{j,q})_{q=1}^{r_{a,j}},
-  \qquad
-  (\nu_{j,q}e^{i\phi_j})_{q=1}^{r_{b,j}}.
+    (\mu_{j,q})_{q=1}^{r_{a,j}},
+    \qquad
+    (\nu_{j,q}e^{i\phi_j})_{q=1}^{r_{b,j}}.
 \]
 
-The formal statements do not use the source's ordering convention.  They state
-the conclusion as equality of multisets.  They do, however, keep the relevant
+The formal statements do not use the source's ordering convention. They state
+the conclusion as equality of multisets. They do, however, keep the relevant
 nonzero-coefficient hypothesis: positive powers alone cannot count zero
 entries.
 
 \section{The source-facing formal route}
 
-For a fixed BNT representative \(j\), the formal coefficient comparison produces
+For a fixed BNT representative $j$, the formal coefficient comparison produces
 eventual equality of the power sums
 \[
-  \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-  =
-  \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N
+    \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
+    =
+    \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N
 \]
-from BNT linear independence.  A finite signed sum of nonzero geometric
+from BNT linear independence. A finite signed sum of nonzero geometric
 sequences which vanishes eventually vanishes at every exponent, so the equality
-holds for all positive \(N\).  The formal proof then applies the
+holds for all positive $N$. The formal proof then applies the
 unequal-cardinality finite-range power-sum theorem.\footnote{\path{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}.}
 The endpoint used by the BNT comparison is the corresponding sector-weight
 comparison lemma.\footnote{\path{MPSTensor.SectorWeightData.copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq}.}
 
 The conclusion is
 \[
-  r_j^S=r_j^T,
-  \qquad
-  \{\!\{\mu^S_{j,q}:1\le q\le r_j^S\}\!\}
-  =
-  \{\!\{\mu^T_{j,q}:1\le q\le r_j^T\}\!\}.
+    r_j^S=r_j^T,
+    \qquad
+    \{\!\{\mu^S_{j,q}:1\le q\le r_j^S\}\!\}
+    =
+    \{\!\{\mu^T_{j,q}:1\le q\le r_j^T\}\!\}.
 \]
 This is the multiset form of the source's ordered-list conclusion.
 
 \section{The alternative formal route}
 
 An earlier formal proof reached the same endpoint by using the recurrence
-behind finite sums of geometric sequences before applying Newton--Girard.  The
-mathematical input is the following elementary lemma.  Let
+behind finite sums of geometric sequences before applying Newton--Girard. The
+mathematical input is the following elementary lemma. Let
 \[
-  F(N)=\sum_{\ell=1}^{m} c_\ell w_\ell^N,
-  \qquad w_\ell\neq 0.
+    F(N)=\sum_{\ell=1}^{m} c_\ell w_\ell^N,
+    \qquad w_\ell\neq 0.
 \]
-If \(F(N)=0\) for all \(N\ge M\), then \(F(k)=0\) for every \(k\ge 0\).  Indeed,
-subtracting \(w_1F(N)\) from \(F(N+1)\) gives
+If $F(N)=0$ for all $N\ge M$, then $F(k)=0$ for every $k\ge 0$. Indeed,
+subtracting $w_1F(N)$ from $F(N+1)$ gives
 \[
-  0
-  =
-  F(N+1)-w_1F(N)
-  =
-  \sum_{\ell=2}^{m} c_\ell(w_\ell-w_1)w_\ell^N
+    0
+    =
+    F(N+1)-w_1F(N)
+    =
+    \sum_{\ell=2}^{m} c_\ell(w_\ell-w_1)w_\ell^N
 \]
-for all \(N\ge M\).  This is a signed sum with one fewer term.  Induction on
-\(m\) shows that the displayed sum is zero for every \(N\ge 0\), hence
+for all $N\ge M$. This is a signed sum with one fewer term. Induction on
+$m$ shows that the displayed sum is zero for every $N\ge 0$, hence
 \[
-  F(N+1)=w_1F(N)\qquad\text{for all }N\ge 0.
+    F(N+1)=w_1F(N)\qquad\text{for all }N\ge 0.
 \]
-Thus \(F(k)=w_1^kF(0)\).  Since \(F(M)=0\) and \(w_1^M\neq 0\), one has
-\(F(0)=0\), and therefore \(F(k)=0\) for all \(k\ge 0\).
+Thus $F(k)=w_1^kF(0)$. Since $F(M)=0$ and $w_1^M\neq 0$, one has
+$F(0)=0$, and therefore $F(k)=0$ for all $k\ge 0$.
 
 For the two sector-weight families, this lemma is applied to the signed union
 \[
-  F(N)
-  =
-  \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-  -
-  \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N .
+    F(N)
+    =
+    \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
+    -
+    \sum_{q=1}^{r_j^T}(\mu^T_{j,q})^N.
 \]
-The nonzero-weight hypothesis is exactly what permits the step \(w_1^M\neq 0\).
+The nonzero-weight hypothesis is exactly what permits the step $w_1^M\neq 0$.
 Since all weights in \leanid{SectorWeightData} are nonzero, the exponent-zero
 power sum is
 \[
-  \sum_{q=1}^{r_j}\mu_{j,q}^{0}=r_j.
+    \sum_{q=1}^{r_j}\mu_{j,q}^{0}=r_j.
 \]
-Thus \(F(0)=0\) gives \(r_j^S=r_j^T\).  After transporting the right-hand index
+Thus $F(0)=0$ gives $r_j^S=r_j^T$. After transporting the right-hand index
 set along this equality, the same extrapolation gives equality of the positive
 power sums over a common index type:
 \[
-  \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
-  =
-  \sum_{q=1}^{r_j^S}(\mu^T_{j,q})^N,
-  \qquad N\ge 1.
+    \sum_{q=1}^{r_j^S}(\mu^S_{j,q})^N
+    =
+    \sum_{q=1}^{r_j^S}(\mu^T_{j,q})^N,
+    \qquad N\ge 1.
 \]
 The proof then applies the same-cardinality Newton--Girard theorem to recover
-the weight multiset.  This route was previously present as checked Lean code
+the weight multiset. This route was previously present as checked Lean code
 through the corresponding copy-count, transported-positive-power-sum, and
 weight-multiset declarations.\footnote{\leanid{MPSTensor.SectorWeightData.copies\_eq\_of\_eventually\_coeff\_eq};
 \leanid{MPSTensor.SectorWeightData.eventually\_coeff\_eq\_implies\_all\_pos\_eq\_after\_copies};
 \leanid{MPSTensor.SectorWeightData.weight\_multiset\_eq\_of\_copies\_eq\_of\_coeff\_eq}.}
 Those declarations have been removed from the current source tree because the
 proportional Fundamental Theorem route no longer uses this same-cardinality
-detour.  The calculation above records the removed argument for comparison
+detour. The calculation above records the removed argument for comparison
 with the paper, not a present Lean proof.
 
 \section{Conclusion}
 
 There is no mathematical gap in the removed alternative route under the
 nonzero-weight hypotheses used in the former sector-weight data: the
-extrapolation theorem proves the \(N=0\) identity, so the copy count is
-justified.  Nevertheless, this is no longer a present Lean route.  The
+extrapolation theorem proves the $N=0$ identity, so the copy count is
+justified. Nevertheless, this is no longer a present Lean route. The
 source-facing theorem surface should use the unequal-cardinality power-sum
 lemma, because that is the lemma invoked in the paper after BNT representative
 matching.
 
 There would be a genuine gap if one tried to count zero weights from positive
-power sums alone.  For example, adjoining a zero to a finite family does not
-change any positive power sum.  Hence a statement without a nonzero-coefficient
+power sums alone. For example, adjoining a zero to a finite family does not
+change any positive power sum. Hence a statement without a nonzero-coefficient
 hypothesis can only recover the multiset after deleting zero entries, unless an
-additional \(N=0\) identity is assumed.
+additional $N=0$ identity is assumed.
 
 \bibliographystyle{alpha}
 \bibliography{references}
