@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.Full.ProportionalTail
 # Heterogeneous BNT block matching
 
 This module contains the heterogeneous block-matching lemma for canonical-form BNT
-families.  It exposes the constructions developed in three supporting sub-modules and
+families.  It exposes the constructions developed in supporting sub-modules and
 provides the public lemma `fundamentalTheorem_equalMPV_CFBNT_hetero`.
 
 The source-paper equal-MPV corollary is stronger: after the BNT blocks have been matched,
@@ -51,6 +51,9 @@ The proof is split across supporting sub-modules for readability:
   dominant-weight projection argument.
 * `TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton` — no-tail fixed-block
   cancellation base cases for the CPSV16 Lemma `Lem1` peeling step.
+* `TNLean.MPS.FundamentalTheorem.Full.ProportionalTail` — asymptotic erased-tail
+  cancellation obtained from the phase-adjusted selected-summand cancellation and the
+  full proportionality identity.
 * `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch` — Layer 1b,
   `blocks_match_of_sameMPV₂_CFBNT`, which converts the non-decaying overlap data into a
   full `BlockPermutationGaugePhaseConclusion` via the overlap dichotomy.
