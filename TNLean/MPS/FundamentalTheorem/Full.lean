@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalTail
 
 /-!
 # Heterogeneous BNT block matching
