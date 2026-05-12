@@ -242,6 +242,34 @@ with an extra $Z$-gauge degree of freedom.
 	applies.
 \end{proof}
 
+\begin{lemma}[Selected coefficient extraction from selected-plus-residual independence]%
+\label{lem:selected_coefficient_from_residual_independence_sum}
+	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_residual_sum}
+	\leanok
+	\uses{lem:selected_coefficient_from_residual_span_sum,
+		lem:eventual_selected_not_in_residual_span_from_li}
+	Let \(v_i^{(N)}\) and \(w_k^{(N)}\) be two finite families, and fix
+	\(i_0\).  Suppose that, for all sufficiently large \(N\),
+	\[
+		\sum_i a_i^{(N)} v_i^{(N)}
+		=
+		b_0^{(N)} v_{i_0}^{(N)}
+		+\sum_k b_k^{(N)} w_k^{(N)}.
+	\]
+	If the family consisting of \(v_{i_0}^{(N)}\) together with the residual
+	vectors \(v_i^{(N)}\), \(i\ne i_0\), and all \(w_k^{(N)}\) is eventually
+	linearly independent, then \(a_{i_0}^{(N)}=b_0^{(N)}\) for all
+	sufficiently large \(N\).  This is the coefficient-extraction form used
+	after the selected block has been separated from the residual family
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Eventual selected-plus-residual linear independence first gives the
+	selected vector outside the residual span.  Then apply
+	Lemma~\ref{lem:selected_coefficient_from_residual_span_sum}.
+\end{proof}
+
 \begin{lemma}[Selected coefficient extraction after one phase substitution]%
 \label{lem:selected_coefficient_from_two_family_linear_independence}
 	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}

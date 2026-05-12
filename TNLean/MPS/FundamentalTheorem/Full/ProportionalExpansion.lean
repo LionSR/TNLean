@@ -398,6 +398,73 @@ lemma eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
     u (fun N => v N i₀) R S (fun N => a N i₀) b₀ hR hS hEq'
       (by simpa [u] using hnot)
 
+/-- **Selected coefficient extraction from selected-plus-residual independence.**
+
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma Lem1
+to separate a fixed block from the remaining contributions. This lemma records
+the exact algebraic passage from an eventual linear-independence statement for
+the selected vector together with the residual family to coefficient equality
+in the displayed finite-sum identity.
+
+**Scope restriction (derived separation input):** The eventual linear
+independence hypothesis must be derived from the CPSV16 BNT separation
+argument. It is not an additional hypothesis of Theorem thm1. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventually_selected_coefficient_eq_of_eventually_linearIndependent_residual_sum
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
+    (v : (N : ℕ) → ι → E N) (w : (N : ℕ) → κ → E N)
+    (a : ℕ → ι → ℂ) (b₀ : ℕ → ℂ) (b : ℕ → κ → ℂ)
+    (i₀ : ι)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (fun o : Option (Sum {i : ι // i ≠ i₀} κ) =>
+          match o with
+          | none => v N i₀
+          | some x =>
+              Sum.elim
+                (fun i : {i : ι // i ≠ i₀} => v N i.1)
+                (w N) x))
+    (hEq : ∀ᶠ N in atTop,
+      ∑ i : ι, a N i • v N i =
+        b₀ N • v N i₀ + ∑ k : κ, b N k • w N k) :
+    ∀ᶠ N in atTop, a N i₀ = b₀ N := by
+  classical
+  have hnot :
+      ∀ᶠ N in atTop,
+        v N i₀ ∉ Submodule.span ℂ
+          (Set.range
+            (Sum.elim
+              (fun i : {i : ι // i ≠ i₀} => v N i.1)
+              (w N))) := by
+    filter_upwards [hLI] with N hLIN
+    have hnone_not_mem :
+        (none : Option (Sum {i : ι // i ≠ i₀} κ)) ∉ Set.range some := by
+      rintro ⟨x, hx⟩
+      cases hx
+    have himage :
+        ((fun o : Option (Sum {i : ι // i ≠ i₀} κ) =>
+            match o with
+            | none => v N i₀
+            | some x =>
+                Sum.elim
+                  (fun i : {i : ι // i ≠ i₀} => v N i.1)
+                  (w N) x) '' Set.range some) =
+          Set.range
+            (Sum.elim
+              (fun i : {i : ι // i ≠ i₀} => v N i.1)
+              (w N)) := by
+      ext x
+      constructor
+      · rintro ⟨o, ⟨y, rfl⟩, rfl⟩
+        exact ⟨y, rfl⟩
+      · rintro ⟨y, rfl⟩
+        exact ⟨some y, ⟨y, rfl⟩, rfl⟩
+    simpa [himage] using
+      hLIN.notMem_span_image (s := Set.range some) (x := none) hnone_not_mem
+  exact eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
+    v w a b₀ b i₀ hnot hEq
+
 /-- **Selected weighted summand from phase and coefficient equality.**
 
 Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After a
