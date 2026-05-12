@@ -25,13 +25,13 @@ The proof first applies `hasPrimitiveFixedPoint_of_peripheralPrimitive`, and the
 injectivity, normalization, weight ordering, and nonzero-weight hypotheses are assumed.
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
-Theorem `Th:TIcanonical`, lines 742--763, starts from an arbitrary
+Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
 translation-invariant MPS representation.
 
 **Scope restriction (peripheral-primitive block hypotheses):** this theorem assumes
 injectivity, strict ordering of the weight moduli, nonzero weights, and peripheral-spectrum
 primitivity for every block. Those hypotheses are not assumptions of PGVWC07
-Theorem `Th:TIcanonical`. See
+Theorem Th:TIcanonical. See
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem isCanonicalForm_of_peripheralPrimitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

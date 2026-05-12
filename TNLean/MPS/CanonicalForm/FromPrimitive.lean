@@ -24,13 +24,13 @@ This theorem proves the final implication after the blockwise injectivity, norma
 ordering, and primitivity hypotheses have already been established.
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
-Theorem `Th:TIcanonical`, lines 742--763, starts from an arbitrary
+Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
 translation-invariant MPS representation.
 
 **Scope restriction (primitive block hypotheses):** this theorem assumes
 injectivity, strict ordering of the weight moduli, nonzero weights, and a primitive fixed point
 for every block. Those hypotheses are not assumptions of PGVWC07
-Theorem `Th:TIcanonical`. See
+Theorem Th:TIcanonical. See
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem isCanonicalForm_of_primitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

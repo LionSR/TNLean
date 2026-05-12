@@ -295,13 +295,13 @@ Conclusion: after a common blocking (currently `p = 1`) and reordering by decrea
 `IsNormalCanonicalForm`.
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
-Theorem `Th:TIcanonical`, lines 742--763, starts from an arbitrary
+Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
 translation-invariant MPS representation.
 
 **Scope restriction (prepared primitive block decomposition):** this theorem assumes an existing
 weighted block decomposition, irreducibility, trace-preserving normalization, primitivity,
 pairwise distinct weight moduli, nonzero weights, and positive bond dimensions. Those hypotheses
-are not assumptions of PGVWC07 Theorem `Th:TIcanonical`. See
+are not assumptions of PGVWC07 Theorem Th:TIcanonical. See
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (A : MPSTensor d D)
