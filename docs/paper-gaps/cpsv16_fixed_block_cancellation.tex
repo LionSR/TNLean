@@ -93,6 +93,19 @@ a preparatory step: it identifies the pair eligible for dominant tail
 subtraction, but it does not by itself prove the arbitrary fixed-block
 cancellation statements.
 
+The resulting leading phase relation and asymptotic leading-tail estimate are
+recorded in:
+\begin{flushleft}\small
+\leanid{MPSTensor.exists\_leading\_phase\_tail\_diff\_tendsto\_zero}\\
+\leanid{\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{flushleft}
+This lemma supplies the phase relation for \(A_0,B_0\) and proves that the
+normalized leading-erased tail difference tends to zero.  It is not the missing
+exact selected-summand cancellation: the remaining proof must still extract the
+leading coefficient identity, or an equivalent tail proportionality statement,
+without assuming residual-family linear independence beyond the fixed-block
+Lemma~\(\mathrm{Lem1}\) input.
+
 There are also conditional tail-peeling auxiliary lemmas:
 \[
 \begin{aligned}
