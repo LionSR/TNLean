@@ -1,0 +1,127 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Scope of the Formal Canonical-Form Reductions Relative to PGVWC07}
+\author{}
+\date{2026-05-12}
+
+\begin{document}
+\maketitle
+
+\section{The source theorem}
+
+The translation-invariant canonical-form theorem of
+P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac starts from an arbitrary
+translation-invariant MPS representation on a finite ring
+\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
+It states that the matrices can always be decomposed as
+\[
+  A_i =
+  \begin{pmatrix}
+    \lambda_1 A_i^1 & 0 & 0 \\
+    0 & \lambda_2 A_i^2 & 0 \\
+    0 & 0 & \cdots
+  \end{pmatrix},
+\]
+where $1 \geq \lambda_j > 0$ and each block satisfies:
+\[
+  \sum_i A_i^j A_i^{j\dagger} = \mathbf{1},\qquad
+  \sum_i A_i^{j\dagger}\Lambda^j A_i^j = \Lambda^j,
+\]
+for a diagonal positive full-rank matrix $\Lambda^j$, and $\mathbf{1}$ is the
+only fixed point of
+\[
+  \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}.
+\]
+If the initial representation has bond dimension $D$, the canonical
+representation has bond dimension at most $D$.
+
+The statement does not assume injectivity, a condition C1, blockwise
+primitivity, a prior block decomposition, strict separation of the weights,
+or that only one block occurs in each weight class. These properties enter
+elsewhere in the paper as later hypotheses, consequences, or genericity
+conditions. For example, the injectivity statement appears only after the
+canonical form has been obtained
+\cite[Proposition~\texttt{prop-inj}, lines~911--950]{PerezGarcia2007MPSReps},
+and the generic uniqueness discussion is a separate theorem
+\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+
+\section{Normalization orientation}
+
+There is also a convention difference in the direction of the canonical
+normalization. In the source theorem, the block transfer map is written as
+\[
+  \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}
+\]
+and imposes the unital condition
+\[
+  \sum_i A_i^j A_i^{j\dagger} = \mathbf{1}.
+\]
+The local canonical-form chapter usually works in the dual
+trace-preserving, or left-canonical, orientation
+\[
+  \sum_i A_i^{j\dagger} A_i^j = \mathbf{1}.
+\]
+This is a convention difference when it is accompanied by the corresponding
+adjoint transfer map or conjugate-transposed Kraus family. It is nevertheless
+important to state the convention explicitly: a theorem written only in the
+left-canonical orientation should not be read literally as PGVWC07
+Theorem~\texttt{Th:TIcanonical} unless the dualization or gauge conversion
+has also been supplied.
+
+\section{The formal reductions}
+
+The currently checked statements in the canonical-form reduction chapter
+prove conditional reductions from prior block hypotheses. In particular,
+the primitive fixed-point reduction assumes
+that the blocks are injective, trace-preserving in the chosen gauge, strictly
+ordered by weight modulus, nonzero, positive-dimensional, and primitive. The
+peripheral-spectrum variant assumes the same injectivity, normalization,
+strict weight ordering, nonzero weights, and positive block dimensions,
+together with the statement that each block transfer map has peripheral
+spectrum $\{1\}$. The normal-canonical-form reduction starts from a weighted
+block decomposition already equivalent to the original state and assumes
+irreducibility, trace-preserving normalization, primitivity, pairwise distinct
+weight moduli, nonzero weights, and positive bond dimensions.
+
+These are correct conditional consequences, but they are not formalizations
+of the full PGVWC07 translation-invariant canonical-form theorem. Their
+hypotheses are stronger and more structured than the source theorem's
+hypotheses. Treating them as the full source theorem would import extra
+assumptions into any later argument that cites canonical-form existence.
+
+\section{Formal boundary}
+
+The currently checked primitive, peripheral-primitive, and
+normal-canonical-form reductions should therefore be read as conditional
+canonical-form theorems rather than as
+formalizations of the full source theorem.\footnote{The formal declarations are
+\texttt{MPSTensor.isCanonicalForm\_of\_primitive},
+\texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}, and
+\texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.}
+They may be used after their hypotheses have been proved from earlier
+source-faithful reductions, but they should not be cited as giving canonical
+form directly from an arbitrary translation-invariant MPS representation.
+
+\section{What remains}
+
+A faithful formalization of PGVWC07
+Theorem~\texttt{Th:TIcanonical} should start with an arbitrary
+translation-invariant MPS representation and construct the block
+decomposition, the positive weights, the unital block gauge, the diagonal
+full-rank fixed points, and the uniqueness of the identity fixed point,
+while preserving the stated bond-dimension bound. The conditional primitive,
+peripheral-primitive, and normal-canonical-form reductions can then be used
+only after the source argument has produced the corresponding hypotheses or
+after a later theorem has explicitly assumed them.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
