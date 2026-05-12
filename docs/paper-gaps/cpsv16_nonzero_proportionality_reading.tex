@@ -46,6 +46,27 @@ to contradict proportionality. If $c_N$ were allowed to be zero at a
 length where the vector on the left also vanished, the identity
 $V^{(N)}(A)=0\cdot V^{(N)}(B)$ would not express equality of projective
 MPV families and would not supply the nonzero scalar used in the contradiction.
+
+To make this last use explicit, write
+$a_j(N)=V^{(N)}(A_j)$ and $b_\ell(N)=V^{(N)}(B_\ell)$ for the BNT-sector
+vectors at length $N$. Let $g_A$ and $g_B$ be the numbers of sectors in the two
+decompositions, and let $\mu_j,\nu_\ell\in\mathbb C$ be the corresponding
+sector weights in the one-representative form used in the block-selection
+argument. The proportionality relation has the form
+\begin{align}
+    \sum_{j=1}^{g_A}\mu_j^N a_j(N)
+    = c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N).
+\end{align}
+Projecting this equality to a selected $B$-sector $k$ gives
+\begin{align}
+    c_N\nu_k^N\langle b_k(N),b_k(N)\rangle=0.
+\end{align}
+The contradiction is therefore the incompatibility of this equality with
+\begin{align}
+    c_N\ne 0,\qquad
+    \nu_k\ne 0,\qquad
+    \langle b_k(N),b_k(N)\rangle\ne 0.
+\end{align}
 Under the canonical-form hypotheses used in the source argument, the selected
 BNT block states have nonzero norm on the tail of lengths used in the
 contradiction; in that range the weak scalar-multiple predicate already forces
