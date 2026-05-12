@@ -14,7 +14,7 @@ the proportional peeling argument for the Fundamental Theorem of MPS.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Theorem `thm1`, line 1182.
+  Theorem II.1, line 1182.
 -/
 
 open Filter
@@ -30,8 +30,8 @@ expressions differ only by terms in the span of a residual family, and the
 selected vector is not in that residual span, then the selected coefficients
 agree.
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. In the paper,
-Lemma `Lem1` is used to separate a fixed BNT block from the remaining
+Source context: arXiv:1606.00608, Theorem II.1, line 1182. In the paper,
+CPSV16, Lem1 is used to separate a fixed BNT block from the remaining
 contributions. This lemma records the algebraic separation needed once the
 appropriate residual-span exclusion has been proved.
 
@@ -70,7 +70,7 @@ lemma selected_coefficient_eq_of_residual_span
 
 This is the eventual form of
 `selected_coefficient_eq_of_residual_span`, suited to the CPSV16 line-1182
-peeling argument where Lemma `Lem1` supplies statements only for sufficiently
+peeling argument where CPSV16, Lem1 supplies statements only for sufficiently
 large chain lengths.
 
 **Scope restriction (residual-span exclusion):** The eventual exclusion of the
