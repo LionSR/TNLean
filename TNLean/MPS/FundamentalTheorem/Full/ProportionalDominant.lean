@@ -413,6 +413,114 @@ lemma exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProp
     exact mul_div_cancel_right₀ (c N * ((μB b0 * ζ) / μA a0) ^ N) hB_ne
   exact ⟨c, hc, hState, by simpa [a0, b0] using hPhaseAdjusted⟩
 
+/-- **Leading phase-adjusted selected difference vanishes asymptotically.**
+
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. Once a
+leading \(B\)-block is phase-matched to the leading \(A\)-block, the projected
+scalar convergence gives an asymptotic cancellation of the selected weighted
+summands after normalization by the leading \(A\)-weight.
+
+This is still weaker than the exact selected-summand equality needed for
+literal tail subtraction. It records only the norm convergence forced by the
+phase relation and the phase-adjusted scalar limit.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma exists_dominant_selected_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ} {ζ : ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hζ : ‖ζ‖ = 1)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N =
+        ζ ^ N • mpvState (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) N)
+    (hProp : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    ∃ c : ℕ → ℂ,
+      (∀ᶠ N in atTop, c N ≠ 0) ∧
+      (∀ᶠ N in atTop,
+        (∑ j : Fin rA, (μA j) ^ N • mpvState (d := d) (A j) N) =
+          c N • (∑ k : Fin rB, (μB k) ^ N • mpvState (d := d) (B k) N)) ∧
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μA ⟨0, Nat.pos_of_ne_zero hrA⟩ ^ N)⁻¹ •
+            ((μA ⟨0, Nat.pos_of_ne_zero hrA⟩) ^ N •
+                mpvState (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) N -
+              c N •
+                ((μB ⟨0, Nat.pos_of_ne_zero hrB⟩) ^ N •
+                  mpvState (d := d) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N))‖)
+        atTop (nhds (0 : ℝ)) := by
+  let a0 : Fin rA := ⟨0, Nat.pos_of_ne_zero hrA⟩
+  let b0 : Fin rB := ⟨0, Nat.pos_of_ne_zero hrB⟩
+  obtain ⟨c, hc, hState, hScalar⟩ :=
+    exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hζ hPhase hProp
+  have hμA_ne : μA a0 ≠ 0 := hA.toHasStrictOrderedNonzeroWeights.mu_ne_zero a0
+  have hA_norm :
+      Tendsto (fun N : ℕ => ‖mpvState (d := d) (A a0) N‖)
+        atTop (nhds (1 : ℝ)) :=
+    tendsto_norm_mpvState_one (A a0)
+      (hA.toHasNormalizedSelfOverlap.overlap_tendsto_one a0)
+  have hScalar_zero :
+      Tendsto
+        (fun N : ℕ => ‖(1 : ℂ) - c N * ((μB b0 * ζ) / μA a0) ^ N‖)
+        atTop (nhds (0 : ℝ)) := by
+    have hsub :
+        Tendsto
+          (fun N : ℕ => (1 : ℂ) - c N * ((μB b0 * ζ) / μA a0) ^ N)
+          atTop (nhds 0) := by
+      have hScalar' :
+          Tendsto (fun N : ℕ => c N * ((μB b0 * ζ) / μA a0) ^ N)
+            atTop (nhds (1 : ℂ)) := by
+        simpa [a0, b0] using hScalar
+      simpa using ((tendsto_const_nhds (x := (1 : ℂ))).sub hScalar')
+    simpa using hsub.norm
+  have hProduct :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(1 : ℂ) - c N * ((μB b0 * ζ) / μA a0) ^ N‖ *
+            ‖mpvState (d := d) (A a0) N‖)
+        atTop (nhds (0 : ℝ)) := by
+    simpa using hScalar_zero.mul hA_norm
+  have hDiff :
+      Tendsto
+        (fun N : ℕ =>
+          ‖(μA a0 ^ N)⁻¹ •
+            ((μA a0) ^ N • mpvState (d := d) (A a0) N -
+              c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N))‖)
+        atTop (nhds (0 : ℝ)) := by
+    refine Tendsto.congr' ?_ hProduct
+    filter_upwards with N
+    let v := mpvState (d := d) (A a0) N
+    have hμA_pow_ne : μA a0 ^ N ≠ 0 := pow_ne_zero N hμA_ne
+    have hvec :
+        (μA a0 ^ N)⁻¹ •
+            ((μA a0) ^ N • mpvState (d := d) (A a0) N -
+              c N • ((μB b0) ^ N • mpvState (d := d) (B b0) N)) =
+          ((1 : ℂ) - c N * ((μB b0 * ζ) / μA a0) ^ N) •
+            mpvState (d := d) (A a0) N := by
+      rw [hPhase N]
+      simp only [smul_sub, smul_smul]
+      rw [← sub_smul]
+      congr 1
+      calc
+        (μA a0 ^ N)⁻¹ * (μA a0) ^ N -
+            (μA a0 ^ N)⁻¹ * (c N * ((μB b0) ^ N * ζ ^ N)) =
+            1 - c N * (((μB b0) ^ N * ζ ^ N) / (μA a0 ^ N)) := by
+              field_simp [hμA_pow_ne]
+        _ = 1 - c N * ((μB b0 * ζ) / μA a0) ^ N := by
+              rw [← mul_pow, ← div_pow]
+    rw [hvec, norm_smul]
+  exact ⟨c, hc, hState, by simpa [a0, b0] using hDiff⟩
+
 /-- **Dominant adjusted scalar has asymptotic modulus one.**
 
 Source: arXiv:1606.00608, lines 1170--1192. In the
