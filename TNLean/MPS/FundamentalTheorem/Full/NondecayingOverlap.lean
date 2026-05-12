@@ -829,7 +829,25 @@ The remaining formal proof obligation is documented in
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
 forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
+**Plan C (issue #1641) status.** The per-block projection argument
+(paper Step 1) has been re-stated and proven on the paper-faithful
+`SectorDecomposition` surface in
+`TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection`
+(`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`).
+That theorem does *not* assume strict-anti weight ordering and works for an
+arbitrary fixed block `k₀`, with the load-bearing non-cancellation step
+factored out as a hypothesis.
+
+Bridging the present `IsCanonicalFormBNT` surface to the new SectorDecomposition
+lemma is blocked by the strict-anti restriction of `IsCanonicalFormBNT`:
+under `mu_strict_anti`, the unit-modulus hypothesis required by the
+SectorDecomposition lemma fails for every weight after the first.  Resolving
+this requires a structural refactor of `IsCanonicalFormBNT` that splits the
+spectral level (`λ_j` with `|λ_0| > |λ_1| > …`) from the within-sector
+unit-modulus weights (`μ_{j,q}` with `|μ_{j,q}| = 1`).  See
+`audits/2026-05-13_cpsv16_ft_bridge_gap.md` for the full analysis. -/
 lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -866,7 +884,16 @@ The remaining formal proof obligation is documented in
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
 forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
+**Plan C (issue #1641) status.** The symmetric per-block projection has been
+re-stated and proven on the paper-faithful `SectorDecomposition` surface in
+`TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection`
+(`fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`).
+The remaining bridge from the present `IsCanonicalFormBNT` surface to that
+SectorDecomposition lemma is blocked by the same strict-anti vs. unit-modulus
+mismatch as the right-block case.  See
+`audits/2026-05-13_cpsv16_ft_bridge_gap.md`. -/
 lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
