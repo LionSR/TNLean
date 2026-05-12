@@ -23,7 +23,12 @@ section HeteroEqualCase
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof
 uses the overlap dichotomy before applying Corollary `eqV`: if two injective
 left-canonical BNT blocks have a cross-overlap which does not tend to zero, then
-their bond dimensions must agree. -/
+their bond dimensions must agree.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma dim_eq_of_nondecaying_overlap_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -49,7 +54,12 @@ lemma dim_eq_of_nondecaying_overlap_CFBNT
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After a
 non-decaying overlap partner is found, the overlap dichotomy and Corollary
 `eqV` identify the two BNT blocks up to gauge and phase. This lemma packages
-the Lean form of that extraction. -/
+the Lean form of that extraction.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma gaugePhaseEquiv_of_nondecaying_overlap_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -81,7 +91,12 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. After
 Corollary `eqV` gives a phase relation
 \(|V^{(N)}(B_k)\rangle = e^{i\phi N}|V^{(N)}(A_j)\rangle\), the selected
 summand in the weighted BNT expansion can be compared coefficientwise. This
-lemma packages the corresponding Lean consequence of a non-decaying overlap. -/
+lemma packages the corresponding Lean consequence of a non-decaying overlap.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma exists_phase_mpvState_eq_smul_of_nondecaying_overlap_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -121,7 +136,12 @@ Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
 Lean proof, each non-decaying overlap is converted to a gauge-phase equivalence
 by the overlap-decay dichotomy. Two distinct partners for the same fixed block
 would then force two distinct BNT blocks on the other side to have a
-non-decaying mutual overlap, contradicting BNT block separation. -/
+non-decaying mutual overlap, contradicting BNT block separation.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma unique_left_nondecaying_overlap_partner_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -241,7 +261,12 @@ lemma unique_left_nondecaying_overlap_partner_CFBNT
 This is the symmetric form of
 `unique_left_nondecaying_overlap_partner_CFBNT`; it is the same CPSV16
 Theorem `thm1`, lines 1170--1192, uniqueness step with the two tensor
-families interchanged. -/
+families interchanged.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma unique_right_nondecaying_overlap_partner_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
