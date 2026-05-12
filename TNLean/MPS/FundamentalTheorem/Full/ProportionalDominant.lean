@@ -501,7 +501,12 @@ Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. If the normalized
 proportional projection identity eventually holds and has an adjusted scalar
 whose modulus tends to one, then the dominant block on either side cannot have
 all cross-overlaps tending to zero. This is the dominant case of the CPSV16
-line 1182 argument after applying Lemma `Lem1`. -/
+line 1182 argument after applying Lemma `Lem1`.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma dominant_projection_contradictions_of_normalized_proportional_inner
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -729,7 +734,12 @@ Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After expanding
 the two canonical-form tensors into their BNT block sums, eventual nonzero
 proportionality supplies the scalar sequence used in the dominant-block
 projection contradiction. This is the dominant case of the line 1182 argument,
-with Lemma `Lem1` accounting for the sufficiently-large-length formulation. -/
+with Lemma `Lem1` accounting for the sufficiently-large-length formulation.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -794,7 +804,12 @@ lemma dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_
 Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The dominant
 projection contradiction rules out the alternative that the leading block on
 one side has vanishing overlap with every block on the other side. Hence each
-leading block admits a non-decaying overlap partner. -/
+leading block admits a non-decaying overlap partner.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma exists_nondecaying_overlap_dominant_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

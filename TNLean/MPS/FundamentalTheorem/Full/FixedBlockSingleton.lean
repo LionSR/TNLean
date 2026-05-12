@@ -36,7 +36,12 @@ the fixed-block cancellation step when the `B`-side has only the selected
 block. Then the proportional weighted-state identity has no other `B`-summands
 which could cancel the selected block, so Lemma `Lem1` coefficient extraction
 directly contradicts the nonzero selected weight and nonzero proportionality
-scalar. -/
+scalar.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne
     {d rA : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin 1 → ℕ}
@@ -114,7 +119,12 @@ symmetric base case of the fixed-block cancellation step when the `A`-side has
 only the selected block. Then the proportional weighted-state identity has no
 other `A`-summands which could cancel the selected block, so Lemma `Lem1`
 coefficient extraction directly contradicts the nonzero selected weight and
-nonzero proportionality scalar. -/
+nonzero proportionality scalar.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne
     {d rB : ℕ}
     {dimA : Fin 1 → ℕ} {dimB : Fin rB → ℕ}

@@ -73,7 +73,12 @@ The proof proceeds by strong induction on `rA + rB`:
   identity.  The reduced identity involves `rA − 1` and `rB − 1` blocks that still satisfy
   `IsCanonicalFormBNT` (all per-block properties are inherited, and the strict weight
   ordering restricts to the sub-range).  The strong induction hypothesis then closes the
-  remaining cases. -/
+  remaining cases.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma exists_nondecaying_overlap_of_sameMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -622,7 +627,12 @@ termination_by rA + rB
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The proof
 removes a matched leading BNT block and repeats the argument on the remaining
 blocks. In the one-copy-per-sector restricted surface used here, the inherited
-tail family is again in restricted BNT canonical form. -/
+tail family is again in restricted BNT canonical form.
+
+**Scope restriction (one-copy-per-sector):** The local hypothesis
+`IsCanonicalFormBNT` is the already-grouped one-copy-per-sector canonical
+form. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma isCanonicalFormBNT_tail_succ
     {d r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
     (A : (j : Fin r) → MPSTensor d (dim j))
@@ -656,7 +666,12 @@ proof removes matched BNT block pairs and repeats the argument on the
 remaining blocks. Since the source theorem permits a permutation of blocks, the
 removed block need not be the leading one. In the one-copy-per-sector
 restricted surface used here, the complement indexed by `Fin.succAbove` is
-again in restricted BNT canonical form. -/
+again in restricted BNT canonical form.
+
+**Scope restriction (one-copy-per-sector):** The local hypothesis
+`IsCanonicalFormBNT` is the already-grouped one-copy-per-sector canonical
+form. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma isCanonicalFormBNT_tail_succAbove
     {d n : ℕ} {dim : Fin (n + 1) → ℕ} {μ : Fin (n + 1) → ℂ}
     (A : (j : Fin (n + 1)) → MPSTensor d (dim j))
@@ -685,7 +700,12 @@ contradiction, that all overlaps with the `A_j` tend to zero. Together with
 the BNT asymptotic orthonormality inside the `A`-family and the normalized
 self-overlap of `B_k`, Corollary `Lem1` gives linear independence, for all
 sufficiently large lengths, of the combined family consisting of all `A_j`
-and this one fixed block `B_k`. -/
+and this one fixed block `B_k`.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -739,7 +759,12 @@ Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, lines
 the two tensor families interchanged. If one fixes a block `A_j` and assumes
 that all overlaps with the `B_k` tend to zero, Corollary `Lem1` gives linear
 independence, for all sufficiently large lengths, of the combined family
-consisting of all `B_k` and this one fixed block `A_j`. -/
+consisting of all `B_k` and this one fixed block `A_j`.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -793,7 +818,12 @@ Source: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the fixed-block
 cancellation step for the leading block of the `B`-family. In the
 one-copy-per-sector setting, the dominant projection argument already
 rules out decay of all overlaps with that leading `B`-block under eventual
-nonzero proportionality of the total MPV families. -/
+nonzero proportionality of the total MPV families.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_right_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -820,7 +850,12 @@ Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185. This is the
 symmetric leading-block cancellation step for the leading block of the
 `A`-family. The dominant projection argument rules out simultaneous decay of
 all overlaps with that leading `A`-block under eventual nonzero proportionality
-of the total MPV families. -/
+of the total MPV families.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_left_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -853,7 +888,12 @@ local Lemma `Lem1` input is
 `eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT`.
 The remaining formal proof obligation is documented in
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607. -/
+#1607.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -885,7 +925,12 @@ The local Lemma `Lem1` input is
 `eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT`.
 The remaining formal proof obligation is documented in
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607. -/
+#1607.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
