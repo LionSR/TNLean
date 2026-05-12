@@ -728,6 +728,49 @@ with an extra $Z$-gauge degree of freedom.
 	normalization.
 \end{proof}
 
+\begin{lemma}[Dominant tail difference vanishes after phase adjustment]%
+\label{lem:dominant_phase_adjusted_tail_difference}
+	\lean{MPSTensor.exists_dominant_tail_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:dominant_phase_adjusted_selected_difference}
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
+	canonical-form families with nonempty index sets, and suppose that the
+	assembled weighted MPV families are eventually nonzero proportional.  If
+	for every \(N\), the leading blocks satisfy
+	\[
+		\ket{V^{(N)}(B_{b_0})}
+		= \zeta^N \ket{V^{(N)}(A_{a_0})}
+	\]
+	with \(|\zeta|=1\), then there is a scalar sequence \(c_N\), eventually
+	nonzero, such that
+	\[
+		\sum_j(\mu^A_j)^N\ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k(\mu^B_k)^N\ket{V^{(N)}(B_k)}
+	\]
+	for all sufficiently large \(N\), and
+	\[
+		\left\|(\mu^A_{a_0})^{-N}
+		\Bigg(
+		\sum_{j\neq a_0}(\mu^A_j)^N\ket{V^{(N)}(A_j)}
+		-
+		c_N\sum_{k\neq b_0}(\mu^B_k)^N\ket{V^{(N)}(B_k)}
+		\Bigg)\right\|
+		\longrightarrow 0 .
+	\]
+	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
+	% This is an asymptotic erased-tail statement; it does not give exact
+	% proportionality of the two erased tails.
+\end{lemma}
+
+\begin{proof}\leanok
+	Split each assembled weighted sum into its leading selected summand and the
+	erased tail.  The total proportionality identity and
+	Lemma~\ref{lem:dominant_phase_adjusted_selected_difference} show that the
+	tail difference is the negative of the selected difference, after the same
+	normalization.  Norms are unchanged by multiplication by \(-1\).
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
