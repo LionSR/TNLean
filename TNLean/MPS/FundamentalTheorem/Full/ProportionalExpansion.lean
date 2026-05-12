@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.BNT.Basic
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 
 /-!

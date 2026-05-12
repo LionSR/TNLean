@@ -6,6 +6,7 @@ import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton
 import TNLean.MPS.FundamentalTheorem.Full.LeadingPartner
 import TNLean.MPS.FundamentalTheorem.Full.LeadingTail
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalTail
 
 /-!
