@@ -7,14 +7,14 @@ import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 /-!
 # Fixed-block residual-span exclusion
 
-This module records the direct residual-span consequence of the fixed-block
-`Lem1` linear-independence input in CPSV16 Theorem II.1.
+The direct residual-span consequence of the fixed-block Lem1
+linear-independence input in CPSV16 Theorem II.1 is isolated here.
 
 ## References
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Corollary `Lem1` and Theorem `thm1`, lines 1182--1185.
+  Corollary Lem1 and Theorem thm1, lines 1182--1185.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -24,11 +24,11 @@ namespace MPSTensor
 
 section HeteroEqualCase
 
-/-- **Fixed-right residual-span exclusion from Lemma `Lem1`.**
+/-- **Fixed-right residual-span exclusion from Lemma Lem1.**
 
-Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, line 1182.
+Source: arXiv:1606.00608, Corollary Lem1 and Theorem thm1, line 1182.
 If a fixed `B`-block has vanishing overlap with every `A`-block, then
-Corollary `Lem1` gives eventual linear independence of the family consisting
+Corollary Lem1 gives eventual linear independence of the family consisting
 of all `A`-blocks and this fixed `B`-block. Therefore, for all sufficiently
 large lengths, the fixed `B` MPV state is not in the span of the `A` MPV
 states.
@@ -80,9 +80,9 @@ lemma eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT
       (s := Set.range (fun j : Fin rA => Sum.inl (β := Fin 1) j))
       (x := Sum.inr (0 : Fin 1)) hnot_range
 
-/-- **Fixed-left residual-span exclusion from Lemma `Lem1`.**
+/-- **Fixed-left residual-span exclusion from Lemma Lem1.**
 
-Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, lines
+Source: arXiv:1606.00608, Corollary Lem1 and Theorem thm1, lines
 1182--1185. This is the symmetric form of
 `eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT`: if a
 fixed `A`-block has vanishing overlap with every `B`-block, then the fixed

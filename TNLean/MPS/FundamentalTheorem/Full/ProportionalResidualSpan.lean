@@ -27,10 +27,10 @@ section ProportionalResidualSpan
 
 Source context: arXiv:1606.00608, Theorem II.1, line 1182. The paper uses
 CPSV16, Lem1 to separate a fixed BNT block from the remaining contributions.
-This lemma records the elementary linear-algebra consequence needed by the
-residual-span coefficient extraction: if the selected vector together with the
-residual family is linearly independent, then the selected vector is not in the
-span of the residual family.
+If the selected vector together with the residual family is linearly
+independent, then the selected vector is not in the span of the residual
+family; this is the elementary linear-algebra consequence needed by the
+residual-span coefficient extraction.
 
 **Scope restriction (derived separation input):** The linear-independence
 hypothesis is not a new source hypothesis for CPSV16. In a source-faithful
@@ -98,8 +98,9 @@ agree.
 
 Source context: arXiv:1606.00608, Theorem II.1, line 1182. In the paper,
 CPSV16, Lem1 is used to separate a fixed BNT block from the remaining
-contributions. This lemma records the algebraic separation needed once the
-appropriate residual-span exclusion has been proved.
+contributions. After the selected vector has been separated from the residual
+span, equality modulo that residual span forces equality of the selected
+coefficients.
 
 **Scope restriction (residual-span exclusion):** The hypothesis
 `v₀ ∉ Submodule.span ℂ (Set.range u)` is not a new source hypothesis for

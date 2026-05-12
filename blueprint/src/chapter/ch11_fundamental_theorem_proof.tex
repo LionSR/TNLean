@@ -159,8 +159,8 @@ with an extra $Z$-gauge degree of freedom.
 	If, for all sufficiently large \(N\), the selected vector \(v_N\) together
 	with the residual family \(\{u_{N,k}\}_k\) is linearly independent, then
 	\(v_N\notin\operatorname{span}\{u_{N,k}\}_k\) for all sufficiently large
-	\(N\).  This records the passage from an eventual BNT separation statement
-	to the residual-span exclusion used by coefficient extraction
+	\(N\).  This is the residual-span exclusion used by coefficient extraction
+	after the eventual BNT separation statement has been established
 	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
@@ -1212,6 +1212,56 @@ with an extra $Z$-gauge degree of freedom.
 	first conjugated to put the family in the displayed order, and then the
 	two-family orthonormal-overlap form of
 	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} applies.
+\end{proof}
+
+\begin{lemma}[Fixed-right residual-span exclusion from all-overlap decay]%
+\label{lem:fixed_right_residual_span_exclusion_from_decay}
+	\lean{MPSTensor.eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT}
+	\leanok
+	\uses{lem:fixed_right_lem1_input_eventual_proportional}
+	Fix one block \(B_{k_0}\) of a BNT canonical-form family.  If
+	\(O_{A_j,B_{k_0}}(N)\to0\) for every block \(A_j\) in the other family,
+	then, for all sufficiently large \(N\),
+	\[
+		V^{(N)}(B_{k_0})\notin
+		\operatorname{span}\{V^{(N)}(A_j):j\}.
+	\]
+	This is the residual-span form of the fixed-block application of
+	\cite[Corollary~\texttt{Lem1} and Theorem~\texttt{thm1},
+	line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:fixed_right_lem1_input_eventual_proportional}
+	The fixed-block Lemma~\texttt{Lem1} input gives eventual linear
+	independence of the family consisting of all \(A_j\) and the selected
+	block \(B_{k_0}\).  A linearly independent family has no member in the
+	span of the others.
+\end{proof}
+
+\begin{lemma}[Fixed-left residual-span exclusion from all-overlap decay]%
+\label{lem:fixed_left_residual_span_exclusion_from_decay}
+	\lean{MPSTensor.eventually_fixed_left_notMem_right_span_of_all_overlaps_decay_CFBNT}
+	\leanok
+	\uses{lem:fixed_left_lem1_input_eventual_proportional}
+	Fix one block \(A_{j_0}\) of a BNT canonical-form family.  If
+	\(O_{A_{j_0},B_k}(N)\to0\) for every block \(B_k\) in the other family,
+	then, for all sufficiently large \(N\),
+	\[
+		V^{(N)}(A_{j_0})\notin
+		\operatorname{span}\{V^{(N)}(B_k):k\}.
+	\]
+	This is the symmetric residual-span form of the fixed-block application of
+	\cite[Corollary~\texttt{Lem1} and Theorem~\texttt{thm1},
+	lines~1182--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:fixed_left_lem1_input_eventual_proportional}
+	The symmetric fixed-block Lemma~\texttt{Lem1} input gives eventual linear
+	independence of the family consisting of all \(B_k\) and the selected
+	block \(A_{j_0}\).  A linearly independent family has no member in the
+	span of the others.
 \end{proof}
 
 \begin{lemma}[Leading fixed-right all-overlaps-decay contradiction]%
