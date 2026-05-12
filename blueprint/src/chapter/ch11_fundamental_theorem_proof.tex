@@ -187,6 +187,9 @@ with an extra $Z$-gauge degree of freedom.
 	\((\mu_B\zeta)^N=\mu_B^N\zeta^N\).
 \end{proof}
 
+% Proof-boundary note: the residual-family linear-independence hypothesis below
+% is not supplied by the fixed-block application of Lemma Lem1 in Theorem II.1.
+% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
 \begin{lemma}[Selected weighted summand from phase substitution and a linear-independence hypothesis]%
 \label{lem:selected_weighted_summand_from_phase_sum_li}
 	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li}
@@ -212,9 +215,7 @@ with an extra $Z$-gauge degree of freedom.
 	for all sufficiently large \(N\).
 	This is a conditional coefficient-extraction statement.  In the fixed-block
 	step, \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} does not by itself
-	supply the displayed residual-family linear independence; the gap is
-	recorded in
-	\texttt{docs/paper-gaps/cpsv16\_fixed\_block\_cancellation.tex}.
+	supply the displayed residual-family linear independence
 	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
@@ -359,6 +360,7 @@ with an extra $Z$-gauge degree of freedom.
 % only the family whose off-diagonal overlaps all tend to zero; for the
 % fixed-block step this is all blocks on one side together with one fixed block
 % on the other side, not the whole remaining tail.
+% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
 \begin{lemma}[Eventual tail proportionality from phase substitution and a linear-independence hypothesis]%
 \label{lem:eventual_tail_proportional_from_phase_sum_li}
 	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li}
@@ -372,10 +374,9 @@ with an extra $Z$-gauge degree of freedom.
 	$B$-blocks is eventually linearly independent, then the two complements,
 	reindexed by the insertion maps, are eventually nonzero proportional.
 	This is a conditional algebraic peeling statement.  The displayed
-	residual-family independence is not supplied by the fixed-block application
-	of \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv}; the remaining
-	source-faithful cancellation step is documented in
-	\texttt{docs/paper-gaps/cpsv16\_fixed\_block\_cancellation.tex}.
+	residual-family independence is not supplied by the fixed-block step; in
+	that step \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} is applied only
+	to the fixed-block family
 	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
@@ -392,6 +393,7 @@ with an extra $Z$-gauge degree of freedom.
 % only the family whose off-diagonal overlaps all tend to zero; for the
 % fixed-block step this is all blocks on one side together with one fixed block
 % on the other side, not the whole remaining tail.
+% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
 \begin{lemma}[Eventual tail proportionality from the left substituted family]%
 \label{lem:eventual_tail_proportional_from_phase_sum_li_left}
 	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left}
@@ -407,9 +409,7 @@ with an extra $Z$-gauge degree of freedom.
 	proportional.
 	This is the same conditional algebraic peeling statement with the linearly
 	independent family ordered as all $B$-blocks together with the remaining
-	$A$-blocks.  The fixed-block source gap is documented in
-	\texttt{docs/paper-gaps/cpsv16\_fixed\_block\_cancellation.tex}.
-	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+	$A$-blocks \cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
