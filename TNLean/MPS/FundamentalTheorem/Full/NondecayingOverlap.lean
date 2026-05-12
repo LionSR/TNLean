@@ -910,7 +910,23 @@ lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV�
     (hAllDecay : ∀ j : Fin rA,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
     False := by
-  sorry
+  have hProp' : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μB B) (toTensorFromBlocks μA A) := by
+    filter_upwards [hProp] with N hN
+    rcases hN with ⟨c, hc, hN⟩
+    exact ⟨c⁻¹, inv_ne_zero hc, fun σ => by
+      calc
+        mpv (toTensorFromBlocks μB B) σ = c⁻¹ * (c * mpv (toTensorFromBlocks μB B) σ) := by
+          rw [inv_mul_cancel_left₀ hc]
+        _ = c⁻¹ * mpv (toTensorFromBlocks μA A) σ := by
+          rw [hN σ]⟩
+  have hAllDecay' : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (B k₀) (A j) N) atTop (nhds 0) := by
+    intro j
+    exact tendsto_mpvOverlap_zero_swap (d := d) (A j) (B k₀) (hAllDecay j)
+  exact
+    fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      (d := d) B A hB hA hrB hrA hProp' k₀ hAllDecay'
 
 /-- **Fixed-left all-overlaps-decay contradiction for proportional BNT families.**
 
@@ -947,7 +963,23 @@ lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂
     (hAllDecay : ∀ k : Fin rB,
       Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
     False := by
-  sorry
+  have hProp' : EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks μB B) (toTensorFromBlocks μA A) := by
+    filter_upwards [hProp] with N hN
+    rcases hN with ⟨c, hc, hN⟩
+    exact ⟨c⁻¹, inv_ne_zero hc, fun σ => by
+      calc
+        mpv (toTensorFromBlocks μB B) σ = c⁻¹ * (c * mpv (toTensorFromBlocks μB B) σ) := by
+          rw [inv_mul_cancel_left₀ hc]
+        _ = c⁻¹ * mpv (toTensorFromBlocks μA A) σ := by
+          rw [hN σ]⟩
+  have hAllDecay' : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (B k) (A j₀) N) atTop (nhds 0) := by
+    intro k
+    exact tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
+  exact
+    fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      (d := d) B A hB hA hrB hrA hProp' j₀ hAllDecay'
 
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 

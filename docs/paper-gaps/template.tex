@@ -2,11 +2,12 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
 
 \input{command}
 
-\title{Model Note: Comparing a Cited Argument with a Formal Statement}
+\title{Model Note: A Source Theorem and a Formal Hypothesis}
 \author{}
 \date{\today}
 
@@ -26,71 +27,77 @@
 % source files, line ranges, labels, and formal declaration names in footnotes
 % when they are only traceability data.
 
-\section{The assertion}
+\section{The cited statement}
 
-This note concerns a hypothetical proposition, of the sort one might encounter
-in a cited argument such as \cite{Cirac2021Matrix}.  The proposition is used
-later in the same argument.
+This note is a model for the documents in \path{docs/paper-gaps/}.  A real note
+should replace the symbols below by the notation of the cited article and should
+identify the source passage by a bibliographic citation.  The visible document
+should be a mathematical explanation, not a form to be filled out.
 
-Let \(\mathcal H\) denote the hypotheses available at a certain point of the
-argument, and let \(C\) denote the conclusion needed there.  Suppose the cited
-source states the implication
-\[
-  \mathcal H \Longrightarrow C.
-  \tag{\path{thm:model-source}}
-\]
-The notation in the displayed implication has now been fixed: \(\mathcal H\) is
-the available hypothesis set, and \(C\) is the conclusion required by the later
-argument.
+Suppose that the cited source proves a theorem under hypotheses
+\(\mathcal H\):
+\begin{align}
+    \mathcal H \Longrightarrow C.
+    \tag{\path{thm:source}}
+\end{align}
+Here \(C\) is the conclusion later used in the argument.  In an actual note,
+the first paragraph should say where this implication appears and where it is
+used, for example \cite[Theorem~4.4]{Cirac2021Matrix}.
 
-\section{The point at issue}
+\section{The formal statement}
 
-Assume that the proof of the displayed implication invokes a lemma which, in the
-special case being used, proves
-\[
-  \mathcal H \wedge \mathcal K \Longrightarrow C,
-  \tag{\path{lem:model-input}}
-\]
-where \(\mathcal K\) is an additional hypothesis.  If the surrounding argument
-does not prove \(\mathcal K\), then the displayed implication
-\(\mathcal H\Rightarrow C\) has not been justified by that proof.  The
-mathematical question is whether \(\mathcal K\) follows from \(\mathcal H\), must
-be added to the statement, or can be avoided by a different argument.
+Assume that the formal development proves instead
+\begin{align}
+    \mathcal H\wedge\mathcal K \Longrightarrow C.
+    \tag{\path{thm:formal}}
+\end{align}
+The additional condition \(\mathcal K\) may be harmless, may follow from
+\(\mathcal H\), or may be a genuine strengthening.  The point of the note is to
+decide which of these alternatives is correct.
 
-Thus the proof supplies the desired conclusion only after the additional
-hypothesis \(\mathcal K\) has been accounted for.
+For instance, if the formal theorem is named \leanid{modelCorrected}, that name
+belongs in a footnote together with the file location, because it is traceability
+data rather than part of the mathematical assertion.\footnote{Model formal
+    declaration: \leanid{modelCorrected} in \doclink{TNLean/Path/To/File}.}
+The main text should still state the theorem as mathematics.
 
-\section{The corrected statement}
+\section{The calculation}
 
-In this model, suppose that \(\mathcal K\) is not known to follow from
-\(\mathcal H\), but that the later proof only uses the theorem in situations
-where \(\mathcal K\) is available.  The corrected statement is then
-\[
-  \mathcal H \wedge \mathcal K \Longrightarrow C.
-\]
-This is a strengthening of the hypotheses, not a derivation of \(\mathcal K\)
-from the original assumptions.
+The comparison should isolate the exact place where the hypotheses differ.  In
+this model the cited proof supplies an intermediate estimate
+\begin{align}
+    F_N           &\leq \varepsilon_N, \tag{\path{eq:source-bound}}\\
+    \varepsilon_N &\xrightarrow[N\to\infty]{}0.
+\end{align}
+The formal proof, however, obtains the same estimate only after using
+\(\mathcal K\):
+\begin{align}
+    \mathcal H\wedge\mathcal K
+    \quad\Longrightarrow\quad
+    F_N \leq \varepsilon_N
+    \quad\Longrightarrow\quad
+    C.
+\end{align}
+If \(\mathcal K\) is a trace normalization, a nonzero scalar condition, or a
+choice of gauge, the note should write it explicitly, for example
+\begin{align}
+    \tr(\rho)=1,\qquad c_N\neq 0,\qquad
+    B^i=\zeta X A^iX^{-1}.
+\end{align}
 
-If the formal development proves this corrected statement, the note should state
-that fact in prose and identify the exact formal declaration in a footnote.  For
-example, the declaration might be recorded as \leanid{modelCorrected} in
-\doclink{TNLean/Path/To/File}.  The formal declaration is evidence for the
-corrected mathematical statement; it is not a substitute for explaining the
-statement.
+\section{Verdict}
 
-The same principle applies if the formal proof uses a theorem from a library
-which is not present in the cited source.  The note should first state that
-theorem as a mathematical assertion, then explain how its hypotheses are verified
-in the present notation, and only then identify the corresponding formal
-declaration.
-
-\section{Conclusion}
-
-The verdict in this model is that the original proof uses an additional
-hypothesis \(\mathcal K\).  The corrected statement is sufficient for the
-surrounding argument only in the cases where \(\mathcal K\) is supplied.  Without
-such a derivation or a different proof of \(C\), the original implication
-\(\mathcal H\Rightarrow C\) remains unjustified.
+The conclusion should state the present mathematical status.  If
+\(\mathcal K\) follows from \(\mathcal H\), the note should give the derivation.
+If it does not, the formal theorem is a restricted result:
+\begin{align}
+    \mathcal H\wedge\mathcal K \Longrightarrow C
+    \qquad\text{is not the same theorem as}\qquad
+    \mathcal H \Longrightarrow C.
+\end{align}
+If the discrepancy is only a local correction, the note should say so and
+identify the corrected formula.  If the issue remains open, it should say what
+has been checked and what remains to be proved.
 
 \bibliographystyle{alpha}
 \bibliography{references}

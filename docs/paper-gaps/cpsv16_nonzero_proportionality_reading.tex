@@ -20,15 +20,23 @@ Cirac--P\'erez-Garc\'ia--Schuch--Verstraete state Theorem~\texttt{thm1}
 in \cite{Cirac2016MPDO_arXiv}, lines~1170--1192, for tensors whose
 matrix-product vectors are ``proportional to each other''.  The displayed
 source statement does not spell out whether the proportionality scalar at a
-fixed length is required to be nonzero.
+fixed length is required to be nonzero.  The two formal readings are
+\begin{align}
+    \exists c_N,\; V^{(N)}(A)=c_NV^{(N)}(B),\\
+    \exists c_N\ne 0,\; V^{(N)}(A)=c_NV^{(N)}(B).
+\end{align}
+\begin{align}
+    V^{(N)}(A)=0\cdot V^{(N)}(B).
+\end{align}
+The scalar multiple with coefficient \(0\) gives no projective point.
 
 \section{Formal reading}
 
 The formal predicate \leanid{NonzeroProportionalMPV2} requires, at each
 length \(N\), a scalar \(c_N \neq 0\) such that
-\[
-  V^{(N)}(A) = c_N V^{(N)}(B).
-\]
+\begin{align}
+    V^{(N)}(A) = c_N V^{(N)}(B).
+\end{align}
 This is the projective reading of proportionality: the two vectors determine
 the same point in projective space.  It is the reading used by the proof of
 Theorem~\texttt{thm1}.  In the block-selection step, the paper assumes that all

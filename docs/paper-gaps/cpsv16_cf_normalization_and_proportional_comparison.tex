@@ -20,10 +20,10 @@ Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 builds the multi-block route to
 the Fundamental Theorem on top of the canonical form
 \cite[Section~II]{Cirac2016MPDO_arXiv}. A tensor $A=(A^i)_{i=1}^d$ is in
 canonical form when, after a basis change of the bond, it decomposes as
-\begin{equation}
+\begin{align}
   A^i=\bigoplus_{k=1}^r \mu_k\,A_k^i,
   \tag{\path{eq:II_CF1}}
-\end{equation}
+\end{align}
 where each block tensor $A_k$ is normal and the scalars $\mu_k$ are nonzero.
 The text immediately fixes a normalization on the weights:
 \begin{quote}
@@ -45,11 +45,10 @@ $q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After Theorem~\texttt{thm1}
 identifies the representatives, $B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the
 trace-pair argument in the proof of Corollary~\texttt{II\_cor2} reduces to the
 unlabeled scalar identity
-\[
+\begin{align}
   \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}\bigl(\nu_{j,q}e^{i\phi_j}\bigr)^N,
-  \qquad\text{for all }j\text{ and all }N.
-\]
+   \end{align}
 The cited Lemma~\texttt{Lem:app\_simple} then concludes that
 $r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
 $\mu_{j,q}=\nu_{j,q}e^{i\phi_j}$. The matching dimensions and the global gauge
@@ -97,11 +96,10 @@ two coefficient sequences indexed by chain length, together with the assumption
 that they converge to nonzero limits. In that route, each block index $j$ had a
 function $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit
 $a_j^\infty\in\mathbb C$ satisfying
-\[
-  a_{N,j}\to a_j^\infty\text{ as }N\to\infty,
-  \qquad a_j^\infty\ne 0,
-\]
-together with the analogous data on the $B$-side and a sequence of
+\begin{align}
+  a_{N,j}\to a_j^\infty, \qquad a_j^\infty\ne 0
+\end{align}
+as \(N\to\infty\), together with the analogous data on the $B$-side and a sequence of
 proportionality scalars $c_N$ converging to a nonzero limit $c$. The
 identification of the scalars is then derived from these convergence
 hypotheses by a comparison of limits, rather than from the source
@@ -114,9 +112,9 @@ of array\footnote{The corresponding blueprint passage is the remark
 \texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
 \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
 lines 172--202.} is
-\[
+\begin{align}
   a_{N,j}=(\mu_j^A)^N.
-\]
+\end{align}
 With this choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$
 becomes a condition on the powers $(\mu_j^A)^N$.
 
@@ -134,18 +132,17 @@ together with a finite-length scalar power-sum identity for the
 $\mu$-coefficient matching.
 
 The memo records the source identity in the form
-\[
+\begin{align}
   \sum_{k=1}^{x_a}\lambda_{a,k}^N
     =\sum_{k=1}^{x_b}\lambda_{b,k}^N
-  \qquad\text{for all }N=1,\ldots,\max(x_a,x_b),
-\]
+\end{align}
 and proposes formalizing it as a fixed-length theorem requiring only finitely
 many values of $N$. The planned application to the BNT
 $\mu$-coefficients reads, in the memo's own notation,
-\[
+\begin{align}
   \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
-\]
+\end{align}
 to be applied via this fixed-length scalar identity to obtain
 $r_{a,j}=r_{b,j}$ and the multiset equality. No convergence statement appears
 in the memo's plan, and no nonzero-limit hypothesis is contemplated.
@@ -156,11 +153,10 @@ at the witness length, while the surrounding BNT permutation step uses span
 equality to extract the linear independence it needs. The memo's own
 resolution is to weaken the global span-equality hypothesis to its eventual
 form,
-\[
-  \forall^{\infty} N,\quad
-  \operatorname{span}\{\,V^{(N)}(A_j)\,\}_j
+\begin{align}
+     \operatorname{span}\{\,V^{(N)}(A_j)\,\}_j
     =\operatorname{span}\{\,V^{(N)}(B_k)\,\}_k,
-\]
+\end{align}
 and to observe that the surrounding step already only consumes the eventual
 form. The memo records this as a backward-compatible weakening that
 discharges the circularity at the type level.
@@ -204,9 +200,10 @@ sector.
 
 Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
 the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
-\[
-  |(\mu_j^A)^N|=|\mu_j^A|^N\to 0\quad\text{as }N\to\infty,
-\]
+\begin{align}
+  |(\mu_j^A)^N|=|\mu_j^A|^N\to 0
+\end{align}
+as \(N\to\infty\),
 so the only candidate limit is $a_j^\infty=0$, contradicting the formal
 hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on
 the unit circle, and the sequence $(\mu_1^A)^N$ converges only in the special
@@ -261,11 +258,11 @@ assumption.
 The second change is to reformulate the proportional comparison around finite
 power-sum data rather than limits. In the general coefficient-multiplicity
 setting of the source proof, the blockwise input should be the finite family
-\[
+\begin{align}
   \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
   \qquad N=1,\ldots,\max(r_{a,j},r_{b,j}),
-\]
+\end{align}
 or the corresponding finite collection of witness lengths produced after the
 BNT span and linear-independence input has been made available. The source
 separation lemma then gives $r_{a,j}=r_{b,j}$ and the multiset equality of the
@@ -278,9 +275,9 @@ same finite-data recipe collapses to comparing one chosen witness length
 $N_0$. The mathematical input is the BNT linear independence at that length,
 supplied by the direct-sum span theorem on a basis of normal tensors, and the
 blockwise output is
-\[
+\begin{align}
   (\mu_j^A)^{N_0}=c^{N_0}\,(\mu_j^B)^{N_0},\qquad j=1,\ldots,g,
-\]
+\end{align}
 which fixes $\mu_j^A$ in terms of $\mu_j^B$ and $c$ up to an $N_0$th root of
 unity. The phase ambiguity is then absorbed into the per-block phase $\phi_j$
 already present in the source statement
