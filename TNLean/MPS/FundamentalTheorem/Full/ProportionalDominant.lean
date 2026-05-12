@@ -285,7 +285,7 @@ lemma tendsto_phase_normalized_weighted_mpvInner_sum_of_leading_CFBNT
 
 /-- **Leading phase-adjusted scalar convergence.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the
+Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. In the
 dominant phase-matched situation, projecting the proportional weighted BNT
 sums against the leading \(A\)-block and using the phase relation
 \(|V^{(N)}(B_0)\rangle=\zeta^N |V^{(N)}(A_0)\rangle\) shows that the same
