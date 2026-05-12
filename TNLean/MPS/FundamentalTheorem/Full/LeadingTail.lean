@@ -31,9 +31,10 @@ section LeadingTail
 Source context: arXiv:1606.00608, Theorem II.1, line 1182. After the leading
 `B`-block has been shown to have a non-decaying overlap with some `A`-block,
 the leading-partner lemma identifies that block as the leading `A`-block.
-Corollary eqV then supplies the phase relation used to start the peeling
-argument, and the selected-summand cancellation gives the leading-erased tail
-asymptotic.
+The non-decaying-overlap phase theorem then gives the relation
+that the MPV state of B_0 at length N is ζ^N times the MPV state of
+A_0; this starts the peeling argument, and the selected-summand cancellation
+gives the leading-erased tail asymptotic.
 
 The conclusion keeps the proportionality scalar sequence for the assembled
 weighted sums together with the normalized leading-tail estimate.
