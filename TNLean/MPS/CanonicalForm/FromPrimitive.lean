@@ -20,8 +20,9 @@ namespace MPSTensor
 /-- Build `IsCanonicalForm` once the normalized self-overlap hypothesis has been derived from
 blockwise primitivity.
 
-This theorem proves the final implication after the blockwise injectivity, normalization, weight
-ordering, and primitivity hypotheses have already been established.
+For a finite family of primitive blocks with injective Kraus span, left-canonical
+normalization, strictly ordered nonzero weights, and positive bond dimensions, the weighted
+family satisfies `IsCanonicalForm`.
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
 Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
@@ -29,8 +30,7 @@ translation-invariant MPS representation.
 
 **Scope restriction (primitive block hypotheses):** this theorem assumes
 injectivity, strict ordering of the weight moduli, nonzero weights, and a primitive fixed point
-for every block. Those hypotheses are not assumptions of PGVWC07
-the source theorem. See
+for every block. Those hypotheses are not assumptions of the source theorem. See
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem isCanonicalForm_of_primitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
