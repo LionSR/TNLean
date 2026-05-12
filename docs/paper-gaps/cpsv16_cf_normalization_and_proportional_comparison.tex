@@ -129,7 +129,7 @@ intended route for Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2} of
 \cite{Cirac2016MPDO_arXiv}.\footnote{%
 \path{audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
 \texttt{64c018ab} earlier the same day as the introducing implementation
-\texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
+\texttt{dd54b79e}.} Its concrete recommendation is a span-equality comparison,
 together with a finite-length scalar power-sum identity for the
 $\mu$-coefficient matching.
 
@@ -168,12 +168,12 @@ discharges the circularity at the type level.
 The implementation committed later the same day departs from both directions
 of the memo. It does not formalize the fixed-length scalar power-sum identity
 proposed for the $\mu$-coefficient step. It also does not adopt the eventual
-span-equality form proposed for the bridge. Instead it introduced, on the
-BNT bridge theorems and later in a single formal data structure, a global
+span-equality form proposed for the comparison step. Instead it introduced, on the
+BNT comparison theorems and later in a single formal data structure, a global
 convergence hypothesis on the coefficient sequences and a separate hypothesis
-that those limits are nonzero. The mathematical object packaged by these fields is not the
+that those limits are nonzero. The mathematical object described by these fields is not the
 power-sum identity from the source proof of Corollary~\texttt{II\_cor2}, and
-it is not the eventual span equality from the memo's bridge plan. It is a
+it is not the eventual span equality from the memo's comparison plan. It is a
 third object, introduced without a corresponding written rationale. A later
 commit on 2026-05-09 describes the structure as ``MPV-level Newton--Girard
 convergence data, not a §II 283--302 Wedderburn-style similarity,'' but this
@@ -292,7 +292,7 @@ multi-multiplicity version follows the finite power-sum identities from the
 proof of Corollary~\texttt{II\_cor2}
 \cite{Cirac2016MPDO_arXiv}, while the single-witness discussion is only the
 strict-weight specialization of that route. The circularity worry that the memo
-flagged in connection with the span-equality bridge does not arise for this
+flagged in connection with the span-equality comparison does not arise for this
 finite-length route once the BNT linear-independence input is supplied from
 the direct-sum span theorem rather than extracted from the proportional
 comparison itself.
@@ -316,7 +316,7 @@ The structural realignment has been done. The canonical-form definition now
 carries the source convention $|\mu_1|=1$ as a field
 of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.
 The convergence-to-nonzero-limit fields and the later per-$N$ coefficient
-package have been removed from the formal development.  The surviving boundary
+fields have been removed from the formal development.  The surviving boundary
 keeps the block-permutation and gauge-phase comparison as an explicit input
 until the source-faithful residual comparison theorem is available.
 
