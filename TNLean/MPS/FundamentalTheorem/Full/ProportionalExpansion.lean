@@ -233,11 +233,11 @@ lemma nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_
 
 /-- **Eventual proportionality from an eventual weighted MPV-state scalar sequence.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After a finite
-number of leading BNT components has been removed, Lemma `Lem1` supplies
-linear independence only for sufficiently large lengths. This bookkeeping lemma
-turns an eventual weighted MPV-state identity into eventual nonzero
-proportionality of the assembled tail tensors. -/
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. At recursive
+stages in the block-deletion argument the available weighted MPV-state identity
+may hold only for sufficiently large lengths. This bookkeeping lemma turns such
+an eventual weighted identity into eventual nonzero proportionality of the
+assembled tail tensors. -/
 lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -290,13 +290,18 @@ lemma eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weigh
 
 /-- **Selected coefficient extraction from an eventual two-family relation.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
-`Lem1`. Once the selected block on one side has been rewritten as a phase
-multiple of the selected block on the other side, Lemma `Lem1` supplies
-eventual linear independence for the remaining two-family list. This lemma is
-the coefficient bookkeeping for that step: equality of the two finite linear
-combinations forces the coefficient of the selected vector to agree
-eventually. -/
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1181--1183. This
+lemma is conditional algebra: once the selected block on one side has been
+rewritten as a phase multiple of the selected block on the other side, an
+explicit eventual linear-independence hypothesis for the displayed two-family
+list lets one compare the selected coefficient.
+
+**Scope restriction (explicit residual-family independence):** In the
+fixed-block step of CPSV16 Theorem `thm1`, Lemma `Lem1` supplies linear
+independence for the family made from all blocks on one side together with one
+fixed block on the other side; it does not directly supply the residual
+two-family hypothesis appearing here. The missing source-faithful isolation
+argument is recorded in `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum
     {ι κ : Type*} [Fintype ι] [Fintype κ]
     {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
@@ -359,10 +364,15 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. After a non-decaying block pair has supplied the phase relation for
-the selected block, Lemma `Lem1` gives eventual linear independence of the
-family obtained by replacing that selected block by its phase-matched partner.
-The total weighted-state relation then identifies the selected coefficient,
-and hence the selected weighted summand. -/
+the selected block, this auxiliary lemma uses an explicit eventual
+linear-independence hypothesis for the displayed residual family. The total
+weighted-state relation then identifies the selected coefficient, and hence the
+selected weighted summand.
+
+**Scope restriction (explicit residual-family independence):** In the
+fixed-block step of CPSV16 Theorem `thm1`, lines 1181--1185, Lemma `Lem1`
+does not by itself supply the residual-family independence assumed here. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
     {d : ℕ} {ι κ : Type*} [Fintype ι] [Fintype κ]
     {dimA : ι → ℕ} {dimB₀ : ℕ} {dimB : κ → ℕ}
@@ -551,7 +561,7 @@ lemma weighted_mpvState_sum_erase_eq_sum_succAbove
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After a leading
 matched BNT component has been removed, the remaining components are reindexed
-and the argument is repeated. This lemma packages that bookkeeping in eventual
+and the argument is repeated. This lemma records that bookkeeping in eventual
 form: an eventual total weighted-state identity, together with an eventual
 selected-summand identity for the leading components, gives eventual nonzero
 proportionality of the two reindexed tail tensors. -/
@@ -615,7 +625,7 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected
 Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The
 source proof permits a permutation of BNT blocks: after a block pair has been
 matched and its weighted summands have been identified, one removes that pair
-and repeats the argument on the two complements. This lemma packages only the
+and repeats the argument on the two complements. This lemma records only the
 finite reindexing and eventual-proportionality bookkeeping for that step. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
     {d nA nB : ℕ}
@@ -668,19 +678,23 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
       (fun k : Fin nB => B (b0.succAbove k))
       c hc hTailReindex
 
-/-- **Tail proportionality from phase substitution and a Lemma `Lem1` input.**
+/-- **Tail proportionality from phase substitution and a linear-independence hypothesis.**
 
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. Once a selected non-decaying block pair has been converted into a
-phase relation, Lemma `Lem1` gives eventual linear independence for the family
-obtained by replacing the selected block by its phase-matched partner. This
-lemma packages the resulting coefficient extraction, selected-summand
-subtraction, and arbitrary-tail reindexing.
+phase relation, this auxiliary lemma records the coefficient extraction,
+selected-summand subtraction, and arbitrary-tail reindexing under an explicit
+eventual linear-independence hypothesis for the displayed residual family.
 
-The assumption is that the displayed combined MPV family is linearly independent
-for all sufficiently large lengths. In the proof of Theorem `thm1` this
-assumption is supplied by the fixed-block application of Lemma `Lem1` at the
-current peeling step. -/
+**Scope restriction (explicit residual-family independence):** CPSV16 Lemma
+`Lem1` gives this kind of independence only for the family in which all
+off-diagonal overlaps tend to zero. In the fixed-block step of Theorem `thm1`,
+lines 1181--1185, the local application gives independence for all blocks on
+one side together with one fixed block on the other side, not for the whole
+remaining tail appearing in this lemma. This auxiliary lemma must therefore
+not be used as the source-faithful discharge of fixed-block cancellation unless
+that residual-family independence has first been proved in the current
+argument. See `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li
     {d nA nB : ℕ}
     {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}

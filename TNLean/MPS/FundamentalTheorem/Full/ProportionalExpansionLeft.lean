@@ -30,15 +30,20 @@ section ProportionalExpansionLeft
 Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
 `Lem1`. This is the symmetric bookkeeping form of
 `eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li`: the
-eventual linear-independence input is taken for the family consisting of all
-`B`-blocks together with the remaining `A`-blocks. The phase is assumed
-nonzero so that the selected `A`-summand can be rewritten in terms of the
-selected `B`-summand before coefficient extraction.
+eventual linear-independence input is taken explicitly for the family
+consisting of all `B`-blocks together with the remaining `A`-blocks. The phase
+is assumed nonzero so that the selected `A`-summand can be rewritten in terms
+of the selected `B`-summand before coefficient extraction.
 
-The assumption is that the displayed combined MPV family is linearly independent
-for all sufficiently large lengths. In the proof of Theorem `thm1` this
-assumption is supplied by the fixed-block application of Lemma `Lem1` at the
-current peeling step. -/
+**Scope restriction (explicit residual-family independence):** CPSV16 Lemma
+`Lem1` gives this kind of independence only for the family in which all
+off-diagonal overlaps tend to zero. In the fixed-block step of Theorem `thm1`,
+lines 1181--1185, the local application gives independence for all blocks on
+one side together with one fixed block on the other side, not for the whole
+remaining tail appearing in this lemma. This auxiliary lemma must therefore
+not be used as the source-faithful discharge of fixed-block cancellation unless
+that residual-family independence has first been proved in the current
+argument. See `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
 lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left
     {d nA nB : ℕ}
     {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
