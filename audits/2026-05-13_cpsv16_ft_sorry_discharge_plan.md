@@ -64,11 +64,24 @@ other family decays to zero, then the two total MPV families cannot be
 eventually proportional—contradiction.
 
 **What is already proved:**
-- Leading‑block versions (`_leading_` variants, lines 827–877) dispatch
-  via `dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
-  (`ProportionalDominant.lean` line 850).
-- No‑tail cases (`_finOne` variants) dispatch via coefficient extraction
-  from an LI family with an empty right‑hand residual.
+- The consolidated contradiction entry point is
+  `dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+  (`ProportionalDominant.lean` line 746); this is also the dispatcher used by
+  the equal-MPV induction's leading-block step.
+- The building block for any inductive route is
+  `exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+  (`ProportionalDominant.lean` line 388), which supplies the asymptotic
+  scalar convergence $c_N((\mu^B_0 \zeta)/\mu^A_0)^N \to 1$.
+- The Lemma Lem1 inputs
+  `eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT`
+  and `…_all_right_single_left_…`
+  (`NondecayingOverlap.lean` lines 709, 768) remain proved and available.
+- *Note (PR #1639 retirements):* the `_leading_all_overlaps_decay_false_*`
+  thin wrappers (formerly at `NondecayingOverlap.lean:827–877`) and the
+  `_finOne` singleton base-case lemmas (formerly in `FixedBlockSingleton.lean`)
+  were retired in PR #1639 as wrong-direction scaffolding; see
+  `audits/2026-05-13_cpsv16_ft_deletion_candidates_and_archaeology.md`
+  §1.B–§1.C for the deletion list and rationale.
 
 **What is NOT proved:** the general $k_0 \neq 0$ / $j_0 \neq 0$ case.
 
@@ -78,7 +91,7 @@ eventually proportional—contradiction.
 
 File: `ProportionalDominant.lean`, lemma
 `dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
-(line 850).
+(line 746).
 
 ### 2.1 Normalization used
 
@@ -176,7 +189,8 @@ Currently we only have the **asymptotic** convergence:
 
 $$c_N \cdot (\mu_B(0) \cdot \zeta \;/\; \mu_A(0))^N \longrightarrow 1$$
 
-(lemma `exists_dominant_phase_adjusted_scalar_tendsto_one`, line 303).
+(lemma `exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`,
+`ProportionalDominant.lean` line 388).
 
 ---
 
@@ -307,7 +321,8 @@ via LI does **not** directly give the contradiction. The residual
 $V(B_k)_{k \neq k_0}$ must be eliminated to use the LI.
 
 For $r_B = 1$ (no‑tail case), the residual is empty → coefficient
-extraction works → already proved (`_finOne`).
+extraction works → this was the `_finOne` singleton case
+(retired in PR #1639; see deletion-candidates audit §1.B).
 
 But for $r_B \ge 2$, the residual persists and LI alone is insufficient.
 
@@ -334,7 +349,7 @@ final result:
 |-------|------|------|----------|
 | `eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li` | `ProportionalExpansion.lean` | 376 | Requires `hLI : LinearIndependent (Sum.elim (all A) (tail B))` |
 | `eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li` | `ProportionalExpansion.lean` | 698 | Requires same LI hypothesis |
-| `eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left` | `ProportionalExpansionLeft.lean` | 47 | Symmetric variant |
+| `eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left` | ~~`ProportionalExpansionLeft.lean`~~ | ~~47~~ | Already retired in PR #1639; see deletion-candidates audit §1.C |
 
 Additionally, if `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`
 is proved by induction (Plan A), then `fixed_right_all_overlaps_decay_false_…`
@@ -345,11 +360,11 @@ The following lemmas **remain load‑bearing** under either plan:
 
 | Lemma | File | Role |
 |-------|------|------|
-| `dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT` | `ProportionalDominant.lean:850` | Leading‑block contradiction |
-| `exists_dominant_adjusted_scalar_tendsto_norm_one_…` | `ProportionalDominant.lean:536` | Scalar norm convergence |
-| `exists_dominant_phase_adjusted_scalar_tendsto_one_…` | `ProportionalDominant.lean:303` | Phase‑adjusted scalar limit |
-| `exists_leading_phase_tail_diff_tendsto_zero_…` | `LeadingTail.lean:47` | Leading‑erased tail asymptotic |
-| `leading_right_nondecaying_partner_eq_leading_left_…` | `LeadingPartner.lean:39` | Uniqueness of leading partner |
+| `dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT` | `ProportionalDominant.lean:746` | Leading‑block contradiction |
+| `exists_dominant_adjusted_scalar_tendsto_norm_one_…` | `ProportionalDominant.lean:299` | Scalar norm convergence |
+| `exists_dominant_phase_adjusted_scalar_tendsto_one_…` | `ProportionalDominant.lean:388` | Phase‑adjusted scalar limit |
+| ~~`exists_leading_phase_tail_diff_tendsto_zero_…`~~ | ~~`LeadingTail.lean:47`~~ | Retired in PR #1639; see deletion-candidates audit §1.A |
+| ~~`leading_right_nondecaying_partner_eq_leading_left_…`~~ | ~~`LeadingPartner.lean:39`~~ | Retired in PR #1639; see deletion-candidates audit §1.A |
 | `exists_phase_mpvState_eq_smul_of_nondecaying_overlap_CFBNT` | `NondecayingPartnerUnique.lean` | Phase extraction from non‑decaying overlap |
 | `isCanonicalFormBNT_tail_succ` / `_succAbove` | `NondecayingOverlap.lean:636,675` | Tail BNT inheritance |
 | `eventually_linearIndependent_all_left_single_right_…` / `_all_right_single_left_…` | `NondecayingOverlap.lean:709,768` | Lemma Lem1 input (may be needed in exactness lemma) |
@@ -384,8 +399,8 @@ lemma exact_leading_coefficient_eventually_eq_...
     (μA a0)^N = (c N) * ((μB b0) * ζ)^N :=
 ```
 
-Suggested proof strategy: use `exists_dominant_phase_adjusted_scalar_tendsto_one`
-to get $c_N \cdot (\mu_B(0) \zeta / \mu_A(0))^N \to 1$. Then combine with
+Suggested proof strategy: use `exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+(`ProportionalDominant.lean` line 388) to get $c_N \cdot (\mu_B(0) \zeta / \mu_A(0))^N \to 1$. Then combine with
 the BNT‑A linear independence (`hA.isBNT.eventually_li`) plus the
 proportionality identity to extract that the deviation $c_N \cdot
 (\mu_B(0) \zeta)^N - \mu_A(0)^N$ multiplies $V(A_0)$ and must vanish
@@ -456,5 +471,5 @@ as an induction on $r_A+r_B$:
 - **Paper‑gaps plan:** `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`
 - **Scope restriction:** `docs/paper-gaps/ft_one_copy_scope_restriction.tex`
 - **Equal‑MPV induction:** `NondecayingOverlap.lean:82–623`
-- **Leading‑block contradiction:** `ProportionalDominant.lean:850–907`
+- **Leading‑block contradiction:** `ProportionalDominant.lean:746` (post-PR #1639 line number)
 - **Conditional tail‑peeling:** `ProportionalExpansion.lean:376–753`

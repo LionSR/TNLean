@@ -16,6 +16,10 @@ and direct path inspection; nothing is modified.
 
 ---
 
+> **Note on file:line citations.** This memo was written against the *pre-deletion* tree (commit `40c1c6f9` on `main`). Several lemmas and entire files cited below were retired in PR #1639; see `audits/2026-05-13_cpsv16_ft_deletion_candidates_and_archaeology.md` for the deletion list and `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md` for the post-deletion roadmap.
+
+---
+
 ## 0. Paper-side proof outline (recap; for the per-step table below)
 
 CPSV16 Appendix A, p. 32, proof of the Fundamental Theorem (verbatim, with
