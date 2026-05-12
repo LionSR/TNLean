@@ -9,8 +9,9 @@ import TNLean.MPS.FundamentalTheorem.Full.ProportionalTail
 /-!
 # Leading phase relation and erased-tail asymptotics
 
-This module records the leading peeling data obtained from eventual
-proportionality of two restricted BNT block families.
+This module records the leading phase relation and leading-erased tail
+asymptotic obtained from eventual proportionality of two restricted BNT block
+families.
 
 ## References
 
