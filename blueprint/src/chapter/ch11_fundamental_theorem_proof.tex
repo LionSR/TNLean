@@ -134,178 +134,8 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the eventual state identity on each basis word.
 \end{proof}
 
-\begin{lemma}[Selected vector is outside the residual span]%
-\label{lem:selected_not_in_residual_span_from_li}
-	\lean{MPSTensor.selected_notMem_residual_span_of_linearIndependent_option}
-	\leanok
-	Let \(v_0\) be a selected vector and let \(\{u_k\}_k\) be a residual
-	family.  If the family consisting of \(v_0\) together with the residual
-	vectors \(u_k\) is linearly independent, then
-	\(v_0\notin\operatorname{span}\{u_k\}_k\).  In the CPSV16 peeling step,
-	this is the algebraic consequence required after the BNT argument has
-	separated the selected block from the residual contributions
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Linear independence says that no member of the family lies in the span of
-	the remaining members.  Apply this to the selected member.
-\end{proof}
-
-\begin{lemma}[Eventual selected vector is outside the residual span]%
-\label{lem:eventual_selected_not_in_residual_span_from_li}
-	\lean{MPSTensor.eventually_selected_notMem_residual_span_of_linearIndependent_option}
-	\leanok
-	If, for all sufficiently large \(N\), the selected vector \(v_N\) together
-	with the residual family \(\{u_{N,k}\}_k\) is linearly independent, then
-	\(v_N\notin\operatorname{span}\{u_{N,k}\}_k\) for all sufficiently large
-	\(N\).  This records the passage from an eventual BNT separation statement
-	to the residual-span exclusion used by coefficient extraction
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	\uses{lem:selected_not_in_residual_span_from_li}
-	Apply Lemma~\ref{lem:selected_not_in_residual_span_from_li} at every
-	sufficiently large length.
-\end{proof}
-
-\begin{lemma}[Selected coefficient extraction modulo a residual span]%
-\label{lem:selected_coefficient_from_residual_span}
-	\lean{MPSTensor.selected_coefficient_eq_of_residual_span}
-	\leanok
-	Let \(v_0\) be a vector and let \(R,S\) lie in the span of a residual
-	family \(\{u_k\}_k\).  If
-	\[
-		a v_0+R=b v_0+S
-	\]
-	and \(v_0\notin\operatorname{span}\{u_k\}_k\), then \(a=b\).  This is the
-	algebraic coefficient-isolation step which remains after the BNT argument
-	has separated the selected block from the residual span
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Subtract the two sides.  Then \((a-b)v_0\) lies in the residual span.  If
-	\(a\ne b\), scalar division places \(v_0\) itself in the same span,
-	contradicting the span-exclusion hypothesis.
-\end{proof}
-
-\begin{lemma}[Eventual selected coefficient extraction modulo residual spans]%
-\label{lem:eventual_selected_coefficient_from_residual_span}
-	\lean{MPSTensor.eventually_selected_coefficient_eq_of_residual_span}
-	\leanok
-	Suppose that, for all sufficiently large \(N\), the residual terms \(R_N\)
-	and \(S_N\) lie in the span of a residual family \(\{u_{N,k}\}_k\), the
-	identity
-	\[
-		a_N v_N+R_N=b_N v_N+S_N
-	\]
-	holds, and \(v_N\) is not in that residual span.  Then \(a_N=b_N\) for
-	all sufficiently large \(N\).  This is the weaker form of coefficient
-	extraction that applies when only the span-exclusion condition is available,
-	before linear independence of the full family has been established
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	\uses{lem:selected_coefficient_from_residual_span}
-	Apply Lemma~\ref{lem:selected_coefficient_from_residual_span} at every
-	sufficiently large length.
-\end{proof}
-
-\begin{lemma}[Selected coefficient extraction after one phase substitution]%
-\label{lem:selected_coefficient_from_two_family_linear_independence}
-	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}
-	\leanok
-	\uses{def:mpv_state}
-	Let \(v_i^{(N)}\) and \(w_k^{(N)}\) be two finite families which, together,
-	are linearly independent for all sufficiently large \(N\).  Suppose that
-	for all sufficiently large \(N\),
-	\[
-		\sum_i a_i^{(N)} v_i^{(N)}
-		=
-		b_0^{(N)} v_{i_0}^{(N)}
-		+\sum_k b_k^{(N)} w_k^{(N)}.
-	\]
-	Then \(a_{i_0}^{(N)}=b_0^{(N)}\) for all sufficiently large \(N\).
-	This is the coefficient-comparison step in the proof of
-	\cite[Theorem~II.1, lines~1181--1182]{Cirac2016MPDO_arXiv}, after applying
-	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Regard both sides as linear combinations of the single family indexed by
-	the disjoint union of the two finite index sets.  Linear independence
-	forces equality of every coefficient, in particular the coefficient of
-	\(v_{i_0}^{(N)}\).
-\end{proof}
-
-\begin{lemma}[Selected weighted summand from phase and coefficient equality]%
-\label{lem:selected_weighted_summand_from_phase_coeff}
-	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff}
-	\leanok
-	\uses{def:mpv_state}
-	Suppose a pair of blocks satisfies
-	\(\ket{V^{(N)}(B)}=\zeta^N\ket{V^{(N)}(A)}\) for every \(N\), and suppose
-	that the corresponding coefficients satisfy
-	\(\mu_A^N=c_N(\mu_B\zeta)^N\) for all sufficiently large \(N\).  Then the
-	selected weighted summands are eventually related by the same scalar
-	sequence:
-	\[
-		\mu_A^N\ket{V^{(N)}(A)}
-		=
-		c_N\mu_B^N\ket{V^{(N)}(B)}.
-	\]
-	This is the algebraic form of the phase relation supplied by
-	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} in the proof of
-	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Substitute the phase relation into the right-hand side and use
-	\((\mu_B\zeta)^N=\mu_B^N\zeta^N\).
-\end{proof}
-
-% Proof-boundary note: the residual-family linear-independence hypothesis below
-% is not supplied by the fixed-block application of Lemma Lem1 in Theorem II.1.
-% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
-\begin{lemma}[Selected weighted summand from phase substitution and a linear-independence hypothesis]%
-\label{lem:selected_weighted_summand_from_phase_sum_li}
-	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li}
-	\leanok
-	\uses{lem:selected_coefficient_from_two_family_linear_independence,
-		lem:selected_weighted_summand_from_phase_coeff}
-	Suppose a total weighted-state identity has the form
-	\[
-		\sum_i \mu_i^N \ket{V^{(N)}(A_i)}
-		=
-		c_N\left(\nu_0^N\ket{V^{(N)}(B_0)}
-		+\sum_k \nu_k^N\ket{V^{(N)}(B_k)}\right)
-	\]
-	for all sufficiently large \(N\).  If
-	\(\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_{i_0})}\) for every \(N\), and
-	the family consisting of the \(A_i\) together with the remaining \(B_k\)
-	is eventually linearly independent, then
-	\[
-		\mu_{i_0}^N\ket{V^{(N)}(A_{i_0})}
-		=
-		c_N\nu_0^N\ket{V^{(N)}(B_0)}
-	\]
-	for all sufficiently large \(N\).
-	This is a conditional coefficient-extraction statement.  In the fixed-block
-	step, \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} does not by itself
-	supply the displayed residual-family linear independence
-	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Substitute the phase relation for \(B_0\) and apply coefficient
-	extraction to the eventually linearly independent disjoint family.  The
-	resulting coefficient equality gives the selected weighted-summand
-	identity.
-\end{proof}
-
+% retired: cpsv16_ft_paper_vs_code_structural_map 2026-05-13
+% The former residual-span/CFLI coefficient-extraction helpers were removed here.
 \begin{lemma}[Subtracting a proportional selected summand]%
 \label{lem:proportional_weighted_state_tail_subtraction}
 	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
@@ -432,72 +262,6 @@ with an extra $Z$-gauge degree of freedom.
 	the two erased finite sums by the complement insertion maps, and convert the
 	eventual weighted tail identity into eventual proportionality of the
 	assembled tail tensors.
-\end{proof}
-
-% Proof-boundary note: the assumption that the displayed combined MPV family is
-% linearly independent for all sufficiently large N is not supplied by the
-% fixed-block application of Lemma Lem1 in Theorem II.1.  Lemma Lem1 supplies
-% only the family whose off-diagonal overlaps all tend to zero; for the
-% fixed-block step this is all blocks on one side together with one fixed block
-% on the other side, not the whole remaining tail.
-% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
-\begin{lemma}[Eventual tail proportionality from phase substitution and a linear-independence hypothesis]%
-\label{lem:eventual_tail_proportional_from_phase_sum_li}
-	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li}
-	\leanok
-	\uses{lem:selected_weighted_summand_from_phase_sum_li,
-		lem:eventual_proportional_weighted_tail_succAbove_package}
-	Suppose the total weighted state sums are eventually related by a nonzero
-	scalar sequence.  If a selected pair satisfies
-	$\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}$ for every $N$,
-	and the family consisting of all $A$-blocks together with the remaining
-	$B$-blocks is eventually linearly independent, then the two complements,
-	reindexed by the insertion maps, are eventually nonzero proportional.
-	This is a conditional algebraic peeling statement.  The displayed
-	residual-family independence is not supplied by the fixed-block step; in
-	that step \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} is applied only
-	to the fixed-block family
-	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Rewrite the \(B\)-side weighted sum as the selected summand plus its
-	complement.  The phase-substitution coefficient lemma gives the selected
-	weighted summand identity.  Subtract that identity from the total relation
-	and reindex the two complements.
-\end{proof}
-
-% Proof-boundary note: the assumption that the displayed combined MPV family is
-% linearly independent for all sufficiently large N is not supplied by the
-% fixed-block application of Lemma Lem1 in Theorem II.1.  Lemma Lem1 supplies
-% only the family whose off-diagonal overlaps all tend to zero; for the
-% fixed-block step this is all blocks on one side together with one fixed block
-% on the other side, not the whole remaining tail.
-% See docs/paper-gaps/cpsv16_fixed_block_cancellation.tex.
-\begin{lemma}[Eventual tail proportionality from the left substituted family]%
-\label{lem:eventual_tail_proportional_from_phase_sum_li_left}
-	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_left}
-	\leanok
-	\uses{lem:selected_coefficient_from_two_family_linear_independence,
-		lem:eventual_proportional_weighted_tail_succAbove_package}
-	Suppose the total weighted state sums are eventually related by a nonzero
-	scalar sequence, and suppose
-	$\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}$ for every $N$,
-	with $\zeta\ne 0$.  If the family consisting of all $B$-blocks together
-	with the remaining $A$-blocks is eventually linearly independent, then the
-	two complements, reindexed by the insertion maps, are eventually nonzero
-	proportional.
-	This is the same conditional algebraic peeling statement with the linearly
-	independent family ordered as all $B$-blocks together with the remaining
-	$A$-blocks \cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Use \(\zeta\ne 0\) to rewrite the selected \(A\)-summand in terms of
-	\(B_{b_0}\).  Coefficient extraction in the eventually linearly
-	independent family identifies the selected summands, and the preceding
-	tail-subtraction lemma gives eventual proportionality of the two
-	complements.
 \end{proof}
 
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
@@ -726,131 +490,8 @@ with an extra $Z$-gauge degree of freedom.
 	applies.
 \end{proof}
 
-\begin{lemma}[Dominant phase-adjusted proportional scalar converges to one]%
-\label{lem:dominant_phase_adjusted_scalar_convergence}
-	\lean{MPSTensor.exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence,
-		lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence,
-		lem:dominant_weight_normalized_bnt_projection,
-		lem:phase_normalized_dominant_bnt_projection}
-	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
-	canonical-form families with nonempty index sets, and suppose that the
-	assembled weighted MPV families are eventually nonzero proportional.  If
-	for every \(N\), the leading blocks satisfy
-	\[
-		\ket{V^{(N)}(B_{b_0})}
-		= \zeta^N \ket{V^{(N)}(A_{a_0})}
-	\]
-	with \(|\zeta|=1\), then there is an eventual nonzero scalar sequence
-	\(c_N\) relating the assembled weighted sums such that
-	\[
-		c_N\left(\frac{\mu^B_{b_0}\zeta}{\mu^A_{a_0}}\right)^N
-		\longrightarrow 1 .
-	\]
-	This is only the leading projected scalar convergence; it is not the exact
-	selected-summand equality needed for tail subtraction.
-	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Project the eventual weighted-state proportionality against the leading
-	\(A\)-block and divide by \((\mu^A_{a_0})^N\).  The \(A\)-side normalized
-	projection tends to \(1\), while the phase relation makes the
-	\(B\)-side projection normalized by \((\mu^B_{b_0}\zeta)^N\) tend to
-	\(1\).  Dividing the two limiting identities gives the stated convergence
-	of \(c_N((\mu^B_{b_0}\zeta)/\mu^A_{a_0})^N\).
-\end{proof}
-
-\begin{lemma}[Dominant selected difference vanishes after phase adjustment]%
-\label{lem:dominant_phase_adjusted_selected_difference}
-	\lean{MPSTensor.exists_dominant_selected_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{lem:dominant_phase_adjusted_scalar_convergence}
-	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
-	canonical-form families with nonempty index sets, and suppose that the
-	assembled weighted MPV families are eventually nonzero proportional.  If
-	for every \(N\), the leading blocks satisfy
-	\[
-		\ket{V^{(N)}(B_{b_0})}
-		= \zeta^N \ket{V^{(N)}(A_{a_0})}
-	\]
-	with \(|\zeta|=1\), then there is a scalar sequence \(c_N\), eventually
-	nonzero, such that
-	\[
-		\sum_j(\mu^A_j)^N\ket{V^{(N)}(A_j)}
-		=
-		c_N\sum_k(\mu^B_k)^N\ket{V^{(N)}(B_k)}
-	\]
-	for all sufficiently large \(N\), and
-	\[
-		\left\|(\mu^A_{a_0})^{-N}
-		\Big((\mu^A_{a_0})^N \ket{V^{(N)}(A_{a_0})}
-		- c_N(\mu^B_{b_0})^N \ket{V^{(N)}(B_{b_0})}\Big)\right\|
-		\longrightarrow 0 .
-	\]
-	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
-	% This is an asymptotic selected-summand cancellation; it does not give
-	% the exact selected-summand equality needed for tail subtraction.
-\end{lemma}
-
-\begin{proof}\leanok
-	Lemma~\ref{lem:dominant_phase_adjusted_scalar_convergence} gives
-	\(c_N((\mu^B_{b_0}\zeta)/\mu^A_{a_0})^N\to 1\).  After substituting the
-	phase relation, the normalized selected difference is
-	\[
-		\left(1-
-		c_N\left(\frac{\mu^B_{b_0}\zeta}{\mu^A_{a_0}}\right)^N\right)
-		\ket{V^{(N)}(A_{a_0})}.
-	\]
-	The first factor tends to \(0\), while the norm of
-	\(\ket{V^{(N)}(A_{a_0})}\) tends to \(1\) by the BNT self-overlap
-	normalization.
-\end{proof}
-
-\begin{lemma}[Dominant tail difference vanishes after phase adjustment]%
-\label{lem:dominant_phase_adjusted_tail_difference}
-	\lean{MPSTensor.exists_dominant_tail_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{lem:dominant_phase_adjusted_selected_difference}
-	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
-	canonical-form families with nonempty index sets, and suppose that the
-	assembled weighted MPV families are eventually nonzero proportional.  If
-	for every \(N\), the leading blocks satisfy
-	\[
-		\ket{V^{(N)}(B_{b_0})}
-		= \zeta^N \ket{V^{(N)}(A_{a_0})}
-	\]
-	with \(|\zeta|=1\), then there is a scalar sequence \(c_N\), eventually
-	nonzero, such that
-	\[
-		\sum_j(\mu^A_j)^N\ket{V^{(N)}(A_j)}
-		=
-		c_N\sum_k(\mu^B_k)^N\ket{V^{(N)}(B_k)}
-	\]
-	for all sufficiently large \(N\), and
-	\[
-		\left\|(\mu^A_{a_0})^{-N}
-		\Bigg(
-		\sum_{j\neq a_0}(\mu^A_j)^N\ket{V^{(N)}(A_j)}
-		-
-		c_N\sum_{k\neq b_0}(\mu^B_k)^N\ket{V^{(N)}(B_k)}
-		\Bigg)\right\|
-		\longrightarrow 0 .
-	\]
-	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
-	% This is an asymptotic erased-tail statement; it does not give exact
-	% proportionality of the two erased tails.
-\end{lemma}
-
-\begin{proof}\leanok
-	Split each assembled weighted sum into its leading selected summand and the
-	erased tail.  The total proportionality identity and
-	Lemma~\ref{lem:dominant_phase_adjusted_selected_difference} show that the
-	tail difference is the negative of the selected difference, after the same
-	normalization.  Norms are unchanged by multiplication by \(-1\).
-\end{proof}
-
+% retired: cpsv16_ft_paper_vs_code_structural_map 2026-05-13
+% The former phase-adjusted selected/tail asymptotic helpers were removed here.
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
@@ -964,36 +605,8 @@ with an extra $Z$-gauge degree of freedom.
 	and apply the normalized scalar rewrite at every sufficiently large length.
 \end{proof}
 
-\begin{lemma}[Eventual adjusted scalar and normalized projections]%
-\label{lem:eventual_adjusted_scalar_norm_and_projection_sequence}
-	\lean{MPSTensor.exists_adjusted_scalar_norm_and_inner_sequence_of_eventuallyNonzeroProportionalMPV₂}
-	\leanok
-	\uses{lem:eventual_proportional_tensor_from_blocks_weighted_state_sequence,
-		lem:eventual_proportional_tensor_from_blocks_adjusted_scalar_norm,
-		lem:eventual_proportional_tensor_from_blocks_weighted_inner_sequence}
-	Suppose the assembled weighted block tensors are eventually proportional by
-	nonzero scalars.  Fix nonzero scalars $\mu,\nu$, and assume that after
-	division by $\mu^N$ and $\nu^N$ the two weighted state sums both have
-	norm tending to $1$.  Then one may choose a single scalar sequence $c_N$,
-	nonzero for all sufficiently large $N$, such that
-	\[
-		\left|c_N(\nu/\mu)^N\right|\longrightarrow 1
-	\]
-	and, for every tensor $X$, the normalized weighted projections against
-	$\ket{V^{(N)}(X)}$ are eventually related by the same adjusted scalar
-	$c_N(\nu/\mu)^N$.  This statement asserts only the scalar-normalization
-	and projection consequences, not a fixed-block coefficient identity.
-	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Choose the scalar sequence from eventual proportionality of the weighted
-	state sums.  The normalized state-norm hypotheses give the adjusted scalar
-	modulus limit.  Projecting the same weighted-state identity against
-	$\ket{V^{(N)}(X)}$ and dividing by $\mu^N$ and $\nu^N$ gives the
-	normalized projection identity with that same scalar sequence.
-\end{proof}
-
+% retired: cpsv16_ft_paper_vs_code_structural_map 2026-05-13
+% The former combined projection-packaging helper was removed here.
 \begin{lemma}[Dominant-block contradiction from eventual proportionality]%
 \label{lem:dominant_projection_contradiction_eventual_proportional}
 	\lean{MPSTensor.dominant_projection_contradictions_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
@@ -1012,46 +625,8 @@ with an extra $Z$-gauge degree of freedom.
 	identities give the two dominant-block contradictions.
 \end{proof}
 
-\begin{lemma}[Dominant blocks have non-decaying partners]%
-\label{lem:dominant_nondecaying_partner_eventual_proportional}
-	\lean{MPSTensor.exists_nondecaying_overlap_dominant_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{lem:dominant_projection_contradiction_eventual_proportional}
-	Under eventual nonzero proportionality of the assembled BNT block tensors,
-	the leading block of each family has a block in the other family whose
-	overlap does not tend to zero.
-\end{lemma}
-
-\begin{proof}\leanok
-	If every overlap from a leading block to the other family vanished, this
-	would contradict
-	Lemma~\ref{lem:dominant_projection_contradiction_eventual_proportional}.
-\end{proof}
-
-\begin{lemma}[Leading right partner is the leading left block]%
-\label{lem:leading_right_partner_is_leading_left_eventual_proportional}
-	\lean{MPSTensor.leading_right_nondecaying_partner_eq_leading_left_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be nonempty one-copy BNT
-	canonical-form families.  Under eventual nonzero proportionality of the
-	assembled BNT block tensors, if some block \(A_j\) has non-decaying overlap
-	with the leading block \(B_0\), then \(j=0\).  Thus the leading
-	\(B\)-block can only be matched with the leading \(A\)-block in the first
-	peeling step.
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	\uses{lem:dominant_adjusted_scalar_norm,
-		lem:bnt_nondecaying_partner_unique}
-	If \(j\neq 0\), uniqueness of the non-decaying partner of \(B_0\) makes every
-	other \(A\)-overlap with \(B_0\) decay.  Project the eventual proportional
-	weighted-sum identity against \(B_0\) and normalize by the leading
-	\(A\)-weight.  The \(A_j\)-term is suppressed by strict dominance of
-	\(|\mu_0|\), while the normalized \(B_0\)-projection on the \(B\)-side has
-	norm tending to \(1\), contradicting the adjusted-scalar projection identity.
-\end{proof}
-
+% retired: cpsv16_ft_paper_vs_code_structural_map 2026-05-13
+% The former dominant-partner and leading-tail peel hooks were removed here.
 \begin{lemma}[Non-decaying BNT overlap gives a gauge phase]%
 \label{lem:bnt_nondecaying_overlap_gauge_phase}
 	\lean{MPSTensor.dim_eq_of_nondecaying_overlap_CFBNT,
@@ -1085,35 +660,6 @@ with an extra $Z$-gauge degree of freedom.
 	Apply the gauge-phase equivalence obtained from the non-decaying overlap.
 	The gauge cancels under the trace defining the MPV, leaving only the phase
 	\(\zeta^N\); normalized self-overlap convergence gives \(|\zeta|=1\).
-\end{proof}
-
-\begin{lemma}[Leading phase relation gives leading-erased tail asymptotics]%
-\label{lem:leading_phase_tail_difference_eventual_proportional}
-	\lean{MPSTensor.exists_leading_phase_tail_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be nonempty one-copy BNT
-	canonical-form families.  Under eventual nonzero proportionality of the
-	assembled BNT block tensors, there is a unit complex number \(\zeta\) such that
-	\[
-		\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_0)}
-	\]
-	for all \(N\), and the corresponding leading-erased weighted tails have
-	normalized difference tending to \(0\).  The scalar sequence is the same
-	eventual proportionality sequence for the assembled weighted MPV sums.
-	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	\uses{lem:fixed_right_leading_all_overlaps_decay_contradiction,
-		lem:leading_right_partner_is_leading_left_eventual_proportional,
-		lem:bnt_nondecaying_overlap_mpv_phase,
-		lem:dominant_phase_adjusted_tail_difference}
-	The leading all-overlaps-decay contradiction for \(B_0\) gives a
-	non-decaying partner for \(B_0\).
-	The leading-partner lemma identifies it with \(A_0\), and the
-	non-decaying-overlap phase lemma gives the displayed phase relation.  The
-	dominant tail-difference lemma then applies to the phase-matched leading
-	pair.
 \end{proof}
 
 \begin{lemma}[Non-decaying BNT partners are unique]%
@@ -1215,42 +761,8 @@ with an extra $Z$-gauge degree of freedom.
 	applies.
 \end{proof}
 
-\begin{lemma}[Leading fixed-right all-overlaps-decay contradiction]%
-\label{lem:fixed_right_leading_all_overlaps_decay_contradiction}
-	\lean{MPSTensor.fixed_right_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
-		lem:dominant_projection_contradiction_eventual_proportional}
-	Under eventual nonzero proportionality of the two total weighted MPV
-	families, the leading block \(B_0\) of the \(B\)-family cannot have
-	\(O_{A_j,B_0}(N)\to 0\) for every block \(A_j\).  This is the
-	leading-block instance of the fixed-\(B_k\) sentence in
-	\cite[Theorem~\texttt{thm1}, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	This is exactly the \(B\)-leading half of the dominant projection
-	contradiction.
-\end{proof}
-
-\begin{lemma}[Leading fixed-left all-overlaps-decay contradiction]%
-\label{lem:fixed_left_leading_all_overlaps_decay_contradiction}
-	\lean{MPSTensor.fixed_left_leading_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
-	\leanok
-	\uses{def:cf_bnt, def:nonzero_proportional_mpv,
-		lem:dominant_projection_contradiction_eventual_proportional}
-	Under eventual nonzero proportionality of the two total weighted MPV
-	families, the leading block \(A_0\) of the \(A\)-family cannot have
-	\(O_{A_0,B_k}(N)\to 0\) for every block \(B_k\).  This is the
-	symmetric leading-block instance of the fixed-block argument in
-	\cite[Theorem~\texttt{thm1}, lines~1182--1185]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	This is exactly the \(A\)-leading half of the dominant projection
-	contradiction.
-\end{proof}
-
+% retired: cpsv16_ft_paper_vs_code_structural_map 2026-05-13
+% The former leading-only wrappers and no-tail singleton base cases were removed here.
 \begin{lemma}[Fixed-right all-overlaps-decay contradiction]%
 \label{lem:fixed_right_all_overlaps_decay_contradiction}
 	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
@@ -1274,29 +786,6 @@ with an extra $Z$-gauge degree of freedom.
 	where the other \(B\)-summands are still present.
 \end{proof}
 
-\begin{lemma}[Fixed-right no-tail cancellation]%
-\label{lem:fixed_right_all_overlaps_decay_contradiction_fin_one}
-	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
-	\leanok
-	\uses{def:cf_bnt, lem:fixed_right_lem1_input_eventual_proportional,
-		lem:eventual_coeff_eq_of_eventual_li}
-	If \(A\) and \(B\) are BNT canonical-form families and the \(B\)-family
-	consists only of the fixed block \(B_0\), then the fixed-right
-	all-overlaps-decay alternative contradicts eventual nonzero proportionality
-	of the total weighted MPV families.  This is the no-tail case of the
-	fixed-block cancellation step in
-	\cite[Theorem~\texttt{thm1}, line~1182]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Lemma~\ref{lem:fixed_right_lem1_input_eventual_proportional} gives eventual
-	linear independence of all \(A_j\) together with \(B_0\).  Since there are
-	no other \(B\)-summands, coefficient extraction in the full proportional
-	weighted-state identity forces the nonzero coefficient
-	\(c_N\nu_0^N\) of \(B_0\) to vanish for all sufficiently large \(N\), a
-	contradiction.
-\end{proof}
-
 \begin{lemma}[Fixed-left all-overlaps-decay contradiction]%
 \label{lem:fixed_left_all_overlaps_decay_contradiction}
 	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
@@ -1317,28 +806,6 @@ with an extra $Z$-gauge degree of freedom.
 	linear independence of all \(B_k\) together with \(A_{j_0}\); the remaining
 	point is the same isolation of the selected summand from the full
 	proportional weighted-state identity.
-\end{proof}
-
-\begin{lemma}[Fixed-left no-tail cancellation]%
-\label{lem:fixed_left_all_overlaps_decay_contradiction_fin_one}
-	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_finOne}
-	\leanok
-	\uses{def:cf_bnt, lem:fixed_left_lem1_input_eventual_proportional,
-		lem:eventual_coeff_eq_of_eventual_li}
-	If \(A\) and \(B\) are BNT canonical-form families and the \(A\)-family
-	consists only of the fixed block \(A_0\), then the fixed-left
-	all-overlaps-decay alternative contradicts eventual nonzero proportionality
-	of the total weighted MPV families.  This is the no-tail case of the
-	symmetric fixed-block cancellation step in
-	\cite[Theorem~\texttt{thm1}, lines~1182--1185]{Cirac2016MPDO_arXiv}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Lemma~\ref{lem:fixed_left_lem1_input_eventual_proportional} gives eventual
-	linear independence of all \(B_k\) together with \(A_0\).  Since there are
-	no other \(A\)-summands, coefficient extraction in the full proportional
-	weighted-state identity forces the nonzero coefficient \(\mu_0^N\) of
-	\(A_0\) to vanish for all sufficiently large \(N\), a contradiction.
 \end{proof}
 
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
