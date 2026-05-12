@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton
+import TNLean.MPS.FundamentalTheorem.Full.LeadingPartner
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalTail
 
 /-!
@@ -51,6 +52,8 @@ The proof is split across supporting sub-modules for readability:
   dominant-weight projection argument.
 * `TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton` — no-tail fixed-block
   cancellation base cases for the CPSV16 Lemma `Lem1` peeling step.
+* `TNLean.MPS.FundamentalTheorem.Full.LeadingPartner` — leading-block
+  partner identification for the proportional peeling argument.
 * `TNLean.MPS.FundamentalTheorem.Full.ProportionalTail` — asymptotic erased-tail
   cancellation obtained from the phase-adjusted selected-summand cancellation and the
   full proportionality identity.

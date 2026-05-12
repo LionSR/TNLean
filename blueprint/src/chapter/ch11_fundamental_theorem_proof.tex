@@ -948,6 +948,28 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:dominant_projection_contradiction_eventual_proportional}.
 \end{proof}
 
+\begin{lemma}[Leading right partner is the leading left block]%
+\label{lem:leading_right_partner_is_leading_left_eventual_proportional}
+	\lean{MPSTensor.leading_right_nondecaying_partner_eq_leading_left_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:dominant_projection_contradiction_eventual_proportional,
+		lem:bnt_nondecaying_partner_unique}
+	Under eventual nonzero proportionality of the assembled BNT block tensors,
+	if the leading block \(B_0\) has non-decaying overlap with some block
+	\(A_j\), then \(j=0\).  Thus the leading \(B\)-block can only be matched
+	with the leading \(A\)-block in the first peeling step.
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	If \(j\neq 0\), uniqueness of the non-decaying partner of \(B_0\) makes every
+	other \(A\)-overlap with \(B_0\) decay.  Project the eventual proportional
+	weighted-sum identity against \(B_0\) and normalize by the leading
+	\(A\)-weight.  The \(A_j\)-term is suppressed by strict dominance of
+	\(|\mu_0|\), while the normalized \(B_0\)-projection on the \(B\)-side has
+	norm tending to \(1\), contradicting the adjusted-scalar projection identity.
+\end{proof}
+
 \begin{lemma}[Non-decaying BNT overlap gives a gauge phase]%
 \label{lem:bnt_nondecaying_overlap_gauge_phase}
 	\lean{MPSTensor.dim_eq_of_nondecaying_overlap_CFBNT,
