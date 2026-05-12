@@ -187,7 +187,7 @@ with an extra $Z$-gauge degree of freedom.
 	\((\mu_B\zeta)^N=\mu_B^N\zeta^N\).
 \end{proof}
 
-\begin{lemma}[Selected weighted summand from phase substitution and Lemma Lem1]%
+\begin{lemma}[Selected weighted summand from phase substitution and a linear-independence hypothesis]%
 \label{lem:selected_weighted_summand_from_phase_sum_li}
 	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li}
 	\leanok
@@ -210,12 +210,12 @@ with an extra $Z$-gauge degree of freedom.
 		c_N\nu_0^N\ket{V^{(N)}(B_0)}
 	\]
 	for all sufficiently large \(N\).
-	This corresponds to the step in the proof of
-	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv} where
-	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} rules out the
-	vanishing-overlap alternative and
-	\cite[Corollary~\texttt{eqV}]{Cirac2016MPDO_arXiv} supplies the phase
-	relation for the selected block.
+	This is a conditional coefficient-extraction statement.  In the fixed-block
+	step, \cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} does not by itself
+	supply the displayed residual-family linear independence; the gap is
+	recorded in
+	\texttt{docs/paper-gaps/cpsv16\_fixed\_block\_cancellation.tex}.
+	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -257,10 +257,9 @@ with an extra $Z$-gauge degree of freedom.
 	If two weighted block-state sums are eventually related by a scalar sequence
 	\(c_N\), and selected summands are eventually related by the same scalar
 	sequence, then the erased tails are eventually related by \(c_N\).
-	This is the eventual form of the preceding deletion step in the proof of
-	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}, used after
-	\cite[Lemma~\texttt{Lem1}]{Cirac2016MPDO_arXiv} supplies linear
-	independence only for sufficiently large lengths.
+	This is the eventual form of the preceding deletion step, used at the
+	sufficiently-large-length stage of
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -360,7 +359,7 @@ with an extra $Z$-gauge degree of freedom.
 % only the family whose off-diagonal overlaps all tend to zero; for the
 % fixed-block step this is all blocks on one side together with one fixed block
 % on the other side, not the whole remaining tail.
-\begin{lemma}[Eventual tail proportionality from phase substitution and an LI hypothesis]%
+\begin{lemma}[Eventual tail proportionality from phase substitution and a linear-independence hypothesis]%
 \label{lem:eventual_tail_proportional_from_phase_sum_li}
 	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li}
 	\leanok
