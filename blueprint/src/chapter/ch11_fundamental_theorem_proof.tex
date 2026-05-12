@@ -134,6 +134,42 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the eventual state identity on each basis word.
 \end{proof}
 
+\begin{lemma}[Selected vector is outside the residual span]%
+\label{lem:selected_not_in_residual_span_from_li}
+	\lean{MPSTensor.selected_notMem_residual_span_of_linearIndependent_option}
+	\leanok
+	Let \(v_0\) be a selected vector and let \(\{u_k\}_k\) be a residual
+	family.  If the family consisting of \(v_0\) together with the residual
+	vectors \(u_k\) is linearly independent, then
+	\(v_0\notin\operatorname{span}\{u_k\}_k\).  In the CPSV16 peeling step,
+	this is the algebraic consequence required after the BNT argument has
+	separated the selected block from the residual contributions
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Linear independence says that no member of the family lies in the span of
+	the remaining members.  Apply this to the selected member.
+\end{proof}
+
+\begin{lemma}[Eventual selected vector is outside the residual span]%
+\label{lem:eventual_selected_not_in_residual_span_from_li}
+	\lean{MPSTensor.eventually_selected_notMem_residual_span_of_linearIndependent_option}
+	\leanok
+	If, for all sufficiently large \(N\), the selected vector \(v_N\) together
+	with the residual family \(\{u_{N,k}\}_k\) is linearly independent, then
+	\(v_N\notin\operatorname{span}\{u_{N,k}\}_k\) for all sufficiently large
+	\(N\).  This records the passage from an eventual BNT separation statement
+	to the residual-span exclusion used by coefficient extraction
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	\uses{lem:selected_not_in_residual_span_from_li}
+	Apply Lemma~\ref{lem:selected_not_in_residual_span_from_li} at every
+	sufficiently large length.
+\end{proof}
+
 \begin{lemma}[Selected coefficient extraction modulo a residual span]%
 \label{lem:selected_coefficient_from_residual_span}
 	\lean{MPSTensor.selected_coefficient_eq_of_residual_span}
