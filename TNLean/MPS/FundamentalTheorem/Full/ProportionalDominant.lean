@@ -365,7 +365,7 @@ lemma exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroPropo
       hA_norm_dominant hB_norm_dominant
   exact ⟨c, hc, hState, by simpa [a0, b0] using hAdjustedScalar_dom⟩
 
-/-- **Dominant phase-adjusted scalar tends to one (Plan A Phase 1 step 1).**
+/-- **Dominant phase-adjusted scalar converges to one.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. Given a unit-modulus
 dominant phase relation `V(B b0) = ζ^N • V(A a0)`, projecting the
@@ -377,8 +377,8 @@ convergence (not just norm-convergence): the adjusted scalar
 This is the proportional-case analog of the equal-MPV identity
 `ratio^N → 1 ⇒ ratio = 1` (via `eq_one_of_pow_tendsto_nhds_one`). In the
 proportional case the free scalar `c_N` prevents the immediate upgrade to
-exact equality; this lemma packages the strongest asymptotic statement
-currently available toward Phase 1 of the discharge plan
+exact equality; this lemma supplies the dominant phase-adjusted scalar limit
+used as input to the inductive sorry-discharge construction in
 `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md` §7.2.
 
 **Scope restriction (one-copy-per-sector):** The local hypotheses
