@@ -3,10 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
-import TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton
-import TNLean.MPS.FundamentalTheorem.Full.LeadingPartner
-import TNLean.MPS.FundamentalTheorem.Full.LeadingTail
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan
 
 /-!
 # Heterogeneous BNT block matching
@@ -51,17 +47,6 @@ The proof is split across supporting sub-modules for readability:
 * `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap` — Layer 1a,
   `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`, a strong induction on `rA + rB` using a
   dominant-weight projection argument.
-* `TNLean.MPS.FundamentalTheorem.Full.FixedBlockSingleton` — no-tail fixed-block
-  cancellation base cases for the CPSV16 Lemma `Lem1` peeling step.
-* `TNLean.MPS.FundamentalTheorem.Full.LeadingPartner` — leading-block
-  partner identification for the proportional peeling argument.
-* `TNLean.MPS.FundamentalTheorem.Full.ProportionalTail` — asymptotic erased-tail
-  cancellation obtained from the phase-adjusted selected-summand cancellation and the
-  full proportionality identity.
-* `TNLean.MPS.FundamentalTheorem.Full.LeadingTail` — leading phase relation
-  and leading-erased tail asymptotics for proportional peeling.
-* `TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan` — linear-algebra
-  residual-span coefficient extraction used in the selected-summand isolation step.
 * `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch` — Layer 1b,
   `blocks_match_of_sameMPV₂_CFBNT`, which converts the non-decaying overlap data into a
   full `BlockPermutationGaugePhaseConclusion` via the overlap dichotomy.
