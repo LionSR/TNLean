@@ -23,7 +23,7 @@ families of tensors in canonical form with basis-of-normal-tensors (BNT)
 separation share the same `μ`-weights, same block count `r`, and same block
 dimensions, and generate *equal* MPVs for all system sizes, then per-block gauge
 equivalence holds together with a global gauge equivalence of the block-diagonal
-tensors.
+tensors. Source context: arXiv:1606.00608, Corollary `II_cor2`, lines 1173--1199.
 
 ### Proportional-MPV Fundamental Theorem (Theorem 4.4)
 
@@ -78,11 +78,17 @@ block weights `μ`, the same number of blocks `r`, and the same block dimensions
 (i)  per-block gauge equivalence: `GaugeEquiv (A k) (B k)` for all `k`;
 (ii) global gauge equivalence of the block-diagonal tensors.
 
-**Scope restriction (one-copy-per-sector)**: Both families must share the same block
+Source context: arXiv:1606.00608, Corollary `II_cor2`, lines 1173--1199.
+
+**Scope restriction (one-copy-per-sector):** Both families must share the same block
 structure `(r, dim, μ)`.  This is the multiplicity-free special case of Cor II.2; the
 paper's general theorem does not assume identical block structures as a hypothesis —
 it derives them.  The multiplicity recovery (`Lem:app_simple` on `∑_q μ_{j,q}^N`) is
-absent.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+absent.  See `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
+**Scope restriction (same-structure gauge comparison):** The proof uses the strict
+same-structure canonical-form gauge comparison, not PGVWC07 Theorem `thm-uniq`
+itself; see `docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`. -/
 -- SCOPE(one-copy-per-sector): requires same (r, dim, μ); paper derives this from BNT.
 theorem fundamentalTheorem_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -98,8 +104,14 @@ theorem fundamentalTheorem_equalMPV_CFBNT
 
 /-- **Equal-MPV FT for CF-BNT with explicit gauge matrices.**
 
-**Scope restriction (one-copy-per-sector)**: same-structure restriction as
-`fundamentalTheorem_equalMPV_CFBNT`; see that theorem's note. -/
+Source context: arXiv:1606.00608, Corollary `II_cor2`, lines 1173--1199.
+
+**Scope restriction (one-copy-per-sector):** same-structure restriction as
+`fundamentalTheorem_equalMPV_CFBNT`; see that theorem's note.
+
+**Scope restriction (same-structure gauge comparison):** inherited from
+`fundamentalTheorem_equalMPV_CFBNT` and the canonical-form gauge comparison
+documented in `docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`. -/
 -- SCOPE(one-copy-per-sector): same-structure restriction.
 theorem fundamentalTheorem_equalMPV_CFBNT_explicit
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -177,7 +189,11 @@ section Corollaries
 
 /-- **Per-block SameMPV from CF-BNT equal MPVs.**
 
-Extracts the per-block `SameMPV` conclusion from the equal-MPV theorem. -/
+Extracts the per-block `SameMPV` conclusion from the equal-MPV theorem.
+
+Source context and scope restriction: this inherits the one-copy-per-sector and
+same-structure gauge-comparison restrictions from `fundamentalTheorem_equalMPV_CFBNT`.
+It is not the unrestricted CPSV16 Corollary `II_cor2`, lines 1173--1199. -/
 theorem perBlock_sameMPV_of_equalMPV_CFBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ}
