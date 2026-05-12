@@ -996,16 +996,18 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:leading_right_partner_is_leading_left_eventual_proportional}
 	\lean{MPSTensor.leading_right_nondecaying_partner_eq_leading_left_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
 	\leanok
-	\uses{lem:dominant_adjusted_scalar_norm,
-		lem:bnt_nondecaying_partner_unique}
-	Under eventual nonzero proportionality of the assembled BNT block tensors,
-	if some block \(A_j\) has non-decaying overlap with the leading block
-	\(B_0\), then \(j=0\).  Thus the leading \(B\)-block can only be matched
-	with the leading \(A\)-block in the first peeling step.
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be nonempty one-copy BNT
+	canonical-form families.  Under eventual nonzero proportionality of the
+	assembled BNT block tensors, if some block \(A_j\) has non-decaying overlap
+	with the leading block \(B_0\), then \(j=0\).  Thus the leading
+	\(B\)-block can only be matched with the leading \(A\)-block in the first
+	peeling step.
 	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
+	\uses{lem:dominant_adjusted_scalar_norm,
+		lem:bnt_nondecaying_partner_unique}
 	If \(j\neq 0\), uniqueness of the non-decaying partner of \(B_0\) makes every
 	other \(A\)-overlap with \(B_0\) decay.  Project the eventual proportional
 	weighted-sum identity against \(B_0\) and normalize by the leading
@@ -1053,12 +1055,9 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:leading_phase_tail_difference_eventual_proportional}
 	\lean{MPSTensor.exists_leading_phase_tail_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
 	\leanok
-	\uses{lem:fixed_right_leading_all_overlaps_decay_contradiction,
-		lem:leading_right_partner_is_leading_left_eventual_proportional,
-		lem:bnt_nondecaying_overlap_mpv_phase,
-		lem:dominant_phase_adjusted_tail_difference}
-	Under eventual nonzero proportionality of the assembled BNT block tensors,
-	there is a unit complex number \(\zeta\) such that
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be nonempty one-copy BNT
+	canonical-form families.  Under eventual nonzero proportionality of the
+	assembled BNT block tensors, there is a unit complex number \(\zeta\) such that
 	\[
 		\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_0)}
 	\]
@@ -1069,6 +1068,10 @@ with an extra $Z$-gauge degree of freedom.
 \end{lemma}
 
 \begin{proof}\leanok
+	\uses{lem:fixed_right_leading_all_overlaps_decay_contradiction,
+		lem:leading_right_partner_is_leading_left_eventual_proportional,
+		lem:bnt_nondecaying_overlap_mpv_phase,
+		lem:dominant_phase_adjusted_tail_difference}
 	The leading all-overlaps-decay contradiction for \(B_0\) gives a
 	non-decaying partner for \(B_0\).
 	The leading-partner lemma identifies it with \(A_0\), and the
