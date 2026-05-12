@@ -4,9 +4,16 @@ This chapter develops the algebra of block permutations, the product-algebra map
 built from per-block same-MPV data, the invariant-projection splitting step that
 reduces a tensor to smaller blocks, and the block-separation argument that
 recovers the individual blocks from a block-diagonal same-MPV hypothesis.
-The results correspond to the canonical-form uniqueness
-of~\cite{PerezGarcia2007Matrix} and the block-separation
-results of~\cite{Cirac2021Matrix}.
+The block-separation results in this chapter are conditional same-structure
+lemmas: they assume blockwise normalization and separation hypotheses, including
+strict ordering of the weight moduli when required below. They should not be read
+as a formalization of the translation-invariant canonical-form uniqueness theorem
+of~\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix},
+which requires injectivity at some finite blocking length, uniqueness of the
+OBC canonical representation, and a finite-size lower bound. The source theorem
+is stated in the cited PGVWC07 passage; the project-level scope distinction is
+recorded in the accompanying paper-gap note.\footnote{%
+	\path{docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex}.}
 
 \section{Block permutation algebra}
 
@@ -350,6 +357,20 @@ We use this notation throughout the block-separation argument.
     proof.
 \end{definition}
 
+\begin{remark}[Canonical-form theorem versus local predicates]\label{rem:pgvwc07_vs_local_cf}
+    The translation-invariant canonical-form theorem of
+    \cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}
+    starts from an arbitrary TI-MPS representation and constructs a block
+    canonical form with positive weights, unital block normalization, full-rank
+    diagonal invariant densities, and uniqueness of the identity fixed point.
+    Definition~\ref{def:is_canonical_form} is a local predicate used after such
+    structure has already been supplied or separately proved. In particular, it
+    assumes injectivity and the self-overlap limit, and the block-separation
+    lemmas below additionally require strict separation of the weight moduli.
+    These results are therefore conditional consequences, not the source
+    canonical-form existence or uniqueness theorems.
+\end{remark}
+
 \begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
     The convention here differs from
     \cite[Theorem~4]{PerezGarcia2007Matrix}, which uses the unital gauge
@@ -400,10 +421,15 @@ We use this notation throughout the block-separation argument.
     \uses{def:is_canonical_form, def:injective}
     Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
     and let $(B_k)$ be injective tensors satisfying the same TP
-    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
+    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that
+    the weight moduli are strictly ordered:
+    \[
+        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
+    \]
     If $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
     for all $N,\sigma$,
-    then each pair $(A_k, B_k)$ generates the same MPV family.
+    then each pair $(A_k, B_k)$ generates the same MPV family
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -444,11 +470,16 @@ We use this notation throughout the block-separation argument.
     \uses{def:is_canonical_form}
     Let $((\mu_k), (A_k))$ satisfy the canonical form conditions,
     and let $(B_k)$ be injective tensors satisfying the same TP
-    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
+    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that
+    the weight moduli are strictly ordered:
+    \[
+        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
+    \]
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV family.
+    $(A_k, B_k)$ generates the same MPV family
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}
@@ -470,12 +501,18 @@ We use this notation throughout the block-separation argument.
     \lean{MPSTensor.per_block_sameMPV_of_normal_canonical_form}\leanok
     \uses{def:is_normal_canonical_form}
     Let $((\mu_k), (A_k))$ satisfy the normal canonical form conditions,
-    and let $(B_k)$ be irreducible tensors of the same bond dimensions, satisfying the same TP
-    normalization $\sum_i (B_k^i)^\dagger B_k^i = \Id$.
+    and let $(B_k)$ be irreducible tensors of the same bond dimensions,
+    satisfying the same TP normalization
+    $\sum_i (B_k^i)^\dagger B_k^i = \Id$. Assume moreover that the weight
+    moduli are strictly ordered:
+    \[
+        |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
+    \]
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV family.
+    $(A_k, B_k)$ generates the same MPV family
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -495,10 +532,13 @@ We use this notation throughout the block-separation argument.
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
     \uses{def:is_canonical_form, def:gauge_equiv, def:tensor_from_blocks}
-    Under the hypotheses of Lemma~\ref{lem:block_sep}, each pair
-    $(A_k, B_k)$ is gauge equivalent. Hence the block-diagonal tensors
+    Under the hypotheses of Lemma~\ref{lem:block_sep}, including strict
+    ordering of the weight moduli, each pair $(A_k, B_k)$ is gauge equivalent.
+    Hence the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    are gauge equivalent.
+    are gauge equivalent. This is a same-structure local comparison theorem,
+    not the full PGVWC07 uniqueness theorem
+    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -513,7 +553,8 @@ We use this notation throughout the block-separation argument.
 \begin{remark}[Relation to the literature]\label{rem:block_perm_literature}
     The block-permutation part follows the decomposition of automorphisms of
     semisimple matrix algebras used in~\cite[Section~IV.A]{Cirac2021Matrix}.
-    The separation part follows the induction on blocks from
-    \cite[Appendix~E]{PerezGarcia2007Matrix}; the checked proof here uses
-    overlap bounds and mixed-transfer decay.
+    The separation part is the local strict-weight peeling argument used in
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv};
+    the checked proof here formulates it as a same-structure block-separation lemma
+    using overlap bounds and mixed-transfer decay.
 \end{remark}
