@@ -16,7 +16,7 @@ proportionality of two restricted BNT block families.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Theorem `thm1`, line 1182.
+  Theorem II.1, line 1182.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -28,10 +28,10 @@ section LeadingTail
 
 /-- **Leading phase relation and leading-erased tail asymptotic.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. After the leading
+Source context: arXiv:1606.00608, Theorem II.1, line 1182. After the leading
 `B`-block has been shown to have a non-decaying overlap with some `A`-block,
 the leading-partner lemma identifies that block as the leading `A`-block.
-Corollary `eqV` then supplies the phase relation used to start the peeling
+Corollary eqV then supplies the phase relation used to start the peeling
 argument, and the selected-summand cancellation gives the leading-erased tail
 asymptotic.
 
