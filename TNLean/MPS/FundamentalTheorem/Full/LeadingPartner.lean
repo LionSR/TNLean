@@ -14,7 +14,7 @@ proportional fundamental theorem argument.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2017),
-  Theorem `thm1`, lines 1170--1192.
+  Theorem II.1, lines 1170--1192.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -26,7 +26,7 @@ section LeadingPartner
 
 /-- **The leading right block can only have the leading left block as non-decaying partner.**
 
-Source context: arXiv:1606.00608, Theorem `thm1`, line 1182. Before peeling
+Source context: arXiv:1606.00608, Theorem II.1, line 1182. Before peeling
 the dominant pair, the source argument first identifies a non-decaying partner
 of the fixed leading block. In the restricted one-copy-per-sector BNT setting,
 strict ordering of the weights forces such a partner for the leading `B`-block
