@@ -1009,7 +1009,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:leading_phase_tail_difference_eventual_proportional}
 	\lean{MPSTensor.exists_leading_phase_tail_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
 	\leanok
-	\uses{lem:dominant_nondecaying_partner_eventual_proportional,
+	\uses{lem:fixed_right_leading_all_overlaps_decay_contradiction,
 		lem:leading_right_partner_is_leading_left_eventual_proportional,
 		lem:bnt_nondecaying_overlap_mpv_phase,
 		lem:dominant_phase_adjusted_tail_difference}
@@ -1025,7 +1025,8 @@ with an extra $Z$-gauge degree of freedom.
 \end{lemma}
 
 \begin{proof}\leanok
-	The dominant-block contradiction gives a non-decaying partner for \(B_0\).
+	The leading all-overlaps-decay contradiction for \(B_0\) gives a
+	non-decaying partner for \(B_0\).
 	The leading-partner lemma identifies it with \(A_0\), and the
 	non-decaying-overlap phase lemma gives the displayed phase relation.  The
 	dominant tail-difference lemma then applies to the phase-matched leading
