@@ -47,14 +47,17 @@ interpretation when the Schmidt weights are non-degenerate.
 
 \section{Formal boundary}
 
-The checked block-separation lemmas in Chapter~9 are not formalizations of
-PGVWC07 Theorem~\texttt{thm-uniq}. They are conditional same-structure
-comparison results. Their hypotheses include blockwise normalization, injective
-or irreducible block hypotheses, a common block index set and dimension
-function, and strict ordering of the weight moduli.\footnote{The corresponding
-formal declarations are
+The checked block-separation lemmas recorded in Chapters~9 and~13 are not
+formalizations of PGVWC07 Theorem~\texttt{thm-uniq}. They are conditional
+same-structure comparison results. Their hypotheses include blockwise
+normalization, injective or irreducible block hypotheses, a common block index
+set and dimension function, and strict ordering of the weight moduli.\footnote{The
+corresponding formal declarations are
 \leanid{MPSTensor.per\_block\_sameMPV\_of\_\allowbreak canonical\_form},
 \leanid{MPSTensor.per\_block\_sameMPV\_of\_\allowbreak normal\_canonical\_form},
+\leanid{MPSTensor.per\_block\_sameMPV\_of\_\allowbreak separated\_canonical\_data},
+\leanid{MPSTensor.fundamentalTheorem\_\allowbreak of\_separated\_canonical\_data},
+\leanid{MPSTensor.fundamentalTheorem\_\allowbreak of\_separated\_canonical\_data\_explicit},
 \leanid{MPSTensor.fundamentalTheorem\_\allowbreak canonicalForm}, and
 \leanid{MPSTensor.fundamentalTheorem\_\allowbreak canonicalForm\_explicit}.}
 
@@ -77,16 +80,18 @@ A source-faithful formalization of PGVWC07 Theorem~\texttt{thm-uniq} should
 state the finite-ring injectivity hypothesis above, uniqueness of the OBC
 canonical representation, and \(N > 2L_0 + D^4\), and should conclude a single unitary
 intertwiner between the two TI canonical \(D\)-MPS representations. The current
-Chapter~9 block-separation lemmas may be used only as local consequences after
-their stronger hypotheses have been proved in the argument at hand.
+Chapter~9 and Chapter~13 block-separation lemmas may be used only as local
+consequences after their stronger hypotheses have been proved in the argument
+at hand.
 
 \section{Tracked consequences}
 
-Blueprint statements that point to Chapter~9 block separation must explicitly
-state the strict weight-modulus hypothesis when their Lean declarations require
-it. Downstream CPSV16 uses should not cite these statements as PGVWC07
-canonical-form uniqueness unless the finite-injectivity, OBC uniqueness,
-finite-size-bound, and unitary-conclusion theorem have been formalized separately.
+Blueprint statements that point to the Chapter~9 or Chapter~13 block-separation
+surface must explicitly state the strict weight-modulus hypothesis when their
+Lean declarations require it. Downstream CPSV16 uses should not cite these
+statements as PGVWC07 canonical-form uniqueness unless the finite-injectivity,
+OBC uniqueness, finite-size-bound, and unitary-conclusion theorem have been
+formalized separately.
 
 \bibliographystyle{alpha}
 \bibliography{references}
