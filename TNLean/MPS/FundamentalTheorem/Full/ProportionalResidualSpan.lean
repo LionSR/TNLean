@@ -60,10 +60,7 @@ lemma selected_coefficient_eq_of_residual_span
     rw [hdiff_eq]
     exact (Submodule.span ℂ (Set.range u)).sub_mem hS hR
   have hv₀_mem : v₀ ∈ Submodule.span ℂ (Set.range u) := by
-    have hscaled :
-        (a - b)⁻¹ • ((a - b) • v₀) ∈ Submodule.span ℂ (Set.range u) :=
-      (Submodule.span ℂ (Set.range u)).smul_mem _ hdiff_mem
-    simpa [smul_smul, inv_mul_cancel₀ hdiff_ne] using hscaled
+    exact ((Submodule.span ℂ (Set.range u)).smul_mem_iff hdiff_ne).mp hdiff_mem
   exact hnot hv₀_mem
 
 /-- **Eventual selected coefficient extraction modulo residual spans.**
