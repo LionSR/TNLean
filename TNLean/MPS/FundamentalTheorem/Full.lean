@@ -60,6 +60,8 @@ The proof is split across supporting sub-modules for readability:
   full proportionality identity.
 * `TNLean.MPS.FundamentalTheorem.Full.LeadingTail` — leading phase relation
   and leading-erased tail asymptotics for proportional peeling.
+* `TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan` — linear-algebra
+  residual-span coefficient extraction used in the selected-summand isolation step.
 * `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch` — Layer 1b,
   `blocks_match_of_sameMPV₂_CFBNT`, which converts the non-decaying overlap data into a
   full `BlockPermutationGaugePhaseConclusion` via the overlap dichotomy.
