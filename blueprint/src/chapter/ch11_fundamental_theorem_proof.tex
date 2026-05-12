@@ -134,6 +134,50 @@ with an extra $Z$-gauge degree of freedom.
 	and evaluate the eventual state identity on each basis word.
 \end{proof}
 
+\begin{lemma}[Selected coefficient extraction modulo a residual span]%
+\label{lem:selected_coefficient_from_residual_span}
+	\lean{MPSTensor.selected_coefficient_eq_of_residual_span}
+	\leanok
+	Let \(v_0\) be a vector and let \(R,S\) lie in the span of a residual
+	family \(\{u_k\}_k\).  If
+	\[
+		a v_0+R=b v_0+S
+	\]
+	and \(v_0\notin\operatorname{span}\{u_k\}_k\), then \(a=b\).  This is the
+	algebraic coefficient-isolation step which remains after the BNT argument
+	has separated the selected block from the residual span
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Subtract the two sides.  Then \((a-b)v_0\) lies in the residual span.  If
+	\(a\ne b\), scalar division places \(v_0\) itself in the same span,
+	contradicting the span-exclusion hypothesis.
+\end{proof}
+
+\begin{lemma}[Eventual selected coefficient extraction modulo residual spans]%
+\label{lem:eventual_selected_coefficient_from_residual_span}
+	\lean{MPSTensor.eventually_selected_coefficient_eq_of_residual_span}
+	\leanok
+	\uses{lem:selected_coefficient_from_residual_span}
+	Suppose that, for all sufficiently large \(N\), the residual terms \(R_N\)
+	and \(S_N\) lie in the span of a residual family \(\{u_{N,k}\}_k\), the
+	identity
+	\[
+		a_N v_N+R_N=b_N v_N+S_N
+	\]
+	holds, and \(v_N\) is not in that residual span.  Then \(a_N=b_N\) for
+	all sufficiently large \(N\).  This records the weaker coefficient
+	extraction target needed before replacing the conditional residual
+	linear-independence route
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply Lemma~\ref{lem:selected_coefficient_from_residual_span} at every
+	sufficiently large length.
+\end{proof}
+
 \begin{lemma}[Selected coefficient extraction after one phase substitution]%
 \label{lem:selected_coefficient_from_two_family_linear_independence}
 	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}
