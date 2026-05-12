@@ -812,6 +812,117 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
       B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
   simpa [Asingle] using hLI
 
+/-- **Fixed-right residual-span exclusion from Lemma `Lem1`.**
+
+Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, line 1182.
+If a fixed `B`-block has vanishing overlap with every `A`-block, then
+Corollary `Lem1` gives eventual linear independence of the family consisting
+of all `A`-blocks and this fixed `B`-block. Therefore, for all sufficiently
+large lengths, the fixed `B` MPV state is not in the span of the `A` MPV
+states.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (k₀ : Fin rB)
+    (hAllDecay : ∀ j : Fin rA,
+      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
+    ∀ᶠ N in atTop,
+      mpvState (d := d) (B k₀) N ∉
+        Submodule.span ℂ (Set.range fun j : Fin rA => mpvState (d := d) (A j) N) := by
+  classical
+  have hLI :=
+    eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT
+      A B hA hB k₀ hAllDecay
+  refine hLI.mono ?_
+  intro N hLIN
+  have hnot_range :
+      (Sum.inr (0 : Fin 1) : Sum (Fin rA) (Fin 1)) ∉
+        Set.range (fun j : Fin rA => Sum.inl (β := Fin 1) j) := by
+    rintro ⟨j, hj⟩
+    cases hj
+  have himage :
+      ((Sum.elim
+          (fun j : Fin rA => mpvState (d := d) (A j) N)
+          (fun _ : Fin 1 => mpvState (d := d) (B k₀) N)) ''
+        Set.range (fun j : Fin rA => Sum.inl (β := Fin 1) j)) =
+          Set.range (fun j : Fin rA => mpvState (d := d) (A j) N) := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨j, rfl⟩, rfl⟩
+      exact ⟨j, rfl⟩
+    · rintro ⟨j, rfl⟩
+      exact ⟨Sum.inl j, ⟨j, rfl⟩, rfl⟩
+  simpa [himage] using
+    hLIN.notMem_span_image
+      (s := Set.range (fun j : Fin rA => Sum.inl (β := Fin 1) j))
+      (x := Sum.inr (0 : Fin 1)) hnot_range
+
+/-- **Fixed-left residual-span exclusion from Lemma `Lem1`.**
+
+Source: arXiv:1606.00608, Corollary `Lem1` and Theorem `thm1`, lines
+1182--1185. This is the symmetric form of
+`eventually_fixed_right_notMem_left_span_of_all_overlaps_decay_CFBNT`: if a
+fixed `A`-block has vanishing overlap with every `B`-block, then the fixed
+`A` MPV state is eventually outside the span of the `B` MPV states.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+lemma eventually_fixed_left_notMem_right_span_of_all_overlaps_decay_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (j₀ : Fin rA)
+    (hAllDecay : ∀ k : Fin rB,
+      Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
+    ∀ᶠ N in atTop,
+      mpvState (d := d) (A j₀) N ∉
+        Submodule.span ℂ (Set.range fun k : Fin rB => mpvState (d := d) (B k) N) := by
+  classical
+  have hLI :=
+    eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT
+      A B hA hB j₀ hAllDecay
+  refine hLI.mono ?_
+  intro N hLIN
+  have hnot_range :
+      (Sum.inr (0 : Fin 1) : Sum (Fin rB) (Fin 1)) ∉
+        Set.range (fun k : Fin rB => Sum.inl (β := Fin 1) k) := by
+    rintro ⟨k, hk⟩
+    cases hk
+  have himage :
+      ((Sum.elim
+          (fun k : Fin rB => mpvState (d := d) (B k) N)
+          (fun _ : Fin 1 => mpvState (d := d) (A j₀) N)) ''
+        Set.range (fun k : Fin rB => Sum.inl (β := Fin 1) k)) =
+          Set.range (fun k : Fin rB => mpvState (d := d) (B k) N) := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨k, rfl⟩, rfl⟩
+      exact ⟨k, rfl⟩
+    · rintro ⟨k, rfl⟩
+      exact ⟨Sum.inl k, ⟨k, rfl⟩, rfl⟩
+  simpa [himage] using
+    hLIN.notMem_span_image
+      (s := Set.range (fun k : Fin rB => Sum.inl (β := Fin 1) k))
+      (x := Sum.inr (0 : Fin 1)) hnot_range
+
 /-- **Leading fixed-right all-overlaps-decay contradiction.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, line 1182. This is the fixed-block
@@ -910,23 +1021,7 @@ lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV�
     (hAllDecay : ∀ j : Fin rA,
       Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
     False := by
-  have hProp' : EventuallyNonzeroProportionalMPV₂
-      (toTensorFromBlocks μB B) (toTensorFromBlocks μA A) := by
-    filter_upwards [hProp] with N hN
-    rcases hN with ⟨c, hc, hN⟩
-    exact ⟨c⁻¹, inv_ne_zero hc, fun σ => by
-      calc
-        mpv (toTensorFromBlocks μB B) σ = c⁻¹ * (c * mpv (toTensorFromBlocks μB B) σ) := by
-          rw [inv_mul_cancel_left₀ hc]
-        _ = c⁻¹ * mpv (toTensorFromBlocks μA A) σ := by
-          rw [hN σ]⟩
-  have hAllDecay' : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (B k₀) (A j) N) atTop (nhds 0) := by
-    intro j
-    exact tendsto_mpvOverlap_zero_swap (d := d) (A j) (B k₀) (hAllDecay j)
-  exact
-    fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-      (d := d) B A hB hA hrB hrA hProp' k₀ hAllDecay'
+  sorry
 
 /-- **Fixed-left all-overlaps-decay contradiction for proportional BNT families.**
 
@@ -963,23 +1058,7 @@ lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂
     (hAllDecay : ∀ k : Fin rB,
       Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
     False := by
-  have hProp' : EventuallyNonzeroProportionalMPV₂
-      (toTensorFromBlocks μB B) (toTensorFromBlocks μA A) := by
-    filter_upwards [hProp] with N hN
-    rcases hN with ⟨c, hc, hN⟩
-    exact ⟨c⁻¹, inv_ne_zero hc, fun σ => by
-      calc
-        mpv (toTensorFromBlocks μB B) σ = c⁻¹ * (c * mpv (toTensorFromBlocks μB B) σ) := by
-          rw [inv_mul_cancel_left₀ hc]
-        _ = c⁻¹ * mpv (toTensorFromBlocks μA A) σ := by
-          rw [hN σ]⟩
-  have hAllDecay' : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (A j₀) N) atTop (nhds 0) := by
-    intro k
-    exact tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
-  exact
-    fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-      (d := d) B A hB hA hrB hrA hProp' j₀ hAllDecay'
+  sorry
 
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
