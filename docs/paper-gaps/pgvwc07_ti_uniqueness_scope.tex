@@ -18,14 +18,24 @@
 
 The translation-invariant canonical-form uniqueness theorem of
 P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac starts with two TI canonical
-\(D\)-MPS representations of the same finite-ring state
+\(D\)-MPS representations of the same finite-ring state.  We write their
+matrices as \(B_i\) and \(C_i\), following the source theorem
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
-Its hypotheses are:
+For a TI representation \(A_i\), PGVWC07 defines
+\[
+  \Gamma_L(X)
+  =
+  \sum_{i_1,\ldots,i_L}
+    \operatorname{tr}\!\left[X A_{i_1}\cdots A_{i_L}\right]
+    |i_1\cdots i_L\rangle .
+\]
+The finite injectivity hypothesis called C1 in the source is the existence of
+a finite length \(L_0\) for which \(\Gamma_{L_0}\) is injective
+\cite[lines~888--908]{PerezGarcia2007MPSReps}.  The theorem assumes:
 \begin{enumerate}
-  \item condition C1 holds: there is a finite length \(L_0\) for which
-    \(\Gamma_{L_0}\) is injective
-    \cite[lines~888--908]{PerezGarcia2007MPSReps};
-  \item the OBC canonical representation is unique;
+  \item this finite injectivity hypothesis holds;
+  \item the open-boundary-condition (OBC) canonical representation of the MPS
+    state is unique;
   \item the length satisfies \(N > 2L_0 + D^4\).
 \end{enumerate}
 The conclusion is the existence of a unitary matrix \(U\) such that
@@ -43,10 +53,10 @@ comparison results. Their hypotheses include blockwise normalization, injective
 or irreducible block hypotheses, a common block index set and dimension
 function, and strict ordering of the weight moduli.\footnote{The corresponding
 formal declarations are
-\path{MPSTensor.per_block_sameMPV_of_canonical_form},
-\path{MPSTensor.per_block_sameMPV_of_normal_canonical_form},
-\path{MPSTensor.fundamentalTheorem_canonicalForm}, and
-\path{MPSTensor.fundamentalTheorem_canonicalForm_explicit}.}
+\leanid{MPSTensor.per\_block\_sameMPV\_of\_\allowbreak canonical\_form},
+\leanid{MPSTensor.per\_block\_sameMPV\_of\_\allowbreak normal\_canonical\_form},
+\leanid{MPSTensor.fundamentalTheorem\_\allowbreak canonicalForm}, and
+\leanid{MPSTensor.fundamentalTheorem\_\allowbreak canonicalForm\_explicit}.}
 
 These assumptions are useful local inputs for later MPS arguments, but they are
 not the hypothesis set of the PGVWC07 uniqueness theorem. In particular, the
@@ -64,8 +74,8 @@ cited as formalizations of that source theorem.
 \section{Required formalization}
 
 A source-faithful formalization of PGVWC07 Theorem~\texttt{thm-uniq} should
-state the finite-ring hypotheses C1, uniqueness of the OBC canonical
-representation, and \(N > 2L_0 + D^4\), and should conclude a single unitary
+state the finite-ring injectivity hypothesis above, uniqueness of the OBC
+canonical representation, and \(N > 2L_0 + D^4\), and should conclude a single unitary
 intertwiner between the two TI canonical \(D\)-MPS representations. The current
 Chapter~9 block-separation lemmas may be used only as local consequences after
 their stronger hypotheses have been proved in the argument at hand.
@@ -75,8 +85,8 @@ their stronger hypotheses have been proved in the argument at hand.
 Blueprint statements that point to Chapter~9 block separation must explicitly
 state the strict weight-modulus hypothesis when their Lean declarations require
 it. Downstream CPSV16 uses should not cite these statements as PGVWC07
-canonical-form uniqueness unless the C1, OBC uniqueness, finite-size bound, and
-unitary-conclusion theorem have been formalized separately.
+canonical-form uniqueness unless the finite-injectivity, OBC uniqueness,
+finite-size-bound, and unitary-conclusion theorem have been formalized separately.
 
 \bibliographystyle{alpha}
 \bibliography{references}
