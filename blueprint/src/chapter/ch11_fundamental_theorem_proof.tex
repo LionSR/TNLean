@@ -694,6 +694,29 @@ with an extra $Z$-gauge degree of freedom.
 	the two complements.
 \end{proof}
 
+\begin{lemma}[Eventual tail proportionality from the left residual independence input]%
+\label{lem:eventual_tail_proportional_from_phase_sum_residual_independence_left}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_residual_left}
+	\leanok
+	\uses{lem:eventual_tail_proportional_from_phase_sum_residual_span_left}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence, and suppose
+	\(\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}\) for every \(N\),
+	with \(\zeta\ne0\).  If the family consisting of
+	\(\ket{V^{(N)}(B_{b_0})}\) together with the remaining \(B\)-block states
+	and the remaining \(A\)-block states is eventually linearly independent,
+	then the two complements, reindexed by the insertion maps, are eventually
+	nonzero proportional.  This is the left-substituted selected-plus-residual
+	independence form of the conditional peeling step
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	The selected-plus-residual independence gives the selected \(B\)-state
+	outside the residual span.  Apply the left residual-span tail-peeling
+	lemma.
+\end{proof}
+
 \begin{lemma}[Norm convergence for scalar-related normalized vectors]%
 \label{lem:proportional_scalar_norm_core}
 	\lean{MPSTensor.tendsto_norm_scalar_of_tendsto_norm_one}

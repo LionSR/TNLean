@@ -246,6 +246,91 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_res
   exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
     A B c a0 b0 hc hState hSelected
 
+/-- **Tail proportionality from the left residual independence input.**
+
+Source context: arXiv:1606.00608, Theorem `thm1`, line 1182 invokes Lemma
+`Lem1`. This is the symmetric selected-plus-residual independence form of the
+tail-peeling step: the selected `B`-state together with the residual `B`- and
+`A`-states is assumed eventually linearly independent.
+
+**Scope restriction (derived separation input):** The displayed eventual
+linear-independence hypothesis must be derived from the CPSV16 fixed-block BNT
+separation argument. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_residual_left
+    {d nA nB : ℕ}
+    {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
+    {μA : Fin (nA + 1) → ℂ} {μB : Fin (nB + 1) → ℂ}
+    {ζ : ℂ}
+    (A : (j : Fin (nA + 1)) → MPSTensor d (dimA j))
+    (B : (k : Fin (nB + 1)) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin (nA + 1)) (b0 : Fin (nB + 1))
+    (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hζ : ζ ≠ 0)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B b0) N = ζ ^ N • mpvState (d := d) (A a0) N)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (fun o : Option (Sum {k : Fin (nB + 1) // k ≠ b0} (Fin nA)) =>
+          match o with
+          | none => mpvState (d := d) (B b0) N
+          | some x =>
+              Sum.elim
+                (fun k : {k : Fin (nB + 1) // k ≠ b0} =>
+                  mpvState (d := d) (B k.1) N)
+                (fun j : Fin nA => mpvState (d := d) (A (a0.succAbove j)) N) x))
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N •
+          (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks
+        (fun j : Fin nA => μA (a0.succAbove j))
+        (fun j : Fin nA => A (a0.succAbove j)))
+      (toTensorFromBlocks
+        (fun k : Fin nB => μB (b0.succAbove k))
+        (fun k : Fin nB => B (b0.succAbove k))) := by
+  classical
+  have hnot :
+      ∀ᶠ N in atTop,
+        mpvState (d := d) (B b0) N ∉
+          Submodule.span ℂ
+            (Set.range
+              (Sum.elim
+                (fun k : {k : Fin (nB + 1) // k ≠ b0} =>
+                  mpvState (d := d) (B k.1) N)
+                (fun j : Fin nA => mpvState (d := d) (A (a0.succAbove j)) N))) := by
+    filter_upwards [hLI] with N hLIN
+    have hnone_not_mem :
+        (none : Option (Sum {k : Fin (nB + 1) // k ≠ b0} (Fin nA))) ∉ Set.range some := by
+      rintro ⟨x, hx⟩
+      cases hx
+    have himage :
+        ((fun o : Option (Sum {k : Fin (nB + 1) // k ≠ b0} (Fin nA)) =>
+            match o with
+            | none => mpvState (d := d) (B b0) N
+            | some x =>
+                Sum.elim
+                  (fun k : {k : Fin (nB + 1) // k ≠ b0} =>
+                    mpvState (d := d) (B k.1) N)
+                  (fun j : Fin nA => mpvState (d := d) (A (a0.succAbove j)) N) x) ''
+          Set.range some) =
+          Set.range
+            (Sum.elim
+              (fun k : {k : Fin (nB + 1) // k ≠ b0} =>
+                mpvState (d := d) (B k.1) N)
+              (fun j : Fin nA => mpvState (d := d) (A (a0.succAbove j)) N)) := by
+      ext x
+      constructor
+      · rintro ⟨o, ⟨y, rfl⟩, rfl⟩
+        exact ⟨y, rfl⟩
+      · rintro ⟨y, rfl⟩
+        exact ⟨some y, ⟨y, rfl⟩, rfl⟩
+    simpa [himage] using
+      hLIN.notMem_span_image (s := Set.range some) (x := none) hnone_not_mem
+  exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_residual_span_left
+    A B c a0 b0 hc hζ hPhase hnot hState
+
 end ProportionalExpansionLeft
 
 end MPSTensor
