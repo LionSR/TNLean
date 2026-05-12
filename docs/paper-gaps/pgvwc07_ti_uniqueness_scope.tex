@@ -22,7 +22,9 @@ P\'erez-Garc\'ia, Verstraete, Wolf, and Cirac starts with two TI canonical
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
 Its hypotheses are:
 \begin{enumerate}
-  \item condition C1 holds;
+  \item condition C1 holds: there is a finite length \(L_0\) for which
+    \(\Gamma_{L_0}\) is injective
+    \cite[lines~888--908]{PerezGarcia2007MPSReps};
   \item the OBC canonical representation is unique;
   \item the length satisfies \(N > 2L_0 + D^4\).
 \end{enumerate}
@@ -39,7 +41,12 @@ The checked block-separation lemmas in Chapter~9 are not formalizations of
 PGVWC07 Theorem~\texttt{thm-uniq}. They are conditional same-structure
 comparison results. Their hypotheses include blockwise normalization, injective
 or irreducible block hypotheses, a common block index set and dimension
-function, and strict ordering of the weight moduli.
+function, and strict ordering of the weight moduli.\footnote{The corresponding
+formal declarations are
+\path{MPSTensor.per_block_sameMPV_of_canonical_form},
+\path{MPSTensor.per_block_sameMPV_of_normal_canonical_form},
+\path{MPSTensor.fundamentalTheorem_canonicalForm}, and
+\path{MPSTensor.fundamentalTheorem_canonicalForm_explicit}.}
 
 These assumptions are useful local inputs for later MPS arguments, but they are
 not the hypothesis set of the PGVWC07 uniqueness theorem. In particular, the
@@ -48,6 +55,11 @@ representations, nor does it assume the Chapter~9 strict-modulus separation
 lemma as an input. Its proof uses the OBC canonical representation and the
 Horn--Johnson matrix lemma route described after
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
+
+Thus this is a theorem-level gap. PGVWC07 Theorem~\texttt{thm-uniq} is not
+currently formalized. The available formal lemmas are conditional
+same-structure consequences with stronger hypotheses, and therefore must not be
+cited as formalizations of that source theorem.
 
 \section{Required formalization}
 

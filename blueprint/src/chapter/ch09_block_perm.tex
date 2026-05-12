@@ -10,8 +10,8 @@ strict ordering of the weight moduli when required below. They should not be rea
 as a formalization of the translation-invariant canonical-form uniqueness theorem
 of~\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix},
 which uses condition C1, uniqueness of the OBC canonical representation, and a
-finite-size lower bound. The distinction is recorded in
-\cite{PerezGarcia2007Matrix} and in
+finite-size lower bound. The source theorem is stated in the cited PGVWC07
+passage; the project-level scope distinction is recorded in
 \texttt{docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex}.
 
 \section{Block permutation algebra}
@@ -428,7 +428,7 @@ We use this notation throughout the block-separation argument.
     If $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
     for all $N,\sigma$,
     then each pair $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~E]{PerezGarcia2007Matrix}.
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -478,7 +478,7 @@ We use this notation throughout the block-separation argument.
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
     $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~E]{PerezGarcia2007Matrix}.
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}
@@ -511,7 +511,7 @@ We use this notation throughout the block-separation argument.
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
     $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~E]{PerezGarcia2007Matrix}.
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -552,7 +552,8 @@ We use this notation throughout the block-separation argument.
 \begin{remark}[Relation to the literature]\label{rem:block_perm_literature}
     The block-permutation part follows the decomposition of automorphisms of
     semisimple matrix algebras used in~\cite[Section~IV.A]{Cirac2021Matrix}.
-    The separation part follows the induction on blocks from
-    \cite[Appendix~E]{PerezGarcia2007Matrix}; the checked proof here uses
-    overlap bounds and mixed-transfer decay.
+    The separation part is the local strict-weight peeling argument used in
+    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv};
+    the checked proof here packages it as a same-structure block-separation lemma
+    using overlap bounds and mixed-transfer decay.
 \end{remark}
