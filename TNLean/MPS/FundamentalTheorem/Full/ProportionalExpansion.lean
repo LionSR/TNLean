@@ -619,6 +619,70 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_notMem_resi
   exact eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
     (A i₀) B₀ hPhase hCoeff
 
+/-- **Selected weighted summand from selected-plus-residual independence.**
+
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma
+Lem1. After a non-decaying block pair has supplied the phase relation for the
+selected block, this auxiliary lemma uses eventual linear independence only
+for the selected MPV state together with the residual states.
+
+**Scope restriction (derived separation input):** The displayed eventual
+linear-independence hypothesis must be derived from the CPSV16 fixed-block BNT
+separation argument before this lemma is used as a source-faithful step. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li_residual
+    {d : ℕ} {ι κ : Type*} [Fintype ι] [Fintype κ]
+    {dimA : ι → ℕ} {dimB₀ : ℕ} {dimB : κ → ℕ}
+    {μA : ι → ℂ} {μB₀ ζ : ℂ} {μB : κ → ℂ} {c : ℕ → ℂ}
+    (A : (i : ι) → MPSTensor d (dimA i))
+    (B₀ : MPSTensor d dimB₀)
+    (B : (k : κ) → MPSTensor d (dimB k))
+    (i₀ : ι)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) B₀ N = ζ ^ N • mpvState (d := d) (A i₀) N)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (fun o : Option (Sum {i : ι // i ≠ i₀} κ) =>
+          match o with
+          | none => mpvState (d := d) (A i₀) N
+          | some x =>
+              Sum.elim
+                (fun i : {i : ι // i ≠ i₀} => mpvState (d := d) (A i.1) N)
+                (fun k : κ => mpvState (d := d) (B k) N) x))
+    (hState : ∀ᶠ N in atTop,
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+        c N •
+          ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+            ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    ∀ᶠ N in atTop,
+      (μA i₀) ^ N • mpvState (d := d) (A i₀) N =
+        c N • (μB₀ ^ N • mpvState (d := d) B₀ N) := by
+  classical
+  have hCoeff :
+      ∀ᶠ N in atTop, (μA i₀) ^ N = c N * (μB₀ * ζ) ^ N := by
+    refine eventually_selected_coefficient_eq_of_eventually_linearIndependent_residual_sum
+      (fun N i => mpvState (d := d) (A i) N)
+      (fun N k => mpvState (d := d) (B k) N)
+      (fun N i => (μA i) ^ N)
+      (fun N => c N * (μB₀ * ζ) ^ N)
+      (fun N k => c N * (μB k) ^ N)
+      i₀ hLI ?_
+    refine hState.mono ?_
+    intro N hN
+    calc
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+          c N •
+            ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+              ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N) := hN
+      _ =
+          (c N * (μB₀ * ζ) ^ N) • mpvState (d := d) (A i₀) N +
+            ∑ k : κ,
+              (c N * (μB k) ^ N) • mpvState (d := d) (B k) N := by
+        rw [hPhase N, smul_add, Finset.smul_sum]
+        simp [smul_smul, mul_pow]
+  exact eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
+    (A i₀) B₀ hPhase hCoeff
+
 /-- **Subtracting a proportional dominant summand from weighted MPV-state sums.**
 
 Source: arXiv:1606.00608, Theorem thm1, lines 1170--1192. The proof removes
@@ -1023,6 +1087,91 @@ lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_res
       A (B b0) (fun k : Fin nB => B (b0.succAbove k)) a0 hPhase hnot hStateSplit
   exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_total_and_selected
     A B c a0 b0 hc hState hSelected
+
+/-- **Tail proportionality from phase substitution and residual independence.**
+
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma
+Lem1. Once a selected non-decaying block pair has been converted into a phase
+relation, this auxiliary lemma records the recursive tail deletion under
+eventual linear independence of the selected block state together with the
+residual states.
+
+**Scope restriction (derived separation input):** The displayed eventual
+linear-independence hypothesis must be derived from the CPSV16 fixed-block BNT
+separation argument. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_residual
+    {d nA nB : ℕ}
+    {dimA : Fin (nA + 1) → ℕ} {dimB : Fin (nB + 1) → ℕ}
+    {μA : Fin (nA + 1) → ℂ} {μB : Fin (nB + 1) → ℂ}
+    {ζ : ℂ}
+    (A : (j : Fin (nA + 1)) → MPSTensor d (dimA j))
+    (B : (k : Fin (nB + 1)) → MPSTensor d (dimB k))
+    (c : ℕ → ℂ) (a0 : Fin (nA + 1)) (b0 : Fin (nB + 1))
+    (hc : ∀ᶠ N in atTop, c N ≠ 0)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) (B b0) N = ζ ^ N • mpvState (d := d) (A a0) N)
+    (hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (fun o : Option (Sum {j : Fin (nA + 1) // j ≠ a0} (Fin nB)) =>
+          match o with
+          | none => mpvState (d := d) (A a0) N
+          | some x =>
+              Sum.elim
+                (fun j : {j : Fin (nA + 1) // j ≠ a0} =>
+                  mpvState (d := d) (A j.1) N)
+                (fun k : Fin nB => mpvState (d := d) (B (b0.succAbove k)) N) x))
+    (hState : ∀ᶠ N in atTop,
+      (∑ j : Fin (nA + 1), (μA j) ^ N • mpvState (d := d) (A j) N) =
+        c N •
+          (∑ k : Fin (nB + 1), (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    EventuallyNonzeroProportionalMPV₂
+      (toTensorFromBlocks
+        (fun j : Fin nA => μA (a0.succAbove j))
+        (fun j : Fin nA => A (a0.succAbove j)))
+      (toTensorFromBlocks
+        (fun k : Fin nB => μB (b0.succAbove k))
+        (fun k : Fin nB => B (b0.succAbove k))) := by
+  classical
+  have hnot :
+      ∀ᶠ N in atTop,
+        mpvState (d := d) (A a0) N ∉
+          Submodule.span ℂ
+            (Set.range
+              (Sum.elim
+                (fun j : {j : Fin (nA + 1) // j ≠ a0} =>
+                  mpvState (d := d) (A j.1) N)
+                (fun k : Fin nB => mpvState (d := d) (B (b0.succAbove k)) N))) := by
+    filter_upwards [hLI] with N hLIN
+    have hnone_not_mem :
+        (none : Option (Sum {j : Fin (nA + 1) // j ≠ a0} (Fin nB))) ∉ Set.range some := by
+      rintro ⟨x, hx⟩
+      cases hx
+    have himage :
+        ((fun o : Option (Sum {j : Fin (nA + 1) // j ≠ a0} (Fin nB)) =>
+            match o with
+            | none => mpvState (d := d) (A a0) N
+            | some x =>
+                Sum.elim
+                  (fun j : {j : Fin (nA + 1) // j ≠ a0} =>
+                    mpvState (d := d) (A j.1) N)
+                  (fun k : Fin nB => mpvState (d := d) (B (b0.succAbove k)) N) x) ''
+          Set.range some) =
+          Set.range
+            (Sum.elim
+              (fun j : {j : Fin (nA + 1) // j ≠ a0} =>
+                mpvState (d := d) (A j.1) N)
+              (fun k : Fin nB => mpvState (d := d) (B (b0.succAbove k)) N)) := by
+      ext x
+      constructor
+      · rintro ⟨o, ⟨y, rfl⟩, rfl⟩
+        exact ⟨y, rfl⟩
+      · rintro ⟨y, rfl⟩
+        exact ⟨some y, ⟨y, rfl⟩, rfl⟩
+    simpa [himage] using
+      hLIN.notMem_span_image (s := Set.range some) (x := none) hnone_not_mem
+  exact eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_notMem_residual_span
+    A B c a0 b0 hc hPhase hnot hState
 
 /-- **Projection of a fixed weighted MPV-state scalar sequence.**
 

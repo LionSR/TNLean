@@ -395,6 +395,40 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:selected_weighted_summand_from_phase_coeff}.
 \end{proof}
 
+\begin{lemma}[Selected weighted summand from phase substitution and residual independence]%
+\label{lem:selected_weighted_summand_from_phase_sum_residual_independence}
+	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li_residual}
+	\leanok
+	\uses{lem:selected_coefficient_from_residual_independence_sum,
+		lem:selected_weighted_summand_from_phase_coeff}
+	Suppose a total weighted-state identity has the form
+	\[
+		\sum_i \mu_i^N \ket{V^{(N)}(A_i)}
+		=
+		c_N\left(\nu_0^N\ket{V^{(N)}(B_0)}
+		+\sum_k \nu_k^N\ket{V^{(N)}(B_k)}\right)
+	\]
+	for all sufficiently large \(N\).  If
+	\(\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_{i_0})}\) for every \(N\), and
+	the family consisting of \(\ket{V^{(N)}(A_{i_0})}\) together with the
+	remaining \(A_i\)-states and the residual \(B_k\)-states is eventually
+	linearly independent, then
+	\[
+		\mu_{i_0}^N\ket{V^{(N)}(A_{i_0})}
+		=
+		c_N\nu_0^N\ket{V^{(N)}(B_0)}
+	\]
+	for all sufficiently large \(N\).  This is the selected-plus-residual
+	independence form of the fixed-block selected-summand bridge
+	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Substitute the phase relation for \(B_0\), apply
+	Lemma~\ref{lem:selected_coefficient_from_residual_independence_sum}, and
+	then use Lemma~\ref{lem:selected_weighted_summand_from_phase_coeff}.
+\end{proof}
+
 \begin{lemma}[Subtracting a proportional selected summand]%
 \label{lem:proportional_weighted_state_tail_subtraction}
 	\lean{MPSTensor.weighted_mpvState_tail_eq_smul_sequence_of_total_and_selected}
@@ -579,6 +613,28 @@ with an extra $Z$-gauge degree of freedom.
 	complement.  The residual-span selected-summand lemma gives the selected
 	weighted summand identity.  Subtract that identity from the total relation
 	and reindex the two complements.
+\end{proof}
+
+\begin{lemma}[Eventual tail proportionality from phase substitution and residual independence]%
+\label{lem:eventual_tail_proportional_from_phase_sum_residual_independence}
+	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_tail_succAbove_of_phase_sum_li_residual}
+	\leanok
+	\uses{lem:selected_weighted_summand_from_phase_sum_residual_independence,
+		lem:eventual_tail_proportional_from_phase_sum_residual_span}
+	Suppose the total weighted state sums are eventually related by a nonzero
+	scalar sequence.  If a selected pair satisfies
+	$\ket{V^{(N)}(B_{b_0})}=\zeta^N\ket{V^{(N)}(A_{a_0})}$ for every \(N\),
+	and the family consisting of \(\ket{V^{(N)}(A_{a_0})}\) together with the
+	remaining \(A\)-block states and the remaining \(B\)-block states is
+	eventually linearly independent, then the two complements, reindexed by the
+	insertion maps, are eventually nonzero proportional.  This is the
+	selected-plus-residual independence form of the conditional peeling step
+	\cite[Theorem~II.1, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	The selected-plus-residual independence gives the selected state outside
+	the residual span.  Apply the residual-span tail-peeling lemma.
 \end{proof}
 
 % Proof-boundary note: the assumption that the displayed combined MPV family is
