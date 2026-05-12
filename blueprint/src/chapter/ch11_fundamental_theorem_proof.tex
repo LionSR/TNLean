@@ -682,6 +682,52 @@ with an extra $Z$-gauge degree of freedom.
 	of \(c_N((\mu^B_{b_0}\zeta)/\mu^A_{a_0})^N\).
 \end{proof}
 
+\begin{lemma}[Dominant selected difference vanishes after phase adjustment]%
+\label{lem:dominant_phase_adjusted_selected_difference}
+	\lean{MPSTensor.exists_dominant_selected_diff_tendsto_zero_of_eventuallyNonzeroProportionalMPV₂_CFBNT}
+	\leanok
+	\uses{lem:dominant_phase_adjusted_scalar_convergence}
+	Let \((\mu^A_j,A_j)\) and \((\mu^B_k,B_k)\) be one-copy BNT
+	canonical-form families with nonempty index sets, and suppose that the
+	assembled weighted MPV families are eventually nonzero proportional.  If
+	for every \(N\), the leading blocks satisfy
+	\[
+		\ket{V^{(N)}(B_{b_0})}
+		= \zeta^N \ket{V^{(N)}(A_{a_0})}
+	\]
+	with \(|\zeta|=1\), then there is a scalar sequence \(c_N\), eventually
+	nonzero, such that
+	\[
+		\sum_j(\mu^A_j)^N\ket{V^{(N)}(A_j)}
+		=
+		c_N\sum_k(\mu^B_k)^N\ket{V^{(N)}(B_k)}
+	\]
+	for all sufficiently large \(N\), and
+	\[
+		\left\|(\mu^A_{a_0})^{-N}
+		\Big((\mu^A_{a_0})^N \ket{V^{(N)}(A_{a_0})}
+		- c_N(\mu^B_{b_0})^N \ket{V^{(N)}(B_{b_0})}\Big)\right\|
+		\longrightarrow 0 .
+	\]
+	\cite[lines~1170--1192]{Cirac2016MPDO_arXiv}.
+	% This is an asymptotic selected-summand cancellation; it does not give
+	% the exact selected-summand equality needed for tail subtraction.
+\end{lemma}
+
+\begin{proof}\leanok
+	Lemma~\ref{lem:dominant_phase_adjusted_scalar_convergence} gives
+	\(c_N((\mu^B_{b_0}\zeta)/\mu^A_{a_0})^N\to 1\).  After substituting the
+	phase relation, the normalized selected difference is
+	\[
+		\left(1-
+		c_N\left(\frac{\mu^B_{b_0}\zeta}{\mu^A_{a_0}}\right)^N\right)
+		\ket{V^{(N)}(A_{a_0})}.
+	\]
+	The first factor tends to \(0\), while the norm of
+	\(\ket{V^{(N)}(A_{a_0})}\) tends to \(1\) by the BNT self-overlap
+	normalization.
+\end{proof}
+
 \begin{lemma}[Proportional weighted states give proportional weighted projections]%
 \label{lem:proportional_tensor_from_blocks_weighted_inner}
 	\lean{MPSTensor.exists_weighted_mpvInner_eq_mul_of_nonzeroProportionalMPV₂_toTensorFromBlocks}
