@@ -23,6 +23,72 @@ namespace MPSTensor
 
 section ProportionalResidualSpan
 
+/-- **Linear independence gives residual-span exclusion.**
+
+Source context: arXiv:1606.00608, Theorem II.1, line 1182. The paper uses
+CPSV16, Lem1 to separate a fixed BNT block from the remaining contributions.
+This lemma records the elementary linear-algebra consequence needed by the
+residual-span coefficient extraction: if the selected vector together with the
+residual family is linearly independent, then the selected vector is not in the
+span of the residual family.
+
+**Scope restriction (derived separation input):** The linear-independence
+hypothesis is not a new source hypothesis for CPSV16. In a source-faithful
+application it must be derived from the BNT separation argument, or replaced by
+the equivalent residual-span exclusion supplied by that argument. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma selected_notMem_residual_span_of_linearIndependent_option
+    {E : Type*} [AddCommGroup E] [Module ℂ E]
+    {κ : Type*} (u : κ → E) (v₀ : E)
+    (hLI : LinearIndependent ℂ
+      (fun o : Option κ =>
+        match o with
+        | none => v₀
+        | some k => u k)) :
+    v₀ ∉ Submodule.span ℂ (Set.range u) := by
+  classical
+  have hnone_not_mem : (none : Option κ) ∉ Set.range some := by
+    rintro ⟨k, hk⟩
+    cases hk
+  have himage :
+      ((fun o : Option κ =>
+          match o with
+          | none => v₀
+          | some k => u k) '' Set.range some) = Set.range u := by
+    ext x
+    constructor
+    · rintro ⟨o, ⟨k, rfl⟩, rfl⟩
+      exact ⟨k, rfl⟩
+    · rintro ⟨k, rfl⟩
+      exact ⟨some k, ⟨k, rfl⟩, rfl⟩
+  simpa [himage] using hLI.notMem_span_image (s := Set.range some) (x := none) hnone_not_mem
+
+/-- **Eventual residual-span exclusion from eventual selected-plus-residual
+linear independence.**
+
+This is the eventual form of
+`selected_notMem_residual_span_of_linearIndependent_option`, suited to the
+CPSV16 line-1182 peeling argument where the block-separation statement is used
+only for sufficiently large chain lengths.
+
+**Scope restriction (derived separation input):** The eventual
+linear-independence hypothesis is an intermediate condition that must be
+derived from the BNT separation argument before this lemma can be used in a
+source-faithful proof; see
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventually_selected_notMem_residual_span_of_linearIndependent_option
+    {κ : Type*}
+    {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
+    (u : (N : ℕ) → κ → E N) (v₀ : (N : ℕ) → E N)
+    (hLI : ∀ᶠ N in atTop, LinearIndependent ℂ
+      (fun o : Option κ =>
+        match o with
+        | none => v₀ N
+        | some k => u N k)) :
+    ∀ᶠ N in atTop, v₀ N ∉ Submodule.span ℂ (Set.range (u N)) := by
+  filter_upwards [hLI] with N hLIN
+  exact selected_notMem_residual_span_of_linearIndependent_option (u N) (v₀ N) hLIN
+
 /-- **Selected coefficient extraction modulo a residual span.**
 
 This is a pure linear-algebra form of the coefficient-isolation step. If two
