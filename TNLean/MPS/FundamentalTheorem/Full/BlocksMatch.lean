@@ -34,7 +34,12 @@ permutation, and per-block gauge-phase equivalence.
 The proof uses the overlap dichotomy: non-decaying cross-family overlap
 forces equal block dimensions and gauge-phase equivalence; injectivity of
 the matching follows from BNT separation.  The argument follows Cirac et al.
-2021 (CPSV17) Appendix A. -/
+2021 (CPSV17) Appendix A.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma blocks_match_of_sameMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

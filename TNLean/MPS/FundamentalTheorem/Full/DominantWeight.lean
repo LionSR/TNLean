@@ -86,7 +86,14 @@ lemma eq_one_of_pow_tendsto_nhds_one {c : ℂ}
 
 section HeteroEqualCase
 
-/-- Dominant BNT block weights have equal norms for equal total MPVs. -/
+/-- Dominant BNT block weights have equal norms for equal total MPVs.
+
+Source context: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.
+
+**Scope restriction (one-copy-per-sector):** The local hypotheses
+`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
+forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
+documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma dominant_weight_norm_eq_of_sameMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
