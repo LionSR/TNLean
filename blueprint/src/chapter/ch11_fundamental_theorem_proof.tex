@@ -178,6 +178,34 @@ with an extra $Z$-gauge degree of freedom.
 	sufficiently large length.
 \end{proof}
 
+\begin{lemma}[Selected coefficient extraction from a residual-span exclusion]%
+\label{lem:selected_coefficient_from_residual_span_sum}
+	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum}
+	\leanok
+	\uses{lem:eventual_selected_coefficient_from_residual_span}
+	Let \(v_i^{(N)}\) and \(w_k^{(N)}\) be two finite families, and fix
+	\(i_0\).  Suppose that, for all sufficiently large \(N\),
+	\[
+		\sum_i a_i^{(N)} v_i^{(N)}
+		=
+		b_0^{(N)} v_{i_0}^{(N)}
+		+\sum_k b_k^{(N)} w_k^{(N)}.
+	\]
+	If \(v_{i_0}^{(N)}\) is not in the span of the residual family consisting
+	of the vectors \(v_i^{(N)}\) with \(i\ne i_0\) together with all
+	\(w_k^{(N)}\), then \(a_{i_0}^{(N)}=b_0^{(N)}\) for all sufficiently large
+	\(N\).  This is the finite-sum form of the residual-span coefficient
+	extraction needed after the BNT separation step
+	\cite[Theorem~II.1, line~1182]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Split the left-hand sum into the selected term and the remaining
+	\(v_i^{(N)}\)-terms.  Both residual sums lie in the span of the displayed
+	residual family, so Lemma~\ref{lem:eventual_selected_coefficient_from_residual_span}
+	applies.
+\end{proof}
+
 \begin{lemma}[Selected coefficient extraction after one phase substitution]%
 \label{lem:selected_coefficient_from_two_family_linear_independence}
 	\lean{MPSTensor.eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum}
@@ -268,6 +296,39 @@ with an extra $Z$-gauge degree of freedom.
 	extraction to the eventually linearly independent disjoint family.  The
 	resulting coefficient equality gives the selected weighted-summand
 	identity.
+\end{proof}
+
+\begin{lemma}[Selected weighted summand from phase substitution and a residual-span exclusion]%
+\label{lem:selected_weighted_summand_from_phase_sum_residual_span}
+	\lean{MPSTensor.eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_notMem_residual_span}
+	\leanok
+	\uses{lem:selected_coefficient_from_residual_span_sum,
+		lem:selected_weighted_summand_from_phase_coeff}
+	Suppose a total weighted-state identity has the form
+	\[
+		\sum_i \mu_i^N \ket{V^{(N)}(A_i)}
+		=
+		c_N\left(\nu_0^N\ket{V^{(N)}(B_0)}
+		+\sum_k \nu_k^N\ket{V^{(N)}(B_k)}\right)
+	\]
+	for all sufficiently large \(N\).  If
+	\(\ket{V^{(N)}(B_0)}=\zeta^N\ket{V^{(N)}(A_{i_0})}\) for every \(N\), and
+	\(\ket{V^{(N)}(A_{i_0})}\) is eventually outside the span of the remaining
+	\(A_i\)-states together with the residual \(B_k\)-states, then
+	\[
+		\mu_{i_0}^N\ket{V^{(N)}(A_{i_0})}
+		=
+		c_N\nu_0^N\ket{V^{(N)}(B_0)}
+	\]
+	for all sufficiently large \(N\).  This is the residual-span version of
+	the selected-summand bridge used in the fixed-block cancellation step
+	\cite[Theorem~II.1, lines~1181--1183]{Cirac2016MPDO_arXiv}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Substitute the phase relation for \(B_0\), apply
+	Lemma~\ref{lem:selected_coefficient_from_residual_span_sum}, and then use
+	Lemma~\ref{lem:selected_weighted_summand_from_phase_coeff}.
 \end{proof}
 
 \begin{lemma}[Subtracting a proportional selected summand]%

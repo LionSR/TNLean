@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.BNT.Basic
+import TNLean.MPS.FundamentalTheorem.Full.ProportionalResidualSpan
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 
 /-!
@@ -332,6 +333,71 @@ lemma eventually_selected_coefficient_eq_of_eventually_linearIndependent_sum
   intro N hN
   simpa [lhs, rhs] using hN (Sum.inl i₀)
 
+/-- **Selected coefficient extraction from a residual-span exclusion.**
+
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma Lem1
+to separate a fixed block from the remaining contributions. This lemma is the
+finite-sum bridge from the displayed block identity to the residual-span
+coefficient extraction: once the selected vector is outside the span of all
+other terms, the selected coefficient is forced.
+
+**Scope restriction (residual-span exclusion):** The eventual exclusion
+hypothesis must be derived from CPSV16 Lemma Lem1 and the BNT separation
+argument. It is not an additional hypothesis of Theorem thm1. See
+`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
+    {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
+    {E : ℕ → Type*} [∀ N, AddCommGroup (E N)] [∀ N, Module ℂ (E N)]
+    (v : (N : ℕ) → ι → E N) (w : (N : ℕ) → κ → E N)
+    (a : ℕ → ι → ℂ) (b₀ : ℕ → ℂ) (b : ℕ → κ → ℂ)
+    (i₀ : ι)
+    (hnot : ∀ᶠ N in atTop,
+      v N i₀ ∉ Submodule.span ℂ
+        (Set.range
+          (Sum.elim
+            (fun i : {i : ι // i ≠ i₀} => v N i.1)
+            (w N))))
+    (hEq : ∀ᶠ N in atTop,
+      ∑ i : ι, a N i • v N i =
+        b₀ N • v N i₀ + ∑ k : κ, b N k • w N k) :
+    ∀ᶠ N in atTop, a N i₀ = b₀ N := by
+  classical
+  let u : (N : ℕ) → Sum {i : ι // i ≠ i₀} κ → E N := fun N =>
+    Sum.elim
+      (fun i : {i : ι // i ≠ i₀} => v N i.1)
+      (w N)
+  let R : (N : ℕ) → E N := fun N =>
+    ∑ i : {i : ι // i ≠ i₀}, a N i.1 • v N i.1
+  let S : (N : ℕ) → E N := fun N =>
+    ∑ k : κ, b N k • w N k
+  have hR : ∀ᶠ N in atTop, R N ∈ Submodule.span ℂ (Set.range (u N)) := by
+    filter_upwards with N
+    dsimp [R, u]
+    refine Submodule.sum_mem _ fun i _ => ?_
+    exact Submodule.smul_mem _ _ <|
+      Submodule.subset_span (Set.mem_range.mpr ⟨Sum.inl i, rfl⟩)
+  have hS : ∀ᶠ N in atTop, S N ∈ Submodule.span ℂ (Set.range (u N)) := by
+    filter_upwards with N
+    dsimp [S, u]
+    refine Submodule.sum_mem _ fun k _ => ?_
+    exact Submodule.smul_mem _ _ <|
+      Submodule.subset_span (Set.mem_range.mpr ⟨Sum.inr k, rfl⟩)
+  have hEq' :
+      ∀ᶠ N in atTop,
+        a N i₀ • v N i₀ + R N = b₀ N • v N i₀ + S N := by
+    refine hEq.mono ?_
+    intro N hN
+    have hsplit :
+        (∑ i : ι, a N i • v N i) = a N i₀ • v N i₀ + R N := by
+      dsimp [R]
+      simpa using
+        (Fintype.sum_eq_add_sum_subtype_ne (fun i : ι => a N i • v N i) i₀)
+    rw [hsplit] at hN
+    simpa [S] using hN
+  exact eventually_selected_coefficient_eq_of_residual_span
+    u (fun N => v N i₀) R S (fun N => a N i₀) b₀ hR hS hEq'
+      (by simpa [u] using hnot)
+
 /-- **Selected weighted summand from phase and coefficient equality.**
 
 Source context: arXiv:1606.00608, Theorem thm1, lines 1170--1192. After a
@@ -406,6 +472,70 @@ lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_li
       (fun N => c N * (μB₀ * ζ) ^ N)
       (fun N k => c N * (μB k) ^ N)
       i₀ hLI ?_
+    refine hState.mono ?_
+    intro N hN
+    calc
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+          c N •
+            ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+              ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N) := hN
+      _ =
+          (c N * (μB₀ * ζ) ^ N) • mpvState (d := d) (A i₀) N +
+            ∑ k : κ,
+              (c N * (μB k) ^ N) • mpvState (d := d) (B k) N := by
+        rw [hPhase N, smul_add, Finset.smul_sum]
+        simp [smul_smul, mul_pow]
+  exact eventually_selected_weighted_mpvState_eq_smul_of_phase_and_coeff
+    (A i₀) B₀ hPhase hCoeff
+
+/-- **Selected weighted summand from phase substitution and a residual-span exclusion.**
+
+Source context: arXiv:1606.00608, Theorem thm1, line 1182 invokes Lemma
+Lem1. After a non-decaying block pair has supplied the phase relation for the
+selected block, this auxiliary lemma uses the residual-span exclusion for the
+selected MPV state rather than linear independence of the whole displayed
+two-family residual list.
+
+**Scope restriction (residual-span exclusion):** The span-exclusion hypothesis
+must be obtained from the source's BNT separation argument. This lemma does
+not assert that CPSV16 Lemma Lem1 directly gives the displayed residual span;
+see `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex`. -/
+lemma eventually_selected_weighted_mpvState_eq_smul_of_phase_sum_and_notMem_residual_span
+    {d : ℕ} {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
+    {dimA : ι → ℕ} {dimB₀ : ℕ} {dimB : κ → ℕ}
+    {μA : ι → ℂ} {μB₀ ζ : ℂ} {μB : κ → ℂ} {c : ℕ → ℂ}
+    (A : (i : ι) → MPSTensor d (dimA i))
+    (B₀ : MPSTensor d dimB₀)
+    (B : (k : κ) → MPSTensor d (dimB k))
+    (i₀ : ι)
+    (hPhase : ∀ N : ℕ,
+      mpvState (d := d) B₀ N = ζ ^ N • mpvState (d := d) (A i₀) N)
+    (hnot : ∀ᶠ N in atTop,
+      mpvState (d := d) (A i₀) N ∉
+        Submodule.span ℂ
+          (Set.range
+            (Sum.elim
+              (fun i : {i : ι // i ≠ i₀} =>
+                mpvState (d := d) (A i.1) N)
+              (fun k : κ => mpvState (d := d) (B k) N))))
+    (hState : ∀ᶠ N in atTop,
+      (∑ i : ι, (μA i) ^ N • mpvState (d := d) (A i) N) =
+        c N •
+          ((μB₀ ^ N • mpvState (d := d) B₀ N) +
+            ∑ k : κ, (μB k) ^ N • mpvState (d := d) (B k) N)) :
+    ∀ᶠ N in atTop,
+      (μA i₀) ^ N • mpvState (d := d) (A i₀) N =
+        c N • (μB₀ ^ N • mpvState (d := d) B₀ N) := by
+  classical
+  have hCoeff :
+      ∀ᶠ N in atTop, (μA i₀) ^ N = c N * (μB₀ * ζ) ^ N := by
+    refine eventually_selected_coefficient_eq_of_eventually_notMem_residual_span_sum
+      (fun N i => mpvState (d := d) (A i) N)
+      (fun N k => mpvState (d := d) (B k) N)
+      (fun N i => (μA i) ^ N)
+      (fun N => c N * (μB₀ * ζ) ^ N)
+      (fun N k => c N * (μB k) ^ N)
+      i₀ hnot ?_
     refine hState.mono ?_
     intro N hN
     calc
