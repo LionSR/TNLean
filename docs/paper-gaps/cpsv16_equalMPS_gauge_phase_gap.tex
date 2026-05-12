@@ -35,18 +35,50 @@ The hypothesis is just that the two tensors are NT.  The conclusion has three
 pieces: convergence of the self-overlap, the $0/1$ dichotomy, and a
 \emph{structural gauge recovery} in the $1$ case.  No proportionality
 hypothesis on the MPVs is required.
+In symbols, for normal tensors \(A_a,A_b\),
+\[
+  \langle V_a^{(N)},V_a^{(N)}\rangle\longrightarrow 1,
+  \qquad
+  \lim_{N\to\infty}|\langle V_b^{(N)},V_a^{(N)}\rangle|\in\{0,1\}.
+  \tag{E}
+\]
+The unit-overlap branch is
+\[
+  |\langle V_b^{(N)},V_a^{(N)}\rangle|\longrightarrow 1
+  \quad\Longrightarrow\quad
+  D_a=D_b
+  \quad\land\quad
+  A_b^i=e^{i\phi}XA_a^iX^{-1}\quad(1\le i\le d),
+  \tag{G}
+\]
+for some invertible \(X\) and some phase \(e^{i\phi}\in\mathbb T\).
 
 The proof in \cite[lines~1093--1117]{Cirac2016MPDO_arXiv} goes through the
 cross-transfer-matrix
 \[
     \mathbb E_{ab} = \sum_{i=1}^d A_a^i \otimes \overline{A_b^i},
 \]
-analysing its eigenvalue equation $\sum_i (A_b^i)^\dagger X A_a^i = \lambda X$
-together with the trace-preserving relation and the strictly-positive
-spectral fixed point $\Lambda_a$.  Cauchy--Schwarz applied to the resulting
-trace inequality forces $|\lambda|<1$ or $|\lambda|=1$, and the latter case
-yields $A_b^i X = \alpha X A_a^i$ with $|\alpha|=1$ and $X$ an isometry,
-which after a dimension argument gives the structural conclusion.
+analysing its eigenvalue equation
+\[
+  \sum_{i=1}^d (A_b^i)^\dagger X A_a^i=\lambda X .
+  \tag{EV}
+\]
+Together with the trace-preserving relation
+\[
+  \sum_{i=1}^d (A_a^i)^\dagger A_a^i=I,
+  \qquad
+  \sum_{i=1}^d (A_b^i)^\dagger A_b^i=I
+  \tag{TP}
+\]
+and the strictly-positive fixed point \(\Lambda_a>0\), Cauchy--Schwarz is
+applied to the corresponding trace inequality.  The equality case has the
+form
+\[
+  A_b^iX=\alpha XA_a^i\qquad(1\le i\le d),
+  \qquad |\alpha|=1,
+  \tag{CS}
+\]
+and gives the gauge phase after the dimension argument.
 
 \section{The formalized same-dimension component}
 
@@ -102,8 +134,18 @@ The formalization records this conclusion as
 in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.  Its proof uses the
 contrapositive of the rectangular overlap-decay theorem
 \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
-if the bond dimensions differ, the overlap tends to zero, contradicting the
-unit-modulus overlap hypothesis.
+if the bond dimensions differ, the overlap tends to zero,
+\[
+  D_a\ne D_b
+  \quad\Longrightarrow\quad
+  \langle V_b^{(N)},V_a^{(N)}\rangle\longrightarrow 0,
+  \tag{R}
+\]
+contradicting the unit-modulus overlap hypothesis
+\[
+  |\langle V_b^{(N)},V_a^{(N)}\rangle|\longrightarrow 1.
+  \tag{U}
+\]
 
 This rectangular dimension recovery is genuinely needed in the proof of
 \cite[Theorem~II.1, lines~1170--1192]{Cirac2016MPDO_arXiv}.  There the relevant

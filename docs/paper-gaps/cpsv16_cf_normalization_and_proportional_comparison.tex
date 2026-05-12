@@ -48,7 +48,7 @@ unlabeled scalar identity
 \[
   \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}\bigl(\nu_{j,q}e^{i\phi_j}\bigr)^N,
-  \qquad\text{for all }j\text{ and all }N.
+  \qquad j=1,\ldots,g,\quad N\ge1.
 \]
 The cited Lemma~\texttt{Lem:app\_simple} then concludes that
 $r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
@@ -98,7 +98,7 @@ that they converge to nonzero limits. In that route, each block index $j$ had a
 function $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit
 $a_j^\infty\in\mathbb C$ satisfying
 \[
-  a_{N,j}\to a_j^\infty\text{ as }N\to\infty,
+  \lim_{N\to\infty}a_{N,j}=a_j^\infty,
   \qquad a_j^\infty\ne 0,
 \]
 together with the analogous data on the $B$-side and a sequence of
@@ -137,7 +137,7 @@ The memo records the source identity in the form
 \[
   \sum_{k=1}^{x_a}\lambda_{a,k}^N
     =\sum_{k=1}^{x_b}\lambda_{b,k}^N
-  \qquad\text{for all }N=1,\ldots,\max(x_a,x_b),
+  \qquad N=1,\ldots,\max(x_a,x_b),
 \]
 and proposes formalizing it as a fixed-length theorem requiring only finitely
 many values of $N$. The planned application to the BNT
@@ -205,7 +205,7 @@ sector.
 Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
 the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
 \[
-  |(\mu_j^A)^N|=|\mu_j^A|^N\to 0\quad\text{as }N\to\infty,
+  \lim_{N\to\infty}|(\mu_j^A)^N|=\lim_{N\to\infty}|\mu_j^A|^N=0,
 \]
 so the only candidate limit is $a_j^\infty=0$, contradicting the formal
 hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on

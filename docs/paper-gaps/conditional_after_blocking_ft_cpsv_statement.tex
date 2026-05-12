@@ -29,6 +29,11 @@ subspaces. After finitely many steps the matrices are replaced by block-diagonal
 matrices
 \[
   A^i = \bigoplus_{k=1}^r \mu_k A_k^i,
+  \qquad
+  \mu_k\ne0,
+  \qquad
+  |\mu_1|=1,\quad |\mu_1|>|\mu_2|>\cdots,
+  \tag{CF}
 \]
 which generate the same family of matrix product vectors as the original tensor;
 zero blocks are allowed in the sense that $\sum_k D_k\le D$
@@ -54,6 +59,19 @@ vectors with coefficients $\sum_q \mu_{j,q}^N$
 \cite[lines~283--302]{Cirac2016MPDO_arXiv}. The review states the same basis
 notion and the same expansion
 \cite[lines~1846--1885]{Cirac2021Matrix}.
+In the notation of the BNT comparison, this is the expansion
+\[
+  V_A^{(N)}
+  =
+  \sum_{j=1}^{g_A}
+  \left(\sum_{q=1}^{r_{A,j}}\mu_{A,j,q}^N\right)a_j(N),
+  \qquad
+  V_B^{(N)}
+  =
+  \sum_{\ell=1}^{g_B}
+  \left(\sum_{q=1}^{r_{B,\ell}}\nu_{B,\ell,q}^N\right)b_\ell(N).
+  \tag{BNT}
+\]
 
 Injectivity is supplied separately. The 2016 source defines injectivity and
 block-injective canonical form, invokes the quantum Wielandt theorem to say that
@@ -63,6 +81,15 @@ bound for canonical-form tensors
 after blocking at most $3D^5$ sites a canonical-form tensor acquires
 block-injective canonical form
 \cite[lines~2114--2124]{Cirac2021Matrix}.
+Schematically, if \(A_k\) is a normal block, the paper uses a blocking length
+\(L\) for which
+\[
+  \operatorname{span}
+  \{A_k^{i_1}\cdots A_k^{i_L}:1\le i_1,\ldots,i_L\le d\}
+  =
+  M_{D_k}(\mathbb C).
+  \tag{Inj}
+\]
 
 The CPSV statement itself is then short. For tensors $A$ and $B$ in
 canonical form, with bases of normal tensors $A_{k_a}$ and $B_{k_b}$,
@@ -78,6 +105,22 @@ The review also points out that a later periodic Fundamental Theorem avoids the
 period-removing blocking step
 \cite[lines~1908--1909]{Cirac2021Matrix}; that theorem is intentionally not used
 in the derivation considered here.
+In formula form, the proportional statement is
+\[
+  \forall N,\quad V_A^{(N)}\sim V_B^{(N)}
+  \quad\Longrightarrow\quad
+  g_A=g_B
+  \quad\land\quad
+  B_{\sigma(j)}^i=e^{i\phi_j}X_jA_j^iX_j^{-1}.
+  \tag{FT}
+\]
+The equal statement then assembles these block gauges into a global gauge, with
+the finite-multiplicity version carrying identity factors on multiplicity
+spaces:
+\[
+  Y=\bigoplus_j I_{r_j}\otimes X_j .
+  \tag{Gauge}
+\]
 
 \section{The conditional Lean theorem}
 
@@ -95,8 +138,23 @@ produced by the preceding structural theorem; the blocked-word relabeling
 assertion for cyclic-sector data is derived in the formal theorem.  The comparison
 field is supplied with trace-preserving, primitive, and irreducible structural
 data and positive bond dimensions for the produced families; it then returns
-BNT-cover data containing the zero-tail, injectivity, normal-form separation,
-and block-permutation gauge-phase comparison needed for those produced families.
+BNT block-comparison data containing the zero-tail, injectivity, normal-form
+separation, and block-permutation gauge-phase comparison needed for those
+produced families.
+In schematic form, the conditional theorem has the boundary
+\[
+  \begin{aligned}
+  &\operatorname{SameMPV}(A,B)
+    \quad+\quad
+    \mathcal C_{\mathrm{prod}}(A,B)\\
+  &\hspace{4em}\Longrightarrow
+    \exists p,\ \operatorname{BNTCompare}(A^{[p]},B^{[p]}),
+  \end{aligned}
+  \tag{Cond}
+\]
+where the comparison package \(\mathcal C_{\mathrm{prod}}(A,B)\) contains
+the produced-sector hypotheses rather than deriving them from
+\(\operatorname{SameMPV}(A,B)\).
 
 These hypotheses are not written as hypotheses of Theorem~\texttt{thm1} or of
 Corollary~\texttt{II\_cor2} in the cited papers. They are the formal boundary
@@ -119,19 +177,42 @@ that one obtains injective or block-injective tensors after further blocking.
 The formal proof must still show that this refinement holds for the final
 common primitive sector families to which the overlap-rigidity comparison is
 applied.
+For the final produced families \(P_s,Q_t\), the missing statement is not an
+assumption of the paper theorem but a derivation of
+\[
+  \forall s,\ \exists L_s,\quad
+  \operatorname{span}\{P_s(w): |w|=L_s\}=M_{D_s}(\mathbb C),
+  \tag{Prod-Inj}
+\]
+and the corresponding statement for \(Q_t\).
 
-Second, the BNT-cover hypothesis contains the paper-level comparison itself,
+Second, the BNT block-comparison hypothesis contains the paper-level comparison itself,
 specialized to the produced nonzero-sector families. In the source, once the
 tensors are in canonical form and the bases of normal tensors have been chosen,
 proportionality or equality of all matrix product vectors matches the basis
 tensors up to phases and gauges. The formal theorem in \ghpr{1104} still takes
-the corresponding BNT-cover data as input for the specific common-sector
+the corresponding block-comparison data as input for the specific common-sector
 families: normal canonical-form data on both sides, proof that distinct sectors
 are not gauge-phase equivalent, zero-tail and injectivity data, and
 block-matching data. A complete proof without the periodic
 Fundamental Theorem must derive all of this data from the equality of the
 original tensors' matrix product vector families, after all blockings and
 reindexings have been accounted for.
+Let \(Z_A,Z_B\) denote the zero-tail dimensions and let \(\omega_A,\omega_B\)
+denote the weight families on the final produced sectors.  The missing
+comparison derivation is therefore the implication
+\[
+  \begin{aligned}
+  \operatorname{SameMPV}(A,B)\Longrightarrow\quad
+  &g_A=g_B,\\
+  &\exists\sigma,\phi_j,X_j,\quad
+    Q_{\sigma(j)}^i=e^{i\phi_j}X_jP_j^iX_j^{-1},\\
+  &Z_A=Z_B,\\
+  &\omega_A=\sigma^*\omega_B.
+  \end{aligned}
+  \tag{Cover}
+\]
+for the same final produced sectors \(P_j,Q_j\).
 
 These two inputs are therefore not extra assumptions proposed by the papers. They
 are parts of the paper argument that remain to be connected to the current
@@ -149,6 +230,14 @@ first removing each period and then grouping the resulting blocks. In ordinary
 paper notation both tensors are simply regarded as tensors over words of the
 common blocked length. In the formal theorem, this coordinate identification is
 now derived from the grouped-block cast construction.
+The coordinate assertion is the equality of two descriptions of the same
+blocked word:
+\[
+  R\!\left(A_k^{[p]}\right)(i_1,\ldots,i_p)
+  =
+  A_k^{i_1}\cdots A_k^{i_p}.
+  \tag{Relabel}
+\]
 
 The zero-tail condition has a similar origin. The source definition of matrix
 product vectors is for positive lengths, and zero blocks are invisible there.
@@ -158,6 +247,13 @@ contributes $D_0$ at length zero. Hence the formal proof records a zero-tail
 dimension and must either identify the two zero tails or keep the length-zero
 identity separate. This is a consequence of the chosen formal convention, not a
 hypothesis appearing in the paper theorem.
+In formulas, for a zero block \(0_{D_0}\),
+\[
+  \tr\bigl(0_{D_0}^{\,N}\bigr)=0\quad(N>0),
+  \qquad
+  \tr\bigl(0_{D_0}^{\,0}\bigr)=D_0.
+  \tag{Zero}
+\]
 
 The transport of weights and zero-tail identities through the chosen common-sector
 representatives is likewise a coordinate-transport condition. The comparison theorem must be
@@ -180,7 +276,7 @@ This note records a proof gap in the present Lean development rather than a
 source error. The cited papers compress the canonical-form reduction, blocking,
 BNT matching, and injectivity refinements in the usual paper notation. The Lean
 development should keep the theorem conditional until the injectivity
-refinement, the BNT-cover comparison for the produced sectors, and the zero-tail
+refinement, the BNT block comparison for the produced sectors, and the zero-tail
 and weight transports have been proved for the same final common-sector data.
 
 \bibliographystyle{alpha}

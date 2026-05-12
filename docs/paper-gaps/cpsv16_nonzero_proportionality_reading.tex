@@ -24,43 +24,105 @@ fixed length is required to be nonzero.
 
 \section{Formal reading}
 
-The formal predicate \leanid{NonzeroProportionalMPV2} requires, at each
-length \(N\), a scalar \(c_N \neq 0\) such that
+There are two possible formal readings of the phrase.  The weak scalar-multiple
+reading is
 \[
-  V^{(N)}(A) = c_N V^{(N)}(B).
+  \forall N,\ \exists c_N\in\mathbb C,\qquad
+  V_A^{(N)}=c_N V_B^{(N)} .
+  \tag{W}
 \]
-This is the projective reading of proportionality: the two vectors determine
-the same point in projective space.  It is the reading used by the proof of
-Theorem~\texttt{thm1}.  In the block-selection step, the paper assumes that all
-overlaps of a fixed block on one side with the blocks on the other side tend
-to zero, expands the two BNT decompositions, and invokes Lemma~\texttt{Lem1}
-to contradict proportionality.  If \(c_N\) were allowed to be zero at a
-length where the vector on the left also vanished, the identity
-\(V^{(N)}(A)=0\cdot V^{(N)}(B)\) would not express equality of projective
-MPV families and would not supply the nonzero scalar used in the contradiction.
-Under the canonical-form hypotheses used in the source argument, the selected
-BNT block states have nonzero norm on the tail of lengths used in the
-contradiction; in that range the weak scalar-multiple predicate already forces
-the proportionality scalar to be nonzero.  Thus the formal predicate records
-the projective form needed at the use site, rather than adding a separate
-asymptotic assumption to the block-selection argument.
+The projective reading is
+\[
+  \forall N,\ \exists c_N\in\mathbb C^\times,\qquad
+  V_A^{(N)}=c_N V_B^{(N)} .
+  \tag{P}
+\]
+The formal predicate \leanid{NonzeroProportionalMPV2} uses \((P)\).  Thus the
+scalar \(c_N\) is a point of \(\mathbb C^\times\), not merely a point of
+\(\mathbb C\).
+
+This distinction is used exactly in the block-selection step of
+Theorem~\texttt{thm1}.  With BNT decompositions written
+\[
+  V_A^{(N)}
+  =
+  \sum_{j=1}^{g_A}\mu_j^N a_j(N),
+  \qquad
+  V_B^{(N)}
+  =
+  \sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N),
+  \tag{BNT}
+\]
+the proportionality identity becomes
+\[
+  \sum_{j=1}^{g_A}\mu_j^N a_j(N)
+  =
+  c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N).
+  \tag{$E_N$}
+\]
+In the no-tail fixed-block contradiction, for instance, \((E_N)\) reduces to
+\[
+  \sum_{j=1}^{g_A}\mu_j^N a_j(N)-c_N\nu_k^N b_k(N)=0.
+  \tag{$C_k$}
+\]
+The linear-independence input then forces the selected coefficient to vanish:
+\[
+  c_N\nu_k^N=0.
+  \tag{$Z_k$}
+\]
+The contradiction is
+\[
+  c_N\ne0,\qquad \nu_k\ne0
+  \quad\Longrightarrow\quad
+  c_N\nu_k^N\ne0,
+  \tag{$NZ_k$}
+\]
+which is unavailable from the weak reading \((W)\).  If \(c_N=0\), the identity
+\[
+  V_A^{(N)}=0\cdot V_B^{(N)}
+  \tag{0}
+\]
+does not identify projective MPV states and does not contradict \((Z_k)\).
+
+Under the canonical-form hypotheses used in the source argument, a selected
+normal block has
+\[
+  \|b_k(N)\|^2=\langle b_k(N),b_k(N)\rangle\longrightarrow 1,
+  \tag{N}
+\]
+hence \(b_k(N)\ne0\) for all sufficiently large \(N\).  In the range in which
+the source performs the block contradiction, the proportionality being used is
+therefore projective proportionality of nonzero vectors.  The formal predicate
+records this use-site reading, rather than adding a separate asymptotic
+hypothesis to Theorem~\texttt{thm1}.
 
 \section{Effect on the theorem}
 
-The nonzero condition does not change the intended conclusion of the source
-theorem.  It records the conventional mathematical meaning of proportional
-nonzero vectors in the source argument.  The weaker scalar-multiple predicate
+The nonzero condition changes the formal predicate from \((W)\) to \((P)\), but
+it does not change the intended conclusion of the source theorem.  It records
+the conventional mathematical meaning of proportional nonzero vectors in the
+source argument.  The weaker scalar-multiple predicate
 \leanid{ProportionalMPV2}, where \(c_N\) may vanish, remains available for
-older auxiliary lemmas, but it is not used as the paper-faithful hypothesis
-for the proportional Fundamental Theorem.
+older auxiliary lemmas, but it is not used as the paper-faithful hypothesis for
+the proportional Fundamental Theorem.
 
 \section{Elimination plan}
 
 No extra mathematical theorem is needed for the present projective reading of
 CPSV16 lines~1170--1192.  If a literal weak-scalar reading is later required,
-it should be formalized as a separate bridge theorem: prove from the source
-canonical-form hypotheses that the relevant MPV vectors do not vanish at the
-lengths used in the argument, then derive
+it should be formalized as a separate bridge theorem.  The mathematical content
+would be
+\[
+  (W)
+  \quad+\quad
+  V_A^{(N)}\ne0
+  \quad+\quad
+  V_B^{(N)}\ne0
+  \quad\Longrightarrow\quad
+  c_N\ne0
+  \tag{Bridge}
+\]
+at the lengths used in the argument.  After this bridge one can derive
 \leanid{NonzeroProportionalMPV2} from the weak predicate before applying the
 block-selection proof.
 
