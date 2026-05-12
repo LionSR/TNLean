@@ -888,7 +888,7 @@ local Lemma `Lem1` input is
 `eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT`.
 The remaining formal proof obligation is documented in
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607.
+#1603.
 
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
@@ -925,7 +925,7 @@ The local Lemma `Lem1` input is
 `eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT`.
 The remaining formal proof obligation is documented in
 `docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607.
+#1603.
 
 **Scope restriction (one-copy-per-sector):** The local hypotheses
 `IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
@@ -965,7 +965,7 @@ BNT canonical form with possible multiplicities. This restriction is documented 
 
 The proof reduces the two quantified non-decaying-overlap claims to the named
 fixed-block contradictions corresponding to the two directions of the source
-argument. Those fixed-block cancellation proofs are tracked in issue #1607. -/
+argument. Those fixed-block cancellation proofs are tracked in issue #1603. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
