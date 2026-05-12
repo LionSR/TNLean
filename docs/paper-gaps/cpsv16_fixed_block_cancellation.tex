@@ -83,64 +83,37 @@ The exact contradiction step is still open:
 The two blocked theorems are the fixed-right and fixed-left cancellation
 statements.\footnote{\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT};
 \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}. Tracked in issue~\#1607.}
-which are the source-faithful fixed-block cancellations \cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.
+which are the source-faithful fixed-block cancellations
+\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.
 
-The no-tail cases are already proved.\footnote{\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT\_finOne};
-\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT\_finOne}.}
-In that case the right-hand residual tail is absent from the isolated equation,
-so coefficient extraction from the linearly independent family gives
-$c_N\nu_{k_0}^N=0$, contradicting $c_N\neq0$ and $\nu_{k_0}\neq0$.
-\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}
-The leading cancellation lemmas are also proved.\footnote{\leanid{MPSTensor.fixed\_right\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT};
-\leanid{MPSTensor.fixed\_left\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.}
-\cite[lines~1150--1164]{Cirac2016MPDO_arXiv}
+The earlier conditional helpers requiring combined-family linear independence
+(\path{_phase_sum_li}) and the residual-span variants have been retired in
+the 2026-05-13 audit; see
+\path{audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}.
+Those helpers should not be used as replacements for the fixed-block sentence at
+lines~1181--1185, because the needed combined-family independence is not
+supplied by Corollary~\texttt{Lem1}.  The remaining open obligation is the
+fixed-block cancellation itself, to be discharged without combined-family LI or
+residual-span exclusion.
 
-The partner identification and leading-tail asymptotics are available, but are
-insufficient for the missing arbitrary fixed-block cancellation.\footnote{\leanid{MPSTensor.leading\_right\_nondecaying\_partner\_eq\_leading\_left\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT};
-\leanid{MPSTensor.exists\_leading\_phase\_tail\_diff\_tendsto\_zero\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.}
-The first identifies the matched leading block, and the second gives
+Retirement note: this note intentionally no longer lists the retired no-tail,
+leading-only, partner-identification, leading-tail, residual-span, or
+\path{_phase_sum_li} declarations.  They were deleted as wrong-direction or
+orphan scaffolding in the same audit.
+
+\section{Current discharge plan}
+
+The current plan is recorded in
+\path{audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.  Plan~A is to
+prove an exact eventual leading-coefficient identity
 \begin{align}
-    \left\lVert
-    \frac{V^{(N)}(A)-c_NV^{(N)}(B)-c_{\mathrm{lead},N}
-        \widetilde V^{(N)}_{\mathrm{lead}}}{
-        \|V^{(N)}_{\mathrm{lead}}\|}\right\rVert\to0,
+    c_N\,\mu^B_{0}{}^N\,\zeta^N=(\mu^A_{0})^N
 \end{align}
-without extracting the exact finite-coefficient identity needed in the same step.
-
-Conditional tail-peeling declarations exist, but they require stronger LI than the
-fixed-block input.\footnote{\leanid{MPSTensor.eventually\_selected\_weighted\_mpvState\_eq\_smul\_of\_phase\_sum\_and\_li};
-\leanid{MPSTensor.eventuallyNonzeroProportionalMPV₂\_tail\_succAbove\_of\_phase\_sum\_li};
-\leanid{MPSTensor.eventuallyNonzeroProportionalMPV₂\_tail\_succAbove\_of\_phase\_sum\_li\_left}.}
-These are algebraically correct and useful in future induction steps, but they
-are not faithful replacements for the source sentence at lines~1181--1185.
-
-\section{Elimination plan}
-
-To remain faithful, the two missing theorems must be derived only from the
-source input in \cite{Cirac2016MPDO_arXiv}:
-\begin{align}
-    &\left(
-        \forall^{\mathrm{cof}}N,\,
-        \mathsf{Hyp}_{\mathrm{LI}}(N)\wedge
-        \mathsf{Hyp}_{\mathrm{prop}}(N)
-    \right)\\
-    &\qquad\Longrightarrow
-    \exists j,\,
-    \neg\left(
-        \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle
-        \xrightarrow[N\to\infty]{}0
-    \right).
-\end{align}
-A plausible formal route is an induction that removes matched leading blocks
-\begin{align}
-    a_0:=V^{(N_0)}(A_{j_0}), \quad b_0:=V^{(N_0)}(B_{k_0}),\\
-    (a_0,b_0)\mapsto (a_1,b_1)\mapsto\cdots
-\end{align}
-while carrying forward eventual proportionality on stripped tails and using the
-two leading-contradiction lemmas at each step. A direct quotient isolation
-argument is another option.
-\footnote{Either route must avoid importing residual linear independence assumptions
-    that are not present in \cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.}
+for all sufficiently large $N$ from the proportionality identity and the BNT
+linear independence on the source-faithful fixed-block family.  Once this
+identity is available, the proportional case can clone the equal-MPV tail
+subtraction and induction architecture, without assuming linear independence of
+all residual blocks on both sides.
 
 \bibliographystyle{alpha}
 \bibliography{references}
