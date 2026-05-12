@@ -578,6 +578,16 @@ This lemma isolates exactly the pieces of the canonical-form bundle used in the
 block-separation argument: injectivity, left-canonical normalization, strict nonzero weights,
 and self-overlap normalization. The canonical-form formulation below is recovered by
 projection from `IsCanonicalForm`.
+
+Source context: PGVWC07, Theorem `thm-uniq`, lines 1002--1015, proves a finite-ring
+TI canonical-form uniqueness theorem from C1, uniqueness of the OBC canonical
+representation, and the bound `N > 2L0 + D^4`.
+
+**Scope restriction (same-structure block separation):** This lemma assumes a common block
+index set, common bond dimensions and weights, strict ordered nonzero weights, blockwise
+injectivity/TP normalization/self-overlap data, and equality of the assembled MPV families.
+These are stronger and different hypotheses than PGVWC07 `thm-uniq`; see
+`docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
 -/
 lemma per_block_sameMPV_of_separated_canonical_data
     (μ : Fin r → ℂ)
@@ -600,7 +610,16 @@ lemma per_block_sameMPV_of_separated_canonical_data
 
 /-- Reformulation extracting per-block `SameMPV` from canonical-form data with a strict
 ordering witness. The strict ordering is available at the BNT level (`IsCanonicalFormBNT.mu_strict_anti`)
-but not from the base `IsCanonicalForm` which only guarantees non-increasing moduli. -/
+but not from the base `IsCanonicalForm` which only guarantees non-increasing moduli.
+
+Source context: PGVWC07, Theorem `thm-uniq`, lines 1002--1015, proves a finite-ring
+canonical-form uniqueness theorem with C1, OBC uniqueness, and a finite-size bound.
+
+**Scope restriction (strict same-structure case):** This statement is not the PGVWC07
+uniqueness theorem. It assumes the same block index set, dimensions, and weights on both
+sides, and it adds the strict weight-modulus ordering needed by the local peeling argument;
+see `docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma per_block_sameMPV_of_canonical_form
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -628,7 +647,16 @@ canonical-form lemma, but the leading-block identification step uses the
 irreducible modulus-one-eigenvalue-rigidity theorem (after separately ruling out
 a bond-dimension mismatch) instead of the injective overlap-decay
 contradiction. Since both block families use the same dimension function, the
-conclusion is the homogeneous predicate `SameMPV`. -/
+conclusion is the homogeneous predicate `SameMPV`.
+
+Source context: PGVWC07, Theorem `thm-uniq`, lines 1002--1015, proves canonical-form
+uniqueness under C1, OBC uniqueness, and `N > 2L0 + D^4`.
+
+**Scope restriction (normal same-structure case):** This lemma assumes common block
+structure, common bond dimensions and weights, strict weight-modulus ordering, and
+irreducible left-canonical comparison blocks. These hypotheses are local inputs rather than
+the PGVWC07 theorem hypotheses; see `docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma per_block_sameMPV_of_normal_canonical_form
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hA : IsNormalCanonicalForm μ A)
@@ -652,7 +680,19 @@ lemma per_block_sameMPV_of_normal_canonical_form
 
 This is the preferred formulation: it only asks for the pieces of canonical-form
 structure actually used by the proof. The canonical-form formulation below remains available
-around this one. -/
+around this one.
+
+Source context: PGVWC07, Theorem `thm-uniq`, lines 1002--1015, concludes a unitary
+intertwiner for two TI canonical representations under C1, OBC uniqueness, and a
+finite-size bound.
+
+**Scope restriction (same-structure gauge comparison):** This theorem first assumes the
+same-structure block-separation hypotheses of
+`per_block_sameMPV_of_separated_canonical_data` and then applies the already formalized
+per-block MPS fundamental theorem. It is therefore a conditional local comparison theorem,
+not a formalization of PGVWC07 `thm-uniq`; see
+`docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma fundamentalTheorem_of_separated_canonical_data
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -669,7 +709,13 @@ lemma fundamentalTheorem_of_separated_canonical_data
     hWeights hA_inj hA_left hA_overlap hB_inj hB_left hSame₂
   exact fundamentalTheorem_multiBlock_full μ A B hA_inj.block_injective hSep
 
-/-- Explicit gauge-matrix form of `fundamentalTheorem_of_separated_canonical_data`. -/
+/-- Explicit gauge-matrix form of `fundamentalTheorem_of_separated_canonical_data`.
+
+Source context and scope restriction: this is the explicit-matrix form of the same
+same-structure comparison theorem documented at
+`fundamentalTheorem_of_separated_canonical_data`. It is not PGVWC07 Theorem `thm-uniq`,
+lines 1002--1015; see `docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma fundamentalTheorem_of_separated_canonical_data_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -689,7 +735,16 @@ lemma fundamentalTheorem_of_separated_canonical_data_explicit
 
 /-- Reformulation of `fundamentalTheorem_of_separated_canonical_data` for canonical-form data
 with an explicit strict-ordering witness. This is the strict same-structure
-specialization, not the full source-paper canonical-form theorem. -/
+specialization, not the full source-paper canonical-form theorem.
+
+Source context: PGVWC07, Theorem `thm-uniq`, lines 1002--1015.
+
+**Scope restriction (strict same-structure gauge comparison):** The theorem assumes common
+block structure and an explicit strict weight-modulus ordering, and derives gauge
+equivalence from the local block-separation lemma. These hypotheses are stronger and
+different from the PGVWC07 source theorem; see
+`docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma fundamentalTheorem_canonicalForm
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
@@ -710,7 +765,13 @@ lemma fundamentalTheorem_canonicalForm
     hSame₂
 
 /-- Explicit gauge-matrix reformulation of
-`fundamentalTheorem_of_separated_canonical_data_explicit` with strict-ordering witness. -/
+`fundamentalTheorem_of_separated_canonical_data_explicit` with strict-ordering witness.
+
+Source context and scope restriction: this is the explicit form of the strict
+same-structure comparison theorem `fundamentalTheorem_canonicalForm`, not a source-faithful
+formalization of PGVWC07 Theorem `thm-uniq`, lines 1002--1015. See
+`docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex`.
+-/
 lemma fundamentalTheorem_canonicalForm_explicit
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
