@@ -28,6 +28,7 @@ import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.LinearMapAux
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.ScalarPowerSumIdentity
+import TNLean.Algebra.UnitModulusPowerSum
 import TNLean.Algebra.BurnsideMatrix
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFrobenius
@@ -225,6 +226,7 @@ import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition.HNoCancelDischarge
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
