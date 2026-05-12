@@ -5,172 +5,290 @@
 \usepackage[hidelinks]{hyperref}
 
 \input{./command}
-\providecommand{\leanid}[1]{\texttt{#1}}
 
-\title{Fixed-Block Cancellation in CPSV16~Theorem~II.1}
+\title{The Fixed-Block Cancellation Step in CPSV16 Theorem II.1}
 \author{}
 \date{2026-05-11}
 
 \begin{document}
 \maketitle
 
-\section{Source step in \leanid{thm1}}
+\section{Source passage}
 
-The step appears in \cite[Theorem~\leanid{thm1}, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+This note concerns the proof of CPSV16
+\cite[Theorem~\texttt{thm1}, lines~1181--1185]{Cirac2016MPDO_arXiv}.
+In the proof one fixes a block \(B_k\).  The source then asserts that the
+asymptotic orthogonality alternative
+\[
+  \langle V^{(N)}(A_j),V^{(N)}(B_k)\rangle \longrightarrow 0
+  \qquad (1\le j\le g_A)
+  \tag{$D_k$}
+\]
+is impossible, because it would contradict proportionality of the full MPV
+families by
+\cite[Corollary~\texttt{Lem1}, lines~1130--1133]{Cirac2016MPDO_arXiv}.
+The same sentence, with \(A\) and \(B\) interchanged, gives the opposite
+block-count inequality.
 
-Let \(A,B\) be in canonical form with BNT decompositions
-\begin{align}
-    V^{(N)}(A) &=\sum_{j=1}^{g_A}\mu_j^N a_j(N), &
-    V^{(N)}(B)=\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N),
-\end{align}
-for all \(N\), and
-\begin{align}
-    a_j(N) &:=V^{(N)}(A_j),\qquad b_\ell(N):=V^{(N)}(B_\ell).
-\end{align}
+\section{The identities}
 
-The source hypothesis is total proportionality:
-\begin{align}
-    \exists c_N\in\mathbb C,\qquad
-    \sum_{j=1}^{g_A}\mu_j^N a_j(N) &=
-    c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N).
-\end{align}
-Assume for a fixed \(k\),
-\begin{align}
-    \langle b_k(N),a_j(N)\rangle &\to 0\quad\forall j\in\{1,\dots,g_A\}.
-\end{align}
-If every \(j\) has this asymptotic orthogonality, then
-\begin{align}
-    \langle b_k(N),V^{(N)}(A)\rangle &\to0,
-\end{align}
-which contradicts source proportionality of \(V^{(N)}(A)\) and \(V^{(N)}(B)\) by
-\cite[Corollary~\leanid{eqV}]{Cirac2016MPDO_arXiv}. Hence some \(j_k\) satisfies
-\begin{align}
-    b_k(N) &\sim e^{i\phi_{j_k}N}\,a_{j_k}(N)\quad(N\to\infty),
-\end{align}
-and thus \(g_a\ge g_b\). Symmetrically \(g_b\ge g_a\), so \(g_a=g_b\).
+Write
+\[
+  a_j(N)=V^{(N)}(A_j),
+  \qquad
+  b_\ell(N)=V^{(N)}(B_\ell).
+\]
+The proportionality of the total MPV families is an equality of the weighted
+sums
+\[
+  \sum_{j=1}^{g_A} \mu_j^N a_j(N)
+  =
+  c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N),
+  \qquad c_N\ne 0 .
+  \tag{$P_N$}
+\]
+The BNT normalization gives, for large \(N\),
+\[
+  \langle a_i(N),a_j(N)\rangle\longrightarrow \delta_{ij},
+  \qquad
+  \langle b_k(N),b_k(N)\rangle\longrightarrow 1 .
+  \tag{BNT}
+\]
+Combining \((D_k)\) with \((BNT)\), Corollary~\texttt{Lem1} gives exactly
+\[
+  \operatorname{LinIndep}\{a_1(N),\ldots,a_{g_A}(N),b_k(N)\}
+  \qquad(N\gg0).
+  \tag{$LI_k$}
+\]
+This is the local conclusion supplied by the cited source passage.  It is the
+faithful statement currently formalized for the fixed-right and fixed-left
+applications of Lemma~\texttt{Lem1}.
 
-The part we need to scrutinize is the sentence that turns \((\mathrm{D}_k)\) plus
-\cite[Lemma~\leanid{Lem1}]{Cirac2016MPDO_arXiv} into a contradiction.
-Lemma~\leanid{Lem1} states:
-For large \(N\), \(\langle V_j|V_{j'}\rangle\to\delta_{j,j'}\) and linear independence of \(\{V_j\}\) both hold.
-\begin{align}
-    \langle V_j|V_{j'}\rangle &\to\delta_{j,j'}.
-\end{align}
+\section{What \((LI_k)\) proves immediately}
 
-\section{Exact contradiction algebra}
+If \(g_B=1\), then \((P_N)\) has no \(B\)-tail.  Separating the selected block
+gives
+\[
+  \sum_{j=1}^{g_A}\mu_j^N a_j(N)-c_N\nu_k^N b_k(N)=0.
+  \tag{1}
+\]
+By \((LI_k)\), the coefficient of \(b_k(N)\) in \((1)\) must vanish:
+\[
+  c_N\nu_k^N=0.
+\]
+This contradicts \(c_N\ne0\) and the nonzero BNT weight \(\nu_k\).  Thus the
+no-tail base case is a direct coefficient-extraction argument.
 
-From \((\mathrm{P}_N)\) with the \(b_k\)-term separated, we obtain
-\begin{align}
-    \sum_{j=1}^{g_A}\mu_j^N a_j(N)-c_N\nu_k^N b_k(N) &=
-    c_N\sum_{\ell\ne k}\nu_\ell^N b_\ell(N).
-\end{align}
-and inner pairing with \(a_{j'}(N)\) gives
-\begin{align}
-    \langle a_{j'}(N),\sum_{j=1}^{g_A}\mu_j^N a_j(N)\rangle
-     &=\mu_{j'}^N\,\|a_{j'}(N)\|^2+c_N\sum_{\ell\ne k}\nu_\ell^N\langle a_{j'}(N),b_\ell(N)\rangle,\\
-    \mu_{j'}^N\,\|a_{j'}(N)\|^2
-     &=\langle a_{j'}(N),c_N\sum_{\ell\ne k}\nu_\ell^N b_\ell(N)\rangle
-\end{align}
-in the tail-free case, the right side vanishes for fixed \(j'\) because \(\langle a_{j'}(N),b_\ell(N)\rangle\to0\) for all \(\ell\ne k\), yielding \(c_N\nu_k^N=0\) after coefficient extraction.
-Lemma~\leanid{Lem1} for side \(b_k\) gives linear independence of
-\begin{align}
-    \{a_1(N),\dots,a_{g_A}(N),b_k(N)\}
-\end{align}
-for \(N\gg0\), and therefore it allows coefficient extraction in any relation of the form
-\begin{align}
-    \sum_{j=1}^{g_A}\alpha_j a_j(N)+\beta\,b_k(N) &=0.
-\end{align}
-That is,
-\begin{align}
-    \operatorname{LinIndep}\{a_j(N),b_k(N)\}
-    \Longrightarrow
-    \left(\sum_{j=1}^{g_A}\mu_j^N a_j(N)-c_N\nu_k^N b_k(N)=0\right)
-    \Longrightarrow c_N\nu_k^N=0.
-\end{align}
-The proof in \cite{Cirac2016MPDO_arXiv} does not prove this directly, because
-the displayed identity has the right-hand residual tail \(c_N\sum_{\ell\ne k}\nu_\ell^N b_\ell(N)\), not \(0\).
+If \(k\) is the leading \(B\)-block, there is also a dominant-projection
+argument.  After normalizing by the leading weights, testing \((P_N)\) against
+\(b_k(N)\) gives a term of the form
+\[
+  c_N\left(\frac{\nu_k}{\mu_1}\right)^N
+  \langle b_k(N),b_k(N)\rangle
+\]
+on the \(B\)-side.  Under \((D_k)\), the \(A\)-side tends to \(0\), while
+\(\langle b_k(N),b_k(N)\rangle\to1\).  For the leading block the remaining
+normalized \(B\)-tail is strictly smaller, so the selected term cannot be
+cancelled by larger weights.  This proves the leading-block contradiction
+without assuming linear independence of the whole residual family.
 
-\begin{align}
-    \sum_{\ell\ne k}\nu_\ell^N b_\ell(N)\in
-    \operatorname{span}\{a_j(N)\}_{j=1}^{g_A}
-    \Longrightarrow
-    \exists f_N,\
-    f_N(a_j(N))=0,\ f_N(b_\ell(N))=0\ (\ell\ne k),\ f_N(b_k(N))\neq0.
-\end{align}
+\section{Where the general fixed-block proof is missing}
 
-So the missing implication is
-\begin{align}
-    \sum_{\ell\ne k}\nu_\ell^N b_\ell(N)\in
-    \operatorname{span}\{a_j(N)\}_{j=1}^{g_A}
-\end{align}
-or equivalently the existence of a functional \(f_N\) with
-\begin{align}
-    f_N(a_j(N)) &=0,\quad f_N(b_\ell(N))=0\ (\ell\ne k),\quad f_N(b_k(N))=1.
-\end{align}
-This is strictly stronger than Lemma~\leanid{Lem1}. The cited step does not provide it.
-\begin{align}
-    \sum_{\ell\ne k}\nu_\ell^N b_\ell(N)\in
-    \operatorname{span}\{a_j(N)\}_{j=1}^{g_A}
-\end{align}
+For an arbitrary \(k\), separating the selected summand in \((P_N)\) gives
+\[
+  \sum_{j=1}^{g_A}\mu_j^N a_j(N)
+  -
+  c_N\nu_k^N b_k(N)
+  =
+  c_N\sum_{\ell\ne k}\nu_\ell^N b_\ell(N).
+  \tag{2}
+\]
+The family in \((LI_k)\) controls only linear relations of the form
+\[
+  \sum_{j=1}^{g_A}\alpha_j(N)a_j(N)+\beta(N)b_k(N)=0.
+  \tag{3}
+\]
+It does not apply directly to \((2)\), because the right-hand side of \((2)\)
+contains vectors outside the family \((LI_k)\).  To extract the coefficient of
+\(b_k(N)\) from \((2)\), one would need an additional isolation statement, for
+example
+\[
+  c_N\sum_{\ell\ne k}\nu_\ell^N b_\ell(N)
+  \in
+  \operatorname{span}\{a_1(N),\ldots,a_{g_A}(N)\},
+  \tag{$I_k$}
+\]
+or equivalently a functional \(f_N\) such that
+\[
+  f_N(a_j(N))=0,\qquad
+  f_N(b_\ell(N))=0\ (\ell\ne k),\qquad
+  f_N(b_k(N))=1.
+  \tag{$F_k$}
+\]
+Neither \((I_k)\) nor \((F_k)\) follows from \((LI_k)\).  In purely algebraic
+terms, \((LI_k)\) rules out
+\[
+  b_k(N)\in \operatorname{span}\{a_j(N)\}_j,
+\]
+but the needed contradiction rules out the stronger possibility
+\[
+  c_N\nu_k^N b_k(N)
+  \in
+  \operatorname{span}\{a_j(N)\}_j
+  +
+  \operatorname{span}\{b_\ell(N):\ell\ne k\}.
+  \tag{4}
+\]
+Statement \((4)\) is precisely the fixed-block cancellation difficulty.
 
-\section{Why dominant-block arguments do not close the gap}
+The dominant-projection proof also does not isolate an arbitrary fixed block.
+Testing \((P_N)\) against \(b_k(N)\), after normalization by a leading weight,
+leaves
+\[
+  c_N\sum_{\ell=1}^{g_B}
+  \left(\frac{\nu_\ell}{\mu_1}\right)^N
+  \langle b_\ell(N),b_k(N)\rangle .
+  \tag{5}
+\]
+When \(k\) is not leading, terms with \(|\nu_\ell|>|\nu_k|\) may dominate
+\((5)\).  If instead one normalizes by \(\nu_k^N\), then terms with
+\(|\nu_\ell|>|\nu_k|\) grow.  Thus the leading-block argument is not a proof of
+the arbitrary fixed-block assertion at line~1182 of the source.
 
-If \(k\) is leading in \(B\) and one divides by the leading weight, the source-style tail estimate is
-\begin{align}
-    c_N\sum_{\ell=1}^{g_B}\left(\frac{\nu_\ell}{\nu_k}\right)^N\langle b_\ell(N),b_k(N)\rangle,
-\end{align}
-with \(\langle b_k(N),b_k(N)\rangle\to1\) and \(|\nu_\ell/\nu_k|\le 1\).
-For \(k\) not leading there is no guarantee that terms with \(|\nu_\ell/\nu_k|>1\) are absent.
-The projection can therefore fail to isolate \(b_k\) without a stronger residual-tail premise.
+\section{Symmetric fixed-left statement}
 
-\section{Left-right symmetric version}
+The proof with \(A\) and \(B\) interchanged has the same form.  Fixing an
+\(A_i\), the decay alternative is
+\[
+  \langle a_i(N),b_\ell(N)\rangle\longrightarrow 0
+  \qquad(1\le \ell\le g_B),
+  \tag{$D'_i$}
+\]
+and Lemma~\texttt{Lem1} supplies
+\[
+  \operatorname{LinIndep}\{a_i(N),b_1(N),\ldots,b_{g_B}(N)\}
+  \qquad(N\gg0).
+  \tag{$LI'_i$}
+\]
+The proportionality identity still contains the remaining \(A\)-summands:
+\[
+  c_N\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N)
+  -
+  \mu_i^N a_i(N)
+  =
+  \sum_{j\ne i}\mu_j^N a_j(N).
+  \tag{6}
+\]
+Thus the missing left-handed step is the symmetric isolation of \(a_i(N)\) from
+the residual \(A\)-tail.
 
-Swapping \(A,B\) gives the analogous condition
-\begin{align}
-    \langle a_i(N),V^{(N)}(B)\rangle &=0
-    \Longrightarrow
-    \langle a_i(N),\sum_{\ell=1}^{g_B}\nu_\ell^N b_\ell(N)\rangle=0.
-\end{align}
+\section{Formal boundary}
 
-From
-\begin{align}
-    \langle a_i(N),b_\ell(N)\rangle\to0\quad\forall\ell
-\end{align}
-the source argument would isolate one \(a_i\) in the tail decomposition.
-Its required linear-independence input is
-\begin{align}
-    \operatorname{LinIndep}\{a_i(N),b_1(N),\dots,b_{g_B}(N)\},
-\end{align}
-again only for one fixed \(i\). The same residual-tail strengthening is still absent in
-\cite[Theorem~\leanid{thm1}, line~1182]{Cirac2016MPDO_arXiv}.
+The existing conditional tail lemmas assume a larger independence statement,
+schematically
+\[
+  \operatorname{LinIndep}
+  \bigl(\{a_j(N)\}_j\cup\{b_\ell(N):\ell\ne k\}\cup\{b_k(N)\}\bigr)
+  \qquad(N\gg0).
+  \tag{$G_k$}
+\]
+From \((G_k)\), coefficient extraction from \((2)\) is immediate.  However
+\((G_k)\) is stronger than Corollary~\texttt{Lem1} as used at
+\cite[Theorem~\texttt{thm1}, line~1182]{Cirac2016MPDO_arXiv}.  The source
+sentence supplies \((LI_k)\), not global residual-family independence
+\((G_k)\).  Therefore the conditional tail lemmas are valid local algebraic
+tools, but they are not yet the faithful formalization of the fixed-block
+cancellation sentence in the source.
 
-\section{Current formal status}
+\section{Formal declarations}
 
-The formal declarations matching the fixed-block cancellation line are
-\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}
-and
-\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV2\_CFBNT}.
-Their currently used conditional lemmas assume exactly the tail-freeing hypotheses.
-The conditional inputs are
-\begin{align}
-    \operatorname{LinIndep}\{a_j,b_\ell:\ell\ne k\}\cup\{b_k\},
-\end{align}
-and
-\begin{align}
-    \operatorname{LinIndep}\{a_i,b_1,\dots,b_{\cdot-1},b_{\cdot+1},\dots,b_{g_B}\}.
-\end{align}
-These are not derivable from Lemma~\leanid{Lem1} in the cited source step.
-\begin{align}
-    g_a &=g_b.
-\end{align}
+The two named proof obligations are
+\[
+\begin{aligned}
+&\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT},\\
+&\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{aligned}
+\]
+They are statements of the cancellation step implicit in the source passage,
+not strengthened variants of the source theorem.  The formal proof obligation
+is tracked by issue~\#1607.
 
-Issue~\#1607 tracks the gap: proving arbitrary fixed-block cancellation from only the source linear-independence family.
+The no-tail base cases, where the selected side has no other summands, are
+already formalized.  In those cases ordinary coefficient extraction from the
+eventual linear independence supplied by Lemma~\texttt{Lem1} forces a nonzero
+selected coefficient to vanish.  The corresponding declarations are
+\[
+\begin{aligned}
+&\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT\_finOne},\\
+&\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT\_finOne}.
+\end{aligned}
+\]
 
-\section{Impact}
+The leading-block cases are also formalized.  They are discharged by the
+dominant projection contradiction already available for eventually nonzero
+proportional BNT families:
+\[
+\begin{aligned}
+&\leanid{MPSTensor.fixed\_right\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT},\\
+&\leanid{MPSTensor.fixed\_left\_leading\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{aligned}
+\]
 
-In the no-tail base case (when the right or left side has no residual blocks), the algebra above simplifies to coefficient extraction and is already formalized.
-The remaining difficulty is the full residual tail for arbitrary blocks, which requires a new source-faithful cancellation argument.
+The first partner-identification step for peeling is now also formalized:
+\begin{flushleft}\small
+\leanid{MPSTensor.leading\_right\_nondecaying\_partner\_eq\_leading\_left\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{flushleft}
+It proves that, under eventual nonzero proportionality, a non-decaying partner
+of the leading \(B\)-block must be the leading \(A\)-block.  This is still only
+a preparatory step: it identifies the pair eligible for dominant tail
+subtraction, but it does not by itself prove the arbitrary fixed-block
+cancellation statements.
+
+The resulting leading phase relation and asymptotic leading-tail estimate are
+recorded in:
+\begin{flushleft}\small
+\leanid{MPSTensor.exists\_leading\_phase\_tail\_diff\_tendsto\_zero\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}.
+\end{flushleft}
+This lemma supplies the phase relation for the leading blocks, written
+\(A_0,B_0\) in the zero-indexed formal declarations and \(A_1,B_1\) in the
+formulas above.  It proves that the normalized leading-erased tail difference
+tends to zero.  It is not the missing exact selected-summand cancellation: the
+remaining proof must still extract the leading coefficient identity, or an
+equivalent tail proportionality statement, without assuming residual-family
+linear independence beyond the fixed-block Lemma~\texttt{Lem1} input.
+
+There are also conditional tail-peeling auxiliary lemmas:
+\[
+\begin{aligned}
+&\leanid{MPSTensor.eventually\_selected\_weighted\_mpvState\_eq\_smul\_of\_phase\_sum\_and\_li},\\
+&\leanid{MPSTensor.eventuallyNonzeroProportionalMPV₂\_tail\_succAbove\_of\_phase\_sum\_li},\\
+&\leanid{MPSTensor.eventuallyNonzeroProportionalMPV₂\_tail\_succAbove\_of\_phase\_sum\_li\_left}.
+\end{aligned}
+\]
+These are correct algebraic statements, but their linear-independence
+hypotheses are stronger than the fixed-block application of
+Lemma~\texttt{Lem1}.  The right-handed auxiliary lemma assumes eventual linear
+independence of all \(A\)-blocks together with the whole remaining \(B\)-tail;
+the left-handed auxiliary lemma assumes the symmetric condition.  In contrast,
+the source sentence at line 1182 supplies only the family consisting of all
+blocks on one side together with the single fixed block on the other side.
+These auxiliary lemmas are therefore conditional local tools, not
+formalizations of the fixed-block cancellation step.
+
+\section{Elimination plan}
+
+The intended elimination is to prove the two fixed-block contradiction
+declarations from the BNT hypotheses, eventual nonzero proportionality, and the
+already formalized fixed-block Lemma~\texttt{Lem1} inputs.  A proof may use an
+induction through matched block removal, using the leading-block
+contradictions above as the case in which the selected block has become
+dominant, or a direct argument isolating the selected summand in the quotient
+by the span of the opposite family.  It must not assume global linear
+independence of all remaining blocks, since that is not a consequence of the
+BNT hypotheses once a block on one side may be phase-equivalent to a block on
+the other.
 
 \bibliographystyle{alpha}
 \bibliography{references}
+
 \end{document}
