@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -20,16 +20,16 @@ Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016 builds the multi-block route to
 the Fundamental Theorem on top of the canonical form
 \cite[Section~II]{Cirac2016MPDO_arXiv}. A tensor $A=(A^i)_{i=1}^d$ is in
 canonical form when, after a basis change of the bond, it decomposes as
-\begin{equation}
-  A^i=\bigoplus_{k=1}^r \mu_k\,A_k^i,
-  \tag{\path{eq:II_CF1}}
-\end{equation}
+\begin{align}
+    A^i=\bigoplus_{k=1}^r \mu_k\,A_k^i,
+    \tag{\path{eq:II_CF1}}
+\end{align}
 where each block tensor $A_k$ is normal and the scalars $\mu_k$ are nonzero.
 The text immediately fixes a normalization on the weights:
 \begin{quote}
-  ``we can always choose $|\mu_k|\le 1$ and at least one of them equals one,
-  something which we will assume from now on.''
-  \cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}
+    ``we can always choose $|\mu_k|\le 1$ and at least one of them equals one,
+    something which we will assume from now on.''
+    \cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}
 \end{quote}
 This is a definitional convention applied throughout the rest of the paper; it
 is not derived later. Combined with the strict modulus ordering used by the BNT
@@ -45,11 +45,10 @@ $q_a=1,\ldots,r_{a,j}$ and $q_b=1,\ldots,r_{b,j}$. After Theorem~\texttt{thm1}
 identifies the representatives, $B_j=e^{i\phi_j}Y_j A_j Y_j^{-1}$, the
 trace-pair argument in the proof of Corollary~\texttt{II\_cor2} reduces to the
 unlabeled scalar identity
-\[
-  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
-    =\sum_{q=1}^{r_{b,j}}\bigl(\nu_{j,q}e^{i\phi_j}\bigr)^N,
-  \qquad\text{for all }j\text{ and all }N.
-\]
+\begin{align}
+    \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
+    =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
+\end{align}
 The cited Lemma~\texttt{Lem:app\_simple} then concludes that
 $r_{a,j}=r_{b,j}=:r_j$ and that the multisets of weights coincide,
 $\mu_{j,q}=\nu_{j,q}e^{i\phi_j}$. The matching dimensions and the global gauge
@@ -64,7 +63,7 @@ $N$-indexed quantity is invoked.
 
 The formal counterpart of the canonical form for the BNT route is the structure
 \leanid{IsNormalCanonicalFormBNT}.\footnote{%
-\path{TNLean/MPS/BNT/Construction.lean}, lines 181--189.}
+    \path{TNLean/MPS/BNT/Construction.lean}, lines 181--189.}
 Its mathematical content is: a strict-modulus ordering on the weight family
 $\mu : \mathrm{Fin}\,r\to\mathbb C$, the nonvanishing $\mu_k\ne 0$ for every
 $k$, and the per-block normality data inherited from the underlying canonical
@@ -76,12 +75,12 @@ The blueprint BNT chapter records the strict-modulus ordering in the
 BNT-separated canonical-form definitions. Separately, the canonical-form
 chapter records the decomposition $\mu_k=\eta_k|\mu_k|$ with $\eta_k$ on the
 unit circle. Neither place imposes $|\mu_1|=1$.\footnote{%
-The BNT-separated definitions are
-\texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt} in
-\path{blueprint/src/chapter/ch10_bnt.tex}, lines 70--100 and 119--141,
-respectively. The phase--modulus decomposition is
-\texttt{thm:mpv\_normalize} in
-\path{blueprint/src/chapter/ch08_canonical.tex}, lines 125--139.}
+    The BNT-separated definitions are
+    \texttt{def:cf\_bnt} and \texttt{def:normal\_cf\_bnt} in
+    \path{blueprint/src/chapter/ch10_bnt.tex}, lines 70--100 and 119--141,
+    respectively. The phase--modulus decomposition is
+    \texttt{thm:mpv\_normalize} in
+    \path{blueprint/src/chapter/ch08_canonical.tex}, lines 125--139.}
 
 The omission is mathematically meaningful, because the source definition is
 used in two ways downstream: it fixes the dominant block on the unit circle,
@@ -97,11 +96,10 @@ two coefficient sequences indexed by chain length, together with the assumption
 that they converge to nonzero limits. In that route, each block index $j$ had a
 function $N\mapsto a_{N,j}\in\mathbb C$ and a designated limit
 $a_j^\infty\in\mathbb C$ satisfying
-\[
-  a_{N,j}\to a_j^\infty\text{ as }N\to\infty,
-  \qquad a_j^\infty\ne 0,
-\]
-together with the analogous data on the $B$-side and a sequence of
+\begin{align}
+    a_{N,j}\to a_j^\infty, \qquad a_j^\infty\ne 0
+\end{align}
+as $N\to\infty$, together with the analogous data on the $B$-side and a sequence of
 proportionality scalars $c_N$ converging to a nonzero limit $c$. The
 identification of the scalars is then derived from these convergence
 hypotheses by a comparison of limits, rather than from the source
@@ -111,12 +109,12 @@ For the natural realization in which the $j$th source sector has one selected
 representative, or one copy in the coefficient multiplicity notation
 ($r_j=1$), and the coefficient is the source weight itself, the formal choice
 of array\footnote{The corresponding blueprint passage is the remark
-\texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
-\path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
-lines 172--202.} is
-\[
-  a_{N,j}=(\mu_j^A)^N.
-\]
+    \texttt{rem:cf\_coeff\_arrays} following \texttt{lem:ft\_proportional} in
+    \path{blueprint/src/chapter/ch11_fundamental_theorem_proof.tex},
+    lines 172--202.} is
+\begin{align}
+    a_{N,j}=(\mu_j^A)^N.
+\end{align}
 With this choice, the convergence requirement $a_{N,j}\to a_j^\infty\ne 0$
 becomes a condition on the powers $(\mu_j^A)^N$.
 
@@ -127,25 +125,24 @@ The convergence-to-nonzero-limits hypothesis is not present in
 own planning record. A proof-plan memo committed on 2026-02-22 sets out the
 intended route for Theorem~\texttt{thm1} and Corollary~\texttt{II\_cor2} of
 \cite{Cirac2016MPDO_arXiv}.\footnote{%
-\path{audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
-\texttt{64c018ab} earlier the same day as the introducing implementation
-\texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
+    \path{audits/2026-02-22_thm4_4_proof_plan_ref1606.txt}, committed in
+    \texttt{64c018ab} earlier the same day as the introducing implementation
+    \texttt{dd54b79e}.} Its concrete recommendation is a span-equality bridge,
 together with a finite-length scalar power-sum identity for the
 $\mu$-coefficient matching.
 
 The memo records the source identity in the form
-\[
-  \sum_{k=1}^{x_a}\lambda_{a,k}^N
+\begin{align}
+    \sum_{k=1}^{x_a}\lambda_{a,k}^N
     =\sum_{k=1}^{x_b}\lambda_{b,k}^N
-  \qquad\text{for all }N=1,\ldots,\max(x_a,x_b),
-\]
+\end{align}
 and proposes formalizing it as a fixed-length theorem requiring only finitely
 many values of $N$. The planned application to the BNT
 $\mu$-coefficients reads, in the memo's own notation,
-\[
-  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
+\begin{align}
+    \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
-\]
+\end{align}
 to be applied via this fixed-length scalar identity to obtain
 $r_{a,j}=r_{b,j}$ and the multiset equality. No convergence statement appears
 in the memo's plan, and no nonzero-limit hypothesis is contemplated.
@@ -156,11 +153,10 @@ at the witness length, while the surrounding BNT permutation step uses span
 equality to extract the linear independence it needs. The memo's own
 resolution is to weaken the global span-equality hypothesis to its eventual
 form,
-\[
-  \forall^{\infty} N,\quad
-  \operatorname{span}\{\,V^{(N)}(A_j)\,\}_j
-    =\operatorname{span}\{\,V^{(N)}(B_k)\,\}_k,
-\]
+\begin{align}
+    \operatorname{span}\{\,V^{(N)}(A_j) \}_j
+    =\operatorname{span}\{\,V^{(N)}(B_k) \}_k,
+\end{align}
 and to observe that the surrounding step already only consumes the eventual
 form. The memo records this as a backward-compatible weakening that
 discharges the circularity at the type level.
@@ -179,14 +175,14 @@ commit on 2026-05-09 describes the structure as ``MPV-level Newton--Girard
 convergence data, not a §II 283--302 Wedderburn-style similarity,'' but this
 description records what the structure became, not why the change from the
 memo's plan was made.\footnote{%
-The introducing commit is \texttt{dd54b79e}, ``Add ScalarPowerSumIdentity,
-BNTConstruction, BNTPermutationThm44.'' Despite the name, the
-\leanid{ScalarPowerSumIdentity} module added by that commit does not
-correspond to the memo's planned fixed-length scalar identity from
-\cite[Lemma~\texttt{Lem:app\_simple}]{Cirac2016MPDO_arXiv}. The
-structure refactor that bundled the limit fields is \texttt{9e096a14}
-(2026-03-22), and the post-hoc Newton--Girard description is in the message
-of \texttt{8ab1a5db} (2026-05-09).}
+    The introducing commit is \texttt{dd54b79e}, ``Add ScalarPowerSumIdentity,
+    BNTConstruction, BNTPermutationThm44.'' Despite the name, the
+    \leanid{ScalarPowerSumIdentity} module added by that commit does not
+    correspond to the memo's planned fixed-length scalar identity from
+    \cite[Lemma~\texttt{Lem:app\_simple}]{Cirac2016MPDO_arXiv}. The
+    structure refactor that bundled the limit fields is \texttt{9e096a14}
+    (2026-03-22), and the post-hoc Newton--Girard description is in the message
+    of \texttt{8ab1a5db} (2026-05-09).}
 
 The recorded design history therefore shows that the limit hypothesis was
 not chosen to follow the source argument and was not the route the
@@ -204,9 +200,10 @@ sector.
 
 Under the source normalization $|\mu_1^A|=1$ and $|\mu_j^A|<1$ for $j\ge 2$,
 the powers $(\mu_j^A)^N$ behave as follows. For each sub-dominant block,
-\[
-  |(\mu_j^A)^N|=|\mu_j^A|^N\to 0\quad\text{as }N\to\infty,
-\]
+\begin{align}
+    |(\mu_j^A)^N|=|\mu_j^A|^N\to 0
+\end{align}
+as $N\to\infty$,
 so the only candidate limit is $a_j^\infty=0$, contradicting the formal
 hypothesis $a_j^\infty\ne 0$. For the dominant block, the modulus stays on
 the unit circle, and the sequence $(\mu_1^A)^N$ converges only in the special
@@ -251,9 +248,9 @@ source.
 The first change is to record the source convention $|\mu_1|=1$. Once this
 normalization is present, the implicit bounds $|\mu_k|\le 1$ on the remaining
 blocks follow from the strict modulus ordering.\footnote{%
-The formal field carrying this ordering is \leanid{mu\_strict\_anti} in
-\leanid{IsNormalCanonicalFormBNT}; see
-\path{TNLean/MPS/BNT/Construction.lean}, lines 184--185.} This should be a
+    The formal field carrying this ordering is \leanid{mu\_strict\_anti} in
+    \leanid{IsNormalCanonicalFormBNT}; see
+    \path{TNLean/MPS/BNT/Construction.lean}, lines 184--185.} This should be a
 field of \leanid{IsNormalCanonicalFormBNT} and of the corresponding blueprint
 definition. It is a transcription of the source definition, not an additional
 assumption.
@@ -261,11 +258,11 @@ assumption.
 The second change is to reformulate the proportional comparison around finite
 power-sum data rather than limits. In the general coefficient-multiplicity
 setting of the source proof, the blockwise input should be the finite family
-\[
-  \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
+\begin{align}
+    \sum_{q=1}^{r_{a,j}}\mu_{j,q}^N
     =\sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N,
-  \qquad N=1,\ldots,\max(r_{a,j},r_{b,j}),
-\]
+    \qquad N=1,\ldots,\max(r_{a,j},r_{b,j}),
+\end{align}
 or the corresponding finite collection of witness lengths produced after the
 BNT span and linear-independence input has been made available. The source
 separation lemma then gives $r_{a,j}=r_{b,j}$ and the multiset equality of the
@@ -278,9 +275,9 @@ same finite-data recipe collapses to comparing one chosen witness length
 $N_0$. The mathematical input is the BNT linear independence at that length,
 supplied by the direct-sum span theorem on a basis of normal tensors, and the
 blockwise output is
-\[
-  (\mu_j^A)^{N_0}=c^{N_0}\,(\mu_j^B)^{N_0},\qquad j=1,\ldots,g,
-\]
+\begin{align}
+    (\mu_j^A)^{N_0}=c^{N_0}\,(\mu_j^B)^{N_0},\qquad j=1,\ldots,g,
+\end{align}
 which fixes $\mu_j^A$ in terms of $\mu_j^B$ and $c$ up to an $N_0$th root of
 unity. The phase ambiguity is then absorbed into the per-block phase $\phi_j$
 already present in the source statement
@@ -316,12 +313,12 @@ The structural realignment has been done. The canonical-form definition now
 carries the source convention $|\mu_1|=1$ as a field
 of \leanid{IsNormalCanonicalFormBNT}, propagated through every constructor.
 The convergence-to-nonzero-limit fields and the later per-$N$ coefficient
-package have been removed from the formal development.  The surviving boundary
+package have been removed from the formal development. The surviving boundary
 keeps the block-permutation and gauge-phase comparison as an explicit input
 until the source-faithful residual comparison theorem is available.
 
 The earlier one-shot nonzero-overlap theorems and the matching wrappers built
-on them have now been deleted.  Their statements asserted a full
+on them have now been deleted. Their statements asserted a full
 ``for every block'' nondecay conclusion from arbitrary bounded coefficient
 arrays, but that conclusion is stronger than the exposed hypotheses: a
 non-dominant coefficient can vanish identically unless the source's residual

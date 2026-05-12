@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -22,22 +22,22 @@ translation-invariant MPS representation on a finite ring
 \cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007MPSReps}.
 It states that the matrices can always be decomposed as
 \[
-  A_i =
-  \begin{pmatrix}
-    \lambda_1 A_i^1 & 0 & 0 \\
-    0 & \lambda_2 A_i^2 & 0 \\
-    0 & 0 & \cdots
-  \end{pmatrix},
+    A_i =
+    \begin{pmatrix}
+        \lambda_1 A_i^1 &0               &0\\
+        0               &\lambda_2 A_i^2 &0\\
+        0               &0               &\cdots
+    \end{pmatrix},
 \]
 where $1 \geq \lambda_j > 0$ and each block satisfies:
 \[
-  \sum_i A_i^j A_i^{j\dagger} = \mathbf{1},\qquad
-  \sum_i A_i^{j\dagger}\Lambda^j A_i^j = \Lambda^j,
+    \sum_i A_i^j A_i^{j\dagger} = \mathbf{1},\qquad
+    \sum_i A_i^{j\dagger}\Lambda^j A_i^j = \Lambda^j,
 \]
 for a diagonal positive full-rank matrix $\Lambda^j$, and $\mathbf{1}$ is the
 only fixed point of
 \[
-  \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}.
+    \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}.
 \]
 If the initial representation has bond dimension $D$, the canonical
 representation has bond dimension at most $D$.
@@ -57,16 +57,16 @@ and the generic uniqueness discussion is a separate theorem
 There is also a convention difference in the direction of the canonical
 normalization. In the source theorem, the block transfer map is written as
 \[
-  \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}
+    \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}
 \]
 and imposes the unital condition
 \[
-  \sum_i A_i^j A_i^{j\dagger} = \mathbf{1}.
+    \sum_i A_i^j A_i^{j\dagger} = \mathbf{1}.
 \]
 The local canonical-form chapter usually works in the dual
 trace-preserving, or left-canonical, orientation
 \[
-  \sum_i A_i^{j\dagger} A_i^j = \mathbf{1}.
+    \sum_i A_i^{j\dagger} A_i^j = \mathbf{1}.
 \]
 This is a convention difference when it is accompanied by the corresponding
 adjoint transfer map or conjugate-transposed Kraus family. It is nevertheless
@@ -102,9 +102,9 @@ The currently checked primitive, peripheral-primitive, and
 normal-canonical-form reductions should therefore be read as conditional
 canonical-form theorems rather than as
 formalizations of the full source theorem.\footnote{The formal declarations are
-\texttt{MPSTensor.isCanonicalForm\_of\_primitive},
-\texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}, and
-\texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.}
+    \texttt{MPSTensor.isCanonicalForm\_of\_primitive},
+    \texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}, and
+    \texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.}
 They may be used after their hypotheses have been proved from earlier
 source-faithful reductions, but they should not be cited as giving canonical
 form directly from an arbitrary translation-invariant MPS representation.

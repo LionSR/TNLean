@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
@@ -18,12 +18,12 @@
 
 The martingale-method paragraph in Cirac--Perez-Garcia--Schuch--Verstraete 2021 can be compared with the
 quantitative estimate isolated in the formal parent-Hamiltonian proof.\footnote{For
-traceability, this note corresponds to
-\href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
-quantitative estimate is recorded in
-\href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
-parent-Hamiltonian theorem in
-\href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
+    traceability, this note corresponds to
+    \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
+    quantitative estimate is recorded in
+    \href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
+    parent-Hamiltonian theorem in
+    \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 The relevant source passage is the discussion of gaps for MPS parent Hamiltonians
 in \cite[Section~IV.C]{Cirac2021Matrix}, where the local paragraph
 \path{sec:4:hams-gaps} develops the inequalities labelled
@@ -31,22 +31,22 @@ in \cite[Section~IV.C]{Cirac2021Matrix}, where the local paragraph
 
 Let
 \[
-  H=\sum_i h_i
+    H=\sum_i h_i
 \]
 be a frustration-free Hamiltonian whose local terms are projections. The
 source recalls that a gap lower bound $\gamma>0$ is equivalent, at the
 quadratic-form level, to
 \[
-  H^2\ge \gamma H.
+    H^2\ge \gamma H.
 \]
 Since $h_i^2=h_i$, the expansion of $H^2$ separates diagonal terms,
 overlapping products, and non-overlapping products. The non-overlapping
 products are treated as non-negative. Thus it is enough to control each
 overlapping pair by an anticommutator estimate
 \begin{equation}
-  h_i h_j+h_j h_i
-  \ge -c_{ij}(1-\gamma)(h_i+h_j),
-  \tag{\path{eq:4:martingale-2}}
+    h_i h_j+h_j h_i
+    \ge -c_{ij}(1-\gamma)(h_i+h_j),
+    \tag{\path{eq:4:martingale-2}}
 \end{equation}
 where the coefficients $c_{ij}$ are chosen so that the contributions in each
 row add up to one. The formal row-sum algebra uses the slightly more flexible
@@ -73,26 +73,26 @@ starting at $i$. Write $i\sim_L j$ when the two length-$L$ cyclic windows
 intersect and $i\ne j$.
 For each fixed $i$, the number of indices $j$ with $i\sim_L j$ is at most
 \[
-  m=2(L-1).
+    m=2(L-1).
 \]
 The formal row-sum reduction specializes the source coefficients to
 \[
-  c_{ij}=\frac{1}{2(L-1)}
+    c_{ij}=\frac{1}{2(L-1)}
 \]
 for overlapping cyclic windows and to $0$ otherwise. The row-cardinality bound
 then gives $\sum_j c_{ij}\le 1$.
 
 With this choice, the constant in the formal statement is
 \[
-  \gamma_L=\frac{1}{4L}.
+    \gamma_L=\frac{1}{4L}.
 \]
 The ordered overlapping estimate sufficient for the gap bound is
 \begin{equation}
-  \operatorname{Re}\langle p_i v,p_j v\rangle
-  \ge
-  -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    \ge
+    -\left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
     \operatorname{Re}\langle p_i v,v\rangle
-  \tag{F}
+    \tag{F}
 \end{equation}
 for every $N\ge 2L$, every off-diagonal overlapping pair $i\sim_L j$, and every
 vector $v$ in the finite chain Hilbert space. Given this estimate, the already
@@ -103,28 +103,28 @@ ground space.
 The formal proof also isolates a sufficient norm-compression form of the same
 input:
 \begin{equation}
-  \|p_i p_j v\|
-  \le
-  \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
-  \|p_i v\|.
-  \tag{N}
+    \|p_i p_j v\|
+    \le
+    \left(1-\frac{1}{4L}\right)\frac{1}{2(L-1)}
+    \|p_i v\|.
+    \tag{N}
 \end{equation}
 For a symmetric projection $p_i$ one has
 \[
-  \operatorname{Re}\langle p_i v,p_j v\rangle
-  =\operatorname{Re}\langle p_i v,p_i p_j v\rangle
-  \ge -\|p_i v\| \|p_i p_j v\|.
+    \operatorname{Re}\langle p_i v,p_j v\rangle
+    =\operatorname{Re}\langle p_i v,p_i p_j v\rangle
+    \ge -\|p_i v\| \|p_i p_j v\|.
 \]
 Thus (N), together with $\operatorname{Re}\langle p_i v,v\rangle=\|p_i v\|^2$,
 implies (F). This is the projection-geometry comparison used in the formal proof:
 a norm-compression estimate for each overlapping pair is converted by
 Cauchy--Schwarz to the ordered Friedrichs estimate, and the finite row-sum
 argument converts those ordered estimates into the global gap bound.\footnote{The
-formal anchors are the cyclic-window gap reductions in
-\path{TNLean/MPS/ParentHamiltonian/Martingale.lean}, lines 1268--1347, the
-remaining theorem \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} at lines
-1393--1405, and the projection-geometry lemmas in
-\path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.}
+    formal anchors are the cyclic-window gap reductions in
+    \path{TNLean/MPS/ParentHamiltonian/Martingale.lean}, lines 1268--1347, the
+    remaining theorem \path{parentHamiltonianES\_gap\_bound\_of\_friedrichs} at lines
+    1393--1405, and the projection-geometry lemmas in
+    \path{TNLean/Analysis/ProjectionGeometry.lean}, lines 58--87 and 285--341.}
 
 \section{What remains to compare}
 

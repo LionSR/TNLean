@@ -35,10 +35,10 @@ later in the same argument.
 Let \(\mathcal H\) denote the hypotheses available at a certain point of the
 argument, and let \(C\) denote the conclusion needed there.  Suppose the cited
 source states the implication
-\[
+\begin{align}
   \mathcal H \Longrightarrow C.
   \tag{\path{thm:model-source}}
-\]
+\end{align}
 The notation in the displayed implication has now been fixed: \(\mathcal H\) is
 the available hypothesis set, and \(C\) is the conclusion required by the later
 argument.
@@ -47,10 +47,10 @@ argument.
 
 Assume that the proof of the displayed implication invokes a lemma which, in the
 special case being used, proves
-\[
+\begin{align}
   \mathcal H \wedge \mathcal K \Longrightarrow C,
   \tag{\path{lem:model-input}}
-\]
+\end{align}
 where \(\mathcal K\) is an additional hypothesis.  If the surrounding argument
 does not prove \(\mathcal K\), then the displayed implication
 \(\mathcal H\Rightarrow C\) has not been justified by that proof.  The
@@ -65,9 +65,9 @@ hypothesis \(\mathcal K\) has been accounted for.
 In this model, suppose that \(\mathcal K\) is not known to follow from
 \(\mathcal H\), but that the later proof only uses the theorem in situations
 where \(\mathcal K\) is available.  The corrected statement is then
-\[
+\begin{align}
   \mathcal H \wedge \mathcal K \Longrightarrow C.
-\]
+\end{align}
 This is a strengthening of the hypotheses, not a derivation of \(\mathcal K\)
 from the original assumptions.
 
