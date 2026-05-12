@@ -30,7 +30,7 @@ translation-invariant MPS representation.
 **Scope restriction (primitive block hypotheses):** this theorem assumes
 injectivity, strict ordering of the weight moduli, nonzero weights, and a primitive fixed point
 for every block. Those hypotheses are not assumptions of PGVWC07
-Theorem Th:TIcanonical. See
+the source theorem. See
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem isCanonicalForm_of_primitive
     {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
