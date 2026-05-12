@@ -119,14 +119,17 @@ are not faithful replacements for the source sentence at lines~1181--1185.
 To remain faithful, the two missing theorems must be derived only from the
 source input in \cite{Cirac2016MPDO_arXiv}:
 \begin{align}
-    \forall^\text{cof}N, 
-    \mathsf{Hyp}_{\text{LI}}(N),
-    \quad
-    \mathsf{Hyp}_{\text{prop}}(N)
-    \Rightarrow
-    \forall^\text{cof}N, 
-    \forall j, 
-    \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\not\to 0.
+    &\left(
+        \forall^{\mathrm{cof}}N,\,
+        \mathsf{Hyp}_{\mathrm{LI}}(N)\wedge
+        \mathsf{Hyp}_{\mathrm{prop}}(N)
+    \right)\\
+    &\qquad\Longrightarrow
+    \exists j,\,
+    \neg\left(
+        \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle
+        \xrightarrow[N\to\infty]{}0
+    \right).
 \end{align}
 A plausible formal route is an induction that removes matched leading blocks
 \begin{align}
