@@ -552,11 +552,15 @@ per-block peripheral-spectrum primitivity.
 		\item each block admits a primitive fixed point.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form conditions.
+	This is a scope-restricted conditional result: it assumes injectivity,
+	strict ordering of the weight moduli, nonzero weights, positive bond
+	dimensions, and primitive fixed-point data. It is not the full
+	translation-invariant canonical-form existence theorem, which starts from
+	an arbitrary translation-invariant MPS representation. This restriction is
+	documented in \texttt{docs/paper-gaps/pgvwc07\_ti\_canonical\_form\_scope.tex};
+	see
+	\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
-% Scope restriction (primitive block hypotheses): not the full source theorem
-% (Theorem Th:TIcanonical, lines 742--763), which starts from an arbitrary
-% translation-invariant MPS representation. See
-% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}\leanok
 	\uses{thm:primitive_overlap}
@@ -584,11 +588,15 @@ per-block peripheral-spectrum primitivity.
 	\end{enumerate}
 	Then $(\mu_k, A_k)$ satisfies the canonical form
 	conditions (Definition~\ref{def:is_canonical_form}).
+	This is a scope-restricted conditional result: it assumes injectivity,
+	strict ordering of the weight moduli, nonzero weights, positive bond
+	dimensions, and peripheral-spectrum primitivity for every block. It is not
+	the full translation-invariant canonical-form existence theorem, which
+	starts from an arbitrary translation-invariant MPS representation. This
+	restriction is documented in
+	\texttt{docs/paper-gaps/pgvwc07\_ti\_canonical\_form\_scope.tex}; see
+	\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
-% Scope restriction (peripheral-primitive block hypotheses): not the full
-% source theorem (lines 742--763), which starts from an
-% arbitrary translation-invariant MPS representation. See
-% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}
 	\leanok
@@ -986,12 +994,16 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		Then there exist a blocking length $p > 0$, weights $(\nu_k)$, and blocked
 		tensors $(B_k)$ such that $A^{[p]}$ generates the same MPV family as
 		$\bigoplus_k \nu_k B_k$, and $(\nu_k, B_k)$ satisfies the normal canonical
-		form conditions.
+		form conditions. This is a scope-restricted conditional result: it assumes
+		an existing weighted primitive block decomposition, irreducibility,
+		trace-preserving normalization, pairwise distinct weight moduli, nonzero
+		weights, and positive bond dimensions. It is not the full
+		translation-invariant canonical-form existence theorem, which starts from
+		an arbitrary translation-invariant MPS representation. This restriction
+		is documented in
+		\texttt{docs/paper-gaps/pgvwc07\_ti\_canonical\_form\_scope.tex}; see
+		\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
-% Scope restriction (prepared primitive block decomposition): not the
-% full source theorem (lines 742--763), which starts from
-% an arbitrary translation-invariant MPS representation. See
-% docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
 
 \begin{proof}\leanok
 		\uses{def:is_normal_canonical_form}
