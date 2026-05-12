@@ -52,6 +52,29 @@ canonical form has been obtained
 and the generic uniqueness discussion is a separate theorem
 \cite[Theorem~\texttt{thm-uniq}, lines~1000--1018]{PerezGarcia2007MPSReps}.
 
+\section{Normalization orientation}
+
+There is also a convention difference in the direction of the canonical
+normalization. PGVWC07 writes the block transfer map as
+\[
+  \mathcal{E}_j(X) = \sum_i A_i^j X A_i^{j\dagger}
+\]
+and imposes the unital condition
+\[
+  \sum_i A_i^j A_i^{j\dagger} = \mathbf{1}.
+\]
+The local canonical-form chapter usually works in the dual
+trace-preserving, or left-canonical, orientation
+\[
+  \sum_i A_i^{j\dagger} A_i^j = \mathbf{1}.
+\]
+This is a convention difference when it is accompanied by the corresponding
+adjoint transfer map or conjugate-transposed Kraus family. It is nevertheless
+important to state the convention explicitly: a theorem written only in the
+left-canonical orientation should not be read literally as PGVWC07
+Theorem~\texttt{Th:TIcanonical} unless the dualization or gauge conversion
+has also been supplied.
+
 \section{The formal reductions}
 
 The currently checked statements in the canonical-form reduction chapter
