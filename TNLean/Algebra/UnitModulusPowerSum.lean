@@ -6,7 +6,6 @@ import Mathlib.Analysis.Asymptotics.SpecificAsymptotics
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Field.GeomSum
-import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Analysis.CStarAlgebra.Basic
 
 /-!
@@ -130,7 +129,7 @@ sequence `N ↦ ∑_q (μ q) ^ N` does not tend to `0` as `N → ∞`.
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192 (the
 unit-modulus power-sum non-decay used inside the per-block projection
 step).  Proof via Cesaro averaging of `‖S N‖²` in `ℂ`. -/
-theorem unitModulus_powerSum_not_tendsto_zero
+theorem unitModulus_power_sum_not_tendsto_zero
     {r : ℕ} (hr : 0 < r) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1) :
     ¬ Tendsto (fun N : ℕ => ∑ q : Fin r, (μ q) ^ N) atTop (nhds 0) := by
   classical

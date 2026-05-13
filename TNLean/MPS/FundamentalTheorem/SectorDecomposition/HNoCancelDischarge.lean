@@ -13,10 +13,10 @@ This module discharges the load-bearing hypothesis `hNoCancel` of
   `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`
   `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`
 
-from three paper-faithful inputs:
+from the following four hypotheses:
 
 * **Unit-modulus sector weights.**  Together with
-  `unitModulus_powerSum_not_tendsto_zero`, this forces the BNT coefficient
+  `unitModulus_power_sum_not_tendsto_zero`, this forces the BNT coefficient
   `Q.coeff N k₀ = ∑_q (Q.weight k₀ q)^N` to not tend to zero as `N → ∞`.
 
 * **Decay of `Q`-off-diagonal cross-overlaps.**  The off-diagonal terms of
@@ -32,7 +32,7 @@ from three paper-faithful inputs:
 * **Lower bound on `‖c N‖`.**  The scalar witness of the eventual
   proportionality is bounded below by a positive constant.
 
-Combining these inputs, the load-bearing `hNoCancel` follows, and the
+Combining these hypotheses, the load-bearing `hNoCancel` follows, and the
 per-block projection contradiction then closes as in
 `PerBlockProjection.lean`.
 
@@ -48,7 +48,8 @@ per-block projection contradiction then closes as in
 
 * `fixed_right_all_overlaps_decay_false_paperFaithful`
   `fixed_left_all_overlaps_decay_false_paperFaithful`
-  end-to-end paper-faithful corollaries.
+  — corollaries assembling the per-block-projection skeleton with the
+  analytic discharge of the non-cancellation hypothesis.
 
 ## References
 
@@ -191,7 +192,7 @@ lemma mpvOverlap_toTensor_basis_not_tendsto_zero
     have := hQuot.congr' hRewQuot
     simpa using this
   -- Step 6: Contradict unit-modulus power-sum non-decay at block `k₀`.
-  refine UnitModulusPowerSum.unitModulus_powerSum_not_tendsto_zero
+  refine UnitModulusPowerSum.unitModulus_power_sum_not_tendsto_zero
     (r := Q.copies k₀) (Q.copies_pos k₀) (Q.weight k₀) (hQ_unit k₀) ?_
   -- Convert `Q.coeff N k₀ → 0` to `∑ q, (Q.weight k₀ q)^N → 0`.
   refine hCoeff_tendsto.congr ?_
@@ -304,18 +305,37 @@ lemma hNoCancel_of_unitModulus_decay_clower
 
 end HNoCancelDischarge
 
-section PaperFaithfulCorollaries
+section PerBlockProjectionContradiction
 
-/-- **Paper-faithful right-block per-block projection contradiction.**
+/-- **Right-block per-block projection contradiction.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.
 
-End-to-end specialization of
+Specialization of
 `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`
 with the load-bearing `hNoCancel` hypothesis discharged from three
-paper-faithful inputs: unit-modulus `Q`-sector weights, decay of `Q`
+analytic inputs: unit-modulus `Q`-sector weights, decay of `Q`
 off-diagonal cross-overlaps, a nonzero `Q`-self-overlap limit, and a
-lower bound on the proportionality scalar `‖c N‖`. -/
+lower bound on the proportionality scalar `‖c N‖`.
+
+**Scope restriction (factored analytic discharge).**  The signature adds
+four hypotheses absent from arXiv:1606.00608 Theorem `thm1`
+(lines 1170--1192):
+
+* `hP_unit`, `hQ_unit`: unit-modulus sector weights on `P` and `Q`.
+  These match CPSV21 Definition 4.2, and both are explicit assumptions
+  in this surface.
+* `hQ_decay_offdiag`: BNT separation expressed as off-diagonal
+  cross-overlap decay on `Q`.  Present in the source via the
+  equal-MPV BNT structure.
+* `hℓ_ne` + `hQ_self_limit`: the self-overlap on the fixed block tends
+  to a nonzero limit.  Source: `HasNormalizedSelfOverlap` field of the
+  canonical form.
+* `hc_lower`: eventual lower bound on the proportionality scalar.
+  Source: the dominant-adjusted scalar limit; in the strict-anti
+  `IsCanonicalFormBNT` surface this follows from
+  `exists_dominant_phase_adjusted_scalar_tendsto_one_*`, but the
+  derivation is deferred to Plan C Objective B. -/
 theorem fixed_right_all_overlaps_decay_false_paperFaithful
     (P Q : SectorDecomposition d)
     (hP_unit : ∀ j q, ‖P.sectors.weight j q‖ = 1)
@@ -344,13 +364,32 @@ theorem fixed_right_all_overlaps_decay_false_paperFaithful
       (P := P) (Q := Q) hQ_unit k₀ hQ_decay_offdiag hℓ_ne
       hQ_self_limit hc_lower)
 
-/-- **Paper-faithful left-block per-block projection contradiction.**
+/-- **Left-block per-block projection contradiction.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185.
 
 Symmetric counterpart of
 `fixed_right_all_overlaps_decay_false_paperFaithful`.  The proof reduces
-to the right-block version after swapping the two families. -/
+to the right-block version after swapping the two families.
+
+**Scope restriction (factored analytic discharge).**  The signature adds
+four hypotheses absent from arXiv:1606.00608 Theorem `thm1`
+(lines 1182--1185):
+
+* `hP_unit`, `hQ_unit`: unit-modulus sector weights on `P` and `Q`.
+  These match CPSV21 Definition 4.2, and both are explicit assumptions
+  in this surface.
+* `hP_decay_offdiag`: BNT separation expressed as off-diagonal
+  cross-overlap decay on `P`.  Present in the source via the
+  equal-MPV BNT structure.
+* `hℓ_ne` + `hP_self_limit`: the self-overlap on the fixed block tends
+  to a nonzero limit.  Source: `HasNormalizedSelfOverlap` field of the
+  canonical form.
+* `hc_lower`: eventual lower bound on the proportionality scalar.
+  Source: the dominant-adjusted scalar limit; in the strict-anti
+  `IsCanonicalFormBNT` surface this follows from
+  `exists_dominant_phase_adjusted_scalar_tendsto_one_*`, but the
+  derivation is deferred to Plan C Objective B. -/
 theorem fixed_left_all_overlaps_decay_false_paperFaithful
     (P Q : SectorDecomposition d)
     (hP_unit : ∀ j q, ‖P.sectors.weight j q‖ = 1)
@@ -379,6 +418,6 @@ theorem fixed_left_all_overlaps_decay_false_paperFaithful
       (P := Q) (Q := P) hP_unit j₀ hP_decay_offdiag hℓ_ne
       hP_self_limit hc_lower)
 
-end PaperFaithfulCorollaries
+end PerBlockProjectionContradiction
 
 end MPSTensor
