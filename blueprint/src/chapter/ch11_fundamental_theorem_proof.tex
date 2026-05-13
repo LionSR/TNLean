@@ -845,6 +845,68 @@ with an extra $Z$-gauge degree of freedom.
 	proportional weighted-state identity.
 \end{proof}
 
+% ---- Plan C: per-block projection on the SectorDecomposition surface ----
+
+\begin{lemma}[Symmetry of eventual nonzero MPV proportionality]%
+\label{lem:eventuallyNonzeroProportionalMPV2_symm}
+	\lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.symm}
+	\leanok
+	\uses{def:nonzero_proportional_mpv}
+	If the MPV of $A$ is eventually proportional to the MPV of $B$ by nonzero
+	scalars, then the MPV of $B$ is eventually proportional to the MPV of $A$:
+	the inverse scalar is the witness.
+\end{lemma}
+
+\begin{proof}\leanok
+	Invert the scalar at each length; nonvanishing is preserved by inversion.
+\end{proof}
+
+\begin{lemma}[Fixed-right all-overlaps-decay contradiction on the sector-decomposition surface]%
+\label{lem:fixed_right_all_overlaps_decay_sectorDecomp}
+	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
+	\leanok
+	\uses{def:paper_sector_data, def:nonzero_proportional_mpv,
+		lem:eventuallyNonzeroProportionalMPV2_symm}
+	Let $P$ and $Q$ be sector decompositions with unit-modulus sector weights on
+	$P$. Fix a block $Q_{k_0}$.  Suppose the assembled tensors
+	$A_{\mathrm{tot}}^P$ and $A_{\mathrm{tot}}^Q$ are eventually nonzero
+	proportional, every cross-overlap $O_{P_j,Q_{k_0}}(N) \to 0$, and the
+	non-cancellation hypothesis $\mathtt{hNoCancel}$ holds: for every scalar
+	sequence $c$ witnessing the proportionality,
+	$c_N \cdot O_{A_{\mathrm{tot}}^Q, Q_{k_0}}(N)$ does not tend to zero.
+	Then a contradiction follows.
+\end{lemma}
+
+\begin{proof}\leanok
+	Per-block projection of \cite[Theorem~\texttt{thm1}, lines~1170--1192]{Cirac2016MPDO_arXiv}
+	onto $Q_{k_0}$, with the load-bearing non-cancellation step factored as the
+	hypothesis $\mathtt{hNoCancel}$.  The BNT coefficient at each block is
+	bounded by the sector multiplicity (unit-modulus weights), and each
+	cross-overlap summand decays; their sum therefore decays.  The projected
+	proportionality identity then forces the scalar-weighted self-overlap to
+	decay too, contradicting $\mathtt{hNoCancel}$.
+\end{proof}
+
+\begin{lemma}[Fixed-left all-overlaps-decay contradiction on the sector-decomposition surface]%
+\label{lem:fixed_left_all_overlaps_decay_sectorDecomp}
+	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
+	\leanok
+	\uses{def:paper_sector_data, def:nonzero_proportional_mpv,
+		lem:fixed_right_all_overlaps_decay_sectorDecomp,
+		lem:eventuallyNonzeroProportionalMPV2_symm}
+	Symmetric counterpart of
+	Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp}.
+	Fix a block $P_{j_0}$.  Under the same unit-modulus, eventual proportionality,
+	all-cross-overlaps-to-$P_{j_0}$ decay, and non-cancellation assumptions
+	(with the roles of $P$ and $Q$ interchanged), a contradiction follows.
+\end{lemma}
+
+\begin{proof}\leanok
+	Swap $P$ and $Q$, apply symmetry of eventual proportionality
+	(Lemma~\ref{lem:eventuallyNonzeroProportionalMPV2_symm}), and invoke
+	Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp}.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}

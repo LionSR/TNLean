@@ -3,7 +3,6 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
-import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
 
 /-!
 # Paper Step 1 on the `SectorDecomposition` surface
@@ -20,9 +19,9 @@ This module re-states and proves Step 1 of arXiv:1606.00608, Theorem `thm1`
   contradictory.
 * `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`:
   the symmetric statement obtained by swapping the two families.
-* `eventuallyNonzeroProportionalMPV₂_symm`: `EventuallyNonzeroProportionalMPV₂`
-  is symmetric in its two arguments; used to reduce the left case to the
-  right case.
+* `EventuallyNonzeroProportionalMPV₂.symm` (in `TNLean.MPS.Defs`):
+  `EventuallyNonzeroProportionalMPV₂` is symmetric in its two arguments;
+  used (via dot notation `hProp.symm`) to reduce the left case to the right case.
 
 ## Scope and load-bearing hypothesis
 
@@ -84,23 +83,6 @@ lemma SectorDecomposition.norm_coeff_le_copies
             simp
   exact hsum.le
 
-/-- **Symmetry of `EventuallyNonzeroProportionalMPV₂`.**
-
-The eventual nonzero-proportionality predicate is symmetric in its two
-arguments: inverting the per-length scalar swaps the two MPV families. -/
-lemma eventuallyNonzeroProportionalMPV₂_symm
-    {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : EventuallyNonzeroProportionalMPV₂ A B) :
-    EventuallyNonzeroProportionalMPV₂ B A := by
-  refine h.mono ?_
-  intro N hN
-  rcases hN with ⟨c, hc, hEq⟩
-  refine ⟨c⁻¹, inv_ne_zero hc, fun σ => ?_⟩
-  calc
-    mpv B σ = c⁻¹ * (c * mpv B σ) := by
-      rw [inv_mul_cancel_left₀ hc]
-    _ = c⁻¹ * mpv A σ := by
-      rw [← hEq σ]
 
 /-- **Per-block projection contradiction (fixed right block).**
 
@@ -123,7 +105,7 @@ this follows from (i) almost-periodicity giving `lim sup |coeff_Q N k₀| > 0`,
 (ii) decay of off-diagonal `Q` cross-overlaps and bounded `|coeff_Q|` from
 unit-modulus weights, and (iii) `|c_N|` bounded below via the dominant-weight
 scaling lemma.  Folding (i)--(iii) into a single hypothesis decouples the
-algebraic skeleton (here) from the analytic content (a future workstream). -/
+algebraic skeleton (here) from the analytic non-cancellation step. -/
 lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp
     (P Q : SectorDecomposition d)
     (hP_unit : ∀ j q, ‖P.sectors.weight j q‖ = 1)
@@ -145,7 +127,7 @@ lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV�
   -- `exists_eventually_weighted_mpvState_eq_smul_sequence_of_eventuallyNonzeroProportionalMPV₂`.
   set Pprop : ℕ → Prop := fun N =>
     ∃ c : ℂ, c ≠ 0 ∧ ∀ σ : Fin N → Fin d,
-      mpv P.toTensor σ = c * mpv Q.toTensor σ with hPprop_def
+      mpv P.toTensor σ = c * mpv Q.toTensor σ
   have hEvent : ∀ᶠ N in atTop, Pprop N := hProp
   let c : ℕ → ℂ := fun N => if hN : Pprop N then Classical.choose hN else 1
   have hc_eq : ∀ᶠ N in atTop, ∀ σ : Fin N → Fin d,
@@ -261,7 +243,7 @@ lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂
   -- Swap P and Q and apply the right-block version.
   refine
     fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp
-      Q P hQ_unit (eventuallyNonzeroProportionalMPV₂_symm hProp) j₀ ?_ hNoCancel
+      Q P hQ_unit hProp.symm j₀ ?_ hNoCancel
   intro k
   exact tendsto_mpvOverlap_zero_swap (d := d) (P.basis j₀) (Q.basis k)
     (hAllDecay k)
