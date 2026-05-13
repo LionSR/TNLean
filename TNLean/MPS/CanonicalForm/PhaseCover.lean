@@ -256,8 +256,6 @@ lemma span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
 
 end MPVCommonPhaseCover
 
-end SectorBasisPreMatching
-
 /-- A BNT block-permutation gauge-phase conclusion produces a common MPV phase cover. -/
 lemma nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
