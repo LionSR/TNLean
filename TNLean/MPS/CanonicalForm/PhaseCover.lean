@@ -256,62 +256,6 @@ lemma span_eq (C : MPVCommonPhaseCover blocksA blocksB) (N : ℕ) :
 
 end MPVCommonPhaseCover
 
-namespace SectorBasisPreMatching
-
-variable {P Q : SectorDecomposition d}
-
-/-- A sector-basis pre-matching supplies a common MPV phase cover of the two basis families.
-
-The common family is the left basis. The left class map is the identity, the right
-class map is the inverse of the matching permutation, and gauge-phase equivalence
-of paired basis blocks gives the required MPV-phase equivalences. -/
-def commonPhaseCover (M : SectorBasisPreMatching P Q) :
-    MPVCommonPhaseCover P.basis Q.basis := by
-  refine {
-    rC := P.basisCount
-    dimC := P.basisDim
-    common := P.basis
-    classA := id
-    classB := M.perm.symm
-    phaseA := ?_
-    phaseB := ?_
-    surjA := ?_
-    surjB := ?_
-  }
-  · intro j
-    exact MPVBlockPhaseEquiv.refl (P.basis j)
-  · intro k
-    have h := MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
-      (P.basis (M.perm.symm k)) (Q.basis (M.perm (M.perm.symm k)))
-      (M.dim_eq (M.perm.symm k)) (M.basis_equiv (M.perm.symm k))
-    rw [M.perm.apply_symm_apply k] at h
-    exact h
-  · intro j
-    exact ⟨j, rfl⟩
-  · intro j
-    exact ⟨M.perm j, by simp⟩
-
-/-- A sector-basis pre-matching gives equality of finite-length MPV spans of the two basis
-families. -/
-lemma span_eq (M : SectorBasisPreMatching P Q) (N : ℕ) :
-    Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
-      mpvState (d := d) (P.basis j) N)) =
-    Submodule.span ℂ (Set.range (fun k : Fin Q.basisCount =>
-      mpvState (d := d) (Q.basis k) N)) :=
-  M.commonPhaseCover.span_eq N
-
-/-- A sector-basis pre-matching establishes the finite-length span equality needed by the
-primitive overlap-span hypotheses. -/
-lemma to_overlapSpan (M : SectorBasisPreMatching P Q)
-    (HP : SectorBasisOverlapOrthoHypotheses P)
-    (HQ : SectorBasisOverlapOrthoHypotheses Q)
-    (hP_inj : ∀ j : Fin P.basisCount, IsInjective (P.basis j))
-    (hQ_inj : ∀ k : Fin Q.basisCount, IsInjective (Q.basis k)) :
-    SectorBasisOverlapSpanHypotheses P Q :=
-  HP.to_overlapSpan HQ hP_inj hQ_inj M.span_eq
-
-end SectorBasisPreMatching
-
 /-- A BNT block-permutation gauge-phase conclusion produces a common MPV phase cover. -/
 lemma nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

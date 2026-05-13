@@ -572,33 +572,6 @@ lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
       μ A hNCF hInj
   exact hasBiCF_of_wordTupleSpanTop A hSpan
 
-/-- Conditional product-word span from all-words pair separation plus eventual identity padding.
-
-The proof takes a finite maximum over the separating and padding lengths for the
-ordered block pairs, obtaining a single homogeneous word length whose block-product
-word evaluations span the full direct product algebra.
-
-This lemma does not supply BNT separation by itself: the homogeneous
-identity-padding input must be supplied separately, preferably by fixed-length
-or period-window hypotheses. -/
-lemma exists_pos_productWordSpan_of_pairTraceSeparatingAll_of_identity_padding
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A)
-    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j))
-    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
-    ∃ m : ℕ, 0 < m ∧
-      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
-        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
-      (⊤ : Submodule ℂ
-        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  obtain ⟨T, hT⟩ :=
-    exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
-      A hSep hPad
-  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
-
 /-- Canonical-form/BNT data give all-words pair trace separation.
 
 Equal-dimensional pairs use the BNT non-gauge-phase-equivalence hypothesis and
@@ -623,55 +596,6 @@ lemma pairTraceSeparatingAll_of_isCanonicalFormBNT
       (hCF.toHasInjectiveBlocks.block_injective k)
       (hCF.toHasInjectiveBlocks.block_injective j)
       hdim
-
-/-- Canonical-form/BNT data and identity padding give homogeneous trace separation.
-
-This is the finite-maximum step after the pairwise Burnside-Jacobson
-identity-padding hypotheses have been supplied. The BNT hypotheses provide
-all-words trace separation for each pair; the generic homogenization lemma
-chooses one length that works for the whole finite block family.
-
-The conclusion depends explicitly on homogeneous padding data; it is not the
-David/Perez-Garcia finite-length direct-sum input. -/
-lemma exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
-    [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A)
-    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
-    ∃ T : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) T :=
-  exists_forall_pairTraceSeparatingAt_of_pairTraceSeparatingAll_of_identity_padding
-    A (pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF) hPad
-
-/-- Canonical-form/BNT data and eventual identity padding give positive product-word span.
-
-Canonical-form/BNT separation gives all-words trace separation for distinct blocks.
-Together with eventual homogeneous identity padding for each ordered block pair, this
-gives a positive word length at which the block-product word evaluations span the full
-direct product algebra.
-
-This lemma depends explicitly on homogeneous padding data. Use a
-fixed-length or period-window hypothesis rather than replacing that input by
-cumulative or all-words separation. -/
-lemma exists_pos_productWordSpan_of_isCanonicalFormBNT_of_identity_padding
-    [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A)
-    (hPad : ∀ k j : Fin r, j ≠ k → ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          (1 : Matrix (Fin (dim j)) (Fin (dim j)) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple (A k) (A j) n))) :
-    ∃ m : ℕ, 0 < m ∧
-      Submodule.span ℂ (Set.range fun ω : Fin m → Fin d =>
-        fun k : Fin r => evalWord (A k) (List.ofFn ω)) =
-      (⊤ : Submodule ℂ
-        ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) := by
-  obtain ⟨T, hT⟩ :=
-    exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_padding
-      μ A hCF hPad
-  exact exists_pos_productWordSpan_of_isCanonicalFormBNT_of_pairTraceSeparatingAt μ A hCF hT
 
 /-- Canonical-form/BNT data and period-window padding give homogeneous trace separation.
 
@@ -797,26 +721,6 @@ lemma
   simpa [WordTupleSpanTop, wordTuple] using
     wordTupleSpanTop_of_isCanonicalFormBNT_of_pairTraceSeparatingUpTo_of_identity_padding
       μ A hCF hST hSep hPad
-
-/-- From `IsCanonicalFormBNT`, obtain `PairTraceSeparatingAll` for every ordered
-pair of distinct blocks and `PairTraceSeparatingUpTo S` for a common cutoff
-`S`.
-
-The homogeneous trace-separation conclusion still requires a period-window
-identity-padding certificate
-(see `exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
-above). -/
-theorem forall_pairTraceSeparatingAll_and_exists_pairTraceSeparatingUpTo_of_isCanonicalFormBNT
-    [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) :
-    (∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j)) ∧
-    (∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S) := by
-  have hSepAll : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j) :=
-    pairTraceSeparatingAll_of_isCanonicalFormBNT μ A hCF
-  obtain ⟨S, hSepUpTo⟩ :=
-    exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll A hSepAll
-  exact ⟨hSepAll, ⟨S, hSepUpTo⟩⟩
 
 /-- Positive-length product-word span obtained from block injectivity and finite
 block-selector words.
