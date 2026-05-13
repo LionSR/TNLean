@@ -169,3 +169,115 @@ PR 2 ("Generalize `PerBlockProjection.fixed_*_sectorDecomp` to two-layer") will:
 1. Re-state the per-block-projection theorems in `SectorDecomposition/PerBlockProjection.lean` using `IsBNTCanonicalFormSD` (replacing the implicit `unit_modulus` hypothesis with `weight_factor`).
 2. Upgrade `HNoCancelDischarge.lean` to accept the *geometric* lower bound `‖c_N‖ ≥ δ · ‖λ_B^{(k₀)} / λ_A^{(0)}‖^N`, either directly or via the rescaled-scalar substitution `c̃_N := c_N · (λ_B^{(k₀)} / λ_A^{(0)})^N`.
 3. Keep `_CFBNT` callers untouched.  PR 3 then closes the two `_CFBNT` sorries at `Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152` by composing the PR 1 adapter with the PR 2 generalized per-block-projection theorems.
+
+## PR 1.5 amendment (2026-05-13) — dominant normalization `‖λ_0‖ = 1`
+
+### Why the amendment is needed
+
+The PR 2 scout (`/executions/c58263cc3990/report`) found that without
+the dominant normalization `‖λ_0‖ = 1`, the analytic discharge on the
+non-dominant `k₀` branch in `HNoCancelDischarge.lean` has a fundamental
+gap: the lower bound on `‖c_N‖` is only *geometric*
+(`δ · ‖λ_B^{(k₀)} / λ_A^{(0)}‖^N`), not constant.  The one-layer
+analytic argument (`unitModulus_power_sum_not_tendsto_zero` applied to
+the rescaled scalar `c̃_N`) requires the constant lower bound, and the
+geometric form does not transfer without an additional uniform bound
+on `‖coeff N j‖`.
+
+Under the dominant normalization, every spectral level satisfies
+`‖λ_j‖ ≤ 1` (`spectralLevel_norm_le_one`), so `‖coeff N j‖ ≤ copies j`
+uniformly in `N` — exactly the one-layer regime.  The geometric
+problem dissolves and the existing analytic discharge lifts
+mechanically.
+
+This matches CPSV21 Definition 4.2 (the paper-faithful normalization
+form), so it is the correct structural fix rather than a workaround.
+
+### What was added
+
+In `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`:
+
+* The existential `exists_spectralLevel` gained a fourth clause
+  `(∀ h : 0 < P.basisCount, ‖lam ⟨0, h⟩‖ = 1)`.  This is vacuous when
+  `P.basisCount = 0` and asserts unit modulus of the dominant level
+  otherwise, exactly mirroring `IsNormalCanonicalFormBNT.mu_dom_norm_one`
+  in `TNLean/MPS/BNT/Construction.lean`.
+* A new accessor `IsBNTCanonicalFormSD.spectralLevel_dom_norm_one`
+  extracts the dominant unit-modulus condition.
+* A new corollary `IsBNTCanonicalFormSD.spectralLevel_norm_le_one`
+  combines the dominant normalization with `spectralLevel_strict_anti`
+  to give a uniform bound `‖λ_j‖ ≤ 1`.
+
+### Adapter choice (Choice B — rescale at adapter level)
+
+The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` was rewritten
+to rescale internally.  Three options were considered:
+
+* **Choice A** (require `IsNormalCanonicalFormBNT`): cleaner type
+  signature but forces every `_CFBNT` caller (the FixedBlockDecay
+  sorries at `:107` and `:152`) to switch input hypotheses.
+* **Choice B** (rescale at adapter level): the adapter consumes
+  `IsCanonicalFormBNT` (no signature change for PR 3 callers), defines
+  `ρ := ‖μ_0‖` (or `1` when `r = 0`), sets `λ_j := μ_j / ρ`, and
+  exposes the assembled-tensor relation as `NonzeroProportionalMPV₂
+  P.toTensor (toTensorFromBlocks μ A)` with per-length scalar
+  `(ρ^N)⁻¹`.  The original `SameMPV₂` output is *replaced* (it could
+  no longer be true once the dominant block is normalized).
+* **Choice C** (both variants): unnecessary complexity; no caller of
+  the old `SameMPV₂`-form adapter existed yet.
+
+**Choice B was selected** because the `_CFBNT` sorries
+(`Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152`) take
+`IsCanonicalFormBNT μA A` / `IsCanonicalFormBNT μB B` as inputs.
+Switching the adapter to `IsNormalCanonicalFormBNT` (Choice A) would
+have required either re-statinging those lemmas or providing a thin
+wrapper at every call site.  Rescaling internally keeps the adapter as
+the single point where the normalization is absorbed.
+
+The output relation `NonzeroProportionalMPV₂ P.toTensor
+(toTensorFromBlocks μ A)` is composable with the
+`EventuallyNonzeroProportionalMPV₂` hypothesis on the
+`toTensorFromBlocks` surface: PR 3 will chain
+`NonzeroProportionalMPV₂.symm` (or its eventual form) twice to
+transfer proportionality between `P_A.toTensor` and `P_B.toTensor` on
+the SD surface.
+
+### Updated adapter signature
+
+```lean
+theorem IsCanonicalFormBNT.toIsBNTCanonicalFormSD
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hCF : IsCanonicalFormBNT μ A) :
+    ∃ P : SectorDecomposition d,
+      IsBNTCanonicalFormSD P ∧
+      NonzeroProportionalMPV₂ P.toTensor
+        (toTensorFromBlocks (d := d) (μ := μ) A)
+```
+
+### Consequences for PR 2 scope
+
+The original PR 2 scope (generalize `PerBlockProjection.fixed_*_sectorDecomp`
+to the two-layer setting, lift `HNoCancelDischarge` to accept geometric
+`c_lower`) is now **achievable as-is, without rate-controlled
+hypotheses**.  Specifically:
+
+* `‖coeff N j‖ ≤ copies j` is uniform in `N`
+  (`spectralLevel_norm_le_one` + `weight_factor`), so the
+  `coeff_bound_uniform` step in `HNoCancelDischarge` reduces to the
+  one-layer case.
+* The `c_lower` problem becomes constant (not geometric) on every
+  branch, including the non-dominant `k₀` branch identified in the PR 2
+  scout report.
+* The rescaling factor `(ρ^N)⁻¹` between `P.toTensor` and
+  `toTensorFromBlocks μ A` is uniform, so it absorbs cleanly into the
+  per-length proportionality scalar produced by
+  `EventuallyNonzeroProportionalMPV₂` in PR 3.
+
+### Downstream impact
+
+* No pre-existing proofs needed touching.  The two `_CFBNT` sorries in
+  `Full/NondecayingOverlap/FixedBlockDecay.lean` and all other callers
+  of `IsCanonicalFormBNT` / `IsNormalCanonicalFormBNT` are unchanged.
+* `lake build` succeeds (8675/8675 jobs, no new errors; pre-existing
+  `sorry` count unchanged).
