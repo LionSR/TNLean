@@ -1735,18 +1735,15 @@ statements.
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos,
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonBlockWeight_ne_zero,
-		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero,
-		MPSTensor.CommonBlockedCyclicSectorFamily.isNormalCanonicalForm_commonFlatBlocks}
+		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:tp_primitive_irreducible_extra_blocking,
 		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
-		thm:irreducible_tensor_cast_phys_dim, thm:ncf_sorted_tp_primitive_irred}
+		thm:irreducible_tensor_cast_phys_dim}
 	Internal lemmas: the common-alphabet sectors are trace-preserving, have
 	primitive transfer maps, are tensor-irreducible, and have positive bond
-	dimensions.  Original nonzero weights remain nonzero after transport.  If
-	transported weights are sorted by strictly decreasing norm, the flattened
-	common-sector family is a normal canonical form.
+	dimensions.  Original nonzero weights remain nonzero after transport.
 
 	These are derived properties of the internal
 	\texttt{CommonBlockedCyclicSectorFamily} record; they are not independent
@@ -1756,30 +1753,22 @@ statements.
 \begin{proof}\leanok
 	\uses{thm:tp_primitive_irreducible_extra_blocking,
 		thm:left_canonical_cast_phys_dim, thm:primitive_transfer_cast_phys_dim,
-		thm:irreducible_tensor_cast_phys_dim, thm:ncf_sorted_tp_primitive_irred}
+		thm:irreducible_tensor_cast_phys_dim}
 	Apply the extra-blocking theorem to each period-removal sector, substitute the
 	equality between the iterated and common physical alphabets, and use that a
-	positive power of a nonzero complex number is nonzero.  The normal canonical
-	form statement is Theorem~\ref{thm:ncf_sorted_tp_primitive_irred} applied to
-	these derived sector data.
+	positive power of a nonzero complex number is nonzero.
 \end{proof}
 
 \begin{theorem}[Common-sector representatives form normal canonical form (internal)]%
 \label{thm:common_representative_normal_bnt}
-	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeWeight_strictAnti_of_weight_strictAnti,
-		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_tp,
-		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_primitive,
-		MPSTensor.CommonBlockedCyclicSectorFamily.commonRepresentativeBlocksAt_irreducible,
-		MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
+	\lean{MPSTensor.isNormalCanonicalFormBNT_commonRepresentativeBlocksAt}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_derived_blocks,
 		thm:common_blocked_cyclic_sector_derived_properties,
 		def:normal_cf_bnt}
 	Internal lemma: for a prescribed common blocking length, choosing one
-	representative per original block retains trace-preserving, primitive, and
-	tensor-irreducible properties, transports strict weight ordering, and gives a
-	normal canonical form with BNT separation when representatives are not
-	gauge-phase equivalent.
+	representative per original block gives a normal canonical form with BNT
+	separation when representatives are not gauge-phase equivalent.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1792,38 +1781,10 @@ statements.
 
 \paragraph{Internal flattening and reindexing lemmas.}
 The following statements are internal lemmas about the
-\texttt{CommonBlockedCyclicSectorFamily} record: they express weight formulas,
-blocked-word identifications, and MPV comparisons between direct and iterated
-blocking.  They are plumbing consumed by the normal canonical-form pipeline and
+\texttt{CommonBlockedCyclicSectorFamily} record: they express blocked-word
+identifications and MPV comparisons between direct and iterated blocking.
+They are plumbing consumed by the normal canonical-form pipeline and
 do not correspond to independent paper-level results.
-
-\begin{theorem}[Weights of common-alphabet sectors]%
-\label{thm:common_flat_weight_apply_of_block}
-	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_of_block}
-	\leanok
-	\uses{def:common_blocked_cyclic_sector_derived_blocks}
-	Formula for transported weight: a sector $s$ of block $k$ carries weight
-	$\mu_k^p$.
-\end{theorem}
-
-\begin{proof}\leanok
-	Unfold the flattened-sector indexing and the definition of the transported
-	weight.
-\end{proof}
-
-\begin{theorem}[Equal weights inside one original block]%
-\label{thm:common_flat_weight_apply_block_eq}
-	\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_block_eq}
-	\leanok
-	\uses{def:common_blocked_cyclic_sector_derived_blocks}
-	All common-alphabet sectors from the same original block carry the same
-	transported weight.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:common_flat_weight_apply_of_block}
-	Apply the weight formula for each sector of the fixed original block.
-\end{proof}
 
 \begin{theorem}[Blocked sectors on a common alphabet (internal flattening)]%
 \label{thm:common_blocked_cyclic_sector_reindexed_samempv}
