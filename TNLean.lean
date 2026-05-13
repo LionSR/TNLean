@@ -224,6 +224,7 @@ import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
