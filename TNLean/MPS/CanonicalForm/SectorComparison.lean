@@ -2,6 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
+import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.CanonicalForm.SectorComparison.BlockMatchingComparison
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
 import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison

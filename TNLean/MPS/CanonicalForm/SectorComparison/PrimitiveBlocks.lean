@@ -220,13 +220,6 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
   · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
       (d := d) (D := D) A hTP hPrim hIrr hk
 
-namespace IsNormalCanonicalFormBNT
-
-variable {d r : ℕ} {dim : Fin r → ℕ}
-variable {μ : Fin r → ℂ}
-variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
-
-end IsNormalCanonicalFormBNT
 
 
 end MPSTensor
