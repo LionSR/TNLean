@@ -219,6 +219,7 @@ import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.FixedBlockDecay
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.FixedBlockDecay_RateQuantified
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
