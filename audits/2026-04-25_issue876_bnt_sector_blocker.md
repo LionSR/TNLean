@@ -39,17 +39,14 @@ construction theorem that produces such a basis from the blocked data.
 
 ## Replacement branch contribution
 
-The replacement branch adds the small post-#886 adapter that is actually true:
+The replacement branch adds the small post-#886 adapters that are actually true:
 
 - `MPSTensor.trivialSectorDecomp`
 - `MPSTensor.sameMPV₂_trivialSectorDecomp`
-- `MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent`
 
-The last theorem has the old TP/primitive/irreducible inputs but also requires
-
-a supplied eventual-linear-independence hypothesis
-`∃ N0, ∀ N > N0, LinearIndependent ℂ (fun k => mpvState (blocks k) N)`.
-It then packages the granular sector decomposition and discharges the current
+The later-retained construction with a supplied eventual-linear-independence
+hypothesis is `MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent`.  It
+packages the granular sector decomposition and discharges the current
 `HasBNTSectorData` by exactly that hypothesis.  This is not a closure of #876;
 it is the clean adapter that future real BNT construction can feed.
 
