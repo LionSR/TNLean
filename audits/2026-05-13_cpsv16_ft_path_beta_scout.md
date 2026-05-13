@@ -339,3 +339,97 @@ The eventual linear independence `bnt_data` corresponds to CPSV21 Definition 4.3
 ### Build status
 
 `lake build` succeeds with no new errors or warnings after the docstring changes.
+
+## PR 2 implementation record (2026-05-13)
+
+PR 2 lands the algebraic skeleton of the two-layer per-block projection
+on the `IsBNTCanonicalFormSD` surface.  The analytic discharge of the
+non-cancellation hypothesis in two-layer form is intentionally deferred
+to PR 2.5 / PR 3 — see "Scope adjustment" below.
+
+### Files changed
+
+* `TNLean/MPS/FundamentalTheorem/SectorDecomposition/PerBlockProjection.lean`
+  — adds two two-layer coefficient bounds and two two-layer
+  per-block-projection contradictions.  The existing one-layer
+  `norm_coeff_le_copies` and `fixed_{right,left}_..._sectorDecomp`
+  remain callable; the new declarations sit alongside.  The import bumps
+  to include `IsBNTCanonicalFormSD`.
+* `TNLean/MPS/FundamentalTheorem/SectorDecomposition/HNoCancelDischarge.lean`
+  — adds two `_paperFaithful_twoLayer` corollaries on the
+  `IsBNTCanonicalFormSD` surface that retain the abstract `hNoCancel`
+  hypothesis (no analytic discharge).
+
+### New declarations
+
+In `PerBlockProjection.lean`:
+
+* `SectorDecomposition.norm_coeff_le_spectral_pow_mul_copies`
+  — geometric coefficient bound: `‖coeff N j‖ ≤ ‖λ_j‖^N · copies j`.
+* `SectorDecomposition.norm_coeff_le_copies_of_IsBNTCanonicalFormSD`
+  — uniform coefficient bound under dominant normalization:
+  `‖coeff N j‖ ≤ copies j`.  Combines the geometric bound with
+  `IsBNTCanonicalFormSD.spectralLevel_norm_le_one` (`‖λ_j‖ ≤ 1`).
+* `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer`
+  — two-layer counterpart of the one-layer
+  `_sectorDecomp` lemma, consuming `IsBNTCanonicalFormSD P` in place of
+  `hP_unit`.  The `hNoCancel` hypothesis shape is unchanged.
+* `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer`
+  — symmetric counterpart, consuming `IsBNTCanonicalFormSD Q`.
+
+In `HNoCancelDischarge.lean`:
+
+* `fixed_right_all_overlaps_decay_false_paperFaithful_twoLayer`
+  and `fixed_left_all_overlaps_decay_false_paperFaithful_twoLayer`
+  — corollaries packaging `IsBNTCanonicalFormSD P` + `IsBNTCanonicalFormSD Q`
+  + abstract `hNoCancel`.  In contrast to the one-layer
+  `_paperFaithful` form, they do **not** discharge `hNoCancel` from
+  unit modulus + decay + `c_lower`; the discharge is deferred.
+
+### Scope adjustment from the original PR 2 outline
+
+The original PR 2 plan included a "Commit 2" — generalising
+`mpvOverlap_toTensor_basis_not_tendsto_zero` to a two-layer form on the
+`IsBNTCanonicalFormSD` surface.  On re-examination of the math:
+
+* The one-layer lemma asserts that the assembled-tensor-to-block overlap
+  `mpvOverlap Q.toTensor (Q.basis k₀) N` does **not** tend to zero.
+  This holds because under unit-modulus weights, the BNT coefficient
+  `Q.coeff N k₀ = ∑_q (weight)^N` is a unit-modulus power sum that does
+  not decay (`unitModulus_power_sum_not_tendsto_zero`).
+* On the two-layer surface, the unit-modulus property lives only on the
+  inner quotient `weight / λ_j`.  The factored form
+  `Q.coeff N k₀ = λ_{k₀}^N · ∑_q (weight / λ_{k₀})^N` has a prefactor
+  `λ_{k₀}^N` which can decay (`‖λ_{k₀}‖ < 1` for non-dominant `k₀`).
+* For non-dominant `k₀`, `mpvOverlap Q.toTensor (Q.basis k₀) N` actually
+  **does** tend to zero generically; the natural non-decaying object is
+  the **normalized** overlap `λ_{k₀}^{-N} · mpvOverlap Q.toTensor (Q.basis k₀) N`,
+  whose cross-overlap analysis introduces ratios `λ_k / λ_{k₀}` that
+  blow up for `k < k₀` (rank-wise).  The decay of cross-overlaps would
+  have to beat these ratios — a rate-controlled separation that
+  `IsBNTCanonicalFormSD` does not currently supply.
+
+Conclusion: the two-layer analog of
+`mpvOverlap_toTensor_basis_not_tendsto_zero` cannot be stated
+unconditionally on the `IsBNTCanonicalFormSD` surface.  The cleanest
+path is to keep `hNoCancel` abstract in PR 2 and defer the analytic
+discharge to a follow-up PR that supplies rate-controlled cross-overlap
+hypotheses (or, alternatively, restricts to dominant `k₀`).
+
+### Build status
+
+`lake build` succeeds (8674/8674 jobs).  No new `sorry` introduced;
+pre-existing `sorry` count unchanged (21).  No new linter warnings
+above the file boundary (long-line warnings on the long two-layer
+lemma names are suppressed locally via `set_option linter.style.longLine
+false in` immediately before each declaration).
+
+### Downstream pick-up (PR 2.5 / PR 3)
+
+PR 3 will close the two `_CFBNT` sorries at
+`TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152`
+by composing the adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD`
+with the two-layer `_paperFaithful_twoLayer` corollaries from this PR.
+The abstract `hNoCancel` hypothesis still needs an analytic discharge
+on the two-layer surface; this is the genuinely hard analytic content
+inherited from the path α / β scouts and is the focus of PR 2.5.
