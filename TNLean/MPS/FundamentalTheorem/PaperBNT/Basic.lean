@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
+import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Overlap.Basic
@@ -10,46 +11,50 @@ import TNLean.MPS.Overlap.Basic
 /-!
 # Paper-faithful BNT canonical form on a `SectorDecomposition`
 
-This module introduces a paper-faithful canonical-form predicate
-`IsBNTCanonicalForm` over a `SectorDecomposition d`.  The structure
-implements the multi-copy BNT decomposition of CPSV16 §II
-(`eq:II_ABasicTensors`, line 286, arXiv:1606.00608) and CPSV21 Definition 4.3
-(lines 1846–1850, arXiv:2011.12127) by exposing:
+This module introduces the paper-faithful canonical-form predicate
+`IsBNTCanonicalForm` over a `SectorDecomposition d`.
 
-* a **spectral level** `spectralLevel j` with strictly decreasing modulus
-  and dominant normalization `‖spectralLevel ⟨0, _⟩‖ = 1`;
-* **within-sector unit-modulus phase weights** `phaseWeight j q` with
-  `‖phaseWeight j q‖ = 1`, factoring the bare sector weight as
-  `P.weight j q = spectralLevel j * phaseWeight j q`;
-* **per-block normality data**: each basis block is injective,
-  irreducible, left-canonical, and has self-overlap tending to one;
-* **eventual linear independence** of basis blocks
-  (`HasBNTSectorData`);
-* **block distinctness**: distinct basis blocks of equal bond dimension
-  are not gauge-phase equivalent.
+The structure is the minimal CPSV16/CPSV21 BNT canonical-form data on top of
+a `SectorDecomposition`.  It records:
 
-The resulting MPV decomposition reads
-```
-mpv P.toTensor σ
-  = ∑_j (spectralLevel j)^N · (∑_q (phaseWeight j q)^N) · mpv (P.basis j) σ,
-```
-where the within-sector unit-modulus power sum `∑_q (phaseWeight j q)^N`
-is the CPSV16 §II sector coefficient.  Specializing to one copy per
-sector (`P.copies j = 1`) collapses this to a single scalar power; that
-specialization is the one captured by the retired one-copy predicate
-discussed in issue #1678 (the `C ⊕ -C` example shows that `1 + (-1)^N`
-is not a scalar power, which is why the one-copy specialization is
-insufficient).
+* **per-block normality** (injective, irreducible, left-canonical) and
+  **self-overlap → 1** (non-periodic / after-blocking surface);
+* **eventual linear independence** of basis MPV states (`HasBNTSectorData`);
+* **block distinctness** in the cast-compatible gauge-phase shape, ruling out
+  gauge-phase equivalence between distinct basis blocks of equal bond
+  dimension.
+
+Crucially, the structure does **not** impose an equal-modulus or strict-order
+condition on the raw sector weights `P.weight j q`.  CPSV16
+`eq:II_ABasicTensors` (line 286) and CPSV21 Definition 4.3 (lines 1846–1884)
+use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not
+require `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order
+on the moduli of distinct BNT basis elements.  See the audit memo
+`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` for the
+counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that motivated
+removing the equal-modulus layer from this core predicate.
+
+An optional equal-modulus weight layer is provided separately as
+`HasEqualModulusWeightLayer` in `PaperBNT/EqualModulus.lean`.  Some
+downstream estimates may consume that layer; it is not part of the
+source-faithful core.
 
 ## References
 
-* CPSV16: Cirac--Pérez-García--Schuch--Verstraete,
-  *Matrix Product Density Operators: Renormalization Fixed Points and
-  Boundary Theories*, Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.
-* CPSV21: Cirac--Pérez-García--Schuch--Verstraete,
-  *Matrix product states and projected entangled pair states: Concepts,
-  symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021);
-  arXiv:2011.12127.
+* CPSV16: Cirac–Pérez-García–Schuch–Verstraete, *Matrix Product Density
+  Operators: Renormalization Fixed Points and Boundary Theories*,
+  Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.  Source-line tags used
+  below: 217–246 (global modulus normalization), 264–279 (gauge-phase
+  grouping rule), 271–301 (two-layer BNT display with raw `μ_{j,q}`),
+  1121–1132 (combined-family LI input), 1181–1188 (multiplicity recovery
+  via power-sum comparison).
+* CPSV21: Cirac–Pérez-García–Schuch–Verstraete, *Matrix product states and
+  projected entangled pair states: Concepts, symmetries, theorems*,
+  Rev. Mod. Phys. **93**, 045003 (2021); arXiv:2011.12127.  Source-line tags
+  used below: 1815–1837 (normal tensors primitive after blocking; canonical
+  form `⊕_k μ_k A_k`), 1846–1884 (BNT and two-layer BNT decomposition with
+  raw `μ_{j,q}`), 1905–1908 (unital gauge optional; non-periodic theorem
+  separated from periodic generalization).
 -/
 
 open scoped Matrix BigOperators
@@ -60,55 +65,57 @@ namespace MPSTensor
 variable {d : ℕ}
 
 /--
-**Paper-faithful BNT canonical form on a sector decomposition.**
+**Paper-faithful BNT canonical form (core).**
 
-Given `P : SectorDecomposition d`, this structure carries the data of a
-two-layer multi-copy BNT canonical form (CPSV16
-`eq:II_ABasicTensors`, line 286; CPSV21 Definition 4.3,
-lines 1846--1850).  See the module docstring for the full mathematical
-content; the MPV decomposition reads
+Given `P : SectorDecomposition d`, this captures the minimal CPSV16/CPSV21
+BNT canonical-form data without any equal-modulus or strict-ordering
+assumption on the raw sector weights.  The MPV expansion that flows from
+this predicate is
+
 ```
 mpv P.toTensor σ
-  = ∑_j (spectralLevel j)^N · (∑_q (phaseWeight j q)^N) · mpv (P.basis j) σ.
+  = ∑_j (∑_q (P.weight j q)^N) · mpv (P.basis j) σ,
 ```
 
-This predicate is the paper-faithful surface used throughout the FT
-chain on multi-copy data.  The retired one-copy predicate discussed in
-issue #1678 is *not* a special case of this structure and is not
-referenced anywhere here.
+i.e. CPSV16 §II's two-layer BNT display (lines 271–301) and CPSV21
+Definition 4.3 (lines 1846–1884) with **raw** `μ_{j,q}` entries and
+coefficient `∑_q μ_{j,q}^N`.
+
+The audit `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md`
+records the counter-examples that motivate keeping equal-modulus/spectral
+data out of this core predicate.
 -/
 structure IsBNTCanonicalForm (P : SectorDecomposition d) where
-  /-- Spectral level: one nonzero complex number per BNT sector. -/
-  spectralLevel : Fin P.basisCount → ℂ
-  /-- The spectral level is everywhere nonzero. -/
-  spectralLevel_ne_zero : ∀ j, spectralLevel j ≠ 0
-  /-- Spectral-level moduli are strictly decreasing in `j`. -/
-  spectralLevel_strict_anti :
-    StrictAnti (fun j : Fin P.basisCount => ‖spectralLevel j‖)
-  /-- **Dominant normalization** of the spectral level. -/
-  spectralLevel_dom_norm_one :
-    ∀ h : 0 < P.basisCount, ‖spectralLevel ⟨0, h⟩‖ = 1
-  /-- Within-sector unit-modulus phase weights `ν_{j,q}`. -/
-  phaseWeight : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ
-  /-- Every within-sector phase weight has unit modulus. -/
-  phaseWeight_norm_one : ∀ j q, ‖phaseWeight j q‖ = 1
-  /-- Factorization `μ_{j,q} = λ_j · ν_{j,q}` of the sector weights. -/
-  weight_factor : ∀ j q, P.weight j q = spectralLevel j * phaseWeight j q
-  /-- Per-block injectivity of the basis. -/
-  basis_injective : ∀ j, IsInjective (P.basis j)
-  /-- Per-block irreducibility of the basis. -/
-  basis_irreducible : ∀ j, IsIrreducibleTensor (P.basis j)
-  /-- Per-block left-canonical form of the basis. -/
-  basis_left_canonical : ∀ j, IsLeftCanonical (P.basis j)
-  /-- Per-block normalized self-overlap. -/
-  basis_normalized_self_overlap : ∀ j,
+  /-- Every basis bond dimension is positive (needed for `NeZero` typeclass
+  inference on `Fin (P.basisDim j)`; cf. CPSV21 lines 1815–1830 where the
+  primitive transfer map lives on a positive-dimension block). -/
+  basis_dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j
+  /-- **Per-block injectivity.**  Each basis block `P.basis j` is an
+  injective MPS tensor (CPSV21 lines 1815–1830). -/
+  basis_injective : ∀ j : Fin P.basisCount, IsInjective (P.basis j)
+  /-- **Per-block irreducibility.**  Each basis block has irreducible
+  transfer map after blocking (CPSV16 lines 233–234; CPSV21 lines
+  1815–1830). -/
+  basis_irreducible : ∀ j : Fin P.basisCount, IsIrreducibleTensor (P.basis j)
+  /-- **Per-block left-canonical form** (CPSV21 lines 1815–1837). -/
+  basis_left_canonical : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j)
+  /-- **Per-block normalized self-overlap.**  Each basis block has
+  `mpvOverlap (P.basis j) (P.basis j) N → 1` as `N → ∞`.  This selects the
+  non-periodic / after-blocking BNT surface (CPSV21 line 1818; the periodic
+  generalization at CPSV21 lines 1905–1908 is deliberately not included
+  here). -/
+  basis_normalized_self_overlap : ∀ j : Fin P.basisCount,
     Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
-  /-- Eventual linear independence of basis blocks (CPSV21 Def. 4.3). -/
+  /-- **BNT eventual linear independence** of the basis MPV states
+  (CPSV21 Definition 4.3, lines 1846–1850; combined-family LI input at
+  CPSV16 lines 1121–1132). -/
   bnt_data : HasBNTSectorData P
-  /-- **Block distinctness**: distinct equal-dimension basis blocks are
-  not gauge-phase equivalent.  This matches the convention used by
-  `BlocksNotGaugePhaseEquiv` in `TNLean/MPS/BNT/Construction.lean`. -/
+  /-- **Block distinctness.**  No gauge-phase equivalence between distinct
+  basis blocks of equal bond dimension; this is the cast-compatible shape
+  used by `BlocksNotGaugePhaseEquiv` in
+  `TNLean/MPS/BNT/Construction.lean`, matching the CPSV16 lines 264–279
+  grouping rule. -/
   basis_distinct : ∀ j k : Fin P.basisCount, j ≠ k →
     ∀ h : P.basisDim j = P.basisDim k,
       ¬ GaugePhaseEquiv
@@ -118,67 +125,53 @@ namespace IsBNTCanonicalForm
 
 variable {P : SectorDecomposition d}
 
-/-- **All spectral-level moduli are bounded by `1`.**
+/-- **Sector coefficient is not eventually zero.**
 
-Combines `spectralLevel_dom_norm_one` with `spectralLevel_strict_anti`:
-the dominant block has unit modulus and every other block has strictly
-smaller modulus, so every modulus is at most `1`. -/
-theorem spectralLevel_norm_le_one (h : IsBNTCanonicalForm P)
-    (j : Fin P.basisCount) : ‖h.spectralLevel j‖ ≤ 1 := by
-  have hpos : 0 < P.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) j.isLt
-  have hdom : ‖h.spectralLevel ⟨0, hpos⟩‖ = 1 :=
-    h.spectralLevel_dom_norm_one hpos
-  have hle : (⟨0, hpos⟩ : Fin P.basisCount) ≤ j :=
-    Fin.mk_le_of_le_val (Nat.zero_le _)
-  have hanti : ‖h.spectralLevel j‖ ≤ ‖h.spectralLevel ⟨0, hpos⟩‖ :=
-    h.spectralLevel_strict_anti.antitone hle
-  rw [hdom] at hanti
-  exact hanti
+For any sector `j`, the power-sum coefficient
+`P.coeff N j = ∑_q (P.weight j q)^N` is not eventually zero in `N`.  This
+rules out the pathological cancellation that would obstruct the CPSV16 §II
+Step 1 coefficient-comparison argument: once combined-family LI isolates
+the `j`-th sector coefficient (CPSV16 lines 1121–1132), the surviving
+relation cannot be `0 = 0` for large `N`, so the multiplicity-recovery
+argument of CPSV16 lines 1181–1188 has a nonvanishing left-hand side to
+compare against.
 
-/-- Phase weights are nonzero (immediate from `phaseWeight_norm_one`). -/
-theorem phaseWeight_ne_zero (h : IsBNTCanonicalForm P)
-    (j : Fin P.basisCount) (q : Fin (P.copies j)) :
-    h.phaseWeight j q ≠ 0 := by
-  have hnorm := h.phaseWeight_norm_one j q
-  intro hzero
-  rw [hzero, norm_zero] at hnorm
-  exact one_ne_zero hnorm.symm
-
-/-- Sector weights are nonzero, re-derivable from
-`spectralLevel_ne_zero` and `phaseWeight_norm_one`. -/
-theorem weight_ne_zero_from_factor (h : IsBNTCanonicalForm P)
-    (j : Fin P.basisCount) (q : Fin (P.copies j)) :
-    P.weight j q ≠ 0 := by
-  rw [h.weight_factor j q]
-  exact mul_ne_zero (h.spectralLevel_ne_zero j) (h.phaseWeight_ne_zero j q)
-
-/-- **Sector coefficient identity.**
-
-The sector coefficient `coeff N j = ∑_q (μ_{j,q})^N` factors as the
-product of the `N`-th power of the spectral level and the within-sector
-unit-modulus power sum `∑_q (ν_{j,q})^N`. -/
-theorem coeff_eq_pow_unit_sum (h : IsBNTCanonicalForm P)
-    (N : ℕ) (j : Fin P.basisCount) :
-    P.coeff N j =
-      (h.spectralLevel j) ^ N *
-        ∑ q : Fin (P.copies j), (h.phaseWeight j q) ^ N := by
+The proof feeds nonzero weights `P.weight j q ≠ 0` (from
+`P.weight_ne_zero`) into `geom_sum_eventually_zero`
+(`TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean`): if the
+power-sum were eventually zero, the geometric-extrapolation lemma would
+force it to vanish at every exponent including `0`, contradicting the
+positivity of `P.copies j` (i.e. `∑_q 1 = P.copies j ≠ 0`).
+-/
+lemma coeff_not_eventually_zero
+    (_h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
+    ¬ (∀ᶠ N in Filter.atTop, P.coeff N j = 0) := by
   classical
-  unfold SectorDecomposition.coeff SectorWeightData.coeff
-  calc
-    ∑ q : Fin (P.copies j), (P.weight j q) ^ N
-        = ∑ q : Fin (P.copies j),
-            (h.spectralLevel j * h.phaseWeight j q) ^ N := by
-          refine Finset.sum_congr rfl ?_
-          intro q _
-          rw [h.weight_factor j q]
-    _ = ∑ q : Fin (P.copies j),
-          (h.spectralLevel j) ^ N * (h.phaseWeight j q) ^ N := by
-          refine Finset.sum_congr rfl ?_
-          intro q _
-          rw [mul_pow]
-    _ = (h.spectralLevel j) ^ N *
-          ∑ q : Fin (P.copies j), (h.phaseWeight j q) ^ N := by
-          rw [← Finset.mul_sum]
+  intro hEv
+  -- Extract an explicit threshold `M` past which the power sum vanishes.
+  rw [Filter.eventually_atTop] at hEv
+  obtain ⟨M, hM⟩ := hEv
+  -- Apply `geom_sum_eventually_zero` with weights `P.weight j` (all nonzero)
+  -- and constants `c q = 1`, to conclude vanishing at every exponent.
+  have hwne : ∀ q : Fin (P.copies j), P.weight j q ≠ 0 :=
+    fun q => P.weight_ne_zero j q
+  have hAll : ∀ k, ∑ q : Fin (P.copies j), (1 : ℂ) * (P.weight j q) ^ k = 0 := by
+    refine SectorWeightData.geom_sum_eventually_zero
+      (w := P.weight j) (c := fun _ => 1) hwne (M := M) ?_
+    intro N hN
+    have hzero : P.coeff N j = 0 := hM N hN
+    -- `∑ q, 1 * w^N = ∑ q, w^N = coeff`.
+    simpa [SectorDecomposition.coeff, SectorWeightData.coeff, one_mul] using hzero
+  -- Specialize at `k = 0` to get `(P.copies j : ℂ) = 0`, contradicting positivity.
+  have h0 := hAll 0
+  -- `∑ q, 1 * w^0 = ∑ q, 1 = P.copies j`.
+  have hcard : (∑ _q : Fin (P.copies j), (1 : ℂ) * (P.weight j _q) ^ 0)
+      = (P.copies j : ℂ) := by
+    simp
+  rw [hcard] at h0
+  -- But `0 < P.copies j` rules out `(P.copies j : ℂ) = 0`.
+  have hpos : 0 < P.copies j := P.copies_pos j
+  exact (Nat.cast_ne_zero.mpr hpos.ne') h0
 
 end IsBNTCanonicalForm
 
