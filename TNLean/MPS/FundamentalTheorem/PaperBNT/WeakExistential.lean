@@ -31,15 +31,15 @@ The proof is the canonical CPSV16 combined-family contradiction:
   eventually;
 * `coefficient_eventually_eq_of_eventually_linearIndependent`
   (`TNLean.MPS.BNT.Basic`, line 172) forces every joint-family coefficient to
-  vanish; specialising at `Sum.inr ⟨0, hQ_pos⟩` gives
-  `c N · Q.coeff N ⟨0, hQ_pos⟩ = 0` eventually, hence
-  `Q.coeff N ⟨0, hQ_pos⟩ = 0` eventually;
+  vanish; specialising at the zeroth `Q`-block index gives
+  `c N · Q.coeff N 0 = 0` eventually, hence `Q.coeff N 0 = 0` eventually;
 * `IsBNTCanonicalForm.coeff_not_eventually_zero` from `PaperBNT/Basic.lean`
   rules this out, contradicting the contrapositive assumption.
 
-The conclusion is the **weak existential** `∃ j, ∃ k, ¬decay`.  Promoting
-this to the full pairwise conjunction `(∀ j, ∃ k, ¬decay) ∧ (∀ k, ∃ j, ¬decay)`
-is a stronger statement that requires induction on
+The conclusion is the **weak existential**: there exist indices `j`, `k`
+such that the cross-overlap does not decay to zero.  Promoting this to the
+full pairwise conjunction `(∀ j, ∃ k, overlap does not decay) ∧ (∀ k, ∃ j,
+overlap does not decay)` is a stronger statement that requires induction on
 `P.basisCount + Q.basisCount`, mirroring CPSV16 §II_cor2's "fixed `k_0`
 move-everything-else" argument (lines 1172–1192).
 
@@ -77,9 +77,11 @@ namespace IsBNTCanonicalForm
 
 The following local lemma is the same-family cross-decay step needed by the
 combined-family `Lem1` input.  It is logically independent of the
-proportionality hypothesis and is the same statement that is expected to be
-exported by the upcoming basic-API for `IsBNTCanonicalForm`; it is kept
-local here until that API lands. -/
+proportionality hypothesis.
+
+TODO: once `PaperBNT/Api.lean` (PR #1694) is merged, this lemma will
+migrate there as `IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero`;
+the local copy is kept here until that landing. -/
 
 /-- **Cross-overlap between distinct basis blocks decays** (same family).
 
@@ -101,10 +103,8 @@ Dispatch follows the CPSV16 lines 1080–1091 normal-tensor overlap dichotomy:
 This statement consumes only the per-block irreducibility, left-canonical
 normalisation, and gauge-phase distinctness fields of `IsBNTCanonicalForm`,
 together with the bond-dimension positivity field providing the local
-`NeZero` instances expected by the underlying analytic engine in
-`TNLean/MPS/Overlap/CastDecay.lean`.  It is expected to migrate to a
-dedicated basic-API module for `IsBNTCanonicalForm` in a follow-up
-landing. -/
+`NeZero` instances required by the decay lemmas in
+`TNLean/MPS/Overlap/CastDecay.lean`. -/
 lemma cross_overlap_basis_tendsto_zero
     {P : SectorDecomposition d} (h : IsBNTCanonicalForm P)
     {j k : Fin P.basisCount} (hjk : j ≠ k) :
@@ -130,11 +130,11 @@ end IsBNTCanonicalForm
 
 /-! ### Eventual weighted-state identity from eventual proportionality
 
-The next local lemma packages `EventuallyNonzeroProportionalMPV₂` for the
-paper-faithful multi-copy setting: the assembled tensors are `P.toTensor`
-and `Q.toTensor`, and the raw sector coefficient
-`P.coeff N j = ∑_q (P.weight j q)^N` of CPSV16 lines 287–301 enters as
-the coefficient in front of each basis MPV state. -/
+The next local lemma extracts a scalar sequence from
+`EventuallyNonzeroProportionalMPV₂` for the paper-faithful multi-copy
+setting: the assembled tensors are `P.toTensor` and `Q.toTensor`, and the
+raw sector coefficient `P.coeff N j = ∑_q (P.weight j q)^N` of CPSV16
+lines 287–301 enters as the coefficient in front of each basis MPV state. -/
 
 private lemma exists_eventually_coeff_weighted_mpvState_eq_smul_sequence
     {P Q : SectorDecomposition d}
@@ -227,25 +227,21 @@ Paper anchors:
 * CPSV16 lines 287–301 — raw sector coefficient
   `P.coeff N j = ∑_q (P.weight j q)^N`;
 * CPSV16 lines 1184–1188 — raw power-sum coefficient comparison; combined
-  with `coeff_not_eventually_zero` (`PaperBNT/Basic.lean` API) to
+  with `coeff_not_eventually_zero` (`PaperBNT/Basic.lean`) to
   discharge the dominant block index.
 
-This is the weak `∃-∃` form.  The full pairwise conjunction
-`(∀ j, ∃ k, ¬decay) ∧ (∀ k, ∃ j, ¬decay)` is a stronger statement requiring
-induction on `P.basisCount + Q.basisCount`. -/
+This is the weak `∃-∃` form.  The full pairwise conjunction (∀ j, ∃ k,
+overlap does not decay) ∧ (∀ k, ∃ j, overlap does not decay) is a stronger
+statement requiring induction on `P.basisCount + Q.basisCount`. -/
 theorem exists_nondecaying_overlap_pair_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
+    (hQ_pos : 0 < Q.basisCount)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ j : Fin P.basisCount, ∃ k : Fin Q.basisCount,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
           atTop (𝓝 0) := by
   classical
-  -- `hP_pos` is recorded in the statement for symmetry with the
-  -- to-be-implemented full pairwise conjunction; only `hQ_pos` enters this
-  -- proof, used to pick the dominant `Q`-block index `⟨0, hQ_pos⟩`.
-  let _hP_pos_unused := hP_pos
   by_contra hcontra
   push Not at hcontra
   -- `hcontra : ∀ j k, Tendsto (overlap (P.basis j) (Q.basis k)) → 0`.
@@ -327,7 +323,7 @@ theorem exists_nondecaying_overlap_pair_of_eventuallyProportional
   have hcoeff :
       ∀ᶠ N in atTop, ∀ x : Sum (Fin P.basisCount) (Fin Q.basisCount),
         α N x = β N x := by
-    set_option maxRecDepth 2000 in
+    set_option maxRecDepth 1024 in
     exact coefficient_eventually_eq_of_eventually_linearIndependent
       (v := v) (a := α) (b := β) hLI hEq
   -- Specialise at the dominant `Q`-block index `inr ⟨0, hQ_pos⟩`:
@@ -352,7 +348,7 @@ theorem exists_nondecaying_overlap_pair_of_eventuallyProportional
     rcases mul_eq_zero.mp hMulN with hzC | hzCoeff
     · exact (hcN hzC).elim
     · exact hzCoeff
-  -- But `coeff_not_eventually_zero` (core `PaperBNT/Basic.lean` API)
+  -- But `coeff_not_eventually_zero` (`PaperBNT/Basic.lean`)
   -- rules this out for any sector — in particular for the chosen
   -- `⟨0, hQ_pos⟩` of the `Q`-family.
   exact hQ.coeff_not_eventually_zero ⟨0, hQ_pos⟩ hQzero
