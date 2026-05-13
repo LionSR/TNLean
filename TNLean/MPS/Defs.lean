@@ -183,6 +183,24 @@ theorem NonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
     _ = c⁻¹ * mpv A σ := by
       rw [← hN σ]
 
+/-- Eventual nonzero MPV proportionality is symmetric.
+
+Inverting the per-length scalar witnesses the symmetry: if `mpv A σ = c N * mpv B σ`
+for all sufficiently large `N`, then `mpv B σ = c⁻¹ N * mpv A σ`. -/
+theorem EventuallyNonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : EventuallyNonzeroProportionalMPV₂ A B) :
+    EventuallyNonzeroProportionalMPV₂ B A := by
+  refine h.mono ?_
+  intro N hN
+  rcases hN with ⟨c, hc, hEq⟩
+  refine ⟨c⁻¹, inv_ne_zero hc, fun σ => ?_⟩
+  calc
+    mpv B σ = c⁻¹ * (c * mpv B σ) := by
+      rw [inv_mul_cancel_left₀ hc]
+    _ = c⁻¹ * mpv A σ := by
+      rw [← hEq σ]
+
 /-- MPV equality gives nonzero MPV proportionality with scalar `1`.
 
 Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, supplies an
