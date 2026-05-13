@@ -80,6 +80,28 @@ within-sector multiplicities under `mu_strict_anti`.
 * `audits/2026-05-13_cpsv16_ft_path_beta_scout.md`, §"PR 1.5 amendment".
 * `docs/paper-gaps/cpsv16_two_layer_sector_refinement.tex` for the
   paper-gap note recording the extra hypotheses beyond CPSV16 §II.
+
+## Rate-quantified strengthening (non-dominant projection branch)
+
+The two-layer per-block-projection lemmas
+`fixed_*_sectorDecomp_twoLayer` in
+`TNLean/MPS/FundamentalTheorem/SectorDecomposition/PerBlockProjection.lean`
+and `fixed_*_paperFaithful_twoLayer` in
+`TNLean/MPS/FundamentalTheorem/SectorDecomposition/HNoCancelDischarge.lean`
+carry an abstract `hNoCancel` hypothesis whose **non-dominant** branch
+is not dischargeable on the present `IsBNTCanonicalFormSD` surface
+alone.  The obstruction analysis recorded in
+`audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md` shows that an
+additional rate-quantified cross-overlap decay hypothesis is required,
+comparing the BNT spectral gap to the weight ratios `‖λ_j / λ_k‖`.
+The structural predicate
+`HasRateQuantifiedCrossOverlapDecay P lam` in
+`TNLean/MPS/FundamentalTheorem/SectorDecomposition/RateQuantifiedDecay.lean`
+captures this strengthened input; it is meant to be combined with
+`IsBNTCanonicalFormSD P` by instantiating `lam` with
+`h.spectralLevel`.  The paper-gap note
+`docs/paper-gaps/cpsv16_bnt_rate_quantification.tex` records the
+mathematical content of the strengthening.
 -/
 
 namespace MPSTensor
@@ -114,6 +136,13 @@ for every `j`, so per-length coefficients `coeff N j` are uniformly
 controlled by the within-sector multiplicities.  This uniform bound powers
 the analytic discharge of `HNoCancelDischarge` on the non-dominant `k₀`
 branch (see the PR 1.5 amendment to the audit memo).
+
+For the non-dominant branch of the two-layer per-block-projection
+discharge, this predicate must be combined with the rate-quantified
+cross-overlap decay predicate
+`HasRateQuantifiedCrossOverlapDecay P h.spectralLevel`
+(see `RateQuantifiedDecay.lean` and
+`docs/paper-gaps/cpsv16_bnt_rate_quantification.tex`).
 
 The spectral level is packaged inside an existential to keep the
 predicate `Prop`-valued; the five layer projections are exposed via
