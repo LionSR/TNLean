@@ -8,23 +8,30 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDischarge
 /-!
 # Rate-quantified fixed-block decay contradictions on the `IsCanonicalFormBNT` surface
 
+**Status note (issue #1678).** As of the cleanup tracked in issue #1678,
+this rate-quantified stack is **no longer the active discharge route** for
+the proportional-MPV non-decaying-overlap dispatcher
+`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`.  The
+dispatcher now exposes only the weak combined-family existential
+`∃ j, ∃ k, ¬ overlap → 0`, discharged directly via the
+combined-family Lem1 + coefficient comparison route in
+`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`.  The
+non-dominant per-block contradictions that this module's sister theorems
+were built to discharge have been **retired** from
+`Full/NondecayingOverlap/FixedBlockDecay.lean`.  The module is retained as
+a **parametric conditional-discharge framework**, exposing
+rate-quantified sister theorems that may be useful for future paper-faithful
+multi-copy BNT sector incarnations of the proof but is not on the current
+critical path.
+
 This module routes the rate-quantified two-layer discharge
 (`fixed_*_..._sectorDecomp_twoLayer_rateQuantified` in
 `TNLean/MPS/FundamentalTheorem/SectorDecomposition/RateQuantifiedDischarge.lean`)
 through the Choice B adapter
 `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` (in
 `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`)
-to the `_CFBNT` surface of
-`Full/NondecayingOverlap/FixedBlockDecay.lean`.
-
-The non-rate-quantified `_CFBNT` lemmas in
-`Full/NondecayingOverlap/FixedBlockDecay.lean` (lines 107, 152) carry an
-unconditional shape that — on the non-dominant projection branch — is
-not dischargeable on the present `IsCanonicalFormBNT` surface alone
-(see `audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md`).  Those
-two lemmas remain `sorry`-marked here; the present module adds **sister
-theorems with the rate-quantified hypotheses inlined as additional
-inputs**, fully proven.
+to the `_CFBNT` surface.  The sister theorems are stated with the
+rate-quantified hypotheses inlined as additional inputs, fully proven.
 
 ## Adapter shape
 
@@ -236,19 +243,21 @@ set_option linter.style.longLine false in
 /-- **Rate-quantified right-block fixed-block decay contradiction on
 the `IsCanonicalFormBNT` surface.**
 
-Sister statement to
-`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
-(in `Full/NondecayingOverlap/FixedBlockDecay.lean`) with the two
-rate-quantified hypotheses
+Rate-quantified sister statement for the right-block all-overlaps-decay
+contradiction with the two rate-quantified hypotheses
 (`HasRateQuantifiedCrossOverlapDecay` on the `B`-side,
 `HasCrossFamilyRateDecay` between the rescaled `A` and `B` spectral
-levels) inlined as additional inputs and fully proven.  The unconditional
-form is documented at
-`Full/NondecayingOverlap/FixedBlockDecay.lean:107` and remains a paper-gap
-(per Option~2 of
-`audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md`); the rate
-hypotheses correspond to the analytic obligation derivable from the
-BNT transfer matrix spectral gap.
+levels) inlined as additional inputs and fully proven.
+
+Per issue #1678, the unconditional non-dominant per-block contradiction
+that this sister theorem was originally designed to discharge has been
+retired from the active proof: the dispatcher
+`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT` now exposes
+the weak combined-family existential and is closed via the combined-family
+Lem1 route (`CombinedLI.lean`).  The rate hypotheses below correspond to
+the analytic obligation derivable from the BNT transfer matrix spectral
+gap and are retained here as a parametric conditional-discharge sister
+theorem for future use.
 
 The cross-family qualitative decay
 `Tendsto (fun N => mpvOverlap (A j) (B k₀) N) atTop (nhds 0)` is
@@ -426,10 +435,10 @@ the right-block version after swapping the two families via
 swap: the within-family rate is taken on the `A`-side, and the
 cross-family rate is from `B` to `A`.
 
-The unconditional sister statement is at
-`Full/NondecayingOverlap/FixedBlockDecay.lean:152` and remains
-paper-gap material per Option~2 of
-`audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md`.
+Per issue #1678, the unconditional non-dominant per-block contradiction
+that this sister theorem was originally designed to discharge has been
+retired from the active proof; this rate-quantified sister statement is
+retained as a parametric conditional-discharge framework only.
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185. -/
 theorem fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT_rateQuantified
