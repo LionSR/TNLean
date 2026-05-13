@@ -623,3 +623,108 @@ and~\cite{Cirac2021Matrix}.
 	The BNT multiplicity lemmas handle this recovery directly rather than through
 	a separate explicit-coefficient equal-case theorem.
 \end{remark}
+
+\section{Paper-faithful BNT canonical form: basic API}
+\label{sec:paper_bnt_api}
+
+This section records the basic API for the paper-faithful BNT canonical-form
+predicate \texttt{IsBNTCanonicalForm} of
+\cite[\S II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
+\cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.  The predicate
+operates on a \texttt{SectorDecomposition} carrying raw sector weights
+\(\mu_{j,q}\) and a coefficient
+\(\operatorname{coeff} N\,j = \sum_q \mu_{j,q}^{\,N}\); no equal-modulus
+factorization is assumed.
+
+\begin{lemma}[Raw two-layer sector coefficient identity]%
+	\label{lem:paper_bnt_coeff_eq_sum_weight_pow}
+	\lean{MPSTensor.IsBNTCanonicalForm.coeff_eq_sum_weight_pow}
+	\leanok
+	For every sector decomposition \(P\), every length \(N\), and every basis
+	index \(j\), the sector coefficient is the raw power sum
+	\[
+		P.\operatorname{coeff}\,N\,j \;=\;
+		\sum_{q=1}^{r_j} (P.\operatorname{weight}\,j\,q)^N.
+	\]
+	This is \cite[eq.~II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
+	\cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Definitional unfolding of \texttt{SectorDecomposition.coeff}.
+\end{proof}
+
+\begin{lemma}[Sector coefficient bound by multiplicity]%
+	\label{lem:paper_bnt_norm_coeff_le_copies}
+	\lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies_of_norm_weight_le_one}
+	\leanok
+	\uses{lem:paper_bnt_coeff_eq_sum_weight_pow}
+	Under the optional global modulus normalization
+	\cite[\S II, lines 217--246]{Cirac2017MPDO_AnnPhys}, every raw weight satisfies
+	\(\lVert\mu_{j,q}\rVert \le 1\), and the triangle inequality bounds
+	the norm of the sector coefficient by the multiplicity:
+	\[
+		\lVert P.\operatorname{coeff}\,N\,j \rVert \;\le\; r_j.
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply the triangle inequality to the raw power sum from
+	Lemma~\ref{lem:paper_bnt_coeff_eq_sum_weight_pow} and bound each term by
+	\(1\) using \(\lVert\mu_{j,q}\rVert \le 1\).
+\end{proof}
+
+\begin{lemma}[Cross-overlap decay between distinct basis blocks]%
+	\label{lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+	\lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
+	\leanok
+	\uses{def:mpv_overlap}
+	If \(P\) carries a paper-faithful BNT canonical form and \(j \neq k\),
+	then \(O_{P_j P_k}(N) \to 0\) as \(N \to \infty\), where \(P_j\) and
+	\(P_k\) are the basis blocks at indices \(j\) and \(k\).  The dispatch
+	follows the normal-tensor overlap dichotomy of
+	\cite[lines 1080--1091]{Cirac2017MPDO_AnnPhys}: differing bond dimensions
+	force decay, and matching bond dimensions are ruled out by the
+	gauge-phase distinctness clause of
+	\cite[lines 264--279]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Case on \texttt{basisDim j = basisDim k}.  If the dimensions differ,
+	apply the dimension-mismatch overlap-decay theorem
+	\texttt{mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}.
+	If they agree, the \texttt{basis\_distinct} field of
+	\texttt{IsBNTCanonicalForm} rules out gauge-phase equivalence in the
+	cast-compatible shape, so the equal-dimension overlap-decay theorem
+	\texttt{mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left\_of\_irreducible\_TP}
+	applies.
+\end{proof}
+
+\begin{lemma}[Combined-family eventual linear independence]%
+	\label{lem:paper_bnt_combined_family_eventually_li}
+	\lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
+	\leanok
+	\uses{lem:bnt_two_family_overlap_orthonormal_li,
+		lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+	Let \(P\) and \(Q\) each carry a paper-faithful BNT canonical form, and
+	suppose every mixed overlap \(O_{P_j Q_k}(N)\) tends to~\(0\).  Then the
+	union family
+	\[
+		\bigl\{\ket{V^{(N)}(P_j)}\bigr\}_{j=1}^{g_P}
+		\cup
+		\bigl\{\ket{V^{(N)}(Q_k)}\bigr\}_{k=1}^{g_Q}
+	\]
+	is linearly independent for all sufficiently large~\(N\).  This is the
+	paper-faithful instantiation of the corollary~Lem1 of
+	\cite[lines 1121--1132]{Cirac2017MPDO_AnnPhys} and matches the BNT
+	linear-independence input recorded at
+	\cite[line 1850]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Feed the per-family normalized self-overlaps (from the canonical-form
+	data), the within-family cross-overlap decay
+	(Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}), and the
+	inter-family decay hypothesis into the two-family overlap-orthonormality
+	criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
+\end{proof}
