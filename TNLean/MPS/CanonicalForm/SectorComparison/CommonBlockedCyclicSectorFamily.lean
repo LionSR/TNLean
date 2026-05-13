@@ -191,20 +191,6 @@ theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : F.commonFlatWeight μ x ≠ 0 :=
   pow_ne_zero F.p (hμ (F.flatKey x).1)
 
-/-- Per-block weight transport under common blocking: every sector belonging to original
-nonzero-weight block `k` carries the transported power `μ k ^ F.p`. -/
-theorem commonFlatWeight_apply_of_block (F : CommonBlockedCyclicSectorFamily blocks)
-    (μ : Fin r → ℂ) (k : Fin r) (s : Fin (F.period k)) :
-    F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) = μ k ^ F.p := by
-  simp [commonFlatWeight, flatKey]
-
-/-- All sectors from the same original block carry the same transported weight. -/
-theorem commonFlatWeight_apply_block_eq (F : CommonBlockedCyclicSectorFamily blocks)
-    (μ : Fin r → ℂ) (k : Fin r) (s t : Fin (F.period k)) :
-    F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k s)) =
-    F.commonFlatWeight μ (finSigmaFinEquiv (Sigma.mk k t)) := by
-  simp [commonFlatWeight_apply_of_block]
-
 private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
     (∑ i : Fin (blockPhysDim d F.p),
@@ -285,42 +271,6 @@ theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : 0 < F.commonFlatDim x := by
   let y := F.flatKey x
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
-
-/-- A common blocked cyclic-sector family is a normal canonical form once its
-transported flat weights are sorted by strictly decreasing modulus. -/
-theorem isNormalCanonicalForm_commonFlatBlocks
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (μ : Fin r → ℂ)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti
-      (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
-    IsNormalCanonicalForm (d := blockPhysDim d F.p)
-      (F.commonFlatWeight μ) F.commonFlatBlocks :=
-  isNormalCanonicalForm_of_tp_primitive_irr_sorted
-    (d' := blockPhysDim d F.p)
-    (μ := F.commonFlatWeight μ)
-    F.commonFlatBlocks
-    F.commonFlatBlocks_tp
-    F.commonFlatBlocks_primitive
-    F.commonFlatDim_pos
-    (F.commonFlatWeight_ne_zero μ hμ)
-    F.commonFlatBlocks_irreducible
-    hAnti.antitone
-
-/-- The derived flattened common-sector family is a normal canonical form when
-expressed at a prescribed common blocking length. -/
-theorem isNormalCanonicalForm_commonFlatBlocksAt
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p' : ℕ} (hp : F.p = p')
-    (μ : Fin r → ℂ)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti
-      (fun x : Fin (∑ k : Fin r, F.period k) => ‖F.commonFlatWeight μ x‖)) :
-    IsNormalCanonicalForm (d := blockPhysDim d p')
-      (F.commonFlatWeight μ) (F.commonFlatBlocksAt hp) := by
-  subst p'
-  simpa [commonFlatBlocksAt] using
-    F.isNormalCanonicalForm_commonFlatBlocks μ hμ hAnti
 
 /-- Iterated blocking of a nonzero-weight block is the relabeled common block.
 

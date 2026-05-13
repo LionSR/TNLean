@@ -1547,55 +1547,6 @@ facts used to recover the lists of weights from those power sums.
 	and the MPV-phase equivalences. The span lemma then applies directly.
 \end{proof}
 
-\begin{definition}[Common phase cover from a sector basis pre-matching]%
-\label{def:sector_basis_pre_matching_common_phase_cover}
-	\lean{MPSTensor.SectorBasisPreMatching.commonPhaseCover}
-	\leanok
-	\uses{def:sector_basis_pre_matching, def:mpv_common_phase_cover}
-	A sector basis pre-matching between sector decompositions $P$ and $Q$
-	canonically gives a common MPV phase cover of their basis block families.  The
-	common family is the basis of $P$, the class map from $P$ is the identity, and
-	the class map from $Q$ is the inverse of the pre-matching permutation.
-\end{definition}
-
-\begin{lemma}[Sector basis pre-matching gives basis-span equality]%
-\label{lem:sector_basis_pre_matching_span_eq}
-	\lean{MPSTensor.SectorBasisPreMatching.span_eq}
-	\leanok
-	\uses{def:sector_basis_pre_matching_common_phase_cover,
-		lem:mpv_common_phase_cover_span_eq}
-	A sector basis pre-matching between $P$ and $Q$ implies equality, for every
-	system size, of the finite-length MPV spans of the two sector bases.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:mpv_common_phase_cover_span_eq}
-	Apply the common phase-cover span lemma to the common phase cover constructed from
-	the pre-matching.
-\end{proof}
-
-\begin{lemma}[Pre-matching supplies primitive overlap-span hypotheses]%
-\label{lem:sector_basis_pre_matching_to_overlap_span}
-	\lean{MPSTensor.SectorBasisPreMatching.to_overlapSpan}
-	\leanok
-	\uses{def:sector_basis_pre_matching, def:sector_basis_overlap_ortho_hyps,
-		def:sector_basis_overlap_span_hyps}
-	If two sector bases satisfy the one-family overlap-orthogonality hypotheses and their
-	basis blocks are one-site injective, then a sector basis pre-matching between
-	them establishes the finite-length span equality and hence the full primitive
-	overlap-span hypotheses.
-\end{lemma}
-
-\begin{proof}
-	\leanok
-	\uses{lem:sector_basis_pre_matching_span_eq,
-		lem:sector_basis_overlap_ortho_to_span}
-	The pre-matching gives the basis-span equality. Combining that equality with
-	the one-family overlap hypotheses and injectivity is exactly the construction of
-	Lemma~\ref{lem:sector_basis_overlap_ortho_to_span}.
-\end{proof}
-
 \begin{lemma}[Common phase cover from a BNT block-matching conclusion]%
 \label{lem:common_phase_cover_of_block_matching}
 	\lean{MPSTensor.nonempty_mpvCommonPhaseCover_of_blockPermutationGaugePhaseConclusion}
@@ -1941,22 +1892,6 @@ block-matching conclusions for the common primitive sectors.
 	satisfies an ordinary conjugation identity by $X_k$; the block-diagonal
 	conjugation formula assembles those identities into the displayed global
 	gauge equivalence.
-\end{proof}
-
-\begin{lemma}[Physical relabelling of normal-form and BNT hypotheses]%
-	\label{lem:normal_form_bnt_reindex_transport}
-	\lean{MPSTensor.IsNormalCanonicalForm.reindexPhysical_equiv,
-		MPSTensor.BlocksNotGaugePhaseEquiv.reindexPhysical_equiv,
-		MPSTensor.IsNormalCanonicalFormBNT.reindexPhysical_equiv}
-	\leanok
-	\uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
-	A bijection of physical alphabets transports normal canonical form and BNT
-	separation by relabelling every physical index in every block.
-\end{lemma}
-
-\begin{proof}\leanok
-	Each assertion is transported along the same relabelling.  BNT separation uses the
-	iff for gauge-phase equivalence under physical reindexing.
 \end{proof}
 
 \begin{theorem}[Common primitive sectors with span hypotheses]%
