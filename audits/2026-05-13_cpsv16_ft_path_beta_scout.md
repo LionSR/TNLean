@@ -281,3 +281,61 @@ hypotheses**.  Specifically:
   of `IsCanonicalFormBNT` / `IsNormalCanonicalFormBNT` are unchanged.
 * `lake build` succeeds (8675/8675 jobs, no new errors; pre-existing
   `sorry` count unchanged).
+
+## PR 1.6 docstring accuracy correction (2026-05-13)
+
+### Issue addressed
+
+The claude review on commit `ce378a21` flagged a **paper-faithfulness** issue:
+the docstrings in `IsBNTCanonicalFormSD.lean` attributed the structure to
+"CPSV21 Definition 4.2" and "CPSV16 §II" in ways that overstated the paper
+source.  Specifically:
+
+* **CPSV21 Definition 4.2** (`def:4:normal-tensor-mps`, line 1828) defines
+  the *one-layer* canonical form `A^i = ⊕_k μ_k A^i_k` with normal tensors.
+  It does **not** define a two-layer BNT, spectral levels, or `‖λ_0‖ = 1`.
+* **CPSV16 `eq:II_ABasicTensors`** (§II, line 286) writes the BNT
+  decomposition with **arbitrary** complex `μ_{j,q}` — no `StrictAnti`, no
+  unit-modulus factorization.
+* The `|μ_{j,q}| = 1` condition first appears in CPSV16 `thm:charact-MPS`
+  (§III, lines 543–555), which characterizes the **RFP sub-class**, not the
+  general BNT canonical form.
+
+### Citations corrected
+
+| Location | Old (incorrect) | New (correct) |
+|---|---|---|
+| Module heading (line 14) | `arXiv:1606.00608 §II / arXiv:2011.12127 Definition 4.2` | CPSV16 `eq:II_ABasicTensors` refined by SD grouping |
+| Structure docstring (line ~69) | `CPSV16 §II; equivalently CPSV21 Definition 4.2` | project-specific refinement of CPSV16 `eq:II_ABasicTensors` |
+| `spectralLevel` accessor | `cf. arXiv:2011.12127 Definition 4.2` | equal-modulus grouping factor; mirrors `IsNormalCanonicalFormBNT.mu_dom_norm_one` |
+| `spectralLevel_dom_norm_one` | `(CPSV21 Definition 4.2)` | mirrors `IsNormalCanonicalFormBNT.mu_dom_norm_one`; not in CPSV16 `eq:II_ABasicTensors` |
+| `spectralLevel_norm_le_one` | `Source: CPSV21 Definition 4.2` | project-specific conditions not in CPSV16 `eq:II_ABasicTensors` |
+| Adapter docstring | `CPSV21 Def 4.2 dominant normalization` | project's dominant normalization; `bnt_data` corresponds to CPSV21 Definition 4.3 |
+| References section | CPSV16 §II + CPSV21 Def 4.2 | CPSV16 `eq:II_ABasicTensors` + `thm:charact-MPS`; CPSV21 Def 4.3 (not Def 4.2); note on Def 4.2 |
+
+### Accurate description
+
+`IsBNTCanonicalFormSD` is a **project-specific refinement** of CPSV16
+`eq:II_ABasicTensors` obtained by:
+1. Grouping equal-modulus blocks into sectors → `SectorDecomposition`.
+2. Extracting a common spectral factor `λ_j` per sector with `StrictAnti`.
+3. Requiring unit-modulus residuals `ν_{j,q} = weight_{j,q} / λ_j` → `weight_factor`.
+4. Normalizing the dominant sector to `‖λ_0‖ = 1` → convention from
+   `IsNormalCanonicalFormBNT.mu_dom_norm_one`.
+
+The eventual linear independence `bnt_data` corresponds to CPSV21 Definition 4.3
+(`def:4:BNT`).  CPSV21 Definition 4.2 (`def:4:normal-tensor-mps`) is the
+**one-layer** canonical form and is not relevant here.
+
+### Files changed
+
+* `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`
+  — module heading, structure docstring, `spectralLevel` accessor,
+  `spectralLevel_dom_norm_one`, `spectralLevel_norm_le_one`, adapter docstring,
+  and References section.  **Docstrings only; no Lean source code changed.**
+* `docs/paper-gaps/cpsv16_two_layer_sector_refinement.tex` — new paper-gap
+  note recording the three extra hypotheses beyond CPSV16 §II.
+
+### Build status
+
+`lake build` succeeds with no new errors or warnings after the docstring changes.

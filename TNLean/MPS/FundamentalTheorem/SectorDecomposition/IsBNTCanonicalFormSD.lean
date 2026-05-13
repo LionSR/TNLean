@@ -10,8 +10,9 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 # Two-layer BNT canonical form on the `SectorDecomposition` surface
 
 The `Prop`-level predicate `IsBNTCanonicalFormSD` over a
-`SectorDecomposition P` records the two-layer BNT canonical form of
-arXiv:1606.00608 §II / arXiv:2011.12127 Definition 4.2:
+`SectorDecomposition P` is a **project-specific refinement** of the
+BNT decomposition of CPSV16 §II (`eq:II_ABasicTensors`, arXiv:1606.00608)
+in which equal-modulus blocks are grouped into sectors:
 
 * a **spectral level** `λ : Fin P.basisCount → ℂ` with `λ_j ≠ 0`,
   strictly-decreasing modulus, and **dominant normalization**
@@ -20,6 +21,16 @@ arXiv:1606.00608 §II / arXiv:2011.12127 Definition 4.2:
   with `‖ν_{j,q}‖ = 1`, expressed as `‖P.sectors.weight j q / λ_j‖ = 1`;
 * eventual linear independence of the basis blocks
   (`HasBNTSectorData`).
+
+The `StrictAnti` and `weight_factor` conditions are **not** present in
+CPSV16's general `eq:II_ABasicTensors` (which allows arbitrary complex
+`μ_{j,q}`); they arise from grouping equal-modulus coefficients into
+sectors and extracting a common spectral factor `λ_j`.  The unit-modulus
+condition `‖ν_{j,q}‖ = 1` is conceptually related to the RFP
+characterization in CPSV16 `thm:charact-MPS` (§III, lines 543–555), which
+is a strict sub-class.  The dominant normalization `‖λ_0‖ = 1` mirrors
+the `IsNormalCanonicalFormBNT.mu_dom_norm_one` convention used throughout
+`TNLean/MPS/BNT/Construction.lean`.
 
 The spectral level is packaged inside an existential so the whole
 predicate stays `Prop`-valued; the layer data is exposed via
@@ -49,13 +60,26 @@ within-sector multiplicities under `mu_strict_anti`.
 
 * CPSV16: Cirac--Pérez-García--Schuch--Verstraete, *Matrix Product Density
   Operators: Renormalization Fixed Points and Boundary Theories*,
-  Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.  Definition of the BNT
-  canonical form, §II.
+  Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.
+  - `eq:II_ABasicTensors` (§II, line 286): the BNT decomposition shape
+    `A^i = ⊕_j ⊕_q μ_{j,q} X_{j,q} A^i_j X_{j,q}^{-1}` with **arbitrary**
+    complex `μ_{j,q}` (no strictness or unit-modulus condition).
+  - `thm:charact-MPS` (§III, lines 543–555): the RFP characterization in
+    which `|μ_{j,q}| = 1`; this is the conceptual ancestor of `weight_factor`.
 * CPSV21: Cirac--Pérez-García--Schuch--Verstraete, *Matrix product states
   and projected entangled pair states: Concepts, symmetries, theorems*,
   Rev. Mod. Phys. **93**, 045003 (2021); arXiv:2011.12127.
-  Definition 4.2 (two-layer BNT canonical form).
+  - Definition 4.3 (`def:4:BNT`, lines 1846–1850): eventual linear
+    independence of the BNT vectors; this is what `bnt_data` captures.
+  - **Note:** Definition 4.2 (`def:4:normal-tensor-mps`) is the one-layer
+    canonical form `A^i = ⊕_k μ_k A^i_k` — it does *not* define the
+    two-layer BNT structure, spectral levels, or unit-modulus conditions.
+* `IsNormalCanonicalFormBNT.mu_dom_norm_one` in
+  `TNLean/MPS/BNT/Construction.lean` for the dominant normalization
+  convention that `spectralLevel_dom_norm_one` mirrors.
 * `audits/2026-05-13_cpsv16_ft_path_beta_scout.md`, §"PR 1.5 amendment".
+* `docs/paper-gaps/cpsv16_two_layer_sector_refinement.tex` for the
+  paper-gap note recording the extra hypotheses beyond CPSV16 §II.
 -/
 
 namespace MPSTensor
@@ -65,9 +89,9 @@ variable {d : ℕ}
 /-- **Two-layer BNT canonical form on the `SectorDecomposition` surface
 (`SD = Sector Decomposition`).**
 
-A `SectorDecomposition` `P` carries the two-layer BNT canonical form of
-CPSV16 §II (arXiv:1606.00608; equivalently CPSV21 Definition 4.2,
-arXiv:2011.12127) when:
+A `SectorDecomposition` `P` satisfies this predicate — a project-specific
+refinement of CPSV16 `eq:II_ABasicTensors` (§II, arXiv:1606.00608) via
+equal-modulus sector grouping — when:
 
 * there is a spectral level `λ : Fin P.basisCount → ℂ` with `λ_j ≠ 0`,
   `StrictAnti (fun j => ‖λ_j‖)`, and **dominant normalization**
@@ -77,12 +101,19 @@ arXiv:2011.12127) when:
 * the basis of normal tensors is eventually linearly independent
   (`HasBNTSectorData`).
 
-The dominant normalization `‖λ_0‖ = 1` is the CPSV21 Definition 4.2
-convention.  Combined with `StrictAnti`, it forces `‖λ_j‖ ≤ 1` for
-every `j`, hence the per-length coefficients `coeff N j` are uniformly
-controlled by the within-sector multiplicities.  This uniform bound is
-what powers the analytic discharge of `HNoCancelDischarge` on the
-non-dominant `k₀` branch (see the PR 1.5 amendment to the audit memo).
+The three extra conditions (`StrictAnti`, `weight_factor`, dominant
+normalization) are **not** present in CPSV16 `eq:II_ABasicTensors`, which
+allows arbitrary complex `μ_{j,q}` without any modulus ordering or
+factorization.  They are introduced by the project's `SectorDecomposition`
+grouping and the `IsNormalCanonicalFormBNT` convention for `‖λ_0‖ = 1`
+(cf. `IsNormalCanonicalFormBNT.mu_dom_norm_one`).  The eventual linear
+independence `bnt_data` corresponds to CPSV21 Definition 4.3 (not Def. 4.2).
+
+Combined with `StrictAnti`, the dominant normalization forces `‖λ_j‖ ≤ 1`
+for every `j`, so per-length coefficients `coeff N j` are uniformly
+controlled by the within-sector multiplicities.  This uniform bound powers
+the analytic discharge of `HNoCancelDischarge` on the non-dominant `k₀`
+branch (see the PR 1.5 amendment to the audit memo).
 
 The spectral level is packaged inside an existential to keep the
 predicate `Prop`-valued; the five layer projections are exposed via
@@ -110,7 +141,10 @@ variable {P : SectorDecomposition d}
 /-- **Spectral level** of the two-layer BNT canonical form.
 
 One complex number `λ_j` per basis block, with `‖λ_j‖` strictly decreasing
-in `j` and `‖λ_0‖ = 1` (cf. arXiv:2011.12127 Definition 4.2). -/
+in `j` and `‖λ_0‖ = 1`.  This is the equal-modulus grouping factor
+introduced by the project's `SectorDecomposition` surface; it is not a
+direct field of CPSV16 `eq:II_ABasicTensors`, which uses bare `μ_{j,q}`.
+The dominant normalization mirrors `IsNormalCanonicalFormBNT.mu_dom_norm_one`. -/
 noncomputable def spectralLevel (h : IsBNTCanonicalFormSD P) :
     Fin P.basisCount → ℂ :=
   h.exists_spectralLevel.choose
@@ -132,11 +166,15 @@ theorem weight_factor (h : IsBNTCanonicalFormSD P)
     ‖P.sectors.weight j q / h.spectralLevel j‖ = 1 :=
   h.exists_spectralLevel.choose_spec.2.2.1 j q
 
-/-- **Dominant normalization of the spectral level** (CPSV21 Definition 4.2).
+/-- **Dominant normalization of the spectral level.**
 
 When `P` has at least one basis block, the dominant spectral level has
-unit modulus, `‖λ_0‖ = 1`.  Combined with `spectralLevel_strict_anti`
-this gives `‖λ_j‖ < 1` for `j ≥ 1` and `‖λ_j‖ ≤ 1` for every `j`. -/
+unit modulus, `‖λ_0‖ = 1`.  This mirrors the convention
+`IsNormalCanonicalFormBNT.mu_dom_norm_one` in
+`TNLean/MPS/BNT/Construction.lean`; it is not asserted by CPSV16
+`eq:II_ABasicTensors` (which imposes no normalization on `μ_{j,q}`).
+Combined with `spectralLevel_strict_anti` this gives `‖λ_j‖ < 1` for
+`j ≥ 1` and `‖λ_j‖ ≤ 1` for every `j`. -/
 theorem spectralLevel_dom_norm_one (h : IsBNTCanonicalFormSD P)
     (hpos : 0 < P.basisCount) :
     ‖h.spectralLevel ⟨0, hpos⟩‖ = 1 :=
@@ -144,10 +182,10 @@ theorem spectralLevel_dom_norm_one (h : IsBNTCanonicalFormSD P)
 
 /-- All spectral-level moduli are bounded by `1`.
 
-Source: CPSV21 Definition 4.2.  Combines `spectralLevel_dom_norm_one`
-with `spectralLevel_strict_anti`: the dominant block has unit modulus
-and every other block has strictly smaller modulus, so all moduli are
-at most `1`. -/
+Combines `spectralLevel_dom_norm_one` with `spectralLevel_strict_anti`:
+the dominant block has unit modulus and every other block has strictly
+smaller modulus, so all moduli are at most `1`.  Both inputs are
+project-specific conditions not present in CPSV16 `eq:II_ABasicTensors`. -/
 theorem spectralLevel_norm_le_one (h : IsBNTCanonicalFormSD P)
     (j : Fin P.basisCount) : ‖h.spectralLevel j‖ ≤ 1 := by
   have hpos : 0 < P.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) j.isLt
@@ -168,20 +206,24 @@ The one-copy-per-sector BNT canonical form `IsCanonicalFormBNT μ A`
 yields the two-layer `IsBNTCanonicalFormSD` on the trivial sector
 decomposition (`copies j = 1`) after rescaling by the dominant-block
 modulus `ρ = ‖μ_0‖` (or `ρ = 1` when there are no blocks).  The
-spectral level is `λ_j = μ_j / ρ`, which satisfies the CPSV21 Def 4.2
-dominant normalization `‖λ_0‖ = 1`.  This is the **Choice B**
-discharge: the rescaling is absorbed at the adapter level so callers
-do not need to add a `‖μ ⟨0, _⟩‖ = 1` hypothesis to existing
-`IsCanonicalFormBNT`-shaped lemmas.
+spectral level is `λ_j = μ_j / ρ`, which satisfies the project's
+dominant normalization `‖λ_0‖ = 1` (cf. `IsNormalCanonicalFormBNT.mu_dom_norm_one`).
+This is the **Choice B** discharge: the rescaling is absorbed at the
+adapter level so callers do not need to add a `‖μ ⟨0, _⟩‖ = 1`
+hypothesis to existing `IsCanonicalFormBNT`-shaped lemmas.
+
+The output structure refines CPSV16 `eq:II_ABasicTensors` (§II,
+arXiv:1606.00608) by grouping the single copy per sector into the
+trivial `SectorDecomposition` and imposing the project-specific
+`StrictAnti` and `weight_factor` conditions.  The eventual linear
+independence `bnt_data` corresponds to CPSV21 Definition 4.3.
 
 Because the weights are rescaled, `P.toTensor` is no longer
 `SameMPV₂`-equal to `toTensorFromBlocks μ A`; instead, the two assembled
 tensors satisfy a uniform `NonzeroProportionalMPV₂` relation with
 scalar `ρ^{-N}` (nonzero for every `N`).  Compose this with the
 input `EventuallyNonzeroProportionalMPV₂` to transfer
-proportionality to the `SectorDecomposition` surface.
-
-(cf. arXiv:1606.00608 §II / arXiv:2011.12127 Definition 4.2.) -/
+proportionality to the `SectorDecomposition` surface. -/
 theorem IsCanonicalFormBNT.toIsBNTCanonicalFormSD
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
