@@ -9,6 +9,15 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDecay
 /-!
 # Renormalised non-cancellation on the two-layer `IsBNTCanonicalFormSD` surface
 
+**Status note (issue #1678).** This module is part of the rate-quantified
+non-dominant per-block discharge stack.  Per issue #1678, this stack is
+**no longer the active discharge route** for the proportional-MPV
+non-decaying-overlap dispatcher: that dispatcher now exposes only the
+weak combined-family existential and is closed directly via
+`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`.  This
+module is retained as a parametric conditional-discharge framework for
+potential future incarnations of the proof.
+
 The two-layer per-block-projection skeleton `fixed_*_sectorDecomp_twoLayer`
 in `PerBlockProjection.lean` carries an abstract hypothesis `hNoCancel`
 asserting that the scaled assembled-to-block overlap

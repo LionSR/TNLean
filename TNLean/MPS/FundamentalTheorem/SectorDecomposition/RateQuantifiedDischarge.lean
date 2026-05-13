@@ -9,6 +9,19 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.CrossFamilyRateDecay
 /-!
 # Rate-quantified discharge of the two-layer per-block projection
 
+**Status note (issue #1678).** This module is part of the rate-quantified
+non-dominant per-block discharge stack that was originally built to close
+the non-dominant `fixed_*_all_overlaps_decay_false_..._CFBNT` contradictions
+in `Full/NondecayingOverlap/FixedBlockDecay.lean`.  Per issue #1678, those
+non-dominant per-block contradictions have been retired from the active
+proof of the proportional-MPV non-decaying-overlap dispatcher, which now
+exposes only the weak combined-family existential and is closed via
+`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`.  This
+module is **no longer on the active discharge route**; it is retained as a
+parametric conditional-discharge framework for potential future incarnations
+of the proof (e.g. the paper-faithful multi-copy BNT sector predicate
+envisaged by issue #1678).
+
 This module composes the two renormalised analytic facts proved
 upstream into the full two-layer per-block-projection contradiction for
 a non-dominant `Q`-block `k₀` on the `IsBNTCanonicalFormSD` surface:

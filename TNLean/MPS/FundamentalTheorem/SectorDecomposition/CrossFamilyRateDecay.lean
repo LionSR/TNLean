@@ -12,6 +12,15 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
 /-!
 # Rate-quantified cross-family BNT overlap decay on `SectorDecomposition`
 
+**Status note (issue #1678).** This module is part of the rate-quantified
+non-dominant per-block discharge stack.  Per issue #1678, this stack is
+**no longer the active discharge route** for the proportional-MPV
+non-decaying-overlap dispatcher: that dispatcher now exposes only the
+weak combined-family existential and is closed directly via
+`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`.  This
+module is retained as a parametric conditional-discharge framework for
+potential future incarnations of the proof.
+
 This module introduces the `Prop`-level predicate
 `HasCrossFamilyRateDecay`, the cross-family analogue of
 `HasRateQuantifiedCrossOverlapDecay` from
