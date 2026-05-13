@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingPartnerUnique
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.FixedBlockDecay
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -15,28 +16,32 @@ heterogeneous equal-case fundamental theorem — the block matching stage that f
 `blocks_match_of_sameMPV₂_CFBNT` in `TNLean.MPS.FundamentalTheorem.Full.BlocksMatch`.
 
 It also states the corresponding proportional-MPV paper-realignment lemma
-`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`, using the
-nonzero projective proportionality hypothesis from arXiv:1606.00608,
-Theorem `thm1`.
-That proportional statement currently carries the intentional proof obligation
-for issue #1563 and is routed through open per-block contradictions.  The
-dominant-block specialisation
+`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`.  Per the
+audit recorded in issue #1678 (and the memory note
+`/memories/cpsv16-ft-issue-1678-correct-approach.md`), that proportional
+dispatcher is now stated in its **weak existential** form
+`∃ j, ∃ k, ¬ overlap → 0` and is proved unconditionally on the
+`IsCanonicalFormBNT` surface by routing through the combined-family Lem1
+existential `exists_nondecaying_overlap_pair_of_nonzeroProportionalMPV₂_CFBNT`
+in `TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`.  The
+previous per-block conjunction shape `(∀ j, ∃ k, …) ∧ (∀ k, ∃ j, …)` is **not
+currently proved** on the one-copy `_CFBNT` surface — see the discussion
+under the dispatcher and `docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex`.
+The dominant-block specialisation
 `exists_nondecaying_dominant_overlap_of_nonzeroProportionalMPV₂_CFBNT`
-is unconditionally closed and is intended as the base case of a future
-inductive replacement of the per-block route (see the parent docstring on
-`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT` for the
-analysis recorded in issue #1678).
+remains unconditionally closed and continues to be exposed as a useful
+specialisation of the dominant-block result.
 
 ## Main statements
 
 * `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`: For every block of one family there
   exists a block of the other family whose cross-overlap does not decay to zero.
-* `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`: The analogous
-  block-selection statement from nonzero proportionality of the assembled MPV
-  families, stated without external coefficient-array hypotheses (currently
-  conditional on open per-block contradictions; see issue #1678).
+* `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`: the
+  weak combined-family existential — there exist `j, k` such that the
+  pairwise overlap `⟪V^{(N)}(A_j), V^{(N)}(B_k)⟫` does not decay to zero
+  under eventual nonzero proportionality of the assembled total MPVs.
 * `exists_nondecaying_dominant_overlap_of_nonzeroProportionalMPV₂_CFBNT`: the
-  unconditional dominant-block specialisation of the previous lemma.
+  unconditional dominant-block specialisation.
 
 ## Implementation notes
 
@@ -50,8 +55,11 @@ For the proportional-MPV statement, the equal-MPV inductive route does not
 adapt directly because the analogue of `μA 0 = μB π(0) · ζ` is only an
 asymptotic (a complex sequence `λ_N → 1`), and the tail-reduction residue
 `(1 - λ_N) · (μA 0)^N` does not fold into the inductive predicate.  The
-current code therefore still routes the non-dominant cases through the open
-per-block contradictions classified as paper-gap in issue #1678.
+dispatcher therefore exposes only the weak existential, with the per-block
+conjunction shape (matched-partner permutation existence) tracked as an
+open paper-gap obligation in
+`docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex` and suitable
+for a future paper-faithful multi-copy BNT sector predicate.
 
 ## References
 
@@ -709,127 +717,8 @@ lemma isCanonicalFormBNT_tail_succAbove
       (fun j k hjk hdim => hA.blocks_not_equiv (a0.succAbove j) (a0.succAbove k)
         (fun h => hjk (Fin.succAbove_right_injective h)) hdim)
 
-/-- **Fixed-block Lemma `Lem1` input for the proportional BNT theorem.**
-
-Source: arXiv:1606.00608, Corollary `Lem1`, lines 1130--1133, and Theorem
-`thm1`, line 1182. In the proof of Theorem `thm1`, one fixes a block `B_k`
-and assumes, for contradiction, that all overlaps with the `A_j` tend to zero.
-Together with the BNT asymptotic orthonormality inside the `A`-family and the
-normalized self-overlap of `B_k`, Corollary `Lem1` gives linear independence,
-for all sufficiently large lengths, of the combined family consisting of all
-`A_j` and this one fixed block `B_k`.
-
-**Scope restriction (one-copy-per-sector):** The local hypotheses
-`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
-forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
-lemma eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (k₀ : Fin rB)
-    (hAllDecay : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
-    ∀ᶠ N in atTop,
-      LinearIndependent ℂ
-        (Sum.elim
-          (fun j : Fin rA => mpvState (d := d) (A j) N)
-          (fun _ : Fin 1 => mpvState (d := d) (B k₀) N)) := by
-  classical
-  let dimBsingle : Fin 1 → ℕ := fun _ => dimB k₀
-  let Bsingle : (k : Fin 1) → MPSTensor d (dimBsingle k) := fun _ => B k₀
-  have hA_self : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds 1) :=
-    hA.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hA_cross : ∀ i j : Fin rA, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0) :=
-    hA.cross_overlap_tendsto_zero
-  have hBsingle_self : ∀ k : Fin 1,
-      Tendsto (fun N => mpvOverlap (d := d) (Bsingle k) (Bsingle k) N) atTop
-        (nhds 1) := by
-    intro k
-    simpa [Bsingle] using hB.toHasNormalizedSelfOverlap.overlap_tendsto_one k₀
-  have hBsingle_cross : ∀ k₁ k₂ : Fin 1, k₁ ≠ k₂ →
-      Tendsto (fun N => mpvOverlap (d := d) (Bsingle k₁) (Bsingle k₂) N)
-        atTop (nhds 0) := by
-    intro k₁ k₂ hk
-    exact (hk (Subsingleton.elim k₁ k₂)).elim
-  have hAB : ∀ j : Fin rA, ∀ k : Fin 1,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (Bsingle k) N) atTop
-        (nhds 0) := by
-    intro j k
-    simpa [Bsingle] using hAllDecay j
-  have hLI :=
-    eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
-      A Bsingle hA_self hA_cross hBsingle_self hBsingle_cross hAB
-  simpa [Bsingle] using hLI
-
-/-- **Symmetric fixed-block Lemma `Lem1` input for the proportional BNT theorem.**
-
-Source: arXiv:1606.00608, Corollary `Lem1`, lines 1130--1133, and Theorem
-`thm1`, lines 1182--1185. The proof of Theorem `thm1` repeats the fixed-block
-argument with the two tensor families interchanged. If one fixes a block `A_j`
-and assumes that all overlaps with the `B_k` tend to zero, Corollary `Lem1`
-gives linear independence, for all sufficiently large lengths, of the combined
-family consisting of all `B_k` and this one fixed block `A_j`.
-
-**Scope restriction (one-copy-per-sector):** The local hypotheses
-`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
-forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
-lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (j₀ : Fin rA)
-    (hAllDecay : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
-    ∀ᶠ N in atTop,
-      LinearIndependent ℂ
-        (Sum.elim
-          (fun k : Fin rB => mpvState (d := d) (B k) N)
-          (fun _ : Fin 1 => mpvState (d := d) (A j₀) N)) := by
-  classical
-  let dimAsingle : Fin 1 → ℕ := fun _ => dimA j₀
-  let Asingle : (j : Fin 1) → MPSTensor d (dimAsingle j) := fun _ => A j₀
-  have hB_self : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds 1) :=
-    hB.toHasNormalizedSelfOverlap.overlap_tendsto_one
-  have hB_cross : ∀ i j : Fin rB, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0) :=
-    hB.cross_overlap_tendsto_zero
-  have hAsingle_self : ∀ j : Fin 1,
-      Tendsto (fun N => mpvOverlap (d := d) (Asingle j) (Asingle j) N) atTop
-        (nhds 1) := by
-    intro j
-    simpa [Asingle] using hA.toHasNormalizedSelfOverlap.overlap_tendsto_one j₀
-  have hAsingle_cross : ∀ j₁ j₂ : Fin 1, j₁ ≠ j₂ →
-      Tendsto (fun N => mpvOverlap (d := d) (Asingle j₁) (Asingle j₂) N)
-        atTop (nhds 0) := by
-    intro j₁ j₂ hj
-    exact (hj (Subsingleton.elim j₁ j₂)).elim
-  have hBA : ∀ k : Fin rB, ∀ j : Fin 1,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (Asingle j) N) atTop
-        (nhds 0) := by
-    intro k j
-    simpa [Asingle] using
-      tendsto_mpvOverlap_zero_swap (d := d) (A j₀) (B k) (hAllDecay k)
-  have hLI :=
-    eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
-      B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
-  simpa [Asingle] using hLI
-
-/-- **Non-decaying overlap existence for proportional-MPV BNT families.**
+/-- **Non-decaying overlap existence for proportional-MPV BNT families
+(weak combined-family existential).**
 
 **Scope restriction (one-copy-per-sector, prominent).** The local hypothesis
 `IsCanonicalFormBNT` is the already-grouped one-copy-per-sector canonical
@@ -844,79 +733,44 @@ and tracked separately.
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
 fixing a block `B_k`, the authors rule out the possibility that all overlaps
 `⟪V^{(N)}(B_k), V^{(N)}(A_j)⟫` tend to zero: otherwise the BNT expansion and
-Lemma `Lem1` would contradict proportionality of the total MPV families. The
-same argument with the two tensors interchanged gives the symmetric statement.
+Lemma `Lem1` would contradict proportionality of the total MPV families.
 
-The proof reduces the two quantified non-decaying-overlap claims to the named
-fixed-block contradictions corresponding to the two directions of the source
-argument.
-
-## Issue #1678 — structural analysis of the current per-block route
+## Issue #1678 — weakening from per-block conjunction to weak existential
 
 Per the audit recorded in issue #1678 (and the memory note
-`/memories/cpsv16-ft-issue-1678-correct-approach.md`), the per-block contradiction
-route used by this statement is **structurally insufficient** for arbitrary
-non-dominant fixed blocks.  In the per-block analytic argument, projecting the
-proportionality identity onto a non-dominant `B_{k₀}` produces an asymptotic
-equation in which both sides reduce to `0 = 0` (each side carries a strictly
-sub-dominant power-of-weight factor).  No contradiction is available without
-either (i) full combined-family eventual linear independence
-`{V^{(N)}(A_j)} ∪ {V^{(N)}(B_k)}` and exact coefficient comparison, or (ii) an
-inductive matching argument analogous to `exists_nondecaying_overlap_of_sameMPV₂_CFBNT`
-(strong induction on `rA + rB` with dominant pair extraction and tail reduction).
+`/memories/cpsv16-ft-issue-1678-correct-approach.md`), the per-block
+contradiction route previously used to obtain the conjunction shape
+`(∀ j₀, ∃ k₀, …) ∧ (∀ k₀, ∃ j₀, …)` is **structurally insufficient** for
+arbitrary non-dominant fixed blocks on the one-copy `IsCanonicalFormBNT`
+surface.  In the per-block analytic argument, projecting the proportionality
+identity onto a non-dominant `B_{k₀}` produces an asymptotic equation in which
+both sides reduce to `0 = 0` (each side carries a strictly sub-dominant
+power-of-weight factor); no contradiction is available without either (i)
+full combined-family eventual linear independence
+`{V^{(N)}(A_j)} ∪ {V^{(N)}(B_k)}` plus exact coefficient comparison, or (ii)
+an inductive matching argument analogous to
+`exists_nondecaying_overlap_of_sameMPV₂_CFBNT`.
+
+Route (i) yields the **weak existential** `∃ j, ∃ k, …` unconditionally on
+the `_CFBNT` surface — see
+`exists_nondecaying_overlap_pair_of_nonzeroProportionalMPV₂_CFBNT` in
+`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`, which
+combines `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal`
+(`TNLean.MPS.BNT.Basic`) with
+`coefficient_eventually_eq_of_eventually_linearIndependent` and the
+self/cross-overlap data from `IsCanonicalFormBNT`.  This is the conclusion
+shape exposed by the present dispatcher.
+
+The **per-block conjunction shape** (matched-partner permutation existence)
+is therefore left as an open paper-gap obligation, tracked in
+`docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex`.  It is
+suitable for the multi-copy paper-faithful BNT sector predicate envisaged
+by issue #1678 §3, where the inductive route is expected to close uniformly.
 
 The **dominant-block** specialisations remain unconditionally available
 (`fixed_right_dominant_…_CFBNT` and `fixed_left_dominant_…_CFBNT`) and are
 exposed separately by `exists_nondecaying_dominant_overlap_of_nonzeroProportionalMPV₂_CFBNT`
-below.
-
-## Analytic obstruction for direct `_sameMPV₂` adaptation
-
-Directly adapting `exists_nondecaying_overlap_of_sameMPV₂_CFBNT` to the
-proportional case is non-trivial:
-
-* In the equal-MPV case, the dominant pair `(A_0, B_{π(0)})` yields the exact
-  algebraic equation `μA 0 = μB π(0) · ζ`.  Subtracting the dominant pair from
-  the state identity produces a `SameMPV₂`-shaped equation on the
-  `(rA - 1, rB - 1)` tail, enabling recursion.
-
-* In the proportional case, the analogue available is the asymptotic limit
-  `λ_N := c_N · ((μB π(0) · ζ) / μA 0)^N → 1` in `ℂ`, supplied by
-  `exists_dominant_phase_adjusted_scalar_tendsto_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`.
-  Substituting back into the state identity leaves a residue term
-  `(1 - λ_N) · (μA 0)^N · mpv(A_0, σ)` that does not fold into any clean
-  weight-power form on the tail.  The `(rA - 1, rB - 1)` tail consequently does
-  not satisfy `EventuallyNonzeroProportionalMPV₂` in the form required by an
-  immediate inductive hypothesis.
-
-Resolving this obstruction requires either generalising the inductive
-predicate (so that the `(1 - λ_N) · (μA 0)^N` residue is admissible on the
-new surface) or controlling the rate at which `λ_N → 1` against the weight
-ratios.  See `audits/2026-05-13_cpsv16_ft_bridge_gap.md` for the deeper
-restructure direction.
-
-**Open obligation (current implementation).** The dispatcher below routes
-through the open per-block contradictions
-`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
-and `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`,
-which carry the obligation as a paper-gap sorry per the issue #1678 analysis.
-The intended replacement is the inductive route sketched above; that
-replacement is not implemented here.
-
-**Weak combined-family existential — first installment of issue #1678's
-recommendation.** The lemma
-`exists_nondecaying_overlap_pair_of_nonzeroProportionalMPV₂_CFBNT`
-(`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`) discharges
-the **weak existential form** `∃ j, ∃ k, ¬ Tendsto (overlap (A j) (B k)) → 0`
-unconditionally on the `_CFBNT` surface using the route advocated in issue
-#1678: combine `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal`
-(`TNLean.MPS.BNT.Basic`, line 195) with
-`coefficient_eventually_eq_of_eventually_linearIndependent`
-(`TNLean.MPS.BNT.Basic`, line 172), feeding self/cross-overlap data from
-`IsCanonicalFormBNT.toHasNormalizedSelfOverlap` and
-`IsCanonicalFormBNT.cross_overlap_tendsto_zero`.  Promoting that weak
-existential to the per-block conjunction returned below is **still pending**
-and remains the responsibility of a future change to this dispatcher proof. -/
+below. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -929,39 +783,28 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     (hrA : rA ≠ 0) (hrB : rB ≠ 0)
     (hProp : NonzeroProportionalMPV₂
       (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
-    (∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) ∧
-    (∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) atTop (nhds 0)) := by
-  constructor
-  · intro j₀
-    by_contra h
-    push Not at h
-    exact fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-      A B hA hB hrA hrB hProp.eventually j₀ h
-  · intro k₀
-    by_contra h
-    push Not at h
-    exact fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-      A B hA hB hrA hrB hProp.eventually k₀ h
+    ∃ j : Fin rA, ∃ k : Fin rB,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0) :=
+  exists_nondecaying_overlap_pair_of_nonzeroProportionalMPV₂_CFBNT
+    A B hA hB hrA hrB hProp.eventually
 
 /-- **Dominant-block non-decaying-overlap existence for proportional-MPV BNT families.**
 
-Specialisation of
-`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT` to the dominant
-blocks (`j₀ = ⟨0, _⟩` and `k₀ = ⟨0, _⟩`).  Both directions of the source
-argument restricted to dominant blocks are routed through the dominant-block
-fixed-block contradictions (`fixed_right_dominant_…_CFBNT` and
-`fixed_left_dominant_…_CFBNT`), which are proved unconditionally on the
-`IsCanonicalFormBNT` surface.
+A useful specialisation of the dominant-block result.  Both directions of
+the source argument restricted to dominant blocks are routed through the
+dominant-block fixed-block contradictions (`fixed_right_dominant_…_CFBNT`
+and `fixed_left_dominant_…_CFBNT`), which are proved unconditionally on
+the `IsCanonicalFormBNT` surface.
 
-This is the part of `exists_nondecaying_overlap_…_CFBNT` that is currently
-closed on the `IsCanonicalFormBNT` surface; the general (non-dominant fixed
-block) obligation remains open — see the parent docstring for the structural
-analysis from issue #1678, including the analytic residue obstruction that
-prevents a direct adaptation of the equal-MPV inductive proof.  This
-dominant-block specialisation serves as the unconditional base case of any
-future inductive route. -/
+This statement is **strictly stronger** than the weak existential exposed
+by `exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT`: it pins
+the non-decaying overlap to the dominant index `⟨0, _⟩` on one side and
+provides the matched-side existential on the other.  The general
+non-dominant per-block conjunction is the open paper-gap obligation
+discussed in the docstring above (issue #1678 and
+`docs/paper-gaps/cpsv16_nondominant_per_block_projection.tex`); this
+dominant-block specialisation serves as the unconditional base case of
+any future inductive route. -/
 lemma exists_nondecaying_dominant_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
