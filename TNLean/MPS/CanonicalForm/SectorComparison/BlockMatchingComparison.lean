@@ -286,12 +286,4 @@ theorem afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonP
   exact (hRemaining hp hAblocks hBblocks hAPos hBPos hNonzeroPos hZero hμA hμB hTPA hTPB
     hPrimA hPrimB hIrrA hIrrB hDimA hDimB).toSpanHypotheses
 
-/-! ### Unconditional (no blocked-word relabeling) variants
-
-The lemmas below use `unconditional_commonPrimitiveIrreducibleBlocks` in place of
-`afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`, removing the
-`CommonSectorRelabelingHypothesis d` requirement.  All remaining hypotheses (zero-tail equality,
-injectivity, finite-length span equality, BNT comparison hypotheses) remain explicitly conditional.
-See `CommonPrimitiveBlockMatchingData` for the paper-source references for each missing input. -/
-
 end MPSTensor

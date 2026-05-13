@@ -20,8 +20,9 @@ sides have TP-primitive decompositions.
 * `bilateral_commonPeriod_blocking_tp_primitive_normal` — two tensors with
   primitive blocked transfer maps have a common positive blocking period that
   preserves primitivity, left-canonical normalization, and normality.
-* `exists_bilateral_tp_primitive_blockDecomp_after_blocking` — two tensors
-  have blocked TP-primitive decompositions on both sides.
+* `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂` — two tensors with
+  the same MPV family have, after a common blocking, TP-primitive decompositions
+  on both sides retaining the blocked `SameMPV₂` relations and zero-tail equations.
 
 ## References
 
