@@ -123,3 +123,49 @@ The existing one-layer stub `IsBNTCanonicalFormSD` in `IsBNTCanonicalFormSD.lean
 * `audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md` — probe ruling out path α (induction).
 * `audits/2026-05-13_cpsv16_ft_bridge_b_status.md` — PR #1645 (Plan C, Objective B) status memo.
 * Issue #1641 (Plan C tracker).
+
+## PR 1 implementation record (2026-05-13)
+
+PR 1 of path β has landed on `feat/mps-ft-path-beta-pr1-two-layer`.  This section records the signatures, decisions, and the pick-up point for PR 2.
+
+### Signatures in PR 1
+
+The file `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean` now exposes:
+
+* `structure IsBNTCanonicalFormSD (P : SectorDecomposition d) : Prop` with two fields
+  - `exists_spectralLevel : ∃ lam : Fin P.basisCount → ℂ, (∀ j, lam j ≠ 0) ∧ StrictAnti (fun j => ‖lam j‖) ∧ (∀ j q, ‖P.sectors.weight j q / lam j‖ = 1)`
+  - `bnt_data : HasBNTSectorData P`
+* `noncomputable def IsBNTCanonicalFormSD.spectralLevel : IsBNTCanonicalFormSD P → Fin P.basisCount → ℂ` (via `Classical.choose`)
+* `theorem IsBNTCanonicalFormSD.spectralLevel_ne_zero`
+* `theorem IsBNTCanonicalFormSD.spectralLevel_strict_anti`
+* `theorem IsBNTCanonicalFormSD.weight_factor : ‖P.sectors.weight j q / h.spectralLevel j‖ = 1`
+* `theorem IsCanonicalFormBNT.toIsBNTCanonicalFormSD : IsCanonicalFormBNT μ A → ∃ P, IsBNTCanonicalFormSD P ∧ SameMPV₂ P.toTensor (toTensorFromBlocks μ A)`
+
+### Structural decision: `∃`-packaged spectral level
+
+The brief described `spectralLevel` as a direct structure field.  Lean 4 rejects `Prop`-valued structures with `Type`-valued fields (`failed to generate projection ... field must be a proof`), so the spectral level is packaged inside `exists_spectralLevel : ∃ lam, …` and exposed via `Classical.choose` accessors.  This keeps the predicate genuinely `Prop`-valued (matching the rest of the canonical-form predicate family) and is transparent to downstream users because the four accessor lemmas (`spectralLevel`, `spectralLevel_ne_zero`, `spectralLevel_strict_anti`, `weight_factor`) provide the layer data on demand.
+
+### Adapter construction
+
+The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` uses the existing `trivialSectorDecomp` and `sameMPV₂_trivialSectorDecomp` from `TNLean/MPS/CanonicalForm/BNTGrouping.lean`, with:
+
+* `spectralLevel := μ`,
+* `spectralLevel_ne_zero := hCF.toIsCanonicalForm.mu_ne_zero`,
+* `spectralLevel_strict_anti := hCF.mu_strict_anti`,
+* `weight_factor := fun j q => …` discharged by `div_self (hμne j)` (since `(trivialSectorDecomp μ A).sectors.weight j q = μ j` and `μ j / μ j = 1`),
+* `bnt_data := hCF.isBNT.eventually_li` (the trivial sector decomposition has `basis = A`, so `HasBNTSectorData` reduces to eventual linear independence on the original blocks, which is the `eventually_li` field of `IsCanonicalFormBNT.isBNT`).
+
+No new helper lemmas were needed — `trivialSectorDecomp`, `sameMPV₂_trivialSectorDecomp`, and `IsCanonicalFormBNT.isBNT` already existed.
+
+### Naming and file placement decisions
+
+* **Replaced the one-layer stub in place.**  The previous `IsBNTCanonicalFormSD` had fields `unit_modulus` and `bnt_data`; both are gone in the two-layer version.  No consumers needed updates (only `TNLean.lean` registered the module; no callers existed).
+* **No new files.**  The adapter lives in the same file as the structure definition (`IsBNTCanonicalFormSD.lean`), matching the co-location pattern of `IsCanonicalFormBNT.isBNT` in `MPS/BNT/Construction.lean`.  `TNLean.lean` already imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD` at line 231; no registration change was needed.
+
+### PR 2 pick-up
+
+PR 2 ("Generalize `PerBlockProjection.fixed_*_sectorDecomp` to two-layer") will:
+
+1. Re-state the per-block-projection theorems in `SectorDecomposition/PerBlockProjection.lean` using `IsBNTCanonicalFormSD` (replacing the implicit `unit_modulus` hypothesis with `weight_factor`).
+2. Upgrade `HNoCancelDischarge.lean` to accept the *geometric* lower bound `‖c_N‖ ≥ δ · ‖λ_B^{(k₀)} / λ_A^{(0)}‖^N`, either directly or via the rescaled-scalar substitution `c̃_N := c_N · (λ_B^{(k₀)} / λ_A^{(0)})^N`.
+3. Keep `_CFBNT` callers untouched.  PR 3 then closes the two `_CFBNT` sorries at `Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152` by composing the PR 1 adapter with the PR 2 generalized per-block-projection theorems.
