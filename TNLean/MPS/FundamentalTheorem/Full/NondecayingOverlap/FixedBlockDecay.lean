@@ -4,13 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingPartnerUnique
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalDominant
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
 
 /-!
 # Fixed-block decay contradictions for proportional BNT families
 
-This module hosts the two fixed-block decay contradictions used in the proof
-of Theorem `thm1` in arXiv:1606.00608 (CPSV16):
+The two fixed-block decay contradictions used in the proof of Theorem
+`thm1` in arXiv:1606.00608 (CPSV16):
 
 * the right form, fixing a `B`-block `B_{k₀}` and ruling out the assumption
   that all overlaps `⟪V^{(N)}(A_j), V^{(N)}(B_{k₀})⟫ → 0`;
@@ -21,7 +20,7 @@ The general (arbitrary fixed block) form is currently an open obligation on
 the `IsCanonicalFormBNT` surface — see the structural analysis in
 `audits/2026-05-13_cpsv16_ft_bridge_gap.md`.  The **dominant**-block
 specialisations (`k₀ = ⟨0, _⟩` for the right form, `j₀ = ⟨0, _⟩` for the left
-form) are unconditionally proved in this module using the dominant-weight
+form) are unconditionally proved below using the dominant-weight
 adjusted scalar limit (`ProportionalDominant.lean`) and the self-overlap
 normalisation supplied by `IsCanonicalForm`.
 
@@ -46,7 +45,7 @@ normalisation supplied by `IsCanonicalForm`.
 matrix product states, fundamental theorem, BNT, overlap, decay contradiction
 -/
 
-open scoped Matrix BigOperators InnerProductSpace
+open scoped BigOperators
 open Filter
 
 namespace MPSTensor

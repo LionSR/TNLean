@@ -2,13 +2,13 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 
 /-!
 # Paper-faithful BNT canonical form on the `SectorDecomposition` surface
 
-This module defines the `Prop`-level predicate `IsBNTCanonicalFormSD` over a
-`SectorDecomposition P`, recording the two paper-faithful hypotheses of
+The `Prop`-level predicate `IsBNTCanonicalFormSD` over a
+`SectorDecomposition P` records the two paper-faithful hypotheses of
 arXiv:1606.00608 Definition 4.2 / arXiv:2011.12127 Definition 4.2:
 
 * every within-sector weight has unit modulus
@@ -17,7 +17,7 @@ arXiv:1606.00608 Definition 4.2 / arXiv:2011.12127 Definition 4.2:
   (the `HasBNTSectorData` field from
   `TNLean.MPS.FundamentalTheorem.SectorDecomposition`).
 
-The structure is the eventual landing target of the
+The structure is the target signature for the
 `IsCanonicalFormBNT`→`SectorDecomposition` reorganization described in
 `audits/2026-05-13_cpsv16_ft_bridge_gap.md` §Resolution.
 
