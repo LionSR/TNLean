@@ -636,6 +636,31 @@ operates on a \texttt{SectorDecomposition} carrying raw sector weights
 \(\operatorname{coeff} N\,j = \sum_q \mu_{j,q}^{\,N}\); no equal-modulus
 factorization is assumed.
 
+\begin{definition}[Paper-faithful BNT canonical form]%
+	\label{def:paper_bnt_cf}
+	\lean{MPSTensor.IsBNTCanonicalForm}
+	\leanok
+	\uses{def:paper_sector_data}
+	Given a sector decomposition \(P\), the predicate
+	\(\texttt{IsBNTCanonicalForm}\,P\) records the minimal CPSV16/CPSV21
+	BNT canonical-form data without any equal-modulus or strict-ordering
+	condition on the raw sector weights.  Specifically it asserts:
+	each basis block has positive bond dimension, is injective,
+	irreducible, and left-canonical; the normalized self-overlap of every
+	basis block converges to~\(1\); the basis MPV family is eventually
+	linearly independent (\texttt{HasBNTSectorData}); and distinct
+	same-dimension basis blocks are not gauge-phase equivalent in the
+	cast-compatible shape.  The MPV expansion takes the raw two-layer form
+	\[
+		V^{(N)}(P)_\sigma
+		\;=\;
+		\sum_{j=1}^{g} \Bigl(\sum_{q=1}^{r_j} \mu_{j,q}^N\Bigr)
+		V^{(N)}(P_j)_\sigma,
+	\]
+	matching \cite[\S~II, lines 271--301]{Cirac2017MPDO_AnnPhys}
+	and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+\end{definition}
+
 \begin{lemma}[Raw two-layer sector coefficient identity]%
 	\label{lem:paper_bnt_coeff_eq_sum_weight_pow}
 	\lean{MPSTensor.IsBNTCanonicalForm.coeff_eq_sum_weight_pow}
@@ -727,4 +752,144 @@ factorization is assumed.
 	(Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}), and the
 	inter-family decay hypothesis into the two-family overlap-orthonormality
 	criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
+\end{proof}
+
+\section{Dropping a BNT sector}
+\label{sec:paper_bnt_drop_sector}
+
+This section formalizes the structural operation of removing one BNT sector
+from a \texttt{SectorDecomposition} and verifies that the paper-faithful
+canonical-form predicate is preserved.  The construction is the foundation
+for the strong-induction route of
+\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys},
+where matched block pairs are removed iteratively; the analytic claims about
+matched-sector coefficients and equal-MPV overlap are deferred to the
+following file.
+
+\begin{definition}[Drop a BNT sector]%
+	\label{def:paper_bnt_drop_sector}
+	\lean{MPSTensor.SectorDecomposition.dropSector}
+	\leanok
+	\uses{def:paper_sector_data}
+	Given a sector decomposition \(P\) with \(P.\texttt{basisCount} = n+1\)
+	and an index \(i_0 \in \{0,\dotsc,n\}\), the operation
+	\(\texttt{dropSector}\,P\,h\,i_0\) is the sector decomposition with
+	\(\texttt{basisCount} = n\) obtained by removing the sector at index
+	\(i_0\) and reindexing the surviving sectors by
+	\(\texttt{Fin.cast}\,h^{-1} \circ \texttt{Fin.succAbove}\,i_0\).
+	Each field of the new sector decomposition is the corresponding field
+	of~\(P\) evaluated at the reindexed position.  The construction is
+	purely structural: it provides the inductive substrate for the
+	CPSV16 \S~II \texttt{II\_cor2} induction step
+	(lines 1172--1192), where matched BNT block pairs are subtracted
+	iteratively from both sides of a same-MPV comparison.
+\end{definition}
+
+\begin{lemma}[Componentwise unfolding for the dropped decomposition]%
+	\label{lem:paper_bnt_drop_sector_unfold}
+	\lean{MPSTensor.SectorDecomposition.dropSector_basisCount,
+		MPSTensor.SectorDecomposition.dropSector_basisDim,
+		MPSTensor.SectorDecomposition.dropSector_basis,
+		MPSTensor.SectorDecomposition.dropSector_copies,
+		MPSTensor.SectorDecomposition.dropSector_weight,
+		MPSTensor.SectorDecomposition.dropSector_coeff}
+	\leanok
+	\uses{def:paper_bnt_drop_sector}
+	The fields of \(\texttt{dropSector}\,P\,h\,i_0\) unfold by reflexivity:
+	\texttt{basisCount} equals \(n\), and each of \texttt{basisDim},
+	\texttt{basis}, \texttt{copies}, \texttt{weight}, and \texttt{coeff} at
+	index \(j\) equals the corresponding field of~\(P\) at the reindexed
+	position \(\texttt{Fin.cast}\,h^{-1}(i_0.\texttt{succAbove}\,j)\).
+	This is \cite[\S~II, lines 287--301]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Definitional unfolding (\texttt{rfl}) in each case.
+\end{proof}
+
+\begin{lemma}[MPV expansion of the dropped tensor]%
+	\label{lem:paper_bnt_drop_sector_mpv_add}
+	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_dropSector_add_coeff_mpv_basis}
+	\leanok
+	\uses{def:paper_sector_data, lem:paper_decomp_formula}
+	For any sector decomposition \(P\) with \(P.\texttt{basisCount} = n+1\),
+	any removed sector index \(i_0 \in \{0,\dotsc,n\}\), and any system
+	size~\(N\),
+	\[
+		V^{(N)}\!\bigl(P.\texttt{dropSector}\,h\,i_0\bigr)_\sigma
+		\;+\;
+		c_{P,\tilde\imath_0}^{(N)} \cdot V^{(N)}(P_{\tilde\imath_0})_\sigma
+		\;=\;
+		V^{(N)}(P)_\sigma,
+	\]
+	where \(\tilde\imath_0 = \texttt{Fin.cast}\,h^{-1}(i_0)\) and
+	\(c_{P,\tilde\imath_0}^{(N)} = \sum_q (P.\texttt{weight}\,\tilde\imath_0\,q)^N\)
+	is the raw power-sum sector coefficient.  This is the raw two-layer BNT
+	display of \cite[\S~II, lines 287--301]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Reindex the MPV decomposition formula
+	(Lemma~\ref{lem:paper_decomp_formula}) from
+	\(\texttt{Fin}\,P.\texttt{basisCount}\) to \(\texttt{Fin}\,(n+1)\) via
+	\(\texttt{Fin.castOrderIso}\), split the sum at \(i_0\) using
+	\(\texttt{Fin.sum\_univ\_succAbove}\), then identify the remaining tail
+	with the MPV of the dropped decomposition via
+	\(\texttt{mpv\_toTensor\_eq\_sum\_coeff}\).
+\end{proof}
+
+\begin{lemma}[Dropped MPV as a difference]%
+	\label{lem:paper_bnt_drop_sector_mpv_sub}
+	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_dropSector_eq_sub}
+	\leanok
+	\uses{lem:paper_bnt_drop_sector_mpv_add}
+	For any \(P\), \(h\), \(i_0\), \(N\), and configuration \(\sigma\),
+	\[
+		V^{(N)}\!\bigl(P.\texttt{dropSector}\,h\,i_0\bigr)_\sigma
+		\;=\;
+		V^{(N)}(P)_\sigma
+		\;-\;
+		c_{P,\tilde\imath_0}^{(N)} \cdot V^{(N)}(P_{\tilde\imath_0})_\sigma.
+	\]
+	This is the symmetric rearrangement of
+	Lemma~\ref{lem:paper_bnt_drop_sector_mpv_add}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Rearrangement of Lemma~\ref{lem:paper_bnt_drop_sector_mpv_add} by
+	\texttt{linear\_combination}.
+\end{proof}
+
+\begin{lemma}[\texttt{IsBNTCanonicalForm} is preserved by \texttt{dropSector}]%
+	\label{lem:paper_bnt_drop_sector_cf}
+	\lean{MPSTensor.IsBNTCanonicalForm.dropSector}
+	\leanok
+	\uses{def:paper_sector_data, def:paper_bnt_cf}
+	If \(P\) carries a paper-faithful BNT canonical form
+	(\texttt{IsBNTCanonicalForm}~\(P\)) and \(P.\texttt{basisCount} = n+1\),
+	then for every index \(i_0 \in \{0,\dotsc,n\}\) the dropped
+	decomposition \(P.\texttt{dropSector}\,h\,i_0\) also carries a
+	paper-faithful BNT canonical form.  Every pointwise field (bond
+	dimension positivity, injectivity, irreducibility, left-canonical form,
+	normalized self-overlap) transfers by evaluation at the reindexed
+	position; eventual linear independence transfers via
+	\texttt{LinearIndependent.comp} applied to the injective
+	\(\texttt{Fin.succAbove}\) embedding
+	(\cite[Definition~4.3, line 1850]{Cirac2021Matrix});
+	block distinctness transfers because the reindexing is injective.
+	This is the foundational induction step of
+	\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}
+	and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Construct the \texttt{IsBNTCanonicalForm} record for
+	\(P.\texttt{dropSector}\,h\,i_0\) field by field.  For
+	\texttt{bnt\_data}, use \texttt{LinearIndependent.comp} with the
+	injective map
+	\(j \mapsto \texttt{Fin.cast}\,h^{-1}(i_0.\texttt{succAbove}\,j)\),
+	whose injectivity follows from
+	\texttt{Fin.succAbove\_right\_injective}.  For \texttt{basis\_distinct},
+	injectivity of the reindexing lifts distinct indices on the dropped
+	decomposition to distinct indices on the original.
 \end{proof}

@@ -15,8 +15,8 @@ strong-induction route to the full equal-MPV non-decaying-overlap statement
 been identified between two families with `SameMPV₂`, the sector and its
 multi-copy weights are removed from both sides and the argument repeats on
 the smaller pair.  No coefficient or overlap identity is asserted here; that
-content belongs to the matched-sector subtraction lemma scheduled for a
-follow-up landing.
+content belongs to the matched-sector subtraction lemma stated in the
+subsequent development.
 
 The operation produces a fresh `SectorDecomposition` with
 `basisCount` reduced by one, the basis-block family reindexed by
