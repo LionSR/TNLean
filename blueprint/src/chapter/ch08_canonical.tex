@@ -2084,27 +2084,6 @@ do not correspond to independent paper-level results.
 	reindexing $l \mapsto k - l$ recovers $\sum_j P_j = \Id$.
 \end{proof}
 
-\begin{theorem}[Sector irreducibility from orbit-sum lift]%
-	\label{thm:sector_irred_orbit_lift}
-	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_hLift}
-	\leanok
-	\uses{thm:cyclic_sector_decomp_irr_tp}
-	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be the cyclic sector projections.
-	Suppose the orbit-sum lift hypothesis holds: for every sector $k$ and
-	every subprojection $Q \le P_k$ fixed by $(\E_A^\dagger)^m$, there exists
-	a global projection $R$ that is invariant under $\E_A^\dagger$ and
-	faithfully reflects triviality ($Q = 0 \Leftrightarrow R = 0$,
-	$Q = P_k \Leftrightarrow R = \Id$).
-	Then $(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:cyclic_sector_decomp_irr_tp}
-	Direct application of the cyclic-decomposition irreducibility
-	theorem from spectral theory.
-\end{proof}
-
 \begin{lemma}[Fixed-point upgrade from irreducibility and trace preservation]%
 	\label{lem:fix_upgrade_peripheral}
 	\lean{MPSTensor.hFixUpgrade_of_peripheral}
@@ -2267,8 +2246,7 @@ do not correspond to independent paper-level results.
 	\label{lem:orbit_sum_hLift_construction}
 	\lean{MPSTensor.hLift_cyclicDecomp_mps_of_fixUpgrade}
 	\leanok
-	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector,
-	      thm:sector_irred_orbit_lift}
+	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector}
 	Let $A$ be a left-canonical MPS tensor, $(P_k)_{k=1}^m$ a cyclic family
 	of orthogonal sector projections with $\sum_k P_k = \Id$, and set
 	$T = \E_A^\dagger$. Assume two auxiliary facts, both discharged from the
@@ -2289,13 +2267,12 @@ do not correspond to independent paper-level results.
 	\]
 	is an orthogonal projection, preserved by $T$, with
 	$Q = 0 \Leftrightarrow R = 0$ and $Q = P_k \Leftrightarrow R = \Id$.
-	In particular $R$ witnesses the orbit-sum lift hypothesis of
-	Theorem~\ref{thm:sector_irred_orbit_lift}.
+	In particular $R$ witnesses the orbit-sum lift condition used by the
+	sector-irreducibility argument.
 \end{lemma}
 
 \begin{proof}\leanok
-	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector,
-	      thm:sector_irred_orbit_lift}
+	\uses{lem:orbit_sum_fixed, lem:orbit_sum_full_sector}
 	The iterates $T^l(Q)$ are each orthogonal projections (repeatedly using
 	the projection-step hypothesis), supported on the shifted sector
 	$P_{k-l}$, and are therefore pairwise orthogonal because distinct
@@ -2384,75 +2361,21 @@ do not correspond to independent paper-level results.
 	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
 \end{proof}
 
-\begin{theorem}[Sector irreducibility from the orbit-sum construction]%
-	\label{thm:sector_irred_fix_upgrade}
-	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_fixUpgrade}
-	\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
-	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
-	Assume the projection-step and fixed-point-upgrade hypotheses of
-	Lemma~\ref{lem:orbit_sum_hLift_construction}. Then $(\E_A^\dagger)^m$
-	is irreducible on each corner $P_k$.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_construction}
-	Apply Lemma~\ref{lem:orbit_sum_hLift_construction} to obtain the orbit-sum
-	lift, then apply Theorem~\ref{thm:sector_irred_orbit_lift}.
-\end{proof}
-
-\begin{theorem}[Sector irreducibility from the projection-step hypothesis]%
-	\label{thm:sector_irred_proj_step}
-	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_projStep}
-	\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
-	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer
-	map, and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections.
-	Assume only the projection-step hypothesis from
-	Lemma~\ref{lem:orbit_sum_hLift_proj_step}. Then $(\E_A^\dagger)^m$
-	is irreducible on each corner $P_k$.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_proj_step}
-	Apply Lemma~\ref{lem:orbit_sum_hLift_proj_step} and then
-	Theorem~\ref{thm:sector_irred_orbit_lift}.
-\end{proof}
-
-\begin{theorem}[Sector irreducibility from fixed-point-algebra rigidity]%
-	\label{thm:sector_irred_fixed_algebra}
-	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps_of_sectorFixedPointAlgebraRigidity}
-	\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_fixed_algebra}
-	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
-	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Assume only
-	the fixed-point-algebra rigidity hypothesis from
-	Definition~\ref{def:sector_fixed_point_algebra_rigidity}. Then
-	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:sector_irred_orbit_lift, lem:orbit_sum_hLift_fixed_algebra}
-	Apply Lemma~\ref{lem:orbit_sum_hLift_fixed_algebra} and then
-	Theorem~\ref{thm:sector_irred_orbit_lift}.
-\end{proof}
-
 \begin{theorem}[Unconditional sector irreducibility]%
 	\label{thm:sector_irred_unconditional}
 	\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}
 	\leanok
-	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
+	\uses{thm:orbit_sum_hLift_unconditional}
 	Let $A$ be a left-canonical MPS tensor with irreducible adjoint transfer map,
 	and let $(P_k)_{k=1}^m$ be cyclic orthogonal sector projections. Then
 	$(\E_A^\dagger)^m$ is irreducible on each corner $P_k$.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:sector_irred_fixed_algebra, thm:sector_fixed_algebra_irred_cyclic}
-	Apply Theorem~\ref{thm:sector_irred_fixed_algebra} with the rigidity
-	hypothesis supplied by
-	Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic}.
+	\uses{thm:orbit_sum_hLift_unconditional}
+	Apply the unconditional orbit-sum lift from
+	Theorem~\ref{thm:orbit_sum_hLift_unconditional} and then the cyclic-sector
+	irreducibility criterion.
 \end{proof}
 
 \section{Reduction to primitive blocks}%
