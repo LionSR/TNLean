@@ -51,6 +51,13 @@ per-block projection contradiction then closes as in
   — corollaries assembling the per-block-projection skeleton with the
   analytic discharge of the non-cancellation hypothesis.
 
+* `fixed_right_all_overlaps_decay_false_paperFaithful_twoLayer`
+  `fixed_left_all_overlaps_decay_false_paperFaithful_twoLayer`
+  — two-layer counterparts consuming `IsBNTCanonicalFormSD P` (resp.
+  `IsBNTCanonicalFormSD Q`).  The abstract `hNoCancel` is kept in the
+  signature: the analytic discharge of `hNoCancel` in the two-layer
+  setting is deferred (see audit memo for the analytic content).
+
 ## References
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
@@ -417,6 +424,68 @@ theorem fixed_left_all_overlaps_decay_false_paperFaithful
     (hNoCancel_of_unitModulus_decay_c_norm_lower
       (P := Q) (Q := P) hP_unit j₀ hP_decay_offdiag hℓ_ne
       hP_self_limit hc_lower)
+
+set_option linter.style.longLine false in
+/-- **Two-layer right-block per-block projection contradiction.**
+
+Two-layer counterpart of `fixed_right_all_overlaps_decay_false_paperFaithful`
+on the `IsBNTCanonicalFormSD` surface.  The two-layer canonical-form
+hypothesis on `P` supplies the uniform coefficient bound
+`‖P.coeff N j‖ ≤ copies j` via
+`SectorDecomposition.norm_coeff_le_copies_of_IsBNTCanonicalFormSD`;
+the canonical-form hypothesis on `Q` is bundled in the signature for
+the eventual analytic discharge of `hNoCancel` (currently abstract).
+
+In contrast to `fixed_right_all_overlaps_decay_false_paperFaithful`,
+the analytic non-cancellation conclusion is **not** discharged here:
+the `hNoCancel` hypothesis is consumed in the same shape as in
+`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer`.
+The downstream analytic argument that produces `hNoCancel` for the
+non-dominant `k₀` branch on the `IsBNTCanonicalFormSD` surface lives
+outside this module. -/
+theorem fixed_right_all_overlaps_decay_false_paperFaithful_twoLayer
+    (P Q : SectorDecomposition d)
+    (hP : IsBNTCanonicalFormSD P)
+    (_hQ : IsBNTCanonicalFormSD Q)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor)
+    (k₀ : Fin Q.basisCount)
+    (hAllDecay_PtoQ : ∀ j : Fin P.basisCount,
+        Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k₀) N)
+          atTop (nhds 0))
+    (hNoCancel : ∀ c : ℕ → ℂ,
+        (∀ᶠ N in atTop, ∀ σ : Fin N → Fin d,
+          mpv P.toTensor σ = c N * mpv Q.toTensor σ) →
+        ¬ Tendsto
+            (fun N => c N * mpvOverlap (d := d) Q.toTensor (Q.basis k₀) N)
+            atTop (nhds 0)) :
+    False :=
+  fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer
+    P Q hP hProp k₀ hAllDecay_PtoQ hNoCancel
+
+set_option linter.style.longLine false in
+/-- **Two-layer left-block per-block projection contradiction.**
+
+Symmetric counterpart of `fixed_right_all_overlaps_decay_false_paperFaithful_twoLayer`
+fixing a `P`-block `j₀` instead of a `Q`-block.  Reduces to the
+right-block two-layer version after swapping `P` and `Q`. -/
+theorem fixed_left_all_overlaps_decay_false_paperFaithful_twoLayer
+    (P Q : SectorDecomposition d)
+    (_hP : IsBNTCanonicalFormSD P)
+    (hQ : IsBNTCanonicalFormSD Q)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor)
+    (j₀ : Fin P.basisCount)
+    (hAllDecay_QtoP : ∀ k : Fin Q.basisCount,
+        Tendsto (fun N => mpvOverlap (d := d) (P.basis j₀) (Q.basis k) N)
+          atTop (nhds 0))
+    (hNoCancel : ∀ c : ℕ → ℂ,
+        (∀ᶠ N in atTop, ∀ σ : Fin N → Fin d,
+          mpv Q.toTensor σ = c N * mpv P.toTensor σ) →
+        ¬ Tendsto
+            (fun N => c N * mpvOverlap (d := d) P.toTensor (P.basis j₀) N)
+            atTop (nhds 0)) :
+    False :=
+  fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer
+    P Q hQ hProp j₀ hAllDecay_QtoP hNoCancel
 
 end PerBlockProjectionContradiction
 
