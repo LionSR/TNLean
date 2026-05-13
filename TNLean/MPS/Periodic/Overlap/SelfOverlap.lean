@@ -581,10 +581,10 @@ compression ∗-algebra isomorphisms `φ k` and the intertwining condition, whic
 provide the per-sector primitivity and irreducibility that make the BDCF
 converse true.  Once that converse is proved, the `sorry` below can be
 discharged by the procedure outlined above. -/
-  -- (Implementation: the forward BDCF direction is
-  --  `exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`
-  --  in `PhaseClassSectorData.lean`; the missing converse would be a lemma in
-  --  `CanonicalForm/BlockDiagonalCommutant`.)
+  -- (Implementation: the forward BDCF direction follows from
+  --  `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` together with
+  --  `cross_overlap_tendsto_zero_of_separated_normalCFBNT_data`; the missing converse
+  --  would be a lemma in `CanonicalForm/BlockDiagonalCommutant`.)
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     {dim : Fin m → ℕ}
