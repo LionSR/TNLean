@@ -572,12 +572,6 @@ lemma hasBiCF_of_isNormalCanonicalFormBNT_of_directSum_injectiveBlocks
       μ A hNCF hInj
   exact hasBiCF_of_wordTupleSpanTop A hSpan
 
-/-- Conditional product-word span from all-words pair separation plus eventual identity padding.
-
-The proof takes a finite maximum over the separating and padding lengths for the
-ordered block pairs, obtaining a single homogeneous word length whose block-product
-word evaluations span the full direct product algebra.
-
 /-- Canonical-form/BNT data give all-words pair trace separation.
 
 Equal-dimensional pairs use the BNT non-gauge-phase-equivalence hypothesis and
