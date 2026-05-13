@@ -205,7 +205,7 @@ import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
-import TNLean.MPS.CanonicalForm.BlockDiagonalCommutant
+import TNLean.MPS.ParentHamiltonian.BiCF.BlockDiagonalCommutant
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
