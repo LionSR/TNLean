@@ -239,6 +239,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
+import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
