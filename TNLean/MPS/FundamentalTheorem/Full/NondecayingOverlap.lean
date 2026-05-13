@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingPartnerUnique
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.FixedBlockDecay
 
 /-!
 # Non-decaying overlap existence for BNT families
@@ -812,106 +813,6 @@ lemma eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_C
       B Asingle hB_self hB_cross hAsingle_self hAsingle_cross hBA
   simpa [Asingle] using hLI
 
-/-- **Fixed-right all-overlaps-decay contradiction for proportional BNT families.**
-
-Source: arXiv:1606.00608, Theorem `thm1`, line 1182. In the proof, after
-fixing a block `B_k`, the authors say that it is impossible for all overlaps
-with the `A_j` blocks to tend to zero, because otherwise the total MPV families
-could not be proportional by Lemma `Lem1`.
-
-This statement names the cancellation step implicit in that sentence. The
-local Lemma `Lem1` input is
-`eventually_linearIndependent_all_left_single_right_of_all_overlaps_decay_CFBNT`.
-The remaining formal proof obligation is documented in
-`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607.
-
-**Scope restriction (one-copy-per-sector):** The local hypotheses
-`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
-forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
-
-**Plan C (issue #1641) status.** The corresponding per-block projection
-argument is recorded on the paper-faithful `SectorDecomposition` surface in
-`TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection`
-(`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`),
-with the load-bearing non-cancellation step factored as the hypothesis
-`hNoCancel`.
-
-Bridging the present `IsCanonicalFormBNT` surface to the new SectorDecomposition
-lemma is blocked by the strict-anti restriction of `IsCanonicalFormBNT`:
-under `mu_strict_anti`, the unit-modulus hypothesis required by the
-SectorDecomposition lemma fails for every weight after the first.  Resolving
-this requires a structural reorganization of `IsCanonicalFormBNT` that splits the
-spectral level (`λ_j` with `|λ_0| > |λ_1| > …`) from the within-sector
-unit-modulus weights (`μ_{j,q}` with `|μ_{j,q}| = 1`).  See
-`audits/2026-05-13_cpsv16_ft_bridge_gap.md` for the full analysis. -/
-lemma fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
-    (hProp : EventuallyNonzeroProportionalMPV₂
-      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
-    (k₀ : Fin rB)
-    (hAllDecay : ∀ j : Fin rA,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k₀) N) atTop (nhds 0)) :
-    False := by
-  sorry
-
-/-- **Fixed-left all-overlaps-decay contradiction for proportional BNT families.**
-
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1185. The proof repeats
-the fixed-block argument with the two tensor families interchanged to obtain
-the opposite block-count inequality. Thus, for a fixed block `A_j`, it is
-impossible for all overlaps with the `B_k` blocks to tend to zero under
-eventual nonzero proportionality of the total MPV families.
-
-This statement names the symmetric cancellation step implicit in the source.
-The local Lemma `Lem1` input is
-`eventually_linearIndependent_all_right_single_left_of_all_overlaps_decay_CFBNT`.
-The remaining formal proof obligation is documented in
-`docs/paper-gaps/cpsv16_fixed_block_cancellation.tex` and tracked in issue
-#1607.
-
-**Scope restriction (one-copy-per-sector):** The local hypotheses
-`IsCanonicalFormBNT` are the already-grouped one-copy-per-sector canonical
-forms. CPSV16 allows BNT multiplicities inside a sector. This restriction is
-documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
-
-**Plan C (issue #1641) status.** The corresponding per-block projection
-argument is recorded on the paper-faithful `SectorDecomposition` surface in
-`TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection`
-(`fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`),
-with the load-bearing non-cancellation step factored as the hypothesis
-`hNoCancel`.
-
-Bridging the present `IsCanonicalFormBNT` surface to that SectorDecomposition
-lemma is blocked by the same strict-anti vs. unit-modulus mismatch as the
-right-block case.  See `audits/2026-05-13_cpsv16_ft_bridge_gap.md`. -/
-lemma fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
-    {d rA rB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (hA : IsCanonicalFormBNT μA A)
-    (hB : IsCanonicalFormBNT μB B)
-    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
-    (hProp : EventuallyNonzeroProportionalMPV₂
-      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B))
-    (j₀ : Fin rA)
-    (hAllDecay : ∀ k : Fin rB,
-      Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k) N) atTop (nhds 0)) :
-    False := by
-  sorry
-
 /-- **Non-decaying overlap existence for proportional-MPV BNT families.**
 
 Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. In the proof,
@@ -928,7 +829,19 @@ BNT canonical form with possible multiplicities. This restriction is documented 
 
 The proof reduces the two quantified non-decaying-overlap claims to the named
 fixed-block contradictions corresponding to the two directions of the source
-argument. Those fixed-block cancellation proofs are tracked in issue #1607. -/
+argument. Those fixed-block contradictions are tracked in issue #1607.
+
+**Open obligation.** The fixed-block contradictions
+`fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+and `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+are themselves open for non-dominant fixed blocks under `mu_strict_anti`; only
+the dominant-block specialisations
+(`fixed_right_dominant_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`
+and `fixed_left_dominant_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`)
+are closed.  Closing the general statement on the `IsCanonicalFormBNT` surface
+requires the structural reorganization described in
+`audits/2026-05-13_cpsv16_ft_bridge_gap.md` §Resolution and tracked in issue
+#1641 (Plan C). -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
@@ -956,6 +869,49 @@ lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     push Not at h
     exact fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
       A B hA hB hrA hrB hProp.eventually k₀ h
+
+/-- **Dominant-block non-decaying-overlap existence for proportional-MPV BNT families.**
+
+Specialisation of
+`exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT` to the dominant
+blocks (`j₀ = ⟨0, _⟩` and `k₀ = ⟨0, _⟩`).  Both directions of the source
+argument restricted to dominant blocks are routed through the dominant-block
+fixed-block contradictions (`fixed_right_dominant_…_CFBNT` and
+`fixed_left_dominant_…_CFBNT`), which are proved unconditionally on the
+`IsCanonicalFormBNT` surface.
+
+This is the part of `exists_nondecaying_overlap_…_CFBNT` that is currently
+closed on the `IsCanonicalFormBNT` surface; the general (non-dominant fixed
+block) obligation remains open — see the parent docstring. -/
+lemma exists_nondecaying_dominant_overlap_of_nonzeroProportionalMPV₂_CFBNT
+    {d rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    [∀ k, NeZero (dimA k)] [∀ k, NeZero (dimB k)]
+    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
+    (A : (j : Fin rA) → MPSTensor d (dimA j))
+    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (hA : IsCanonicalFormBNT μA A)
+    (hB : IsCanonicalFormBNT μB B)
+    (hrA : rA ≠ 0) (hrB : rB ≠ 0)
+    (hProp : NonzeroProportionalMPV₂
+      (toTensorFromBlocks μA A) (toTensorFromBlocks μB B)) :
+    (∃ k₀ : Fin rB,
+      ¬ Tendsto (fun N =>
+        mpvOverlap (d := d) (A ⟨0, Nat.pos_of_ne_zero hrA⟩) (B k₀) N)
+        atTop (nhds 0)) ∧
+    (∃ j₀ : Fin rA,
+      ¬ Tendsto (fun N =>
+        mpvOverlap (d := d) (A j₀) (B ⟨0, Nat.pos_of_ne_zero hrB⟩) N)
+        atTop (nhds 0)) := by
+  refine ⟨?_, ?_⟩
+  · by_contra h
+    push Not at h
+    exact fixed_left_dominant_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp.eventually h
+  · by_contra h
+    push Not at h
+    exact fixed_right_dominant_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT
+      A B hA hB hrA hrB hProp.eventually h
 
 end HeteroEqualCase
 
