@@ -230,7 +230,9 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.HNoCancelDischarge
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDecay
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RenormalizedNonCancellation
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.CrossFamilyRateDecay
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDischarge
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
