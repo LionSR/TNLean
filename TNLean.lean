@@ -236,6 +236,8 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RenormalizedNonCancella
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.CrossFamilyRateDecay
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDischarge
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
+import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
+import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
