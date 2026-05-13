@@ -901,7 +901,22 @@ through the open per-block contradictions
 and `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_CFBNT`,
 which carry the obligation as a paper-gap sorry per the issue #1678 analysis.
 The intended replacement is the inductive route sketched above; that
-replacement is not implemented here. -/
+replacement is not implemented here.
+
+**Weak combined-family existential — first installment of issue #1678's
+recommendation.** The lemma
+`exists_nondecaying_overlap_pair_of_nonzeroProportionalMPV₂_CFBNT`
+(`TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.CombinedLI`) discharges
+the **weak existential form** `∃ j, ∃ k, ¬ Tendsto (overlap (A j) (B k)) → 0`
+unconditionally on the `_CFBNT` surface using the route advocated in issue
+#1678: combine `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal`
+(`TNLean.MPS.BNT.Basic`, line 195) with
+`coefficient_eventually_eq_of_eventually_linearIndependent`
+(`TNLean.MPS.BNT.Basic`, line 172), feeding self/cross-overlap data from
+`IsCanonicalFormBNT.toHasNormalizedSelfOverlap` and
+`IsCanonicalFormBNT.cross_overlap_tendsto_zero`.  Promoting that weak
+existential to the per-block conjunction returned below is **still pending**
+and remains the responsibility of a future change to this dispatcher proof. -/
 lemma exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
