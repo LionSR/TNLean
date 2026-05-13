@@ -851,7 +851,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:eventuallyNonzeroProportionalMPV2_symm}
 	\lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.symm}
 	\leanok
-	\uses{def:nonzero_proportional_mpv}
+	\uses{def:eventually_nonzero_proportional_mpv}
 	If the MPV of $A$ is eventually proportional to the MPV of $B$ by nonzero
 	scalars, then the MPV of $B$ is eventually proportional to the MPV of $A$:
 	the inverse scalar is the witness.
@@ -865,7 +865,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:fixed_right_all_overlaps_decay_sectorDecomp}
 	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
 	\leanok
-	\uses{def:paper_sector_data, def:nonzero_proportional_mpv,
+	\uses{def:paper_sector_data, def:eventually_nonzero_proportional_mpv,
 		lem:eventuallyNonzeroProportionalMPV2_symm}
 	Let $P$ and $Q$ be sector decompositions with unit-modulus sector weights on
 	$P$. Fix a block $Q_{k_0}$.  Suppose the assembled tensors
@@ -891,7 +891,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:fixed_left_all_overlaps_decay_sectorDecomp}
 	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
 	\leanok
-	\uses{def:paper_sector_data, def:nonzero_proportional_mpv,
+	\uses{def:paper_sector_data, def:eventually_nonzero_proportional_mpv,
 		lem:fixed_right_all_overlaps_decay_sectorDecomp,
 		lem:eventuallyNonzeroProportionalMPV2_symm}
 	Symmetric counterpart of
