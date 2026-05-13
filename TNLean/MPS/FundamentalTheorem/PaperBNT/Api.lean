@@ -8,9 +8,9 @@ import TNLean.MPS.Overlap.CastDecay
 import TNLean.Spectral.SpectralGapNT
 
 /-!
-# Paper-faithful BNT canonical form: basic API
+# Paper-faithful BNT canonical form: basic lemmas
 
-This module supplies the elementary downstream API for the paper-faithful
+This module provides the elementary lemmas for the paper-faithful
 core predicate `IsBNTCanonicalForm` introduced in
 `PaperBNT/Basic.lean`.  All lemmas here use the **raw** sector data
 `P.weight j q` and `P.coeff N j = ∑_q (P.weight j q)^N`; no equal-modulus
@@ -18,30 +18,30 @@ factorisation is assumed.  The optional `HasEqualModulusWeightLayer`
 specialisation lives in `PaperBNT/EqualModulus.lean` and is intentionally
 not imported here.
 
-## API
+## Contents
 
-* `coeff_eq_sum_weight_pow` — definitional unfolding
+* `SectorDecomposition.coeff_eq_sum_weight_pow` — definitional unfolding
   `P.coeff N j = ∑_q (P.weight j q)^N`
   (CPSV16 lines 287–301; CPSV21 lines 1864–1884).
-* `norm_coeff_le_copies_of_norm_weight_le_one` — bound the sector
-  coefficient by the multiplicity when every copy has unit-or-less
-  modulus (CPSV16 lines 287–301 with the optional normalization
-  convention of lines 217–246).
-* `cross_overlap_basis_tendsto_zero` — cross-overlap between distinct
-  basis blocks decays, dispatched by bond-dimension equality
+* `SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one` — bound
+  the sector coefficient by the multiplicity when every copy has unit-or-less
+  modulus (CPSV16 lines 287–301 with the optional normalization convention
+  of lines 217–246).
+* `IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero` — cross-overlap
+  between distinct basis blocks decays, dispatched by bond-dimension equality
   (CPSV16 lines 1080–1091; CPSV16 lines 264–279).
-* `combined_family_eventually_li` — combined-family eventual linear
-  independence for two paper-faithful BNT canonical forms with mutually
-  vanishing cross-overlaps (CPSV16 corollary `Lem1`, lines 1121–1132;
-  CPSV21 line 1850 BNT linear-independence input).
+* `IsBNTCanonicalForm.combined_family_eventually_li` — combined-family
+  eventual linear independence for two paper-faithful BNT canonical forms
+  with mutually vanishing cross-overlaps (CPSV16 corollary Lem1,
+  lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
 
 ## References
 
 * CPSV16: Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608.
   Lines 217–246 (optional global modulus normalization), 264–279
   (gauge-phase sector grouping), 287–301 (raw two-layer BNT display),
-  349–352 (`thm1`), 1080–1091 (normal-tensor overlap dichotomy),
-  1121–1132 (`Lem1`, combined-family eventual linear independence).
+  349–352 (thm1), 1080–1091 (normal-tensor overlap dichotomy),
+  1121–1132 (Lem1, combined-family eventual linear independence).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127.
   Lines 1846–1884 (BNT and two-layer BNT decomposition with raw
   `μ_{j,q}`).
@@ -54,9 +54,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-namespace IsBNTCanonicalForm
-
-variable {P Q : SectorDecomposition d}
+namespace SectorDecomposition
 
 /-- **Raw two-layer sector coefficient identity** (definitional).
 
@@ -110,6 +108,12 @@ lemma norm_coeff_le_copies_of_norm_weight_le_one
     _ ≤ ∑ _q : Fin (P.copies j), (1 : ℝ) := hSumBound
     _ = (P.copies j : ℝ) := hCard
 
+end SectorDecomposition
+
+namespace IsBNTCanonicalForm
+
+variable {P Q : SectorDecomposition d}
+
 /-- **Cross-overlap between distinct basis blocks decays.**
 
 For any two distinct basis indices `j ≠ k` of a paper-faithful BNT
@@ -149,18 +153,17 @@ lemma cross_overlap_basis_tendsto_zero
 /-- **Combined-family eventual linear independence** for two
 paper-faithful BNT canonical forms with mutually vanishing cross-overlaps.
 
-This is the paper-faithful instantiation of the corollary `Lem1`
+This is the paper-faithful instantiation of corollary Lem1
 (CPSV16 lines 1121–1132): once the cross-overlaps between the two BNT
 families vanish, the union of basis MPV states is linearly independent
 for all sufficiently large lengths.  CPSV21 line 1850 states the same
 linear-independence input as part of the BNT definition.
 
 The proof feeds the per-family normalised self-overlaps, the
-within-family cross-decay supplied by
-`cross_overlap_basis_tendsto_zero`, and the inter-family decay
-hypothesis `hAB` into
+within-family cross-decay from `cross_overlap_basis_tendsto_zero`, and
+the inter-family decay hypothesis into
 `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal`
-(`TNLean/MPS/BNT/Basic.lean`). -/
+(`TNLean.MPS.BNT.Basic`, line 195). -/
 lemma combined_family_eventually_li
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hAB : ∀ (j : Fin P.basisCount) (k : Fin Q.basisCount),
