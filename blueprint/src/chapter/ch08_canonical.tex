@@ -30,26 +30,14 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 
 \section{Block-diagonal construction}
 
-\begin{definition}[Block-diagonal tensor from blocks]\label{def:tensor_from_blocks}
-	\lean{MPSTensor.toTensorFromBlocks}
-	\leanok
-	\uses{def:block_diagonal_tensor}
-	Recall the block-diagonal tensor of
-	Definition~\ref{def:block_diagonal_tensor}.
-	Given $r$ blocks with bond dimensions $(D_k)_{k=1}^r$,
-	per-block MPS tensors $\{A_k^i\}$,
-	and scaling factors $(\mu_k)_{k=1}^r$,
-	we write
-	$\bigoplus_{k=1}^r \mu_k A_k$
-	for the tensor of total bond dimension $D = \sum_k D_k$ whose Kraus
-	operators are $A^i = \bigoplus_{k=1}^r \mu_k A_k^i$, obtained by
-	placing the scaled block Kraus operators on the diagonal.
-\end{definition}
+\begin{remark}
+	See \cref{def:block_diagonal_tensor} for the formalized block-diagonal tensor construction.
+\end{remark}
 
 \begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
 	\leanok
-	\uses{def:tensor_from_blocks, def:injective}
+	\uses{def:block_diagonal_tensor, def:injective}
 	If all block tensors $A_k$ are injective and the per-block
 	same-MPV condition holds ($A_k$ and $B_k$ generate the same
 	MPV family for each~$k$),
@@ -66,7 +54,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
-	\uses{def:tensor_from_blocks, def:same_mpv}
+	\uses{def:block_diagonal_tensor, def:same_mpv}
 	If $A_k$ and $B_k$ generate the same MPV family for each
 	block~$k$, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
@@ -82,7 +70,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
-	\uses{def:tensor_from_blocks, def:injective, def:same_mpv, thm:multi_block_ft}
+	\uses{def:block_diagonal_tensor, def:injective, def:same_mpv, thm:multi_block_ft}
 	If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
 	the same MPV family, then the block-diagonal tensors
 	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
@@ -139,7 +127,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \begin{theorem}[MPV under block normalization]\label{thm:mpv_normalize}
 	\lean{MPSTensor.mpv_toTensorFromBlocks_normalize}
 	\leanok
-	\uses{def:tensor_from_blocks, def:mpv}
+	\uses{def:block_diagonal_tensor, def:mpv}
 	For any nonzero scaling factors $\mu_k$, set
 	$\eta_k := \mu_k / |\mu_k|$ and $B_k := |\mu_k| A_k$.
 	Then $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \eta_k B_k$
@@ -814,39 +802,9 @@ per-block peripheral-spectrum primitivity.
 		a separate assumption.
 \end{proof}
 
-\begin{theorem}[Modulus-one eigenvalue rigidity for irreducible TP blocks]%
-		\label{thm:nt_modulus_one_gauge}
-		\lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}\leanok
-		\uses{def:irreducible_tensor, def:tp_kraus, def:gauge_phase_equiv}
-		Let $A$ and $B$ be irreducible MPS tensors satisfying
-		$\sum_i (A^i)^\dagger A^i = \Id$ and
-		$\sum_i (B^i)^\dagger B^i = \Id$.
-		If the mixed transfer map has spectral radius at least~$1$
-		(equivalently, it has a peripheral eigenvalue of modulus~$1$),
-		then $A$ and $B$ are gauge-phase equivalent.
-\end{theorem}
-
-\begin{proof}\leanok
-		\uses{thm:modulus_one_gauge, thm:psd_fp_exists,
-			thm:psd_fp_pd_irred, thm:right_canonical_gauge}
-		The argument is the same as in Theorem~\ref{thm:modulus_one_gauge}
-		(with the gauging formula given by Theorem~\ref{thm:right_canonical_gauge}
-		directly),
-		but the fixed-point theorem used here comes from irreducibility rather than
-		injectivity.
-		Take a modulus-one eigenvector of the mixed transfer map.
-		Because $A$ and $B$ are TP-normalized, each transfer map has a nonzero
-		PSD fixed point by Theorem~\ref{thm:psd_fp_exists}.
-		Irreducibility upgrades these fixed points to positive definite ones by
-		Theorem~\ref{thm:psd_fp_pd_irred}.
-		Theorem~\ref{thm:right_canonical_gauge} therefore gauges $A$ and $B$
-		separately to unital Kraus families.
-		In this unital gauge, the embedded modulus-one eigenvector saturates the
-		Kadison--Schwarz inequality, and the same equality / multiplicative-domain
-		argument as in Theorem~\ref{thm:modulus_one_gauge} produces an
-		invertible intertwiner between the two Kraus families.
-		That intertwiner is exactly the required gauge-phase equivalence.
-\end{proof}
+\begin{remark}
+	See \cref{thm:modulus_one_gauge_irr_tp} for the formalized modulus-one eigenvalue rigidity statement for irreducible trace-preserving blocks.
+\end{remark}
 
 \begin{lemma}[Mixed-transfer spectral radius from unit-modulus overlap]%
 		\label{lem:overlap_norm_one_implies_spectral_radius_ge_one}
@@ -884,10 +842,10 @@ per-block peripheral-spectrum primitivity.
 
 \begin{proof}\leanok
 		\uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,
-			thm:nt_modulus_one_gauge}
+			thm:modulus_one_gauge_irr_tp}
 		By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one},
 		the mixed transfer spectral radius is at least~$1$.
-		Theorem~\ref{thm:nt_modulus_one_gauge} then gives gauge-phase
+		Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase
 		equivalence.
 \end{proof}
 
@@ -901,19 +859,6 @@ A separate reduction for periodic blocks without blocking
 is developed in \cite{DeLasCuevas2017Irreducible}; see
 Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 
-\begin{theorem}[Irreducible block decomposition]%
-	\label{thm:irred_decomp_reduction}
-	\lean{MPSTensor.exists_irreducible_blockDecomp}
-	\leanok
-	\uses{def:irreducible_tensor}
-	Every MPS tensor $A$ generates the same MPV family as
-	a block-diagonal tensor $\bigoplus_{k=1}^r A_k$
-	with each block irreducible.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:irred_decomp}
-	Apply Theorem~\ref{thm:irred_decomp}.
-\end{proof}
 
 \begin{theorem}[Left-canonical normalization for irreducible TP blocks]%
 	\label{thm:CFII_data}
@@ -961,8 +906,8 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:irred_decomp_reduction, thm:CFII_data}
-	Combine Theorems~\ref{thm:irred_decomp_reduction}
+	\uses{thm:irred_decomp, thm:CFII_data}
+	Combine Theorems~\ref{thm:irred_decomp}
 	and~\ref{thm:CFII_data}.
 \end{proof}
 
@@ -1229,7 +1174,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	\label{thm:block_tensor_to_tensor_from_blocks}
 	\lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}
 	\leanok
-	\uses{thm:samempv_blocking_distributes, def:tensor_from_blocks, def:blocked_tensor}
+	\uses{thm:samempv_blocking_distributes, def:block_diagonal_tensor, def:blocked_tensor}
 	For any weighted block tensor $\bigoplus_k \mu_k B_k$ and any blocking
 	length $p \ge 0$, its blocked MPV family agrees with the weighted block tensor
 	formed from the blocked blocks $B_k^{[p]}$ and the powered weights $\mu_k^p$.
@@ -1259,7 +1204,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	\lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:block_tensor_to_tensor_from_blocks, thm:samempv2pos_block_tensor,
-	      def:tensor_from_blocks}
+	      def:block_diagonal_tensor}
 	If two weighted nonzero-block tensors agree on all positive system sizes, then
 	after any positive common blocking their blocked nonzero-block tensors still agree
 	on all positive system sizes, with weights transported from $\mu_k$ to
@@ -1425,7 +1370,7 @@ The following results separate the zero blocks from the nonzero blocks.
 	\label{thm:tensor_from_blocks_cast_phys_dim}
 	\lean{MPSTensor.toTensorFromBlocks_cast_physDim}
 	\leanok
-	\uses{def:tensor_from_blocks}
+	\uses{def:block_diagonal_tensor}
 	Identifying equal physical alphabets commutes with forming a weighted
 	block-diagonal tensor from a finite block family.
 \end{theorem}
@@ -1512,44 +1457,25 @@ The following results separate the zero blocks from the nonzero blocks.
 	so Theorem~\ref{thm:primitive_blocking_divisible} applies.
 \end{proof}
 
-\begin{definition}[Common-period blocking of a block family]%
-	\label{def:common_period_blocking_ch8}
-	\lean{MPSTensor.commonPeriodBlocking}
-	\leanok
-	\uses{def:blocked_tensor}
-	Given a finite family of tensors $(B_k)$ and positive integers $(p_k)$,
-	the common-period blocking is the family obtained by blocking every $B_k$
-	at the least common multiple of the periods $p_k$.
-\end{definition}
+\begin{remark}
+	See \cref{def:common_period_blocking} for the formalized common-period blocked family construction.
+\end{remark}
 
-\begin{theorem}[Primitivity of the common-period blocking]%
-	\label{thm:common_period_blocking_primitive_ch8}
-	\lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
-	\leanok
-	\uses{def:common_period_blocking_ch8, thm:primitive_blocking_divisible}
-	Suppose each $B_k$ has positive bond dimension and each blocked transfer map
-	$\E_{B_k^{[p_k]}}$ is primitive.
-	Then every member of the common-period blocked family also has primitive
-	transfer map.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:primitive_blocking_divisible}
-	Each $p_k$ divides the common blocking length, so
-	Theorem~\ref{thm:primitive_blocking_divisible} applies to every block.
-\end{proof}
+\begin{remark}
+	See \cref{thm:common_period_blocking_primitive} for the formalized primitivity statement for common-period blocking.
+\end{remark}
 
 \begin{theorem}[Formula for common-period blocking]%
 	\label{thm:common_period_blocking_apply}
 	\lean{MPSTensor.commonPeriodBlocking_apply}
 	\leanok
-	\uses{def:common_period_blocking_ch8}
+	\uses{def:common_period_blocking}
 	Each block of the common-period blocking is exactly the corresponding tensor
 	blocked at the common least common multiple.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{def:common_period_blocking_ch8}
+	\uses{def:common_period_blocking}
 	This is the definition of the common-period blocking.
 \end{proof}
 
@@ -1821,7 +1747,7 @@ statements.
 \label{def:primitive_irreducible_cyclic_sectors}
 	\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}
 	\leanok
-	\uses{def:blocked_tensor, def:tensor_from_blocks, def:same_mpv2}
+	\uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
 	A tensor has primitive irreducible cyclic sectors if some positive
 	period-removal length $m$ represents $A^{[m]}$ as a unit-weight block tensor
 	whose sector blocks are trace-preserving, have primitive transfer maps, are
@@ -1851,7 +1777,7 @@ statements.
 	\lean{MPSTensor.CommonBlockedCyclicSectorFamily}
 	\leanok
 	\uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor,
-		def:tensor_from_blocks, def:same_mpv2}
+		def:block_diagonal_tensor, def:same_mpv2}
 	Internal record bundling common-reblocking data for a finite family of
 	nonzero-weight blocks.  It specifies a common physical blocking length $p$,
 	per-block period-removal lengths $m_k$, later reblocking lengths $e_k$ with
@@ -1887,7 +1813,7 @@ statements.
 		MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight}
 	\leanok
 	\uses{def:common_blocked_cyclic_sector_family, def:blocked_tensor,
-		def:tensor_from_blocks, thm:iterated_blocking_samempv_reindex}
+		def:block_diagonal_tensor, thm:iterated_blocking_samempv_reindex}
 	Derived sector tensors, bond dimensions, flattened families, and transported
 	weights obtained from a \texttt{CommonBlockedCyclicSectorFamily}.  These are
 	internal definitions consumed by the normal canonical-form pipeline.
@@ -2324,11 +2250,11 @@ do not correspond to independent paper-level results.
 	\]
 \end{definition}
 
-\begin{proof}\leanok
+\begin{remark}\leanok
 	This is the abstract multiplicativity property used in the orbit-sum
 	construction. Theorem~\ref{thm:sector_fixed_algebra_irred_cyclic} shows
 	that it is automatic in the irreducible trace-preserving cyclic setting.
-\end{proof}
+\end{remark}
 
 \begin{lemma}[Projection step from sector fixed-point-algebra rigidity]%
 	\label{lem:sector_fixed_algebra_proj_step}
@@ -2816,20 +2742,9 @@ do not correspond to independent paper-level results.
 	the corresponding blocked tensor.
 \end{proof}
 
-\begin{theorem}[Blocking preserves normality]%
-	\label{thm:normal_blocking_preserved}
-	\lean{MPSTensor.isNormal_blockTensor_of_isNormal}
-	\leanok
-	\uses{def:normal, def:blocked_tensor}
-	If $A$ is normal and $p \ge 1$, then $A^{[p]}$ is normal.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:isNormal_blockTensor}
-	Since $A$ is normal, there exists $N$ with $S_N(A) = \MN{D}$.
-	Then $S_{Np}(A) = \MN{D}$ (word products at multiples still span),
-	and $S_N(A^{[p]}) \supseteq S_{Np}(A) = \MN{D}$.
-\end{proof}
+\begin{remark}
+	See \cref{thm:isNormal_blockTensor} for the formalized statement that blocking preserves normality.
+\end{remark}
 
 \subsection{Basis of Normal Tensors}
 
@@ -2919,36 +2834,10 @@ do not correspond to independent paper-level results.
 	so the gauge phase must have modulus one.
 \end{proof}
 
-\begin{theorem}[Norm-class sector decomposition]
-	\label{thm:bnt_grouping_gauge_equiv}
-	\lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}\leanok
-	\uses{def:norm_class_grouping}
-	For a weighted block family \((\mu_k,A_k)_{k=1}^r\) with
-	\(\mu_k\neq 0\), assume that
-	\[
-		|\mu_j|=|\mu_k| \quad\Longrightarrow\quad
-		A_j \text{ and } A_k \text{ generate the same MPV family}.
-	\]
-	Then one may choose one representative basis tensor for each norm class and
-	obtain a sector decomposition \(P\) with strictly decreasing sector norms
-	such that
-	\[
-		P_{\mathrm{tot}}
-		\sim
-		\bigoplus_{k=1}^r \mu_k A_k,
-	\]
-	where \(\sim\) denotes equality of the two MPV families.
-\end{theorem}
+\begin{remark}
+	See \cref{lem:restricted_norm_class_collapse_bnt} for the formalized restricted norm-class collapse statement.
+\end{remark}
 
-\begin{theorem}[Sector decomposition from TP primitive irreducible blocks]
-	\label{thm:sector_decomp_tp_prim_irr}
-	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}\leanok
-	\uses{thm:overlap_decay_irr_tp, thm:bnt_grouping_gauge_equiv}
-	From a trace-preserving primitive irreducible block decomposition with nonzero
-	weights, quotient the block indices by MPV phase equivalence and absorb the
-	phases into the sector weights. The resulting sector decomposition represents
-	the same weighted block sum and satisfies the BNT sector conditions.
-\end{theorem}
 
 \begin{theorem}[Existential BNT independence from overlap limits]
 	\label{thm:bnt_li_from_overlap_limits_exists}
@@ -3355,7 +3244,7 @@ do not correspond to independent paper-level results.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:primitive_blocking_divisible, thm:normal_blocking_preserved}
+	\uses{thm:primitive_blocking_divisible, thm:isNormal_blockTensor}
 	Take $p$ to be the least common multiple of $p_A$ and $p_B$.
 	Primitivity follows from divisibility, and left-canonical normalization and
 	normality are both preserved under blocking.
@@ -3365,7 +3254,7 @@ do not correspond to independent paper-level results.
 	\label{thm:ft_after_blocking_structural}
 	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
 	\leanok
-	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
+	\uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:block_diagonal_tensor}
 	If two tensors generate the same MPV family, then each tensor admits some
 	blocking after which it decomposes into a zero-tail tensor plus nonzero
 	left-canonical blocks with primitive transfer maps and positive bond
@@ -3413,7 +3302,7 @@ do not correspond to independent paper-level results.
 	\lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
 	\leanok
 	\uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
-	      def:tensor_from_blocks}
+	      def:block_diagonal_tensor}
 	Suppose $A$ is expressed as a zero-tail tensor plus the weighted nonzero-block
 	tensor $\bigoplus_k \mu_k B_k$. For every positive blocking length $p$,
 	$A^{[p]}$ is expressed as the same zero-tail contribution plus the weighted
@@ -3446,7 +3335,7 @@ do not correspond to independent paper-level results.
 \label{thm:nonzero_block_zero_tail_identity}
 	\lean{MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
 	\leanok
-	\uses{def:same_mpv2, def:zero_mps_tensor, def:tensor_from_blocks}
+	\uses{def:same_mpv2, def:zero_mps_tensor, def:block_diagonal_tensor}
 	Suppose two tensors have the same MPV family and each is expressed as a
 	zero-tail tensor plus a weighted nonzero-block tensor. Then the two nonzero-block
 	tensors agree on every positive system size, and at size $0$ the equality is
@@ -3499,25 +3388,6 @@ do not correspond to independent paper-level results.
 	the common scalar term.
 \end{proof}
 
-\begin{theorem}[After-blocking structural form]%
-\label{thm:ft_after_blocking_structural_zero_tail}
-	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
-	\leanok
-	\uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:zero_mps_tensor}
-	If two tensors generate the same MPV family, then each tensor admits a blocked
-	decomposition into a zero-tail tensor plus nonzero left-canonical blocks
-	with primitive transfer maps and positive bond dimensions. The theorem also
-	retains, for each blocking period, the relation that the blocked tensors
-	generate the same MPV family.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:tp_primitive_blockdecomp}
-	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two
-	tensors and keep the zero-tail MPV equations returned by that theorem. The
-	property that the blocked tensors generate the same MPV family follows by
-	blocking the original equality.
-\end{proof}
 
 \begin{theorem}[Cyclic sectors after the zero-tail split]%
 \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}

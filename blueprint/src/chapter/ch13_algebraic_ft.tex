@@ -990,7 +990,7 @@ decomposition.
     \label{def:global_gauge_of_blocks}
     \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}
     \leanok
-    \uses{def:tensor_from_blocks}
+    \uses{def:block_diagonal_tensor}
     Given per-block gauges $X_k \in \GL_{D_k}(\C)$, first form the
     dependent block-diagonal element $\bigoplus_k X_k$ and then reindex the
     dependent block-coordinate index to the standard index
@@ -1004,7 +1004,7 @@ decomposition.
     \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
         MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
     \leanok
-    \uses{def:global_gauge_of_blocks, def:tensor_from_blocks, def:gauge_equiv}
+    \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
     If each block satisfies $B_k^i=X_k A_k^i X_k^{-1}$, then the weighted
     direct sums satisfy, for every physical index~$i$,
     \[
@@ -1069,7 +1069,7 @@ decomposition.
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv,
-        def:tensor_from_blocks, lem:tensor_from_blocks_globalGauge_conj}
+        def:block_diagonal_tensor, lem:tensor_from_blocks_globalGauge_conj}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -1148,21 +1148,21 @@ decomposition.
 
 \begin{lemma}[MPV invariance under block permutation]\label{lem:mpv_perm_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
-    \uses{def:tensor_from_blocks, def:same_mpv2}
+    \uses{def:block_diagonal_tensor, def:same_mpv2}
     Permuting the block index set and transporting the weights
     correspondingly does not change the $\mathrm{SameMPV}_2$ family of the
     weighted block-diagonal tensor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:tensor_from_blocks}
+    \uses{def:block_diagonal_tensor}
     The sum of per-block MPV contributions is invariant under rearrangement
     of the summands.
 \end{proof}
 
 \begin{lemma}[MPV invariance under dimension cast]\label{lem:mpv_cast_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_cast}\leanok
-    \uses{def:tensor_from_blocks, def:same_mpv2}
+    \uses{def:block_diagonal_tensor, def:same_mpv2}
     If two block-dimension families agree pointwise, the corresponding
     weighted block-diagonal tensors generate the same $\mathrm{SameMPV}_2$
     family after transporting the blocks across the dimension equalities.
@@ -1180,7 +1180,7 @@ decomposition.
 
 \begin{lemma}[Gauge equivalence of direct sums implies same MPV]\label{lem:gauge_equiv_implies_same_mpv}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_implies_sameMPV}\leanok
-    \uses{def:tensor_from_blocks, def:gauge_equiv, def:same_mpv}
+    \uses{def:block_diagonal_tensor, def:gauge_equiv, def:same_mpv}
     If the weighted block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
     $\bigoplus_k \mu_k B_k$ are gauge equivalent, then they generate the
     same MPV family.
@@ -1199,7 +1199,7 @@ decomposition.
 
 \begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
     \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
-    \uses{def:tensor_from_blocks}
+    \uses{def:block_diagonal_tensor}
     For a canonical-form record $C$, the assembled tensor $T_C$ is
     definitionally equal to the weighted block-diagonal tensor
     $\bigoplus_k \mu_k^C\, A_k^C$,
@@ -1291,15 +1291,9 @@ which is then combined with overlap estimates and the leading-block peel.
     is obtained only after grouping repeated representatives.
 \end{definition}
 
-\begin{definition}[Normal canonical-form data with ordered weights]\label{def:normal_canonical_form}
-    \lean{MPSTensor.IsNormalCanonicalForm}
-    \leanok
-    \uses{def:isCanonicalForm}
-    A family has \emph{normal canonical-form data with ordered weights} if it
-    satisfies Definition~\ref{def:isCanonicalForm} with each block additionally
-    \emph{irreducible} (no nontrivial invariant projection) and
-    \emph{primitive} (the transfer map has spectral gap).
-\end{definition}
+\begin{remark}
+    See \cref{def:is_normal_canonical_form} for the formalized normal canonical-form data statement.
+\end{remark}
 
 \begin{lemma}[Block separation from weighted word identities]%
     \label{lem:block_separation_all_words}
