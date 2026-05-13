@@ -1,0 +1,227 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Non-Dominant Per-Block Projection in CPSV16 \S II Step~1\\
+       under the One-Copy \leanid{IsCanonicalFormBNT} Surface}
+\author{}
+\date{2026-05-13}
+
+\begin{document}
+\maketitle
+
+\section{Notation}
+
+Fix two families of MPS site tensors $\{A_j\}_{j=1}^{r_A}$ and
+$\{B_k\}_{k=1}^{r_B}$ with nonzero scalars
+$\mu^A_j,\mu^B_k\in\mathbb C$. The assembled MPV at length~$N$ is
+\begin{align}
+    V^{(N)}(A_{\mathrm{tot}})
+       &=\sum_{j=1}^{r_A}(\mu^A_j)^N\,V^{(N)}(A_j),
+    & V^{(N)}(B_{\mathrm{tot}})
+       &=\sum_{k=1}^{r_B}(\mu^B_k)^N\,V^{(N)}(B_k),
+\end{align}
+written $V^{(N)}(\mathtt{toTensorFromBlocks} \mu A)$ in the
+formalization.\footnote{%
+    \leanid{MPSTensor.toTensorFromBlocks};
+    \leanid{MPSTensor.mpv\_toTensorFromBlocks\_eq\_sum}.}
+A cross-overlap $\langle V^{(N)}(A_j),V^{(N)}(B_k)\rangle$ is
+\leanid{MPSTensor.mpvOverlap}. \emph{Eventual proportionality} of the
+assembled families is the hypothesis that for some scalar sequence
+$c_N\ne 0$ cofinally,
+\begin{align}
+    \sum_{j}(\mu^A_j)^N V^{(N)}(A_j)
+    &= c_N\sum_{k}(\mu^B_k)^N V^{(N)}(B_k)
+    \qquad(\forall^{\mathrm{cof}}N),
+    \label{eq:prop}
+\end{align}
+formalized as
+\leanid{EventuallyNonzeroProportionalMPV\textsubscript{2}}.
+
+The BNT canonical form \leanid{IsCanonicalFormBNT} carries a single
+weight $\mu_k$ per sector with strict ordering
+\begin{align}
+    \|\mu_1\|>\|\mu_2\|>\cdots>\|\mu_r\|
+    \tag{\leanid{mu\_strict\_anti}}
+\end{align}
+across the entire family.\footnote{%
+    \leanid{MPSTensor.IsCanonicalFormBNT.mu\_strict\_anti} in
+    \doclink{TNLean/MPS/BNT/Construction}.}
+Together with the dominant normalization $\|\mu_1\|=1$, every
+sub-dominant block has modulus strictly less than~$1$.
+\cite[Definition~4.3]{Cirac2021Matrix} states the corresponding
+source structure as a two-layer canonical form: spectral levels
+$\lambda_j$ with $\|\lambda_1\|>\cdots>\|\lambda_g\|$ factored from
+within-sector unit-modulus weights $\mu_{j,q}$ ($\|\mu_{j,q}\|=1$)
+with sector multiplicities $r_j\ge 1$. The
+\leanid{IsCanonicalFormBNT} surface is the one-copy specialization
+$r_j=1$ of that structure; see
+\path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
+
+\section{Cited assertion}
+
+The Step~1 paragraph at \cite[lines~1170--1192]{Cirac2016MPDO_arXiv}
+fixes any $B$-block $B_{k_0}$ and rules out
+\begin{align}
+    \langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle
+    \xrightarrow[N\to\infty]{}0
+    \qquad(\text{all }j),
+    \tag{$\mathcal H_{k_0}$}
+    \label{eq:Hk0}
+\end{align}
+by Corollary~\texttt{Lem1} \cite[line~1131]{Cirac2016MPDO_arXiv}, which
+gives eventual linear independence of
+$\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0} and
+combines it with the proportionality identity at
+\cite[eq.~\texttt{eq:II\_ABasicTensors}, line~286]{Cirac2016MPDO_arXiv}.
+
+\section{Formal statement}
+
+The formal target is, for $k_0:\mathrm{Fin}\,r_B$ arbitrary,\footnote{%
+    Declaration at
+    \path{TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap/FixedBlockDecay.lean}
+    line~107; symmetric statement
+    \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}
+    at line~152.}
+\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}:
+given \leanid{IsCanonicalFormBNT} on both $\mu^A,A$ and $\mu^B,B$,
+\leanid{EventuallyNonzeroProportionalMPV\textsubscript{2}} between the
+assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$ and the hypothesis
+$\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
+$\bot$.
+The dominant specialization $k_0=\langle 0,\_\rangle$ is discharged
+separately by
+\leanid{MPSTensor.fixed\_right\_dominant\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}\footnote{%
+    Same file, line~178; the symmetric
+    \leanid{MPSTensor.fixed\_left\_dominant\_\ldots\_CFBNT} is at
+    line~458.}
+using the dominant-adjusted scalar limit. The universally quantified
+declarations remain open.
+
+\section{Where the per-block projection fails for non-dominant
+\texorpdfstring{$k_0$}{k0}}
+
+Projecting \eqref{eq:prop} onto $V^{(N)}(B_{k_0})$ gives, with
+$\mathrm{LHS}_N:=\langle V^{(N)}(A_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangle$
+and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangle$,
+\begin{align}
+    \mathrm{LHS}_N
+       &=\sum_{j}(\mu^A_j)^N\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle,
+    & \mathrm{RHS}_N
+       &=c_N\sum_{k}(\mu^B_k)^N\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle.
+    \label{eq:LHSRHS}
+\end{align}
+With $\|\mu^A_j\|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
+\eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
+BNT cross-overlap decay\footnote{%
+    \leanid{MPSTensor.IsCanonicalFormBNT.cross\_overlap\_tendsto\_zero}.}
+gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$
+and a nonzero limit $\ell$ at $k=k_0$, so
+$\mathrm{RHS}_N=c_N(\mu^B_{k_0})^N(\ell+o(1))$.
+The dominant-adjusted scalar limit\footnote{%
+    \leanid{MPSTensor.exists\_dominant\_adjusted\_scalar\_tendsto\_norm\_one\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}.}
+gives $\bigl\|c_N(\mu^B_0/\mu^A_0)^N\bigr\|\to 1$, hence
+\begin{align}
+    \bigl\|c_N(\mu^B_{k_0})^N\bigr\|
+    &\sim
+    \|\mu^A_0\|^N
+    \bigl\|\mu^B_{k_0}/\mu^B_0\bigr\|^N.
+    \label{eq:decay}
+\end{align}
+Under $\|\mu^A_0\|=1$ and \leanid{mu\_strict\_anti}, the second factor
+in~\eqref{eq:decay} decays geometrically whenever $k_0\ne 0$, so
+$\mathrm{RHS}_N\to 0$ together with $\mathrm{LHS}_N$. No contradiction
+is available from the per-block projection. The dominant case
+$k_0=0$ is the unique index for which the ratio in~\eqref{eq:decay}
+is the constant~$1$ and the bound stays uniform; that is the analytic
+content of \leanid{fixed\_right\_dominant\_\ldots\_CFBNT}.
+
+Two independent probes confirm the obstruction. Path~$\alpha$
+(\path{audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md},
+\ghpr{1654}) shows an exact eventual leading-coefficient identity
+$c_N(\mu^B_0)^N\zeta^N=(\mu^A_0)^N$ fails at $r_A=r_B=2$ with distinct
+sub-dominant moduli. Path~$\beta$ scope adjustment
+(\path{audits/2026-05-13_cpsv16_ft_path_beta_scout.md},
+\ghpr{1664}) shows the lifted per-block projection on the
+\leanid{SectorDecomposition} surface inherits the same decay
+mismatch.
+
+\section{The argument the source uses}
+
+The Step~1 contradiction in \cite[lines~1170--1192]{Cirac2016MPDO_arXiv}
+does not project onto $V^{(N)}(B_{k_0})$. Isolating $V^{(N)}(B_{k_0})$
+in~\eqref{eq:prop} gives
+\begin{align}
+    \sum_{j}(\mu^A_j)^N V^{(N)}(A_j)
+    -c_N\!\!\!\sum_{k\ne k_0}\!\!(\mu^B_k)^N V^{(N)}(B_k)
+    &=c_N(\mu^B_{k_0})^N V^{(N)}(B_{k_0}),
+    \label{eq:isolate}
+\end{align}
+whose left-hand side lies in
+$\operatorname{span}(\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_k):k\ne k_0\})$. A
+larger application of \texttt{Lem1} provides eventual linear
+independence of the combined family with full span dimension,
+\begin{align}
+    \dim\operatorname{span}(\{V^{(N)}(A_j)\}_{j=1}^{r_A}
+        \cup\{V^{(N)}(B_k)\}_{k=1}^{r_B})
+    =r_A+r_B
+    \qquad(\forall^{\mathrm{cof}}N),
+    \label{eq:largeLem1}
+\end{align}
+under all-pairwise cross-overlap decay. With~\eqref{eq:largeLem1},
+\eqref{eq:isolate} forces $c_N(\mu^B_{k_0})^N=0$ by coefficient
+identification, contradicting $c_N\ne 0$ and $\mu^B_{k_0}\ne 0$. The
+mechanism uses only the coefficient match forced by linear
+independence; it requires neither side to stay bounded away from~$0$.
+
+The formalization currently provides the smaller \texttt{Lem1} instance
+$\{V^{(N)}(A_j)\}\cup\{V^{(N)}(B_{k_0})\}$ as
+\leanid{MPSTensor.eventually\_linearIndependent\_all\_left\_single\_right\_of\_all\_overlaps\_decay\_CFBNT}
+and its symmetric
+\leanid{\ldots\_all\_right\_single\_left\_\ldots\_CFBNT}.\footnote{%
+    \path{TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap.lean}
+    lines~710 and~769.}
+The larger combined-family instance \eqref{eq:largeLem1} is not
+formalized.
+
+\section{Classification}
+
+\emph{Scope restriction combined with an open gap.} The dominant
+declarations
+\leanid{fixed\_right\_dominant\_\ldots\_CFBNT} and
+\leanid{fixed\_left\_dominant\_\ldots\_CFBNT}
+prove the Step~1 conclusion for $k_0=\langle 0,\_\rangle$ on the
+one-copy surface. The universally quantified statements stay open
+because the cited mechanism requires either
+
+\begin{enumerate}
+    \item the combined-family \texttt{Lem1} statement
+          \eqref{eq:largeLem1} with all-pairwise cross-overlap decay,
+          enabling the coefficient-identification step
+          of~\eqref{eq:isolate}; or
+    \item the two-layer paper-faithful structure of
+          \cite[Definition~4.3]{Cirac2021Matrix}, separating spectral
+          levels $\lambda_j$ from within-sector unit-modulus weights
+          $\mu_{j,q}$. The two-layer surface
+          \leanid{MPSTensor.IsBNTCanonicalFormSD}\footnote{%
+              \doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}.}
+          permits the geometric factor in~\eqref{eq:decay} to be
+          cancelled against $c_N$ before projection, recovering a
+          constant lower bound. Tracked in \ghissue{1641}.
+\end{enumerate}
+
+The collapse $r_j=1$ enforced by \leanid{mu\_strict\_anti}
+identifies the two layers into a single weight; once collapsed, the
+non-dominant Step~1 conclusion cannot be reached by per-block
+projection on the \leanid{IsCanonicalFormBNT} surface because both
+sides of the projected proportionality decay together.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
