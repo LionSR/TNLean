@@ -907,6 +907,68 @@ with an extra $Z$-gauge degree of freedom.
 	Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp}.
 \end{proof}
 
+
+% ---- Plan C Objective A: analytic discharge of hNoCancel ----
+
+\begin{lemma}[Power-sum of a unit-modulus family does not tend to zero]%
+\label{lem:unitModulus_power_sum_not_tendsto_zero}
+	\lean{UnitModulusPowerSum.unitModulus_power_sum_not_tendsto_zero}
+	\leanok
+	For $\mu : \{1,\ldots,r\} \to \mathbb{C}$ with $r > 0$ and $|\mu_q| = 1$
+	for every $q$, the sequence $N \mapsto \sum_q (\mu_q)^N$ does not tend to
+	$0$ as $N \to \infty$.
+\end{lemma}
+
+\begin{proof}\leanok
+	Cesaro-average $\|S(N)\|^2 = \sum_{q,q'} (\mu_q \overline{\mu_{q'}})^N$
+	in $N$.  Each off-diagonal pair contributes $0$ to the average (the
+	geometric sum is uniformly bounded and divided by $T \to \infty$), while
+	each diagonal pair contributes $1$.  The Cesaro limit therefore equals the
+	cardinality of the resonant set $\{(q,q') \mid \mu_q\overline{\mu_{q'}} = 1\}$,
+	which is at least $r > 0$.  If $S(N) \to 0$, the Cesaro mean also tends to
+	$0$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Right-block per-block projection contradiction under analytic discharge]%
+\label{thm:fixed_right_all_overlaps_decay_paperFaithful}
+	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_paperFaithful}
+	\leanok
+	\uses{lem:unitModulus_power_sum_not_tendsto_zero,
+		lem:fixed_right_all_overlaps_decay_sectorDecomp}
+	Let $P$ and $Q$ be sector decompositions with unit-modulus weights on both.
+	Fix a block $Q_{k_0}$.  Suppose the assembled tensors are eventually
+	nonzero proportional, every cross-overlap $O_{P_j,Q_{k_0}}(N) \to 0$,
+	the off-diagonal cross-overlaps on $Q$ decay, the self-overlap at $k_0$
+	tends to a nonzero limit $\ell$, and the proportionality scalar admits
+	a positive eventual lower bound.  Then a contradiction follows.
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp} after
+	discharging $\mathtt{hNoCancel}$ from
+	Lemma~\ref{lem:unitModulus_power_sum_not_tendsto_zero}: the BNT coefficient
+	at $k_0$ is a unit-modulus power sum, hence does not tend to zero, so
+	the scalar-weighted block overlap cannot vanish.
+\end{proof}
+
+\begin{theorem}[Left-block per-block projection contradiction under analytic discharge]%
+\label{thm:fixed_left_all_overlaps_decay_paperFaithful}
+	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_paperFaithful}
+	\leanok
+	\uses{lem:unitModulus_power_sum_not_tendsto_zero,
+		lem:fixed_left_all_overlaps_decay_sectorDecomp}
+	Symmetric counterpart of
+	Theorem~\ref{thm:fixed_right_all_overlaps_decay_paperFaithful} with the
+	roles of $P$ and $Q$ interchanged.  Fix a block $P_{j_0}$ and assume
+	the analogous unit-modulus, decay, self-overlap, and scalar-lower-bound
+	conditions on $P$.  Then a contradiction follows.
+\end{theorem}
+
+\begin{proof}\leanok
+	Swap $P$ and $Q$ and invoke
+	Theorem~\ref{thm:fixed_right_all_overlaps_decay_paperFaithful}.
+\end{proof}
+
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
 	\lean{MPSTensor.exists_nondecaying_overlap_of_nonzeroProportionalMPV₂_CFBNT}

@@ -115,6 +115,35 @@ identity is available, the proportional case can clone the equal-MPV tail
 subtraction and induction architecture, without assuming linear independence of
 all residual blocks on both sides.
 
+\subsection{Factored analytic discharge and the lower-bound gap}
+
+\textit{Classification: Scope restriction.}
+
+The non-cancellation conclusion is formally established under four explicit
+analytic hypotheses:
+\begin{enumerate}
+  \item unit-modulus sector weights on both the $A$-family and the $B$-family;
+  \item off-diagonal cross-overlap decay on the fixed-block family, i.e.,
+        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_k)\rangle \to 0$ for $k \neq k_0$;
+  \item a nonzero limit of the self-overlap at the fixed block,
+        $\langle V^{(N)}(B_{k_0}), V^{(N)}(B_{k_0})\rangle \to \ell \neq 0$; and
+  \item an eventual positive lower bound $\|c_N\| \geq \delta > 0$.
+\end{enumerate}
+Hypotheses~(1)--(3) are present in the source via the BNT structure
+\cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}.  Hypothesis~(4) is not
+directly supplied: the cited argument rules out cancellation by appeal to the
+dominant-adjusted scalar limit, but deriving the explicit lower bound
+$\|c_N\|\geq\delta$ from the structural data of the canonical form is not yet
+formalized and is recorded as an open obligation in
+\path{audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.\footnote{%
+  The universally-quantified non-cancellation discharge is
+  \leanid{MPSTensor.hNoCancel\_of\_unitModulus\_decay\_c\_norm\_lower}.
+  The two assembled contradictions are
+  \leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_paperFaithful}
+  and
+  \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_paperFaithful};
+  both carry hypothesis~(4) as an explicit parameter.}
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
