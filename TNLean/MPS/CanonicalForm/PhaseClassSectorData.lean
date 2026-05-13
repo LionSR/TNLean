@@ -145,70 +145,11 @@ theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
   · exact collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
   · exact collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
 
-/-- **Phase-class BNT sector construction with one-sided overlap data.**
-
-Starting from trace-preserving primitive irreducible blocks with nonzero weights,
-quotient the block indices by MPV phase equivalence. The constructed sector
-decomposition represents the original weighted block sum, satisfies the BNT
-linear-independence condition, and its chosen basis blocks carry the
-single-family overlap-orthogonality data needed for the primitive
-overlap-rigidity route.
-
-The theorem also proves that if the original blocks are one-site injective,
-then the chosen basis blocks are injective. It does not claim the remaining
-two-family hypothesis: equality of the finite-length MPV spans between two
-independently constructed bases is a separate task. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P ∧
-      SectorBasisOverlapOrthoHypotheses P ∧
-      ((∀ k, IsInjective (blocks k)) → ∀ j, IsInjective (P.basis j)) := by
-  classical
-  let classes := mpvPhaseClassData blocks
-  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
-  have hSame : SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) :=
-    collapsedBntSectorDecomp_sameMPV₂ (d := d) μ blocks hμne
-  have hBNT : HasBNTSectorData (d := d) P :=
-    collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
-  refine ⟨P, hSame, hBNT, ?_, ?_⟩
-  · refine {
-      dim_pos := ?_
-      normalized := ?_
-      self_overlap := ?_
-      off_overlap := ?_
-    }
-    · intro j
-      simpa [P, collapsedBntSectorDecomp] using NeZero.pos (dim (classes.repr j))
-    · intro j
-      simpa [P, collapsedBntSectorDecomp] using hTP (classes.repr j)
-    · intro j
-      simpa [P, collapsedBntSectorDecomp] using
-        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-        (blocks (classes.repr j)) (hIrr (classes.repr j))
-        (hTP (classes.repr j)) (hPrim (classes.repr j))
-    · intro i j hij
-      simpa [P, collapsedBntSectorDecomp] using
-        cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
-        (fun j : Fin classes.g => blocks (classes.repr j))
-        (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
-        (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
-        classes.blocks_not_equiv i j hij
-  · intro hInj j
-    simpa [P, collapsedBntSectorDecomp] using hInj (classes.repr j)
-
 /-- Concrete one-sided data for the construction using representatives of MPV phase-equivalence
 classes, including the finite-length representative-span identity.
 
-This private auxiliary lemma gives the common conclusions used by the public one-sided
-overlap-data theorems. -/
+This private auxiliary lemma gives the common conclusions used by the public two-sided
+overlap-span theorem. -/
 private theorem bntSectorDecomp_overlapData_basisSpan_aux
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -264,80 +205,6 @@ private theorem bntSectorDecomp_overlapData_basisSpan_aux
   · intro N
     simpa [P, collapsedBntSectorDecomp] using classes.representative_mpv_span_eq (d := d) N
 
-/-- **Phase-class BNT sector construction with primitive overlap data.**
-
-This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` by exposing the
-properties of the chosen representative basis blocks that are needed by the overlap-rigidity
-layer. The extra `hInj` hypothesis is intentional: the one-sided BNT constructor assumes
-irreducibility, primitivity, and trace preservation, while
-`SectorBasisOverlapSpanHypotheses` consumes length-1 MPS-injectivity.
-
-The finite-span comparison between two independently constructed sector bases is not part of
-this one-sided theorem; it depends on comparing the two sides. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hInj : ∀ k, IsInjective (blocks k))
-    (hμne : ∀ k, μ k ≠ 0) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P ∧
-      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
-      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
-      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
-      (∀ j : Fin P.basisCount,
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
-          Filter.atTop (nhds (1 : ℂ))) ∧
-      (∀ i j : Fin P.basisCount, i ≠ j →
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
-          Filter.atTop (nhds 0)) := by
-  obtain ⟨P, hSame, hBNT, hPos, hBasisInj, hBasisTP, hSelfOverlap, hCrossOverlap, _hSpan⟩ :=
-    bntSectorDecomp_overlapData_basisSpan_aux
-      (d := d) μ blocks hTP hIrr hPrim hInj hμne
-  exact ⟨P, hSame, hBNT, hPos, hBasisInj, hBasisTP, hSelfOverlap, hCrossOverlap⟩
-
-/-- **Phase-class BNT sector construction with overlap data and the quotient span identity.**
-
-This strengthens `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData` by
-also exposing the finite-length span invariant of the phase-class representative
-construction: at every length, the chosen MPV phase-class representatives span the same
-MPV subspace as the original block
-family.  This removes the quotient/enumeration identities from later two-sided span
-comparisons; the remaining comparison is the genuine equality of the two original nonzero-block
-spans. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hInj : ∀ k, IsInjective (blocks k))
-    (hμne : ∀ k, μ k ≠ 0) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P ∧
-      (∀ j : Fin P.basisCount, 0 < P.basisDim j) ∧
-      (∀ j : Fin P.basisCount, IsInjective (P.basis j)) ∧
-      (∀ j : Fin P.basisCount, (∑ i : Fin d, (P.basis j i)ᴴ * (P.basis j i)) = 1) ∧
-      (∀ j : Fin P.basisCount,
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
-          Filter.atTop (nhds (1 : ℂ))) ∧
-      (∀ i j : Fin P.basisCount, i ≠ j →
-        Filter.Tendsto (fun N => mpvOverlap (d := d) (P.basis i) (P.basis j) N)
-          Filter.atTop (nhds 0)) ∧
-      (∀ N,
-        Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>
-          mpvState (d := d) (P.basis j) N)) =
-        Submodule.span ℂ (Set.range (fun k : Fin r =>
-          mpvState (d := d) (blocks k) N))) := by
-  exact bntSectorDecomp_overlapData_basisSpan_aux
-    (d := d) μ blocks hTP hIrr hPrim hInj hμne
-
 /-- **Two-sided overlap-span data from nonzero-weight block span equality.**
 
 Apply the construction using representatives of MPV phase-equivalence classes on both
@@ -377,10 +244,10 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
       HasBNTSectorData (d := d) Q ∧
       SectorBasisOverlapSpanHypotheses P Q := by
   obtain ⟨P, hPblocks, hPbnt, hPdim, hPinj, hPnorm, hPself, hPoff, hPspan⟩ :=
-    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+    bntSectorDecomp_overlapData_basisSpan_aux
       (d := d) μA blocksA hTPA hIrrA hPrimA hInjA hμA
   obtain ⟨Q, hQblocks, hQbnt, hQdim, hQinj, hQnorm, hQself, hQoff, hQspan⟩ :=
-    exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapData_and_basisSpan
+    bntSectorDecomp_overlapData_basisSpan_aux
       (d := d) μB blocksB hTPB hIrrB hPrimB hInjB hμB
   have hSpan : ∀ N,
       Submodule.span ℂ (Set.range (fun j : Fin P.basisCount =>

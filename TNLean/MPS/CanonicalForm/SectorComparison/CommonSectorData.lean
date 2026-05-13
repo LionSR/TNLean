@@ -601,8 +601,8 @@ theorem afterBlocking_commonLengthCommonSectorData_of_reindexed
 The complete fundamental theorem should take two tensors `A, B` with `SameMPV₂ A B`
 and pass from the blocked reduction data to the paper's basis-of-normal-tensors
 sector comparison. The one-sided phase-class BNT construction is available as
-`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`, with one-sided overlap data
-exposed by `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_with_overlapOrtho`.
+`exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; the remaining overlap/span
+data are packaged at the two-sided comparison layer.
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
