@@ -29,7 +29,7 @@ A single new analytic theorem is proved and lives in
 `TNLean/Algebra/UnitModulusPowerSum.lean`:
 
 ```lean
-theorem unitModulus_powerSum_not_tendsto_zero
+theorem unitModulus_power_sum_not_tendsto_zero
     {r : ℕ} (hr : 0 < r) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1) :
     ¬ Tendsto (fun N : ℕ => ∑ q : Fin r, (μ q) ^ N) atTop (nhds 0)
 ```
@@ -75,8 +75,8 @@ lemma mpvOverlap_toTensor_basis_not_tendsto_zero
 is the bridge from the analytic ingredient to the projected
 proportionality identity.  Combined with a lower bound `‖c N‖ ≥ δ > 0`
 on the proportionality scalar, this gives the single-sequence
-`hNoCancel_singleSeq` and the universally-quantified
-`hNoCancel_of_unitModulus_decay_clower`.
+`hNoCancel_single_seq` and the universally-quantified
+`hNoCancel_of_unitModulus_decay_c_norm_lower`.
 
 End-to-end corollaries with discharged `hNoCancel`:
 

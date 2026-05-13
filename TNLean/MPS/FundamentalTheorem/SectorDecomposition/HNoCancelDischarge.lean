@@ -43,7 +43,7 @@ per-block projection contradiction then closes as in
   self-overlap limit, the assembled-tensor-to-block overlap does not
   tend to zero).
 
-* `hNoCancel_of_unitModulus_decay_clower` (the universally-quantified
+* `hNoCancel_of_unitModulus_decay_c_norm_lower` (the universally-quantified
   hNoCancel discharge consumed by the per-block projection theorems).
 
 * `fixed_right_all_overlaps_decay_false_paperFaithful`
@@ -65,7 +65,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-section HNoCancelDischarge
+section UnitModulusNonCancellation
 
 /-- **Assembled-tensor-to-block overlap does not vanish.**
 
@@ -207,7 +207,7 @@ block index `k₀` admitting both decaying off-diagonal cross-overlaps and a
 nonzero self-overlap limit, every scalar sequence `c : ℕ → ℂ` whose norm
 is eventually bounded below by a positive constant satisfies the
 non-cancellation conclusion of `hNoCancel`. -/
-lemma hNoCancel_singleSeq
+lemma hNoCancel_single_seq
     (Q : SectorDecomposition d)
     (hQ_unit : ∀ k q, ‖Q.sectors.weight k q‖ = 1)
     (k₀ : Fin Q.basisCount)
@@ -276,8 +276,8 @@ The form consumed by
 `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`.
 Each scalar witness `c` of the eventual proportionality is assumed to
 admit a positive lower bound (`hc_lower`), and the non-cancellation
-conclusion then follows from `hNoCancel_singleSeq`. -/
-lemma hNoCancel_of_unitModulus_decay_clower
+conclusion then follows from `hNoCancel_single_seq`. -/
+lemma hNoCancel_of_unitModulus_decay_c_norm_lower
     {P Q : SectorDecomposition d}
     (hQ_unit : ∀ k q, ‖Q.sectors.weight k q‖ = 1)
     (k₀ : Fin Q.basisCount)
@@ -300,10 +300,10 @@ lemma hNoCancel_of_unitModulus_decay_clower
             (fun N => c N * mpvOverlap (d := d) Q.toTensor (Q.basis k₀) N)
             atTop (nhds 0) := by
   intro c hProp
-  exact hNoCancel_singleSeq Q hQ_unit k₀ hQ_decay_offdiag hℓ_ne
+  exact hNoCancel_single_seq Q hQ_unit k₀ hQ_decay_offdiag hℓ_ne
     hQ_self_limit c (hc_lower c hProp)
 
-end HNoCancelDischarge
+end UnitModulusNonCancellation
 
 section PerBlockProjectionContradiction
 
@@ -313,7 +313,7 @@ Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.
 
 Specialization of
 `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp`
-with the load-bearing `hNoCancel` hypothesis discharged from three
+with the load-bearing `hNoCancel` hypothesis discharged from four
 analytic inputs: unit-modulus `Q`-sector weights, decay of `Q`
 off-diagonal cross-overlaps, a nonzero `Q`-self-overlap limit, and a
 lower bound on the proportionality scalar `‖c N‖`.
@@ -360,7 +360,7 @@ theorem fixed_right_all_overlaps_decay_false_paperFaithful
     False :=
   fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp
     P Q hP_unit hProp k₀ hAllDecay_PtoQ
-    (hNoCancel_of_unitModulus_decay_clower
+    (hNoCancel_of_unitModulus_decay_c_norm_lower
       (P := P) (Q := Q) hQ_unit k₀ hQ_decay_offdiag hℓ_ne
       hQ_self_limit hc_lower)
 
@@ -414,7 +414,7 @@ theorem fixed_left_all_overlaps_decay_false_paperFaithful
     False :=
   fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp
     P Q hQ_unit hProp j₀ hAllDecay_QtoP
-    (hNoCancel_of_unitModulus_decay_clower
+    (hNoCancel_of_unitModulus_decay_c_norm_lower
       (P := Q) (Q := P) hP_unit j₀ hP_decay_offdiag hℓ_ne
       hP_self_limit hc_lower)
 
