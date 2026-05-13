@@ -26,7 +26,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:proportional_tensor_from_blocks_weighted_states_at_length}
 	\lean{MPSTensor.exists_weighted_mpvState_eq_smul_of_nonzeroProportional_at_length_toTensorFromBlocks}
 	\leanok
-	\uses{def:tensor_from_blocks, def:mpv_state}
+	\uses{def:block_diagonal_tensor, def:mpv_state}
 	At a fixed length \(N\), if the two assembled block tensors have
 	proportional MPV vectors with nonzero scalar \(c\), then their expanded
 	weighted BNT state sums at length \(N\) are related by the same scalar.
@@ -100,7 +100,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:weighted_state_sequence_to_proportional_tensor_from_blocks}
 	\lean{MPSTensor.nonzeroProportionalMPV₂_toTensorFromBlocks_of_weighted_mpvState_eq_smul_sequence}
 	\leanok
-	\uses{def:nonzero_proportional_mpv, def:tensor_from_blocks, def:mpv_state}
+	\uses{def:nonzero_proportional_mpv, def:block_diagonal_tensor, def:mpv_state}
 	Conversely, suppose that for assembled block tensors
 	\(A=\bigoplus_j \mu_j A_j\) and \(B=\bigoplus_k \nu_k B_k\) there is a
 	sequence of nonzero scalars \(c_N\) such that
@@ -122,7 +122,7 @@ with an extra $Z$-gauge degree of freedom.
 \label{lem:eventual_weighted_state_sequence_to_proportional_tensor_from_blocks}
 	\lean{MPSTensor.eventuallyNonzeroProportionalMPV₂_toTensorFromBlocks_of_eventually_weighted_mpvState}
 	\leanok
-	\uses{def:eventually_nonzero_proportional_mpv, def:tensor_from_blocks,
+	\uses{def:eventually_nonzero_proportional_mpv, def:block_diagonal_tensor,
 		def:mpv_state}
 	If the expanded weighted block-state sums are related by a scalar sequence
 	for all sufficiently large lengths, and the scalar is eventually nonzero,
@@ -1925,7 +1925,7 @@ block-matching conclusions for the common primitive sectors.
 	\lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
 		MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
 	\leanok
-	\uses{def:block_matching_gauge_phase_data, def:tensor_from_blocks,
+	\uses{def:block_matching_gauge_phase_data, def:block_diagonal_tensor,
 		def:gauge_equiv}
 	If the block weights absorb the per-block phases,
 	$\mu_A(k)=\mu_B(\sigma(k))\zeta_k$, then the weighted direct sum of the

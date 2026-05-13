@@ -208,7 +208,7 @@ recorded in the accompanying paper-gap note.\footnote{%
 \begin{lemma}[Per-block same MPV gives global gauge equivalence]\label{lem:per_block_gauge}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
-    \uses{def:injective, def:gauge_equiv, def:tensor_from_blocks}
+    \uses{def:injective, def:gauge_equiv, def:block_diagonal_tensor}
     If all block tensors $A_k$ are injective, and $B_k$ are
     block tensors of the same bond dimensions such that per-block
     same-MPV holds, then each pair $(A_k, B_k)$ is gauge
@@ -516,9 +516,9 @@ We use this notation throughout the block-separation argument.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ncf_overlap_tendsto_one, thm:nt_modulus_one_gauge, lem:block_sep}
+    \uses{thm:ncf_overlap_tendsto_one, thm:modulus_one_gauge_irr_tp, lem:block_sep}
     The proof follows the same peeling argument as Lemma~\ref{lem:block_sep},
-    with Theorem~\ref{thm:nt_modulus_one_gauge} (modulus-one eigenvalue rigidity
+    with Theorem~\ref{thm:modulus_one_gauge_irr_tp} (modulus-one eigenvalue rigidity
     for irreducible tensors) replacing the injective overlap-decay argument at
     the identification step, since the blocks are irreducible rather than
     injective.
@@ -531,7 +531,7 @@ We use this notation throughout the block-separation argument.
 \begin{lemma}[Canonical-form gauge comparison, same-structure case]\label{lem:ft_canonical}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm}
     \leanok
-    \uses{def:is_canonical_form, def:gauge_equiv, def:tensor_from_blocks}
+    \uses{def:is_canonical_form, def:gauge_equiv, def:block_diagonal_tensor}
     Under the hypotheses of Lemma~\ref{lem:block_sep}, including strict
     ordering of the weight moduli, each pair $(A_k, B_k)$ is gauge equivalent.
     Hence the block-diagonal tensors
