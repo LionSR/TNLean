@@ -524,26 +524,4 @@ theorem exists_bnt_sectorDecomp_of_linearIndependent
     sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
   simpa [trivialSectorDecomp] using hLI
 
-/-- Signature-compatible reformulation for TP / primitive / irreducible block data.
-
-The extra block-normality hypotheses are intentionally retained here to match the
-shape expected by the one-sided BNT-construction route, but only nonzero weights and the
-current BNT linear-independence hypothesis are used.  Use
-`exists_bnt_sectorDecomp_of_linearIndependent` when those extra hypotheses are not
-already present. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_linearIndependent
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (_hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (_hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (_hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    (hLI : ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun k : Fin r => mpvState (blocks k) N)) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P :=
-  exists_bnt_sectorDecomp_of_linearIndependent μ blocks hμne hLI
-
 end MPSTensor
