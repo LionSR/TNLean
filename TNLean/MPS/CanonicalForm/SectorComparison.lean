@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.BlockMatchingComparison
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveReindexTransport
 import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 
@@ -44,8 +43,6 @@ The supporting modules are:
   common-sector transport after the structural theorem.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData` —
   common primitive span, phase-cover, and BNT block-matching hypotheses.
-* `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveReindexTransport` —
-  physical-reindex transport for primitive BNT-cover hypotheses.
 * `TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison` — basic sector
   comparisons from block-span and phase-cover data.
 * `TNLean.MPS.CanonicalForm.SectorComparison.BlockMatchingComparison` — sector comparison
