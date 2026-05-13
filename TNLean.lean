@@ -219,6 +219,7 @@ import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.FundamentalTheorem.Full.DominantWeight
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalScalar
 import TNLean.MPS.FundamentalTheorem.Full.ProportionalExpansion
+import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap.FixedBlockDecay
 import TNLean.MPS.FundamentalTheorem.Full.NondecayingOverlap
 import TNLean.MPS.FundamentalTheorem.Full.BlocksMatch
 import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
@@ -227,6 +228,7 @@ import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.HNoCancelDischarge
+import TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
