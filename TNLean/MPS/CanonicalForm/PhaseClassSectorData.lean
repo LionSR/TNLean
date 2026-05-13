@@ -28,62 +28,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Eventual independence from separated overlap data -/
-
-/-- **Eventual BNT linear independence for an already separated normal family.**
-
-For TP primitive irreducible blocks that are pairwise not gauge-phase equivalent,
-self-overlaps tend to `1` and cross-overlaps tend to `0`.  Hence their MPV states
-are eventually linearly independent.  This supplies the missing linear-independence
-step after a future one-sided BNT construction has chosen separated representatives
-and absorbed all repeated gauge phases into sector weights. -/
-theorem exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) blocks) :
-    ∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun k : Fin r => mpvState (d := d) (blocks k) N) := by
-  apply exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal blocks
-  · intro k
-    exact overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      (blocks k) (hIrr k) (hTP k) (hPrim k)
-  · intro j k hjk
-    exact cross_overlap_tendsto_zero_of_separated_normalCFBNT_data blocks
-      (HasIrreducibleBlocks.ofForall hIrr)
-      (IsLeftCanonicalBlockFamily.ofForall hTP)
-      hBlocks j k hjk
-
-/-- **Separated-family BNT sector construction.**
-
-If the given TP primitive irreducible blocks are already pairwise separated by
-non-gauge-phase-equivalence, the one-sector-per-block sector decomposition is a genuine BNT
-sector decomposition: it represents the original weighted block sum and satisfies
-`HasBNTSectorData` by the overlap-derived eventual linear independence above.
-
-This theorem does not identify gauge-phase-equivalent blocks.  Instead it
-identifies the exact remaining task for the full one-sided construction: first
-choose separated representatives and absorb the corresponding phases into sector
-weights, then apply this constructor. -/
-theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
-    (hμne : ∀ k, μ k ≠ 0)
-    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) blocks) :
-    ∃ P : SectorDecomposition d,
-      SameMPV₂ P.toTensor (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
-      HasBNTSectorData (d := d) P := by
-  refine ⟨trivialSectorDecomp μ blocks hμne,
-    sameMPV₂_trivialSectorDecomp μ blocks hμne, ?_⟩
-  simpa [trivialSectorDecomp] using
-    exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
-      blocks hTP hIrr hPrim hBlocks
+/-! ### Phase-class quotient construction -/
 
 /-- The concrete sector decomposition obtained from representatives of MPV phase classes. -/
 private noncomputable def collapsedBntSectorDecomp
@@ -161,13 +106,19 @@ private theorem collapsedBntSectorDecomp_hasBNT
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
   have hLI : ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ
-        (fun j : Fin classes.g => mpvState (d := d) (blocks (classes.repr j)) N) :=
-    exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv
+        (fun j : Fin classes.g => mpvState (d := d) (blocks (classes.repr j)) N) := by
+    apply exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
       (fun j : Fin classes.g => blocks (classes.repr j))
-      (fun j => hTP (classes.repr j))
-      (fun j => hIrr (classes.repr j))
-      (fun j => hPrim (classes.repr j))
-      classes.blocks_not_equiv
+    · intro j
+      exact overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+        (blocks (classes.repr j)) (hIrr (classes.repr j))
+        (hTP (classes.repr j)) (hPrim (classes.repr j))
+    · intro i j hij
+      exact cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+        (fun j : Fin classes.g => blocks (classes.repr j))
+        (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
+        (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
+        classes.blocks_not_equiv i j hij
   simpa [P, collapsedBntSectorDecomp] using hLI
 
 /-- **Unconditional one-sided BNT sector construction for primitive irreducible blocks.**
@@ -177,7 +128,7 @@ nonzero weights, quotient the block indices by MPV phase equivalence.  One
 representative is chosen for each class; for every original block in the class,
 the associated phase is multiplied into its sector weight.  Gauge-phase-equivalent
 blocks land in the same MPV phase class, so the chosen representatives satisfy
-`BlocksNotGaugePhaseEquiv`.  The separated-family BNT independence theorem then
+`BlocksNotGaugePhaseEquiv`.  The overlap-limit independence criterion then
 proves `HasBNTSectorData` for the constructed sector decomposition. -/
 theorem exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

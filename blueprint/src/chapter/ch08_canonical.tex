@@ -2760,24 +2760,6 @@ do not correspond to independent paper-level results.
 	explicit threshold $N_0$.
 \end{proof}
 
-\begin{theorem}[BNT independence for separated primitive normal blocks]
-	\label{thm:bnt_li_tp_prim_irr_separated}
-	\lean{MPSTensor.exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
-	\leanok
-	\uses{thm:bnt_li_from_overlap_limits_exists, def:gauge_phase_equiv}
-	For trace-preserving primitive irreducible blocks of positive bond dimension
-	that are pairwise not gauge-phase equivalent, the block MPV states are
-	linearly independent for all sufficiently large system sizes.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{thm:bnt_li_from_overlap_limits_exists}
-	Primitivity and trace preservation give self-overlap convergence to $1$.
-	BNT separation gives cross-overlap convergence to $0$ for distinct blocks.
-	The result follows from
-	Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}.
-\end{proof}
-
 \begin{theorem}[Granular sector decomposition from eventual BNT independence]
 	\label{thm:bnt_sector_decomp_linear_independent}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
@@ -2797,27 +2779,6 @@ do not correspond to independent paper-level results.
 	sector decomposition.
 \end{proof}
 
-\begin{theorem}[Separated primitive normal sector construction]
-	\label{thm:bnt_sector_decomp_tp_prim_irr_separated}
-	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv}
-	\leanok
-	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
-	For trace-preserving primitive irreducible blocks of positive bond dimension
-	with nonzero weights, if distinct blocks are pairwise not gauge-phase
-	equivalent, then the granular
-	sector decomposition represents the same MPS family and satisfies the BNT
-	linear-independence condition.  Equal-modulus separated blocks remain as
-	distinct basis blocks.
-\end{theorem}
-
-\begin{proof}\leanok
-	\uses{lem:trivial_sector_decomp_same_mpv, thm:bnt_li_tp_prim_irr_separated}
-	The granular sector decomposition preserves the represented family by
-	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The separated primitive
-	normal hypotheses give the eventual linear independence by
-	Theorem~\ref{thm:bnt_li_tp_prim_irr_separated}.
-\end{proof}
-
 \begin{definition}[MPV phase class data]
 	\label{def:mpv_phase_class_data}
 	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
@@ -2834,7 +2795,7 @@ do not correspond to independent paper-level results.
 	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
 	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
 	\leanok
-	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated}
+	\uses{def:mpv_phase_class_data, thm:bnt_li_from_overlap_limits_exists}
 	For trace-preserving primitive irreducible blocks of positive bond dimension
 	with nonzero weights, there is a sector decomposition representing the same
 	weighted block sum and satisfying the BNT linear-independence condition.  The
@@ -2843,14 +2804,15 @@ do not correspond to independent paper-level results.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated, thm:mpv_decomposition}
+	\uses{def:mpv_phase_class_data, thm:bnt_li_from_overlap_limits_exists, thm:mpv_decomposition}
 	Finite phase classes partition the original block indices.  Expanding the
 	sector decomposition gives the original finite sum after replacing each class
 	member by its representative and moving the factor $\zeta^N$ into
 	$(\zeta\mu_k)^N$.  If two chosen representatives were gauge-phase equivalent,
 	they would lie in the same MPV phase class, contradicting their being distinct
 	classes.  Therefore the representatives satisfy the separated primitive-normal
-	hypothesis, and Theorem~\ref{thm:bnt_li_tp_prim_irr_separated} gives the BNT
+	hypothesis, and the overlap-limit criterion
+	(Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}) gives the BNT
 	linear-independence condition.
 \end{proof}
 
@@ -2870,7 +2832,7 @@ do not correspond to independent paper-level results.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{def:mpv_phase_class_data, thm:bnt_li_tp_prim_irr_separated,
+	\uses{def:mpv_phase_class_data, thm:bnt_li_from_overlap_limits_exists,
 		thm:cross_overlap_zero_split, thm:bnt_sector_decomp_tp_prim_irr_collapsed}
 	The proof is the phase-class construction of
 	Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}.  The chosen basis
