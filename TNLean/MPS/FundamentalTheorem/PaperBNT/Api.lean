@@ -251,6 +251,43 @@ theorem coeff_not_tendsto_zero_at_unit_block
   intro hTend
   exact hAnal hTend
 
+/-- **Cesàro converse: coefficient decays when every weight is strictly subnormal.**
+
+For any sector `j : Fin P.basisCount` such that every copy weight satisfies
+`‖P.weight j q‖ < 1` (strictly), the power-sum coefficient
+`P.coeff N j = ∑_q (P.weight j q)^N` tends to `0` as `N → ∞`.
+
+This is the **converse** of `coeff_not_tendsto_zero_at_unit_block`: under the
+CPSV16 §II.A line-246 normalization (`weight_norm_le_one`), if **no** copy of
+sector `j` carries a unit-modulus weight, then the sector's coefficient
+decays exponentially.  The argument is elementary: each summand
+`(P.weight j q)^N` tends to `0` because the closed-unit-disk strict
+inequality `‖w‖ < 1` makes the geometric sequence vanish, and a finite sum
+of vanishing sequences vanishes.
+
+Paper anchor: CPSV16 §II.A line 246 + line 1244 (the convergence half of
+the line-246 dichotomy: unit-modulus weights survive; subnormal weights
+decay).  This is the lemma the Phase B-γ matched-pair argument
+(`PaperBNT/StrongMatch.lean`) uses to dismiss non-unit sectors of `Q` that
+do not appear in the matching `φ : UnitQ ↪ Fin P.basisCount`. -/
+theorem coeff_tendsto_zero_of_all_weights_subnorm
+    (_h : IsBNTCanonicalForm P) (j : Fin P.basisCount)
+    (hSubnorm : ∀ q : Fin (P.copies j), ‖P.weight j q‖ < 1) :
+    Tendsto (fun N : ℕ => P.coeff N j) atTop (𝓝 0) := by
+  classical
+  -- Unfold `P.coeff N j = ∑_q (P.weight j q)^N` and apply `tendsto_finset_sum`.
+  have hEq : ∀ N : ℕ, P.coeff N j
+      = ∑ q : Fin (P.copies j), (P.weight j q) ^ N := fun N => rfl
+  refine Filter.Tendsto.congr (fun N => (hEq N).symm) ?_
+  -- Each term `(P.weight j q)^N → 0` by `tendsto_pow_atTop_nhds_zero_of_norm_lt_one`.
+  have hSumZero :
+      Tendsto (fun N : ℕ => ∑ q : Fin (P.copies j), (P.weight j q) ^ N)
+        atTop (𝓝 (∑ _q : Fin (P.copies j), (0 : ℂ))) := by
+    refine tendsto_finset_sum (Finset.univ : Finset (Fin (P.copies j))) ?_
+    intro q _
+    exact tendsto_pow_atTop_nhds_zero_of_norm_lt_one (hSubnorm q)
+  simpa using hSumZero
+
 /-- **Thermodynamic-limit non-vanishing of a unit-block coefficient.**
 
 A user-facing alias for `coeff_not_tendsto_zero_at_unit_block`, named

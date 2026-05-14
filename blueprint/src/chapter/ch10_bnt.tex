@@ -1726,3 +1726,163 @@ downstream cardinality bounds on the unit-block subsets.
 	weight-equivariance argument discussed in the scoping paragraph
 	above and is deferred to a follow-up phase.
 \end{remark}
+
+\subsection{Phase B-\(\gamma\): CPSV16 \S{}II.C lines 1187-1188 Corollary substitution}
+
+Given the matched gauges from Phase B-\(\alpha\) (Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+encoded as the injection \(\varphi : \texttt{UnitQ} \hookrightarrow \mathrm{Fin}\,P.\texttt{basisCount}\)
+from Phase B-\(\beta\) (Theorem~\ref{thm:paper_bnt_bijective_match_of_sameMPV}),
+the \emph{per-block coefficient identity} of CPSV16 \S{}II.C lines 1187-1188
+(arXiv:1606.00608, the Corollary \texttt{II\_cor2}'s substitution argument)
+follows by substituting the per-pair gauge identity
+\(\mathrm{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \mathrm{mpv}(A_{\varphi(k)})(\sigma)\)
+into the original \(\texttt{SameMPV}_2\) proportionality and projecting
+the resulting overlap onto each basis tensor \(A_{j_0}\).
+
+\paragraph{Honest scoping (issue \#1725 Phase B-\(\gamma\)).}
+The user-requested literal form of the matched-pair clause is
+\emph{eventual exact} equality \(P.\texttt{coeff}\,N\,(\varphi\,k) = \zeta_k^N \cdot Q.\texttt{coeff}\,N\,k.\texttt{val}\)
+for all sufficiently large \(N\).  Deriving eventual exact equality from the
+partial-bijection data (\(\texttt{UnitQ}\) only, with non-unit \(Q\)-blocks
+unconstrained) requires combined LI on \(P.\texttt{basis} \sqcup \{Q.\texttt{basis}\,k : k \notin \texttt{UnitQ}\}\),
+the precise partial-union LI that issue \#1722 flagged as not naturally
+derivable from \texttt{IsBNTCanonicalForm}.  We deliver the
+\emph{asymptotic-difference} form
+\(\texttt{Tendsto}\,(P.\texttt{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\texttt{coeff}\,N\,k.\texttt{val})\,\texttt{atTop}\,(\mathcal{N}\,0)\),
+which is the natural output of the overlap-projection argument; the
+upgrade to the eventual-exact form is provided downstream by the
+multiset-rigidity lemma \texttt{Multiset.eq\_of\_power\_sum\_eq}
+(Theorem~\ref{thm:paper_bnt_multiset_eq_of_power_sum_eq}, the Newton-Girard
+input behind CPSV16 lines 1187-1188).  The non-matched-decay clause is
+delivered in full.
+
+\begin{theorem}[CPSV16 \S{}II.C lines 1187-1188 Corollary substitution]
+	\label{thm:paper_bnt_coeff_identity_via_global_gauge}
+	\lean{MPSTensor.coeff_identity_via_global_gauge}
+	\leanok
+	\uses{def:paper_bnt_canonical_form,
+		thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+		thm:paper_bnt_bijective_match_of_sameMPV,
+		thm:paper_bnt_combined_family_eventually_li,
+		thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+	Let \(P, Q : \texttt{SectorDecomposition}\,d\) be two paper-faithful BNT
+	canonical forms (\(\texttt{IsBNTCanonicalForm}\)) generating proportional
+	MPVs (\(\texttt{SameMPV}_2\,P.\texttt{toTensor}\,Q.\texttt{toTensor}\)).
+	Let
+	\[
+		\texttt{UnitQ} := \{ k : \mathrm{Fin}\,Q.\texttt{basisCount} \mid \exists\,q,\ \|Q.\texttt{weight}\,k\,q\| = 1 \}
+	\]
+	be the unit-modulus subset of \(Q\)-sectors (CPSV16 \S{}II.A line~246
+	normalization), and let
+	\(\varphi : \texttt{UnitQ} \hookrightarrow \mathrm{Fin}\,P.\texttt{basisCount}\)
+	be an injection equipped with per-pair matched-gauge data
+	\((h_k, \texttt{GaugePhaseEquiv}, \neg \text{decay}_k)\) for every
+	\(k \in \texttt{UnitQ}\).  Then:
+	\begin{enumerate}
+		\item \emph{Matched-pair asymptotic identity}: for every \(k \in \texttt{UnitQ}\)
+			there exists a phase \(\zeta_k \in \mathbb{C}\) with \(\|\zeta_k\| = 1\)
+			such that the asymptotic difference of coefficient sequences vanishes,
+			\[
+				\lim_{N \to \infty}\ P.\texttt{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\texttt{coeff}\,N\,k.\texttt{val}\ =\ 0.
+			\]
+		\item \emph{Non-matched-decay}: for every \(j_0 : \mathrm{Fin}\,P.\texttt{basisCount}\)
+			outside the range of \(\varphi\),
+			\[
+				\lim_{N \to \infty}\ P.\texttt{coeff}\,N\,j_0\ =\ 0.
+			\]
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	Fix \(j_0 : \mathrm{Fin}\,P.\texttt{basisCount}\) and project the SameMPV\(_2\)
+	identity onto the overlap with \(P.\texttt{basis}\,j_0\):
+	\[
+		\sum_j P.\texttt{coeff}\,N\,j \cdot \langle V_N(A_j) \mid V_N(A_{j_0}) \rangle
+		=
+		\sum_k Q.\texttt{coeff}\,N\,k \cdot \langle V_N(B_k) \mid V_N(A_{j_0}) \rangle.
+	\]
+	(\textbf{LHS}.) The off-diagonal \(j \neq j_0\) terms decay by
+	\(\texttt{cross\_overlap\_basis\_tendsto\_zero}\) (CPSV16 lines 1080-1091)
+	and the diagonal term \(P.\texttt{coeff}\,N\,j_0 \cdot
+	(\langle V_N(A_{j_0}) \mid V_N(A_{j_0}) \rangle - 1)\) decays by the
+	normalized self-overlap (CPSV21 line 1818).  Hence
+	\(\texttt{LHS} - P.\texttt{coeff}\,N\,j_0 \to 0\).
+
+	(\textbf{RHS}.) Split \(k : \mathrm{Fin}\,Q.\texttt{basisCount}\)
+	into \(\texttt{UnitQ}\) and its complement:
+	\begin{itemize}
+		\item For \(k \in \texttt{UnitQ}\): substitute via the gauge identity
+			\(\mathrm{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \mathrm{mpv}(A_{\varphi(k)})(\sigma)\)
+			(CPSV16 line 1186; the unit-modulus closure \(\|\zeta_k\| = 1\)
+			follows from \(\texttt{norm\_eq\_one\_of\_selfOverlap\_scale}\) and
+			both per-block normalized self-overlaps tending to 1).
+			\begin{itemize}
+				\item If \(\varphi(k) = j_0\): self-overlap diagonal, contributes
+					\(Q.\texttt{coeff}\,N\,k \cdot \zeta_k^N + o(1)\);
+				\item If \(\varphi(k) \neq j_0\): cross-overlap decay,
+					contributes \(o(1)\).
+			\end{itemize}
+		\item For \(k \notin \texttt{UnitQ}\): every copy weight has strict
+			modulus \(< 1\), so \(Q.\texttt{coeff}\,N\,k \to 0\) by
+			Theorem~\ref{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
+			combined with the uniform overlap bound from left-canonical
+			normalization (\(\texttt{leftCanonical\_mpvOverlap\_bound}\),
+			CPSV21 lines 1815-1837), the contribution decays to 0.
+	\end{itemize}
+	Combining all per-\(k\) pieces:
+	\(\texttt{RHS} - \sum_{k \in \texttt{UnitQ},\,\varphi(k) = j_0} \zeta_k^N \cdot Q.\texttt{coeff}\,N\,k.\texttt{val} \to 0\).
+	Since \(\varphi\) is an embedding, the sum has at most one term.
+	With \(\texttt{LHS} = \texttt{RHS}\) (the projection identity), we obtain
+	\(P.\texttt{coeff}\,N\,j_0 - (\text{matched term}) \to 0\).
+
+	Specialising:
+	\begin{itemize}
+		\item If \(j_0 = \varphi(k_0)\) for some \(k_0 \in \texttt{UnitQ}\):
+			the matched term is \(\zeta_{k_0}^N \cdot Q.\texttt{coeff}\,N\,k_0.\texttt{val}\),
+			giving clause (1) with \(\zeta := \zeta_{k_0}\).
+		\item If \(j_0 \notin \mathrm{range}(\varphi)\): the matched term is empty
+			(0), giving clause (2).
+	\end{itemize}
+\end{proof}
+
+\begin{lemma}[Cesàro converse: coefficient decay for subnormal sectors]
+	\label{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+	\lean{MPSTensor.IsBNTCanonicalForm.coeff_tendsto_zero_of_all_weights_subnorm}
+	\leanok
+	\uses{def:paper_bnt_canonical_form}
+	Let \(P : \texttt{SectorDecomposition}\,d\) be a paper-faithful BNT
+	canonical form, and let \(j : \mathrm{Fin}\,P.\texttt{basisCount}\) be
+	a sector for which every copy weight is strictly subnormal,
+	\(\|P.\texttt{weight}\,j\,q\| < 1\) for every \(q\).  Then
+	\(\lim_{N \to \infty} P.\texttt{coeff}\,N\,j = 0\).
+\end{lemma}
+
+\begin{proof}
+	The coefficient \(P.\texttt{coeff}\,N\,j = \sum_q (P.\texttt{weight}\,j\,q)^N\)
+	is a finite sum.  Each summand \((P.\texttt{weight}\,j\,q)^N\) tends to 0
+	as \(N \to \infty\) by \(\texttt{tendsto\_pow\_atTop\_nhds\_zero\_of\_norm\_lt\_one}\)
+	(the closed-unit-disk strict subnorm hypothesis).  A finite sum of
+	null sequences is null.
+\end{proof}
+
+\begin{remark}[Relationship to the audit memo]
+	\label{rem:paper_bnt_coeff_identity_via_global_gauge_audit_link}
+	Theorem~\ref{thm:paper_bnt_coeff_identity_via_global_gauge}
+	corresponds directly to the audit memo
+	\texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} \S{}8, Phase~4c-\(\gamma\)
+	(rebadged Phase~B-\(\gamma\) after the Phase~A canonical-form
+	strengthening, PR~\#1727).  The audit memo's prescribed route
+	``substitute the per-pair gauge phases into the original proportionality,
+	reduce to the A-only relation, and extract per-\(j\) coefficient
+	identities using \texttt{hP.bnt\_data} alone'' is here realised via
+	an overlap-projection argument that handles the
+	\(\texttt{UnitQ}\)-restricted bijection setting (the full bijection
+	on \(\mathrm{Fin}\,P.\texttt{basisCount} \simeq \mathrm{Fin}\,Q.\texttt{basisCount}\)
+	is not delivered by Phase~B-\(\beta\); see the scoping discussion
+	above).  The result avoids \(\texttt{dropSector}\) entirely (Phase
+	4c drift) and consumes only A-side cross-overlap decay
+	(\texttt{cross\_overlap\_basis\_tendsto\_zero}), basis self-overlap
+	normalization (\texttt{basis\_normalized\_self\_overlap}), and the
+	Cesàro converse
+	(Lemma~\ref{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}).
+\end{remark}
