@@ -1293,6 +1293,72 @@ of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
 	\(P\)-indexing as required.
 \end{proof}
 
+\begin{lemma}[Matched-sector weight-permutation extractor]%
+	\label{lem:paper_bnt_matched_sector_weight_equiv}
+	\lean{MPSTensor.matched_sector_weight_equiv}
+	\leanok
+	\uses{lem:paper_bnt_matched_sector_weight_multiset_eq}
+	Under the hypotheses of
+	Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq}, there
+	exist a per-sector multiplicity match
+	\(h : P.\texttt{copies}\,j_0 = Q.\texttt{copies}\,\tilde k_0\) and an
+	explicit permutation
+	\[
+		\tau \;:\;
+		\texttt{Fin}\,(P.\texttt{copies}\,j_0)
+		\;\simeq\;
+		\texttt{Fin}\,(Q.\texttt{copies}\,\tilde k_0)
+	\]
+	identifying the individual per-copy weights up to the gauge phase:
+	\[
+		Q.\texttt{weight}\,\tilde k_0\,(\tau\,q)
+		\;=\;
+		\zeta^{-1} \cdot P.\texttt{weight}\,j_0\,q
+		\qquad \text{for every } q.
+	\]
+	This is the per-copy realisation of
+	\cite[\S~II, line 1188]{Cirac2017MPDO_AnnPhys}
+	(\(\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}\)): the multiset equality
+	from Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} is
+	upgraded to a concrete indexing between the matched \(P\)- and
+	\(Q\)-copies.
+\end{lemma}
+
+\begin{proof}\leanok
+	Invoke Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} to
+	obtain the cardinality match \(h\) and the multiset equality
+	\[
+		\texttt{Multiset.map}\,(P.\texttt{weight}\,j_0)\,
+			\texttt{Finset.univ.val}
+		\;=\;
+		\texttt{Multiset.map}\,\bigl(q \mapsto \zeta \cdot
+			Q.\texttt{weight}\,\tilde k_0\,(\texttt{Fin.cast}\,h\,q)\bigr)\,
+			\texttt{Finset.univ.val}.
+	\]
+	From this multiset-map equality on
+	\(\texttt{Fin}\,(P.\texttt{copies}\,j_0)\) extract a permutation
+	\(\sigma : \texttt{Equiv.Perm}\,(\texttt{Fin}\,(P.\texttt{copies}\,j_0))\)
+	satisfying
+	\[
+		P.\texttt{weight}\,j_0\,q
+		\;=\;
+		\zeta \cdot Q.\texttt{weight}\,\tilde k_0\,
+			(\texttt{Fin.cast}\,h\,(\sigma\,q))
+		\qquad \text{for every } q.
+	\]
+	The underlying combinatorial fact is that two equal multisets over
+	\(\texttt{Fin}\,n\) admit an index permutation matching their elements
+	pointwise (proved by induction on \(n\) via
+	\texttt{Fin.univ\_succAbove} for the multiset decomposition and
+	\texttt{finSuccEquiv$'$} for the assembly of the permutation at the
+	successor step).  Compose with the cardinality cast
+	\(\texttt{Fin.castOrderIso}\,h\) to define
+	\(\tau := \sigma \,;\, \texttt{Fin.castOrderIso}\,h\) and cancel
+	\(\zeta\) via \(\zeta \neq 0\) (\texttt{mul\_inv\_cancel}_0) to convert
+	the gauge factor on the right of the pointwise identity to
+	\(\zeta^{-1}\) on the left.
+\end{proof}
+
 \subsection{Cross-overlap decay against a dropped sector}
 \label{sec:paper_bnt_drop_sector_overlap_decay}
 
