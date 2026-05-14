@@ -227,7 +227,9 @@ end HasNormalizedSelfOverlap
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
 (PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli. The strictly decreasing variant
-is enforced at the BNT level (`IsCanonicalFormBNT`) after the grouping step. -/
+is a one-copy-per-sector artifact; the paper-faithful `IsBNTCanonicalForm`
+(`MPS/FundamentalTheorem/PaperBNT/Basic.lean`) uses sector multiplicities and does not require
+strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block is algebraically injective (`span (range (A k)) = ⊤`). -/

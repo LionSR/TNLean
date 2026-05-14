@@ -599,8 +599,10 @@ lemma per_block_sameMPV_of_separated_canonical_data
       (summed_block_difference_eq_zero_of_sameMPV₂ μ A B hSame₂)
 
 /-- Reformulation extracting per-block `SameMPV` from canonical-form data with a strict
-ordering witness. The strict ordering is available at the BNT level (`IsCanonicalFormBNT.mu_strict_anti`)
-but not from the base `IsCanonicalForm` which only guarantees non-increasing moduli. -/
+ordering witness. The strict ordering is not part of `IsCanonicalForm` (which only guarantees
+non-increasing moduli); it must be supplied by the caller via `StrictAnti (fun k => ‖μ k‖)`.
+The paper-faithful BNT surface `IsBNTCanonicalForm` (`MPS/FundamentalTheorem/PaperBNT/Basic.lean`)
+uses sector multiplicities and deliberately omits a strict-ordering field. -/
 lemma per_block_sameMPV_of_canonical_form
     (μ : Fin r → ℂ)
     (A B : (k : Fin r) → MPSTensor d (dim k))
