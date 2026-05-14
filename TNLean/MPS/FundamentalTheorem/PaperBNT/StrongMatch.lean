@@ -5,11 +5,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
 
 /-!
-# Phase B-α (paper-faithful) strong existential matching
+# Phase B-α and B-β (paper-faithful) strong existential and bijective matching
 
-This module is **Phase B-α** of the CPSV16/CPSV21 fundamental-theorem
-clean-slate plan (issue #1725) — the paper-faithful strong existential
-matching theorem.  It states the CPSV16 §II.C lines 1182–1186 *Step 1*
+This module is **Phase B-α and Phase B-β** of the CPSV16/CPSV21
+fundamental-theorem clean-slate plan (issue #1725).  The downstream
+Phase B-γ Corollary substitution argument
+(`coeff_identity_via_global_gauge`, CPSV16 §II.C lines 1187-1188) lives
+in the companion module `PaperBNT/CoeffIdentity.lean` (file split in
+PR #1729 to respect the 1000-line module limit).
+
+The paper-faithful strong existential
+matching theorem states the CPSV16 §II.C lines 1182–1186 *Step 1*
 conclusion directly on the original (un-dropped) pair `(P, Q)` of
 BNT canonical forms, iterated over each sector `k` of `Q` that carries
 a unit-modulus copy.
@@ -522,5 +528,6 @@ theorem bijective_match_of_sameMPV
     exact φ₀_spec k
   · intro j
     exact ψ₀_spec j
+
 
 end MPSTensor
