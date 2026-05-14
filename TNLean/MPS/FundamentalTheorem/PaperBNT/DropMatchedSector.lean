@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DropSector
+import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
 
 /-!
@@ -145,9 +146,10 @@ into `Fin P.basisCount` and `Fin Q.basisCount`, respectively, matching the
 indexing convention adopted by `mpv_toTensor_dropSector_eq_sub`
 (`PaperBNT/DropSector.lean`).
 
-The `IsBNTCanonicalForm` hypotheses `hP` and `hQ` are recorded for API
-symmetry with the downstream Phase 4c caller; the present algebraic
-identity itself does not consume them. -/
+The `IsBNTCanonicalForm` hypotheses `hP` and `hQ` are recorded for
+caller-symmetry with the downstream Phase 4c induction step, which will
+have these in hand; the present algebraic identity itself does not
+consume them. -/
 theorem sameMPV_dropSector_dropSector
     {P Q : SectorDecomposition d}
     (_hP : IsBNTCanonicalForm P) (_hQ : IsBNTCanonicalForm Q)
@@ -231,22 +233,24 @@ theorem sameMPV_dropSector_dropSector
   linear_combination
     (P.coeff N i₀' * mpv (P.basis i₀') σ) * hCancel N
 
-/-! ### Convenience wrapper from `GaugePhaseEquiv` data
+/-! ### Equivalent formulation with explicit gauge phase and conjugation witness
 
-In Phase 4c, the matched-pair gauge data is produced as a single
-`GaugePhaseEquiv` predicate by
-`exists_dominant_match_of_sameMPV`
-(`PaperBNT/DominantMatch.lean`).  This wrapper unpacks the
-`GaugePhaseEquiv` to extract the gauge phase `ζ` and conjugating matrix
-`X`, derives the basis-MPV relation `hMpv` via
+This is an equivalent formulation of `sameMPV_dropSector_dropSector`
+suited for Phase 4c, where the matched-pair gauge-phase equivalence is
+supplied via explicit witnesses: a nonzero gauge phase `ζ`, a conjugating
+matrix `X`, and a weight permutation `τ`.  The conjugation hypothesis
+`hζ_of_hGPE` asserts the existence of `X` realising
+`Q.basis k₀' i = ζ • (X * P.basis i₀' i * X⁻¹)`
+(bond-dimension cast of `P.basis i₀'` accounted for by `h_dim`).
+From `hζ_of_hGPE` the basis-MPV relation `hMpv` is derived via
 `MPSTensor.mpv_eq_pow_mul_of_gaugePhase` (`SharedInfra/GaugePhase.lean`)
-together with the bond-dimension cast lemma, and then dispatches to
-`sameMPV_dropSector_dropSector`.
+together with `MPSTensor.mpv_cast_dim` (`Overlap/CastLemmas.lean`), and
+the result is then dispatched to `sameMPV_dropSector_dropSector`.
 
 Paper anchor: CPSV16 lines 1172–1192 (`II_cor2`) joins the gauge-phase
 equivalence `B_k = e^{i φ_k} X_k A_{j_k} X_k^{-1}` (line 1180) with the
 multiplicity recovery `μ_{j,q} = ν_{j,q} · e^{i φ_j}` (line 1188); the
-present wrapper feeds both into the cancellation. -/
+present reformulation feeds both into the cancellation. -/
 theorem sameMPV_dropSector_dropSector_of_gaugePhaseEquiv
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -256,10 +260,6 @@ theorem sameMPV_dropSector_dropSector_of_gaugePhaseEquiv
     (i₀ : Fin (nP + 1)) (k₀ : Fin (nQ + 1))
     (h_dim : P.basisDim (Fin.cast hcardP.symm i₀)
              = Q.basisDim (Fin.cast hcardQ.symm k₀))
-    (hGPE : GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor d) h_dim)
-              (P.basis (Fin.cast hcardP.symm i₀)))
-        (Q.basis (Fin.cast hcardQ.symm k₀)))
     (τ : Fin (P.copies (Fin.cast hcardP.symm i₀)) ≃
          Fin (Q.copies (Fin.cast hcardQ.symm k₀)))
     (ζ : ℂ)
@@ -277,22 +277,7 @@ theorem sameMPV_dropSector_dropSector_of_gaugePhaseEquiv
           ζ⁻¹ * P.weight (Fin.cast hcardP.symm i₀) q) :
     SameMPV₂ (P.dropSector hcardP i₀).toTensor
              (Q.dropSector hcardQ k₀).toTensor := by
-  -- `hGPE` itself is recorded for API symmetry with the Phase 4c caller;
-  -- the `ζ`/`X` data we actually consume is supplied by `hζ_of_hGPE`,
-  -- which captures the underlying `GaugePhaseEquiv` witness in a form
-  -- where the phase variable is explicit.  In Phase 4c, the caller will
-  -- destructure `hGPE` and feed both `hGPE` and the extracted phase data
-  -- here.
-  let _hGPE_used := hGPE
   obtain ⟨X, hX⟩ := hζ_of_hGPE
-  -- Local cast helper: bond-dimension casts do not change MPV traces.
-  have mpv_cast_dim :
-      ∀ {n m : ℕ} (h : n = m) (A : MPSTensor d n)
-        {N : ℕ} (σ : Fin N → Fin d),
-        mpv (cast (congr_arg (MPSTensor d) h) A) σ = mpv A σ := by
-    intros n m h A N σ
-    cases h
-    rfl
   -- Derive the `hMpv` relation:
   --   `mpv (Q.basis k₀') σ = ζ^N · mpv (P.basis i₀') σ`.
   have hMpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
