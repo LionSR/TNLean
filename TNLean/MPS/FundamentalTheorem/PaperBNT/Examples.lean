@@ -93,6 +93,13 @@ noncomputable example
     refine ⟨0, 0, ?_⟩
     change ‖(1 : ℂ)‖ = 1
     simp
+  -- CPSV16 line 246 (dominant-block reading): the unique weight at the
+  -- unique sector is the unit-modulus witness.
+  weight_unit_at_dominant_block := by
+    intro _
+    refine ⟨0, ?_⟩
+    change ‖(1 : ℂ)‖ = 1
+    simp
 
 /-! ## Example 2 — `C ⊕ (-C)` -/
 
@@ -146,6 +153,13 @@ noncomputable example
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
+    simp
+  -- CPSV16 line 246 (dominant-block reading): the first copy of the unique
+  -- sector carries weight `μ = 1`.
+  weight_unit_at_dominant_block := by
+    intro _
+    refine ⟨0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
     simp
 
@@ -208,6 +222,13 @@ noncomputable example
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
+    simp
+  -- CPSV16 line 246 (dominant-block reading): the first copy of the unique
+  -- sector carries weight `μ = 1`.
+  weight_unit_at_dominant_block := by
+    intro _
+    refine ⟨0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
     simp
 
@@ -325,6 +346,13 @@ noncomputable example
   -- CPSV16 line 246: the first copy `q = 0` carries the unit weight.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
+    simp
+  -- CPSV16 line 246 (dominant-block reading): the first copy of the unique
+  -- sector carries the unit weight.
+  weight_unit_at_dominant_block := by
+    intro _
+    refine ⟨0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
     simp
 

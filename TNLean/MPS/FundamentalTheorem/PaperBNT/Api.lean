@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
+import TNLean.MPS.FundamentalTheorem.PaperBNT.CesaroNonDecay
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.Spectral.SpectralGapNT
@@ -210,6 +211,65 @@ unit-modulus weight without depending on the structure layout. -/
 lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
     ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
       ‖P.weight j q‖ = 1 := h.weight_unit_exists
+
+/-- **Dominant-block coefficient non-decay.**
+
+Under the CPSV16 §II.A line-246 normalization carried by
+`IsBNTCanonicalForm` (every weight has modulus `≤ 1`, and at index `0`
+some copy has unit modulus — `weight_norm_le_one` and
+`weight_unit_at_dominant_block`), the dominant-sector coefficient
+`P.coeff N ⟨0, hP_pos⟩ = ∑_q (P.weight ⟨0, hP_pos⟩ q)^N` does **not**
+tend to `0` as `N → ∞`.
+
+This is the structural-field replacement of the residual
+`hP_dom_coeff_not_tendsto_zero` hypothesis previously carried by
+`exists_dominant_match_of_sameMPV` in `PaperBNT/DominantMatch.lean`.
+Its proof reduces directly to the Cesàro non-decay analytic lemma
+`MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus`:
+both hypotheses of that lemma (`‖μ q‖ ≤ 1` and the unit-modulus witness
+in the dominant block) are exactly the two structural fields of
+`IsBNTCanonicalForm` at sector index `0`.
+
+Paper anchor: CPSV16 §II.A lines 1181–1188.  The body of the FT proof
+takes the assumed line-246 normalization and reads off non-decay of the
+dominant-block coefficient power-sum; this lemma formalises that
+reading. -/
+lemma coeff_dominant_not_tendsto_zero
+    (h : IsBNTCanonicalForm P) (hP_pos : 0 < P.basisCount) :
+    ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0) := by
+  -- Extract the dominant-block weight family and its CPSV16 §II.A
+  -- line-246 properties at sector `0`.
+  have h_le : ∀ q : Fin (P.copies ⟨0, hP_pos⟩),
+      ‖P.weight ⟨0, hP_pos⟩ q‖ ≤ 1 := h.weight_norm_le_one ⟨0, hP_pos⟩
+  have h_unit : ∃ q : Fin (P.copies ⟨0, hP_pos⟩),
+      ‖P.weight ⟨0, hP_pos⟩ q‖ = 1 :=
+    h.weight_unit_at_dominant_block hP_pos
+  -- Apply the Cesàro non-decay analytic lemma.
+  have hAnal := CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus
+    (P.weight ⟨0, hP_pos⟩) h_le h_unit
+  -- `P.coeff N ⟨0, hP_pos⟩ = ∑ q, (P.weight ⟨0, hP_pos⟩ q)^N` is `rfl`.
+  intro hTend
+  apply hAnal
+  exact hTend
+
+/-- **Thermodynamic-limit non-vanishing of the dominant coefficient.**
+
+A user-facing alias for `coeff_dominant_not_tendsto_zero`, named in the
+language of the audit memo
+`thermodynamic_limit_normalization_audit_2026-05-14` §Q-C: the
+CPSV16 §II.A line-246 normalization picks out the dominant block whose
+power-sum coefficient does **not** vanish in the thermodynamic limit.
+
+This is the coefficient form of the audit's "thermodynamic-limit
+non-vanishing" condition.  A self-overlap form
+`limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication
+recorded by the audit's Q-C equivalence (forward direction), which we
+do not formalise here — the coefficient form is the operational input
+to the FT proof; the self-overlap reading is a paraphrase. -/
+lemma thermodynamic_limit_nonvanishing
+    (h : IsBNTCanonicalForm P) (hP_pos : 0 < P.basisCount) :
+    ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0) :=
+  h.coeff_dominant_not_tendsto_zero hP_pos
 
 end IsBNTCanonicalForm
 
