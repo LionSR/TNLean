@@ -210,12 +210,23 @@ Every field of the paper-faithful canonical-form predicate transfers from
 * `basis_distinct` transfers because the reindexing map is injective, so
   pairs of distinct basis indices on the dropped decomposition correspond
   to pairs of distinct basis indices on the original (CPSV16 lines 264–279
-  gauge-phase grouping rule).
+  gauge-phase grouping rule);
+* `weight_norm_le_one` (CPSV16 line 246, modulus bound) transfers
+  pointwise after reindexing;
+* `weight_unit_exists` (CPSV16 line 246, unit-modulus witness) is the
+  only non-pointwise field: dropping the sector that carried the unique
+  unit-modulus weight would destroy the existential witness, so the
+  caller must supply a unit-modulus witness on the *remaining*
+  decomposition.  In the CPSV16 §II `II_cor2` induction this is the
+  normalization step that re-orients the next-dominant block; the
+  `hUnitRem` hypothesis below records that step abstractly.
 
 This is the foundational lemma for the CPSV16 §II `II_cor2` induction step
 (lines 1172–1192). -/
 def dropSector
-    (hP : IsBNTCanonicalForm P) (h : P.basisCount = n + 1) (i₀ : Fin (n + 1)) :
+    (hP : IsBNTCanonicalForm P) (h : P.basisCount = n + 1) (i₀ : Fin (n + 1))
+    (hUnitRem : ∃ (j : Fin n) (q : Fin ((P.dropSector h i₀).copies j)),
+      ‖(P.dropSector h i₀).weight j q‖ = 1) :
     IsBNTCanonicalForm (P.dropSector h i₀) where
   basis_dim_pos _ := hP.basis_dim_pos _
   basis_injective _ := hP.basis_injective _
@@ -263,6 +274,16 @@ def dropSector
     exact hP.basis_distinct
       (Fin.cast h.symm (i₀.succAbove j)) (Fin.cast h.symm (i₀.succAbove k))
       hjk' hdim
+  weight_norm_le_one := by
+    -- Pointwise: a copy of the dropped decomposition corresponds to a copy
+    -- of the original at the reindexed sector position.
+    intro j q
+    have := hP.weight_norm_le_one (Fin.cast h.symm (i₀.succAbove j))
+    -- `(P.dropSector h i₀).weight j q = P.weight (Fin.cast h.symm (i₀.succAbove j)) q`
+    -- after the corresponding `Fin.cast` of `q`.
+    simpa [SectorDecomposition.dropSector_weight,
+           SectorDecomposition.dropSector_copies] using this _
+  weight_unit_exists := hUnitRem
 
 end IsBNTCanonicalForm
 

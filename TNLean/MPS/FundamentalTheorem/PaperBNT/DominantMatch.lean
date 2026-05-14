@@ -32,19 +32,31 @@ The module has three layers:
 ## Hypothesis disclosure (paper-faithful)
 
 The dominant-pair matching at the **fixed** index `⟨0, hP_pos⟩` does not
-follow from the core `IsBNTCanonicalForm` data alone: the core predicate is
-deliberately invariant under relabelling of sectors and does not single out
-a dominant sector.  Lemma 3 therefore explicitly assumes the **CPSV16
-lines 217–246** global modulus normalization data, in two parts:
+follow from the core seven-field `IsBNTCanonicalForm` data alone: the core
+seven fields are deliberately invariant under relabelling of sectors and do
+not single out a dominant sector.  Following the CPSV16 §II.A line-246
+normalization convention, `IsBNTCanonicalForm` now carries two additional
+structural fields:
 
-* `(hP_norm hQ_norm : ∀ … ‖weight‖ ≤ 1)` — every raw weight has unit-or-less
-  modulus after the CPSV16 lines 217–246 normalisation;
-* `(hP_dom_coeff_not_tendsto_zero : ¬ Tendsto (P.coeff · ⟨0, hP_pos⟩) atTop (𝓝 0))`
-  — the dominant sector coefficient does not asymptotically vanish.  This is
-  the paper-faithful reading of "block `0` is dominant"
-  (CPSV16 lines 234–246) without committing to the equal-modulus weight
-  factorisation `HasEqualModulusWeightLayer`; it captures exactly what the
-  CPSV16 dominant-block projection argument needs.
+* `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
+  modulus bound.  Lemma 3 below feeds this in via `hP.weight_norm_le_one`
+  and `hQ.weight_norm_le_one`, replacing the prior explicit `hP_norm /
+  hQ_norm` parameters.
+* `weight_unit_exists : ∃ j q, ‖weight j q‖ = 1`  — CPSV16 line 246,
+  the unit-modulus existential.
+
+The remaining external hypothesis on Lemma 3,
+`(hP_dom_coeff_not_tendsto_zero : ¬ Tendsto (P.coeff · ⟨0, hP_pos⟩) atTop (𝓝 0))`,
+records that the **dominant sector**'s coefficient does not asymptotically
+vanish.  This is the index-0 reading of the existential
+`weight_unit_exists`; deriving the index-0 form from the existential would
+require relabelling sectors so the unit-modulus copy sits in sector 0
+together with a Bohr/Kronecker–Weyl non-decay argument for power-sums of
+unit-modulus complex numbers (CPSV16 lines 1181–1188 paper-side; see also
+the audit memos `extra_hypotheses_audit_2026-05-14` §Q2 and
+`thermodynamic_limit_normalization_audit_2026-05-14` §Q-C).  The general
+non-decay result is tracked separately and will replace this explicit
+parameter once available.
 
 These hypotheses are weaker than the legacy `IsCanonicalFormBNT` package
 (which baked in `mu_strict_anti` + a single per-sector "spectral level"
@@ -130,11 +142,11 @@ theorem exists_nondecaying_overlap_pair_of_sameMPV
 
 /-! ### Lemma 3: dominant-pair matching at the fixed index `0`
 
-The main result of Phase 4b-ii: under `SameMPV₂` plus the CPSV16
-lines 217–246 normalisation data (and the dominant-coefficient non-decay
-hypothesis), the dominant block `P.basis ⟨0, hP_pos⟩` of `P` has a `Q`-side
-match `Q.basis k₀` of equal bond dimension, gauge-phase equivalent in the
-cast-left shape, and with a non-decaying cross-overlap.
+The main result of Phase 4b-ii: under `SameMPV₂` plus the dominant-block
+coefficient non-decay assumption, the dominant block `P.basis ⟨0, hP_pos⟩`
+of `P` has a `Q`-side match `Q.basis k₀` of equal bond dimension,
+gauge-phase equivalent in the cast-left shape, and with a non-decaying
+cross-overlap.
 
 The proof is a direct read of the CPSV16 lines 1172–1188 dominant-block
 projection: assume by contradiction that **all** cross-overlaps
@@ -146,12 +158,15 @@ the dominant `P`-block).
   is `P.coeff N ⟨0, _⟩ + (small)` thanks to:
   – `basis_normalized_self_overlap` at `j = 0` (`overlap → 1`);
   – `cross_overlap_basis_tendsto_zero` at `j ≠ 0` (`overlap → 0`);
-  – `norm_coeff_le_copies_of_norm_weight_le_one` (`Api.lean`) gives the
-    coefficient bound `‖P.coeff N j‖ ≤ P.copies j` from `hP_norm`.
+  – the structural field `weight_norm_le_one` of `IsBNTCanonicalForm`
+    (CPSV16 §II.A line 246) feeds into
+    `norm_coeff_le_copies_of_norm_weight_le_one` (`Api.lean`) and gives
+    the coefficient bound `‖P.coeff N j‖ ≤ P.copies j`.
 
 * The RHS = `∑_k Q.coeff N k · overlap(Q.basis k, P.basis ⟨0, _⟩) N`
   vanishes asymptotically, again by coefficient boundedness from
-  `hQ_norm` and the contrapositive assumption that all `k`-overlaps decay.
+  `hQ.weight_norm_le_one` and the contrapositive assumption that all
+  `k`-overlaps decay.
 
 * `SameMPV₂` makes both sides equal, so `P.coeff N ⟨0, _⟩` tends to `0`,
   contradicting `hP_dom_coeff_not_tendsto_zero`.
@@ -162,21 +177,21 @@ contrapositive of
 gauge-phase equivalence, via the contrapositive of
 `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`.
 
-Hypothesis disclosure: the extra normalisation hypotheses `hP_norm`,
-`hQ_norm`, and `hP_dom_coeff_not_tendsto_zero` are NOT part of
-`IsBNTCanonicalForm` (the core predicate is deliberately label-invariant).
-They are the paper-faithful reading of CPSV16 lines 217–246 and 234–246;
-see the module docstring above for the design rationale.
+Hypothesis disclosure: the modulus bounds `weight_norm_le_one` are part
+of the strengthened `IsBNTCanonicalForm` predicate (CPSV16 §II.A
+line 246) and need not be supplied externally.  The non-decay hypothesis
+`hP_dom_coeff_not_tendsto_zero` is the index-0 specialisation of the
+structural field `weight_unit_exists`; its derivation requires a
+Bohr/Kronecker–Weyl non-decay step for unit-modulus power sums (audit
+memo `extra_hypotheses_audit_2026-05-14` §Q2,
+`thermodynamic_limit_normalization_audit_2026-05-14` §Q-C) and is tracked
+as a follow-up.
 -/
 theorem exists_dominant_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor)
-    (hP_norm : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
-      ‖P.weight j q‖ ≤ 1)
-    (hQ_norm : ∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
-      ‖Q.weight k q‖ ≤ 1)
     (hP_dom_coeff_not_tendsto_zero :
       ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0)) :
     ∃ k₀ : Fin Q.basisCount,
@@ -193,6 +208,11 @@ theorem exists_dominant_match_of_sameMPV
   -- the contradiction route below also forces it, so it is recorded but not
   -- used directly in the proof.
   have _hQ_pos_used : 0 < Q.basisCount := hQ_pos
+  -- Derive the CPSV16 §II.A line-246 modulus bounds from the strengthened
+  -- `IsBNTCanonicalForm` predicate.  The structural fields replace what
+  -- used to be supplied as explicit parameters at the call site.
+  have hP_weight_le := hP.weight_norm_le_one
+  have hQ_weight_le := hQ.weight_norm_le_one
   set j₀ : Fin P.basisCount := ⟨0, hP_pos⟩ with hj₀_def
   -- Step 1: extract some k₀ with non-decaying overlap to `P.basis j₀`.
   have hExists_k :
@@ -256,7 +276,7 @@ theorem exists_dominant_match_of_sameMPV
       refine squeeze_zero_norm (fun N => ?_) hBound
       have hC :=
         P.norm_coeff_le_copies_of_norm_weight_le_one (N := N) (j := j)
-          (hWeightLe := hP_norm j)
+          (hWeightLe := hP_weight_le j)
       calc
         ‖P.coeff N j * mpvOverlap (d := d) (P.basis j) (P.basis j₀) N‖
             = ‖P.coeff N j‖ *
@@ -298,7 +318,7 @@ theorem exists_dominant_match_of_sameMPV
       refine squeeze_zero_norm (fun N => ?_) hBound
       have hC :=
         P.norm_coeff_le_copies_of_norm_weight_le_one (N := N) (j := j₀)
-          (hWeightLe := hP_norm j₀)
+          (hWeightLe := hP_weight_le j₀)
       calc
         ‖P.coeff N j₀ *
             (mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N - 1)‖
@@ -376,7 +396,7 @@ theorem exists_dominant_match_of_sameMPV
       refine squeeze_zero_norm (fun N => ?_) hBound
       have hC :=
         Q.norm_coeff_le_copies_of_norm_weight_le_one (N := N) (j := k)
-          (hWeightLe := hQ_norm k)
+          (hWeightLe := hQ_weight_le k)
       calc
         ‖Q.coeff N k * mpvOverlap (d := d) (Q.basis k) (P.basis j₀) N‖
             = ‖Q.coeff N k‖ *

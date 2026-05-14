@@ -648,9 +648,16 @@ factorization is assumed.
 	each basis block has positive bond dimension, is injective,
 	irreducible, and left-canonical; the normalized self-overlap of every
 	basis block converges to~\(1\); the basis MPV family is eventually
-	linearly independent (\texttt{HasBNTSectorData}); and distinct
+	linearly independent (\texttt{HasBNTSectorData}); distinct
 	same-dimension basis blocks are not gauge-phase equivalent in the
-	cast-compatible shape.  The MPV expansion takes the raw two-layer form
+	cast-compatible shape; and the CPSV16 \S II.A line-246 normalization
+	convention holds, namely
+	\[
+		\lVert \mu_{j,q} \rVert \le 1 \;\text{for every}\; (j,q),
+		\qquad
+		\exists\, (j_*, q_*) :\; \lVert \mu_{j_*, q_*} \rVert = 1.
+	\]
+	The MPV expansion takes the raw two-layer form
 	\[
 		V^{(N)}(P)_\sigma
 		\;=\;
@@ -659,6 +666,10 @@ factorization is assumed.
 	\]
 	matching \cite[\S~II, lines 271--301]{Cirac2017MPDO_AnnPhys}
 	and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+	The line-246 normalization fields admit every paper-faithful example
+	(in particular \(C \oplus D\), \(C \oplus (-C)\),
+	\(C \oplus (1/2) C\), and \(C \oplus (-C) \oplus (1/2) C\)) and are
+	NOT derivable from the per-block normality data alone.
 \end{definition}
 
 \begin{lemma}[Raw two-layer sector coefficient identity]%
@@ -753,6 +764,58 @@ factorization is assumed.
 	inter-family decay hypothesis into the two-family overlap-orthonormality
 	criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
+
+\begin{lemma}[Sector coefficient bound from the line-246 structural field]%
+	\label{lem:paper_bnt_norm_coeff_le_copies_struct}
+	\lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
+	\leanok
+	\uses{def:paper_bnt_cf, lem:paper_bnt_norm_coeff_le_copies}
+	Under the strengthened paper-faithful canonical form, the structural
+	field \texttt{weight\_norm\_le\_one} (CPSV16 \S II.A line~246) yields
+	directly
+	\[
+		\lVert P.\operatorname{coeff}\,N\,j \rVert \;\le\; r_j
+	\]
+	for every \(N\) and basis index~\(j\), without an additional
+	explicit modulus-bound hypothesis at the call site.
+\end{lemma}
+
+\begin{proof}\leanok
+	Feed the structural field \texttt{weight\_norm\_le\_one} into
+	Lemma~\ref{lem:paper_bnt_norm_coeff_le_copies}.
+\end{proof}
+
+\begin{lemma}[Unit-modulus weight witness from the line-246 structural field]%
+	\label{lem:paper_bnt_weight_unit_exists_of_struct}
+	\lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
+	\leanok
+	\uses{def:paper_bnt_cf}
+	Re-exposes the structural field \texttt{weight\_unit\_exists}
+	(CPSV16 \S II.A line~246) at the API layer: under the strengthened
+	paper-faithful canonical form, there exist indices~\((j_*, q_*)\) with
+	\(\lVert P.\operatorname{weight}\,j_*\,q_* \rVert = 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Direct projection onto the \texttt{weight\_unit\_exists} field.
+\end{proof}
+
+\begin{example}[\(C \oplus (1/2)C\), unequal-modulus admissibility]%
+	\label{ex:paper_bnt_halvedDecomp}
+	\lean{MPSTensor.PaperBNT.Examples.halvedDecomp}
+	\leanok
+	\uses{def:paper_bnt_cf}
+	The single-sector two-copy decomposition with raw weights
+	\((1, 1/2)\) demonstrates that the strengthened
+	\texttt{IsBNTCanonicalForm} admits unequal-modulus copies:
+	\texttt{weight\_norm\_le\_one} holds because
+	\(\lVert 1 \rVert \le 1\) and \(\lVert 1/2 \rVert = 1/2 \le 1\),
+	and \texttt{weight\_unit\_exists} is witnessed by the first
+	copy with weight~\(1\).  This is the CPSV16 \S II.A line~246
+	convention in positive form, reifying the audit
+	\(C \oplus (1/2)C\) counter-example of
+	\texttt{audits/2026-05-13\_cpsv16\_paper\_bnt\_phase\_1\_multiplicity\_audit.md}.
+\end{example}
 
 \section{Dropping a BNT sector}
 \label{sec:paper_bnt_drop_sector}
@@ -866,17 +929,21 @@ following file.
 	\leanok
 	\uses{def:paper_sector_data, def:paper_bnt_cf}
 	If \(P\) carries a paper-faithful BNT canonical form
-	(\texttt{IsBNTCanonicalForm}~\(P\)) and \(P.\texttt{basisCount} = n+1\),
-	then for every index \(i_0 \in \{0,\dotsc,n\}\) the dropped
-	decomposition \(P.\texttt{dropSector}\,h\,i_0\) also carries a
-	paper-faithful BNT canonical form.  Every pointwise field (bond
-	dimension positivity, injectivity, irreducibility, left-canonical form,
-	normalized self-overlap) transfers by evaluation at the reindexed
-	position; eventual linear independence transfers via
-	\texttt{LinearIndependent.comp} applied to the injective
+	(\texttt{IsBNTCanonicalForm}~\(P\)) with \(P.\texttt{basisCount} = n+1\),
+	if \(i_0 \in \{0,\dotsc,n\}\) is the index to drop, and if the
+	dropped decomposition retains a unit-modulus weight (\texttt{hUnitRem})
+	—~i.e.\ the CPSV16 \S II.A line-246 unit-witness convention survives the
+	drop—~then \(P.\texttt{dropSector}\,h\,i_0\) carries a paper-faithful BNT
+	canonical form.  Every pointwise field (bond dimension positivity,
+	injectivity, irreducibility, left-canonical form, normalized self-overlap,
+	and the modulus bound \(\lVert\mu_{j,q}\rVert \le 1\)) transfers by
+	evaluation at the reindexed position; eventual linear independence
+	transfers via \texttt{LinearIndependent.comp} applied to the injective
 	\(\texttt{Fin.succAbove}\) embedding
-	(\cite[Definition~4.3, line 1850]{Cirac2021Matrix});
-	block distinctness transfers because the reindexing is injective.
+	(\cite[Definition~4.3, line 1850]{Cirac2021Matrix}); block distinctness
+	transfers because the reindexing is injective; and the unit-witness
+	existential is supplied by \texttt{hUnitRem} (faithful to the CPSV16
+	renormalization step at each induction iteration).
 	This is the foundational induction step of
 	\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}
 	and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
