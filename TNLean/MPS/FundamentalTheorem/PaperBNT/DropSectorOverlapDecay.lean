@@ -40,9 +40,9 @@ pair is paired with a fresh matched-pair extraction by
 A separate **dimension-mismatch** helper
 `cross_overlap_basis_dropSector_tendsto_zero_of_dim_ne` is also provided:
 for any P-side index `j` and any dropped Q-basis index `l`, if the bond
-dimensions disagree, decay follows directly from the irreducible/TP-decay
-lemma of `Spectral/SpectralGapNT.lean` (CPSV16 line 1080 unequal-dimension
-case).
+dimensions disagree, decay follows directly from the irreducible/TP
+decay theorem in `Spectral/SpectralGapNT.lean`
+(CPSV16 line 1080 unequal-dimension case).
 
 The two lemmas together cover **all dimension-mismatched** cross-pairs
 and the **matched P-block** at the equal-dimension level.  The residual
@@ -139,83 +139,6 @@ lemma cross_overlap_basis_dropSector_tendsto_zero_of_dim_ne
     (hQ.basis_left_canonical _)
     hDim
 
-/-! ### Norm-one gauge phase from matched-pair self-overlap scaling
-
-Internal helper.  When the matched-pair gauge-phase witness on the cast
-basis tensors is in hand, the gauge phase `ζ` has unit norm.  This
-specialises `norm_eq_one_of_selfOverlap_scale`
-(`SharedInfra/GaugePhase.lean`) to the paper-faithful canonical-form
-self-overlap data carried by `IsBNTCanonicalForm`
-(`basis_normalized_self_overlap` field, CPSV21 line 1818). -/
-
-private lemma _root_.MPSTensor.IsBNTCanonicalForm.norm_gaugePhase_eq_one_of_basis
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    {j₀ : Fin P.basisCount} {k₀ : Fin Q.basisCount}
-    (hDim : P.basisDim j₀ = Q.basisDim k₀)
-    {X : GL (Fin (Q.basisDim k₀)) ℂ} {ζ : ℂ}
-    (hX : ∀ i : Fin d,
-      Q.basis k₀ i =
-        ζ • ((X : Matrix _ _ ℂ) *
-          (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) i *
-          ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ))) :
-    ‖ζ‖ = 1 := by
-  -- Basis-MPV power identity from the gauge-phase witness.
-  have hmpv :
-      ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (Q.basis k₀) σ =
-          ζ ^ N * mpv (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) σ :=
-    mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) hDim) (P.basis j₀))
-      (B := Q.basis k₀) X ζ hX
-  -- Self-overlap scaling identity.
-  have hScale :
-      ∀ N : ℕ,
-        mpvOverlap (d := d) (Q.basis k₀) (Q.basis k₀) N =
-          (ζ * starRingEnd ℂ ζ) ^ N *
-            mpvOverlap (d := d)
-              (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀))
-              (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) N :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul
-      (A := cast (congr_arg (MPSTensor d) hDim) (P.basis j₀))
-      (B := Q.basis k₀) (ζ := ζ) hmpv
-  -- Self-overlap of the cast basis tensor agrees with that of the uncast one.
-  have hScale' :
-      ∀ N : ℕ,
-        mpvOverlap (d := d) (Q.basis k₀) (Q.basis k₀) N =
-          (ζ * starRingEnd ℂ ζ) ^ N *
-            mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N := by
-    intro N
-    have := hScale N
-    rw [mpvOverlap_cast_dim_left hDim (P.basis j₀)
-        (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) N] at this
-    -- Now the right-hand mpvOverlap still has a cast on the right argument.
-    -- Eliminate it via `mpv_cast_dim` componentwise.
-    have hCast :
-        mpvOverlap (d := d) (P.basis j₀)
-            (cast (congr_arg (MPSTensor d) hDim) (P.basis j₀)) N =
-          mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N := by
-      classical
-      simp only [mpvOverlap]
-      refine Finset.sum_congr rfl ?_
-      intro σ _
-      rw [mpv_cast_dim hDim (P.basis j₀) N σ]
-    rw [hCast] at this
-    exact this
-  -- Self-overlap norms tend to 1 on both sides via `basis_normalized_self_overlap`.
-  have hPP :
-      Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N‖)
-        atTop (𝓝 1) := by
-    have h := (hP.basis_normalized_self_overlap j₀).norm
-    simpa using h
-  have hQQ :
-      Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k₀) (Q.basis k₀) N‖)
-        atTop (𝓝 1) := by
-    have h := (hQ.basis_normalized_self_overlap k₀).norm
-    simpa using h
-  exact norm_eq_one_of_selfOverlap_scale (A := P.basis j₀) (B := Q.basis k₀)
-    (ζ := ζ) hPP hQQ hScale'
-
 /-! ### Matched P-block cross-overlap decays against the dropped Q-basis
 
 The CPSV16 §II `II_cor2` strong induction needs the cross-overlaps
@@ -299,11 +222,6 @@ theorem cross_overlap_basis_matched_dropSector_tendsto_zero
   -- unfolded form `Q.basis (Fin.cast hcardQ.symm k₀)`).
   let k₀' : Fin Q.basisCount := Fin.cast hcardQ.symm k₀
   have hk₀'_def : k₀' = Fin.cast hcardQ.symm k₀ := rfl
-  -- Norm-one gauge phase from self-overlap scaling.
-  have hζ_norm : ‖ζ‖ = 1 :=
-    IsBNTCanonicalForm.norm_gaugePhase_eq_one_of_basis (hP := hP) (hQ := hQ)
-      (j₀ := j₀) (k₀ := Fin.cast hcardQ.symm k₀)
-      (hDim := hDim) (X := X) (ζ := ζ) hX
   -- Basis-MPV power identity from the gauge-phase witness, with the
   -- cast on the P-side absorbed by `mpv_cast_dim`.
   have hMpv :
@@ -316,6 +234,37 @@ theorem cross_overlap_basis_matched_dropSector_tendsto_zero
         (B := Q.basis (Fin.cast hcardQ.symm k₀)) X ζ hX N σ
     change mpv (Q.basis (Fin.cast hcardQ.symm k₀)) σ = ζ ^ N * mpv (P.basis j₀) σ
     rw [h₁, mpv_cast_dim hDim (P.basis j₀) N σ]
+  -- Self-overlap scaling identity (CPSV16 lines 1148–1167 dimension
+  -- uniqueness machinery, here used to constrain `ζ` to the unit circle).
+  have hScale' :
+      ∀ N : ℕ,
+        mpvOverlap (d := d) (Q.basis k₀') (Q.basis k₀') N =
+          (ζ * starRingEnd ℂ ζ) ^ N *
+            mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N := by
+    intro N
+    have hScale_cast :
+        mpvOverlap (d := d) (Q.basis k₀') (Q.basis k₀') N =
+          (ζ * starRingEnd ℂ ζ) ^ N *
+            mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N := by
+      have hSelf :=
+        mpvOverlap_self_scale_of_mpv_eq_pow_mul
+          (A := P.basis j₀) (B := Q.basis k₀') (ζ := ζ) hMpv N
+      exact hSelf
+    exact hScale_cast
+  -- Norm-one gauge phase from self-overlap scaling: feed the two
+  -- `basis_normalized_self_overlap → 1` limits and the scaling identity
+  -- into `norm_eq_one_of_selfOverlap_scale`.
+  have hPP :
+      Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis j₀) (P.basis j₀) N‖)
+        atTop (𝓝 1) := by
+    simpa using (hP.basis_normalized_self_overlap j₀).norm
+  have hQQ :
+      Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k₀') (Q.basis k₀') N‖)
+        atTop (𝓝 1) := by
+    simpa using (hQ.basis_normalized_self_overlap k₀').norm
+  have hζ_norm : ‖ζ‖ = 1 :=
+    norm_eq_one_of_selfOverlap_scale
+      (A := P.basis j₀) (B := Q.basis k₀') (ζ := ζ) hPP hQQ hScale'
   intro l
   -- Reindexed Q-basis at the dropped position `l`.
   let k : Fin Q.basisCount := Fin.cast hcardQ.symm (k₀.succAbove l)
