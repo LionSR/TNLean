@@ -1292,3 +1292,153 @@ of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
 	\texttt{Fin.cast} to express the multiset over the
 	\(P\)-indexing as required.
 \end{proof}
+
+\subsection{Cross-overlap decay against a dropped sector}
+\label{sec:paper_bnt_drop_sector_overlap_decay}
+
+Once a matched basis-sector pair \((j_0, k_0)\) has been extracted from
+two paper-faithful BNT canonical forms with
+\(\texttt{SameMPV}_2\) (Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}),
+the strong-induction step of \cite[\S~II,
+\texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys} needs the
+cross-overlaps
+\[
+	\texttt{mpvOverlap}\,
+		(P.\texttt{basis}\,j)\,
+		((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)
+\]
+to decay for every \((j, l)\), so that
+Lemma~\ref{lem:paper_bnt_combined_family_eventually_li} (combined-family eventual linear
+independence) applies on the reduced pair
+\((P, Q.\texttt{dropSector}\,h_Q\,k_0)\).  This subsection records the
+two ingredients of that decay supplied by the matched-pair data alone.
+
+\begin{lemma}[Dimension-mismatch cross-overlap decay against a dropped sector]%
+	\label{lem:paper_bnt_cross_overlap_dropSector_dim_ne}
+	\lean{MPSTensor.cross_overlap_basis_dropSector_tendsto_zero_of_dim_ne}
+	\leanok
+	\uses{def:paper_bnt_cf, lem:paper_bnt_drop_sector_unfold}
+	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
+	canonical forms.  Fix \(h_Q : Q.\texttt{basisCount} = n_Q + 1\),
+	\(k_0 : \texttt{Fin}(n_Q + 1)\), and
+	\(j : \texttt{Fin}\,P.\texttt{basisCount}\),
+	\(l : \texttt{Fin}\,n_Q\).  If
+	\(P.\texttt{basisDim}\,j \neq
+		Q.\texttt{basisDim}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l))\),
+	then
+	\[
+		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j)\,
+			((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\,N
+		\xrightarrow[N \to \infty]{} 0.
+	\]
+	This is the unequal-bond-dimension half of the
+	\cite[\S~II, line 1080]{Cirac2017MPDO_AnnPhys}
+	normal-tensor overlap dichotomy, read on the dropped Q-basis at
+	index \(l\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Unfold \((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l =
+		Q.\texttt{basis}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l))\)
+	via the \texttt{dropSector\_basis} unfolding lemma, and dispatch to
+	\texttt{mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}
+	with the per-block irreducible / left-canonical data carried by
+	\texttt{IsBNTCanonicalForm}.
+\end{proof}
+
+\begin{lemma}[Matched-block cross-overlap decay against a dropped sector]%
+	\label{lem:paper_bnt_cross_overlap_dropSector_matched}
+	\lean{MPSTensor.cross_overlap_basis_matched_dropSector_tendsto_zero}
+	\leanok
+	\uses{def:paper_bnt_cf, lem:paper_bnt_drop_sector_unfold,
+		lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
+	canonical forms.  Fix
+	\(j_0 : \texttt{Fin}\,P.\texttt{basisCount}\),
+	\(h_Q : Q.\texttt{basisCount} = n_Q + 1\),
+	\(k_0 : \texttt{Fin}(n_Q + 1)\), a bond-dimension equality
+	\(h_{\dim} : P.\texttt{basisDim}\,j_0
+		= Q.\texttt{basisDim}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0))\), and a
+	matched-pair gauge-phase witness
+	\[
+		\texttt{GaugePhaseEquiv}\,
+			(\texttt{cast}\,h_{\dim}\,(P.\texttt{basis}\,j_0))\,
+			(Q.\texttt{basis}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0)))
+	\]
+	(supplied by the dominant-pair matching step of
+	\cite[\S~II, line 1180]{Cirac2017MPDO_AnnPhys}).  Then for every
+	dropped Q-basis index \(l : \texttt{Fin}\,n_Q\),
+	\[
+		\texttt{mpvOverlap}\,
+			(P.\texttt{basis}\,j_0)\,
+			((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\,N
+		\xrightarrow[N \to \infty]{} 0.
+	\]
+\end{lemma}
+
+\begin{proof}\leanok
+	Destructure the matched-pair witness into a conjugating element
+	\(X \in \mathrm{GL}(\texttt{Fin}\,(Q.\texttt{basisDim}\,k_0'))\) and
+	a nonzero gauge phase \(\zeta\) with the conjugacy identity on the
+	cast basis tensor (\(\tilde k_0 = \texttt{Fin.cast}\,h_Q^{-1}(k_0)\)).
+	The basis-MPV power identity
+	\(V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma
+		= \zeta^N \cdot V^{(N)}(P.\texttt{basis}\,j_0)_\sigma\)
+	follows by
+	\texttt{mpv\_eq\_pow\_mul\_of\_gaugePhase} together with
+	\texttt{mpv\_cast\_dim} to absorb the bond-dimension cast.
+
+	The self-overlap scaling identity
+	\(\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)
+		(Q.\texttt{basis}\,\tilde k_0)\,N
+		= (\zeta \overline{\zeta})^N \cdot
+		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j_0)
+			(P.\texttt{basis}\,j_0)\,N\),
+	combined with
+	\(\texttt{basis\_normalized\_self\_overlap}\) on both sides
+	(\(\to 1\) in norm), gives \(\|\zeta\| = 1\) via
+	\texttt{norm\_eq\_one\_of\_selfOverlap\_scale}.
+
+	With \(k := \texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l)\),
+	the basis-MPV power identity yields the pointwise factorisation
+	\[
+		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j_0)\,(Q.\texttt{basis}\,k)\,N
+		= \zeta^{-N} \cdot
+			\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)\,(Q.\texttt{basis}\,k)\,N.
+	\]
+	Since \(k_0.\texttt{succAbove}\,l \neq k_0\), the Q-side basis indices
+	\(\tilde k_0\) and \(k\) differ, and
+	Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero} applied to \(Q\) gives
+	\(\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)\,
+		(Q.\texttt{basis}\,k)\,N \to 0\).  As
+	\(\|\zeta^{-N}\| = 1\), the product decays via
+	\texttt{squeeze\_zero\_norm}.
+\end{proof}
+
+\begin{remark}[Unmatched-index residual]
+	\label{rem:paper_bnt_cross_overlap_dropSector_unmatched}
+	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_matched} handles
+	the \(j = j_0\) row of the cross-overlap matrix on the reduced pair
+	\((P, Q.\texttt{dropSector}\,h_Q\,k_0)\), and
+	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_dim_ne} handles
+	every dimension-mismatched entry.  The residual entries
+	(\(j \neq j_0\), bond dimensions equal, gauge-distinct on the cast
+	surface) are not a consequence of the matched-pair witness alone:
+	the matched-pair gauge-phase equivalence relates \(P.\texttt{basis}\,j_0\)
+	to \(Q.\texttt{basis}\,\tilde k_0\), not to any other
+	\(Q.\texttt{basis}\,\tilde k_0.\texttt{succAbove}\,l\), and the
+	\texttt{basis\_distinct} field of
+	\texttt{IsBNTCanonicalForm} on the \(P\) side relates
+	\(P.\texttt{basis}\,j\) to \(P.\texttt{basis}\,j_0\), not to a
+	\(Q\)-side basis block.  These entries enter the
+	\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}
+	argument through the outer induction on
+	\(P.\texttt{basisCount} + Q.\texttt{basisCount}\): after the matched
+	pair is removed, the surviving \((P, Q.\texttt{dropSector}\,h_Q\,k_0)\)
+	pair is paired with a fresh matched-pair extraction on the reduced
+	data (the dominant-pair matching step recorded in
+	\texttt{PaperBNT/DominantMatch.lean}), and the cross-overlap decay
+	for the next \(j_0\) is supplied by reapplying
+	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_matched} to the
+	freshly matched index.
+\end{remark}
