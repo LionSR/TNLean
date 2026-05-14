@@ -1615,3 +1615,114 @@ subset.
 	\texttt{matched\_sector\_coeff\_identity\_eventually}) at the
 	strong-matching layer.
 \end{remark}
+
+\subsection{Phase B-\(\beta\): bijective matching by symmetry}
+\label{subsec:paper_bnt_strong_match_bijective_symmetry}
+
+\emph{CPSV16 §II.C lines 1184--1186, the symmetry argument
+\(g_a \ge g_b \wedge g_b \ge g_a \Rightarrow g_a = g_b\).}
+
+Phase B-\(\alpha\)
+(Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+gives one direction of the matching on the unit-block subset.
+Applying the same theorem once more with the roles of \(P\) and \(Q\)
+swapped (and the trivially-symmetric flip of
+\(\texttt{SameMPV}_2\)) gives the other direction.  The two
+matchings, combined with the \texttt{basis\_distinct} field of
+\texttt{IsBNTCanonicalForm} (CPSV16 lines 264--279), force
+\emph{injectivity in both directions}.
+
+\paragraph{Honest scoping (issue \#1725 Phase B-\(\beta\)).}
+The literal paper conclusion ``\(g_a = g_b\) and a relabelling
+\(B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}\)''
+(\cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}) would in
+Lean read as a bijection
+\(\beta : \{k \mid \exists q,\, |\mu_{k,q}^Q| = 1\}
+  \simeq \{j \mid \exists q,\, |\mu_{j,q}^P| = 1\}\)
+between the unit-modulus subsets of the two BNT canonical forms.
+Phase B-\(\beta\) delivers the \emph{symmetric injective matching}
+(the literal CPSV16 line~1186 ``\(g_a \ge g_b \wedge g_b \ge g_a\)''
+step) on the cleanest paper-faithful surface: two
+\texttt{Function.Embedding}s, one in each direction, codomains in
+\(\texttt{Fin}\,P.\texttt{basisCount}\) and
+\(\texttt{Fin}\,Q.\texttt{basisCount}\) respectively.  Upgrading the
+codomains to the unit-modulus subsets (and packaging as a bijection
+\(\beta\)) requires the additional per-sector weight-equivariance
+argument of \cite[Lemma~\texttt{equalMPS}, lines 1148--1167]{Cirac2017MPDO_AnnPhys}
+combined with the gauge-phase identity on the weighted sectors
+\(\sum_q (\mu_{j,q})^N |V^N(P.\texttt{basis}\,j)\rangle\); the
+non-decay output of Phase B-\(\alpha\) is on the \emph{basis} MPV
+states, not on the weighted sectors, and so does not by itself force
+the matched \(j\) to carry a unit-modulus weight.  This upgrade is
+isolated as a follow-up phase that lifts the matching from
+basis-MPV non-decay to weight transport; the Phase B-\(\beta\) output
+is the direct formalisation of the paper's \(g_a \ge g_b\) and the
+symmetric \(g_b \ge g_a\) sub-conclusions and is sufficient for
+downstream cardinality bounds on the unit-block subsets.
+
+\begin{theorem}[Bijective matching by symmetry]
+	\label{thm:paper_bnt_bijective_match_of_sameMPV}
+	\lean{MPSTensor.bijective_match_of_sameMPV}
+	\leanok
+	Let \(P, Q : \texttt{SectorDecomposition}\,d\) be two
+	\texttt{IsBNTCanonicalForm} BNT canonical forms with
+	\(\texttt{SameMPV}_2\,P.\texttt{toTensor}\,Q.\texttt{toTensor}\).
+	Write
+	\(\texttt{UnitP} := \{ j : \texttt{Fin}\,P.\texttt{basisCount}
+	  \mid \exists q, |P.\texttt{weight}\,j\,q| = 1 \}\)
+	and \(\texttt{UnitQ}\) symmetrically on \(Q\).  Then there exist
+	\texttt{Function.Embedding}s
+	\(\varphi : \texttt{UnitQ} \hookrightarrow \texttt{Fin}\,P.\texttt{basisCount}\)
+	and
+	\(\psi : \texttt{UnitP} \hookrightarrow \texttt{Fin}\,Q.\texttt{basisCount}\)
+	such that for every \(k \in \texttt{UnitQ}\) the bond dimensions
+	match, the basis tensors are gauge-phase equivalent (cast-left
+	shape), and the basis cross-overlap does not tend to zero; and
+	symmetrically for every \(j \in \texttt{UnitP}\) via \(\psi\).
+\end{theorem}
+
+\begin{proof}\leanok
+	Apply Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+	first with \((P, Q, \texttt{hEqual})\) to obtain a raw matched-sector
+	function \(\varphi_0 : \texttt{UnitQ} \to \texttt{Fin}\,P.\texttt{basisCount}\)
+	via classical choice, and then again with
+	\((Q, P, \texttt{hEqual}.\texttt{symm})\) to obtain the symmetric
+	raw function \(\psi_0 : \texttt{UnitP} \to \texttt{Fin}\,Q.\texttt{basisCount}\).
+
+	\emph{Forward injectivity.}  Suppose \(\varphi_0(k_1) = \varphi_0(k_2) = j\).
+	The two matching witnesses give a common centre
+	\(P.\texttt{basis}\,j\) with two gauge-phase equivalences (after
+	cast) to \(Q.\texttt{basis}\,k_1\) and \(Q.\texttt{basis}\,k_2\).
+	Composing through this centre (cast-aware transitivity of
+	\texttt{GaugePhaseEquiv}, packaged as the local helper
+	\texttt{gaugePhaseEquiv\_cast\_compose\_via\_centre}) gives
+	\(\texttt{GaugePhaseEquiv}\,(\texttt{cast}\,h_Q\,(Q.\texttt{basis}\,k_1))
+	  (Q.\texttt{basis}\,k_2)\)
+	for the dimension equality \(h_Q : Q.\texttt{basisDim}\,k_1
+	= Q.\texttt{basisDim}\,k_2\).  The \texttt{basis\_distinct} field of
+	\texttt{IsBNTCanonicalForm} on \(Q\) (CPSV16 lines 264--279) then
+	forces \(k_1 = k_2\).  The backward injectivity is symmetric.
+
+	\emph{Wrapping as \texttt{Function.Embedding}.}  The injective
+	functions \(\varphi_0\) and \(\psi_0\), paired with the injectivity
+	proofs, are exactly the \texttt{Function.Embedding} pair stated in
+	the theorem.  The matching data are extracted by re-applying the
+	classical-choice spec at each subtype index.
+\end{proof}
+
+\begin{remark}[Relationship to the audit memo]
+	\label{rem:paper_bnt_bijective_match_audit_link}
+	Theorem~\ref{thm:paper_bnt_bijective_match_of_sameMPV} corresponds
+	directly to the audit memo
+	\texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} \S{}8, Phase~4c-\(\beta\)
+	(rebadged Phase~B-\(\beta\) after the Phase~A canonical-form
+	strengthening, PR~\#1727).  The audit memo's claim
+	``\(P.\texttt{basisCount} = Q.\texttt{basisCount}\)'' translates to the
+	cardinality inequalities
+	\(|\texttt{UnitQ}| \le P.\texttt{basisCount}\) and
+	\(|\texttt{UnitP}| \le Q.\texttt{basisCount}\) provided by the two
+	embeddings here; the upgrade to an equality (and to a bijection
+	\(\texttt{UnitQ} \simeq \texttt{UnitP}\)) requires the
+	weight-equivariance argument discussed in the scoping paragraph
+	above and is deferred to a follow-up phase.
+\end{remark}
