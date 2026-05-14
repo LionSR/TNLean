@@ -426,4 +426,131 @@ theorem matched_sector_weight_multiset_eq
             intro q _; rfl
   exact hMultiset.trans hReindex
 
+/-! ### Matched-sector weight-permutation extractor
+
+The multiset equality above is upgraded to an *explicit* permutation
+`τ : Fin (P.copies j₀) ≃ Fin (Q.copies k₀')` matching individual per-copy
+weights up to the gauge-phase factor `ζ`.  This is the per-copy form of
+CPSV16 line 1188 (`μ_{j,q} = ν_{j,q} · e^{i\phi_j}` for an indexing of
+the `Q`-copies determined by a matching).
+
+The proof reduces to a generic helper extracting an `Equiv.Perm` from a
+multiset-map equality on `Fin`, then composes with the cardinality cast
+and clears the `ζ` factor with `mul_inv_cancel₀ hζ`.
+-/
+
+/-- **Auxiliary: extract `Equiv.Perm (Fin n)` from a multiset map equality.**
+
+Given `f, g : Fin n → α` whose `Multiset.map`s over `Finset.univ.val`
+coincide, there exists a permutation `σ` of `Fin n` with
+`f q = g (σ q)` for every `q`.
+
+Proof by induction on `n`: at the successor step, locate an index `j`
+in the codomain of `g` matching `f 0`, decompose both multisets via
+`Fin.univ_succAbove`, apply the inductive hypothesis to the restricted
+functions on `Fin n`, and reassemble via `finSuccEquiv'` and
+`Equiv.optionCongr`. -/
+private lemma exists_perm_of_multiset_map_univ_eq {α : Type*} :
+    ∀ {n : ℕ} (f g : Fin n → α),
+      Multiset.map f (Finset.univ : Finset (Fin n)).val =
+        Multiset.map g (Finset.univ : Finset (Fin n)).val →
+      ∃ σ : Equiv.Perm (Fin n), ∀ q, f q = g (σ q) := by
+  intro n
+  induction n with
+  | zero =>
+    intro _ _ _
+    exact ⟨Equiv.refl _, fun q => q.elim0⟩
+  | succ n ih =>
+    intro f g hMap
+    classical
+    -- Locate `j : Fin (n+1)` with `g j = f 0`.
+    have hMem : f 0 ∈ Multiset.map g (Finset.univ : Finset (Fin (n+1))).val := by
+      rw [← hMap]
+      exact Multiset.mem_map_of_mem f (Finset.mem_univ_val 0)
+    obtain ⟨j, _hjMem, hj⟩ := Multiset.mem_map.mp hMem
+    -- `Multiset.map h univ = h p ::ₘ Multiset.map (h ∘ p.succAbove) univ`.
+    have decomp : ∀ (h : Fin (n+1) → α) (p : Fin (n+1)),
+        Multiset.map h (Finset.univ : Finset (Fin (n+1))).val =
+          h p ::ₘ Multiset.map (h ∘ p.succAbove)
+            (Finset.univ : Finset (Fin n)).val := by
+      intro h p
+      have hUniv : (Finset.univ : Finset (Fin (n+1))).val =
+          p ::ₘ ((Finset.univ : Finset (Fin n)).val.map p.succAboveEmb) := by
+        rw [Fin.univ_succAbove n p, Finset.cons_val, Finset.map_val]
+      rw [hUniv, Multiset.map_cons, Multiset.map_map]
+      rfl
+    -- Reduce to a multiset-map equality on `Fin n`.
+    have hRestricted :
+        Multiset.map (f ∘ (0 : Fin (n+1)).succAbove)
+            (Finset.univ : Finset (Fin n)).val =
+          Multiset.map (g ∘ j.succAbove)
+            (Finset.univ : Finset (Fin n)).val := by
+      have hEqCons :
+          f 0 ::ₘ Multiset.map (f ∘ (0 : Fin (n+1)).succAbove)
+              (Finset.univ : Finset (Fin n)).val =
+            g j ::ₘ Multiset.map (g ∘ j.succAbove)
+              (Finset.univ : Finset (Fin n)).val := by
+        rw [← decomp f 0, ← decomp g j]
+        exact hMap
+      rw [hj] at hEqCons
+      exact (Multiset.cons_inj_right (f 0)).mp hEqCons
+    -- Apply the inductive hypothesis.
+    obtain ⟨σ', hσ'⟩ := ih _ _ hRestricted
+    -- Assemble `σ : Fin (n+1) ≃ Fin (n+1)` via `finSuccEquiv'`.
+    refine ⟨((finSuccEquiv' (0 : Fin (n+1))).trans σ'.optionCongr).trans
+              (finSuccEquiv' j).symm, ?_⟩
+    intro q
+    refine q.cases ?_ ?_
+    · -- Case `q = 0`: `σ 0 = j`, and `g j = f 0` by `hj`.
+      simp only [Equiv.trans_apply, finSuccEquiv'_at,
+        Equiv.optionCongr_apply, Option.map_none, finSuccEquiv'_symm_none]
+      exact hj.symm
+    · -- Case `q = i.succ`: `σ i.succ = j.succAbove (σ' i)`.
+      intro i
+      have hRec := hσ' i
+      simp only [Function.comp_apply, Fin.zero_succAbove] at hRec
+      simp only [Equiv.trans_apply, ← Fin.zero_succAbove,
+        finSuccEquiv'_succAbove, Equiv.optionCongr_apply,
+        Option.map_some, finSuccEquiv'_symm_some]
+      exact hRec
+
+set_option linter.unusedVariables false in
+/-- **Matched-sector weight-permutation extractor.**
+
+Refines `matched_sector_weight_multiset_eq` into an explicit permutation
+`τ` realising CPSV16 line 1188's per-copy identification.
+
+Paper anchor: CPSV16 §II.C lines 1158-1167, 1184, 1188 (arXiv:1606.00608). -/
+theorem matched_sector_weight_equiv
+    {P Q : SectorDecomposition d}
+    (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
+    (ζ : ℂ) (hζ : ζ ≠ 0)
+    {N₀ : ℕ}
+    (hCoeff : ∀ N > N₀, P.coeff N j₀ = ζ ^ N * Q.coeff N k₀') :
+    ∃ (hCopies : P.copies j₀ = Q.copies k₀')
+      (τ : Fin (P.copies j₀) ≃ Fin (Q.copies k₀')),
+      ∀ q : Fin (P.copies j₀),
+        Q.weight k₀' (τ q) = ζ⁻¹ * P.weight j₀ q := by
+  classical
+  obtain ⟨hCopies, hMultiset⟩ :=
+    matched_sector_weight_multiset_eq j₀ k₀' ζ hζ hCoeff
+  -- Extract `σ : Fin (P.copies j₀) ≃ Fin (P.copies j₀)` matching the
+  -- per-copy weights up to the gauge-phase factor `ζ`.
+  obtain ⟨σ, hσ⟩ :=
+    exists_perm_of_multiset_map_univ_eq
+      (P.weight j₀)
+      (fun q : Fin (P.copies j₀) => ζ * Q.weight k₀' (Fin.cast hCopies q))
+      hMultiset
+  -- Compose with the cardinality cast `Fin (P.copies j₀) ≃ Fin (Q.copies k₀')`.
+  let castEquiv : Fin (P.copies j₀) ≃ Fin (Q.copies k₀') :=
+    (Fin.castOrderIso hCopies).toEquiv
+  refine ⟨hCopies, σ.trans castEquiv, ?_⟩
+  intro q
+  have hPoint : P.weight j₀ q = ζ * Q.weight k₀' (Fin.cast hCopies (σ q)) :=
+    hσ q
+  have hQ : Q.weight k₀' ((σ.trans castEquiv) q)
+      = Q.weight k₀' (Fin.cast hCopies (σ q)) := by
+    simp [castEquiv]
+  rw [hQ, hPoint, ← mul_assoc, inv_mul_cancel₀ hζ, one_mul]
+
 end MPSTensor
