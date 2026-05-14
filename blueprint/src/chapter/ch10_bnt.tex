@@ -893,3 +893,124 @@ following file.
 	injectivity of the reindexing lifts distinct indices on the dropped
 	decomposition to distinct indices on the original.
 \end{proof}
+
+\subsection{Matched-sector subtraction: equal-MPV identity on dropped tails}
+
+This subsection records the algebraic cancellation step that drives the
+strong-induction route to the equal-MPV non-decaying-overlap statement
+(Corollary~II.2 of~\cite{Cirac2017MPDO_AnnPhys}, lines~1172--1192).
+The result is: if two sector decompositions \(P\) and \(Q\) satisfy the
+equal-MPV identity and a single basis-sector pair \((i_0, k_0)\) is
+matched via a common gauge phase \(\zeta \in \mathbb{C}\setminus\{0\}\)
+coupling the basis MPVs and the weight multisets, then dropping that
+sector from each side preserves the equal-MPV identity.
+This is the cancellation underlying the matched relation
+\[
+	\mu_{j,q} \;=\; \nu_{j,q} \cdot e^{i\varphi_j},
+	\qquad
+	V^{(N)}(B_k)_\sigma \;=\; e^{i\varphi_j N}\, V^{(N)}(A_{j_k})_\sigma
+\]
+of \cite[\S~II, lines~1184--1188]{Cirac2017MPDO_AnnPhys}.
+
+\begin{lemma}[Matched-sector subtraction preserves the equal-MPV identity]%
+	\label{lem:paper_bnt_sameMPV_dropSector_dropSector}
+	\lean{MPSTensor.sameMPV_dropSector_dropSector}
+	\leanok
+	\uses{def:paper_sector_data, def:paper_bnt_cf,
+		lem:paper_bnt_drop_sector_mpv_sub}
+	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
+	canonical forms, with \(n_P + 1\) and \(n_Q + 1\) basis sectors
+	respectively, satisfying the equal-MPV identity
+	\(V^{(N)}(P)_\sigma = V^{(N)}(Q)_\sigma\) for all \(N\) and \(\sigma\).
+	Fix a basis-sector pair
+	\((i_0, k_0) \in \{0,\dotsc,n_P\} \times \{0,\dotsc,n_Q\}\) and a
+	scalar \(\zeta \in \mathbb{C}\setminus\{0\}\).  Assume:
+	\begin{enumerate}
+		\item (basis-MPV gauge relation) for every system size \(N\) and
+			configuration \(\sigma\),
+			\[
+				V^{(N)}(B_{k_0})_\sigma
+				\;=\;
+				\zeta^N \cdot V^{(N)}(A_{i_0})_\sigma;
+			\]
+		\item (weight-multiset matching) there exist copy-multiplicities
+			\(r_{P,i_0}\) and \(r_{Q,k_0}\) and a bijection
+			\(\tau : \{0,\dotsc,r_{P,i_0}-1\} \to \{0,\dotsc,r_{Q,k_0}-1\}\)
+			such that for every copy index \(q\),
+			\[
+				\nu_{k_0,\tau(q)}
+				\;=\;
+				\zeta^{-1} \cdot \mu_{i_0,q}.
+			\]
+	\end{enumerate}
+	Then the equal-MPV identity holds for the dropped tails:
+	\[
+		V^{(N)}(P')_\sigma
+		\;=\;
+		V^{(N)}(Q')_\sigma
+		\quad\text{for all }N,\,\sigma,
+	\]
+	where \(P'\) \textup{(}resp.\ \(Q'\)\textup{)} denotes the sector
+	decomposition obtained by removing basis sector \(A_{i_0}\) from
+	\(P\) \textup{(}resp.\ \(B_{k_0}\) from \(Q\)\textup{)}.
+	This is the algebraic cancellation step of
+	\cite[\S~II, Corollary~II.2, lines~1172--1192]{Cirac2017MPDO_AnnPhys}.
+	The same \(\zeta\) appears in both hypotheses by design: independent
+	gauge and weight phases would leave a residual \(\zeta^{2N}\) factor
+	and the subtraction would fail to cancel.
+\end{lemma}
+
+\begin{proof}\leanok
+	Fix \((N, \sigma)\).  Expand \(V^{(N)}(P')_\sigma\) and the
+	analogous \(Q'\)-side via
+	Lemma~\ref{lem:paper_bnt_drop_sector_mpv_sub}.  By the equal-MPV
+	identity, the full totals \(V^{(N)}(P)_\sigma\) and
+	\(V^{(N)}(Q)_\sigma\) agree, so it remains to show
+	\[
+		c_{P,i_0}^{(N)} \cdot V^{(N)}(A_{i_0})_\sigma
+		\;=\;
+		c_{Q,k_0}^{(N)} \cdot V^{(N)}(B_{k_0})_\sigma.
+	\]
+	For the coefficient ratio, reindex the per-copy sum
+	\(c_{Q,k_0}^{(N)} = \sum_{q'} \nu_{k_0,q'}^{\,N}\)
+	along \(\tau\), substitute the weight relation, distribute the
+	\(N\)-th power, and factor \((\zeta^{-1})^N\) out of the sum:
+	\(c_{Q,k_0}^{(N)} = \zeta^{-N} \cdot c_{P,i_0}^{(N)}\).
+	Substituting the basis-MPV gauge relation and using
+	\(\zeta^{-N}\zeta^N = 1\) (which requires \(\zeta \neq 0\)) closes
+	the identity.
+\end{proof}
+
+\begin{remark}
+	The hypotheses \(\mathsf{IsBNTCanonicalForm}\) on \(P\) and \(Q\) are
+	not consumed by the algebraic identity itself
+	(lines~1184--1188 of~\cite{Cirac2017MPDO_AnnPhys}); they are recorded
+	in the Lean signature for caller-symmetry with the strong-induction
+	step that uses this lemma.
+\end{remark}
+
+\begin{lemma}[Matched-sector subtraction via gauge-phase equivalence]%
+	\label{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}
+	\lean{MPSTensor.sameMPV_dropSector_dropSector_of_gaugePhaseEquiv}
+	\leanok
+	\uses{lem:paper_bnt_sameMPV_dropSector_dropSector}
+	An equivalent formulation of
+	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector} that takes
+	as input the gauge-phase equivalence between the matched basis tensors
+	(\cite[\S~II, line~1180]{Cirac2017MPDO_AnnPhys}) together with the
+	weight permutation, and derives the basis-MPV gauge relation
+	internally via the gauge-phase formula for matrix-product vectors
+	(\cite[\S~II, line~1187]{Cirac2017MPDO_AnnPhys}) and a bond-dimension
+	coercion.  Used in the strong-induction step relying on
+	Corollary~II.2 of~\cite{Cirac2017MPDO_AnnPhys} (lines~1172--1192).
+\end{lemma}
+
+\begin{proof}\leanok
+	Extract from the gauge-phase equivalence a matrix \(X\) and scalar
+	\(\zeta \neq 0\) satisfying a conjugacy identity on the matched basis
+	tensor.  Apply the gauge-phase formula for matrix-product vectors
+	(\cite[\S~II, line~1187]{Cirac2017MPDO_AnnPhys}) to obtain
+	\(V^{(N)}(B_{k_0})_\sigma = \zeta^N \cdot V^{(N)}(A_{i_0})_\sigma\)
+	after absorbing the bond-dimension coercion.  Dispatch to
+	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector}.
+\end{proof}
