@@ -147,6 +147,23 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   dominant-block projection (CPSV16 lines 1181–1188). -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
+  /-- **CPSV16 line-246 normalization, dominant-block reading.**  When the
+  decomposition has at least one basis sector, the sector at index `0`
+  carries a unit-modulus copy.  CPSV16 §II.A line 246 only states the
+  existential form `∃ j q, ‖μ_{j,q}‖ = 1`, but the body of the FT proof
+  (CPSV16 lines 1181–1188) **uses** the index-0 reading: the dominant
+  sector is selected by the unit-modulus weight, and the relabelling
+  convention places the dominant sector at index `0`.  This field records
+  that relabelling step structurally so it does not need to be supplied
+  externally; the proof of `coeff_dominant_not_tendsto_zero`
+  (PaperBNT/CesaroNonDecay.lean) reads off the dominant-block coefficient
+  non-decay directly from this field via the Cesàro-mean argument.
+
+  When `P.basisCount = 0`, the field is vacuous (no `hpos` premise is
+  available).  When `P.basisCount = 1`, the field collapses to
+  `weight_unit_exists` with the unique sector index. -/
+  weight_unit_at_dominant_block : ∀ (hpos : 0 < P.basisCount),
+    ∃ q : Fin (P.copies ⟨0, hpos⟩), ‖P.weight ⟨0, hpos⟩ q‖ = 1
 
 namespace IsBNTCanonicalForm
 
