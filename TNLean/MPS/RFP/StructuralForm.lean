@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.CPPrimitive
-import TNLean.MPS.BNT.Construction
+import TNLean.PiAlgebra.CanonicalFormSep
+import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Spectral.QuantitativeGap
 
@@ -24,7 +25,7 @@ that are renormalization fixed points, following arXiv:1606.00608 Section 3.4
 * `rfp_nt_cfii_diagonal_fixedPoint`: Appendix B / CFII reduction step — after unitary
   conjugation, a left-canonical normal RFP tensor has a diagonal positive-definite fixed point
 * `rfp_cf_structural`: each canonical-form block is injective
-* `rfp_bnt_structural`: each BNT block is injective
+* `rfp_bnt_structural`: each BNT basis block of a `SectorDecomposition` is injective
 
 ## Proof strategy
 
@@ -256,11 +257,15 @@ theorem rfp_cf_structural {r : ℕ} {dim : Fin r → ℕ}
     ∀ k, IsInjective (A k) :=
   hCF.block_injective
 
-/-- BNT blocks are already injective, so the same precursor applies blockwise. -/
-theorem rfp_bnt_structural {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (hCF : IsCanonicalFormBNT μ A) :
-    ∀ k, IsInjective (A k) :=
-  hCF.toIsCanonicalForm.block_injective
+/-- Every BNT basis block is injective.
+
+Given a sector decomposition `P` in BNT canonical form (CPSV16 §III, `thm:charact-MPS`,
+arXiv:1606.00608 lines 543–555; basis-block properties at lines 271–301 and 317–344),
+every basis block `P.basis j` is an injective MPS tensor.  The result is a direct projection
+of `IsBNTCanonicalForm.basis_injective`. -/
+theorem rfp_bnt_structural (P : SectorDecomposition d)
+    (hP : IsBNTCanonicalForm P) :
+    ∀ j, IsInjective (P.basis j) :=
+  hP.basis_injective
 
 end MPSTensor
