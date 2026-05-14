@@ -238,6 +238,7 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDischarge
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DropSector
 import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
+import TNLean.MPS.FundamentalTheorem.PaperBNT.NewtonGirard
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
