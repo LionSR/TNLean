@@ -24,36 +24,40 @@ The module has three layers:
    (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
    `PaperBNT/WeakExistential.lean`) to the `SameMPV₂` hypothesis: some pair
    of basis blocks has a non-decaying cross-overlap.
-3. **Lemma 3** — the **dominant-pair matching** statement: for the dominant
-   block of `P` (index `⟨0, hP_pos⟩`), there is a block `k₀` of `Q` of equal
-   bond dimension, gauge-phase equivalent (cast-left shape) to the dominant
-   `P`-block, and with a non-decaying cross-overlap.
+3. **Lemma 3** — the **unit-block matching** statement: for any sector
+   `j₀ : Fin P.basisCount` carrying a unit-modulus copy (supplied
+   externally), there is a block `k₀` of `Q` of equal bond dimension,
+   gauge-phase equivalent (cast-left shape) to the `P`-block at `j₀`,
+   and with a non-decaying cross-overlap.
 
 ## Hypothesis disclosure (paper-faithful)
 
-The dominant-pair matching at the **fixed** index `⟨0, hP_pos⟩` does not
-follow from the core seven-field `IsBNTCanonicalForm` data alone: the core
-seven fields are deliberately invariant under relabelling of sectors and do
-not single out a dominant sector.  Following the CPSV16 §II.A line-246
-normalization convention, `IsBNTCanonicalForm` carries three additional
+The unit-block matching at a **user-supplied** sector index
+`j₀ : Fin P.basisCount` (with an externally provided unit-modulus
+witness) does not single out any particular sector internally: the core
+seven `IsBNTCanonicalForm` fields are deliberately invariant under
+relabelling of sectors.  Following the CPSV16 §II.A line-246
+normalization convention, `IsBNTCanonicalForm` carries two additional
 structural fields:
 
 * `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
   modulus bound.  Lemma 3 below feeds this in via `hP.weight_norm_le_one`
-  and `hQ.weight_norm_le_one`, replacing the prior explicit `hP_norm /
-  hQ_norm` parameters.
+  and `hQ.weight_norm_le_one`.
 * `weight_unit_exists : ∃ j q, ‖weight j q‖ = 1`  — CPSV16 line 246,
-  the unit-modulus existential.
-* `weight_unit_at_dominant_block : ∀ hpos, ∃ q, ‖weight ⟨0, hpos⟩ q‖ = 1`
-  — CPSV16 line 246 read at the **dominant** sector index `0`, which is
-  the form used in the FT proof (CPSV16 lines 1181–1188).
+  the unit-modulus existential (global, over the two-layer index
+  `(j, q)`).
 
-The dominant-block coefficient non-decay
-`¬ Tendsto (P.coeff · ⟨0, hP_pos⟩) atTop (𝓝 0)` is now **derived** from
-the third structural field above via the Cesàro non-decay analytic lemma
-in `PaperBNT/CesaroNonDecay.lean` and is no longer an explicit parameter
-on Lemma 3.  The reduction is recorded in
-`IsBNTCanonicalForm.coeff_dominant_not_tendsto_zero` (`PaperBNT/Api.lean`).
+Issue #1725 Phase A retired an auxiliary dominant-block structural
+field (audit memo `/tmp/phase_4c_drift_audit_2026-05-14.md` §Q-C):
+CPSV16 line 246 is
+**global** and does not pin the unit-modulus copy to sector 0.  The
+matching theorem below now takes the unit-modulus sector as an
+**explicit parameter** `j₀ : Fin P.basisCount` together with a
+per-sector unit-modulus existential
+`hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
+sector's coefficient is then derived inside the proof via
+`IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
+(`PaperBNT/Api.lean`).
 
 These hypotheses are weaker than the legacy `IsCanonicalFormBNT` package
 (which baked in `mu_strict_anti` + a single per-sector "spectral level"
@@ -137,38 +141,38 @@ theorem exists_nondecaying_overlap_pair_of_sameMPV
   exists_nondecaying_overlap_pair_of_eventuallyProportional
     (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
 
-/-! ### Lemma 3: dominant-pair matching at the fixed index `0`
+/-! ### Lemma 3: unit-block matching at a user-supplied index `j₀`
 
-The main result of Phase 4b-ii: under `SameMPV₂` plus the dominant-block
-coefficient non-decay assumption, the dominant block `P.basis ⟨0, hP_pos⟩`
-of `P` has a `Q`-side match `Q.basis k₀` of equal bond dimension,
-gauge-phase equivalent in the cast-left shape, and with a non-decaying
-cross-overlap.
+The main result of Phase 4b-ii: under `SameMPV₂` plus a unit-modulus
+witness `∃ q, ‖P.weight j₀ q‖ = 1` at a user-supplied sector index
+`j₀ : Fin P.basisCount`, the block `P.basis j₀` of `P` has a `Q`-side
+match `Q.basis k₀` of equal bond dimension, gauge-phase equivalent in
+the cast-left shape, and with a non-decaying cross-overlap.
 
-The proof is a direct read of the CPSV16 lines 1172–1188 dominant-block
+The proof is a direct read of the CPSV16 lines 1172–1188 unit-block
 projection: assume by contradiction that **all** cross-overlaps
-`mpvOverlap (P.basis ⟨0, _⟩) (Q.basis k)` decay; project the `SameMPV₂`
-identity onto `mpvState (P.basis ⟨0, _⟩)` (taking the bilinear overlap with
-the dominant `P`-block).
+`mpvOverlap (P.basis j₀) (Q.basis k)` decay; project the `SameMPV₂`
+identity onto `mpvState (P.basis j₀)` (taking the bilinear overlap with
+the `j₀`-th `P`-block).
 
-* The LHS = `∑_j P.coeff N j · overlap(P.basis j, P.basis ⟨0, _⟩) N`
-  is `P.coeff N ⟨0, _⟩ + (small)` thanks to:
-  – `basis_normalized_self_overlap` at `j = 0` (`overlap → 1`);
-  – `cross_overlap_basis_tendsto_zero` at `j ≠ 0` (`overlap → 0`);
+* The LHS = `∑_j P.coeff N j · overlap(P.basis j, P.basis j₀) N`
+  is `P.coeff N j₀ + (small)` thanks to:
+  – `basis_normalized_self_overlap` at `j = j₀` (`overlap → 1`);
+  – `cross_overlap_basis_tendsto_zero` at `j ≠ j₀` (`overlap → 0`);
   – the structural field `weight_norm_le_one` of `IsBNTCanonicalForm`
     (CPSV16 §II.A line 246) feeds into
     `norm_coeff_le_copies_of_norm_weight_le_one` (`Api.lean`) and gives
     the coefficient bound `‖P.coeff N j‖ ≤ P.copies j`.
 
-* The RHS = `∑_k Q.coeff N k · overlap(Q.basis k, P.basis ⟨0, _⟩) N`
+* The RHS = `∑_k Q.coeff N k · overlap(Q.basis k, P.basis j₀) N`
   vanishes asymptotically, again by coefficient boundedness from
   `hQ.weight_norm_le_one` and the contrapositive assumption that all
   `k`-overlaps decay.
 
-* `SameMPV₂` makes both sides equal, so `P.coeff N ⟨0, _⟩` tends to `0`,
-  contradicting `IsBNTCanonicalForm.coeff_dominant_not_tendsto_zero`
-  (derived from the structural field `weight_unit_at_dominant_block` via
-  the Cesàro non-decay lemma in `PaperBNT/CesaroNonDecay.lean`).
+* `SameMPV₂` makes both sides equal, so `P.coeff N j₀` tends to `0`,
+  contradicting `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
+  applied to the user-supplied unit-modulus witness `hUnit` via the
+  Cesàro non-decay lemma in `PaperBNT/CesaroNonDecay.lean`.
 
 The extracted `k₀` then satisfies (i) equal bond dimensions, via the
 contrapositive of
@@ -176,25 +180,29 @@ contrapositive of
 gauge-phase equivalence, via the contrapositive of
 `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`.
 
-Hypothesis disclosure: the modulus bounds `weight_norm_le_one` and the
-dominant-block unit-modulus witness `weight_unit_at_dominant_block` are
-both structural fields of `IsBNTCanonicalForm` (CPSV16 §II.A line 246)
-and need not be supplied externally.  The dominant-block coefficient
-non-decay is derived from these inside the proof via
-`IsBNTCanonicalForm.coeff_dominant_not_tendsto_zero` (`PaperBNT/Api.lean`).
--/
-theorem exists_dominant_match_of_sameMPV
+Hypothesis disclosure: the modulus bound `weight_norm_le_one` is a
+structural field of `IsBNTCanonicalForm` (CPSV16 §II.A line 246) and
+need not be supplied externally.  The unit-modulus witness at the
+chosen sector `j₀` is supplied externally because CPSV16 line 246 is
+**global** (the unit-modulus copy can sit in any sector); the
+structural field `weight_unit_exists` does not pin it to a specific
+sector.  Issue #1725 Phase A retired the auxiliary dominant-block
+structural field that previously fixed `j₀ = 0` and discharged the
+unit-modulus witness implicitly. -/
+theorem exists_unit_block_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
+    (hQ_pos : 0 < Q.basisCount)
+    (j₀ : Fin P.basisCount)
+    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
-      ∃ h : P.basisDim ⟨0, hP_pos⟩ = Q.basisDim k₀,
+      ∃ h : P.basisDim j₀ = Q.basisDim k₀,
         GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) h) (P.basis ⟨0, hP_pos⟩))
+            (cast (congr_arg (MPSTensor d) h) (P.basis j₀))
             (Q.basis k₀) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis ⟨0, hP_pos⟩) (Q.basis k₀) N)
+            mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
           atTop (𝓝 0) := by
   classical
   -- The Q-side positivity hypothesis is part of the user-facing signature
@@ -207,12 +215,11 @@ theorem exists_dominant_match_of_sameMPV
   -- used to be supplied as explicit parameters at the call site.
   have hP_weight_le := hP.weight_norm_le_one
   have hQ_weight_le := hQ.weight_norm_le_one
-  -- Dominant-block coefficient non-decay derived from the structural
-  -- field `weight_unit_at_dominant_block` via the Cesàro non-decay lemma.
+  -- Unit-block coefficient non-decay derived from the user-supplied
+  -- unit-modulus witness `hUnit` via the Cesàro non-decay lemma.
   have hP_dom_coeff_not_tendsto_zero :
-      ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0) :=
-    hP.coeff_dominant_not_tendsto_zero hP_pos
-  set j₀ : Fin P.basisCount := ⟨0, hP_pos⟩ with hj₀_def
+      ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
+    hP.coeff_not_tendsto_zero_at_unit_block j₀ hUnit
   -- Step 1: extract some k₀ with non-decaying overlap to `P.basis j₀`.
   have hExists_k :
       ∃ k₀ : Fin Q.basisCount,
