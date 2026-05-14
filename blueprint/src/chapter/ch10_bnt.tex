@@ -1163,3 +1163,132 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 	\texttt{IsBNTCanonicalForm} predicate plus the equal-MPV hypothesis,
 	with no analytic side conditions exposed at the call site.
 \end{remark}
+
+\subsection{Matched-sector coefficient identity and weight multiset equality}
+
+The matched-sector subtraction lemma above
+(Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}) consumes a
+bijection \(\tau\) between the per-copy index sets and a weight relation
+\(Q.\texttt{weight}\,\tilde k_0\,(\tau q) = \zeta^{-1} \cdot
+P.\texttt{weight}\,\tilde\imath_0\,q\).  This subsection records the two
+algebraic inputs that produce the data \((\tau, \zeta)\) from a
+\(\texttt{SameMPV}_2\) hypothesis and the gauge-phase basis-MPV relation
+of the matched pair: the \emph{matched-sector coefficient identity}
+projected via combined-family eventual linear independence, and the
+\emph{matched-sector weight multiset equality} derived from the coefficient
+identity by Newton--Girard recovery
+(Theorem~\ref{thm:power_sum_multiset}).  Together they are the
+Step~1 linear-independence projection of \cite[\S~II, \texttt{II\_cor2},
+lines 1170--1192]{Cirac2017MPDO_AnnPhys} and the
+\(\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}\) recovery
+of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
+
+\begin{lemma}[Matched-sector coefficient identity (eventual)]%
+	\label{lem:paper_bnt_matched_sector_coeff_identity_eventually}
+	\lean{MPSTensor.matched_sector_coeff_identity_eventually}
+	\leanok
+	\uses{def:paper_sector_data, def:paper_bnt_drop_sector}
+	Let \(P, Q\) be sector decompositions with
+	\(\texttt{SameMPV}_2(P.\texttt{toTensor}, Q.\texttt{toTensor})\) and
+	\(Q.\texttt{basisCount} = n_Q + 1\).  Fix an index
+	\(j_0 \in \{0,\dotsc,P.\texttt{basisCount}-1\}\), a matched
+	\(Q\)-sector \(k_0 \in \{0,\dotsc,n_Q\}\) (lifted to
+	\(\tilde k_0 \in \texttt{Fin}\,Q.\texttt{basisCount}\)), and a scalar
+	\(\zeta \in \mathbb{C}\).  Assume:
+	\begin{enumerate}
+		\item (basis-MPV gauge relation) for every system size \(N\) and
+			configuration \(\sigma\),
+			\[
+				V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma
+				\;=\;
+				\zeta^N \cdot V^{(N)}(P.\texttt{basis}\,j_0)_\sigma;
+			\]
+		\item (combined-family eventual linear independence) there exists
+			\(N_0 \in \mathbb{N}\) such that for every \(N > N_0\), the
+			combined MPV-state family
+			\(\bigl(V^{(N)}(P.\texttt{basis}\,j)\bigr)_{j}
+			\oplus
+			\bigl(V^{(N)}((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\bigr)_{l}\)
+			is linearly independent over~\(\mathbb{C}\).
+	\end{enumerate}
+	Then there exists \(N_0 \in \mathbb{N}\) such that for every
+	\(N > N_0\),
+	\[
+		P.\texttt{coeff}\,N\,j_0
+		\;=\;
+		\zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0.
+	\]
+	This is the Step~1 linear-independence projection of
+	\cite[\S~II, \texttt{II\_cor2},
+	lines 1170--1192]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Fix \(N > N_0\).  Substituting the basis-MPV gauge relation in the
+	\(Q\)-side expansion
+	\(V^{(N)}(Q.\texttt{toTensor})_\sigma
+	= \sum_{k} c_{Q,k}^{(N)} V^{(N)}(Q.\texttt{basis}\,k)_\sigma\)
+	(with the \texttt{Fin.sum\_univ\_succAbove} succAbove-splitting at
+	\(k = \tilde k_0\)) and equating to the \(P\)-side expansion via
+	\(\texttt{SameMPV}_2\), the difference of the two expansions becomes a
+	single linear relation among the combined MPV-state family.  Combined-
+	family eventual linear independence
+	(\(\texttt{Fintype.linearIndependent\_iff}\)) extracts the coefficient
+	at the matched index \(j_0\): it is
+	\(P.\texttt{coeff}\,N\,j_0 - \zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0\),
+	which must vanish.
+\end{proof}
+
+\begin{lemma}[Matched-sector weight multiset equality]%
+	\label{lem:paper_bnt_matched_sector_weight_multiset_eq}
+	\lean{MPSTensor.matched_sector_weight_multiset_eq}
+	\leanok
+	\uses{def:paper_sector_data,
+		lem:paper_bnt_matched_sector_coeff_identity_eventually,
+		thm:power_sum_multiset}
+	Let \(P, Q\) be sector decompositions, and fix indices
+	\(j_0 \in \texttt{Fin}\,P.\texttt{basisCount}\),
+	\(\tilde k_0 \in \texttt{Fin}\,Q.\texttt{basisCount}\), and a nonzero
+	scalar \(\zeta \in \mathbb{C}\setminus\{0\}\).  Suppose
+	\[
+		P.\texttt{coeff}\,N\,j_0
+		\;=\;
+		\zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0
+		\qquad \text{for every } N > N_0.
+	\]
+	Then the per-sector multiplicities match,
+	\(P.\texttt{copies}\,j_0 = Q.\texttt{copies}\,\tilde k_0\), and the
+	rescaled per-copy weight multisets coincide:
+	\[
+		\texttt{Multiset.map}\,(P.\texttt{weight}\,j_0)\,\texttt{Finset.univ.val}
+		\;=\;
+		\texttt{Multiset.map}\,\bigl(q \mapsto \zeta \cdot
+			Q.\texttt{weight}\,\tilde k_0\,(\texttt{Fin.cast}\,h\,q)\bigr)
+			\,\texttt{Finset.univ.val}.
+	\]
+	This is \cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}
+	(\(\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}\) and matching
+	\(r_{a,j} = r_{b,j}\)) read on a single matched sector.
+\end{lemma}
+
+\begin{proof}\leanok
+	Unfold both sides of the coefficient identity to per-copy power sums
+	\(\sum_{q} (P.\texttt{weight}\,j_0\,q)^N\) and
+	\(\sum_{q'} (Q.\texttt{weight}\,\tilde k_0\,q')^N\) and distribute
+	\(\zeta^N\) through the \(Q\)-side sum to obtain the rescaled identity
+	\[
+		\sum_{q} (P.\texttt{weight}\,j_0\,q)^N
+		\;=\;
+		\sum_{q'} (\zeta \cdot Q.\texttt{weight}\,\tilde k_0\,q')^N
+		\qquad \text{for every } N > N_0.
+	\]
+	Extend to all positive exponents via
+	\texttt{power\_sums\_eq\_of\_eventually\_eq\_hetero} and apply the
+	unequal-cardinality multiset-recovery lemma
+	\texttt{Matrix.sum\_pow\_eq\_implies\_card\_eq\_and\_multiset\_eq\_of\_le\_max\_card}
+	(nonzero weights are required, supplied by
+	\(\zeta \neq 0\) and \texttt{weight\_ne\_zero}).  This delivers both
+	the multiplicity match and the multiset equality; reindex along
+	\texttt{Fin.cast} to express the multiset over the
+	\(P\)-indexing as required.
+\end{proof}
