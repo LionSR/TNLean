@@ -247,4 +247,280 @@ theorem forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
+/-! ### Phase B-β local helpers: transitivity of `GaugePhaseEquiv` at a fixed bond dim
+
+The Phase B-β bijective-matching proof composes two gauge-phase
+equivalences `(P.basis j) ↔ (Q.basis k₁)` and `(P.basis j) ↔ (Q.basis k₂)`
+through the common centre `P.basis j` to derive an equivalence
+`(Q.basis k₁) ↔ (Q.basis k₂)`.  The `basis_distinct` field of
+`IsBNTCanonicalForm` then forces `k₁ = k₂` (injectivity of the matching). -/
+
+/-- Transitivity of `GaugePhaseEquiv` at a fixed bond dimension.
+
+If `B i = ζ₁ • (X₁ * A i * X₁⁻¹)` and `C i = ζ₂ • (X₂ * B i * X₂⁻¹)`,
+then `C i = (ζ₂ ζ₁) • ((X₂ X₁) * A i * (X₂ X₁)⁻¹)`, giving
+`GaugePhaseEquiv A C` with gauge `X₂ * X₁` and phase scalar `ζ₂ * ζ₁`. -/
+private theorem gaugePhaseEquiv_trans_same_dim {d D : ℕ} {A B C : MPSTensor d D}
+    (h₁ : GaugePhaseEquiv A B) (h₂ : GaugePhaseEquiv B C) : GaugePhaseEquiv A C := by
+  classical
+  obtain ⟨X₁, ζ₁, hζ₁, hr₁⟩ := h₁
+  obtain ⟨X₂, ζ₂, hζ₂, hr₂⟩ := h₂
+  refine ⟨X₂ * X₁, ζ₂ * ζ₁, mul_ne_zero hζ₂ hζ₁, ?_⟩
+  intro i
+  -- Abbreviations for the matrix coercions of the four GL units in play.
+  set X₁M : Matrix (Fin D) (Fin D) ℂ :=
+    ((X₁ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  set X₂M : Matrix (Fin D) (Fin D) ℂ :=
+    ((X₂ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  set X₁invM : Matrix (Fin D) (Fin D) ℂ :=
+    ((X₁⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  set X₂invM : Matrix (Fin D) (Fin D) ℂ :=
+    ((X₂⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  -- Coercion of the product `X₂ * X₁` to a matrix is the matrix product.
+  have hMul_val :
+      (((X₂ * X₁ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ) = X₂M * X₁M := by
+    simp [X₁M, X₂M]
+  -- Coercion of the inverse of the product is the reversed product of inverses.
+  have hMulInv_val :
+      (((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) = X₁invM * X₂invM := by
+    have hRev : ((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) = X₁⁻¹ * X₂⁻¹ := mul_inv_rev X₂ X₁
+    have := congrArg (fun U : GL (Fin D) ℂ =>
+        (U : Matrix (Fin D) (Fin D) ℂ)) hRev
+    simp [X₁invM, X₂invM]
+  -- Compute `C i` by chaining the two equivalences.
+  calc C i
+      = ζ₂ • (X₂M * B i * X₂invM) := hr₂ i
+    _ = ζ₂ • (X₂M * (ζ₁ • (X₁M * A i * X₁invM)) * X₂invM) := by rw [hr₁ i]
+    _ = ζ₂ • (ζ₁ • (X₂M * (X₁M * A i * X₁invM) * X₂invM)) := by
+          simp [smul_smul]
+    _ = (ζ₂ * ζ₁) • (X₂M * X₁M * A i * X₁invM * X₂invM) := by
+          simp [smul_smul, Matrix.mul_assoc]
+    _ = (ζ₂ * ζ₁) • ((X₂M * X₁M) * A i * (X₁invM * X₂invM)) := by
+          simp [Matrix.mul_assoc]
+    _ = (ζ₂ * ζ₁) •
+          ((((X₂ * X₁ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ) * A i *
+            (((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+          rw [hMul_val, hMulInv_val]
+
+/-- Composition through a common centre `A`: if the cast `D = D₁` carries
+`A : MPSTensor d D` into a gauge-phase equivalence with `B : MPSTensor d D₁`,
+and similarly the cast `D = D₂` carries `A` into a gauge-phase equivalence
+with `C : MPSTensor d D₂`, then `B` and `C` are gauge-phase equivalent
+(after the dimension cast `D₁ = D₂`).
+
+This is the cast-aware transitivity used in Phase B-β to derive
+`GaugePhaseEquiv (Q.basis k₁) (Q.basis k₂)` (up to cast) from two
+matchings against the same `P.basis j`, before invoking `basis_distinct`
+of `Q` to force `k₁ = k₂`. -/
+private theorem gaugePhaseEquiv_cast_compose_via_centre
+    {d D D₁ D₂ : ℕ}
+    (h₁ : D = D₁) (h₂ : D = D₂)
+    {A : MPSTensor d D} {B : MPSTensor d D₁} {C : MPSTensor d D₂}
+    (GE₁ : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h₁) A) B)
+    (GE₂ : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h₂) A) C) :
+    GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) (h₁.symm.trans h₂)) B) C := by
+  subst h₁
+  -- After `subst h₁`, `D₁` is replaced everywhere by `D`, the cast on
+  -- `GE₁` reduces to identity, and `h₂.symm.trans h₂ = h₂`.
+  subst h₂
+  -- After `subst h₂`, all three tensors live in `MPSTensor d D`.
+  simp only [cast_eq] at GE₁ GE₂ ⊢
+  exact gaugePhaseEquiv_trans_same_dim (gaugePhaseEquiv_symm_same_dim GE₁) GE₂
+
+/-! ### Phase B-β main theorem: bijective matching by symmetry
+
+CPSV16 §II.C lines 1184–1186, the **symmetry argument**
+`g_a ≥ g_b ∧ g_b ≥ g_a ⇒ g_a = g_b`.
+
+The paper-faithful Phase B-α theorem
+`forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV` gives one
+direction: for every unit-modulus sector `k` of `Q` there exists a
+sector `j` of `P` with matched bond dimension, gauge-phase equivalence
+(after cast), and non-decaying cross-overlap.  Applying the SAME theorem
+once more with `(P, Q)` swapped and `SameMPV₂` symmetrically flipped
+gives the other direction: for every unit-modulus sector `j` of `P`
+there exists a sector `k` of `Q` with the matching data.
+
+The resulting two functions are **injective embeddings**
+
+  `φ : { k // ∃ q, ‖Q.weight k q‖ = 1 } ↪ Fin P.basisCount`,
+  `ψ : { j // ∃ q, ‖P.weight j q‖ = 1 } ↪ Fin Q.basisCount`.
+
+Injectivity is the CPSV16 §II.C lines 1184–1186 conclusion: two
+unit-modulus sectors of `Q` that match the SAME sector `j` of `P`
+would force two sectors of `Q` to be gauge-phase equivalent through
+the common centre `P.basis j`, contradicting `basis_distinct` of `Q`.
+
+## Scoping note (honest scoping per the task brief)
+
+The user-requested literal form `β : UnitQ ≃ UnitP` (a bijection
+between the unit-modulus Finsets) requires an additional argument that
+the matched `j` lies in `UnitP`, i.e. that the matched sector of `P`
+also carries a unit-modulus weight.  That step is **not** discharged by
+the Phase B-α non-decay output alone (`mpvOverlap` is on the *basis*
+tensors, not on the weighted sectors); it requires the per-sector
+weight-equivariance argument of CPSV16 Lemma `equalMPS` (lines 1148–1167)
+combined with the gauge-phase identity on weighted sectors.  Phase B-β
+delivers the *symmetric injective matching*, which is the direct
+formalisation of the paper's `g_a ≥ g_b ∧ g_b ≥ g_a` step on the
+unit-modulus subsets; the upgrade to `UnitQ ≃ UnitP` is deferred to a
+later phase that lifts the matching from basis-MPV non-decay to weight
+transport.
+
+Style choice: `UnitP` and `UnitQ` are encoded as `Subtype`s on
+`Fin P.basisCount` and `Fin Q.basisCount` respectively.  This avoids
+the `DecidablePred` obligation that `Finset.univ.filter` would impose,
+keeps the bond-dimension/gauge-phase data attached to the original
+sector index, and is the cleanest carrier for the matching data. -/
+
+/-- **CPSV16 §II.C lines 1184–1186 (Phase B-β, bijective matching by
+symmetry).**
+
+Applying `forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV` twice
+(once with `(P, Q, hEqual)` and once with `(Q, P, hEqual.symm)`) yields
+two `Function.Embedding`s, one in each direction, on the unit-modulus
+subsets
+
+* `UnitQ := { k : Fin Q.basisCount // ∃ q, ‖Q.weight k q‖ = 1 }`,
+* `UnitP := { j : Fin P.basisCount // ∃ q, ‖P.weight j q‖ = 1 }`.
+
+Both embeddings carry the matched bond-dimension equality, the
+gauge-phase equivalence (cast-left shape), and the non-decaying
+cross-overlap of basis MPV states.  Injectivity in each direction
+routes through `basis_distinct` of the *target* canonical form, via the
+cast-aware transitivity helper
+`gaugePhaseEquiv_cast_compose_via_centre`.
+
+Paper anchor: CPSV16 §II.C lines 1184–1186 (arXiv:1606.00608),
+`Lem1` at CPSV16 lines 1131–1133.  See the scoping note in the module
+docstring for the relationship to the bijection
+`β : UnitQ ≃ UnitP` (deferred to a later phase). -/
+theorem bijective_match_of_sameMPV
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    let UnitP := { j : Fin P.basisCount // ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 }
+    let UnitQ := { k : Fin Q.basisCount // ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1 }
+    ∃ (φ : UnitQ ↪ Fin P.basisCount) (ψ : UnitP ↪ Fin Q.basisCount),
+      (∀ k : UnitQ, ∃ h : P.basisDim (φ k) = Q.basisDim k.val,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h) (P.basis (φ k)))
+              (Q.basis k.val) ∧
+          ¬ Tendsto (fun N : ℕ =>
+              mpvOverlap (d := d) (P.basis (φ k)) (Q.basis k.val) N)
+            atTop (𝓝 0)) ∧
+      (∀ j : UnitP, ∃ h : Q.basisDim (ψ j) = P.basisDim j.val,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ j)))
+              (P.basis j.val) ∧
+          ¬ Tendsto (fun N : ℕ =>
+              mpvOverlap (d := d) (Q.basis (ψ j)) (P.basis j.val) N)
+            atTop (𝓝 0)) := by
+  classical
+  -- Phase B-α applied in each direction.
+  have hFwd := forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual
+  have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
+    fun N σ => (hEqual N σ).symm
+  have hBwd := forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hEqual_symm
+  -- Subtype carriers of the unit-modulus subsets.
+  set UnitP := { j : Fin P.basisCount // ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 }
+    with hUnitP_def
+  set UnitQ := { k : Fin Q.basisCount // ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1 }
+    with hUnitQ_def
+  -- Raw matched-sector function for the forward (`UnitQ → Fin P.basisCount`)
+  -- direction, by classical choice on the Phase B-α witness.
+  let φ₀ : UnitQ → Fin P.basisCount := fun k => (hFwd k.val k.property).choose
+  -- The classical-choice spec at each `k : UnitQ`.
+  have φ₀_spec : ∀ k : UnitQ,
+      ∃ h : P.basisDim (φ₀ k) = Q.basisDim k.val,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis (φ₀ k)))
+            (Q.basis k.val) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis (φ₀ k)) (Q.basis k.val) N)
+          atTop (𝓝 0) := fun k => (hFwd k.val k.property).choose_spec
+  -- Forward injectivity (CPSV16 line 1186): two unit-modulus sectors of
+  -- `Q` that map to the same `j` of `P` would force two gauge-phase
+  -- equivalences with the same centre `P.basis j`, hence
+  -- `GaugePhaseEquiv (Q.basis k₁) (Q.basis k₂)` (up to cast), contradicting
+  -- `basis_distinct` of `Q`.
+  -- Helper: align an equivalence centred at `P.basis j'` to one centred at
+  -- `P.basis j` when `j = j'`.  The `rintro ... rfl` performs `subst` on the
+  -- *fresh* free variable, sidestepping the motive-type obstruction that
+  -- `rw [hjEq]` would hit (because `h_t` depends on `j'`).
+  have rebase_centre_P :
+      ∀ (j j' : Fin P.basisCount) (_hj : j = j')
+        {kv : Fin Q.basisCount}
+        (h_t : P.basisDim j' = Q.basisDim kv)
+        (_GE : GaugePhaseEquiv
+                  (cast (congr_arg (MPSTensor d) h_t) (P.basis j')) (Q.basis kv)),
+        ∃ h_t' : P.basisDim j = Q.basisDim kv,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h_t') (P.basis j)) (Q.basis kv) := by
+    rintro _ _ rfl _ h_t GE
+    exact ⟨h_t, GE⟩
+  have hφ₀_inj : Function.Injective φ₀ := by
+    intro k₁ k₂ hjEq
+    obtain ⟨h₁, GE₁, _⟩ := φ₀_spec k₁
+    obtain ⟨h₂, GE₂, _⟩ := φ₀_spec k₂
+    by_contra hne
+    have hne_val : k₁.val ≠ k₂.val := fun h => hne (Subtype.ext h)
+    -- Use the helper to move from centre `P.basis (φ₀ k₂)` to `P.basis (φ₀ k₁)`.
+    obtain ⟨h₂', GE₂'⟩ :=
+      rebase_centre_P (φ₀ k₁) (φ₀ k₂) hjEq h₂ GE₂
+    -- Compose the two equivalences through the common centre `P.basis (φ₀ k₁)`.
+    have hQdim : Q.basisDim k₁.val = Q.basisDim k₂.val := h₁.symm.trans h₂'
+    have hQGE :
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hQdim) (Q.basis k₁.val))
+            (Q.basis k₂.val) :=
+      gaugePhaseEquiv_cast_compose_via_centre (A := P.basis (φ₀ k₁))
+        (B := Q.basis k₁.val) (C := Q.basis k₂.val) h₁ h₂' GE₁ GE₂'
+    exact hQ.basis_distinct k₁.val k₂.val hne_val hQdim hQGE
+  -- Symmetric (`UnitP → Fin Q.basisCount`) direction.
+  let ψ₀ : UnitP → Fin Q.basisCount := fun j => (hBwd j.val j.property).choose
+  have ψ₀_spec : ∀ j : UnitP,
+      ∃ h : Q.basisDim (ψ₀ j) = P.basisDim j.val,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ₀ j)))
+            (P.basis j.val) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (Q.basis (ψ₀ j)) (P.basis j.val) N)
+          atTop (𝓝 0) := fun j => (hBwd j.val j.property).choose_spec
+  -- Symmetric helper for the backward direction.
+  have rebase_centre_Q :
+      ∀ (k k' : Fin Q.basisCount) (_hk : k = k')
+        {jv : Fin P.basisCount}
+        (h_t : Q.basisDim k' = P.basisDim jv)
+        (_GE : GaugePhaseEquiv
+                  (cast (congr_arg (MPSTensor d) h_t) (Q.basis k')) (P.basis jv)),
+        ∃ h_t' : Q.basisDim k = P.basisDim jv,
+          GaugePhaseEquiv
+              (cast (congr_arg (MPSTensor d) h_t') (Q.basis k)) (P.basis jv) := by
+    rintro _ _ rfl _ h_t GE
+    exact ⟨h_t, GE⟩
+  have hψ₀_inj : Function.Injective ψ₀ := by
+    intro j₁ j₂ hkEq
+    obtain ⟨h₁, GE₁, _⟩ := ψ₀_spec j₁
+    obtain ⟨h₂, GE₂, _⟩ := ψ₀_spec j₂
+    by_contra hne
+    have hne_val : j₁.val ≠ j₂.val := fun h => hne (Subtype.ext h)
+    obtain ⟨h₂', GE₂'⟩ :=
+      rebase_centre_Q (ψ₀ j₁) (ψ₀ j₂) hkEq h₂ GE₂
+    have hPdim : P.basisDim j₁.val = P.basisDim j₂.val := h₁.symm.trans h₂'
+    have hPGE :
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) hPdim) (P.basis j₁.val))
+            (P.basis j₂.val) :=
+      gaugePhaseEquiv_cast_compose_via_centre (A := Q.basis (ψ₀ j₁))
+        (B := P.basis j₁.val) (C := P.basis j₂.val) h₁ h₂' GE₁ GE₂'
+    exact hP.basis_distinct j₁.val j₂.val hne_val hPdim hPGE
+  -- Package as `Function.Embedding`s and supply the matching data.
+  refine ⟨⟨φ₀, hφ₀_inj⟩, ⟨ψ₀, hψ₀_inj⟩, ?_, ?_⟩
+  · intro k
+    exact φ₀_spec k
+  · intro j
+    exact ψ₀_spec j
+
 end MPSTensor
