@@ -111,7 +111,6 @@ strong induction.
 -/
 
 open scoped Matrix BigOperators
-open Filter Topology
 
 namespace MPSTensor
 
