@@ -34,6 +34,10 @@ not imported here.
   eventual linear independence for two paper-faithful BNT canonical forms
   with mutually vanishing cross-overlaps (CPSV16 corollary Lem1,
   lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
+* `IsBNTCanonicalForm.norm_coeff_le_copies` — the structural-field reading
+  of the multiplicity bound (CPSV16 line 246 via `weight_norm_le_one`).
+* `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the existential
+  unit-modulus witness re-exposed at the API layer (CPSV16 line 246).
 
 ## References
 
@@ -181,6 +185,31 @@ lemma combined_family_eventually_li
     (hB_self := hQ.basis_normalized_self_overlap)
     (hB_off := fun _ _ hk => hQ.cross_overlap_basis_tendsto_zero hk)
     (hAB := hAB)
+
+/-- **Coefficient norm bound under the canonical-form line-246
+normalization.**
+
+A direct consequence of the structural field `weight_norm_le_one`
+(CPSV16 §II.A line 246): under the paper-faithful canonical form, the
+sector coefficient `P.coeff N j = ∑_q (P.weight j q)^N` is bounded in
+modulus by the multiplicity `P.copies j`.  This is the structural-field
+reading of the prior explicit-hypothesis lemma
+`SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one`. -/
+lemma norm_coeff_le_copies
+    (h : IsBNTCanonicalForm P) (N : ℕ) (j : Fin P.basisCount) :
+    ‖P.coeff N j‖ ≤ (P.copies j : ℝ) :=
+  P.norm_coeff_le_copies_of_norm_weight_le_one (N := N) (j := j)
+    (hWeightLe := h.weight_norm_le_one j)
+
+/-- **Unit-modulus weight witness from the canonical-form line-246
+normalization.**
+
+Re-exposes the structural field `weight_unit_exists` (CPSV16 §II.A
+line 246) at the API layer for downstream callers that want to extract a
+unit-modulus weight without depending on the structure layout. -/
+lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
+    ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
+      ‖P.weight j q‖ = 1 := h.weight_unit_exists
 
 end IsBNTCanonicalForm
 
