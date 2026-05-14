@@ -1081,3 +1081,85 @@ of \cite[\S~II, lines~1184--1188]{Cirac2017MPDO_AnnPhys}.
 	after absorbing the bond-dimension coercion.  Dispatch to
 	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector}.
 \end{proof}
+
+\section{Ces\`aro non-decay and dominant-block coefficient}
+\label{sec:paper_bnt_cesaro_nondecay}
+
+This section formalizes the analytic input that lets us replace the
+residual ``dominant coefficient does not asymptotically vanish'' hypothesis
+on the dominant-pair matching of
+\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys} by a derived lemma.
+The reduction is to a pure-analytic statement: a finite sum of $N$-th
+powers of complex numbers in the closed unit disk, with at least one
+unit-modulus summand, cannot tend to zero.
+
+The proof is the elementary Ces\`aro-mean identity:
+\(
+M_T := T^{-1} \sum_{N=0}^{T-1} |c(N)|^2
+     = \sum_{p,q} T^{-1} \sum_{N=0}^{T-1} (\mu_p \overline{\mu_q})^N
+\)
+splits into:
+\(T^{-1}\) times the partial geometric sum for each pair $(p, q)$; each
+pair with $\mu_p \overline{\mu_q} = 1$ contributes the limit $1$, while
+each pair with $\mu_p \overline{\mu_q} \neq 1$ contributes the limit
+$0$ (since $|(z^T - 1)/(z - 1)| \leq 2/|z - 1|$ divided by $T \to 0$).
+The diagonal pair $(q^*, q^*)$ at a unit-modulus index $q^*$ contributes,
+so $M_T \to \#\{\text{matching pairs}\} \geq 1 > 0$, contradicting
+$c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
+
+\begin{lemma}[Ces\`aro non-decay of a finite power sum]%
+	\label{lem:paper_bnt_cesaro_nondecay}
+	\lean{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}
+	\leanok
+	Let $\mu : \{0, \dotsc, r-1\} \to \mathbb{C}$ satisfy $|\mu_q| \leq 1$
+	for every $q$ and let some $q^*$ satisfy $|\mu_{q^*}| = 1$.  Then the
+	sequence $N \mapsto \sum_{q=0}^{r-1} (\mu_q)^N$ does not tend to $0$
+	as $N \to \infty$.  This is the analytic content of the dominant-block
+	non-decay step at
+	\cite[\S~II.A, lines~246, 1181--1188]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+	Ces\`aro-mean argument as described above; see the module docstring
+	of \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/CesaroNonDecay.lean}
+	for the full elementary proof.
+\end{proof}
+
+\begin{lemma}[Dominant-block coefficient non-decay]%
+	\label{lem:paper_bnt_coeff_dominant_not_tendsto_zero}
+	\lean{MPSTensor.IsBNTCanonicalForm.coeff_dominant_not_tendsto_zero}
+	\leanok
+	\uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
+	Let \(P\) be a sector decomposition carrying a paper-faithful BNT
+	canonical form with \(P.\texttt{basisCount} > 0\).  Then the dominant
+	sector's coefficient
+	\(c_{0}(N) = \sum_q (P.\texttt{weight}\,\langle 0,\,h\rangle\,q)^N\)
+	does not tend to \(0\) as \(N \to \infty\).
+
+	This is the structural-field reading of the CPSV16 \S~II.A line~246
+	normalization (every weight has modulus \(\leq 1\), and at index \(0\)
+	some copy has unit modulus); the proof reduces directly to
+	Lemma~\ref{lem:paper_bnt_cesaro_nondecay} with the dominant-block
+	weight family.
+\end{lemma}
+
+\begin{proof}\leanok
+	Apply Lemma~\ref{lem:paper_bnt_cesaro_nondecay} to the family
+	\(\mu := P.\texttt{weight}\,\langle 0,\,h\rangle\), feeding in the
+	two structural fields of \texttt{IsBNTCanonicalForm} at sector~\(0\):
+	\texttt{weight\_norm\_le\_one} supplies the modulus bound and
+	\texttt{weight\_unit\_at\_dominant\_block} supplies the unit-modulus
+	witness.
+\end{proof}
+
+\begin{remark}
+	Consuming this lemma inside \texttt{exists\_dominant\_match\_of\_sameMPV}
+	(\texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/DominantMatch.lean})
+	eliminates the prior explicit
+	\(\lnot \texttt{Tendsto}\,(P.\texttt{coeff}\,\cdot\,\langle 0,\,h\rangle)\,\texttt{atTop}\,(\nh\,0)\)
+	parameter from the dominant-pair matching theorem of
+	\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys}.  After this
+	cleanup the matching theorem reads off purely from the strengthened
+	\texttt{IsBNTCanonicalForm} predicate plus the equal-MPV hypothesis,
+	with no analytic side conditions exposed at the call site.
+\end{remark}

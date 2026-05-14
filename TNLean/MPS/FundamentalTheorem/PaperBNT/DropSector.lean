@@ -220,13 +220,20 @@ Every field of the paper-faithful canonical-form predicate transfers from
   decomposition.  In the CPSV16 §II `II_cor2` induction this is the
   normalization step that re-orients the next-dominant block; the
   `hUnitRem` hypothesis below records that step abstractly.
+* `weight_unit_at_dominant_block` (CPSV16 line 246, dominant-block
+  reading) is the index-0 specialisation of `weight_unit_exists`; the
+  `hUnitDomRem` hypothesis records the index-0 witness on the remaining
+  decomposition, again recording the relabelling step abstractly.
 
 This is the foundational lemma for the CPSV16 §II `II_cor2` induction step
 (lines 1172–1192). -/
 def dropSector
     (hP : IsBNTCanonicalForm P) (h : P.basisCount = n + 1) (i₀ : Fin (n + 1))
     (hUnitRem : ∃ (j : Fin n) (q : Fin ((P.dropSector h i₀).copies j)),
-      ‖(P.dropSector h i₀).weight j q‖ = 1) :
+      ‖(P.dropSector h i₀).weight j q‖ = 1)
+    (hUnitDomRem : ∀ (hpos : 0 < n),
+      ∃ q : Fin ((P.dropSector h i₀).copies ⟨0, hpos⟩),
+        ‖(P.dropSector h i₀).weight ⟨0, hpos⟩ q‖ = 1) :
     IsBNTCanonicalForm (P.dropSector h i₀) where
   basis_dim_pos _ := hP.basis_dim_pos _
   basis_injective _ := hP.basis_injective _
@@ -284,6 +291,7 @@ def dropSector
     simpa [SectorDecomposition.dropSector_weight,
            SectorDecomposition.dropSector_copies] using this _
   weight_unit_exists := hUnitRem
+  weight_unit_at_dominant_block := hUnitDomRem
 
 end IsBNTCanonicalForm
 
