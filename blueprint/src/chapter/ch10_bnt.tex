@@ -765,6 +765,58 @@ factorization is assumed.
 	criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
 
+\begin{lemma}[Sector coefficient bound from the line-246 structural field]%
+	\label{lem:paper_bnt_norm_coeff_le_copies_struct}
+	\lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
+	\leanok
+	\uses{def:paper_bnt_cf, lem:paper_bnt_norm_coeff_le_copies}
+	Under the strengthened paper-faithful canonical form, the structural
+	field \texttt{weight\_norm\_le\_one} (CPSV16 \S II.A line~246) yields
+	directly
+	\[
+		\lVert P.\operatorname{coeff}\,N\,j \rVert \;\le\; r_j
+	\]
+	for every \(N\) and basis index~\(j\), without an additional
+	explicit modulus-bound hypothesis at the call site.
+\end{lemma}
+
+\begin{proof}\leanok
+	Feed the structural field \texttt{weight\_norm\_le\_one} into
+	Lemma~\ref{lem:paper_bnt_norm_coeff_le_copies}.
+\end{proof}
+
+\begin{lemma}[Unit-modulus weight witness from the line-246 structural field]%
+	\label{lem:paper_bnt_weight_unit_exists_of_struct}
+	\lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
+	\leanok
+	\uses{def:paper_bnt_cf}
+	Re-exposes the structural field \texttt{weight\_unit\_exists}
+	(CPSV16 \S II.A line~246) at the API layer: under the strengthened
+	paper-faithful canonical form, there exist indices~\((j_*, q_*)\) with
+	\(\lVert P.\operatorname{weight}\,j_*\,q_* \rVert = 1\).
+\end{lemma}
+
+\begin{proof}\leanok
+	Direct projection onto the \texttt{weight\_unit\_exists} field.
+\end{proof}
+
+\begin{example}[\(C \oplus (1/2)C\), unequal-modulus admissibility]%
+	\label{ex:paper_bnt_halvedDecomp}
+	\lean{MPSTensor.PaperBNT.Examples.halvedDecomp}
+	\leanok
+	\uses{def:paper_bnt_cf}
+	The single-sector two-copy decomposition with raw weights
+	\((1, 1/2)\) demonstrates that the strengthened
+	\texttt{IsBNTCanonicalForm} admits unequal-modulus copies:
+	\texttt{weight\_norm\_le\_one} holds because
+	\(\lVert 1 \rVert \le 1\) and \(\lVert 1/2 \rVert = 1/2 \le 1\),
+	and \texttt{weight\_unit\_exists} is witnessed by the first
+	copy with weight~\(1\).  This is the CPSV16 \S II.A line~246
+	convention in positive form, reifying the audit
+	\(C \oplus (1/2)C\) counter-example of
+	\texttt{audits/2026-05-13\_cpsv16\_paper\_bnt\_phase\_1\_multiplicity\_audit.md}.
+\end{example}
+
 \section{Dropping a BNT sector}
 \label{sec:paper_bnt_drop_sector}
 
