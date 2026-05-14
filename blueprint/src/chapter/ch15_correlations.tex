@@ -123,7 +123,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \begin{remark}[Spectral hypothesis and the spectral gap]%
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
-      thm:spectral_gap_irr_tp, thm:spectral_gap_wielandt}
+        thm:spectral_gap_irr_tp, thm:spectral_gap_wielandt}
     The hypothesis ``$|\lambda_2| < 1$'' in
     Theorem~\ref{thm:correlator_exponential_bound} is the source-paper
     \emph{spectral gap} condition for the transfer map $\E_A$.
@@ -178,7 +178,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.exponential_convergence_of_primitive}
     \leanok
     \uses{thm:primitive_compl_lt_one, def:fixed_point_proj,
-          thm:primitive_overlap}
+        thm:primitive_overlap}
     Fix an injective, trace-preserving MPS tensor $A$ with positive
     definite fixed point $\rho$.
     Let
@@ -209,7 +209,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.correlation_length_bound}
     \leanok
     \uses{def:correlation_length, thm:exponential_convergence_primitive,
-          def:injective}
+        def:injective}
     For an injective trace-preserving MPS tensor, there exist
     $C > 0$ and $\xi > 0$ such that for all $n \ge 0$ and all
     traceless $X \in \MN{D}$ (i.e.\ $\tr(X) = 0$),
@@ -252,7 +252,7 @@ and rates for the single-tensor transfer map $\E_A$.
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
     \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates,
-          def:correlation_length, thm:correlator_exponential_bound}
+        def:correlation_length, thm:correlator_exponential_bound}
     When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
     (Definition~\ref{def:parent_hamiltonian}) whose ground state is the
     matrix product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}),
@@ -359,7 +359,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible,
-          thm:form_II}
+        thm:form_II}
     By Theorem~\ref{thm:rfp_nt_structural_of_left_canonical}, the tensor $A$
     is injective. Therefore its transfer map is irreducible, and hence $A$ is
     irreducible as a tensor. Applying Theorem~\ref{thm:form_II} gives a
@@ -373,7 +373,7 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isRFP_injective}
     \leanok
     \uses{def:is_rfp, def:injective, def:fixed_point_proj,
-          thm:exponential_convergence_primitive}
+        thm:exponential_convergence_primitive}
     Let $A$ be an injective left-canonical RFP tensor with positive-definite
     fixed point $\rho$ of the transfer map $\E_A$. Then
     $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)}\,\rho$
@@ -393,8 +393,8 @@ and rates for the single-tensor transfer map $\E_A$.
     \lean{MPSTensor.rfp_nt_structural_full}
     \leanok
     \uses{thm:rfp_nt_structural_of_left_canonical,
-          thm:rfp_nt_cfii_diagonal_fixed_point,
-          thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
+        thm:rfp_nt_cfii_diagonal_fixed_point,
+        thm:transferMap_eq_fixedPointProj_of_isRFP_injective}
     A normal tensor $A$ in canonical form~II that is a renormalization fixed
     point admits a decomposition $A^i = X \Lambda U^i X^{-1}$, where
     $\Lambda$ is diagonal positive and the family $U = (U^i)$ is an
@@ -408,12 +408,44 @@ and rates for the single-tensor transfer map $\E_A$.
     transports the decomposition back through the conjugation.
 \end{proof}
 
+\begin{theorem}[Canonical-form blocks are injective]\label{thm:rfp_cf_structural}
+    \lean{MPSTensor.rfp_cf_structural}
+    \leanok
+    \uses{def:is_canonical_form, def:injective}
+    For a family of tensors in canonical form, every block is injective.
+    This is a direct projection of the injectivity field of the canonical-form
+    predicate; see \cite[Section~2.3]{Cirac2017Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    Immediate from the \texttt{block\_injective} field of
+    \texttt{IsCanonicalForm}.
+\end{proof}
+
+\begin{theorem}[BNT basis blocks are injective]\label{thm:rfp_bnt_structural}
+    \lean{MPSTensor.rfp_bnt_structural}
+    \leanok
+    \uses{def:bnt, def:injective}
+    Let $P$ be a sector decomposition in BNT canonical form.
+    Then every basis block $P_j$ is injective as an MPS tensor.
+    This is the basis-block injectivity part of
+    \cite[Section~III, Theorem~3]{Cirac2017Matrix}
+    (CPSV16 \texttt{thm:charact-MPS}, arXiv:1606.00608 lines 543--555;
+    basis-block normality established at lines 271--301 and 317--344).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:rfp_cf_structural}
+    Direct projection of the \texttt{basis\_injective} field of
+    \texttt{IsBNTCanonicalForm}.  The result holds for arbitrary copy
+    multiplicities, since the statement concerns only BNT basis blocks and
+    not copy weights.
+\end{proof}
+
 \begin{theorem}[RG flow convergence for canonical-form tensors]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
     \leanok
     \uses{def:is_canonical_form, def:transfer_map, def:fixed_point_proj,
-          thm:exponential_convergence_primitive}
+        thm:exponential_convergence_primitive}
     For a tensor in canonical form with blocks $(A_k)$ and weights $(\mu_k)$,
     the iterated blocking $\E_{A_k}^{2^n}$ converges pointwise to an
     idempotent linear map $\E_\infty$ as $n\to\infty$.
