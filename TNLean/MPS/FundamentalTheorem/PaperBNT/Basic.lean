@@ -22,17 +22,23 @@ a `SectorDecomposition`.  It records:
 * **eventual linear independence** of basis MPV states (`HasBNTSectorData`);
 * **block distinctness** in the cast-compatible gauge-phase shape, ruling out
   gauge-phase equivalence between distinct basis blocks of equal bond
-  dimension.
+  dimension;
+* the CPSV16 §II.A line-246 **normalization convention** on the raw sector
+  weights `μ_{j,q}`: `|μ_{j,q}| ≤ 1` and at least one of them equals one
+  (lines 246 and 1244).
 
 Crucially, the structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
 `eq:II_ABasicTensors` (line 286) and CPSV21 Definition 4.3 (lines 1846–1884)
 use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not
 require `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order
-on the moduli of distinct BNT basis elements.  See the audit memo
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` for the
-counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that motivated
-removing the equal-modulus layer from this core predicate.
+on the moduli of distinct BNT basis elements.  The audit memo
+`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` collects
+the counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that
+motivate keeping the equal-modulus layer out of the core predicate; all of
+them are admitted by the line-246 normalization fields below (every weight
+has modulus `≤ 1`, and at least one copy of one basis sector has unit
+modulus).
 
 An optional equal-modulus weight layer is provided separately as
 `HasEqualModulusWeightLayer` in `PaperBNT/EqualModulus.lean`.  Some
@@ -120,6 +126,27 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
     ∀ h : P.basisDim j = P.basisDim k,
       ¬ GaugePhaseEquiv
           (cast (congr_arg (MPSTensor d) h) (P.basis j)) (P.basis k)
+  /-- **CPSV16 line-246 normalization, modulus bound.**  Every raw sector
+  weight has modulus at most one.  CPSV16 §II.A line 246: "we can always
+  choose `|μ_k| ≤ 1`"; reinvoked in the body of the FT proof at line 1244
+  ("the assumed normalization `|μ_{jq}| ≤ 1` … implies that `𝔼^N` converges").
+  This convention admits all counter-examples of the prior audit
+  (`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md`):
+  `C ⊕ D` (weights `(1, 1)`), `C ⊕ (-C)` (weights `(1, -1)`),
+  `C ⊕ (1/2)C` (weights `(1, 1/2)`), and `C ⊕ (-C) ⊕ (1/2)C`. -/
+  weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
+    ‖P.weight j q‖ ≤ 1
+  /-- **CPSV16 line-246 normalization, unit-witness existence.**  At least
+  one copy of one basis sector has unit-modulus weight.  CPSV16 §II.A
+  line 246: "at least one of them equals one, something which we will
+  assume from now on"; used in the FT proof at line 1244 (the assumed
+  normalization makes the transfer-matrix-power sequence converge, picking
+  out the dominant block).  This is the existential form of the paper's
+  convention; relabelling sectors so the unit-modulus copy sits in
+  sector 0 specialises it to the index-0 reading used in the FT
+  dominant-block projection (CPSV16 lines 1181–1188). -/
+  weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
+    ‖P.weight j q‖ = 1
 
 namespace IsBNTCanonicalForm
 
