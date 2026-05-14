@@ -236,6 +236,7 @@ import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RenormalizedNonCancella
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.CrossFamilyRateDecay
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition.RateQuantifiedDischarge
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
+import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DropSector
 import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
 import TNLean.MPS.FundamentalTheorem.PaperBNT.NewtonGirard
