@@ -39,6 +39,10 @@ not imported here.
   of the multiplicity bound (CPSV16 line 246 via `weight_norm_le_one`).
 * `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the existential
   unit-modulus witness re-exposed at the API layer (CPSV16 line 246).
+* `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block` — the
+  Cesàro non-decay reading of CPSV16 line 246 + line 1244, parametrised
+  by the unit-modulus block witness (issue #1725 Phase A; audit memo
+  `/tmp/phase_4c_drift_audit_2026-05-14.md`).
 
 ## References
 
@@ -212,64 +216,62 @@ lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
     ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
       ‖P.weight j q‖ = 1 := h.weight_unit_exists
 
-/-- **Dominant-block coefficient non-decay.**
+/-- **CPSV16 line 246 + line 1244 generalization.**
 
-Under the CPSV16 §II.A line-246 normalization carried by
-`IsBNTCanonicalForm` (every weight has modulus `≤ 1`, and at index `0`
-some copy has unit modulus — `weight_norm_le_one` and
-`weight_unit_at_dominant_block`), the dominant-sector coefficient
-`P.coeff N ⟨0, hP_pos⟩ = ∑_q (P.weight ⟨0, hP_pos⟩ q)^N` does **not**
-tend to `0` as `N → ∞`.
+For any sector `j₀ : Fin P.basisCount` that contains at least one
+unit-modulus weight, the power-sum coefficient
+`P.coeff N j₀ = ∑_q (P.weight j₀ q)^N` does **not** tend to `0` as
+`N → ∞`.
 
-This is the structural-field replacement of the residual
-`hP_dom_coeff_not_tendsto_zero` hypothesis previously carried by
-`exists_dominant_match_of_sameMPV` in `PaperBNT/DominantMatch.lean`.
-Its proof reduces directly to the Cesàro non-decay analytic lemma
-`MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus`:
-both hypotheses of that lemma (`‖μ q‖ ≤ 1` and the unit-modulus witness
-in the dominant block) are exactly the two structural fields of
-`IsBNTCanonicalForm` at sector index `0`.
+The unit-modulus witness is supplied externally because the structural
+field `IsBNTCanonicalForm.weight_unit_exists` only asserts the
+**global** existence of some `(j, q)` with unit-modulus weight (CPSV16
+§II.A line 246, verbatim); it does not pin the witness to a specific
+sector.  Callers that have an arrow-specific unit-modulus witness (for
+example from a downstream matching argument that has already isolated a
+sector) pass it in here.
 
-Paper anchor: CPSV16 §II.A lines 1181–1188.  The body of the FT proof
-takes the assumed line-246 normalization and reads off non-decay of the
-dominant-block coefficient power-sum; this lemma formalises that
-reading. -/
-lemma coeff_dominant_not_tendsto_zero
-    (h : IsBNTCanonicalForm P) (hP_pos : 0 < P.basisCount) :
-    ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0) := by
-  -- Extract the dominant-block weight family and its CPSV16 §II.A
-  -- line-246 properties at sector `0`.
-  have h_le : ∀ q : Fin (P.copies ⟨0, hP_pos⟩),
-      ‖P.weight ⟨0, hP_pos⟩ q‖ ≤ 1 := h.weight_norm_le_one ⟨0, hP_pos⟩
-  have h_unit : ∃ q : Fin (P.copies ⟨0, hP_pos⟩),
-      ‖P.weight ⟨0, hP_pos⟩ q‖ = 1 :=
-    h.weight_unit_at_dominant_block hP_pos
+Paper anchor: CPSV16 §II.A line 246 (the "at least one `|μ_k| = 1`"
+convention) combined with line 1244 (the assumed normalization makes
+the transfer-matrix-power sequence converge); proof via Cesàro
+non-decay (`PaperBNT/CesaroNonDecay.lean`,
+`sum_pow_not_tendsto_zero_of_unit_modulus`, CPSV16 lines 1158–1167). -/
+theorem coeff_not_tendsto_zero_at_unit_block
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
+    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
+    ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) := by
+  -- Extract the unit-block weight family and its CPSV16 §II.A
+  -- line-246 properties at sector `j₀`.
+  have h_le : ∀ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ ≤ 1 :=
+    h.weight_norm_le_one j₀
   -- Apply the Cesàro non-decay analytic lemma.
   have hAnal := CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus
-    (P.weight ⟨0, hP_pos⟩) h_le h_unit
-  -- `P.coeff N ⟨0, hP_pos⟩ = ∑ q, (P.weight ⟨0, hP_pos⟩ q)^N` is `rfl`.
+    (P.weight j₀) h_le hUnit
+  -- `P.coeff N j₀ = ∑ q, (P.weight j₀ q)^N` is `rfl`.
   intro hTend
-  apply hAnal
-  exact hTend
+  exact hAnal hTend
 
-/-- **Thermodynamic-limit non-vanishing of the dominant coefficient.**
+/-- **Thermodynamic-limit non-vanishing of a unit-block coefficient.**
 
-A user-facing alias for `coeff_dominant_not_tendsto_zero`, named in the
-language of the audit memo
+A user-facing alias for `coeff_not_tendsto_zero_at_unit_block`, named
+in the language of the audit memo
 `thermodynamic_limit_normalization_audit_2026-05-14` §Q-C: the
-CPSV16 §II.A line-246 normalization picks out the dominant block whose
-power-sum coefficient does **not** vanish in the thermodynamic limit.
+CPSV16 §II.A line-246 normalization picks out the unit-modulus block(s)
+whose power-sum coefficient does **not** vanish in the thermodynamic
+limit.
 
 This is the coefficient form of the audit's "thermodynamic-limit
-non-vanishing" condition.  A self-overlap form
-`limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication
-recorded by the audit's Q-C equivalence (forward direction), which we
-do not formalise here — the coefficient form is the operational input
-to the FT proof; the self-overlap reading is a paraphrase. -/
+non-vanishing" condition, parametrised by the unit-modulus block
+witness supplied by the caller.  A self-overlap form
+`limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication recorded by
+the audit's Q-C equivalence (forward direction), which we do not
+formalise here — the coefficient form is the operational input to the
+FT proof; the self-overlap reading is a paraphrase. -/
 lemma thermodynamic_limit_nonvanishing
-    (h : IsBNTCanonicalForm P) (hP_pos : 0 < P.basisCount) :
-    ¬ Tendsto (fun N : ℕ => P.coeff N ⟨0, hP_pos⟩) atTop (𝓝 0) :=
-  h.coeff_dominant_not_tendsto_zero hP_pos
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
+    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
+    ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
+  h.coeff_not_tendsto_zero_at_unit_block j₀ hUnit
 
 end IsBNTCanonicalForm
 

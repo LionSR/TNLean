@@ -1082,16 +1082,25 @@ of \cite[\S~II, lines~1184--1188]{Cirac2017MPDO_AnnPhys}.
 	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector}.
 \end{proof}
 
-\section{Ces\`aro non-decay and dominant-block coefficient}
+\section{Ces\`aro non-decay and unit-block coefficient}
 \label{sec:paper_bnt_cesaro_nondecay}
 
-This section formalizes the analytic input that lets us replace the
-residual ``dominant coefficient does not asymptotically vanish'' hypothesis
-on the dominant-pair matching of
-\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys} by a derived lemma.
+This section formalizes the analytic input that supplies, for any
+sector \(j_0\) carrying a unit-modulus weight, the
+``sector-\(j_0\) coefficient does not asymptotically vanish''
+ingredient used in the matching step of
+\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys}.
 The reduction is to a pure-analytic statement: a finite sum of $N$-th
 powers of complex numbers in the closed unit disk, with at least one
 unit-modulus summand, cannot tend to zero.
+
+Issue~\#1725 Phase~A parametrised the lemma below (and its consumer,
+\texttt{exists\_unit\_block\_match\_of\_sameMPV}) by an externally
+supplied unit-modulus block witness, faithfully mirroring the
+\emph{global} character of the CPSV16 line~246 normalization (audit memo
+\texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} §Q-C).  A previous
+design carried a structural field pinning the unit-modulus copy to
+sector index~0; that field was retired as an engineering artifact.
 
 The proof is the elementary Ces\`aro-mean identity:
 \(
@@ -1114,7 +1123,7 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 	Let $\mu : \{0, \dotsc, r-1\} \to \mathbb{C}$ satisfy $|\mu_q| \leq 1$
 	for every $q$ and let some $q^*$ satisfy $|\mu_{q^*}| = 1$.  Then the
 	sequence $N \mapsto \sum_{q=0}^{r-1} (\mu_q)^N$ does not tend to $0$
-	as $N \to \infty$.  This is the analytic content of the dominant-block
+	as $N \to \infty$.  This is the analytic content of the unit-block
 	non-decay step at
 	\cite[\S~II.A, lines~246, 1181--1188]{Cirac2017MPDO_AnnPhys}.
 \end{lemma}
@@ -1125,43 +1134,52 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 	for the full elementary proof.
 \end{proof}
 
-\begin{lemma}[Dominant-block coefficient non-decay]%
-	\label{lem:paper_bnt_coeff_dominant_not_tendsto_zero}
-	\lean{MPSTensor.IsBNTCanonicalForm.coeff_dominant_not_tendsto_zero}
+\begin{lemma}[Unit-block coefficient non-decay]%
+	\label{lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+	\lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block}
 	\leanok
 	\uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
 	Let \(P\) be a sector decomposition carrying a paper-faithful BNT
-	canonical form with \(P.\texttt{basisCount} > 0\).  Then the dominant
-	sector's coefficient
-	\(c_{0}(N) = \sum_q (P.\texttt{weight}\,\langle 0,\,h\rangle\,q)^N\)
-	does not tend to \(0\) as \(N \to \infty\).
+	canonical form and let \(j_0 : \mathrm{Fin}\,P.\texttt{basisCount}\) be
+	any sector index such that some copy of sector \(j_0\) carries a
+	unit-modulus weight, i.e.\ there exists
+	\(q\) with \(\lVert P.\texttt{weight}\,j_0\,q\rVert = 1\).  Then the
+	sector-\(j_0\) coefficient
+	\(c_{j_0}(N) = \sum_q (P.\texttt{weight}\,j_0\,q)^N\) does not tend to
+	\(0\) as \(N \to \infty\).
 
-	This is the structural-field reading of the CPSV16 \S~II.A line~246
-	normalization (every weight has modulus \(\leq 1\), and at index \(0\)
-	some copy has unit modulus); the proof reduces directly to
-	Lemma~\ref{lem:paper_bnt_cesaro_nondecay} with the dominant-block
-	weight family.
+	This is the paper-parametrised reading of the CPSV16 \S~II.A line~246
+	+ line~1244 normalization.  The unit-modulus witness is supplied
+	externally (as the hypothesis above) because CPSV16 line~246 is a
+	\emph{global} statement
+	(``at least one of them equals one'' over the two-layer index
+	\((j, q)\)) and does not pin the witness to a specific sector; the
+	structural field
+	\texttt{IsBNTCanonicalForm.weight\_unit\_exists}
+	carries only that global existential.
 \end{lemma}
 
 \begin{proof}\leanok
 	Apply Lemma~\ref{lem:paper_bnt_cesaro_nondecay} to the family
-	\(\mu := P.\texttt{weight}\,\langle 0,\,h\rangle\), feeding in the
-	two structural fields of \texttt{IsBNTCanonicalForm} at sector~\(0\):
-	\texttt{weight\_norm\_le\_one} supplies the modulus bound and
-	\texttt{weight\_unit\_at\_dominant\_block} supplies the unit-modulus
-	witness.
+	\(\mu := P.\texttt{weight}\,j_0\), feeding in the structural field
+	\texttt{weight\_norm\_le\_one} of \texttt{IsBNTCanonicalForm}
+	(modulus bound) and the supplied per-sector unit-modulus existential
+	\texttt{hUnit}.
 \end{proof}
 
 \begin{remark}
-	Consuming this lemma inside \texttt{exists\_dominant\_match\_of\_sameMPV}
+	Consuming this lemma inside
+	\texttt{exists\_unit\_block\_match\_of\_sameMPV}
 	(\texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/DominantMatch.lean})
-	eliminates the prior explicit
-	\(\lnot \texttt{Tendsto}\,(P.\texttt{coeff}\,\cdot\,\langle 0,\,h\rangle)\,\texttt{atTop}\,(\nh\,0)\)
-	parameter from the dominant-pair matching theorem of
-	\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys}.  After this
-	cleanup the matching theorem reads off purely from the strengthened
-	\texttt{IsBNTCanonicalForm} predicate plus the equal-MPV hypothesis,
-	with no analytic side conditions exposed at the call site.
+	supplies the
+	\(\lnot \texttt{Tendsto}\,(P.\texttt{coeff}\,\cdot\,j_0)\,\texttt{atTop}\,(\nh\,0)\)
+	internal step of the matching theorem of
+	\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys}.  Issue~\#1725
+	Phase~A retired an auxiliary dominant-block structural field that
+	previously pinned \(j_0 = 0\); the matching theorem now takes the
+	unit-block sector and witness as explicit parameters, faithfully
+	mirroring the global character of CPSV16 line~246 (audit memo
+	\texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} §Q-C).
 \end{remark}
 
 \subsection{Matched-sector coefficient identity and weight multiset equality}
