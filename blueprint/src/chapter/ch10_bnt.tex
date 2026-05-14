@@ -1526,3 +1526,92 @@ two ingredients of that decay supplied by the matched-pair data alone.
 	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_matched} to the
 	freshly matched index.
 \end{remark}
+
+\section{Phase B-\(\alpha\): paper-faithful strong existential matching}
+
+This section records the paper-faithful Phase~B-\(\alpha\) lifting of
+the weak existential \(\exists j,\exists k\) of
+\texttt{PaperBNT/WeakExistential.lean} to the strong existential
+\(\forall k,\exists j\) matching theorem on the original
+(un-dropped) pair of BNT canonical forms.  No recursion, no
+\texttt{dropSector} usage, no combined-LI obligation on a partial
+union: the result is a single \(\forall k,\exists j\) existential
+statement on the original \((P, Q)\), iterated externally over each
+\(Q\)-side unit-block sector.
+
+The unit-block restriction on \(k\) is paper-faithful:
+\cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} records the modulus-one
+hypothesis as a single \emph{global} existential over the two-layer
+\((j, q)\) index of the BNT display, not a per-block one.  Sectors
+whose weights all have modulus strictly less than one have
+coefficients \(Q.\texttt{coeff}\,N\,k = \sum_q (Q.\texttt{weight}\,k\,q)^N\)
+that decay exponentially to zero, contribute nothing to the
+thermodynamic state, and are not constrained by the matching
+(\cite[\S~II.C, lines~1244--1248]{Cirac2017MPDO_AnnPhys} returns to
+this point via the \(\mathbb{E}^N\)-fixed-point characterisation).
+The downstream Phase~B-\(\beta\) bijective-matching layer will apply
+this theorem twice (with \((P, Q)\) swapped) to derive the cardinality
+identity and the per-pair bijection / gauge data on the unit-block
+subset.
+
+\begin{theorem}[Strong existential matching at unit-block sectors]
+	\label{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+	\lean{MPSTensor.forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+	\leanok
+	Let \(P, Q : \texttt{SectorDecomposition}\,d\) be two
+	\texttt{IsBNTCanonicalForm} BNT canonical forms with
+	\(\texttt{SameMPV}_2\,P.\texttt{toTensor}\,Q.\texttt{toTensor}\).
+	For every sector \(k : \texttt{Fin}\,Q.\texttt{basisCount}\) that
+	carries at least one unit-modulus weight, there exists a sector
+	\(j : \texttt{Fin}\,P.\texttt{basisCount}\) with matched bond
+	dimension \(h : P.\texttt{basisDim}\,j = Q.\texttt{basisDim}\,k\),
+	a gauge-phase equivalence
+	\(\texttt{GaugePhaseEquiv}\,(\texttt{cast}\,h\,(P.\texttt{basis}\,j))
+		\,(Q.\texttt{basis}\,k)\)
+	on the cast-left surface, and a non-decaying cross-overlap
+	\(\lnot\,\texttt{Tendsto}\,(\lambda N,\,\texttt{mpvOverlap}\,
+		(P.\texttt{basis}\,j)\,(Q.\texttt{basis}\,k)\,N)\,\texttt{atTop}\,(\nh\,0)\).
+\end{theorem}
+
+\begin{proof}\leanok
+	The CPSV16 §II.C lines 1182--1186 Step 1 contrapositive of
+	\cite[Lemma~\texttt{Lem1}, lines 1131--1133]{Cirac2017MPDO_AnnPhys},
+	combined-LI on the \emph{full} family
+	\(\{A^{[j]}\}_j \cup \{B^{[k]}\}_k\), is iterated externally over
+	each unit-block sector \(k\).  Each iteration is discharged by
+	the unit-block matching theorem
+	\texttt{exists\_unit\_block\_match\_of\_sameMPV}
+	(\texttt{PaperBNT/DominantMatch.lean}) with the roles of \(P\) and
+	\(Q\) swapped: feed \(\texttt{hQ}, \texttt{hP}\) (in that order),
+	supply \(0 < P.\texttt{basisCount}\) from the global unit witness
+	on \(P\) (the structural field
+	\texttt{IsBNTCanonicalForm.weight\_unit\_exists}),
+	supply the unit-modulus witness on \(Q\)'s sector \(k\) (the
+	hypothesis of this theorem), and supply
+	\(\texttt{SameMPV}_2\,Q.\texttt{toTensor}\,P.\texttt{toTensor}\)
+	via the pointwise-symmetric flip
+	\(\lambda N\,\sigma,\,(\texttt{hEqual}\,N\,\sigma).\texttt{symm}\).
+	Re-orient the resulting conclusion via two purely-formal helpers:
+	symmetry of \texttt{GaugePhaseEquiv} across a bond-dim cast
+	(via \texttt{subst} on the dimension equality, then symmetry on
+	the equal-dimension surface) and symmetry of overlap convergence
+	to zero (\texttt{tendsto\_mpvOverlap\_zero\_swap}).
+\end{proof}
+
+\begin{remark}[No \texttt{dropSector}, no partial-union LI]
+	\label{rem:paper_bnt_strong_match_no_partial_li}
+	Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+	consumes \emph{only} the weak existential
+	\texttt{exists\_unit\_block\_match\_of\_sameMPV}, which itself
+	routes through the combined-LI step
+	\texttt{combined\_family\_eventually\_li} on the \emph{full}
+	\(P.\texttt{basis} \sqcup Q.\texttt{basis}\) family (the
+	\(\texttt{Lem1}\) input of CPSV16 lines 1131--1133), not on any
+	partial union \(P.\texttt{basis} \sqcup Q.\texttt{dropSector}.\texttt{basis}\).
+	This is the paper-faithful realization recommended by the audit
+	memo \texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} §8 and
+	closes the open obligation \#1722
+	(\(\texttt{hCombLI}\) on the partial union of
+	\texttt{matched\_sector\_coeff\_identity\_eventually}) at the
+	strong-matching layer.
+\end{remark}
