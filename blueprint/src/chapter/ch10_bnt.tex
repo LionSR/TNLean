@@ -893,3 +893,125 @@ following file.
 	injectivity of the reindexing lifts distinct indices on the dropped
 	decomposition to distinct indices on the original.
 \end{proof}
+
+\subsection{Matched-sector subtraction: \(\texttt{SameMPV}_2\) on dropped tails}
+
+This subsection records the algebraic cancellation step that drives the
+strong-induction route to the equal-MPV non-decaying-overlap statement
+(\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}).
+The result is: if two sector decompositions \(P\) and \(Q\) have equal
+matrix-product vectors (\(\texttt{SameMPV}_2\)) and a single basis-sector
+pair \((i_0, k_0)\) is matched via a common gauge phase \(\zeta \in
+\mathbb{C}\setminus\{0\}\) coupling the basis MPVs and the weight
+multisets, then dropping that sector from each side preserves
+\(\texttt{SameMPV}_2\).  This is the cancellation underlying the matched
+relation
+\[
+	\mu_{j,q} \;=\; \nu_{j,q} \cdot e^{i\varphi_j},
+	\qquad
+	V^{(N)}(B_k)_\sigma \;=\; e^{i\varphi_j N}\, V^{(N)}(A_{j_k})_\sigma
+\]
+of \cite[\S~II, \texttt{II\_cor2}, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
+
+\begin{lemma}[Matched-sector subtraction preserves \(\texttt{SameMPV}_2\)]%
+	\label{lem:paper_bnt_sameMPV_dropSector_dropSector}
+	\lean{MPSTensor.sameMPV_dropSector_dropSector}
+	\leanok
+	\uses{def:paper_sector_data, def:paper_bnt_cf,
+		lem:paper_bnt_drop_sector_mpv_sub}
+	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
+	canonical forms with \(P.\texttt{basisCount} = n_P + 1\),
+	\(Q.\texttt{basisCount} = n_Q + 1\), and
+	\(\texttt{SameMPV}_2(P.\texttt{toTensor}, Q.\texttt{toTensor})\).  Fix
+	a basis-sector pair
+	\((i_0, k_0) \in \{0,\dotsc,n_P\} \times \{0,\dotsc,n_Q\}\) and a
+	scalar \(\zeta \in \mathbb{C}\setminus\{0\}\).  Set
+	\(\tilde\imath_0 = \texttt{Fin.cast}\,h_P^{-1}(i_0)\) and
+	\(\tilde k_0 = \texttt{Fin.cast}\,h_Q^{-1}(k_0)\).
+	Assume:
+	\begin{enumerate}
+		\item (basis-MPV gauge relation) for every system size \(N\) and
+			configuration \(\sigma\),
+			\[
+				V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma
+				\;=\;
+				\zeta^N \cdot V^{(N)}(P.\texttt{basis}\,\tilde\imath_0)_\sigma;
+			\]
+		\item (weight-multiset matching) there exists a bijection
+			\(\tau : \texttt{Fin}\,(P.\texttt{copies}\,\tilde\imath_0) \to
+			\texttt{Fin}\,(Q.\texttt{copies}\,\tilde k_0)\) such that for
+			every copy index \(q\),
+			\[
+				Q.\texttt{weight}\,\tilde k_0\,(\tau q)
+				\;=\;
+				\zeta^{-1} \cdot P.\texttt{weight}\,\tilde\imath_0\,q.
+			\]
+	\end{enumerate}
+	Then \(\texttt{SameMPV}_2\) holds on the dropped tails:
+	\[
+		\texttt{SameMPV}_2\bigl(
+			(P.\texttt{dropSector}\,h_P\,i_0).\texttt{toTensor},\,
+			(Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{toTensor}
+		\bigr).
+	\]
+	This is the algebraic cancellation step of
+	\cite[\S~II, \texttt{II\_cor2},
+	lines 1172--1192]{Cirac2017MPDO_AnnPhys}.  The same \(\zeta\) appears
+	in both hypotheses by design: independent gauge and weight phases
+	would leave a residual \(\zeta^{2N}\) factor and the subtraction
+	would fail to cancel.
+\end{lemma}
+
+\begin{proof}\leanok
+	Fix \((N, \sigma)\).  Expand both
+	\(V^{(N)}((P.\texttt{dropSector}\,h_P\,i_0).\texttt{toTensor})_\sigma\)
+	and the analogous \(Q\)-side via
+	Lemma~\ref{lem:paper_bnt_drop_sector_mpv_sub}.  By
+	\(\texttt{SameMPV}_2\), the totals
+	\(V^{(N)}(P.\texttt{toTensor})_\sigma\) and
+	\(V^{(N)}(Q.\texttt{toTensor})_\sigma\) agree, so it remains to show
+	\[
+		c_{P,\tilde\imath_0}^{(N)} \cdot V^{(N)}(P_{\tilde\imath_0})_\sigma
+		\;=\;
+		c_{Q,\tilde k_0}^{(N)} \cdot V^{(N)}(Q_{\tilde k_0})_\sigma.
+	\]
+	For the coefficient ratio, reindex the per-copy sum
+	\(c_{Q,\tilde k_0}^{(N)} = \sum_{q'} (Q.\texttt{weight}\,\tilde k_0\,q')^N\)
+	along \(\tau\), substitute the weight relation, distribute the
+	\(N\)-th power, and factor \((\zeta^{-1})^N\) out of the sum:
+	\(c_{Q,\tilde k_0}^{(N)} = \zeta^{-N} \cdot c_{P,\tilde\imath_0}^{(N)}\).
+	Substituting the basis-MPV relation and using
+	\(\zeta^{-N}\zeta^N = 1\) (which requires \(\zeta \neq 0\)) closes
+	the identity.  Formally, \texttt{linear\_combination} scaled by the
+	common factor \(c_{P,\tilde\imath_0}^{(N)} \cdot
+	V^{(N)}(P_{\tilde\imath_0})_\sigma\) discharges the residual.
+\end{proof}
+
+\begin{lemma}[Matched-sector subtraction from \(\texttt{GaugePhaseEquiv}\)]%
+	\label{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}
+	\lean{MPSTensor.sameMPV_dropSector_dropSector_of_gaugePhaseEquiv}
+	\leanok
+	\uses{lem:paper_bnt_sameMPV_dropSector_dropSector}
+	A convenience wrapper around
+	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector} that consumes a
+	\(\texttt{GaugePhaseEquiv}\) predicate between the matched basis
+	tensors (as supplied by the dominant-pair matching step of
+	\cite[\S~II, line 1180]{Cirac2017MPDO_AnnPhys}) together with the
+	weight permutation, and derives the basis-MPV gauge relation
+	internally via
+	\(\texttt{mpv\_eq\_pow\_mul\_of\_gaugePhase}\) and the bond-dimension
+	cast lemma.  Used in the Phase~4c assembly of the
+	\(\texttt{II\_cor2}\) strong induction (lines 1172--1192).
+\end{lemma}
+
+\begin{proof}\leanok
+	Destructure the \(\texttt{GaugePhaseEquiv}\) witness into
+	\((X, \zeta)\) with \(\zeta \neq 0\) and a conjugacy identity on the
+	cast basis tensor.  Apply
+	\(\texttt{mpv\_eq\_pow\_mul\_of\_gaugePhase}\) to obtain
+	\(V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma =
+	\zeta^N \cdot V^{(N)}(\texttt{cast}\,(P.\texttt{basis}\,\tilde\imath_0))_\sigma\),
+	then absorb the cast via the local bond-dimension cast lemma
+	(\(\texttt{cases}\) on the dimension equality).  Dispatch to
+	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector}.
+\end{proof}
