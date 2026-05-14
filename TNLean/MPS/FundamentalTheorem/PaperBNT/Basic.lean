@@ -138,32 +138,26 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
     ‖P.weight j q‖ ≤ 1
   /-- **CPSV16 line-246 normalization, unit-witness existence.**  At least
   one copy of one basis sector has unit-modulus weight.  CPSV16 §II.A
-  line 246: "at least one of them equals one, something which we will
-  assume from now on"; used in the FT proof at line 1244 (the assumed
-  normalization makes the transfer-matrix-power sequence converge, picking
-  out the dominant block).  This is the existential form of the paper's
-  convention; relabelling sectors so the unit-modulus copy sits in
-  sector 0 specialises it to the index-0 reading used in the FT
-  dominant-block projection (CPSV16 lines 1181–1188). -/
+  line 246 (verbatim): "we can always choose `|μ_k| ≤ 1` and at least one
+  of them equals one, something which we will assume from now on."  The
+  paper states this **globally** over the two-layer index `(j, q)` of the
+  two-layer BNT display (CPSV16 lines 287–301): the existential ranges over
+  all `(j, q)` pairs and does **not** pin the witness to a specific
+  sector.  The witness is reinvoked in the body of the FT proof at
+  CPSV16 line 1244 ("the assumed normalization `|μ_{jq}| ≤ 1` … implies
+  that `𝔼^N` converges"), again read off the two-layer indexing without a
+  sector-specific reading.
+
+  A previous design carried an extra structural field pinning the
+  witness to sector index 0; this was an engineering artifact, removed
+  in the Phase A cleanup of issue #1725 (audit memo
+  `/tmp/phase_4c_drift_audit_2026-05-14.md`).  Downstream code that
+  needs a unit-modulus witness in a specific sector now supplies the
+  sector index and unit-modulus existential externally; see
+  `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
+  (`PaperBNT/Api.lean`). -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
-  /-- **CPSV16 line-246 normalization, dominant-block reading.**  When the
-  decomposition has at least one basis sector, the sector at index `0`
-  carries a unit-modulus copy.  CPSV16 §II.A line 246 only states the
-  existential form `∃ j q, ‖μ_{j,q}‖ = 1`, but the body of the FT proof
-  (CPSV16 lines 1181–1188) **uses** the index-0 reading: the dominant
-  sector is selected by the unit-modulus weight, and the relabelling
-  convention places the dominant sector at index `0`.  This field records
-  that relabelling step structurally so it does not need to be supplied
-  externally; the proof of `coeff_dominant_not_tendsto_zero`
-  (PaperBNT/CesaroNonDecay.lean) reads off the dominant-block coefficient
-  non-decay directly from this field via the Cesàro-mean argument.
-
-  When `P.basisCount = 0`, the field is vacuous (no `hpos` premise is
-  available).  When `P.basisCount = 1`, the field collapses to
-  `weight_unit_exists` with the unique sector index. -/
-  weight_unit_at_dominant_block : ∀ (hpos : 0 < P.basisCount),
-    ∃ q : Fin (P.copies ⟨0, hpos⟩), ‖P.weight ⟨0, hpos⟩ q‖ = 1
 
 namespace IsBNTCanonicalForm
 
