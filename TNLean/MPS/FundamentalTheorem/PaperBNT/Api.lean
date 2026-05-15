@@ -39,11 +39,10 @@ not imported here.
   of the multiplicity bound (CPSV16 line 246 via `weight_norm_le_one`).
 * `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the global
   unit-modulus witness re-exposed at the API layer (CPSV16 line 246).
-* `IsBNTCanonicalForm.weight_unit_exists_per_block_of_struct` — the
-  per-block unit-modulus witnesses (CPSV21 §III.2 / Definition 4.3).
 * `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block` — the Cesàro
-  non-decay reading of per-block spectral-radius-one normalization, with
-  the unit witness discharged from the structure (Phase D, issue #1730).
+  non-decay reading of the line-1182 projection step, with the per-block
+  unit-modulus witness supplied as an explicit theorem-level hypothesis
+  `hUnit : ∃ q, ‖μ_{j₀,q}‖ = 1`.
 
 ## References
 
@@ -216,37 +215,30 @@ lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
     ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
       ‖P.weight j q‖ = 1 := h.weight_unit_exists
 
-/-- **Per-block unit-modulus weight witness from CPSV21 §III.2.**
-
-Re-exposes `weight_unit_exists_per_block`, the Phase D strengthening of
-`IsBNTCanonicalForm`: every BNT basis sector carries its own unit-modulus
-copy weight. -/
-lemma weight_unit_exists_per_block_of_struct
-    (h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
-    ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 :=
-  h.weight_unit_exists_per_block j
-
 /-- **Per-block coefficient non-decay.**
 
-For every sector `j₀ : Fin P.basisCount`, the power-sum coefficient
+For a user-supplied sector `j₀ : Fin P.basisCount` carrying a unit-modulus
+copy witness `hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`, the power-sum coefficient
 `P.coeff N j₀ = ∑_q (P.weight j₀ q)^N` does **not** tend to `0` as
 `N → ∞`.
 
-Phase D strengthens the canonical-form surface with the CPSV21 §III.2 /
-Definition 4.3 per-block spectral-radius-one normalization, so the
-unit-modulus witness needed by the Cesàro non-decay lemma is discharged
-automatically from `h.weight_unit_exists_per_block j₀`.
+The per-block unit-modulus hypothesis `hUnit` is taken as an explicit
+theorem-level argument rather than a structural field of
+`IsBNTCanonicalForm`: CPSV16 §II.A line 246 records only the *global*
+normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, and CPSV21 §III.2
+Definition 4.3 (lines 1846–1884) normalizes the spectral radius of the
+*basis* tensors, not the copy coefficients $\mu_{j,q}$.  The per-block
+witness is implicit in CPSV16 §II.C line 1182's projection step and is
+therefore exposed here as a per-theorem hypothesis.
 
-Paper anchor: CPSV21 §III.2 / Definition 4.3 lines 1846–1884
-(per-block spectral-radius-one BNT normalization), CPSV16 §II.C lines
-1158–1167 (power-sum non-decay / exact comparison input). -/
+Paper anchor: CPSV16 §II.C lines 1158–1167 (power-sum non-decay / exact
+comparison input), CPSV16 §II.C line 1182 (per-block projection step). -/
 theorem coeff_not_tendsto_zero_at_block
-    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount) :
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
+    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
     ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) := by
   have h_le : ∀ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ ≤ 1 :=
     h.weight_norm_le_one j₀
-  have hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1 :=
-    h.weight_unit_exists_per_block j₀
   have hAnal := CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus
     (P.weight j₀) h_le hUnit
   intro hTend
@@ -300,15 +292,16 @@ limit.
 
 This is the coefficient form of the audit's "thermodynamic-limit
 non-vanishing" condition, with the per-block unit-modulus witness
-supplied by the structure.  A self-overlap form
+supplied as an explicit theorem-level hypothesis.  A self-overlap form
 `limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication recorded by
 the audit's Q-C equivalence (forward direction), which we do not
 formalise here — the coefficient form is the operational input to the
 FT proof; the self-overlap reading is a paraphrase. -/
 lemma thermodynamic_limit_nonvanishing
-    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount) :
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
+    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
     ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
-  h.coeff_not_tendsto_zero_at_block j₀
+  h.coeff_not_tendsto_zero_at_block j₀ hUnit
 
 end IsBNTCanonicalForm
 

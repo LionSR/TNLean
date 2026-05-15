@@ -19,8 +19,11 @@ Paper anchors:
   contradiction and symmetry argument.
 * CPSV16 §II.C lines 1187–1188: exact power-sum coefficient comparison,
   recovering copy multiplicities and weights up to the matched phase.
-* CPSV21 Definition 4.3 lines 1846–1884: per-block spectral-radius-one
-  normalization, formalized in Phase D as `weight_unit_exists_per_block`.
+* CPSV21 Definition 4.3 lines 1846–1884: per-block BNT normalization on
+  the basis tensors.  The per-block convention on copy coefficients
+  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — paper-implicit in CPSV16 §II.C line 1182's
+  projection argument — is taken as an explicit theorem-level hypothesis
+  here, not as a structural field of `IsBNTCanonicalForm`.
 
 The theorem below exposes the sector-level data needed before assembling
 the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  It does not use
@@ -84,6 +87,8 @@ This is the Lean sector-data counterpart of CPSV16 §II.C lines 1184–1188. -/
 theorem ft_paper_bnt_equal_sector_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
       (∀ k, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -93,7 +98,7 @@ theorem ft_paper_bnt_equal_sector_data
         ∀ k, ∃ τ : Fin (Q.copies k) ≃ Fin (P.copies (β k)),
           ∀ q : Fin (Q.copies k), Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ q) := by
   classical
-  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hEqual
+  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hUnitP hUnitQ hEqual
   let hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) :=
     fun k => by
@@ -151,6 +156,8 @@ rather than an opaque existential. -/
 theorem ft_paper_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -180,7 +187,7 @@ theorem ft_paper_bnt_equal_global_gauge
                 Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                   (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
-  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hEqual
+  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hUnitP hUnitQ hEqual
   let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
     fun k => (hβMatchFull k).choose
   let hGPE : ∀ k : Fin Q.basisCount,

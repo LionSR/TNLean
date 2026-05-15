@@ -25,9 +25,19 @@ a `SectorDecomposition`.  It records:
   dimension;
 * the CPSV16 §II.A line-246 **normalization convention** on the raw sector
   weights `μ_{j,q}`: `|μ_{j,q}| ≤ 1` and at least one of them equals one
-  (lines 246 and 1244);
-* the CPSV21 §III.2 / Definition 4.3 per-block spectral-radius-one
-  normalization: each BNT basis block has at least one unit-modulus copy.
+  (lines 246 and 1244).
+
+The per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit
+in CPSV16 §II.C line 1182's projection step and not explicitly stated in
+CPSV16 §II.A line 246 (which is global) nor in CPSV21 §III.2 lines 1846–1884
+(which normalizes the spectral radius of the BNT *basis tensors*, not the
+copy coefficients) — is **not** a structural field of `IsBNTCanonicalForm`.
+The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
+`exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
+`ft_paper_bnt_equal_*`) take the per-block witness as an explicit
+hypothesis at the theorem level.  This keeps the canonical-form predicate
+maximally paper-faithful and quarantines the line-1182 paper-implicit
+convention to the theorems that actually need it.
 
 Crucially, the structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
@@ -139,37 +149,14 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   `C ⊕ (1/2)C` (weights `(1, 1/2)`), and `C ⊕ (-C) ⊕ (1/2)C`. -/
   weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ ≤ 1
-  /-- **Per-block unit-modulus normalization (paper-implicit convention).**
-  Each BNT basis block contains at least one unit-modulus raw copy weight.
-
-  Source-faithfulness note.  CPSV16 §II.A line 246 states only a *global*
-  unit-modulus witness — "we can always choose `|μ_k| ≤ 1` and at least one
-  of them equals one" — and CPSV21 §III.2 Definition 4.3 (lines 1846–1884)
-  states a *per-NT-block* spectral-radius-one convention on the basis
-  tensors, not on the copy coefficients `μ_{j,q}`.  Strictly, CPSV16 and
-  CPSV21 do not explicitly assert `∀ j, ∃ q, ‖μ_{j,q}‖ = 1`.
-
-  However, the equal-MPV FT proof in CPSV16 §II.C lines 1182–1183
-  implicitly requires this hypothesis: the projection of `|V^{(N)}(B)⟩`
-  onto `|V^{(N)}(B_k)⟩` produces the contradiction `Q.coeff N k → 0`,
-  which is only impossible if some `‖Q.weight k q‖ = 1`.  Without this,
-  the matching argument fails for BNT blocks whose copy weights all have
-  modulus `< 1` (which are valid CPSV16 BNTs but contribute vanishingly
-  to the thermodynamic-limit MPV).
-
-  We therefore make this paper-implicit convention an explicit structural
-  field of `IsBNTCanonicalForm`.  This is stronger than the explicit
-  CPSV16/CPSV21 statements and excludes from our FT theorems any CPSV16
-  BNT with all-decaying blocks; that scope restriction is the honest
-  reading of CPSV16's L1182 projection argument. -/
-  weight_unit_exists_per_block : ∀ j : Fin P.basisCount,
-    ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1
   /-- **CPSV16 line-246 global unit witness.**  At least one copy of one
-  basis sector has unit-modulus weight.  This field is retained as the
-  global CPSV16 normalization/non-emptiness witness consumed by older
-  auxiliary lemmas; on all nonempty sector decompositions it follows
-  immediately from `weight_unit_exists_per_block` by choosing any basis
-  index. -/
+  basis sector has unit-modulus weight.  CPSV16 §II.A line 246: "we can
+  always choose `|μ_k| ≤ 1` and at least one of them equals one."  This
+  is the global (not per-block) normalization condition; the per-block
+  refinement `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` is paper-implicit in CPSV16 §II.C
+  line 1182's projection argument and is therefore taken as an explicit
+  per-theorem hypothesis on the fundamental-theorem theorems, rather
+  than baked into this structural predicate. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
 

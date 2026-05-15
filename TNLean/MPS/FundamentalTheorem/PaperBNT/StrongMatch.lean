@@ -170,24 +170,26 @@ private theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
 
 /-! ### Phase B-α main theorem: paper-faithful full-basis matching -/
 
-/-- **CPSV16 §II.C lines 1182–1186 Step 1 (Phase D full-basis form).**
+/-- **CPSV16 §II.C lines 1182–1186 Step 1 (full-basis form).**
 
 For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
 bond dimension, gauge-phase equivalent to `Q.basis k` after the dimension
 cast, and with non-decaying cross-overlap.
 
-The Phase D strengthening of `IsBNTCanonicalForm` adds the CPSV21 §III.2 /
-Definition 4.3 per-block spectral-radius-one normalization
-`weight_unit_exists_per_block`; hence every sector is a unit block and the
-previous unit-subset restriction disappears.  The proof applies
-`exists_block_match_of_sameMPV` with `(P, Q)` swapped and re-orients the
-result using the local symmetry helpers.
+The proof iterates `exists_block_match_of_sameMPV` over every `Q`-sector
+with `(P, Q)` swapped, so it consumes the per-block unit-modulus
+witnesses on the *swapped* side, namely `hUnitQ : ∀ k, ∃ q, ‖μ_{k,q}‖ = 1`
+for $Q$.  The per-block unit-modulus convention is paper-implicit in
+CPSV16 §II.C line 1182's projection argument; it is taken here as an
+explicit theorem-level hypothesis (CPSV16 §II.A line 246 records only
+the global unit witness).
 
 Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608) and CPSV21
 Definition 4.3 lines 1846–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
@@ -198,9 +200,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
         atTop (𝓝 0) := by
   classical
   intro k
-  -- `P.basisCount > 0`: the retained global unit witness on `P` supplies a
-  -- sector index.  (The per-block field gives the full-basis upgrade; this
-  -- global field is still a convenient non-emptiness witness.)
+  -- `P.basisCount > 0`: the global unit witness on `P` supplies a sector index.
   have hP_pos : 0 < P.basisCount := by
     obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
     exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
@@ -209,7 +209,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     fun N σ => (hEqual N σ).symm
   obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
     exists_block_match_of_sameMPV
-      (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
+      (P := Q) (Q := P) hQ hP k (hUnitQ k) hQ_pos hP_pos hEqual_symm
   refine ⟨j, hsymDim.symm, ?_, ?_⟩
   · exact gaugePhaseEquiv_swap_cast hsymDim.symm
       (by simpa using hGE_swapped)
@@ -300,7 +300,7 @@ private theorem gaugePhaseEquiv_cast_compose_via_centre
 
 /-! ### Phase B-β main theorem: full bijective matching by symmetry -/
 
-/-- **CPSV16 §II.C lines 1184–1186 (Phase D full-basis bijection).**
+/-- **CPSV16 §II.C lines 1184–1186 full-basis bijection.**
 
 Applying `forall_k_exists_j_nondecaying_overlap_of_sameMPV` in both
 directions gives injective maps `Fin Q.basisCount → Fin P.basisCount` and
@@ -309,12 +309,19 @@ the forward injection into an equivalence `β : Fin Q.basisCount ≃
 Fin P.basisCount`, carrying the matched bond-dimension equality,
 gauge-phase equivalence, and non-decaying overlap for every sector of `Q`.
 
-This is the Lean counterpart of the CPSV16 symmetry step `g_A ≥ g_B` and
-`g_B ≥ g_A`, now over the **full** BNT basis because Phase D makes every
-basis block a unit block. -/
+This is the Lean counterpart of the CPSV16 symmetry step "$g_A \geq g_B$
+and $g_B \geq g_A$".  The proof invokes
+`forall_k_exists_j_nondecaying_overlap_of_sameMPV` once with $(P,Q)$ and
+once with $(Q,P)$, hence it consumes per-block unit-modulus witnesses on
+both sides: `hUnitP : ∀ j, ∃ q, ‖μ_{j,q}^P‖ = 1` and `hUnitQ : ∀ k, ∃ q,
+‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 §II.C line 1182's
+projection argument and are taken as explicit theorem-level hypotheses
+here (CPSV16 §II.A line 246 records only the global unit witness). -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
@@ -325,10 +332,12 @@ theorem bijective_match_of_sameMPV
             mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
           atTop (𝓝 0) := by
   classical
-  have hFwd := forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual
+  have hFwd :=
+    forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hUnitQ hEqual
   have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
     fun N σ => (hEqual N σ).symm
-  have hBwd := forall_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hEqual_symm
+  have hBwd :=
+    forall_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hUnitP hEqual_symm
   let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
   have φ₀_spec : ∀ k : Fin Q.basisCount,
       ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
