@@ -31,11 +31,9 @@ Wiener / Cesaro one:
   sequence tends to zero would force the Cesaro mean to vanish, a
   contradiction.
 
-This is the analytic ingredient used to discharge the load-bearing
-`hNoCancel` hypothesis in the per-block projection argument of
-arXiv:1606.00608, Theorem `thm1` (lines 1170--1192).  The MPS-side
-discharge lives in
-`TNLean/MPS/FundamentalTheorem/SectorDecomposition/HNoCancelDischarge.lean`.
+This is a general analytic ingredient about complex power sums of
+unit-modulus families (arXiv:1606.00608, Theorem `thm1`, lines
+1170--1192).
 
 The module is purely about complex power sums; it has no MPS
 dependencies and uses no `sorry`/`axiom`/`unsafe`.
