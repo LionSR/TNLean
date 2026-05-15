@@ -242,6 +242,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.DropMatchedSector
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DropSector
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DropSectorOverlapDecay
 import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
+import TNLean.MPS.FundamentalTheorem.PaperBNT.Fundamental
 import TNLean.MPS.FundamentalTheorem.PaperBNT.NewtonGirard
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongInduction
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
