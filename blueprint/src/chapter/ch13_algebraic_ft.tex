@@ -1482,28 +1482,36 @@ which is then combined with overlap estimates and the leading-block peel.
 
 \begin{lemma}[Heterogeneous equal-case block matching]%
     \label{lem:fundamentalTheorem_equalMPV_CFBNT_hetero}
-    \lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT_hetero}
+    \lean{MPSTensor.ft_paper_bnt_equal_sector_data}
     \leanok
     \uses{def:same_mpv, def:cf_bnt, def:gauge_phase_equiv}
-    Let $\{\mu_j A_j\}_{j=0}^{r_A-1}$ and $\{\nu_k B_k\}_{k=0}^{r_B-1}$ be
-    two canonical-form BNT families, possibly with different block counts and
+    Let $P$ and $Q$ be two paper-faithful BNT sector decompositions
+    (Definition~\ref{def:cf_bnt}), possibly with different block counts and
     different bond dimensions in corresponding blocks.
-    If the block-diagonal tensors generate the same MPV family, then
-    the two families have the same number of blocks, the blocks can be matched
-    by a permutation preserving the bond dimensions, and each matched pair is
-    gauge-phase equivalent.
-    This is the block-matching conclusion, not yet the final global weighted
-    gauge-equivalence statement for the block-diagonal tensors.
+    If their block-diagonal tensors generate the same MPV family
+    (Definition~\ref{def:same_mpv}), then the basis sectors are
+    bijectively matched by a permutation $\beta$, each matched basis pair is
+    gauge-phase equivalent (Definition~\ref{def:gauge_phase_equiv}), the
+    matched copy multiplicities agree, and the copy weights agree up to a
+    unit-modulus phase $\zeta$ and a copy-index reindexing.
+    This is the sector-data form of the equal-case CPSV theorem
+    \cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys};
+    the corresponding global gauge corollary is recorded as
+    \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} in
+    \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The proof is the block-matching argument carried out in the supporting
-    modules for the heterogeneous equal case: one first produces a
-    non-decaying cross-overlap for each block, applies the overlap dichotomy to
-    show that the matched blocks must have equal dimension and differ only by a
-    phase gauge, and finally upgrades the resulting matching to a permutation of
-    all blocks.
+    On the paper-faithful BNT surface, the proof proceeds in three steps,
+    carried out in the \texttt{PaperBNT/} module of the formalization:
+    bijective block matching via non-decaying cross-overlaps
+    (\texttt{StrongMatch.bijective\_match\_of\_sameMPV}); coefficient identity
+    via the global-gauge phase $\zeta$
+    (\texttt{CoeffIdentity.coeff\_identity\_via\_global\_gauge}); and finally
+    multiset comparison of the scalar power sums recovering matched copy
+    multiplicities and weights up to $\zeta^{-1}$
+    (\texttt{WeightEquiv.matched\_sector\_weight\_equiv}).
 \end{proof}
 
 %% ---------------------------------------------------------

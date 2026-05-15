@@ -861,52 +861,6 @@ with an extra $Z$-gauge degree of freedom.
 	Invert the scalar at each length; nonvanishing is preserved by inversion.
 \end{proof}
 
-\begin{lemma}[Fixed-right all-overlaps-decay contradiction on the sector-decomposition surface]%
-\label{lem:fixed_right_all_overlaps_decay_sectorDecomp}
-	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
-	\leanok
-	\uses{def:paper_sector_data, def:eventually_nonzero_proportional_mpv,
-		lem:eventuallyNonzeroProportionalMPV2_symm}
-	Let $P$ and $Q$ be sector decompositions with unit-modulus sector weights on
-	$P$. Fix a block $Q_{k_0}$.  Suppose the assembled tensors
-	$A_{\mathrm{tot}}^P$ and $A_{\mathrm{tot}}^Q$ are eventually nonzero
-	proportional, every cross-overlap $O_{P_j,Q_{k_0}}(N) \to 0$, and the
-	non-cancellation hypothesis $\mathtt{hNoCancel}$ holds: for every scalar
-	sequence $c$ witnessing the proportionality,
-	$c_N \cdot O_{A_{\mathrm{tot}}^Q, Q_{k_0}}(N)$ does not tend to zero.
-	Then a contradiction follows.
-\end{lemma}
-
-\begin{proof}\leanok
-	Per-block projection of \cite[Theorem~\texttt{thm1}, lines~1170--1192]{Cirac2016MPDO_arXiv}
-	onto $Q_{k_0}$, with the load-bearing non-cancellation step factored as the
-	hypothesis $\mathtt{hNoCancel}$.  The BNT coefficient at each block is
-	bounded by the sector multiplicity (unit-modulus weights), and each
-	cross-overlap summand decays; their sum therefore decays.  The projected
-	proportionality identity then forces the scalar-weighted self-overlap to
-	decay too, contradicting $\mathtt{hNoCancel}$.
-\end{proof}
-
-\begin{lemma}[Fixed-left all-overlaps-decay contradiction on the sector-decomposition surface]%
-\label{lem:fixed_left_all_overlaps_decay_sectorDecomp}
-	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp}
-	\leanok
-	\uses{def:paper_sector_data, def:eventually_nonzero_proportional_mpv,
-		lem:fixed_right_all_overlaps_decay_sectorDecomp,
-		lem:eventuallyNonzeroProportionalMPV2_symm}
-	Symmetric counterpart of
-	Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp}.
-	Fix a block $P_{j_0}$.  Under the same unit-modulus, eventual proportionality,
-	all-cross-overlaps-to-$P_{j_0}$ decay, and non-cancellation assumptions
-	(with the roles of $P$ and $Q$ interchanged), a contradiction follows.
-\end{lemma}
-
-\begin{proof}\leanok
-	Swap $P$ and $Q$, apply symmetry of eventual proportionality
-	(Lemma~\ref{lem:eventuallyNonzeroProportionalMPV2_symm}), and invoke
-	Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp}.
-\end{proof}
-
 
 % ---- Plan C Objective A: analytic discharge of hNoCancel ----
 
@@ -929,45 +883,6 @@ with an extra $Z$-gauge degree of freedom.
 	$0$, a contradiction.
 \end{proof}
 
-\begin{theorem}[Right-block per-block projection contradiction under analytic discharge]%
-\label{thm:fixed_right_all_overlaps_decay_paperFaithful}
-	\lean{MPSTensor.fixed_right_all_overlaps_decay_false_paperFaithful}
-	\leanok
-	\uses{lem:unitModulus_power_sum_not_tendsto_zero,
-		lem:fixed_right_all_overlaps_decay_sectorDecomp}
-	Let $P$ and $Q$ be sector decompositions with unit-modulus weights on both.
-	Fix a block $Q_{k_0}$.  Suppose the assembled tensors are eventually
-	nonzero proportional, every cross-overlap $O_{P_j,Q_{k_0}}(N) \to 0$,
-	the off-diagonal cross-overlaps on $Q$ decay, the self-overlap at $k_0$
-	tends to a nonzero limit $\ell$, and the proportionality scalar admits
-	a positive eventual lower bound.  Then a contradiction follows.
-\end{theorem}
-
-\begin{proof}\leanok
-	Apply Lemma~\ref{lem:fixed_right_all_overlaps_decay_sectorDecomp} after
-	discharging $\mathtt{hNoCancel}$ from
-	Lemma~\ref{lem:unitModulus_power_sum_not_tendsto_zero}: the BNT coefficient
-	at $k_0$ is a unit-modulus power sum, hence does not tend to zero, so
-	the scalar-weighted block overlap cannot vanish.
-\end{proof}
-
-\begin{theorem}[Left-block per-block projection contradiction under analytic discharge]%
-\label{thm:fixed_left_all_overlaps_decay_paperFaithful}
-	\lean{MPSTensor.fixed_left_all_overlaps_decay_false_paperFaithful}
-	\leanok
-	\uses{lem:unitModulus_power_sum_not_tendsto_zero,
-		lem:fixed_left_all_overlaps_decay_sectorDecomp}
-	Symmetric counterpart of
-	Theorem~\ref{thm:fixed_right_all_overlaps_decay_paperFaithful} with the
-	roles of $P$ and $Q$ interchanged.  Fix a block $P_{j_0}$ and assume
-	the analogous unit-modulus, decay, self-overlap, and scalar-lower-bound
-	conditions on $P$.  Then a contradiction follows.
-\end{theorem}
-
-\begin{proof}\leanok
-	Swap $P$ and $Q$ and invoke
-	Theorem~\ref{thm:fixed_right_all_overlaps_decay_paperFaithful}.
-\end{proof}
 
 \begin{theorem}[Proportional BNT families have non-decaying block overlaps]%
 \label{thm:proportional_bnt_nondecaying_overlap}
@@ -1090,7 +1005,7 @@ block-diagonal gauge.
 \end{proof}
 
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
+	\lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
 	Fix a common block structure: the same number of blocks~$g$,
@@ -1108,12 +1023,14 @@ block-diagonal gauge.
 \begin{proof}
 	\leanok
 	\uses{lem:ft_canonical}
-	Since both families share the canonical-form hypotheses, the BNT separation
-	condition is not needed.
-	The same-structure canonical-form comparison
-	(Lemma~\ref{lem:ft_canonical}) then applies directly to this
-	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
-	equivalence and hence global gauge equivalence.
+	On the paper-faithful BNT surface this is the specialization of
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} (in
+	\texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}) to the
+	situation where $P$ and $Q$ share a common $(g, D_k, \mu_k)$ block
+	structure: the basis bijection $\beta$ is trivial, the per-block gauge
+	matrices $X_{\text{block}}\,k$ provide the per-pair gauge equivalences,
+	and the flattened direct-sum gauge $X$ assembles them into the global
+	conjugation on $\bigoplus_k\mu_k A_k$ and $\bigoplus_k\mu_k B_k$.
 \end{proof}
 
 \subsection{Sector multiplicities and weight recovery}%
@@ -2076,7 +1993,7 @@ block-matching conclusions for the common primitive sectors.
 \end{proof}
 
 
-\begin{remark}[Equal-case comparison after canonical reduction]\notready
+\begin{remark}[Equal-case comparison after canonical reduction]
 	The equal-case proof in the source starts after both tensors have been put in
 	canonical form and after a basis of normal tensors has been chosen.  In that
 	notation the BNT expansion has the form
@@ -2103,8 +2020,21 @@ block-matching conclusions for the common primitive sectors.
 	\]
 	Newton--Girard then recovers the multiplicities and weight multisets, and the
 	block gauges $Y_j$ are placed on the diagonal to give the global conjugating
-	matrix.  This is the equal-case corollary in the source, restated in
-	\cite[Corollary~IV.5]{Cirac2021Matrix}.
+	matrix.  This is the equal-case corollary
+	\cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys},
+	restated in \cite[Corollary~IV.5]{Cirac2021Matrix}.
+
+	The paper-faithful Lean formalization of this route is split into two
+	theorems in \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}:
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data} packages the BNT
+	basis bijection $\beta$, the per-block gauge-phase witnesses, copy-count
+	equality, and the scalar coefficient comparison
+	$Q.\text{weight}_k\,q=(\zeta_k)^{-1}\,P.\text{weight}_{\beta k}\,(\tau\,q)$
+	matching the source power-sum identity displayed above; and
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} assembles the
+	per-block gauge matrices $Y_j=X_{\text{block}}\,k$ on the flattened
+	direct sum to produce the global conjugation~$X$, matching the appendix
+	construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
 
 	The comparison theorems above formalize only the part of this route after the
 	common blocked nonzero sectors and their BNT matching data have been supplied.
