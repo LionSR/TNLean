@@ -88,6 +88,8 @@ CPSV16 §II.C lines 354–361 / 1184–1192. -/
 theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
@@ -118,7 +120,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
   obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, X, _hXdef, hGauge⟩ :=
-    ft_paper_bnt_equal_global_gauge hP hQ hEqual
+    ft_paper_bnt_equal_global_gauge hP hQ hUnitP hUnitQ hEqual
   -- `P.totalDim = Q.totalDim` follows from `sectorFlatEquiv` plus matched dims
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -142,6 +144,8 @@ CPSV16 §II.C lines 354–361. -/
 theorem ft_paper_bnt_equal_mps_gaugeEquiv
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (_hTotal : P.totalDim = Q.totalDim),
       ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -160,7 +164,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv
                        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
-    ft_paper_bnt_equal_mps_gaugeEquiv_witnesses hP hQ hEqual
+    ft_paper_bnt_equal_mps_gaugeEquiv_witnesses hP hQ hUnitP hUnitQ hEqual
   exact ⟨SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ,
     β, hDim, τ, X, hGauge⟩
 
