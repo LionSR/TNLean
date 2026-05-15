@@ -140,21 +140,21 @@ from equal MPV families on the paper-faithful BNT surface, it produces:
 * the explicit flattened global matrix
   `X = globalGaugeOfBlocks (matched_block_gauge Xblock)`.
 
-The final displayed equality says that `Q.toTensor` is obtained by conjugating
-the `P`-side sector tensor written in `Q`'s flattened copy coordinates.  In
-paper notation this is the direct-sum matrix
-`⊕_k (𝟙_{r_k} ⊗ X_k)`.  The remaining conversion from this matched-coordinate
-presentation to a literal `GaugeEquiv P.toTensor Q.toTensor` is only a
-coordinate permutation/cast of the flattened direct sum and is intentionally not
-hidden here; the theorem exposes the explicit CPSV16 witness rather than an
-opaque existential. -/
+The final displayed equality says that the unfolded flattened presentation of
+`Q.toTensor` is obtained by conjugating the `P`-side sector tensor written in
+`Q`'s flattened copy coordinates.  In paper notation this is the direct-sum
+matrix `⊕_k (𝟙_{r_k} ⊗ X_k)`.  The remaining conversion from this
+matched-coordinate presentation to a literal `GaugeEquiv P.toTensor Q.toTensor`
+is only a coordinate permutation/cast of the flattened direct sum and is
+intentionally not hidden here; the theorem exposes the explicit CPSV16 witness
+rather than an opaque existential. -/
 theorem ft_paper_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
       (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
-      (hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k)
+      (_hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k)
       (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
       (ζ : Fin Q.basisCount → ℂ)
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
@@ -167,16 +167,18 @@ theorem ft_paper_bnt_equal_global_gauge
               Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
       (∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
         Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) ∧
-      ∃ X : GL (Fin Q.totalDim) ℂ,
+      ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
         X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
         ∀ i : Fin d,
-          Q.toTensor i =
-            (X : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+          toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+            (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
               toTensorFromBlocks (d := d)
                 (μ := matched_p_weight (P := P) (Q := Q) β τ)
                 (matched_p_basis (P := P) (Q := Q) β hDim) i *
-              (((X)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
+              (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+                Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                  (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hEqual
   let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
@@ -239,12 +241,12 @@ theorem ft_paper_bnt_equal_global_gauge
     let x := Q.flatIndexEquiv.symm s
     let k : Fin Q.basisCount := x.1
     let q : Fin (Q.copies k) := x.2
-    have hμ : μP s = Q.flatWeight s * ζ k := by
+    have hμ : μP s = Q.weight k q * ζ k := by
       have hw := hWeight k q
       change P.weight (β k) (τ k q) = Q.weight k q * ζ k
       calc
         P.weight (β k) (τ k q) = ζ k * Q.weight k q := by
-          rw [hw, mul_assoc, mul_inv_cancel₀ (hζ_ne k), one_mul]
+          rw [hw, ← mul_assoc, mul_inv_cancel₀ (hζ_ne k), one_mul]
         _ = Q.weight k q * ζ k := by ring
     change (Q.weight k q) • Q.basis k i =
       (Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
@@ -267,26 +269,35 @@ theorem ft_paper_bnt_equal_global_gauge
     simp [toTensorFromBlocks]
   have hRight :
       toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
-        (fun s i => Q.flatWeight s • Q.flatBasis s i) = Q.toTensor := by
+        (fun s i => Q.flatWeight s • Q.flatBasis s i) =
+        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis := by
     funext i
-    simp [SectorDecomposition.toTensor, toTensorFromBlocks]
+    simp [toTensorFromBlocks]
   refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, ?_⟩
   refine ⟨globalGaugeOfBlocks Xcoord, rfl, ?_⟩
   intro i
   calc
-    Q.toTensor i =
+    toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
         toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
           (fun s i => Q.flatWeight s • Q.flatBasis s i) i := by
             rw [hRight]
-    _ = (globalGaugeOfBlocks Xcoord : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+    _ = (globalGaugeOfBlocks Xcoord : Matrix
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
           toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
             (fun s i => μP s • AP s i) i *
-          (((globalGaugeOfBlocks Xcoord)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-            Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := hFormula i
-    _ = (globalGaugeOfBlocks Xcoord : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+          (((globalGaugeOfBlocks Xcoord)⁻¹ :
+              GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+            Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := hFormula i
+    _ = (globalGaugeOfBlocks Xcoord : Matrix
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
           toTensorFromBlocks (d := d) (μ := μP) AP i *
-          (((globalGaugeOfBlocks Xcoord)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-            Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
+          (((globalGaugeOfBlocks Xcoord)⁻¹ :
+              GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+            Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
             rw [hLeft]
 
 end MPSTensor
