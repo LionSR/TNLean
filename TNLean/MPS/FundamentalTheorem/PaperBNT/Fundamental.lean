@@ -224,7 +224,8 @@ theorem ft_paper_bnt_equal_global_gauge
   have hWeight : ∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
       Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q) := by
     intro k q
-    have hpoint := (hWeightData k).choose_spec.choose_spec ((hWeightData k).choose_spec.choose.symm q)
+    have hpoint := (hWeightData k).choose_spec.choose_spec
+      ((hWeightData k).choose_spec.choose.symm q)
     simpa [τ] using hpoint
   let μP : Fin Q.totalCopies → ℂ := matched_p_weight (P := P) (Q := Q) β τ
   let AP : (s : Fin Q.totalCopies) → MPSTensor d (Q.flatDim s) :=
