@@ -817,271 +817,6 @@ factorization is assumed.
 	\texttt{audits/2026-05-13\_cpsv16\_paper\_bnt\_phase\_1\_multiplicity\_audit.md}.
 \end{example}
 
-\section{Dropping a BNT sector}
-\label{sec:paper_bnt_drop_sector}
-
-This section formalizes the structural operation of removing one BNT sector
-from a \texttt{SectorDecomposition} and verifies that the paper-faithful
-canonical-form predicate is preserved.  The construction is the foundation
-for the strong-induction route of
-\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys},
-where matched block pairs are removed iteratively; the analytic claims about
-matched-sector coefficients and equal-MPV overlap are deferred to the
-following file.
-
-\begin{definition}[Drop a BNT sector]%
-	\label{def:paper_bnt_drop_sector}
-	\lean{MPSTensor.SectorDecomposition.dropSector}
-	\leanok
-	\uses{def:paper_sector_data}
-	Given a sector decomposition \(P\) with \(P.\texttt{basisCount} = n+1\)
-	and an index \(i_0 \in \{0,\dotsc,n\}\), the operation
-	\(\texttt{dropSector}\,P\,h\,i_0\) is the sector decomposition with
-	\(\texttt{basisCount} = n\) obtained by removing the sector at index
-	\(i_0\) and reindexing the surviving sectors by
-	\(\texttt{Fin.cast}\,h^{-1} \circ \texttt{Fin.succAbove}\,i_0\).
-	Each field of the new sector decomposition is the corresponding field
-	of~\(P\) evaluated at the reindexed position.  The construction is
-	purely structural: it provides the inductive substrate for the
-	CPSV16 \S~II \texttt{II\_cor2} induction step
-	(lines 1172--1192), where matched BNT block pairs are subtracted
-	iteratively from both sides of a same-MPV comparison.
-\end{definition}
-
-\begin{lemma}[Componentwise unfolding for the dropped decomposition]%
-	\label{lem:paper_bnt_drop_sector_unfold}
-	\lean{MPSTensor.SectorDecomposition.dropSector_basisCount,
-		MPSTensor.SectorDecomposition.dropSector_basisDim,
-		MPSTensor.SectorDecomposition.dropSector_basis,
-		MPSTensor.SectorDecomposition.dropSector_copies,
-		MPSTensor.SectorDecomposition.dropSector_weight,
-		MPSTensor.SectorDecomposition.dropSector_coeff}
-	\leanok
-	\uses{def:paper_bnt_drop_sector}
-	The fields of \(\texttt{dropSector}\,P\,h\,i_0\) unfold by reflexivity:
-	\texttt{basisCount} equals \(n\), and each of \texttt{basisDim},
-	\texttt{basis}, \texttt{copies}, \texttt{weight}, and \texttt{coeff} at
-	index \(j\) equals the corresponding field of~\(P\) at the reindexed
-	position \(\texttt{Fin.cast}\,h^{-1}(i_0.\texttt{succAbove}\,j)\).
-	This is \cite[\S~II, lines 287--301]{Cirac2017MPDO_AnnPhys}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Definitional unfolding (\texttt{rfl}) in each case.
-\end{proof}
-
-\begin{lemma}[MPV expansion of the dropped tensor]%
-	\label{lem:paper_bnt_drop_sector_mpv_add}
-	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_dropSector_add_coeff_mpv_basis}
-	\leanok
-	\uses{def:paper_sector_data, lem:paper_decomp_formula}
-	For any sector decomposition \(P\) with \(P.\texttt{basisCount} = n+1\),
-	any removed sector index \(i_0 \in \{0,\dotsc,n\}\), and any system
-	size~\(N\),
-	\[
-		V^{(N)}\!\bigl(P.\texttt{dropSector}\,h\,i_0\bigr)_\sigma
-		\;+\;
-		c_{P,\tilde\imath_0}^{(N)} \cdot V^{(N)}(P_{\tilde\imath_0})_\sigma
-		\;=\;
-		V^{(N)}(P)_\sigma,
-	\]
-	where \(\tilde\imath_0 = \texttt{Fin.cast}\,h^{-1}(i_0)\) and
-	\(c_{P,\tilde\imath_0}^{(N)} = \sum_q (P.\texttt{weight}\,\tilde\imath_0\,q)^N\)
-	is the raw power-sum sector coefficient.  This is the raw two-layer BNT
-	display of \cite[\S~II, lines 287--301]{Cirac2017MPDO_AnnPhys}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Reindex the MPV decomposition formula
-	(Lemma~\ref{lem:paper_decomp_formula}) from
-	\(\texttt{Fin}\,P.\texttt{basisCount}\) to \(\texttt{Fin}\,(n+1)\) via
-	\(\texttt{Fin.castOrderIso}\), split the sum at \(i_0\) using
-	\(\texttt{Fin.sum\_univ\_succAbove}\), then identify the remaining tail
-	with the MPV of the dropped decomposition via
-	\(\texttt{mpv\_toTensor\_eq\_sum\_coeff}\).
-\end{proof}
-
-\begin{lemma}[Dropped MPV as a difference]%
-	\label{lem:paper_bnt_drop_sector_mpv_sub}
-	\lean{MPSTensor.SectorDecomposition.mpv_toTensor_dropSector_eq_sub}
-	\leanok
-	\uses{lem:paper_bnt_drop_sector_mpv_add}
-	For any \(P\), \(h\), \(i_0\), \(N\), and configuration \(\sigma\),
-	\[
-		V^{(N)}\!\bigl(P.\texttt{dropSector}\,h\,i_0\bigr)_\sigma
-		\;=\;
-		V^{(N)}(P)_\sigma
-		\;-\;
-		c_{P,\tilde\imath_0}^{(N)} \cdot V^{(N)}(P_{\tilde\imath_0})_\sigma.
-	\]
-	This is the symmetric rearrangement of
-	Lemma~\ref{lem:paper_bnt_drop_sector_mpv_add}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Rearrangement of Lemma~\ref{lem:paper_bnt_drop_sector_mpv_add} by
-	\texttt{linear\_combination}.
-\end{proof}
-
-\begin{lemma}[\texttt{IsBNTCanonicalForm} is preserved by \texttt{dropSector}]%
-	\label{lem:paper_bnt_drop_sector_cf}
-	\lean{MPSTensor.IsBNTCanonicalForm.dropSector}
-	\leanok
-	\uses{def:paper_sector_data, def:paper_bnt_cf}
-	If \(P\) carries a paper-faithful BNT canonical form
-	(\texttt{IsBNTCanonicalForm}~\(P\)) with \(P.\texttt{basisCount} = n+1\),
-	if \(i_0 \in \{0,\dotsc,n\}\) is the index to drop, and if the
-	dropped decomposition retains a unit-modulus weight (\texttt{hUnitRem})
-	—~i.e.\ the CPSV16 \S II.A line-246 unit-witness convention survives the
-	drop—~then \(P.\texttt{dropSector}\,h\,i_0\) carries a paper-faithful BNT
-	canonical form.  Every pointwise field (bond dimension positivity,
-	injectivity, irreducibility, left-canonical form, normalized self-overlap,
-	and the modulus bound \(\lVert\mu_{j,q}\rVert \le 1\)) transfers by
-	evaluation at the reindexed position; eventual linear independence
-	transfers via \texttt{LinearIndependent.comp} applied to the injective
-	\(\texttt{Fin.succAbove}\) embedding
-	(\cite[Definition~4.3, line 1850]{Cirac2021Matrix}); block distinctness
-	transfers because the reindexing is injective; and the unit-witness
-	existential is supplied by \texttt{hUnitRem} (faithful to the CPSV16
-	renormalization step at each induction iteration).
-	This is the foundational induction step of
-	\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}
-	and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Construct the \texttt{IsBNTCanonicalForm} record for
-	\(P.\texttt{dropSector}\,h\,i_0\) field by field.  For
-	\texttt{bnt\_data}, use \texttt{LinearIndependent.comp} with the
-	injective map
-	\(j \mapsto \texttt{Fin.cast}\,h^{-1}(i_0.\texttt{succAbove}\,j)\),
-	whose injectivity follows from
-	\texttt{Fin.succAbove\_right\_injective}.  For \texttt{basis\_distinct},
-	injectivity of the reindexing lifts distinct indices on the dropped
-	decomposition to distinct indices on the original.
-\end{proof}
-
-\subsection{Matched-sector subtraction: equal-MPV identity on dropped tails}
-
-This subsection records the algebraic cancellation step that drives the
-strong-induction route to the equal-MPV non-decaying-overlap statement
-(Corollary~II.2 of~\cite{Cirac2017MPDO_AnnPhys}, lines~1172--1192).
-The result is: if two sector decompositions \(P\) and \(Q\) satisfy the
-equal-MPV identity and a single basis-sector pair \((i_0, k_0)\) is
-matched via a common gauge phase \(\zeta \in \mathbb{C}\setminus\{0\}\)
-coupling the basis MPVs and the weight multisets, then dropping that
-sector from each side preserves the equal-MPV identity.
-This is the cancellation underlying the matched relation
-\[
-	\mu_{j,q} \;=\; \nu_{j,q} \cdot e^{i\varphi_j},
-	\qquad
-	V^{(N)}(B_k)_\sigma \;=\; e^{i\varphi_j N}\, V^{(N)}(A_{j_k})_\sigma
-\]
-of \cite[\S~II, lines~1184--1188]{Cirac2017MPDO_AnnPhys}.
-
-\begin{lemma}[Matched-sector subtraction preserves the equal-MPV identity]%
-	\label{lem:paper_bnt_sameMPV_dropSector_dropSector}
-	\lean{MPSTensor.sameMPV_dropSector_dropSector}
-	\leanok
-	\uses{def:paper_sector_data, def:paper_bnt_cf,
-		lem:paper_bnt_drop_sector_mpv_sub}
-	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
-	canonical forms, with \(n_P + 1\) and \(n_Q + 1\) basis sectors
-	respectively, satisfying the equal-MPV identity
-	\(V^{(N)}(P)_\sigma = V^{(N)}(Q)_\sigma\) for all \(N\) and \(\sigma\).
-	Fix a basis-sector pair
-	\((i_0, k_0) \in \{0,\dotsc,n_P\} \times \{0,\dotsc,n_Q\}\) and a
-	scalar \(\zeta \in \mathbb{C}\setminus\{0\}\).  Assume:
-	\begin{enumerate}
-		\item (basis-MPV gauge relation) for every system size \(N\) and
-			configuration \(\sigma\),
-			\[
-				V^{(N)}(B_{k_0})_\sigma
-				\;=\;
-				\zeta^N \cdot V^{(N)}(A_{i_0})_\sigma;
-			\]
-		\item (weight-multiset matching) there exist copy-multiplicities
-			\(r_{P,i_0}\) and \(r_{Q,k_0}\) and a bijection
-			\(\tau : \{0,\dotsc,r_{P,i_0}-1\} \to \{0,\dotsc,r_{Q,k_0}-1\}\)
-			such that for every copy index \(q\),
-			\[
-				\nu_{k_0,\tau(q)}
-				\;=\;
-				\zeta^{-1} \cdot \mu_{i_0,q}.
-			\]
-	\end{enumerate}
-	Then the equal-MPV identity holds for the dropped tails:
-	\[
-		V^{(N)}(P')_\sigma
-		\;=\;
-		V^{(N)}(Q')_\sigma
-		\quad\text{for all }N,\,\sigma,
-	\]
-	where \(P'\) \textup{(}resp.\ \(Q'\)\textup{)} denotes the sector
-	decomposition obtained by removing basis sector \(A_{i_0}\) from
-	\(P\) \textup{(}resp.\ \(B_{k_0}\) from \(Q\)\textup{)}.
-	This is the algebraic cancellation step of
-	\cite[\S~II, Corollary~II.2, lines~1172--1192]{Cirac2017MPDO_AnnPhys}.
-	The same \(\zeta\) appears in both hypotheses by design: independent
-	gauge and weight phases would leave a residual \(\zeta^{2N}\) factor
-	and the subtraction would fail to cancel.
-\end{lemma}
-
-\begin{proof}\leanok
-	Fix \((N, \sigma)\).  Expand \(V^{(N)}(P')_\sigma\) and the
-	analogous \(Q'\)-side via
-	Lemma~\ref{lem:paper_bnt_drop_sector_mpv_sub}.  By the equal-MPV
-	identity, the full totals \(V^{(N)}(P)_\sigma\) and
-	\(V^{(N)}(Q)_\sigma\) agree, so it remains to show
-	\[
-		c_{P,i_0}^{(N)} \cdot V^{(N)}(A_{i_0})_\sigma
-		\;=\;
-		c_{Q,k_0}^{(N)} \cdot V^{(N)}(B_{k_0})_\sigma.
-	\]
-	For the coefficient ratio, reindex the per-copy sum
-	\(c_{Q,k_0}^{(N)} = \sum_{q'} \nu_{k_0,q'}^{\,N}\)
-	along \(\tau\), substitute the weight relation, distribute the
-	\(N\)-th power, and factor \((\zeta^{-1})^N\) out of the sum:
-	\(c_{Q,k_0}^{(N)} = \zeta^{-N} \cdot c_{P,i_0}^{(N)}\).
-	Substituting the basis-MPV gauge relation and using
-	\(\zeta^{-N}\zeta^N = 1\) (which requires \(\zeta \neq 0\)) closes
-	the identity.
-\end{proof}
-
-\begin{remark}
-	The hypotheses \(\mathsf{IsBNTCanonicalForm}\) on \(P\) and \(Q\) are
-	not consumed by the algebraic identity itself
-	(lines~1184--1188 of~\cite{Cirac2017MPDO_AnnPhys}); they are recorded
-	in the Lean signature for caller-symmetry with the strong-induction
-	step that uses this lemma.
-\end{remark}
-
-\begin{lemma}[Matched-sector subtraction via gauge-phase equivalence]%
-	\label{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}
-	\lean{MPSTensor.sameMPV_dropSector_dropSector_of_gaugePhaseEquiv}
-	\leanok
-	\uses{lem:paper_bnt_sameMPV_dropSector_dropSector}
-	An equivalent formulation of
-	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector} that takes
-	as input the gauge-phase equivalence between the matched basis tensors
-	(\cite[\S~II, line~1180]{Cirac2017MPDO_AnnPhys}) together with the
-	weight permutation, and derives the basis-MPV gauge relation
-	internally via the gauge-phase formula for matrix-product vectors
-	(\cite[\S~II, line~1187]{Cirac2017MPDO_AnnPhys}) and a bond-dimension
-	coercion.  Used in the strong-induction step relying on
-	Corollary~II.2 of~\cite{Cirac2017MPDO_AnnPhys} (lines~1172--1192).
-\end{lemma}
-
-\begin{proof}\leanok
-	Extract from the gauge-phase equivalence a matrix \(X\) and scalar
-	\(\zeta \neq 0\) satisfying a conjugacy identity on the matched basis
-	tensor.  Apply the gauge-phase formula for matrix-product vectors
-	(\cite[\S~II, line~1187]{Cirac2017MPDO_AnnPhys}) to obtain
-	\(V^{(N)}(B_{k_0})_\sigma = \zeta^N \cdot V^{(N)}(A_{i_0})_\sigma\)
-	after absorbing the bond-dimension coercion.  Dispatch to
-	Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector}.
-\end{proof}
-
 \section{Ces\`aro non-decay and unit-block coefficient}
 \label{sec:paper_bnt_cesaro_nondecay}
 
@@ -1182,87 +917,30 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 	\texttt{/tmp/phase\_4c\_drift\_audit\_2026-05-14.md} §Q-C).
 \end{remark}
 
-\subsection{Matched-sector coefficient identity and weight multiset equality}
+\subsection{Matched-sector weight multiset equality}
 
-The matched-sector subtraction lemma above
-(Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}) consumes a
-bijection \(\tau\) between the per-copy index sets and a weight relation
-\(Q.\texttt{weight}\,\tilde k_0\,(\tau q) = \zeta^{-1} \cdot
-P.\texttt{weight}\,\tilde\imath_0\,q\).  This subsection records the two
-algebraic inputs that produce the data \((\tau, \zeta)\) from a
-\(\texttt{SameMPV}_2\) hypothesis and the gauge-phase basis-MPV relation
-of the matched pair: the \emph{matched-sector coefficient identity}
-projected via combined-family eventual linear independence, and the
-\emph{matched-sector weight multiset equality} derived from the coefficient
-identity by Newton--Girard recovery
-(Theorem~\ref{thm:power_sum_multiset}).  Together they are the
-Step~1 linear-independence projection of \cite[\S~II, \texttt{II\_cor2},
-lines 1170--1192]{Cirac2017MPDO_AnnPhys} and the
+Given a matched basis-sector pair \((j_0, \tilde k_0)\) and a nonzero
+scalar \(\zeta \in \mathbb{C}\setminus\{0\}\) such that the matched
+coefficient identity
+\(P.\texttt{coeff}\,N\,j_0 = \zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0\)
+holds for every \(N\) past some threshold \(N_0\), this subsection
+records the two algebraic conclusions: the \emph{matched-sector weight
+multiset equality} derived from the coefficient identity by power-sum
+recovery (Theorem~\ref{thm:power_sum_multiset}), and the
+\emph{matched-sector weight-permutation extractor} upgrading the multiset
+equality to an explicit per-copy indexing.  Together they realise the
 \(\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}\) recovery
-of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
-
-\begin{lemma}[Matched-sector coefficient identity (eventual)]%
-	\label{lem:paper_bnt_matched_sector_coeff_identity_eventually}
-	\lean{MPSTensor.matched_sector_coeff_identity_eventually}
-	\leanok
-	\uses{def:paper_sector_data, def:paper_bnt_drop_sector}
-	Let \(P, Q\) be sector decompositions with
-	\(\texttt{SameMPV}_2(P.\texttt{toTensor}, Q.\texttt{toTensor})\) and
-	\(Q.\texttt{basisCount} = n_Q + 1\).  Fix an index
-	\(j_0 \in \{0,\dotsc,P.\texttt{basisCount}-1\}\), a matched
-	\(Q\)-sector \(k_0 \in \{0,\dotsc,n_Q\}\) (lifted to
-	\(\tilde k_0 \in \texttt{Fin}\,Q.\texttt{basisCount}\)), and a scalar
-	\(\zeta \in \mathbb{C}\).  Assume:
-	\begin{enumerate}
-		\item (basis-MPV gauge relation) for every system size \(N\) and
-			configuration \(\sigma\),
-			\[
-				V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma
-				\;=\;
-				\zeta^N \cdot V^{(N)}(P.\texttt{basis}\,j_0)_\sigma;
-			\]
-		\item (combined-family eventual linear independence) there exists
-			\(N_0 \in \mathbb{N}\) such that for every \(N > N_0\), the
-			combined MPV-state family
-			\(\bigl(V^{(N)}(P.\texttt{basis}\,j)\bigr)_{j}
-			\oplus
-			\bigl(V^{(N)}((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\bigr)_{l}\)
-			is linearly independent over~\(\mathbb{C}\).
-	\end{enumerate}
-	Then there exists \(N_0 \in \mathbb{N}\) such that for every
-	\(N > N_0\),
-	\[
-		P.\texttt{coeff}\,N\,j_0
-		\;=\;
-		\zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0.
-	\]
-	This is the Step~1 linear-independence projection of
-	\cite[\S~II, \texttt{II\_cor2},
-	lines 1170--1192]{Cirac2017MPDO_AnnPhys}.
-\end{lemma}
-
-\begin{proof}\leanok
-	Fix \(N > N_0\).  Substituting the basis-MPV gauge relation in the
-	\(Q\)-side expansion
-	\(V^{(N)}(Q.\texttt{toTensor})_\sigma
-	= \sum_{k} c_{Q,k}^{(N)} V^{(N)}(Q.\texttt{basis}\,k)_\sigma\)
-	(with the \texttt{Fin.sum\_univ\_succAbove} succAbove-splitting at
-	\(k = \tilde k_0\)) and equating to the \(P\)-side expansion via
-	\(\texttt{SameMPV}_2\), the difference of the two expansions becomes a
-	single linear relation among the combined MPV-state family.  Combined-
-	family eventual linear independence
-	(\(\texttt{Fintype.linearIndependent\_iff}\)) extracts the coefficient
-	at the matched index \(j_0\): it is
-	\(P.\texttt{coeff}\,N\,j_0 - \zeta^N \cdot Q.\texttt{coeff}\,N\,\tilde k_0\),
-	which must vanish.
-\end{proof}
+of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.  The
+coefficient identity itself is the Step~1 linear-independence projection
+of \cite[\S~II, \texttt{II\_cor2}, lines 1170--1192]{Cirac2017MPDO_AnnPhys}
+and is supplied by the global-gauge / full-basis route of
+Phase~B-\(\gamma\) below.
 
 \begin{lemma}[Matched-sector weight multiset equality]%
 	\label{lem:paper_bnt_matched_sector_weight_multiset_eq}
 	\lean{MPSTensor.matched_sector_weight_multiset_eq}
 	\leanok
 	\uses{def:paper_sector_data,
-		lem:paper_bnt_matched_sector_coeff_identity_eventually,
 		thm:power_sum_multiset}
 	Let \(P, Q\) be sector decompositions, and fix indices
 	\(j_0 \in \texttt{Fin}\,P.\texttt{basisCount}\),
@@ -1376,156 +1054,6 @@ of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}.
 	the gauge factor on the right of the pointwise identity to
 	\(\zeta^{-1}\) on the left.
 \end{proof}
-
-\subsection{Cross-overlap decay against a dropped sector}
-\label{sec:paper_bnt_drop_sector_overlap_decay}
-
-Once a matched basis-sector pair \((j_0, k_0)\) has been extracted from
-two paper-faithful BNT canonical forms with
-\(\texttt{SameMPV}_2\) (Lemma~\ref{lem:paper_bnt_sameMPV_dropSector_dropSector_of_gpe}),
-the strong-induction step of \cite[\S~II,
-\texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys} needs the
-cross-overlaps
-\[
-	\texttt{mpvOverlap}\,
-		(P.\texttt{basis}\,j)\,
-		((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)
-\]
-to decay for every \((j, l)\), so that
-Lemma~\ref{lem:paper_bnt_combined_family_eventually_li} (combined-family eventual linear
-independence) applies on the reduced pair
-\((P, Q.\texttt{dropSector}\,h_Q\,k_0)\).  This subsection records the
-two ingredients of that decay supplied by the matched-pair data alone.
-
-\begin{lemma}[Dimension-mismatch cross-overlap decay against a dropped sector]%
-	\label{lem:paper_bnt_cross_overlap_dropSector_dim_ne}
-	\lean{MPSTensor.cross_overlap_basis_dropSector_tendsto_zero_of_dim_ne}
-	\leanok
-	\uses{def:paper_bnt_cf, lem:paper_bnt_drop_sector_unfold}
-	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
-	canonical forms.  Fix \(h_Q : Q.\texttt{basisCount} = n_Q + 1\),
-	\(k_0 : \texttt{Fin}(n_Q + 1)\), and
-	\(j : \texttt{Fin}\,P.\texttt{basisCount}\),
-	\(l : \texttt{Fin}\,n_Q\).  If
-	\(P.\texttt{basisDim}\,j \neq
-		Q.\texttt{basisDim}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l))\),
-	then
-	\[
-		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j)\,
-			((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\,N
-		\xrightarrow[N \to \infty]{} 0.
-	\]
-	This is the unequal-bond-dimension half of the
-	\cite[\S~II, line 1080]{Cirac2017MPDO_AnnPhys}
-	normal-tensor overlap dichotomy, read on the dropped Q-basis at
-	index \(l\).
-\end{lemma}
-
-\begin{proof}\leanok
-	Unfold \((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l =
-		Q.\texttt{basis}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l))\)
-	via the \texttt{dropSector\_basis} unfolding lemma, and dispatch to
-	\texttt{mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}
-	with the per-block irreducible / left-canonical data carried by
-	\texttt{IsBNTCanonicalForm}.
-\end{proof}
-
-\begin{lemma}[Matched-block cross-overlap decay against a dropped sector]%
-	\label{lem:paper_bnt_cross_overlap_dropSector_matched}
-	\lean{MPSTensor.cross_overlap_basis_matched_dropSector_tendsto_zero}
-	\leanok
-	\uses{def:paper_bnt_cf, lem:paper_bnt_drop_sector_unfold,
-		lem:paper_bnt_cross_overlap_basis_tendsto_zero}
-	Let \(P, Q\) be sector decompositions carrying paper-faithful BNT
-	canonical forms.  Fix
-	\(j_0 : \texttt{Fin}\,P.\texttt{basisCount}\),
-	\(h_Q : Q.\texttt{basisCount} = n_Q + 1\),
-	\(k_0 : \texttt{Fin}(n_Q + 1)\), a bond-dimension equality
-	\(h_{\dim} : P.\texttt{basisDim}\,j_0
-		= Q.\texttt{basisDim}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0))\), and a
-	matched-pair gauge-phase witness
-	\[
-		\texttt{GaugePhaseEquiv}\,
-			(\texttt{cast}\,h_{\dim}\,(P.\texttt{basis}\,j_0))\,
-			(Q.\texttt{basis}\,(\texttt{Fin.cast}\,h_Q^{-1}(k_0)))
-	\]
-	(supplied by the dominant-pair matching step of
-	\cite[\S~II, line 1180]{Cirac2017MPDO_AnnPhys}).  Then for every
-	dropped Q-basis index \(l : \texttt{Fin}\,n_Q\),
-	\[
-		\texttt{mpvOverlap}\,
-			(P.\texttt{basis}\,j_0)\,
-			((Q.\texttt{dropSector}\,h_Q\,k_0).\texttt{basis}\,l)\,N
-		\xrightarrow[N \to \infty]{} 0.
-	\]
-\end{lemma}
-
-\begin{proof}\leanok
-	Destructure the matched-pair witness into a conjugating element
-	\(X \in \mathrm{GL}(\texttt{Fin}\,(Q.\texttt{basisDim}\,k_0'))\) and
-	a nonzero gauge phase \(\zeta\) with the conjugacy identity on the
-	cast basis tensor (\(\tilde k_0 = \texttt{Fin.cast}\,h_Q^{-1}(k_0)\)).
-	The basis-MPV power identity
-	\(V^{(N)}(Q.\texttt{basis}\,\tilde k_0)_\sigma
-		= \zeta^N \cdot V^{(N)}(P.\texttt{basis}\,j_0)_\sigma\)
-	follows by
-	\texttt{mpv\_eq\_pow\_mul\_of\_gaugePhase} together with
-	\texttt{mpv\_cast\_dim} to absorb the bond-dimension cast.
-
-	The self-overlap scaling identity
-	\(\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)
-		(Q.\texttt{basis}\,\tilde k_0)\,N
-		= (\zeta \overline{\zeta})^N \cdot
-		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j_0)
-			(P.\texttt{basis}\,j_0)\,N\),
-	combined with
-	\(\texttt{basis\_normalized\_self\_overlap}\) on both sides
-	(\(\to 1\) in norm), gives \(\|\zeta\| = 1\) via
-	\texttt{norm\_eq\_one\_of\_selfOverlap\_scale}.
-
-	With \(k := \texttt{Fin.cast}\,h_Q^{-1}(k_0.\texttt{succAbove}\,l)\),
-	the basis-MPV power identity yields the pointwise factorisation
-	\[
-		\texttt{mpvOverlap}\,(P.\texttt{basis}\,j_0)\,(Q.\texttt{basis}\,k)\,N
-		= \zeta^{-N} \cdot
-			\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)\,(Q.\texttt{basis}\,k)\,N.
-	\]
-	Since \(k_0.\texttt{succAbove}\,l \neq k_0\), the Q-side basis indices
-	\(\tilde k_0\) and \(k\) differ, and
-	Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero} applied to \(Q\) gives
-	\(\texttt{mpvOverlap}\,(Q.\texttt{basis}\,\tilde k_0)\,
-		(Q.\texttt{basis}\,k)\,N \to 0\).  As
-	\(\|\zeta^{-N}\| = 1\), the product decays via
-	\texttt{squeeze\_zero\_norm}.
-\end{proof}
-
-\begin{remark}[Unmatched-index residual]
-	\label{rem:paper_bnt_cross_overlap_dropSector_unmatched}
-	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_matched} handles
-	the \(j = j_0\) row of the cross-overlap matrix on the reduced pair
-	\((P, Q.\texttt{dropSector}\,h_Q\,k_0)\), and
-	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_dim_ne} handles
-	every dimension-mismatched entry.  The residual entries
-	(\(j \neq j_0\), bond dimensions equal, gauge-distinct on the cast
-	surface) are not a consequence of the matched-pair witness alone:
-	the matched-pair gauge-phase equivalence relates \(P.\texttt{basis}\,j_0\)
-	to \(Q.\texttt{basis}\,\tilde k_0\), not to any other
-	\(Q.\texttt{basis}\,\tilde k_0.\texttt{succAbove}\,l\), and the
-	\texttt{basis\_distinct} field of
-	\texttt{IsBNTCanonicalForm} on the \(P\) side relates
-	\(P.\texttt{basis}\,j\) to \(P.\texttt{basis}\,j_0\), not to a
-	\(Q\)-side basis block.  These entries enter the
-	\cite[\S~II, \texttt{II\_cor2}, lines 1172--1192]{Cirac2017MPDO_AnnPhys}
-	argument through the outer induction on
-	\(P.\texttt{basisCount} + Q.\texttt{basisCount}\): after the matched
-	pair is removed, the surviving \((P, Q.\texttt{dropSector}\,h_Q\,k_0)\)
-	pair is paired with a fresh matched-pair extraction on the reduced
-	data (the dominant-pair matching step recorded in
-	\texttt{PaperBNT/DominantMatch.lean}), and the cross-overlap decay
-	for the next \(j_0\) is supplied by reapplying
-	Lemma~\ref{lem:paper_bnt_cross_overlap_dropSector_matched} to the
-	freshly matched index.
-\end{remark}
 
 \section{Phase B-\(\alpha\): paper-faithful strong existential matching}
 
@@ -1751,9 +1279,9 @@ derivable from \texttt{IsBNTCanonicalForm}.  We deliver the
 \(\texttt{Tendsto}\,(P.\texttt{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\texttt{coeff}\,N\,k.\texttt{val})\,\texttt{atTop}\,(\mathcal{N}\,0)\),
 which is the natural output of the overlap-projection argument; the
 upgrade to the eventual-exact form is provided downstream by the
-multiset-rigidity lemma \texttt{Multiset.eq\_of\_power\_sum\_eq}
-(Theorem~\ref{thm:paper_bnt_multiset_eq_of_power_sum_eq}, the Newton-Girard
-input behind CPSV16 lines 1187-1188).  The non-matched-decay clause is
+multiset-rigidity lemma of
+Theorem~\ref{thm:power_sum_multiset}, the Newton--Girard
+input behind CPSV16 lines 1187-1188.  The non-matched-decay clause is
 delivered in full.
 
 \begin{theorem}[CPSV16 \S{}II.C lines 1187-1188 Corollary substitution]
