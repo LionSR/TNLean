@@ -220,6 +220,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
 import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Fundamental
+import TNLean.MPS.FundamentalTheorem.PaperBNT.FundamentalCoord
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
