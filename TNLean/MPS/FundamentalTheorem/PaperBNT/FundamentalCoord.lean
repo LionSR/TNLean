@@ -96,7 +96,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
       (ζ : Fin Q.basisCount → ℂ)
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
       (_hTotal : P.totalDim = Q.totalDim)
-      (X : GL (Fin Q.totalDim) ℂ),
+      (X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ),
       (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
       (∀ (k : Fin Q.basisCount) (i : Fin d),
         Q.basis k i =
@@ -108,12 +108,14 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
         Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) ∧
       (∀ i : Fin d,
         Q.toTensor i =
-          (X : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+          (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
             toTensorFromBlocks (d := d)
               (μ := matched_p_weight (P := P) (Q := Q) β τ)
               (matched_p_basis (P := P) (Q := Q) β hDim) i *
-            (((X)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)) := by
+            (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+              Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                     (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
   obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, X, _hXdef, hGauge⟩ :=
     ft_paper_bnt_equal_global_gauge hP hQ hEqual
@@ -145,15 +147,17 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv
       ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
         (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
         (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
-        (X : GL (Fin Q.totalDim) ℂ),
+        (X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ),
         ∀ i : Fin d,
           Q.toTensor i =
-            (X : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
+            (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
               toTensorFromBlocks (d := d)
                 (μ := matched_p_weight (P := P) (Q := Q) β τ)
                 (matched_p_basis (P := P) (Q := Q) β hDim) i *
-              (((X)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
+              (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+                Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                       (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
     ft_paper_bnt_equal_mps_gaugeEquiv_witnesses hP hQ hEqual
