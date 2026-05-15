@@ -183,7 +183,6 @@ import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
-import TNLean.MPS.ParentHamiltonian.DegenerateGS
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
@@ -205,7 +204,6 @@ import TNLean.MPS.Symmetry.StringOrder
 
 -- Layer 5: Multi-block
 import TNLean.MPS.Core.MultiBlock
-import TNLean.MPS.ParentHamiltonian.BiCF.BlockDiagonalCommutant
 import TNLean.Algebra.BlockTriangularTrace
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.MPS.BNT.Basic
@@ -235,23 +233,8 @@ import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.SectorIrreducibility
-import TNLean.MPS.CanonicalForm.SectorComparison
-import TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction
-import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
-import TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorRepresentatives
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
-import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
-import TNLean.MPS.CanonicalForm.SectorComparison.NonzeroBlockComparison
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
-import TNLean.MPS.CanonicalForm.SectorComparison.StructuralData
-import TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData
-import TNLean.MPS.CanonicalForm.SectorComparison.BasicSectorComparison
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
