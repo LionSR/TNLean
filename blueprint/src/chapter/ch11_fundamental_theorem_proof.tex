@@ -113,7 +113,7 @@ block-diagonal gauge.
 \end{proof}
 
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
-	\lean{MPSTensor.fundamentalTheorem_equalMPV_CFBNT}
+	\lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
 	\leanok
 	\uses{def:cf_bnt, def:gauge_equiv}
 	Fix a common block structure: the same number of blocks~$g$,
@@ -131,12 +131,14 @@ block-diagonal gauge.
 \begin{proof}
 	\leanok
 	\uses{lem:ft_canonical}
-	Since both families share the canonical-form hypotheses, the BNT separation
-	condition is not needed.
-	The same-structure canonical-form comparison
-	(Lemma~\ref{lem:ft_canonical}) then applies directly to this
-	common $(g, D_k, \mu_k)$ structure, yielding per-block gauge
-	equivalence and hence global gauge equivalence.
+	On the paper-faithful BNT surface this is the specialization of
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} (in
+	\texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}) to the
+	situation where $P$ and $Q$ share a common $(g, D_k, \mu_k)$ block
+	structure: the basis bijection $\beta$ is trivial, the per-block gauge
+	matrices $X_{\text{block}}\,k$ provide the per-pair gauge equivalences,
+	and the flattened direct-sum gauge $X$ assembles them into the global
+	conjugation on $\bigoplus_k\mu_k A_k$ and $\bigoplus_k\mu_k B_k$.
 \end{proof}
 
 \subsection{Sector multiplicities and weight recovery}%
@@ -1099,7 +1101,7 @@ block-matching conclusions for the common primitive sectors.
 \end{proof}
 
 
-\begin{remark}[Equal-case comparison after canonical reduction]\notready
+\begin{remark}[Equal-case comparison after canonical reduction]
 	The equal-case proof in the source starts after both tensors have been put in
 	canonical form and after a basis of normal tensors has been chosen.  In that
 	notation the BNT expansion has the form
@@ -1126,8 +1128,21 @@ block-matching conclusions for the common primitive sectors.
 	\]
 	Newton--Girard then recovers the multiplicities and weight multisets, and the
 	block gauges $Y_j$ are placed on the diagonal to give the global conjugating
-	matrix.  This is the equal-case corollary in the source, restated in
-	\cite[Corollary~IV.5]{Cirac2021Matrix}.
+	matrix.  This is the equal-case corollary
+	\cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys},
+	restated in \cite[Corollary~IV.5]{Cirac2021Matrix}.
+
+	The paper-faithful Lean formalization of this route is split into two
+	theorems in \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}:
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data} packages the BNT
+	basis bijection $\beta$, the per-block gauge-phase witnesses, copy-count
+	equality, and the scalar coefficient comparison
+	$Q.\text{weight}_k\,q=(\zeta_k)^{-1}\,P.\text{weight}_{\beta k}\,(\tau\,q)$
+	matching the source power-sum identity displayed above; and
+	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} assembles the
+	per-block gauge matrices $Y_j=X_{\text{block}}\,k$ on the flattened
+	direct sum to produce the global conjugation~$X$, matching the appendix
+	construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
 
 	The comparison theorems above formalize only the part of this route after the
 	common blocked nonzero sectors and their BNT matching data have been supplied.

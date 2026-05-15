@@ -214,7 +214,6 @@ import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.CanonicalForm.FromPrimitive
-import TNLean.MPS.FundamentalTheorem.EqualProportional
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
