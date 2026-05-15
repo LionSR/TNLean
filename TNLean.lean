@@ -227,9 +227,6 @@ import TNLean.MPS.FundamentalTheorem.OverlapConvergenceAux
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition.PerBlockProjection
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition.HNoCancelDischarge
-import TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.FundamentalTheorem.PaperBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
