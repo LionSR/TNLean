@@ -1,539 +1,1286 @@
 
 \chapter{Basis of Normal Tensors}\label{ch:bnt}
 
-This chapter develops the canonical form and \emph{basis of normal tensors}
-(BNT) framework of~\cite[\S~II]{Cirac2017MPDO_AnnPhys}, together with the
-analytic, algebraic, and gauge-theoretic ingredients used in the proof of
-the Fundamental Theorem of Matrix Product Vectors. The exposition follows
-the appendix proof of~\cite[II.cor.2]{Cirac2017MPDO_AnnPhys}, restated as
-Corollary~4.5 in~\cite{Cirac2021Matrix}. The route consists of three
-analytic ingredients and one algebraic assembly:
-the cross-overlap dichotomy of~\cite[L.\,1080--1133]{Cirac2017MPDO_AnnPhys},
-which produces eventual linear independence of any combined BNT family;
-the Newton--Girard power-sum recovery
-of~\cite[L.\,1155--1163, 1184--1188]{Cirac2017MPDO_AnnPhys}, which
-identifies multiplicities and weight multisets;
-a per-block non-decay statement (CPSV16 \S~II.A line~246, used implicitly
-at~L.\,1182--1183) that fixes the projection onto matched sectors;
-and a single global gauge substitution
-(\cite[L.\,1189--1192]{Cirac2017MPDO_AnnPhys}) reading off the conjugation
-matrix.
+This chapter introduces the \emph{basis of normal tensors} (BNT) notion,
+the canonical-form variants with BNT separation, the
+cross-overlap decay theorem, and the permutation-rigidity
+arguments used in the proof of the Fundamental Theorem.
+The chapter concludes with auxiliary results on
+coefficient convergence and Newton--Girard identities.
+The main references are
+\cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
+and~\cite{Cirac2021Matrix}.
 
+\section{Basis of normal tensors}
 
-% ==========================================================
-\section{Canonical form and basis of normal tensors}
-\label{sec:bnt:cf}
-
-Let $A$ be a tensor with matrix-valued components $A^i \in
-    \mathcal{M}_{D \times D}(\mathbb{C})$, generating the family of matrix
-product vectors
-\[
-    \ket{V^{(N)}(A)} = \sum_{i_1,\ldots,i_N}
-    \tr(A^{i_1}\cdots A^{i_N}) \ket{i_1,\ldots,i_N}.
-\]
-Following~\cite[\S~II.A]{Cirac2017MPDO_AnnPhys},
-$A$ is in \emph{canonical form} (CF) when, after a blocking that removes
-$p$-periodic eigenvectors, one can decompose
-\begin{equation}\label{eq:bnt:cf}
-    A^i = \bigoplus_{k=1}^{r} \mu_k\, A^i_k,
-\end{equation}
-where each $A_k$ is a \emph{normal tensor}: it admits no nontrivial
-invariant subspace, and its transfer operator $\mathcal{E}_k(X) =
-    \sum_i A^i_k\, X\, (A^i_k)^\dagger$ has a unique eigenvalue of modulus
-equal to its spectral radius (which is~$1$).
-The scalars $\mu_k \in \mathbb{C}$ are chosen so that
-\begin{equation}\label{eq:bnt:norm246}
-    |\mu_k| \le 1 \qquad \text{for every } k,
-    \qquad \text{and} \qquad |\mu_{k^\star}| = 1 \quad
-    \text{for at least one } k^\star,
-\end{equation}
-the convention adopted at~\cite[L.\,246]{Cirac2017MPDO_AnnPhys}.
-
-Two normal blocks $\tilde A_k$ and $A_j$ in~\eqref{eq:bnt:cf} generate
-proportional families of matrix product vectors if and only if they are
-related by a gauge phase: there exist a phase $\phi_k \in \mathbb{R}$
-and an invertible matrix $X_k$ such that
-\begin{equation}\label{eq:bnt:gaugephase}
-    \tilde A^i_k = e^{i\phi_k}\, X_k\, A^i_j\, X_k^{-1}.
-\end{equation}
-Grouping the blocks of~\eqref{eq:bnt:cf} by the equivalence
-relation~\eqref{eq:bnt:gaugephase} and choosing one representative
-$A_j$ ($j = 1,\ldots,g$) from each class yields the two-layer
-\emph{BNT decomposition}~\cite[L.\,287--301]{Cirac2017MPDO_AnnPhys},
-\begin{equation}\label{eq:bnt:twolayer}
-    A^i = \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
-    \mu_{j,q}\, X_{j,q}\, A^i_j\, X_{j,q}^{-1}.
-\end{equation}
-Here $r_j$ counts the multiplicities of the $j$-th class and the
-$X_{j,q}$ encode the per-copy gauges. Setting $X = \bigoplus_{j,q}
-    X_{j,q}$, the matrix product vector display reads
-\begin{equation}\label{eq:bnt:mpv_display}
-    \ket{V^{(N)}(A)} = \sum_{j=1}^{g}
-    \left(\sum_{q=1}^{r_j}\mu_{j,q}^{\,N}\right)
-    \ket{V^{(N)}(A_j)}.
-\end{equation}
-
-\begin{definition}[Basis of normal tensors]\label{def:bnt}
-    The collection $(A_j)_{j=1}^{g}$ is a \emph{basis of normal tensors}
-    (BNT) for $A$ when:
+\begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
+    \lean{MPSTensor.IsBNTCanonicalForm}
+    \leanok
+    \uses{def:normal, def:mpv}
+    A \emph{basis of normal tensors} (BNT) for a
+    total tensor $A_{\mathrm{tot}}$ consists of $g$ block tensors
+    $(A_1, \ldots, A_g)$ with bond dimensions $(D_1, \ldots, D_g)$
+    such that:
     \begin{enumerate}
-        \item each $A_j$ is a normal tensor;
-        \item the family $\ket{V^{(N)}(A)}$ is a linear combination of
-              $\{\ket{V^{(N)}(A_j)}\}_{j=1}^{g}$ for every $N$, with the
-              coefficients of~\eqref{eq:bnt:mpv_display};
-        \item there exists $N_0$ such that, for every $N > N_0$, the
-              vectors $\ket{V^{(N)}(A_j)}$ are linearly independent;
-        \item distinct same-dimension representatives are not
-              gauge-phase equivalent in the sense
-              of~\eqref{eq:bnt:gaugephase}.
+        \item each $A_j$ is normal
+              (Definition~\ref{def:normal}),
+        \item at each system size~$N$, the MPV of $A_{\mathrm{tot}}$
+              lies in the span of the block MPVs
+              $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$,
+        \item for sufficiently large~$N$, the block MPV
+              vectors $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are
+              linearly independent.
     \end{enumerate}
+    This is \cite[Definition~4.2]{Cirac2021Matrix}. In the canonical-form
+    characterization of \cite[Section~2.3 and Appendix~A]{Cirac2016MPDO_arXiv},
+    a BNT is a minimal family of representatives for the relation
+    \[
+        \widetilde A_k^i = e^{i\phi_k}X_k A_j^iX_k^{-1}
+    \]
+    among the normal blocks in the canonical form.
 \end{definition}
 
-The minimality
-condition~\cite[L.\,271--274]{Cirac2017MPDO_AnnPhys} ensures that the
-representatives are independent and that the multiplicities $r_j$ and
-weights $\mu_{j,q}$ are intrinsic to the family generated by~$A$.
-For each NT block $A_j$ one further has
-$\langle V^{(N)}(A_j)\,|\,V^{(N)}(A_j)\rangle \to 1$ as $N \to \infty$,
-the trace-preserving normalization
-of~\cite[L.\,1818--1832]{Cirac2017MPDO_AnnPhys}.
-
-\paragraph{Lean realization.}
-The data of Definition~\ref{def:bnt} together with~\eqref{eq:bnt:norm246}
-are formalized as the predicate
-\lean{MPSTensor.IsBNTCanonicalForm}\leanok, a structure carrying
-positive bond dimensions, injectivity, irreducibility, left-canonical
-normalization, normalized self-overlaps, BNT linear independence, the
-gauge-phase distinctness of distinct same-dimension representatives, and
-the modulus-bound and unit-modulus existential fields encoding
-\eqref{eq:bnt:norm246}.
-
-
-% ==========================================================
-\section{Overlap dichotomy and combined linear independence}
-\label{sec:bnt:lem1}
-
-The basic analytic input on normal tensors is the following dichotomy,
-established as~\cite[L.\,1080--1118, \textit{equalMPS}]{Cirac2017MPDO_AnnPhys}.
-
-\begin{lemma}[Overlap dichotomy]\label{lem:bnt:dichotomy}
-    Let $A$ and $B$ be normal tensors of bond dimensions $D_A$ and $D_B$,
-    trace-preserving normalized, with self-overlaps
-    $\langle V^{(N)}(A)\,|\,V^{(N)}(A)\rangle \to 1$ and similarly for
-    $B$. Then
-    \[
-        \bigl|\langle V^{(N)}(B)\,|\,V^{(N)}(A)\rangle\bigr|
-        \longrightarrow 0 \quad \text{or} \quad 1.
-    \]
-    The limit~$1$ forces $D_A = D_B$ and the existence of a phase
-    $\phi$ and an invertible $X$ with $B^i = e^{i\phi} X A^i X^{-1}$;
-    in particular,
-    \[
-        \ket{V^{(N)}(B)} = e^{i\phi N}\, \ket{V^{(N)}(A)}.
-    \]
+\begin{lemma}[Finite-index overlap-orthonormality implies eventual linear independence]
+    \label{lem:bnt_finite_index_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap}
+    Let $I$ be a finite index set and let $(A_i)_{i\in I}$ be a finite
+    family of tensors such that $O_{A_iA_i}(N)\to 1$ for each $i$, and
+    $O_{A_iA_j}(N)\to 0$ whenever $i\neq j$. Then the MPV states
+    $\{\ket{V^{(N)}(A_i)}\}_{i\in I}$ are linearly independent for all
+    sufficiently large~$N$.
 \end{lemma}
 
-The proof uses the Perron--Frobenius structure of the transfer
-operators $\mathcal{E}_A$ and $\mathcal{E}_B$: the mixed transfer
-operator $\mathcal{E}_{AB}(X) = \sum_i B^{i\dagger} X A^i$ has spectral
-radius strictly less than $1$ unless an intertwining isometry exists,
-in which case the Cauchy--Schwarz inequality is saturated and
-$B = e^{i\phi} X A X^{-1}$. The contrapositive is the key ingredient
-for the Fundamental Theorem: distinct NT blocks are asymptotically
-orthogonal.
+\begin{proof}\leanok
+    The Gram matrix of the family $\{\ket{V^{(N)}(A_i)}\}_{i\in I}$
+    converges entrywise to the identity matrix. Hence for all sufficiently
+    large $N$ it is invertible, so the MPV states are linearly independent.
+\end{proof}
 
-The Gram matrix of the family $\{\ket{V^{(N)}(A_j)}\}_{j=1}^{g}$
-converges entrywise to the $g \times g$ identity matrix. Since
-invertibility is open in matrix space, this yields the following
-\emph{Lem1} of~\cite[L.\,1131--1133]{Cirac2017MPDO_AnnPhys}.
+\begin{lemma}[Overlap-orthonormality implies eventual linear independence]
+    \label{lem:bnt_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
+    Let $(A_j)_{j=1}^g$ be a finite family of tensors such that
+    $O_{A_jA_j}(N) \to 1$ for each $j$ and $O_{A_iA_j}(N) \to 0$
+    for $i \neq j$. Then the MPV states
+    $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$ are linearly independent for all
+    sufficiently large~$N$.
+\end{lemma}
 
-\begin{lemma}[Combined-family eventual linear independence]
-    \label{lem:bnt:lem1}
-    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two finite families
-    of normal tensors satisfying Lemma~\ref{lem:bnt:dichotomy}'s
-    normalization hypotheses. Assume that within each family the
-    cross-overlaps tend to zero, and that every mixed overlap
-    $\langle V^{(N)}(A_j)\,|\,V^{(N)}(B_k)\rangle$ tends to zero. Then
-    there exists $N_0$ such that, for every $N > N_0$, the combined family
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li} with
+    $I=\{1,\ldots,g\}$.
+\end{proof}
+
+\begin{lemma}[Eventual coefficient extraction from linear independence]%
+    \label{lem:eventual_coeff_eq_of_eventual_li}
+    \lean{MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent}
+    \leanok
+    If a finite family of vectors is linearly independent for all sufficiently
+    large $N$, and two finite linear combinations of that family are equal
+    for all sufficiently large $N$, then the corresponding coefficients are
+    equal for all sufficiently large $N$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Move the two linear combinations to one side. Linear independence forces
+    each coefficient difference to vanish at every sufficiently large length.
+\end{proof}
+
+\begin{lemma}[Overlap-orthonormality for two families]%
+    \label{lem:bnt_two_family_overlap_orthonormal_li}
+    \lean{MPSTensor.eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal}
+    \leanok
+    \uses{def:mpv_overlap, lem:bnt_finite_index_overlap_orthonormal_li}
+    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be finite families of
+    tensors. Suppose the overlaps inside each family are asymptotically
+    orthonormal, and suppose every mixed overlap
+    $O_{A_jB_k}(N)$ tends to~$0$. Then the combined MPV family
     \[
-        \{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A} \cup
+        \{\ket{V^{(N)}(A_j)}\}_{j=1}^{g_A}
+        \cup
         \{\ket{V^{(N)}(B_k)}\}_{k=1}^{g_B}
     \]
-    is linearly independent.
+    is linearly independent for all sufficiently large~$N$.
 \end{lemma}
 
-Applied to a single BNT, the within-family hypothesis follows from
-Lemma~\ref{lem:bnt:dichotomy} and the gauge-phase distinctness of
-Definition~\ref{def:bnt}~(4), so the representatives $A_j$ themselves
-are eventually linearly independent. Applied to two BNTs whose mixed
-representatives fail to be gauge-phase equivalent, it yields the
-combined linear independence that drives the projection arguments of
-Sections~\ref{sec:bnt:match}--\ref{sec:bnt:coeff_identity}.
+\begin{proof}\leanok
+    Apply the finite-index Gram-matrix criterion to the disjoint union of the two
+    index sets. The within-family hypotheses give the diagonal and
+    off-diagonal limits inside each block, and the mixed overlap hypothesis gives
+    the off-diagonal limits between the two blocks.
+\end{proof}
 
-\paragraph{Lean realization.}
-The dichotomy of Lemma~\ref{lem:bnt:dichotomy} is the engine behind the
-within-family cross-overlap decay; the combined-family
-Lemma~\ref{lem:bnt:lem1} is recorded as
-\lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}\leanok,
-which takes two BNT canonical forms and an inter-family overlap decay
-hypothesis and returns the eventual linear independence of the union.
+\begin{definition}[No gauge-phase-equivalent distinct blocks]%
+    \label{def:blocks_not_gauge_phase_equiv}
+    \lean{MPSTensor.BlocksNotGaugePhaseEquiv}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    A finite block family has no gauge-phase-equivalent distinct blocks when,
+    for any two distinct indices with the same bond dimension, the corresponding
+    blocks are not gauge-phase equivalent.
+\end{definition}
 
-
-% ==========================================================
-\section{Newton--Girard power-sum recovery}
-\label{sec:bnt:newton_girard}
-
-The algebraic ingredient at the heart of~\cite[II.cor.2]{Cirac2017MPDO_AnnPhys}
-recovers multiplicities and weight multisets from equality of power sums.
-The following finite-range form is essentially~\cite[L.\,1155--1163,
-    appendix \textit{Lem:app\_simple}]{Cirac2017MPDO_AnnPhys}.
-
-\begin{theorem}[Power-sum multiset recovery]\label{thm:bnt:newton_girard}
-    Let $\alpha_1,\ldots,\alpha_m$ and $\beta_1,\ldots,\beta_n$ be
-    nonzero complex numbers. If
+\begin{definition}[Canonical form with BNT separation]\label{def:cf_bnt}
+    \lean{MPSTensor.IsCanonicalFormBNT}
+    \leanok
+    \uses{def:is_canonical_form, def:blocks_not_gauge_phase_equiv}
+    A family is in \emph{canonical form with BNT separation}
+    if it satisfies Definition~\ref{def:is_canonical_form} and,
+    in addition:
+    \begin{enumerate}
+        \item the moduli are \emph{strictly} decreasing:
+              $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$
+              (strengthened from the non-increasing ordering
+              of Definition~\ref{def:is_canonical_form}),
+        \item distinct blocks of the same bond dimension are
+              \emph{not} gauge-phase equivalent.
+    \end{enumerate}
+    This is an already grouped special case. In the source BNT expansion
+    of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, repeated copies of a
+    selected basis tensor appear as
     \[
-        \sum_{q=1}^{m} \alpha_q^{\,N}
-        = \sum_{q=1}^{n} \beta_q^{\,N}
-        \qquad \text{for every } 1 \le N \le \max(m, n),
+        A^i
+        = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+        \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1}.
     \]
-    then $m = n$ and the multisets $\{\alpha_q\}$ and $\{\beta_q\}$
-    coincide.
+    The coefficients $\mu_{j,q}$, multiplicities $r_j$, and gauges
+    $X_{j,q}$ are not part of this restricted single-representative
+    definition. This definition therefore records only strict weight
+    ordering and the absence of phase-gauge equivalence among the selected
+    blocks. It is not the source notion of block-injective canonical form,
+    which is the fixed-length direct-sum span condition discussed in
+    Chapter~\ref{ch:wielandt} and Chapter~\ref{ch:ft_proof}.
+\end{definition}
+
+\begin{theorem}[Distinct bond dimensions force BNT separation]
+    \label{thm:cf_bnt_distinct_dims}
+    \lean{MPSTensor.IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims}
+    \leanok
+    \uses{def:is_canonical_form, def:cf_bnt}
+    If a canonical-form family has strictly decreasing weight moduli and
+    pairwise distinct bond dimensions, then it is in canonical form with BNT
+    separation.
 \end{theorem}
 
-The proof passes to diagonal matrices and applies the Newton--Girard
-recursion
-\[
-    k\, e_k = \sum_{i=1}^{k} (-1)^{i-1}\, e_{k-i}\, p_i,
-    \qquad p_i = \sum_q \alpha_q^{\,i},
-\]
-which expresses the elementary symmetric polynomials $e_k$ in the
-$\alpha_q$ in terms of the power sums $p_i$. Equal power sums at
-$N = 1, \ldots, m$ thus force equal characteristic polynomials, hence
-equal multisets of roots.
+\begin{proof}\leanok
+    The only new clause in Definition~\ref{def:cf_bnt} is the prohibition on
+    gauge-phase equivalence between distinct blocks of the same bond
+    dimension. When the bond dimensions are pairwise distinct, this clause is
+    vacuous.
+\end{proof}
 
-The first application of Theorem~\ref{thm:bnt:newton_girard} arises when
-two BNTs are matched sector-by-sector: matched sectors that turn out
-to differ only by a global phase $\zeta_k$ satisfy
-\begin{equation}\label{eq:bnt:matched_power_sum}
-    \sum_{q=1}^{r^A_j}(\mu^A_{j,q})^{\,N}
-    = \sum_{q=1}^{r^B_{j}}(\zeta_j\, \mu^B_{j,q})^{\,N}
-    \qquad \text{for every } N > N_0,
-\end{equation}
-and Theorem~\ref{thm:bnt:newton_girard} (with both sides extended to all
-positive $N$ via the eventual identity) recovers the multiplicity
-identity $r^A_j = r^B_{j}$ and the rescaled multiset equality
-\[
-    \bigl\{\mu^A_{j,q}\bigr\}_{q=1}^{r^A_j}
-    = \bigl\{\zeta_j\, \mu^B_{j,q}\bigr\}_{q=1}^{r^B_j}.
-\]
-A combinatorial extraction upgrades the multiset equality to a
-permutation of indices: there is a bijection $\tau_j : \mathrm{Fin}\,r^A_j
-    \simeq \mathrm{Fin}\,r^B_j$ such that, for every $q$,
-\[
-    \mu^B_{j,\tau_j(q)} = \zeta_j^{-1}\, \mu^A_{j,q}.
-\]
-
-\paragraph{Lean realization.}
-The multiset form is
-\lean{MPSTensor.matched_sector_weight_multiset_eq}\leanok,
-and the permutation form is
-\lean{MPSTensor.matched_sector_weight_equiv}\leanok, both consuming an
-eventual coefficient identity of the form~\eqref{eq:bnt:matched_power_sum}
-and returning $r^A_j = r^B_j$ together with the explicit bijection
-$\tau_j$.
-
-
-% ==========================================================
-\section{Per-block non-decay}
-\label{sec:bnt:nondecay}
-
-The matching of Section~\ref{sec:bnt:match} relies on the
-coefficient
-\[
-    c_j(N) = \sum_{q=1}^{r_j}\, \mu_{j,q}^{\,N}
-\]
-not vanishing in the limit, at least for sectors $j$ carrying a
-unit-modulus copy. This is the analytic content
-of~\cite[L.\,246, L.\,1182--1183]{Cirac2017MPDO_AnnPhys}, used
-implicitly when extracting per-sector phases from the projection
-identity.
-
-\begin{lemma}[Ces\`aro non-decay]\label{lem:bnt:cesaro}
-    Let $\mu_1, \ldots, \mu_r$ be complex numbers with $|\mu_q| \le 1$
-    for every $q$ and $|\mu_{q^\star}| = 1$ for at least one
-    $q^\star$. Then
+\begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
+    \lean{MPSTensor.IsNormalCanonicalFormBNT}\leanok
+    \uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
+    A family is in \emph{normal canonical form with BNT separation}
+    if it satisfies Definition~\ref{def:is_normal_canonical_form}
+    and, in addition:
+    \begin{enumerate}
+        \item the moduli are strictly decreasing
+              (strengthened from non-increasing),
+        \item distinct blocks of the same bond dimension are
+              not gauge-phase equivalent,
+        \item the dominant block has unit modulus, $\|\mu_1\| = 1$
+              (\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
+    \end{enumerate}
+    As in Definition~\ref{def:cf_bnt}, the strict ordering describes an
+    already selected or grouped representative family. It is not the source
+    BNT expansion
     \[
-        c(N) = \sum_{q=1}^{r} \mu_q^{\,N}
-        \not\to 0 \qquad \text{as } N \to \infty.
+        A^i
+        = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
+        \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+    \]
+    where repeated copies of the same basis tensor remain visible through
+    their coefficients, multiplicities, and gauges.
+\end{definition}
+
+\begin{lemma}[Restricted norm-class collapse]
+    \label{lem:restricted_norm_class_collapse_bnt}
+    \lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}
+    \leanok
+    \uses{def:mpv}
+    Let $(\mu_k, A_k)_{k=1}^r$ be a weighted block family with
+    $\mu_k \neq 0$ for every $k$. Assume that whenever
+    $\|\mu_j\| = \|\mu_k\|$, the tensors $A_j$ and $A_k$ generate the
+    same MPV family. Then one can regroup the blocks into a sector
+    decomposition whose associated total tensor generates the same MPV family
+    as $\bigoplus_k \mu_k A_k$, and whose sector-weight norms are strictly
+    decreasing. This is a special-case regrouping lemma, not the full BNT
+    characterization of \cite[Section~2.3]{Cirac2016MPDO_arXiv}: the
+    hypothesis that equal-norm blocks already generate the same MPV family is
+    an assumption here, while the source BNT construction chooses a minimal family
+    of representatives for the phase-gauge equivalence classes of normal
+    blocks.
+\end{lemma}
+
+\begin{proof}\leanok
+    Order the distinct norms of the weights in decreasing order, choose one
+    representative block from each norm class, and retain the multiplicities
+    inside each class as sector copies. The equal-MPV hypothesis lets every
+    block in a class be replaced by the chosen representative, so the regrouped
+    decomposition has the same MPV family. By construction, the sector-weight
+    norms are strictly decreasing.
+\end{proof}
+
+\begin{theorem}[Cross-overlap decay from explicit BNT hypotheses]
+    \label{thm:cross_overlap_zero_split}
+    \lean{MPSTensor.cross_overlap_tendsto_zero_of_separated_CFBNT_data}
+    \leanok
+    \uses{def:mpv_overlap, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^r$ be injective and trace-preserving normalized.
+    Assume that distinct equal-dimension blocks are not gauge-phase
+    equivalent. Then $O_{A_jA_k}(N) \to 0$ for every pair $j \neq k$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:overlap_decay, thm:overlap_decay_rect}
+    If the bond dimensions differ, Theorem~\ref{thm:overlap_decay_rect}
+    gives the decay. If the bond dimensions agree, the non-equivalence
+    hypothesis excludes gauge-phase equivalence, so
+    Theorem~\ref{thm:overlap_decay} gives the decay.
+\end{proof}
+
+\begin{theorem}[Cross-overlap decay for BNT-separated blocks]\label{thm:cross_overlap_zero}
+    \lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
+    \leanok
+    \uses{def:cf_bnt, def:mpv_overlap}
+    If $((\mu_k),(A_k))$ is in canonical form with BNT separation and
+    $j \neq k$, then $O_{A_j A_k}(N) \to 0$.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cf_bnt, thm:cross_overlap_zero_split}
+    Definition~\ref{def:cf_bnt} supplies injectivity, left-canonical
+    normalization, and the BNT separation hypothesis, so
+    Theorem~\ref{thm:cross_overlap_zero_split} applies directly.
+\end{proof}
+
+\begin{lemma}[BNT from explicit blockwise hypotheses]
+    \label{lem:cf_bnt_is_bnt_split}
+    \lean{MPSTensor.isBNT_of_separated_CFBNT_data}
+    \leanok
+    \uses{def:bnt, def:mpv_overlap}
+    Let $(\mu_k, A_k)_{k=1}^r$ be a weighted block family. Assume that the
+    blocks are injective and trace-preserving normalized, that
+    $O_{A_kA_k}(N) \to 1$ for each $k$, and that distinct equal-dimension
+    blocks are not gauge-phase equivalent. Then the blocks form a basis of
+    normal tensors for the block-diagonal tensor $\bigoplus_k \mu_k A_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpv_decomposition, lem:bnt_overlap_orthonormal_li, thm:cross_overlap_zero_split}
+    Injective blocks are normal. The block-diagonal decomposition theorem gives
+    the MPV expansion of $\bigoplus_k \mu_k A_k$ in terms of the block MPVs.
+    The self-overlap limits are part of the hypotheses, and
+    Theorem~\ref{thm:cross_overlap_zero_split} supplies the off-diagonal
+    decay. Therefore Lemma~\ref{lem:bnt_overlap_orthonormal_li} gives the
+    eventual linear independence required in Definition~\ref{def:bnt}.
+\end{proof}
+
+\begin{lemma}[Restricted CF-BNT hypotheses yield a basis of normal tensors]\label{lem:cf_bnt_is_bnt}
+    \lean{MPSTensor.IsCanonicalFormBNT.isBNT}
+    \leanok
+    \uses{def:cf_bnt, def:bnt}
+    If $((\mu_k), (A_k))$ is in canonical form with BNT separation, then
+    the block tensors form a basis of normal tensors for the
+    block-diagonal tensor $\bigoplus_k \mu_k A_k$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:cf_bnt, lem:cf_bnt_is_bnt_split}
+    Definition~\ref{def:cf_bnt} provides injective blocks, left-canonical
+    normalization, normalized self-overlaps, and BNT separation. Hence
+    Lemma~\ref{lem:cf_bnt_is_bnt_split} applies.
+\end{proof}
+
+\begin{remark}[Comparing the two normality conditions]%
+    \label{rem:normalcf_bnt_gap}
+    Definition~\ref{def:normal_cf_bnt} references the normal canonical form
+    conditions (Definition~\ref{def:is_normal_canonical_form}), which encode
+    normality via the spectral characterization (primitive transfer map).
+    Definition~\ref{def:bnt} requires normality via the algebraic
+    characterization (eventual block injectivity,
+    Definition~\ref{def:normal}). These are equivalent by Remark~2.20, but
+    the equivalence must be invoked explicitly: the Wielandt theory of
+    Chapter~\ref{ch:wielandt} provides the implication from primitivity to
+    eventual block injectivity needed here.
+\end{remark}
+
+\begin{lemma}[Restricted normal-CF-BNT hypotheses give a BNT]
+    \label{lem:normal_cf_bnt_is_bnt}
+    \lean{MPSTensor.IsNormalCanonicalFormBNT.isBNT}
+    \leanok
+    \uses{def:normal_cf_bnt, def:bnt}
+    If a family is in normal canonical form with BNT separation and each block
+    is also known to be normal in the algebraic sense, then the blocks form a
+    basis of normal tensors for the associated block-diagonal tensor.
+\end{lemma}
+
+\begin{proof}\leanok\uses{rem:normalcf_bnt_gap}
+    The normal-canonical hypotheses already give the block-diagonal MPV
+    expansion, the self-overlap normalization, and the eventual linear
+    independence coming from irreducible trace-preserving overlap decay.
+    Supplying algebraic normality for each block adds the remaining clause in
+    Definition~\ref{def:bnt}.
+\end{proof}
+
+\section{Permutation rigidity for bases of normal tensors}
+
+\begin{lemma}[Invertible change of basis]
+    \label{lem:bnt_invertible_change_basis}
+    \lean{exists_invertible_changeBasis}
+    \leanok
+    Let $v_1, \ldots, v_g$ and $w_1, \ldots, w_g$ be two linearly independent
+    families in a complex vector space with the same span. Then there exists an
+    invertible matrix $U \in \GL_g(\C)$ such that
+    \[
+        w_j = \sum_{i=1}^g U_{ij} v_i
+    \]
+    for every $j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Because the two families span the same subspace, each $w_j$ has a unique
+    expansion in the basis $\{v_i\}_{i=1}^g$; these coefficients form the
+    columns of $U$. If $U a = 0$, then the corresponding linear relation among
+    the $w_j$ is trivial because the $w_j$ are linearly independent. Thus $U$
+    is injective, hence invertible.
+\end{proof}
+
+\begin{lemma}[Eventual change of basis from equal spans]
+    \label{lem:bnt_eventual_change_basis}
+    \lean{MPSTensor.eventually_exists_invertible_changeBasis}
+    \leanok
+    \uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
+    If two finite families of blocks have asymptotically orthonormal overlaps
+    within each family and their MPV spans agree for every system size $N$,
+    then for all sufficiently large $N$ there exists an invertible matrix
+    $U_N$ expressing the MPV states of one family as linear combinations of
+    the MPV states of the other.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
+    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
+    linearly independent for all sufficiently large $N$. At such an $N$, the
+    span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
+\end{proof}
+
+\begin{theorem}[Permutation rigidity for equal block counts]
+    \label{thm:bnt_perm_same_card}
+    \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
+    \leanok
+    \uses{def:injective, def:mpv_overlap, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be injective families satisfying
+    trace-preserving normalization, with self-overlaps tending to~$1$ and
+    off-diagonal overlaps tending to~$0$ within each family. If the spans of
+    the MPV states agree for every system size $N$, then there is a permutation
+    $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and $B_{\pi(j)}$ have the
+    same bond dimension and are gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
+    For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
+    invertible matrix $U_N$ relating the two MPV families. Fix $j$. If every
+    mixed overlap $O_{A_iB_j}(N)$ tended to $0$, then taking inner products of
+    the relation with the $A_i$ and using that the Gram matrix of the
+    $A$-family tends to the identity would force the $j$th column of $U_N$ to
+    vanish asymptotically, contradicting the self-overlap limit of $B_j$.
+    Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
+    overlap. Theorems~\ref{thm:overlap_decay_rect}
+    and~\ref{thm:overlap_decay} then force equal bond dimension and
+    gauge-phase equivalence for each match. Off-diagonal decay within the
+    $B$-family makes $f$ injective, hence bijective, and its inverse is the
+    required permutation.
+\end{proof}
+
+\begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
+    \lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho}
+    \leanok
+    \uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
+    Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two
+    families of injective tensors satisfying the TP normalization
+    $\sum_i (A_j^i)^\dagger A_j^i = \Id$ and
+    $\sum_i (B_k^i)^\dagger B_k^i = \Id$, whose self-overlaps
+    converge to~$1$ and whose cross-overlaps within each
+    family converge to~$0$.
+    If for every system size~$N$,
+    \[
+        \spn_{\C}\{\ket{V^{(N)}(A_j)} : 1 \le j \le g_A\}
+        =
+        \spn_{\C}\{\ket{V^{(N)}(B_k)} : 1 \le k \le g_B\},
+    \]
+    then $g_A = g_B$, and there is a permutation $\pi$ of the common
+    block index set such that $A_j$ and $B_{\pi(j)}$ have the same bond
+    dimension and are gauge-phase equivalent for each~$j$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
+    By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
+    linearly independent for all sufficiently large $N$. At such an $N$, the
+    common span has the same dimension when computed from the $A$-family or
+    the $B$-family, so $g_A = g_B$. After identifying the two index sets,
+    Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
+\end{proof}
+
+\begin{theorem}[Non-equivalent irreducible TP blocks are eventually non-proportional]
+    \label{thm:not_gauge_phase_eventually_not_proportional}
+    \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
+    \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
+    \leanok
+    \uses{def:gauge_phase_equiv, def:mpv_overlap, def:irreducible_tensor}
+    Let $A$ and $B$ be irreducible trace-preserving blocks whose
+    self-overlaps converge to $1$. If they are not gauge-phase equivalent,
+    then for every lower bound $N_0$ there is $N\ge N_0$ such that
+    $V^{(N)}(A)$ is not proportional to $V^{(N)}(B)$. Consequently,
+    in an already separated same-dimensional BNT block family, any two
+    distinct blocks have such non-proportional MPV states at arbitrarily
+    large lengths.
+\end{theorem}
+
+\begin{proof}\leanok
+    If the two MPV states were proportional for all sufficiently large $N$,
+    the irreducible trace-preserving overlap decay theorem would force
+    gauge-phase equivalence. This contradicts the hypothesis.
+\end{proof}
+
+\section{Coefficient convergence}
+
+\begin{lemma}[Strict-dominance coefficient ratios]
+    \label{lem:strict_dominance_coefficient_ratios}
+    \notready
+    \uses{def:cf_bnt}
+    Let $(\mu_k)_k$ be a strictly ordered nonzero weight family with
+    $\mu_0$ dominant. Then the normalized powers
+    $(\mu_k/\mu_0)^N$ converge to $1$ for the dominant block and to
+    $0$ for every other block.
+\end{lemma}
+
+\begin{proof}\notready
+    The dominant ratio is $1$. For every other block, strict ordering gives
+    $|\mu_k/\mu_0|<1$, so its powers converge to $0$.
+\end{proof}
+
+\begin{lemma}[Dominant-weight normalization]
+    \label{lem:dominant_weight_normalization}
+    \notready
+    \uses{def:block_diagonal_tensor, def:mpv}
+    Factoring the dominant weight from a block-diagonal tensor rewrites its
+    MPV as $\mu_0^N$ times the MPV of the normalized block family. Hence
+    a proportionality relation between two such tensors induces the
+    corresponding proportionality relation between their normalized block
+    families, with the scalar adjusted by the dominant-weight ratio.
+\end{lemma}
+
+\begin{proof}\notready
+    Expand the MPV of the block-diagonal tensor as the sum over blocks and
+    factor $\mu_0^N$ from each coefficient. The proportionality statement
+    follows by dividing by the nonzero dominant power.
+\end{proof}
+
+\begin{remark}[Strict-dominance regime]\notready
+    The coefficient-ratio decay auxiliary applies when one
+    modulus is strictly dominant:
+    $|\mu_0| > |\mu_k|$ for $k \ge 1$.
+    In that restricted situation the ratios $(\mu_k/\mu_0)^N$ tend to
+    zero, and the MPV of the normalized block family gives the corresponding
+    proportional comparison after factoring out the leading weight.
+    In the more general periodic setting of
+    \cite[Equation~(72a)]{Cirac2021Matrix}, the coefficient attached to block~$j$
+    can take the form $\sum_q \mu_{j,q}^N$, where the $\mu_{j,q}$ are the
+    individual weights contributed by that block.
+    The oscillatory case with $|\mu_{j,q}| = 1$
+    is treated separately in the periodic comparison theorem.
+\end{remark}
+
+\section{Newton--Girard identities}
+
+\begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
+    \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
+        Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
+    \leanok
+    If $A, B \in \MN{n}$ satisfy
+    $\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
+    then $A$ and $B$ have the same characteristic polynomial.
+    It is enough to assume this equality for $1 \le k \le n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $e_m$ denote the $m$th elementary symmetric polynomial in the
+    eigenvalues, with $e_0 = 1$.
+    The Newton--Girard recursion
+    \[
+        m e_m = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
+    \]
+    expresses the coefficients of the characteristic polynomial in terms
+    of the power-sum traces $\tr(A^i)$.
+    Equal power sums for $A$ and $B$ therefore give equal coefficients,
+    hence equal characteristic polynomials.
+\end{proof}
+
+\begin{remark}[How the power-sum equality is used]
+    The equal-MPV corollary in the source compares scalar power sums only after
+    the BNT representatives have already been matched. If the matched basis
+    tensors satisfy $B_j=e^{i\phi_j}Y_jA_jY_j^{-1}$, then for every positive
+    length $N$ the coefficient $\sum_q \mu_{j,q}^N$ of
+    $\ket{V^{(N)}(A_j)}$ in the BNT expansion of $A$ equals the coefficient
+    $\sum_q(\nu_{j,q}e^{i\phi_j})^N$ coming from $B$. This scalar equality
+    is the input to the Newton--Girard step.
+
+    Thus the power-sum lemma determines the multiset of weights with
+    multiplicity, but it is not a replacement for the BNT matching argument. The
+    block permutation and the phase gauges must first identify which basis tensor
+    is being compared. Once that matching is available, the power-sum lemma
+    supplies the multiplicity and weight equality needed to identify the weighted
+    block-diagonal gauge.
+
+    The finite-range statement below includes the same-cardinality form, the
+    nonzero-entry unequal-cardinality form, and the positive-power conclusion
+    after deleting zeros. The nonzero-entry form pads the shorter family by zeros,
+    applies the same-cardinality result at length $\max(m,n)$, and then uses the
+    nonzero-entry hypothesis to count the padded zeros. The Appendix lemma in the
+    source fixes an ordering convention for the two families; here the conclusion
+    is stated as multiset equality, so no sorting hypothesis is needed. If
+    equality at exponent $0$ is also assumed, the nonzero-entry hypothesis can be
+    omitted because $\sum_k \lambda_{a,k}^0=x_a$ and
+    $\sum_k \lambda_{b,k}^0=x_b$.
+\end{remark}
+
+\begin{theorem}[Finite-range equal power sums imply equal multisets]
+    \label{thm:bounded_power_sum_multiset}
+    \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
+        Matrix.sum_pow_eq_implies_nonzero_multiset_eq_of_le_max_length,
+        Matrix.sum_pow_eq_implies_multiset_eq_of_le_max_length,
+        Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}
+    \leanok
+    Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
+    If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for $1 \le k \le n$,
+    then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+    More generally, if $\alpha : \{0,\ldots,m-1\}\to\C$ and
+    $\beta : \{0,\ldots,n-1\}\to\C$ have no zero entries and their power sums
+    agree for $1 \le k \le \max(m,n)$, then $m=n$ and the two multisets
+    are equal.
+    There is also an exponent-zero list form: for lists
+    $(\lambda_{a,k})_{k=1}^{x_a}$ and
+    $(\lambda_{b,k})_{k=1}^{x_b}$, the hypothesis
+    \(\sum_{k=1}^{x_a}\lambda_{a,k}^N
+    =\sum_{k=1}^{x_b}\lambda_{b,k}^N\) for
+    $1\le N\le \max(x_a,x_b)$ implies
+    \[
+        \{\lambda_{a,k}\mid \lambda_{a,k}\neq 0\}_{k=1}^{x_a}
+        =
+        \{\lambda_{b,k}\mid \lambda_{b,k}\neq 0\}_{k=1}^{x_b}
+    \]
+    as multisets. If the equality is also assumed at $N=0$, then the original
+    lists have the same multiset.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:newton_girard}
+    Apply the finite-range Newton--Girard theorem to
+    $\diag(\alpha)$ and $\diag(\beta)$, then extract the roots of
+    $\prod_i (X-\alpha_i)$ and $\prod_i (X-\beta_i)$. For unequal
+    cardinalities, pad both lists with zeros to length $\max(m,n)$. The
+    equal-root conclusion compares the padded multisets, and the nonzero-entry
+    hypothesis makes the number of padded zeros exactly $\max(m,n)-m$ and
+    $\max(m,n)-n$, forcing $m=n$.
+    Without a nonzero-entry hypothesis, first delete the zero entries; for
+    positive $N$, this does not change
+    $\sum_k\lambda_k^N$. The nonzero-entry form then compares the remaining
+    multisets. In the exponent-zero list form, the equality at $N=0$ gives
+    $x_a=x_b$, so the same-cardinality finite-range theorem applies directly.
+\end{proof}
+
+\begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
+    \lean{Matrix.sum_pow_eq_implies_multiset_eq}
+    \leanok
+    Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
+    If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
+    then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:newton_girard}
+    Construct diagonal matrices $\diag(\alpha)$ and
+    $\diag(\beta)$.
+    The power-sum hypothesis gives
+    $\tr(\diag(\alpha)^k) = \tr(\diag(\beta)^k)$.
+    By Theorem~\ref{thm:newton_girard}, the characteristic
+    polynomials agree: $\prod_i (X - \alpha_i) = \prod_i (X - \beta_i)$.
+    Extracting roots gives multiset equality.
+\end{proof}
+
+\begin{remark}
+    Theorems~\ref{thm:newton_girard} and~\ref{thm:power_sum_multiset}
+    remain relevant for the equal-MPV source corollary discussed in
+    Section~\ref{sec:ft_equal_mpv_comparisons}, where the paper uses a power-sum
+    step to recover the multiplicities $r_j$ and the weights $\mu_{j,q}$.
+    The BNT multiplicity lemmas handle this recovery directly rather than through
+    a separate explicit-coefficient equal-case theorem.
+\end{remark}
+
+\section{Paper-faithful BNT canonical form: basic API}
+\label{sec:paper_bnt_api}
+
+This section records the basic API for the paper-faithful BNT canonical-form
+predicate of
+\cite[\S II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
+\cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}. The predicate
+operates on a sector decomposition carrying raw sector weights
+$\mu_{j,q}$ and a coefficient
+$\operatorname{coeff} N\,j = \sum_q \mu_{j,q}^{\,N}$; no equal-modulus
+factorization is assumed.
+
+\begin{definition}[Paper-faithful BNT canonical form]%
+    \label{def:paper_bnt_cf}
+    \lean{MPSTensor.IsBNTCanonicalForm}
+    \leanok
+    \uses{def:paper_sector_data}
+    Given a sector decomposition $P$, the paper-faithful BNT
+    canonical-form predicate records the minimal CPSV16/CPSV21
+    BNT canonical-form data without any equal-modulus or strict-ordering
+    condition on the raw sector weights. Specifically it asserts:
+    each basis block has positive bond dimension, is injective,
+    irreducible, and left-canonical; the normalized self-overlap of every
+    basis block converges to~$1$; the basis MPV family is eventually
+    linearly independent; distinct same-dimension basis blocks are not
+    gauge-phase equivalent in the cast-compatible shape; and the
+    CPSV16 \S II.A line-246 normalization convention holds, namely
+    \[
+        \lVert \mu_{j,q} \rVert \le 1 \text{ for every }  (j,q),
+        \qquad
+        \exists\, (j_*, q_*) :  \lVert \mu_{j_*, q_*} \rVert = 1.
+    \]
+    The MPV expansion takes the raw two-layer form
+    \[
+        V^{(N)}(P)_\sigma
+        =
+        \sum_{j=1}^{g} \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
+        V^{(N)}(P_j)_\sigma,
+    \]
+    matching \cite[\S~II, lines 271--301]{Cirac2017MPDO_AnnPhys}
+    and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+    The line-246 normalization fields admit every paper-faithful example
+    (in particular $C \oplus D$, $C \oplus (-C)$,
+    $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and are
+    not derivable from the per-block normality data alone.
+\end{definition}
+
+\begin{lemma}[Raw two-layer sector coefficient identity]%
+    \label{lem:paper_bnt_coeff_eq_sum_weight_pow}
+    \lean{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow}
+    \leanok
+    \uses{def:paper_sector_data}
+    For every sector decomposition $P$, every length $N$, and every basis
+    index $j$, the sector coefficient is the raw power sum
+    \[
+        P.\operatorname{coeff}\,N\,j =
+        \sum_{q=1}^{r_j} (P.\operatorname{weight}\,j\,q)^N.
+    \]
+    This is \cite[eq.~II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
+    \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Definitional unfolding of the sector coefficient.
+\end{proof}
+
+\begin{lemma}[Sector coefficient bound by multiplicity]%
+    \label{lem:paper_bnt_norm_coeff_le_copies}
+    \lean{MPSTensor.SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one}
+    \leanok
+    \uses{lem:paper_bnt_coeff_eq_sum_weight_pow}
+    Under the optional global modulus normalization
+    \cite[\S II, lines 217--246]{Cirac2017MPDO_AnnPhys}, every raw weight satisfies
+    $\lVert\mu_{j,q}\rVert \le 1$, and the triangle inequality bounds
+    the norm of the sector coefficient by the multiplicity:
+    \[
+        \lVert P.\operatorname{coeff}\,N\,j \rVert \le  r_j.
     \]
 \end{lemma}
 
-\begin{proof}
-    Suppose for contradiction that $c(N) \to 0$. The Ces\`aro mean
-    \[
-        M_T = \frac{1}{T}\sum_{N=0}^{T-1}\bigl|c(N)\bigr|^2
-        = \sum_{p,q=1}^{r} \frac{1}{T}\sum_{N=0}^{T-1}
-        (\mu_p\, \overline{\mu_q})^{\,N}
-    \]
-    is dominated by $|c(N)|^2 \to 0$, hence $M_T \to 0$. For each pair
-    $(p, q)$ with $\mu_p\, \overline{\mu_q} = 1$, the inner average
-    contributes $1$ in the limit; for each pair with $\mu_p
-        \overline{\mu_q} \ne 1$, the geometric partial sum yields a
-    contribution bounded by $2/(T\,|\mu_p \overline{\mu_q} - 1|) \to 0$.
-    The diagonal pair $(q^\star, q^\star)$ contributes~$1$, so $M_T \to
-        M_\infty \ge 1 > 0$, contradicting $M_T \to 0$.
+\begin{proof}\leanok
+    Apply the triangle inequality to the raw power sum from
+    Lemma~\ref{lem:paper_bnt_coeff_eq_sum_weight_pow} and bound each term by
+    $1$ using $\lVert\mu_{j,q}\rVert \le 1$.
 \end{proof}
 
-Applied to a BNT canonical form, Lemma~\ref{lem:bnt:cesaro} immediately
-yields the per-block non-decay: if some copy $\mu_{j_0, q}$ has unit
-modulus, then $c_{j_0}(N) \not\to 0$. Under the per-block strengthening
-$\forall j\,\exists q : |\mu_{j,q}| = 1$, every block coefficient fails
-to vanish in the limit.
+\begin{lemma}[Cross-overlap decay between distinct basis blocks]%
+    \label{lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
+    \leanok
+    \uses{def:mpv_overlap, def:paper_bnt_cf}
+    If $P$ carries a paper-faithful BNT canonical form and $j \neq k$,
+    then $O_{P_j P_k}(N) \to 0$ as $N \to \infty$, where $P_j$ and
+    $P_k$ are the basis blocks at indices $j$ and $k$. The dispatch
+    follows the normal-tensor overlap dichotomy of
+    \cite[lines 1080--1091]{Cirac2017MPDO_AnnPhys}: differing bond dimensions
+    force decay, and matching bond dimensions are ruled out by the
+    gauge-phase distinctness clause of
+    \cite[lines 264--279]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
 
-\paragraph{Lean realization.}
-The unit-block non-decay is
-\lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}\leanok,
-taking an explicit unit-modulus witness on the target sector. The
-per-block strengthening, which yields global non-vanishing of the
-thermodynamic-limit state contributions, is
-\lean{MPSTensor.IsBNTCanonicalForm.thermodynamic_limit_nonvanishing}\leanok.
+\begin{proof}\leanok
+    Case on whether the bond dimensions match. If the dimensions differ,
+    apply the dimension-mismatch overlap-decay theorem.
+    If they agree, the basis-distinctness clause of the paper-faithful BNT
+    canonical form rules out gauge-phase equivalence in the
+    cast-compatible shape, so the equal-dimension overlap-decay theorem
+    applies.
+\end{proof}
 
-
-% ==========================================================
-\section{Sector matching for equal MPV}
-\label{sec:bnt:match}
-
-The first half of~\cite[II.cor.2]{Cirac2017MPDO_AnnPhys} pairs the
-basis tensors of two BNT canonical forms generating the same MPV
-family. Let $P$ and $Q$ be sector decompositions, both in BNT
-canonical form, with basis tensors $(A_j)_{j=1}^{g_A}$ and
-$(B_k)_{k=1}^{g_B}$, multiplicities $r^P_j$, $r^Q_k$, and raw
-weights $\mu^P_{j,q}$, $\mu^Q_{k,q}$. Assume
-\begin{equation}\label{eq:bnt:samempv}
-    \ket{V^{(N)}(P)} = \ket{V^{(N)}(Q)}
-    \qquad \text{for every } N,
-\end{equation}
-which by~\eqref{eq:bnt:mpv_display} reads
-\begin{equation}\label{eq:bnt:samempv_expanded}
-    \sum_{j=1}^{g_A}\left(\sum_{q=1}^{r^P_j}(\mu^P_{j,q})^{\,N}\right)
-    \ket{V^{(N)}(A_j)} = \sum_{k=1}^{g_B}\left(\sum_{q=1}^{r^Q_k}(\mu^Q_{k,q})^{\,N}\right)
-    \ket{V^{(N)}(B_k)}.
-\end{equation}
-
-\begin{theorem}[Sector matching]\label{thm:bnt:match}
-    Suppose~\eqref{eq:bnt:samempv} holds and that, for every $k$, the
-    sector $B_k$ carries at least one unit-modulus copy:
-    $\exists q : |\mu^Q_{k,q}| = 1$. Then for every such $k$ there
-    exists $j_k \in \{1, \ldots, g_A\}$ with
+\begin{lemma}[Combined-family eventual linear independence]%
+    \label{lem:paper_bnt_combined_family_eventually_li}
+    \lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
+    \leanok
+    \uses{lem:bnt_two_family_overlap_orthonormal_li,
+        lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    Let $P$ and $Q$ each carry a paper-faithful BNT canonical form, and
+    suppose every mixed overlap $O_{P_j Q_k}(N)$ tends to~$0$. Then the
+    union family
     \[
-        D^P_{j_k} = D^Q_{k}, \qquad
-        B_k \sim_{\mathrm{gp}} A_{j_k},
+        \bigl\{\ket{V^{(N)}(P_j)}\bigr\}_{j=1}^{g_P}
+        \cup
+        \bigl\{\ket{V^{(N)}(Q_k)}\bigr\}_{k=1}^{g_Q}
     \]
-    that is, the bond dimensions match and the basis tensors are
-    gauge-phase equivalent in the sense of~\eqref{eq:bnt:gaugephase}.
-    A symmetric statement holds with the roles of $P$ and $Q$ exchanged,
-    and the resulting matchings are injective in both directions, so
-    that $g_A = g_B = g$ and there is a bijection
+    is linearly independent for all sufficiently large~$N$. This is the
+    paper-faithful instantiation of the corollary~\texttt{Lem1} of
+    \cite[lines 1121--1132]{Cirac2017MPDO_AnnPhys} and matches the BNT
+    linear-independence input recorded at
+    \cite[line 1850]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Feed the per-family normalized self-overlaps (from the canonical-form
+    data), the within-family cross-overlap decay
+    (Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}), and the
+    inter-family decay hypothesis into the two-family overlap-orthonormality
+    criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
+\end{proof}
+
+\begin{lemma}[Sector coefficient bound from the line-246 structural field]%
+    \label{lem:paper_bnt_norm_coeff_le_copies_struct}
+    \lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
+    \leanok
+    \uses{def:paper_bnt_cf, lem:paper_bnt_norm_coeff_le_copies}
+    Under the strengthened paper-faithful canonical form, the structural
+    field encoding CPSV16 \S II.A line~246 yields directly
     \[
-        \beta : \mathrm{Fin}\,g_B \xrightarrow{\sim}
-        \mathrm{Fin}\,g_A
-        \qquad \text{with} \qquad
-        D^P_{\beta(k)} = D^Q_k, \qquad
-        B_k \sim_{\mathrm{gp}} A_{\beta(k)}.
+        \lVert P.\operatorname{coeff}\,N\,j \rVert \le  r_j
     \]
+    for every $N$ and basis index~$j$, without an additional
+    explicit modulus-bound hypothesis at the call site.
+\end{lemma}
+
+\begin{proof}\leanok
+    Feed the global modulus normalization field into
+    Lemma~\ref{lem:paper_bnt_norm_coeff_le_copies}.
+\end{proof}
+
+\begin{lemma}[Unit-modulus weight witness from the line-246 structural field]%
+    \label{lem:paper_bnt_weight_unit_exists_of_struct}
+    \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
+    \leanok
+    \uses{def:paper_bnt_cf}
+    Re-exposes the unit-modulus existential field
+    (CPSV16 \S II.A line~246) at the API layer: under the strengthened
+    paper-faithful canonical form, there exist indices~$(j_*, q_*)$ with
+    $\lVert P.\operatorname{weight}\,j_*\,q_* \rVert = 1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Direct projection onto the unit-modulus existential field of the
+    canonical-form predicate.
+\end{proof}
+
+\begin{example}[$C \oplus (1/2)C$, unequal-modulus admissibility]%
+    \label{ex:paper_bnt_halvedDecomp}
+    \lean{MPSTensor.PaperBNT.Examples.halvedDecomp}
+    \leanok
+    \uses{def:paper_bnt_cf}
+    The single-sector two-copy decomposition with raw weights
+    $(1, 1/2)$ demonstrates that the strengthened paper-faithful BNT
+    canonical form admits unequal-modulus copies: the modulus-bound field
+    holds because $\lVert 1 \rVert \le 1$ and
+    $\lVert 1/2 \rVert = 1/2 \le 1$, and the unit-modulus existential is
+    witnessed by the first copy with weight~$1$. This is the CPSV16
+    \S II.A line~246 convention in positive form, reifying the
+    $C \oplus (1/2)C$ example.
+\end{example}
+
+\section{Ces\`aro non-decay and unit-block coefficient}
+\label{sec:paper_bnt_cesaro_nondecay}
+
+This section formalizes the analytic input that supplies, for any
+sector $j_0$ carrying a unit-modulus weight, the
+``sector-$j_0$ coefficient does not asymptotically vanish''
+ingredient used in the matching step of
+\cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys}.
+The reduction is to a pure-analytic statement: a finite sum of $N$-th
+powers of complex numbers in the closed unit disk, with at least one
+unit-modulus summand, cannot tend to zero.
+
+The proof is the elementary Ces\`aro-mean identity:
+\(
+M_T := T^{-1} \sum_{N=0}^{T-1} |c(N)|^2
+= \sum_{p,q} T^{-1} \sum_{N=0}^{T-1} (\mu_p \overline{\mu_q})^N
+\)
+splits into:
+$T^{-1}$ times the partial geometric sum for each pair $(p, q)$; each
+pair with $\mu_p \overline{\mu_q} = 1$ contributes the limit $1$, while
+each pair with $\mu_p \overline{\mu_q} \neq 1$ contributes the limit
+$0$ (since $|(z^T - 1)/(z - 1)| \leq 2/|z - 1|$ divided by $T \to 0$).
+The diagonal pair $(q^*, q^*)$ at a unit-modulus index $q^*$ contributes,
+so $M_T \to \#\{\text{matching pairs}\} \geq 1 > 0$, contradicting
+$c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
+
+\begin{lemma}[Ces\`aro non-decay of a finite power sum]%
+    \label{lem:paper_bnt_cesaro_nondecay}
+    \lean{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}
+    \leanok
+    Let $\mu : \{0, \dotsc, r-1\} \to \mathbb{C}$ satisfy $|\mu_q| \leq 1$
+    for every $q$ and let some $q^*$ satisfy $|\mu_{q^*}| = 1$. Then the
+    sequence $N \mapsto \sum_{q=0}^{r-1} (\mu_q)^N$ does not tend to $0$
+    as $N \to \infty$. This is the analytic content of the unit-block
+    non-decay step at
+    \cite[\S~II.A, lines~246, 1181--1188]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Ces\`aro-mean argument as described above.
+\end{proof}
+
+\begin{lemma}[Unit-block coefficient non-decay]%
+    \label{lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
+    \leanok
+    \uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
+    Let $P$ be a sector decomposition carrying a paper-faithful BNT
+    canonical form and let $j_0$ be any sector index such that some copy
+    of sector $j_0$ carries a unit-modulus weight, i.e.\ there exists
+    $q$ with $\lVert P.\operatorname{weight}\,j_0\,q\rVert = 1$.
+    Then the sector-$j_0$ coefficient
+    $c_{j_0}(N) = \sum_q (P.\operatorname{weight}\,j_0\,q)^N$ does not
+    tend to $0$ as $N \to \infty$.
+
+    This is the paper-parametrised reading of the CPSV16 \S~II.A line~246
+    + line~1244 normalization. The unit-modulus witness is supplied
+    externally (as the hypothesis above) because CPSV16 line~246 is a
+    \emph{global} statement (``at least one of them equals one'' over the
+    two-layer index $(j, q)$) and does not pin the witness to a specific
+    sector.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:paper_bnt_cesaro_nondecay} to the family
+    $\mu := P.\operatorname{weight}\,j_0$, feeding in the modulus-bound
+    field (giving $\lVert\mu_q\rVert \le 1$ for every $q$) and the
+    supplied per-sector unit-modulus existential hypothesis.
+\end{proof}
+
+\begin{remark}
+    Consuming this lemma inside the matching theorem of
+    \cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys} supplies the
+    non-decay step on $P.\operatorname{coeff} \cdot\,j_0$. The matching
+    theorem now takes the unit-block sector and witness as explicit
+    parameters, faithfully mirroring the global character of CPSV16
+    line~246.
+\end{remark}
+
+\subsection{Matched-sector weight multiset equality}
+
+Given a matched basis-sector pair $(j_0, \tilde k_0)$ and a nonzero
+scalar $\zeta \in \mathbb{C}\setminus\{0\}$ such that the matched
+coefficient identity
+$P.\operatorname{coeff}\,N\,j_0 = \zeta^N \cdot Q.\operatorname{coeff}\,N\,\tilde k_0$
+holds for every $N$ past some threshold $N_0$, this subsection
+records the two algebraic conclusions: the \emph{matched-sector weight
+    multiset equality} derived from the coefficient identity by power-sum
+recovery (Theorem~\ref{thm:power_sum_multiset}), and the
+\emph{matched-sector weight-permutation extractor} upgrading the multiset
+equality to an explicit per-copy indexing. Together they realise the
+$\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ recovery
+of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}. The
+coefficient identity itself is the Step~1 linear-independence projection
+of \cite[\S~II, \texttt{II\_cor2}, lines 1170--1192]{Cirac2017MPDO_AnnPhys}
+and is supplied by the global-gauge / full-basis route of
+Phase~B-$\gamma$ below.
+
+\begin{lemma}[Matched-sector weight multiset equality]%
+    \label{lem:paper_bnt_matched_sector_weight_multiset_eq}
+    \lean{MPSTensor.matched_sector_weight_multiset_eq}
+    \leanok
+    \uses{def:paper_sector_data,
+        thm:power_sum_multiset}
+    Let $P, Q$ be sector decompositions, and fix indices $j_0$, $\tilde k_0$,
+    and a nonzero scalar $\zeta \in \mathbb{C}\setminus\{0\}$. Suppose
+    \[
+        P.\operatorname{coeff}\,N\,j_0
+        =
+        \zeta^N \cdot Q.\operatorname{coeff}\,N\,\tilde k_0
+        \qquad \text{for every } N > N_0.
+    \]
+    Then the per-sector multiplicities match,
+    $P.\operatorname{copies}\,j_0 = Q.\operatorname{copies} \tilde k_0$, and the
+    rescaled per-copy weight multisets coincide.
+    This is \cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}
+    ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ and matching
+    $r_{a,j} = r_{b,j}$) read on a single matched sector.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:bounded_power_sum_multiset}
+    Unfold both sides of the coefficient identity to per-copy power sums
+    $\sum_{q} (P.\operatorname{weight}\,j_0\,q)^N$ and
+    $\sum_{q'} (Q.\operatorname{weight} \tilde k_0\,q')^N$ and distribute
+    $\zeta^N$ through the $Q$-side sum to obtain the rescaled identity
+    \[
+        \sum_{q} (P.\operatorname{weight}\,j_0\,q)^N
+        =
+        \sum_{q'} (\zeta \cdot Q.\operatorname{weight} \tilde k_0\,q')^N
+        \qquad \text{for every } N > N_0.
+    \]
+    Extend to all positive exponents and apply the
+    unequal-cardinality multiset-recovery lemma
+    (Theorem~\ref{thm:bounded_power_sum_multiset}); nonzero weights are
+    required, supplied by $\zeta \neq 0$ together with the weight
+    non-vanishing field. This delivers both
+    the multiplicity match and the multiset equality.
+\end{proof}
+
+\begin{lemma}[Matched-sector weight-permutation extractor]%
+    \label{lem:paper_bnt_matched_sector_weight_equiv}
+    \lean{MPSTensor.matched_sector_weight_equiv}
+    \leanok
+    \uses{lem:paper_bnt_matched_sector_weight_multiset_eq}
+    Under the hypotheses of
+    Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq}, there
+    exist a per-sector multiplicity match and an explicit permutation
+    between the per-copy index sets identifying the individual per-copy
+    weights up to the gauge phase:
+    \[
+        Q.\operatorname{weight} \tilde k_0\,(\tau\,q)
+        =
+        \zeta^{-1} \cdot P.\operatorname{weight}\,j_0\,q
+        \qquad \text{for every } q.
+    \]
+    This is the per-copy realisation of
+    \cite[\S~II, line 1188]{Cirac2017MPDO_AnnPhys}
+    ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$): the multiset equality
+    from Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} is
+    upgraded to a concrete indexing between the matched $P$- and
+    $Q$-copies.
+\end{lemma}
+
+\begin{proof}\leanok
+    Invoke Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} to
+    obtain the cardinality match and the multiset equality.
+    From this multiset-map equality extract a permutation matching the
+    elements pointwise (proved by induction on the cardinality).
+    Compose with the cardinality cast and cancel $\zeta$ via
+    $\zeta \neq 0$ to convert the gauge factor on the right of the
+    pointwise identity to $\zeta^{-1}$ on the left.
+\end{proof}
+
+\section{Phase B-$\alpha$: paper-faithful strong existential matching}
+
+This section records the paper-faithful Phase~B-$\alpha$ lifting of
+the weak existential $\exists j,\exists k$ to the strong existential
+$\forall k,\exists j$ matching theorem on the original
+(un-dropped) pair of BNT canonical forms. No recursion, no partial
+sector dropping, no combined-LI obligation on a partial union: the
+result is a single $\forall k,\exists j$ existential statement on the
+original $(P, Q)$, iterated externally over each $Q$-side
+unit-block sector.
+
+The unit-block restriction on $k$ is paper-faithful:
+\cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} records the modulus-one
+hypothesis as a single \emph{global} existential over the two-layer
+$(j, q)$ index of the BNT display, not a per-block one. Sectors
+whose weights all have modulus strictly less than one have
+coefficients $Q.\operatorname{coeff}\,N\,k = \sum_q (Q.\operatorname{weight}\,k\,q)^N$
+that decay exponentially to zero, contribute nothing to the
+thermodynamic state, and are not constrained by the matching
+(\cite[\S~II.C, lines~1244--1248]{Cirac2017MPDO_AnnPhys} returns to
+this point via the $\mathbb{E}^N$-fixed-point characterisation).
+The downstream Phase~B-$\beta$ bijective-matching layer will apply
+this theorem twice (with $(P, Q)$ swapped) to derive the cardinality
+identity and the per-pair bijection / gauge data on the full basis
+(every sector is a unit block under the Phase~D per-block
+normalization).
+
+\begin{theorem}[Strong existential matching, full-basis form]
+    \label{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \leanok
+    \uses{def:paper_bnt_cf,
+        lem:paper_bnt_combined_family_eventually_li,
+        lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    Let $P, Q$ be two paper-faithful BNT canonical forms with the
+    same MPV family. For every sector $k$ there exists a sector $j$
+    with matched bond dimension $h : P.\operatorname{basisDim}\,j = Q.\operatorname{basisDim}\,k$,
+    a gauge-phase equivalence between the cast basis tensors, and a
+    non-decaying cross-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:paper_bnt_combined_family_eventually_li,
+        lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    The CPSV16 \S II.C lines 1182--1186 Step 1 contrapositive of
+    \cite[Lemma~\texttt{Lem1}, lines 1131--1133]{Cirac2017MPDO_AnnPhys},
+    combined-LI on the \emph{full} family
+    $\{A^{[j]}\}_j \cup \{B^{[k]}\}_k$, is iterated externally over
+    each sector $k$. Each iteration is discharged by
+    the full-basis matching theorem
+    (\texttt{MPSTensor.exists\_block\_match\_of\_sameMPV}) with the
+    roles of $P$ and $Q$ swapped: feed the canonical-form data in
+    the reversed order, supply the basis non-emptiness witness from the
+    retained global unit witness, and supply the proportional-MPV
+    hypothesis via the pointwise-symmetric flip.
+    Re-orient the resulting conclusion via symmetry of gauge-phase
+    equivalence across a bond-dim cast and symmetry of overlap
+    convergence to zero.
+\end{proof}
+
+\begin{remark}[No partial-union LI]
+    \label{rem:paper_bnt_strong_match_no_partial_li}
+    Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    consumes \emph{only} the weak existential matching theorem, which
+    itself routes through the combined-LI step
+    (Lemma~\ref{lem:paper_bnt_combined_family_eventually_li}) on the
+    \emph{full} $P.\operatorname{basis} \sqcup Q.\operatorname{basis}$ family (the
+    \texttt{Lem1} input of CPSV16 lines 1131--1133), not on any
+    partial union. This is the paper-faithful realization and closes
+    the open obligation at the strong-matching layer.
+\end{remark}
+
+\subsection{Phase B-$\beta$: bijective matching by symmetry}
+\label{subsec:paper_bnt_strong_match_bijective_symmetry}
+
+\emph{CPSV16 \S II.C lines 1184--1186, the symmetry argument
+    $g_a \ge g_b \wedge g_b \ge g_a \Rightarrow g_a = g_b$.}
+
+Phase B-$\alpha$
+(Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+gives one direction of the matching on the unit-block subset.
+Applying the same theorem once more with the roles of $P$ and $Q$
+swapped (and the trivially-symmetric flip of the proportional-MPV
+hypothesis) gives the other direction. The two matchings, combined
+with the basis-distinctness clause of the canonical-form predicate
+(CPSV16 lines 264--279), force \emph{injectivity in both directions}.
+
+\paragraph{Honest scoping.}
+The literal paper conclusion ``$g_a = g_b$ and a relabelling
+$B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
+(\cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}) would read as a
+bijection between the unit-modulus subsets of the two BNT canonical
+forms. Phase B-$\beta$ delivers the \emph{symmetric injective
+    matching} (the literal CPSV16 line~1186 ``$g_a \ge g_b \wedge g_b \ge g_a$''
+step) on the cleanest paper-faithful surface: two
+injective embeddings, one in each direction, codomains in the full
+basis of $P$ and $Q$ respectively. Upgrading the codomains to the
+unit-modulus subsets (and packaging as a bijection) requires the
+additional per-sector weight-equivariance argument of
+\cite[Lemma~\texttt{equalMPS}, lines 1148--1167]{Cirac2017MPDO_AnnPhys}
+combined with the gauge-phase identity on the weighted sectors
+$\sum_q (\mu_{j,q})^N |V^N(P.\operatorname{basis}\,j)\rangle$; the
+non-decay output of Phase B-$\alpha$ is on the \emph{basis} MPV
+states, not on the weighted sectors, and so does not by itself force
+the matched $j$ to carry a unit-modulus weight. This upgrade is
+isolated as a follow-up phase.
+
+\begin{theorem}[Bijective matching by symmetry]
+    \label{thm:paper_bnt_bijective_match_of_sameMPV}
+    \lean{MPSTensor.bijective_match_of_sameMPV}
+    \leanok
+    \uses{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        def:paper_bnt_cf}
+    Let $P, Q$ be two paper-faithful BNT canonical forms with the
+    same MPV family. Write
+    \[
+        \texttt{UnitP} := \{ j \mid \exists q,\, |P.\operatorname{weight}\,j\,q| = 1 \}
+    \]
+    and $\texttt{UnitQ}$ symmetrically on $Q$. Then there exist
+    injective embeddings
+    \[
+        \varphi : \texttt{UnitQ} \hookrightarrow P.\operatorname{basisIndex},
+        \qquad
+        \psi : \texttt{UnitP} \hookrightarrow Q.\operatorname{basisIndex},
+    \]
+    such that for every $k \in \texttt{UnitQ}$ the bond dimensions
+    match, the basis tensors are gauge-phase equivalent (cast-left
+    shape), and the basis cross-overlap does not tend to zero; and
+    symmetrically for every $j \in \texttt{UnitP}$ via $\psi$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    Apply Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    first with $(P, Q)$ and the original hypothesis to obtain a raw
+    matched-sector function via classical choice, and then again with
+    $(Q, P)$ and the symmetric flipped hypothesis to obtain the
+    symmetric raw function.
+
+    \emph{Forward injectivity.}  Suppose $\varphi_0(k_1) = \varphi_0(k_2) = j$.
+    The two matching witnesses give a common centre
+    $P.\operatorname{basis}\,j$ with two gauge-phase equivalences (after
+    cast) to $Q.\operatorname{basis}\,k_1$ and $Q.\operatorname{basis}\,k_2$.
+    Composing through this centre (cast-aware transitivity of
+    gauge-phase equivalence) gives a gauge-phase equivalence between
+    $Q.\operatorname{basis}\,k_1$ and $Q.\operatorname{basis}\,k_2$ for the
+    dimension equality
+    $h_Q : Q.\operatorname{basisDim}\,k_1 = Q.\operatorname{basisDim}\,k_2$.
+    The basis-distinctness clause of the canonical-form predicate on $Q$
+    (CPSV16 lines 264--279) then forces $k_1 = k_2$. The backward
+    injectivity is symmetric.
+
+    \emph{Wrapping as injective embeddings.}  The injective
+    functions, paired with the injectivity proofs, are exactly the
+    embedding pair stated in the theorem. The matching data are
+    extracted by re-applying the classical-choice spec at each subtype
+    index.
+\end{proof}
+
+\subsection{Phase B-$\gamma$: CPSV16 \S{}II.C lines 1187--1188 Corollary substitution}
+
+Given the matched gauges from Phase B-$\alpha$
+encoded as the injection from Phase B-$\beta$, the \emph{per-block
+    coefficient identity} of CPSV16 \S~II.C lines 1187--1188
+(arXiv:1606.00608, the Corollary \texttt{II\_cor2}'s substitution argument)
+follows by substituting the per-pair gauge identity
+$\operatorname{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \operatorname{mpv}(A_{\varphi(k)})(\sigma)$
+into the original proportional-MPV hypothesis and projecting the
+resulting overlap onto each basis tensor $A_{j_0}$.
+
+\paragraph{Honest scoping.}
+The user-requested literal form of the matched-pair clause is
+\emph{eventual exact} equality
+$P.\operatorname{coeff}\,N\,(\varphi\,k) = \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}$
+for all sufficiently large $N$. Deriving eventual exact equality
+from the partial-bijection data ($\texttt{UnitQ}$ only, with non-unit
+$Q$-blocks unconstrained) requires combined LI on a partial union,
+the precise partial-union LI not naturally derivable from the
+paper-faithful BNT canonical form alone. We deliver the
+\emph{asymptotic-difference} form
+$\operatorname{Tendsto}\,(P.\operatorname{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}) \operatorname{atTop}\,(\mathcal{N}\,0)$,
+which is the natural output of the overlap-projection argument; the
+upgrade to the eventual-exact form is provided downstream by the
+multiset-rigidity lemma of Theorem~\ref{thm:power_sum_multiset}, the
+Newton--Girard input behind CPSV16 lines 1187--1188. The
+non-matched-decay clause is delivered in full.
+
+\begin{lemma}[Ces\`aro converse: coefficient decay for subnormal sectors]
+    \label{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+    \lean{MPSTensor.IsBNTCanonicalForm.coeff_tendsto_zero_of_all_weights_subnorm}
+    \leanok
+    \uses{def:paper_bnt_cf}
+    Let $P$ be a paper-faithful BNT canonical form, and let $j$ be
+    a sector for which every copy weight is strictly subnormal,
+    $\lVert P.\operatorname{weight}\,j\,q \rVert < 1$ for every $q$.
+    Then $\lim_{N \to \infty} P.\operatorname{coeff}\,N\,j = 0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The coefficient $P.\operatorname{coeff}\,N\,j = \sum_q (P.\operatorname{weight}\,j\,q)^N$
+    is a finite sum. Each summand $(P.\operatorname{weight}\,j\,q)^N$ tends
+    to $0$ as $N \to \infty$ by the closed-unit-disk strict subnorm
+    hypothesis. A finite sum of null sequences is null.
+\end{proof}
+
+\begin{theorem}[CPSV16 \S{}II.C lines 1187--1188 Corollary substitution]
+    \label{thm:paper_bnt_coeff_identity_via_global_gauge}
+    \lean{MPSTensor.coeff_identity_via_global_gauge}
+    \leanok
+    \uses{def:paper_bnt_cf,
+        thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        thm:paper_bnt_bijective_match_of_sameMPV,
+        lem:paper_bnt_combined_family_eventually_li,
+        thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+    Let $P, Q$ be two paper-faithful BNT canonical forms generating
+    proportional MPVs. Let
+    \[
+        \texttt{UnitQ} := \{ k \mid \exists\,q,\ \lVert Q.\operatorname{weight}\,k\,q \rVert = 1 \}
+    \]
+    be the unit-modulus subset of $Q$-sectors (CPSV16 \S~II.A line~246
+    normalization), and let $\varphi : \texttt{UnitQ} \hookrightarrow P.\operatorname{basisIndex}$
+    be an injection equipped with per-pair matched-gauge data
+    for every $k \in \texttt{UnitQ}$. Then:
+    \begin{enumerate}
+        \item \emph{Matched-pair asymptotic identity}: for every
+              $k \in \texttt{UnitQ}$ there exists a phase $\zeta_k \in \mathbb{C}$
+              with $\lVert\zeta_k\rVert = 1$ such that the asymptotic difference
+              of coefficient sequences vanishes,
+              \[
+                  \lim_{N \to \infty}\ P.\operatorname{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}\ =\ 0.
+              \]
+        \item \emph{Non-matched-decay}: for every $j_0 \in P.\operatorname{basisIndex}$
+              outside the range of $\varphi$,
+              \[
+                  \lim_{N \to \infty}\ P.\operatorname{coeff}\,N\,j_0\ =\ 0.
+              \]
+    \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-    Fix $k$. Were every overlap $\langle V^{(N)}(A_j)\,|\,V^{(N)}(B_k)
-        \rangle$ to tend to zero, Lemma~\ref{lem:bnt:lem1} applied to
-    $\{A_j\}_j \cup \{B_k\}$ would render the combined family eventually
-    linearly independent. Projecting the equal-MPV
-    identity~\eqref{eq:bnt:samempv_expanded} onto $\ket{V^{(N)}(B_k)}$
-    would then force $\sum_q (\mu^Q_{k,q})^{\,N} \to 0$, contradicting
-    the per-block non-decay of Lemma~\ref{lem:bnt:cesaro} applied to the
-    unit-block witness. Hence some mixed overlap fails to decay, and the
-    overlap dichotomy Lemma~\ref{lem:bnt:dichotomy} produces the matched
-    $j_k$ with the required bond-dimension equality and gauge-phase
-    equivalence. The symmetric argument together with the gauge-phase
-    distinctness clause of Definition~\ref{def:bnt}~(4) force the
-    matching to be injective in both directions, giving $g_A = g_B$ and
-    the bijection $\beta$.
+    \leanok
+    \uses{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
+        lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    Fix $j_0$ and project the proportional-MPV identity onto the
+    overlap with $P.\operatorname{basis}\,j_0$:
+    \[
+        \sum_j P.\operatorname{coeff}\,N\,j \cdot \langle V_N(A_j) \mid V_N(A_{j_0}) \rangle
+        =
+        \sum_k Q.\operatorname{coeff}\,N\,k \cdot \langle V_N(B_k) \mid V_N(A_{j_0}) \rangle.
+    \]
+    \emph{LHS.} The off-diagonal $j \neq j_0$ terms decay by
+    Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero} (CPSV16
+    lines 1080--1091) and the diagonal term
+    \(P.\operatorname{coeff}\,N\,j_0 \cdot
+    (\langle V_N(A_{j_0}) \mid V_N(A_{j_0}) \rangle - 1)\)
+    decays by the normalized self-overlap (CPSV21 line 1818). Hence
+    $\text{LHS} - P.\operatorname{coeff}\,N\,j_0 \to 0$.
+
+    \emph{RHS.} Split $k$ into $\texttt{UnitQ}$ and its complement.
+    \begin{itemize}
+        \item For $k \in \texttt{UnitQ}$: substitute via the gauge identity
+              $\operatorname{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \operatorname{mpv}(A_{\varphi(k)})(\sigma)$
+              (CPSV16 line 1186; the unit-modulus closure
+              $\lVert\zeta_k\rVert = 1$ follows from the norm-from-overlap
+              lemma and both per-block normalized self-overlaps tending to 1).
+              If $\varphi(k) = j_0$: self-overlap diagonal, contributes
+              $Q.\operatorname{coeff}\,N\,k \cdot \zeta_k^N + o(1)$.
+              If $\varphi(k) \neq j_0$: cross-overlap decay, contributes $o(1)$.
+        \item For $k \notin \texttt{UnitQ}$: every copy weight has strict
+              modulus $< 1$, so $Q.\operatorname{coeff}\,N\,k \to 0$ by
+              Lemma~\ref{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
+              combined with the uniform overlap bound from left-canonical
+              normalization (CPSV21 lines 1815--1837), the contribution decays
+              to $0$.
+    \end{itemize}
+    Combining all per-$k$ pieces:
+    $\text{RHS} - \sum_{k \in \texttt{UnitQ}, \varphi(k) = j_0} \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val} \to 0$.
+    Since $\varphi$ is an embedding, the sum has at most one term.
+    With $\text{LHS} = \text{RHS}$ (the projection identity), we obtain
+    $P.\operatorname{coeff}\,N\,j_0 - (\text{matched term}) \to 0$.
+
+    Specialising: if $j_0 = \varphi(k_0)$ for some $k_0 \in \texttt{UnitQ}$,
+    the matched term is $\zeta_{k_0}^N \cdot Q.\operatorname{coeff}\,N\,k_0.\operatorname{val}$,
+    giving clause~(1). If $j_0 \notin \operatorname{range}(\varphi)$, the
+    matched term is empty (0), giving clause~(2).
 \end{proof}
 
-The phases $\phi_k$ from~\eqref{eq:bnt:gaugephase} and the
-intertwining matrices $X_k$ assemble, sector by sector, into the data
-that drives the coefficient identity of the next section.
-
-\paragraph{Lean realization.}
-The per-sector existential is
-\lean{MPSTensor.exists_block_match_of_sameMPV}\leanok, and the
-bijective form, packaging the symmetric application together with
-injectivity, is
-\lean{MPSTensor.bijective_match_of_sameMPV}\leanok.
-
-
-% ==========================================================
-\section{Coefficient identity via the global gauge}
-\label{sec:bnt:coeff_identity}
-
-Once the sector bijection $\beta$ and the per-pair phases
-$\zeta_k = e^{i\phi_k}$ and gauges $X_k$ of Theorem~\ref{thm:bnt:match}
-are in hand, the coefficient identity
-of~\cite[L.\,1184--1188]{Cirac2017MPDO_AnnPhys} follows from a single
-global substitution. Define the block matrix
-\[
-    Y = \bigoplus_{k=1}^{g}\, X_k.
-\]
-Conjugating $Q$ by $Y$ transports each $B_k$ to $\zeta_k^{-1}
-    A_{\beta(k)}$ up to a per-sector phase, and the equal-MPV
-identity~\eqref{eq:bnt:samempv_expanded} pulls back to the A-side
-basis. The A-only eventual linear independence of
-$\{\ket{V^{(N)}(A_j)}\}_j$ (Definition~\ref{def:bnt}~(3)) then allows
-the coefficients to be read off sector by sector.
-
-\begin{theorem}[Eventual coefficient identity]\label{thm:bnt:coeff_identity}
-    Under the hypotheses of Theorem~\ref{thm:bnt:match}, there exist
-    phases $\zeta_1, \ldots, \zeta_g \in \mathbb{C}$ with $|\zeta_k| = 1$
-    and a threshold $N_0$ such that, for every $N > N_0$ and every $k$,
-    \begin{equation}\label{eq:bnt:coeff_identity}
-        \sum_{q=1}^{r^P_{\beta(k)}} (\mu^P_{\beta(k), q})^{\,N}
-        = \zeta_k^{\,N}
-        \sum_{q=1}^{r^Q_k} (\mu^Q_{k, q})^{\,N}.
-    \end{equation}
-    Equivalently, the matched basis MPVs satisfy
-    \[
-        \ket{V^{(N)}(B_k)} = \zeta_k^{\,N}
-        \ket{V^{(N)}(A_{\beta(k)})}
-    \]
-    for every $N$.
-\end{theorem}
-
-The eventual exact form~\eqref{eq:bnt:coeff_identity} is precisely the
-power-sum identity~\eqref{eq:bnt:matched_power_sum} that feeds
-Theorem~\ref{thm:bnt:newton_girard}, yielding the matched multiplicity
-identity $r^P_{\beta(k)} = r^Q_k$ and the rescaled weight permutation
-$\tau_k$ of Section~\ref{sec:bnt:newton_girard}.
-
-\paragraph{Lean realization.}
-The coefficient identity is recorded in two forms. The global gauge
-route, conjugating $Q$ by the assembled block matrix $Y$ and applying
-A-only linear independence, is
-\lean{MPSTensor.coeff_identity_via_global_gauge}\leanok. The
-matched-basis MPV phase route, equivalent
-to~\eqref{eq:bnt:coeff_identity} through the basis self-overlaps, is
-\lean{MPSTensor.coeff_identity_via_matched_mpv_phase}\leanok.
-
-
-% ==========================================================
-\section{Total bond dimension and flattened indices}
-\label{sec:bnt:totaldim}
-
-The CPSV16 corollary asserts equality of the ambient bond dimensions
-of $A$ and $B$ before constructing the conjugating
-matrix~\cite[L.\,1188 implied, L.\,1189]{Cirac2017MPDO_AnnPhys}. In the
-two-layer display~\eqref{eq:bnt:twolayer}, the ambient bond dimension is
-\[
-    D(P) = \sum_{j=1}^{g_P}\, r^P_j\, D^P_j,
-\]
-and similarly for $Q$. The sector matching of
-Theorem~\ref{thm:bnt:match} provides $D^P_{\beta(k)} = D^Q_k$, while the
-power-sum recovery of Theorem~\ref{thm:bnt:newton_girard} provides
-$r^P_{\beta(k)} = r^Q_k$. A reindexing along $\beta$ thus gives
-\begin{equation}\label{eq:bnt:totaldim}
-    D(P) = \sum_{k=1}^{g}\, r^P_{\beta(k)}\, D^P_{\beta(k)}
-    = \sum_{k=1}^{g}\, r^Q_k\, D^Q_k = D(Q).
-\end{equation}
-At the level of flattened sector indices --- pairs $(k, q)$ ranging
-over $\bigsqcup_k \mathrm{Fin}\,r^Q_k$ --- the matching $(\beta, \tau)$
-of Theorem~\ref{thm:bnt:match} and Section~\ref{sec:bnt:newton_girard}
-produces an explicit bijection
-\[
-    \mathrm{Fin} \mathrm{totalCopies}(Q)
-    \xrightarrow{\sim}
-    \mathrm{Fin} \mathrm{totalCopies}(P),
-    \qquad (k, q) \longmapsto (\beta(k),\, \tau_k(q)).
-\]
-This permutation of flattened indices, combined
-with~\eqref{eq:bnt:totaldim}, sets up the coordinate identification used
-in the final global gauge construction.
-
-\paragraph{Lean realization.}
-The equality~\eqref{eq:bnt:totaldim} is
-\lean{MPSTensor.SectorDecomposition.totalDim_eq_of_match}\leanok, and
-the flattened-index bijection is
-\lean{MPSTensor.SectorDecomposition.sectorFlatEquiv}\leanok.
-
-
-% ==========================================================
-\section{The global gauge and the equal-MPV corollary}
-\label{sec:bnt:global_gauge}
-
-The endgame of~\cite[L.\,1189--1192]{Cirac2017MPDO_AnnPhys} assembles
-the per-sector gauges $X_k$ produced by Theorem~\ref{thm:bnt:match}
-into a single invertible matrix $X$ realizing the conjugation
-$A^i = X B^i X^{-1}$. Writing the two-layer
-display~\eqref{eq:bnt:twolayer} with multiplicities $r_k$ visible on
-the diagonal, define
-\begin{equation}\label{eq:bnt:globalgauge}
-    X = \bigoplus_{k=1}^{g}\, (\mathbb{1}_{r_k} \otimes X_k),
-\end{equation}
-where the direct sum runs over the matched sectors, $\mathbb{1}_{r_k}$
-is the identity of size $r_k$ on the multiplicity space, and $X_k$
-acts on the bond-dimension space of $A_{\beta(k)}$.
-
-\begin{theorem}[Equal-MPV corollary]\label{thm:bnt:II_cor2}
-    Let $P$ and $Q$ be two sector decompositions in BNT canonical form,
-    each satisfying~\eqref{eq:bnt:norm246} sector-wise. If
-    $\ket{V^{(N)}(P)} = \ket{V^{(N)}(Q)}$ for every $N$, then the
-    ambient bond dimensions coincide
-    (Section~\ref{sec:bnt:totaldim}) and the
-    matrix~\eqref{eq:bnt:globalgauge}, after composition with the
-    flattened-index permutation of Section~\ref{sec:bnt:totaldim},
-    realizes
-    \[
-        A^i = X\, B^i\, X^{-1}
-        \qquad \text{for every } i.
-    \]
-\end{theorem}
-
-\begin{proof}
-    The block matching $\beta$, the bond-dimension and multiplicity
-    identities, and the gauge-phase equivalences $\zeta_k$ and
-    $X_k$ on each matched pair are supplied by
-    Theorem~\ref{thm:bnt:match} and~\eqref{eq:bnt:coeff_identity}.
-    On each matched pair $(\beta(k), k)$, the gauge-phase
-    relation~\eqref{eq:bnt:gaugephase} reads
-    \[
-        B^i_k = \zeta_k\, X_k\, A^i_{\beta(k)}\, X_k^{-1}.
-    \]
-    The phases $\zeta_k$ are absorbed into the weights via the
-    permutation $\tau_k$ of Section~\ref{sec:bnt:newton_girard}, which
-    transports the multiset $\{\mu^Q_{k,q}\}_q$ to
-    $\{\zeta_k^{-1}\mu^P_{\beta(k),q}\}_q$. The direct
-    sum~\eqref{eq:bnt:globalgauge} on the flattened index $(k, q)$,
-    composed with the permutation $(k, q) \mapsto (\beta(k),
-        \tau_k(q))$ of Section~\ref{sec:bnt:totaldim}, then implements the
-    conjugation $A^i = X B^i X^{-1}$ sector by sector. The total
-    dimension equality~\eqref{eq:bnt:totaldim} guarantees that the
-    flattening is between spaces of equal dimension.
-\end{proof}
-
-This is~\cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys},
-restated as Corollary~4.5 in~\cite{Cirac2021Matrix}. In the language
-of gauge equivalence~\cite[L.\,1189--1192]{Cirac2017MPDO_AnnPhys}, the
-two MPS-generating tensors are conjugate via an invertible matrix
-whose construction is explicit in the matched-coordinate data.
-
-\paragraph{Lean realization.}
-The matched-coordinate sector-data form, packaging the bijection
-$\beta$, the phases $\zeta_k$, the gauges $X_k$, and the
-multiplicity/dimension equalities, is
-\lean{MPSTensor.ft_paper_bnt_equal_sector_data}\leanok. The
-matched-coordinate global gauge form, assembling the direct
-sum~\eqref{eq:bnt:globalgauge} on the Q-side flattened indices, is
-\lean{MPSTensor.ft_paper_bnt_equal_global_gauge}\leanok. The witness
-extraction for the literal $\mathrm{GaugeEquiv}$ packaging on the
-matched-coordinate MPS surface is recorded as
-\lean{MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv_witnesses}\leanok,
-with the bundled gauge-equivalence statement
-\lean{MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv}\leanok.
+\begin{remark}
+    Theorem~\ref{thm:paper_bnt_coeff_identity_via_global_gauge}
+    realises the substitution route of CPSV16 \S~II.C lines 1187--1188:
+    substitute the per-pair gauge phases into the original proportional-MPV
+    identity, reduce to the $A$-only relation, and extract per-$j$
+    coefficient identities using the cross-overlap decay clause alone.
+    The result handles the $\texttt{UnitQ}$-restricted bijection
+    setting; the full bijection on
+    $P.\operatorname{basisIndex} \simeq Q.\operatorname{basisIndex}$ is not
+    delivered by Phase~B-$\beta$ (see the scoping discussion above).
+\end{remark}
