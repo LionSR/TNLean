@@ -123,7 +123,7 @@ canonical-form surface of Chapter~\ref{ch:bnt}; see
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
 	\lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
 	\leanok
-	\uses{def:cf_bnt, def:gauge_equiv}
+	\uses{def:bnt, def:gauge_equiv}
 	Fix a common block structure: the same number of blocks~$g$,
 	the same bond dimensions $(D_k)_{k=1}^g$, and the same weights
 	$(\mu_k)_{k=1}^g$.
@@ -468,7 +468,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
 	\leanok
-	\uses{lem:bnt_perm_simple, lem:sector_basis_pre_matching_to_matching}
+	\uses{thm:bnt:match, lem:sector_basis_pre_matching_to_matching}
 	The permutation-rigidity lemma for bases of normal tensors gives a
 	permutation, the matched bond dimensions, and the gauge-phase equivalences
 	of the basis blocks, hence a sector basis pre-matching. Asymptotic

@@ -3456,7 +3456,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_selectorWords}
     \lean{MPSTensor.isBlockDiagonal'_of_commutes_reindexed_toTensorFromBlocks_of_bntSelectorWords}
     \leanok
-    \uses{def:cf_bnt, lem:pair_trace_separation_to_pairwise_selectors,
+    \uses{def:bnt, lem:pair_trace_separation_to_pairwise_selectors,
         lem:pair_trace_separation_homogenization_with_padding,
         lem:block_selectors_from_pairwise_separators,
         lem:block_projection_span_from_product_word_span}
@@ -3488,7 +3488,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
         lem:block_projection_span_from_product_word_span}
     Block injectivity writes each target sector matrix as a fixed-length linear
     combination of word evaluations.  For a canonical-form/BNT family,
-    Definition~\ref{def:cf_bnt} gives one-site injectivity of each block, hence
+    Definition~\ref{def:bnt} gives one-site injectivity of each block, hence
     $1$-block injectivity by Lemma~\ref{lem:one_block_injective_of_injective}.
     For a target tuple $(M_j)_j$, write $M_k$ as a
     one-letter linear combination in block $k$, multiply by the selector for $k$,
@@ -3593,7 +3593,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_bntSelectorWords}
     \lean{MPSTensor.parentHamiltonianGroundSpace_le_bntSpan_of_bntSelectorWords}
     \leanok
-    \uses{def:cf_bnt, rem:word_tuple_span_top,
+    \uses{def:bnt, rem:word_tuple_span_top,
         def:parent_hamiltonian_ground_space_bnt, def:bnt_span}
     Let $A$ be in canonical-form/BNT, assume $1 < L$ and $N \ge L + 1$, and suppose
     length-$S$ block-selector words are given.  If every assembled periodic-chain
