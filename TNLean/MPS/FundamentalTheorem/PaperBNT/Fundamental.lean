@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.PaperBNT.CoeffIdentity
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongInduction
+import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
 # Paper-faithful BNT equal-MPV sector data theorem
@@ -33,6 +34,43 @@ open Filter Topology
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-- The `P`-side copy weight transported into the flattened copy coordinates of `Q`.
+
+For a matched basis bijection `β : Fin Q.basisCount ≃ Fin P.basisCount` and
+per-block copy permutations `τ k`, this is the weight array appearing in the
+coordinate-level direct sum
+`⊕_{(k,q)} P.weight (β k) (τ k q) • P.basis (β k)`.
+It is the Lean counterpart of the reindexing implicit in CPSV16 §II.C lines
+1189–1192 before forming the global gauge `⊕_k (𝟙_{r_k} ⊗ X_k)`. -/
+noncomputable def matched_p_weight {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
+    Fin Q.totalCopies → ℂ :=
+  fun s =>
+    let x := Q.flatIndexEquiv.symm s
+    P.weight (β x.1) (τ x.1 x.2)
+
+/-- The `P`-side basis tensor transported into the flattened copy coordinates of `Q`.
+
+The output is indexed by `Fin Q.totalCopies`, with each copy `(k,q)` carrying the
+cast of `P.basis (β k)` to the matched `Q.basisDim k`. -/
+noncomputable def matched_p_basis {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k) :
+    (s : Fin Q.totalCopies) → MPSTensor d (Q.flatDim s) := fun s => by
+  change MPSTensor d (Q.basisDim (Q.flatIndexEquiv.symm s).1)
+  exact cast (congr_arg (MPSTensor d) (hDim (Q.flatIndexEquiv.symm s).1))
+    (P.basis (β (Q.flatIndexEquiv.symm s).1))
+
+/-- Duplicate the per-basis gauge matrices over all copies in the flattened `Q` coordinates.
+
+This realizes the `𝟙_{r_k} ⊗ X_k` part of CPSV16 §II.C line 1191. -/
+noncomputable def matched_block_gauge {Q : SectorDecomposition d}
+    (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ) :
+    (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ := fun s => by
+  change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
+  exact Xblock (Q.flatIndexEquiv.symm s).1
 
 /-- **Paper-faithful equal-MPV sector-data theorem (Phase D).**
 
@@ -90,5 +128,177 @@ theorem ft_paper_bnt_equal_sector_data
   intro q
   have hpoint := hτPQ (τPQ.symm q)
   simpa using hpoint
+
+/-- **Phase E global gauge in matched flattened coordinates.**
+
+This is the coordinate-level assembly of CPSV16 §II.C lines 1189–1192.  Starting
+from equal MPV families on the paper-faithful BNT surface, it produces:
+
+* the full basis bijection `β`,
+* per-block bond-dimension equalities and gauge matrices `Xblock k`,
+* copy permutations `τ k` with the **same** phase `ζ k` as the block gauge, and
+* the explicit flattened global matrix
+  `X = globalGaugeOfBlocks (matched_block_gauge Xblock)`.
+
+The final displayed equality says that the unfolded flattened presentation of
+`Q.toTensor` is obtained by conjugating the `P`-side sector tensor written in
+`Q`'s flattened copy coordinates.  In paper notation this is the direct-sum
+matrix `⊕_k (𝟙_{r_k} ⊗ X_k)`.  The remaining conversion from this
+matched-coordinate presentation to a literal `GaugeEquiv P.toTensor Q.toTensor`
+is only a coordinate permutation/cast of the flattened direct sum and is
+intentionally not hidden here; the theorem exposes the explicit CPSV16 witness
+rather than an opaque existential. -/
+theorem ft_paper_bnt_equal_global_gauge
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (_hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k)
+      (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+      (ζ : Fin Q.basisCount → ℂ)
+      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
+      (∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
+        Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) ∧
+      ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
+        X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
+        ∀ i : Fin d,
+          toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+            (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
+              toTensorFromBlocks (d := d)
+                (μ := matched_p_weight (P := P) (Q := Q) β τ)
+                (matched_p_basis (P := P) (Q := Q) β hDim) i *
+              (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+                Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                  (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
+  classical
+  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPV hP hQ hEqual
+  let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
+    fun k => (hβMatchFull k).choose
+  let hGPE : ∀ k : Fin Q.basisCount,
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
+    fun k => (hβMatchFull k).choose_spec.1
+  let Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
+    fun k => (hGPE k).choose
+  let ζ : Fin Q.basisCount → ℂ := fun k => (hGPE k).choose_spec.choose
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    (hGPE k).choose_spec.choose_spec.1
+  have hConj : ∀ (k : Fin Q.basisCount) (i : Fin d),
+      Q.basis k i =
+        ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+          (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+            Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)) := by
+    intro k i
+    exact (hGPE k).choose_spec.choose_spec.2 i
+  have hMpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ := by
+    intro k N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k)))
+      (B := Q.basis k) (Xblock k) (ζ k) (hConj k) N σ,
+      mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
+  have hCoeff := coeff_identity_via_matched_mpv_phase hP hEqual β ζ hMpv
+  have hWeightData : ∀ k : Fin Q.basisCount,
+      ∃ (hCopies : P.copies (β k) = Q.copies k)
+        (τPQ : Fin (P.copies (β k)) ≃ Fin (Q.copies k)),
+        ∀ q : Fin (P.copies (β k)),
+          Q.weight k (τPQ q) = (ζ k)⁻¹ * P.weight (β k) q := by
+    intro k
+    obtain ⟨N₀, hCoeff_k⟩ := hCoeff k
+    exact matched_sector_weight_equiv (P := P) (Q := Q)
+      (j₀ := β k) (k₀' := k) (ζ := ζ k) (hζ_ne k) (N₀ := N₀) hCoeff_k
+  let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := fun k =>
+    (hWeightData k).choose
+  let τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)) :=
+    fun k => (hWeightData k).choose_spec.choose.symm
+  have hWeight : ∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
+      Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q) := by
+    intro k q
+    have hpoint := (hWeightData k).choose_spec.choose_spec
+      ((hWeightData k).choose_spec.choose.symm q)
+    simpa [τ] using hpoint
+  let μP : Fin Q.totalCopies → ℂ := matched_p_weight (P := P) (Q := Q) β τ
+  let AP : (s : Fin Q.totalCopies) → MPSTensor d (Q.flatDim s) :=
+    matched_p_basis (P := P) (Q := Q) β hDim
+  let Xcoord : (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ :=
+    matched_block_gauge (Q := Q) Xblock
+  have hWeighted : ∀ (s : Fin Q.totalCopies) (i : Fin d),
+      (Q.flatWeight s) • Q.flatBasis s i =
+        (Xcoord s : Matrix (Fin (Q.flatDim s)) (Fin (Q.flatDim s)) ℂ) *
+          ((μP s) • AP s i) *
+          (((Xcoord s)⁻¹ : GL (Fin (Q.flatDim s)) ℂ) :
+            Matrix (Fin (Q.flatDim s)) (Fin (Q.flatDim s)) ℂ) := by
+    intro s i
+    let x := Q.flatIndexEquiv.symm s
+    let k : Fin Q.basisCount := x.1
+    let q : Fin (Q.copies k) := x.2
+    have hμ : μP s = Q.weight k q * ζ k := by
+      have hw := hWeight k q
+      change P.weight (β k) (τ k q) = Q.weight k q * ζ k
+      calc
+        P.weight (β k) (τ k q) = ζ k * Q.weight k q := by
+          rw [hw, ← mul_assoc, mul_inv_cancel₀ (hζ_ne k), one_mul]
+        _ = Q.weight k q * ζ k := by ring
+    change (Q.weight k q) • Q.basis k i =
+      (Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+        ((μP s) • (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i) *
+        (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+          Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)
+    rw [hConj k i, hμ]
+    simp [smul_smul, Matrix.mul_assoc, Algebra.mul_smul_comm, Algebra.smul_mul_assoc]
+  have hFormula :=
+    toTensorFromBlocks_eq_globalGaugeOfBlocks_conj
+      (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+      (A := fun s i => μP s • AP s i)
+      (B := fun s i => Q.flatWeight s • Q.flatBasis s i)
+      Xcoord hWeighted
+  have hLeft :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+        (fun s i => μP s • AP s i) =
+        toTensorFromBlocks (d := d) (μ := μP) AP := by
+    funext i
+    simp [toTensorFromBlocks]
+  have hRight :
+      toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+        (fun s i => Q.flatWeight s • Q.flatBasis s i) =
+        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis := by
+    funext i
+    simp [toTensorFromBlocks]
+  refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, ?_⟩
+  refine ⟨globalGaugeOfBlocks Xcoord, rfl, ?_⟩
+  intro i
+  calc
+    toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+        toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+          (fun s i => Q.flatWeight s • Q.flatBasis s i) i := by
+            rw [hRight]
+    _ = (globalGaugeOfBlocks Xcoord : Matrix
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
+          toTensorFromBlocks (d := d) (μ := fun _ : Fin Q.totalCopies => (1 : ℂ))
+            (fun s i => μP s • AP s i) i *
+          (((globalGaugeOfBlocks Xcoord)⁻¹ :
+              GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+            Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := hFormula i
+    _ = (globalGaugeOfBlocks Xcoord : Matrix
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
+          toTensorFromBlocks (d := d) (μ := μP) AP i *
+          (((globalGaugeOfBlocks Xcoord)⁻¹ :
+              GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+            Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+              (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
+            rw [hLeft]
 
 end MPSTensor
