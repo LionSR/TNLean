@@ -226,6 +226,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
+import TNLean.MPS.FundamentalTheorem.PaperBNT.ProportionalMatch
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
