@@ -213,14 +213,15 @@ Every field of the paper-faithful canonical-form predicate transfers from
   gauge-phase grouping rule);
 * `weight_norm_le_one` (CPSV16 line 246, modulus bound) transfers
   pointwise after reindexing;
-* `weight_unit_exists` (CPSV16 line 246, unit-modulus witness) is the
-  only non-pointwise field: dropping the sector that carried the unique
-  unit-modulus weight would destroy the existential witness, so the
-  caller must supply a unit-modulus witness on the *remaining*
-  decomposition.  The `hUnitRem` hypothesis below records that step
-  abstractly.  (Issue #1725 Phase A retired the auxiliary dominant-block
-  structural field that previously required a second `hUnitDomRem`
-  parameter; that parameter is no longer needed here.)
+* `weight_unit_exists_per_block` (CPSV21 §III.2 / Definition 4.3,
+  per-block spectral-radius-one normalization) is pointwise on the
+  remaining decomposition but not automatic after dropping: if a
+  remaining block's only unit copy had been grouped differently, the
+  caller must supply the per-block witnesses for the reduced surface;
+* `weight_unit_exists` (CPSV16 line 246, global unit witness) is retained
+  as the nonempty/global normalization witness for auxiliary lemmas, so
+  the caller also supplies a global witness on the remaining
+  decomposition.
 
 This is a foundational lemma originally intended for the CPSV16 §II
 `II_cor2` strong-induction route (lines 1172–1192).  It is retained
@@ -229,6 +230,9 @@ drift audit (`/tmp/phase_4c_drift_audit_2026-05-14.md` §8) does not
 chain `dropSector`-preservation on `IsBNTCanonicalForm`. -/
 def dropSector
     (hP : IsBNTCanonicalForm P) (h : P.basisCount = n + 1) (i₀ : Fin (n + 1))
+    (hUnitRemPerBlock : ∀ j : Fin n,
+      ∃ q : Fin ((P.dropSector h i₀).copies j),
+        ‖(P.dropSector h i₀).weight j q‖ = 1)
     (hUnitRem : ∃ (j : Fin n) (q : Fin ((P.dropSector h i₀).copies j)),
       ‖(P.dropSector h i₀).weight j q‖ = 1) :
     IsBNTCanonicalForm (P.dropSector h i₀) where
@@ -287,6 +291,7 @@ def dropSector
     -- after the corresponding `Fin.cast` of `q`.
     simpa [SectorDecomposition.dropSector_weight,
            SectorDecomposition.dropSector_copies] using this _
+  weight_unit_exists_per_block := hUnitRemPerBlock
   weight_unit_exists := hUnitRem
 
 end IsBNTCanonicalForm

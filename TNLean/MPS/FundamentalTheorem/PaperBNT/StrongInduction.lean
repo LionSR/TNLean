@@ -133,7 +133,7 @@ Given:
   `mpv (Q.basis k₀') σ = ζ^N · mpv (P.basis j₀) σ` for every system size
   and configuration (this is the output of
   `MPSTensor.mpv_eq_pow_mul_of_gaugePhase` applied to the
-  `GaugePhaseEquiv` witness from `exists_unit_block_match_of_sameMPV`,
+  `GaugePhaseEquiv` witness from `exists_block_match_of_sameMPV`,
   CPSV16 line 1187);
 * `hCombLI` — combined-family eventual linear independence of
   `P.basis ⊔ (Q.dropSector k₀).basis` (the paper-faithful Lem1 input,

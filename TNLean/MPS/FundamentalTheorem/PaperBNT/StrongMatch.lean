@@ -48,7 +48,7 @@ original pair, with the paper's "given $k$" hypothesis explicitly
 encoded as the unit-modulus existential.  There is **no recursion**,
 no `dropSector` usage, and no combined-LI obligation on a partial
 union: the entire proof routes through the existing
-`exists_unit_block_match_of_sameMPV` lemma (which itself routes
+`exists_block_match_of_sameMPV` lemma (which itself routes
 through the full-family combined LI `combined_family_eventually_li`,
 `PaperBNT/Api.lean`).
 
@@ -60,7 +60,7 @@ bijection / gauge data.
 ## Proof strategy (route B of the audit memo)
 
 Given a sector `k` of `Q` with a unit-modulus weight, apply the
-existing `exists_unit_block_match_of_sameMPV` (`PaperBNT/DominantMatch`,
+existing `exists_block_match_of_sameMPV` (`PaperBNT/DominantMatch`,
 post-Phase-A rename in PR #1726) **with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);
@@ -78,7 +78,7 @@ local helpers (`gaugePhaseEquiv_swap_cast` and
 `tendsto_mpvOverlap_zero_swap`) flip those into the paper-stated
 `(P, Q)`-ordered conclusion.
 
-No `sorry`, no `axiom`, no `unsafe`.
+All proofs in this file are closed constructively.
 -/
 
 open scoped Matrix BigOperators
@@ -159,7 +159,7 @@ flip both the cast direction and the equivalence direction.
 The two forms are mathematically the same statement (after eliminating
 the cast by `subst`), but the cast routing differs at the term level,
 so we record this as an explicit helper used inside
-`forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
+`forall_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
 private theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
     (h : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hGP : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h.symm) B) A) :
@@ -168,88 +168,52 @@ private theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
   -- After `subst`, both casts reduce to identity.
   simpa using gaugePhaseEquiv_symm_same_dim (by simpa using hGP)
 
-/-! ### Phase B-α main theorem: paper-faithful strong existential matching -/
+/-! ### Phase B-α main theorem: paper-faithful full-basis matching -/
 
-/-- **CPSV16 §II.C lines 1182–1186 Step 1 (paper-faithful Phase B-α).**
+/-- **CPSV16 §II.C lines 1182–1186 Step 1 (Phase D full-basis form).**
 
-For every sector `k` of `Q` that carries at least one unit-modulus
-weight (the CPSV16 §II.A line-246 hypothesis, applied at `k`), there
-exists a sector `j` of `P` of equal bond dimension, gauge-phase
-equivalent to `Q.basis k` after the dimension cast, and with
-non-decaying cross-overlap.
+For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
+bond dimension, gauge-phase equivalent to `Q.basis k` after the dimension
+cast, and with non-decaying cross-overlap.
 
-This is the paper's Step 1 contrapositive of `Lem1` (CPSV16 lines
-1131–1133, combined LI on the **FULL** `{A^{[j]}} ∪ {B^{[k]}}` family),
-**iterated externally** over each unit-block sector `k` of `Q`.  No
-recursion on a smaller `SectorDecomposition`, no `dropSector` usage,
-no combined LI on a partial union — only the weak existential
-(packaged as `exists_unit_block_match_of_sameMPV` in
-`PaperBNT/DominantMatch.lean`) applied at each sector.
+The Phase D strengthening of `IsBNTCanonicalForm` adds the CPSV21 §III.2 /
+Definition 4.3 per-block spectral-radius-one normalization
+`weight_unit_exists_per_block`; hence every sector is a unit block and the
+previous unit-subset restriction disappears.  The proof applies
+`exists_block_match_of_sameMPV` with `(P, Q)` swapped and re-orients the
+result using the local symmetry helpers.
 
-The unit-block restriction on `k` is paper-faithful: the CPSV16 §II.A
-line-246 normalization is recorded globally on the two-layer `(j, q)`
-indexing of the BNT display (not per-block), so non-unit-block sectors
-may exist in principle.  Such "ghost" blocks have coefficients
-`Q.coeff N k = ∑_q (Q.weight k q)^N` that decay exponentially to zero,
-contribute nothing to the thermodynamic state, and are not constrained
-by the matching (the FT cannot reconstruct them from `P` alone).  The
-downstream Phase B-β bijective-matching layer applies this theorem
-twice (with `P, Q` swapped) to derive `g_a = g_b` on the unit-block
-subset and the per-pair gauge data.
-
-Proof strategy (route B of `/tmp/phase_4c_drift_audit_2026-05-14.md`):
-apply `exists_unit_block_match_of_sameMPV` with the swap
-`(P := Q, Q := P)`, feed `hQ`, `hP`, `hP_pos`, the unit-modulus
-witness on `Q`, and the pointwise-symmetric `SameMPV₂` flip
-`fun N σ => (hEqual N σ).symm`.  Re-orient the resulting conclusion
-via `gaugePhaseEquiv_swap_cast` and `tendsto_mpvOverlap_zero_swap`.
-
-Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608);
-`Lem1` at CPSV16 lines 1131–1133.  Iteration of the paper's
-"given $k$" is encoded as the outer `∀ k`. -/
-theorem forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV
+Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608) and CPSV21
+Definition 4.3 lines 1846–1884. -/
+theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∀ k : Fin Q.basisCount, (∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1) →
-      ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
-        GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) h) (P.basis j))
-            (Q.basis k) ∧
-        ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
-          atTop (𝓝 0) := by
+    ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
+      GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) h) (P.basis j))
+          (Q.basis k) ∧
+      ¬ Tendsto (fun N : ℕ =>
+          mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+        atTop (𝓝 0) := by
   classical
-  intro k hUnitQ
-  -- `P.basisCount > 0`: the global unit witness on `P` produces a
-  -- sector index, which witnesses positivity of the basis count.
+  intro k
+  -- `P.basisCount > 0`: the retained global unit witness on `P` supplies a
+  -- sector index.  (The per-block field gives the full-basis upgrade; this
+  -- global field is still a convenient non-emptiness witness.)
   have hP_pos : 0 < P.basisCount := by
     obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
     exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
-  -- Pointwise-symmetric flip of `SameMPV₂`: by `.symm` of each scalar
-  -- equality.  No new content; just `Q ↔ P` reordering.
+  have hQ_pos : 0 < Q.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) k.isLt
   have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
     fun N σ => (hEqual N σ).symm
-  -- Apply the existing Phase-A lemma with `P` and `Q` swapped.
   obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
-    exists_unit_block_match_of_sameMPV
-      (P := Q) (Q := P) hQ hP hP_pos k hUnitQ hEqual_symm
-  -- `hsymDim : Q.basisDim k = P.basisDim j`; flip to the paper-stated
-  -- `P.basisDim j = Q.basisDim k`.
+    exists_block_match_of_sameMPV
+      (P := Q) (Q := P) hQ hP k hQ_pos hP_pos hEqual_symm
   refine ⟨j, hsymDim.symm, ?_, ?_⟩
-  · -- Gauge-phase equivalence: flip the cast direction and the
-    -- equivalence direction simultaneously via `gaugePhaseEquiv_swap_cast`.
-    -- `hGE_swapped : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hsymDim) (Q.basis k))
-    --                                (P.basis j)`.
-    -- We want `GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hsymDim.symm)
-    --                                  (P.basis j)) (Q.basis k)`.
-    exact gaugePhaseEquiv_swap_cast hsymDim.symm
-      (by
-        -- `hsymDim.symm.symm = hsymDim` definitionally for `Eq`.
-        simpa using hGE_swapped)
-  · -- Tendsto symmetry: swap A and B in `mpvOverlap` preserves
-    -- convergence to zero (`mpvOverlap A B N = star (mpvOverlap B A N)`).
-    intro hTend
+  · exact gaugePhaseEquiv_swap_cast hsymDim.symm
+      (by simpa using hGE_swapped)
+  · intro hTend
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
@@ -334,127 +298,46 @@ private theorem gaugePhaseEquiv_cast_compose_via_centre
   simp only [cast_eq] at GE₁ GE₂ ⊢
   exact gaugePhaseEquiv_trans_same_dim (gaugePhaseEquiv_symm_same_dim GE₁) GE₂
 
-/-! ### Phase B-β main theorem: bijective matching by symmetry
+/-! ### Phase B-β main theorem: full bijective matching by symmetry -/
 
-CPSV16 §II.C lines 1184–1186, the **symmetry argument**
-`g_a ≥ g_b ∧ g_b ≥ g_a ⇒ g_a = g_b`.
+/-- **CPSV16 §II.C lines 1184–1186 (Phase D full-basis bijection).**
 
-The paper-faithful Phase B-α theorem
-`forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV` gives one
-direction: for every unit-modulus sector `k` of `Q` there exists a
-sector `j` of `P` with matched bond dimension, gauge-phase equivalence
-(after cast), and non-decaying cross-overlap.  Applying the SAME theorem
-once more with `(P, Q)` swapped and `SameMPV₂` symmetrically flipped
-gives the other direction: for every unit-modulus sector `j` of `P`
-there exists a sector `k` of `Q` with the matching data.
+Applying `forall_k_exists_j_nondecaying_overlap_of_sameMPV` in both
+directions gives injective maps `Fin Q.basisCount → Fin P.basisCount` and
+`Fin P.basisCount → Fin Q.basisCount`.  Finite cardinal comparison turns
+the forward injection into an equivalence `β : Fin Q.basisCount ≃
+Fin P.basisCount`, carrying the matched bond-dimension equality,
+gauge-phase equivalence, and non-decaying overlap for every sector of `Q`.
 
-The resulting two functions are **injective embeddings**
-
-  `φ : { k // ∃ q, ‖Q.weight k q‖ = 1 } ↪ Fin P.basisCount`,
-  `ψ : { j // ∃ q, ‖P.weight j q‖ = 1 } ↪ Fin Q.basisCount`.
-
-Injectivity is the CPSV16 §II.C lines 1184–1186 conclusion: two
-unit-modulus sectors of `Q` that match the SAME sector `j` of `P`
-would force two sectors of `Q` to be gauge-phase equivalent through
-the common centre `P.basis j`, contradicting `basis_distinct` of `Q`.
-
-## Scoping note (honest scoping per the task brief)
-
-The user-requested literal form `β : UnitQ ≃ UnitP` (a bijection
-between the unit-modulus Finsets) requires an additional argument that
-the matched `j` lies in `UnitP`, i.e. that the matched sector of `P`
-also carries a unit-modulus weight.  That step is **not** discharged by
-the Phase B-α non-decay output alone (`mpvOverlap` is on the *basis*
-tensors, not on the weighted sectors); it requires the per-sector
-weight-equivariance argument of CPSV16 Lemma `equalMPS` (lines 1148–1167)
-combined with the gauge-phase identity on weighted sectors.  Phase B-β
-delivers the *symmetric injective matching*, which is the direct
-formalisation of the paper's `g_a ≥ g_b ∧ g_b ≥ g_a` step on the
-unit-modulus subsets; the upgrade to `UnitQ ≃ UnitP` is deferred to a
-later phase that lifts the matching from basis-MPV non-decay to weight
-transport.
-
-Style choice: `UnitP` and `UnitQ` are encoded as `Subtype`s on
-`Fin P.basisCount` and `Fin Q.basisCount` respectively.  This avoids
-the `DecidablePred` obligation that `Finset.univ.filter` would impose,
-keeps the bond-dimension/gauge-phase data attached to the original
-sector index, and is the cleanest carrier for the matching data. -/
-
-/-- **CPSV16 §II.C lines 1184–1186 (Phase B-β, bijective matching by
-symmetry).**
-
-Applying `forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV` twice
-(once with `(P, Q, hEqual)` and once with `(Q, P, hEqual.symm)`) yields
-two `Function.Embedding`s, one in each direction, on the unit-modulus
-subsets
-
-* `UnitQ := { k : Fin Q.basisCount // ∃ q, ‖Q.weight k q‖ = 1 }`,
-* `UnitP := { j : Fin P.basisCount // ∃ q, ‖P.weight j q‖ = 1 }`.
-
-Both embeddings carry the matched bond-dimension equality, the
-gauge-phase equivalence (cast-left shape), and the non-decaying
-cross-overlap of basis MPV states.  Injectivity in each direction
-routes through `basis_distinct` of the *target* canonical form, via the
-cast-aware transitivity helper
-`gaugePhaseEquiv_cast_compose_via_centre`.
-
-Paper anchor: CPSV16 §II.C lines 1184–1186 (arXiv:1606.00608),
-`Lem1` at CPSV16 lines 1131–1133.  See the scoping note in the module
-docstring for the relationship to the bijection
-`β : UnitQ ≃ UnitP` (deferred to a later phase). -/
+This is the Lean counterpart of the CPSV16 symmetry step `g_A ≥ g_B` and
+`g_B ≥ g_A`, now over the **full** BNT basis because Phase D makes every
+basis block a unit block. -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    let UnitP := { j : Fin P.basisCount // ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 }
-    let UnitQ := { k : Fin Q.basisCount // ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1 }
-    ∃ (φ : UnitQ ↪ Fin P.basisCount) (ψ : UnitP ↪ Fin Q.basisCount),
-      (∀ k : UnitQ, ∃ h : P.basisDim (φ k) = Q.basisDim k.val,
-          GaugePhaseEquiv
-              (cast (congr_arg (MPSTensor d) h) (P.basis (φ k)))
-              (Q.basis k.val) ∧
-          ¬ Tendsto (fun N : ℕ =>
-              mpvOverlap (d := d) (P.basis (φ k)) (Q.basis k.val) N)
-            atTop (𝓝 0)) ∧
-      (∀ j : UnitP, ∃ h : Q.basisDim (ψ j) = P.basisDim j.val,
-          GaugePhaseEquiv
-              (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ j)))
-              (P.basis j.val) ∧
-          ¬ Tendsto (fun N : ℕ =>
-              mpvOverlap (d := d) (Q.basis (ψ j)) (P.basis j.val) N)
-            atTop (𝓝 0)) := by
+    ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
+      ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis (β k)))
+            (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
+          atTop (𝓝 0) := by
   classical
-  -- Phase B-α applied in each direction.
-  have hFwd := forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual
+  have hFwd := forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hEqual
   have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
     fun N σ => (hEqual N σ).symm
-  have hBwd := forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hEqual_symm
-  -- Subtype carriers of the unit-modulus subsets.
-  set UnitP := { j : Fin P.basisCount // ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 }
-    with hUnitP_def
-  set UnitQ := { k : Fin Q.basisCount // ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1 }
-    with hUnitQ_def
-  -- Raw matched-sector function for the forward (`UnitQ → Fin P.basisCount`)
-  -- direction, by classical choice on the Phase B-α witness.
-  let φ₀ : UnitQ → Fin P.basisCount := fun k => (hFwd k.val k.property).choose
-  -- The classical-choice spec at each `k : UnitQ`.
-  have φ₀_spec : ∀ k : UnitQ,
-      ∃ h : P.basisDim (φ₀ k) = Q.basisDim k.val,
+  have hBwd := forall_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hEqual_symm
+  let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
+  have φ₀_spec : ∀ k : Fin Q.basisCount,
+      ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
         GaugePhaseEquiv
             (cast (congr_arg (MPSTensor d) h) (P.basis (φ₀ k)))
-            (Q.basis k.val) ∧
+            (Q.basis k) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis (φ₀ k)) (Q.basis k.val) N)
-          atTop (𝓝 0) := fun k => (hFwd k.val k.property).choose_spec
-  -- Forward injectivity (CPSV16 line 1186): two unit-modulus sectors of
-  -- `Q` that map to the same `j` of `P` would force two gauge-phase
-  -- equivalences with the same centre `P.basis j`, hence
-  -- `GaugePhaseEquiv (Q.basis k₁) (Q.basis k₂)` (up to cast), contradicting
-  -- `basis_distinct` of `Q`.
-  -- Helper: align an equivalence centred at `P.basis j'` to one centred at
-  -- `P.basis j` when `j = j'`.  The `rintro ... rfl` performs `subst` on the
-  -- *fresh* free variable, sidestepping the motive-type obstruction that
-  -- `rw [hjEq]` would hit (because `h_t` depends on `j'`).
+            mpvOverlap (d := d) (P.basis (φ₀ k)) (Q.basis k) N)
+          atTop (𝓝 0) := fun k => (hFwd k).choose_spec
   have rebase_centre_P :
       ∀ (j j' : Fin P.basisCount) (_hj : j = j')
         {kv : Fin Q.basisCount}
@@ -471,30 +354,25 @@ theorem bijective_match_of_sameMPV
     obtain ⟨h₁, GE₁, _⟩ := φ₀_spec k₁
     obtain ⟨h₂, GE₂, _⟩ := φ₀_spec k₂
     by_contra hne
-    have hne_val : k₁.val ≠ k₂.val := fun h => hne (Subtype.ext h)
-    -- Use the helper to move from centre `P.basis (φ₀ k₂)` to `P.basis (φ₀ k₁)`.
     obtain ⟨h₂', GE₂'⟩ :=
       rebase_centre_P (φ₀ k₁) (φ₀ k₂) hjEq h₂ GE₂
-    -- Compose the two equivalences through the common centre `P.basis (φ₀ k₁)`.
-    have hQdim : Q.basisDim k₁.val = Q.basisDim k₂.val := h₁.symm.trans h₂'
+    have hQdim : Q.basisDim k₁ = Q.basisDim k₂ := h₁.symm.trans h₂'
     have hQGE :
         GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) hQdim) (Q.basis k₁.val))
-            (Q.basis k₂.val) :=
+            (cast (congr_arg (MPSTensor d) hQdim) (Q.basis k₁))
+            (Q.basis k₂) :=
       gaugePhaseEquiv_cast_compose_via_centre (A := P.basis (φ₀ k₁))
-        (B := Q.basis k₁.val) (C := Q.basis k₂.val) h₁ h₂' GE₁ GE₂'
-    exact hQ.basis_distinct k₁.val k₂.val hne_val hQdim hQGE
-  -- Symmetric (`UnitP → Fin Q.basisCount`) direction.
-  let ψ₀ : UnitP → Fin Q.basisCount := fun j => (hBwd j.val j.property).choose
-  have ψ₀_spec : ∀ j : UnitP,
-      ∃ h : Q.basisDim (ψ₀ j) = P.basisDim j.val,
+        (B := Q.basis k₁) (C := Q.basis k₂) h₁ h₂' GE₁ GE₂'
+    exact hQ.basis_distinct k₁ k₂ hne hQdim hQGE
+  let ψ₀ : Fin P.basisCount → Fin Q.basisCount := fun j => (hBwd j).choose
+  have ψ₀_spec : ∀ j : Fin P.basisCount,
+      ∃ h : Q.basisDim (ψ₀ j) = P.basisDim j,
         GaugePhaseEquiv
             (cast (congr_arg (MPSTensor d) h) (Q.basis (ψ₀ j)))
-            (P.basis j.val) ∧
+            (P.basis j) ∧
         ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (Q.basis (ψ₀ j)) (P.basis j.val) N)
-          atTop (𝓝 0) := fun j => (hBwd j.val j.property).choose_spec
-  -- Symmetric helper for the backward direction.
+            mpvOverlap (d := d) (Q.basis (ψ₀ j)) (P.basis j) N)
+          atTop (𝓝 0) := fun j => (hBwd j).choose_spec
   have rebase_centre_Q :
       ∀ (k k' : Fin Q.basisCount) (_hk : k = k')
         {jv : Fin P.basisCount}
@@ -511,23 +389,28 @@ theorem bijective_match_of_sameMPV
     obtain ⟨h₁, GE₁, _⟩ := ψ₀_spec j₁
     obtain ⟨h₂, GE₂, _⟩ := ψ₀_spec j₂
     by_contra hne
-    have hne_val : j₁.val ≠ j₂.val := fun h => hne (Subtype.ext h)
     obtain ⟨h₂', GE₂'⟩ :=
       rebase_centre_Q (ψ₀ j₁) (ψ₀ j₂) hkEq h₂ GE₂
-    have hPdim : P.basisDim j₁.val = P.basisDim j₂.val := h₁.symm.trans h₂'
+    have hPdim : P.basisDim j₁ = P.basisDim j₂ := h₁.symm.trans h₂'
     have hPGE :
         GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) hPdim) (P.basis j₁.val))
-            (P.basis j₂.val) :=
+            (cast (congr_arg (MPSTensor d) hPdim) (P.basis j₁))
+            (P.basis j₂) :=
       gaugePhaseEquiv_cast_compose_via_centre (A := Q.basis (ψ₀ j₁))
-        (B := P.basis j₁.val) (C := P.basis j₂.val) h₁ h₂' GE₁ GE₂'
-    exact hP.basis_distinct j₁.val j₂.val hne_val hPdim hPGE
-  -- Package as `Function.Embedding`s and supply the matching data.
-  refine ⟨⟨φ₀, hφ₀_inj⟩, ⟨ψ₀, hψ₀_inj⟩, ?_, ?_⟩
-  · intro k
-    exact φ₀_spec k
-  · intro j
-    exact ψ₀_spec j
+        (B := P.basis j₁) (C := P.basis j₂) h₁ h₂' GE₁ GE₂'
+    exact hP.basis_distinct j₁ j₂ hne hPdim hPGE
+  have hCardQP : Fintype.card (Fin Q.basisCount) ≤ Fintype.card (Fin P.basisCount) :=
+    Fintype.card_le_of_injective φ₀ hφ₀_inj
+  have hCardPQ : Fintype.card (Fin P.basisCount) ≤ Fintype.card (Fin Q.basisCount) :=
+    Fintype.card_le_of_injective ψ₀ hψ₀_inj
+  have hCard : Fintype.card (Fin Q.basisCount) = Fintype.card (Fin P.basisCount) :=
+    le_antisymm hCardQP hCardPQ
+  have hφ₀_bij : Function.Bijective φ₀ :=
+    (Fintype.bijective_iff_injective_and_card φ₀).2 ⟨hφ₀_inj, hCard⟩
+  let β : Fin Q.basisCount ≃ Fin P.basisCount := Equiv.ofBijective φ₀ hφ₀_bij
+  refine ⟨β, ?_⟩
+  intro k
+  simpa [β] using φ₀_spec k
 
 
 end MPSTensor

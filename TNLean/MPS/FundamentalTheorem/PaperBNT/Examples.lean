@@ -24,7 +24,7 @@ core examples have a single BNT basis sector (`basisCount = 1`):
   copies with raw weights `(1, 1/2)`.  Demonstrates that unequal-modulus
   copies are admissible by the CPSV16 §II.A line-246 normalization
   (`weight_norm_le_one` holds because both `1` and `1/2` have modulus
-  `≤ 1`; `weight_unit_exists` is witnessed by the first copy).
+  `≤ 1`; `weight_unit_exists_per_block` and `weight_unit_exists` are witnessed by the first copy).
 
 A fourth example exercises the **optional** equal-modulus layer
 `HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
@@ -88,7 +88,13 @@ noncomputable example
     intro _ _
     change ‖(1 : ℂ)‖ ≤ 1
     simp
-  -- CPSV16 line 246: the unique weight is the unit-modulus witness.
+  -- CPSV21 §III.2: the unique block has the unit-modulus witness.
+  weight_unit_exists_per_block := by
+    intro _
+    refine ⟨0, ?_⟩
+    change ‖(1 : ℂ)‖ = 1
+    simp
+  -- CPSV16 line 246: the unique weight is the global unit-modulus witness.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(1 : ℂ)‖ = 1
@@ -143,6 +149,12 @@ noncomputable example
     split_ifs with hq
     · simp
     · simp
+  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
+  weight_unit_exists_per_block := by
+    intro _
+    refine ⟨0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
+    simp
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
@@ -205,6 +217,12 @@ noncomputable example
         simp [Complex.mul_re]
       rw [this]
       simp
+  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
+  weight_unit_exists_per_block := by
+    intro _
+    refine ⟨0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
+    simp
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
@@ -255,7 +273,7 @@ noncomputable example
 
 This example demonstrates that the strengthened `IsBNTCanonicalForm`
 predicate (with the CPSV16 §II.A line-246 fields `weight_norm_le_one`
-and `weight_unit_exists`) admits decompositions whose copies have
+and `weight_unit_exists_per_block`) admits decompositions whose copies have
 **unequal** moduli: the construction below has one unit-modulus copy
 and one `1/2`-modulus copy.  This is exactly the
 `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
@@ -288,7 +306,7 @@ unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 raw weights `(1, 1/2)`.  The sector coefficient is `1 + (1/2)^N → 1`,
 not a scalar power.  Demonstrates that the strengthened
 `IsBNTCanonicalForm` admits unequal-modulus copies: `weight_norm_le_one`
-holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists`
+holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists_per_block`
 is witnessed by the first copy with weight `1`.
 
 Paper anchor: CPSV16 §II.A line 246, the line-246 normalization
@@ -322,7 +340,13 @@ noncomputable example
     split_ifs with hq
     · simp
     · simp; norm_num
-  -- CPSV16 line 246: the first copy `q = 0` carries the unit weight.
+  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
+  weight_unit_exists_per_block := by
+    intro _
+    refine ⟨0, ?_⟩
+    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
+    simp
+  -- CPSV16 line 246: the first copy `q = 0` carries the global unit weight.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1

@@ -9,11 +9,11 @@ import TNLean.MPS.Overlap.CastDecay
 import TNLean.Analysis.ConvergenceHelpers
 
 /-!
-# Dominant-pair matching on the paper-faithful BNT canonical-form surface
+# Full-block matching on the paper-faithful BNT canonical-form surface
 
 This module is **Phase 4b-ii** of the CPSV16/CPSV21 fundamental-theorem
 clean-slate plan (issue #1688).  It produces the **gauge-phase match** for a
-single dominant block of one BNT canonical form against some block of the
+single BNT basis block of one BNT canonical form against some block of the
 other, under `SameMPV₂` of the assembled tensors.
 
 The module has three layers:
@@ -24,15 +24,15 @@ The module has three layers:
    (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
    `PaperBNT/WeakExistential.lean`) to the `SameMPV₂` hypothesis: some pair
    of basis blocks has a non-decaying cross-overlap.
-3. **Lemma 3** — the **unit-block matching** statement: for any sector
-   `j₀ : Fin P.basisCount` carrying a unit-modulus copy (supplied
-   externally), there is a block `k₀` of `Q` of equal bond dimension,
-   gauge-phase equivalent (cast-left shape) to the `P`-block at `j₀`,
+3. **Lemma 3** — the **block matching** statement: for any sector
+   `j₀ : Fin P.basisCount`, the structural per-block unit-modulus witness
+   gives a block `k₀` of `Q` of equal bond dimension, gauge-phase
+   equivalent (cast-left shape) to the `P`-block at `j₀`,
    and with a non-decaying cross-overlap.
 
 ## Hypothesis disclosure (paper-faithful)
 
-The unit-block matching at a **user-supplied** sector index
+The block matching at a **user-supplied** sector index
 `j₀ : Fin P.basisCount` (with an externally provided unit-modulus
 witness) does not single out any particular sector internally: the core
 seven `IsBNTCanonicalForm` fields are deliberately invariant under
@@ -43,9 +43,9 @@ structural fields:
 * `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
   modulus bound.  Lemma 3 below feeds this in via `hP.weight_norm_le_one`
   and `hQ.weight_norm_le_one`.
-* `weight_unit_exists : ∃ j q, ‖weight j q‖ = 1`  — CPSV16 line 246,
-  the unit-modulus existential (global, over the two-layer index
-  `(j, q)`).
+* `weight_unit_exists_per_block : ∀ j, ∃ q, ‖weight j q‖ = 1` —
+  CPSV21 §III.2 / Definition 4.3 per-block spectral-radius-one
+  normalization.
 
 Issue #1725 Phase A retired an auxiliary dominant-block structural
 field (audit memo `/tmp/phase_4c_drift_audit_2026-05-14.md` §Q-C):
@@ -56,7 +56,7 @@ matching theorem below now takes the unit-modulus sector as an
 per-sector unit-modulus existential
 `hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
 sector's coefficient is then derived inside the proof via
-`IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
+`IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
 (`PaperBNT/Api.lean`).
 
 These hypotheses are weaker than the legacy `IsCanonicalFormBNT` package
@@ -79,10 +79,10 @@ strong-induction step of the CPSV16 `II_cor2` argument.
   Operators: Renormalization Fixed Points and Boundary Theories*,
   Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.  Source-line tags:
   217–246 (global modulus normalization; dominant-norm-1 weight assumption),
-  234–246 (the dominant block is selected by normality + modulus-1 dominant
+  234–246 (the BNT basis block is selected by normality + modulus-1 dominant
   weight), 264–279 (gauge-phase grouping rule), 287–301 (raw two-layer BNT
   display), 1080–1091 (overlap dichotomy), 1172–1188 (`II_cor2` proof:
-  dominant block projection forces non-decay; multiplicity recovery via
+  BNT basis block projection forces non-decay; multiplicity recovery via
   power-sum coefficient comparison).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
   *Matrix product states and projected entangled pair states*, Rev. Mod.
@@ -91,7 +91,7 @@ strong-induction step of the CPSV16 `II_cor2` argument.
 
 ## Tags
 
-matrix product states, fundamental theorem, BNT, dominant block,
+matrix product states, fundamental theorem, BNT, BNT basis block,
 gauge-phase equivalence, non-decaying overlap, paper-faithful BNT canonical
 form
 -/
@@ -141,7 +141,7 @@ theorem exists_nondecaying_overlap_pair_of_sameMPV
   exists_nondecaying_overlap_pair_of_eventuallyProportional
     (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
 
-/-! ### Lemma 3: unit-block matching at a user-supplied index `j₀`
+/-! ### Lemma 3: block matching at a user-supplied index `j₀`
 
 The main result of Phase 4b-ii: under `SameMPV₂` plus a unit-modulus
 witness `∃ q, ‖P.weight j₀ q‖ = 1` at a user-supplied sector index
@@ -170,7 +170,7 @@ the `j₀`-th `P`-block).
   `k`-overlaps decay.
 
 * `SameMPV₂` makes both sides equal, so `P.coeff N j₀` tends to `0`,
-  contradicting `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
+  contradicting `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
   applied to the user-supplied unit-modulus witness `hUnit` via the
   Cesàro non-decay lemma in `PaperBNT/CesaroNonDecay.lean`.
 
@@ -189,12 +189,11 @@ structural field `weight_unit_exists` does not pin it to a specific
 sector.  Issue #1725 Phase A retired the auxiliary dominant-block
 structural field that previously fixed `j₀ = 0` and discharged the
 unit-modulus witness implicitly. -/
-theorem exists_unit_block_match_of_sameMPV
+theorem exists_block_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hQ_pos : 0 < Q.basisCount)
     (j₀ : Fin P.basisCount)
-    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
+    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
       ∃ h : P.basisDim j₀ = Q.basisDim k₀,
@@ -209,17 +208,18 @@ theorem exists_unit_block_match_of_sameMPV
   -- (witnessing that the existential `∃ k₀ : Fin Q.basisCount` is non-vacuous);
   -- the contradiction route below also forces it, so it is recorded but not
   -- used directly in the proof.
+  have _hP_pos_used : 0 < P.basisCount := hP_pos
   have _hQ_pos_used : 0 < Q.basisCount := hQ_pos
   -- Derive the CPSV16 §II.A line-246 modulus bounds from the strengthened
   -- `IsBNTCanonicalForm` predicate.  The structural fields replace what
   -- used to be supplied as explicit parameters at the call site.
   have hP_weight_le := hP.weight_norm_le_one
   have hQ_weight_le := hQ.weight_norm_le_one
-  -- Unit-block coefficient non-decay derived from the user-supplied
-  -- unit-modulus witness `hUnit` via the Cesàro non-decay lemma.
+  -- Block coefficient non-decay derived from the structural per-block
+  -- unit-modulus witness via the Cesàro non-decay lemma.
   have hP_dom_coeff_not_tendsto_zero :
       ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
-    hP.coeff_not_tendsto_zero_at_unit_block j₀ hUnit
+    hP.coeff_not_tendsto_zero_at_block j₀
   -- Step 1: extract some k₀ with non-decaying overlap to `P.basis j₀`.
   have hExists_k :
       ∃ k₀ : Fin Q.basisCount,

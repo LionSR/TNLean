@@ -26,9 +26,9 @@ The matched-pair hypotheses (`hMpv` for the gauge-phase relation on basis
 MPVs, and `τ`/`hWeight` for the weight permutation) are exactly the data
 extracted, in the CPSV16 §II `II_cor2` proof outline, from:
 
-* `exists_unit_block_match_of_sameMPV` (`PaperBNT/DominantMatch.lean`),
-  Phase 4b-ii (parametrised by a unit-modulus block witness; issue #1725
-  Phase A), supplying `(k₀, h_dim, GaugePhaseEquiv)`;
+* `exists_block_match_of_sameMPV` (`PaperBNT/DominantMatch.lean`),
+  Phase D's full-basis upgrade of Phase 4b-ii (issue #1730), supplying
+  `(k₀, h_dim, GaugePhaseEquiv)`;
 * `Multiset.eq_of_power_sum_eq` (`PaperBNT/NewtonGirard.lean`), Phase 4b-i,
   supplying the matched weight permutation via multiplicity recovery.
 
@@ -82,8 +82,8 @@ For each `(N, σ)`:
 
 Phase 4c (strong induction → full conjunction) will iterate:
 
-* invoke `exists_unit_block_match_of_sameMPV` to extract a matched index
-  (after supplying a unit-modulus block witness; issue #1725 Phase A);
+* invoke `exists_block_match_of_sameMPV` to extract a matched index
+  using the Phase D per-block normalization (issue #1730);
 * invoke `Multiset.eq_of_power_sum_eq` (after coefficient extraction) to
   build the weight permutation `τ`;
 * invoke the present `sameMPV_dropSector_dropSector` to drop both matched
