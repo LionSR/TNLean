@@ -344,22 +344,12 @@ private lemma norm_mpvOverlap_le_self_arith_mean
   rw [hRewrite, hSelfA, hSelfB] at hSumSplit
   linarith [hTri, hSumSplit]
 
-/-- **Per-block proportional matching at a $Q$-sector $k_0$.**
-
-For two paper-faithful BNT canonical forms with eventual nonzero
-proportionality of their assembled tensors, and a $Q$-sector $k_0$
-carrying a unit-modulus copy weight, every other $P$-sector $j_0$
-that also carries a unit-modulus copy weight produces some $P$-block
-$j_1$ such that the bond dimensions agree, the cast-compatible gauge-phase
-equivalence holds, and the cross-overlap with $Q.\mathrm{basis}\,k_0$ does
-not decay.  The auxiliary unit-modulus block $j_0$ on the $P$ side serves
-as the helper sector for the joint Cesàro non-decay
-(`joint_coeff_not_tendsto_zero`).
-
-Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), lines 1167–1170
-(theorem statement), and lines 1182–1188 (proof using BNT basis-block
-projection together with the per-block unit-modulus convention of
-§II.A line 246). -/
+/-- **Per-block proportional matching at a $Q$-sector $k_0$.**  Under
+eventual nonzero proportionality and unit-modulus copy weights at $Q$-sector
+$k_0$ and auxiliary $P$-sector $j_0$, some $P$-block $j_1$ has matched bond
+dimension, cast-compatible gauge-phase equivalence, and non-decaying
+cross-overlap with $Q.\mathrm{basis}\,k_0$.  Paper anchor: CPSV16 §II.C
+lines 349–352, 1167–1170, 1182–1188. -/
 theorem exists_block_match_at_Q_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -491,33 +481,21 @@ theorem exists_block_match_at_Q_of_eventuallyProportional
     refine hSum.congr ?_
     intro N
     exact (hExpand N).symm
-  -- Step 3: each basis cross-overlap is eventually bounded in norm.
-  -- AM–GM with self-overlaps → 1 on each side gives a uniform eventual bound
-  -- of `3/2` for each pair `(P.basis j, Q.basis k')` and `(Q.basis k, Q.basis k₀)`
-  -- etc.
-  have hSelfNormPj : ∀ j : Fin P.basisCount,
-      Tendsto (fun N : ℕ =>
-          ‖mpvOverlap (d := d) (P.basis j) (P.basis j) N‖) atTop (𝓝 1) := by
-    intro j
-    have h := (hP.basis_normalized_self_overlap j).norm
-    simpa using h
-  have hSelfNormQk : ∀ k : Fin Q.basisCount,
-      Tendsto (fun N : ℕ =>
-          ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖) atTop (𝓝 1) := by
-    intro k
-    have h := (hQ.basis_normalized_self_overlap k).norm
-    simpa using h
+  -- Step 3: basis self-overlaps eventually ≤ 3/2, then AM–GM bounds cross
+  -- overlaps `(Q.basis k, P.basis j₀)` by 3/2 eventually.
   have hEvSelfBoundP : ∀ j : Fin P.basisCount,
       ∀ᶠ N in atTop,
         ‖mpvOverlap (d := d) (P.basis j) (P.basis j) N‖ ≤ (3 : ℝ) / 2 := by
     intro j
-    have h := (hSelfNormPj j).eventually_lt_const (show (1 : ℝ) < 3/2 by norm_num)
+    have h := ((hP.basis_normalized_self_overlap j).norm).eventually_lt_const
+      (show ‖(1 : ℂ)‖ < 3/2 by simp; norm_num)
     filter_upwards [h] with N hN using le_of_lt hN
   have hEvSelfBoundQ : ∀ k : Fin Q.basisCount,
       ∀ᶠ N in atTop,
         ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖ ≤ (3 : ℝ) / 2 := by
     intro k
-    have h := (hSelfNormQk k).eventually_lt_const (show (1 : ℝ) < 3/2 by norm_num)
+    have h := ((hQ.basis_normalized_self_overlap k).norm).eventually_lt_const
+      (show ‖(1 : ℂ)‖ < 3/2 by simp; norm_num)
     filter_upwards [h] with N hN using le_of_lt hN
   -- AM–GM bound for `(Q.basis k, P.basis j₀)` cross overlap.
   have hQbasis_Pj₀_bound : ∀ k : Fin Q.basisCount,
@@ -600,32 +578,9 @@ theorem exists_block_match_at_Q_of_eventuallyProportional
           mpvOverlap (d := d) Q.toTensor (Q.basis k₀) N - Q.coeff N k₀)
         atTop (𝓝 0) :=
     mpvOverlap_total_basis_diff_tendsto_zero hQ k₀
-  -- Step 7: RHS - P.coeff j₀ · Q.coeff k₀ → 0.
-  -- RHS = (P.coeff j₀ + small_P) · (Q.coeff k₀ + small_Q).
-  -- Define a_N := mpvOverlap P (P_j₀), b_N := mpvOverlap Q (Q_k₀),
-  --    α := P.coeff j₀, β := Q.coeff k₀.
-  -- a_N · b_N - α · β = (a_N - α) · b_N + α · (b_N - β).
-  -- (a_N - α) → 0, b_N bounded by `M_Q'` eventually, α bounded, (b_N - β) → 0.
-  -- So a_N · b_N - α · β → 0.
-  have hOverlapPP_bounded : ∀ᶠ N in atTop,
-      ‖mpvOverlap (d := d) P.toTensor (P.basis j₀) N‖ ≤
-        ‖P.coeff N j₀‖ + 1 := by
-    have hSmall :
-        Tendsto (fun N : ℕ =>
-            ‖mpvOverlap (d := d) P.toTensor (P.basis j₀) N - P.coeff N j₀‖)
-          atTop (𝓝 0) := by
-      have := hOverlapPP_diff.norm
-      simpa using this
-    have hEv1 := hSmall.eventually_lt_const (show (0 : ℝ) < 1 by norm_num)
-    filter_upwards [hEv1] with N hN
-    calc ‖mpvOverlap (d := d) P.toTensor (P.basis j₀) N‖
-        = ‖mpvOverlap (d := d) P.toTensor (P.basis j₀) N - P.coeff N j₀ +
-            P.coeff N j₀‖ := by ring_nf
-      _ ≤ ‖mpvOverlap (d := d) P.toTensor (P.basis j₀) N - P.coeff N j₀‖
-          + ‖P.coeff N j₀‖ := norm_add_le _ _
-      _ ≤ 1 + ‖P.coeff N j₀‖ := by linarith [le_of_lt hN]
-      _ = ‖P.coeff N j₀‖ + 1 := by ring
-  -- `mpvOverlap Q (Q_k₀)` similarly bounded by `‖Q.coeff k₀‖ + 1` eventually.
+  -- Step 7: RHS - P.coeff j₀ · Q.coeff k₀ → 0 via the algebraic identity
+  -- a·b - α·β = (a - α)·b + α·(b - β) with (a - α) → 0, b bounded,
+  -- α bounded, (b - β) → 0.
   have hOverlapQQ_bounded : ∀ᶠ N in atTop,
       ‖mpvOverlap (d := d) Q.toTensor (Q.basis k₀) N‖ ≤
         ‖Q.coeff N k₀‖ + 1 := by
