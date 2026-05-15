@@ -7,97 +7,37 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
 /-!
 # Proportional sector matching for two paper-faithful BNT canonical forms
 
-This module proves the proportional analogue of CPSV16 §II.C (lines 349–352
-and 1167–1170) — CPSV21 §III.2 lines 1891–1894 — for two BNT canonical
-sector decompositions whose assembled tensors are eventually proportional
-(rather than exactly equal).
-
 The main theorem `MPSTensor.ft_paper_bnt_proportional_sector_match`
-delivers:
+delivers the basis-count identity $g_P = g_Q$, a basis bijection
+$\beta : \{1,\dots,g_Q\} \to \{1,\dots,g_P\}$, per-block bond-dimension
+equality $D_P^{(\beta k)} = D_Q^{(k)}$, and per-block gauge-phase
+equivalence $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$, from the hypotheses
 
-* the basis-count identity $g_P = g_Q$,
-* a basis bijection $\beta : \{1,\dots,g_Q\} \to \{1,\dots,g_P\}$,
-* per-block bond-dimension equality $D_P^{(\beta k)} = D_Q^{(k)}$,
-* per-block gauge-phase equivalence
-  $B_k = \zeta_k\, X_k\, A_{\beta k}\, X_k^{-1}$ (`GaugePhaseEquiv` form),
-
-from the hypotheses
-
-* both decompositions are paper-faithful BNT canonical forms
-  (`IsBNTCanonicalForm`),
+* both decompositions are `IsBNTCanonicalForm`,
 * every basis sector on each side carries a unit-modulus copy weight,
-  i.e. $\forall j,\ \exists q,\ \|\mu_{j,q}^P\| = 1$ and
-  $\forall k,\ \exists q,\ \|\mu_{k,q}^Q\| = 1$ (CPSV16 §II.A line 246
-  per-block reading, paper-implicit in the §II.C line-1182 projection
-  step),
-* eventual nonzero proportionality $V^{(N)}(P) = c_N\, V^{(N)}(Q)$ for all
-  sufficiently large $N$ with $c_N \neq 0$
+* eventual nonzero proportionality $V^{(N)}(P) = c_N V^{(N)}(Q)$
   (`EventuallyNonzeroProportionalMPV₂`).
 
-## Proof strategy
+The proof mirrors the equal-MPV chain in `DominantMatch` and `StrongMatch`,
+but keeps the per-$N$ proportionality scalar $c_N$ inside the projection
+identity.  The novel analytic input is the joint Cesàro non-decay of
+$P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)$, which expands as
+$\sum_{q,p}(\mu_{j,q}^P\,\mu_{k,p}^Q)^N$ — a single sum of $N$-th powers
+with a unit-modulus pair — to which
+`CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus` applies.
 
-The proof mirrors the equal-MPV chain `DominantMatch.exists_block_match_of_sameMPV`
-→ `StrongMatch.forall_k_exists_j_nondecaying_overlap_of_sameMPV` →
-`StrongMatch.bijective_match_of_sameMPV`, but with the per-$N$
-proportionality scalar $c_N$ kept inside the projection identity.
-
-The novel analytic input is the **joint Cesàro non-decay** of the product
-$P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)$.  Expanding the two
-sums and rearranging gives
-$$
-P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)
-  = \sum_{q,p}\bigl(\mu_{j,q}^P\,\mu_{k,p}^Q\bigr)^N.
-$$
-Both factors have modulus at most $1$, and at the unit-modulus copies
-$(q^*,p^*)$ the product also has unit modulus.  By the Cesàro non-decay
-theorem `CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus`
-(CPSV16 §II.A line 246; CPSV16 §II.C lines 1181–1188) the joint product
-does not tend to zero.
-
-With this joint non-decay, the per-block matching at a fixed sector $k_0$
-of $Q$ proceeds by contradiction.  Assume that all cross-overlaps
-$\langle V^{(N)}(A_j) | V^{(N)}(B_{k_0})\rangle$ tend to zero as $N \to
-\infty$.  Project the proportionality identity $V^{(N)}(P) = c_N\,
-V^{(N)}(Q)$ onto $V^{(N)}(B_{k_0})$ and onto $V^{(N)}(A_{j^*})$
-(for any $j^*$ of $P$, supplied by the per-block unit-modulus
-hypothesis).  The two projections give
-$$
-\langle V^{(N)}(B_{k_0})|V^{(N)}(P)\rangle = c_N\,\langle
-V^{(N)}(B_{k_0})|V^{(N)}(Q)\rangle,\qquad
-\langle V^{(N)}(A_{j^*})|V^{(N)}(P)\rangle = c_N\,\langle
-V^{(N)}(A_{j^*})|V^{(N)}(Q)\rangle.
-$$
-Multiplying these (eliminating $c_N$) yields the identity
-$$
-\langle V^{(N)}(B_{k_0})|V^{(N)}(P)\rangle\cdot \langle
-V^{(N)}(A_{j^*})|V^{(N)}(Q)\rangle
-=\langle V^{(N)}(B_{k_0})|V^{(N)}(Q)\rangle\cdot \langle
-V^{(N)}(A_{j^*})|V^{(N)}(P)\rangle.
-$$
-Under the contradiction hypothesis the left-hand factor
-$\langle V^{(N)}(B_{k_0})|V^{(N)}(P)\rangle\to 0$ and the right-hand
-factor $\langle V^{(N)}(A_{j^*})|V^{(N)}(Q)\rangle$ is bounded, so the
-left-hand side tends to zero.  The right-hand side, after the asymptotic
-elimination of cross-overlaps, equals
-$Q.\mathrm{coeff}(N,k_0)\cdot P.\mathrm{coeff}(N,j^*)$ up to a
-sequence that tends to zero — contradicting the joint Cesàro non-decay.
-
-Dimension equality and the cast-compatible gauge-phase equivalence then
-follow from the contrapositives of
-`mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` and
-`mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`
-exactly as in the equal-MPV case.  The full bijection comes from running
-the per-block matching in both directions and comparing finite cardinals.
+The per-block matching at a fixed sector $k_0$ of $Q$ projects the
+proportionality identity onto $V^{(N)}(B_{k_0})$ and onto
+$V^{(N)}(A_{j^*})$, multiplies the two equations to eliminate $c_N$, and
+contradicts the joint non-decay.  Dimension equality and gauge-phase
+equivalence then follow as in the equal case, and the full bijection
+comes from running the per-block matching in both directions.
 
 ## References
 
-* CPSV16: Cirac–Pérez-García–Schuch–Verstraete, *Matrix Product Density
-  Operators: Renormalization Fixed Points and Boundary Theories*,
-  arXiv:1606.00608, §II.C lines 349–352 (theorem `thm1`), lines
-  1167–1170 (theorem statement) and lines 1182–1188 (proof of `thm1`).
-* CPSV21: Cirac–Pérez-García–Schuch–Verstraete, *Matrix product states
-  and projected entangled pair states*, arXiv:2011.12127, lines
-  1891–1894 (proportional-MPV theorem-level target).
+* CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
+  (restatement), 1182–1188 (proof).
+* CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
 open scoped Matrix BigOperators
@@ -107,25 +47,17 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Joint Cesàro non-decay of the product of two unit-block coefficients -/
-
 /-- **Joint Cesàro non-decay** of the product of two unit-block sector
 coefficients.
 
 For sectors $j$ on side $P$ and $k$ on side $Q$ with unit-modulus copy
 witnesses $q^*$ and $p^*$, the product
-$P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)$ is a sum over pairs
-$(q,p)$ of $N$-th powers of products $\mu_{j,q}^P\,\mu_{k,p}^Q$, all of
-modulus at most one, with at least one pair $(q^*,p^*)$ of unit modulus.
-By `CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus` the sum does
-not tend to zero.
-
-This is the joint analogue of `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
-(`PaperBNT/Api.lean`) and is the analytic input that lets the proportional
-matching theorem eliminate the per-$N$ proportionality scalar $c_N$
-without bounding it directly.  Paper anchor: CPSV16 §II.A line 246
-(modulus bound + unit-modulus convention) and CPSV16 §II.C lines
-1181–1188 (the Cesàro non-decay step). -/
+$P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)
+  = \sum_{q,p}(\mu_{j,q}^P\,\mu_{k,p}^Q)^N$
+has a unit-modulus summand at $(q^*,p^*)$.  By
+`CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus` the sum does not
+tend to zero.  Paper anchor: CPSV16 §II.A line 246 and §II.C lines
+1181–1188. -/
 lemma joint_coeff_not_tendsto_zero
     {P Q : SectorDecomposition d}
     (j : Fin P.basisCount) (k : Fin Q.basisCount)
@@ -204,15 +136,12 @@ lemma joint_coeff_not_tendsto_zero
             (P.weight j pq.1 * Q.weight k pq.2) ^ N := hProd.symm
     _ = ∑ s : Fin r, (μ s) ^ N := hSum.symm
 
-/-! ### Asymptotic identification of `mpvOverlap toTensor basis j₀` with `coeff j₀`
-
-For a basis block `j₀` of a paper-faithful BNT canonical form, the overlap
-$\langle V^{(N)}(\text{toTensor})|V^{(N)}(\text{basis}_{j_0})\rangle$ differs
-from the sector coefficient $P.\mathrm{coeff}(N,j_0)$ by a sequence tending
-to zero.  The difference is the diagonal "self-overlap − 1" term together
-with the off-diagonal $P$-cross terms; both vanish in the limit by the
-basis self-overlap normalization (`basis_normalized_self_overlap`) and the
-cross-decay lemma (`cross_overlap_basis_tendsto_zero`). -/
+/-- For a basis block $j_0$ of a paper-faithful BNT canonical form, the
+overlap $\langle V^{(N)}(\text{toTensor})|V^{(N)}(\text{basis}_{j_0})\rangle$
+differs from the sector coefficient $P.\mathrm{coeff}(N,j_0)$ by a sequence
+tending to zero: the diagonal "self-overlap $-\,1$" and the off-diagonal
+$P$-cross summands both vanish under the basis self-overlap normalization
+and the cross-decay lemma. -/
 private lemma mpvOverlap_total_basis_diff_tendsto_zero
     {P : SectorDecomposition d} (hP : IsBNTCanonicalForm P)
     (j₀ : Fin P.basisCount) :
@@ -335,14 +264,14 @@ private lemma mpvOverlap_total_basis_diff_tendsto_zero
   rw [hOverlapExpand, hSplit]
   ring
 
-/-! ### AM–GM bound on cross overlaps
-
-For two MPS tensors `A` and `B`, the modulus of the overlap
-$\langle V^{(N)}(A)|V^{(N)}(B)\rangle$ is bounded by the arithmetic mean
-of the self-overlap moduli.  This is the AM–GM inequality
-$|x\bar y| \le \tfrac{1}{2}(|x|^2+|y|^2)$ applied to each configuration
-$\sigma$ and summed.  When both self-overlaps converge to $1$, the
-cross-overlap modulus is eventually bounded by $2$. -/
+/-- The AM–GM inequality
+$|x\bar y| \le \tfrac{1}{2}(|x|^2+|y|^2)$ applied to each configuration $\sigma$
+gives the bound
+$\|\langle V^{(N)}(A)|V^{(N)}(B)\rangle\| \le
+  \tfrac{1}{2}(\|\langle V^{(N)}(A)|V^{(N)}(A)\rangle\|
+  + \|\langle V^{(N)}(B)|V^{(N)}(B)\rangle\|)$,
+which is eventually $\le 2$ for basis blocks with self-overlaps converging
+to $1$. -/
 private lemma norm_mpvOverlap_le_self_arith_mean
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) (N : ℕ) :
     ‖mpvOverlap (d := d) A B N‖ ≤
