@@ -34,30 +34,27 @@ The module has three layers:
 
 The block matching at a **user-supplied** sector index
 `j₀ : Fin P.basisCount` (with an externally provided unit-modulus
-witness) does not single out any particular sector internally: the core
-seven `IsBNTCanonicalForm` fields are deliberately invariant under
+witness) does not single out any particular sector internally: the
+`IsBNTCanonicalForm` fields are deliberately invariant under
 relabelling of sectors.  Following the CPSV16 §II.A line-246
-normalization convention, `IsBNTCanonicalForm` carries two additional
-structural fields:
+normalization convention, `IsBNTCanonicalForm` carries the modulus-bound
+field
 
 * `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
   modulus bound.  Lemma 3 below feeds this in via `hP.weight_norm_le_one`
   and `hQ.weight_norm_le_one`.
-* `weight_unit_exists_per_block : ∀ j, ∃ q, ‖weight j q‖ = 1` —
-  CPSV21 §III.2 / Definition 4.3 per-block spectral-radius-one
-  normalization.
 
-Issue #1725 Phase A retired an auxiliary dominant-block structural
-field (audit memo `/tmp/phase_4c_drift_audit_2026-05-14.md` §Q-C):
-CPSV16 line 246 is
-**global** and does not pin the unit-modulus copy to sector 0.  The
-matching theorem below now takes the unit-modulus sector as an
-**explicit parameter** `j₀ : Fin P.basisCount` together with a
-per-sector unit-modulus existential
-`hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
+The per-block unit-modulus convention `∀ j, ∃ q, ‖weight j q‖ = 1` is
+**not** a structural field — CPSV16 line 246 is **global** (the
+unit-modulus copy can sit in any sector) and CPSV21 §III.2 Definition 4.3
+(lines 1846–1884) normalizes the spectral radius of the *basis* tensors,
+not the copy coefficients.  The matching theorem below therefore takes
+the unit-modulus sector as an **explicit parameter** `j₀ : Fin P.basisCount`
+together with a per-sector unit-modulus existential
+`hUnitP_at_j₀ : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
 sector's coefficient is then derived inside the proof via
 `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
-(`PaperBNT/Api.lean`).
+(`PaperBNT/Api.lean`), now also taking the same per-block hypothesis.
 
 These hypotheses are weaker than the legacy `IsCanonicalFormBNT` package
 (which baked in `mu_strict_anti` + a single per-sector "spectral level"
@@ -193,6 +190,7 @@ theorem exists_block_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (j₀ : Fin P.basisCount)
+    (hUnitP_at_j₀ : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
     (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
     (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
@@ -215,11 +213,11 @@ theorem exists_block_match_of_sameMPV
   -- used to be supplied as explicit parameters at the call site.
   have hP_weight_le := hP.weight_norm_le_one
   have hQ_weight_le := hQ.weight_norm_le_one
-  -- Block coefficient non-decay derived from the structural per-block
-  -- unit-modulus witness via the Cesàro non-decay lemma.
+  -- Block coefficient non-decay derived from the externally supplied
+  -- per-block unit-modulus witness via the Cesàro non-decay lemma.
   have hP_dom_coeff_not_tendsto_zero :
       ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
-    hP.coeff_not_tendsto_zero_at_block j₀
+    hP.coeff_not_tendsto_zero_at_block j₀ hUnitP_at_j₀
   -- Step 1: extract some k₀ with non-decaying overlap to `P.basis j₀`.
   have hExists_k :
       ∃ k₀ : Fin Q.basisCount,

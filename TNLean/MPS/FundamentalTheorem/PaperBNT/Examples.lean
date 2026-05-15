@@ -24,7 +24,12 @@ core examples have a single BNT basis sector (`basisCount = 1`):
   copies with raw weights `(1, 1/2)`.  Demonstrates that unequal-modulus
   copies are admissible by the CPSV16 §II.A line-246 normalization
   (`weight_norm_le_one` holds because both `1` and `1/2` have modulus
-  `≤ 1`; `weight_unit_exists_per_block` and `weight_unit_exists` are witnessed by the first copy).
+  `≤ 1`; `weight_unit_exists` is witnessed by the first copy).
+
+Each example additionally exposes a named lemma `<example>_weight_unit_per_block`
+witnessing the per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1`,
+which fundamental-theorem theorems consume as an explicit hypothesis
+(paper-implicit in CPSV16 §II.C line 1182's projection argument).
 
 A fourth example exercises the **optional** equal-modulus layer
 `HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
@@ -88,17 +93,27 @@ noncomputable example
     intro _ _
     change ‖(1 : ℂ)‖ ≤ 1
     simp
-  -- CPSV21 §III.2: the unique block has the unit-modulus witness.
-  weight_unit_exists_per_block := by
-    intro _
-    refine ⟨0, ?_⟩
-    change ‖(1 : ℂ)‖ = 1
-    simp
   -- CPSV16 line 246: the unique weight is the global unit-modulus witness.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(1 : ℂ)‖ = 1
     simp
+
+/-- **Per-block unit-modulus witness for `singletonDecomp`.**
+
+Fundamental-theorem theorems on `IsBNTCanonicalForm` take the per-block
+unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` (paper-implicit in
+CPSV16 §II.C line 1182's projection argument) as an explicit
+hypothesis.  For `singletonDecomp C`, the unique copy carries
+weight `1`. -/
+lemma singletonDecomp_weight_unit_per_block (C : MPSTensor d D) :
+    ∀ j : Fin (singletonDecomp C).basisCount,
+      ∃ q : Fin ((singletonDecomp C).copies j),
+        ‖(singletonDecomp C).weight j q‖ = 1 := by
+  intro _
+  refine ⟨0, ?_⟩
+  change ‖(1 : ℂ)‖ = 1
+  simp
 
 /-! ## Example 2 — `C ⊕ (-C)` -/
 
@@ -149,17 +164,26 @@ noncomputable example
     split_ifs with hq
     · simp
     · simp
-  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
-  weight_unit_exists_per_block := by
-    intro _
-    refine ⟨0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
-    simp
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
     simp
+
+/-- **Per-block unit-modulus witness for `signFlipDecomp`.**
+
+For each (unique) BNT basis sector, the copy `q = 0` carries weight
+`μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
+explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+line 1182's projection argument). -/
+lemma signFlipDecomp_weight_unit_per_block (C : MPSTensor d D) :
+    ∀ j : Fin (signFlipDecomp C).basisCount,
+      ∃ q : Fin ((signFlipDecomp C).copies j),
+        ‖(signFlipDecomp C).weight j q‖ = 1 := by
+  intro _
+  refine ⟨0, ?_⟩
+  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else -1)‖ = 1
+  simp
 
 /-! ## Example 3 — `C ⊕ e^{iθ} C` -/
 
@@ -217,17 +241,26 @@ noncomputable example
         simp [Complex.mul_re]
       rw [this]
       simp
-  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
-  weight_unit_exists_per_block := by
-    intro _
-    refine ⟨0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
-    simp
   -- CPSV16 line 246: the first copy `q = 0` carries weight `μ = 1`.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
     simp
+
+/-- **Per-block unit-modulus witness for `phaseDecomp`.**
+
+For each (unique) BNT basis sector, the copy `q = 0` carries weight
+`μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
+explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+line 1182's projection argument). -/
+lemma phaseDecomp_weight_unit_per_block (C : MPSTensor d D) (θ : ℝ) :
+    ∀ j : Fin (phaseDecomp C θ).basisCount,
+      ∃ q : Fin ((phaseDecomp C θ).copies j),
+        ‖(phaseDecomp C θ).weight j q‖ = 1 := by
+  intro _
+  refine ⟨0, ?_⟩
+  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else Complex.exp (Complex.I * θ))‖ = 1
+  simp
 
 /-! ## Example 4 — equal-modulus weight layer on `signFlipDecomp`
 
@@ -273,7 +306,7 @@ noncomputable example
 
 This example demonstrates that the strengthened `IsBNTCanonicalForm`
 predicate (with the CPSV16 §II.A line-246 fields `weight_norm_le_one`
-and `weight_unit_exists_per_block`) admits decompositions whose copies have
+and `weight_unit_exists`) admits decompositions whose copies have
 **unequal** moduli: the construction below has one unit-modulus copy
 and one `1/2`-modulus copy.  This is exactly the
 `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
@@ -306,7 +339,7 @@ unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 raw weights `(1, 1/2)`.  The sector coefficient is `1 + (1/2)^N → 1`,
 not a scalar power.  Demonstrates that the strengthened
 `IsBNTCanonicalForm` admits unequal-modulus copies: `weight_norm_le_one`
-holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists_per_block`
+holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists`
 is witnessed by the first copy with weight `1`.
 
 Paper anchor: CPSV16 §II.A line 246, the line-246 normalization
@@ -340,17 +373,26 @@ noncomputable example
     split_ifs with hq
     · simp
     · simp; norm_num
-  -- CPSV21 §III.2: the single block has a unit copy at `q = 0`.
-  weight_unit_exists_per_block := by
-    intro _
-    refine ⟨0, ?_⟩
-    change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
-    simp
   -- CPSV16 line 246: the first copy `q = 0` carries the global unit weight.
   weight_unit_exists := by
     refine ⟨0, 0, ?_⟩
     change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
     simp
+
+/-- **Per-block unit-modulus witness for `halvedDecomp`.**
+
+For each (unique) BNT basis sector, the copy `q = 0` carries the unit
+weight `μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
+explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+line 1182's projection argument). -/
+lemma halvedDecomp_weight_unit_per_block (C : MPSTensor d D) :
+    ∀ j : Fin (halvedDecomp C).basisCount,
+      ∃ q : Fin ((halvedDecomp C).copies j),
+        ‖(halvedDecomp C).weight j q‖ = 1 := by
+  intro _
+  refine ⟨0, ?_⟩
+  change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
+  simp
 
 end PaperBNT.Examples
 end MPSTensor
