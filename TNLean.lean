@@ -231,10 +231,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
 import TNLean.MPS.Periodic.ZGauge
-import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Applications
-import TNLean.MPS.Periodic.Symmetry
-import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.Existence
@@ -264,7 +261,6 @@ import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
-import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Structure.BlockPermutation
