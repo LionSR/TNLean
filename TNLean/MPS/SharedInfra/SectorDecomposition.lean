@@ -198,6 +198,97 @@ lemma mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
     _ = ∑ j : Fin P.basisCount, P.coeff N j * mpv (P.basis j) σ := by
           simp [SectorDecomposition.coeff, SectorWeightData.coeff]
 
+/-! ## Matched-sector flattened equivalences
+
+When two paper-faithful sector decompositions $P$ and $Q$ share an MPV
+family, the equal-MPV matching theorem (CPSV16 §II.C lines 1184–1192)
+produces a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
+matched copy permutations $τ_k$, and per-block bond-dimension equalities
+$D_P^{(βk)} = D_Q^{(k)}$.  These data induce an equivalence between the
+flattened sector indices of $P$ and $Q$, and an equality of the total
+bond dimensions $\sum_k r_k D_k$.  We package these here for downstream
+use in the literal `GaugeEquiv` packaging of `II_cor2`. -/
+
+/-- Flattened-sector permutation induced by a matched basis bijection and
+matched copy permutations.
+
+For matched data $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$ and copy
+permutations $τ_k : \{1,\dots,r_k^Q\} \simeq \{1,\dots,r_{βk}^P\}$, this
+sends a flat $Q$-sector index $s \leftrightarrow (k,q)$ to the flat
+$P$-sector index $\leftrightarrow (βk, τ_k q)$.
+
+CPSV16 §II.C lines 1184–1192 (matched flattened-copy reindexing). -/
+noncomputable def sectorFlatEquiv
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
+    Fin Q.totalCopies ≃ Fin P.totalCopies :=
+  (Q.flatIndexEquiv.symm.trans
+    ((Equiv.sigmaCongrRight τ).trans
+      (Equiv.sigmaCongrLeft (β := fun k' : Fin P.basisCount =>
+        Fin (P.copies k')) β))).trans P.flatIndexEquiv
+
+@[simp]
+theorem sectorFlatEquiv_apply
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+    (s : Fin Q.totalCopies) :
+    sectorFlatEquiv (P := P) (Q := Q) β τ s =
+      P.flatIndexEquiv ⟨β (Q.flatIndexEquiv.symm s).1,
+        τ (Q.flatIndexEquiv.symm s).1 (Q.flatIndexEquiv.symm s).2⟩ := by
+  simp [sectorFlatEquiv, Equiv.sigmaCongrLeft_apply,
+    Equiv.sigmaCongrRight_apply]
+
+/-- Flat-sector dimensions of $P$ and $Q$ agree along `sectorFlatEquiv`,
+using the matched per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$.
+
+CPSV16 §II.C lines 1184–1192. -/
+theorem flatDim_sectorFlatEquiv
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+    (s : Fin Q.totalCopies) :
+    P.flatDim (sectorFlatEquiv (P := P) (Q := Q) β τ s) = Q.flatDim s := by
+  -- both sides reduce to a basis dimension of the matched block
+  simp [SectorDecomposition.flatDim, sectorFlatEquiv_apply, hDim]
+
+/-- **Total bond dimension matches across paper-faithful sector matchings.**
+
+If $P$ and $Q$ admit a matched basis bijection with matched per-block bond
+dimensions and matched copy permutations, then their total bond dimensions
+$\sum_s D_s$ coincide.
+
+CPSV16 §II.C lines 1184–1192. -/
+theorem totalDim_eq_of_match
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
+    P.totalDim = Q.totalDim := by
+  classical
+  -- reindex the P-side sum across `sectorFlatEquiv` and use `flatDim_sectorFlatEquiv`
+  have hreindex :
+      ∑ s' : Fin P.totalCopies, P.flatDim s' =
+        ∑ s : Fin Q.totalCopies,
+          P.flatDim (sectorFlatEquiv (P := P) (Q := Q) β τ s) := by
+    refine (Fintype.sum_equiv (sectorFlatEquiv (P := P) (Q := Q) β τ)
+      (fun s => P.flatDim (sectorFlatEquiv (P := P) (Q := Q) β τ s))
+      (fun s' => P.flatDim s') ?_).symm
+    intro s
+    rfl
+  -- finish: replace the inner P.flatDim by Q.flatDim along the matched indices
+  have hpoint :
+      (fun s : Fin Q.totalCopies =>
+          P.flatDim (sectorFlatEquiv (P := P) (Q := Q) β τ s)) =
+        fun s => Q.flatDim s := by
+    funext s
+    exact flatDim_sectorFlatEquiv (P := P) (Q := Q) β hDim τ s
+  change ∑ s' : Fin P.totalCopies, P.flatDim s' =
+      ∑ s : Fin Q.totalCopies, Q.flatDim s
+  rw [hreindex, hpoint]
+
 end SectorDecomposition
 
 end MPSTensor
