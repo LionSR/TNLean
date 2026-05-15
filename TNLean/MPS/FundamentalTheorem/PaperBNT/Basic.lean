@@ -25,7 +25,9 @@ a `SectorDecomposition`.  It records:
   dimension;
 * the CPSV16 §II.A line-246 **normalization convention** on the raw sector
   weights `μ_{j,q}`: `|μ_{j,q}| ≤ 1` and at least one of them equals one
-  (lines 246 and 1244).
+  (lines 246 and 1244);
+* the CPSV21 §III.2 / Definition 4.3 per-block spectral-radius-one
+  normalization: each BNT basis block has at least one unit-modulus copy.
 
 Crucially, the structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
@@ -59,8 +61,9 @@ source-faithful core.
   Rev. Mod. Phys. **93**, 045003 (2021); arXiv:2011.12127.  Source-line tags
   used below: 1815–1837 (normal tensors primitive after blocking; canonical
   form `⊕_k μ_k A_k`), 1846–1884 (BNT and two-layer BNT decomposition with
-  raw `μ_{j,q}`), 1905–1908 (unital gauge optional; non-periodic theorem
-  separated from periodic generalization).
+  raw `μ_{j,q}` and per-block spectral-radius-one normalization),
+  1905–1908 (unital gauge optional; non-periodic theorem separated from
+  periodic generalization).
 -/
 
 open scoped Matrix BigOperators
@@ -136,26 +139,22 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   `C ⊕ (1/2)C` (weights `(1, 1/2)`), and `C ⊕ (-C) ⊕ (1/2)C`. -/
   weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ ≤ 1
-  /-- **CPSV16 line-246 normalization, unit-witness existence.**  At least
-  one copy of one basis sector has unit-modulus weight.  CPSV16 §II.A
-  line 246 (verbatim): "we can always choose `|μ_k| ≤ 1` and at least one
-  of them equals one, something which we will assume from now on."  The
-  paper states this **globally** over the two-layer index `(j, q)` of the
-  two-layer BNT display (CPSV16 lines 287–301): the existential ranges over
-  all `(j, q)` pairs and does **not** pin the witness to a specific
-  sector.  The witness is reinvoked in the body of the FT proof at
-  CPSV16 line 1244 ("the assumed normalization `|μ_{jq}| ≤ 1` … implies
-  that `𝔼^N` converges"), again read off the two-layer indexing without a
-  sector-specific reading.
-
-  A previous design carried an extra structural field pinning the
-  witness to sector index 0; this was an engineering artifact, removed
-  in the Phase A cleanup of issue #1725 (audit memo
-  `/tmp/phase_4c_drift_audit_2026-05-14.md`).  Downstream code that
-  needs a unit-modulus witness in a specific sector now supplies the
-  sector index and unit-modulus existential externally; see
-  `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block`
-  (`PaperBNT/Api.lean`). -/
+  /-- **CPSV21 per-block unit normalization.**  Each BNT basis block
+  contains at least one unit-modulus raw copy weight.  This is the
+  per-block spectral-radius-one normalization used in CPSV21 §III.2 /
+  Definition 4.3 (lines 1846–1884): after grouping copies into a BNT
+  basis tensor, every basis block is represented with spectral radius
+  one in its own copy layer.  It strengthens the global CPSV16 line-246
+  witness and is the key Phase D correction that turns the previous
+  unit-subset matching theorem into a full-basis matching theorem. -/
+  weight_unit_exists_per_block : ∀ j : Fin P.basisCount,
+    ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1
+  /-- **CPSV16 line-246 global unit witness.**  At least one copy of one
+  basis sector has unit-modulus weight.  This field is retained as the
+  global CPSV16 normalization/non-emptiness witness consumed by older
+  auxiliary lemmas; on all nonempty sector decompositions it follows
+  immediately from `weight_unit_exists_per_block` by choosing any basis
+  index. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
 

@@ -37,12 +37,13 @@ not imported here.
   lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
 * `IsBNTCanonicalForm.norm_coeff_le_copies` — the structural-field reading
   of the multiplicity bound (CPSV16 line 246 via `weight_norm_le_one`).
-* `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the existential
+* `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the global
   unit-modulus witness re-exposed at the API layer (CPSV16 line 246).
-* `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block` — the
-  Cesàro non-decay reading of CPSV16 line 246 + line 1244, parametrised
-  by the unit-modulus block witness (issue #1725 Phase A; audit memo
-  `/tmp/phase_4c_drift_audit_2026-05-14.md`).
+* `IsBNTCanonicalForm.weight_unit_exists_per_block_of_struct` — the
+  per-block unit-modulus witnesses (CPSV21 §III.2 / Definition 4.3).
+* `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block` — the Cesàro
+  non-decay reading of per-block spectral-radius-one normalization, with
+  the unit witness discharged from the structure (Phase D, issue #1730).
 
 ## References
 
@@ -53,7 +54,7 @@ not imported here.
   1121–1132 (Lem1, combined-family eventual linear independence).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127.
   Lines 1846–1884 (BNT and two-layer BNT decomposition with raw
-  `μ_{j,q}`).
+  `μ_{j,q}` and per-block spectral-radius-one normalization).
 -/
 
 open scoped Matrix BigOperators
@@ -206,48 +207,48 @@ lemma norm_coeff_le_copies
   P.norm_coeff_le_copies_of_norm_weight_le_one (N := N) (j := j)
     (hWeightLe := h.weight_norm_le_one j)
 
-/-- **Unit-modulus weight witness from the canonical-form line-246
-normalization.**
+/-- **Global unit-modulus weight witness from the canonical-form normalization.**
 
 Re-exposes the structural field `weight_unit_exists` (CPSV16 §II.A
 line 246) at the API layer for downstream callers that want to extract a
-unit-modulus weight without depending on the structure layout. -/
+global unit-modulus weight without depending on the structure layout. -/
 lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
     ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
       ‖P.weight j q‖ = 1 := h.weight_unit_exists
 
-/-- **CPSV16 line 246 + line 1244 generalization.**
+/-- **Per-block unit-modulus weight witness from CPSV21 §III.2.**
 
-For any sector `j₀ : Fin P.basisCount` that contains at least one
-unit-modulus weight, the power-sum coefficient
+Re-exposes `weight_unit_exists_per_block`, the Phase D strengthening of
+`IsBNTCanonicalForm`: every BNT basis sector carries its own unit-modulus
+copy weight. -/
+lemma weight_unit_exists_per_block_of_struct
+    (h : IsBNTCanonicalForm P) (j : Fin P.basisCount) :
+    ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1 :=
+  h.weight_unit_exists_per_block j
+
+/-- **Per-block coefficient non-decay.**
+
+For every sector `j₀ : Fin P.basisCount`, the power-sum coefficient
 `P.coeff N j₀ = ∑_q (P.weight j₀ q)^N` does **not** tend to `0` as
 `N → ∞`.
 
-The unit-modulus witness is supplied externally because the structural
-field `IsBNTCanonicalForm.weight_unit_exists` only asserts the
-**global** existence of some `(j, q)` with unit-modulus weight (CPSV16
-§II.A line 246, verbatim); it does not pin the witness to a specific
-sector.  Callers that have an arrow-specific unit-modulus witness (for
-example from a downstream matching argument that has already isolated a
-sector) pass it in here.
+Phase D strengthens the canonical-form surface with the CPSV21 §III.2 /
+Definition 4.3 per-block spectral-radius-one normalization, so the
+unit-modulus witness needed by the Cesàro non-decay lemma is discharged
+automatically from `h.weight_unit_exists_per_block j₀`.
 
-Paper anchor: CPSV16 §II.A line 246 (the "at least one `|μ_k| = 1`"
-convention) combined with line 1244 (the assumed normalization makes
-the transfer-matrix-power sequence converge); proof via Cesàro
-non-decay (`PaperBNT/CesaroNonDecay.lean`,
-`sum_pow_not_tendsto_zero_of_unit_modulus`, CPSV16 lines 1158–1167). -/
-theorem coeff_not_tendsto_zero_at_unit_block
-    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
-    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
+Paper anchor: CPSV21 §III.2 / Definition 4.3 lines 1846–1884
+(per-block spectral-radius-one BNT normalization), CPSV16 §II.C lines
+1158–1167 (power-sum non-decay / exact comparison input). -/
+theorem coeff_not_tendsto_zero_at_block
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount) :
     ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) := by
-  -- Extract the unit-block weight family and its CPSV16 §II.A
-  -- line-246 properties at sector `j₀`.
   have h_le : ∀ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ ≤ 1 :=
     h.weight_norm_le_one j₀
-  -- Apply the Cesàro non-decay analytic lemma.
+  have hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1 :=
+    h.weight_unit_exists_per_block j₀
   have hAnal := CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus
     (P.weight j₀) h_le hUnit
-  -- `P.coeff N j₀ = ∑ q, (P.weight j₀ q)^N` is `rfl`.
   intro hTend
   exact hAnal hTend
 
@@ -257,7 +258,7 @@ For any sector `j : Fin P.basisCount` such that every copy weight satisfies
 `‖P.weight j q‖ < 1` (strictly), the power-sum coefficient
 `P.coeff N j = ∑_q (P.weight j q)^N` tends to `0` as `N → ∞`.
 
-This is the **converse** of `coeff_not_tendsto_zero_at_unit_block`: under the
+This is the **converse** of `coeff_not_tendsto_zero_at_block`: under the
 CPSV16 §II.A line-246 normalization (`weight_norm_le_one`), if **no** copy of
 sector `j` carries a unit-modulus weight, then the sector's coefficient
 decays exponentially.  The argument is elementary: each summand
@@ -267,9 +268,9 @@ of vanishing sequences vanishes.
 
 Paper anchor: CPSV16 §II.A line 246 + line 1244 (the convergence half of
 the line-246 dichotomy: unit-modulus weights survive; subnormal weights
-decay).  This is the lemma the Phase B-γ matched-pair argument
-(`PaperBNT/StrongMatch.lean`) uses to dismiss non-unit sectors of `Q` that
-do not appear in the matching `φ : UnitQ ↪ Fin P.basisCount`. -/
+decay).  After the Phase D per-block normalization this lemma is no longer
+on the FT critical path, but it remains a useful peripheral/subnormal-sector
+estimate. -/
 theorem coeff_tendsto_zero_of_all_weights_subnorm
     (_h : IsBNTCanonicalForm P) (j : Fin P.basisCount)
     (hSubnorm : ∀ q : Fin (P.copies j), ‖P.weight j q‖ < 1) :
@@ -290,7 +291,7 @@ theorem coeff_tendsto_zero_of_all_weights_subnorm
 
 /-- **Thermodynamic-limit non-vanishing of a unit-block coefficient.**
 
-A user-facing alias for `coeff_not_tendsto_zero_at_unit_block`, named
+A user-facing alias for `coeff_not_tendsto_zero_at_block`, named
 in the language of the audit memo
 `thermodynamic_limit_normalization_audit_2026-05-14` §Q-C: the
 CPSV16 §II.A line-246 normalization picks out the unit-modulus block(s)
@@ -298,17 +299,16 @@ whose power-sum coefficient does **not** vanish in the thermodynamic
 limit.
 
 This is the coefficient form of the audit's "thermodynamic-limit
-non-vanishing" condition, parametrised by the unit-modulus block
-witness supplied by the caller.  A self-overlap form
+non-vanishing" condition, with the per-block unit-modulus witness
+supplied by the structure.  A self-overlap form
 `limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication recorded by
 the audit's Q-C equivalence (forward direction), which we do not
 formalise here — the coefficient form is the operational input to the
 FT proof; the self-overlap reading is a paraphrase. -/
 lemma thermodynamic_limit_nonvanishing
-    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
-    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
+    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount) :
     ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
-  h.coeff_not_tendsto_zero_at_unit_block j₀ hUnit
+  h.coeff_not_tendsto_zero_at_block j₀
 
 end IsBNTCanonicalForm
 
