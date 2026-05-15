@@ -672,7 +672,7 @@ factorization is assumed.
 
 \begin{lemma}[Raw two-layer sector coefficient identity]%
 	\label{lem:paper_bnt_coeff_eq_sum_weight_pow}
-	\lean{MPSTensor.IsBNTCanonicalForm.coeff_eq_sum_weight_pow}
+	\lean{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow}
 	\leanok
 	For every sector decomposition \(P\), every length \(N\), and every basis
 	index \(j\), the sector coefficient is the raw power sum
@@ -690,7 +690,7 @@ factorization is assumed.
 
 \begin{lemma}[Sector coefficient bound by multiplicity]%
 	\label{lem:paper_bnt_norm_coeff_le_copies}
-	\lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies_of_norm_weight_le_one}
+	\lean{MPSTensor.SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one}
 	\leanok
 	\uses{lem:paper_bnt_coeff_eq_sum_weight_pow}
 	Under the optional global modulus normalization
@@ -869,7 +869,7 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 
 \begin{lemma}[Unit-block coefficient non-decay]%
 	\label{lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
-	\lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_unit_block}
+	\lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
 	\leanok
 	\uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
 	Let \(P\) be a sector decomposition carrying a paper-faithful BNT
@@ -1077,18 +1077,19 @@ thermodynamic state, and are not constrained by the matching
 this point via the \(\mathbb{E}^N\)-fixed-point characterisation).
 The downstream Phase~B-\(\beta\) bijective-matching layer will apply
 this theorem twice (with \((P, Q)\) swapped) to derive the cardinality
-identity and the per-pair bijection / gauge data on the unit-block
-subset.
+identity and the per-pair bijection / gauge data on the full basis
+(every sector is a unit block under the Phase~D per-block
+normalization).
 
-\begin{theorem}[Strong existential matching at unit-block sectors]
+\begin{theorem}[Strong existential matching, full-basis form]
 	\label{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-	\lean{MPSTensor.forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+	\lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
 	\leanok
 	Let \(P, Q : \texttt{SectorDecomposition}\,d\) be two
 	\texttt{IsBNTCanonicalForm} BNT canonical forms with
 	\(\texttt{SameMPV}_2\,P.\texttt{toTensor}\,Q.\texttt{toTensor}\).
-	For every sector \(k : \texttt{Fin}\,Q.\texttt{basisCount}\) that
-	carries at least one unit-modulus weight, there exists a sector
+	For every sector \(k : \texttt{Fin}\,Q.\texttt{basisCount}\) there
+	exists a sector
 	\(j : \texttt{Fin}\,P.\texttt{basisCount}\) with matched bond
 	dimension \(h : P.\texttt{basisDim}\,j = Q.\texttt{basisDim}\,k\),
 	a gauge-phase equivalence
@@ -1104,16 +1105,17 @@ subset.
 	\cite[Lemma~\texttt{Lem1}, lines 1131--1133]{Cirac2017MPDO_AnnPhys},
 	combined-LI on the \emph{full} family
 	\(\{A^{[j]}\}_j \cup \{B^{[k]}\}_k\), is iterated externally over
-	each unit-block sector \(k\).  Each iteration is discharged by
-	the unit-block matching theorem
-	\texttt{exists\_unit\_block\_match\_of\_sameMPV}
+	each sector \(k\).  Each iteration is discharged by
+	the full-basis matching theorem
+	\texttt{exists\_block\_match\_of\_sameMPV}
 	(\texttt{PaperBNT/DominantMatch.lean}) with the roles of \(P\) and
 	\(Q\) swapped: feed \(\texttt{hQ}, \texttt{hP}\) (in that order),
-	supply \(0 < P.\texttt{basisCount}\) from the global unit witness
-	on \(P\) (the structural field
-	\texttt{IsBNTCanonicalForm.weight\_unit\_exists}),
-	supply the unit-modulus witness on \(Q\)'s sector \(k\) (the
-	hypothesis of this theorem), and supply
+	supply \(0 < P.\texttt{basisCount}\) from the retained global unit
+	witness on \(P\) (the structural field
+	\texttt{IsBNTCanonicalForm.weight\_unit\_exists}, kept only as a
+	non-emptiness witness; the Phase~D per-block field
+	\texttt{weight\_unit\_exists\_per\_block} supplies the actual
+	per-block normalization), and supply
 	\(\texttt{SameMPV}_2\,Q.\texttt{toTensor}\,P.\texttt{toTensor}\)
 	via the pointwise-symmetric flip
 	\(\lambda N\,\sigma,\,(\texttt{hEqual}\,N\,\sigma).\texttt{symm}\).
