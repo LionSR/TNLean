@@ -2843,3 +2843,81 @@ see in particular
 	the basis-of-normal-tensors and multiplicity comparison developed later, rather
 	than an artificial separation of equal weight norms.
 \end{remark}
+
+\subsection{Out-of-scope PGVWC06 theorems}%
+\label{subsec:pgvwc06_out_of_scope}
+
+This chapter follows the modern presentation of~\cite{Cirac2017MPDO_AnnPhys}
+and~\cite{Cirac2021Matrix}, which is better aligned with the Lean
+formalization architecture (TI site-independent tensors, transfer-map
+primitivity, and CPM fixed-point normalization).
+The 2007 preprint~\cite{PerezGarcia2007Matrix} contains eight named theorems
+in its canonical-form section~\S III (lines~399--1177 of \texttt{MPSarchive.tex}).
+Theorem~\texttt{Th:TIcanonical} has a partial, conditional counterpart here;
+the opening paragraphs of this chapter state that scope limitation explicitly.
+The remaining seven theorems are outside the formalization scope:
+
+\begin{itemize}
+  \item \textbf{Thm.~\texttt{OBC-Vidal} (lines~431--443): completeness and
+    OBC canonical form.}
+    Any pure state admits an OBC-MPS representation of bond dimension
+    $D\le d^{\lfloor N/2\rfloor}$ with simultaneous left-normalization and
+    a positive full-rank diagonal interleaving matrix~$\Lambda^{[m]}$.
+    \emph{Not formalized:} the chapter starts from a site-independent TI
+    tensor; constructing the finite-OBC Schmidt canonical form requires a
+    site-dependent Chain layer not present in this development.
+
+  \item \textbf{Thm.~\texttt{free-OBC} (lines~466--486): OBC representation
+    freedom.}
+    Every OBC-MPS $\{B^{[m]}_i\}$ is related to the canonical one by
+    site-local invertible gauge matrices $Y_j,Z_j$ with $Y_j Z_j = \mathbf{1}$.
+    \emph{Not formalized:} same reason as \texttt{OBC-Vidal}; local-gauge
+    analysis for site-dependent open-boundary matrices is outside the TI-MPS
+    scope.
+
+  \item \textbf{Thm.\ ``Site-independent matrices'' (lines~620--630).}
+    Every TI pure state with PBC on a finite ring of $N$ sites has a
+    site-independent MPS representation; a bond-$D$ OBC representation
+    lifts to one at bond dimension at most~$ND$.
+    \emph{Not formalized:} the chapter assumes a site-independent MPV tensor
+    as input; the block-circulant construction producing it is out of scope.
+
+  \item \textbf{Thm.~\texttt{Th:periodic} (lines~849--858): periodic
+    decomposition.}
+    If the transfer map of a single-block TI canonical MPS has $p$
+    eigenvalues of modulus~$1$, the state is a superposition of $p$
+    $p$-periodic states of bond dimension~$D$, and vanishes when $p \nmid N$.
+    \emph{Partially formalized:} the cyclic-sector machinery of
+    \cref{sec:cyclic_sectors} (\cref{thm:cyclic_sector_decomp_after_blocking})
+    removes the period and yields primitive sector tensors, but the explicit
+    state-vector decomposition into $p$-periodic summands is not separately
+    stated.
+
+  \item \textbf{Thm.\ ``Interpretation of $\Lambda$'' (lines~987--993).}
+    Under condition~C2, the eigenvalues of the half-chain reduced density
+    operator converge as $N\to\infty$ to $\Lambda\otimes\Lambda$ with
+    $\Lambda$ from Theorem~\texttt{Th:TIcanonical}.
+    \emph{Not formalized:} \cref{thm:CFII_data} produces $\Lambda$, but the
+    asymptotic eigenvalue statement requires correlation-length and entropy
+    material outside the scope of this chapter.
+
+  \item \textbf{Thm.~\texttt{thm-uniq} (lines~1002--1015): uniqueness of
+    the canonical form.}
+    Under condition~C1 with unique OBC canonical form, two TI canonical
+    $D$-MPS representations of the same state satisfy $B_i = U C_i U^\dagger$
+    for a global unitary~$U$.
+    \emph{Not formalized in this chapter:} a modern analogue is proved in
+    Chapter~\ref{ch:ft_proof} as
+    \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge};
+    the original finite-ring uniqueness of~\cite{PerezGarcia2007Matrix}
+    under C1/C2 and $N > 2L_0 + D^4$ is not covered here.
+
+  \item \textbf{Thm.\ ``Obtaining the TI canonical form''
+    (lines~1154--1165).}
+    The site-independent $D\times D$ matrices can be recovered from an OBC
+    canonical form by solving an $N$-independent system~(S) of $O(D^8)$
+    quadratic equations; every solution is related to the canonical form by
+    a global unitary.
+    \emph{Not formalized:} numerical and algorithmic recovery is entirely
+    out of scope; the chapter addresses existence and uniqueness abstractly.
+\end{itemize}
