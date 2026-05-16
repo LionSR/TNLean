@@ -173,69 +173,6 @@ theorem toSpanHypotheses
 
 end CommonPrimitiveBlockMatchingHypotheses
 
-/-! ### Zero-tail equality from block matching -/
-
-/-- At length zero, a block-diagonal tensor contributes the sum of the block dimensions. -/
-private theorem mpv_toTensorFromBlocks_zero_eq_sum_dim
-    {d r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (blocks : (x : Fin r) → MPSTensor d (dim x))
-    (σ : Fin 0 → Fin d) :
-    mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ =
-      ∑ x : Fin r, (dim x : ℂ) := by
-  rw [mpv_toTensorFromBlocks_eq_sum]
-  refine Finset.sum_congr rfl fun x _ => ?_
-  simp [mpv, coeff, Matrix.trace_one]
-
-/-- A BNT block matching identifies the total nonzero bond dimensions. -/
-private theorem sum_dim_eq_of_blockPermutationGaugePhaseConclusion
-    {d rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {blocksA : (x : Fin rA) → MPSTensor d (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor d (dimB x)}
-    (hMatch : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
-    (∑ x : Fin rA, (dimA x : ℂ)) = ∑ y : Fin rB, (dimB y : ℂ) := by
-  rcases hMatch with ⟨_, perm, hmatch⟩
-  calc
-    (∑ x : Fin rA, (dimA x : ℂ)) =
-        ∑ x : Fin rA, (dimB (perm x) : ℂ) := by
-          refine Finset.sum_congr rfl fun x _ => ?_
-          obtain ⟨hdim, _⟩ := hmatch x
-          simp [hdim]
-    _ = ∑ y : Fin rB, (dimB y : ℂ) := by
-          let f : Fin rA → ℂ := fun x => (dimB (perm x) : ℂ)
-          let g : Fin rB → ℂ := fun y => (dimB y : ℂ)
-          have hfg : ∀ x, f x = g (perm x) := fun _ => rfl
-          simpa [f, g] using (Fintype.sum_equiv perm f g hfg)
-
-/-- The length-zero identity and block matching force equal zero-tail dimensions.
-
-The structural theorem already supplies the length-zero equation for the two zero-tail plus
-nonzero-sector decompositions. A BNT block-matching conclusion matches the nonzero blocks by
-a permutation with equal bond dimensions, so the nonzero length-zero contributions cancel. -/
-theorem zeroTail_eq_of_blockPermutationGaugePhaseConclusion
-    {d rA rB zeroTailA zeroTailB : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {μA : Fin rA → ℂ} {μB : Fin rB → ℂ}
-    {blocksA : (x : Fin rA) → MPSTensor d (dimA x)}
-    {blocksB : (x : Fin rB) → MPSTensor d (dimB x)}
-    (hZero : ∀ σ : Fin 0 → Fin d,
-      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
-        (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
-    (hMatch : BlockPermutationGaugePhaseConclusion (d := d) blocksA blocksB) :
-    zeroTailA = zeroTailB := by
-  let σ : Fin 0 → Fin d := Fin.elim0
-  have hsum :=
-    sum_dim_eq_of_blockPermutationGaugePhaseConclusion
-      (d := d) (blocksA := blocksA) (blocksB := blocksB) hMatch
-  have hzero := hZero σ
-  rw [mpv_toTensorFromBlocks_zero_eq_sum_dim μA blocksA σ,
-    mpv_toTensorFromBlocks_zero_eq_sum_dim μB blocksB σ] at hzero
-  have hzero' :
-      (zeroTailA : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) =
-        (zeroTailB : ℂ) + ∑ y : Fin rB, (dimB y : ℂ) := by
-    simpa [hsum] using hzero
-  exact Nat.cast_inj.mp (add_right_cancel hzero')
-
-
 /-! ### Per-block to global proportional gauge
 
 The per-block matchers from `BlockPermutationGaugePhaseConclusion` produce, for every
