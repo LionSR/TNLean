@@ -6,7 +6,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
-import TNLean.MPS.CanonicalForm.SectorIrreducibility
+import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -122,7 +122,7 @@ hypotheses (corner-irreducible → proj-step → fixed-algebra-rigidity
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
 is reached.  Only the unconditional form and the top-level packaging
 `exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
-are consumed by the downstream canonical-form pipeline.
+are consumed by the downstream canonical-form proof chain.
 -/
 
 open KadisonSchwarz

@@ -1178,3 +1178,216 @@ block-matching conclusions for the common primitive sectors.
 	open source-faithful passage from equality of total MPV vectors to the
 	componentwise power-sum identities.
 \end{remark}
+
+\section{Auxiliary constructions relocated from Chapter~\ref{ch:canonical}}%
+\label{sec:ft_auxiliary_from_ch08}
+
+The following auxiliary results were previously presented in
+Chapter~\ref{ch:canonical}.  They are reduction steps of the fundamental-theorem
+proof rather than statements about canonical-form data, so they are collected
+here.
+
+\subsection{Block-sum fundamental-theorem wrappers}%
+\label{subsec:ft_block_sum_wrappers}
+
+\begin{remark}
+	See \cref{def:block_diagonal_tensor} for the formalized block-diagonal tensor construction.
+\end{remark}
+
+\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
+	\lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
+	\leanok
+	\uses{def:block_diagonal_tensor, def:injective}
+	If all block tensors $A_k$ are injective and the per-block
+	same-MPV condition holds ($A_k$ and $B_k$ generate the same
+	MPV family for each~$k$),
+	then each pair $(A_k, B_k)$ is gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:ft_single}
+	Apply the single-block fundamental theorem
+	(Theorem~\ref{thm:ft_single}) to each block independently.
+\end{proof}
+
+\begin{remark}[Per-block restatement, not the multi-block paper theorem]
+  This is a block-sum reformulation of the per-block injective single-block FT:
+  the block pairing $(A_k, B_k)$ is assumed already given and the blocks already
+  matched.  It is not the multi-block fundamental theorem of
+  \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}, which derives the
+  block matching and permutation from only the global same-MPV hypothesis.
+\end{remark}
+
+\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
+	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
+	\leanok
+	\uses{def:block_diagonal_tensor, def:same_mpv}
+	If $A_k$ and $B_k$ generate the same MPV family for each
+	block~$k$, then the block-diagonal tensors
+	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+	also generate the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:mpv_decomposition}
+	By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
+	each MPV is $\sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
+	Per-block equality of MPV coefficients gives global equality.
+\end{proof}
+
+\begin{remark}[Direct-sum congruence]
+  This is a direct-sum congruence statement: per-block MPV equality lifts to
+  global MPV equality via the block-diagonal decomposition formula.
+\end{remark}
+
+\begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
+	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
+	\leanok
+	\uses{def:block_diagonal_tensor, def:injective, def:same_mpv, thm:multi_block_ft}
+	If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
+	the same MPV family, then the block-diagonal tensors
+	$\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:multi_block_ft}
+	Apply the per-block single-block fundamental theorem
+	(Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
+	equivalences from injectivity and equality of MPV families, then
+	combine them into a global gauge for the block-diagonal tensors.
+\end{proof}
+
+\begin{remark}[Block-diagonal gauge assembly, not the FT block-matching theorem]
+  This combines per-block gauges into a block-diagonal gauge for the global
+  assembled tensor, given pre-matched same-index blocks.  It is not the FT
+  block-matching theorem: it does not derive the block pairing or permutation
+  from a global same-MPV hypothesis; the block correspondence is assumed in
+  advance.
+\end{remark}
+
+\subsection{Proportional single-block ingredient}%
+\label{subsec:ft_proportional_single_block}
+
+\begin{theorem}[Proportional MPV implies gauge-phase equivalence]\label{thm:proportional_ft}
+	\lean{MPSTensor.gaugePhaseEquiv_of_proportionalMPV₂_of_overlap_tendsto_one}
+	\leanok
+	\uses{def:gauge_phase_equiv, def:injective, def:tp_kraus}
+	Let $A$ and $B$ be injective MPS tensors satisfying
+	$\sum_i (A^i)^\dagger A^i = \Id$ and
+	$\sum_i (B^i)^\dagger B^i = \Id$.
+	If $A$ and $B$ generate proportional MPV families
+	($V^{(N)}(A)_\sigma = c_N V^{(N)}(B)_\sigma$
+	for some $c_N \in \C$) and
+	$O_{AA}(N) \to 1$, $O_{BB}(N) \to 1$,
+	then $A$ and $B$ are gauge-phase equivalent.
+\end{theorem}
+
+\begin{proof}
+	\leanok
+	\uses{thm:overlap_decay}
+	By contradiction.
+	If $A$ and $B$ are not gauge-phase equivalent, then
+	$O_{AB}(N) \to 0$ (Theorem~\ref{thm:overlap_decay}).
+	From the proportionality hypothesis,
+	$O_{AB}(N) = c_N O_{BB}(N)$.
+	Since $O_{BB}(N) \to 1$, it follows that $c_N \to 0$.
+	But $O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0$,
+	contradicting $O_{AA}(N) \to 1$.
+
+	In~\cite{PerezGarcia2007Matrix}, the proportional case
+	is handled as part of the canonical form argument.
+	Here it is obtained directly from the overlap-decay theorem.
+\end{proof}
+
+\subsection{Equal-norm primitive irreducible blocks (BNT input)}%
+\label{subsec:ft_equal_norm_blocks}
+
+\begin{theorem}[Gauge phases have unit modulus for primitive irreducible blocks]%
+	\label{thm:unit_modulus_phase_tp_prim_irred}
+	\lean{MPSTensor.norm_gaugePhase_eq_one_of_irr_TP_primitive}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
+	For trace-preserving primitive irreducible blocks, every gauge-phase
+	equivalence has a phase factor of modulus~$1$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:gauge_phase_equiv, def:irreducible_tensor}
+	Primitivity forces the peripheral spectrum to consist of $\{1\}$ alone,
+	so the gauge phase must have modulus one.
+\end{proof}
+
+\begin{remark}
+	See \cref{lem:restricted_norm_class_collapse_bnt} for the formalized restricted norm-class collapse statement.
+\end{remark}
+
+\begin{theorem}[Existential BNT independence from overlap limits]%
+	\label{thm:bnt_li_from_overlap_limits_exists}
+	\lean{MPSTensor.exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal}
+	\leanok
+	\uses{lem:bnt_overlap_orthonormal_li}
+	If the self-overlaps of a finite block family tend to $1$ and the
+	cross-overlaps of distinct blocks tend to $0$, then the MPV states are
+	linearly independent for all sufficiently large system sizes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{lem:bnt_overlap_orthonormal_li}
+	This is Lemma~\ref{lem:bnt_overlap_orthonormal_li}, restated with an
+	explicit threshold $N_0$.
+\end{proof}
+
+\begin{theorem}[Granular sector decomposition from eventual BNT independence]%
+	\label{thm:bnt_sector_decomp_linear_independent}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_linearIndependent}
+	\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv, def:bnt}
+	If the MPV states of the blocks are linearly independent for all sufficiently
+	large system sizes and all weights are nonzero, then the granular sector
+	decomposition represents the same MPS family and satisfies the BNT
+	linear-independence condition.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
+	The equality of represented families is
+	Lemma~\ref{lem:trivial_sector_decomp_same_mpv}.  The assumed eventual linear
+	independence is exactly the BNT condition for the basis blocks of the granular
+	sector decomposition.
+\end{proof}
+
+\begin{definition}[MPV phase class data]%
+	\label{def:mpv_phase_class_data}
+	\lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
+	\leanok
+	For a finite family of blocks, put $j \sim k$ when there is a nonzero
+	scalar factor $\zeta$ such that
+	$\ket{V^{(N)}(B_k)}=\zeta^N\ket{V^{(N)}(B_j)}$ for every length~$N$.
+	The associated structure enumerates the finite quotient, chooses one
+	representative per class, records the scalar relating the representative to
+	each member, and shows that distinct representatives are not gauge-phase
+	equivalent.
+\end{definition}
+
+\begin{theorem}[Phase-class BNT sector construction]%
+	\label{thm:bnt_sector_decomp_tp_prim_irr_collapsed}
+	\lean{MPSTensor.exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks}
+	\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_from_overlap_limits_exists}
+	For trace-preserving primitive irreducible blocks of positive bond dimension
+	with nonzero weights, there is a sector decomposition representing the same
+	weighted block sum and satisfying the BNT linear-independence condition.  The
+	construction chooses one representative per MPV phase class and absorbs the
+	nonzero scalar factors into the sector weights.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:mpv_phase_class_data, thm:bnt_li_from_overlap_limits_exists, thm:mpv_decomposition}
+	Finite phase classes partition the original block indices.  Expanding the
+	sector decomposition gives the original finite sum after replacing each class
+	member by its representative and moving the factor $\zeta^N$ into
+	$(\zeta\mu_k)^N$.  If two chosen representatives were gauge-phase equivalent,
+	they would lie in the same MPV phase class, contradicting their being distinct
+	classes.  Therefore the representatives satisfy the separated primitive-normal
+	hypothesis, and the overlap-limit criterion
+	(Theorem~\ref{thm:bnt_li_from_overlap_limits_exists}) gives the BNT
+	linear-independence condition.
+\end{proof}

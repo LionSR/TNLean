@@ -9,13 +9,13 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Common blocked cyclic-sector families
 
-**Internal bookkeeping record.**  After period removal each nonzero-weight
+**Auxiliary record.**  After period removal each nonzero-weight
 block splits into cyclic sectors; the sectors from different blocks may
 have different physical alphabets.  This file provides the common-reblocking
 data that reblocks every sector to a single shared physical blocking length
 so that all sectors can be compared in a uniform canonical form.
 
-The structure and its derived theorems are internal intermediate constructions — they
+The structure and its derived theorems are intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
 not paper-level results of 1606.00608 or 2011.12127.
 -/
@@ -32,10 +32,10 @@ additional positive blocking lengths, the primitive irreducible sector tensors,
 and the MPV compatibility between the iterated block and the corresponding
 unit-weight sum of reblocked cyclic sectors.
 
-This is internal bookkeeping: the flattened common-sector family is derived
+This is an auxiliary construction: the flattened common-sector family is derived
 canonically from these data, and all attached theorems are properties of the
 record's fields.  There is no paper-level theorem that this record directly
-instantiates; it is consumed by the normal canonical-form existence pipeline. -/
+instantiates; it is consumed by the normal canonical-form existence proof chain. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where
   /-- The common physical blocking length. -/

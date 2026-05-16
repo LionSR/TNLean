@@ -26,8 +26,8 @@ Exports:
   identity: per-block conjugation lifts to a `globalGaugeOfBlocks`-conjugation
   of `toTensorFromBlocks`.
 
-These declarations are pure linear-algebra plumbing not specific to the
-fundamental theorem; placing them in `SharedInfra` avoids a layer inversion
+These declarations are pure linear-algebra intermediate constructions not specific to the
+fundamental theorem; placing them in `SharedInfra` avoids a dependency inversion
 where `CanonicalForm/...` had to import `FundamentalTheorem.Multi`.
 
 ## Reference

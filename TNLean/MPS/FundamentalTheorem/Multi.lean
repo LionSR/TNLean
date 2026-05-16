@@ -26,9 +26,9 @@ uses the block-diagonal matrix `⊕_k X k` for
 The block-diagonal `GL` constructors `blockDiagonalGL` and `globalGaugeOfBlocks`
 and the direct-sum conjugation identity
 `toTensorFromBlocks_eq_globalGaugeOfBlocks_conj` are pure linear-algebra
-plumbing and have been moved to `TNLean.MPS.SharedInfra.BlockGauge` so that
+intermediate constructions and have been moved to `TNLean.MPS.SharedInfra.BlockGauge` so that
 canonical-form modules can use them without inverting the layer order.  They
-are re-exported here transitively through the import above.
+are re-stated here transitively through the import above.
 -/
 
 variable {d : ℕ}

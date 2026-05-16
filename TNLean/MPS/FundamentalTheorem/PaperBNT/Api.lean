@@ -38,7 +38,7 @@ not imported here.
 * `IsBNTCanonicalForm.norm_coeff_le_copies` — the structural-field reading
   of the multiplicity bound (CPSV16 line 246 via `weight_norm_le_one`).
 * `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the global
-  unit-modulus witness re-exposed at the API layer (CPSV16 line 246).
+  unit-modulus witness re-stated for direct access by downstream callers (CPSV16 line 246).
 * `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block` — the Cesàro
   non-decay reading of the line-1182 projection step, with the per-block
   unit-modulus witness supplied as an explicit theorem-level hypothesis
@@ -208,8 +208,8 @@ lemma norm_coeff_le_copies
 
 /-- **Global unit-modulus weight witness from the canonical-form normalization.**
 
-Re-exposes the structural field `weight_unit_exists` (CPSV16 §II.A
-line 246) at the API layer for downstream callers that want to extract a
+Re-states the structural field `weight_unit_exists` (CPSV16 §II.A
+line 246) for direct access by downstream callers that want to extract a
 global unit-modulus weight without depending on the structure layout. -/
 lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
     ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),

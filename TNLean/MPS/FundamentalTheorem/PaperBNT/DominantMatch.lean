@@ -110,11 +110,19 @@ eventual scope).  The conversion is purely `Filter.Eventually` packaging.
 Paper anchor: CPSV16 corollary `II_cor2`, lines 1172–1192, instantiates
 `thm1` with equal MPV; the proportionality scalar is `1`.
 -/
+theorem SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
+    {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂Pos A B) :
+    EventuallyNonzeroProportionalMPV₂ A B := by
+  refine Filter.eventually_atTop.mpr ⟨1, fun N hN => ?_⟩
+  refine ⟨1, one_ne_zero, fun σ => ?_⟩
+  simpa using h N hN σ
+
 theorem SameMPV₂.toEventuallyNonzeroProportionalMPV₂
     {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : SameMPV₂ A B) :
     EventuallyNonzeroProportionalMPV₂ A B :=
-  (h.toNonzeroProportionalMPV₂).eventually
+  h.toSameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
 
 /-! ### Lemma 2: weak non-decay existential for `SameMPV₂`
 
@@ -127,6 +135,17 @@ Paper anchor: CPSV16 lines 1121–1132 (Lem1, combined-family eventual LI),
 applied along the contrapositive route of CPSV16 lines 1172–1192
 (`II_cor2`).
 -/
+theorem exists_nondecaying_overlap_pair_of_sameMPVPos
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hQ_pos : 0 < Q.basisCount)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∃ j : Fin P.basisCount, ∃ k : Fin Q.basisCount,
+      ¬ Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+          atTop (𝓝 0) :=
+  exists_nondecaying_overlap_pair_of_eventuallyProportional
+    (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
+
 theorem exists_nondecaying_overlap_pair_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -135,8 +154,8 @@ theorem exists_nondecaying_overlap_pair_of_sameMPV
     ∃ j : Fin P.basisCount, ∃ k : Fin Q.basisCount,
       ¬ Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
           atTop (𝓝 0) :=
-  exists_nondecaying_overlap_pair_of_eventuallyProportional
-    (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
+  exists_nondecaying_overlap_pair_of_sameMPVPos
+    (P := P) (Q := Q) hP hQ hQ_pos hEqual.toSameMPV₂Pos
 
 /-! ### Lemma 3: block matching at a user-supplied index `j₀`
 
@@ -186,13 +205,13 @@ structural field `weight_unit_exists` does not pin it to a specific
 sector.  Issue #1725 Phase A retired the auxiliary dominant-block
 structural field that previously fixed `j₀ = 0` and discharged the
 unit-modulus witness implicitly. -/
-theorem exists_block_match_of_sameMPV
+theorem exists_block_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (j₀ : Fin P.basisCount)
     (hUnitP_at_j₀ : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
     (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ k₀ : Fin Q.basisCount,
       ∃ h : P.basisDim j₀ = Q.basisDim k₀,
         GaugePhaseEquiv
@@ -230,13 +249,16 @@ theorem exists_block_match_of_sameMPV
     -- overlap with `P.basis j₀` to obtain the column-`j₀` identity:
     --   ∑_j P.coeff N j · overlap(P.basis j, P.basis j₀) N
     --     = ∑_k Q.coeff N k · overlap(Q.basis k, P.basis j₀) N.
+    -- Under `SameMPV₂Pos`, the per-`N` overlap identity is established only
+    -- for `N ≥ 1`.  This eventual identity suffices because every consumer
+    -- below operates on `atTop` limits.
     have hOverlap_identity :
-        ∀ N : ℕ,
+        ∀ᶠ N : ℕ in atTop,
           (∑ j : Fin P.basisCount, P.coeff N j *
               mpvOverlap (d := d) (P.basis j) (P.basis j₀) N)
             = ∑ k : Fin Q.basisCount, Q.coeff N k *
                 mpvOverlap (d := d) (Q.basis k) (P.basis j₀) N := by
-      intro N
+      refine Filter.eventually_atTop.mpr ⟨1, fun N hN => ?_⟩
       have hLHS :=
         mpvOverlap_eq_sum_of_decomp_left (d := d) (g := P.basisCount)
           (dim := P.basisDim) (A_total := P.toTensor) (A := P.basis)
@@ -255,7 +277,7 @@ theorem exists_block_match_of_sameMPV
         simp only [mpvOverlap]
         refine Finset.sum_congr rfl ?_
         intro σ _
-        rw [hEqual N σ]
+        rw [hEqual N hN σ]
       exact (hLHS.symm.trans hPQ).trans hRHS
     -- Step 2: LHS tail (j ≠ j₀) tends to 0 because each summand is
     -- `bounded · (overlap → 0)`.
@@ -438,9 +460,9 @@ theorem exists_block_match_of_sameMPV
                       mpvOverlap (d := d) (P.basis j) (P.basis j₀) N)
                     - P.coeff N j₀))
             atTop (𝓝 0) := by simpa using hDiff
-      refine hDiff'.congr ?_
-      intro N
-      have hId := hOverlap_identity N
+      refine Filter.Tendsto.congr' ?_ hDiff'
+      refine hOverlap_identity.mono ?_
+      intro N hId
       -- coeff = RHS - (LHS - coeff)
       linear_combination -hId
     exact hP_dom_coeff_not_tendsto_zero hCoeff_tendsto_zero
@@ -472,5 +494,26 @@ theorem exists_block_match_of_sameMPV
         (hB_norm := hQ.basis_left_canonical k₀)
         (hNot := hNot)
   exact ⟨k₀, hDim, hGPE, hk₀⟩
+
+/-- Compatibility wrapper: the legacy all-length `SameMPV₂` form of the block
+match.  Forwards to the positive-length core variant via the forgetful
+projection `SameMPV₂.toSameMPV₂Pos`. -/
+theorem exists_block_match_of_sameMPV
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (j₀ : Fin P.basisCount)
+    (hUnitP_at_j₀ : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
+    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ k₀ : Fin Q.basisCount,
+      ∃ h : P.basisDim j₀ = Q.basisDim k₀,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis j₀))
+            (Q.basis k₀) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
+          atTop (𝓝 0) :=
+  exists_block_match_of_sameMPVPos
+    (P := P) (Q := Q) hP hQ j₀ hUnitP_at_j₀ hP_pos hQ_pos hEqual.toSameMPV₂Pos
 
 end MPSTensor

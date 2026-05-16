@@ -99,6 +99,20 @@ refers to these as the "zero tail" for bookkeeping. -/
 def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv B σ
 
+/-- Full MPV equality (all lengths, including `N = 0`) implies positive-length
+MPV equality. Used to reuse all-length theorems where only the positive-length
+data are needed, e.g. when comparing zero-tail-stripped block decompositions. -/
+theorem SameMPV₂.toSameMPV₂Pos {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂ A B) : SameMPV₂Pos A B :=
+  fun N _hN σ => h N σ
+
+/-- Positive-length MPV equality is symmetric. -/
+theorem SameMPV₂Pos.symm {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂Pos A B) : SameMPV₂Pos B A :=
+  fun N hN σ => (h N hN σ).symm
+
 /-- Weak scalar proportionality of MPVs.
 
 For each `N` there exists `c_N` with `V_N(A) = c_N · V_N(B)`.  The scalar is

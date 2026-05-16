@@ -39,7 +39,7 @@ hypothesis at the theorem level.  This keeps the canonical-form predicate
 maximally paper-faithful and quarantines the line-1182 paper-implicit
 convention to the theorems that actually need it.
 
-Crucially, the structure does **not** impose an equal-modulus or strict-order
+The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
 `eq:II_ABasicTensors` (line 286) and CPSV21 Definition 4.3 (lines 1846–1884)
 use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not

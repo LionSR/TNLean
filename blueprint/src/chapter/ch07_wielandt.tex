@@ -1796,3 +1796,30 @@ span.
     blocked irreducible tensors and eigenvector-spreading arguments, but they are
     auxiliary here and we do not list them separately.
 \end{remark}
+
+\section{Block injectivity from TP/primitive/irreducible blocks (relocated from Chapter~\ref{ch:canonical})}%
+\label{sec:ch07_block_inj_from_tp_primitive_irred}
+
+\begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
+	\label{thm:tp_primitive_irred_block_injective}
+	\lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
+		MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
+	\leanok
+	\uses{thm:normal_tp_primitive_irred,
+		lem:isNBlkInjective_iff_blockTensor_isInjective}
+	Let $A$ be a left-canonical MPS tensor with $D > 0$,
+	irreducible transfer map, and peripheral spectrum $\{1\}$.
+	Then some blocking $A^{[L]}$ is one-site injective.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:normal_tp_primitive_irred,
+		lem:isNBlkInjective_iff_blockTensor_isInjective}
+	The normality theorem (Theorem~\ref{thm:normal_tp_primitive_irred}) gives
+	eventual block injectivity, and the blocked-chain equivalence identifies this
+	with one-site injectivity of the corresponding blocked tensor.
+\end{proof}
+
+\begin{remark}
+	See \cref{thm:isNormal_blockTensor} for the formalized statement that blocking preserves normality.
+\end{remark}
