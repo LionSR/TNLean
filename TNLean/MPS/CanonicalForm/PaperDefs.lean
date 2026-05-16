@@ -38,7 +38,7 @@ The predicates here are the literal source-paper formulations.
   spanned by MPV families of the `A_j` at every length, and eventually linearly
   independent).
 
-## Reuse of existing primitive-channel API
+## Relation to the existing primitive-channel predicate
 
 CPSV16's clause "the associated CPM has a unique eigenvalue of magnitude
 equal to its spectral radius which is equal to one" is the standard
@@ -52,21 +52,21 @@ The TN-Review formulation (`Papers/2011.12127/TN-Review-main.tex:1827-1830`)
 "the transfer operator is a primitive channel" is the same clause and is not
 duplicated.
 
-## Bridges to existing strong predicates
+## Connections to existing strong predicates
 
-One light bridge is provided:
+One direct connection is provided:
 
 * `MPSTensor.IsNormalTensor.of_irreducible_and_primitive` —
   package an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
 
-Two further bridges are intentionally **not** provided here, in keeping with the
+Two further connections are intentionally **not** provided here, in keeping with the
 "clean layer, no `sorry`" quality bar:
 
-* A CF bridge `IsCanonicalFormPaper.of_isNormalCanonicalForm` would need to import
+* A CF connection `IsCanonicalFormPaper.of_isNormalCanonicalForm` would need to import
   `TNLean.PiAlgebra.CanonicalFormSepAux` which transitively imports
   `TNLean.MPS.FundamentalTheorem.*`; we keep `PaperDefs.lean` in a clean pre-FT
-  layer. Such a bridge belongs in a separate downstream file.
-* A BNT bridge `IsBNTPaper.of_isBNT` would require the implication
+  layer. Such a connection belongs in a separate downstream file.
+* A BNT connection `IsBNTPaper.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
   block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
   formulation. That equivalence requires Wielandt-style spectral arguments not
@@ -109,7 +109,7 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
   spectral radius equal to one (primitive transfer map). -/
   primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
 
-/-- Bridge: an irreducible tensor whose transfer map is primitive is a CPSV16 normal tensor. -/
+/-- An irreducible tensor whose transfer map is primitive is a CPSV16 normal tensor. -/
 theorem IsNormalTensor.of_irreducible_and_primitive
     {A : MPSTensor d D}
     (hIrr : IsIrreducibleTensor A)

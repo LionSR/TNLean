@@ -115,7 +115,7 @@ theorem exists_compressedTensor_of_supported_projection
     by simpa [Matrix.star_eq_conjTranspose] using Unitary.mul_star_self_of_mem U.prop
   have hU'U : Umatᴴ * Umat = 1 :=
     by simpa [Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U
-  -- Helper: trace invariance under unitary conjugation
+  -- Trace invariance under unitary conjugation
   have trace_conj (M : MatrixAlg D) : Matrix.trace (Umatᴴ * M * Umat) = Matrix.trace M := by
     rw [Matrix.mul_assoc, Matrix.trace_mul_comm Umatᴴ (M * Umat),
       Matrix.mul_assoc, hUU, Matrix.mul_one]

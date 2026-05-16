@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLiftCore
+import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 
 /-!

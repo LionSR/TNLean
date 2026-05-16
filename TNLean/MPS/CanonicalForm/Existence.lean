@@ -350,7 +350,7 @@ Remaining gap for a complete canonical-form existence theorem:
 
 /-- **Unconditional TP-gauge reduction for the 1606 theorem (1606.00608 Section 2.3 + App. A).**
 
-From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
+From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
@@ -396,7 +396,7 @@ theorem exists_irreducible_blockDecomp_with_tpGauge
 
 /-- **CFII fixed-point data for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
 
-From an arbitrary tensor `A` we produce an irreducible block decomposition. Moreover, for each
+From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
 we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
 

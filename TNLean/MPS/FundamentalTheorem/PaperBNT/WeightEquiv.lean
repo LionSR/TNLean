@@ -163,7 +163,7 @@ weights up to the gauge-phase factor `ζ`.  This is the per-copy form of
 CPSV16 line 1188 (`μ_{j,q} = ν_{j,q} · e^{i\phi_j}` for an indexing of
 the `Q`-copies determined by a matching).
 
-The proof reduces to a generic helper extracting an `Equiv.Perm` from a
+The proof reduces to a generic auxiliary lemma extracting an `Equiv.Perm` from a
 multiset-map equality on `Fin`, then composes with the cardinality cast
 and clears the `ζ` factor with `mul_inv_cancel₀ hζ`.
 -/

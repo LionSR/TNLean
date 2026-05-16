@@ -10,7 +10,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 /-!
 # Representative common-sector blocks
 
-**Internal bookkeeping.**  For each original nonzero-weight block, a
+**Auxiliary construction.**  For each original nonzero-weight block, a
 `CommonBlockedCyclicSectorFamily` flattens all its cyclic sectors over
 a common alphabet.  This file selects one representative sector per
 original block and transports the structural properties
@@ -18,8 +18,8 @@ original block and transports the structural properties
 to that representative family.
 
 All theorems here are properties of the representative indices derived
-from the internal `CommonBlockedCyclicSectorFamily` record.  They are
-consumed by the normal canonical-form existence pipeline, not directly
+from the `CommonBlockedCyclicSectorFamily` record.  They are
+consumed by the normal canonical-form existence proof chain, not directly
 by paper-level statements.
 -/
 
