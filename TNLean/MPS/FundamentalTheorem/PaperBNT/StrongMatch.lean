@@ -74,7 +74,7 @@ post-Phase-A rename in PR #1726) **with `P` and `Q` swapped**:
 The result is a `j₀ : Fin P.basisCount` with `Q.basisDim k = P.basisDim j₀`,
 a gauge-phase equivalence in the `Q → P` cast direction, and a
 non-decaying overlap in the `(Q.basis k, P.basis j₀)` order.  Two
-local helpers (`gaugePhaseEquiv_swap_cast` and
+local auxiliary lemmas (`gaugePhaseEquiv_swap_cast` and
 `tendsto_mpvOverlap_zero_swap`) flip those into the paper-stated
 `(P, Q)`-ordered conclusion.
 
@@ -88,7 +88,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Local helpers: symmetry of `GaugePhaseEquiv` across a bond-dim cast -/
+/-! ### Local auxiliary lemmas: symmetry of `GaugePhaseEquiv` across a bond-dim cast -/
 
 /-- Symmetry of `GaugePhaseEquiv` at a fixed bond dimension.
 
@@ -158,7 +158,7 @@ flip both the cast direction and the equivalence direction.
 
 The two forms are mathematically the same statement (after eliminating
 the cast by `subst`), but the cast routing differs at the term level,
-so we record this as an explicit helper used inside
+so we record this as an explicit auxiliary lemma used inside
 `forall_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
 private theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
     (h : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
@@ -186,11 +186,11 @@ the global unit witness).
 
 Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608) and CPSV21
 Definition 4.3 lines 1846–1884. -/
-theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
+theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
       GaugePhaseEquiv
           (cast (congr_arg (MPSTensor d) h) (P.basis j))
@@ -205,10 +205,9 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     obtain ⟨j₀, _, _⟩ := hP.weight_unit_exists
     exact Nat.lt_of_le_of_lt (Nat.zero_le _) j₀.isLt
   have hQ_pos : 0 < Q.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) k.isLt
-  have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
-    fun N σ => (hEqual N σ).symm
+  have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
   obtain ⟨j, hsymDim, hGE_swapped, hNonDecay_swapped⟩ :=
-    exists_block_match_of_sameMPV
+    exists_block_match_of_sameMPVPos
       (P := Q) (Q := P) hQ hP k (hUnitQ k) hQ_pos hP_pos hEqual_symm
   refine ⟨j, hsymDim.symm, ?_, ?_⟩
   · exact gaugePhaseEquiv_swap_cast hsymDim.symm
@@ -217,7 +216,23 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
-/-! ### Phase B-β local helpers: transitivity of `GaugePhaseEquiv` at a fixed bond dim
+/-- Reformulation for the all-length `SameMPV₂` form. -/
+theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
+      GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) h) (P.basis j))
+          (Q.basis k) ∧
+      ¬ Tendsto (fun N : ℕ =>
+          mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
+        atTop (𝓝 0) :=
+  forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
+    (P := P) (Q := Q) hP hQ hUnitQ hEqual.toSameMPV₂Pos
+
+/-! ### Phase B-β local auxiliary lemmas: transitivity of `GaugePhaseEquiv` at a fixed bond dim
 
 The Phase B-β bijective-matching proof composes two gauge-phase
 equivalences `(P.basis j) ↔ (Q.basis k₁)` and `(P.basis j) ↔ (Q.basis k₂)`
@@ -317,12 +332,12 @@ both sides: `hUnitP : ∀ j, ∃ q, ‖μ_{j,q}^P‖ = 1` and `hUnitQ : ∀ k, �
 ‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 §II.C line 1182's
 projection argument and are taken as explicit theorem-level hypotheses
 here (CPSV16 §II.A line 246 records only the global unit witness). -/
-theorem bijective_match_of_sameMPV
+theorem bijective_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
     (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
       ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
         GaugePhaseEquiv
@@ -333,11 +348,10 @@ theorem bijective_match_of_sameMPV
           atTop (𝓝 0) := by
   classical
   have hFwd :=
-    forall_k_exists_j_nondecaying_overlap_of_sameMPV hP hQ hUnitQ hEqual
-  have hEqual_symm : SameMPV₂ Q.toTensor P.toTensor :=
-    fun N σ => (hEqual N σ).symm
+    forall_k_exists_j_nondecaying_overlap_of_sameMPVPos hP hQ hUnitQ hEqual
+  have hEqual_symm : SameMPV₂Pos Q.toTensor P.toTensor := hEqual.symm
   have hBwd :=
-    forall_k_exists_j_nondecaying_overlap_of_sameMPV hQ hP hUnitP hEqual_symm
+    forall_k_exists_j_nondecaying_overlap_of_sameMPVPos hQ hP hUnitP hEqual_symm
   let φ₀ : Fin Q.basisCount → Fin P.basisCount := fun k => (hFwd k).choose
   have φ₀_spec : ∀ k : Fin Q.basisCount,
       ∃ h : P.basisDim (φ₀ k) = Q.basisDim k,
@@ -420,6 +434,24 @@ theorem bijective_match_of_sameMPV
   refine ⟨β, ?_⟩
   intro k
   simpa [β] using φ₀_spec k
+
+/-- Reformulation for the all-length `SameMPV₂` form. -/
+theorem bijective_match_of_sameMPV
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
+      ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
+        GaugePhaseEquiv
+            (cast (congr_arg (MPSTensor d) h) (P.basis (β k)))
+            (Q.basis k) ∧
+        ¬ Tendsto (fun N : ℕ =>
+            mpvOverlap (d := d) (P.basis (β k)) (Q.basis k) N)
+          atTop (𝓝 0) :=
+  bijective_match_of_sameMPVPos
+    (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 
 end MPSTensor

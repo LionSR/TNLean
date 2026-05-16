@@ -35,7 +35,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- **Helper: gauge-phase data gives an MPV-level scalar-power identity with unit phase.**
+/-- **Auxiliary lemma: gauge-phase data gives an MPV-level scalar-power identity with unit phase.**
 
 Given a matched bond-dimension equality `h : P.basisDim j = Q.basisDim k`
 and a cast-left gauge-phase equivalence between `P.basis j` and `Q.basis k`,
@@ -73,7 +73,7 @@ private lemma extract_unit_gauge_phase_mpv
 
 /-- **CPSV16 §II.C lines 1187–1188, coefficient identity from fixed MPV phases.**
 
-This helper isolates the linear-independence part of the global-gauge
+This auxiliary lemma isolates the linear-independence part of the global-gauge
 substitution.  If a full basis bijection `β` has already been equipped with
 specific phases `ζ k` satisfying
 
@@ -89,10 +89,10 @@ function explicit.  Phase E uses it to keep the coefficient/weight comparison
 coupled to the same per-block gauge matrices that are later assembled into
 `X = ⊕_k (𝟙_{r_k} ⊗ X_k)`; this is the paper-faithful reading of CPSV16 §II.C
 lines 1187–1192. -/
-theorem coeff_identity_via_matched_mpv_phase
+theorem coeff_identity_via_matched_mpv_phasePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ)
     (hζ_mpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
@@ -113,8 +113,11 @@ theorem coeff_identity_via_matched_mpv_phase
   have hEq : ∀ᶠ N in atTop,
       ∑ j : Fin P.basisCount, a N j • mpvState (d := d) (P.basis j) N =
         ∑ j : Fin P.basisCount, b N j • mpvState (d := d) (P.basis j) N := by
-    refine Filter.Eventually.of_forall ?_
-    intro N
+    -- Under `SameMPV₂Pos`, the per-`N` MPV state identity is established only
+    -- for `N ≥ 1`; this eventual identity suffices for the downstream
+    -- `coefficient_eventually_eq_of_eventually_linearIndependent` consumer.
+    refine Filter.eventually_atTop.mpr ⟨1, ?_⟩
+    intro N hN
     have hPstate :
         mpvState (d := d) P.toTensor N =
           ∑ j : Fin P.basisCount, P.coeff N j •
@@ -134,7 +137,7 @@ theorem coeff_identity_via_matched_mpv_phase
     have hStateEq : mpvState (d := d) P.toTensor N = mpvState (d := d) Q.toTensor N := by
       apply PiLp.ext
       intro σ
-      simpa [mpvState_apply, mpv] using hEqual N σ
+      simpa [mpvState_apply, mpv] using hEqual N hN σ
     have hQsubst :
         (∑ k : Fin Q.basisCount, Q.coeff N k •
             mpvState (d := d) (Q.basis k) N) =
@@ -197,6 +200,20 @@ theorem coeff_identity_via_matched_mpv_phase
   have h := hN₀ N (le_of_lt hN) (β k)
   simpa [a, b] using h
 
+/-- Reformulation for the all-length `SameMPV₂` form. -/
+theorem coeff_identity_via_matched_mpv_phase
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (ζ : Fin Q.basisCount → ℂ)
+    (hζ_mpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ) :
+    ∀ k : Fin Q.basisCount, ∃ N₀, ∀ N > N₀,
+      P.coeff N (β k) = (ζ k) ^ N * Q.coeff N k :=
+  coeff_identity_via_matched_mpv_phasePos
+    (P := P) (Q := Q) hP hEqual.toSameMPV₂Pos β ζ hζ_mpv
+
 /-- **CPSV16 §II.C lines 1187–1188, full-basis coefficient identity.**
 
 Assume a full matched-basis equivalence `β : Fin Q.basisCount ≃
@@ -211,10 +228,10 @@ an eventual exact coefficient identity
 This is the formal counterpart of CPSV16 line 1188's exact power-sum
 comparison; it deliberately avoids the unsound asymptotic-difference to
 full-multiset route identified in the Phase B completion audit. -/
-theorem coeff_identity_via_global_gauge
+theorem coeff_identity_via_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv
@@ -252,8 +269,11 @@ theorem coeff_identity_via_global_gauge
   have hEq : ∀ᶠ N in atTop,
       ∑ j : Fin P.basisCount, a N j • mpvState (d := d) (P.basis j) N =
         ∑ j : Fin P.basisCount, b N j • mpvState (d := d) (P.basis j) N := by
-    refine Filter.Eventually.of_forall ?_
-    intro N
+    -- Under `SameMPV₂Pos`, the per-`N` MPV state identity is established only
+    -- for `N ≥ 1`; this eventual identity suffices for the downstream
+    -- `coefficient_eventually_eq_of_eventually_linearIndependent` consumer.
+    refine Filter.eventually_atTop.mpr ⟨1, ?_⟩
+    intro N hN
     have hPstate :
         mpvState (d := d) P.toTensor N =
           ∑ j : Fin P.basisCount, P.coeff N j •
@@ -273,7 +293,7 @@ theorem coeff_identity_via_global_gauge
     have hStateEq : mpvState (d := d) P.toTensor N = mpvState (d := d) Q.toTensor N := by
       apply PiLp.ext
       intro σ
-      simpa [mpvState_apply, mpv] using hEqual N σ
+      simpa [mpvState_apply, mpv] using hEqual N hN σ
     have hQsubst :
         (∑ k : Fin Q.basisCount, Q.coeff N k •
             mpvState (d := d) (Q.basis k) N) =
@@ -335,5 +355,19 @@ theorem coeff_identity_via_global_gauge
   intro N hN
   have h := hN₀ N (le_of_lt hN) (β k)
   simpa [a, b] using h
+
+/-- Reformulation for the all-length `SameMPV₂` form. -/
+theorem coeff_identity_via_global_gauge
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor)
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k)) :
+    ∀ k : Fin Q.basisCount, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∃ N₀, ∀ N > N₀,
+      P.coeff N (β k) = ζ ^ N * Q.coeff N k :=
+  coeff_identity_via_global_gaugePos
+    (P := P) (Q := Q) hP hQ hEqual.toSameMPV₂Pos β hMatch
 
 end MPSTensor
