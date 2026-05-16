@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem
 import TNLean.MPS.CanonicalForm.PhaseCover
-import TNLean.MPS.FundamentalTheorem.Multi
+import TNLean.MPS.SharedInfra.BlockGauge
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
