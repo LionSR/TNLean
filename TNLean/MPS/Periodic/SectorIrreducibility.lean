@@ -2,10 +2,10 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.CanonicalForm.SectorIrreducibility.ProjectionOrtho
-import TNLean.MPS.CanonicalForm.SectorIrreducibility.OrbitSum
-import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLiftCore
-import TNLean.MPS.CanonicalForm.SectorIrreducibility.HLift
+import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
+import TNLean.MPS.Periodic.SectorIrreducibility.OrbitSum
+import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
+import TNLean.MPS.Periodic.SectorIrreducibility.HLift
 
 /-!
 # Sector irreducibility helpers
