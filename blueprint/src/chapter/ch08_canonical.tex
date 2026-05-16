@@ -28,6 +28,71 @@ The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
 
+\section{Paper-faithful definitions}\label{sec:paper_faithful_defs}
+
+The strong predicates used elsewhere in this chapter
+(\texttt{IsCanonicalForm}, \texttt{IsNormalCanonicalForm},
+\texttt{IsCanonicalFormBNT}) bundle extra structure (left-canonical
+normalization, strict modulus ordering, one-copy-per-sector) beyond the
+literal source paper definitions. The Lean module
+\texttt{TNLean.MPS.CanonicalForm.PaperDefs} records the
+\emph{source-paper} predicates from~\cite{Cirac2017MPDO_AnnPhys}
+without strengthening, for use as the public anchors of the
+formalization.
+
+\begin{definition}[CPSV normal tensor (NT)]\label{def:nt_paper}
+	\lean{MPSTensor.IsNormalTensor}
+	\leanok
+	A tensor $A : \texttt{MPSTensor } d\, D$ is a \emph{normal tensor}
+	if (i)~$A$ admits no nontrivial invariant orthogonal projection
+	(\texttt{IsIrreducibleTensor}), and (ii)~its associated CPM
+	$\mathcal{E}_A(X) = \sum_i A^i X (A^i)^\dagger$ has a unique
+	eigenvalue of magnitude equal to its spectral radius which is
+	equal to one (\texttt{IsPrimitive (transferMap A)}, after
+	the spectral-radius normalization in
+	\cite[paragraph preceding the NT definition]{Cirac2017MPDO_AnnPhys}).
+\end{definition}
+
+\begin{definition}[CPSV canonical form (CF)]\label{def:cf_paper}
+	\lean{MPSTensor.IsCanonicalFormPaper}
+	\leanok
+	A tensor $A$ is in \emph{canonical form} if there is a finite family
+	of normal tensors $A_k : \texttt{MPSTensor } d\, D_k$ and weights
+	$\mu_k \in \mathbb{C}$ ($k = 1, \dots, r$) with
+	\[
+		A^i \;\cong\; \bigoplus_{k=1}^r \mu_k\, A_k^i
+	\]
+	in the sense that $A$ and the block-assembled tensor
+	$\texttt{toTensorFromBlocks}\,\mu\,A_\bullet$ generate the same
+	MPV family at every length, and the weights satisfy the
+	normalization $|\mu_k| \le 1$ for all $k$ and $|\mu_k| = 1$ for
+	at least one $k$.
+\end{definition}
+
+\begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_paper}
+	\lean{MPSTensor.IsBNTPaper}
+	\leanok
+	A finite family $\{A_j\}_{j=1}^g$ of normal tensors is a
+	\emph{basis of normal tensors} for $A$ if (i)~each $A_j$ is normal,
+	(ii)~for every $N$, the MPV family $V^{(N)}(A)$ is a linear
+	combination of $\{V^{(N)}(A_j)\}_j$, and (iii)~there exists $N_0$
+	such that for all $N > N_0$ the MPV states
+	$\texttt{mpvState}\,A_j\,N$ are linearly independent.
+\end{definition}
+
+\begin{remark}[Bridges]
+	The module ships a light bridge
+	\texttt{IsNormalTensor.of\_irreducible\_and\_primitive} that
+	packages an \texttt{IsIrreducibleTensor} witness with a
+	\texttt{IsPrimitive (transferMap A)} witness. CF-side and
+	BNT-side bridges to the strong predicates of this chapter
+	(\texttt{IsNormalCanonicalForm}, \texttt{IsBNT}) are not
+	provided in \texttt{PaperDefs.lean} because they require either
+	a fundamental-theorem-level dependency or the
+	algebraic-to-spectral normality implication, both of which live
+	in downstream layers.
+\end{remark}
+
 \section{Block-diagonal construction}
 
 \begin{remark}

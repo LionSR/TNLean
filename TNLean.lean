@@ -231,6 +231,7 @@ import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.CanonicalForm.PaperDefs
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
