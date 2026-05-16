@@ -38,15 +38,14 @@ phase-equivalent TP/primitive/irreducible blocks.
   pragmatic Phase C target (with the exact-`SameMPV₂` zero-tail and global
   rescaling issues quarantined behind the prepared-data hypotheses).
 
-## Layering note
+## Layering
 
-This module imports `TNLean.MPS.FundamentalTheorem.PaperBNT.Basic` from the
-`CanonicalForm` directory.  This bridges canonical-form prepared data into
-the `IsBNTCanonicalForm` contract that lives in the fundamental-theorem layer;
-the inversion is intentional and matches the inversion already present at
-`TNLean/MPS/CanonicalForm/PhaseCover.lean:6` and
-`TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean:8`.  It is to be resolved
-in a future SharedInfra reorganization.
+This module lives in the `FundamentalTheorem.PaperBNT.*` layer because it
+consumes both canonical-form data (`CanonicalForm.PhaseClassSectorData`) and
+the FT-side `IsBNTCanonicalForm` contract (`FundamentalTheorem.PaperBNT.Basic`).
+Placing it in `FundamentalTheorem.PaperBNT.Supplier` re-establishes the natural
+layering: `FundamentalTheorem.PaperBNT` is above `CanonicalForm`, so importing
+from both directions here is consistent with the overall layer order.
 -/
 
 open scoped Matrix BigOperators

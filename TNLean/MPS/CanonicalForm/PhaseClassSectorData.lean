@@ -33,7 +33,7 @@ variable {d : ℕ}
 /-- The concrete sector decomposition obtained from representatives of MPV phase classes.
 
 Made non-`private` so the prepared-block PaperBNT constructor
-(`TNLean.MPS.CanonicalForm.PaperBNTSupplier`) can construct an
+(`TNLean.MPS.FundamentalTheorem.PaperBNT.Supplier`) can construct an
 `IsBNTCanonicalForm P` directly on top of this concrete `P`, with full access
 to the underlying phase-class representatives. -/
 noncomputable def collapsedBntSectorDecomp

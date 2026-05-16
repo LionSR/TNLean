@@ -2921,3 +2921,139 @@ The remaining seven theorems are outside the formalization scope:
     \emph{Not formalized:} numerical and algorithmic recovery is entirely
     out of scope; the chapter addresses existence and uniqueness abstractly.
 \end{itemize}
+
+\subsection{PaperBNT supplier interface}%
+\label{subsec:paperbnt_supplier}
+
+The \emph{paper-faithful} BNT predicate \texttt{IsBNTCanonicalForm}
+(Chapter~\ref{ch:bnt}) represents the CPSV16 basis-of-normal-tensors data with
+full multiplicity and span fields.  Phase~C PR~1 of the
+formalization closed the \emph{prepared-block} direction of the supplier bridge:
+
+\begin{theorem}[Prepared-block PaperBNT constructor (Phase~C PR~1)]%
+  \label{thm:paperbnt_supplier_prepared}
+  \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks}
+  \leanok
+  Let $r \in \mathbb{N}$, let $\dim : \mathrm{Fin}\,r \to \mathbb{N}$,
+  let $\mu : \mathrm{Fin}\,r \to \mathbb{C}$, and let
+  $\mathrm{blocks}_k : \texttt{MPSTensor}\,d\,(\dim k)$ for $k < r$.
+  Assume:
+  \begin{enumerate}
+    \item \textbf{positive bond dimensions:} $0 < \dim k$ for all $k$,
+    \item \textbf{TP normalization:} each block satisfies
+          $\sum_i (\mathrm{blocks}_k^i)^\dagger\,\mathrm{blocks}_k^i = \Id$
+          (\texttt{IsLeftCanonical}),
+    \item \textbf{primitivity:} the transfer map $\mathcal{E}_{\mathrm{blocks}_k}$
+          is primitive for each $k$,
+    \item \textbf{irreducibility:} each block satisfies
+          \texttt{IsIrreducibleTensor},
+    \item \textbf{injectivity:} each block satisfies \texttt{IsInjective},
+    \item \textbf{nonzero weights:} $\mu_k \neq 0$ for all $k$,
+    \item \textbf{bounded weights:} $|\mu_k| \le 1$ for all $k$,
+    \item \textbf{global unit witness:} $\exists\,k,\;|\mu_k| = 1$.
+  \end{enumerate}
+  Then there exists a \texttt{SectorDecomposition} $P$ such that
+  \begin{itemize}
+    \item $P.\texttt{toTensor}$ and
+          $\texttt{toTensorFromBlocks}\,\mu\,\mathrm{blocks}$
+          generate the same MPV family at every length
+          (\texttt{SameMPV\textsubscript{2}}), and
+    \item $P$ satisfies \texttt{IsBNTCanonicalForm}.
+  \end{itemize}
+\end{theorem}
+
+\begin{proof}\leanok
+  The phase-class quotient collapses gauge-phase-equivalent blocks into
+  sectors with unit-modulus per-copy scalars (derived from the TP + primitive +
+  irreducible hypotheses via the MPV phase-class infrastructure).
+  The resulting sector decomposition inherits the BNT data fields from
+  \texttt{exists\_bnt\_sectorDecomp\_of\_tp\_primitive\_irr\_blocks};
+  the bounded-weight and global-unit hypotheses close the weight-norm fields
+  of \texttt{IsBNTCanonicalForm} directly.
+\end{proof}
+
+\begin{remark}[Arbitrary-input bridge: open formalization direction]%
+  \label{rem:arbitrary_input_bridge_gap}
+  Theorem~\ref{thm:paperbnt_supplier_prepared} requires eight
+  \emph{prepared-input} hypotheses; it does not supply a
+  \texttt{SectorDecomposition} starting from an arbitrary
+  \texttt{MPSTensor}.  Three independent obstacles block the
+  arbitrary-input bridge.
+
+  \begin{enumerate}
+    \item \textbf{Zero-tail bookkeeping.}
+      \texttt{SameMPV\textsubscript{2}} quantifies over all $N \ge 0$, so the
+      $N = 0$ clause reads $\dim(P.\texttt{toTensor}) = \dim(\text{input})$.
+      The arbitrary-input reduction naturally yields
+      \texttt{SameMPV\textsubscript{2}Pos} (equality for $N \ge 1$) together
+      with a separate length-zero dimension identity.  Bridging to exact
+      \texttt{SameMPV\textsubscript{2}} requires matching the zero-tail bond
+      dimension after pruning all-zero blocks, which fails once zero blocks
+      are removed by Theorem~\ref{thm:zero_block_separation}.
+
+    \item \textbf{Global weight normalization.}
+      \texttt{IsBNTCanonicalForm} requires $|\mu_k| \le 1$ for all $k$ and
+      $|\mu_k| = 1$ for some $k$.  These are normalization conventions, not
+      consequences of an arbitrary tensor.  For example, if the left-canonical
+      block $C$ has unit weight, the scaled input $A = 2 \cdot C$ produces
+      weights of modulus $2$, violating the bound.  The hypotheses
+      \texttt{hμLe} and \texttt{hμUnit} must therefore be supplied externally,
+      or the statement must be weakened to a rescaled form.
+
+    \item \textbf{Per-block unit-modulus witness.}
+      The field $\forall j,\;\exists q,\;|\mathrm{weight}\,j\,q| = 1$ is
+      intentionally kept as a theorem-level hypothesis in PaperBNT
+      (see \texttt{PaperBNT/Api.lean} and \texttt{PaperBNT/Fundamental.lean}).
+      For decaying sectors such as $C \oplus \tfrac{1}{2}D$, this field is
+      false: no weight of the $D$ sector has unit modulus.  The
+      formalization therefore treats it as an explicit assumption rather than
+      a consequence of the block decomposition.
+  \end{enumerate}
+
+  The partial-supplier path of Phase~C
+  (see \texttt{docs/audits/2026-05-16\_phase\_C\_feasibility\_gpt55.md}, \S5)
+  outlines a route to a positive-length, normalized-input,
+  per-block-unit-assumed supplier theorem that would formalize the
+  non-trivial content of BNT existence for a large class of inputs.
+  Closing the full gap for arbitrary tensors remains an open formalization
+  direction.
+\end{remark}
+
+\subsection{After-blocking material in other chapters}%
+\label{subsec:after_blocking_other_chapters}
+
+Several declarations physically defined in
+\texttt{TNLean/MPS/CanonicalForm/SectorComparison/} and related modules belong
+logically to the after-blocking fundamental-theorem pipeline rather than to
+the canonical-form reduction proper.  Their blueprint \texttt{\textbackslash lean\{\ldots\}} tags
+live in \Cref{ch:ft_proof} and \Cref{ch:after_blocking} to reflect this;
+Chapter~\ref{ch:canonical} does not claim them as canonical-form theorems.
+
+Representative examples (navigable via the tagged theorems in those chapters):
+\begin{itemize}
+  \item \texttt{afterBlocking\_commonPrimitiveIrreducibleBlocks\_of\_reindexedNonzeroParts}
+    (\Cref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed})~---
+    produces common TP/primitive/irreducible sector decompositions for two
+    same-MPV tensors; tagged in \Cref{ch:after_blocking}.
+
+  \item \texttt{afterBlocking\_commonLengthCommonSectorData\_of\_sameMPV\textsubscript{2}}
+    (\Cref{thm:ft_after_blocking_common_length_common_sector_data})~---
+    the main common-length after-blocking structural theorem; tagged in
+    \Cref{ch:after_blocking}.
+
+  \item \texttt{bilateral\_commonPeriod\_blocking\_tp\_primitive\_normal}
+    (\Cref{thm:common_period_two_tensors})~---
+    common blocking period for two primitive normal tensors; tagged in
+    \Cref{ch:after_blocking}.
+
+  \item \texttt{unconditional\_commonPrimitiveIrreducibleBlocks}
+    (\Cref{thm:after_blocking_unconditional_common_primitive_irr})~---
+    removes the reindexing pre-hypothesis from the above; tagged in
+    \Cref{ch:ft_proof}.
+\end{itemize}
+
+The physical co-location of these files with the canonical-form layer is an
+artifact of the build dependency order; a future refactor may move them to a
+dedicated after-blocking module.  Until then, readers should consult
+Chapters~\ref{ch:ft_proof} and~\ref{ch:after_blocking} for the
+after-blocking pipeline documentation.

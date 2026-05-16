@@ -227,6 +227,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
 import TNLean.MPS.FundamentalTheorem.PaperBNT.ProportionalMatch
+import TNLean.MPS.FundamentalTheorem.PaperBNT.Supplier
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
@@ -241,7 +242,6 @@ import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
-import TNLean.MPS.CanonicalForm.PaperBNTSupplier
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Periodic.Defs
