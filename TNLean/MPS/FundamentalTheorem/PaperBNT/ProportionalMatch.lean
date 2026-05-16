@@ -718,11 +718,11 @@ theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
       hP hQ k (hUnitQ k) j_w ⟨q_w, hq_w⟩ hProp
   exact ⟨j₁, hDim, hGE, hNonDecay⟩
 
-/-! ### Gauge-phase helpers for the bijective-matching argument
+/-! ### Gauge-phase auxiliary lemmas for the bijective-matching argument
 
 The bijection construction composes two gauge-phase equivalences through a
-common centre.  These local helpers replicate the cast-aware transitivity
-and symmetry results in `StrongMatch` (kept here as private helpers to
+common centre.  These local auxiliary lemmas replicate the cast-aware transitivity
+and symmetry results in `StrongMatch` (kept here as private auxiliary lemmas to
 respect the file lane). -/
 
 /-- Symmetry of `GaugePhaseEquiv` at a fixed bond dimension. -/
