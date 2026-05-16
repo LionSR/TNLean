@@ -112,7 +112,12 @@ noncomputable def flatBasis (P : SectorDecomposition d) :
     (s : Fin P.totalCopies) → MPSTensor d (P.flatDim s) :=
   fun s ↦ P.basis (P.flatIndexEquiv.symm s).1
 
-/-- Total bond dimension of the flattened block-diagonal tensor. -/
+/-- Total bond dimension of the flattened block-diagonal tensor.
+
+Marked `@[reducible]` so that `Fin P.totalDim` and `Fin (∑ s, P.flatDim s)`
+unify during type-class instance synthesis (needed for the literal
+`GaugeEquiv` packaging that compares matrices indexed by both forms). -/
+@[reducible]
 noncomputable def totalDim (P : SectorDecomposition d) : ℕ :=
   ∑ s : Fin P.totalCopies, P.flatDim s
 
@@ -288,6 +293,70 @@ theorem totalDim_eq_of_match
   change ∑ s' : Fin P.totalCopies, P.flatDim s' =
       ∑ s : Fin Q.totalCopies, Q.flatDim s
   rw [hreindex, hpoint]
+
+/-! ### Σ-level sector permutation between flattened bond-dimension indices
+
+The `sectorFlatEquiv` already permutes the flattened copy index
+`Fin Q.totalCopies ≃ Fin P.totalCopies` and `flatDim_sectorFlatEquiv` certifies
+that the per-flat-copy bond dimensions agree.  The next equivalence packages
+both pieces as a single permutation of the Σ-index that underlies
+`toTensor`/`toTensorFromBlocks`, and induces an equivalence on
+`Fin · .totalDim`.  Both are needed to convert the matched-coordinate gauge
+equation of CPSV16 lines 1189–1192 into the literal cast-of-`P.toTensor`
+form of the II_cor2 statement (CPSV16 §II.C lines 354–361). -/
+
+/-- The Σ-level permutation `Σ s, Fin (Q.flatDim s) ≃ Σ k, Fin (P.flatDim k)`
+induced by the matched basis bijection $β$, copy permutations $τ_k$ and
+matched bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$.
+
+CPSV16 §II.C lines 354–361 / 1184–1192. -/
+noncomputable def sectorFlatSigmaEquiv
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
+    ((s : Fin Q.totalCopies) × Fin (Q.flatDim s)) ≃
+      ((k : Fin P.totalCopies) × Fin (P.flatDim k)) :=
+  Equiv.sigmaCongr (sectorFlatEquiv (P := P) (Q := Q) β τ)
+    (fun s => finCongr
+      (flatDim_sectorFlatEquiv (P := P) (Q := Q) β hDim τ s).symm)
+
+@[simp]
+theorem sectorFlatSigmaEquiv_apply
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+    (s : Fin Q.totalCopies) (m : Fin (Q.flatDim s)) :
+    sectorFlatSigmaEquiv (P := P) (Q := Q) β hDim τ ⟨s, m⟩ =
+      ⟨sectorFlatEquiv (P := P) (Q := Q) β τ s,
+        finCongr (flatDim_sectorFlatEquiv (P := P) (Q := Q) β hDim τ s).symm m⟩ := by
+  rfl
+
+/-- The dim-level equivalence `Fin Q.totalDim ≃ Fin P.totalDim` induced by the
+matched flattened sector data.
+
+CPSV16 §II.C lines 354–361 / 1184–1192. -/
+noncomputable def sectorFlatDimEquiv
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
+    Fin Q.totalDim ≃ Fin P.totalDim :=
+  (finSigmaFinEquiv (m := Q.totalCopies) (n := Q.flatDim)).symm.trans
+    ((sectorFlatSigmaEquiv (P := P) (Q := Q) β hDim τ).trans
+      (finSigmaFinEquiv (m := P.totalCopies) (n := P.flatDim)))
+
+theorem sectorFlatDimEquiv_apply
+    {d : ℕ} {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+    (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+    (j : Fin Q.totalDim) :
+    sectorFlatDimEquiv (P := P) (Q := Q) β hDim τ j =
+      finSigmaFinEquiv (sectorFlatSigmaEquiv (P := P) (Q := Q) β hDim τ
+        (finSigmaFinEquiv.symm j)) := by
+  rfl
 
 end SectorDecomposition
 
