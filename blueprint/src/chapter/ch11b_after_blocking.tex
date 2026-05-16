@@ -139,7 +139,7 @@ theorems.
 	normality are both preserved under blocking.
 \end{proof}
 
-\begin{theorem}[Structural after-blocking form of the fundamental theorem]%
+\begin{theorem}[Structural after-blocking decomposition]%
 	\label{thm:ft_after_blocking_structural}
 	\lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
 	\leanok
@@ -168,6 +168,16 @@ theorems.
 	\uses{thm:tp_primitive_blockdecomp}
 	Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
 \end{proof}
+
+\begin{remark}[Structural after-blocking decomposition; not the FT block-matching theorem]
+  This theorem produces, for each of the two same-MPV tensors independently,
+  a TP/primitive/left-canonical block decomposition after blocking.  It does
+  \emph{not} derive any block matching, gauge equivalence, or phases between
+  the two decompositions; those are produced by the subsequent common-sector
+  pipeline in this chapter.  It is structural scaffolding for the FT proof,
+  not the multi-block fundamental theorem of
+  \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}.
+\end{remark}
 
 \begin{theorem}[Zero-tail decomposition after blocking]%
 	\label{thm:zero_tail_decomp_block_tensor}

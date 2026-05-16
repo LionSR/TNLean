@@ -116,6 +116,16 @@ formalization.
 	(Theorem~\ref{thm:ft_single}) to each block independently.
 \end{proof}
 
+\begin{remark}[Structural scaffolding, not the multi-block paper theorem]
+  This is a block-sum assembly of the per-block injective single-block FT:
+  it assumes the block pairing $(A_k, B_k)$ is already given and that the
+  blocks have been pre-matched.  It is \emph{not} the CPSV16 / TN-Review
+  multi-block fundamental theorem, which derives the block matching and
+  permutation from only the global same-MPV hypothesis
+  (see \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}).
+  This declaration is structural scaffolding for the FT proof pipeline.
+\end{remark}
+
 \begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
@@ -132,6 +142,12 @@ formalization.
 	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
+\begin{remark}[Direct-sum congruence helper]
+  This is a direct-sum congruence lemma: it lifts per-block MPV equality to
+  global MPV equality via the block-diagonal decomposition formula.
+  It is a helper result, not a paper-level theorem.
+\end{remark}
+
 \begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
@@ -147,6 +163,15 @@ formalization.
 	equivalences from injectivity and equality of MPV families, then
 	combine them into a global gauge for the block-diagonal tensors.
 \end{proof}
+
+\begin{remark}[Block-diagonal gauge assembly, not the FT block-matching theorem]
+  This assembles per-block gauges into a block-diagonal gauge for the global
+  assembled tensor, \emph{given pre-matched same-index blocks}.  It is
+  \emph{not} the FT block-matching theorem: it does not derive the block
+  pairing or permutation from a global same-MPV hypothesis; the block
+  correspondence is assumed in advance.  This declaration is structural
+  scaffolding consumed by the FT proof pipeline in Chapter~\ref{ch:ft_proof}.
+\end{remark}
 
 \section{Transfer map normalization}
 
@@ -523,6 +548,16 @@ per-block peripheral-spectrum primitivity.
 	$O_{A_k A_k}(N) \to 1$.
 \end{proof}
 
+\begin{remark}[Prepared-data constructor; not the arbitrary-input CF theorem]
+  This is a \emph{constructor}: it packages prepared primitive-block data
+  into the \texttt{IsCanonicalForm} predicate.  It is \emph{not} the
+  full TI canonical-form existence theorem of
+  \cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix} or
+  \cite[Section~IV.A.1]{Cirac2021Matrix}, which starts from an arbitrary
+  input tensor and produces the decomposition.  This result is illustrative
+  and not consumed downstream in the FT pipeline.
+\end{remark}
+
 \begin{theorem}[Canonical form from peripheral primitivity]%
 	\label{thm:canonical_from_primitive}
 	\lean{MPSTensor.isCanonicalForm_of_peripheralPrimitive}
@@ -575,6 +610,16 @@ per-block peripheral-spectrum primitivity.
 	Since this holds for every block, the overlap clause required in
 	Definition~\ref{def:is_canonical_form} follows from the other hypotheses.
 \end{proof}
+
+\begin{remark}[Prepared peripheral-primitive constructor; not consumed downstream]
+  This is a \emph{constructor} that packages prepared peripheral-primitive
+  block data into \texttt{IsCanonicalForm}.  Like
+  Theorem~\ref{thm:canonical_from_primitive_fixedpoint}, it assumes the
+  blocks are already given in the correct normalized form; it is
+  \emph{not} the arbitrary-input TI canonical-form existence theorem.
+  This result is illustrative; it is not consumed by the subsequent FT or
+  BNT pipeline.
+\end{remark}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
 	Theorem~\ref{thm:canonical_from_primitive} shows that
@@ -924,6 +969,18 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		reordered family satisfies Definition~\ref{def:is_normal_canonical_form}
 		and generates the same MPV family as~$A$.
 \end{proof}
+
+\begin{remark}[Prepared-data NCF constructor; distinguished from CPSV16 CF existence]
+  This is a \emph{constructor} that packages prepared primitive block data
+  into \texttt{IsNormalCanonicalForm}: all six hypotheses are assumed in
+  advance; the theorem merely re-orders the blocks and attaches the predicate.
+  It is \emph{not} the arbitrary-input canonical-form existence theorem of
+  \cite[lines~237--250]{Cirac2017MPDO_AnnPhys} (equivalently
+  \cite[MPDO, lines~249--250]{Cirac2017MPDO_AnnPhys}), which starts from
+  an arbitrary tensor and derives the primitive block structure.  That
+  arbitrary-input direction is the open formalization gap documented in
+  Section~\ref{subsec:paperbnt_supplier}.
+\end{remark}
 
 \section{Zero-block separation}%
 \label{sec:zero_block_separation}
