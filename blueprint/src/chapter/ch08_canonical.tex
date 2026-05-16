@@ -3026,28 +3026,28 @@ Several declarations physically defined in
 \texttt{TNLean/MPS/CanonicalForm/SectorComparison/} and related modules belong
 logically to the after-blocking fundamental-theorem pipeline rather than to
 the canonical-form reduction proper.  Their blueprint \texttt{\textbackslash lean\{\ldots\}} tags
-live in \Cref{ch:ft_proof} and \Cref{ch:after_blocking} to reflect this;
-Chapter~\ref{ch:canonical} does not claim them as canonical-form theorems.
+live in \Cref{ch:ft_proof} and \Cref{ch:canonical_after_blocking} to reflect
+this; Chapter~\ref{ch:canonical} does not claim them as canonical-form theorems.
 
 Representative examples (navigable via the tagged theorems in those chapters):
 \begin{itemize}
   \item \texttt{afterBlocking\_commonPrimitiveIrreducibleBlocks\_of\_reindexedNonzeroParts}
     (\Cref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed})~---
     produces common TP/primitive/irreducible sector decompositions for two
-    same-MPV tensors; tagged in \Cref{ch:after_blocking}.
+    same-MPV tensors; tagged in \Cref{ch:canonical_after_blocking}.
 
   \item \texttt{afterBlocking\_commonLengthCommonSectorData\_of\_sameMPV\textsubscript{2}}
-    (\Cref{thm:ft_after_blocking_common_length_common_sector_data})~---
+    (\Cref{thm:ft_after_blocking_common_length_common_sector_theorem})~---
     the main common-length after-blocking structural theorem; tagged in
-    \Cref{ch:after_blocking}.
+    \Cref{ch:canonical_after_blocking}.
 
   \item \texttt{bilateral\_commonPeriod\_blocking\_tp\_primitive\_normal}
     (\Cref{thm:common_period_two_tensors})~---
     common blocking period for two primitive normal tensors; tagged in
-    \Cref{ch:after_blocking}.
+    \Cref{ch:canonical_after_blocking}.
 
   \item \texttt{unconditional\_commonPrimitiveIrreducibleBlocks}
-    (\Cref{thm:after_blocking_unconditional_common_primitive_irr})~---
+    (\Cref{thm:unconditional_common_primitive_irreducible_blocks})~---
     removes the reindexing pre-hypothesis from the above; tagged in
     \Cref{ch:ft_proof}.
 \end{itemize}
@@ -3055,5 +3055,5 @@ Representative examples (navigable via the tagged theorems in those chapters):
 The physical co-location of these files with the canonical-form layer is an
 artifact of the build dependency order; a future refactor may move them to a
 dedicated after-blocking module.  Until then, readers should consult
-Chapters~\ref{ch:ft_proof} and~\ref{ch:after_blocking} for the
+Chapters~\ref{ch:ft_proof} and~\ref{ch:canonical_after_blocking} for the
 after-blocking pipeline documentation.
