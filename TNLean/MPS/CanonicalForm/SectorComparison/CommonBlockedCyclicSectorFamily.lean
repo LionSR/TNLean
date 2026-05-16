@@ -101,16 +101,6 @@ noncomputable def flatKey (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : (k : Fin r) × Fin (F.period k) :=
   finSigmaFinEquiv.symm x
 
-/-- Encode one original block and one of its cyclic sectors as a flattened sector index. -/
-noncomputable def flatIndexOf (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) : Fin (∑ k : Fin r, F.period k) :=
-  finSigmaFinEquiv (Sigma.mk k s)
-
-/-- The flattened sector chosen as the representative for one original block. -/
-noncomputable def flatRepresentativeIndex (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) : Fin (∑ k : Fin r, F.period k) :=
-  F.flatIndexOf k ⟨0, F.period_pos k⟩
-
 /-- The flattened sectors produced by `CommonBlockedCyclicSectorFamily` carry unit weights. -/
 def flatWeight (F : CommonBlockedCyclicSectorFamily blocks) :
     Fin (∑ k : Fin r, F.period k) → ℂ :=

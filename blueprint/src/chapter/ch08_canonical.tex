@@ -28,6 +28,71 @@ The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
 
+\section{Paper-faithful definitions}\label{sec:paper_faithful_defs}
+
+The strong predicates used elsewhere in this chapter
+(\texttt{IsCanonicalForm}, \texttt{IsNormalCanonicalForm},
+\texttt{IsCanonicalFormBNT}) bundle extra structure (left-canonical
+normalization, strict modulus ordering, one-copy-per-sector) beyond the
+literal source paper definitions. The Lean module
+\texttt{TNLean.MPS.CanonicalForm.PaperDefs} records the
+\emph{source-paper} predicates from~\cite{Cirac2017MPDO_AnnPhys}
+without strengthening, for use as the public anchors of the
+formalization.
+
+\begin{definition}[CPSV normal tensor (NT)]\label{def:nt_paper}
+	\lean{MPSTensor.IsNormalTensor}
+	\leanok
+	A tensor $A : \texttt{MPSTensor } d\, D$ is a \emph{normal tensor}
+	if (i)~$A$ admits no nontrivial invariant orthogonal projection
+	(\texttt{IsIrreducibleTensor}), and (ii)~its associated CPM
+	$\mathcal{E}_A(X) = \sum_i A^i X (A^i)^\dagger$ has a unique
+	eigenvalue of magnitude equal to its spectral radius which is
+	equal to one (\texttt{IsPrimitive (transferMap A)}, after
+	the spectral-radius normalization in
+	\cite[paragraph preceding the NT definition]{Cirac2017MPDO_AnnPhys}).
+\end{definition}
+
+\begin{definition}[CPSV canonical form (CF)]\label{def:cf_paper}
+	\lean{MPSTensor.IsCanonicalFormPaper}
+	\leanok
+	A tensor $A$ is in \emph{canonical form} if there is a finite family
+	of normal tensors $A_k : \texttt{MPSTensor } d\, D_k$ and weights
+	$\mu_k \in \mathbb{C}$ ($k = 1, \dots, r$) with
+	\[
+		A^i \;\cong\; \bigoplus_{k=1}^r \mu_k\, A_k^i
+	\]
+	in the sense that $A$ and the block-assembled tensor
+	$\texttt{toTensorFromBlocks}\,\mu\,A_\bullet$ generate the same
+	MPV family at every length, and the weights satisfy the
+	normalization $|\mu_k| \le 1$ for all $k$ and $|\mu_k| = 1$ for
+	at least one $k$.
+\end{definition}
+
+\begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_paper}
+	\lean{MPSTensor.IsBNTPaper}
+	\leanok
+	A finite family $\{A_j\}_{j=1}^g$ of normal tensors is a
+	\emph{basis of normal tensors} for $A$ if (i)~each $A_j$ is normal,
+	(ii)~for every $N$, the MPV family $V^{(N)}(A)$ is a linear
+	combination of $\{V^{(N)}(A_j)\}_j$, and (iii)~there exists $N_0$
+	such that for all $N > N_0$ the MPV states
+	$\texttt{mpvState}\,A_j\,N$ are linearly independent.
+\end{definition}
+
+\begin{remark}[Bridges]
+	The module ships a light bridge
+	\texttt{IsNormalTensor.of\_irreducible\_and\_primitive} that
+	packages an \texttt{IsIrreducibleTensor} witness with a
+	\texttt{IsPrimitive (transferMap A)} witness. CF-side and
+	BNT-side bridges to the strong predicates of this chapter
+	(\texttt{IsNormalCanonicalForm}, \texttt{IsBNT}) are not
+	provided in \texttt{PaperDefs.lean} because they require either
+	a fundamental-theorem-level dependency or the
+	algebraic-to-spectral normality implication, both of which live
+	in downstream layers.
+\end{remark}
+
 \section{Block-diagonal construction}
 
 \begin{remark}
@@ -51,6 +116,16 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	(Theorem~\ref{thm:ft_single}) to each block independently.
 \end{proof}
 
+\begin{remark}[Structural scaffolding, not the multi-block paper theorem]
+  This is a block-sum assembly of the per-block injective single-block FT:
+  it assumes the block pairing $(A_k, B_k)$ is already given and that the
+  blocks have been pre-matched.  It is \emph{not} the CPSV16 / TN-Review
+  multi-block fundamental theorem, which derives the block matching and
+  permutation from only the global same-MPV hypothesis
+  (see \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}).
+  This declaration is structural scaffolding for the FT proof pipeline.
+\end{remark}
+
 \begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
 	\lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
 	\leanok
@@ -67,6 +142,12 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	Per-block equality of MPV coefficients gives global equality.
 \end{proof}
 
+\begin{remark}[Direct-sum congruence helper]
+  This is a direct-sum congruence lemma: it lifts per-block MPV equality to
+  global MPV equality via the block-diagonal decomposition formula.
+  It is a helper result, not a paper-level theorem.
+\end{remark}
+
 \begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
 	\lean{MPSTensor.fundamentalTheorem_multiBlock_global}
 	\leanok
@@ -82,6 +163,15 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 	equivalences from injectivity and equality of MPV families, then
 	combine them into a global gauge for the block-diagonal tensors.
 \end{proof}
+
+\begin{remark}[Block-diagonal gauge assembly, not the FT block-matching theorem]
+  This assembles per-block gauges into a block-diagonal gauge for the global
+  assembled tensor, \emph{given pre-matched same-index blocks}.  It is
+  \emph{not} the FT block-matching theorem: it does not derive the block
+  pairing or permutation from a global same-MPV hypothesis; the block
+  correspondence is assumed in advance.  This declaration is structural
+  scaffolding consumed by the FT proof pipeline in Chapter~\ref{ch:ft_proof}.
+\end{remark}
 
 \section{Transfer map normalization}
 
@@ -458,6 +548,16 @@ per-block peripheral-spectrum primitivity.
 	$O_{A_k A_k}(N) \to 1$.
 \end{proof}
 
+\begin{remark}[Prepared-data constructor; not the arbitrary-input CF theorem]
+  This is a \emph{constructor}: it packages prepared primitive-block data
+  into the \texttt{IsCanonicalForm} predicate.  It is \emph{not} the
+  full TI canonical-form existence theorem of
+  \cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix} or
+  \cite[Section~IV.A.1]{Cirac2021Matrix}, which starts from an arbitrary
+  input tensor and produces the decomposition.  This result is illustrative
+  and not consumed downstream in the FT pipeline.
+\end{remark}
+
 \begin{theorem}[Canonical form from peripheral primitivity]%
 	\label{thm:canonical_from_primitive}
 	\lean{MPSTensor.isCanonicalForm_of_peripheralPrimitive}
@@ -510,6 +610,16 @@ per-block peripheral-spectrum primitivity.
 	Since this holds for every block, the overlap clause required in
 	Definition~\ref{def:is_canonical_form} follows from the other hypotheses.
 \end{proof}
+
+\begin{remark}[Prepared peripheral-primitive constructor; not consumed downstream]
+  This is a \emph{constructor} that packages prepared peripheral-primitive
+  block data into \texttt{IsCanonicalForm}.  Like
+  Theorem~\ref{thm:canonical_from_primitive_fixedpoint}, it assumes the
+  blocks are already given in the correct normalized form; it is
+  \emph{not} the arbitrary-input TI canonical-form existence theorem.
+  This result is illustrative; it is not consumed by the subsequent FT or
+  BNT pipeline.
+\end{remark}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
 	Theorem~\ref{thm:canonical_from_primitive} shows that
@@ -859,6 +969,18 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		reordered family satisfies Definition~\ref{def:is_normal_canonical_form}
 		and generates the same MPV family as~$A$.
 \end{proof}
+
+\begin{remark}[Prepared-data NCF constructor; distinguished from CPSV16 CF existence]
+  This is a \emph{constructor} that packages prepared primitive block data
+  into \texttt{IsNormalCanonicalForm}: all six hypotheses are assumed in
+  advance; the theorem merely re-orders the blocks and attaches the predicate.
+  It is \emph{not} the arbitrary-input canonical-form existence theorem of
+  \cite[lines~237--250]{Cirac2017MPDO_AnnPhys} (equivalently
+  \cite[MPDO, lines~249--250]{Cirac2017MPDO_AnnPhys}), which starts from
+  an arbitrary tensor and derives the primitive block structure.  That
+  arbitrary-input direction is the open formalization gap documented in
+  Section~\ref{subsec:paperbnt_supplier}.
+\end{remark}
 
 \section{Zero-block separation}%
 \label{sec:zero_block_separation}
@@ -2778,3 +2900,217 @@ see in particular
 	the basis-of-normal-tensors and multiplicity comparison developed later, rather
 	than an artificial separation of equal weight norms.
 \end{remark}
+
+\subsection{Out-of-scope PGVWC06 theorems}%
+\label{subsec:pgvwc06_out_of_scope}
+
+This chapter follows the modern presentation of~\cite{Cirac2017MPDO_AnnPhys}
+and~\cite{Cirac2021Matrix}, which is better aligned with the Lean
+formalization architecture (TI site-independent tensors, transfer-map
+primitivity, and CPM fixed-point normalization).
+The 2007 preprint~\cite{PerezGarcia2007Matrix} contains eight named theorems
+in its canonical-form section~\S III (lines~399--1177 of \texttt{MPSarchive.tex}).
+Theorem~\texttt{Th:TIcanonical} has a partial, conditional counterpart here;
+the opening paragraphs of this chapter state that scope limitation explicitly.
+The remaining seven theorems are outside the formalization scope:
+
+\begin{itemize}
+  \item \textbf{Thm.~\texttt{OBC-Vidal} (lines~431--443): completeness and
+    OBC canonical form.}
+    Any pure state admits an OBC-MPS representation of bond dimension
+    $D\le d^{\lfloor N/2\rfloor}$ with simultaneous left-normalization and
+    a positive full-rank diagonal interleaving matrix~$\Lambda^{[m]}$.
+    \emph{Not formalized:} the chapter starts from a site-independent TI
+    tensor; constructing the finite-OBC Schmidt canonical form requires a
+    site-dependent Chain layer not present in this development.
+
+  \item \textbf{Thm.~\texttt{free-OBC} (lines~466--486): OBC representation
+    freedom.}
+    Every OBC-MPS $\{B^{[m]}_i\}$ is related to the canonical one by
+    site-local invertible gauge matrices $Y_j,Z_j$ with $Y_j Z_j = \mathbf{1}$.
+    \emph{Not formalized:} same reason as \texttt{OBC-Vidal}; local-gauge
+    analysis for site-dependent open-boundary matrices is outside the TI-MPS
+    scope.
+
+  \item \textbf{Thm.\ ``Site-independent matrices'' (lines~620--630).}
+    Every TI pure state with PBC on a finite ring of $N$ sites has a
+    site-independent MPS representation; a bond-$D$ OBC representation
+    lifts to one at bond dimension at most~$ND$.
+    \emph{Not formalized:} the chapter assumes a site-independent MPV tensor
+    as input; the block-circulant construction producing it is out of scope.
+
+  \item \textbf{Thm.~\texttt{Th:periodic} (lines~849--858): periodic
+    decomposition.}
+    If the transfer map of a single-block TI canonical MPS has $p$
+    eigenvalues of modulus~$1$, the state is a superposition of $p$
+    $p$-periodic states of bond dimension~$D$, and vanishes when $p \nmid N$.
+    \emph{Partially formalized:} the cyclic-sector machinery of
+    \cref{sec:cyclic_sectors} (\cref{thm:cyclic_sector_decomp_after_blocking})
+    removes the period and yields primitive sector tensors, but the explicit
+    state-vector decomposition into $p$-periodic summands is not separately
+    stated.
+
+  \item \textbf{Thm.\ ``Interpretation of $\Lambda$'' (lines~987--993).}
+    Under condition~C2, the eigenvalues of the half-chain reduced density
+    operator converge as $N\to\infty$ to $\Lambda\otimes\Lambda$ with
+    $\Lambda$ from Theorem~\texttt{Th:TIcanonical}.
+    \emph{Not formalized:} \cref{thm:CFII_data} produces $\Lambda$, but the
+    asymptotic eigenvalue statement requires correlation-length and entropy
+    material outside the scope of this chapter.
+
+  \item \textbf{Thm.~\texttt{thm-uniq} (lines~1002--1015): uniqueness of
+    the canonical form.}
+    Under condition~C1 with unique OBC canonical form, two TI canonical
+    $D$-MPS representations of the same state satisfy $B_i = U C_i U^\dagger$
+    for a global unitary~$U$.
+    \emph{Not formalized in this chapter:} a modern analogue is proved in
+    Chapter~\ref{ch:ft_proof} as
+    \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge};
+    the original finite-ring uniqueness of~\cite{PerezGarcia2007Matrix}
+    under C1/C2 and $N > 2L_0 + D^4$ is not covered here.
+
+  \item \textbf{Thm.\ ``Obtaining the TI canonical form''
+    (lines~1154--1165).}
+    The site-independent $D\times D$ matrices can be recovered from an OBC
+    canonical form by solving an $N$-independent system~(S) of $O(D^8)$
+    quadratic equations; every solution is related to the canonical form by
+    a global unitary.
+    \emph{Not formalized:} numerical and algorithmic recovery is entirely
+    out of scope; the chapter addresses existence and uniqueness abstractly.
+\end{itemize}
+
+\subsection{PaperBNT supplier interface}%
+\label{subsec:paperbnt_supplier}
+
+The \emph{paper-faithful} BNT predicate \texttt{IsBNTCanonicalForm}
+(Chapter~\ref{ch:bnt}) represents the CPSV16 basis-of-normal-tensors data with
+full multiplicity and span fields.  Phase~C PR~1 of the
+formalization closed the \emph{prepared-block} direction of the supplier bridge:
+
+\begin{theorem}[Prepared-block PaperBNT constructor (Phase~C PR~1)]%
+  \label{thm:paperbnt_supplier_prepared}
+  \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks}
+  \leanok
+  Let $r \in \mathbb{N}$, let $\dim : \mathrm{Fin}\,r \to \mathbb{N}$,
+  let $\mu : \mathrm{Fin}\,r \to \mathbb{C}$, and let
+  $\mathrm{blocks}_k : \texttt{MPSTensor}\,d\,(\dim k)$ for $k < r$.
+  Assume:
+  \begin{enumerate}
+    \item \textbf{positive bond dimensions:} $0 < \dim k$ for all $k$,
+    \item \textbf{TP normalization:} each block satisfies
+          $\sum_i (\mathrm{blocks}_k^i)^\dagger\,\mathrm{blocks}_k^i = \Id$
+          (\texttt{IsLeftCanonical}),
+    \item \textbf{primitivity:} the transfer map $\mathcal{E}_{\mathrm{blocks}_k}$
+          is primitive for each $k$,
+    \item \textbf{irreducibility:} each block satisfies
+          \texttt{IsIrreducibleTensor},
+    \item \textbf{injectivity:} each block satisfies \texttt{IsInjective},
+    \item \textbf{nonzero weights:} $\mu_k \neq 0$ for all $k$,
+    \item \textbf{bounded weights:} $|\mu_k| \le 1$ for all $k$,
+    \item \textbf{global unit witness:} $\exists\,k,\;|\mu_k| = 1$.
+  \end{enumerate}
+  Then there exists a \texttt{SectorDecomposition} $P$ such that
+  \begin{itemize}
+    \item $P.\texttt{toTensor}$ and
+          $\texttt{toTensorFromBlocks}\,\mu\,\mathrm{blocks}$
+          generate the same MPV family at every length
+          (\texttt{SameMPV\textsubscript{2}}), and
+    \item $P$ satisfies \texttt{IsBNTCanonicalForm}.
+  \end{itemize}
+\end{theorem}
+
+\begin{proof}\leanok
+  The phase-class quotient collapses gauge-phase-equivalent blocks into
+  sectors with unit-modulus per-copy scalars (derived from the TP + primitive +
+  irreducible hypotheses via the MPV phase-class infrastructure).
+  The resulting sector decomposition inherits the BNT data fields from
+  \texttt{exists\_bnt\_sectorDecomp\_of\_tp\_primitive\_irr\_blocks};
+  the bounded-weight and global-unit hypotheses close the weight-norm fields
+  of \texttt{IsBNTCanonicalForm} directly.
+\end{proof}
+
+\begin{remark}[Arbitrary-input bridge: open formalization direction]%
+  \label{rem:arbitrary_input_bridge_gap}
+  Theorem~\ref{thm:paperbnt_supplier_prepared} requires eight
+  \emph{prepared-input} hypotheses; it does not supply a
+  \texttt{SectorDecomposition} starting from an arbitrary
+  \texttt{MPSTensor}.  Three independent obstacles block the
+  arbitrary-input bridge.
+
+  \begin{enumerate}
+    \item \textbf{Zero-tail bookkeeping.}
+      \texttt{SameMPV\textsubscript{2}} quantifies over all $N \ge 0$, so the
+      $N = 0$ clause reads $\dim(P.\texttt{toTensor}) = \dim(\text{input})$.
+      The arbitrary-input reduction naturally yields
+      \texttt{SameMPV\textsubscript{2}Pos} (equality for $N \ge 1$) together
+      with a separate length-zero dimension identity.  Bridging to exact
+      \texttt{SameMPV\textsubscript{2}} requires matching the zero-tail bond
+      dimension after pruning all-zero blocks, which fails once zero blocks
+      are removed by Theorem~\ref{thm:zero_block_separation}.
+
+    \item \textbf{Global weight normalization.}
+      \texttt{IsBNTCanonicalForm} requires $|\mu_k| \le 1$ for all $k$ and
+      $|\mu_k| = 1$ for some $k$.  These are normalization conventions, not
+      consequences of an arbitrary tensor.  For example, if the left-canonical
+      block $C$ has unit weight, the scaled input $A = 2 \cdot C$ produces
+      weights of modulus $2$, violating the bound.  The hypotheses
+      \texttt{hμLe} and \texttt{hμUnit} must therefore be supplied externally,
+      or the statement must be weakened to a rescaled form.
+
+    \item \textbf{Per-block unit-modulus witness.}
+      The field $\forall j,\;\exists q,\;|\mathrm{weight}\,j\,q| = 1$ is
+      intentionally kept as a theorem-level hypothesis in PaperBNT
+      (see \texttt{PaperBNT/Api.lean} and \texttt{PaperBNT/Fundamental.lean}).
+      For decaying sectors such as $C \oplus \tfrac{1}{2}D$, this field is
+      false: no weight of the $D$ sector has unit modulus.  The
+      formalization therefore treats it as an explicit assumption rather than
+      a consequence of the block decomposition.
+  \end{enumerate}
+
+  The partial-supplier path of Phase~C
+  (see \texttt{docs/audits/2026-05-16\_phase\_C\_feasibility\_gpt55.md}, \S5)
+  outlines a route to a positive-length, normalized-input,
+  per-block-unit-assumed supplier theorem that would formalize the
+  non-trivial content of BNT existence for a large class of inputs.
+  Closing the full gap for arbitrary tensors remains an open formalization
+  direction.
+\end{remark}
+
+\subsection{After-blocking material in other chapters}%
+\label{subsec:after_blocking_other_chapters}
+
+Several declarations physically defined in
+\texttt{TNLean/MPS/CanonicalForm/SectorComparison/} and related modules belong
+logically to the after-blocking fundamental-theorem pipeline rather than to
+the canonical-form reduction proper.  Their blueprint \texttt{\textbackslash lean\{\ldots\}} tags
+live in \Cref{ch:ft_proof} and \Cref{ch:canonical_after_blocking} to reflect
+this; Chapter~\ref{ch:canonical} does not claim them as canonical-form theorems.
+
+Representative examples (navigable via the tagged theorems in those chapters):
+\begin{itemize}
+  \item \texttt{afterBlocking\_commonPrimitiveIrreducibleBlocks\_of\_reindexedNonzeroParts}
+    (\Cref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed})~---
+    produces common TP/primitive/irreducible sector decompositions for two
+    same-MPV tensors; tagged in \Cref{ch:canonical_after_blocking}.
+
+  \item \texttt{afterBlocking\_commonLengthCommonSectorData\_of\_sameMPV\textsubscript{2}}
+    (\Cref{thm:ft_after_blocking_common_length_common_sector_theorem})~---
+    the main common-length after-blocking structural theorem; tagged in
+    \Cref{ch:canonical_after_blocking}.
+
+  \item \texttt{bilateral\_commonPeriod\_blocking\_tp\_primitive\_normal}
+    (\Cref{thm:common_period_two_tensors})~---
+    common blocking period for two primitive normal tensors; tagged in
+    \Cref{ch:canonical_after_blocking}.
+
+  \item \texttt{unconditional\_commonPrimitiveIrreducibleBlocks}
+    (\Cref{thm:unconditional_common_primitive_irreducible_blocks})~---
+    removes the reindexing pre-hypothesis from the above; tagged in
+    \Cref{ch:ft_proof}.
+\end{itemize}
+
+The physical co-location of these files with the canonical-form layer is an
+artifact of the build dependency order; a future refactor may move them to a
+dedicated after-blocking module.  Until then, readers should consult
+Chapters~\ref{ch:ft_proof} and~\ref{ch:canonical_after_blocking} for the
+after-blocking pipeline documentation.
