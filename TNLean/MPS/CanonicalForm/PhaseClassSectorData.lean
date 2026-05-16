@@ -30,8 +30,13 @@ variable {d : ℕ}
 
 /-! ### Phase-class quotient construction -/
 
-/-- The concrete sector decomposition obtained from representatives of MPV phase classes. -/
-private noncomputable def collapsedBntSectorDecomp
+/-- The concrete sector decomposition obtained from representatives of MPV phase classes.
+
+Made non-`private` so the prepared-block PaperBNT constructor
+(`TNLean.MPS.CanonicalForm.PaperBNTSupplier`) can construct an
+`IsBNTCanonicalForm P` directly on top of this concrete `P`, with full access
+to the underlying phase-class representatives. -/
+noncomputable def collapsedBntSectorDecomp
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -54,7 +59,10 @@ private noncomputable def collapsedBntSectorDecomp
     sectors := sectors
   }
 
-private theorem collapsedBntSectorDecomp_sameMPV₂
+/-- The total tensor of `collapsedBntSectorDecomp` has the same MPV at every length
+as the original `toTensorFromBlocks μ blocks`.  Exposed (was previously `private`)
+for the prepared-block PaperBNT constructor. -/
+theorem collapsedBntSectorDecomp_sameMPV₂
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -92,7 +100,9 @@ private theorem collapsedBntSectorDecomp_sameMPV₂
             symm
             simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
-private theorem collapsedBntSectorDecomp_hasBNT
+/-- `collapsedBntSectorDecomp` carries `HasBNTSectorData`.  Exposed (was previously
+`private`) for the prepared-block PaperBNT constructor. -/
+theorem collapsedBntSectorDecomp_hasBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
