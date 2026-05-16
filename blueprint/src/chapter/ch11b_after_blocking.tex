@@ -12,6 +12,74 @@ setup surrounding \cite[Section~IV.A]{Cirac2021Matrix}. The individual blueprint
 statements below are implementation bridge lemmas rather than paper-numbered
 theorems.
 
+\section{Zero-tail separation (relocated from Chapter~\ref{ch:canonical})}%
+\label{sec:zero_block_separation}
+
+In the irreducible block decomposition some blocks may have all-zero Kraus
+operators.  Such blocks contribute to the MPV only at length $N=0$, where the
+contribution equals their bond dimension.  The three statements below separate
+the all-zero blocks from the nonzero blocks; they are consumed throughout this
+chapter (zero-tail bookkeeping) and in Chapter~\ref{ch:ft_proof}.
+
+\begin{definition}[Zero MPS tensor]\label{def:zero_mps_tensor}
+	\lean{MPSTensor.zeroMPSTensor}
+	\leanok
+	The \emph{zero MPS tensor} of physical dimension $d$ and bond
+	dimension $D$, denoted $\mathbf{0}_{d,D}$, is the tensor whose
+	Kraus operators are all zero.
+\end{definition}
+
+\begin{theorem}[MPV of zero tensor]\label{thm:mpv_zero_tensor}
+	\lean{MPSTensor.mpv_zeroMPSTensor}
+	\leanok
+	\uses{def:zero_mps_tensor}
+	For any spin configuration $\sigma$ of length $N$,
+	\[
+		V^{(N)}(\mathbf{0}_{d,D})_\sigma
+		= \begin{cases} D & \text{if } N = 0, \\ 0 & \text{if } N \ge 1. \end{cases}
+	\]
+\end{theorem}
+
+\begin{proof}\leanok
+	For $N = 0$, $(\mathbf{0}_{d,D})^{\varnothing} = \Id_{D}$,
+	so the MPV equals $\tr(\Id_D) = D$.
+	For $N \ge 1$, every word product of a zero tensor is zero.
+\end{proof}
+
+\begin{theorem}[Zero-block separation]%
+	\label{thm:zero_block_separation}
+	\lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
+	\leanok
+	\uses{def:irreducible_tensor, def:zero_mps_tensor}
+	Every MPS tensor $A$ admits a block decomposition into:
+	\begin{enumerate}
+		\item a \emph{trivial block} of bond dimension $D_0$ with all Kraus operators zero
+		      (accumulating all all-zero irreducible blocks), and
+		\item a finite family of \emph{nontrivial blocks} $(B_k)_{k=1}^r$,
+		      each irreducible, each with at least one nonzero Kraus
+		      operator, and each with positive bond dimension,
+	\end{enumerate}
+	such that
+	\[
+		V^{(N)}(A)_\sigma
+		= V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
+		+ V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r B_k\bigr)_\sigma
+	\]
+	for every spin configuration $\sigma$ of length $N$.
+	At $N = 0$ this reads $D = D_0 + \sum_{k=1}^r D_k$.
+	For $N \ge 1$ the zero-tail term vanishes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:irred_decomp, thm:mpv_zero_tensor}
+	Apply the irreducible block decomposition
+	(Theorem~\ref{thm:irred_decomp}) and partition the blocks
+	by whether each has a nonzero Kraus operator.
+	The all-zero blocks satisfy a dimension bound via
+	irreducibility; their total bond dimension is $D_0$.
+	The MPV identity follows from the block structure.
+\end{proof}
+
 \section{Reduction and structural after-blocking results}
 
 \begin{theorem}[Blockwise TP-gauge normalization of irreducible blocks]%
