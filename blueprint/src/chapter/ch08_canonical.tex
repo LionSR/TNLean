@@ -30,17 +30,16 @@ The reduction draws on
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
 
-\section{Paper-faithful definitions}\label{sec:paper_faithful_defs}
+\section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:paper_faithful_defs}
 
-The strong predicates used elsewhere in this chapter
-(\texttt{IsCanonicalForm}, \texttt{IsNormalCanonicalForm},
-\texttt{IsCanonicalFormBNT}) bundle extra structure (left-canonical
-normalization, strict modulus ordering, one-copy-per-sector) beyond the
-literal source paper definitions. The Lean module
-\texttt{TNLean.MPS.CanonicalForm.PaperDefs} records the
-\emph{source-paper} predicates from~\cite{Cirac2017MPDO_AnnPhys}
-without strengthening, for use as the public anchors of the
-formalization.
+This section records the unstrengthened definitions of \emph{normal tensor},
+\emph{canonical form}, and \emph{basis of normal tensors} from
+\cite{Cirac2017MPDO_AnnPhys}.  The stronger predicates used elsewhere in
+this chapter (Definition~\ref{def:is_normal_canonical_form} and the
+canonical-form BNT predicate of Chapter~\ref{ch:bnt}) bundle additional
+structure---left-canonical normalization, strict modulus ordering,
+one-copy-per-sector---which is not present in the literal source-paper
+definitions stated below.
 
 \begin{definition}[CPSV normal tensor (NT)]\label{def:nt_paper}
 	\lean{MPSTensor.IsNormalTensor}
@@ -75,24 +74,27 @@ formalization.
 	\lean{MPSTensor.IsBNTPaper}
 	\leanok
 	A finite family $\{A_j\}_{j=1}^g$ of normal tensors is a
-	\emph{basis of normal tensors} for $A$ if (i)~each $A_j$ is normal,
-	(ii)~for every $N$, the MPV family $V^{(N)}(A)$ is a linear
-	combination of $\{V^{(N)}(A_j)\}_j$, and (iii)~there exists $N_0$
-	such that for all $N > N_0$ the MPV states
-	$\texttt{mpvState}\,A_j\,N$ are linearly independent.
+	\emph{basis of normal tensors} for $A$ if:
+	\begin{enumerate}
+		\item each $A_j$ is normal in the sense of Definition~\ref{def:nt_paper};
+		\item for every $N \ge 1$ there exist coefficients
+		      $c_j^{(N)} \in \mathbb{C}$ with
+		      \[
+		        V^{(N)}(A) \;=\; \sum_{j=1}^{g} c_j^{(N)}\, V^{(N)}(A_j);
+		      \]
+		\item there exists $N_0$ such that for all $N > N_0$ the family
+		      $\bigl(V^{(N)}(A_j)\bigr)_{j=1}^{g}$ is linearly independent.
+	\end{enumerate}
 \end{definition}
 
-\begin{remark}[Connections to the strong predicates]
-	The module provides one connecting lemma,
-	\texttt{IsNormalTensor.of\_irreducible\_and\_primitive}, which
-	combines an \texttt{IsIrreducibleTensor} witness with an
-	\texttt{IsPrimitive (transferMap A)} witness. Connections from
-	these paper-faithful predicates to the strong predicates
-	\texttt{IsNormalCanonicalForm} and \texttt{IsBNT} are not given
-	in \texttt{PaperDefs.lean}: they require either a
-	fundamental-theorem-level dependency or the algebraic-to-spectral
-	normality implication, both of which appear in downstream
-	chapters.
+\begin{remark}[Relation to the strong predicates]
+	A tensor $A$ which is both irreducible (Definition~\ref{def:irreducible_tensor})
+	and has primitive transfer map is normal in the sense of
+	Definition~\ref{def:nt_paper}.  The reverse implications from the
+	stronger predicates of Definition~\ref{def:is_normal_canonical_form} and
+	of Chapter~\ref{ch:bnt} require either the fundamental-theorem step or
+	the algebraic-to-spectral normality equivalence; these appear in
+	downstream chapters.
 \end{remark}
 
 \section{Transfer map normalization}\label{sec:transfer_map_normalization}
@@ -321,26 +323,24 @@ Theorem~\ref{thm:blocking_primitivity}: blocking an irreducible TP block by the
 least common multiple of its peripheral periods makes the resulting transfer map
 primitive, removing periodicity.
 
-\begin{remark}[Prepared-block constructors for the canonical-form predicate]\leanok
-	The Lean formalization records two prepared-block constructors that package
-	pre-normalized data into the canonical-form predicate.  The first
-	(\texttt{MPSTensor.isCanonicalForm\_of\_primitive}) starts from
-	injective, left-canonical, strictly-ordered nonzero-weight blocks each
-	admitting a primitive fixed point.  The second
-	(\texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}) replaces the
-	primitive fixed-point hypothesis by the peripheral-spectrum primitivity
-	condition $\sigma_\partial(\E_{A_k}) = \{1\}$.  In both cases the canonical-form
-	overlap clause $O_{A_k A_k}(N)\to 1$ is derived from the other hypotheses via
-	the spectral-gap criterion of Chapter~\ref{ch:spectral}.  These statements
-	assume the blocks are already in the required normal form and are not the
+\begin{remark}[Two routes to the canonical-form predicate from normal blocks]\leanok
+	Given a family of injective, left-canonical, strictly-ordered
+	nonzero-weight blocks $(\mu_k, A_k)$, the canonical-form conditions of
+	Definition~\ref{def:cf_paper} can be discharged from either of two
+	spectral hypotheses on the per-block transfer map $\E_{A_k}$: a
+	positive-definite primitive fixed point, or the peripheral-spectrum
+	condition $\sigma_\partial(\E_{A_k}) = \{1\}$.  In both cases the
+	overlap clause $O_{A_k A_k}(N) \to 1$ follows from the spectral-gap
+	criterion of Chapter~\ref{ch:spectral}.  Both statements assume the
+	blocks are already in the required normal form; they are not the
 	arbitrary-input canonical-form existence theorem of
 	\cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix}.
 \end{remark}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}\leanok
-	The peripheral-primitive prepared-block constructor above shows that
-	the overlap convergence hypothesis in the canonical form
-	conditions is redundant once peripheral-spectrum primitivity is known.
+	The remark above shows that the overlap convergence hypothesis in the
+	canonical form conditions is redundant once peripheral-spectrum
+	primitivity is known.
 	The argument factors through the spectral-gap formulation of
 	Chapter~\ref{ch:spectral}: peripheral-spectrum primitivity is first
 	converted to that spectral-gap condition, and the overlap limit is then
@@ -587,14 +587,14 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 		and generates the same MPV family as~$A$.
 \end{proof}
 
-\begin{remark}[Prepared-data NCF constructor; distinguished from CPSV16 CF existence]
-  This is a \emph{constructor} that packages prepared primitive block data
-  into \texttt{IsNormalCanonicalForm}: all six hypotheses are assumed in
-  advance; the theorem merely re-orders the blocks and attaches the predicate.
-  It is \emph{not} the arbitrary-input canonical-form existence theorem of
-  \cite[lines~237--250]{Cirac2017MPDO_AnnPhys} (equivalently
-  \cite[MPDO, lines~249--250]{Cirac2017MPDO_AnnPhys}), which starts from
-  an arbitrary tensor and derives the primitive block structure.  That
+\begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]
+  Theorem~\ref{thm:exists_normal_canonical_form} assumes all six block
+  hypotheses---irreducibility, TP normalization, primitivity, distinct
+  nonzero weight moduli, and positive bond dimensions---in advance, and
+  produces the normal canonical form by reordering.  It is \emph{not} the
+  arbitrary-input canonical-form existence theorem of
+  \cite[lines~237--250]{Cirac2017MPDO_AnnPhys}, which starts from an
+  arbitrary tensor and derives the primitive block structure.  That
   arbitrary-input direction is the open formalization gap documented in
   Section~\ref{subsec:paperbnt_supplier}.
 \end{remark}
@@ -669,14 +669,10 @@ the least common multiple of its peripheral periods, the resulting tensor has no
 nontrivial $p$-periodic vectors
 \cite[Section~2.3]{Cirac2017MPDO_AnnPhys}.  The cyclic-sector decomposition
 itself comes from the peripheral spectrum of the adjoint transfer map
-\cite[Theorem~6.6]{Wolf2012Quantum}.
-
-The proof-level statements about projection multiplicativity, sector primitivity
-and irreducibility, and common-alphabet bookkeeping are internal to the
-period-removal argument; their Lean homes are
-\texttt{MPS/CanonicalForm/SectorComparison/} and
-\texttt{MPS/Periodic/SectorIrreducibility/}.
-The three source-facing endpoint statements are presented here.
+\cite[Theorem~6.6]{Wolf2012Quantum}.  Three source-facing statements summarize
+this step: existence of the cyclic decomposition after blocking, the version
+specialized to irreducible TP tensors, and the strengthened version where the
+resulting sector blocks are themselves primitive and irreducible.
 
 \begin{theorem}[Period removal by blocking (1606.00608, §2.3)]%
 	\label{thm:cyclic_sector_decomp_after_blocking}
@@ -744,9 +740,10 @@ The three source-facing endpoint statements are presented here.
 	$(C_k)_{k=1}^m$ such that every $C_k$ is left-canonical, has primitive
 	transfer map, is tensor-irreducible, and has nonzero bond dimension.
 
-	This packages the period-removal step together with the
-	internal sector-orbit lift; it is the result consumed by the
-	common-blocking construction downstream.
+	Equivalently: the cyclic-sector decomposition of $A^{[m]}$ produces unit
+	blocks that already satisfy the trace-preservation, primitivity, and
+	irreducibility hypotheses needed for the common-blocking step
+	(Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -762,12 +759,11 @@ The three source-facing endpoint statements are presented here.
 \section{Reduction to primitive blocks}%
 \label{sec:reduction_to_normal_form}
 
-Two structural after-blocking statements relocated to
-Chapter~\ref{ch:canonical_after_blocking}, and one block-injectivity statement
-relocated to Chapter~\ref{ch:wielandt}, take an arbitrary tensor or
-TP-primitive-irreducible block to a primitive block decomposition.  The
-source-facing residue in this chapter is the normality of a TP-primitive
-irreducible block.
+The structural after-blocking statements that take an arbitrary tensor or a
+TP-primitive-irreducible block to a primitive block decomposition appear in
+Chapter~\ref{ch:canonical_after_blocking}, and the block-injectivity statement
+in Chapter~\ref{ch:wielandt}.  The single statement recorded in this chapter
+is the normality of a TP-primitive irreducible block.
 
 \begin{theorem}[TP-primitive irreducible tensor is normal]%
 	\label{thm:normal_tp_primitive_irred}
@@ -792,22 +788,37 @@ irreducible block.
 \begin{theorem}[Sorting by strictly decreasing weight norms]
 	\label{thm:bnt_sorted_reindexing}
 	\lean{MPSTensor.exists_sorted_reindexing}\leanok
-	If nonzero weights $(\mu_k)_{k=1}^r$ have pairwise distinct norms, then there is a permutation of
-	$\{1,\dots,r\}$ under which $\|\mu_k\|$ is strictly decreasing.
+	Let $(\mu_k)_{k=1}^r$ be nonzero complex weights whose moduli are pairwise
+	distinct.  Then there exists a permutation $\sigma$ of $\{1,\dots,r\}$ such that
+	\[
+		|\mu_{\sigma(1)}| > |\mu_{\sigma(2)}| > \cdots > |\mu_{\sigma(r)}| > 0.
+	\]
 \end{theorem}
 
 \begin{theorem}[Sorted decomposition preserves the represented MPS family]
 	\label{thm:bnt_sorted_blockdecomp}
 	\lean{MPSTensor.exists_sorted_blockDecomp_of_distinct_norms}\leanok
 	\uses{thm:bnt_sorted_reindexing}
-	Under the same distinct-norm hypothesis, the sorted block family is gauge equivalent to the original decomposition and has strictly decreasing norms.
+	Under the same hypothesis, with $\sigma$ as above and
+	$\tilde\mu_k := \mu_{\sigma(k)}$, $\tilde B_k := B_{\sigma(k)}$,
+	\[
+		\mc{V}\!\bigl(\textstyle\bigoplus_k \mu_k B_k\bigr)
+		\;=\; \mc{V}\!\bigl(\textstyle\bigoplus_k \tilde\mu_k \tilde B_k\bigr),
+		\qquad |\tilde\mu_1| > \cdots > |\tilde\mu_r|.
+	\]
 \end{theorem}
 
 \begin{theorem}[Normal canonical form after sorting]
 	\label{thm:bnt_sorted_ncf}
 	\lean{MPSTensor.exists_sortedNCF_of_distinct_norms}\leanok
 	\uses{def:is_normal_canonical_form, thm:bnt_sorted_blockdecomp}
-	If each block is irreducible, trace-preserving, primitive, and has positive dimension, then sorting by strictly decreasing weight norms produces a normal canonical form.
+	Suppose $(\mu_k, B_k)_{k=1}^r$ satisfies $\mu_k \neq 0$, $|\mu_k|$ pairwise
+	distinct, and each $B_k$ is irreducible, left-canonical
+	($\sum_i (B_k^i)^\dagger B_k^i = \Id$), with primitive transfer map and
+	$\dim B_k > 0$.  Then after sorting by strictly decreasing
+	$|\mu_{\sigma(k)}|$, the resulting family $(\tilde\mu_k, \tilde B_k)$
+	satisfies the normal canonical form conditions of
+	Definition~\ref{def:is_normal_canonical_form}.
 \end{theorem}
 
 \begin{definition}[Granular sector decomposition]
@@ -815,9 +826,14 @@ irreducible block.
 	\lean{MPSTensor.trivialSectorDecomp}
 	\leanok
 	\uses{def:paper_sector_data}
-	Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$,
-	form a sector decomposition with one basis block for each original block,
-	one copy in each sector, and sector weight $\mu_k$ on the $k$th sector.
+	Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
+	\emph{granular sector decomposition} has $r$ sectors, one basis block
+	$B_k$ per sector, multiplicity~$1$ in each sector, and sector weight
+	$\mu_k$ on the $k$th sector.  Equivalently, as a finite sum,
+	\[
+		\sum_{k=1}^{r} \mu_k^{\,N} V^{(N)}(B_k)_\sigma
+		\;=\; V^{(N)}\!\bigl(\textstyle\bigoplus_k \mu_k B_k\bigr)_\sigma.
+	\]
 \end{definition}
 
 \begin{lemma}[Granular sector decomposition preserves the represented family]
@@ -841,22 +857,36 @@ irreducible block.
 	\label{thm:bnt_trivial_sector}
 	\lean{MPSTensor.exists_trivialSectorDecomp_of_sorted_distinct_norms}\leanok
 	\uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
-	If all weights are nonzero and strictly decreasing in norm, one obtains a
-	sector decomposition with one copy per sector that preserves the represented
-	MPS family.
+	If $\mu_k \neq 0$ for all $k$ and $|\mu_1| > \cdots > |\mu_r|$, then the
+	granular sector decomposition $P = \mathrm{trivialSectorDecomp}(\mu,B)$
+	satisfies $V^{(N)}(P) = V^{(N)}(\bigoplus_k \mu_k B_k)$ for every
+	$N \ge 1$ and has exactly one copy per sector.
 \end{theorem}
 
 \begin{definition}[Norm-class partition]
 	\label{def:norm_class_grouping_data}
 	\lean{MPSTensor.NormClassGroupingData}\leanok
-	The grouping data consists of: norm classes, one representative value per class, class multiplicities, an enumeration of members in each class, and a regrouping identity recovering the full finite sum.
+	Let $(\mu_k)_{k=1}^r$ be a finite family of complex weights.  A
+	\emph{norm-class partition} consists of: a number of classes $s \le r$;
+	representative values $\lambda_1 > \cdots > \lambda_s > 0$;
+	multiplicities $(m_j)_{j=1}^s$ with $\sum_j m_j = r$; for each $j$ an
+	enumeration $\iota_j : \{1,\dots,m_j\} \hookrightarrow \{1,\dots,r\}$ of
+	the indices $k$ with $|\mu_k| = \lambda_j$; and the regrouping identity
+	\[
+		\sum_{k=1}^{r} f(k) \;=\; \sum_{j=1}^{s} \sum_{q=1}^{m_j} f(\iota_j(q))
+	\]
+	for every function $f$.
 \end{definition}
 
 \begin{definition}[Norm-class enumeration in decreasing order]
 	\label{def:norm_class_grouping}
 	\lean{MPSTensor.normClassGroupingData}\leanok
 	\uses{def:norm_class_grouping_data}
-	From any finite weight family, construct norm classes ordered by strictly decreasing norm values.
+	For any finite family $(\mu_k)_{k=1}^r$ of complex weights, the function
+	$\mathrm{normClassGroupingData}$ produces a norm-class partition (in the
+	sense of Definition~\ref{def:norm_class_grouping_data}) with
+	representative values arranged in strictly decreasing order
+	$\lambda_1 > \cdots > \lambda_s$.
 \end{definition}
 
 \section{Open directions}\label{sec:open_directions}
@@ -874,32 +904,31 @@ irreducible block.
 	expressed over the same blocked physical alphabet
 	\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
 
-	The corresponding intermediate statements, including the common-alphabet
-	cyclic-sector family and the after-blocking zero-tail and common-sector
-	transport theorems, are collected in
-	Chapter~\ref{ch:canonical_after_blocking}; the present chapter records only
-	the source-facing endpoints
-	(Theorems~\ref{thm:cyclic_sector_decomp_after_blocking},
+	The common-alphabet cyclic-sector family and the after-blocking
+	zero-tail and common-sector transport statements are stated and proved
+	in Chapter~\ref{ch:canonical_after_blocking}; the present chapter
+	records only
+	Theorems~\ref{thm:cyclic_sector_decomp_after_blocking},
 	\ref{thm:cyclic_sector_decomp_irr_tp}, and
-	\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}).
+	\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}.
 	The sorted normal-canonical-form theorem
 	(Theorem~\ref{thm:bnt_sorted_ncf}) assumes pairwise distinct nonzero weight
 	norms; equal-norm families require the basis-of-normal-tensors and
 	multiplicity comparison developed in Chapter~\ref{ch:bnt}.
 \end{remark}
 
-\subsection{Out-of-scope PGVWC06 theorems}%
+\subsection{Material from PGVWC06 not covered by this chapter}%
 \label{subsec:pgvwc06_out_of_scope}
 
-This chapter follows the modern presentation of~\cite{Cirac2017MPDO_AnnPhys}
-and~\cite{Cirac2021Matrix}, which is better aligned with the Lean
-formalization architecture (TI site-independent tensors, transfer-map
-primitivity, and CPM fixed-point normalization).
-The 2007 preprint~\cite{PerezGarcia2007Matrix} contains eight named theorems
-in its canonical-form section~\S III (lines~399--1177 of \texttt{MPSarchive.tex}).
-Theorem~\texttt{Th:TIcanonical} has a partial, conditional counterpart here;
-the opening paragraphs of this chapter state that scope limitation explicitly.
-The remaining seven theorems are outside the formalization scope:
+This chapter follows the presentation of~\cite{Cirac2017MPDO_AnnPhys}
+and~\cite{Cirac2021Matrix}, which works with site-independent
+translation-invariant tensors, transfer-map primitivity, and CPM
+fixed-point normalization.  The 2007 preprint~\cite{PerezGarcia2007Matrix}
+contains eight named theorems in its canonical-form section~\S III
+(lines~399--1177 of \texttt{MPSarchive.tex}).  Theorem~\texttt{Th:TIcanonical}
+has a partial, conditional counterpart here; the opening paragraphs of this
+chapter make the scope limitation explicit.  The remaining seven theorems
+of \cite{PerezGarcia2007Matrix} \S III are not covered:
 
 \begin{itemize}
   \item \textbf{Thm.~\texttt{OBC-Vidal} (lines~431--443): completeness and
@@ -907,7 +936,7 @@ The remaining seven theorems are outside the formalization scope:
     Any pure state admits an OBC-MPS representation of bond dimension
     $D\le d^{\lfloor N/2\rfloor}$ with simultaneous left-normalization and
     a positive full-rank diagonal interleaving matrix~$\Lambda^{[m]}$.
-    \emph{Not formalized:} the chapter starts from a site-independent TI
+    \emph{Not covered:} the chapter starts from a site-independent TI
     tensor; constructing the finite-OBC Schmidt canonical form requires a
     site-dependent Chain layer not present in this development.
 
@@ -915,7 +944,7 @@ The remaining seven theorems are outside the formalization scope:
     freedom.}
     Every OBC-MPS $\{B^{[m]}_i\}$ is related to the canonical one by
     site-local invertible gauge matrices $Y_j,Z_j$ with $Y_j Z_j = \mathbf{1}$.
-    \emph{Not formalized:} same reason as \texttt{OBC-Vidal}; local-gauge
+    \emph{Not covered:} same reason as \texttt{OBC-Vidal}; local-gauge
     analysis for site-dependent open-boundary matrices is outside the TI-MPS
     scope.
 
@@ -923,8 +952,8 @@ The remaining seven theorems are outside the formalization scope:
     Every TI pure state with PBC on a finite ring of $N$ sites has a
     site-independent MPS representation; a bond-$D$ OBC representation
     lifts to one at bond dimension at most~$ND$.
-    \emph{Not formalized:} the chapter assumes a site-independent MPV tensor
-    as input; the block-circulant construction producing it is out of scope.
+    \emph{Not covered:} the chapter assumes a site-independent MPV tensor
+    as input; the block-circulant construction producing it is not covered.
 
   \item \textbf{Thm.~\texttt{Th:periodic} (lines~849--858): periodic
     decomposition.}
@@ -941,16 +970,16 @@ The remaining seven theorems are outside the formalization scope:
     Under condition~C2, the eigenvalues of the half-chain reduced density
     operator converge as $N\to\infty$ to $\Lambda\otimes\Lambda$ with
     $\Lambda$ from Theorem~\texttt{Th:TIcanonical}.
-    \emph{Not formalized:} \cref{thm:CFII_data} produces $\Lambda$, but the
+    \emph{Not covered:} \cref{thm:CFII_data} produces $\Lambda$, but the
     asymptotic eigenvalue statement requires correlation-length and entropy
-    material outside the scope of this chapter.
+    material not addressed here.
 
   \item \textbf{Thm.~\texttt{thm-uniq} (lines~1002--1015): uniqueness of
     the canonical form.}
     Under condition~C1 with unique OBC canonical form, two TI canonical
     $D$-MPS representations of the same state satisfy $B_i = U C_i U^\dagger$
     for a global unitary~$U$.
-    \emph{Not formalized in this chapter:} a modern analogue is proved in
+    \emph{Not covered in this chapter:} a modern analogue is proved in
     Chapter~\ref{ch:ft_proof} as
     \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge};
     the original finite-ring uniqueness of~\cite{PerezGarcia2007Matrix}
@@ -962,20 +991,21 @@ The remaining seven theorems are outside the formalization scope:
     canonical form by solving an $N$-independent system~(S) of $O(D^8)$
     quadratic equations; every solution is related to the canonical form by
     a global unitary.
-    \emph{Not formalized:} numerical and algorithmic recovery is entirely
-    out of scope; the chapter addresses existence and uniqueness abstractly.
+    \emph{Not covered:} this chapter addresses existence and uniqueness
+    abstractly; numerical and algorithmic recovery is not formalized.
 \end{itemize}
 
-\subsection{Prepared-block BNT construction}%
+\subsection{Building a BNT from normal blocks with normalized weights}%
 \label{subsec:paperbnt_supplier}
 
-The paper-faithful BNT predicate (Definition~\ref{def:bnt_paper}, formalized
-as \texttt{IsBNTCanonicalForm} in Chapter~\ref{ch:bnt}) represents the CPSV16
-basis-of-normal-tensors structure with full multiplicity and span fields.  The
-following theorem is the prepared-block direction: a constructor from
-pre-normalized block hypotheses to a BNT-equipped sector decomposition.
+The BNT predicate (Definition~\ref{def:bnt_paper}, formalized as
+\texttt{IsBNTCanonicalForm} in Chapter~\ref{ch:bnt}) bundles the
+basis-of-normal-tensors structure of \cite{Cirac2017MPDO_AnnPhys} with
+multiplicity and span fields.  The following theorem starts from a family
+of normalized block data and produces a sector decomposition satisfying that
+predicate.
 
-\begin{theorem}[Prepared-block PaperBNT constructor (Phase~C PR~1)]%
+\begin{theorem}[BNT from normal blocks with normalized weights]%
   \label{thm:paperbnt_supplier_prepared}
   \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks}
   \leanok
@@ -1019,186 +1049,250 @@ pre-normalized block hypotheses to a BNT-equipped sector decomposition.
 
 \begin{remark}[Arbitrary-input direction: open formalization gap]%
   \label{rem:arbitrary_input_bridge_gap}
-  Theorem~\ref{thm:paperbnt_supplier_prepared} requires eight
-  \emph{prepared-input} hypotheses; it does not supply a
-  \texttt{SectorDecomposition} starting from an arbitrary
-  \texttt{MPSTensor}.  Three independent obstacles block the
-  arbitrary-input direction.
+  Theorem~\ref{thm:paperbnt_supplier_prepared} assumes eight pre-normalized
+  hypotheses on the block data; it does not produce a sector decomposition
+  starting from an arbitrary MPS tensor.  Three independent obstacles
+  separate it from the arbitrary-input statement.
 
   \begin{enumerate}
-    \item \textbf{Zero-tail conventions.}
-      \texttt{SameMPV\textsubscript{2}} quantifies over all $N \ge 0$, so the
-      $N = 0$ clause reads $\dim(P.\texttt{toTensor}) = \dim(\text{input})$.
-      The arbitrary-input reduction naturally yields
-      \texttt{SameMPV\textsubscript{2}Pos} (equality for $N \ge 1$) together
-      with a separate length-zero dimension identity.  Reducing to the exact
-      \texttt{SameMPV\textsubscript{2}} statement requires matching the
-      zero-tail bond dimension after pruning all-zero blocks, which fails once
-      zero blocks are removed by Theorem~\ref{thm:zero_block_separation}.
+    \item \textbf{Zero-tail at $N=0$.}  The same-MPV equivalence used in the
+      BNT predicate quantifies over all $N \ge 0$, so the $N=0$ clause
+      forces the bond dimension of the sector decomposition to equal the
+      bond dimension of the input.  The arbitrary-input reduction naturally
+      yields equality only for $N \ge 1$ together with a separate
+      length-zero dimension identity; matching the zero-tail bond dimension
+      fails once all-zero blocks are removed by
+      Theorem~\ref{thm:zero_block_separation}.
 
-    \item \textbf{Global weight normalization.}
-      \texttt{IsBNTCanonicalForm} requires $|\mu_k| \le 1$ for all $k$ and
-      $|\mu_k| = 1$ for some $k$.  These are normalization conventions, not
-      consequences of an arbitrary tensor.  For example, if the left-canonical
-      block $C$ has unit weight, the scaled input $A = 2 \cdot C$ produces
-      weights of modulus $2$, violating the bound.  The hypotheses
-      \texttt{hμLe} and \texttt{hμUnit} must therefore be supplied externally,
-      or the statement must be weakened to a rescaled form.
+    \item \textbf{Global weight normalization.}  The BNT predicate
+      requires $|\mu_k| \le 1$ for all $k$ and $|\mu_k| = 1$ for some $k$.
+      These are normalization conventions, not consequences of an
+      arbitrary tensor.  If a left-canonical block $C$ has unit weight,
+      the scaled input $A = 2 \cdot C$ has weight of modulus $2$, violating
+      the bound.  The hypotheses must therefore be supplied externally,
+      or the statement weakened to a rescaled form.
 
-    \item \textbf{Per-block unit-modulus witness.}
-      The field $\forall j,\;\exists q,\;|\mathrm{weight}\,j\,q| = 1$ is
-      intentionally kept as a theorem-level hypothesis in PaperBNT
-      (see \texttt{PaperBNT/Api.lean} and \texttt{PaperBNT/Fundamental.lean}).
-      For decaying sectors such as $C \oplus \tfrac{1}{2}D$, this field is
-      false: no weight of the $D$ sector has unit modulus.  The
-      formalization therefore treats it as an explicit assumption rather than
-      a consequence of the block decomposition.
+    \item \textbf{Per-block unit-modulus witness.}  The BNT predicate
+      requires
+      $\forall j,\;\exists q,\;\bigl|\mathrm{weight}\,j\,q\bigr| = 1$.
+      For a decaying sector such as $C \oplus \tfrac{1}{2} D$, this fails:
+      no weight of the $D$ sector has unit modulus.  The condition is
+      therefore an explicit hypothesis rather than a consequence of the
+      block decomposition.
   \end{enumerate}
 
-  The partial-supplier path of Phase~C
-  (see \texttt{docs/audits/2026-05-16\_phase\_C\_feasibility\_gpt55.md}, \S5)
-  outlines a route to a positive-length, normalized-input,
-  per-block-unit-assumed supplier theorem that would formalize the
-  non-trivial content of BNT existence for a large class of inputs.
-  Closing the full gap for arbitrary tensors remains an open formalization
-  direction.
+  Closing the gap for arbitrary tensors remains open.
 \end{remark}
 
-\subsection{Intermediate constructions referenced from other chapters}%
+\subsection{Auxiliary lemmas}%
 \label{subsec:internal_lean_only_labels}
 
-The following statements are intermediate constructions formalized in the Lean
-modules \texttt{MPS/Core/BlockingInfrastructure.lean},
-\texttt{MPS/Core/BlockingTransfer.lean},
-\texttt{MPS/CanonicalForm/BlockingViaAdjoint.lean},
-\texttt{MPS/CanonicalForm/FromPeripheralPrimitive.lean},
-\texttt{MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean},
-\texttt{MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorConstruction.lean},
-and \texttt{MPS/Periodic/SectorIrreducibility/HLift.lean}.  They are not
-source-paper theorems but are consumed from the Fundamental-Theorem and
-after-blocking chapters and from
-Chapter~\ref{ch:periodic_ft_apps}.  Each is recorded here as a short label-only
-pointer so that the dependency graph remains complete; the mathematical content
-is documented in the Lean source.
+The lemmas below collect the small structural facts about transfer maps,
+blocking, and cyclic-sector reblocking that are used in the after-blocking
+constructions of Chapter~\ref{ch:ft_proof} and
+Chapter~\ref{ch:canonical_after_blocking} and in the periodic extension of
+Chapter~\ref{ch:periodic_ft_apps}.
 
-\begin{remark}[Canonical form from peripheral primitivity (Lean code only)]\label{thm:canonical_from_primitive}\leanok
-	Prepared-block constructor \texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive};
-	see the prepared-block remark in
-	Section~\ref{sec:canonical_from_primitivity}.
-\end{remark}
-\begin{remark}[Adjoint primitivity equivalence (Lean code only)]\label{thm:primitive_adjoint_equiv}\leanok
-	\texttt{MPSTensor.IsPrimitive.adjoint\_iff}: primitivity is invariant under
-	taking adjoints, since the peripheral eigenvalues of $E^\dagger$ are the
-	conjugates of those of~$E$.
-\end{remark}
-\begin{remark}[Iterated blocking at the transfer-map level (Lean code only)]\label{thm:iterated_blocking_transfer}\leanok
-	\texttt{MPSTensor.transferMap\_blockTensor\_mul}: $\E_{(A^{[m]})^{[n]}}=\E_{A^{[mn]}}$.
-\end{remark}
-\begin{remark}[Primitivity under blocking-divisibility (Lean code only)]\label{thm:primitive_blocking_divisible}\leanok
-	\texttt{MPSTensor.isPrimitive\_transferMap\_blockTensor\_of\_dvd}: if $\E_{A^{[p_0]}}$
-	is primitive and $p_0 \mid p$ then $\E_{A^{[p]}}$ is primitive.
-\end{remark}
-\begin{remark}[Blocking assembled weighted blocks (Lean code only)]\label{thm:block_tensor_to_tensor_from_blocks}\leanok
-	\texttt{MPSTensor.sameMPV₂\_blockTensor\_toTensorFromBlocks}: blocking commutes
-	with the assembled weighted block sum.
-\end{remark}
-\begin{remark}[Nonzero blocked weights (Lean code only)]\label{lem:block_weights_ne_zero}\leanok
-	\texttt{MPSTensor.blockWeights\_ne\_zero}: a positive power of a nonzero
-	complex weight remains nonzero after blocking.
-\end{remark}
-\begin{remark}[Primitive irreducible cyclic-sector data (Lean code only)]\label{def:primitive_irreducible_cyclic_sectors}\leanok
-	\texttt{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}: predicate recording
-	the period-removal length~$m$, the unit-weight $A^{[m]}$ block-tensor
-	decomposition, and the TP+primitive+irreducible+positive-dimension fields.
-\end{remark}
-\begin{remark}[Primitive cyclic sectors of irreducible TP tensors (Lean code only)]\label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}\leanok
-	\texttt{MPSTensor.hasPrimitiveIrreducibleCyclicSectors\_of\_TP\_of\_isIrreducibleTensor};
-	restatement of Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} as the
-	above predicate.
-\end{remark}
-\begin{remark}[Common reblocked cyclic-sector family (Lean code only)]\label{thm:exists_common_blocked_cyclic_sector_family}\leanok
-	\texttt{MPSTensor.exists\_commonBlockedCyclicSectorFamily\_of\_hasPrimitiveIrreducibleCyclicSectors};
-	reblocks every per-block cyclic sector to a common physical alphabet.
-\end{remark}
-\begin{remark}[Common reblocking at a prescribed multiple (Lean code only)]\label{thm:exists_common_blocked_cyclic_sector_family_common_multiple}\leanok
-	\texttt{MPSTensor.exists\_commonBlockedCyclicSectorFamily\_of\_commonMultiple};
-	specifies the common physical length explicitly.
-\end{remark}
-\begin{remark}[Common-flat unit weight is nonzero (Lean code only)]\label{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}\leanok
-	The unit weight of the common reblocked cyclic-sector family is nonzero
-	(formalized as \texttt{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight\_ne\_zero}).
-\end{remark}
-\begin{remark}[Common-alphabet structural properties (Lean code only)]\label{thm:common_blocked_cyclic_sector_derived_properties}\leanok
-	Lemmas in
-	\texttt{CommonBlockedCyclicSectorFamily.lean} establishing that the
-	common-alphabet sectors are trace-preserving, have primitive transfer maps,
-	are tensor-irreducible, and have positive bond dimensions.
-\end{remark}
-\begin{remark}[Common-alphabet flattening (Lean code only)]\label{thm:common_blocked_cyclic_sector_reindexed_samempv}\leanok
-	Common-alphabet flattening lemmas in
-	\texttt{CommonBlockedCyclicSectorFamily.lean}: iterated block
-	$(B_k^{[m_k]})^{[e_k]}$ agrees with the directly-blocked tensor after word
-	identification.
-\end{remark}
-\begin{remark}[Coordinate-grouping predicate (Lean code only)]\label{def:common_blocked_cyclic_sector_grouped_block_cast}\leanok
-	\texttt{MPSTensor.CommonBlockedCyclicSectorFamily.groupedBlockCastAgrees}:
-	the canonical identification of the common alphabet with the iterated alphabet
-	agrees with grouping a direct word of length $p=m_k e_k$ into $e_k$
-	consecutive length-$m_k$ words.
-\end{remark}
-\begin{remark}[Digit-level flattening (Lean code only)]\label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}\leanok
-	\texttt{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock\_cast\_eq};
-	digit-level cast lemma for $p=mn$ words.
-\end{remark}
-\begin{remark}[Direct vs.\ iterated blocking comparison (Lean code only)]\label{thm:common_blocked_cyclic_sector_blocked_word_comparison}\leanok
-	Bundle of common-alphabet reindexing lemmas in
-	\texttt{CommonBlockedCyclicSectorFamily.lean} comparing direct blocking with
-	the common-sector form.
-\end{remark}
-\begin{remark}[Reindexed nonzero-part transport (Lean code only)]\label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}\leanok
-	The common-alphabet nonzero-part transport lemmas in
-	\texttt{CommonBlockedCyclicSectorFamily.lean}.
-\end{remark}
-\begin{remark}[Unconditional sector irreducibility (Lean code only)]\label{thm:sector_irred_unconditional}\leanok
-	\texttt{MPSTensor.isIrreducibleOnCorner\_of\_cyclic\_decomp\_mps}: each
-	cyclic-sector corner of the adjoint blocked transfer map is irreducible.
-\end{remark}
+\begin{lemma}[Canonical form from peripheral primitivity]%
+\label{thm:canonical_from_primitive}
+\lean{MPSTensor.isCanonicalForm_of_peripheralPrimitive}\leanok
+\uses{def:is_canonical_form, def:irreducible_tensor, def:tp_kraus}
+Let $(\mu_k,A_k)_{k=1}^r$ be a family of nonzero weights and left-canonical
+irreducible blocks with positive bond dimensions, with strictly decreasing
+moduli $|\mu_1|>\cdots>|\mu_r|>0$ and $|\mu_1|=1$, and assume each transfer
+map satisfies $\sigma_\partial(\E_{A_k}) = \{1\}$ (peripheral-spectrum
+primitivity). Then $(\mu_k,A_k)_{k=1}^r$ satisfies the canonical-form
+conditions of Definition~\ref{def:is_canonical_form}. In particular,
+$O_{A_k A_k}(N) \to 1$ for every $k$.
+\end{lemma}
 
-\subsection{After-blocking material in other chapters}%
-\label{subsec:after_blocking_other_chapters}
+\begin{lemma}[Adjoint primitivity equivalence]%
+\label{thm:primitive_adjoint_equiv}
+\lean{MPSTensor.IsPrimitive.adjoint_iff}\leanok
+\uses{def:primitive_channel}
+Let $\E$ be a finite-dimensional completely positive map. Then $\E$ is
+primitive if and only if its Frobenius adjoint $\E^\dagger$ is primitive.
+Equivalently, $\sigma_\partial(\E) = \{1\}$ iff
+$\sigma_\partial(\E^\dagger) = \{1\}$, since the peripheral spectrum of
+$\E^\dagger$ consists of the complex conjugates of the peripheral spectrum
+of $\E$.
+\end{lemma}
 
-Several declarations physically defined in
-\texttt{TNLean/MPS/CanonicalForm/SectorComparison/} and related modules belong
-logically to the after-blocking fundamental-theorem proof chain rather than to
-the canonical-form reduction proper.  Their blueprint \texttt{\textbackslash lean\{\ldots\}} tags
-live in \Cref{ch:ft_proof} and \Cref{ch:canonical_after_blocking} to reflect
-this; Chapter~\ref{ch:canonical} does not claim them as canonical-form theorems.
+\begin{lemma}[Primitivity under blocking by a multiple]%
+\label{thm:primitive_blocking_divisible}
+\lean{MPSTensor.isPrimitive_transferMap_blockTensor_of_dvd}\leanok
+\uses{def:blocked_tensor, def:primitive_channel}
+Let $A$ be an MPS tensor with positive bond dimension and let $p_0,p\ge 1$
+with $p_0 \mid p$. If $\E_{A^{[p_0]}}$ is primitive, then $\E_{A^{[p]}}$ is
+primitive.
+\end{lemma}
 
-Representative examples (navigable via the tagged theorems in those chapters):
-\begin{itemize}
-  \item \texttt{afterBlocking\_commonPrimitiveIrreducibleBlocks\_of\_reindexedNonzeroParts}
-    (\Cref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed})~---
-    produces common TP/primitive/irreducible sector decompositions for two
-    same-MPV tensors; tagged in \Cref{ch:canonical_after_blocking}.
+\begin{lemma}[Blocking the assembled weighted block sum]%
+\label{thm:block_tensor_to_tensor_from_blocks}
+\lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}\leanok
+\uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
+For nonzero weights $(\mu_k)_{k=1}^r$, blocks $(B_k)_{k=1}^r$, and any
+blocking length $p\ge 1$, the blocked assembled tensor agrees with the
+assembled tensor of the blocked blocks with powered weights:
+\[
+  (\textstyle\bigoplus_k \mu_k B_k)^{[p]}
+  \sim  \textstyle\bigoplus_k \mu_k^{\,p}\, B_k^{[p]},
+\]
+where $\sim$ denotes generation of the same MPV family at every length.
+\end{lemma}
 
-  \item \texttt{afterBlocking\_commonLengthCommonSectorData\_of\_sameMPV\textsubscript{2}}
-    (\Cref{thm:ft_after_blocking_common_length_common_sector_theorem})~---
-    the main common-length after-blocking structural theorem; tagged in
-    \Cref{ch:canonical_after_blocking}.
+\begin{lemma}[Nonzero weights survive blocking]%
+\label{lem:block_weights_ne_zero}
+\lean{MPSTensor.blockWeights_ne_zero}\leanok
+If $\mu \in \mathbb{C}$ is nonzero and $p \ge 1$, then $\mu^p \neq 0$. In
+particular, blocking preserves the nonzero-weight hypothesis of a
+weighted block decomposition.
+\end{lemma}
 
-  \item \texttt{bilateral\_commonPeriod\_blocking\_tp\_primitive\_normal}
-    (\Cref{thm:common_period_two_tensors})~---
-    common blocking period for two primitive normal tensors; tagged in
-    \Cref{ch:canonical_after_blocking}.
+\begin{lemma}[Primitive cyclic sectors of irreducible TP tensors]%
+\label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+\lean{MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor}\leanok
+\uses{def:irreducible_tensor, def:tp_kraus, def:primitive_channel,
+      thm:cyclic_sector_decomp_irr_tp_prim_irr}
+Let $A$ be a left-canonical irreducible MPS tensor with $D > 0$. Then there
+exist a period $m \ge 1$ and a family $(C_k)_{k=1}^m$ of left-canonical
+blocks with primitive transfer maps, tensor-irreducible structure, and
+positive bond dimensions such that $A^{[m]}$ generates the same MPV family
+as the unit-weight assembled tensor $\bigoplus_{k=1}^m C_k$.
+\end{lemma}
 
-  \item \texttt{unconditional\_commonPrimitiveIrreducibleBlocks}
-    (\Cref{thm:unconditional_common_primitive_irreducible_blocks})~---
-    removes the reindexing pre-hypothesis from the above; tagged in
-    \Cref{ch:ft_proof}.
-\end{itemize}
+\begin{lemma}[Common reblocking of cyclic-sector families]%
+\label{thm:exists_common_blocked_cyclic_sector_family}
+\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}\leanok
+\uses{thm:has_primitive_irreducible_cyclic_sectors_tp_irr,
+      def:blocked_tensor}
+Given a finite family $(B_k)_{k=1}^r$ of left-canonical irreducible TP
+tensors with positive bond dimensions and per-block period-removal lengths
+$(m_k)_{k=1}^r$, there exists a common blocking length $p$ such that, for
+every $k$, the blocked tensor $B_k^{[p]}$ admits a unit-weight assembled
+decomposition over a single common blocked alphabet $d^{[p]}$ into
+left-canonical blocks with primitive transfer maps, tensor irreducibility,
+and positive bond dimensions.
+\end{lemma}
 
-The physical co-location of these files with the canonical-form layer is an
-artifact of the build dependency order; a future reorganization may move them
-to a dedicated after-blocking module.  Until then, readers should consult
-Chapters~\ref{ch:ft_proof} and~\ref{ch:canonical_after_blocking} for the
-after-blocking construction documentation.
+\begin{lemma}[Nonzero unit weight of the common reblocked family]%
+\label{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_ne_zero}\leanok
+\uses{thm:exists_common_blocked_cyclic_sector_family}
+The unit weight on each sector of the common reblocked cyclic-sector family
+of Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family} is nonzero.
+\end{lemma}
+
+\begin{lemma}[Sector irreducibility for the adjoint blocked map]%
+\label{thm:sector_irred_unconditional}
+\lean{MPSTensor.isIrreducibleOnCorner_of_cyclic_decomp_mps}\leanok
+\uses{def:irreducible_tensor}
+Let $A$ be a left-canonical irreducible MPS tensor with $D>0$, let $m$ be
+the period of the cyclic-sector decomposition of $A$, and let
+$(P_u)_{u=1}^m$ be the cyclic projections of the adjoint transfer map
+satisfying $\E_{A^\dagger}(P_{u+1}) = P_u$ and $\sum_u P_u = \Id$. Then
+the restriction of $(\E_{A^\dagger})^m$ to each corner $P_u \MN{D} P_u$ is
+irreducible.
+\end{lemma}
+
+\begin{lemma}[Iterated blocking at the transfer-map level]%
+\label{thm:iterated_blocking_transfer}
+\lean{MPSTensor.transferMap_blockTensor_mul}\leanok
+\uses{def:blocked_tensor, def:transfer_map}
+For any MPS tensor $A$ and integers $m,n \ge 1$,
+\[
+  \E_{(A^{[m]})^{[n]}} \;=\; \E_{A^{[mn]}}.
+\]
+\end{lemma}
+
+\begin{definition}[Primitive irreducible cyclic-sector data]%
+\label{def:primitive_irreducible_cyclic_sectors}
+\lean{MPSTensor.HasPrimitiveIrreducibleCyclicSectors}\leanok
+\uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_channel,
+      def:tp_kraus}
+$A$ \emph{has primitive irreducible cyclic sectors} of period $m \ge 1$ if
+there exists a family $(C_k)_{k=1}^m$ of MPS tensors such that $A^{[m]}$
+generates the same MPV family as $\bigoplus_{k=1}^{m} C_k$ (unit weights),
+and each $C_k$ is left-canonical, has primitive transfer map, is
+tensor-irreducible, and has positive bond dimension.
+\end{definition}
+
+\begin{lemma}[Common reblocking at a prescribed multiple]%
+\label{thm:exists_common_blocked_cyclic_sector_family_common_multiple}
+\lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_commonMultiple}\leanok
+\uses{thm:exists_common_blocked_cyclic_sector_family}
+With hypotheses as in
+Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family}, and given any
+integer $p$ that is a common multiple of the per-block period-removal
+lengths $(m_k)$, the common reblocking can be performed at the prescribed
+length $p$ rather than only at some sufficiently large length.
+\end{lemma}
+
+\begin{lemma}[Structural properties of the common reblocked sectors]%
+\label{thm:common_blocked_cyclic_sector_derived_properties}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.derivedProperties}\leanok
+\uses{thm:exists_common_blocked_cyclic_sector_family}
+Each sector tensor in the common reblocked cyclic-sector family of
+Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family} is
+trace-preserving ($\sum_i (B^i)^\dagger B^i = \Id$), has primitive
+transfer map ($\sigma_\partial(\E_B) = \{1\}$), is tensor-irreducible,
+and has positive bond dimension.
+\end{lemma}
+
+\begin{lemma}[Common-alphabet flattening]%
+\label{thm:common_blocked_cyclic_sector_reindexed_samempv}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV}\leanok
+\uses{thm:exists_common_blocked_cyclic_sector_family}
+With $p = m_k e_k$ for each $k$, the iterated blocked tensor $(B_k^{[m_k]})^{[e_k]}$
+agrees with the directly blocked tensor $B_k^{[p]}$ in the same-MPV sense,
+after the canonical identification of the $p$-blocked alphabet $d^{[p]}$ with
+the $e_k$-fold tensor power of the $m_k$-blocked alphabet $d^{[m_k]}$.
+\end{lemma}
+
+\begin{lemma}[Reindexed nonzero-part transport]%
+\label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzeroPart}\leanok
+\uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
+The nonzero-part decomposition of a weighted block sum
+$\bigoplus_k \mu_k B_k$ transports through the common-alphabet
+identification of
+Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}: the
+common-alphabet sectors have the same nonzero-part decomposition as the
+direct $p$-blocked tensors.
+\end{lemma}
+
+\begin{definition}[Coordinate-grouping predicate]%
+\label{def:common_blocked_cyclic_sector_grouped_block_cast}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.groupedBlockCastAgrees}\leanok
+\uses{thm:exists_common_blocked_cyclic_sector_family}
+The canonical identification of the common-alphabet sectors with the iterated
+alphabet $(d^{[m_k]})^{e_k}$ agrees with grouping any direct word of length
+$p = m_k e_k$ into $e_k$ consecutive words of length $m_k$.
+\end{definition}
+
+\begin{lemma}[Digit-level flattening cast]%
+\label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq}\leanok
+\uses{def:common_blocked_cyclic_sector_grouped_block_cast}
+For $p = mn$, the canonical word-flattening cast identifies a $p$-letter
+word with the concatenation of $n$ consecutive $m$-letter words: the
+two encodings of a word of length $p$ over $d^{[p]}$ and over
+$(d^{[m]})^{n}$ are equal under the canonical alphabet identification.
+\end{lemma}
+
+\begin{lemma}[Direct vs.\ iterated blocking comparison]%
+\label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
+\lean{MPSTensor.CommonBlockedCyclicSectorFamily.blocked_word_comparison}\leanok
+\uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
+      def:common_blocked_cyclic_sector_grouped_block_cast}
+Direct blocking at length $p = m_k e_k$ and iterated blocking
+$(B_k^{[m_k]})^{[e_k]}$ produce, after the canonical alphabet
+identification, the same weighted finite sum: for every $N \ge 0$ and
+every blocked word $\sigma$,
+\[
+  V^{(N)}\!\bigl(B_k^{[p]}\bigr)_\sigma
+  \;=\; V^{(N)}\!\bigl((B_k^{[m_k]})^{[e_k]}\bigr)_{\sigma'},
+\]
+where $\sigma'$ is the image of $\sigma$ under the coordinate-grouping
+identification.
+\end{lemma}
