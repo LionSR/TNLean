@@ -413,22 +413,13 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   have hQ_ne : Q ≠ 0 := by
     intro hQ0
     have hXh_inv_mul : Xᴴ * Xinᴴ = 1 := by
-      calc
-        Xᴴ * Xinᴴ = (Xin * X)ᴴ := by
-          simp [Matrix.conjTranspose_mul]
-        _ = 1 := by
-          simp [hX_inv_mul]
-    have : X = 0 := by
-      calc
-        X = X * 1 := by simp
-        _ = X * (Xᴴ * Xinᴴ) := by rw [hXh_inv_mul]
-        _ = (X * Xᴴ) * Xinᴴ := by simp [Matrix.mul_assoc]
-        _ = 0 := by simp [Q, hQ0]
-    have hX_ne : X ≠ 0 := by
-      intro hX0
-      have hbad := hX_mul_inv
-      simp [X, Xin, hX0] at hbad
-    exact hX_ne this
+      rw [← Matrix.conjTranspose_mul, hX_inv_mul, Matrix.conjTranspose_one]
+    have hX_zero : X = 0 := by
+      have hQXin : (X * Xᴴ) * Xinᴴ = 0 := by simp [Q, hQ0]
+      calc X = X * (Xᴴ * Xinᴴ) := by rw [hXh_inv_mul, Matrix.mul_one]
+           _ = (X * Xᴴ) * Xinᴴ := (Matrix.mul_assoc X Xᴴ Xinᴴ).symm
+           _ = 0 := hQXin
+    simp [X, Xin, hX_zero] at hX_mul_inv
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
     injective_implies_irreducibleCP A hA
   have hCPA : IsCPMap (transferMap (d := d) (D := D) A) :=
