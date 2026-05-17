@@ -192,7 +192,7 @@ This follows from the general nilpotency bound `f^(dim V) = 0` for
 nilpotent endomorphisms, combined with `dim(V₀) ≤ D`.
 
 Paper: arXiv:0909.5347, Lemma 2(b) — "the nilpotent block satisfies
-A₁^D̃₀ = 0 on V₀ where D̃₀ = dim(V₀) ≤ D." -/
+A₁^D'₀ = 0 on V₀ where D'₀ = dim(V₀) ≤ D." -/
 theorem fitting_nilpotent_pow_eq_zero
     (M : Matrix (Fin D) (Fin D) ℂ) :
     let f : End ℂ (Fin D → ℂ) := Matrix.toLin' M

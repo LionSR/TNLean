@@ -381,7 +381,7 @@ variable (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 the Choi matrix `τ = (T ⊗ id)(|Ω⟩⟨Ω|)` is positive semidefinite.
 
 Note: In TNLean, `IsCPMap T` is *defined* as the existence of a Kraus
-representation. The ⟸ direction uses spectral decomposition of `τ`. -/
+representation. The ⇐ direction uses spectral decomposition of `τ`. -/
 theorem cp_iff_choi_posSemidef [NeZero D] :
     IsCPMap T ↔ (choiMatrix T).PosSemidef := by
   constructor

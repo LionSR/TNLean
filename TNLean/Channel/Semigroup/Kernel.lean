@@ -5,7 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Channel.Semigroup.Basic
 import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Topology.Algebra.Module.StrongTopology
+import Mathlib.Topology.Algebra.Module.Spaces.CompactConvergenceCLM
+import Mathlib.Topology.Algebra.Module.Spaces.ContinuousLinearMap
 
 /-!
 # Kernel / fixed-point connections for semigroup generators

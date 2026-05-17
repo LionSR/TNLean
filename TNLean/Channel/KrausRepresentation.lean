@@ -96,8 +96,8 @@ theorem kraus_sum_mul_conjTranspose_of_unital
 /-! ### Unitary freedom in Kraus operators (Theorem 2.1, item 4, Eq. (2.10) ensemble equivalence) -/
 
 /-- **Theorem 2.1 item 4 (isometry freedom, sufficient direction)**:
-If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K̃ₗ`, then `{Kⱼ}` and
-`{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`.
+If `W` is an isometry (`Wᴴ W = 1`) and `Kⱼ = ∑ₗ Wⱼₗ K'ₗ`, then `{Kⱼ}` and
+`{K'ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K'ₗ X K'ₗ†`.
 
 This rectangular form specializes to the usual unitary-freedom statement when
 the output and input Kraus index sets have the same cardinality. The index
@@ -144,8 +144,8 @@ theorem kraus_same_map_of_isometry_combination
     _ = ∑ l, K' l * X * (K' l)ᴴ := by simp
 
 /-- **Theorem 2.1 item 4 (unitary freedom, sufficient direction)**:
-If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K̃ₗ`, then `{Kⱼ}` and
-`{K̃ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K̃ₗ X K̃ₗ†`. -/
+If `U` is unitary (`Uᴴ U = 1`) and `Kⱼ = ∑ₗ Uⱼₗ K'ₗ`, then `{Kⱼ}` and
+`{K'ₗ}` define the same map: `∑ⱼ Kⱼ X Kⱼ† = ∑ₗ K'ₗ X K'ₗ†`. -/
 theorem kraus_same_map_of_unitary_combination
     {ι : Type*} [Fintype ι] [DecidableEq ι]
     (K : ι → Matrix (Fin D) (Fin D) ℂ)

@@ -61,7 +61,7 @@ def NonrepeatingSectors {D m : ℕ} (P : Fin m → MatrixAlg D) : Prop :=
 def blockedSectorIndex {m : ℕ} [NeZero m] (p : ℕ) (α : ℕ) (k : ℕ) : Fin m :=
   ⟨(α + p * k) % m, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne m))⟩
 
-/-- Blocked sector projection `P̃_α = ∑_k P_[α+pk mod m]` with `k < m / gcd(m,p)`. -/
+/-- Blocked sector projection `P'_α = ∑_k P_[α+pk mod m]` with `k < m / gcd(m,p)`. -/
 noncomputable def blockedSectorProjection {D m : ℕ} [NeZero m]
     (P : Fin m → MatrixAlg D) (p : ℕ) (α : ℕ) : MatrixAlg D :=
   ∑ k : Fin (periodicBlockPeriod m p), P (blockedSectorIndex (m := m) p α k)

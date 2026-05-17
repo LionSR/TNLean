@@ -186,7 +186,7 @@ theorem rectSpan_nilpIndex_finrank_le
     _ = D * ((A i₀) ^ D).rank := by
         rw [rank_pow_nilpIndex_eq A i₀]
 
-/-- **NilpIndex pigeonhole**: there exists `n₀ ≤ D * D̃` with consecutive finrank
+/-- **NilpIndex pigeonhole**: there exists `n₀ ≤ D * D'` with consecutive finrank
 equality for the nilpIndex rectSpan. -/
 theorem exists_finrank_eq_succ_of_rectSpan_nilpIndex
     (A : MPSTensor d D) (i₀ : Fin d) :
@@ -213,7 +213,7 @@ theorem rectSpanNilpIndexLeftStep_surjective_of_finrank_eq
     (rectSpan_nilpIndex_leftStep_injective A i₀ n)
 
 /-- **Ceiling permanence**: once the finrank of `rectSpan ((A i₀)^r) A n` reaches
-the ceiling `D * D̃`, it stays there for all subsequent levels.
+the ceiling `D * D'`, it stays there for all subsequent levels.
 
 The argument: finrank at ceiling → rectSpan = range → finrank = ceiling. Since
 finrank is non-decreasing and bounded by ceiling, it stays at ceiling. -/
@@ -242,7 +242,7 @@ theorem rectSpan_nilpIndex_finrank_ceiling_permanent
 
 /-- **At ceiling, rectSpan equals full range.**
 
-When the finrank reaches `D * D̃`, the rectSpan at that level equals
+When the finrank reaches `D * D'`, the rectSpan at that level equals
 `range(mulLeft ((A i₀)^r))`. -/
 theorem rectSpan_nilpIndex_eq_range_of_finrank_eq_ceiling
     (A : MPSTensor d D) (i₀ : Fin d) (n : ℕ)

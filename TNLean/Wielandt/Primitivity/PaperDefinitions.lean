@@ -120,7 +120,7 @@ an MPS tensor `A` is primitive (in the paper's sense) if there exists `q` such
 that for every nonzero vector `φ`, `H_q(A,φ) = ℂ^D`, i.e. length-`q` word
 products applied to `φ` span all of `ℂ^D`.
 
-Paper: "E_A is primitive ⟺ for all |φ⟩ ≠ 0, ∃ q s.t. H_q(A,φ) = ℂ^D."
+Paper: "E_A is primitive ↔ for all |φ⟩ ≠ 0, ∃ q s.t. H_q(A,φ) = ℂ^D."
 The uniform `q` (independent of `φ`) is part of the paper's definition.
 
 Note: The full equivalence of all three Proposition 3 conditions is assembled
@@ -205,7 +205,7 @@ required to be positive *definite* (not merely positive semidefinite). For
 irreducible channels, the PSD fixed point is automatically PosDef, so the two
 notions coincide in that case.
 
-**Paper**: "E_A is strongly irreducible ⟺ 1 is the unique eigenvalue of E_A
+**Paper**: "E_A is strongly irreducible ↔ 1 is the unique eigenvalue of E_A
 with modulus 1, and the corresponding eigenvector ρ is positive definite."
 (arXiv:0909.5347, Proposition 3(c))
 

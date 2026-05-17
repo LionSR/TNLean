@@ -258,13 +258,15 @@ private theorem scalar_sum_comm {α β : Type*} [Fintype α] [Fintype β]
       simp_rw [Finset.sum_mul]
 
 private theorem separateLinearMap_apply_commute
-    {α β : Type*} [Fintype α] [Fintype β]
+    {α β : Type*} [Finite α] [Finite β]
     (P : EuclideanSpace ℂ α →ₗ[ℂ] EuclideanSpace ℂ α)
     (Q : EuclideanSpace ℂ β →ₗ[ℂ] EuclideanSpace ℂ β)
     (F : α → β → ℂ) (a : α) (b : β) :
     P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a =
       Q (WithLp.toLp 2 (fun b' => P (WithLp.toLp 2 (fun a' => F a' b')) a)) b := by
   classical
+  letI := Fintype.ofFinite α
+  letI := Fintype.ofFinite β
   calc
     P (WithLp.toLp 2 (fun a' => Q (WithLp.toLp 2 (fun b' => F a' b')) b)) a
         = ∑ a', (Q (WithLp.toLp 2 (fun b' => F a' b')) b) *

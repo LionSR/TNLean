@@ -47,7 +47,7 @@ strictly stronger than the qualitative `∃ N` statement exported by
 3. Apply the sharp theorem `vecMulVec_eigenvector_exact_wordSpan` from
    `TNLean.Wielandt.RectangularSpan.Universality`, which assembles:
    - one-sided `rectSpan` strict growth under normality,
-   - the sharp bound `r + D·D̃ ≤ D² − D + 1`,
+   - the sharp bound `r + D·D' ≤ D² − D + 1`,
    - eigenvector padding from the actual word-span level up to `D² − D + 1`.
 
 ## References

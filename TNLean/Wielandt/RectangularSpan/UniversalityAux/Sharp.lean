@@ -25,7 +25,7 @@ than `D` as the power exponent. Key savings:
 
 1. `range((A i₀)^r) = range((A i₀)^D)` (range stabilizes at nilpIndex)
 2. `(A i₀)^r ∈ wordSpan A r` (costs only `r`, not `D`)
-3. When `r ≥ 1`: `D · D̃ + r ≤ D² - D + 1`
+3. When `r ≥ 1`: `D · D' + r ≤ D² - D + 1`
 
 ### References
 - arXiv:0909.5347, Lemma 2(b) (exact bound D²-D+1)
@@ -223,7 +223,7 @@ theorem sharp_bound_le (A : MPSTensor d D)
     _ = D * D := Nat.sub_add_cancel hDs_le_DD
 
 /-- **Conditional sharp Lemma 2(b)**: given rectSpan
-stabilization within `D * D̃` steps,
+stabilization within `D * D'` steps,
 `∀ ψ, vecMulVec φ ψ ∈ cumulativeSpan A (D²-D+1)`. -/
 theorem vecMulVec_eigenvector_sharp_of_rectSpan
     (A : MPSTensor d D) (i₀ : Fin d)

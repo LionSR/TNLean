@@ -259,7 +259,7 @@ theorem peripheral_eigenvalues_closed_under_mul
 
 /-- **Peripheral eigenvalues are closed under inversion.**
 
-For `|α| = 1`, we have `α⁻¹ = ᾱ`, and `U_α†` is the eigenvector. -/
+For `|α| = 1`, we have `α⁻¹ = α'`, and `U_α†` is the eigenvector. -/
 theorem peripheral_eigenvalues_closed_under_inv
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -274,10 +274,10 @@ theorem peripheral_eigenvalues_closed_under_inv
   · -- HasEigenvalue for α⁻¹: Uα† is the eigenvector
     obtain ⟨Uα, hUα⟩ := MPSTensor.exists_peripheral_unitary_of_irreducible_schwarz
       K hUnital ρ hρ hρfix hIrr hα
-    -- E(Uα†) = (E(Uα))† = (α · Uα)† = ᾱ · Uα† = α⁻¹ · Uα†
+    -- E(Uα†) = (E(Uα))† = (α · Uα)† = α' · Uα† = α⁻¹ · Uα†
     have hUα_map : Kraus.map K (Uα : MatrixAlg D) = α • (Uα : MatrixAlg D) := by
       simpa [Kraus.map, MPSTensor.transferMap_apply] using hUα
-    -- ᾱ = α⁻¹ when |α| = 1
+    -- α' = α⁻¹ when |α| = 1
     have hconj_eq_inv : starRingEnd ℂ α = α⁻¹ :=
       (Complex.inv_eq_conj hα.2).symm
     have hmap_conj : Kraus.map K (Uα : MatrixAlg D)ᴴ =

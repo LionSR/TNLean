@@ -713,7 +713,7 @@ private theorem exists_traceless_blockUT_lindblad_form
   obtain ⟨c, hc⟩ := exists_traceless_kraus_shift G.L
   -- Shifted operators L'_j = G.L j + c_j · I
   set L' : Fin G.r → Mat := fun j => G.L j + c j • (1 : Mat) with hL'_def
-  -- Shifted Hamiltonian: H' = G.H - (I/2)·(Σ c̄ⱼ Lⱼ - Σ cⱼ Lⱼ†)
+  -- Shifted Hamiltonian: H' = G.H - (I/2)·(Σ c'ⱼ Lⱼ - Σ cⱼ Lⱼ†)
   set Δ : Mat := ∑ j : Fin G.r,
     (starRingEnd ℂ (c j) • G.L j - c j • (G.L j)ᴴ) with hΔ_def
   set H' : Mat := G.H - (Complex.I / 2) • Δ with hH'_def
@@ -757,7 +757,7 @@ private theorem exists_traceless_blockUT_lindblad_form
         have : Complex.I * (Complex.I / 2) = -(1/2 : ℂ) := by
           field_simp; rw [Complex.I_sq]
         rw [this, neg_smul, sub_neg_eq_add]
-      -- Step 2: ½Σ L'†L' = ½Σ G.L†G.L + ½Σ c̄ G.L + ½Σ c G.L† + ½Σ|c|² I
+      -- Step 2: ½Σ L'†L' = ½Σ G.L†G.L + ½Σ c' G.L + ½Σ c G.L† + ½Σ|c|² I
       have h_adj : (1/2 : ℂ) • ∑ j : Fin G.r, (L' j)ᴴ * L' j =
           (1/2 : ℂ) • ∑ j, (G.L j)ᴴ * G.L j +
           (1/2 : ℂ) • ∑ j, starRingEnd ℂ (c j) • G.L j +
@@ -774,7 +774,7 @@ private theorem exists_traceless_blockUT_lindblad_form
       rw [h_iH', h_adj, hΔ_def, Finset.smul_sum]
       simp_rw [smul_sub]
       simp_rw [Finset.sum_sub_distrib]
-      -- The key cancellation: ½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL† = Σc̄L
+      -- The key cancellation: ½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL† = Σc'L
       have hcancel :
           (∑ x, (1 / 2 : ℂ) • starRingEnd ℂ (c x) • G.L x -
            ∑ x, (1 / 2 : ℂ) • c x • (G.L x)ᴴ) +
@@ -782,7 +782,7 @@ private theorem exists_traceless_blockUT_lindblad_form
            (1 / 2 : ℂ) • ∑ j, c j • (G.L j)ᴴ) =
           ∑ i, starRingEnd ℂ (c i) • G.L i := by
         rw [← Finset.smul_sum, ← Finset.smul_sum]
-        -- ½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL† = Σc̄L
+        -- ½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL† = Σc'L
         module
       -- Now assemble
       have : κ_shift = κ_old +
@@ -790,17 +790,17 @@ private theorem exists_traceless_blockUT_lindblad_form
           (1 / 2 : ℂ) • ∑ i, (starRingEnd ℂ (c i) * c i) • (1 : Mat) := rfl
       rw [this]; clear this
       -- Group the sums on the LHS
-      -- LHS = iG.H + (½Σc̄L - ½ΣcL†) + ½ΣG.L†G.L + ½Σc̄L + ½ΣcL† + ½Σ|c|²I
-      -- = iG.H + ½ΣG.L†G.L + (½Σc̄L - ½ΣcL† + ½Σc̄L + ½ΣcL†) + ½Σ|c|²I
-      -- = iG.H + ½ΣG.L†G.L + Σc̄L + ½Σ|c|²I
-      -- = κ_old + Σc̄L + ½Σ|c|²I
+      -- LHS = iG.H + (½Σc'L - ½ΣcL†) + ½ΣG.L†G.L + ½Σc'L + ½ΣcL† + ½Σ|c|²I
+      -- = iG.H + ½ΣG.L†G.L + (½Σc'L - ½ΣcL† + ½Σc'L + ½ΣcL†) + ½Σ|c|²I
+      -- = iG.H + ½ΣG.L†G.L + Σc'L + ½Σ|c|²I
+      -- = κ_old + Σc'L + ½Σ|c|²I
       have hκ_old_eq : κ_old = Complex.I • G.H +
           (1 / 2 : ℂ) • ∑ j, (G.L j)ᴴ * G.L j := rfl
       rw [hκ_old_eq]
       -- Use hcancel to rewrite
-      -- LHS: iG.H + (½Σc̄L - ½ΣcL†) + (½ΣG.L†G.L + ½Σc̄L + ½ΣcL† + ½Σ|c|²I)
-      -- Group (½Σc̄L - ½ΣcL†) + (½Σc̄L + ½ΣcL†) = Σc̄L using hcancel
-      -- Then LHS = iG.H + ½ΣG.L†G.L + Σc̄L + ½Σ|c|²I = RHS
+      -- LHS: iG.H + (½Σc'L - ½ΣcL†) + (½ΣG.L†G.L + ½Σc'L + ½ΣcL† + ½Σ|c|²I)
+      -- Group (½Σc'L - ½ΣcL†) + (½Σc'L + ½ΣcL†) = Σc'L using hcancel
+      -- Then LHS = iG.H + ½ΣG.L†G.L + Σc'L + ½Σ|c|²I = RHS
       -- Set abbreviations for readability
       set A := Complex.I • G.H
       set B := ∑ x, (1 / 2 : ℂ) • starRingEnd ℂ (c x) • G.L x -

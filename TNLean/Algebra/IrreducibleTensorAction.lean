@@ -73,7 +73,7 @@ lemma isIrreducibleAction_of_isIrreducibleTensor
   have hHerm : P.IsHermitian := by
     have hSymm : (Matrix.toEuclideanLin P).IsSymmetric := by
       simpa [P, p'] using (Submodule.starProjection_isSymmetric (K := W'))
-    exact (Matrix.isHermitian_iff_isSymmetric (A := P) (𝕜 := ℂ) (n := Fin D)).2 hSymm
+    exact (Matrix.isSymmetric_toEuclideanLin_iff (A := P) (𝕜 := ℂ) (n := Fin D)).mp hSymm
   -- The matrix `P` is idempotent.
   have hPP : P * P = P := by
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
