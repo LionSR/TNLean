@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
 import TNLean.MPS.CanonicalForm.PhaseCover
-import TNLean.PiAlgebra.CanonicalFormSepAux
 
 /-!
 # Phase B-γ/D coefficient identity from a full BNT basis matching
