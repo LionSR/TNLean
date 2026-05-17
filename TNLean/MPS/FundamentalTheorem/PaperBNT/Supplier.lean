@@ -454,4 +454,73 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     rw [hLeft, hRight] at hReindex
     exact hReindex
 
+/-! ### End-to-end arbitrary-input PaperBNT supplier
+
+Composing the prepared-block supplier `exists_prepared_BNT_blocks_afterBlocking_pos`
+with the prepared-block BNT constructor
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` closes the
+arbitrary-input path on the paper-BNT side, with one explicit user assumption.
+
+The CPSV16 paper makes the weight normalization (absolute value of every weight
+at most one and at least one of unit modulus) an explicit user choice: see
+arXiv:1606.00608, §II.A line 246 ("we can always *choose* this normalization,
+which we will assume from now on").  Accordingly the end-to-end entry below
+exposes the prepared-block family produced by blocking and lets the user
+supply the §II.A line 246 normalization on those specific weights, after which
+the prepared-block BNT constructor delivers a full `IsBNTCanonicalForm`
+decomposition together with positive-length MPV agreement.
+-/
+
+/-- **End-to-end arbitrary-input PaperBNT supplier (CPSV16 §II.A L237-280).**
+
+For any tensor `A : MPSTensor d D`, after at most one positive blocking length
+`p`, there is a finite family of **prepared** blocks (left-canonical,
+primitive, irreducible, one-site injective, with nonzero weights and positive
+bond dimensions) whose direct-sum tensor matches the `p`-blocked input
+`blockTensor A p` at every positive length.  Moreover, **provided the user
+supplies the CPSV16 §II.A line 246 normalization choice** on those weights
+(every weight has absolute value at most one and at least one of unit
+modulus), there is a paper-faithful BNT canonical-form sector decomposition
+`P` with `blockTensor A p` matching `P.toTensor` at every positive length.
+
+The normalization is, per CPSV16 line 246, an explicit user choice:  the paper
+writes "we can always *choose* this normalization, which we will assume from
+now on".  We therefore expose the prepared-block family and embed the
+conditional sector-decomposition supplier inside the existential.
+
+Paper anchor: arXiv:1606.00608 §II.A line 237-280; proposition
+char-BNT line 1135-1149. -/
+theorem exists_isBNTCanonicalForm_afterBlocking_pos
+    {d D : ℕ} (A : MPSTensor d D) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ r : ℕ, ∃ dim : Fin r → ℕ, ∃ μ : Fin r → ℂ,
+    ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      (∀ k, 0 < dim k) ∧
+      (∀ k, IsLeftCanonical (blocks k)) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, IsInjective (blocks k)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+      (∀ (_hμLe : ∀ k, ‖μ k‖ ≤ 1) (_hμUnit : ∃ k, ‖μ k‖ = 1),
+        ∃ P : SectorDecomposition (blockPhysDim d p),
+          SameMPV₂Pos (blockTensor (d := d) (D := D) A p) P.toTensor ∧
+          IsBNTCanonicalForm P) := by
+  classical
+  obtain ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne, hSamePos⟩ :=
+    exists_prepared_BNT_blocks_afterBlocking_pos (d := d) (D := D) A
+  refine ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne, hSamePos, ?_⟩
+  intro hμLe hμUnit
+  obtain ⟨P, hSame, hBNT⟩ :=
+    exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
+      (d := blockPhysDim d p) (r := r) (dim := dim)
+      μ blocks hDim hTP hPrim hIrr hInj hμne hμLe hμUnit
+  refine ⟨P, ?_, hBNT⟩
+  -- Chain the positive-length MPV identity with the prepared-block agreement.
+  -- `hSamePos`: `mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ` for `N > 0`.
+  -- `hSame`:    `mpv P.toTensor σ = mpv (toTensorFromBlocks μ blocks) σ` for all `N`.
+  intro N hN σ
+  exact (hSamePos N hN σ).trans (hSame N σ).symm
+
 end MPSTensor
