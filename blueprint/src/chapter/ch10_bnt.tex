@@ -201,8 +201,6 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{lemma}[Restricted norm-class collapse]
     \label{lem:restricted_norm_class_collapse_bnt}
-    \lean{MPSTensor.exists_normClassSectorDecomp_of_equalNorm_sameMPV}
-    \leanok
     \uses{def:mpv}
     Let $(\mu_k, A_k)_{k=1}^r$ be a weighted block family with
     $\mu_k \neq 0$ for every $k$. Assume that whenever
@@ -218,7 +216,7 @@ and~\cite{Cirac2021Matrix}.
     blocks.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     Order the distinct norms of the weights in decreasing order, choose one
     representative block from each norm class, and retain the multiplicities
     inside each class as sector copies. The equal-MPV hypothesis lets every
