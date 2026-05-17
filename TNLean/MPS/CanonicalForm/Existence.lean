@@ -7,7 +7,6 @@ import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
-import TNLean.MPS.CanonicalForm.FromPeripheralPrimitive
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.MPS.Tactic.Basic
 
@@ -236,7 +235,7 @@ theorem isNormal_of_isPrimitiveMPS
 ## (5) Normality from primitive spectral-gap hypotheses
 
 For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
-`PeripheralToSpectralGap.lean` and `FromPeripheralPrimitive.lean` directly.
+`PeripheralToSpectralGap.lean` directly.
 -/
 
 /-!
