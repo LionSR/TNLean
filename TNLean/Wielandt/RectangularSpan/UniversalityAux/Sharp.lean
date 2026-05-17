@@ -256,8 +256,12 @@ theorem vecMulVec_eigenvector_sharp_of_rectSpan
           sharp_bound_le A i₀ hNotInv
   exact wordSpan_le_cumulativeSpan A hbound hmem
 
-/-- **Parametric sharp rectangular span via nilpIndex.** -/
-theorem wielandt_sharp_parametric_assembly [NeZero D]
+/-- **Parametric sharp word-span saturation via nilpotent index.**
+
+Given eigenvectors and a `rectSpan` stabilization at step `n₀`
+(with the initial matrix `(A i₀) ^ nilpIndex (toLin' (A i₀))`),
+produces `wordSpan A N = ⊤` for `N = (D-1) + (nilpIndex + n₀) + (D-1)`. -/
+theorem wielandt_sharp_parametric_span [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)

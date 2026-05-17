@@ -203,7 +203,7 @@ private theorem transferMap_pow_rankOne_posSemidef
 
 /-- **A nonzero PSD fixed point of a paper-primitive transfer map is positive definite.**
 
-This is the crucial step in Proposition 3 (a)→(c) of arXiv:0909.5347.
+This is the positivity step in Proposition 3 (a)→(c) of arXiv:0909.5347.
 The proof uses the decomposition of PSD matrices into sums of outer products
 and the positivity-improving property of primitive transfer maps.
 

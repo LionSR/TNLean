@@ -274,14 +274,13 @@ positive blocking length `p` and a finite family of prepared blocks
 weights and positive bond dimensions) whose direct-sum tensor matches the
 `p`-blocked input `blockTensor A p` at every positive length.
 
-This is the paper-faithful CPSV16 §II.A layer that is left as a user choice in
-the source paper: the §II.A line 246 weight normalization is **not** delivered
+The CPSV16 §II.A line 246 weight normalization is **not** delivered
 here, since the source paper makes this an explicit user assumption.  A
-separate normalization layer / hypothesis is then composed with the prepared
+separate normalization hypothesis is composed with the prepared
 blocks here to feed the `IsBNTCanonicalForm` constructor
 `exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks`.
 
-Pipeline:
+Construction steps:
 
 1. `unconditional_commonPrimitiveIrreducibleBlocks A A (fun _ _ => rfl)` —
    apply the two-sided arbitrary-input reduction at `B = A` to obtain a
@@ -471,17 +470,17 @@ the prepared-block BNT constructor delivers a full `IsBNTCanonicalForm`
 decomposition together with positive-length MPV agreement.
 -/
 
-/-- **End-to-end arbitrary-input PaperBNT supplier (CPSV16 §II.A L237-280).**
+/-- **Arbitrary-input BNT block preparation (CPSV16 §II.A L237-280).**
 
 For any tensor `A : MPSTensor d D`, after at most one positive blocking length
 `p`, there is a finite family of **prepared** blocks (left-canonical,
 primitive, irreducible, one-site injective, with nonzero weights and positive
 bond dimensions) whose direct-sum tensor matches the `p`-blocked input
-`blockTensor A p` at every positive length.  Moreover, **provided the user
-supplies the CPSV16 §II.A line 246 normalization choice** on those weights
-(every weight has absolute value at most one and at least one of unit
-modulus), there is a paper-faithful BNT canonical-form sector decomposition
-`P` with `blockTensor A p` matching `P.toTensor` at every positive length.
+`blockTensor A p` at every positive length.  When the user supplies the
+CPSV16 §II.A line 246 normalization choice on those weights (every weight
+has absolute value at most one and at least one of unit modulus), there is a
+BNT canonical-form sector decomposition `P` satisfying `IsBNTCanonicalForm`
+with `blockTensor A p` matching `P.toTensor` at every positive length.
 
 The normalization is, per CPSV16 line 246, an explicit user choice:  the paper
 writes "we can always *choose* this normalization, which we will assume from

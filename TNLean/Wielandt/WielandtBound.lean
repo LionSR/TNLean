@@ -17,7 +17,7 @@ consequences of normality that feed into the fixed-length Wielandt bound
 The paper-facing Theorem 1 statements (case (1), (2), (3) bounds on the
 Kraus-rank index $i(A)$) are in `SourceTheorems/WielandtInequality.lean`.
 This file only provides the cumulative-span and eigenvector-spreading
-inputs needed by the primitivity/normality bridge and the blueprint.
+inputs needed by the Proposition 3(c)→(b) proof in `Primitivity/Normal.lean`.
 
 ## Main result
 
@@ -44,8 +44,7 @@ variable {d D : ℕ}
 /-! ## The cumulative Wielandt chain
 
 The four standard consequences of normality.  These are combined below
-in one theorem so that callers (e.g. the primitivity/normality bridge
-in `Primitivity/Normal.lean`) get all outputs at once. -/
+in one theorem so that `Primitivity/Normal.lean` gets all outputs at once. -/
 
 /-- **The cumulative Wielandt chain**: under `IsNormal A`,
 the four standard cumulative consequences hold simultaneously.

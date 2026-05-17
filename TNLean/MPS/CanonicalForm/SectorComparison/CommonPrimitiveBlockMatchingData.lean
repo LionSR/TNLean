@@ -275,7 +275,7 @@ noncomputable def globalX (G : BlockMatchingGaugePhaseData blocksA blocksB) :
     GL (Fin (∑ k : Fin rA, dimB (G.perm k))) ℂ :=
   globalGaugeOfBlocks G.X
 
-/-- Explicit global-gauge witness for the matched block assembly.
+/-- Explicit global-gauge witness for the matched block direct sum.
 
 When per-block phases are absorbed into the block weights via
 `μA k = μB (perm k) * phase k`, the weighted direct sum of the permuted right

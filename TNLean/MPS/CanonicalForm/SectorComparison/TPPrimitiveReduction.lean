@@ -69,8 +69,8 @@ canonical-form reduction.  It imports four Wielandt modules:
    reaches the full matrix algebra, with an explicit bound on the stopping time.
 
 3. **`Wielandt.RectangularSpan.Basic`** — the rectangular span theory for Wielandt
-   Lemma 2(b): provides the conditional assembly `wielandt_lemma2b_conditional` that
-   reduces the full-rank conclusion to finding a rank-one element in the word span.
+   Lemma 2(b): `wielandt_lemma2b_conditional` reduces the full-rank conclusion to
+   finding a rank-one element in the word span.
 
 4. **`Wielandt.Primitivity.StronglyIrreducibleToFullRank`** — the hardest direction
    of the primitivity equivalence (Proposition 3(a)→(c) of arXiv:0909.5347): strong

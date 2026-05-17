@@ -9,9 +9,9 @@ import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Overlap.Basic
 
 /-!
-# Paper-faithful BNT canonical form on a `SectorDecomposition`
+# BNT canonical form on a `SectorDecomposition`
 
-This module introduces the paper-faithful canonical-form predicate
+This module introduces the canonical-form predicate
 `IsBNTCanonicalForm` over a `SectorDecomposition d`.
 
 The structure is the minimal CPSV16/CPSV21 BNT canonical-form data on top of
@@ -35,9 +35,9 @@ copy coefficients) — is **not** a structural field of `IsBNTCanonicalForm`.
 The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
 `exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
 `ft_paper_bnt_equal_*`) take the per-block witness as an explicit
-hypothesis at the theorem level.  This keeps the canonical-form predicate
-maximally paper-faithful and quarantines the line-1182 paper-implicit
-convention to the theorems that actually need it.
+hypothesis at the theorem level, keeping the canonical-form predicate
+minimal and the line-1182 implicit convention local to the theorems
+that actually need it.
 
 The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
@@ -84,7 +84,7 @@ namespace MPSTensor
 variable {d : ℕ}
 
 /--
-**Paper-faithful BNT canonical form (core).**
+**BNT canonical form (core predicate `IsBNTCanonicalForm`).**
 
 Given `P : SectorDecomposition d`, this captures the minimal CPSV16/CPSV21
 BNT canonical-form data without any equal-modulus or strict-ordering

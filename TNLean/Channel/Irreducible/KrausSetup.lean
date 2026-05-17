@@ -8,7 +8,7 @@ import TNLean.Channel.PerronFrobenius.Existence
 /-!
 # Shared Kraus setup for irreducible CP maps
 
-This file factors out the common boilerplate used when an irreducible
+This file factors out the routine setup when an irreducible
 completely positive map is converted into an irreducible Kraus family and then
 paired with the adjoint Perron--Frobenius eigenvector of that family.
 
@@ -82,7 +82,7 @@ theorem exists_nonzero_kraus
       MPSTensor.transferMap (d := hSetup.n) (D := D) hSetup.K = 0 :=
     LinearMap.ext fun X => by
       simp [MPSTensor.transferMap_apply, hK_zero]
-  exact hE (by simpa only [hSetup.map_eq] using htransfer_zero)
+  exact hE (hSetup.map_eq.trans htransfer_zero)
 
 /-- Shared adjoint Perron--Frobenius data extracted from an irreducible CP map. -/
 theorem exists_posDef_adjoint_eigenvector
@@ -92,10 +92,9 @@ theorem exists_posDef_adjoint_eigenvector
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
       MPSTensor.transferMap (d := hSetup.n) (D := D)
-        (fun i => (hSetup.K i)ᴴ) σ = (r : ℂ) • σ := by
-  exact
-    MPSTensor.exists_posDef_adjoint_eigenvector
-      (d := hSetup.n) (D := D) hSetup.K hSetup.irreducible
-      (hSetup.exists_nonzero_kraus hE)
+        (fun i => (hSetup.K i)ᴴ) σ = (r : ℂ) • σ :=
+  MPSTensor.exists_posDef_adjoint_eigenvector
+    (d := hSetup.n) (D := D) hSetup.K hSetup.irreducible
+    (hSetup.exists_nonzero_kraus hE)
 
 end IrreducibleCPKrausSetup

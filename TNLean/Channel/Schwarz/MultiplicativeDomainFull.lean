@@ -30,7 +30,7 @@ namespace KadisonSchwarz
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-section Helpers
+section AuxiliaryLemmas
 
 @[simp] theorem krausMap_add (K : Fin d → Mat) (X Y : Mat) :
     krausMap K (X + Y) = krausMap K X + krausMap K Y := by
@@ -52,7 +52,7 @@ theorem conjTranspose_krausMap (K : Fin d → Mat) (X : Mat) :
     (krausMap K X)ᴴ = krausMap K Xᴴ := by
   rw [krausMap_conjTranspose]
 
-end Helpers
+end AuxiliaryLemmas
 
 section Definitions
 

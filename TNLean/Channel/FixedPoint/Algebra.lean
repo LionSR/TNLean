@@ -41,7 +41,7 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-section Helpers
+section AuxiliaryLemmas
 
 @[simp] theorem map_add (K : Fin d → Mat) (X Y : Mat) :
     map K (X + Y) = map K X + map K Y := by
@@ -75,7 +75,7 @@ private theorem isUnital_conjTranspose_of_isTP (K : Fin d → Mat) (h_tp : IsTP 
     IsUnital (fun i => (K i)ᴴ) := by
   simpa [IsUnital, IsTP] using h_tp
 
-end Helpers
+end AuxiliaryLemmas
 
 section FixedPoints
 

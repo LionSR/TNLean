@@ -5,15 +5,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Fundamental
 
 /-!
-# Paper-faithful BNT equal-MPV gauge equivalence: bundled `II_cor2` witness
+# BNT equal-MPV gauge equivalence: bundled `II_cor2` witness
 
-This module packages the paper-faithful equal-MPV theorem
-`ft_paper_bnt_equal_global_gauge` as the literal `II_cor2` statement of
-CPSV16 §II.C lines 354–361 / appendix lines 1184–1192.
+This module states the equal-MPV theorem `ft_paper_bnt_equal_global_gauge`
+in the form of the literal `II_cor2` statement of CPSV16 §II.C lines 354–361
+/ appendix lines 1184–1192.
 
 The bundled-witness theorem `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses`
-exposes, for any two paper-faithful BNT sector decompositions $P$ and $Q$
-generating the same MPV family:
+exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
+`IsBNTCanonicalForm` and generating the same MPV family:
 
 * the matched basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$;
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$;
@@ -38,8 +38,8 @@ into a literal `cast`-of-`P.toTensor` requires assembling a sector-permutation
 matrix from `sectorFlatEquiv` and conjugating; the present module records the
 witness bundle that is the verbatim CPSV16 II_cor2 packaging, while the
 permutation-matrix conjugation is left for a follow-up module (it requires
-non-trivial `PEquiv` glue on block-diagonal matrices over a reindexed
-$Σ$-type).
+non-trivial `PEquiv` connecting results on block-diagonal matrices over a
+reindexed $Σ$-type).
 
 Paper anchors:
 
@@ -59,8 +59,8 @@ variable {d : ℕ}
 
 /-- **CPSV16 `II_cor2` witness form (CPSV16 §II.C lines 354–361 / 1184–1192).**
 
-If two paper-faithful BNT sector decompositions generate the same MPV family,
-then there exist:
+If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+same MPV family, then there exist:
 
 * a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$,
@@ -168,8 +168,8 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
 
 /-- **CPSV16 `II_cor2` literal form, sector data + total bond-dimension equality.**
 
-If two paper-faithful BNT sector decompositions generate the same MPV
-family, their total bond dimensions agree and there exists a matrix $X$
+If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+same MPV family, their total bond dimensions agree and there exists a matrix $X$
 realizing the CPSV16 line-1191 global gauge in $Q$'s flattened sector
 coordinates.
 
@@ -506,8 +506,9 @@ private lemma permMatrix_conj_eq_submatrix {n : Type*}
 
 /-- **CPSV16 `II_cor2` literal form (CPSV16 §II.C lines 354–361 / 1184–1192).**
 
-If two paper-faithful BNT sector decompositions generate the same MPV family,
-then their total bond dimensions agree, and there exists an explicit
+If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+same MPV family, then their total bond dimensions agree, and there exists an
+explicit
 $Y \in \mathrm{GL}(Q.\mathrm{totalDim},\mathbb{C})$ realizing the global gauge
 equation
 $$V_Q^i \;=\; Y \,\bigl(\mathrm{cast}\;V_P^i\bigr)\, Y^{-1}$$

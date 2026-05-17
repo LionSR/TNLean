@@ -7,11 +7,12 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
-# Paper-faithful BNT equal-MPV sector data theorem
+# BNT equal-MPV sector data theorem (CPSV16 §II.C lines 1182–1192)
 
-This module assembles Phase D's full-basis matching and eventual exact
-coefficient identity into the sector-data conclusion of the CPSV16/CPSV21
-fundamental theorem on the paper-faithful `IsBNTCanonicalForm` surface.
+This module combines the full-basis matching (`StrongMatch`) and the
+exact coefficient identity (`CoeffIdentity`) into the sector-data
+conclusion of the CPSV16/CPSV21 fundamental theorem on the
+`IsBNTCanonicalForm` surface.
 
 Paper anchors:
 
@@ -21,7 +22,7 @@ Paper anchors:
   recovering copy multiplicities and weights up to the matched phase.
 * CPSV21 Definition 4.3 lines 1846–1884: per-block BNT normalization on
   the basis tensors.  The per-block convention on copy coefficients
-  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — paper-implicit in CPSV16 §II.C line 1182's
+  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit in CPSV16 §II.C line 1182's
   projection argument — is taken as an explicit theorem-level hypothesis
   here, not as a structural field of `IsBNTCanonicalForm`.
 
@@ -75,15 +76,13 @@ noncomputable def matched_block_gauge {Q : SectorDecomposition d}
   change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
   exact Xblock (Q.flatIndexEquiv.symm s).1
 
-/-- **Paper-faithful equal-MPV sector-data theorem (Phase D).**
+/-- **BNT equal-MPV sector-data theorem (CPSV16 §II.C lines 1184–1188).**
 
-If two paper-faithful BNT sector decompositions generate the same MPV family,
-then their BNT basis sectors are bijectively matched by gauge-phase
-equivalence.  For each matched sector, the copy multiplicities agree and the
-raw copy weights agree after multiplying by the inverse of the gauge phase and
-permuting the copies.
-
-This is the Lean sector-data counterpart of CPSV16 §II.C lines 1184–1188. -/
+If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
+same MPV family, then their BNT basis sectors are bijectively matched by
+gauge-phase equivalence.  For each matched sector, the copy multiplicities
+agree and the raw copy weights agree after multiplying by the inverse of the
+gauge phase and permuting the copies. -/
 theorem ft_paper_bnt_equal_sector_dataPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -151,10 +150,10 @@ theorem ft_paper_bnt_equal_sector_data
   ft_paper_bnt_equal_sector_dataPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
-/-- **Phase E global gauge in matched flattened coordinates.**
+/-- **Global gauge in matched flattened coordinates (CPSV16 §II.C lines 1189–1192).**
 
-This is the coordinate-level assembly of CPSV16 §II.C lines 1189–1192.  Starting
-from equal MPV families on the paper-faithful BNT surface, it produces:
+This is the coordinate-level construction of the global gauge.  Starting
+from equal MPV families on the BNT canonical-form surface, it produces:
 
 * the full basis bijection `β`,
 * per-block bond-dimension equalities and gauge matrices `Xblock k`,

@@ -5,20 +5,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
 
 /-!
-# Phase B-α and B-β (paper-faithful) strong existential and bijective matching
+# Strong existential and bijective sector matching (CPSV16 §II.C lines 1182–1186)
 
-This module is **Phase B-α and Phase B-β** of the CPSV16/CPSV21
-fundamental-theorem clean-slate plan (issue #1725).  The downstream
-Phase B-γ Corollary substitution argument
-(`coeff_identity_via_global_gauge`, CPSV16 §II.C lines 1187-1188) lives
-in the companion module `PaperBNT/CoeffIdentity.lean` (file split in
-PR #1729 to respect the 1000-line module limit).
+The strong existential matching theorem states the CPSV16 §II.C lines 1182–1186
+*Step 1* conclusion directly on the original pair `(P, Q)` of BNT canonical
+forms, iterated over each sector `k` of `Q` that carries a unit-modulus copy.
 
-The paper-faithful strong existential
-matching theorem states the CPSV16 §II.C lines 1182–1186 *Step 1*
-conclusion directly on the original (un-dropped) pair `(P, Q)` of
-BNT canonical forms, iterated over each sector `k` of `Q` that carries
-a unit-modulus copy.
+The coefficient identity of CPSV16 §II.C lines 1187–1188 (Corollary substitution)
+lives in the companion module `PaperBNT/CoeffIdentity.lean`.
 
 ## Paper anchor
 
@@ -41,7 +35,7 @@ blocks contribute coefficients that decay exponentially and so do not
 constrain the matching; the paper restricts attention to the
 "physical" (unit-modulus carrying) blocks.
 
-## Scope (Phase B-α)
+## Proof structure
 
 The result is a **single `∀ k, ∃ j` existential statement** on the
 original pair, with the paper's "given $k$" hypothesis explicitly
@@ -52,16 +46,16 @@ union: the entire proof routes through the existing
 through the full-family combined LI `combined_family_eventually_li`,
 `PaperBNT/Api.lean`).
 
-The downstream Phase B-β (bijective matching) will apply this theorem
-twice — once with `(P, Q)` and once with `(Q, P)` — to derive
-`P.basisCount = Q.basisCount` on the unit-block subset and the per-pair
-bijection / gauge data.
+The bijective matching (`bijective_match_of_sameMPVPos`) applies the
+forward existential twice — once with `(P, Q)` and once with `(Q, P)` —
+to derive `P.basisCount = Q.basisCount` and the full bijection
+`β : Fin Q.basisCount ≃ Fin P.basisCount`.
 
-## Proof strategy (route B of the audit memo)
+## Proof of the existential
 
 Given a sector `k` of `Q` with a unit-modulus weight, apply the
-existing `exists_block_match_of_sameMPV` (`PaperBNT/DominantMatch`,
-post-Phase-A rename in PR #1726) **with `P` and `Q` swapped**:
+existing `exists_block_match_of_sameMPV` (`PaperBNT/DominantMatch`)
+**with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);
 * supply `hP_pos : 0 < P.basisCount` from `hP.weight_unit_exists`
@@ -75,8 +69,8 @@ The result is a `j₀ : Fin P.basisCount` with `Q.basisDim k = P.basisDim j₀`,
 a gauge-phase equivalence in the `Q → P` cast direction, and a
 non-decaying overlap in the `(Q.basis k, P.basis j₀)` order.  Two
 local auxiliary lemmas (`gaugePhaseEquiv_swap_cast` and
-`tendsto_mpvOverlap_zero_swap`) flip those into the paper-stated
-`(P, Q)`-ordered conclusion.
+`tendsto_mpvOverlap_zero_swap`) flip those into the `(P, Q)`-ordered
+conclusion.
 
 All proofs in this file are closed constructively.
 -/
@@ -88,7 +82,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Phase B-α main theorem: paper-faithful full-basis matching -/
+/-! ### Strong existential matching: CPSV16 §II.C lines 1182–1186 -/
 
 /-- **CPSV16 §II.C lines 1182–1186 Step 1 (full-basis form).**
 
@@ -152,7 +146,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
   forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     (P := P) (Q := Q) hP hQ hUnitQ hEqual.toSameMPV₂Pos
 
-/-! ### Phase B-β main theorem: full bijective matching by symmetry -/
+/-! ### Bijective sector matching by symmetry -/
 
 /-- **CPSV16 §II.C lines 1184–1186 full-basis bijection.**
 

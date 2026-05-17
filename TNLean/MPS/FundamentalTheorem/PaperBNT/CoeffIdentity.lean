@@ -6,16 +6,15 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
 import TNLean.MPS.CanonicalForm.PhaseCover
 
 /-!
-# Phase B-γ/D coefficient identity from a full BNT basis matching
+# Coefficient identity for full BNT basis matching (CPSV16 §II.C lines 1187–1188)
 
 This module contains the CPSV16 §II.C lines 1187–1188 coefficient
-comparison in the Phase D, full-basis form.  The earlier Phase B version
-worked over a unit-modulus subset and produced an asymptotic difference.  Phase D
-strengthens `IsBNTCanonicalForm` with CPSV21 §III.2 / Definition 4.3
-per-block spectral-radius-one normalization, upgrades matching to a full
-bijection `β : Fin Q.basisCount ≃ Fin P.basisCount`, and therefore the
-substitution has no residual unmatched terms.  A-only BNT linear
-independence gives eventual **exact** coefficient identities.
+comparison in the full-basis bijection form.  The full basis bijection
+`β : Fin Q.basisCount ≃ Fin P.basisCount` (from `StrongMatch`) together with
+`IsBNTCanonicalForm`'s CPSV21 §III.2 / Definition 4.3 per-block
+spectral-radius-one normalization ensures the substitution has no residual
+unmatched terms.  BNT linear independence of the `P`-basis
+(`hP.bnt_data`) then yields eventual **exact** coefficient identities.
 
 Paper anchors:
 
@@ -84,10 +83,9 @@ then `SameMPV₂ P.toTensor Q.toTensor` and the BNT linear independence of the
 `P.coeff N (β k) = (ζ k)^N * Q.coeff N k`.
 
 Unlike `coeff_identity_via_global_gauge`, this statement keeps the phase
-function explicit.  Phase E uses it to keep the coefficient/weight comparison
-coupled to the same per-block gauge matrices that are later assembled into
-`X = ⊕_k (𝟙_{r_k} ⊗ X_k)`; this is the paper-faithful reading of CPSV16 §II.C
-lines 1187–1192. -/
+function explicit.  The coefficient/weight comparison is coupled to the
+per-block gauge matrices that are later combined into
+`X = ⊕_k (𝟙_{r_k} ⊗ X_k)`, following CPSV16 §II.C lines 1187–1192. -/
 theorem coeff_identity_via_matched_mpv_phasePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
@@ -226,7 +224,7 @@ an eventual exact coefficient identity
 
 This is the formal counterpart of CPSV16 line 1188's exact power-sum
 comparison; it deliberately avoids the unsound asymptotic-difference to
-full-multiset route identified in the Phase B completion audit. -/
+full-multiset route noted in the multiplicity-audit memo. -/
 theorem coeff_identity_via_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

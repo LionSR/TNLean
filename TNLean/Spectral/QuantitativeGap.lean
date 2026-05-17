@@ -193,7 +193,7 @@ private theorem geometric_apply_bound_of_spectralRadius_lt_one
       exact mul_le_mul_of_nonneg_right (hpow n) (norm_nonneg x)
     _ = C * r ^ n * ‖x‖ := by ring
 
-/-! ## Helper lemmas -/
+/-! ## Auxiliary lemmas -/
 
 /-- The word span at length 1 equals the span of the Kraus operators. -/
 theorem wordSpan_one_eq_span_range (A : MPSTensor d D) :

@@ -12,9 +12,9 @@ import TNLean.Channel.Primitive
 import TNLean.Channel.Irreducible.FromSpectral
 
 /-!
-# Primitive MPS bridge lemmas for Wielandt theory
+# Connecting results for primitive MPS and spectral-gap conditions
 
-This module collects the public bridge between the paper-facing transfer-map
+This module collects the connection between the paper-facing transfer-map
 condition `IsStronglyIrreduciblePaper` and the spectral-gap predicate
 `IsPrimitiveMPS`.  These results are used by the Proposition 3(c)→(b) proof in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` and by downstream

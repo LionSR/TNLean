@@ -12,8 +12,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 # Canonical-form reduction after blocking
 
 This module is the public entry point for the complete canonical-form
-reduction after blocking. It keeps the historical import path
-`TNLean.MPS.CanonicalForm.Assembly` available while the underlying development is
+reduction after blocking. The underlying development is
 split across focused supporting modules.
 
 The supporting modules are:
@@ -38,8 +37,8 @@ The supporting modules are:
   after the zero-tail and TP-gauge structural reduction.
 * `TNLean.MPS.CanonicalForm.SectorComparison.StructuralData` — common-period blocking
   and structural after-blocking data.
-* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — historical re-export
-  path for structural data and common-sector transport.
+* `TNLean.MPS.CanonicalForm.SectorComparison.StructuralTheorem` — structural data and
+  common-sector transport.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport` — zero-tail and
   common-sector transport after the structural theorem.
 * `TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData` —

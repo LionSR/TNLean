@@ -172,13 +172,8 @@ theorem wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible
     wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOneBasis B φ hVec hBasis
   have hD_pos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   have hArith : (D - 1) + (D ^ 2 - D + 1) = D ^ 2 := by
-    have hDD2 : D ≤ D ^ 2 := by
-      calc
-        D = D * 1 := (Nat.mul_one D).symm
-        _ ≤ D * D := Nat.mul_le_mul_left D hD_pos
-        _ = D ^ 2 := (sq D).symm
-    zify [hD_pos, hDD2]
-    ring
+    have hDD2 : D ≤ D ^ 2 := Nat.le_self_pow (by omega) D
+    zify [hD_pos, hDD2]; ring
   have hBtop : wordSpan B (D ^ 2) = ⊤ := by
     rwa [hArith] at hAssembly
   have hEq : wordSpan B (D ^ 2) = wordSpan A (D ^ 2) := by

@@ -7,16 +7,14 @@ import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
 
 /-!
-# Weak non-decaying-overlap existential on the paper-faithful BNT surface
+# Weak non-decaying-overlap existential for BNT canonical forms
 
-This module proves the paper-faithful multi-copy weak existential: under
-eventual nonzero proportionality of the two assembled tensors, some pair
-of basis blocks has a non-decaying cross-overlap.  Both families carry
-the multi-copy paper-faithful predicate `IsBNTCanonicalForm`
-(`PaperBNT/Basic.lean`), and the sector coefficient is
+This module proves the multi-copy weak existential for `IsBNTCanonicalForm`:
+under eventual nonzero proportionality of the two assembled tensors, some pair
+of basis blocks has a non-decaying cross-overlap.  The sector coefficient is
 the raw power sum `P.coeff N j = ∑_q (P.weight j q)^N` of CPSV16 §II
 (lines 287–301) — never a scalar power `(λ_j)^N` of a single per-sector
-"spectral level".
+spectral level.
 
 The proof is the canonical CPSV16 combined-family contradiction:
 
@@ -85,9 +83,9 @@ the local copy is kept here until that landing. -/
 
 /-- **Cross-overlap between distinct basis blocks decays** (same family).
 
-For any two distinct basis indices `j ≠ k` of a paper-faithful BNT canonical
-form, the MPV overlap `mpvOverlap (P.basis j) (P.basis k) N` tends to `0` as
-`N → ∞`.
+For any two distinct basis indices `j ≠ k` of a BNT canonical form
+satisfying `IsBNTCanonicalForm`, the MPV overlap
+`mpvOverlap (P.basis j) (P.basis k) N` tends to `0` as `N → ∞`.
 
 Dispatch follows the CPSV16 lines 1080–1091 normal-tensor overlap dichotomy:
 
@@ -131,10 +129,10 @@ end IsBNTCanonicalForm
 /-! ### Eventual weighted-state identity from eventual proportionality
 
 The next local lemma extracts a scalar sequence from
-`EventuallyNonzeroProportionalMPV₂` for the paper-faithful multi-copy
-setting: the assembled tensors are `P.toTensor` and `Q.toTensor`, and the
-raw sector coefficient `P.coeff N j = ∑_q (P.weight j q)^N` of CPSV16
-lines 287–301 enters as the coefficient in front of each basis MPV state. -/
+`EventuallyNonzeroProportionalMPV₂`: the assembled tensors are
+`P.toTensor` and `Q.toTensor`, and the raw sector coefficient
+`P.coeff N j = ∑_q (P.weight j q)^N` of CPSV16 lines 287–301 enters
+as the coefficient in front of each basis MPV state. -/
 
 private lemma exists_eventually_coeff_weighted_mpvState_eq_smul_sequence
     {P Q : SectorDecomposition d}
@@ -212,7 +210,7 @@ private lemma exists_eventually_coeff_weighted_mpvState_eq_smul_sequence
 /-! ### The weak existential -/
 
 /-- **Weak non-decaying-overlap existence** for proportional families on the
-paper-faithful BNT canonical-form surface.
+BNT canonical-form surface (`IsBNTCanonicalForm`).
 
 Given two `IsBNTCanonicalForm` families with eventual nonzero proportionality
 of the assembled tensors, some pair `(j, k)` of basis blocks has a

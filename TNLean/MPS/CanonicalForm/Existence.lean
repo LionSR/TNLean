@@ -68,7 +68,7 @@ The formal Lean declaration:
 
 > `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves the implication
 > `IsStronglyIrreduciblePaper A → krausRank A = D` (equivalently,
-> `wordSpan A 1 = ⊤`).  This is the paper-faithful proof of the hardest direction
+> `wordSpan A 1 = ⊤`).  This proves the hardest direction
 > in the Sanz–Pérez-García–Wolf–Cirac primitivity equivalence.
 
 ## External input — Perez-Garcia et al. invariant subspace decomposition
