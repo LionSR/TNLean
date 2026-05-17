@@ -526,8 +526,7 @@ theorem mixedTransfer_pow_tendsto_zero
   suffices ∀ n, ((mixedTransferMap A B) ^ n) X = (F' ^ n) X by
     simp_rw [this]; exact h_eval.comp h_clm
   intro n
-  have h_pow : F' ^ n = Φ ((mixedTransferMap A B) ^ n) := (map_pow Φ _ n).symm
-  simp only [h_pow]; rfl
+  rw [(map_pow Φ (mixedTransferMap A B) n).symm]; rfl
 
 end SpectralConvergence
 

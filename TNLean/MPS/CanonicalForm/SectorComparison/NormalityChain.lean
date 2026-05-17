@@ -366,8 +366,8 @@ blocking, read back as direct blocking of the original tensor. -/
 theorem blockTensor_isInjective_mul_of_blockTensor_isInjective
     (A : MPSTensor d D) {N m : ℕ} (hm : 0 < m)
     (hN : IsInjective (blockTensor A N)) :
-    IsInjective (blockTensor A (m * N)) := by
-  exact (isNBlkInjective_iff_blockTensor_isInjective A (m * N)).1
+    IsInjective (blockTensor A (m * N)) :=
+  (isNBlkInjective_iff_blockTensor_isInjective A (m * N)).1
     (isNBlkInjective_mul_of_isNBlkInjective A hm
       ((isNBlkInjective_iff_blockTensor_isInjective A N).2 hN))
 

@@ -198,8 +198,7 @@ lemma traceMulRightPi_apply (A : MPSTensor d D)
 $\tr(A^i A^j) = \tr(B^i B^j)$ for all $i, j$. -/
 lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
-  have h := hAB.trace_evalWord [i, j]
-  simpa [evalWord, Matrix.mul_assoc] using h
+  simpa [evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j]
 
 /-- If `A` is injective, then `traceMulRightPi A` has trivial kernel.
 
@@ -234,7 +233,8 @@ theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this
 
-/-- If $\Phi_A$ is injective and $\operatorname{range} \Phi_A \subseteq \operatorname{range} \Phi_B$,
+/-- If $\Phi_A$ is injective and
+$\operatorname{range} \Phi_A \subseteq \operatorname{range} \Phi_B$,
 then $\ker \Phi_B = \{0\}$.
 
 By rank--nullity, $\dim(\operatorname{range} \Phi_A) = \dim V$,

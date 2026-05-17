@@ -37,7 +37,8 @@ Within `section SpectralGapDecomposition`, we use local notation:
 * `N` for `E - P` (the complementary part)
 
 ## References
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.3 Theorem 6.7][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.3
+  Theorem 6.7][Wolf2012QChannels]
 -/
 
 open Matrix

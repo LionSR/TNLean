@@ -50,8 +50,8 @@ lemma gaugeEquiv_toTensorFromBlocks_of_blockConj
         (X k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) * A k i *
           (((X k)⁻¹ : GL (Fin (dim k)) ℂ) : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
     GaugeEquiv (toTensorFromBlocks (d := d) (μ := μ) A)
-      (toTensorFromBlocks (d := d) (μ := μ) B) := by
-  exact ⟨globalGaugeOfBlocks X,
+      (toTensorFromBlocks (d := d) (μ := μ) B) :=
+  ⟨globalGaugeOfBlocks X,
     toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (μ := μ) (A := A) (B := B) X hX⟩
 
 /-- Gauge equivalence of weighted direct sums from gauge equivalence of each summand. -/

@@ -21,7 +21,8 @@ This file also proves the Hilbert–Schmidt contraction property.
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5, Equation (5.2)][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5,
+  Equation (5.2)][Wolf2012QChannels]
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder

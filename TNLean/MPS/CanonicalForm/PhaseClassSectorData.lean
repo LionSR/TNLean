@@ -319,8 +319,8 @@ theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_commonPhaseCover
       SameMPV₂ Q.toTensor (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
       HasBNTSectorData (d := d) P ∧
       HasBNTSectorData (d := d) Q ∧
-      SectorBasisOverlapSpanHypotheses P Q := by
-  exact exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
+      SectorBasisOverlapSpanHypotheses P Q :=
+  exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
     (d := d) μA blocksA μB blocksB hTPA hTPB hIrrA hIrrB hPrimA hPrimB
     hInjA hInjB hμA hμB (fun N => cover.span_eq N)
 

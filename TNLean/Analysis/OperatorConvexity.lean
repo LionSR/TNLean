@@ -174,8 +174,7 @@ private lemma psd_smul_real
   · intro v
     rw [mulVec_smul_eq, dotProduct_smul, smul_eq_mul]
     have hnn : (0 : ℂ) ≤ star v ⬝ᵥ A *ᵥ v := hA.dotProduct_mulVec_nonneg v
-    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := by
-      rw [Complex.le_def]; exact ⟨by simpa, by simp⟩
+    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := RCLike.ofReal_nonneg.mpr ht
     exact mul_nonneg ht_ℂ hnn
 
 /-- Positive semidefiniteness is preserved under convex combinations of PSD matrices. -/

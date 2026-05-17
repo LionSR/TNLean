@@ -35,11 +35,7 @@ theorem re_inner_apply_apply_self {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProj
   have hidem : P (P v) = P v := by
     simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T v)
       hP.isIdempotentElem.eq
-  calc
-    RCLike.re (⟪P v, P v⟫_𝕜) = RCLike.re (⟪P (P v), v⟫_𝕜) := by
-      exact congrArg RCLike.re ((hP.isSymmetric (P v) v).symm)
-    _ = RCLike.re (⟪P v, v⟫_𝕜) := by
-      rw [hidem]
+  rw [show ⟪P v, P v⟫_𝕜 = ⟪P (P v), v⟫_𝕜 from (hP.isSymmetric (P v) v).symm, hidem]
 
 /-- A symmetric projection has nonnegative quadratic form. -/
 theorem re_inner_nonneg {P : E →ₗ[𝕜] E} (hP : P.IsSymmetricProjection) (v : E) :
@@ -96,8 +92,7 @@ theorem re_inner_apply_apply_nonneg_of_commute {P Q : E →ₗ[𝕜] E}
   have hQidem : Q (Q (P v)) = Q (P v) := by
     simpa [Module.End.mul_apply] using congrArg (fun T : E →ₗ[𝕜] E => T (P v))
       hQ.isIdempotentElem.eq
-  have hsym₁ : ⟪P v, Q v⟫_𝕜 = ⟪Q (P v), v⟫_𝕜 := by
-    exact (hQ.isSymmetric (P v) v).symm
+  have hsym₁ : ⟪P v, Q v⟫_𝕜 = ⟪Q (P v), v⟫_𝕜 := (hQ.isSymmetric (P v) v).symm
   have hsym₂ : ⟪Q (P v), v⟫_𝕜 = ⟪Q (P v), Q v⟫_𝕜 := by
     calc
       ⟪Q (P v), v⟫_𝕜 = ⟪Q (Q (P v)), v⟫_𝕜 := by rw [hQidem]

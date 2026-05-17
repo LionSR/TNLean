@@ -67,7 +67,7 @@ theorem peripheral_isRootOfUnity_of_closed_powers
     (hclosed : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → ∀ n : ℕ,
       μ ^ n ∈ peripheralEigenvalues E)
     (μ : ℂ) (hμ : μ ∈ peripheralEigenvalues E) :
-    ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 := by
-  exact peripheral_isRootOfUnity_of_pow_mem_peripheralEigenvalues E μ hμ (hclosed μ hμ)
+    ∃ p : ℕ, 0 < p ∧ μ ^ p = 1 :=
+  peripheral_isRootOfUnity_of_pow_mem_peripheralEigenvalues E μ hμ (hclosed μ hμ)
 
 end

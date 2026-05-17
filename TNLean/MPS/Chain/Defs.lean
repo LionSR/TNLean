@@ -68,20 +68,17 @@ def GaugeEquiv (A B : MPSChainTensor d D n) : Prop :=
 @[simp] lemma coeff_eq (A : MPSChainTensor d D n) (σ : Fin n → Fin d) :
     coeff A σ = Matrix.trace (eval A σ) := rfl
 
-theorem SameState.refl (A : MPSChainTensor d D n) : SameState A A := by
-  intro σ
-  rfl
+theorem SameState.refl (A : MPSChainTensor d D n) : SameState A A :=
+  fun _ => rfl
 
 theorem SameState.symm {A B : MPSChainTensor d D n} (h : SameState A B) :
-    SameState B A := by
-  intro σ
-  exact (h σ).symm
+    SameState B A :=
+  fun σ => (h σ).symm
 
 theorem SameState.trans {A B C : MPSChainTensor d D n}
     (hAB : SameState A B) (hBC : SameState B C) :
-    SameState A C := by
-  intro σ
-  exact (hAB σ).trans (hBC σ)
+    SameState A C :=
+  fun σ => (hAB σ).trans (hBC σ)
 
 /-- `SameState` is an equivalence relation. -/
 instance instEquivalenceSameState : Equivalence (SameState (d := d) (D := D) (n := n)) where

@@ -173,19 +173,6 @@ theorem sum_stdBasis_mul_conjTranspose :
     _ = (d : ℂ) • ∑ i : Fin d, Matrix.single i i (1 : ℂ) := by rw [Finset.smul_sum]
     _ = (d : ℂ) • (1 : MatrixAlg d) := by rw [sum_single_diag_one]
 
-private theorem stdBasis_orthonormal_of_inner_eq_trace
-    [NormedAddCommGroup (MatrixAlg d)] [InnerProductSpace ℂ (MatrixAlg d)]
-    (hinner : ∀ X Y : MatrixAlg d, inner ℂ X Y = Matrix.trace (Y * Xᴴ)) :
-    Orthonormal ℂ ⇑(Matrix.stdBasis ℂ (Fin d) (Fin d)) := by
-  rw [orthonormal_iff_ite]
-  intro a b
-  rcases a with ⟨i, j⟩
-  rcases b with ⟨k, l⟩
-  rw [hinner, Matrix.stdBasis_eq_single, Matrix.stdBasis_eq_single, Matrix.conjTranspose_single]
-  rw [Matrix.trace_mul_single]
-  simp only [star_one, MulOpposite.op_one, single, of_apply, eq_comm, smul_ite,
-    one_smul, smul_zero, Prod.mk.injEq]
-
 /-- If a finite family of nonnegative reals has total sum at most `0`, then every term is `0`. -/
 lemma eq_zero_of_nonneg_of_sum_le_zero {ι : Type*} [Fintype ι]
     (f : ι → ℝ) (hf : ∀ i, 0 ≤ f i) (hsum : ∑ i, f i ≤ 0) :

@@ -142,46 +142,6 @@ noncomputable def stringOrderParam (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
   Matrix.trace (Λ * twistedTransferIter A u L 1)
 
-/-- `stringOrderParam` is the weighted trace pairing of the `L`-th mixed-transfer
-iterate for `A` and the twisted Kraus companion family. -/
-private lemma stringOrderParam_eq_trace_mixedTransfer (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ)
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    stringOrderParam A u Λ L =
-      Matrix.trace
-        (Λ * (((mixedTransferMap A (twistedMixedCompanion A u)) ^ L) 1)) := by
-  simp only [stringOrderParam, twistedTransferIter,
-    twistedTransferMap_eq_mixedTransfer]
-
-/-- For a unital transfer map and trace-one boundary state, the untwisted string
-order parameter is constantly `1`. -/
-private lemma stringOrderParam_one_eq_one
-    (A : MPSTensor d D)
-    (Λ : Matrix (Fin D) (Fin D) ℂ)
-    (hΛtr : Matrix.trace Λ = 1)
-    (hNorm : transferMap A 1 = 1) (L : ℕ) :
-    stringOrderParam A 1 Λ L = 1 := by
-  have hpow_one :
-      ((transferMap A) ^ L) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-    induction L with
-    | zero =>
-        rfl
-    | succ n ih =>
-        calc
-          ((transferMap A) ^ (n + 1)) (1 : Matrix (Fin D) (Fin D) ℂ)
-              = transferMap A (((transferMap A) ^ n) 1) := by
-                  simp only [pow_succ', Module.End.mul_apply]
-          _ = transferMap A 1 := by rw [ih]
-          _ = 1 := hNorm
-  have htwisted_pow_one :
-      ((twistedTransferMap A 1) ^ L) (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-    have htwisted_eq : twistedTransferMap A 1 = transferMap A := by
-      ext X i j
-      exact congrArg (fun M => M i j) (twistedTransferMap_one (A := A) X)
-    simpa only [htwisted_eq] using hpow_one
-  simp only [stringOrderParam, twistedTransferIter, htwisted_pow_one, hΛtr,
-    Matrix.mul_one]
-
 /-! ### Boundary string order and local symmetry -/
 
 /-- The virtual-boundary version of the string-order expression:
@@ -196,14 +156,6 @@ noncomputable def stringOrderBoundaryParam (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ X Y : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) : ℂ :=
   Matrix.trace (Λ * X * twistedTransferIter A u L Y)
-
-/-- The original one-sided string-order parameter is the boundary expression with
-trivial boundaries `X = Y = 1`. -/
-private lemma stringOrderBoundaryParam_one_one (A : MPSTensor d D)
-    (u : Matrix (Fin d) (Fin d) ℂ)
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    stringOrderBoundaryParam A u Λ 1 1 L = stringOrderParam A u Λ L := by
-  simp only [stringOrderBoundaryParam, stringOrderParam, Matrix.mul_one]
 
 /-- If the continuous linear operator underlying the twisted transfer map has
 spectral radius `< 1`, then every virtual-boundary string-order sequence tends
@@ -224,9 +176,6 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
   haveI : FiniteDimensional ℂ (V →L[ℂ] V) :=
     (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
   have hpow : Filter.Tendsto (fun L => F' ^ L) Filter.atTop (nhds 0) := by
-    let hFinite : FiniteDimensional ℂ (V →L[ℂ] V) :=
-      (Module.End.toContinuousLinearMap V).toLinearEquiv.finiteDimensional
-    letI : FiniteDimensional ℂ (V →L[ℂ] V) := hFinite
     let hComplete : CompleteSpace (V →L[ℂ] V) := FiniteDimensional.complete ℂ (V →L[ℂ] V)
     exact @pow_tendsto_zero_of_spectralRadius_lt_one (V →L[ℂ] V)
       inferInstance hComplete inferInstance F' <| by

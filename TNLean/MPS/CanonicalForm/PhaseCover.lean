@@ -35,8 +35,8 @@ def MPVBlockPhaseEquiv {d DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
 namespace MPVBlockPhaseEquiv
 
 /-- Reflexivity of heterogeneous MPV phase equivalence. -/
-lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A := by
-  exact ⟨1, one_ne_zero, fun N σ => by simp⟩
+lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A :=
+  ⟨1, one_ne_zero, fun N σ => by simp⟩
 
 /-- Symmetry of heterogeneous MPV phase equivalence. -/
 lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
@@ -509,8 +509,8 @@ noncomputable def mpvPhaseClassData {r : ℕ} {dim : Fin r → ℕ}
     have hquot : Quotient.mk (mpvPhaseSetoid blocks) (reprFn j) =
         Quotient.mk (mpvPhaseSetoid blocks) (reprFn k) :=
       Quotient.sound hphase
-    have hclass : classOf j = classOf k := by
-      exact (hrepr_mem j).symm.trans (hquot.trans (hrepr_mem k))
+    have hclass : classOf j = classOf k :=
+      (hrepr_mem j).symm.trans (hquot.trans (hrepr_mem k))
     apply hjk
     simpa [classOf, e] using congrArg e hclass
   have hRegroup : ∀ (f : Fin r → ℂ),
