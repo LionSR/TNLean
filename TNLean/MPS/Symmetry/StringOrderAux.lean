@@ -274,60 +274,37 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
             setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
       intro i
       have hAeq : setup.A' i = setup.S * A i * setup.S⁻¹ := by
-        rw [setup.hA'_def, tpGauge, setup.hS_def]
-        rfl
-      have hBstar :
-          (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
-        calc
-          (setup.B' i)ᴴ
-              = ((setup.S * setup.B i * setup.S⁻¹ : Matrix (Fin D) (Fin D) ℂ))ᴴ := by
-                  rw [setup.hB'_def, tpGauge, setup.hS_def]
-                  rfl
-          _ = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
-                simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+        rw [setup.hA'_def, tpGauge, setup.hS_def]; rfl
+      have hBstar : (setup.B' i)ᴴ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
+        have hB'eq : setup.B' i = setup.S * setup.B i * setup.S⁻¹ := by
+          rw [setup.hB'_def, tpGauge, setup.hS_def]; rfl
+        calc (setup.B' i)ᴴ
+            = (setup.S⁻¹)ᴴ * (setup.B i)ᴴ * setup.Sᴴ := by
+                  rw [hB'eq]; simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
           _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
-                simp [setup.hS_herm, setup.hS_inv_herm]
-      calc
-        setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ
-            = (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
-                (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
-                  rw [hAeq, hBstar, setup.hS_herm]
-        _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
-              calc
-                (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
-                    (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
-                    = setup.S * A i * (setup.S⁻¹ * (setup.S * V * setup.S)) *
-                        (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
-                        simp [Matrix.mul_assoc]
-                _ = setup.S * A i * (V * setup.S) *
-                      (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by
-                      have hSV :
-                          setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S := by
-                        calc
-                          setup.S⁻¹ * (setup.S * V * setup.S)
-                              = (setup.S⁻¹ * setup.S) * V * setup.S := by
-                                  simp [Matrix.mul_assoc]
-                          _ = V * setup.S := by simp [setup.hS_inv_mul]
-                      rw [hSV]
-                _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
-                      calc
-                        setup.S * A i * (V * setup.S) *
-                            (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
-                            = setup.S * A i *
-                                ((V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)) := by
-                                simp [Matrix.mul_assoc]
-                        _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by
-                              congr 1
-                              calc
-                                (V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
-                                    = V * (setup.S * setup.S⁻¹) * (setup.B i)ᴴ * setup.S := by
-                                        simp [Matrix.mul_assoc]
-                                _ = V * (setup.B i)ᴴ * setup.S := by
-                                      simp [setup.hS_mul_inv, Matrix.mul_assoc]
-                _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.S := by
-                      simp [Matrix.mul_assoc]
+                rw [setup.hS_inv_herm, setup.hS_herm]
+      -- Extract the two inner cancellations as local helpers.
+      have hSV : setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S :=
+        calc setup.S⁻¹ * (setup.S * V * setup.S)
+            = (setup.S⁻¹ * setup.S) * V * setup.S := by simp [Matrix.mul_assoc]
+          _ = V * setup.S := by rw [setup.hS_inv_mul, Matrix.one_mul]
+      have hVSB : (V * setup.S) * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) =
+                  V * (setup.B i)ᴴ * setup.S :=
+        calc V * setup.S * (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)
+            = V * (setup.S * setup.S⁻¹) * (setup.B i)ᴴ * setup.S := by simp [Matrix.mul_assoc]
+          _ = V * (setup.B i)ᴴ * setup.S := by rw [setup.hS_mul_inv, Matrix.mul_one]
+      calc setup.A' i * (setup.S * V * setup.Sᴴ) * (setup.B' i)ᴴ
+          = (setup.S * A i * setup.S⁻¹) * (setup.S * V * setup.S) *
+              (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by rw [hAeq, hBstar, setup.hS_herm]
+        _ = setup.S * A i * (setup.S⁻¹ * (setup.S * V * setup.S)) *
+              (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by simp [Matrix.mul_assoc]
+        _ = setup.S * A i * (V * setup.S) *
+              (setup.S⁻¹ * (setup.B i)ᴴ * setup.S) := by rw [hSV]
+        _ = setup.S * A i * ((V * setup.S) *
+              (setup.S⁻¹ * (setup.B i)ᴴ * setup.S)) := by simp [Matrix.mul_assoc]
+        _ = setup.S * A i * (V * (setup.B i)ᴴ * setup.S) := by rw [hVSB]
         _ = setup.S * (A i * V * (setup.B i)ᴴ) * setup.Sᴴ := by
-              simp [setup.hS_herm]
+              simp [Matrix.mul_assoc, setup.hS_herm]
     calc
       mixedTransferMap setup.A' setup.B' (setup.S * V * setup.Sᴴ)
           = ∑ i : Fin d,
@@ -345,13 +322,12 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
   have hGauge_ne : setup.S * V * setup.Sᴴ ≠ 0 := by
     intro hZero
     apply hV
-    have h' : setup.S⁻¹ * (setup.S * V * setup.Sᴴ) * (setup.Sᴴ)⁻¹ = 0 := by
+    have h : setup.S⁻¹ * (setup.S * V * setup.Sᴴ) * (setup.Sᴴ)⁻¹ = 0 := by
       simp [hZero]
-    have h'' : setup.S⁻¹ * (setup.S * V) = 0 := by
-      simpa [Matrix.mul_assoc, setup.hS_hMul_inv] using h'
-    have h''' : (setup.S⁻¹ * setup.S) * V = 0 := by
-      simpa [Matrix.mul_assoc] using h''
-    simpa [setup.hS_inv_mul] using h'''
+    have h1 : setup.S⁻¹ * (setup.S * V) = 0 := by
+      simpa [Matrix.mul_assoc, setup.hS_hMul_inv] using h
+    rw [← Matrix.mul_assoc, setup.hS_inv_mul, Matrix.one_mul] at h1
+    exact h1
   rw [Module.End.hasEigenvalue_iff]
   intro hBot
   have hMem :
@@ -791,12 +767,8 @@ theorem boundaryState_invariant_of_virtualUnitary
             simp [transferMap_apply]
       _ = ρ := by simp [ρ, hBfix, Matrix.mul_assoc]
   have hρ_tr : Matrix.trace ρ = 1 := by
-    calc
-      Matrix.trace ρ = Matrix.trace (V * Λ * Vᴴ) := rfl
-      _ = Matrix.trace (Vᴴ * (V * Λ)) := by
-            simpa [Matrix.mul_assoc] using Matrix.trace_mul_cycle V Λ Vᴴ
-      _ = Matrix.trace ((Vᴴ * V) * Λ) := by simp [Matrix.mul_assoc]
-      _ = 1 := by simpa [hV'] using hΛtr
+    have hρ_unf : ρ = V * Λ * Vᴴ := rfl
+    rw [hρ_unf, Matrix.trace_mul_cycle, hV', Matrix.one_mul, hΛtr]
   have hρ_ne : ρ ≠ 0 := by
     intro hρ0
     simp [hρ0] at hρ_tr
@@ -816,12 +788,10 @@ theorem boundaryState_invariant_of_virtualUnitary
     rw [hρ_scalar, Matrix.trace_smul, hΛtr] at hρ_tr
     simpa using hρ_tr
   have hρ_eq : ρ = Λ := by simpa [hc] using hρ_scalar
-  calc
-    Vᴴ * Λ * V = Vᴴ * ρ * V := by
-      simpa [Matrix.mul_assoc] using congrArg (fun M => Vᴴ * M * V) hρ_eq.symm
-    _ = Vᴴ * (V * (Λ * (Vᴴ * V))) := by simp [ρ, Matrix.mul_assoc]
-    _ = Vᴴ * (V * Λ) := by simp [hV']
-    _ = (Vᴴ * V) * Λ := by simp [Matrix.mul_assoc]
+  calc Vᴴ * Λ * V
+      = Vᴴ * ρ * V := by rw [← hρ_eq]
+    _ = (Vᴴ * V) * Λ * (Vᴴ * V) := by
+          simp [show ρ = V * Λ * Vᴴ from rfl, Matrix.mul_assoc]
     _ = Λ := by simp [hV']
 
 end MPSTensor
