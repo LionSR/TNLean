@@ -62,7 +62,8 @@ i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Proposition 7.2 gives CCP.
 **Proof ingredients**:
 1. The CP hypothesis gives positivity of the Choi matrix of `exp(tL)`.
 2. Boundary differentiation of a PSD-valued curve yields positivity of the projected derivative.
-3. Wolf Proposition 7.2 identifies projected Choi positivity with conditional complete positivity. -/
+3. Wolf Proposition 7.2 identifies projected Choi positivity with conditional
+   complete positivity. -/
 theorem cp_semigroup_implies_ccp_generator
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t)) :

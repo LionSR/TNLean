@@ -234,8 +234,9 @@ theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
     simpa [Matrix.traceLinearMap_apply] using congrArg (· 1) htr_zero
   simp [Matrix.trace_one, Fintype.card_fin, (Nat.cast_ne_zero (R := ℂ)).2 (NeZero.ne D)] at this
 
-/-- If $\Phi_A$ is injective and $\operatorname{range} \Phi_A \subseteq \operatorname{range} \Phi_B$,
-then $\ker \Phi_B = \{0\}$.
+/-- If $\Phi_A$ is injective and
+$\operatorname{range} \Phi_A \subseteq \operatorname{range} \Phi_B$, then
+$\ker \Phi_B = \{0\}$.
 
 By rank--nullity, $\dim(\operatorname{range} \Phi_A) = \dim V$,
 so $\dim(\operatorname{range} \Phi_B) \ge \dim V$, forcing $\ker \Phi_B = \{0\}$. -/

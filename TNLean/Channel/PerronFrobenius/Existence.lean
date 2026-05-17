@@ -43,7 +43,8 @@ backwards compatibility even though the file no longer introduces an axiom).
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2 Theorems 6.3/6.5][Wolf2012QChannels]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.2
+  Theorems 6.3/6.5][Wolf2012QChannels]
 * [Cirac et al., arXiv:1606.00608, Appendix A][Cirac2017Annals]
 * [Evans–Høegh-Krohn, *Spectral properties of positive maps*, 1978][Evans1978Spectral]
 -/

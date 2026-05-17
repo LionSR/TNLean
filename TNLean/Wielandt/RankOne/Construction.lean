@@ -12,7 +12,8 @@ import Mathlib.Data.List.FinRange
 /-!
 # Rank-one construction (reductions)
 
-`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the **vector-to-matrix spanning step** of
+`TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` already proves the
+**vector-to-matrix spanning step** of
 Wielandt Lemma 2(b): if
 
 * word products of length `n` applied to a vector `φ` span all of `ℂ^D`, and
@@ -395,7 +396,8 @@ theorem vecMulVec_pi_single_mem_wordSpan_of_rankOne
 single rank-one element `|φ⟩⟨ψ|` inside `wordSpan A m` together with a row
 spreading statement `rowSpreadSpan A ψ k = ⊤`, then `wordSpan A (n + (m+k)) = ⊤`.
 
-This composes the reduction above with the vector-to-matrix spanning lemma from `SpanGrowth/VectorToMatrixSpan.lean`.
+This composes the reduction above with the vector-to-matrix spanning lemma from
+`SpanGrowth/VectorToMatrixSpan.lean`.
 -/
 theorem wordSpan_eq_top_of_vectorSpreadSpan_eq_top_of_rankOne
     (A : MPSTensor d D) (φ ψ : Fin D → ℂ) {n m k : ℕ}

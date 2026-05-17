@@ -234,7 +234,8 @@ theorem aklt_isNormal : IsNormal akltTensor := ⟨2, aklt_isNBlkInjective_two⟩
 /-! ### Z₂ on-site symmetry -/
 
 /-- The Z₂ physical action on the spin-1 basis ${|+1\rangle, |0\rangle, |-1\rangle}$:
-the generator acts as the matrix $\begin{pmatrix} -1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}$. -/
+the generator acts as the matrix
+$\begin{pmatrix} -1 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 1 & 0 \end{pmatrix}$. -/
 def akltZ2Action :
     Multiplicative (ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ where
   toFun g := if Multiplicative.toAdd g = 0 then 1

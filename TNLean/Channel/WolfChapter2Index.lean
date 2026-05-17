@@ -17,7 +17,6 @@ import TNLean.Channel.POVM.Uniqueness
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WolfProps
 import TNLean.Channel.NormalForm
-import TNLean.Channel.LorentzNormalForm
 
 /-!
 # Wolf Lecture Notes — Chapter 2: Representations
@@ -25,6 +24,12 @@ import TNLean.Channel.LorentzNormalForm
 This file indexes the formalization of Chapter 2 of Wolf's
 *Quantum Channels & Operations: Guided Tour*, which covers the main
 representations of quantum channels.
+
+The Lorentz-normal-form statements are recorded in
+`TNLean.Channel.LorentzNormalForm`, but that file contains the compactness and
+classification proof obligations for Wolf Proposition 2.9. The index mentions
+those statements by name without importing the unfinished file into the
+default root.
 
 ## Coverage summary
 
@@ -229,11 +234,14 @@ representations of quantum channels.
 
 | Result | Notes |
 |--------|-------|
-| Theorem 2.5 (unitary form) | Reduced isometric form formalized; unitary form needs basis extension |
-| Section 2.3 Lorentz normal form (full proof) | Statement formalised (`exists_lorentz_normal_form_qubit`);
+| Theorem 2.5 (unitary form) | Reduced isometric form formalized; unitary form
+needs basis extension |
+| Section 2.3 Lorentz normal form (full proof) | Statement formalised
+(`exists_lorentz_normal_form_qubit`);
   proof blocked on compactness of bounded SL(n, ℂ) sets (`infimum_is_attained`) —
   see `LorentzNormalForm.lean` for details |
-| Section 2.3 Generic normal form (full proof) | Statement formalised (`exists_normal_form_generic`);
+| Section 2.3 Generic normal form (full proof) | Statement formalised
+(`exists_normal_form_generic`);
   proof blocked on same compactness lemma |
 | Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 

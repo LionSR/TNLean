@@ -10,7 +10,8 @@ open scoped Matrix BigOperators
 # Iterated invariant-projection splitting: irreducible block decomposition
 
 This module implements the "iterate until all blocks are irreducible" step from
-Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 (around eq. `\label{eq:II_Aiplusk1}`).
+Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3
+(around eq. `\label{eq:II_Aiplusk1}`).
 
 Starting from an arbitrary MPS tensor `A : MPSTensor d D`, we iteratively apply
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict` — which produces two blocks each with

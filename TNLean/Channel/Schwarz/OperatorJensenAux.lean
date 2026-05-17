@@ -255,9 +255,9 @@ lemma povmDiagonal_inv (w : ι → ℝ) (t : ℝ) (hw : ∀ i, w i ≠ 0) (ht : 
   congr 1
   funext a
   rcases a with ⟨i, _⟩ | _
-  · show ((w i : ℝ) : ℂ) * (((w i)⁻¹ : ℝ) : ℂ) = 1
+  · change ((w i : ℝ) : ℂ) * (((w i)⁻¹ : ℝ) : ℂ) = 1
     rw [← Complex.ofReal_mul, mul_inv_cancel₀ (hw i), Complex.ofReal_one]
-  · show ((t : ℝ) : ℂ) * (((t)⁻¹ : ℝ) : ℂ) = 1
+  · change ((t : ℝ) : ℂ) * (((t)⁻¹ : ℝ) : ℂ) = 1
     rw [← Complex.ofReal_mul, mul_inv_cancel₀ ht, Complex.ofReal_one]
 
 /-- Compressing the inverse of `povmDiagonal w t` by the POVM dilation. -/
@@ -269,6 +269,7 @@ lemma povmIsometry_compress_diagonal_inv
   rw [povmDiagonal_inv w t hw ht]
   exact povmIsometry_compress_diagonal (fun i => (w i)⁻¹) t⁻¹
 
+omit [DecidableEq ι] in
 /-- **Finite-POVM resolvent inequality.**
 
 Let `C_i` be a finite family of matrices defining POVM elements `B_i = C_i * (C_i)ᴴ`,

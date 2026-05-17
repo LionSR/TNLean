@@ -82,7 +82,9 @@ finite-dimensional ℂ-algebra, being a subalgebra of `M_D(ℂ)`.
 
 This is a type alias for the subtype
 `↥(adjointFixedPointsStarSubalgebra K h_tp hρ hρ_fix)`. -/
-abbrev FixedPointAlgebra :=
+abbrev FixedPointAlgebra
+    (K : Fin d → Mat) (h_tp : IsTP K) {ρ : Mat}
+    (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) : Type _ :=
   ↥(adjointFixedPointsStarSubalgebra (d := d) (D := D) K h_tp hρ hρ_fix)
 
 /-- Every finite-dimensional `*`-subalgebra of `M_D(ℂ)` is a semisimple ring. -/

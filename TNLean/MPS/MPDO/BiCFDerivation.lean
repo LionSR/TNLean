@@ -3,14 +3,16 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Counterexample
-import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 
 /-!
 # Finite-length sufficient conditions and obstructions for MPDO biCF
 
 This module retains the historical import path for the MPDO biCF derivation
 layer while the finite-length criteria are organized by their mathematical
-role.
+role. It imports the proof-complete obstruction and criterion layer. The
+direct-sum uniqueness capstone remains available from its own files, but is not
+imported here while it depends on the unfinished parent-Hamiltonian uniqueness
+argument.
 
 The supporting modules are:
 
@@ -36,7 +38,8 @@ The supporting modules are:
 * `TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum` — the BNT-facing direct-sum
   form that supplies that distinctness input from separated same-dimension
   blocks and gives the fixed three-block pair separation for all ordered pairs,
-  while keeping the direct-sum injectivity hypotheses explicit.
+  while keeping the direct-sum injectivity hypotheses explicit. This capstone
+  is imported directly by users who need the unfinished uniqueness route.
 
 ## References
 

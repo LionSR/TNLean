@@ -52,7 +52,9 @@ with the periodic boundary condition:
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section~4.3, lines 1976--2094 (parent Hamiltonian definition and uniqueness argument)
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
+  Section~4.3, lines 1976--2094 (parent Hamiltonian definition and uniqueness
+  argument)
 * [FNW92] Sections 3–4
 * [PGVWC07] arXiv:quant-ph/0608197, Sections 5–6
 
@@ -856,7 +858,8 @@ with the span of the MPV with the reduced window `L > L₀` (instead of `2L₀`)
 
 The normality hypothesis enables the range reduction from `2L₀` to `L₀ + 1`
 via the structure theory of normal MPS (peripheral spectrum, canonical form).
-See [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127, Section~4.3, lines 2049--2094. -/
+See [Cirac--Perez-Garcia--Schuch--Verstraete 2021] arXiv:2011.12127,
+Section~4.3, lines 2049--2094. -/
 -- TODO(parent-hamiltonian): derive using the normal-form range reduction and
 -- the cyclic-window definition of `chainGroundSpace`.
 theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
