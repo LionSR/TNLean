@@ -91,7 +91,7 @@ theorem parentHamiltonianES_gap_bound_of_quadratic_form
           ‖parentHamiltonianES A L N v‖ := by
   have hγ : 0 < (1 : ℝ) / (4 * (L : ℝ)) := by
     have hLpos : (0 : ℝ) < (L : ℝ) := by
-      exact_mod_cast (Nat.zero_lt_of_lt hL)
+      exact_mod_cast Nat.zero_lt_of_lt hL
     exact div_pos (by norm_num) (mul_pos (by norm_num) hLpos)
   exact ⟨hγ, parentHamiltonianES_norm_bound_of_quadratic_form A L hγ hQuad⟩
 
@@ -155,9 +155,9 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
   have hLpos : (0 : ℝ) < (L : ℝ) := by
-    exact_mod_cast (Nat.zero_lt_of_lt hL)
+    exact_mod_cast Nat.zero_lt_of_lt hL
   have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
-    exact_mod_cast (Nat.le_of_lt hL)
+    exact_mod_cast Nat.le_of_lt hL
   have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
     have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
     rw [div_le_iff₀ hden]
@@ -299,9 +299,9 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_friedrichs
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
   have hLpos : (0 : ℝ) < (L : ℝ) := by
-    exact_mod_cast (Nat.zero_lt_of_lt hL)
+    exact_mod_cast Nat.zero_lt_of_lt hL
   have hLge_one : (1 : ℝ) ≤ (L : ℝ) := by
-    exact_mod_cast (Nat.le_of_lt hL)
+    exact_mod_cast Nat.le_of_lt hL
   have hγle : ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
     have hden : 0 < 4 * (L : ℝ) := mul_pos (by norm_num) hLpos
     rw [div_le_iff₀ hden]

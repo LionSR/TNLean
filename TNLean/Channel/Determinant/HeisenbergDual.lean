@@ -209,9 +209,8 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
     ∀ (ij : Fin d × Fin d) (a : Fin r),
       Matrix.stdBasis ℂ (Fin d) (Fin d) ij * K a =
         K a * Td (Matrix.stdBasis ℂ (Fin d) (Fin d) ij) := by
-  -- TODO(refactor/513): thread the shared `L`/`hTd_kraus`/`hL_unital` setup
-  -- through these auxiliary lemmas instead of rebuilding it here and in
-  -- `heisenberg_dual_ks_eq_stdBasis`.
+  -- TODO(reorganize/513): factor out the shared `L`/`hTd_kraus`/`hL_unital` setup
+  -- instead of reconstructing it here and in `heisenberg_dual_ks_eq_stdBasis`.
   set L : Fin r → MatrixAlg d := fun i => (K i)ᴴ with hL_def
   have hTd_kraus : ∀ X, Td X = KadisonSchwarz.krausMap L X := by
     intro X
@@ -222,8 +221,8 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
   intro ij
   let e : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) ij
   let es : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) (ij.2, ij.1)
-  have hes : es = eᴴ := by
-    exact (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
+  have hes : es = eᴴ :=
+    (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
   have hTd_es : Td es = (Td e)ᴴ := by
     calc
       Td es = KadisonSchwarz.krausMap L es := hTd_kraus es

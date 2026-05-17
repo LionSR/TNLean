@@ -27,11 +27,8 @@ theorem LinearMap.ne_zero_of_eigenvector
     [Semiring R] [AddCommMonoid M] [Module R M] [NoZeroSMulDivisors R M]
     {E : M →ₗ[R] M} {ρ : M} {μ : R}
     (hρ_ne : ρ ≠ 0) (hμ_ne : μ ≠ 0) (hEig : E ρ = μ • ρ) :
-    E ≠ 0 := by
-  intro hE0
-  have hρ_zero : μ • ρ = 0 := by
-    simpa [hE0] using hEig.symm
-  exact hρ_ne ((eq_zero_or_eq_zero_of_smul_eq_zero hρ_zero).resolve_left hμ_ne)
+    E ≠ 0 := fun hE0 => hρ_ne
+  ((eq_zero_or_eq_zero_of_smul_eq_zero (by simpa [hE0] using hEig.symm)).resolve_left hμ_ne)
 
 /-- A positive-eigenvalue equation with nonzero eigenvector forces a linear map to be nonzero. -/
 theorem LinearMap.ne_zero_of_pos_eigenvector

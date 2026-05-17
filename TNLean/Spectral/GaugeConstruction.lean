@@ -134,7 +134,8 @@ theorem ker_all_of_inj {D₁ D₂ : ℕ}
 /-- If `X ≠ 0` and `ker X` is invariant under all matrices, then `X` is injective. -/
 theorem injective_of_ker_all [NeZero D₂]
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) (hX : X ≠ 0)
-    (h_all : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ, ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
+    (h_all : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ,
+        ∀ v, X *ᵥ v = 0 → X *ᵥ (M *ᵥ v) = 0) :
     ∀ v : Fin D₂ → ℂ, X *ᵥ v = 0 → v = 0 := by
   intro v hv
   by_contra hv_ne

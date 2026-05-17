@@ -136,8 +136,7 @@ theorem gaugeEquiv_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
 
 This follows from gauge equivalence. -/
 theorem sameMPV_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    SameMPV (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) := by
-  exact (GaugeEquiv.sameMPV (d := d) (D := D) (A := A) (B := tpGauge (d := d) (D := D) A ρ))
-    (gaugeEquiv_tpGauge (d := d) (D := D) A ρ hρ)
+    SameMPV (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) :=
+  GaugeEquiv.sameMPV (gaugeEquiv_tpGauge (d := d) (D := D) A ρ hρ)
 
 end MPSTensor

@@ -196,8 +196,8 @@ theorem hermitian_span_trivial_commutant_implies_no_blockUpperTriangular
     abel
   have hcommP : ∀ j : Fin F.r, P * F.L j = F.L j * P := by
     intro j
-    have hLj_mem : F.L j ∈ lindbladSpan F := by
-      exact Submodule.subset_span ⟨j, rfl⟩
+    have hLj_mem : F.L j ∈ lindbladSpan F :=
+      Submodule.subset_span ⟨j, rfl⟩
     have hLj_star_mem : (F.L j)ᴴ ∈ lindbladSpan F := hHerm _ hLj_mem
     have hPAQ : P * F.L j * (1 - P) = 0 := by
       have hct := congrArg Matrix.conjTranspose (hblock_span _ hLj_star_mem)
@@ -283,8 +283,8 @@ private theorem exists_lindblad_form_rank_le_finrank
     simp only [Submodule.coe_sum, Submodule.coe_smul] at hval
     exact hval
   -- Gram matrix C = α†α is PSD
-  have hC_psd : (αᴴ * α).PosSemidef := by
-    exact Matrix.posSemidef_conjTranspose_mul_self α
+  have hC_psd : (αᴴ * α).PosSemidef :=
+    Matrix.posSemidef_conjTranspose_mul_self α
   -- Factor C = B†B where B = √C
   set B := CFC.sqrt (αᴴ * α)
   have hC_factor : (αᴴ * α) = Bᴴ * B := by
@@ -649,7 +649,8 @@ private theorem finrank_traceless_blockUT_add_D_le
   have hφ_apply : ∀ M : Mat, φ M = (1 - P) * (M * P) := by
     intro M; rfl
   have hφ_one : φ (1 : Mat) = 0 := by
-    rw [hφ_apply, Matrix.one_mul]; exact orthogonalProjection_complement_mul hP.1
+    rw [hφ_apply, Matrix.one_mul]
+    exact orthogonalProjection_complement_mul hP.1
   have h_sup : K_φ ⊔ K_τ = ⊤ := by
     simpa [φ, τ, K_φ, K_τ] using
       ker_sup_traceless_eq_top_of_one_mem_ker φ hφ_one hD_ne

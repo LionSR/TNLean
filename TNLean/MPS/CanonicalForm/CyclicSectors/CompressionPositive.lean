@@ -76,8 +76,8 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
           (List.cons_ne_nil (σ 0) (List.ofFn fun i => σ i.succ))
       calc
         mpv A σ = Matrix.trace (evalWord A (List.ofFn σ)) := by rfl
-        _ = Matrix.trace (P * evalWord A (List.ofFn σ)) := by
-              exact congrArg Matrix.trace hPw.symm
+        _ = Matrix.trace (P * evalWord A (List.ofFn σ)) :=
+              congrArg Matrix.trace hPw.symm
         _ = mpv C σ := (hCmpv n'.succ σ).symm
 
 end CompressionPositiveMPV

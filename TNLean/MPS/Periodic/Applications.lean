@@ -13,7 +13,7 @@ periodic fundamental theorem. It contains:
 
 1. A **single-block** symmetry theorem (`rotatePhysical` +
    `gaugeEquiv_of_sameMPV_rotatePhysical`).
-2. A **periodic-form assembly lemma** that isolates the only missing input for
+2. A **periodic-form theorem** that isolates the only missing input for
    the full Corollary 4.1 of arXiv:1708.00029 Section 4.
 3. **Preservation lemmas** showing that unitary rotation of the physical index
    preserves the transfer map, left-canonical normalization, irreducibility,
@@ -63,7 +63,7 @@ theorem gaugeEquiv_of_sameMPV_rotatePhysical
     GaugeEquiv A (rotatePhysical u A) :=
   fundamentalTheorem_singleBlock hA hSym
 
-/-- Corollary 4.1 assembly step (periodic form).
+/-- Corollary 4.1 (periodic form).
 
 Assume the periodic equal-case FT as a hypothesis (`hPeriodicEq`): whenever two
 tensors are in irreducible form II and generate the same MPV family, they are
@@ -249,7 +249,7 @@ theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (u : Matrix (Fin d) (Fin d) 
 
 /-! ### Irreducible form preservation under rotation -/
 
-/-- Physical-index rotation distributes over the block-diagonal assembly:
+/-- Physical-index rotation distributes over the block-diagonal sum:
 `rotatePhysical u (toTensorFromBlocks μ A) =
   toTensorFromBlocks μ (fun k => rotatePhysical u (A k))`.
 

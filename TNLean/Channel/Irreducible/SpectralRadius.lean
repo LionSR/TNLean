@@ -154,8 +154,8 @@ private lemma spectralRadius_smul
       rwa [Set.mem_smul_set_iff_inv_smul_mem₀ hc] at hz
     have hz' : c • (c⁻¹ • z) = z := by
       rw [smul_smul, mul_inv_cancel₀ hc, one_smul]
-    have hnorm : (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := by
-      exact congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c (c⁻¹ • z))
+    have hnorm : (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ :=
+      congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c (c⁻¹ • z))
     calc
       (‖z‖₊ : ℝ≥0∞) = (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) := by rw [hz']
       _ = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := hnorm
@@ -175,8 +175,8 @@ private lemma spectralRadius_smul
         inferInstance inferInstance inferInstance hComplete inferInstance F
     obtain ⟨μ, hμ_spec, hμ_max⟩ :=
       hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
-    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F := by
-      exact le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
+    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F :=
+      le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
     have hcμ_spec : c • μ ∈ spectrum ℂ (c • F) := by
       rw [hspec]
       exact Set.smul_mem_smul_set hμ_spec
@@ -408,8 +408,8 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       rw [show (rInvNN : ℝ) = r⁻¹ by rfl, norm_inv]
       simpa using congrArg Inv.inv hnorm_cast
     calc
-      (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (rInvNN : ℝ≥0∞) := by
-        exact congrArg (fun x : ℝ≥0 => (x : ℝ≥0∞)) hnorm_nnn
+      (‖((↑r : ℂ)⁻¹)‖₊ : ℝ≥0∞) = (rInvNN : ℝ≥0∞) :=
+        congrArg (fun x : ℝ≥0 => (x : ℝ≥0∞)) hnorm_nnn
       _ = ENNReal.ofReal (r⁻¹) := by
         rw [← ENNReal.ofReal_coe_nnreal]
         rfl

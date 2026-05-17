@@ -601,7 +601,7 @@ lemma per_block_sameMPV_of_separated_canonical_data
 /-- Reformulation extracting per-block `SameMPV` from canonical-form data with a strict
 ordering witness. The strict ordering is not part of `IsCanonicalForm` (which only guarantees
 non-increasing moduli); it must be supplied by the caller via `StrictAnti (fun k => ‖μ k‖)`.
-The paper-faithful predicate `IsBNTCanonicalForm` uses sector multiplicities and deliberately
+The source-paper predicate `IsBNTCanonicalForm` uses sector multiplicities and deliberately
 omits a strict-ordering field. -/
 lemma per_block_sameMPV_of_canonical_form
     (μ : Fin r → ℂ)

@@ -170,8 +170,8 @@ theorem kraus_same_map_of_unitaryGroup_combination
     (hK : ∀ j, K j = ∑ l, (U : Matrix (Fin r) (Fin r) ℂ) j l • K' l) :
     ∀ X : Matrix (Fin D) (Fin D) ℂ,
       ∑ j : Fin r, K j * X * (K j)ᴴ =
-      ∑ l : Fin r, K' l * X * (K' l)ᴴ := by
-  exact kraus_same_map_of_unitary_combination K K' (U : Matrix (Fin r) (Fin r) ℂ)
+      ∑ l : Fin r, K' l * X * (K' l)ᴴ :=
+  kraus_same_map_of_unitary_combination K K' (U : Matrix (Fin r) (Fin r) ℂ)
     (Matrix.mem_unitaryGroup_iff'.mp U.prop) hK
 
 /-- Existentially formulated sufficient direction for Kraus unitary freedom:

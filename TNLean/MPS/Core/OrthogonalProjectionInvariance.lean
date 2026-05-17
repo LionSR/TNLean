@@ -9,8 +9,8 @@ import TNLean.Channel.Irreducible.Basic
 /-!
 # Orthogonal-projection invariance for transfer maps
 
-This module provides a lightweight bridge from the Kraus-operator condition
-`(1 - P) * A i * P = 0` to invariance of the compressed algebra under the
+This module derives, from the Kraus-operator condition
+`(1 - P) * A i * P = 0`, invariance of the compressed algebra under the
 transfer map of an MPS tensor.
 -/
 

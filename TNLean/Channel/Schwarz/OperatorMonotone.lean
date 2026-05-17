@@ -73,8 +73,8 @@ theorem matrix_rpow_le_rpow
 /-- Matrix-specialized operator monotonicity of `log` on positive definite matrices. -/
 theorem matrix_log_le_log
     {A B : Mat} (hAB : A ≤ B) (hA : A.PosDef) :
-    CFC.log A ≤ CFC.log B := by
-  exact CFC.log_le_log (A := Mat) hAB
+    CFC.log A ≤ CFC.log B :=
+  CFC.log_le_log (A := Mat) hAB
     (ha := Matrix.isStrictlyPositive_iff_posDef.mpr hA)
 
 /-- Wolf Corollary 5.2(1) in matrix form.

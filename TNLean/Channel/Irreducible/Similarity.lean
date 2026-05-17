@@ -351,8 +351,8 @@ theorem isIrreducibleMap_similarity_smul
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hIrr : IsIrreducibleMap E) :
-    IsIrreducibleMap (c • similarityMap (D := D) C E) := by
-  exact isIrreducibleMap_smul hc (isIrreducibleMap_similarity (D := D) hC hIrr)
+    IsIrreducibleMap (c • similarityMap (D := D) C E) :=
+  isIrreducibleMap_smul hc (isIrreducibleMap_similarity (D := D) hC hIrr)
 
 /-- Wolf Proposition 6.6 in the paper's scalar-normalized form (`c > 0`). -/
 theorem isIrreducibleMap_full_similarity
@@ -360,5 +360,5 @@ theorem isIrreducibleMap_full_similarity
     {C : Matrix (Fin D) (Fin D) ℂ} (hC : C.det ≠ 0)
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hIrr : IsIrreducibleMap E) :
-    IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) := by
-  exact isIrreducibleMap_similarity_smul (D := D) (by exact_mod_cast hc.ne') hC hIrr
+    IsIrreducibleMap ((c : ℂ) • similarityMap (D := D) C E) :=
+  isIrreducibleMap_similarity_smul (D := D) (by exact_mod_cast hc.ne') hC hIrr

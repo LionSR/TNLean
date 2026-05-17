@@ -52,7 +52,7 @@ theorem mem_blockIdeal_iff {i : ι} {x : ∀ j, R j} :
   have h_eq : blockIdeal R i =
       (Ideal.pi fun j =>
         ((Function.update (⊥ : ∀ k, TwoSidedIdeal (R k)) i ⊤) j).asIdeal).toTwoSided := by
-    simp only [blockIdeal, twoSidedIdealPiOrderIso]; rfl
+    simp [blockIdeal, twoSidedIdealPiOrderIso]
   rw [h_eq, Ideal.mem_toTwoSided, Ideal.mem_pi]
   constructor
   · intro h j hj

@@ -107,8 +107,8 @@ private lemma inv_factorial_nonneg (n : ℕ) :
   exact le_of_lt (inv_pos.mpr hfac_pos)
 
 private lemma inv_factorial_ne_zero (n : ℕ) :
-    ((n.factorial : ℂ)⁻¹) ≠ 0 := by
-  exact inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero n)
+    ((n.factorial : ℂ)⁻¹) ≠ 0 :=
+  inv_ne_zero (by exact_mod_cast Nat.factorial_ne_zero n)
 
 private lemma pos_of_matrix_ne_zero
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A ≠ 0) : 0 < D := by
@@ -167,8 +167,8 @@ theorem exp_truncation_posDef_of_irreducible_cp
     have h_re_not_pos : ¬ 0 < (star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v)).re := by
       intro hre_pos
       exact hq_not_pos ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
-    have h_re_zero : (star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v)).re = 0 := by
-      exact le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
+    have h_re_zero : (star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v)).re = 0 :=
+      le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
     exact Complex.ext h_re_zero him_zero.symm
   have hsum_zero : (∑ k ∈ Finset.range D, term k) *ᵥ v = 0 :=
     (hsum_psd.dotProduct_mulVec_zero_iff v).mp hq_zero
@@ -209,8 +209,8 @@ theorem exp_truncation_posDef_of_irreducible_cp
     intro k hk
     rw [Matrix.smul_mulVec, hterm_zero_E k hk]
     simp
-  have hq_growth : 0 < star v ⬝ᵥ (((T ^ (D - 1)) A) *ᵥ v) := by
-    exact (Matrix.posDef_iff_dotProduct_mulVec.mp h_growth).2 hv
+  have hq_growth : 0 < star v ⬝ᵥ (((T ^ (D - 1)) A) *ᵥ v) :=
+    (Matrix.posDef_iff_dotProduct_mulVec.mp h_growth).2 hv
   exact (ne_of_gt hq_growth) (by simp [hv_growth_zero])
 
 /-- **Wolf Theorem 6.2, item 3 (exponential condition for irreducible positive maps)**:
@@ -303,8 +303,8 @@ theorem exp_posDef_of_irreducible_cp
       have h_re_not_pos : ¬ 0 < (star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v)).re := by
         intro hre_pos
         exact hq_not_pos ((Complex.pos_iff).2 ⟨hre_pos, him_zero⟩)
-      have h_re_zero : (star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v)).re = 0 := by
-        exact le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
+      have h_re_zero : (star v ⬝ᵥ (((NormedSpace.exp Φ) A) *ᵥ v)).re = 0 :=
+        le_antisymm (le_of_not_gt h_re_not_pos) hre_nonneg
       exact Complex.ext h_re_zero him_zero.symm
     have hrq_tsum_zero : ∑' n, rqterm n = 0 := by
       rw [← Complex.re_tsum hqseries, ← hqeq, hq_zero]
@@ -337,8 +337,8 @@ theorem exp_posDef_of_irreducible_cp
       refine Finset.sum_eq_zero ?_
       intro k hk
       exact hterm_zero k hk
-    have hq_trunc : 0 < star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) := by
-      exact (Matrix.posDef_iff_dotProduct_mulVec.mp htrunc_pd).2 hv
+    have hq_trunc : 0 < star v ⬝ᵥ ((∑ k ∈ Finset.range D, term k) *ᵥ v) :=
+      (Matrix.posDef_iff_dotProduct_mulVec.mp htrunc_pd).2 hv
     exact (ne_of_gt hq_trunc) (by simp [hv_trunc_zero])
   have hfinal : ((NormedSpace.exp Φ) A).PosDef := by
     rw [Matrix.posDef_iff_dotProduct_mulVec]

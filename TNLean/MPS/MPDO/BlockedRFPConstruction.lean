@@ -189,19 +189,16 @@ def ofSALZCLAndCommutingForm
 
 /-- The issue-#782 commuting-form data together with MPO ZCL yield the
 GSNNCH-with-ZCL branch of Theorem 4.9. -/
-theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) :
-    IsGSNNCHWithZCL K := by
-  exact (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2
-    ⟨data.commutingForm, data.zcl⟩
+theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
+  (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨data.commutingForm, data.zcl⟩
 
 /-- The structure implies the current MPDO RFP predicate. -/
 theorem isRFP (data : SimpleMPDOBlockedRFPData K) : IsRFP K :=
   data.zcl
 
 /-- The structure implies the transfer-map fusion formulation of MPDO RFP. -/
-theorem isRFPViaFusion (data : SimpleMPDOBlockedRFPData K) :
-    IsRFP_MPDO_via_fusion K := by
-  exact isRFP_MPDO_via_fusion_of_isRFP (M := K) data.isRFP
+theorem isRFPViaFusion (data : SimpleMPDOBlockedRFPData K) : IsRFP_MPDO_via_fusion K :=
+  isRFP_MPDO_via_fusion_of_isRFP (M := K) data.isRFP
 
 end SimpleMPDOBlockedRFPData
 

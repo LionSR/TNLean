@@ -644,7 +644,8 @@ theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP
       (instGCNormedRingMatrixCLM D₁ D₂) (instGCNormedAlgebraMatrixCLM D₁ D₂)
       (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance (a := F)
       (@spectrum.nonempty _ (instGCNormedRingMatrixCLM D₁ D₂)
-        (instGCNormedAlgebraMatrixCLM D₁ D₂) (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
+        (instGCNormedAlgebraMatrixCLM D₁ D₂)
+        (instGCCompleteSpaceMatrixCLM D₁ D₂) inferInstance F)
   have hμ_one : (↑‖μ‖₊ : ENNReal) = 1 := by
     simpa only [ENNReal.coe_eq_one, hEqF] using hμ_rad
   have hμ_nnn : ‖μ‖₊ = (1 : NNReal) := (ENNReal.coe_eq_one).1 hμ_one

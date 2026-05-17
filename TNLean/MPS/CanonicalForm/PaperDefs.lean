@@ -155,7 +155,8 @@ structure CanonicalFormPaperData (A : MPSTensor d D) where
 
 /--
 `MPSTensor.IsCanonicalFormPaper A` is the propositional **canonical form**
-predicate from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
+predicate from arXiv:1606.00608
+(`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
 direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least one
 `|μ_k| = 1`.
 

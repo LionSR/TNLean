@@ -374,8 +374,8 @@ theorem toContinuousLinearMap_pow_apply [NeZero D]
     (F : Mat →ₗ[ℂ] Mat) (X : Mat) (n : ℕ) :
     (((Module.End.toContinuousLinearMap Mat) F) ^ n) X = (F ^ n) X := by
   have hpowEq : ((Module.End.toContinuousLinearMap Mat) F) ^ n =
-      (Module.End.toContinuousLinearMap Mat) (F ^ n) := by
-    exact (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
+      (Module.End.toContinuousLinearMap Mat) (F ^ n) :=
+    (map_pow (Module.End.toContinuousLinearMap Mat) F n).symm
   rw [hpowEq]
   rfl
 
@@ -397,8 +397,8 @@ theorem spectralRadius_lt_one_of_eigenvalues_lt_one [NeZero D]
       inferInstance inferInstance inferInstance hComplete inferInstance (Φ F)
   obtain ⟨μ, hμ_spec, hμ_max⟩ :=
     hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
-  have hμ_norm : (‖μ‖₊ : ENNReal) = spectralRadius ℂ (Φ F) := by
-    exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
+  have hμ_norm : (‖μ‖₊ : ENNReal) = spectralRadius ℂ (Φ F) :=
+    le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
   have hμ_spec_end : μ ∈ spectrum ℂ F := by
     rw [AlgEquiv.spectrum_eq Φ] at hμ_spec
     exact hμ_spec

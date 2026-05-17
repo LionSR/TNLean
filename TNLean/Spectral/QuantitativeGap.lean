@@ -129,7 +129,8 @@ private theorem geometric_bound_of_spectralRadius_lt_one
   have hr_lt_one : (r : ℝ) < 1 := by
     exact_mod_cast hr_below
   have hr_pos : 0 < (r : ℝ) := by
-    exact_mod_cast (lt_of_le_of_lt (show (0 : ℝ≥0∞) ≤ spectralRadius ℂ T from bot_le) hr_above)
+    exact_mod_cast (lt_of_le_of_lt
+      (show (0 : ℝ≥0∞) ≤ spectralRadius ℂ T from bot_le) hr_above)
   have hev :
       ∀ᶠ n in Filter.atTop, ‖T ^ n‖₊ < r ^ n := by
     have gelfand := spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius T

@@ -36,10 +36,8 @@ theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
     (h : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j))) :
     ∀ᶠ N in atTop, LinearIndependent ℂ (fun i => v i N) := by
   let G : ℕ → Matrix ι ι ℂ := fun N i j => ⟪v i N, v j N⟫_ℂ
-  have hG : Tendsto G atTop (nhds L) := by
-    refine tendsto_pi_nhds.2 fun i ↦ ?_
-    refine tendsto_pi_nhds.2 fun j ↦ ?_
-    exact h i j
+  have hG : Tendsto G atTop (nhds L) :=
+    tendsto_pi_nhds.2 fun i => tendsto_pi_nhds.2 fun j => h i j
   have hdet : Tendsto (fun N => (G N).det) atTop (nhds L.det) :=
     ((continuous_id.matrix_det).tendsto L).comp hG
   have hdet_ne : ∀ᶠ N in atTop, (G N).det ≠ 0 := hdet.eventually_ne hL

@@ -137,27 +137,6 @@ private theorem tracePairBilin_fixedPointProj [NeZero D]
 -- And tr(B† ρ B) = tr(ρ^{1/2} B (ρ^{1/2} B)†) ≥ 0 with equality iff ρ^{1/2} B = 0.
 -- For now we prove the strict positivity directly.
 
-/-- `tr(B† ρ B).re ≥ 0` when `ρ` is positive semidefinite. -/
-private theorem trace_conjTranspose_mul_posSemidef_mul_re_nonneg
-    {D : ℕ} (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (B : Matrix (Fin D) (Fin D) ℂ) :
-    0 ≤ (Matrix.trace (Bᴴ * ρ * B)).re := by
-  have hpsd : (Bᴴ * ρ * B).PosSemidef := hρ.conjTranspose_mul_mul_same B
-  exact (Complex.nonneg_iff.mp hpsd.trace_nonneg).1
-
-/-- If `B ∈ (wordSpan A n)⊥` (in the trace pairing), then the LHS of
-the trace-pairing identity vanishes. -/
-private theorem sum_normSq_eq_zero_of_trace_ortho [NeZero D]
-    (A : MPSTensor d D) (n : ℕ)
-    (B : Matrix (Fin D) (Fin D) ℂ)
-    (hB : ∀ σ : Fin n → Fin d,
-      Matrix.trace (Bᴴ * evalWord A (List.ofFn σ)) = 0) :
-    (∑ σ : Fin n → Fin d,
-        ‖Matrix.trace (Bᴴ * evalWord A (List.ofFn σ))‖ ^ 2 : ℝ) = 0 := by
-  apply Finset.sum_eq_zero
-  intro σ _
-  simp [hB σ]
-
 /-! ### Part 3: Main theorem — strong irreducibility → eventually full Kraus rank
 
 The proof follows the paper's contradiction argument:

@@ -134,7 +134,7 @@ private lemma sum_one_smul_eq {n : ℕ}
     (by simp)
 
 /-- The dissipator equals ½ of the Kossakowski commutator sum
-(for a single operator). This bridges the two forms. -/
+(for a single operator). This connects the two forms. -/
 private lemma dissipator_eq_half_kossakowski
     (Lop ρ : Matrix (Fin D) (Fin D) ℂ) :
     dissipator Lop ρ = (1/2 : ℂ) • (

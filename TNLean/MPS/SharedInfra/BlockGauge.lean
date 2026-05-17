@@ -12,7 +12,7 @@ import Mathlib.Algebra.BigOperators.Fin
 This file factors out the pure-linear-algebra block-diagonal gauge machinery
 that is consumed by both:
 
-* the FT-side block-gauge assembly (`TNLean.MPS.FundamentalTheorem.Multi`), and
+* the block-gauge construction in `TNLean.MPS.FundamentalTheorem.Multi`, and
 * the canonical-form sector-comparison data layer
   (`TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData`).
 

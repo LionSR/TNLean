@@ -277,11 +277,8 @@ theorem biRectSpan_finrank_le
   calc
     Module.finrank ℂ (biRectSpan (d := d) (D := D) P Q B n)
         ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) * Module.finrank ℂ ℂ :=
-          Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by
+          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
 /-!
 ## Injectivity tools on invertible blocks

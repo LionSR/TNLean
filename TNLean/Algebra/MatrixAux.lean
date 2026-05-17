@@ -34,13 +34,8 @@ namespace Matrix
 /-- The complex vector-space dimension of `D × D` matrices is `D ^ 2`. -/
 theorem finrank_matrix_fin_eq_sq (D : ℕ) :
     Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 := by
-  calc
-    Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ)
-        = Fintype.card (Fin D) * Fintype.card (Fin D) * Module.finrank ℂ ℂ :=
-            Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-          simp only [Fintype.card_fin, Module.finrank_self, mul_one]
-    _ = D ^ 2 := by ring
+  rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]
+  ring
 
 /-- The top submodule of `D × D` matrices has dimension `D ^ 2`. -/
 theorem finrank_top_matrix_fin_eq_sq (D : ℕ) :
@@ -71,8 +66,7 @@ theorem dim_le_of_mulVec_injective {D₁ D₂ : ℕ} [NeZero D₂]
   let f : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ) := Matrix.toLin' X
   have hf_inj : Function.Injective f := by
     intro u v huv
-    have h_sub : f (u - v) = 0 := by
-      simpa using congrArg (fun w => w - f v) huv
+    have h_sub : f (u - v) = 0 := by rw [map_sub]; exact sub_eq_zero.mpr huv
     exact sub_eq_zero.mp <| h_inj _ h_sub
   have hfinrank : Module.finrank ℂ (Fin D₂ → ℂ) ≤ Module.finrank ℂ (Fin D₁ → ℂ) :=
     LinearMap.finrank_le_finrank_of_injective hf_inj

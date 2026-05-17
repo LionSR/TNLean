@@ -26,14 +26,11 @@ lemma bounded_mul_tendsto_zero
     (c : ℂ) (f : ℕ → ℂ) (hc : ‖c‖ ≤ 1)
     (hf : Tendsto f atTop (nhds 0)) :
     Tendsto (fun N => c ^ N * f N) atTop (nhds 0) := by
-  have hfn : Tendsto (fun N => ‖f N‖) atTop (nhds 0) := by
-    convert hf.norm using 1; simp only [norm_zero]
+  have hfn : Tendsto (fun N => ‖f N‖) atTop (nhds 0) := by simpa using hf.norm
   apply squeeze_zero_norm (fun N => ?_) hfn
-  calc ‖c ^ N * f N‖ = ‖c ^ N‖ * ‖f N‖ := norm_mul _ _
-    _ = ‖c‖ ^ N * ‖f N‖ := by rw [norm_pow]
-    _ ≤ 1 * ‖f N‖ := mul_le_mul_of_nonneg_right
-        (pow_le_one₀ (norm_nonneg _) hc) (norm_nonneg _)
-    _ = ‖f N‖ := one_mul _
+  calc ‖c ^ N * f N‖ = ‖c‖ ^ N * ‖f N‖ := by rw [norm_mul, norm_pow]
+    _ ≤ ‖f N‖ := by
+        exact mul_le_of_le_one_left (norm_nonneg _) (pow_le_one₀ (norm_nonneg _) hc)
 
 /-- If `‖c‖ < 1` and `‖f N‖ ≤ C` for all `N`, then `c ^ N * f N → 0`. -/
 lemma geometric_mul_bounded_tendsto_zero

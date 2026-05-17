@@ -115,8 +115,8 @@ theorem IsHermitian.sum_dotProduct_eigenvectorBasis_eq_trace
 For any `f : ℝ → ℝ`, `hA.cfc (fun x => -f x) = -(hA.cfc f)`.
 
 NOTE: the proof reaches through `IsHermitian.cfc_eq` to the abstract
-`cfc` (where `cfc_neg` lives). If Mathlib refactors the link between
-`IsHermitian.cfc` and the abstract CFC, this bridge may need updating. -/
+`cfc` (where `cfc_neg` lives). If Mathlib reorganizes the connection between
+`IsHermitian.cfc` and the abstract CFC, this proof may need updating. -/
 theorem IsHermitian.cfc_neg {A : Matrix n n 𝕜} (hA : A.IsHermitian) (f : ℝ → ℝ) :
     hA.cfc (fun x => -f x) = -(hA.cfc f) := by
   rw [← hA.cfc_eq, ← hA.cfc_eq, _root_.cfc_neg f A]
@@ -146,7 +146,7 @@ private local instance instTROCNonnegSpectrumClass : NonnegSpectrumClass ℝ Mat
 private local instance instTROCCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
-/-- Bridge: for `0 ≤ A` (Loewner) in `Mat` and a Hermitian proof `hH`,
+/-- For `0 ≤ A` (Loewner) in `Mat` and a Hermitian proof `hH`,
 `A^p = hH.cfc (fun x => x^p)`. Taking `hH` as an explicit argument ensures
 the CFC in the conclusion matches the caller's chosen Hermitian proof. -/
 private lemma rpow_eq_cfc_power {A : Mat} (hA : 0 ≤ A) (hH : A.IsHermitian) (p : ℝ) :
@@ -174,8 +174,7 @@ private lemma psd_smul_real
   · intro v
     rw [mulVec_smul_eq, dotProduct_smul, smul_eq_mul]
     have hnn : (0 : ℂ) ≤ star v ⬝ᵥ A *ᵥ v := hA.dotProduct_mulVec_nonneg v
-    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := by
-      rw [Complex.le_def]; exact ⟨by simpa, by simp⟩
+    have ht_ℂ : (0 : ℂ) ≤ ((t : ℝ) : ℂ) := RCLike.ofReal_nonneg.mpr ht
     exact mul_nonneg ht_ℂ hnn
 
 /-- Positive semidefiniteness is preserved under convex combinations of PSD matrices. -/

@@ -216,8 +216,8 @@ theorem exists_tp_gauge_blockwise
               GaugeEquiv.sameMPV (hGauge1 k)
             have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
               calc
-                mpv (blocks1 k) σ = mpv (fun i => c • blocks0 k i) σ := by
-                  exact (hGaugeSame N σ).symm
+                mpv (blocks1 k) σ = mpv (fun i => c • blocks0 k i) σ :=
+                  (hGaugeSame N σ).symm
                 _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
             have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
               exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))

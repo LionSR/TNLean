@@ -289,10 +289,8 @@ theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D]
 equivalent to gauge equivalence. -/
 theorem sameMPVFrom_iff_gaugeEquiv_of_injective [NeZero D]
     {A B : MPSTensor d D} (hA : IsInjective A) {N₀ : ℕ} :
-    SameMPVFrom N₀ A B ↔ GaugeEquiv A B := by
-  constructor
-  · exact fundamentalTheorem_singleBlock_finiteLength hA
-  · intro hGE
-    exact (GaugeEquiv.sameMPV hGE).sameMPVFrom _
+    SameMPVFrom N₀ A B ↔ GaugeEquiv A B :=
+  ⟨fundamentalTheorem_singleBlock_finiteLength hA,
+   fun hGE => (GaugeEquiv.sameMPV hGE).sameMPVFrom _⟩
 
 end MPSTensor

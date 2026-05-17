@@ -77,10 +77,10 @@ private theorem extract_unitary_from_inner_form [NeZero d]
           Y * ((↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d))) :
     ∃ U : Matrix.unitaryGroup (Fin d) ℂ, T = unitaryChannel U := by
   -- GL identities
-  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 := by
-    exact congrArg Units.val (inv_mul_cancel P)
-  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 := by
-    exact congrArg Units.val (mul_inv_cancel P)
+  have hPinvP : (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) * (↑P : MatrixAlg d) = 1 :=
+    congrArg Units.val (inv_mul_cancel P)
+  have hPPinv : (↑P : MatrixAlg d) * (↑(P⁻¹ : GL (Fin d) ℂ) : MatrixAlg d) = 1 :=
+    congrArg Units.val (mul_inv_cancel P)
   -- Step 1: P†P is in the center → is a scalar matrix
   have hPHP_center :
       (↑P : MatrixAlg d)ᴴ * (↑P : MatrixAlg d) ∈

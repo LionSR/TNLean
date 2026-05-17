@@ -140,7 +140,7 @@ decomposition.
 For `r ≥ 2`, the proof of `∀ k, SameMPV (A k) (B k)` is the block-separation
 theorem in `CanonicalFormSep.lean`; for `r = 1` it follows from
 `sameMPV₂_single_block`. -/
-section EndToEnd
+section MultiBlockGaugeEquiv
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
@@ -185,7 +185,7 @@ lemma fundamentalTheorem_multiBlock_explicit_fromSameMPV₂
   let _ := hSame₂
   exact fundamentalTheorem_multiBlock_explicit A B hA hSep
 
-end EndToEnd
+end MultiBlockGaugeEquiv
 
 /-! ### Equivalence: per-block SameMPV ↔ per-block GaugeEquiv (under injectivity) -/
 section Equivalence

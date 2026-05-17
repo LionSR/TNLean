@@ -208,14 +208,14 @@ lemma mpv_toTensor_eq_sum_coeff (P : SectorDecomposition d) {N : ℕ}
 
 /-! ## Matched-sector flattened equivalences
 
-When two paper-faithful sector decompositions $P$ and $Q$ share an MPV
+When two sector decompositions $P$ and $Q$ share an MPV
 family, the equal-MPV matching theorem (CPSV16 §II.C lines 1184–1192)
 produces a basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$,
 matched copy permutations $τ_k$, and per-block bond-dimension equalities
 $D_P^{(βk)} = D_Q^{(k)}$.  These data induce an equivalence between the
 flattened sector indices of $P$ and $Q$, and an equality of the total
-bond dimensions $\sum_k r_k D_k$.  We package these here for downstream
-use in the literal `GaugeEquiv` packaging of `II_cor2`. -/
+bond dimensions $\sum_k r_k D_k$.  The results here are used in the
+`GaugeEquiv` construction for `II_cor2`. -/
 
 /-- Flattened-sector permutation induced by a matched basis bijection and
 matched copy permutations.
@@ -262,7 +262,7 @@ theorem flatDim_sectorFlatEquiv
   -- both sides reduce to a basis dimension of the matched block
   simp [SectorDecomposition.flatDim, sectorFlatEquiv_apply, hDim]
 
-/-- **Total bond dimension matches across paper-faithful sector matchings.**
+/-- **Total bond dimension matches across matched sector decompositions.**
 
 If $P$ and $Q$ admit a matched basis bijection with matched per-block bond
 dimensions and matched copy permutations, then their total bond dimensions

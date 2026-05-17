@@ -9,9 +9,9 @@ Two injective MPS chains `A` and `B` whose combined tensors
 family are related by cyclic gauge transformations on the virtual bonds.
 
 The hypothesis `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)` is
-trace agreement for all mixed-site words of all lengths. The paper bridges
-the gap from fixed-length `SameState` to this hypothesis via a blocking
-argument for `n ≥ 3`; this bridging step is not formalized here.
+trace agreement for all mixed-site words of all lengths. The paper passes
+from fixed-length `SameState` to this hypothesis via a blocking
+argument for `n ≥ 3`; this step is not formalized here.
 
 ## References
 

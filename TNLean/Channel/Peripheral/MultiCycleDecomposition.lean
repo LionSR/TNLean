@@ -225,8 +225,8 @@ theorem preserves_corner_pow_period (M : MultiCycleDecomposition T)
                   calc
                     T (M.P c (shiftIndex j n + 1) * X * M.P c (shiftIndex j n + 1))
                         = T (M.P c (shiftIndex j n + 1) * X) *
-                            T (M.P c (shiftIndex j n + 1)) := by
-                              exact M.mulRight c (shiftIndex j n + 1)
+                            T (M.P c (shiftIndex j n + 1)) :=
+                              M.mulRight c (shiftIndex j n + 1)
                                 (M.P c (shiftIndex j n + 1) * X)
                     _ = (T (M.P c (shiftIndex j n + 1)) * T X) *
                           T (M.P c (shiftIndex j n + 1)) := by

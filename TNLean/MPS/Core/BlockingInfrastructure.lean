@@ -29,7 +29,7 @@ primitive simultaneously.
   in the blocking period (for multiples).
 
 ### Part C: Common period via LCM
-* `lcmPeriod`, `lcmPeriod_pos`, `dvd_lcmPeriod` — lightweight LCM helpers on `Fin k → ℕ`
+* `lcmPeriod`, `lcmPeriod_pos`, `dvd_lcmPeriod` — auxiliary LCM results on `Fin k → ℕ`
   families used throughout common-period blocking.
 * `exists_common_blocking_all_primitive` — given a family of blocks each admitting some
   primitivity period, there exists a single common period.
@@ -127,8 +127,8 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
     mpv (blockTensor (d := d) (D := D) A p) σ
         = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = mpv (toTensorFromBlocks μ blocks) σflat := hSame (N * p) σflat
-    _ = ∑ k : Fin r, (μ k) ^ (N * p) • mpv (blocks k) σflat := by
-          exact mpv_toTensorFromBlocks_eq_sum μ blocks σflat
+    _ = ∑ k : Fin r, (μ k) ^ (N * p) • mpv (blocks k) σflat :=
+          mpv_toTensorFromBlocks_eq_sum μ blocks σflat
     _ = ∑ k : Fin r,
           ((μ k) ^ p) ^ N • mpv (blockTensor (d := d) (D := dim k) (blocks k) p) σ := by
           refine Finset.sum_congr rfl fun k _ => ?_
@@ -136,8 +136,8 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
             rw [Nat.mul_comm, pow_mul]
           rw [hpow, (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) (blocks k) p σ).symm]
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
-          exact (mpv_toTensorFromBlocks_eq_sum
+          (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ :=
+          (mpv_toTensorFromBlocks_eq_sum
             (fun k => (μ k) ^ p)
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p) σ).symm
 
@@ -169,8 +169,8 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
         (toTensorFromBlocks (d := d) (μ := μ) blocks) p)
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
-  exact sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) :=
+  sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
     (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
     μ blocks (by mpv_ext; rfl) p
@@ -406,8 +406,8 @@ theorem blockIndexOfList_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
 /-- Decoding blocked physical indices as words is injective. -/
 theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L) := by
   intro i j hij
-  have hdecode : decodeBlock d L i = decodeBlock d L j := by
-    exact List.ofFn_injective hij
+  have hdecode : decodeBlock d L i = decodeBlock d L j :=
+    List.ofFn_injective hij
   unfold decodeBlock at hdecode
   exact ((finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm).injective hdecode
 
@@ -442,8 +442,8 @@ original direct blocked index. -/
 @[mps_block_words]
 theorem iteratedBlockIndex_directToIteratedBlockIndex (d m n : ℕ)
     (i : Fin (blockPhysDim d (m * n))) :
-    iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i := by
-  exact wordOfBlock_injective d (m * n)
+    iteratedBlockIndex d m n (directToIteratedBlockIndex d m n i) = i :=
+  wordOfBlock_injective d (m * n)
     (wordOfBlock_iteratedBlockIndex_directToIteratedBlockIndex d m n i)
 
 /-- The map grouping a direct blocked word into iterated blocked words is surjective. -/
@@ -624,8 +624,8 @@ theorem flattenedIteratedBlockTensor_blockTensor
     flattenedIteratedBlockTensor
         (d := d) (p := p) (D := D)
         (blockTensor (d := d) (D := D) A p) L =
-      blockTensor (d := d) (D := D) A (p * L) := by
-  exact reindexPhysical_directToIteratedBlockIndex_blockTensor (d := d) A p L
+      blockTensor (d := d) (D := D) A (p * L) :=
+  reindexPhysical_directToIteratedBlockIndex_blockTensor (d := d) A p L
 
 /-- Assembling flattened iterated blocks is the physical reindexing of assembling the
 iterated blocked tensors. -/
@@ -712,7 +712,7 @@ The theorem `flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean` enc
 combinatorial identity as a list equality.  The lemma
 `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
 assertion implies the coordinate-level one required by `groupedBlockCastAgrees`, and the
-assembly theorem uses it to remove the former blocking-coordinate hypothesis.
+sector-comparison theorem uses it to remove the former blocking-coordinate hypothesis.
 -/
 
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/

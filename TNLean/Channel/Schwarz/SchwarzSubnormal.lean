@@ -172,8 +172,8 @@ private lemma le_of_forall_le_add_pos_smul_one (B D : Mat)
   have hg_tendsto : Filter.Tendsto g Filter.atTop (nhds (D - B)) := by
     have hε :
         Filter.Tendsto (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)))
-          Filter.atTop (nhds (0 : ℂ)) := by
-      exact (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
+          Filter.atTop (nhds (0 : ℂ)) :=
+      (Complex.continuous_ofReal.tendsto 0).comp tendsto_one_div_add_atTop_nhds_zero_nat
     have hzero :
         Filter.Tendsto
           (fun n : ℕ => ((((1 / ((n : ℝ) + 1)) : ℝ) : ℂ)) • (1 : Mat))

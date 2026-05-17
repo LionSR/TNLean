@@ -22,7 +22,7 @@ we assume the trace-preserving normalization
     \leanok
     \uses{def:mps_tensor}
     The \emph{mixed transfer operator} (or \emph{cross transfer
-    operator}) for two MPS tensors $A$ and $B$ of the same bond
+        operator}) for two MPS tensors $A$ and $B$ of the same bond
     dimension~$D$ is the linear map
     $F_{AB} : \MN{D} \to \MN{D}$ defined by
     \[
@@ -38,7 +38,7 @@ we assume the trace-preserving normalization
     dimension $D_2$ (possibly $D_1 \neq D_2$), the
     \emph{rectangular mixed transfer operator} is
     $F_{AB}^{\mathrm{rect}} :
-    M_{D_1 \times D_2}(\C) \to M_{D_1 \times D_2}(\C)$
+        M_{D_1 \times D_2}(\C) \to M_{D_1 \times D_2}(\C)$
     defined by
     \[
         F_{AB}^{\mathrm{rect}}(X)
@@ -73,7 +73,7 @@ we assume the trace-preserving normalization
     the inductive step applies $F_{AB}$ to each summand
     and re-indexes via
     $\{0,\ldots,d{-}1\}^{N+1} \cong
-    \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
+        \{0,\ldots,d{-}1\} \times \{0,\ldots,d{-}1\}^N$.
 \end{proof}
 
 \begin{theorem}[Matrix trace of iterated mixed transfer at the identity]\label{thm:mixed_trace_identity}
@@ -82,10 +82,10 @@ we assume the trace-preserving normalization
     \uses{def:mixed_transfer, def:eval_word}
     For $N \ge 0$,
     \[
-        \tr\bigl(F_{AB}^N(\Id)\bigr)
-        = 
+        \tr(F_{AB}^N(\Id))
+        =
         \sum_{\sigma}
-        \tr\bigl(A^\sigma (B^\sigma)^\dagger\bigr).
+        \tr(A^\sigma (B^\sigma)^\dagger).
     \]
     This is the matrix trace of $F_{AB}^N$ evaluated at the
     identity matrix.
@@ -98,17 +98,15 @@ we assume the trace-preserving normalization
     Apply the matrix trace to each summand in
     Theorem~\ref{thm:mixed_pow} with $X = \Id$:
     $\tr(F_{AB}^N(\Id))
-    = \sum_\sigma \tr(A^\sigma \cdot \Id \cdot (B^\sigma)^\dagger)
-    = \sum_\sigma \tr(A^\sigma (B^\sigma)^\dagger)$.
+        = \sum_\sigma \tr(A^\sigma \cdot \Id \cdot (B^\sigma)^\dagger)
+        = \sum_\sigma \tr(A^\sigma (B^\sigma)^\dagger)$.
 \end{proof}
 
 \section{MPV overlap as transfer trace}
 
 Recall from Definition~\ref{def:mpv_overlap} that
 \[
-    O_{AB}(N)
-    =
-    \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
+    O_{AB}(N) = \sum_{\sigma \in \{0,\ldots,d{-}1\}^N}
     V^{(N)}(A)_\sigma \overline{V^{(N)}(B)_\sigma}.
 \]
 This section rewrites that scalar as the operator trace of the
@@ -157,7 +155,7 @@ mixed transfer power.
     $F_{AB}^N(E_{pq})$, extract the $(p,q)$-entry, and
     reassemble. The resulting double sum over $(p,q)$ and $\sigma$
     equals $\sum_\sigma V^{(N)}(A)_\sigma
-    \overline{V^{(N)}(B)_\sigma} = O_{AB}(N)$.
+        \overline{V^{(N)}(B)_\sigma} = O_{AB}(N)$.
 \end{proof}
 
 \begin{theorem}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
@@ -185,10 +183,10 @@ mixed transfer power.
     \uses{def:eval_word}
     For a word $\sigma \in \{0,\ldots,d{-}1\}^N$,
     \[
-        \tr\bigl(A^\sigma (B^\sigma)^\dagger\bigr)
+        \tr(A^\sigma (B^\sigma)^\dagger)
         =
         \sum_{j,k = 0}^{D-1}
-        (A^\sigma)_{jk}\,\overline{(B^\sigma)_{jk}}.
+        (A^\sigma)_{jk} \overline{(B^\sigma)_{jk}}.
     \]
 \end{lemma}
 
@@ -250,7 +248,7 @@ Euclidean space.
 
 The eigenvalue bound comes from a uniform Frobenius-norm estimate
 obtained directly from the trace-preserving normalization
-(cf.\ \cite[Proposition~6.1]{Wolf2012Quantum} for the general
+(cf.~\cite[Proposition~6.1]{Wolf2012Quantum} for the general
 operator-norm version via Russo--Dye).
 For the rigidity theorem, one gauges $A$ and $B$ separately using
 positive fixed points of their transfer maps to obtain unital Kraus
@@ -277,8 +275,8 @@ a block embedding of a mixed-transfer eigenvector.
     for all $n$, where $C_D$ depends only on $D$.
     If $F_{AB}(X) = \mu X$ and $X \neq 0$, then
     $|\mu|^n \|X\|_{\mathrm{HS}}
-    = \|F_{AB}^n(X)\|_{\mathrm{HS}}
-    \le C_D \|X\|_{\mathrm{HS}}$
+        = \|F_{AB}^n(X)\|_{\mathrm{HS}}
+        \le C_D \|X\|_{\mathrm{HS}}$
     for every $n$.
     Hence $|\mu| \le 1$.
 
@@ -312,9 +310,9 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv,
-          thm:qpf, thm:right_canonical_gauge,
-          thm:ks_peripheral, thm:kraus_commute,
-          thm:left_multiplicative_identity, thm:simplicity, thm:skolem_noether}
+        thm:qpf, thm:right_canonical_gauge,
+        thm:ks_peripheral, thm:kraus_commute,
+        thm:left_multiplicative_identity, thm:simplicity, thm:skolem_noether}
     Since $\rho(F_{AB}) \le 1$ (Theorem~\ref{thm:spectral_radius_le_one})
     and $\rho(F_{AB}) \ge 1$ by hypothesis, there exists an
     eigenvalue~$\mu$ with $|\mu| = 1$ and eigenvector $X \neq 0$:
@@ -332,10 +330,10 @@ a block embedding of a mixed-transfer eigenvector.
 
     \emph{Step~2 (Block Kraus family and off-diagonal embedding).}
     Form the block Kraus operators $C^i = \bigl(\begin{smallmatrix}
-    A'^i & 0 \\ 0 & B'^i\end{smallmatrix}\bigr)$.
+            A'^i & 0 \\ 0 & B'^i\end{smallmatrix}\bigr)$.
     These constitute a unital Kraus family on $\MN{2D}$.
     The off-diagonal matrix
-    $Y = \bigl(\begin{smallmatrix} 0 & X' \\ 0 & 0\end{smallmatrix}\bigr)$
+    $Y = (\begin{smallmatrix} 0 & X' \\ 0 & 0\end{smallmatrix})$
     satisfies $E_C(Y) = \mu Y$.
 
     \emph{Step~3 (KS equality and Kraus commutation).}
@@ -363,12 +361,12 @@ a block embedding of a mixed-transfer eigenvector.
     The map $M \mapsto X' M (X')^{-1}$ is a $\C$-algebra automorphism
     of $\MN{D}$ sending $B'^i$ to $A'^i$.
     By Skolem--Noether (Theorem~\ref{thm:skolem_noether}) this is an
-    inner automorphism.  Undoing the separate gauges gives
-    $B^i = \bar{\mu} \, X \, A^i \, X^{-1}$ for all~$i$,
+    inner automorphism. Undoing the separate gauges gives
+    $B^i = \bar{\mu} X A^i X^{-1}$ for all~$i$,
     establishing gauge-phase equivalence
     (Definition~\ref{def:gauge_phase_equiv}).
 
-    The crucial point is that one gauges the individual transfer maps
+    The point is that one gauges the individual transfer maps
     to unital form; one does not require the mixed transfer map itself
     to be simultaneously unital and trace-preserving.
 \end{proof}
@@ -387,9 +385,9 @@ a block embedding of a mixed-transfer eigenvector.
     Then the transported matrix $X' = S_A^{-1} X (S_B^\dagger)^{-1}$ is nonzero,
     the families $A'$ and $B'$ are unital, and for every~$i$ one has
     \[
-        X' (B'^i)^\dagger = \mu \, (A'^i)^\dagger X',
+        X' (B'^i)^\dagger = \mu (A'^i)^\dagger X',
         \qquad
-        A'^i X' = \mu \, X' B'^i.
+        A'^i X' = \mu X' B'^i.
     \]
 \end{theorem}
 
@@ -411,7 +409,7 @@ a block embedding of a mixed-transfer eigenvector.
     an invertible matrix $X'$, and a scalar $\mu$ with $|\mu| = 1$ such that,
     for every physical index~$i$,
     \[
-        A'^i X' = \mu \, X' B'^i
+        A'^i X' = \mu X' B'^i.
     \]
     Then $A$ and $B$ are gauge-phase equivalent.
 \end{theorem}
@@ -458,12 +456,12 @@ a block embedding of a mixed-transfer eigenvector.
     \leanok
     \uses{def:injective}
     Let $A$ and $B$ be injective tensors of bond dimensions $D_1$ and $D_2$.
-    If there exist $X \in M_{D_1 \times D_2}(\mathbb{C}) \setminus \{0\}$ and
-    $\mu \in \mathbb{C}$ such that, for every physical index~$i$,
+    If there exist $X \in M_{D_1 \times D_2}(\C) \setminus \{0\}$ and
+    $\mu \in \C$ such that, for every physical index~$i$,
     \[
-        X (B^i)^\dagger = \mu \, (A^i)^\dagger X,
+        X (B^i)^\dagger = \mu (A^i)^\dagger X,
         \qquad
-        A^i X = \mu \, X B^i
+        A^i X = \mu X B^i,
     \]
     then $D_1 = D_2$.
 \end{theorem}
@@ -490,7 +488,7 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_bound, thm:gauged_intertwining_core,
-          thm:rectangular_intertwining_dim_eq}
+        thm:rectangular_intertwining_dim_eq}
     The same word-expansion argument as in
     Theorem~\ref{thm:eigenvalue_bound} gives $|\mu| \le 1$
     for every eigenvalue of $F_{AB}^{\mathrm{rect}}$.
@@ -593,20 +591,20 @@ canonical-form separation arguments.
 \section{Spectral gap under irreducible-TP hypotheses}
 
 The preceding spectral-gap results require \emph{injectivity} of both
-tensors.  The following variants weaken this to \emph{irreducibility}
+tensors. The following variants weaken this to \emph{irreducibility}
 combined with trace-preserving normalization
 ($\sum_i (A^i)^\dagger A^i = \Id$), following Cirac et
 al.~\cite{Cirac2017Annals} and the irreducibility theory of
-\cite[Section~6.2]{Wolf2012Quantum}.  The argument replaces the
+\cite[Section~6.2]{Wolf2012Quantum}. The argument replaces the
 Kraus-commutation step with a Cauchy--Schwarz rigidity argument for
 the Perron--Frobenius fixed point.
 
 \begin{theorem}[Gauge-equivalence from irreducible-TP spectral
-    radius]\label{thm:modulus_one_gauge_irr_tp}
+        radius]\label{thm:modulus_one_gauge_irr_tp}
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv,
-          def:irreducible_tensor, thm:eigenvalue_bound}
+        def:irreducible_tensor, thm:eigenvalue_bound}
     Let $A, B$ be irreducible trace-preserving normalized MPS tensors
     of bond dimension~$D$.
     If $\rho(F_{AB}) \ge 1$, then $A$ and $B$ are gauge-phase equivalent.
@@ -615,10 +613,10 @@ the Perron--Frobenius fixed point.
 \begin{proof}
     \leanok
     \uses{thm:modulus_one_gauge, thm:qpf, thm:right_canonical_gauge,
-          thm:ks_peripheral, thm:kraus_commute,
-          thm:left_multiplicative_identity, thm:psd_fp_pd_irred,
-          thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase,
-          thm:skolem_noether}
+        thm:ks_peripheral, thm:kraus_commute,
+        thm:left_multiplicative_identity, thm:psd_fp_pd_irred,
+        thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase,
+        thm:skolem_noether}
     Choose a modulus-one eigenvector as in
     Theorem~\ref{thm:modulus_one_gauge}.
     The proof follows the five-step structure of
@@ -648,14 +646,14 @@ the Perron--Frobenius fixed point.
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
     \uses{def:gauge_phase_equiv, def:irreducible_tensor,
-          def:mixed_transfer}
+        def:mixed_transfer}
     Let $A, B$ be irreducible trace-preserving normalized MPS tensors
     of the same bond dimension that are not gauge-phase equivalent.
     Then $\rho(F_{AB}) < 1$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_radius_le_one,
-    thm:modulus_one_gauge_irr_tp}
+        thm:modulus_one_gauge_irr_tp}
     Contrapositive of
     Theorem~\ref{thm:modulus_one_gauge_irr_tp}, combined with
     $\rho(F_{AB}) \le 1$
@@ -667,7 +665,7 @@ the Perron--Frobenius fixed point.
     \lean{MPSTensor.mixedTransfer_pow_tendsto_zero_of_irreducible_TP}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv,
-          def:irreducible_tensor}
+        def:irreducible_tensor}
     Under the hypotheses of
     Theorem~\ref{thm:spectral_gap_irr_tp},
     $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
@@ -683,7 +681,7 @@ the Perron--Frobenius fixed point.
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
     \leanok
     \uses{def:mpv_overlap, def:gauge_phase_equiv,
-          def:irreducible_tensor}
+        def:irreducible_tensor}
     Let $A, B$ be irreducible trace-preserving normalized tensors of
     the same bond dimension that are not gauge-phase equivalent.
     Then $O_{AB}(N) \to 0$ as $N \to \infty$.
@@ -730,7 +728,7 @@ the Perron--Frobenius fixed point.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_gap_rect_irr_tp,
-    thm:overlap_trace_rect}
+        thm:overlap_trace_rect}
     Combine
     Theorem~\ref{thm:spectral_gap_rect_irr_tp} with
     Theorem~\ref{thm:overlap_trace_rect}.
@@ -738,14 +736,14 @@ the Perron--Frobenius fixed point.
 
 \section{Conditional expectation from a faithful fixed point}
 
-This section follows \cite[Section~6.4]{Wolf2012Quantum}; the conditional
-expectation is built from the fixed-point algebra of
-\cite[Theorem~6.14]{Wolf2012Quantum} via \cite[(1.40)]{Wolf2012Quantum}.
+This section follows~\cite[Section~6.4]{Wolf2012Quantum}; the conditional
+expectation is built from the fixed-point algebra of~\cite[Theorem~6.14]{Wolf2012Quantum}
+via~\cite[(1.40)]{Wolf2012Quantum}.
 The scalar conditional expectation $E_\sigma$ is the special case where
 the fixed-point $*$-subalgebra is the scalar algebra $\C\cdot\Id$
 (the primitive-channel case). The general irreducible case with
 nontrivial period requires the Wedderburn block decomposition
-of \cite[Theorem~6.14]{Wolf2012Quantum}.
+of~\cite[Theorem~6.14]{Wolf2012Quantum}.
 % The nontrivial-period conditional expectation is outside the present
 % formal scope of this section.
 
@@ -764,7 +762,7 @@ of \cite[Theorem~6.14]{Wolf2012Quantum}.
     \uses{def:is_conditional_expectation}
     For $\sigma \ge 0$ with $\tr(\sigma)\neq 0$, define
     \[
-      E_\sigma(X) := \frac{\tr(\sigma X)}{\tr(\sigma)}\,\Id.
+        E_\sigma(X) := \frac{\tr(\sigma X)}{\tr(\sigma)} \Id.
     \]
 \end{definition}
 
@@ -772,7 +770,7 @@ of \cite[Theorem~6.14]{Wolf2012Quantum}.
     \lean{Kraus.scalarConditionalExpectation_apply}
     \leanok
     \uses{def:scalar_conditional_expectation}
-    $E_\sigma(X)=\dfrac{\tr(\sigma X)}{\tr(\sigma)}\,\Id$.
+    $E_\sigma(X)=\dfrac{\tr(\sigma X)}{\tr(\sigma)} \Id$.
 \end{lemma}
 
 \begin{theorem}[Unitality]\label{thm:scalar_conditional_expectation_unital}
@@ -833,11 +831,11 @@ of \cite[Theorem~6.14]{Wolf2012Quantum}.
     \lean{Kraus.scalarConditionalExpectation_isConditionalExpectation}
     \leanok
     \uses{def:is_conditional_expectation, def:scalar_conditional_expectation,
-          def:tp_kraus,
-          thm:scalar_conditional_expectation_unital,
-          thm:scalar_conditional_expectation_idempotent,
-          lem:scalar_conditional_expectation_mem_adjointFixedPoints,
-          lem:scalar_conditional_expectation_fixes_scalar}
+        def:tp_kraus,
+        thm:scalar_conditional_expectation_unital,
+        thm:scalar_conditional_expectation_idempotent,
+        lem:scalar_conditional_expectation_mem_adjointFixedPoints,
+        lem:scalar_conditional_expectation_fixes_scalar}
     Let $K$ be trace-preserving, let $\rho>0$ be a positive-definite fixed
     point of the associated channel $T(\rho)=\sum_i K_i\rho K_i^\dagger$ (so $T(\rho)=\rho$), and
     assume every adjoint fixed point of $T^*$ is a scalar multiple of $\Id$.
@@ -855,18 +853,18 @@ of \cite[Theorem~6.14]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     Write $S=\sqrt{\sigma}$ and define the Kraus family
-    $K_{j,i}=\ket{j}\bra{i}\,S$ indexed by $(j,i)\in\{1,\dots,D\}^2$.
-    Using $\ket{j}\bra{i}\,M\,\ket{i}\bra{j} = M_{ii}\,\ket{j}\bra{j}$ and
+    $K_{j,i}=\ketbra{j}{i}\,S$ indexed by $(j,i)\in\{1,\ldots,D\}^2$.
+    Using $\ketbra{j}{i}\,M\,\ketbra{i}{j} = M_{ii} \ketbra{j}{j}$ and
     summing first over $i$ and then over $j$,
     \[
         \sum_{j,i} K_{j,i}\,X\,K_{j,i}^\dagger
-        = \sum_j \ket{j}\bra{j}\,\operatorname{tr}(SXS)
-        = \operatorname{tr}(\sigma X)\,\Id,
+        = \sum_j \ketbra{j}{j} \tr(SXS)
+        = \tr(\sigma X) \Id,
     \]
-    where we used cyclicity of the trace and $S^2=\sigma$.  Hence
-    $E_\sigma = (\operatorname{tr}\sigma)^{-1}\cdot\bigl(X\mapsto\sum_{j,i}K_{j,i}XK_{j,i}^\dagger\bigr)$
-    is the Kraus map scaled by the nonnegative real number
-    $(\operatorname{tr}\sigma)^{-1}$, and therefore completely positive.
+    where we used cyclicity of the trace and $S^2=\sigma$. Hence
+    $E_\sigma = (\tr(\sigma))^{-1}\cdot(X\mapsto\sum_{j,i}K_{j,i}XK_{j,i}^\dagger)$
+    is the Kraus map scaled by the non-negative real number
+    $(\tr(\sigma))^{-1}$, and therefore completely positive.
 \end{proof}
 
 \begin{theorem}[$\sigma$-trace preservation of the scalar conditional expectation]
@@ -874,24 +872,23 @@ of \cite[Theorem~6.14]{Wolf2012Quantum}.
     \lean{Kraus.scalarConditionalExpectation_preserves_weighted_trace}
     \leanok
     \uses{def:scalar_conditional_expectation}
-    If $\operatorname{tr}\sigma\neq 0$, then for every $X$
+    If $\tr(\sigma)\neq 0$, then for every $X$
     \[
-        \operatorname{tr}\bigl(\sigma\,E_\sigma(X)\bigr)
-        = \operatorname{tr}(\sigma X).
+        \tr(\sigma\,E_\sigma(X))
+        = \tr(\sigma X).
     \]
 \end{theorem}
 \begin{proof}\leanok
     Direct computation:
-    $\operatorname{tr}\bigl(\sigma\cdot\tfrac{\operatorname{tr}(\sigma X)}{\operatorname{tr}\sigma}\Id\bigr)
-    = \tfrac{\operatorname{tr}(\sigma X)}{\operatorname{tr}\sigma}\operatorname{tr}\sigma
-    = \operatorname{tr}(\sigma X)$.
+    $\tr(\sigma\cdot\tfrac{\tr(\sigma X)}{\tr(\sigma)}\Id)
+        = \tfrac{\tr(\sigma X)}{\tr(\sigma)}\tr(\sigma)
+        = \tr(\sigma X)$.
 \end{proof}
 
 \section{Stationary support}
 
 This section develops the support-projection theory
-behind stationary states, following
-\cite[Section~6.4, Propositions~6.10--6.11]{Wolf2012Quantum}.
+behind stationary states, following~\cite[Section~6.4, Propositions~6.10--6.11]{Wolf2012Quantum}.
 
 \begin{lemma}[Lower-triangular Kraus condition implies corner invariance]%
     \label{lem:lower_zero_invariance}
@@ -904,7 +901,7 @@ behind stationary states, following
     \]
     then
     \[
-        P \, \E_A(P X P) \, P = \E_A(P X P)
+        P \E_A(P X P) P = \E_A(P X P)
     \]
     for all $X \in \MN{D}$.
 \end{lemma}
@@ -924,7 +921,7 @@ behind stationary states, following
     Let $P$ denote the support projection of~$\rho$.
     Then
     \[
-        P \, E(P X P) \, P = E(P X P)
+        P E(P X P) P = E(P X P)
     \]
     for all $X \in \MN{D}$.
 \end{theorem}
@@ -983,12 +980,12 @@ behind stationary states, following
     The non-trivial formulations needed here are the following results from
     Wolf:
     \begin{itemize}
-        \item the converse direction of \cite[Proposition~6.10]{Wolf2012Quantum}:
-            if the support projection of every positive semidefinite fixed point
-            is full, then the channel is irreducible;
+        \item the converse direction of~\cite[Proposition~6.10]{Wolf2012Quantum}:
+              if the support projection of every positive semidefinite fixed point
+              is full, then the channel is irreducible;
         \item \cite[Proposition~6.11]{Wolf2012Quantum}: minimality of the
-            stationary support among invariant projections, without assuming
-            irreducibility.
+              stationary support among invariant projections, without assuming
+              irreducibility.
     \end{itemize}
     These statements are not used elsewhere in this chapter.
 \end{remark}
@@ -1011,12 +1008,12 @@ sector is positive definite.
     then $P\, v = 0$.
 \end{lemma}
 \begin{proof}\leanok
-    Diagonalize $\rho = U\,\mathrm{diag}(\lambda)\,U^\dagger$ with
+    Diagonalize $\rho = U\,\diag(\lambda)\,U^\dagger$ with
     $\lambda_j \ge 0$. Writing $w := U^\dagger v$, the hypothesis
     $\rho v = 0$ gives $\lambda_j\, w_j = 0$ for every $j$; hence $w_j = 0$
     whenever $\lambda_j > 0$. The support projection acts as
-    $\mathrm{diag}(\chi_{\lambda_j > 0})$ in the eigenbasis, so
-    $P\,v = U\,\mathrm{diag}(\chi_{\lambda_j > 0})\,w = 0$.
+    $\diag(\chi_{\lambda_j > 0})$ in the eigenbasis, so
+    $P\,v = U\,\diag(\chi_{\lambda_j > 0})\,w = 0$.
 \end{proof}
 
 \begin{definition}[Corner submodule / idempotent-corner identification]%
@@ -1065,7 +1062,7 @@ sector is positive definite.
     $u \neq 0$, while $V^\dagger V = P$ forces $P u = u$. The quadratic
     form computes as
     $w^\dagger (V\rho V^\dagger) w = u^\dagger \rho u$,
-    which is nonnegative by positive semidefiniteness. If it vanishes, then
+    which is non-negative by positive semidefiniteness. If it vanishes, then
     $\rho u = 0$, and by
     Lemma~\ref{lem:supportProj_mulVec_eq_zero_of_mulVec_eq_zero} also
     $P u = 0$, contradicting $P u = u \neq 0$.
@@ -1074,8 +1071,7 @@ sector is positive definite.
 \section{Wedderburn decomposition of the fixed-point algebra}
 
 This section proves the structure theorem for the fixed-point
-algebra of a trace-preserving Kraus map, following
-\cite[Theorems~6.12--6.14]{Wolf2012Quantum}. The proof uses the
+algebra of a trace-preserving Kraus map, following~\cite[Theorems~6.12--6.14]{Wolf2012Quantum}. The proof uses the
 Jacobson radical characterization of semisimplicity together with the
 Wedderburn--Artin structure theorem for finite-dimensional semisimple
 algebras over an algebraically closed field.
@@ -1106,9 +1102,11 @@ algebras over an algebraically closed field.
     \lean{Kraus.fixedPointAlgebra_wedderburnArtin}
     \leanok
     \uses{thm:fixedPointAlgebra_isSemisimpleRing}
-    There exist $n\in\N$ and dimensions $d_1,\dots,d_n\ge 1$ such that
+    There exist $n\in\N$ and dimensions $d_1,\ldots,d_n\ge 1$ such that
     the adjoint-fixed-point $*$-subalgebra is $\C$-algebra isomorphic to
-    $\prod_{k=1}^{n} M_{d_k}(\C)$.
+    \[
+        \prod_{k=1}^{n} \MN{d_k}.
+    \]
 \end{theorem}
 
 \begin{proof}
@@ -1124,11 +1122,11 @@ algebras over an algebraically closed field.
     \lean{Kraus.adjointFixedPoints_wedderburnDecomp}
     \leanok
     \uses{thm:fixedPointAlgebra_wedderburnArtin}
-    There exist integers $n$, block sizes $d_1,\dots,d_n \ge 1$,
-    multiplicities $m_1,\dots,m_n \ge 1$, and a $\C$-algebra isomorphism from
+    There exist integers $n$, block sizes $d_1,\ldots,d_n \ge 1$,
+    multiplicities $m_1,\ldots,m_n \ge 1$, and a $\C$-algebra isomorphism from
     the adjoint-fixed-point $*$-subalgebra to
     \[
-        \prod_{k=1}^{n} M_{d_k}(\C)
+        \prod_{k=1}^{n} \MN{d_k}
     \]
     such that
     \[
@@ -1149,9 +1147,9 @@ algebras over an algebraically closed field.
     Wolf's block form identifies the adjoint-fixed-point algebra, up to a
     unitary change of basis, with
     \[
-        0 \oplus \bigoplus_k M_{d_k}(\C) \otimes \Id_{m_k}
+        0 \oplus \bigoplus_k \MN{d_k} \otimes \Id_{m_k}
     \]
-    together with the density-block form $M_{d_k}(\C) \otimes \rho_k$.
+    together with the density-block form $\MN{d_k} \otimes \rho_k$.
     The theorem above gives the product decomposition, multiplicities, and
     dimension bound needed from this block form.
 \end{remark}
@@ -1187,8 +1185,7 @@ algebras over an algebraically closed field.
 
 \section{Further irreducibility and primitivity equivalences}
 
-This section collects several criteria and equivalences from
-\cite[Theorems~6.2, 6.7, 6.8]{Wolf2012Quantum} that are
+This section collects several criteria and equivalences from~\cite[Theorems~6.2, 6.7, 6.8]{Wolf2012Quantum} that are
 used later.
 
 \begin{theorem}[Exponential positivity condition]%
@@ -1245,7 +1242,7 @@ used later.
 \section{Multi-cycle block-permutation structure}
 
 This section develops the block-permutation structure underlying the
-cycle decomposition of \cite[Theorem~6.16]{Wolf2012Quantum}. The
+cycle decomposition of~\cite[Theorem~6.16]{Wolf2012Quantum}. The
 multi-cycle decomposition refines the single-cycle case to handle
 arbitrary peripheral periods.
 
@@ -1253,10 +1250,10 @@ arbitrary peripheral periods.
     \label{def:cycle_structure}
     \lean{CycleStructure}
     \leanok
-    Let $T : \MN{D} \to \MN{D}$.  A \emph{block-permutation structure} for
+    Let $T : \MN{D} \to \MN{D}$. A \emph{block-permutation structure} for
     $T$ consists of a finite index set $\iota$, a family of orthogonal
     projections $P_k \in \MN{D}$ for $k \in \iota$, and a permutation
-    $\sigma \in \mathrm{Sym}(\iota)$ (not necessarily a single cycle — in
+    $\sigma \in \mathrm{Sym}(\iota)$ (not necessarily a single cycle---in
     general $\sigma$ may have multiple disjoint cycles), such that
     \[
         T(P_{\sigma(k)}) = P_k,\quad
@@ -1272,14 +1269,14 @@ arbitrary peripheral periods.
     \leanok
     A \emph{multi-cycle decomposition} of $T : \MN{D} \to \MN{D}$ consists of a
     finite cycle index $\iota$, a per-cycle period
-    $m : \iota \to \mathbb{N}_{>0}$, a projection family
+    $m : \iota \to \N_{>0}$, a projection family
     $P_{c,k} \in \MN{D}$ for $c \in \iota$ and $k \in \Fin{m(c)}$
-    consisting of orthogonal projections, together with the per-cycle
-    cyclic action
+    consisting of orthogonal projections. For every $c \in \iota$ and
+    $k \in \Fin{m(c)}$, the per-cycle cyclic action is
     \[
-        T(P_{c,k+1}) = P_{c,k}\qquad (k \in \Fin{m(c)},\ c \in \iota)
+        T(P_{c,k+1}) = P_{c,k}.
     \]
-    and the multiplicative-domain factorisations
+    The multiplicative-domain factorisations are
     $T(P_{c,k}\,X) = T(P_{c,k})\,T(X)$ and
     $T(X\,P_{c,k}) = T(X)\,T(P_{c,k})$.
 \end{definition}
@@ -1290,7 +1287,7 @@ arbitrary peripheral periods.
     \leanok
     \uses{def:multi_cycle_decomposition}
     For every cycle $c \in \iota$ and index $k \in \Fin{m(c)}$, the
-    iterate $T^{m(c)}$ preserves the corner $P_{c,k}\,\MN{D}\,P_{c,k}$.
+    iterate $T^{m(c)}$ preserves the corner $P_{c,k} \MN{D}\,P_{c,k}$.
 \end{theorem}
 
 \begin{proof}
@@ -1299,7 +1296,7 @@ arbitrary peripheral periods.
     By induction on $n$, the $n$-th iterate $T^n$ sends
     $P_{c,k+n}\,X\,P_{c,k+n}$ to $P_{c,k}\,T^n(X)\,P_{c,k}$, using the
     multiplicative-domain factorisations and the cyclic action
-    $T(P_{c,j+1}) = P_{c,j}$ at each induction step.  Specialising to
+    $T(P_{c,j+1}) = P_{c,j}$ at each induction step. Specialising to
     $n = m(c)$ and using that the indices $k + m(c) = k$ in $\Fin{m(c)}$
     yields corner preservation of $T^{m(c)}$.
 \end{proof}
@@ -1309,15 +1306,15 @@ arbitrary peripheral periods.
     \lean{MultiCycleDecomposition.preserves_corner_pow_of_dvd}
     \leanok
     \uses{thm:multi_cycle_preserves_corner_pow_period}
-    If $N \in \mathbb{N}$ is divisible by every per-cycle period $m(c)$,
-    then $T^N$ preserves every corner $P_{c,k}\,\MN{D}\,P_{c,k}$ of the
+    If $N \in \N$ is divisible by every per-cycle period $m(c)$,
+    then $T^N$ preserves every corner $P_{c,k} \MN{D}\,P_{c,k}$ of the
     decomposition.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:multi_cycle_preserves_corner_pow_period}
-    Write $N = m(c)\,q$.  Corner preservation is stable under taking
+    Write $N = m(c)\,q$. Corner preservation is stable under taking
     powers, so $T^N = (T^{m(c)})^q$ preserves each corner by
     Theorem~\ref{thm:multi_cycle_preserves_corner_pow_period}.
 \end{proof}
@@ -1328,18 +1325,17 @@ arbitrary peripheral periods.
     \leanok
     \uses{def:multi_cycle_decomposition, def:cycle_structure}
     A multi-cycle decomposition gives a single-index block-permutation
-    structure on the sigma index $\Sigma_{c \in \iota}\,\Fin{m(c)}$: the
+    structure on the sigma index $\Sigma_{c \in \iota} \Fin{m(c)}$: the
     permutation is the sigma-product of per-cycle cyclic shifts
     $k \mapsto k+1$ (whose cycle decomposition has one cycle per
     $c \in \iota$), the projections are $(c, k) \mapsto P_{c,k}$, and the
-    multiplicative-domain factorisations descend componentwise.  The
+    multiplicative-domain factorisations descend componentwise. The
     resulting map forgets the explicit cycle-indexing.
 \end{definition}
 
 \section{Peripheral eigenvalue group structure}
 
-This section proves the peripheral spectrum structure of
-\cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
+This section proves the peripheral spectrum structure of~\cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
 the peripheral eigenvalues form a finite cyclic group.
 The trace-preserving refinement that the order divides the bond
 dimension is proved in
@@ -1359,7 +1355,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 \begin{proof}
     \leanok
     The KS equality gives $E(X^\dagger X) = X^\dagger X$, so $X^\dagger X$
-    is a nonzero PSD fixed point.  Irreducibility upgrades it to positive
+    is a nonzero PSD fixed point. Irreducibility upgrades it to positive
     definite, hence invertible, so $\det(X) \ne 0$.
 \end{proof}
 
@@ -1375,9 +1371,9 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 
 \begin{proof}
     \leanok
-    Take eigenvectors $X, Y$ for $\mu, \nu$.  The KS equality at $X$
+    Take eigenvectors $X, Y$ for $\mu, \nu$. The KS equality at $X$
     puts $X$ in the multiplicative domain, so
-    $E(YX) = E(Y)E(X) = (\nu\mu)(YX)$.  Since $X, Y$ are units
+    $E(YX) = E(Y)E(X) = (\nu\mu)(YX)$. Since $X, Y$ are units
     (Lemma~\ref{lem:isUnit_peripheral_eigenvector}), $YX \ne 0$ and
     $|\mu\nu| = 1$.
 \end{proof}
@@ -1420,7 +1416,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     \leanok
     \uses{thm:peripheral_cyclic_structure}
     Apply Theorem~\ref{thm:peripheral_cyclic_structure} for the cyclic
-    structure.  Divisibility $m \mid D$ follows from the cyclic
+    structure. Divisibility $m \mid D$ follows from the cyclic
     decomposition: $m$ mutually orthogonal projections summing to $\Id$
     each have equal trace (by trace preservation), so
     $m \cdot \tr(P_0) = D$ with $\tr(P_0) \in \N$.
@@ -1597,7 +1593,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     Given a peripheral unitary eigenvector $U$ for $\gamma$, the
     multiplicative-domain identity gives $E(X U^\dagger) = X U^\dagger$
     for any $\gamma$-eigenvector $X$. By the scalar fixed-point lemma
-    for irreducible unital maps, $X U^\dagger = c \cdot I$, hence
+    for irreducible unital maps, $X U^\dagger = c \cdot \Id$, hence
     $X = c \cdot U$ and the eigenspace is one-dimensional.
 \end{proof}
 
@@ -1605,8 +1601,7 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
 
 The theorems in this section are stated directly in terms of the
 complementary map $E - P$. This is the analytic form needed for the later
-overlap argument, corresponding to the primitive-case specialization of
-\cite[Theorem~6.7]{Wolf2012Quantum} where $T_\phi$ is a rank-one projection.
+overlap argument, corresponding to the primitive-case specialization of~\cite[Theorem~6.7]{Wolf2012Quantum} where $T_\phi$ is a rank-one projection.
 For primitive normalized transfer maps, Chapter~\ref{ch:channels} supplies
 this spectral-gap input under explicit hypotheses.
 
@@ -1618,7 +1613,7 @@ this spectral-gap input under explicit hypotheses.
     ($\tr(\rho) \neq 0$) and
     let $P$ be the fixed-point projection
     (Definition~\ref{def:fixed_point_proj}).
-    If $\rho_{\mathrm{spec}}(E - P) < 1$, then
+    If $\rho_{\spec}(E - P) < 1$, then
     $\Tr(E^n) \to 1$ as $n \to \infty$.
 \end{theorem}
 
@@ -1628,7 +1623,7 @@ this spectral-gap input under explicit hypotheses.
     By the power decomposition
     (Theorem~\ref{thm:pow_decomp}),
     $E^n = P + (E - P)^n$ for $n \ge 1$.
-    Since $\rho_{\mathrm{spec}}(E - P) < 1$, the Gelfand formula gives
+    Since $\rho_{\spec}(E - P) < 1$, the Gelfand formula gives
     $(E - P)^n \to 0$, so $\Tr(E^n) \to \Tr(P)$.
     The operator trace of $P$ equals~$1$: since
     $P(X) = \frac{\tr(X)}{\tr(\rho)} \rho$,
@@ -1641,7 +1636,7 @@ this spectral-gap input under explicit hypotheses.
     \uses{def:transfer_map, def:fixed_point_proj, def:mpv_overlap}
     Let $A$ be a normalized MPS tensor with a nonzero PSD fixed
     point $\rho$ of the transfer map.
-    If $\rho_{\mathrm{spec}}(\E_A - P) < 1$ (where $P$ is the fixed-point
+    If $\rho_{\spec}(\E_A - P) < 1$ (where $P$ is the fixed-point
     projection), then $O_{AA}(N) \to 1$ as $N \to \infty$.
 \end{theorem}
 
@@ -1657,7 +1652,7 @@ this spectral-gap input under explicit hypotheses.
 \begin{lemma}[Norm of self-overlap convergence]\label{lem:norm_selfOverlap_tendsto}
     \lean{MPSTensor.tendsto_norm_selfOverlap_one}\leanok
     \uses{def:mpv_overlap}
-    If $A$ is an MPS tensor and $O_{AA}(N) \to 1$ in $\mathbb{C}$ as
+    If $A$ is an MPS tensor and $O_{AA}(N) \to 1$ in $\C$ as
     $N \to \infty$, then $\|O_{AA}(N)\| \to 1$ as
     $N \to \infty$.
 \end{lemma}

@@ -378,14 +378,14 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   have hDvdA : ∀ k, (hCycA k).choose ∣ p := by
     intro k
     have h₁ : periodA k ∣ pA := dvd_lcmPeriod periodA k
-    have h₂ : periodA k ∣ p := by
-      exact Nat.dvd_trans h₁ (Nat.dvd_lcm_left pA pB)
+    have h₂ : periodA k ∣ p :=
+      Nat.dvd_trans h₁ (Nat.dvd_lcm_left pA pB)
     simpa [periodA] using h₂
   have hDvdB : ∀ k, (hCycB k).choose ∣ p := by
     intro k
     have h₁ : periodB k ∣ pB := dvd_lcmPeriod periodB k
-    have h₂ : periodB k ∣ p := by
-      exact Nat.dvd_trans h₁ (Nat.dvd_lcm_right pA pB)
+    have h₂ : periodB k ∣ p :=
+      Nat.dvd_trans h₁ (Nat.dvd_lcm_right pA pB)
     simpa [periodB] using h₂
   obtain ⟨⟨familyA, hFamilyA⟩⟩ :=
     exists_commonBlockedCyclicSectorFamily_of_commonMultiple

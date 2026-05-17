@@ -303,8 +303,8 @@ theorem residualSlice_limit_zero_of_fixedPoint
       Filter.atTop (nhds (T a δ)) :=
     (hδ_cont.tendsto a).comp hφtendsto
   have hsub_res_zero : Filter.Tendsto (fun k : ℕ => T (residualSliceTime u s (φ k)) δ)
-      Filter.atTop (nhds 0) := by
-    exact hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
+      Filter.atTop (nhds 0) :=
+    hsub_decay.congr' (Filter.Eventually.of_forall (fun k => hres_eq (φ k)))
   exact tendsto_nhds_unique hsub_res hsub_res_zero
 
 /-- By compactness of `[0, s]`, the residual slice times admit a convergent subsequence
@@ -405,8 +405,8 @@ theorem exists_trace_ne_zero_eigenvector_of_fraction_slice
   have hX_fix_t₀ : T t₀ X = X := by
     calc
       T t₀ X = ((T u) ^ Nat.factorial (Module.finrank ℂ Mat)) X := by rw [hTt₀_eq_pow]
-      _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X := by
-        exact pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
+      _ = μ ^ Nat.factorial (Module.finrank ℂ Mat) • X :=
+        pow_apply_eigenvector (T u) X μ (Nat.factorial (Module.finrank ℂ Mat)) hX_eig
       _ = X := by simp [hμN]
   have hX_span : X = Matrix.trace X • σ := hfixed_1d X hX_fix_t₀
   have : X = 0 := by simpa [htrX] using hX_span

@@ -334,8 +334,8 @@ private theorem generator_vanishes_at_limit
     calc ‖L (ρ_shift (φ n))‖
         ≤ s * ‖E‖ ^ 2 * Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ := hL_norm
       _ ≤ s * ‖E‖ ^ 2 * Real.exp (1 * ‖E‖) * R := by
-          have h_exp : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) := by
-            exact Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le_one])
+          have h_exp : Real.exp (s * ‖E‖) ≤ Real.exp (1 * ‖E‖) :=
+            Real.exp_le_exp_of_le (by nlinarith [norm_nonneg E, hs_le_one])
           have h_mul :
               Real.exp (s * ‖E‖) * ‖ρ_shift (φ n)‖ ≤
                 Real.exp (1 * ‖E‖) * R :=

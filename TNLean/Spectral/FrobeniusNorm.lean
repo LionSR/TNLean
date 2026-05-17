@@ -46,10 +46,6 @@ noncomputable def frobSq (X : Matrix (Fin m) (Fin n) ℂ) : ℝ :=
 lemma frobSq_nonneg (X : Matrix (Fin m) (Fin n) ℂ) : 0 ≤ frobSq X :=
   Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => by positivity
 
-private lemma complex_mul_star_re (z : ℂ) : (z * star z).re = ‖z‖ ^ 2 := by
-  rw [show star z = starRingEnd ℂ z from rfl, Complex.mul_conj', ← Complex.ofReal_pow]
-  exact Complex.ofReal_re _
-
 /-- The Frobenius norm squared equals `(trace(X† X)).re`. -/
 lemma frobSq_trace (X : Matrix (Fin m) (Fin n) ℂ) :
     frobSq X = (Matrix.trace (Xᴴ * X)).re := by

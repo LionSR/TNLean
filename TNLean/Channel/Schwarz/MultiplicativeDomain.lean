@@ -63,12 +63,6 @@ private theorem krausMap_conjTranspose (K : Fin d → Matrix (Fin D) (Fin D) ℂ
   simp only [krausMap, conjTranspose_sum, conjTranspose_mul, conjTranspose_conjTranspose,
     mul_assoc]
 
-/-- `krausMap` is linear: `krausMap K (μ • X) = μ • krausMap K X`. -/
-private theorem krausMap_smul (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
-    (μ : ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
-    krausMap K (μ • X) = μ • krausMap K X := by
-  simp only [krausMap, smul_mul_assoc, mul_smul_comm, Finset.smul_sum]
-
 end AuxiliaryLemmas
 
 /-! ## KS equality for peripheral eigenvectors -/

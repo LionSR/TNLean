@@ -102,8 +102,8 @@ private lemma exists_natCast_eq_trace_of_orthogonal_projection
           (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
             (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) *
           (conjStarAlgAut ℂ _ hH.eigenvectorUnitary)
-            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) := by
-        exact congr_arg₂ (· * ·) hspec hspec
+            (Matrix.diagonal (RCLike.ofReal ∘ hH.eigenvalues)) :=
+        congr_arg₂ (· * ·) hspec hspec
       rw [this, ← map_mul, Matrix.diagonal_mul_diagonal]
       congr 1; ext j; simp [Function.comp, sq]
     -- P * P = P, so diag(λ²) = diag(λ), hence λ_i² = λ_i
@@ -416,8 +416,8 @@ theorem peripheral_eigenvalues_cyclic_structure
       have hg_eq : (⟨u, hu_mem⟩ : ↥periphSubgroup) = g ^ z := hz.symm
       have hg_mod : g ^ z = g ^ (z % ↑m).toNat := by
         have hm_ne : (m : ℤ) ≠ 0 := Int.natCast_ne_zero.mpr (by omega)
-        have hmod_cast : z % ↑m = ↑(z % ↑m).toNat := by
-          exact (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm
+        have hmod_cast : z % ↑m = ↑(z % ↑m).toNat :=
+          (Int.toNat_of_nonneg (Int.emod_nonneg z hm_ne)).symm
         conv_lhs => rw [← zpow_mod_orderOf g z, hg_order]
         rw [hmod_cast, zpow_natCast]
         rfl
@@ -437,8 +437,8 @@ theorem peripheral_eigenvalues_cyclic_structure
     · -- (⊇): each γ^k is a peripheral eigenvalue
       rintro ⟨k, rfl⟩
       -- g^k ∈ periphSubgroup, so (g^k).val.val ∈ peripheralEigenvalues E
-      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup := by
-        exact (g ^ (k : ℕ)).property
+      have hgk_sub : (g ^ (k : ℕ)).val ∈ periphSubgroup :=
+        (g ^ (k : ℕ)).property
       change ((g.val : ℂ)) ^ (k : ℕ) ∈ peripheralEigenvalues E
       have : ((g ^ (k : ℕ)).val : ℂ) ∈ peripheralEigenvalues E := hgk_sub
       simp only [SubgroupClass.coe_pow, Units.val_pow_eq_pow_val] at this

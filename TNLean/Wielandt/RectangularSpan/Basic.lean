@@ -205,10 +205,8 @@ theorem rectSpan_finrank_le (P : Matrix (Fin D) (Fin D) ℂ) (A : MPSTensor d D)
     Module.finrank ℂ (rectSpan P A n) ≤ D ^ 2 := by
   calc Module.finrank ℂ (rectSpan P A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by
+          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
 /-! ## Section 4: Cumulative rectangular span -/
 
@@ -237,10 +235,8 @@ theorem cumulativeRectSpan_finrank_le
     Module.finrank ℂ (cumulativeRectSpan P A n) ≤ D ^ 2 := by
   calc Module.finrank ℂ (cumulativeRectSpan P A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by
+          rw [Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one]; ring
 
 /-- When `cumulativeSpan A n = ⊤`, the cumulative rectangular span equals `range(mulLeft P)`. -/
 theorem cumulativeRectSpan_eq_range_of_cumulativeSpan_eq_top

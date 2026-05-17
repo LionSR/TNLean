@@ -279,15 +279,8 @@ map is idempotent. -/
 theorem blockedTransferMap_idempotent_of_isRFP {M : MPOTensor d D}
     (hM : IsRFP M) {n : ℕ} (hn : 0 < n) :
     blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
-  have hEq : blockedTransferMap M n = transferMap M :=
-    blockedTransferMap_eq_transferMap_of_isRFP hM hn
-  have hComp : blockedTransferMap M n ∘ₗ blockedTransferMap M n =
-      transferMap M ∘ₗ transferMap M := by
-    exact congrArg (fun f => f ∘ₗ f) hEq
-  calc
-    blockedTransferMap M n ∘ₗ blockedTransferMap M n = transferMap M ∘ₗ transferMap M := hComp
-    _ = transferMap M := hM
-    _ = blockedTransferMap M n := hEq.symm
+  rw [blockedTransferMap_eq_transferMap_of_isRFP hM hn]
+  exact hM
 
 /-- Transfer-map-level fusion-isometry formulation of the current MPDO RFP
 condition.

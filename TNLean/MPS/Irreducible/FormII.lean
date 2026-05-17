@@ -22,7 +22,7 @@ to channel / QPF normalization, following:
 
 ## Main results
 
-### Part 1: Bridge `IsIrreducibleTensor` ↔ `IsIrreducibleMap (transferMap A)`
+### Part 1: Equivalence of `IsIrreducibleTensor` and `IsIrreducibleMap (transferMap A)`
 
 * `MPSTensor.invariance_implies_lowerZero`: the invariance condition for a projection
   under a transfer map implies `(1 - P) * A i * P = 0` for all `i`.
@@ -51,7 +51,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Part 1: Bridge IsIrreducibleTensor → IsIrreducibleMap -/
+/-! ## Part 1: IsIrreducibleTensor is equivalent to IsIrreducibleMap -/
 
 /-- The invariance condition for a projection `P` under the transfer map
 implies `(1 - P) * A i * P = 0` for every Kraus operator.
@@ -138,7 +138,7 @@ theorem isIrreducibleTensor_of_isIrreducibleMap
 
 section CFII
 
-/-- Helper: the transfer map of a unitary-conjugated tensor equals the
+/-- The transfer map of a unitary-conjugated tensor equals the
 conjugation of the original transfer map.
 
 For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
@@ -165,7 +165,7 @@ private lemma transferMap_unitaryConj [DecidableEq (Fin D)]
   -- Both sides equal Vᴴ * (A i * (V * (X * (Vᴴ * ((A i)ᴴ * V))))) after right-association
   repeat rw [Matrix.mul_assoc]
 
-/-- Helper: the TP condition is preserved by unitary conjugation. -/
+/-- The TP condition is preserved by unitary conjugation. -/
 private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
@@ -186,7 +186,7 @@ private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
       Matrix.conjTranspose_conjTranspose]
     -- LHS: Vᴴ * ((A i)ᴴ * V) * (Vᴴ * A i * V)
     -- RHS: Vᴴ * ((A i)ᴴ * A i) * V
-    -- Insert V * Vᴴ = 1 to bridge
+    -- Insert V * Vᴴ = 1
     have step1 : Vᴴ * ((A i)ᴴ * V) * (Vᴴ * A i * V) =
         Vᴴ * (A i)ᴴ * (V * Vᴴ) * A i * V := by
       repeat rw [← Matrix.mul_assoc]

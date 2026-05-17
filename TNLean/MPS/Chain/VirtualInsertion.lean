@@ -27,10 +27,7 @@ in the span of `{A j}` with coefficients read from `physRealize`. -/
 theorem physRealize_spec (A : MPSTensor d D) (hA : IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     A i * X = ∑ j, (physRealize A hA X) i j • A j :=
-  set_option linter.unnecessarySimpa false in
-  by
-    simpa [physRealize] using
-      (decompositionMap_sum (A := A) hA (A i * X)).symm
+  (decompositionMap_sum (A := A) hA (A i * X)).symm
 
 /-- Left-bond analogue of `physRealize`:
 `physRealizeLeft A hA X` captures coefficients that rewrite each `X * A i`. -/
@@ -42,10 +39,7 @@ noncomputable def physRealizeLeft (A : MPSTensor d D) (hA : IsInjective A)
 theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : IsInjective A)
     (X : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
     X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j :=
-  set_option linter.unnecessarySimpa false in
-  by
-    simpa [physRealizeLeft] using
-      (decompositionMap_sum (A := A) hA (X * A i)).symm
+  (decompositionMap_sum (A := A) hA (X * A i)).symm
 
 /-- `physRealize` is linear in the inserted matrix. -/
 theorem physRealize_linear (A : MPSTensor d D) (hA : IsInjective A) :

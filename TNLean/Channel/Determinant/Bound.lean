@@ -148,8 +148,8 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
     _ ≤ ‖c‖ * (‖(T ^ n) ρ‖ + ‖(T ^ n) σ‖) := by
       gcongr
       exact norm_sub_le _ _
-    _ ≤ ‖c‖ * (M + M) := by
-      exact mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
+    _ ≤ ‖c‖ * (M + M) :=
+      mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
 
 private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
@@ -223,8 +223,8 @@ private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
     have hμ_gt : 1 < ‖μ‖ := lt_of_not_ge hμ_le
     have hz_norm_pos : 0 < ‖z‖ := norm_pos_iff.mpr hz_ne
     obtain ⟨n, hn⟩ := pow_unbounded_of_one_lt ((Cx + Cy) / ‖z‖) hμ_gt
-    have hpow_gt : Cx + Cy < ‖μ‖ ^ n * ‖z‖ := by
-      exact (div_lt_iff₀ hz_norm_pos).mp hn
+    have hpow_gt : Cx + Cy < ‖μ‖ ^ n * ‖z‖ :=
+      (div_lt_iff₀ hz_norm_pos).mp hn
     have hpow_le : ‖μ‖ ^ n * ‖z‖ ≤ Cx + Cy := by
       calc
         ‖μ‖ ^ n * ‖z‖ = ‖μ ^ n • z‖ := by rw [norm_smul, norm_pow]

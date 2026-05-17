@@ -100,7 +100,8 @@ private lemma sqrtFactor_mul_conjTranspose' [DecidableEq (Fin D)]
   change U * Matrix.diagonal (sqrtΛ' hρ) * (U * Matrix.diagonal (sqrtΛ' hρ))ᴴ = ρ
   rw [Matrix.conjTranspose_mul, Matrix.diagonal_conjTranspose, star_sqrtΛ'' hρ]
   calc U * Matrix.diagonal (sqrtΛ' hρ) * (Matrix.diagonal (sqrtΛ' hρ) * Uᴴ)
-      = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by noncomm_ring
+      = U * (Matrix.diagonal (sqrtΛ' hρ) * Matrix.diagonal (sqrtΛ' hρ)) * Uᴴ := by
+          noncomm_ring
     _ = U * Matrix.diagonal (fun j => (↑(hρ.eigenvalues j) : ℂ)) * Uᴴ := by
         rw [sqrtΛ_mul_sqrtΛ' hρ hρ_pd.posSemidef]
     _ = ρ := by
@@ -153,7 +154,8 @@ private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
 /-! ### Diagonal subtraction and spectral shift -/
 
 private lemma diagonal_sub_smul_one' [DecidableEq (Fin D)] (v : Fin D → ℝ) (c : ℝ) :
-    Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
+    Matrix.diagonal (fun j => (↑(v j) : ℂ)) -
+        (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
   rw [← Matrix.diagonal_one, ← Matrix.diagonal_smul, Matrix.diagonal_sub]
   congr 1; ext i; simp [Pi.smul_apply, Complex.ofReal_sub]
@@ -194,7 +196,8 @@ private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
     _ = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) * Uᴴ -
           U * ((↑c : ℂ) • 1) * Uᴴ := h_cI_sub
     _ = U *
-          (Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) - (↑c : ℂ) • 1) * Uᴴ := by
+          (Matrix.diagonal (fun j => (↑(hA.eigenvalues j) : ℂ)) -
+            (↑c : ℂ) • 1) * Uᴴ := by
         noncomm_ring
     _ = U * Matrix.diagonal (fun j => (↑(hA.eigenvalues j - c) : ℂ)) * Uᴴ := by
         congr 1
@@ -244,7 +247,8 @@ private lemma key_identity' [DecidableEq (Fin D)]
         = (S * Bᴴ) * σ * (B * Sᴴ) := by noncomm_ring
       _ = 1 * σ * 1 := by rw [hSBt, hBSt]
       _ = σ := by rw [Matrix.one_mul, Matrix.mul_one]
-  have : S * (H - (↑c₀ : ℂ) • 1) * Sᴴ = S * H * Sᴴ - (↑c₀ : ℂ) • (S * Sᴴ) := by
+  have : S * (H - (↑c₀ : ℂ) • 1) * Sᴴ =
+        S * H * Sᴴ - (↑c₀ : ℂ) • (S * Sᴴ) := by
     simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one]
   rw [this, hSHS, sqrtFactor_mul_conjTranspose' hρ hρ_pd]
 
@@ -296,7 +300,8 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
     rw [Matrix.posDef_diagonal_iff] at h_pd'
     obtain ⟨i₀, hi₀⟩ := minEigenvalue_achieved' hH_herm
     have := h_pd' i₀
-    rw [show (↑(hH_herm.eigenvalues i₀ - c₀) : ℂ) = ↑(hH_herm.eigenvalues i₀ - c₀) from rfl,
+    rw [show (↑(hH_herm.eigenvalues i₀ - c₀) : ℂ) =
+            ↑(hH_herm.eigenvalues i₀ - c₀) from rfl,
         hi₀, sub_self] at this
     simp at this
   have h_key := key_identity' (σ := σ) hρ hρ_pd c₀

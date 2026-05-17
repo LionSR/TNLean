@@ -87,9 +87,7 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
     intro i
     simpa [reindexPhysical] using hLower (e.symm i)
   · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
-    refine ⟨P, hPproj, hP0, hP1, ?_⟩
-    intro i
-    exact hLower (e i)
+    exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
 
 /-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_reindexPhysical_equiv {d₁ d₂ D : ℕ}

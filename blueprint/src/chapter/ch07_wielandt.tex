@@ -17,7 +17,7 @@ The results follow~\cite{Sanz2010Quantum}.
         S_n(A) =  \spn_{\C}\{A^w : |w| = n\}
         \subseteq  \MN{D}.
     \]
-    This is \cite[Section~II]{Sanz2010Quantum}.
+    This is~\cite[Section~II]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{definition}[Cumulative span]\label{def:cumulative_span}
@@ -102,17 +102,17 @@ The results follow~\cite{Sanz2010Quantum}.
     \label{lem:two_sided_nonzero_matrix_span}
     \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
     \leanok
-    If \(C\in M_D(\mathbb C)\) is nonzero, then
+    If $C \in \MN{D}$ is nonzero, then
     \[
-        \operatorname{span}\{RCS:R,S\in M_D(\mathbb C)\}=M_D(\mathbb C).
+        \spn_{\C}\{R C S : R, S \in \MN{D}\}=\MN{D}.
     \]
-    This is the matrix-factorization input used in
+    This is the matrix-factorization input used in~%
     \cite[Lemma~\texttt{lem1}]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Choose a nonzero entry \(C_{pq}\).  Then every matrix unit \(E_{ij}\)
-    is a scalar multiple of \(E_{ip}CE_{qj}\), so the displayed span
+    Choose a nonzero entry $C_{pq}$. Then every matrix unit $E_{ij}$
+    is a scalar multiple of $E_{ip} C E_{qj}$, so the displayed span
     contains the standard matrix basis.
 \end{proof}
 
@@ -121,16 +121,16 @@ The results follow~\cite{Sanz2010Quantum}.
     \lean{MPSTensor.span_range_evalWord_mul_nonzero_mul_evalWord_eq_top}
     \leanok
     \uses{def:l_blk_injective, lem:two_sided_nonzero_matrix_span}
-    If \(A\) is \(L\)-block injective and \(X\neq 0\), then
+    If $A$ is $L$-block injective and $X \neq 0$, then
     \[
-        \operatorname{span}\{A_uXA_v: |u|=|v|=L\}=M_D(\mathbb C).
+        \spn_{\C}\{A^u X A^v : |u| = |v| = L\}=\MN{D}.
     \]
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:two_sided_nonzero_matrix_span}
-    By \(L\)-block injectivity, the length-\(L\) word products span
-    \(M_D(\mathbb C)\).  Bilinearity of \((R,S)\mapsto RXS\) reduces the
-    preceding lemma to products with \(R\) and \(S\) chosen among those
+    By $L$-block injectivity, the length-$L$ word products span
+    $\MN{D}$. Bilinearity of $(R, S)\mapsto R X S$ reduces the
+    preceding lemma to products with $R$ and $S$ chosen among those
     word products.
 \end{proof}
 
@@ -227,7 +227,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{def:normal}
     If $A$ is normal, then there exists a word $w$ of length
     $\le D^2$ such that $\tr(A^w) \neq 0$.
-    This is \cite[Lemma~1]{Sanz2010Quantum}.
+    This is~\cite[Lemma~1]{Sanz2010Quantum}.
     For the trace argument below, the nontrivial case is $D \ge 1$;
     when $D = 0$ the normality hypothesis is vacuous.
 \end{theorem}
@@ -251,7 +251,7 @@ The results follow~\cite{Sanz2010Quantum}.
     If $A$ is normal, then
     $T_{D^2 - d' + 1}(A) = \MN{D}$,
     where $d' = \dim S_1(A) = \krausrk(A)$.
-    This is the sharp form of \cite[Lemma~1]{Sanz2010Quantum}:
+    This is the sharp form of~\cite[Lemma~1]{Sanz2010Quantum}:
     the cumulative span already reaches $\MN{D}$ by index
     $D^2 - d' + 1 \le D^2$.
 \end{theorem}
@@ -277,7 +277,7 @@ The results follow~\cite{Sanz2010Quantum}.
     If $A$ is normal, then there exists a word $w$ of length
     $\le D^2 - \krausrk(A) + 1$ such that
     $\tr(A^w) \neq 0$.
-    This is \cite[Lemma~1]{Sanz2010Quantum} with the sharp
+    This is~\cite[Lemma~1]{Sanz2010Quantum} with the sharp
     length bound.
 \end{theorem}
 
@@ -318,10 +318,10 @@ The results follow~\cite{Sanz2010Quantum}.
     $V_n$ is closed under left-multiplication by each $A^i$,
     so $\wordspn{N}{A} \subseteq V_n \neq \MN{D}$
     for all $N \ge 1$, contradicting normality.
-    Since $V_{D^2-d'+1} = \MN{D}$, the identity $\mathbf{1}$ lies in
-    $V_{D^2-d'+1}$ and is therefore a linear combination of word products of
+    Since $V_{D^2 - d' + 1} = \MN{D}$, the identity $\Id$ lies in
+    $V_{D^2 - d' + 1}$ and is therefore a linear combination of word products of
     positive length. At least one such product has nonzero trace
-    (since $\tr(\mathbf{1}) = D \geq 2 \neq 0$).
+    (since $\tr(\Id) = D \ge 2 \neq 0$).
 \end{proof}
 
 \section{Eigenvector extraction}
@@ -376,11 +376,11 @@ The results follow~\cite{Sanz2010Quantum}.
     Given an MPS tensor~$A$ and a vector
     $\varphi \in \C^D$, the \emph{cumulative vector span} is
     \[
-        K_n(A, \varphi) = 
+        K_n(A, \varphi) =
         \spn_{\C}\{A^w \varphi : |w| \le n\}
         \subseteq  \C^D.
     \]
-    This is \cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
+    This is~\cite[proof of Lemma~2(a)]{Sanz2010Quantum}.
 \end{definition}
 
 \begin{theorem}[Vector span stabilisation]\label{thm:vector_span_stable}
@@ -420,13 +420,13 @@ The results follow~\cite{Sanz2010Quantum}.
     $A^{i_0} \varphi = \mu \varphi$ with $\mu \neq 0$
     and $\varphi \neq 0$.
     Then $K_{D-1}(A, \varphi) = \C^D$.
-    This is \cite[Lemma~2(a)]{Sanz2010Quantum}.
+    This is~\cite[Lemma~2(a)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:cumulative_eq_top, lem:vector_span_from_matrix,
-          thm:vector_span_stable}
+        thm:vector_span_stable}
     The vector span $K_n$ is monotone and $\dim K_n \le D$.
     If $K_n = K_{n+1}$ for some $n < D-1$, the span stabilises
     (Theorem~\ref{thm:vector_span_stable}).
@@ -459,7 +459,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{thm:cumulative_eq_top, thm:eigenvalue_extraction,
-          thm:eigenvector_spreading}
+        thm:eigenvector_spreading}
     Items (1)--(3) follow from Theorems~\ref{thm:cumulative_eq_top}
     and~\ref{thm:eigenvalue_extraction}.
     Item (4) combines these with the eigenvector spreading bound
@@ -474,7 +474,7 @@ The results follow~\cite{Sanz2010Quantum}.
     then $T_{D^2}(A) = \MN{D}$.
     In particular, the cumulative span stabilises at index
     at most $D^2$.
-    This is the cumulative-span part of \cite[Theorem~1]{Sanz2010Quantum}.
+    This is the cumulative-span part of~\cite[Theorem~1]{Sanz2010Quantum}.
     The cited theorem is stronger: via Lemma~2(b) it upgrades this to a
     fixed-length conclusion $S_N(A) = \MN{D}$, stated below as a
     separate statement.
@@ -490,10 +490,10 @@ The results follow~\cite{Sanz2010Quantum}.
     Theorem~\ref{thm:wielandt_bound} gives the $D^2$
     cumulative-span bound.
     The full-rank index bound $\iota(A) \le (D^2 - d + 1) \cdot D^2$
-    (Theorem 1 case (1) of \cite{Sanz2010Quantum}) is proved in
+    (\cite[Theorem~1, case~(1)]{Sanz2010Quantum}) is proved in
     Theorem~\ref{thm:wielandt_general} below.
     The sharp blocking-length estimates for injectivity ($D^4$)
-    and bi-canonical form ($3D^5$) from \cite{Sanz2010Quantum}
+    and bi-canonical form ($3D^5$) from~\cite{Sanz2010Quantum}
     are not proved here.
 \end{remark}
 
@@ -501,7 +501,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \lean{MPSTensor.oneStepAugment}
     \leanok
     \uses{def:mps_tensor}
-    Let $A$ be an MPS tensor with Kraus family $(A^i)_{i=0}^{d-1}$, and
+    Let $A$ be an MPS tensor with Kraus family $\{A^i\}_{i=0}^{d-1}$, and
     let $X \in \MN{D}$. The \emph{one-step augmentation} of $A$ by $X$
     is the tensor $\widetilde A$ with physical dimension $d+1$ whose
     first Kraus operator is $X$ and whose remaining Kraus operators are
@@ -525,8 +525,8 @@ The results follow~\cite{Sanz2010Quantum}.
 
 \begin{lemma}[Redundant one-step augmentation]\label{lem:one_step_augment_word_span}
     \lean{MPSTensor.oneStepAugment_apply_mem_wordSpan_one,
-          MPSTensor.wordSpan_oneStepAugment_one,
-          MPSTensor.wordSpan_oneStepAugment_eq}
+        MPSTensor.wordSpan_oneStepAugment_one,
+        MPSTensor.wordSpan_oneStepAugment_eq}
     \leanok
     \uses{def:one_step_augment, def:word_span, lem:kraus_mem_word_span_one}
     Let $X \in S_1(A)$, and let $\widetilde A$ be the one-step
@@ -549,7 +549,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{lemma}[Normality and Kraus rank under one-step augmentation]%
     \label{lem:one_step_augment_normal_kraus_rank}
     \lean{MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one,
-          MPSTensor.krausRank_oneStepAugment}
+        MPSTensor.krausRank_oneStepAugment}
     \leanok
     \uses{def:one_step_augment, def:normal, lem:one_step_augment_word_span}
     Let $X \in S_1(A)$, and let $\widetilde A$ be the one-step
@@ -573,15 +573,15 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{theorem}[Wielandt case (2), invertible generator]%
     \label{thm:wielandt_case2_normal_generator}
     \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit,
-          MPSTensor.iIndex_le_of_isNormal_of_isUnit}
+        MPSTensor.iIndex_le_of_isNormal_of_isUnit}
     \leanok
     \uses{def:word_span, def:normal}
     Let $A$ be a normal MPS tensor with bond dimension $D$, and suppose
     that some Kraus operator $A^{i_0}$ is invertible. Then
     \[
-        S_{D^2-\krausrk(A)+1}(A)=\MN{D},
+        S_{D^2 - \krausrk(A) + 1}(A)=\MN{D},
         \qquad
-        \iota(A) \le D^2-\krausrk(A)+1.
+        \iota(A) \le D^2 - \krausrk(A) + 1.
     \]
 \end{theorem}
 
@@ -593,7 +593,7 @@ The results follow~\cite{Sanz2010Quantum}.
     reached, the same argument applied at all later lengths would
     contradict normality. Since $\dim S_1(A)=\krausrk(A)$ and
     $\dim \MN{D}=D^2$, the full algebra is reached by
-    length $D^2-\krausrk(A)+1$. The index bound follows from the
+    length $D^2 - \krausrk(A) + 1$. The index bound follows from the
     definition of $\iota(A)$.
 \end{proof}
 
@@ -602,14 +602,14 @@ The results follow~\cite{Sanz2010Quantum}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
     \leanok
     \uses{def:word_span, def:one_step_augment,
-          lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
-          thm:wielandt_case2_normal_generator}
+        lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+        thm:wielandt_case2_normal_generator}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
     $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
     with a positive-definite fixed point. If $S_1(A)$ contains an
     invertible matrix $X$, then
     \[
-        S_{D^2-\krausrk(A)+1}(A)=\MN{D}.
+        S_{D^2 - \krausrk(A) + 1}(A)=\MN{D}.
     \]
     In the terminology of~\cite{Sanz2010Quantum}, this is the case where
     the first application space $S_1(A)$ contains an invertible operator.
@@ -619,14 +619,14 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
-          thm:wielandt_case2_normal_generator}
+        thm:wielandt_case2_normal_generator}
     Adjoin $X$ as an extra first Kraus operator, obtaining
     $\widetilde A$. Primitivity with a positive-definite fixed point and
     normalization give normality of $A$, hence normality of $\widetilde A$;
     the Kraus rank and all exact word spans are unchanged. The first Kraus operator of
     $\widetilde A$ is invertible, so
     Theorem~\ref{thm:wielandt_case2_normal_generator} gives
-    $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$.
+    $S_{D^2 - \krausrk(\widetilde A) + 1}(\widetilde A)=\MN{D}$.
     Transfer this equality back to $A$.
 \end{proof}
 
@@ -637,9 +637,9 @@ The results follow~\cite{Sanz2010Quantum}.
     \uses{thm:wielandt_case2_one_step_span}
     Under the hypotheses of Theorem~\ref{thm:wielandt_case2_one_step_span},
     \[
-        \iota(A) \le D^2-\krausrk(A)+1,
+        \iota(A) \le D^2 - \krausrk(A) + 1,
     \]
-    where $\iota(A)=\min\{n:S_n(A)=\MN{D}\}$.
+    where $\iota(A)=\min\{n : S_n(A)=\MN{D}\}$.
 \end{corollary}
 
 \begin{proof}
@@ -652,25 +652,25 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{corollary}[Wielandt case (2), invertible Kraus operator]%
     \label{cor:wielandt_case2_generator}
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit,
-          MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
+        MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
-          cor:wielandt_case2_one_step_index}
+        cor:wielandt_case2_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
     $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
     with a positive-definite fixed point. If some Kraus operator $A^{i_0}$
     is invertible, then
     \[
-        S_{D^2-\krausrk(A)+1}(A)=\MN{D},
+        S_{D^2 - \krausrk(A) + 1}(A)=\MN{D},
         \qquad
-        \iota(A) \le D^2-\krausrk(A)+1.
+        \iota(A) \le D^2 - \krausrk(A) + 1.
     \]
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span,
-          cor:wielandt_case2_one_step_index}
+        cor:wielandt_case2_one_step_index}
     Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
     Lemma~\ref{lem:kraus_mem_word_span_one}.
 \end{proof}
@@ -686,7 +686,7 @@ The results follow~\cite{Sanz2010Quantum}.
     such that $A^{i_0}\varphi=\mu\varphi$. Then, for every
     $\psi \in \C^D$,
     \[
-        \ketbra{\varphi}{\psi} \in S_{D^2-D+1}(A).
+        \ketbra{\varphi}{\psi} \in S_{D^2 - D + 1}(A).
     \]
 \end{lemma}
 
@@ -699,7 +699,7 @@ The results follow~\cite{Sanz2010Quantum}.
     the whole range. The nilpotent index contributes the remaining
     length. Since the eigenvalue on $\varphi$ is nonzero, eigenvector
     padding moves the resulting cumulative membership to the exact
-    length $D^2-D+1$.
+    length $D^2 - D + 1$.
 \end{proof}
 
 \begin{theorem}[Wielandt case (3), one-step non-invertible element]%
@@ -707,9 +707,9 @@ The results follow~\cite{Sanz2010Quantum}.
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
     \leanok
     \uses{def:word_span, def:one_step_augment,
-          lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
-          thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
-          thm:lemma2b_assembly}
+        lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
+        thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
+        thm:lemma2b_assembly}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
     $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
     with a positive-definite fixed point. If $S_1(A)$ contains a
@@ -718,7 +718,7 @@ The results follow~\cite{Sanz2010Quantum}.
         S_{D^2}(A)=\MN{D}.
     \]
     More explicitly, it is enough to have $X\varphi=\mu\varphi$ with
-    $\varphi\ne 0$ and $\mu\ne 0$. In the terminology of~\cite{Sanz2010Quantum},
+    $\varphi \ne 0$ and $\mu \ne 0$. In the terminology of~\cite{Sanz2010Quantum},
     this is the case where the first application space $S_1(A)$ contains a
     non-invertible operator with a nonzero eigenvalue. This is the exact
     word-span form of~\cite[Theorem~1, case~(3)]{Sanz2010Quantum}.
@@ -727,15 +727,15 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank,
-          thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
-          thm:lemma2b_assembly}
+        thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector,
+        thm:lemma2b_assembly}
     Adjoin $X$ as an extra first Kraus operator. The augmented tensor is
     normal and has the same exact word spans as $A$. The eigenvector
     relation for $X$ is now a one-generator eigenvector relation. The
     eigenvector-spreading argument gives full fixed-length vector span
     by length $D-1$, and
     Lemma~\ref{lem:rank_one_noninvertible_eigenvector} gives the
-    rank-one operators $\ketbra{\varphi}{\psi}$ in length $D^2-D+1$.
+    rank-one operators $\ketbra{\varphi}{\psi}$ in length $D^2 - D + 1$.
     Multiplying these two fixed-length spans gives
     $S_{D^2}$ for the augmented tensor, hence for $A$.
 \end{proof}
@@ -761,14 +761,14 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{corollary}[Wielandt case (3), non-invertible Kraus operator]%
     \label{cor:wielandt_case3_generator}
     \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector,
-          MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
+        MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
-          cor:wielandt_case3_one_step_index}
+        cor:wielandt_case3_one_step_index}
     Let $A$ be an MPS tensor with bond dimension $D \ge 1$, satisfying
     $\sum_i (A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive
     with a positive-definite fixed point. If some Kraus operator $A^{i_0}$
-    is non-invertible and has an eigenvector $\varphi\ne0$ with nonzero
+    is non-invertible and has an eigenvector $\varphi \ne 0$ with nonzero
     eigenvalue $\mu$, then
     \[
         S_{D^2}(A)=\MN{D},
@@ -780,7 +780,7 @@ The results follow~\cite{Sanz2010Quantum}.
 \begin{proof}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span,
-          cor:wielandt_case3_one_step_index}
+        cor:wielandt_case3_one_step_index}
     Apply the one-step case to $X=A^{i_0}$, which belongs to $S_1(A)$ by
     Lemma~\ref{lem:kraus_mem_word_span_one}.
 \end{proof}
@@ -794,53 +794,53 @@ The results follow~\cite{Sanz2010Quantum}.
     that is primitive with a positive-definite fixed point.
     Then
     \[
-        \iota(A) \;\le\;
+        \iota(A) \le
         (D^2 - \krausrk(A) + 1) \cdot D^2,
     \]
     where $\iota(A) = \min\{n : S_n(A) = \MN{D}\}$ is the full-Kraus-rank index.
-    This is \cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
+    This is~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:nonzero_trace_word_sharp_pos, thm:eigenvector_from_trace,
-          thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator,
-          cor:wielandt_case3_generator}
+        thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator,
+        cor:wielandt_case3_generator}
     \begin{enumerate}
-    \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
-          holds trivially.
-    \item \emph{$D \ge 2$:}
-        By Theorem~\ref{thm:nonzero_trace_word_sharp_pos},
-        there exists a \emph{positive-length} word~$w$ with
-        $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$,
-        where $d' = \krausrk(A)$.
-        The matrix $A^w$ has nonzero trace,
-        hence a nonzero eigenvalue $\mu$ and eigenvector $\varphi$
-        (Theorem~\ref{thm:eigenvector_from_trace}).
-        Set $n = |w|$ and let $B = A^{[n]}$ be the blocked tensor.
-        Then $B$ is normal (Theorem~\ref{thm:isNormal_blockTensor}),
-        and the encoding of $w$ as a single block index gives
-        $B^{i_0} = A^w$.
-        \begin{enumerate}
-        \item If $A^w$ is invertible (invertible case),
-              $S_{D^2}(B) = \MN{D}$, whence
-              $S_{D^2 \cdot n}(A) = \MN{D}$.
-        \item If $A^w$ is non-invertible (non-invertible case),
-              the eigenvector $\varphi$ spans a proper subspace,
-              and the rank-one extraction argument gives
-              $S_{D^2}(B) = \MN{D}$, whence
-              $S_{D^2 \cdot n}(A) = \MN{D}$.
-        \end{enumerate}
-        In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
-        direct dimension growth, giving
-        $S_{D^2-k_B+1}(B) = \MN{D}$ where
-        $k_B = \krausrk(B)$.
-        In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
-        from tracking indices through the rank-one extraction argument of
-        \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate qualitative
-        fixed-length conclusion stated below does not supply this
-        explicit bound.
-        In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
+        \item \emph{$D = 1$:} In this case $\iota(A) = 0$, so the bound
+              holds trivially.
+        \item \emph{$D \ge 2$:}
+              By Theorem~\ref{thm:nonzero_trace_word_sharp_pos},
+              there exists a \emph{positive-length} word~$w$ with
+              $|w| \le D^2 - d' + 1$ and $\tr(A^w) \neq 0$,
+              where $d' = \krausrk(A)$.
+              The matrix $A^w$ has nonzero trace,
+              hence a nonzero eigenvalue $\mu$ and eigenvector $\varphi$
+              (Theorem~\ref{thm:eigenvector_from_trace}).
+              Set $n = |w|$ and let $B = A^{[n]}$ be the blocked tensor.
+              Then $B$ is normal (Theorem~\ref{thm:isNormal_blockTensor}),
+              and the encoding of $w$ as a single block index gives
+              $B^{i_0} = A^w$.
+              \begin{enumerate}
+                  \item If $A^w$ is invertible (invertible case),
+                        $S_{D^2}(B) = \MN{D}$, whence
+                        $S_{D^2 \cdot n}(A) = \MN{D}$.
+                  \item If $A^w$ is non-invertible (non-invertible case),
+                        the eigenvector $\varphi$ spans a proper subspace,
+                        and the rank-one extraction argument gives
+                        $S_{D^2}(B) = \MN{D}$, whence
+                        $S_{D^2 \cdot n}(A) = \MN{D}$.
+              \end{enumerate}
+              In the invertible case, the invertible Kraus operator $B^{i_0}$ allows
+              direct dimension growth, giving
+              $S_{D^2 - k_B + 1}(B) = \MN{D}$ where
+              $k_B = \krausrk(B)$.
+              In the non-invertible case, the bound $S_{D^2}(B) = \MN{D}$ follows
+              from tracking indices through the rank-one extraction argument of
+              \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate qualitative
+              fixed-length conclusion stated below does not supply this
+              explicit bound.
+              In both cases $\iota(A) \le D^2 \cdot n \le D^2 \cdot (D^2 - d' + 1)$.
     \end{enumerate}
 \end{proof}
 
@@ -848,7 +848,7 @@ The results follow~\cite{Sanz2010Quantum}.
     \leanok
     The quantitative bound
     $\iota(A) \le (D^2 - d' + 1)\cdot D^2$
-    is cited from \cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
+    is cited from~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
     The blueprint's own lemmas prove the qualitative conclusion used on the
     fundamental-theorem route, namely Theorem~\ref{thm:wielandt_lemma2b}:
     there exists $N$ with $S_N(A) = \MN{D}$.
@@ -966,26 +966,26 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 \begin{proof}
     \leanok
     Each length-$n$ word in the blocked alphabet
-    $\{0,\ldots,d^L-1\}$ decodes to a length-$nL$ word
-    in the original alphabet $\{0,\ldots,d-1\}$,
+    $\{0, \ldots, d^L - 1\}$ decodes to a length-$nL$ word
+    in the original alphabet $\{0, \ldots, d-1\}$,
     so $S_n(A^{[L]}) \subseteq S_{nL}(A)$.
 \end{proof}
 
 
 \begin{theorem}[Bounded injective blocking for left-canonical normal tensors]%
-\label{thm:bounded_injective_blocking_normal_left_canonical}
+    \label{thm:bounded_injective_blocking_normal_left_canonical}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
     \uses{def:normal, def:blocked_tensor, thm:wielandt_bound}
-    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
+    Let $A$ be a left-canonical normal MPS tensor with bond dimension $D > 0$.
     Then there is a positive blocking length $L \le D^4$ such that the blocked
     tensor $A^{[L]}$ is one-site injective.
 
     This is the blocked-injectivity form of the quantum Wielandt input used in
-    the non-periodic Fundamental Theorem chain.  It corresponds to the statement
+    the non-periodic Fundamental Theorem chain. It corresponds to the statement
     in \cite[Section~II, line~332]{Cirac2016MPDO_arXiv} that every normal tensor
-    becomes injective after at most $D^4$ blockings, using the index estimate of
-    \cite[Theorem~1]{Sanz2010Quantum}.  The Lean statement includes the
+    becomes injective after at most $D^4$ blockings, using the index estimate of~%
+    \cite[Theorem~1]{Sanz2010Quantum}. The Lean statement includes the
     left-canonical/trace-preserving hypothesis because that is the canonical-form
     context in which the blocked-injectivity input is consumed.
 \end{theorem}
@@ -993,24 +993,24 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 \begin{proof}
     \leanok
     The proof uses the full-Kraus-rank index bound from the quantum Wielandt
-    inequality.  Since $A$ is normal, the index is attained; the one-step Kraus
+    inequality. Since $A$ is normal, the index is attained; the one-step Kraus
     rank is nonzero in the left-canonical case, so the bound
-    $(D^2-\operatorname{rank}S_1(A)+1)D^2$ is at most $D^4$.  The passage from
+    $(D^2 - \rank S_1(A) + 1)D^2$ is at most $D^4$. The passage from
     exact word-span fullness to injectivity of the blocked tensor is
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
 \begin{corollary}[Uniform injective blocking for normal BNT families]%
-\label{cor:uniform_injective_blocking_normal_bnt}
+    \label{cor:uniform_injective_blocking_normal_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
     \uses{thm:normal_tp_primitive_irred,
         thm:bounded_injective_blocking_normal_left_canonical}
     Let $(A_x)_{x \in X}$ be a finite normal-canonical BNT family whose
-    blocks have positive virtual bond dimension.  Then there is a positive
+    blocks have positive virtual bond dimension. Then there is a positive
     integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
-    injective.  The same conclusion holds simultaneously for two finite
+    injective. The same conclusion holds simultaneously for two finite
     normal-canonical BNT families whose blocks have positive virtual bond
     dimension.
 \end{corollary}
@@ -1018,7 +1018,7 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
 \begin{proof}
     \leanok
     Apply Theorem~\ref{thm:bounded_injective_blocking_normal_left_canonical}
-    to each block.  Taking the product of the finitely many resulting positive
+    to each block. Taking the product of the finitely many resulting positive
     blocking lengths gives a common positive multiple, and injectivity persists
     under positive further blocking.
 \end{proof}
@@ -1072,7 +1072,7 @@ used to produce rank-one elements.
     $\Id = \sum_r c_r A^{w_r}$ with each $|w_r| = N$.
     Then
     \[
-        M = M \cdot \Id = \sum_r c_r \, M A^{w_r}
+        M = M \cdot \Id = \sum_r c_r M A^{w_r}
         \in S_N(A) \cdot S_N(A) \subseteq S_{2N}(A)
     \]
     by Lemma~\ref{lem:word_span_mul}.
@@ -1144,8 +1144,8 @@ used to produce rank-one elements.
 \begin{proof}
     \leanok
     \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector,
-          thm:eigenvector_spreading, lem:blocking_transfer,
-          thm:lemma2b_assembly}
+        thm:eigenvector_spreading, lem:blocking_transfer,
+        thm:lemma2b_assembly}
     Apply Theorem~\ref{thm:lemma2b_assembly} to the
     blocked tensor $A^{[L]}$,
     which is normal by Theorem~\ref{thm:isNormal_blockTensor}.
@@ -1193,7 +1193,7 @@ used to produce rank-one elements.
 \begin{proof}
     \leanok
     \uses{def:blocked_tensor, thm:isNormal_blockTensor,
-          thm:eigenvector_from_trace}
+        thm:eigenvector_from_trace}
     Set $B = A^{[N_0]}$.
     Since $S_{N_0}(A) = \MN{D}$, we have $S_1(B) = \MN{D}$
     by definition of the blocked tensor.
@@ -1230,7 +1230,7 @@ used to produce rank-one elements.
 \begin{proof}
     \leanok
     \uses{thm:rankone_extraction_blockTensor,
-          thm:wielandt_blocked_assembly}
+        thm:wielandt_blocked_assembly}
     By normality, some $N_0$ has $S_{N_0}(A) = \MN{D}$.
     If $N_0 = 0$ we are done.
     Otherwise, Theorem~\ref{thm:rankone_extraction_blockTensor}
@@ -1254,41 +1254,41 @@ used to produce rank-one elements.
 \section{Primitive MPS tensors}
 
 \begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
-	\lean{MPSTensor.IsPrimitiveMPS}
-	\leanok
-	\uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
-	Assume $D > 0$.
-	A tensor $A$ together with a matrix $\rho \in \MN{D}$ is
-	\emph{primitive} if
-	\[
-		\sum_i (A^i)^\dagger A^i = \Id,
-		\qquad \rho \ge 0,
-		\qquad \rho \neq 0,
-		\qquad \E_A(\rho) = \rho,
-	\]
-	and, if $P$ is the fixed-point projection associated to $\rho$,
-	then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
-	When the choice of $\rho$ is irrelevant, we simply say that $A$
-	is a primitive MPS tensor.
-	This is weaker than the primitive condition of \cite{Sanz2010Quantum}, which requires
-	$\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
-	The stronger positive-definite hypothesis is imposed separately in
-	Theorems~\ref{thm:primitive_implies_irreducible}
-	and~\ref{thm:primitive_posDef_aperiodic_normal}.
+    \lean{MPSTensor.IsPrimitiveMPS}
+    \leanok
+    \uses{def:mps_tensor, def:transfer_map, def:fixed_point_proj}
+    Assume $D > 0$.
+    A tensor $A$ together with a matrix $\rho \in \MN{D}$ is
+    \emph{primitive} if
+    \[
+        \sum_i (A^i)^\dagger A^i = \Id,
+        \qquad \rho \ge 0,
+        \qquad \rho \neq 0,
+        \qquad \E_A(\rho) = \rho,
+    \]
+    and, if $P$ is the fixed-point projection associated to $\rho$,
+    then $\rho_{\mathrm{spec}}(\E_A - P) < 1$.
+    When the choice of $\rho$ is irrelevant, we simply say that $A$
+    is a primitive MPS tensor.
+    This is weaker than the primitive condition of~\cite{Sanz2010Quantum}, which requires
+    $\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
+    The stronger positive-definite hypothesis is imposed separately in
+    Theorems~\ref{thm:primitive_implies_irreducible}
+    and~\ref{thm:primitive_posDef_aperiodic_normal}.
 \end{definition}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
-	\lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
-	\leanok
-	\uses{def:primitive_mps, def:mpv_overlap}
-	If $A$ is a primitive MPS tensor, then
-	$O_{AA}(N) \to 1$.
+    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \leanok
+    \uses{def:primitive_mps, def:mpv_overlap}
+    If $A$ is a primitive MPS tensor, then
+    $O_{AA}(N) \to 1$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:primitive_overlap}
-	Immediate from the self-overlap convergence under a
-	complementary spectral gap
-	(Theorem~\ref{thm:primitive_overlap}).
+    Immediate from the self-overlap convergence under a
+    complementary spectral gap
+    (Theorem~\ref{thm:primitive_overlap}).
 \end{proof}
 
 \section{Primitivity and normality}
@@ -1347,10 +1347,10 @@ spectral gap. It is connected to normality through the following results.
 
 \begin{proof}\leanok
     Set $\sigma' = \sigma - \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
-    Then $\tr(\sigma') = 0$ and $(E - P_\rho)(\sigma') = \sigma'$.
-    If $\sigma' \neq 0$, then $1$ is an eigenvalue of $E - P_\rho$,
+    Then $\tr(\sigma') = 0$ and $(\E_A - P_\rho)(\sigma') = \sigma'$.
+    If $\sigma' \neq 0$, then $1$ is an eigenvalue of $\E_A - P_\rho$,
     contradicting the spectral gap
-    $\rho_{\mathrm{spec}}(E - P_\rho) < 1$.
+    $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
 \end{proof}
 
 \begin{theorem}[Complement powers tend to zero]%
@@ -1371,7 +1371,7 @@ spectral gap. It is connected to normality through the following results.
 
 \begin{remark}[Primitivity: spectral gap vs.\ positive definiteness]%
     \label{rem:prim_definition_mismatch}\leanok
-    The primitivity condition used in \S\ref{subsec:prim_to_normal}
+    The primitivity condition used in Section~\ref{subsec:prim_to_normal}
     has three parts: TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
     a nonzero PSD fixed point $\rho$, and the spectral gap
     $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
@@ -1386,15 +1386,15 @@ spectral gap. It is connected to normality through the following results.
     Theorem~\ref{thm:primitive_implies_irreducible} gives
     irreducibility.
     Together with the Burnside argument below
-    (\S\ref{subsec:burnside_bridge})
+    (Section~\ref{subsec:burnside_bridge})
     and Theorem~\ref{thm:algspan_to_normal}, one obtains
     \[
         \text{primitive} + \rho \text{ positive definite}
-        \;\Rightarrow\;
+        \Rightarrow
         \text{irreducible}
-        \;\Rightarrow\;
+        \Rightarrow
         \algspn(A) = \MN{D}
-        \;\Rightarrow\;
+        \Rightarrow
         \text{normal}.
     \]
     The last step uses the aperiodicity condition
@@ -1414,7 +1414,7 @@ spectral gap. It is connected to normality through the following results.
     \uses{def:primitive_mps, def:irreducible_tensor}
     If $A$ is a primitive MPS tensor with PSD fixed point $\rho$
     and $\rho$ is positive definite, then $A$ is an irreducible tensor.
-    This is part of \cite[Proposition~3]{Sanz2010Quantum}
+    This is part of~\cite[Proposition~3]{Sanz2010Quantum}
     (see also \cite[Section~2.3]{Cirac2017MPDO_AnnPhys}).
 \end{theorem}
 
@@ -1458,94 +1458,94 @@ For Burnside-style arguments it is more natural to work with invariant
 \emph{subspaces} of $\C^D$ under the Kraus operators.
 
 \begin{definition}[Algebra span]\label{def:alg_span}
-	\lean{MPSTensor.algSpan}\leanok
-	\uses{def:mps_tensor}
-	For an MPS tensor $A$, let $\algspn(A)$ be the unital
-	$\C$-subalgebra of $\MN{D}$ generated by the matrices $\{A^i\}$:
-	\[
-		\algspn(A)
-		= \C\langle A^i : i = 0,\ldots,d{-}1\rangle
-		\subseteq \MN{D}.
-	\]
+    \lean{MPSTensor.algSpan}\leanok
+    \uses{def:mps_tensor}
+    For an MPS tensor $A$, let $\algspn(A)$ be the unital
+    $\C$-subalgebra of $\MN{D}$ generated by the matrices $\{A^i\}_{i=0}^{d-1}$:
+    \[
+        \algspn(A)
+        = \C\langle A^i : i = 0, \ldots, d-1\rangle
+        \subseteq \MN{D}.
+    \]
 \end{definition}
 
 \begin{definition}[Invariant submodule]\label{def:invariant_submodule}
-	\lean{MPSTensor.IsInvariantSubmodule}\leanok
-	\uses{def:mps_tensor}
-	A subspace $W \le \C^D$ is \emph{$A$-invariant} if
-	$A^i W \subseteq W$ for every $i$.
+    \lean{MPSTensor.IsInvariantSubmodule}\leanok
+    \uses{def:mps_tensor}
+    A subspace $W \le \C^D$ is \emph{$A$-invariant} if
+    $A^i W \subseteq W$ for every $i$.
 \end{definition}
 
 \begin{definition}[Irreducible action]\label{def:irreducible_action}
-	\lean{MPSTensor.IsIrreducibleAction}\leanok
-	\uses{def:invariant_submodule}
-	The Kraus operators of $A$ act \emph{irreducibly} on $\C^D$ if every
-	$A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
+    \lean{MPSTensor.IsIrreducibleAction}\leanok
+    \uses{def:invariant_submodule}
+    The Kraus operators of $A$ act \emph{irreducibly} on $\C^D$ if every
+    $A$-invariant subspace is trivial, i.e. equal to $0$ or to $\C^D$.
 \end{definition}
 
 \begin{theorem}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
-	\lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
-	\uses{def:irreducible_tensor, def:irreducible_action}
-	If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
-	then the Kraus operators act irreducibly on $\C^D$
-	(Definition~\ref{def:irreducible_action}).
+    \lean{MPSTensor.isIrreducibleAction_of_isIrreducibleTensor}\leanok
+    \uses{def:irreducible_tensor, def:irreducible_action}
+    If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
+    then the Kraus operators act irreducibly on $\C^D$
+    (Definition~\ref{def:irreducible_action}).
 \end{theorem}
 
 \begin{proof}\leanok
-	Let $W \le \C^D$ be an $A$-invariant subspace.
-	In finite dimension the orthogonal projection $P$ onto $W$ exists.
-	Invariance of $W$ implies $(\Id - P) A^i P = 0$ for all~$i$.
-	Thus $P$ is a nontrivial invariant projection unless $W = 0$ or $W = \C^D$,
-	contradicting irreducibility of the tensor.
+    Let $W \le \C^D$ be an $A$-invariant subspace.
+    In finite dimension the orthogonal projection $P$ onto $W$ exists.
+    Invariance of $W$ implies $(\Id - P) A^i P = 0$ for all~$i$.
+    Thus $P$ is a nontrivial invariant projection unless $W = 0$ or $W = \C^D$,
+    contradicting irreducibility of the tensor.
 \end{proof}
 
 \begin{theorem}[Burnside's theorem for Kraus algebras]\label{thm:burnside_matrix}
-	\lean{MPSTensor.burnside_matrix}\leanok
-	\uses{def:alg_span, def:irreducible_action}
-	Assume $D > 0$.
-	If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is the
-	full matrix algebra:
-	\[
-		\algspn(A) = \MN{D}.
-	\]
-	This is the complex finite-dimensional case of Burnside's theorem
-	(equivalently, Jacobson's density theorem); see~\cite{Jacobson2009BasicAlgebraII}.
+    \lean{MPSTensor.burnside_matrix}\leanok
+    \uses{def:alg_span, def:irreducible_action}
+    Assume $D > 0$.
+    If $A$ acts irreducibly on $\C^D$, then the generated unital subalgebra is the
+    full matrix algebra:
+    \[
+        \algspn(A) = \MN{D}.
+    \]
+    This is the complex finite-dimensional case of Burnside's theorem
+    (equivalently, Jacobson's density theorem); see~\cite{Jacobson2009BasicAlgebraII}.
 \end{theorem}
 
 \begin{proof}\leanok
-	Transport $\algspn(A)$ along the algebra equivalence
-	$\MN{D} \simeq_{\C} \operatorname{End}_{\C}(\C^D)$.
-	The irreducible-action hypothesis makes $\C^D$ a simple module for this
-	algebra.
-	Over the algebraically closed field $\C$, Schur's lemma identifies the
-	endomorphisms commuting with the action with scalars, and Jacobson density
-	then forces the action map to be surjective onto all of
-	$\operatorname{End}_{\C}(\C^D)$.
+    Transport $\algspn(A)$ along the algebra equivalence
+    $\MN{D} \simeq_{\C} \operatorname{End}_{\C}(\C^D)$.
+    The irreducible-action hypothesis makes $\C^D$ a simple module for this
+    algebra.
+    Over the algebraically closed field $\C$, Schur's lemma identifies the
+    endomorphisms commuting with the action with scalars, and Jacobson density
+    then forces the action map to be surjective onto all of
+    $\operatorname{End}_{\C}(\C^D)$.
 \end{proof}
 
 \begin{remark}\leanok
-	This Burnside/Jacobson-density step is a substantial external algebraic
-	ingredient in the chapter. We use it here as the finite-dimensional complex
-	Burnside theorem, namely the statement that an irreducible matrix algebra
-	action already generates the full endomorphism algebra.
+    This Burnside/Jacobson-density step is a substantial external algebraic
+    ingredient in the chapter. We use it here as the finite-dimensional complex
+    Burnside theorem, namely the statement that an irreducible matrix algebra
+    action already generates the full endomorphism algebra.
 \end{remark}
 
 \begin{theorem}[Irreducible action implies eventual cumulative spanning]%
-	\label{thm:irreducible_action_cumulative_span}
-	\lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
-	\uses{def:cumulative_span, def:irreducible_action}
-	Assume $D > 0$.
-	If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
-	$T_N(A) = \MN{D}$.
+    \label{thm:irreducible_action_cumulative_span}
+    \lean{MPSTensor.exists_cumulativeSpan_eq_top_of_isIrreducibleAction}\leanok
+    \uses{def:cumulative_span, def:irreducible_action}
+    Assume $D > 0$.
+    If $A$ acts irreducibly on $\C^D$, then there exists $N$ such that
+    $T_N(A) = \MN{D}$.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:burnside_matrix}
-	By Theorem~\ref{thm:burnside_matrix}, $\algspn(A) = \MN{D}$.
-	Every element of the algebra span is a linear combination of word products,
-	hence belongs to $T_n(A)$ for some~$n$.
-	Since $\MN{D}$ is finite-dimensional, the ascending chain
-	$T_0(A) \le T_1(A) \le \cdots$ stabilizes, so one can choose a uniform
-	$N$ with $T_N(A) = \MN{D}$.
+    By Theorem~\ref{thm:burnside_matrix}, $\algspn(A) = \MN{D}$.
+    Every element of the algebra span is a linear combination of word products,
+    hence belongs to $T_n(A)$ for some~$n$.
+    Since $\MN{D}$ is finite-dimensional, the ascending chain
+    $T_0(A) \le T_1(A) \le \cdots$ stabilizes, so one can choose a uniform
+    $N$ with $T_N(A) = \MN{D}$.
 \end{proof}
 
 
@@ -1581,7 +1581,7 @@ projection onto the fixed-point subspace.
     \uses{thm:fixedpoint_unique_spectral}
     By Theorem~\ref{thm:fixedpoint_unique_spectral},
     if $\sigma \ge 0$ and $\E_A(\sigma) = \sigma$, then
-    $\sigma = \frac{\tr\sigma}{\tr\rho} \rho$.
+    $\sigma = \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
     Since $\rho > 0$, Wolf's uniqueness criterion for
     irreducibility applies.
 \end{proof}
@@ -1592,7 +1592,7 @@ projection onto the fixed-point subspace.
     \leanok
     \uses{def:primitive_mps}
     If $A$ is a primitive MPS tensor with positive-definite fixed
-    point~$\rho$, then $A$ is strongly irreducible in the sense of
+    point~$\rho$, then $A$ is strongly irreducible in the sense of~%
     \cite[Proposition~3(c)]{Sanz2010Quantum}:
     $\E_A$ is irreducible, the fixed point $\rho$ is positive
     definite, and the peripheral spectrum of $\E_A$ is $\{1\}$.
@@ -1643,14 +1643,14 @@ span.
 \begin{remark}[Aperiodicity condition]\label{rem:aperiodicity}\leanok
     We say $A$ satisfies the \emph{aperiodicity condition}
     if $\Id \in S_1(A)$, i.e.\ the identity matrix lies in the
-    span of the Kraus operators $\{A^i\}$.
+    span of the Kraus operators $\{A^i\}_{i=0}^{d-1}$.
     This is an additional hypothesis. The one-sided TP normalization
     $\sum_i (A^i)^\dagger A^i = \Id$ does \emph{not} imply
     $\Id \in S_1(A)$; it only gives a quadratic identity among the
     Kraus operators.
     The aperiodicity condition is kept explicit in this section for
     generality.
-	    For the primitive condition with positive-definite fixed point
+    For the primitive condition with positive-definite fixed point
     (peripheral-spectrum primitivity together with a positive-definite
     fixed point), normality follows directly from Wolf's primitivity
     equivalence (Theorem~\ref{thm:wolf_6_8_conjunction}) without passing
@@ -1741,11 +1741,11 @@ span.
     This assembles the full chain:
     \[
         \text{irreducible tensor}
-        \;\xrightarrow{\ref{thm:irreducible_tensor_to_action}}\;
+        \xrightarrow{\ref{thm:irreducible_tensor_to_action}}
         \text{irreducible action}
-        \;\xrightarrow{\text{Burnside}}\;
+        \xrightarrow{\text{Burnside}}
         \algspn(A) = \MN{D}
-        \;\xrightarrow{\ref{thm:algspan_to_normal}}\;
+        \xrightarrow{\ref{thm:algspan_to_normal}}
         \text{normal}.
     \]
     This corresponds to the irreducibility-to-normality direction of
@@ -1757,7 +1757,7 @@ span.
 
 \begin{proof}\leanok
     \uses{thm:algspan_to_normal, thm:burnside_matrix,
-          thm:irreducible_tensor_to_action}
+        thm:irreducible_tensor_to_action}
     By Theorem~\ref{thm:irreducible_tensor_to_action},
     $A$ acts irreducibly on $\C^D$.
     By Theorem~\ref{thm:burnside_matrix},
@@ -1785,13 +1785,13 @@ span.
 \end{proof}
 
 \begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}
-    The aperiodicity results in \S\ref{sec:cumspan_to_wordspan} are needed only for the
+    The aperiodicity results in Section~\ref{sec:cumspan_to_wordspan} are needed only for the
     block-injective argument through Definition~\ref{def:normal}, where one upgrades cumulative
     spanning to eventual block injectivity. The normal-canonical theory used later in
     Chapters~\ref{ch:canonical}--\ref{ch:bnt} does not pass through this step:
     it works directly with irreducible TP-normalized blocks whose blocked transfer maps
     are primitive and, once the corresponding weighted block data are available,
-    places them in normal canonical form in the sense of
+    places them in normal canonical form in the sense of~%
     \cite{Cirac2017MPDO_AnnPhys}. There are analogous cumulative-span lemmas for
     blocked irreducible tensors and eigenvector-spreading arguments, but they are
     auxiliary here and we do not list them separately.
@@ -1801,25 +1801,25 @@ span.
 \label{sec:ch07_block_inj_from_tp_primitive_irred}
 
 \begin{theorem}[TP-primitive irreducible tensor is injective after blocking]%
-	\label{thm:tp_primitive_irred_block_injective}
-	\lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
-		MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
-	\leanok
-	\uses{thm:normal_tp_primitive_irred,
-		lem:isNBlkInjective_iff_blockTensor_isInjective}
-	Let $A$ be a left-canonical MPS tensor with $D > 0$,
-	irreducible transfer map, and peripheral spectrum $\{1\}$.
-	Then some blocking $A^{[L]}$ is one-site injective.
+    \label{thm:tp_primitive_irred_block_injective}
+    \lean{MPSTensor.exists_blockTensor_isInjective_of_tp_primitive_irreducible,
+        MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
+    \leanok
+    \uses{thm:normal_tp_primitive_irred,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    Let $A$ be a left-canonical MPS tensor with $D > 0$,
+    irreducible transfer map, and peripheral spectrum $\{1\}$.
+    Then some blocking $A^{[L]}$ is one-site injective.
 \end{theorem}
 
 \begin{proof}\leanok
-	\uses{thm:normal_tp_primitive_irred,
-		lem:isNBlkInjective_iff_blockTensor_isInjective}
-	The normality theorem (Theorem~\ref{thm:normal_tp_primitive_irred}) gives
-	eventual block injectivity, and the blocked-chain equivalence identifies this
-	with one-site injectivity of the corresponding blocked tensor.
+    \uses{thm:normal_tp_primitive_irred,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    The normality theorem (Theorem~\ref{thm:normal_tp_primitive_irred}) gives
+    eventual block injectivity, and the blocked-chain equivalence identifies this
+    with one-site injectivity of the corresponding blocked tensor.
 \end{proof}
 
 \begin{remark}
-	See \cref{thm:isNormal_blockTensor} for the formalized statement that blocking preserves normality.
+    See Theorem~\ref{thm:isNormal_blockTensor} for the formalized statement that blocking preserves normality.
 \end{remark}

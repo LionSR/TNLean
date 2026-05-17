@@ -77,8 +77,8 @@ lemma inverse_compression_le
   have hBlock : (Matrix.fromBlocks Y⁻¹ W Wᴴ (Wᴴ * Y * W)).PosSemidef := by
     exact (Matrix.PosDef.fromBlocks₁₁ (B := W) (D := Wᴴ * Y * W) hY.inv).2 <| by
       simpa using (Matrix.PosSemidef.zero : (0 : Matrix m m ℂ).PosSemidef)
-  have hSchur : (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ).PosSemidef := by
-    exact (Matrix.PosDef.fromBlocks₂₂ (A := Y⁻¹) (B := W) hD).1 hBlock
+  have hSchur : (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ).PosSemidef :=
+    (Matrix.PosDef.fromBlocks₂₂ (A := Y⁻¹) (B := W) hD).1 hBlock
   rw [Matrix.le_iff]
   have hConj : (Wᴴ * (Y⁻¹ - W * (Wᴴ * Y * W)⁻¹ * Wᴴ) * W).PosSemidef :=
     Matrix.PosSemidef.conjTranspose_mul_mul_same hSchur W

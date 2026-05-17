@@ -76,8 +76,8 @@ theorem choi_projected_posSemidef_implies_ccp
     let α : ℂ := star ω ⬝ᵥ u
     let a : Fin D × Fin D → ℂ := -u + ((1 / 2 : ℂ) * α) • ω
     let c : ℂ := (1 : ℂ) / ((D : ℝ).sqrt : ℂ)
-    have hsqrtD : (((D : ℝ).sqrt : ℂ)) ≠ 0 := by
-      exact Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2
+    have hsqrtD : (((D : ℝ).sqrt : ℂ)) ≠ 0 :=
+      Complex.ofReal_ne_zero.mpr <| Real.sqrt_ne_zero'.2
         (by exact_mod_cast Nat.pos_of_ne_zero hD)
     have hc : c ≠ 0 := by
       dsimp [c]

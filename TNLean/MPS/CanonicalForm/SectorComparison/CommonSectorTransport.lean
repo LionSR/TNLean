@@ -112,8 +112,8 @@ lemma zeroTail_commonFlat_of_word_eq
       mpv (blockTensor (d := d) (D := D) A F.p) σ =
         mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
-  exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
+  zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
 
 /-- If the canonical identifications agree with consecutive grouping for every nonzero block,
@@ -131,8 +131,8 @@ lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
       mpv (blockTensor (d := d) (D := D) A F.p) σ =
         mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
-  exact zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
+            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
+  zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
 
 /-- The preceding zero-tail rewriting from the coordinate-grouping condition, expressed at a

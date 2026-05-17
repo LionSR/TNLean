@@ -41,11 +41,7 @@ lemma isNBlkInjective_iff_blockTensor_isInjective (A : MPSTensor d D) (N : ℕ) 
             evalWord A (List.ofFn (decodeBlock d N i))) =
         Submodule.span ℂ (Set.range fun σ : Fin N → Fin d => evalWord A (List.ofFn σ)) := by
     simp [hRange]
-  constructor
-  · intro h
-    exact hSpan.trans h
-  · intro h
-    exact hSpan.symm.trans h
+  exact ⟨hSpan.trans, hSpan.symm.trans⟩
 
 end MPSTensor
 

@@ -330,8 +330,8 @@ theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
             (fun _ : Fin (F.period k) => (1 : ℂ)) (F.commonSectorBlock k) σ]
           simp [smul_eq_mul, Finset.mul_sum]
     _ = ∑ y : ((k : Fin r) × Fin (F.period k)),
-          ((μ y.1) ^ F.p) ^ N • mpv (F.commonSectorBlock y.1 y.2) σ := by
-          exact (Fintype.sum_sigma'
+          ((μ y.1) ^ F.p) ^ N • mpv (F.commonSectorBlock y.1 y.2) σ :=
+          (Fintype.sum_sigma'
             (fun k s => ((μ k) ^ F.p) ^ N • mpv (F.commonSectorBlock k s) σ)).symm
     _ = ∑ x : Fin (∑ k : Fin r, F.period k),
           (F.commonFlatWeight μ x) ^ N • mpv (F.commonFlatBlocks x) σ := by
@@ -342,8 +342,8 @@ theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
           simpa [gSigma, commonFlatWeight, commonFlatBlocks, commonFlatDim, flatKey,
             smul_eq_mul] using h
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ := by
-          exact (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ :=
+          (mpv_toTensorFromBlocks_eq_sum (F.commonFlatWeight μ) (F.commonFlatBlocks) σ).symm
 
 /-! ### Direct-vs-iterated blocking identifications (internal intermediate construction)
 
@@ -569,8 +569,8 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
           refine Finset.sum_congr rfl fun k _ => ?_
           rw [hBlock k N σ]
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) σ := by
-          exact (mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) σ :=
+          (mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
             F.commonReindexedBlock σ).symm
 
 /-- Agreement of blocked-word decodings assembles the weighted direct sum obtained by

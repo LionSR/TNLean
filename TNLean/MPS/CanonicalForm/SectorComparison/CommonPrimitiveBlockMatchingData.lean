@@ -340,8 +340,8 @@ theorem gaugeEquiv_toTensorFromBlocks
     (hμ : ∀ k, μA k = μB (G.perm k) * G.phase k) :
     GaugeEquiv
       (toTensorFromBlocks (d := d) (μ := μA) G.castA)
-      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) := by
-  exact ⟨G.globalX, G.toTensorFromBlocks_reindexB_eq_globalX_conj μA μB hμ⟩
+      (toTensorFromBlocks (d := d) (μ := fun k => μB (G.perm k)) G.reindexB) :=
+  ⟨G.globalX, G.toTensorFromBlocks_reindexB_eq_globalX_conj μA μB hμ⟩
 
 end BlockMatchingGaugePhaseData
 

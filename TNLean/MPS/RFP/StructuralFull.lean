@@ -162,7 +162,7 @@ theorem rfp_nt_structural_full (A : MPSTensor d D) [NeZero D]
   have hDpos : 0 < (D : ℝ) := by
     exact_mod_cast hDpos_nat
   have hD_neC : (D : ℂ) ≠ 0 := by
-    exact_mod_cast (NeZero.ne D)
+    exact_mod_cast NeZero.ne D
   let Λ : Fin D → ℝ := fun k =>
     Real.sqrt (((D : ℝ) * (ρ k k).re) / (Matrix.trace ρ).re)
   let L : Mat := Matrix.diagonal (fun k => (Λ k : ℂ))

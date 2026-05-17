@@ -340,12 +340,8 @@ theorem sal_zcl_implies_rank_one_T
     ∃ a b : Fin n → ℝ, T = Matrix.vecMulVec a b ∧ a ⬝ᵥ b = 1 := by
   rcases hPF hPrimitive hZCL with ⟨a, b, hT⟩
   refine ⟨a, b, hT, ?_⟩
-  calc
-    a ⬝ᵥ b = Matrix.trace (Matrix.vecMulVec a b) := by
-      symm
-      exact Matrix.trace_vecMulVec a b
-    _ = Matrix.trace T := by rw [← hT]
-    _ = 1 := hTrace
+  rw [← Matrix.trace_vecMulVec, ← hT]
+  exact hTrace
 
 /-- **Lemma C.4, PSD-corrected matrix form**: if the auxiliary trace matrix `T`
 is positive semidefinite, then the corrected finite-dimensional theorem

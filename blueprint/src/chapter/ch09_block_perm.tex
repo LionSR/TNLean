@@ -1,7 +1,8 @@
+
 \chapter{Block Permutation and Separation}\label{ch:block_perm}
 
 This chapter develops the algebra of block permutations, the product-algebra maps
-built from per-block same-MPV data, the invariant-projection splitting step that
+built from per-block same-MPV hypotheses, the invariant-projection splitting step that
 reduces a tensor to smaller blocks, and the block-separation argument that
 recovers the individual blocks from a block-diagonal same-MPV hypothesis.
 The block-separation results in this chapter are conditional same-structure
@@ -13,7 +14,7 @@ which requires injectivity at some finite blocking length, uniqueness of the
 OBC canonical representation, and a finite-size lower bound. The source theorem
 is stated in the cited PGVWC07 passage; the project-level scope distinction is
 recorded in the accompanying paper-gap note.\footnote{%
-	\path{docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex}.}
+    \path{docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex}.}
 
 \section{Block permutation algebra}
 
@@ -106,7 +107,7 @@ recorded in the accompanying paper-gap note.\footnote{%
     be the induced permutation from Theorem~\ref{thm:ring_perm}.
     For each block index $k$, the map
     \[
-        M \mapsto (T(0,\ldots,0,M,0,\ldots,0))_{\pi(k)}
+        M \mapsto (T(0, \ldots, 0, M, 0, \ldots, 0))_{\pi(k)}
     \]
     from $\MN{D_k}$ to $\MN{D_{\pi(k)}}$ is bijective.
 \end{theorem}
@@ -137,7 +138,7 @@ recorded in the accompanying paper-gap note.\footnote{%
 \begin{proof}
     \leanok
     \uses{thm:ring_perm, thm:dim_preserved, thm:component_map_bijective,
-          thm:skolem_noether}
+        thm:skolem_noether}
     Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
     Theorem~\ref{thm:dim_preserved} identifies the matrix sizes
     $D_{\pi(k)} = D_k$.
@@ -149,7 +150,7 @@ recorded in the accompanying paper-gap note.\footnote{%
     automorphism inner.
 
     This is a standard result in the theory of semisimple algebras;
-    see \cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
+    see~\cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
 \end{proof}
 
 \section{Product algebra linear extension}
@@ -161,8 +162,8 @@ recorded in the accompanying paper-gap note.\footnote{%
     Given injective tensors $A_k, B_k$ of bond dimension~$D_k$
     with the same MPV for each block~$k$,
     the \emph{per-block linear extension} $T_k$ is the unique
-    linear map $\MN{D_k}\to\MN{D_k}$ satisfying
-    $T_k(A_k^i)=B_k^i$ for all~$i$.
+    linear map $\MN{D_k} \to \MN{D_k}$ satisfying
+    $T_k(A_k^i) = B_k^i$ for all~$i$.
     It exists (and is unique) because $\{A_k^i\}$ spans
     $\MN{D_k}$ by injectivity.
 \end{definition}
@@ -172,7 +173,7 @@ recorded in the accompanying paper-gap note.\footnote{%
     \leanok
     \uses{def:per_block_linear_ext}
     The \emph{product algebra automorphism} is the componentwise map
-    $T:\prod_k\MN{D_k}\to\prod_k\MN{D_k}$ defined by
+    $T : \prod_k \MN{D_k} \to \prod_k \MN{D_k}$ defined by
     $T(M)_k := T_k(M_k)$.
     Theorem~\ref{thm:pi_linear_ext} shows that each $T_k$ is a
     $\C$-algebra homomorphism and that this map is a
@@ -195,7 +196,7 @@ recorded in the accompanying paper-gap note.\footnote{%
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, lem:linear_map_to_alg,
-          thm:pi_auto_decomp}
+        thm:pi_auto_decomp}
     Each $T_k$ exists uniquely and is multiplicative by
     Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
     Promotion to algebra homomorphisms
@@ -205,13 +206,13 @@ recorded in the accompanying paper-gap note.\footnote{%
     block permutation together with per-block inner automorphisms.
 \end{proof}
 
-\begin{lemma}[Per-block same MPV gives global gauge equivalence]\label{lem:per_block_gauge}
+\begin{lemma}[Per-block same-MPV condition gives global gauge equivalence]\label{lem:per_block_gauge}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
     \uses{def:injective, def:gauge_equiv, def:block_diagonal_tensor}
     If all block tensors $A_k$ are injective, and $B_k$ are
-    block tensors of the same bond dimensions such that per-block
-    same-MPV holds, then each pair $(A_k, B_k)$ is gauge
+    block tensors of the same bond dimensions such that the per-block
+    same-MPV condition holds, then each pair $(A_k, B_k)$ is gauge
     equivalent, and the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     are globally gauge equivalent.
@@ -221,7 +222,7 @@ recorded in the accompanying paper-gap note.\footnote{%
     \leanok
     \uses{thm:ft_single, thm:multi_block_global}
     Per-block gauge equivalence follows from the single-block
-    FT (Theorem~\ref{thm:ft_single}) applied to each block.
+    fundamental theorem (Theorem~\ref{thm:ft_single}) applied to each block.
     Global gauge equivalence follows by placing the
     per-block gauge matrices on the block diagonal
     (Theorem~\ref{thm:multi_block_global}).
@@ -349,17 +350,17 @@ We use this notation throughout the block-separation argument.
     Condition~(5) is a primitivity hypothesis:
     for a primitive channel
     (\cite[Theorem~6.7, item~3]{Wolf2012Quantum}),
-    $T^n(\rho)\to\rho_\infty$ for every initial state,
+    $T^n(\rho) \to \rho_\infty$ for every initial state,
     which forces the self-overlap to converge to~$1$.
-    See also \cite[Theorem~6.8]{Wolf2012Quantum}
+    See also~\cite[Theorem~6.8]{Wolf2012Quantum}
     for the completely-positive characterisation
     and Chapter~\ref{ch:spectral} for the spectral-gap
     proof.
 \end{definition}
 
 \begin{remark}[Canonical-form theorem versus local predicates]\label{rem:pgvwc07_vs_local_cf}
-    The translation-invariant canonical-form theorem of
-    \cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}
+    The translation-invariant canonical-form theorem
+    of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}
     starts from an arbitrary TI-MPS representation and constructs a block
     canonical form with positive weights, unital block normalization, full-rank
     diagonal invariant densities, and uniqueness of the identity fixed point.
@@ -372,8 +373,8 @@ We use this notation throughout the block-separation argument.
 \end{remark}
 
 \begin{remark}[Normalization convention]\label{rem:tp_vs_unital}
-    The convention here differs from
-    \cite[Theorem~4]{PerezGarcia2007Matrix}, which uses the unital gauge
+    The convention here differs from~\cite[Theorem~4]{PerezGarcia2007Matrix},
+    which uses the unital gauge
     $\sum_i A_k^i (A_k^i)^\dagger = \Id$.
     This chapter instead works in the dual TP gauge
     $\sum_i (A_k^i)^\dagger A_k^i = \Id$.
@@ -395,7 +396,7 @@ We use this notation throughout the block-separation argument.
 
 \begin{remark}[Normal-canonical companion]\label{rem:normal_cf_companion}
     Definition~\ref{def:is_canonical_form} gives the block-injective conditions.
-    The normal-canonical analogue instead uses
+    The normal-canonical analog instead uses
     Definition~\ref{def:is_normal_canonical_form}: injectivity and the explicit
     self-overlap hypothesis are replaced by irreducibility, TP normalization,
     and primitive transfer maps. Theorem~\ref{thm:ncf_overlap_tendsto_one}
@@ -426,42 +427,42 @@ We use this notation throughout the block-separation argument.
     \[
         |\mu_1| > |\mu_2| > \cdots > |\mu_r|.
     \]
-    If $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
-    for all $N,\sigma$,
-    then each pair $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
+    If $\sum_{k=1}^r \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
+    for all $N$ and $\sigma$,
+    then each pair $(A_k, B_k)$ generates the same MPV
+    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:overlap_decay, thm:overlap_decay_rect}
     By induction on the number of blocks~$r$.
-    In the inductive step, take bilinear overlaps with the leading block $A_0$:
+    In the inductive step, take bilinear overlaps with the leading block $A_1$:
     from
-    $\sum_k \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
+    $\sum_{k=1}^r \mu_k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma) = 0$
     one obtains
     \[
-        \sum_k \overline{\mu_k}^N
-        \bigl(O_{A_0 A_k}(N) - O_{A_0 B_k}(N)\bigr) = 0.
+        \sum_{k=1}^r \overline{\mu_k}^N
+        (O_{A_1 A_k}(N) - O_{A_1 B_k}(N)) = 0.
     \]
-    After division by $\overline{\mu_0}^N$,
-    the contributions from $k \ge 1$ decay because
-    $|\mu_k / \mu_0| < 1$ (strict weight ordering) and the bilinear overlaps
-    $O_{A_0 A_k}(N)$ and $O_{A_0 B_k}(N)$ are bounded
+    After division by $\overline{\mu_1}^N$,
+    the contributions from $k \ge 2$ decay because
+    $|\mu_k/\mu_1| < 1$ (strict weight ordering) and the bilinear overlaps
+    $O_{A_1 A_k}(N)$ and $O_{A_1 B_k}(N)$ are bounded
     (Theorems~\ref{thm:overlap_decay_rect}
     and~\ref{thm:overlap_decay} supply the relevant bounds), leaving
-    $O_{A_0 A_0}(N) - O_{A_0 B_0}(N) \to 0$.
-    Condition~(5) gives $O_{A_0 A_0}(N) \to 1$, hence
-    $O_{A_0 B_0}(N) \to 1$.
-    Since $O_{A_0 B_0}(N) \to 1 \neq 0$, the bond dimensions must match:
-    $D_{A_0} = D_{B_0}$; otherwise Theorem~\ref{thm:overlap_decay_rect}
-    would give $O_{A_0 B_0}(N) \to 0$, a contradiction.
+    $O_{A_1 A_1}(N) - O_{A_1 B_1}(N) \to 0$.
+    Condition~(5) gives $O_{A_1 A_1}(N) \to 1$, hence
+    $O_{A_1 B_1}(N) \to 1$.
+    Since $O_{A_1 B_1}(N) \to 1 \neq 0$, the bond dimensions must match:
+    $D_{A_1} = D_{B_1}$; otherwise Theorem~\ref{thm:overlap_decay_rect}
+    would give $O_{A_1 B_1}(N) \to 0$, a contradiction.
     With equal bond dimensions established, the contrapositive of
-    Theorem~\ref{thm:overlap_decay} forces $A_0$ and $B_0$
-    to be gauge-phase equivalent; the limit $O_{A_0 B_0}(N) \to 1$
-    then makes the phase trivial, so $A_0$ and $B_0$
+    Theorem~\ref{thm:overlap_decay} forces $A_1$ and $B_1$
+    to be gauge-phase equivalent; the limit $O_{A_1 B_1}(N) \to 1$
+    then makes the phase trivial, so $A_1$ and $B_1$
     generate the same MPV family.
     Peeling off the leading block and dividing by
-    $\mu_0^N$, the induction hypothesis applies.
+    $\mu_1^N$, the induction hypothesis applies.
 \end{proof}
 
 \begin{lemma}[Block separation from canonical form]\label{lem:block_sep}
@@ -478,8 +479,8 @@ We use this notation throughout the block-separation argument.
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
+    $(A_k, B_k)$ generates the same MPV
+    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}
@@ -488,8 +489,8 @@ We use this notation throughout the block-separation argument.
     Apply Lemma~\ref{lem:block_sep_core} to the identity obtained from the
     equality of the two block-diagonal MPV families.
     The induction peels off the dominant block and treats the remainder as
-    a decaying tail. Concretely, one isolates the leading term
-    $\mu_1^N V(A_1)$ and bounds the remaining contribution by
+    a decaying tail. Concretely, one isolates the leading component
+    $\mu_1^N V^{(N)}(A_1)_\sigma$ and bounds the remaining contribution by
     $O(|\mu_2/\mu_1|^N)$ after dividing by $\mu_1^N$.
     The canonical form conditions supply injectivity, TP normalization,
     strict nonzero weights, and self-overlap convergence for $(A_k)$, while
@@ -511,8 +512,8 @@ We use this notation throughout the block-separation argument.
     If the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     generate the same MPV family, then each pair
-    $(A_k, B_k)$ generates the same MPV family
-    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
+    $(A_k, B_k)$ generates the same MPV
+    family~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -524,7 +525,7 @@ We use this notation throughout the block-separation argument.
     injective.
     Theorem~\ref{thm:ncf_overlap_tendsto_one}
     replaces the explicit self-overlap hypothesis on the leading block.
-    Since both block families already use the same dimension function,
+    Since both block families already have the same bond dimensions,
     the conclusion is direct per-block same MPV.
 \end{proof}
 
@@ -537,8 +538,8 @@ We use this notation throughout the block-separation argument.
     Hence the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     are gauge equivalent. This is a same-structure local comparison theorem,
-    not the full PGVWC07 uniqueness theorem
-    \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
+    not the full PGVWC07 uniqueness
+    theorem~\cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -553,8 +554,9 @@ We use this notation throughout the block-separation argument.
 \begin{remark}[Relation to the literature]\label{rem:block_perm_literature}
     The block-permutation part follows the decomposition of automorphisms of
     semisimple matrix algebras used in~\cite[Section~IV.A]{Cirac2021Matrix}.
-    The separation part is the local strict-weight peeling argument used in
-    \cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv};
-    the checked proof here formulates it as a same-structure block-separation lemma
+    The separation part is the local strict-weight peeling argument used
+    in~\cite[Appendix~\texttt{AppendixMPV}, lines~1054--1192]{Cirac2016MPDO_arXiv};
+    the proof here formulates it as a same-structure block-separation lemma
     using overlap bounds and mixed-transfer decay.
 \end{remark}
+

@@ -127,8 +127,8 @@ theorem exists_twoBlock_decomp_of_lowerZero
     -- rewrite the conjugation automorphism in matrix form
     simpa [Pdiag, f, Unitary.conjStarAlgAut_star_apply] using h
   -- `Pdiag` is idempotent, hence its diagonal entries are `0` or `1`.
-  have hU_mul_star : Umat * star Umat = 1 := by
-    exact Unitary.mul_star_self_of_mem U.2
+  have hU_mul_star : Umat * star Umat = 1 :=
+    Unitary.mul_star_self_of_mem U.2
   have hPdiag_idem : Pdiag * Pdiag = Pdiag := by
     -- `Pdiag` is conjugate to `P`, hence idempotent.
     calc
@@ -176,8 +176,8 @@ theorem exists_twoBlock_decomp_of_lowerZero
       simp
     -- rewrite the RHS in terms of `n` and `m`.
     -- We avoid simp rewriting `Fintype.card T` into a subtraction form.
-    have hcard : Fintype.card S + Fintype.card T = D := by
-      exact hsum.symm.trans hST
+    have hcard : Fintype.card S + Fintype.card T = D :=
+      hsum.symm.trans hST
     simpa [n, m] using hcard
   -- Auxiliary: `f` is `0` on the complement subtype.
   have hfT : ∀ t : T, f t.1 = 0 := by

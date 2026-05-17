@@ -265,10 +265,10 @@ stationary algebra tower as soon as it is an RFP. -/
 theorem isRFP_MPDO_via_algebra_of_isRFP_of_isTP_of_posDef_fixed
     {M : MPOTensor d D} (hRFP : IsRFP M) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
-    IsRFP_MPDO_via_algebra M := by
-  refine ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix, ?_⟩
-  exact AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible
-    (M := M) (h_tp := h_tp) hρ hρ_fix hRFP
+    IsRFP_MPDO_via_algebra M :=
+  ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix,
+   AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible
+     (M := M) (h_tp := h_tp) hρ hρ_fix hRFP⟩
 
 /-- Under the same side hypotheses, the transfer-map fusion formulation implies
 this algebra formulation. -/
@@ -289,11 +289,10 @@ theorem isRFP_MPDO_via_algebra_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
       (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
-    IsRFP_MPDO_via_algebra M := by
-  refine ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix, ?_⟩
-  exact
-    AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
-      (M := M) (h_tp := h_tp) hρ hρ_fix hEq
+    IsRFP_MPDO_via_algebra M :=
+  ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix,
+   AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+     (M := M) (h_tp := h_tp) hρ hρ_fix hEq⟩
 
 namespace AlgebraStructureData
 

@@ -663,7 +663,7 @@ theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin 
       (localTermESSummand_sum_isPositive A (Fin.pos i) L i) ?_ ?_
     · simp
     · rw [Complex.inv_re, Complex.normSq_natCast]
-      have hnonneg : 0 ≤ ((d ^ L : ℕ) : ℝ) := by exact_mod_cast Nat.zero_le (d ^ L)
+      have hnonneg : 0 ≤ ((d ^ L : ℕ) : ℝ) := Nat.cast_nonneg (d ^ L)
       exact div_nonneg hnonneg (mul_nonneg hnonneg hnonneg)
   · simp [localTermES, localTerm, hLN]
 

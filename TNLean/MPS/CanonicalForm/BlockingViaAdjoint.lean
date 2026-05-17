@@ -103,12 +103,12 @@ theorem Module.End.hasEigenvalue_adjoint_iff (E : V →ₗ[ℂ] V) (μ : ℂ) :
     -- We rewrite it symmetrically below.)
     calc
       E.adjoint.charpoly
-          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly := by
-              exact hEadj.symm
+          = (LinearMap.toMatrix v.toBasis v.toBasis E.adjoint).charpoly :=
+              hEadj.symm
       _ = ((LinearMap.toMatrix v.toBasis v.toBasis E)ᴴ).charpoly := by
             rw [hMatAdj]
-      _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) := by
-            exact Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
+      _ = (LinearMap.toMatrix v.toBasis v.toBasis E).charpoly.map (starRingEnd ℂ) :=
+            Matrix.charpoly_conjTranspose (M := LinearMap.toMatrix v.toBasis v.toBasis E)
       _ = E.charpoly.map (starRingEnd ℂ) := by
             rw [hE]
   -- Now compare roots using `Polynomial.isRoot_map_iff`.

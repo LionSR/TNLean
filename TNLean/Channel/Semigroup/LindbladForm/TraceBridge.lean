@@ -7,7 +7,7 @@ import TNLean.Channel.Semigroup.LindbladForm.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
-# Lindblad Form — Trace Bridge
+# Lindblad Form — Trace-preserving semigroups and trace-annihilating generators
 
 This file proves the equivalence between trace-annihilating generators and
 trace-preserving semigroups.
@@ -43,7 +43,7 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
   -- this : MulOpposite.op 1 • A i j = 0
   simpa using this
 
-/-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
+/-! ## Equivalence: trace-annihilating ↔ trace-preserving semigroup -/
 
 /-- The trace-evaluation functional as an ℝ-linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/
@@ -78,20 +78,6 @@ private lemma expSemigroupCLM_mul_comm_local
     ext X i j
     simp
   exact hc.exp_left.eq
-
-/-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
-This follows from `trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0`. -/
-private lemma trace_iterate_eq_zero
-    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hTA : IsTraceAnnihilating L)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    {n : ℕ} (hn : 0 < n) :
-    trace ((L ^ n) ρ) = 0 := by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.pos_iff_ne_zero.mp hn)
-  change trace ((L ^ (k + 1)) ρ) = 0
-  rw [pow_succ']
-  change trace (L ((L ^ k) ρ)) = 0
-  exact hTA _
 
 set_option maxHeartbeats 2000000 in
 -- The chain-rule / derivative-normalization proof below is source-level expensive on CLMs.

@@ -256,8 +256,8 @@ theorem IsCPMap.of_tendsto_toCLM [NeZero D]
     (hE : ∀ n, IsCPMap (E n))
     (hlim : Filter.Tendsto (fun n => endEquivD D (E n)) Filter.atTop
       (nhds (endEquivD D F))) :
-    IsCPMap F := by
-  exact (isClosed_setOf_isCPMap (D := D)).mem_of_tendsto hlim
+    IsCPMap F :=
+  (isClosed_setOf_isCPMap (D := D)).mem_of_tendsto hlim
     (Filter.Eventually.of_forall hE)
 
 /-- In dimension `0`, every linear map is completely positive. -/
@@ -311,8 +311,8 @@ theorem IsCPMap.expSemigroup
           (((t : ℂ) • L) ^ n) := by
         calc
           (endEquivD D).symm ((((t : ℂ) • endEquivD D L) ^ n))
-              = ((endEquivD D).symm (((t : ℂ) • endEquivD D L))) ^ n := by
-                  exact map_pow (endEquivD D).symm ((t : ℂ) • endEquivD D L) n
+              = ((endEquivD D).symm (((t : ℂ) • endEquivD D L))) ^ n :=
+                  map_pow (endEquivD D).symm ((t : ℂ) • endEquivD D L) n
           _ = (((t : ℂ) • L) ^ n) := by rw [hbase]
       have hterm_eq : termLM n = (((t ^ n / Nat.factorial n : ℝ) : ℂ) • (L ^ n)) := by
         calc

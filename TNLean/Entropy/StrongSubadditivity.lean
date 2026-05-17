@@ -156,10 +156,8 @@ theorem vonNeumannEntropy_eq_zero_of_fin_one
     exact_mod_cast h_cast
   have h_eig : hM.eigenvalues 0 = 1 := by
     simpa [Fin.sum_univ_one] using h_sum
-  have h1 : Real.negMulLog (1 : ℝ) = 0 := by
-    simp [Real.negMulLog]
   change ∑ i : Fin 1, Real.negMulLog (hM.eigenvalues i) = 0
-  rw [Fin.sum_univ_one, h_eig, h1]
+  rw [Fin.sum_univ_one, h_eig, Real.negMulLog_one]
 
 end FinOneEntropy
 

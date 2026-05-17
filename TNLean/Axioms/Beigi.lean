@@ -63,7 +63,7 @@ commuting Hamiltonians in 1D with finite degeneracy, exhibiting the
 ground space as the span of locally orthogonal product-of-pairs
 states. Formalization is expected to require:
 
-1. A tensor-product / local-support API on `NSiteSpace d N` beyond the
+1. A tensor-product / local-support interface on `NSiteSpace d N` beyond the
    current `Cfg`-based representation.
 2. A translation from the ground-space decomposition of [Beigi] to the
    RFP idempotence equation `transferMap A ∘ transferMap A =

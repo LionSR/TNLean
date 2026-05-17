@@ -88,8 +88,8 @@ theorem preserves_corner_pow_of_cyclic_decomp
                   congr 1
                   calc
                     T (P (cyclicIndex k n + 1) * X * P (cyclicIndex k n + 1))
-                        = T (P (cyclicIndex k n + 1) * X) * T (P (cyclicIndex k n + 1)) := by
-                            exact hMulRight (cyclicIndex k n + 1) (P (cyclicIndex k n + 1) * X)
+                        = T (P (cyclicIndex k n + 1) * X) * T (P (cyclicIndex k n + 1)) :=
+                            hMulRight (cyclicIndex k n + 1) (P (cyclicIndex k n + 1) * X)
                     _ = (T (P (cyclicIndex k n + 1)) * T X) * T (P (cyclicIndex k n + 1)) := by
                             rw [hMulLeft (cyclicIndex k n + 1) X]
                     _ = P (cyclicIndex k n) * T X * P (cyclicIndex k n) := by
@@ -160,8 +160,8 @@ theorem isPrimitive_restriction_of_cyclic_decomp
     rw [hperiph]
     exact ⟨0, by simp only [Fin.coe_ofNat_eq_mod, Nat.zero_mod, pow_zero]⟩
   rcases hone_mem.1.exists_hasEigenvector with ⟨ρ, hρeig⟩
-  have hρ_fix : T ρ = ρ := by
-    exact (Module.End.HasEigenvector.apply_eq_smul hρeig).trans (by simp only [one_smul])
+  have hρ_fix : T ρ = ρ :=
+    (Module.End.HasEigenvector.apply_eq_smul hρeig).trans (by simp only [one_smul])
   have hρ_ne : ρ ≠ 0 := (Module.End.hasEigenvector_iff.mp hρeig).2
   have hper_pow : ∀ μ : ℂ, μ ∈ peripheralEigenvalues T → μ ^ m = 1 := by
     intro μ hμ
@@ -285,8 +285,8 @@ theorem preserves_corner_pow_orderOf_of_perm_decomp
                   congr 1
                   calc
                     T (P (σ ((σ ^ n) k)) * X * P (σ ((σ ^ n) k))
-                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) := by
-                              exact hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
+                        ) = T (P (σ ((σ ^ n) k)) * X) * T (P (σ ((σ ^ n) k))) :=
+                              hMulRight (σ ((σ ^ n) k)) (P (σ ((σ ^ n) k)) * X)
                     _ = (T (P (σ ((σ ^ n) k))) * T X) * T (P (σ ((σ ^ n) k))) := by
                           rw [hMulLeft (σ ((σ ^ n) k)) X]
                     _ = P ((σ ^ n) k) * T X * P ((σ ^ n) k) := by

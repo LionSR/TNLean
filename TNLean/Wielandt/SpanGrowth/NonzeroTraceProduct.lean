@@ -272,11 +272,9 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
   have hr_le : r ≤ D ^ 2 := by
     calc r ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
           Submodule.finrank_le _
-      _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-          Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-      _ = D * D * 1 := by
-            simp only [Fintype.card_fin, Module.finrank_self, mul_one]
-      _ = D ^ 2 := by ring
+      _ = D ^ 2 := by
+            rw [Module.finrank_matrix, Fintype.card_fin,
+              Module.finrank_self, mul_one]; ring
   -- The bound n we aim for
   set n := D ^ 2 - r + 1 with hn_def
   by_contra hne
@@ -349,12 +347,9 @@ theorem cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
             inferInstance
           exact (Submodule.eq_top_of_finrank_eq h).ge
         calc Module.finrank ℂ (cumulativeSpan A n) = D ^ 2 := h_eq
-          _ = D * D * 1 := by ring
-          _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-              Module.finrank ℂ ℂ := by
-                simp only [Fintype.card_fin, Module.finrank_self, mul_one]
           _ = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-              (Module.finrank_matrix ℂ ℂ _ _).symm
+              (by rw [Module.finrank_matrix, Fintype.card_fin,
+                Module.finrank_self, mul_one]; ring)
       exact hne this
 
 /-- **Lemma 1, sharp version** (arXiv:0909.5347):
@@ -562,10 +557,9 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
     have hr_le : r ≤ D ^ 2 := by
       calc r ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
             Submodule.finrank_le _
-        _ = D * D * 1 := by
-            simp only [Module.finrank_matrix, Fintype.card_fin,
-              Module.finrank_self, mul_one]
-        _ = D ^ 2 := by ring
+        _ = D ^ 2 := by
+            rw [Module.finrank_matrix, Fintype.card_fin,
+              Module.finrank_self, mul_one]; ring
     -- We need to show the dimension grows to D²
     -- If bound ≥ 1 (which it is when D ≥ 2 and r ≤ D²):
     have hbound_pos : 1 ≤ bound := by omega
@@ -623,19 +617,15 @@ theorem exists_nonzero_trace_word_sharp_pos [NeZero D]
       calc Module.finrank ℂ (V bound)
           ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
             Submodule.finrank_le _
-        _ = D * D * 1 := by
-            simp only [Module.finrank_matrix, Fintype.card_fin,
-              Module.finrank_self, mul_one]
-        _ = D ^ 2 := by ring
+        _ = D ^ 2 := by
+            rw [Module.finrank_matrix, Fintype.card_fin,
+              Module.finrank_self, mul_one]; ring
     have h_ge := hV_dim
     have h_eq : Module.finrank ℂ (V bound) = D ^ 2 := by omega
     calc Module.finrank ℂ (V bound) = D ^ 2 := h_eq
-      _ = D * D * 1 := by ring
-      _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-          Module.finrank ℂ ℂ := by
-            simp only [Fintype.card_fin, Module.finrank_self, mul_one]
       _ = Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-          (Module.finrank_matrix ℂ ℂ _ _).symm
+          (by rw [Module.finrank_matrix, Fintype.card_fin,
+                Module.finrank_self, mul_one]; ring)
   -- Step 7: trace vanishes on V bound but tr(I) ≠ 0
   have h1mem : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ V bound :=
     hV_top ▸ Submodule.mem_top

@@ -17,8 +17,8 @@ The underlying eigenvalue-based definition, the nonnegativity proof,
 and the `S(ρ) ≤ log D` bound live in `TNLean.Analysis.Entropy`. To
 avoid maintaining two parallel spellings of the same definition, this
 module introduces `Entropy`-namespace aliases for them via Mathlib-style
-`alias` declarations rather than wrapping them in `noncomputable def`s
-plus trivial unfolding `@[simp]` lemmas.
+`alias` declarations rather than restating them as `noncomputable def`s
+with trivial unfolding `@[simp]` lemmas.
 
 ## Main declarations
 

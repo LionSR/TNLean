@@ -54,21 +54,6 @@ private lemma conjTranspose_commute_conjTranspose_mul_self_of_normal
   (Commute.refl Aᴴ).mul_right
     (Commute.symm (commute_conjTranspose_of_normal (A := A) hA))
 
-/-- For a normal matrix `A`, the generators `{A, Aᴴ, Aᴴ * A, 1}` commute pairwise. -/
-private lemma normal_generators_pairwise_commute
-    (hA : Aᴴ * A = A * Aᴴ) :
-    Commute A Aᴴ ∧
-      Commute A (Aᴴ * A) ∧
-      Commute A (1 : Matrix (Fin D) (Fin D) ℂ) ∧
-      Commute Aᴴ (Aᴴ * A) ∧
-      Commute Aᴴ (1 : Matrix (Fin D) (Fin D) ℂ) ∧
-      Commute (Aᴴ * A) (1 : Matrix (Fin D) (Fin D) ℂ) :=
-  ⟨commute_conjTranspose_of_normal (A := A) hA,
-   commute_conjTranspose_mul_self_of_normal (A := A) hA,
-   Commute.one_right A,
-   conjTranspose_commute_conjTranspose_mul_self_of_normal (A := A) hA,
-   Commute.one_right Aᴴ,
-   Commute.one_right (Aᴴ * A)⟩
 
 end NormalGenerators
 
