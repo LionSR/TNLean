@@ -8,7 +8,7 @@ import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
 import TNLean.MPS.Periodic.SectorIrreducibility.HLift
 
 /-!
-# Sector irreducibility helpers
+# Sector irreducibility
 
 The sector-irreducibility argument for cyclic decompositions starts from a
 partition of unity by orthogonal projections. Adjoint fixed projections preserve

@@ -130,13 +130,13 @@ lemma supportProj_idem :
 
 /-- `supportProj ρ` is an orthogonal projection. -/
 lemma isOrthogonalProjection_supportProj :
-    IsOrthogonalProjection (supportProj (D := D) ρ hρ) := by
-  exact ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
+    IsOrthogonalProjection (supportProj (D := D) ρ hρ) :=
+  ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
     supportProj_idem (D := D) (ρ := ρ) (hρ := hρ)⟩
 
 /-- Spectral decomposition for a Hermitian matrix, in matrix form.
 
-We provide a local helper (to avoid importing `TNLean.QPF.PosDef`).
+Kept local to avoid a dependency on `TNLean.QPF.PosDef`.
 -/
 private lemma spectral_decomp_eq
     (M : Matrix (Fin D) (Fin D) ℂ) (hM : M.IsHermitian) :
@@ -251,10 +251,10 @@ section FixedPointInvariant
 
 /-- Adjoint identity for dot product: `star x ⬝ᵥ (M *ᵥ y) = star (Mᴴ *ᵥ x) ⬝ᵥ y`.
 
-This helper is intentionally kept local to this file: unlike
+This auxiliary lemma is intentionally kept local to this file: unlike
 `orthogonalProjection_posSemidef` in `Irreducible/Basic`, this is a small linear-algebra
-rewrite used only in the fixed-point support-projection argument below, and exporting it
-would add API surface without a second in-repo call site.
+rewrite used only in the fixed-point support-projection argument below, and there is no
+second in-repo call site.
 -/
 private lemma dotProduct_mulVec_conjTranspose
     (M : Matrix (Fin D) (Fin D) ℂ)
@@ -381,7 +381,7 @@ theorem lowerZero_of_posSemidef_fixedPoint
     -- Now apply the invariance lemma.
     simpa using (ker_invariant_under_adjoint (d := d) (D := D) A ρ hρ_psd hρ_fix
       ((1 - P) *ᵥ v) hker i)
-  -- Package the result.
+  -- Conclude.
   refine ?_
   -- unfold `let P := ...`
   simp [P, hP_proj, h_complement_zero]

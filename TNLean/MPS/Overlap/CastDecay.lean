@@ -7,7 +7,7 @@ import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.SpectralGapNT
 
 /-!
-# Cast-aware overlap-decay helpers
+# Cast-aware overlap-decay lemmas
 
 This module records the recurring pattern where an equal-dimension hypothesis is used to cast the
 left tensor before applying an overlap-decay theorem, and the resulting limit is transported back to

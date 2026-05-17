@@ -166,9 +166,8 @@ noncomputable def state (data : GSNNCHData d N) : ChainOperator d N :=
 
 /-- Every GSNNCH witness gives back the underlying commuting-form realization. -/
 theorem realizes_form_state (data : GSNNCHData d N) :
-    data.form.Realizes data.state := by
-  refine ⟨data.normalization, data.normalization_pos, ?_⟩
-  rfl
+    data.form.Realizes data.state :=
+  ⟨data.normalization, data.normalization_pos, rfl⟩
 
 end GSNNCHData
 
@@ -206,10 +205,8 @@ end CommutingFormData
 theorem isGSNNCHAt_iff_exists_commutingForm {d N : ℕ} (ρ : ChainOperator d N) :
     IsGSNNCHAt ρ ↔ ∃ data : CommutingFormData d N, data.Realizes ρ := by
   constructor
-  · rintro ⟨data, hρ⟩
-    refine ⟨data.form, ?_⟩
-    rw [hρ]
-    exact data.realizes_form_state
+  · rintro ⟨data, rfl⟩
+    exact ⟨data.form, data.realizes_form_state⟩
   · rintro ⟨data, hρ⟩
     exact data.isGSNNCHAt_of_realizes hρ
 
@@ -220,17 +217,12 @@ theorem isGSNNCH_of_hasCommutingForm {M : MPOTensor d D}
   exact data.isGSNNCHAt_of_realizes hdata
 
 theorem hasCommutingForm_of_isGSNNCH {M : MPOTensor d D}
-    (hM : IsGSNNCH M) : HasCommutingForm M := by
-  intro N hN
-  rcases (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN) with
-    ⟨data, hdata⟩
-  exact ⟨data, hdata⟩
+    (hM : IsGSNNCH M) : HasCommutingForm M := fun N hN =>
+  (isGSNNCHAt_iff_exists_commutingForm (mpo M N)).mp (hM N hN)
 
 theorem isGSNNCH_iff_hasCommutingForm (M : MPOTensor d D) :
-    IsGSNNCH M ↔ HasCommutingForm M := by
-  constructor
-  · exact hasCommutingForm_of_isGSNNCH
-  · exact isGSNNCH_of_hasCommutingForm
+    IsGSNNCH M ↔ HasCommutingForm M :=
+  ⟨hasCommutingForm_of_isGSNNCH, isGSNNCH_of_hasCommutingForm⟩
 
 /-- The GSNNCH-with-zero-correlation-length branch of the simple-MPDO
 equivalence. -/

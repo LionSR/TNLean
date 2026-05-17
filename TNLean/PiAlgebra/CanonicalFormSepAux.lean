@@ -61,8 +61,8 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 /-! ### Additive split conditions for canonical-form hypotheses
 
 The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility.  The
-structures below expose weaker pieces of data so theorem signatures can migrate gradually without
-forcing an immediate project-wide refactor.
+structures below expose weaker conditions so theorem signatures can migrate gradually without
+forcing an immediate project-wide reorganization.
 -/
 
 /-- Each block in the family is algebraically injective. -/
@@ -151,8 +151,8 @@ end IsLeftCanonicalBlockFamily
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
 
 This is the relaxed weight-ordering condition matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021): block weights are non-increasing by modulus, but ties are
-permitted. The strictly decreasing variant `HasStrictOrderedNonzeroWeights`
+(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021): block weights are non-increasing
+by modulus, but ties are permitted. The strictly decreasing variant `HasStrictOrderedNonzeroWeights`
 is used internally by the block-separation and coefficient-convergence proofs. -/
 structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   /-- Non-increasing ordering of the block weights by modulus. -/
@@ -226,8 +226,9 @@ end HasNormalizedSelfOverlap
 `∑ᵢ Aᵢ† Aᵢ = I`, non-increasing weight data, and overlap normalization in a single proposition.
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
-(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli. The strictly decreasing variant
-is a one-copy-per-sector artifact; the paper-faithful predicate `IsBNTCanonicalForm` uses sector
+(PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli.
+The strictly decreasing variant
+is a one-copy-per-sector artifact; the source-paper predicate `IsBNTCanonicalForm` uses sector
 multiplicities and does not require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
@@ -242,8 +243,8 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
   This field is kept for backward compatibility with the original separated FT interface. In the
-  normal-canonical-form formulation the same conclusion is derived from irreducibility, left-canonical
-  normalization, and peripheral-spectrum primitivity via
+  normal-canonical-form formulation the same conclusion is derived from irreducibility,
+  left-canonical normalization, and peripheral-spectrum primitivity via
   `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
   overlap_tendsto_one :
     ∀ k,

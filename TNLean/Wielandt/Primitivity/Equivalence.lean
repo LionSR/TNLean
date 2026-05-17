@@ -233,7 +233,8 @@ paper primitivity is equivalent to the conjunction of eventual full Kraus rank,
 normality, and strong irreducibility.
 
 This theorem is intentionally stated as
-`IsPrimitivePaper A ↔ (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A)`.
+`IsPrimitivePaper A ↔
+  (HasEventuallyFullKrausRank A ∧ IsNormal A ∧ IsStronglyIrreduciblePaper A)`.
 For explicit pairwise equivalences, use:
 `primitivePaper_iff_hasEventuallyFullKrausRank`,
 `primitivePaper_iff_stronglyIrreducible`, and

@@ -128,8 +128,8 @@ private theorem posSemidef_fromBlocks_zero_zero
   let fg := Finsupp.sumFinsuppEquivProdFinsupp x
   let xL : m →₀ ℂ := fg.1
   let xR : o →₀ ℂ := fg.2
-  have hx : x = Finsupp.sumElim xL xR := by
-    exact (Finsupp.sumFinsuppEquivProdFinsupp.symm_apply_apply x).symm
+  have hx : x = Finsupp.sumElim xL xR :=
+    (Finsupp.sumFinsuppEquivProdFinsupp.symm_apply_apply x).symm
   rw [hx, Finsupp.sumElim_eq_add, Finsupp.sum_add_index']
   · have hRight :
         (Finsupp.mapDomain Sum.inr xR).sum (fun i xi =>

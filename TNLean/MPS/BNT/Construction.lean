@@ -477,17 +477,15 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
     (∀ N : ℕ, ∃ c : Fin r → ℂ, ∀ σ : Fin N → Fin d,
       mpv (toTensorFromBlocks μ A) σ = ∑ j : Fin r, c j * mpv (A j) σ) ∧
     (∃ N0 : ℕ, ∀ N > N0,
-      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N)) := by
-  constructor
-  · exact spans_mpv_toTensorFromBlocks μ A
-  · exact
-      exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
-        (fun j => hNCF.overlap_tendsto_one j)
-        (fun i j hij =>
-          cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
-            hNCF.toHasIrreducibleBlocks
-            hNCF.toIsLeftCanonicalBlockFamily
-            hBlocks i j hij)
+      LinearIndependent ℂ (fun j : Fin r => mpvState (d := d) (A j) N)) :=
+  ⟨spans_mpv_toTensorFromBlocks μ A,
+   exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
+     (fun j => hNCF.overlap_tendsto_one j)
+     (fun i j hij =>
+       cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+         hNCF.toHasIrreducibleBlocks
+         hNCF.toIsLeftCanonicalBlockFamily
+         hBlocks i j hij)⟩
 
 /-- Separated-hypotheses version of `IsNormalCanonicalFormBNT.isBNT`.
 

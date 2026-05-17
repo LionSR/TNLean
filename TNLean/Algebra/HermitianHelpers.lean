@@ -31,8 +31,7 @@ theorem spectral_decomp_eq_of_generalIndex
       Matrix.diagonal (fun j => (↑(hM.eigenvalues j) : ℂ)) *
       (↑hM.eigenvectorUnitary : Matrix n n ℂ)ᴴ := by
   have h := hM.spectral_theorem
-  rw [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
-  convert h using 2
+  rwa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose] at h
 
 end Matrix.IsHermitian
 

@@ -228,9 +228,7 @@ theorem RepeatedBlocks.symm {A B : MPSTensor d D}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
   rcases h with ⟨ξ, Y, hξ, hY⟩
   have hξ_ne : ξ ≠ 0 := by
-    intro h0
-    have : ‖ξ‖ = 0 := by simp [h0]
-    linarith [hξ]
+    intro h0; simp [h0] at hξ
   refine ⟨ξ⁻¹, Y⁻¹, by simp [norm_inv, hξ], ?_⟩
   intro i
   have hYi := hY i

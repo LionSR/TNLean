@@ -56,7 +56,8 @@ theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
       _ = P i * 1 * P i := by rw [hPsum]
       _ = P i := by simp [(hPproj i).2]
   have hsum_erase : ∑ k ∈ Finset.univ.erase i, P i * P k * P i = 0 := by
-    rw [← Finset.sum_erase_add Finset.univ (fun k => P i * P k * P i) (Finset.mem_univ i)] at hsum_i
+    rw [← Finset.sum_erase_add Finset.univ (fun k => P i * P k * P i)
+        (Finset.mem_univ i)] at hsum_i
     have hiii : P i * P i * P i = P i := by
       simp [(hPproj i).2]
     rw [hiii] at hsum_i

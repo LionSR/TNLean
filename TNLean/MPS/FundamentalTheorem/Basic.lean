@@ -64,11 +64,7 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
 theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
     (hA : IsInjective A) :
-    SameMPV A B ↔ GaugeEquiv A B := by
-  constructor
-  · intro hAB
-    exact fundamentalTheorem_singleBlock hA hAB
-  · intro hAB
-    exact GaugeEquiv.sameMPV hAB
+    SameMPV A B ↔ GaugeEquiv A B :=
+  ⟨fundamentalTheorem_singleBlock hA, GaugeEquiv.sameMPV⟩
 
 end MPSTensor

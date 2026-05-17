@@ -6,13 +6,12 @@ import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basic
 
 /-!
-# Periodic Z-gauge helpers
+# Periodic Z-gauge construction
 
 This file contains the standalone Z-gauge matrix constructions used in the
 periodic equal-case fundamental theorem of arXiv:1708.00029. The declarations
-were moved out of `MPS/FundamentalTheorem/SectorDecomposition.lean` to complete
-the Gemma split between the general fundamental-theorem stack and the periodic
-Section 3–Section 4 definitions.
+are separated from the non-periodic fundamental theorem theory to isolate the
+Section 3–Section 4 periodic constructions.
 -/
 
 open scoped Matrix
@@ -26,15 +25,13 @@ noncomputable def zGaugeEntry (μ ν : ℂ) : ℂ := μ / ν
 theorem zGaugeEntry_pow_eq_one_of_pow_eq
     {m : ℕ} {μ ν : ℂ} (hpow : μ ^ m = ν ^ m) (hν : ν ≠ 0) :
     (zGaugeEntry μ ν) ^ m = 1 := by
-  dsimp [zGaugeEntry]
-  rw [div_pow, hpow, div_self]
-  exact pow_ne_zero m hν
+  simp only [zGaugeEntry, div_pow, hpow, div_self (pow_ne_zero m hν)]
 
 /-- The ratio defining the Z-gauge rescales `ν` back to `μ`. -/
 theorem zGaugeEntry_mul_right {μ ν : ℂ} (hν : ν ≠ 0) :
     zGaugeEntry μ ν * ν = μ := by
-  dsimp [zGaugeEntry]
-  rw [div_eq_mul_inv, mul_assoc, inv_mul_cancel₀ hν, mul_one]
+  unfold zGaugeEntry
+  exact div_mul_cancel₀ μ hν
 
 section ZGaugeDiagonal
 
@@ -51,23 +48,18 @@ theorem zGaugeDiagonal_pow_eq_one
     (hpow : ∀ i, μ i ^ m = ν i ^ m)
     (hν : ∀ i, ν i ≠ 0) :
     zGaugeDiagonal (n := n) μ ν ^ m = 1 := by
-  ext i j
-  by_cases hij : i = j
-  · subst hij
-    simp [zGaugeDiagonal, Matrix.diagonal_pow,
-      zGaugeEntry_pow_eq_one_of_pow_eq (hpow i) (hν i)]
-  · simp [zGaugeDiagonal, Matrix.diagonal_pow, hij]
+  simp only [zGaugeDiagonal, Matrix.diagonal_pow, Pi.pow_def]
+  congr 1; ext i
+  exact zGaugeEntry_pow_eq_one_of_pow_eq (hpow i) (hν i)
 
 /-- Pointwise form of `Z * diag(ν) = diag(μ)` for the periodic Z-gauge. -/
 theorem zGaugeDiagonal_mul_diagonal
     (μ ν : n → ℂ)
     (hν : ∀ i, ν i ≠ 0) :
     zGaugeDiagonal (n := n) μ ν * Matrix.diagonal ν = Matrix.diagonal μ := by
-  ext i j
-  by_cases hij : i = j
-  · subst hij
-    simp [zGaugeDiagonal, zGaugeEntry_mul_right (hν i)]
-  · simp [zGaugeDiagonal, hij]
+  simp only [zGaugeDiagonal, Matrix.diagonal_mul_diagonal]
+  congr 1; funext i
+  exact zGaugeEntry_mul_right (hν i)
 
 end ZGaugeDiagonal
 

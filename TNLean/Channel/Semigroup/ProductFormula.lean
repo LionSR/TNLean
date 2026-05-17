@@ -33,7 +33,7 @@ open Matrix TNLean
 
 noncomputable section
 
-section ProductFormulaHelpers
+section TrotterEstimates
 
 variable {D : ℕ}
 
@@ -135,8 +135,8 @@ theorem norm_pow_sub_pow_le_of_norm_le [NeZero D]
         _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               ring_nf
         _ ≤ M ^ (m + 1) * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ := by
-                exact mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
+              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ :=
+                mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
               nlinarith
         _ = ((m + 1 : ℕ) : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               rw [Nat.cast_add, Nat.cast_one]
@@ -169,8 +169,8 @@ theorem norm_trotter_pow_sub_exp_le_of_step [NeZero D]
       gcongr
       exact norm_add_le A B
     exact hS_le0.trans <| by gcongr
-  have hM : 1 ≤ Real.exp (s * (‖A‖ + ‖B‖)) := by
-    exact Real.one_le_exp (mul_nonneg hs_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)))
+  have hM : 1 ≤ Real.exp (s * (‖A‖ + ‖B‖)) :=
+    Real.one_le_exp (mul_nonneg hs_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _)))
   have hpow : ‖E ^ (n + 1) - S ^ (n + 1)‖ ≤
       ((n + 1 : ℕ) : ℝ) * (Real.exp (s * (‖A‖ + ‖B‖))) ^ (n + 1) * ‖E - S‖ := by
     exact norm_pow_sub_pow_le_of_norm_le (D := D) (A := E) (B := S)
@@ -277,6 +277,6 @@ theorem lie_trotter_suzuki_bound_of_step [NeZero D]
           Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
             ring
 
-end ProductFormulaHelpers
+end TrotterEstimates
 
 end -- noncomputable section

@@ -184,7 +184,8 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
         atTop (nhds (0 : ℂ)) := by
     refine Tendsto.congr (fun n => ?_) htr0
     -- `Φ` preserves powers; `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
-    have hpow : (F' ^ n) = Φ ((mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) := by
+    have hpow : (F' ^ n) =
+        Φ ((mixedTransferMap₂ (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) := by
       simp [F', Φ]
     -- Pass to underlying linear maps.
     have hlin :

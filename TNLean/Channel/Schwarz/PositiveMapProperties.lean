@@ -175,13 +175,13 @@ theorem IsPositiveMap.spectrum_contractivity
   have hTA : (T A).IsHermitian := hT.map_isHermitian hA
   have hTA_sa : IsSelfAdjoint (T A) := isSelfAdjoint_iff.mpr hTA
   have hLowerA : (a : ℝ) • I ≤ A := by
-    have hLowerA' : algebraMap ℝ Mat a ≤ A := by
-      exact algebraMap_le_of_le_spectrum (a := A) (r := a) (ha := hA_sa)
+    have hLowerA' : algebraMap ℝ Mat a ≤ A :=
+      algebraMap_le_of_le_spectrum (a := A) (r := a) (ha := hA_sa)
         (fun x hx => (hSpec hx).1)
     simpa [I, Algebra.algebraMap_eq_smul_one] using hLowerA'
   have hUpperA : A ≤ (b : ℝ) • I := by
-    have hUpperA' : A ≤ algebraMap ℝ Mat b := by
-      exact le_algebraMap_of_spectrum_le (a := A) (r := b) (ha := hA_sa)
+    have hUpperA' : A ≤ algebraMap ℝ Mat b :=
+      le_algebraMap_of_spectrum_le (a := A) (r := b) (ha := hA_sa)
         (fun x hx => (hSpec hx).2)
     simpa [I, Algebra.algebraMap_eq_smul_one] using hUpperA'
   obtain ⟨hLowerTA, hUpperTA⟩ := hT.image_bounded hSub ha0 hb0 hLowerA hUpperA

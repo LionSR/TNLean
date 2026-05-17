@@ -297,8 +297,8 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
         intro hbot
         apply hγ
         apply le_antisymm
-        · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) := by
-            exact iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
+        · have hle : V γ ≤ Module.End.eigenspace (T idx) (γ idx) :=
+            iInf_le (fun j => Module.End.eigenspace (T j) (γ j)) idx
           simpa only [le_bot_iff, hbot] using hle
         · exact bot_le
       let α : σ := fun idx => ⟨γ idx, hEig idx⟩
@@ -501,15 +501,5 @@ theorem quadraticForm_nonneg_of_isPositiveMap_of_commuting_images
     apply Finset.sum_congr rfl; intro q _
     ring
 
-/-- A positive map is positive on commuting block families.
-
-This collects `quadraticForm_nonneg_of_isPositiveMap_of_commuting_images` into a
-single reusable predicate. -/
-private lemma isPositiveOnCommuting_of_isPositiveMap
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) :
-    IsPositiveOnCommuting T := by
-  intro n a ha hcomm ψ
-  exact quadraticForm_nonneg_of_isPositiveMap_of_commuting_images hT a ha hcomm ψ
 
 end PositiveOnAbelian
