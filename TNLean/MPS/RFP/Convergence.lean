@@ -17,7 +17,7 @@ argument from CPGSV21, Section 2.3 and Appendix B of arXiv:1606.00608
 (Cirac–Pérez-García–Schuch–Verstraete).
 
 For a CF tensor, the transfer matrix decomposes as
-`E' = ⊕_{j,j'} μ_{j,q} μ̄_{j',q'} E_{j,j'}`.
+`E' = ⊕_{j,j'} μ_{j,q} μ'_{j',q'} E_{j,j'}`.
 Off-diagonal blocks `E_{j,j'}` (j ≠ j') have spectral radius < 1 and decay.
 Diagonal blocks `E_{j,j}` have a unique magnitude-1 eigenvalue. So `E'^N`
 converges to an idempotent (the RFP).

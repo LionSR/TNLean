@@ -30,10 +30,10 @@ with composition. We also relate it to the Kraus representation.
 ## Main results
 
 * `transferMatrix_mulVec_eq`: `T̂ *ᵥ vec(ρ) = vec(T(ρ))`
-* `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
+* `transferMatrix_comp`: `(S ∘ T)^ = Ŝ * T̂`
 * `transferMatrix_id`: the transfer matrix of the identity is the identity
 * `transferMatrix_kraus`: for a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer
-  matrix is `∑ᵢ K̄ᵢ ⊗ₖ Kᵢ`
+  matrix is `∑ᵢ K'ᵢ ⊗ₖ Kᵢ`
 * `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
   matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
@@ -205,7 +205,7 @@ noncomputable def transferMatrixLM :
 /-! ### Kraus representation of the transfer matrix -/
 
 /-- For a Kraus map `T(X) = ∑ᵢ Kᵢ X Kᵢ†`, the transfer matrix is
-`∑ᵢ K̄ᵢ ⊗ₖ Kᵢ` (Kronecker product of the entrywise conjugate of `Kᵢ`
+`∑ᵢ K'ᵢ ⊗ₖ Kᵢ` (Kronecker product of the entrywise conjugate of `Kᵢ`
 with `Kᵢ`).
 
 This connects the channel-theoretic Kraus representation with the

@@ -96,7 +96,7 @@ private lemma blockHermitian_of_blockPositive {n D : ℕ}
       _ = q := by simp only [RCLike.star_def, RingHomCompTriple.comp_apply, RingHom.id_apply]
       _ = star q := hqreal.symm
       _ = inner ℂ (A.toEuclideanLin x) x := by rw [hinner]
-  have hAherm : A.IsHermitian := (Matrix.isHermitian_iff_isSymmetric (A := A)).2 hAsym
+  have hAherm : A.IsHermitian := (Matrix.isSymmetric_toEuclideanLin_iff (A := A)).mp hAsym
   intro i j
   ext r s
   simpa only [conjTranspose_apply, RCLike.star_def] using congrArg
@@ -191,10 +191,10 @@ private lemma blockForm_nonneg_of_scalarPSD_of_commuting {n D : ℕ}
     cases idx with
     | inl ij =>
         rcases ij with ⟨i, j⟩
-        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := H i j)).mp (hH i j)
+        simpa only [T] using (Matrix.isSymmetric_toEuclideanLin_iff (A := H i j)).mpr (hH i j)
     | inr ij =>
         rcases ij with ⟨i, j⟩
-        simpa only [T] using (Matrix.isHermitian_iff_isSymmetric (A := K i j)).mp (hK i j)
+        simpa only [T] using (Matrix.isSymmetric_toEuclideanLin_iff (A := K i j)).mpr (hK i j)
   have hEuclMul := Internal.toEuclideanLin_mul (D := D)
   have htoEuclComm {A B : Matrix (Fin D) (Fin D) ℂ} (hAB : Commute A B) :
       Commute (Matrix.toEuclideanLin A : EuclideanSpace ℂ (Fin D) →ₗ[ℂ] EuclideanSpace ℂ (Fin D))

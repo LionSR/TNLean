@@ -1,5 +1,5 @@
 import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.LinearAlgebra.Matrix.Nondegenerate
+import Mathlib.Analysis.InnerProductSpace.GramMatrix
 import Mathlib.Topology.Instances.Matrix
 import Mathlib.Topology.Separation.Basic
 
@@ -35,23 +35,15 @@ theorem eventually_linearIndependent_of_gram_tendsto_nondegenerate
     (v : ι → ℕ → V) (L : Matrix ι ι ℂ) (hL : L.det ≠ 0)
     (h : ∀ i j, Tendsto (fun N => ⟪v i N, v j N⟫_ℂ) atTop (nhds (L i j))) :
     ∀ᶠ N in atTop, LinearIndependent ℂ (fun i => v i N) := by
-  let G : ℕ → Matrix ι ι ℂ := fun N i j => ⟪v i N, v j N⟫_ℂ
+  let G : ℕ → Matrix ι ι ℂ := fun N => Matrix.gram ℂ fun i => v i N
   have hG : Tendsto G atTop (nhds L) :=
-    tendsto_pi_nhds.2 fun i => tendsto_pi_nhds.2 fun j => h i j
+    tendsto_pi_nhds.2 fun i => tendsto_pi_nhds.2 fun j => by
+      simpa [G] using h i j
   have hdet : Tendsto (fun N => (G N).det) atTop (nhds L.det) :=
     ((continuous_id.matrix_det).tendsto L).comp hG
   have hdet_ne : ∀ᶠ N in atTop, (G N).det ≠ 0 := hdet.eventually_ne hL
-  exact hdet_ne.mono fun N hN => by
-    rw [Fintype.linearIndependent_iff]
-    intro c hc
-    have hmul : (G N).mulVec c = 0 := by
-      ext j
-      have key : (G N).mulVec c j = ⟪v j N, ∑ i : ι, c i • v i N⟫_ℂ := by
-        simp only [Matrix.mulVec.eq_1, dotProduct, inner_sum, inner_smul_right]
-        apply Finset.sum_congr rfl; intro i _; ring
-      simp only [key, hc, inner_zero_right, Pi.zero_apply]
-    have hc0 : c = 0 := Matrix.eq_zero_of_mulVec_eq_zero hN hmul
-    intro i; exact congr_fun hc0 i
+  exact hdet_ne.mono fun N hN =>
+    Matrix.linearIndependent_of_det_gram_ne_zero (𝕜 := ℂ) (v := fun i => v i N) hN
 
 /--
 **Lem1 (MPDO 1606.00608 / 1708.00029)**: eventual linear independence from

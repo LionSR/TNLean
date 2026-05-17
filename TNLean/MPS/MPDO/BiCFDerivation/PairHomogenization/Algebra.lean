@@ -373,8 +373,9 @@ theorem matrixPairSubalgebra_eq_top_of_leftAxisIdeal_eq_top {D : ℕ}
     rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
     have hpy' : p.2 = y := by simpa using hpy
     have hneg : (-p.1, 0) ∈ S := by
-      have hx : -p.1 ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
-      simpa [leftAxisIdeal] using hx
+      have hx : p.1 ∈ leftAxisIdeal S hfst := by rw [hleft]; trivial
+      have hpos : (p.1, 0) ∈ S := by simpa [leftAxisIdeal] using hx
+      simpa using S.neg_mem hpos
     have hadd : (-p.1, 0) + p ∈ S := S.add_mem hneg hpS
     have hsum : (-p.1, 0) + p = (0, y) := by
       ext <;> simp [hpy']
@@ -396,8 +397,9 @@ theorem matrixPairSubalgebra_eq_top_of_rightAxisIdeal_eq_top {D : ℕ}
     rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
     have hpx' : p.1 = x := by simpa using hpx
     have hneg : (0, -p.2) ∈ S := by
-      have hy : -p.2 ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
-      simpa [rightAxisIdeal] using hy
+      have hy : p.2 ∈ rightAxisIdeal S hsnd := by rw [hright]; trivial
+      have hpos : (0, p.2) ∈ S := by simpa [rightAxisIdeal] using hy
+      simpa using S.neg_mem hpos
     have hadd : p + (0, -p.2) ∈ S := S.add_mem hpS hneg
     have hsum : p + (0, -p.2) = (x, 0) := by
       ext <;> simp [hpx']
@@ -525,8 +527,9 @@ private theorem matrixPairSubalgebra_eq_top_of_leftAxisIdealHetero_eq_top {D₁ 
     rcases (Subalgebra.mem_map.mp hymap) with ⟨p, hpS, hpy⟩
     have hpy' : p.2 = y := by simpa using hpy
     have hneg : (-p.1, 0) ∈ S := by
-      have hx : -p.1 ∈ leftAxisIdealHetero S hfst := by rw [hleft]; trivial
-      simpa [leftAxisIdealHetero] using hx
+      have hx : p.1 ∈ leftAxisIdealHetero S hfst := by rw [hleft]; trivial
+      have hpos : (p.1, 0) ∈ S := by simpa [leftAxisIdealHetero] using hx
+      simpa using S.neg_mem hpos
     have hadd : (-p.1, 0) + p ∈ S := S.add_mem hneg hpS
     have hsum : (-p.1, 0) + p = (0, y) := by
       ext <;> simp [hpy']
@@ -546,8 +549,9 @@ private theorem matrixPairSubalgebra_eq_top_of_rightAxisIdealHetero_eq_top {D₁
     rcases (Subalgebra.mem_map.mp hxmap) with ⟨p, hpS, hpx⟩
     have hpx' : p.1 = x := by simpa using hpx
     have hneg : (0, -p.2) ∈ S := by
-      have hy : -p.2 ∈ rightAxisIdealHetero S hsnd := by rw [hright]; trivial
-      simpa [rightAxisIdealHetero] using hy
+      have hy : p.2 ∈ rightAxisIdealHetero S hsnd := by rw [hright]; trivial
+      have hpos : (0, p.2) ∈ S := by simpa [rightAxisIdealHetero] using hy
+      simpa using S.neg_mem hpos
     have hadd : p + (0, -p.2) ∈ S := S.add_mem hpS hneg
     have hsum : p + (0, -p.2) = (x, 0) := by
       ext <;> simp [hpx']

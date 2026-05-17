@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Periodic.Defs
 
 /-!
-# Beigi's ground-space theorem (axiomatized) and the RFP ⟺ NNCPH split
+# Beigi's ground-space theorem (axiomatized) and the RFP ↔ NNCPH split
 
 This module states two axioms that together realize the equivalence
 `IsRFP A ⇔ IsNNCPH A N` used in the proof of Theorem 3.10 of
