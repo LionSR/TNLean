@@ -6,7 +6,6 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.FundamentalTheorem.PaperBNT.CesaroNonDecay
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
-import TNLean.Spectral.SpectralGapNT
 
 /-!
 # Paper-faithful BNT canonical form: basic lemmas
