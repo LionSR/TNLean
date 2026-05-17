@@ -9,7 +9,7 @@ import Mathlib.Tactic.Abel
 # RFP decorrelation theory — commuting idempotent algebra
 
 This file develops the algebraic theory of commuting idempotent endomorphisms
-needed for the decorrelation ⟺ commuting parent Hamiltonian equivalence
+needed for the decorrelation ↔ commuting parent Hamiltonian equivalence
 (Proposition D.3, arXiv:1606.00608 Appendix D).
 
 Building on the backward direction proved in

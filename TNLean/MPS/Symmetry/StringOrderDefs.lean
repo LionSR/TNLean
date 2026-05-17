@@ -277,7 +277,7 @@ def CondC2 : Prop :=
 
 /-- **Condition C3** (doubled transfer-matrix commutation):
 The doubled transfer matrix `E = ∑_j A_j ⊗ Ā_j` commutes with
-`V ⊗ V̄`.  In the transfer-map language (with twist `u = 1`), this is
+`V ⊗ V'`.  In the transfer-map language (with twist `u = 1`), this is
 `V ℰ_1(X) V† = ℰ_1(V X V†)`. -/
 def CondC3 : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ,

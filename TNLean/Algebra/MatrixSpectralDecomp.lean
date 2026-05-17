@@ -14,7 +14,7 @@ matrix to outer-product sums over its spectral data.
 ## Main results
 
 * `Matrix.mul_single_mul_conjTranspose_eq_vecMulVec` — conjugating a scaled
-  matrix unit `(c · c̄) · E_{i,j}` by `K` and `Kᴴ` yields the rank-one outer
+  matrix unit `(c · c') · E_{i,j}` by `K` and `Kᴴ` yields the rank-one outer
   product of the corresponding columns of `K`.
 * `Matrix.PosSemidef.eq_sum_vecMulVec_nonzero_eigs` — a positive semidefinite
   matrix equals the sum of the rank-one outer products from its nonzero
@@ -26,7 +26,7 @@ open Matrix Finset BigOperators
 
 namespace Matrix
 
-/-- `K * (c * c̄ · E_{i,j}) * K† = c · K_col(i) ⊗ c̄ · K_col(j)†` as an outer
+/-- `K * (c * c' · E_{i,j}) * K† = c · K_col(i) ⊗ c' · K_col(j)†` as an outer
 product. -/
 theorem mul_single_mul_conjTranspose_eq_vecMulVec
     {n : Type*} [Fintype n] [DecidableEq n]

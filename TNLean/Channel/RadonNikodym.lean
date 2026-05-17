@@ -96,8 +96,8 @@ theorem Matrix.blockDiagTopProj_apply (r s : ℕ) (j j' : Fin (r + s)) :
 /-- For any matrix `C : Fin r → Fin m` and `A : Fin D → Fin D`,
   `A ⊗ (Cᴴ * C) = (𝟙 ⊗ C)ᴴ * (A ⊗ 𝟙) * (𝟙 ⊗ C)`.
 This is the Kronecker identity used in the Radon–Nikodym construction: it
-rewrites `V†(A ⊗ P)V` with `P = CᴴC` as `(C̃ V)† (A ⊗ 𝟙)(C̃ V)` with
-`C̃ = 𝟙 ⊗ C`. -/
+rewrites `V†(A ⊗ P)V` with `P = CᴴC` as `(C' V)† (A ⊗ 𝟙)(C' V)` with
+`C' = 𝟙 ⊗ C`. -/
 theorem Matrix.kroneckerMap_conjTranspose_mul_kroneckerMap
     {D r m : ℕ} (A : Matrix (Fin D) (Fin D) ℂ)
     (C : Matrix (Fin r) (Fin m) ℂ) :
