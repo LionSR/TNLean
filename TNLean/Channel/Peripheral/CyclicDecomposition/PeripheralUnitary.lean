@@ -431,17 +431,10 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   have hα_unit : star α * α = 1 := by
     simpa [Complex.star_def, mul_comm] using hα_unit_mul
   have hα_sq : ‖α‖ ^ 2 = 1 := by
-    have hnormSqC : (↑(Complex.normSq α) : ℂ) = 1 := by
-      calc
-        (↑(Complex.normSq α) : ℂ) = star α * α := by
-          rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-        _ = 1 := hα_unit
-    have hnormSq : Complex.normSq α = 1 := by
-      exact_mod_cast hnormSqC
-    simpa [Complex.normSq_eq_norm_sq] using hnormSq
+    have h : (starRingEnd ℂ) α * α = 1 := by rwa [starRingEnd_apply]
+    exact_mod_cast Complex.conj_mul' α ▸ h
   have hα_norm : ‖α‖ = 1 := by
-    have hnonneg : 0 ≤ ‖α‖ := norm_nonneg α
-    nlinarith
+    nlinarith [norm_nonneg α]
   set β : ℂ := α⁻¹ ^ (m⁻¹ : ℂ)
   have hβm : β ^ m = α⁻¹ := by
     simpa [β] using (Complex.cpow_nat_inv_pow (α⁻¹) (NeZero.ne m))
