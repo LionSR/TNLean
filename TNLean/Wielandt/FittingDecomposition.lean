@@ -58,7 +58,9 @@ theorem isNilpotent_restrict_maxGenEigenspace_zero
   have h := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f 0
   simp only [map_zero, sub_zero] at h
   obtain ⟨k, hk⟩ := h
-  exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
+  exact ⟨k, by
+    ext ⟨v, hv⟩
+    exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
 
 theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     {K : Type*} {V : Type*}
@@ -78,7 +80,9 @@ theorem isUnit_restrict_maxGenEigenspace_of_ne_zero
     exact W.sub_mem (hf_maps hx) (ha_maps hx)
   have hnil : IsNilpotent (N.restrict hN_maps) := by
     obtain ⟨k, hk⟩ := End.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap f μ
-    exact ⟨k, by ext ⟨v, hv⟩; exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
+    exact ⟨k, by
+      ext ⟨v, hv⟩
+      exact congr_arg Subtype.val (LinearMap.congr_fun hk ⟨v, hv⟩)⟩
   have ha_apply : ∀ (v : V), a v = μ • v := fun v => by
     change (algebraMap K (End K V) μ) v = μ • v
     rw [Module.algebraMap_end_eq_smul_id, LinearMap.smul_apply, LinearMap.id_apply]

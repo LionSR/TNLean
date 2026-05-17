@@ -303,12 +303,7 @@ theorem perturbation_ne_zero_of_trace_zero [NeZero D]
   rw [Matrix.trace_add, Matrix.trace_smul, htr, smul_zero, add_zero] at this
   have htr_pos : (0 : ℝ) < (ρ.trace).re := by
     rw [hρ.isHermitian.trace_eq_sum_eigenvalues]
-    -- Goal: 0 < (∑ i, ↑(eigenvalues i)).re
-    -- Since eigenvalues are real, .re of the sum = sum of eigenvalues
-    suffices h : 0 < ∑ i : Fin D, hρ.isHermitian.eigenvalues i by
-      calc (0 : ℝ) < ∑ i : Fin D, hρ.isHermitian.eigenvalues i := h
-        _ = (∑ i, (hρ.isHermitian.eigenvalues i : ℂ)).re := by simp
-        _ = _ := rfl
+    simp only [Complex.re_sum]
     exact Finset.sum_pos (fun i _ => hρ.eigenvalues_pos i)
       ⟨⟨0, NeZero.pos D⟩, Finset.mem_univ _⟩
   exact absurd this (ne_of_apply_ne Complex.re (ne_of_gt htr_pos))

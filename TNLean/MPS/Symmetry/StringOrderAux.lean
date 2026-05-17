@@ -129,7 +129,8 @@ lemma gaugePhaseEquiv_of_gaugeEquiv_left_right
           simp [Matrix.mul_assoc]
     _ = ζ • (Z⁻¹ * (Y * (X * A i * X⁻¹) * Y⁻¹) * Z) := by rw [hX i]
     _ = ζ • (((Z⁻¹ * Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
-          (((((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ))) := by
+          (((Z⁻¹ * Y * X : GL (Fin D) ℂ)⁻¹ : GL (Fin D) ℂ) :
+            Matrix (Fin D) (Fin D) ℂ)) := by
           simp [Matrix.mul_assoc, mul_inv_rev]
 
 /-- Bundled TP-gauge data for a twisted MPS tensor, used to reduce the spectral radius
@@ -662,16 +663,7 @@ theorem twistedTransfer_eigen_of_virtualUnitary
           rw [Finset.smul_sum]
           apply Finset.sum_congr rfl
           intro i _
-          calc
-            (μ • (V * A i * Vᴴ)) * V * (A i)ᴴ
-                = μ • (((V * A i * Vᴴ) * V) * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
-            _ = μ • ((V * A i * (Vᴴ * V)) * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
-            _ = μ • ((V * A i) * (A i)ᴴ) := by
-                    simp [hV', Matrix.mul_assoc]
-            _ = μ • (V * A i * (A i)ᴴ) := by
-                    simp [Matrix.mul_assoc]
+          simp [Matrix.mul_assoc, hV']
     _ = μ • (V * ∑ i : Fin d, A i * (A i)ᴴ) := by
           simp [Matrix.mul_assoc, Matrix.mul_sum]
     _ = μ • (V * transferMap A 1) := by

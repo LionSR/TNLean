@@ -107,8 +107,8 @@ theorem fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     X = 0 := by
   have hXstar : E Xᴴ = Xᴴ := by
     calc
-      E Xᴴ = (E X)ᴴ := by
-        exact IsPositiveMap.map_conjTranspose (hT := hE.pos) X
+      E Xᴴ = (E X)ᴴ :=
+        IsPositiveMap.map_conjTranspose (hT := hE.pos) X
       _ = Xᴴ := by simp [hXfix]
   let Y₁ : Matrix (Fin D) (Fin D) ℂ := X + Xᴴ
   let Y₂ : Matrix (Fin D) (Fin D) ℂ := Complex.I • (X - Xᴴ)
@@ -126,11 +126,11 @@ theorem fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
     simp [Y₁, htrX, Matrix.trace_add, Matrix.trace_conjTranspose]
   have htrY₂ : Matrix.trace Y₂ = 0 := by
     simp [Y₂, htrX, Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose]
-  have hY₁_zero : Y₁ = 0 := by
-    exact hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+  have hY₁_zero : Y₁ = 0 :=
+    hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
       hE hIrr Y₁ hY₁_herm hY₁_fix htrY₁
-  have hY₂_zero : Y₂ = 0 := by
-    exact hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
+  have hY₂_zero : Y₂ = 0 :=
+    hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
       hE hIrr Y₂ hY₂_herm hY₂_fix htrY₂
   have hXherm : X = Xᴴ := by
     have h' : X - Xᴴ = 0 := by
@@ -192,8 +192,8 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
     (htr : Matrix.trace ρ ≠ 0)
     (hPrim : IsPrimitive E)
     (ν : ℂ) (hν : Module.End.HasEigenvalue (E - fixedPointProj ρ htr) ν) :
-    ‖ν‖ < 1 := by
-  exact _root_.compl_eigenvalue_norm_lt_one_of_primitive
+    ‖ν‖ < 1 :=
+  _root_.compl_eigenvalue_norm_lt_one_of_primitive
     (E := E) (ρ := ρ) hρ_fix hρ_ne htr hE.tp hPrim
     (fun μ hμ => hE.eigenvalue_norm_le_one μ hμ)
     (fun X hXfix htrX =>

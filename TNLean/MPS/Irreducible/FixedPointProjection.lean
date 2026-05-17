@@ -130,8 +130,8 @@ lemma supportProj_idem :
 
 /-- `supportProj ρ` is an orthogonal projection. -/
 lemma isOrthogonalProjection_supportProj :
-    IsOrthogonalProjection (supportProj (D := D) ρ hρ) := by
-  exact ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
+    IsOrthogonalProjection (supportProj (D := D) ρ hρ) :=
+  ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
     supportProj_idem (D := D) (ρ := ρ) (hρ := hρ)⟩
 
 /-- Spectral decomposition for a Hermitian matrix, in matrix form.

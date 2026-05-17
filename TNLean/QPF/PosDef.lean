@@ -72,7 +72,8 @@ private lemma ker_invariant_under_adjoint
   have hqf : star x ⬝ᵥ (ρ *ᵥ x) = 0 := by simp [hx]
   have hsum : star x ⬝ᵥ (ρ *ᵥ x) =
       ∑ i : Fin d, star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) := by
-    conv_lhs => rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x from by rw [hρ_fix]]
+    conv_lhs =>
+      rw [show ρ *ᵥ x = (transferMap (d := d) (D := D) A ρ) *ᵥ x from by rw [hρ_fix]]
     simp only [transferMap_apply, Matrix.sum_mulVec]
     rw [dotProduct_sum]
     congr 1; ext i
@@ -82,7 +83,8 @@ private lemma ker_invariant_under_adjoint
   have h_each_zero : ∀ i : Fin d,
       star ((A i)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A i)ᴴ *ᵥ x)) = 0 := by
     intro i
-    have h_sum_zero : ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
+    have h_sum_zero :
+        ∑ j, RCLike.re (star ((A j)ᴴ *ᵥ x) ⬝ᵥ (ρ *ᵥ ((A j)ᴴ *ᵥ x))) = 0 := by
       rw [← map_sum, ← hsum, hqf]; simp
     have hre := (Finset.sum_eq_zero_iff_of_nonneg (fun j _ => hρ_psd.re_dotProduct_nonneg _)).mp
       h_sum_zero i (Finset.mem_univ _)
@@ -135,7 +137,8 @@ theorem posSemidef_fixedPoint_isPosDef
     have ⟨k, hk⟩ : ∃ k, x k ≠ 0 := by
       by_contra h_all_zero; push Not at h_all_zero
       exact hx (funext h_all_zero)
-    let M : Matrix (Fin D) (Fin D) ℂ := Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
+    let M : Matrix (Fin D) (Fin D) ℂ :=
+      Matrix.of (fun i j => if j = k then v i * (x k)⁻¹ else 0)
     have hMx : M *ᵥ x = v := by
       ext i
       simp only [M, Matrix.mulVec, dotProduct, Matrix.of_apply]
@@ -220,7 +223,8 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     intro v hv
     set w := Uᴴ *ᵥ v
     have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
-      have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
+      have hρv :
+          (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 :=
         spectral_decomp_eq hH ▸ hv
       set Λ := Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ))
       have hUΛw : U *ᵥ (Λ *ᵥ w) = 0 := by

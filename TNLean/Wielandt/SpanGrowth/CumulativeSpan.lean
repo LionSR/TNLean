@@ -212,11 +212,8 @@ theorem cumulativeSpan_finrank_le (A : MPSTensor d D) (n : ℕ) :
   calc Module.finrank ℂ (cumulativeSpan A n)
       ≤ Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) :=
         Submodule.finrank_le _
-    _ = Fintype.card (Fin D) * Fintype.card (Fin D) *
-        Module.finrank ℂ ℂ := Module.finrank_matrix ℂ ℂ _ _
-    _ = D * D * 1 := by
-        simp [Fintype.card_fin, Module.finrank_self]
-    _ = D ^ 2 := by ring
+    _ = D ^ 2 := by rw [Module.finrank_matrix, Fintype.card_fin,
+            Module.finrank_self, mul_one]; ring
 
 /-- If T_n < T_{n+1} (strict inclusion), dim(T_{n+1}) > dim(T_n).
 Uses Mathlib's `Submodule.finrank_lt_finrank_of_lt`.

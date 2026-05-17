@@ -101,8 +101,8 @@ theorem generator_apply_eq_zero_of_expSemigroup_apply_eq_self
       (hasDerivAt_expSemigroup_apply (L := L) X 0).hasDerivWithinAt
   have hd₂' : HasDerivWithinAt (fun _ : ℝ => X) 0 (Set.Ici 0) 0 :=
     (hasDerivAt_const 0 X).hasDerivWithinAt
-  have hd₂ : HasDerivWithinAt (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 := by
-    exact hd₂'.congr (fun u hu => hX u hu) (by simp [expSemigroup_zero])
+  have hd₂ : HasDerivWithinAt (fun u : ℝ => expSemigroup L u X) 0 (Set.Ici 0) 0 :=
+    hd₂'.congr (fun u hu => hX u hu) (by simp [expSemigroup_zero])
   exact (uniqueDiffWithinAt_Ici 0).eq_deriv _ hd₁ hd₂
 
 /-- Kernel elements of `L` are exactly the matrices fixed by `exp(tL)` for every

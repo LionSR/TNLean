@@ -196,11 +196,11 @@ private theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zer
     simp [Y₁, htrX, Matrix.trace_add, Matrix.trace_conjTranspose]
   have htrY₂ : Matrix.trace Y₂ = 0 := by
     simp [Y₂, htrX, Matrix.trace_smul, Matrix.trace_sub, Matrix.trace_conjTranspose]
-  have hY₁_zero : Y₁ = 0 := by
-    exact hHermitianZero Y₁ hY₁_herm
+  have hY₁_zero : Y₁ = 0 :=
+    hHermitianZero Y₁ hY₁_herm
       (by simpa only [transferMap_apply, E] using hY₁_fix) htrY₁
-  have hY₂_zero : Y₂ = 0 := by
-    exact hHermitianZero Y₂ hY₂_herm
+  have hY₂_zero : Y₂ = 0 :=
+    hHermitianZero Y₂ hY₂_herm
       (by simpa only [transferMap_apply, E] using hY₂_fix) htrY₂
   have hXherm : X = Xᴴ := by
     have h' : X - Xᴴ = 0 := by
@@ -230,8 +230,8 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero
     (X : Matrix (Fin D) (Fin D) ℂ)
     (hXfix : transferMap (d := d) (D := D) A X = X)
     (htrX : Matrix.trace X = 0) :
-    X = 0 := by
-  exact transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zero
+    X = 0 :=
+  transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zero
     (A := A)
     (hHermitianZero := fun Y hYherm hYfix htrY =>
       transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero
@@ -363,8 +363,8 @@ private theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_aux
         (E - fixedPointProj (D := D) ρ htrρ))
       (r := (1 : NNReal)) ?_)
     intro z hz
-    have hz' : z ∈ spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) := by
-      exact h_spec ▸ hz
+    have hz' : z ∈ spectrum ℂ (E - fixedPointProj (D := D) ρ htrρ) :=
+      h_spec ▸ hz
     have hEig : Module.End.HasEigenvalue (E - fixedPointProj (D := D) ρ htrρ) z :=
       Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz'
     have hz_norm : ‖z‖ < 1 := hcompl z hEig

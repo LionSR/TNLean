@@ -187,8 +187,8 @@ lemma mpvOverlap_eq_sum_of_decomp_right
     mpvOverlap (d := d) X A_total N =
       ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (c j) := by
   calc
-    mpvOverlap (d := d) X A_total N = star (mpvInner (d := d) X A_total N) := by
-      exact mpvOverlap_eq_star_mpvInner X A_total N
+    mpvOverlap (d := d) X A_total N = star (mpvInner (d := d) X A_total N) :=
+      mpvOverlap_eq_star_mpvInner X A_total N
     _ = star (∑ j : Fin g, c j * mpvInner (d := d) X (A j) N) := by
       rw [mpvInner_eq_sum_of_decomp_right (d := d) A_total A c hdecomp X]
     _ = ∑ j : Fin g, mpvOverlap (d := d) X (A j) N * star (c j) := by

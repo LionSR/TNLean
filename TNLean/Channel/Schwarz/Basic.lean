@@ -271,8 +271,8 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
       simp only [hEig, hkey]
     simp [h1, h2]
   -- Faithfulness: PSD + weighted trace 0 ⇒ the KS gap is 0.
-  have h_gap_zero : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 := by
-    exact posSemidef_eq_zero_of_posDef_trace_mul_eq_zero (hM := h_psd) (hρ := hρ) h_trace_gap
+  have h_gap_zero : map K (Xᴴ * X) - (map K X)ᴴ * map K X = 0 :=
+    posSemidef_eq_zero_of_posDef_trace_mul_eq_zero (hM := h_psd) (hρ := hρ) h_trace_gap
   exact sub_eq_zero.mp h_gap_zero
 
 /-! ## KS gap decomposition and Kraus-level commutation -/

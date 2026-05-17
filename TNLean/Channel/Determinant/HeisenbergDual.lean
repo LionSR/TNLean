@@ -221,8 +221,8 @@ private theorem heisenberg_dual_basis_commute [NeZero d]
   intro ij
   let e : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) ij
   let es : MatrixAlg d := Matrix.stdBasis ℂ (Fin d) (Fin d) (ij.2, ij.1)
-  have hes : es = eᴴ := by
-    exact (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
+  have hes : es = eᴴ :=
+    (stdBasis_conjTranspose_eq_swap (d := d) ij.1 ij.2).symm
   have hTd_es : Td es = (Td e)ᴴ := by
     calc
       Td es = KadisonSchwarz.krausMap L es := hTd_kraus es
