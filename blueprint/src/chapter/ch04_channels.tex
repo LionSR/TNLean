@@ -2158,17 +2158,22 @@ Subsection~\ref{subsec:lorentz_normal_form}.
 
 This subsection states the existence theorems from
 \cite[Section~2.3]{Wolf2012Quantum}.
+% The Wolf.* declarations referenced in this subsection live in
+% TNLean/Channel/LorentzNormalForm.lean, which is not in the root import
+% graph because its core minimisation lemma is still on `sorry`. The
+% `\lean{...}` tags are omitted here so that checkdecls passes; the Lean
+% names are listed in the per-entry comments below.
 
+% Lean: Wolf.SLFiltering
 \begin{definition}[SL-filtering operation]\label{def:sl_filtering}
-    \lean{Wolf.SLFiltering}\leanok
     An \emph{SL-filtering} for $D \times D$ matrices is a completely
     positive map of the form $\Phi(X) = S X S^{\dagger}$ where
     $S \in \MN{D}$ satisfies $\det S = 1$. Such maps are
     invertible and have Kraus rank~1.
 \end{definition}
 
+% Lean: Wolf.DoublyStochastic
 \begin{definition}[Doubly-stochastic map]\label{def:doubly_stochastic}
-    \lean{Wolf.DoublyStochastic}\leanok
     A linear map $T : \MN{D} \to \MN{D}$ is \emph{doubly-stochastic}
     if $T(\Id) \propto \Id$ and the reduced density matrix
     $\tr_{1}[\tau]$ of its Choi matrix $\tau = (T \otimes \id)(\ketbra{\Omega}{\Omega})$
@@ -2176,8 +2181,8 @@ This subsection states the existence theorems from
     \cite[Proposition~2.8]{Wolf2012Quantum}.
 \end{definition}
 
+% Lean: Wolf.infimum_is_attained
 \begin{lemma}[Infimum attainment for SL-filterings]\label{lem:infimum_is_attained}
-    \lean{Wolf.infimum_is_attained}
     For a positive-definite Choi matrix $\tau$, the infimum of
     $\tr\![(S_{2} \otimes_{k} S_{1}) \tau (S_{2} \otimes_{k} S_{1})^{\dagger}]$
     over $S_{1}, S_{2} \in \MN{D}$ with $\det S_{1} = \det S_{2} = 1$
@@ -2185,8 +2190,8 @@ This subsection states the existence theorems from
     subsets of $\SL(D, \C)$ and the extreme-value theorem.
 \end{lemma}
 
+% Lean: Wolf.exists_normal_form_generic
 \begin{theorem}[Generic normal form for CP maps]\label{thm:exists_normal_form_generic}
-    \lean{Wolf.exists_normal_form_generic}
     \uses{def:sl_filtering, def:doubly_stochastic, lem:infimum_is_attained}
     Let $T : \MN{D} \to \MN{D}$ be a completely positive map whose Choi matrix
     is positive-definite (equivalently, $T$ has full Kraus rank). Then there
@@ -2195,8 +2200,8 @@ This subsection states the existence theorems from
     \textbf{Not yet proved}---proof blocked on Lemma~\ref{lem:infimum_is_attained}.
 \end{theorem}
 
+% Lean: Wolf.IsLorentzDiagonal
 \begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}
-    \lean{Wolf.IsLorentzDiagonal}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ for its matrix
     in the normalized Pauli basis
@@ -2206,8 +2211,8 @@ This subsection states the existence theorems from
     off-diagonal entry of $\widehat{T'}$ is zero.
 \end{definition}
 
+% Lean: Wolf.IsLorentzNonDiagonal
 \begin{definition}[Non-diagonal Lorentz normal form]\label{def:lorentz_non_diagonal}
-    \lean{Wolf.IsLorentzNonDiagonal}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
     Pauli basis. The channel is in \emph{non-diagonal Lorentz normal form}
@@ -2224,8 +2229,8 @@ This subsection states the existence theorems from
     Trace preservation supplies the first row of the displayed matrix.
 \end{definition}
 
+% Lean: Wolf.IsLorentzSingular
 \begin{definition}[Singular Lorentz normal form]\label{def:lorentz_singular}
-    \lean{Wolf.IsLorentzSingular}\leanok
     For a completely positive, trace-preserving qubit channel
     $T' : \MN{2} \to \MN{2}$, write $\widehat{T'}$ in the normalized
     Pauli basis. The channel is in \emph{singular Lorentz normal form} when
@@ -2242,8 +2247,8 @@ This subsection states the existence theorems from
     Trace preservation supplies the first row of the displayed matrix.
 \end{definition}
 
+% Lean: Wolf.exists_lorentz_normal_form_qubit
 \begin{theorem}[Lorentz normal form for qubit channels]\label{thm:lorentz_normal_form_qubit}
-    \lean{Wolf.exists_lorentz_normal_form_qubit}
     \uses{def:sl_filtering, lem:infimum_is_attained, def:lorentz_diagonal,
         def:lorentz_non_diagonal, def:lorentz_singular}
     For every qubit channel $T : \MN{2} \to \MN{2}$,
