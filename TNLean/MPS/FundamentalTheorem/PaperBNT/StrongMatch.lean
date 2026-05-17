@@ -88,7 +88,14 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Local auxiliary lemmas: symmetry of `GaugePhaseEquiv` across a bond-dim cast -/
+/-! ### Auxiliary symmetry and composition lemmas for `GaugePhaseEquiv`
+
+The four lemmas below — symmetry at a fixed bond dimension, symmetry
+across a bond-dimension cast, transitivity at a fixed bond dimension, and
+composition through a common centre — are elementary algebraic
+manipulations of the `GaugePhaseEquiv` relation.  They are used both in
+the bijective-matching argument of this file and in the proportional
+analogue in `PaperBNT/ProportionalMatch.lean`. -/
 
 /-- Symmetry of `GaugePhaseEquiv` at a fixed bond dimension.
 
@@ -97,7 +104,7 @@ scalar `ζ` such that `B i = ζ • (X * A i * X⁻¹)` for every physical
 index `i`.  Conjugating by `X⁻¹` and scaling by `ζ⁻¹` gives the
 reversed identity `A i = ζ⁻¹ • (X⁻¹ * B i * X)`, i.e.
 `GaugePhaseEquiv B A`. -/
-private theorem gaugePhaseEquiv_symm_same_dim {d D : ℕ} {A B : MPSTensor d D}
+theorem gaugePhaseEquiv_symm_same_dim {d D : ℕ} {A B : MPSTensor d D}
     (h : GaugePhaseEquiv A B) : GaugePhaseEquiv B A := by
   classical
   obtain ⟨X, ζ, hζ, hrel⟩ := h
@@ -160,7 +167,7 @@ The two forms are mathematically the same statement (after eliminating
 the cast by `subst`), but the cast routing differs at the term level,
 so we record this as an explicit auxiliary lemma used inside
 `forall_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
-private theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
+theorem gaugePhaseEquiv_swap_cast {d D₁ D₂ : ℕ}
     (h : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hGP : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h.symm) B) A) :
     GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) A) B := by
@@ -232,11 +239,11 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
   forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     (P := P) (Q := Q) hP hQ hUnitQ hEqual.toSameMPV₂Pos
 
-/-! ### Phase B-β local auxiliary lemmas: transitivity of `GaugePhaseEquiv` at a fixed bond dim
+/-! ### Composition of `GaugePhaseEquiv` through a common centre
 
-The Phase B-β bijective-matching proof composes two gauge-phase
-equivalences `(P.basis j) ↔ (Q.basis k₁)` and `(P.basis j) ↔ (Q.basis k₂)`
-through the common centre `P.basis j` to derive an equivalence
+The bijective-matching proof composes two gauge-phase equivalences
+`(P.basis j) ↔ (Q.basis k₁)` and `(P.basis j) ↔ (Q.basis k₂)` through the
+common centre `P.basis j` to derive an equivalence
 `(Q.basis k₁) ↔ (Q.basis k₂)`.  The `basis_distinct` field of
 `IsBNTCanonicalForm` then forces `k₁ = k₂` (injectivity of the matching). -/
 
@@ -245,7 +252,7 @@ through the common centre `P.basis j` to derive an equivalence
 If `B i = ζ₁ • (X₁ * A i * X₁⁻¹)` and `C i = ζ₂ • (X₂ * B i * X₂⁻¹)`,
 then `C i = (ζ₂ ζ₁) • ((X₂ X₁) * A i * (X₂ X₁)⁻¹)`, giving
 `GaugePhaseEquiv A C` with gauge `X₂ * X₁` and phase scalar `ζ₂ * ζ₁`. -/
-private theorem gaugePhaseEquiv_trans_same_dim {d D : ℕ} {A B C : MPSTensor d D}
+theorem gaugePhaseEquiv_trans_same_dim {d D : ℕ} {A B C : MPSTensor d D}
     (h₁ : GaugePhaseEquiv A B) (h₂ : GaugePhaseEquiv B C) : GaugePhaseEquiv A C := by
   classical
   obtain ⟨X₁, ζ₁, hζ₁, hr₁⟩ := h₁
@@ -297,7 +304,7 @@ This is the cast-aware transitivity used in Phase B-β to derive
 `GaugePhaseEquiv (Q.basis k₁) (Q.basis k₂)` (up to cast) from two
 matchings against the same `P.basis j`, before invoking `basis_distinct`
 of `Q` to force `k₁ = k₂`. -/
-private theorem gaugePhaseEquiv_cast_compose_via_centre
+theorem gaugePhaseEquiv_cast_compose_via_centre
     {d D D₁ D₂ : ℕ}
     (h₁ : D = D₁) (h₂ : D = D₂)
     {A : MPSTensor d D} {B : MPSTensor d D₁} {C : MPSTensor d D₂}
