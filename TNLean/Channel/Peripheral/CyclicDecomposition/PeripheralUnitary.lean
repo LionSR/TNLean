@@ -262,10 +262,9 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hUnital' hρ hρfix X γ hEig_map hγ_norm
   have hγ_star_mul : star γ * γ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [normSq_eq_norm_sq, hγ_norm, one_pow, ofReal_one]
+    rw [← starRingEnd_apply, Complex.conj_mul', hγ_norm]; simp
   have hγ_starRing_mul : (starRingEnd ℂ) γ * γ = 1 := by
-    simpa [Complex.star_def] using hγ_star_mul
+    rwa [starRingEnd_apply]
   have hXX_fix_map : Kraus.map K (Xᴴ * X) = Xᴴ * X := by
     calc
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X := hKS_map
@@ -454,10 +453,9 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   have hβ_norm : ‖β‖ = 1 :=
     (pow_eq_one_iff_of_nonneg (norm_nonneg β) (NeZero.ne m)).1 hβ_norm_pow
   have hβ_unit : star β * β = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [normSq_eq_norm_sq, hβ_norm, one_pow, ofReal_one]
+    rw [← starRingEnd_apply, Complex.conj_mul', hβ_norm]; simp
   have hβ_starRing_mul : (starRingEnd ℂ) β * β = 1 := by
-    simpa [Complex.star_def] using hβ_unit
+    rwa [starRingEnd_apply]
   have hU_star_mul : ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) = 1 :=
     Matrix.UnitaryGroup.star_mul_self U
   refine ⟨⟨β • (U : MatrixAlg D), by

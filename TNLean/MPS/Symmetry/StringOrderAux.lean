@@ -667,11 +667,7 @@ theorem boundaryState_invariant_of_virtualUnitary
   have hμ_ne : μ ≠ 0 := by
     intro h; simp [h] at hμ
   have hμ_sq : star μ * μ = 1 := by
-    have hsqR : Complex.normSq μ = 1 := by
-      simpa [Complex.normSq_eq_norm_sq, sq] using by nlinarith [hμ]
-    have hsq' : (Complex.normSq μ : ℂ) = 1 := by exact_mod_cast hsqR
-    rw [Complex.normSq_eq_conj_mul_self] at hsq'
-    simpa using hsq'
+    rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
   have huc : uᴴ * u = 1 := mul_eq_one_comm.mp hu
   have hcoeff :
       ∀ k j : Fin d,
