@@ -53,7 +53,8 @@ the MPS-scoped location matches the existing layering.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Proposition IV.12 and the auxiliary Lemma L in the appendix
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Proposition IV.12 and
+  the auxiliary Lemma L in the appendix
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -123,7 +124,8 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `Δ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ` pairs to zero against every
   length-`L` block-diagonal product, then each `Δ k` vanishes individually.
 
-  This is the block-decomposed surrogate for [Cirac--Perez-Garcia--Schuch--Verstraete 2017], Proposition IV.3
+  This is the block-decomposed surrogate for
+  [Cirac--Perez-Garcia--Schuch--Verstraete 2017], Proposition IV.3
   (arXiv:1606.00608, "`propblockinj`"): after blocking at most `3 D^5` spins,
   where `D` denotes the bond dimension in the paper (in this block-decomposed
   setting one may take `D` to be a global bound such as `⨆ k, dim k`),

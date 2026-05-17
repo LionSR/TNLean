@@ -62,7 +62,8 @@ i.e. `P(L⊗id)(|Ω⟩⟨Ω|)P ≥ 0`. Then Proposition 7.2 gives CCP.
 **Proof ingredients**:
 1. The CP hypothesis gives positivity of the Choi matrix of `exp(tL)`.
 2. Boundary differentiation of a PSD-valued curve yields positivity of the projected derivative.
-3. Wolf Proposition 7.2 identifies projected Choi positivity with conditional complete positivity. -/
+3. Wolf Proposition 7.2 identifies projected Choi positivity with conditional
+   complete positivity. -/
 theorem cp_semigroup_implies_ccp_generator
     (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : ∀ t : ℝ, 0 ≤ t → IsCPMap (expSemigroup L t)) :
@@ -151,14 +152,13 @@ theorem cp_semigroup_implies_ccp_generator
       have hpsd : (gp t).PosSemidef := by
         rw [hproj_eq t]
         exact ChoiJamiolkowski.projectedChoiPosSemidef_of_cp (hCP t (le_of_lt ht))
-      have hscale : 0 ≤ (t - 0)⁻¹ := by
-        exact inv_nonneg.mpr (sub_nonneg.mpr (le_of_lt ht))
-      have hscaleC : (0 : ℂ) ≤ ((t - 0)⁻¹ : ℂ) := by
-        exact_mod_cast hscale
+      have hscale : 0 ≤ (t - 0)⁻¹ :=
+        inv_nonneg.mpr (sub_nonneg.mpr (le_of_lt ht))
+      have hscaleC : (0 : ℂ) ≤ ((t - 0)⁻¹ : ℂ) := by exact_mod_cast hscale
       have hscaledC : (((t - 0)⁻¹ : ℂ) • gp t).PosSemidef := by
         simpa using hpsd.smul hscaleC
-      have hcast : ((↑t : ℂ)⁻¹) = ((t⁻¹ : ℝ) : ℂ) := by
-        exact (map_inv₀ (algebraMap ℝ ℂ) t).symm
+      have hcast : ((↑t : ℂ)⁻¹) = ((t⁻¹ : ℝ) : ℂ) :=
+        (map_inv₀ (algebraMap ℝ ℂ) t).symm
       have hscaled : (t⁻¹ • gp t).PosSemidef := by
         change ((((t⁻¹ : ℝ) : ℂ)) • gp t).PosSemidef
         rw [← hcast]
@@ -184,10 +184,10 @@ theorem cp_semigroup_implies_ccp_generator
         rw [hg0]
         simpa [Matrix.IsHermitian] using (Matrix.omegaProj_conjTranspose (d := D))
       have hdiff : (g t - g 0).IsHermitian := hgt.sub hg0_herm
-      have hscale : 0 ≤ (t - 0)⁻¹ := by
-        exact inv_nonneg.mpr (sub_nonneg.mpr (le_of_lt ht))
-      have hsmul_herm : (((t - 0)⁻¹ : ℝ) • (g t - g 0)).IsHermitian := by
-        exact IsSelfAdjoint.smul (IsSelfAdjoint.of_nonneg hscale) hdiff
+      have hscale : 0 ≤ (t - 0)⁻¹ :=
+        inv_nonneg.mpr (sub_nonneg.mpr (le_of_lt ht))
+      have hsmul_herm : (((t - 0)⁻¹ : ℝ) • (g t - g 0)).IsHermitian :=
+        IsSelfAdjoint.smul (IsSelfAdjoint.of_nonneg hscale) hdiff
       simpa [slope] using hsmul_herm
     have hchoi_herm : (ChoiJamiolkowski.choiMatrix L).IsHermitian := by
       haveI : (nhdsWithin (0 : ℝ) (Set.Ioi 0)).NeBot := nhdsWithin_Ioi_neBot le_rfl
@@ -394,8 +394,8 @@ private theorem norm_pow_sub_pow_le [NeZero D]
         _ = M ^ m * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               ring_nf
         _ ≤ M ^ (m + 1) * ‖A - B‖ + (m : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
-              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ := by
-                exact mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
+              have hpowδ : M ^ m * ‖A - B‖ ≤ M ^ (m + 1) * ‖A - B‖ :=
+                mul_le_mul_of_nonneg_right (pow_le_pow_right₀ hM (Nat.le_succ m)) hδ_nonneg
               nlinarith
         _ = ((m + 1 : ℕ) : ℝ) * M ^ (m + 1) * ‖A - B‖ := by
               rw [Nat.cast_add, Nat.cast_one]
@@ -445,8 +445,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
       have hC0_nonneg : 0 ≤ C0 := by
         dsimp [C0]
         nlinarith [norm_nonneg Lc, mul_nonneg ht (norm_nonneg Qc)]
-      have hM : 1 ≤ Real.exp (s * C0) := by
-        exact Real.one_le_exp (mul_nonneg hs_nonneg hC0_nonneg)
+      have hM : 1 ≤ Real.exp (s * C0) :=
+        Real.one_le_exp (mul_nonneg hs_nonneg hC0_nonneg)
       have hlocal0 : ‖F - S‖ ≤ s ^ 2 * (‖Lc‖ ^ 2 * Real.exp (s * ‖Lc‖) + ‖Qc‖) := by
         simpa [F, S, s, Lc, Qc] using norm_eulerStep_sub_expSemigroupCLM_le (G := G) hs_nonneg
       have hlocal : ‖F - S‖ ≤ s ^ 2 * C1 := by
@@ -458,8 +458,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
           gcongr
         exact hlocal0.trans <| mul_le_mul_of_nonneg_left hinside (sq_nonneg s)
       have hpow : ‖F ^ (n + 1) - S ^ (n + 1)‖ ≤
-          ((n + 1 : ℕ) : ℝ) * (Real.exp (s * C0)) ^ (n + 1) * ‖F - S‖ := by
-        exact norm_pow_sub_pow_le (D := D) (A := F) (B := S) (M := Real.exp (s * C0))
+          ((n + 1 : ℕ) : ℝ) * (Real.exp (s * C0)) ^ (n + 1) * ‖F - S‖ :=
+        norm_pow_sub_pow_le (D := D) (A := F) (B := S) (M := Real.exp (s * C0))
           hM hF_le hS_le (n + 1)
       have hMpow : (Real.exp (s * C0)) ^ (n + 1) = Real.exp (t * C0) := by
         dsimp [s]
@@ -498,8 +498,8 @@ private theorem generatorDecomp_cp_semigroup (G : GeneratorDecomp D) :
                 _ = t ^ 2 * Real.exp (t * C0) * C1 / (n + 1) := by field_simp
     have hbound_tendsto : Filter.Tendsto
         (fun n : ℕ => t ^ 2 * Real.exp (t * C0) * C1 / (n + 1)) Filter.atTop (nhds 0) := by
-      have hden : Filter.Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ)) Filter.atTop Filter.atTop := by
-        exact tendsto_natCast_atTop_atTop.comp (Filter.tendsto_add_atTop_nat 1)
+      have hden : Filter.Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ)) Filter.atTop Filter.atTop :=
+        tendsto_natCast_atTop_atTop.comp (Filter.tendsto_add_atTop_nat 1)
       simpa using (Filter.Tendsto.div_atTop tendsto_const_nhds hden)
     have hlim : Filter.Tendsto (fun n : ℕ => sgEndEquiv D (approx n)) Filter.atTop
         (nhds (sgEndEquiv D (expSemigroup G.toLinearMap t))) := by

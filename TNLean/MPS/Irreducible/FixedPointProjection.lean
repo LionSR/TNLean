@@ -130,8 +130,8 @@ lemma supportProj_idem :
 
 /-- `supportProj ρ` is an orthogonal projection. -/
 lemma isOrthogonalProjection_supportProj :
-    IsOrthogonalProjection (supportProj (D := D) ρ hρ) := by
-  exact ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
+    IsOrthogonalProjection (supportProj (D := D) ρ hρ) :=
+  ⟨supportProj_isHermitian (D := D) (ρ := ρ) (hρ := hρ),
     supportProj_idem (D := D) (ρ := ρ) (hρ := hρ)⟩
 
 /-- Spectral decomposition for a Hermitian matrix, in matrix form.
@@ -398,7 +398,8 @@ iterating the canonical-form splitting step.
 References:
 * Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): the recursion terminates
   because each irreducible block has strictly smaller bond dimension.
-* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly different presentation.
+* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly different
+  presentation.
 -/
 
 section SupportProjNontriviality

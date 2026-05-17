@@ -79,20 +79,6 @@ private lemma expSemigroupCLM_mul_comm_local
     simp
   exact hc.exp_left.eq
 
-/-- `trace(Lⁿ(ρ)) = 0` for `n ≥ 1` when `L` is trace-annihilating.
-This follows from `trace(Lⁿ(ρ)) = trace(L(Lⁿ⁻¹(ρ))) = 0`. -/
-private lemma trace_iterate_eq_zero
-    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    (hTA : IsTraceAnnihilating L)
-    (ρ : Matrix (Fin D) (Fin D) ℂ)
-    {n : ℕ} (hn : 0 < n) :
-    trace ((L ^ n) ρ) = 0 := by
-  obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.pos_iff_ne_zero.mp hn)
-  change trace ((L ^ (k + 1)) ρ) = 0
-  rw [pow_succ']
-  change trace (L ((L ^ k) ρ)) = 0
-  exact hTA _
-
 set_option maxHeartbeats 2000000 in
 -- The chain-rule / derivative-normalization proof below is source-level expensive on CLMs.
 /-- CLM-level version: trace-annihilating → trace constant under exp semigroup. -/

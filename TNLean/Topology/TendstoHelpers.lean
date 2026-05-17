@@ -20,8 +20,7 @@ namespace Filter
 theorem Tendsto.ne_nhds {α X : Type*} [TopologicalSpace X] [T2Space X]
     {f : α → X} {l : Filter α} [NeBot l] {a b : X}
     (ha : Tendsto f l (nhds a)) (hab : a ≠ b) :
-    ¬ Tendsto f l (nhds b) := by
-  intro hb
-  exact hab (tendsto_nhds_unique ha hb)
+    ¬ Tendsto f l (nhds b) :=
+  fun hb => hab (tendsto_nhds_unique ha hb)
 
 end Filter

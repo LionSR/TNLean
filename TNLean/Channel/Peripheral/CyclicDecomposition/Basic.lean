@@ -73,8 +73,7 @@ def cornerRestriction {D : ℕ} (P : MatrixAlg D) (T : MatrixEnd D)
     (hInv : PreservesCorner P T) :
     cornerSubmodule P →ₗ[ℂ] cornerSubmodule P where
   toFun X := ⟨T X.1, by
-    have hX : P * X.1 * P = X.1 := by
-      exact X.2
+    have hX : P * X.1 * P = X.1 := X.2
     simpa [hX] using hInv X.1⟩
   map_add' X Y := by
     apply Subtype.ext

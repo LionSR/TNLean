@@ -107,12 +107,10 @@ instance (n : Type*) [Fintype n] [DecidableEq n] :
   NormedSpace.restrictScalars ℝ ℂ (TNLean.MatrixCLM n)
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
-    Module ℝ (TNLean.MatrixCLM n) := by
-  infer_instance
+    Module ℝ (TNLean.MatrixCLM n) := inferInstance
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
-    NormedAlgebra ℝ (TNLean.MatrixCLM n) := by
-  infer_instance
+    NormedAlgebra ℝ (TNLean.MatrixCLM n) := inferInstance
 
 instance (n : Type*) [Fintype n] [DecidableEq n] :
     NormedAlgebra ℚ (TNLean.MatrixCLM n) :=

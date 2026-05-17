@@ -241,8 +241,8 @@ private lemma mpvOverlap_total_basis_diff_tendsto_zero
       mpvOverlap (d := d) P.toTensor (P.basis j₀) N
         = ∑ j : Fin P.basisCount,
             P.coeff N j *
-              mpvOverlap (d := d) (P.basis j) (P.basis j₀) N := by
-    exact mpvOverlap_eq_sum_of_decomp_left (d := d) (g := P.basisCount)
+              mpvOverlap (d := d) (P.basis j) (P.basis j₀) N :=
+    mpvOverlap_eq_sum_of_decomp_left (d := d) (g := P.basisCount)
       (dim := P.basisDim) (A_total := P.toTensor) (A := P.basis)
       (N := N) (c := fun j => P.coeff N j)
       (hdecomp := fun σ => P.mpv_toTensor_eq_sum_coeff (N := N) σ)

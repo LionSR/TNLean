@@ -41,7 +41,8 @@ finite-dimensional space is of the form `T_t = exp(tL)` for some generator `L`
 
 ## References
 
-* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1, Proposition 7.1][Wolf2012Quantum]
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 7.1,
+  Proposition 7.1][Wolf2012Quantum]
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal TNOperatorSpace
@@ -369,8 +370,8 @@ private theorem continuous_semigroup_hasDerivWithinAt_zero
         rw [smul_sub, smul_smul, inv_mul_cancel₀ (ne_of_gt hε_pos), one_smul]
       rw [this, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hε_pos, norm_sub_rev]
       calc (δ / 2)⁻¹ * ‖P (δ / 2) - (δ / 2) • (1 : Matrix (Fin D) (Fin D) ℂ →L[ℂ] _)‖
-          ≤ (δ / 2)⁻¹ * (1 / 2 * (δ / 2)) := by
-            exact mul_le_mul_of_nonneg_left hbound (inv_nonneg.mpr (le_of_lt hε_pos))
+          ≤ (δ / 2)⁻¹ * (1 / 2 * (δ / 2)) :=
+            mul_le_mul_of_nonneg_left hbound (inv_nonneg.mpr hε_pos.le)
         _ = 1 / 2 := by field_simp
         _ < 1 := by norm_num
     -- Step 5: (δ/2)⁻¹ • P(δ/2) is a unit

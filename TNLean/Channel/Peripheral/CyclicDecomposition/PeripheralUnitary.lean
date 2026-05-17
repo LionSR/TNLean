@@ -232,8 +232,8 @@ section PeripheralUnitary
 matrix eigenvector.
 
 This is the unitary part of Wolf Theorem 6.6. The formulation is stated for transfer maps of
-Kraus families because the available Kadison--Schwarz / multiplicative-domain interface is implemented
-at that level. -/
+Kraus families because the available Kadison--Schwarz / multiplicative-domain interface is
+implemented at that level. -/
 theorem exists_peripheral_unitary_of_irreducible_schwarz
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -303,8 +303,8 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
       simpa [Matrix.smul_one_eq_diagonal] using hscalar_psd
     have hdiag_nonneg := (Matrix.posSemidef_diagonal_iff).1 hdiag_psd
     exact hdiag_nonneg ⟨0, NeZero.pos D⟩
-  have hc_eq_real : c = (c.re : ℂ) := by
-    exact Complex.ext rfl (by simpa using (Complex.nonneg_iff.mp hc_nonneg).2.symm)
+  have hc_eq_real : c = (c.re : ℂ) :=
+    Complex.ext rfl (by simpa using (Complex.nonneg_iff.mp hc_nonneg).2.symm)
   have hcre_nonneg : 0 ≤ c.re := (Complex.nonneg_iff.mp hc_nonneg).1
   have hcre_ne0 : c.re ≠ 0 := by
     intro h0
@@ -453,8 +453,8 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
       ‖β‖ ^ m = ‖β ^ m‖ := by rw [norm_pow]
       _ = ‖α⁻¹‖ := by simp only [hβm, norm_inv]
       _ = 1 := by simp only [norm_inv, hα_norm, inv_one]
-  have hβ_norm : ‖β‖ = 1 := by
-    exact (pow_eq_one_iff_of_nonneg (norm_nonneg β) (NeZero.ne m)).1 hβ_norm_pow
+  have hβ_norm : ‖β‖ = 1 :=
+    (pow_eq_one_iff_of_nonneg (norm_nonneg β) (NeZero.ne m)).1 hβ_norm_pow
   have hβ_unit : star β * β = 1 := by
     rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
     simp only [normSq_eq_norm_sq, hβ_norm, one_pow, ofReal_one]

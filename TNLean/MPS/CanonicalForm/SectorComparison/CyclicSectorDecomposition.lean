@@ -390,8 +390,8 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
       _ = X := hPX
   let Xcorner : cornerSubmodule (P k) := ⟨X, hXcorner⟩
   let X' : Matrix (Fin (dim k)) (Fin (dim k)) ℂ := (φ k).symm Xcorner
-  have hφX' : (φ k X').1 = X := by
-    exact congrArg Subtype.val (LinearEquiv.apply_symm_apply (φ k) Xcorner)
+  have hφX' : (φ k X').1 = X :=
+    congrArg Subtype.val (LinearEquiv.apply_symm_apply (φ k) Xcorner)
   have hPherm : (P k)ᴴ = P k := (hPproj k).1.eq
   have hCornerTransfer :
       transferMap (d := blockPhysDim d m) (D := D)
@@ -438,8 +438,8 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
     have hPcorner : P k * P k * P k = P k := by
       rw [(hPproj k).2, (hPproj k).2]
     let Yinv : Matrix (Fin (dim k)) (Fin (dim k)) ℂ := (φ k).symm ⟨P k, hPcorner⟩
-    have hφYinv : (φ k Yinv).1 = P k := by
-      exact congrArg Subtype.val (LinearEquiv.apply_symm_apply (φ k) ⟨P k, hPcorner⟩)
+    have hφYinv : (φ k Yinv).1 = P k :=
+      congrArg Subtype.val (LinearEquiv.apply_symm_apply (φ k) ⟨P k, hPcorner⟩)
     have hleft : (φ k 1).1 * P k = P k := by
       have hmul := hMul k 1 Yinv
       rw [one_mul, hφYinv] at hmul
