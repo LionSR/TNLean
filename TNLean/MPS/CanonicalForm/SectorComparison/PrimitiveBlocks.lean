@@ -220,6 +220,96 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
   · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
       (d := d) (D := D) A hTP hPrim hIrr hk
 
+/-! ## Common injective reblocking for TP / primitive / irreducible families
 
+For an arbitrary finite family of left-canonical, primitive, irreducible blocks
+with positive bond dimensions, there is a single positive blocking length `L`
+at which every block becomes one-site injective, and at which left-canonical
+normalization, transfer-map primitivity, and tensor irreducibility are all
+preserved.
+
+This is the finite-family analogue of
+`exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible`, packaged so
+that the consumer can feed the resulting prepared blocks into the
+`PaperBNT` prepared-block supplier.
+
+Paper anchor: CPSV16 §II.A discussion around blocking to common normal form
+(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section II.A,
+lines 237–280).
+-/
+
+/-- **Common injective reblocking for TP / primitive / irreducible families.**
+
+Given a finite family of left-canonical, primitive, irreducible MPS tensors
+indexed by `Fin r` with positive bond dimensions, there exists a single
+positive blocking length `L` at which every block is simultaneously
+one-site injective, left-canonical, primitive, and irreducible.
+
+Strategy:
+
+1. For each `k`, the per-block lemma
+   `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible` gives a
+   positive length `L k` at which the block becomes one-site injective.
+2. Setting `L := ∏ k, L k`, fixed-length injectivity persists at positive
+   multiples via `blockTensor_isInjective_mul_of_blockTensor_isInjective`.
+3. Trace-preservation, transfer-map primitivity, and tensor irreducibility
+   are preserved at any positive blocking length via
+   `tp_primitive_irreducible_extra_blocking`.
+-/
+theorem exists_common_injective_blocking_of_tp_primitive_irr_family
+    {d r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (blocks k)))
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k)) :
+    ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r,
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) ∧
+      (∑ i : Fin (blockPhysDim d L),
+        (blockTensor (d := d) (D := dim k) (blocks k) L i)ᴴ *
+          blockTensor (d := d) (D := dim k) (blocks k) L i = 1) ∧
+      _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d L) (D := dim k)
+          (blockTensor (d := d) (D := dim k) (blocks k) L)) ∧
+      IsIrreducibleTensor (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+  classical
+  -- `NeZero (dim k)` for each `k` from positivity.
+  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  -- Per-block injective blocking lengths.
+  have hBlock : ∀ k : Fin r, ∃ Lk : ℕ, 0 < Lk ∧
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) Lk) := by
+    intro k
+    exact MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible
+      (blocks k) (hTP k) (hPrim k) (hIrr k)
+  let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
+  have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
+  have hL_inj : ∀ k,
+      IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+    fun k => (Classical.choose_spec (hBlock k)).2
+  refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
+  intro k
+  -- Step 1: rewrite the common length as `(∏_{j≠k} L j) * L k`.
+  have hcommon :
+      (∏ j : Fin r, L j) = (∏ j ∈ Finset.univ.erase k, L j) * L k := by
+    simpa using (Finset.prod_erase_mul (s := Finset.univ) (a := k) (f := L)
+      (Finset.mem_univ k)).symm
+  have hmult_pos : 0 < ∏ j ∈ Finset.univ.erase k, L j :=
+    Finset.prod_pos fun j _ => hL_pos j
+  -- Step 2: injectivity at the common length via blockwise multiplication.
+  have hInj :
+      IsInjective
+        (blockTensor (d := d) (D := dim k) (blocks k) (∏ j : Fin r, L j)) := by
+    have hmul := MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective
+      (blocks k) hmult_pos (hL_inj k)
+    rw [hcommon]
+    exact hmul
+  -- Step 3: TP + primitive + irreducible preserved at positive blocking length.
+  have hL_total_pos : 0 < ∏ j : Fin r, L j :=
+    Finset.prod_pos fun j _ => hL_pos j
+  obtain ⟨hTPk, hPrimk, hIrrk⟩ :=
+    MPSTensor.tp_primitive_irreducible_extra_blocking
+      (d := d) (D := dim k)
+      (blocks k) (hTP k) (hPrim k) (hIrr k) hL_total_pos
+  exact ⟨hInj, hTPk, hPrimk, hIrrk⟩
 
 end MPSTensor

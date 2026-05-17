@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
+import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 
@@ -232,5 +234,224 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
       basis_distinct := h_distinct
       weight_norm_le_one := h_weight_le
       weight_unit_exists := h_weight_unit }
+
+/-! ### Arbitrary-input prepared-block supplier
+
+This is the arbitrary-input layer of the paper-BNT supplier path.  Starting
+from any MPS tensor `A`, after a single positive blocking length `p` we
+produce a finite family of prepared blocks that are simultaneously
+left-canonical, primitive, irreducible, and one-site injective, with nonzero
+weights, and matching the blocked input in positive-length MPVs.
+
+This is the "everything except the weight normalization" layer.  The
+remaining ingredient is the CPSV16 §II.A line 246 normalization
+(absolute value of every weight at most one and at least one of unit modulus),
+which the source paper makes an explicit user choice ("we can always choose
+this normalization, which we will assume").  A separate normalization layer
+or hypothesis passes those facts to the prepared-block supplier
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` to obtain
+the full `IsBNTCanonicalForm` conclusion.
+
+Paper anchor: CPSV16 §II.A line 237-280 (canonical form definition,
+normalization, and BNT discussion), Cirac–Pérez-García–Schuch–Verstraete,
+arXiv:1606.00608.
+-/
+
+private lemma sameMPV₂Pos_reindexPhysical_aux
+    {d₁ d₂ D₁ D₂ : ℕ} (f : Fin d₁ → Fin d₂)
+    {A : MPSTensor d₂ D₁} {B : MPSTensor d₂ D₂}
+    (hSame : SameMPV₂Pos A B) :
+    SameMPV₂Pos (reindexPhysical f A) (reindexPhysical f B) := by
+  intro N hN σ
+  rw [mpv_reindexPhysical, mpv_reindexPhysical]
+  exact hSame N hN _
+
+/-- **Arbitrary-input prepared-block supplier (positive-length).**
+
+Given an arbitrary MPS tensor `A` of bond dimension `D`, there is a single
+positive blocking length `p` and a finite family of prepared blocks
+(left-canonical, primitive, irreducible, one-site injective, with nonzero
+weights and positive bond dimensions) whose direct-sum tensor matches the
+`p`-blocked input `blockTensor A p` at every positive length.
+
+This is the paper-faithful CPSV16 §II.A layer that is left as a user choice in
+the source paper: the §II.A line 246 weight normalization is **not** delivered
+here, since the source paper makes this an explicit user assumption.  A
+separate normalization layer / hypothesis is then composed with the prepared
+blocks here to feed the `IsBNTCanonicalForm` constructor
+`exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks`.
+
+Pipeline:
+
+1. `unconditional_commonPrimitiveIrreducibleBlocks A A (fun _ _ => rfl)` —
+   apply the two-sided arbitrary-input reduction at `B = A` to obtain a
+   positive blocking length `p₀`, a left-canonical / primitive / irreducible
+   nonzero-weight block family `blocksA`, and the positive-length identity
+   `SameMPV₂Pos (blockTensor A p₀) (toTensorFromBlocks μA blocksA)`.
+2. `exists_common_injective_blocking_of_tp_primitive_irr_family` produces a
+   common positive extra blocking length `L` at which each block becomes
+   one-site injective and preserves left-canonical, primitive, and
+   irreducible properties.
+3. Flattening the iterated blocking back to the direct `p₀ * L` alphabet
+   transports each block and the positive-length MPV identity to the direct
+   `blockPhysDim d (p₀ * L)` alphabet without changing the relevant
+   block-level properties (all of them are invariant under physical
+   reindexing by an alphabet equivalence).
+-/
+theorem exists_prepared_BNT_blocks_afterBlocking_pos
+    {d D : ℕ} (A : MPSTensor d D) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ r : ℕ, ∃ dim : Fin r → ℕ, ∃ μ : Fin r → ℂ,
+    ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      (∀ k, 0 < dim k) ∧
+      (∀ k, IsLeftCanonical (blocks k)) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, IsInjective (blocks k)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
+  classical
+  -- Step 1: arbitrary-input two-sided reduction at `B = A`.
+  obtain ⟨p₀, hp₀, _zeroTailA, _zeroTailB,
+      rA, dimA, μA, blocksA,
+      _rB, _dimB, _μB, _blocksB,
+      _hZAflat, _hZBflat, hAPos, _hBPos, _hNonzeroPos, _hZeroFlat,
+      hμA, _hμB, hTPA, _hTPB, hPrimA, _hPrimB,
+      hIrrA, _hIrrB, hDimA, _hDimB⟩ :=
+    unconditional_commonPrimitiveIrreducibleBlocks
+      (d := d) (D₁ := D) (D₂ := D) A A (fun _ _ => rfl)
+  -- Step 2: common positive extra blocking that makes each block injective and
+  -- preserves trace-preservation, transfer-map primitivity, and tensor
+  -- irreducibility.
+  obtain ⟨L, hL, hBlocked⟩ :=
+    exists_common_injective_blocking_of_tp_primitive_irr_family
+      (d := blockPhysDim d p₀) (r := rA) (dim := dimA)
+      (blocks := blocksA) hDimA hTPA hPrimA hIrrA
+  -- Step 3: package the result.  The final blocks live in the direct
+  -- `blockPhysDim d (p₀ * L)` alphabet via `flattenedIteratedBlockTensor`.
+  refine ⟨p₀ * L, Nat.mul_pos hp₀ hL, rA, dimA, fun k => (μA k) ^ L,
+    fun k => flattenedIteratedBlockTensor
+      (d := d) (p := p₀) (D := dimA k) (blocksA k) L, hDimA, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  -- IsLeftCanonical of each flattened-iterated block.
+  · intro k
+    have hLCBlocked : ∑ i : Fin (blockPhysDim (blockPhysDim d p₀) L),
+        (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L i)ᴴ *
+          blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L i = 1 :=
+      (hBlocked k).2.1
+    change IsLeftCanonical
+      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
+        (blocksA k) L)
+    exact (leftCanonical_reindexPhysical_equiv
+      (directIteratedBlockEquiv d p₀ L)
+      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+        hLCBlocked
+  -- Transfer-map primitivity of each flattened-iterated block.
+  · intro k
+    have hPrimBlocked := (hBlocked k).2.2.1
+    change _root_.IsPrimitive
+      (transferMap (d := blockPhysDim d (p₀ * L)) (D := dimA k)
+        (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
+          (blocksA k) L))
+    exact (isPrimitive_transferMap_reindexPhysical_equiv
+      (directIteratedBlockEquiv d p₀ L)
+      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+        hPrimBlocked
+  -- Tensor irreducibility of each flattened-iterated block.
+  · intro k
+    have hIrrBlocked := (hBlocked k).2.2.2
+    change IsIrreducibleTensor
+      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
+        (blocksA k) L)
+    exact (isIrreducibleTensor_reindexPhysical_equiv
+      (directIteratedBlockEquiv d p₀ L)
+      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+        hIrrBlocked
+  -- One-site injectivity of each flattened-iterated block.
+  · intro k
+    have hInjBlocked := (hBlocked k).1
+    change IsInjective
+      (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
+        (blocksA k) L)
+    exact (isInjective_reindexPhysical_equiv
+      (directIteratedBlockEquiv d p₀ L)
+      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+        hInjBlocked
+  -- Nonzero weights at the power.
+  · intro k; exact pow_ne_zero L (hμA k)
+  -- Positive-length MPV equality with the blocked input.
+  · -- (i) blocked Pos:
+    have hBlockPos :
+        SameMPV₂Pos
+          (blockTensor (d := blockPhysDim d p₀) (D := D)
+            (blockTensor (d := d) (D := D) A p₀) L)
+          (blockTensor (d := blockPhysDim d p₀) (D := ∑ k : Fin rA, dimA k)
+            (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L) :=
+      sameMPV₂Pos_blockTensor
+        (d := blockPhysDim d p₀)
+        (blockTensor (d := d) (D := D) A p₀)
+        (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA)
+        hAPos L hL
+    -- (ii) blocking distributes over toTensorFromBlocks (full-length SameMPV₂):
+    have hDistr : SameMPV₂
+        (blockTensor (d := blockPhysDim d p₀) (D := ∑ k : Fin rA, dimA k)
+          (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L)
+        (toTensorFromBlocks
+          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (fun k => (μA k) ^ L)
+          (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+            (blocksA k) L)) :=
+      sameMPV₂_blockTensor_toTensorFromBlocks
+        (d := blockPhysDim d p₀) (dim := dimA) μA blocksA L
+    -- (iii) combine the two on the iterated phys-dim alphabet:
+    have hIter : SameMPV₂Pos
+        (blockTensor (d := blockPhysDim d p₀) (D := D)
+          (blockTensor (d := d) (D := D) A p₀) L)
+        (toTensorFromBlocks
+          (d := blockPhysDim (blockPhysDim d p₀) L)
+          (fun k => (μA k) ^ L)
+          (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+            (blocksA k) L)) := by
+      intro N hN σ
+      exact (hBlockPos N hN σ).trans (hDistr N σ)
+    -- (iv) physically reindex both sides to the direct `blockPhysDim d (p₀ * L)`
+    -- alphabet via `directIteratedBlockEquiv`.
+    have hReindex :
+        SameMPV₂Pos
+          (reindexPhysical (directIteratedBlockEquiv d p₀ L)
+            (blockTensor (d := blockPhysDim d p₀) (D := D)
+              (blockTensor (d := d) (D := D) A p₀) L))
+          (reindexPhysical (directIteratedBlockEquiv d p₀ L)
+            (toTensorFromBlocks
+              (d := blockPhysDim (blockPhysDim d p₀) L)
+              (fun k => (μA k) ^ L)
+              (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+                (blocksA k) L))) :=
+      sameMPV₂Pos_reindexPhysical_aux
+        (f := (directIteratedBlockEquiv d p₀ L : _ → _)) hIter
+    -- (v) rewrite both sides using `flattenedIteratedBlockTensor_blockTensor`
+    -- and `toTensorFromBlocks_flattenedIteratedBlockTensor`.
+    have hLeft :
+        reindexPhysical (directIteratedBlockEquiv d p₀ L)
+          (blockTensor (d := blockPhysDim d p₀) (D := D)
+            (blockTensor (d := d) (D := D) A p₀) L) =
+          blockTensor (d := d) (D := D) A (p₀ * L) :=
+      flattenedIteratedBlockTensor_blockTensor (d := d) (D := D) A p₀ L
+    have hRight :
+        reindexPhysical (directIteratedBlockEquiv d p₀ L)
+          (toTensorFromBlocks
+            (d := blockPhysDim (blockPhysDim d p₀) L)
+            (fun k => (μA k) ^ L)
+            (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+              (blocksA k) L)) =
+          toTensorFromBlocks
+            (d := blockPhysDim d (p₀ * L))
+            (μ := fun k => (μA k) ^ L)
+            (fun k => flattenedIteratedBlockTensor (d := d) (p := p₀)
+              (D := dimA k) (blocksA k) L) :=
+      (toTensorFromBlocks_flattenedIteratedBlockTensor (d := d) (p := p₀)
+        (r := rA) (L := L) (dim := dimA) (fun k => (μA k) ^ L) blocksA).symm
+    rw [hLeft, hRight] at hReindex
+    exact hReindex
 
 end MPSTensor
