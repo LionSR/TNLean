@@ -35,7 +35,7 @@ open Matrix Finset MPSTensor
 
 namespace MPSTensor
 
-/-! ### Shared helpers for MPS examples -/
+/-! ### Shared auxiliary lemmas for MPS examples -/
 
 /-- The Pauli X (swap / bit-flip) matrix `σx = !![0, 1; 1, 0]`. -/
 def pauliX : Matrix (Fin 2) (Fin 2) ℂ :=

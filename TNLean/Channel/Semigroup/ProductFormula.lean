@@ -33,7 +33,7 @@ open Matrix TNLean
 
 noncomputable section
 
-section ProductFormulaHelpers
+section TrotterEstimates
 
 variable {D : ℕ}
 
@@ -277,6 +277,6 @@ theorem lie_trotter_suzuki_bound_of_step [NeZero D]
           Real.exp ((((n + 2 : ℕ) : ℝ) / (n + 1)) * t * (‖A‖ + ‖B‖)) := by
             ring
 
-end ProductFormulaHelpers
+end TrotterEstimates
 
 end -- noncomputable section

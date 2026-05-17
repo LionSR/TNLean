@@ -672,13 +672,7 @@ def edgeMiddleConfigToOpenMiddleConfig (A : Tensor G d) (e : Edge G)
     (β : EdgeBoundaryConfig (G := G) A e)
     (η : EdgeMiddleConfig (G := G) A e β) :
     EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual :=
-  ⟨fun f => η.1 f.1,
-    by
-      constructor
-      · intro ie
-        exact η.2.2.1 ie
-      · intro ie
-        exact η.2.2.2 ie⟩
+  ⟨fun f => η.1 f.1, η.2.2.1, η.2.2.2⟩
 
 @[simp] theorem edgeMiddleConfigToOpenMiddleConfig_apply (A : Tensor G d) (e : Edge G)
     (β : EdgeBoundaryConfig (G := G) A e)

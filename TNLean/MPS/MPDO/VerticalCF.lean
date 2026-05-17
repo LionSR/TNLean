@@ -38,11 +38,11 @@ surrogate for the paper's vertical canonical form.
   Lemma L from the paper's appendix, proved here using the block-injective
   canonical-form (biCF) field of `HorizontalCFData`.
 
-The full Proposition IV.12 / Proposition 4.13 bridge from horizontal to vertical
-canonical form is deferred to a follow-up PR: its blueprint entry
-`thm:vertical_cf_of_horizontal_cf` is marked `\notready`, and the corresponding
-Lean statement will be introduced together with its proof rather than as an
-empty placeholder.
+The full passage from horizontal to vertical canonical form
+(Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is deferred to a
+follow-up PR: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
+`\notready`, and the corresponding Lean statement will be introduced together
+with its proof rather than as an empty placeholder.
 
 ## Module location
 
@@ -319,7 +319,7 @@ theorem blockwise_insert_eq_of_mpv_agree
     (smul_eq_zero.mp hk).resolve_left hμne
   exact sub_eq_zero.mp hdiff
 
--- The full bridge `verticalCF_of_horizontalCF` (Proposition IV.12 / Proposition 4.13
+-- The implication `verticalCF_of_horizontalCF` (Proposition IV.12 / Proposition 4.13
 -- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
