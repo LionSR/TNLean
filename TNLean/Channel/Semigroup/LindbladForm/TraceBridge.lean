@@ -7,7 +7,7 @@ import TNLean.Channel.Semigroup.LindbladForm.Basic
 import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
-# Lindblad Form — Trace Bridge
+# Lindblad Form — Trace-preserving semigroups and trace-annihilating generators
 
 This file proves the equivalence between trace-annihilating generators and
 trace-preserving semigroups.
@@ -43,7 +43,7 @@ theorem Matrix.eq_zero_of_forall_trace_mul_eq_zero
   -- this : MulOpposite.op 1 • A i j = 0
   simpa using this
 
-/-! ## Bridge: trace-annihilating ↔ trace-preserving semigroup -/
+/-! ## Equivalence: trace-annihilating ↔ trace-preserving semigroup -/
 
 /-- The trace-evaluation functional as an ℝ-linear map:
 `T ↦ trace(T(ρ))` for a fixed matrix `ρ`. -/

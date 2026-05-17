@@ -64,7 +64,7 @@ lemma akltTensor_one :
 lemma akltTensor_two :
     akltTensor 2 = -(↑(Real.sqrt 2 / Real.sqrt 3) : ℂ) • !![0, 0; 1, 0] := rfl
 
-/-! ### Scalar arithmetic helpers -/
+/-! ### Scalar arithmetic lemmas -/
 
 private lemma ofReal_sqrt3_mul_self :
     (↑(Real.sqrt 3) : ℂ) * (↑(Real.sqrt 3) : ℂ) = 3 := by
@@ -146,7 +146,7 @@ private lemma product_in_wordSpan (i j : Fin 3) :
   rw [this]
   exact Submodule.subset_span ⟨_, rfl⟩
 
-/-- Helper: nonzero coefficient for the off-diagonal products. -/
+/-- Nonzero coefficient for the off-diagonal products. -/
 private lemma aklt_coeff_ne_zero :
     (↑(1 / Real.sqrt 3) : ℂ) * ↑(Real.sqrt 2 / Real.sqrt 3) ≠ 0 :=
   mul_ne_zero (Complex.ofReal_ne_zero.mpr (by positivity))

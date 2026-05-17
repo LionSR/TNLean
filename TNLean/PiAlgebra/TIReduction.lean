@@ -48,9 +48,7 @@ theorem ti_reduction_corollary
       B i = (X : Matrix _ _ ℂ) * A i * ((X⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) ∧
     MPSTensor.IsInjective B := by
   obtain ⟨X, hGauge⟩ := ti_tensors_single_gauge A B hn hA hMPV
-  constructor
-  · exact ⟨X, hGauge⟩
-  · exact MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩
+  exact ⟨⟨X, hGauge⟩, MPSTensor.isInjective_of_gaugeEquiv hA ⟨X, hGauge⟩⟩
 
 /-- **TI Reduction from SameState**.
 

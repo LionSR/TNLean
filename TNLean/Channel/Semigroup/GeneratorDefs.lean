@@ -37,9 +37,9 @@ noncomputable section
 
 variable {D : ℕ}
 
-section CommutatorHelpers
+section CommutatorAnticommutator
 
-/-! ## Commutator and anticommutator auxiliary lemmas -/
+/-! ## Commutator and anticommutator -/
 
 /-- The **commutator** `[A, B] = AB - BA`. -/
 abbrev Matrix.commutator (A B : Matrix (Fin D) (Fin D) ℂ) :
@@ -51,7 +51,7 @@ abbrev Matrix.anticommutator (A B : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin D) (Fin D) ℂ :=
   A * B + B * A
 
-end CommutatorHelpers
+end CommutatorAnticommutator
 
 /-! ## The (φ, κ) generator decomposition (Wolf Equation 7.14) -/
 

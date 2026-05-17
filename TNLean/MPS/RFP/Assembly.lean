@@ -7,9 +7,9 @@ import TNLean.MPS.RFP.ZeroCorrelationLength
 import TNLean.MPS.RFP.StructuralForm
 
 /-!
-# Assembly: RFP ⟺ ZCL equivalence
+# Equivalence of RFP and ZCL
 
-This file assembles the forward and backward directions of the main
+This file proves the forward and backward directions of the main
 equivalence from arXiv:1606.00608, Theorem 3.10 (partial):
 
 > For a canonical-form MPS tensor, being a renormalization fixed point (RFP)

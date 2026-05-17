@@ -14,8 +14,8 @@ import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 /-!
 # Peripheral primitivity → spectral gap primitivity (transfer map)
 
-This file bridges the **peripheral-spectrum** notion of primitivity for quantum channels
-(`peripheralEigenvalues E = {1}`) to the existing **spectral-gap** notion used in the MPS
+This file connects the **peripheral-spectrum** notion of primitivity for quantum channels
+(`peripheralEigenvalues E = {1}`) to the **spectral-gap** notion used in the MPS
 proof chain (`MPSTensor.IsPrimitiveMPS` / `MPSTensor.HasPrimitiveFixedPoint`).
 
 Concretely, for the transfer map of an injective normalized tensor `A`, we prove:

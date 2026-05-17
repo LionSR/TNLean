@@ -23,7 +23,7 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
 /-! ## (1) ↔ (2): Fixed density ↔ kernel element
 
-This is the simplest equivalence, following directly from the bridge
+This is the simplest equivalence, following directly from the equivalence
 `L X = 0 ↔ exp(tL) X = X ∀ t ≥ 0` (Wolf Section 7.1, formalized in `Kernel.lean`).
 -/
 
@@ -108,12 +108,8 @@ private lemma not_posDef_of_proj_sandwich_eq_self
   have hQu : (1 - P) * (u : Mat) = 0 := by
     simpa [hu] using hQρ
   have h1P : 1 - P = 0 := by
-    calc
-      1 - P = (1 - P) * 1 := (Matrix.mul_one _).symm
-      _ = (1 - P) * ((u : Mat) * (↑u⁻¹ : Mat)) := by rw [Units.mul_inv]
-      _ = ((1 - P) * (u : Mat)) * (↑u⁻¹ : Mat) := (Matrix.mul_assoc _ _ _).symm
-      _ = 0 * (↑u⁻¹ : Mat) := by rw [hQu]
-      _ = 0 := Matrix.zero_mul _
+    calc 1 - P = (1 - P) * ((u : Mat) * ↑u⁻¹) := by rw [Units.mul_inv, mul_one]
+      _ = 0 := by rw [← mul_assoc, hQu, zero_mul]
   exact hP1 (sub_eq_zero.mp h1P).symm
 
 /-- **Wolf Proposition 7.6, (1) → (3)**: A rank-deficient fixed density matrix

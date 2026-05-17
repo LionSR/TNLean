@@ -808,7 +808,7 @@ theorem wrapped_mirror_witness_agree_of_chainGroundSpace
   -- preimage under the injective groundSpaceMap.
   sorry
 
-/-- Range-reduction bridge for normal tensors.
+/-- Range reduction for normal tensors.
 
 This is the missing hard direction of `chainGroundSpace_eq_mpvSubmodule_normal`:
 for a normal tensor with an `L₀`-block-injective presentation, the reduced

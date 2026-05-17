@@ -29,7 +29,7 @@ primitive simultaneously.
   in the blocking period (for multiples).
 
 ### Part C: Common period via LCM
-* `lcmPeriod`, `lcmPeriod_pos`, `dvd_lcmPeriod` — lightweight LCM helpers on `Fin k → ℕ`
+* `lcmPeriod`, `lcmPeriod_pos`, `dvd_lcmPeriod` — auxiliary LCM results on `Fin k → ℕ`
   families used throughout common-period blocking.
 * `exists_common_blocking_all_primitive` — given a family of blocks each admitting some
   primitivity period, there exists a single common period.
@@ -712,7 +712,7 @@ The theorem `flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean` enc
 combinatorial identity as a list equality.  The lemma
 `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
 assertion implies the coordinate-level one required by `groupedBlockCastAgrees`, and the
-assembly theorem uses it to remove the former blocking-coordinate hypothesis.
+sector-comparison theorem uses it to remove the former blocking-coordinate hypothesis.
 -/
 
 /-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/

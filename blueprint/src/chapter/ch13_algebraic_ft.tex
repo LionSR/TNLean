@@ -1485,7 +1485,7 @@ which is then combined with overlap estimates and the leading-block peel.
     \lean{MPSTensor.ft_paper_bnt_equal_sector_data}
     \leanok
     \uses{def:same_mpv, def:bnt, def:gauge_phase_equiv}
-    Let $P$ and $Q$ be two paper-faithful BNT sector decompositions
+    Let $P$ and $Q$ be two BNT sector decompositions
     (Definition~\ref{def:bnt}), possibly with different block counts and
     different bond dimensions in corresponding blocks.
     If their block-diagonal tensors generate the same MPV family
@@ -1494,24 +1494,27 @@ which is then combined with overlap estimates and the leading-block peel.
     gauge-phase equivalent (Definition~\ref{def:gauge_phase_equiv}), the
     matched copy multiplicities agree, and the copy weights agree up to a
     unit-modulus phase $\zeta$ and a copy-index reindexing.
-    This is the sector-data form of the equal-case CPSV theorem
+    This is the sector-data form of the equal-case theorem
     \cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys};
-    the corresponding global gauge corollary is recorded as
-    \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} in
-    \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}.
+    the corresponding global gauge corollary is recorded in
+    Chapter~\ref{ch:ft_proof}.
+    % Maintainer note (Lean): the global-gauge companion is
+    % MPSTensor.ft_paper_bnt_equal_global_gauge in
+    % TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    On the paper-faithful BNT surface, the proof proceeds in three steps,
-    carried out in the \texttt{PaperBNT/} module of the formalization:
-    bijective block matching via non-decaying cross-overlaps
-    (\texttt{StrongMatch.bijective\_match\_of\_sameMPV}); coefficient identity
-    via the global-gauge phase $\zeta$
-    (\texttt{CoeffIdentity.coeff\_identity\_via\_global\_gauge}); and finally
-    multiset comparison of the scalar power sums recovering matched copy
-    multiplicities and weights up to $\zeta^{-1}$
-    (\texttt{WeightEquiv.matched\_sector\_weight\_equiv}).
+    On the BNT canonical form, the proof proceeds in three steps:
+    bijective block matching from non-decaying cross-overlaps, coefficient
+    identity via the global-gauge phase $\zeta$, and multiset comparison of
+    the scalar power sums recovering matched copy multiplicities and
+    weights up to $\zeta^{-1}$.
+    % Maintainer note (Lean): the three steps are formalised as
+    % StrongMatch.bijective_match_of_sameMPV,
+    % CoeffIdentity.coeff_identity_via_global_gauge, and
+    % WeightEquiv.matched_sector_weight_equiv in
+    % TNLean/MPS/FundamentalTheorem/PaperBNT/.
 \end{proof}
 
 %% ---------------------------------------------------------

@@ -7,9 +7,9 @@ import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Algebra.Group.TypeTags.Finite
 
 /-!
-# Z₂ group helpers for MPS examples
+# Z₂ group lemmas for MPS examples
 
-Shared infrastructure for MPS examples with Z₂ = `Multiplicative (ZMod 2)` symmetry.
+Shared lemmas for MPS examples with Z₂ = `Multiplicative (ZMod 2)` symmetry.
 -/
 
 namespace MPSTensor
