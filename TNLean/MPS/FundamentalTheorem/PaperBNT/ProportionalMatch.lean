@@ -718,118 +718,14 @@ theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
       hP hQ k (hUnitQ k) j_w ⟨q_w, hq_w⟩ hProp
   exact ⟨j₁, hDim, hGE, hNonDecay⟩
 
-/-! ### Gauge-phase auxiliary lemmas for the bijective-matching argument
+/-! ### Bijective matching from per-block existentials in both directions
 
 The bijection construction composes two gauge-phase equivalences through a
-common centre.  These local auxiliary lemmas replicate the cast-aware transitivity
-and symmetry results in `StrongMatch` (kept here as private auxiliary lemmas to
-respect the file lane). -/
-
-/-- Symmetry of `GaugePhaseEquiv` at a fixed bond dimension. -/
-private theorem gaugePhaseEquiv_symm_same_dim_local
-    {d D : ℕ} {A B : MPSTensor d D}
-    (h : GaugePhaseEquiv A B) : GaugePhaseEquiv B A := by
-  classical
-  obtain ⟨X, ζ, hζ, hrel⟩ := h
-  refine ⟨X⁻¹, ζ⁻¹, inv_ne_zero hζ, ?_⟩
-  intro i
-  have hBi := hrel i
-  set XM : Matrix (Fin D) (Fin D) ℂ := (X : Matrix (Fin D) (Fin D) ℂ)
-  set XinvM : Matrix (Fin D) (Fin D) ℂ :=
-    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  have hXX : XinvM * XM = (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    have hU : (X⁻¹ * X : GL (Fin D) ℂ) = 1 := by simp
-    have hUval :
-        ((X⁻¹ * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-          = ((1 : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-      congrArg Units.val hU
-    simp only [Units.val_mul, Units.val_one] at hUval
-    exact hUval
-  have hInvInv : ((X⁻¹)⁻¹ : GL (Fin D) ℂ) = X := inv_inv X
-  have hSandwich :
-      XinvM * B i * XM = ζ • A i := by
-    calc
-      XinvM * B i * XM
-          = XinvM * (ζ • (XM * A i * XinvM)) * XM := by rw [hBi]
-      _ = ζ • (XinvM * (XM * A i * XinvM) * XM) := by simp
-      _ = ζ • ((XinvM * XM) * A i * (XinvM * XM)) := by
-            simp [Matrix.mul_assoc]
-      _ = ζ • A i := by rw [hXX]; simp
-  have hAi : A i = ζ⁻¹ • (XinvM * B i * XM) := by
-    have := congrArg (fun M => (ζ⁻¹ : ℂ) • M) hSandwich
-    simp only [smul_smul, inv_mul_cancel₀ hζ, one_smul] at this
-    exact this.symm
-  change A i = ζ⁻¹ • (XinvM * B i *
-    (((X⁻¹)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-  simpa [hInvInv, XM, XinvM] using hAi
-
-/-- Symmetry of `GaugePhaseEquiv` across a bond-dim cast. -/
-private theorem gaugePhaseEquiv_swap_cast_local {d D₁ D₂ : ℕ}
-    (h : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (hGP : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h.symm) B) A) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) A) B := by
-  subst h
-  simpa using gaugePhaseEquiv_symm_same_dim_local (by simpa using hGP)
-
-/-- Transitivity of `GaugePhaseEquiv` at a fixed bond dimension. -/
-private theorem gaugePhaseEquiv_trans_same_dim_local
-    {d D : ℕ} {A B C : MPSTensor d D}
-    (h₁ : GaugePhaseEquiv A B) (h₂ : GaugePhaseEquiv B C) :
-    GaugePhaseEquiv A C := by
-  classical
-  obtain ⟨X₁, ζ₁, hζ₁, hr₁⟩ := h₁
-  obtain ⟨X₂, ζ₂, hζ₂, hr₂⟩ := h₂
-  refine ⟨X₂ * X₁, ζ₂ * ζ₁, mul_ne_zero hζ₂ hζ₁, ?_⟩
-  intro i
-  set X₁M : Matrix (Fin D) (Fin D) ℂ :=
-    ((X₁ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  set X₂M : Matrix (Fin D) (Fin D) ℂ :=
-    ((X₂ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  set X₁invM : Matrix (Fin D) (Fin D) ℂ :=
-    ((X₁⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  set X₂invM : Matrix (Fin D) (Fin D) ℂ :=
-    ((X₂⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  have hMul_val :
-      (((X₂ * X₁ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ) = X₂M * X₁M := by
-    simp [X₁M, X₂M]
-  have hMulInv_val :
-      (((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-        = X₁invM * X₂invM := by
-    have hRev : ((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) = X₁⁻¹ * X₂⁻¹ :=
-      mul_inv_rev X₂ X₁
-    have := congrArg (fun U : GL (Fin D) ℂ =>
-        (U : Matrix (Fin D) (Fin D) ℂ)) hRev
-    simp [X₁invM, X₂invM]
-  calc C i
-      = ζ₂ • (X₂M * B i * X₂invM) := hr₂ i
-    _ = ζ₂ • (X₂M * (ζ₁ • (X₁M * A i * X₁invM)) * X₂invM) := by rw [hr₁ i]
-    _ = ζ₂ • (ζ₁ • (X₂M * (X₁M * A i * X₁invM) * X₂invM)) := by
-          simp [smul_smul]
-    _ = (ζ₂ * ζ₁) • (X₂M * X₁M * A i * X₁invM * X₂invM) := by
-          simp [smul_smul, Matrix.mul_assoc]
-    _ = (ζ₂ * ζ₁) • ((X₂M * X₁M) * A i * (X₁invM * X₂invM)) := by
-          simp [Matrix.mul_assoc]
-    _ = (ζ₂ * ζ₁) •
-          ((((X₂ * X₁ : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ) * A i *
-            (((X₂ * X₁)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
-          rw [hMul_val, hMulInv_val]
-
-/-- Composition through a common centre `A`. -/
-private theorem gaugePhaseEquiv_cast_compose_via_centre_local
-    {d D D₁ D₂ : ℕ}
-    (h₁ : D = D₁) (h₂ : D = D₂)
-    {A : MPSTensor d D} {B : MPSTensor d D₁} {C : MPSTensor d D₂}
-    (GE₁ : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h₁) A) B)
-    (GE₂ : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h₂) A) C) :
-    GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor d) (h₁.symm.trans h₂)) B) C := by
-  subst h₁
-  subst h₂
-  simp only [cast_eq] at GE₁ GE₂ ⊢
-  exact gaugePhaseEquiv_trans_same_dim_local
-    (gaugePhaseEquiv_symm_same_dim_local GE₁) GE₂
-
-/-! ### Bijective matching from per-block existentials in both directions -/
+common centre.  The cast-aware symmetry and transitivity lemmas
+(`gaugePhaseEquiv_symm_same_dim`, `gaugePhaseEquiv_swap_cast`,
+`gaugePhaseEquiv_trans_same_dim`, `gaugePhaseEquiv_cast_compose_via_centre`)
+are shared with the equal-MPV variant in
+`PaperBNT/StrongMatch.lean`. -/
 
 /-- **Bijective proportional matching.**
 
@@ -898,7 +794,7 @@ theorem bijective_match_of_eventuallyProportional
         GaugePhaseEquiv
             (cast (congr_arg (MPSTensor d) hQdim) (Q.basis k₁))
             (Q.basis k₂) :=
-      gaugePhaseEquiv_cast_compose_via_centre_local
+      gaugePhaseEquiv_cast_compose_via_centre
         (A := P.basis (φ₀ k₁))
         (B := Q.basis k₁) (C := Q.basis k₂) h₁ h₂' GE₁ GE₂'
     exact hQ.basis_distinct k₁ k₂ hne hQdim hQGE
@@ -936,7 +832,7 @@ theorem bijective_match_of_eventuallyProportional
         GaugePhaseEquiv
             (cast (congr_arg (MPSTensor d) hPdim) (P.basis j₁))
             (P.basis j₂) :=
-      gaugePhaseEquiv_cast_compose_via_centre_local
+      gaugePhaseEquiv_cast_compose_via_centre
         (A := Q.basis (ψ₀ j₁))
         (B := P.basis j₁) (C := P.basis j₂) h₁ h₂' GE₁ GE₂'
     exact hP.basis_distinct j₁ j₂ hne hPdim hPGE
