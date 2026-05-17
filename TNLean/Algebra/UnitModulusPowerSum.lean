@@ -168,13 +168,9 @@ theorem unitModulus_power_sum_not_tendsto_zero
         = ∑ p : Fin r × Fin r, (μ p.1 * star (μ p.2)) ^ N := by
     intro N
     have hnormSq : ((‖S N‖ ^ 2 : ℝ) : ℂ) = S N * star (S N) := by
-      have h1 : Complex.normSq (S N) = ‖S N‖ ^ 2 :=
-        Complex.normSq_eq_norm_sq (S N)
-      have h2 : S N * (starRingEnd ℂ) (S N) = (Complex.normSq (S N) : ℂ) :=
-        Complex.mul_conj (S N)
-      have h3 : S N * star (S N) = ((‖S N‖ ^ 2 : ℝ) : ℂ) := by
-        rw [show star (S N) = (starRingEnd ℂ) (S N) from rfl, h2, h1]
-      exact h3.symm
+      rw [show star (S N) = (starRingEnd ℂ) (S N) from rfl]
+      push_cast
+      exact (Complex.mul_conj' (S N)).symm
     rw [hnormSq, hS_def]
     -- S N = ∑_q μ_q^N; star (S N) = ∑_q' star (μ_q')^N
     have hStar : star (∑ q : Fin r, (μ q) ^ N)
@@ -206,14 +202,7 @@ theorem unitModulus_power_sum_not_tendsto_zero
     intro p hp
     rcases Finset.mem_image.mp hp with ⟨q, _, rfl⟩
     have hμq_sq : μ q * star (μ q) = 1 := by
-      have h := Complex.mul_conj (μ q)
-      have h2 : Complex.normSq (μ q) = 1 := by
-        have := Complex.normSq_eq_norm_sq (μ q)
-        rw [this, hμ q, one_pow]
-      have h3 : μ q * (starRingEnd ℂ) (μ q) = 1 := by
-        rw [h, h2]; norm_num
-      rw [show star (μ q) = (starRingEnd ℂ) (μ q) from rfl]
-      exact h3
+      rw [show star (μ q) = (starRingEnd ℂ) (μ q) from rfl, Complex.mul_conj', hμ q]; simp
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hμq_sq⟩
   have hDiag_card : (Finset.univ.image (fun q : Fin r => (q, q))).card = r := by
     rw [Finset.card_image_of_injective _ (fun a b h => (Prod.mk.inj h).1)]
