@@ -54,6 +54,7 @@ noncomputable def twistedTransferMap (A : MPSTensor d D)
       ((LinearMap.mulLeft ℂ (A n)).comp
         (LinearMap.mulRight ℂ (A n')ᴴ))
 
+/-- Computation rule for the twisted transfer map: `ℰ_u(X) = ∑_{n,n'} u_{n'n} A_n X A_{n'}†`. -/
 @[simp]
 lemma twistedTransferMap_apply (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
@@ -115,12 +116,15 @@ noncomputable def twistedTransferIter (A : MPSTensor d D)
       Matrix (Fin D) (Fin D) ℂ :=
   (twistedTransferMap A u) ^ N
 
+/-- The zeroth iterate of the twisted transfer map is the identity. -/
 @[simp]
 lemma twistedTransferIter_zero (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     twistedTransferIter A u 0 = LinearMap.id :=
   pow_zero _
 
+/-- The `(N+1)`-th iterate of the twisted transfer map is the twisted transfer
+map composed with the `N`-th iterate: `ℰ_u^{N+1} = ℰ_u ∘ ℰ_u^N`. -/
 lemma twistedTransferIter_succ (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     twistedTransferIter A u (N + 1) =

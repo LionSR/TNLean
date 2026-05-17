@@ -622,8 +622,7 @@ theorem twistedTransfer_eigen_of_virtualUnitary
     (hC1μ : ∀ i : Fin d,
       ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ)) :
     twistedTransferMap A u V = μ • V := by
-  have hV' : Vᴴ * V = 1 := by
-    simpa using (mul_eq_one_comm.mp hV)
+  have hV' : Vᴴ * V = 1 := mul_eq_one_comm.mp hV
   calc
     twistedTransferMap A u V
         = ∑ i : Fin d, (∑ j : Fin d, u i j • A j) * V * (A i)ᴴ := by
@@ -671,17 +670,11 @@ theorem boundaryState_invariant_of_virtualUnitary
   haveI : NeZero D := ⟨hD⟩
   let B : MPSTensor d D := twistedMixedCompanion A u
   have hμ_ne : μ ≠ 0 := by
-    intro hμ0
-    have : ‖μ‖ = 0 := by simp [hμ0]
-    rw [hμ] at this
-    norm_num at this
+    intro h; simp [h] at hμ
   have hμ_sq : star μ * μ = 1 := by
-    have hsq : ‖μ‖ * ‖μ‖ = 1 := by
-      nlinarith [hμ]
     have hsqR : Complex.normSq μ = 1 := by
-      simpa [Complex.normSq_eq_norm_sq, sq] using hsq
-    have hsq' : (Complex.normSq μ : ℂ) = 1 := by
-      exact_mod_cast hsqR
+      simpa [Complex.normSq_eq_norm_sq, sq] using by nlinarith [hμ]
+    have hsq' : (Complex.normSq μ : ℂ) = 1 := by exact_mod_cast hsqR
     rw [Complex.normSq_eq_conj_mul_self] at hsq'
     simpa using hsq'
   have huc : uᴴ * u = 1 := mul_eq_one_comm.mp hu
