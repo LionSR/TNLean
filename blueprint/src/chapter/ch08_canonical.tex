@@ -35,23 +35,19 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     \cite[Section~II.A]{Cirac2017MPDO_AnnPhys}; see also
     \cite[Theorems~4.2 and~4.4]{Cirac2021Matrix}. Every
     translation-invariant MPS tensor $A$ is, after blocking by a period
-    $p \ge 1$, MPV-equivalent to a weighted direct sum
+    $p \ge 1$, replaced by a tensor $B$ generating the same MPV family and
+    whose nonzero part is in canonical form. Thus, for each physical index $i$,
     \[
-        A^{[p]} \sim
-        \mathbf{0}_{d^{[p]},D_0}
+        B^i
+        =
+        \mathbf{0}_{D_0}
         \oplus
-        \bigoplus_{k=1}^{r} \mu_k B_k.
+        \bigoplus_{k=1}^{r} \mu_k B_k^i,
     \]
-    Here $\mathbf{0}_{d^{[p]},D_0}$ is the all-zero block of bond dimension
-    $D_0$, the weights $\mu_k$ are nonzero, and the blocks $B_k$ have positive
-    bond dimensions, are irreducible and left-canonical,
-    \[
-        \sum_i (B_k^i)^\dagger B_k^i = \Id,
-    \]
-    and have primitive transfer maps,
-    \[
-        \sigma_\partial(\E_{B_k}) = \{1\}.
-    \]
+    where $\mathbf{0}_{D_0}$ is the all-zero summand of bond dimension $D_0$
+    and the tensors $B_k$ are normal tensors. If $r>0$, the weights $\mu_k$
+    may be normalized so that $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for
+    at least one index $k$.
 \end{theorem}
 
 This chapter formalizes the constituent steps of this reduction:
