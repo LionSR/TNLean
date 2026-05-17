@@ -47,7 +47,7 @@ theorem sum_mul_mul {α : Type*} [NonUnitalNonAssocSemiring α]
     {d l m n r : ℕ} (L : Matrix (Fin l) (Fin m) α)
     (M : Fin d → Matrix (Fin m) (Fin n) α) (R : Matrix (Fin n) (Fin r) α) :
     ∑ i : Fin d, L * M i * R = L * (∑ i : Fin d, M i) * R := by
-  simp only [← Matrix.sum_mul, ← Matrix.mul_sum, Matrix.mul_assoc]
+  simp only [← Matrix.sum_mul, ← Matrix.mul_sum]
 
 /-- If multiplication by a rectangular matrix has trivial kernel, then the source dimension is at
 most the target dimension. -/
