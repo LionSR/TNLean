@@ -14,7 +14,8 @@ This file provides a small reusable collection for transporting the parent-Hamil
 open-chain restriction maps (`contiguousRestrictₗ`, `tailRestrictₗ`,
 `restrictFirst`) across arithmetic-equal indexings of the total length. It is
 aimed at the periodic-chain normal-form range-reduction argument
-(see [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section~4.3, lines 2049--2094]), where intermediate induction steps naturally produce
+(see [Cirac--Perez-Garcia--Schuch--Verstraete 2021, Section~4.3,
+lines 2049--2094]), where intermediate induction steps naturally produce
 states indexed by `K + 1 + L₀` that have to be viewed as states indexed by
 `K + (L₀ + 1)`, or states indexed by `N - (L₀ + 1) + (L₀ + 1)` that have to be
 viewed as states indexed by `N`.

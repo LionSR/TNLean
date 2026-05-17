@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
-import TNLean.MPS.ParentHamiltonian.Martingale.Gap
 
 /-!
 # Martingale-method spectral-gap framework for parent Hamiltonians
@@ -16,17 +15,18 @@ parent-Hamiltonian spectral gap. The Friedrichs-angle estimate needed
 to close `parentHamiltonian_gapped` is tracked by issues #952 and #460
 (#190). See issue #1512 for the root-only audit.
 
-This file collects the four submodules:
+This file collects the three proof-complete infrastructure submodules:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form ⟹ norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space /
   Hamiltonian transport, positivity, commutation, and kernel identification;
 * `Martingale.Reduction` — martingale quadratic-form reduction chain from
-  ordered cross-term bounds down to concrete cyclic-window Friedrichs;
-* `Martingale.Gap` — the final spectral-gap pair
-  `parentHamiltonianES_gap_bound_of_friedrichs` and
-  `parentHamiltonian_gapped`.
+  ordered cross-term bounds down to concrete cyclic-window Friedrichs.
+
+The final spectral-gap pair `parentHamiltonianES_gap_bound_of_friedrichs` and
+`parentHamiltonian_gapped` remains in `Martingale.Gap`; it is not imported here
+until the Friedrichs-angle estimate is proved.
 
 ## Proof route
 

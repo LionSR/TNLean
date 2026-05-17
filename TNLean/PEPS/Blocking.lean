@@ -463,24 +463,28 @@ def edgeBoundaryToInsertedBoundaryConfig (A : Tensor G d) (e : Edge G)
   leftResidual := β.leftResidual
   rightResidual := β.rightResidual
 
+omit [Fintype V] in
 @[simp] theorem edgeBoundaryToInsertedBoundaryConfig_leftEdgeIndex
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).leftEdgeIndex =
       β.edgeIndex :=
   rfl
 
+omit [Fintype V] in
 @[simp] theorem edgeBoundaryToInsertedBoundaryConfig_rightEdgeIndex
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).rightEdgeIndex =
       β.edgeIndex :=
   rfl
 
+omit [Fintype V] in
 @[simp] theorem edgeBoundaryToInsertedBoundaryConfig_leftResidual
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).leftResidual =
       β.leftResidual :=
   rfl
 
+omit [Fintype V] in
 @[simp] theorem edgeBoundaryToInsertedBoundaryConfig_rightResidual
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β).rightResidual =
@@ -597,6 +601,7 @@ omit [Fintype V] in
     localVirtualConfigSplitAt_symm_apply_snd (G := G) A (edgeRightIncident (G := G) e)
       (β.rightEdgeIndex, β.rightResidual) ie
 
+omit [Fintype V] in
 @[simp] theorem edgeInsertedLeftLocalConfig_edgeBoundaryToInsertedBoundaryConfig
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     edgeInsertedLeftLocalConfig (G := G) A e
@@ -604,6 +609,7 @@ omit [Fintype V] in
       edgeLeftLocalConfig (G := G) A e β :=
   rfl
 
+omit [Fintype V] in
 @[simp] theorem edgeInsertedRightLocalConfig_edgeBoundaryToInsertedBoundaryConfig
     (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e) :
     edgeInsertedRightLocalConfig (G := G) A e
@@ -619,6 +625,7 @@ instance instFintypeEdgeComplementConfig (A : Tensor G d) (e : Edge G) :
     Fintype (EdgeComplementConfig (G := G) A e) :=
   inferInstance
 
+omit [DecidableRel G.Adj] in
 private theorem edge_ne_of_middle_incident (e : Edge G) {v : V}
     (hv : v ∈ edgeMiddleVertices e) (ie : IncidentEdge G v) : ie.1 ≠ e := by
   intro hie
@@ -627,12 +634,14 @@ private theorem edge_ne_of_middle_incident (e : Edge G) {v : V}
   · exact hvne.1 (hleft.symm.trans (congrArg (fun f : Edge G => f.1.1) hie))
   · exact hvne.2 (hright.symm.trans (congrArg (fun f : Edge G => f.1.2) hie))
 
+omit [Fintype V] [DecidableRel G.Adj] in
 private theorem otherLeft_edge_ne (e : Edge G)
     (ie : OtherIncidentEdge (G := G) e.1.1 (edgeLeftIncident (G := G) e)) :
     ie.1.1 ≠ e := by
   intro hie
   exact ie.2 (Subtype.ext hie)
 
+omit [Fintype V] [DecidableRel G.Adj] in
 private theorem otherRight_edge_ne (e : Edge G)
     (ie : OtherIncidentEdge (G := G) e.1.2 (edgeRightIncident (G := G) e)) :
     ie.1.1 ≠ e := by
@@ -680,6 +689,7 @@ def edgeMiddleConfigToOpenMiddleConfig (A : Tensor G d) (e : Edge G)
       · intro ie
         exact η.2.2.2 ie⟩
 
+omit [Fintype V] in
 @[simp] theorem edgeMiddleConfigToOpenMiddleConfig_apply (A : Tensor G d) (e : Edge G)
     (β : EdgeBoundaryConfig (G := G) A e)
     (η : EdgeMiddleConfig (G := G) A e β) (f : {f : Edge G // f ≠ e}) :
@@ -709,12 +719,14 @@ noncomputable def edgeOpenMiddleConfigToMiddleConfig (A : Tensor G d) (e : Edge 
           have hne := otherRight_edge_ne (G := G) e ie
           simpa [hne] using ζ.2.2 ie⟩
 
+omit [Fintype V] in
 @[simp] theorem edgeOpenMiddleConfigToMiddleConfig_edge (A : Tensor G d) (e : Edge G)
     (β : EdgeBoundaryConfig (G := G) A e)
     (ζ : EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual) :
     (edgeOpenMiddleConfigToMiddleConfig (G := G) A e β ζ).1 e = β.edgeIndex := by
   simp [edgeOpenMiddleConfigToMiddleConfig]
 
+omit [Fintype V] in
 @[simp] theorem edgeOpenMiddleConfigToMiddleConfig_apply_ne (A : Tensor G d) (e : Edge G)
     (β : EdgeBoundaryConfig (G := G) A e)
     (ζ : EdgeOpenMiddleConfig (G := G) A e β.leftResidual β.rightResidual)
