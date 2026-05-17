@@ -149,7 +149,7 @@ private lemma shiftIndex_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
 
 end CyclicShift
 
-section PreservesCornerHelper
+section CornerPreservation
 
 /-- Corner preservation is stable under taking powers. -/
 private lemma preserves_corner_pow {S : MatrixEnd D} {P : MatrixAlg D}
@@ -180,7 +180,7 @@ private lemma preserves_corner_pow {S : MatrixEnd D} {P : MatrixAlg D}
         _ = (S ^ n) (S (P * X * P)) := this
         _ = (S ^ (n + 1)) (P * X * P) := by simp [pow_succ]
 
-end PreservesCornerHelper
+end CornerPreservation
 
 section PerCycle
 
@@ -303,10 +303,10 @@ The permutation is the sigma-product of per-cycle cyclic shifts; the
 projections are the flattened family; the cyclic action on the sigma
 index matches the per-cycle action on each `Fin (period c)`.
 
-This provides an assembly point: given a Wolf Theorem 6.16 Wedderburn-based
-existence result (currently blocked on issues #27/#360), the resulting
-`MultiCycleDecomposition` can be flattened to a `CycleStructure` for use
-with the existing block-permutation formalization in
+This connects multi-cycle decompositions to the block-permutation theory:
+given a Wolf Theorem 6.16 Wedderburn-based existence result (currently blocked
+on issues #27/#360), the resulting `MultiCycleDecomposition` can be flattened
+to a `CycleStructure` for use with
 `TNLean.Channel.Peripheral.Cycles`. -/
 noncomputable def toCycleStructure (M : MultiCycleDecomposition T) :
     CycleStructure T :=

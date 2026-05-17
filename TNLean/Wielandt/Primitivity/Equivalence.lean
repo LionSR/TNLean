@@ -43,7 +43,7 @@ import surface. The direction-specific files
 `Primitivity/ImpliesStronglyIrreducible.lean`,
 `Primitivity/ImpliesStronglyIrreducibleAux.lean`, and
 `Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
-implementation modules, while the canonical / FT / BNT assembly does not
+implementation modules, while the canonical / FT / BNT construction does not
 import these statements directly.
 
 ## Full-equivalence corollaries

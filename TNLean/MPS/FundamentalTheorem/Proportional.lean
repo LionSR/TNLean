@@ -232,8 +232,7 @@ modulus) would tend to `0`, contradicting the hypothesis.
 
 The proof uses the rectangular overlap-decay theorem
 `mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one`, whose proof rests on the
-mixed-transfer trace identity, and is paper-faithful (no proportionality hypothesis
-required). -/
+mixed-transfer trace identity, with no proportionality hypothesis required. -/
 theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     (A B : MPSTensor d D)
     (hOverlap :

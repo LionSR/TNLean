@@ -9,7 +9,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
 # Executable examples for `IsBNTCanonicalForm`
 
 This file collects concrete `SectorDecomposition` constructions and
-instantiates the paper-faithful `IsBNTCanonicalForm` on each.  All three
+instantiates `IsBNTCanonicalForm` on each.  All three
 core examples have a single BNT basis sector (`basisCount = 1`):
 
 * **Example 1** — single sector, single copy: `weight = (1,)`.
@@ -311,7 +311,7 @@ and `weight_unit_exists`) admits decompositions whose copies have
 and one `1/2`-modulus copy.  This is exactly the
 `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
 counter-example, here written as a positive example: the strengthened
-predicate is paper-faithful (line 246 verbatim) and admits the example.
+predicate follows line 246 verbatim and admits the example.
 
 The decomposition does NOT admit `HasEqualModulusWeightLayer`: the
 optional equal-modulus layer of `PaperBNT/EqualModulus.lean` would

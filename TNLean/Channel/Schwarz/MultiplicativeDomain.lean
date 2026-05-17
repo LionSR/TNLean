@@ -44,7 +44,7 @@ namespace KadisonSchwarz
 
 /-! ## Auxiliary lemmas -/
 
-section Helpers
+section AuxiliaryLemmas
 
 /-- Trace of `krausMap` equals trace of the original matrix times ∑ Kᵢ† Kᵢ. When TP, this
 equals the original trace. -/
@@ -69,7 +69,7 @@ private theorem krausMap_smul (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     krausMap K (μ • X) = μ • krausMap K X := by
   simp only [krausMap, smul_mul_assoc, mul_smul_comm, Finset.smul_sum]
 
-end Helpers
+end AuxiliaryLemmas
 
 /-! ## KS equality for peripheral eigenvectors -/
 

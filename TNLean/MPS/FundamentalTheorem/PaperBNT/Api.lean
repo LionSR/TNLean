@@ -8,10 +8,9 @@ import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
 
 /-!
-# Paper-faithful BNT canonical form: basic lemmas
+# Auxiliary lemmas for the BNT canonical-form predicate `IsBNTCanonicalForm`
 
-This module provides the elementary lemmas for the paper-faithful
-core predicate `IsBNTCanonicalForm` introduced in
+Elementary lemmas for the predicate `IsBNTCanonicalForm` introduced in
 `PaperBNT/Basic.lean`.  All lemmas here use the **raw** sector data
 `P.weight j q` and `P.coeff N j = ∑_q (P.weight j q)^N`; no equal-modulus
 factorisation is assumed.  The optional `HasEqualModulusWeightLayer`
@@ -31,7 +30,7 @@ not imported here.
   between distinct basis blocks decays, dispatched by bond-dimension equality
   (CPSV16 lines 1080–1091; CPSV16 lines 264–279).
 * `IsBNTCanonicalForm.combined_family_eventually_li` — combined-family
-  eventual linear independence for two paper-faithful BNT canonical forms
+  eventual linear independence for two BNT canonical forms
   with mutually vanishing cross-overlaps (CPSV16 corollary Lem1,
   lines 1121–1132; CPSV21 line 1850 BNT linear-independence input).
 * `IsBNTCanonicalForm.norm_coeff_le_copies` — the structural-field reading
@@ -124,9 +123,9 @@ variable {P Q : SectorDecomposition d}
 
 /-- **Cross-overlap between distinct basis blocks decays.**
 
-For any two distinct basis indices `j ≠ k` of a paper-faithful BNT
-canonical form, the MPV overlap `mpvOverlap (P.basis j) (P.basis k) N`
-tends to `0` as `N → ∞`.
+For any two distinct basis indices `j ≠ k` of a BNT canonical form
+satisfying `IsBNTCanonicalForm`, the MPV overlap
+`mpvOverlap (P.basis j) (P.basis k) N` tends to `0` as `N → ∞`.
 
 The dispatch follows CPSV16 lines 1080–1091 (the normal-tensor overlap
 dichotomy):
@@ -158,14 +157,14 @@ lemma cross_overlap_basis_tendsto_zero
       (h.basis_left_canonical j) (h.basis_left_canonical k)
       hdim
 
-/-- **Combined-family eventual linear independence** for two
-paper-faithful BNT canonical forms with mutually vanishing cross-overlaps.
+/-- **Combined-family eventual linear independence** for two BNT canonical
+forms with mutually vanishing cross-overlaps.
 
-This is the paper-faithful instantiation of corollary Lem1
-(CPSV16 lines 1121–1132): once the cross-overlaps between the two BNT
-families vanish, the union of basis MPV states is linearly independent
-for all sufficiently large lengths.  CPSV21 line 1850 states the same
-linear-independence input as part of the BNT definition.
+This is the instantiation of corollary Lem1 (CPSV16 lines 1121–1132): once the
+cross-overlaps between the two BNT families vanish, the union of basis MPV
+states is linearly independent for all sufficiently large lengths.  CPSV21
+line 1850 states the same linear-independence input as part of the BNT
+definition.
 
 The proof feeds the per-family normalised self-overlaps, the
 within-family cross-decay from `cross_overlap_basis_tendsto_zero`, and
@@ -190,14 +189,13 @@ lemma combined_family_eventually_li
     (hB_off := fun _ _ hk => hQ.cross_overlap_basis_tendsto_zero hk)
     (hAB := hAB)
 
-/-- **Coefficient norm bound under the canonical-form line-246
-normalization.**
+/-- **Coefficient norm bound under the line-246 normalization.**
 
 A direct consequence of the structural field `weight_norm_le_one`
-(CPSV16 §II.A line 246): under the paper-faithful canonical form, the
-sector coefficient `P.coeff N j = ∑_q (P.weight j q)^N` is bounded in
-modulus by the multiplicity `P.copies j`.  This is the structural-field
-reading of the prior explicit-hypothesis lemma
+(CPSV16 §II.A line 246): the sector coefficient
+`P.coeff N j = ∑_q (P.weight j q)^N` is bounded in modulus by the
+multiplicity `P.copies j`.  This is the structural-field reading of the
+prior explicit-hypothesis lemma
 `SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one`. -/
 lemma norm_coeff_le_copies
     (h : IsBNTCanonicalForm P) (N : ℕ) (j : Fin P.basisCount) :

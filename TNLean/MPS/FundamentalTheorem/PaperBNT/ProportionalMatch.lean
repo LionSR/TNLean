@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.PaperBNT.StrongMatch
 
 /-!
-# Proportional sector matching for two paper-faithful BNT canonical forms
+# Proportional sector matching for two BNT canonical forms
 
 The main theorem `MPSTensor.ft_paper_bnt_proportional_sector_match`
 delivers the basis-count identity $g_P = g_Q$, a basis bijection
@@ -136,7 +136,7 @@ lemma joint_coeff_not_tendsto_zero
             (P.weight j pq.1 * Q.weight k pq.2) ^ N := hProd.symm
     _ = ∑ s : Fin r, (μ s) ^ N := hSum.symm
 
-/-- For a basis block $j_0$ of a paper-faithful BNT canonical form, the
+/-- For a basis block $j_0$ of a BNT canonical form satisfying `IsBNTCanonicalForm`, the
 overlap $\langle V^{(N)}(\text{toTensor})|V^{(N)}(\text{basis}_{j_0})\rangle$
 differs from the sector coefficient $P.\mathrm{coeff}(N,j_0)$ by a sequence
 tending to zero: the diagonal "self-overlap $-\,1$" and the off-diagonal
@@ -854,7 +854,7 @@ theorem bijective_match_of_eventuallyProportional
 
 /-! ### Final theorem: proportional sector matching with basis-count equality -/
 
-/-- **Proportional sector matching for two paper-faithful BNT canonical forms.**
+/-- **Proportional sector matching for two BNT canonical forms.**
 
 If two BNT canonical sector decompositions have eventually proportional
 assembled tensors with nonzero per-$N$ scalar, and each basis sector on both
