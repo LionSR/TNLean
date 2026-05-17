@@ -32,8 +32,10 @@ def evalWord (A : MPSTensor d D) : List (Fin d) → Matrix (Fin D) (Fin D) ℂ
   | [] => 1
   | i :: w => A i * evalWord A w
 
+/-- The empty word evaluates to the identity. -/
 @[simp] lemma evalWord_nil (A : MPSTensor d D) : evalWord A [] = 1 := rfl
 
+/-- The word `i :: w` evaluates to `A i` times the evaluation of `w`. -/
 @[simp] lemma evalWord_cons (A : MPSTensor d D) (i : Fin d) (w : List (Fin d)) :
     evalWord A (i :: w) = A i * evalWord A w := rfl
 
