@@ -15,9 +15,9 @@ import Mathlib.Analysis.Matrix.Order
 This file formalises the existence results for normal forms of quantum channels
 under filtering operations, as described in Wolf Section 2.3 (Eqs. (2.35)-(2.43)).
 The central idea is that every CP map with full Kraus rank can be brought to a
-doubly-stochastic normal
-form by pre- and post-composition with invertible Kraus-rank-1 CP maps (filtering
-operations).  For qubit channels (D = 2) the equivalence class under
+doubly-stochastic normal form by pre- and post-composition with invertible
+Kraus-rank-1 CP maps (filtering operations).  For qubit channels (D = 2) the
+equivalence class under
 SL(2, ℂ)-filterings admits a particularly explicit classification — the *Lorentz
 normal form* — with three canonical representatives.
 
