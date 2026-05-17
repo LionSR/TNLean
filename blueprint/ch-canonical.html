@@ -1062,18 +1062,11 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Theorems&#160;4.2 and&#160;4.4
 	]
-</span>. Every translation-invariant MPS tensor \(A\) is, after blocking by a period \(p \ge 1\), MPV-equivalent to a weighted direct sum </p>
+</span>. Every translation-invariant MPS tensor \(A\) is, after blocking by a period \(p \ge 1\), replaced by a tensor \(B\) generating the same MPV family and whose nonzero part is in canonical form. Thus, for each physical index \(i\), </p>
 <div class="displaymath" id="a0000000649">
-  \[  A^{[p]} \sim \mathbf{0}_{d^{[p]},D_0} \oplus \bigoplus _{k=1}^{r} \mu _k B_k.  \]
+  \[  B^i = \mathbf{0}_{D_0} \oplus \bigoplus _{k=1}^{r} \mu _k B_k^i,  \]
 </div>
-<p> Here \(\mathbf{0}_{d^{[p]},D_0}\) is the all-zero block of bond dimension \(D_0\), the weights \(\mu _k\) are nonzero, and the blocks \(B_k\) have positive bond dimensions, are irreducible and left-canonical, </p>
-<div class="displaymath" id="a0000000650">
-  \[  \sum _i (B_k^i)^\dagger B_k^i = \mathbb {1},  \]
-</div>
-<p> and have primitive transfer maps, </p>
-<div class="displaymath" id="a0000000651">
-  \[  \sigma _\partial (\mathcal{E}_{B_k}) = \{ 1\} .  \]
-</div>
+<p> where \(\mathbf{0}_{D_0}\) is the all-zero summand of bond dimension \(D_0\) and the tensors \(B_k\) are normal tensors. If \(r{\gt}0\), the weights \(\mu _k\) may be normalized so that \(|\mu _k|\le 1\) for all \(k\) and \(|\mu _k|=1\) for at least one index \(k\). </p>
 
   </div>
 </div>
@@ -1178,7 +1171,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  A tensor \(A\) is in <em>canonical form</em> if there is a finite family of normal tensors \(A_k\) of physical dimension \(d\) and bond dimension \(D_k\), and weights \(\mu _k \in \mathbb {C}\) for \(k = 1,\ldots ,r\), such that, for each physical index \(i\), </p>
-<div class="displaymath" id="a0000000652">
+<div class="displaymath" id="a0000000650">
   \[  A^i \cong \bigoplus _{k=1}^r \mu _k\,  A_k^i,  \]
 </div>
 <p> in the sense that \(A\) and the weighted direct sum \(\bigoplus _{k=1}^r \mu _k A_k\) generate the same MPV family at every length, and the weights satisfy the normalization \(|\mu _k| \le 1\) for all \(k\) and \(|\mu _k| = 1\) for at least one \(k\). </p>
@@ -1230,7 +1223,7 @@
   <li><p>each \(A_j\) is normal in the sense of Definition&#160;<a href="ch-canonical.html#def:nt_paper">9.2</a>; </p>
 </li>
   <li><p>for every system length \(N\) there exist coefficients \(c_j^{(N)} \in \mathbb {C}\) with </p>
-<div class="displaymath" id="a0000000653">
+<div class="displaymath" id="a0000000651">
   \[  |V^{(N)}(A)\rangle  = \sum _{j=1}^{g} c_j^{(N)} |V^{(N)}(A_j)\rangle ;  \]
 </div>
 </li>
@@ -1240,7 +1233,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000654">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000652">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -1252,7 +1245,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000654">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000652">#</a>
     
     
     
@@ -1265,7 +1258,7 @@
 </div>
 <h1 id="sec:transfer_map_normalization">9.2 Transfer map normalization</h1>
 
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000655">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000653">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -1279,7 +1272,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000655">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000653">#</a>
     
     
     
@@ -1308,7 +1301,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:samempv_unitary">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000656"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000654"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1359,7 +1352,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000656">
+<div class="proof_wrapper" id="a0000000654">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1495,7 +1488,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:fp_inv_proj">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000657"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000655"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1546,7 +1539,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000657">
+<div class="proof_wrapper" id="a0000000655">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1593,7 +1586,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:two_block_decomp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000658"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000656"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1650,7 +1643,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000658">
+<div class="proof_wrapper" id="a0000000656">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1743,7 +1736,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:irred_decomp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000659"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000657"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1798,7 +1791,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000659">
+<div class="proof_wrapper" id="a0000000657">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1851,7 +1844,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:form_II">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000660"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000658"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1903,13 +1896,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an irreducible MPS tensor satisfying \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), and assume \(D {\gt} 0\). Then there exist a unitary \(U\) and a diagonal positive definite matrix \(\Lambda \) such that, for \(B^i := U^\dagger A^i U\), </p>
-<div class="displaymath" id="a0000000661">
+<div class="displaymath" id="a0000000659">
   \[  \sum _i (B^i)^\dagger B^i = \mathbb {1}\qquad \text{and}\qquad \mathcal{E}_B(\Lambda ) = \Lambda .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000660">
+<div class="proof_wrapper" id="a0000000658">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1925,7 +1918,7 @@
 <h1 id="sec:canonical_from_primitivity">9.5 Canonical form from primitivity</h1>
 
 <p>The canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:cf_paper">9.3</a>) include an explicit hypothesis that the self-overlap \(O_{A_k A_k}(N) \to 1\) for each block. The single source-faithful result of this section is Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">9.17</a>: blocking an irreducible TP block by the least common multiple of its peripheral periods makes the resulting transfer map primitive, removing periodicity. </p>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000662">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000660">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -1939,7 +1932,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000662">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000660">#</a>
     
     
     
@@ -2002,7 +1995,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:blocking_primitivity">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000663"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000661"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2069,7 +2062,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000663">
+<div class="proof_wrapper" id="a0000000661">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2224,7 +2217,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:ncf_overlap_tendsto_one">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000664"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000662"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2279,7 +2272,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000664">
+<div class="proof_wrapper" id="a0000000662">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2291,7 +2284,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000665">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000663">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -2302,7 +2295,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000665">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000663">#</a>
     
     
     
@@ -2329,7 +2322,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:overlap_norm_one_implies_spectral_radius_ge_one">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000666"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000664"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2380,7 +2373,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000666">
+<div class="proof_wrapper" id="a0000000664">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2408,7 +2401,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:nt_overlap_norm_one_gauge">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000667"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000665"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2469,7 +2462,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000667">
+<div class="proof_wrapper" id="a0000000665">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2512,7 +2505,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:CFII_data">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000668"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000666"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2584,7 +2577,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000668">
+<div class="proof_wrapper" id="a0000000666">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2612,7 +2605,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:irreducible_block_decomp_with_cfii">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000669"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000667"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2667,7 +2660,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000669">
+<div class="proof_wrapper" id="a0000000667">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2695,7 +2688,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:exists_normal_canonical_form">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000670"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000668"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2765,7 +2758,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000670">
+<div class="proof_wrapper" id="a0000000668">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2777,7 +2770,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000671">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000669">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -2789,7 +2782,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000671">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000669">#</a>
     
     
     
@@ -2824,7 +2817,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_gauge_arbitrary">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000672"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000670"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2885,14 +2878,14 @@
 </li>
 </ol>
 <p> such that </p>
-<div class="displaymath" id="a0000000673">
+<div class="displaymath" id="a0000000671">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,D_0})_\sigma + V^{(N)}\! (\textstyle \bigoplus _{k=1}^r \mu _k B_k)_\sigma .  \]
 </div>
 <p> This is the furthest unconditional reduction step available for arbitrary tensors before periodicity removal. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000672">
+<div class="proof_wrapper" id="a0000000670">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2923,7 +2916,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocking_period">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000674"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000672"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2974,7 +2967,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000674">
+<div class="proof_wrapper" id="a0000000672">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3023,7 +3016,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000675"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000673"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3097,7 +3090,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000675">
+<div class="proof_wrapper" id="a0000000673">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3125,7 +3118,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000676"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000674"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3186,7 +3179,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000676">
+<div class="proof_wrapper" id="a0000000674">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3214,7 +3207,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000677"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000675"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3274,7 +3267,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000677">
+<div class="proof_wrapper" id="a0000000675">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3305,7 +3298,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000678"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000676"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3364,7 +3357,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000678">
+<div class="proof_wrapper" id="a0000000676">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3397,7 +3390,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Let \((\mu _k)_{k=1}^r\) be nonzero complex weights whose moduli are pairwise distinct. Then there exists a permutation \(\sigma \) of \(\{ 1,\ldots ,r\} \) such that </p>
-<div class="displaymath" id="a0000000679">
+<div class="displaymath" id="a0000000677">
   \[  |\mu _{\sigma (1)}| {\gt} |\mu _{\sigma (2)}| {\gt} \cdots {\gt} |\mu _{\sigma (r)}| {\gt} 0.  \]
 </div>
 
@@ -3443,7 +3436,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypothesis, with \(\sigma \) as above and \(\tilde\mu _k := \mu _{\sigma (k)}\), \(\tilde B_k := B_{\sigma (k)}\), </p>
-<div class="displaymath" id="a0000000680">
+<div class="displaymath" id="a0000000678">
   \[  \mathcal{V}\! (\textstyle \bigoplus _k \mu _k B_k) = \mathcal{V}\! (\textstyle \bigoplus _k \tilde\mu _k \tilde B_k), \qquad |\tilde\mu _1| {\gt} \cdots {\gt} |\tilde\mu _r|.  \]
 </div>
 
@@ -3555,7 +3548,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Given nonzero weights \((\mu _k)_{k=1}^r\) and blocks \((B_k)_{k=1}^r\), the <em>granular sector decomposition</em> has \(r\) sectors, one basis block \(B_k\) per sector, multiplicity&#160;\(1\) in each sector, and sector weight \(\mu _k\) on the \(k\)th sector. Equivalently, as a finite sum, </p>
-<div class="displaymath" id="a0000000681">
+<div class="displaymath" id="a0000000679">
   \[  \sum _{k=1}^{r} \mu _k^{\, N} V^{(N)}(B_k)_\sigma = V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma .  \]
 </div>
 
@@ -3577,7 +3570,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000682"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000680"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3630,7 +3623,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000682">
+<div class="proof_wrapper" id="a0000000680">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3707,7 +3700,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Let \((\mu _k)_{k=1}^r\) be a finite family of complex weights. A <em>norm-class partition</em> consists of: a number of classes \(s \le r\); representative values \(\lambda _1 {\gt} \cdots {\gt} \lambda _s {\gt} 0\); multiplicities \((m_j)_{j=1}^s\) with \(\sum _j m_j = r\); for each \(j\) an enumeration \(\iota _j : \{ 1,\ldots ,m_j\}  \hookrightarrow \{ 1,\ldots ,r\} \) of the indices \(k\) with \(|\mu _k| = \lambda _j\); and the regrouping identity </p>
-<div class="displaymath" id="a0000000683">
+<div class="displaymath" id="a0000000681">
   \[  \sum _{k=1}^{r} f(k) = \sum _{j=1}^{s} \sum _{q=1}^{m_j} f(\iota _j(q)),  \]
 </div>
 <p> for every function \(f\). </p>
@@ -3863,7 +3856,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:paperbnt_supplier_prepared">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000684"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000682"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3919,7 +3912,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000684">
+<div class="proof_wrapper" id="a0000000682">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3953,7 +3946,7 @@
   </div>
   <div class="remark_thmcontent">
   <p> Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_prepared">9.44</a> starts from a pre-normalized block family. For an arbitrary MPS tensor \(A\), Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">13.31</a> in Chapter&#160;<a href="ch-canonical_after_blocking.html">13</a> supplies, after blocking by a period \(p\), a zero-tail/primitive-block decomposition. For every spin configuration \(\sigma \) of length \(N\), </p>
-<div class="displaymath" id="a0000000685">
+<div class="displaymath" id="a0000000683">
   \[  V^{(N)}(A^{[p]})_\sigma = V^{(N)}(\mathbf{0}_{d^{[p]},D_0})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma .  \]
 </div>
 <p> At \(N \ge 1\) the zero-tail term vanishes, so the nonzero blocks suffice to identify the MPV. The length-zero contribution is the bond-dimension trace \(D_0\) of the zero-tail factor; matching it to the input bond dimension is the zero-tail identity. The remaining normalization hypotheses in the strengthened BNT formulation built from Definition&#160;<a href="ch-canonical.html#def:bnt_paper">9.4</a>—the bound \(|\mu _k|\le 1\) and the unit-modulus witness \(\exists k, |\mu _k|=1\)—are normalization conventions. When the nonzero block family is nonempty, scaling the input by a single scalar makes \(\max _k |\mu _k|=1\), and the bound \(|\mu _k|\le 1\) follows once a global unit witness is fixed. Thus the arbitrary-input statement at \(N \ge 1\) is provided by Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">13.31</a>, and the BNT predicate (Definition&#160;<a href="ch-canonical.html#def:bnt_paper">9.4</a>) is obtained by a global rescaling and reordering of weights. </p>
@@ -4205,7 +4198,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For nonzero weights \((\mu _k)_{k=1}^r\), blocks \((B_k)_{k=1}^r\), and any blocking length \(p\ge 1\), the blocked assembled tensor agrees with the assembled tensor of the blocked blocks with powered weights: </p>
-<div class="displaymath" id="a0000000686">
+<div class="displaymath" id="a0000000684">
   \[  (\textstyle \bigoplus _k \mu _k B_k)^{[p]} \sim \textstyle \bigoplus _k \mu _k^{\, p}\,  B_k^{[p]},  \]
 </div>
 <p> where \(\sim \) denotes generation of the same MPV family at every length. </p>
@@ -4583,7 +4576,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any MPS tensor \(A\) and integers \(m,n \ge 1\), </p>
-<div class="displaymath" id="a0000000687">
+<div class="displaymath" id="a0000000685">
   \[  \mathcal{E}_{(A^{[m]})^{[n]}} = \mathcal{E}_{A^{[mn]}}.  \]
 </div>
 
@@ -5106,7 +5099,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Direct blocking at length \(p = m_k e_k\) and iterated blocking \((B_k^{[m_k]})^{[e_k]}\) produce, after the canonical alphabet identification, the same weighted finite sum: for every \(N \ge 0\) and every blocked word \(\sigma \), </p>
-<div class="displaymath" id="a0000000688">
+<div class="displaymath" id="a0000000686">
   \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! ((B_k^{[m_k]})^{[e_k]})_{\sigma '},  \]
 </div>
 <p> where \(\sigma '\) is the image of \(\sigma \) under the coordinate-grouping identification. </p>
