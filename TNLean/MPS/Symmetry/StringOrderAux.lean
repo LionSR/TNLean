@@ -516,9 +516,8 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
   · simpa using hU_unitary_right
   · simpa using hU_unitary_left
   · have hζ_norm : ‖ζ‖ = 1 := by
-      have hsq : ‖ζ‖ ^ 2 = 1 := by
-        simpa [Complex.normSq_eq_norm_sq] using hζ_sq_eq_one
-      nlinarith [norm_nonneg ζ]
+      nlinarith [norm_nonneg ζ,
+        show ‖ζ‖ ^ 2 = 1 from by simpa [Complex.normSq_eq_norm_sq] using hζ_sq_eq_one]
     simp [norm_inv, hζ_norm]
   · intro i
     have hBi : ∀ j : Fin d, B j = ζ • (U * A j * Uᴴ) := by
