@@ -123,8 +123,9 @@ theorem forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
 /-- Existential common-length form of
 `forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`.
 
-This is the API expected by selector and word-span consumers that only need a
-single finite separating length for all ordered block pairs. -/
+Packages the universal pair-separation result into an existential: there is a
+single finite length at which every ordered pair of distinct blocks is
+trace-separated. -/
 theorem exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))

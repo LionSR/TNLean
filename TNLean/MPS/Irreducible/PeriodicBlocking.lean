@@ -7,7 +7,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition
 open scoped BigOperators
 
 /-!
-# Periodic-sector blocking helpers
+# Periodic-sector blocking constructions
 
 This module defines the elementary blocking data used by periodic-sector arguments:
 

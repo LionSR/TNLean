@@ -401,16 +401,16 @@ theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
 
 end ProportionalCase
 
-/-! ## Z-gauge construction helpers (Theorem 3.8 steps 5–7) -/
+/-! ## Z-gauge construction (Theorem 3.8, steps 5–7) -/
 
-section ZGaugeAssembly
+section ZGaugeConstruction
 
 /-- **Z-gauge diagonal from matched m-th powers (Theorem 3.8, step 7).**
 
 If two weight families have equal `m`-th powers and the denominators are nonzero, the
 Z-gauge diagonal `Z = diag(μ_i/ν_i)` satisfies `Z^m = 1` and `Z · diag(ν) = diag(μ)`.
 
-Assembles `zGaugeDiagonal_pow_eq_one` and `zGaugeDiagonal_mul_diagonal`. -/
+Combines `zGaugeDiagonal_pow_eq_one` and `zGaugeDiagonal_mul_diagonal`. -/
 theorem zgauge_construction
     {n : Type*} [Fintype n] [DecidableEq n]
     (m : ℕ) (μ ν : n → ℂ)
@@ -470,11 +470,11 @@ theorem equalCase_zgauge_of_power_sums
   let ⟨Z, hZm, hZmul⟩ := zgauge_construction m μ ν hPow hν
   ⟨Z, hZm, hZmul, weight_multisets_eq_of_power_sums_eq μ ν hPS⟩
 
-end ZGaugeAssembly
+end ZGaugeConstruction
 
-/-! ## Theorem 3.8 — Equal case assembly (arXiv:1708.00029)
+/-! ## Theorem 3.8 — Equal case (arXiv:1708.00029)
 
-The equal-case Fundamental Theorem of MPS in irreducible form composes:
+The equal-case Fundamental Theorem of MPS in irreducible form combines:
 
 1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
 2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`): Newton–Girard + Z-gauge diagonal.

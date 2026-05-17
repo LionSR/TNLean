@@ -59,7 +59,7 @@ def IsLocallyOrthogonal (A : MPSTensor d D) : Prop :=
   IsRFP A
 
 /-- `IsLocallyOrthogonal` is definitionally equal to `IsRFP` for a single
-BNT block. This lemma bridges the two views. -/
+BNT block. -/
 lemma isLocallyOrthogonal_iff_isRFP (A : MPSTensor d D) :
     IsLocallyOrthogonal A ↔ IsRFP A :=
   Iff.rfl

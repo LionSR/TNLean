@@ -121,7 +121,7 @@ lemma isIrreducibleAction_of_isIrreducibleTensor
     apply (Matrix.toEuclideanLin : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] E →ₗ[ℂ] E).injective
     apply LinearMap.ext
     intro x
-    -- Expand the triple product using the `Matrix.toLpLin` API.
+    -- Expand the triple product using the `Matrix.toLpLin` linear equivalence.
     simp [Matrix.toEuclideanLin]
     -- Show the intermediate vector lies in `W'`.
     have hP_lin : Matrix.toEuclideanLin P = p'.toLinearMap := by

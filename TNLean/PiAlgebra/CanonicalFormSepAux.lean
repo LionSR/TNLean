@@ -61,8 +61,8 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 /-! ### Additive split conditions for canonical-form hypotheses
 
 The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility.  The
-structures below expose weaker pieces of data so theorem signatures can migrate gradually without
-forcing an immediate project-wide refactor.
+structures below expose weaker conditions so theorem signatures can migrate gradually without
+forcing an immediate project-wide reorganization.
 -/
 
 /-- Each block in the family is algebraically injective. -/
@@ -227,7 +227,7 @@ end HasNormalizedSelfOverlap
 
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
 (PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli. The strictly decreasing variant
-is a one-copy-per-sector artifact; the paper-faithful predicate `IsBNTCanonicalForm` uses sector
+is a one-copy-per-sector artifact; the source-paper predicate `IsBNTCanonicalForm` uses sector
 multiplicities and does not require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
