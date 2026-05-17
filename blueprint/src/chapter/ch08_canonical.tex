@@ -507,7 +507,7 @@ primitive, removing periodicity.
 \end{proof}
 
 \section{Steps toward canonical form existence}%
-\label{sec:canonical_pipeline_1606}
+\label{sec:canonical_construction_1606}
 
 This section combines the components of the canonical-form
 construction following~\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
@@ -905,7 +905,7 @@ is the normality of a TP-primitive irreducible block.
 \section{Scope and BNT input reductions}\label{sec:open_directions}
 
 \begin{remark}[Canonical-form reduction before the equal-case comparison]%
-    \label{rem:canonical_pipeline_gaps}
+    \label{rem:canonical_construction_gaps}
     \leanok
     The MPS canonical-form reduction separates the all-zero summand, which
     contributes only to the length-zero trace, from the nonzero part. It then
@@ -1159,7 +1159,10 @@ Chapter~\ref{ch:periodic_ft_apps}.
 
 \begin{lemma}[Structural properties of the common reblocked sectors]%
     \label{thm:common_blocked_cyclic_sector_derived_properties}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.derivedProperties}\leanok
+    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_tp,
+        MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_primitive,
+        MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible,
+        MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos}\leanok
     \uses{thm:exists_common_blocked_cyclic_sector_family}
     Each sector tensor in the common reblocked cyclic-sector family of
     Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family} is
@@ -1168,9 +1171,14 @@ Chapter~\ref{ch:periodic_ft_apps}.
     and has positive bond dimension.
 \end{lemma}
 
+% TODO(lean): the next two lemmas claim aggregate statements about the common
+% reblocked family.  The Lean library has the sector-by-sector comparison
+% lemmas (e.g. `blockTensor_sameMPV2_commonReindexedBlock_of_word_eq` and the
+% `sameMPV2_weightedCanonicalBlock_commonFlat_of_blockwise` family) but no
+% single bundled `reindexed_sameMPV` / `reindexed_nonzeroPart` declaration;
+% the \lean{} tags are removed until a faithful Lean statement exists.
 \begin{lemma}[Common-alphabet flattening]%
     \label{thm:common_blocked_cyclic_sector_reindexed_samempv}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV}\leanok
     \uses{thm:exists_common_blocked_cyclic_sector_family}
     With $p = m_k e_k$ for each $k$, the iterated blocked tensor $(B_k^{[m_k]})^{[e_k]}$
     agrees with the directly blocked tensor $B_k^{[p]}$ in the sense of generating
@@ -1181,7 +1189,6 @@ Chapter~\ref{ch:periodic_ft_apps}.
 
 \begin{lemma}[Reindexed nonzero-part transport]%
     \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzeroPart}\leanok
     \uses{thm:common_blocked_cyclic_sector_reindexed_samempv}
     The nonzero-part decomposition of a weighted block sum
     $\bigoplus_k \mu_k B_k$ transports through the common-alphabet
@@ -1210,9 +1217,13 @@ Chapter~\ref{ch:periodic_ft_apps}.
     $(d^{[m]})^{n}$ are equal under the canonical alphabet identification.
 \end{lemma}
 
+% TODO(lean): no single bundled `blocked_word_comparison` declaration exists
+% in `CommonBlockedCyclicSectorFamily.lean`; the per-letter and per-block
+% identifications are stated separately (e.g. `flattenWordOfBlock_cast_eq`,
+% `blockTensor_eq_commonReindexedBlock_of_word_eq`).  Drop the \lean{} tag
+% until a faithful bundled statement is added in Lean.
 \begin{lemma}[Direct and iterated blocking comparison]%
     \label{thm:common_blocked_cyclic_sector_blocked_word_comparison}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.blocked_word_comparison}\leanok
     \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
         def:common_blocked_cyclic_sector_grouped_block_cast}
     Direct blocking at length $p = m_k e_k$ and iterated blocking
