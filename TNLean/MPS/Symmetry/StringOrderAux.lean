@@ -429,12 +429,12 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
       have hbad := hX_mul_inv
       simp [X, Xin, hX0] at hbad
     exact hX_ne this
+  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
+    injective_implies_irreducibleCP A hA
+  have hCPA : IsCPMap (transferMap (d := d) (D := D) A) :=
+    transferMap_isCPMap A
+  have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
   have hζ_sq_eq_one : Complex.normSq ζ = 1 := by
-    have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-      injective_implies_irreducibleCP A hA
-    have hCPA : IsCPMap (transferMap (d := d) (D := D) A) :=
-      transferMap_isCPMap A
-    have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
     have hone_eig : transferMap A 1 = ((1 : ℝ) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
       simpa using hNorm
     exact
@@ -445,9 +445,6 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
         (Complex.normSq_pos.2 hζ) hone_eig hQ_eigA |>.symm
   have hQ_fix : transferMap A Q = Q := by
     simpa [hζ_sq_eq_one] using hQ_eigA
-  have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    injective_implies_irreducibleCP A hA
-  have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
   rcases posSemidef_fixedPoint_unique_of_irreducible (A := A) hIrrA
       (1 : Matrix (Fin D) (Fin D) ℂ) Q hone_psd one_ne_zero hQ_psd hNorm hQ_fix with
     ⟨c, hQ_scalar⟩
