@@ -14,7 +14,7 @@ normal-form reductions.
     \lean{Matrix.trace_mul_right_eq_zero_iff}
     \leanok
     For $M \in \MN{D}$,
-    $\tr(M N) = 0$ for all $N \in \MN{D}$
+    $\tr(M N) = 0$ for all~$N \in \MN{D}$
     if and only if $M = 0$.
 \end{theorem}
 
@@ -23,7 +23,7 @@ normal-form reductions.
     Testing against the matrix units $E_{ji}$
     (the matrix with $1$ in position $(j,i)$ and $0$ elsewhere)
     gives $\tr(E_{ji} M) = M_{ij}$.
-    Hence if $\tr(MN) = 0$ for all~$N$, then every entry of $M$
+    Hence if $\tr(M N) = 0$ for all~$N$, then every entry of $M$
     vanishes.
 \end{proof}
 
@@ -41,7 +41,7 @@ normal-form reductions.
     \uses{def:mpv}
     Viewing the word $w$ as a configuration of length~$|w|$,
     Definition~\ref{def:mpv} gives the corresponding MPV coefficient as
-    the trace coefficient $c_w(A)=\tr(A^w)$.
+    the trace coefficient $c_w(A) = \tr(A^w)$.
     The same-MPV hypothesis gives equality at every
     system size.
 \end{proof}
@@ -53,7 +53,7 @@ normal-form reductions.
     For a tensor~$A$, attach to the chosen family $\{A^i\}$ the
     auxiliary linear map $\Phi_A : \MN{D} \to \C^d$ defined by
     \[
-        \Phi_A(M)_i =   \tr(M \cdot A^i).
+        \Phi_A(M)_i = \tr(M \cdot A^i).
     \]
 \end{definition}
 
@@ -86,9 +86,9 @@ normal-form reductions.
     \uses{lem:same_mpv_trace}
     If $B^i = 0$ for all~$i$, then
     Lemma~\ref{lem:same_mpv_trace} gives $\tr(A^w) = 0$ for every
-    word~$w$, in particular for all length-1 words.
+    word~$w$, in particular for all words of length~$1$.
     Since the $\{A^i\}$ span $\MN{D}$, the trace functional vanishes
-    identically, contradicting $\tr(\Id_D) = D \neq 0$.
+    identically, contradicting $\tr(\Id_{D}) = D \neq 0$.
 \end{proof}
 
 \section{Linear extension}
@@ -111,11 +111,11 @@ normal-form reductions.
     Applying Lemma~\ref{lem:same_mpv_trace} to all words of length~$2$
     shows $\Phi_A \circ \ell_A = \Phi_B \circ \ell_B$.
     Since $A$ is injective, $\ell_A$ is surjective, giving
-    $\mathrm{range}(\Phi_A) \subseteq \mathrm{range}(\Phi_B)$.
+    $\operatorname{range}(\Phi_A) \subseteq \operatorname{range}(\Phi_B)$.
     By Theorem~\ref{thm:trace_pairing_injective},
     $\ker \Phi_A = \{0\}$, so rank--nullity gives
-    $\dim(\mathrm{range}(\Phi_A)) = \dim(\MN{D})$.
-    Hence $\dim(\mathrm{range}(\Phi_B)) \ge \dim(\MN{D})$,
+    $\dim(\operatorname{range}(\Phi_A)) = \dim(\MN{D})$.
+    Hence $\dim(\operatorname{range}(\Phi_B)) \ge \dim(\MN{D})$,
     and rank--nullity again gives $\ker \Phi_B = \{0\}$.
     A left inverse $g$ of $\Phi_B$ gives $T := g \circ \Phi_A$,
     and uniqueness follows because the $\{A^i\}$ span $\MN{D}$.
@@ -128,26 +128,35 @@ normal-form reductions.
     If $A$ is injective and $A$, $B$ generate the same MPV family,
     and $T : \MN{D} \to \MN{D}$ is the unique linear map satisfying
     $T(A^i) = B^i$ for all~$i$, then
-    $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
+    $T(MN) = T(M) T(N)$ for all~$M, N \in \MN{D}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, lem:same_mpv_trace}
-    \textbf{Step 1} ($\Phi_B \circ T = \Phi_A$).
+    \textbf{Step~1} ($\Phi_B \circ T = \Phi_A$).
     Applying Lemma~\ref{lem:same_mpv_trace} to words of length~$2$
     gives $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$ for all~$i$.
     Since the $\{A^i\}$ span $\MN{D}$, $\Phi_B \circ T = \Phi_A$.
 
-    \textbf{Step 2} ($T(A^i A^j) = B^i B^j$).
-    Lemma~\ref{lem:same_mpv_trace} applied to the word $(i,j,k)$ gives
-    $\tr(A^i A^j A^k) = \tr(B^i B^j B^k)$ for all $i,j,k$.
-    So $\Phi_B(T(A^i A^j))_k = \Phi_A(A^i A^j)_k = \tr(A^i A^j A^k) = \tr(B^i B^j B^k) = \Phi_B(B^i B^j)_k$.
+    \textbf{Step~2} ($T(A^i A^j) = B^i B^j$).
+    Lemma~\ref{lem:same_mpv_trace} applied to the word $(i, j, k)$ gives
+    $\tr(A^i A^j A^k) = \tr(B^i B^j B^k)$ for all~$i, j, k$.
+    Thus, for each~$k$,
+    \[
+        \begin{aligned}
+            \Phi_B(T(A^i A^j))_k
+             & = \Phi_A(A^i A^j)_k  \\
+             & = \tr(A^i A^j A^k)   \\
+             & = \tr(B^i B^j B^k)   \\
+             & = \Phi_B(B^i B^j)_k.
+        \end{aligned}
+    \]
     The same rank--nullity argument used in the proof of
     Theorem~\ref{thm:linear_ext} gives $\ker \Phi_B = \{0\}$.
     Hence $T(A^i A^j) = B^i B^j$.
 
-    \textbf{Step 3} (bilinear extension).
+    \textbf{Step~3} (bilinear extension).
     For fixed~$j$, the maps $M \mapsto T(M \cdot A^j)$ and
     $M \mapsto T(M) \cdot B^j$ agree on the spanning set
     $\{A^i\}$, hence on all of $\MN{D}$.
@@ -180,18 +189,18 @@ normal-form reductions.
     \lean{MPSTensor.skolemNoether_matrix}
     \leanok
     Every $\C$-algebra automorphism of $\MN{D}$ is inner:
-    for any $f \in \mathrm{Aut}_{\C\text{-alg}}(\MN{D})$,
-    there exists $X \in \GL_D(\C)$ such that
-    $f(M) = X M X^{-1}$ for all $M$.
+    for any~$f \in \operatorname{Aut}_{\C\text{-alg}}(\MN{D})$,
+    there exists~$X \in \GL_{D}(\C)$ such that
+    $f(M) = X M X^{-1}$ for all~$M$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     Via the canonical identification
-    $\MN{D} \cong \mathrm{End}_{\C}(\C^D)$,
+    $\MN{D} \cong \operatorname{End}_{\C}(\C^D)$,
     the automorphism $f$ induces an automorphism of
-    $\mathrm{End}_{\C}(\C^D)$.
-    Every algebra automorphism of $\mathrm{End}(V)$ is
+    $\operatorname{End}_{\C}(\C^D)$.
+    Every algebra automorphism of $\operatorname{End}(V)$ is
     conjugation by an invertible linear map
     (this is a standard result in the theory of central
     simple algebras).
@@ -207,7 +216,7 @@ normal-form reductions.
 
 \begin{proof}
     \leanok
-    By surjectivity, there exists $X$ with $T(X) = \Id$.
+    By surjectivity, there exists~$X$ with $T(X) = \Id$.
     Then $T(\Id) = T(X) \cdot T(\Id) = T(X \cdot \Id) = T(X) = \Id$,
     using multiplicativity and $T(X) = \Id$.
     With $T(\Id) = \Id$ established, $T$ preserves the unit
@@ -220,17 +229,17 @@ normal-form reductions.
     \lean{MPSTensor.fundamentalTheorem_singleBlock}
     \leanok
     \uses{def:injective, def:same_mpv, def:gauge_equiv}
-    Let $A$ be an injective MPV tensor and let $B$ be an MPV tensor
+    Let $A$ be an injective MPS tensor and let $B$ be an MPS tensor
     of the same bond dimension.
     If $A$ and $B$ generate the same MPV family, then they are gauge
-    equivalent: there exists $X \in \GL_D(\C)$ such that
+    equivalent: there exists~$X \in \GL_{D}(\C)$ such that
     $B^i = X A^i X^{-1}$ for all~$i$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity,
-          lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
+        lem:trace_ne_zero, lem:linear_map_to_alg, thm:skolem_noether}
     By Theorem~\ref{thm:linear_ext}, there is a unique linear
     $T$ with $T(A^i) = B^i$.
     By Theorem~\ref{thm:linear_ext_mul}, $T$ is multiplicative.
