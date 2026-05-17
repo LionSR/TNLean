@@ -133,9 +133,9 @@ private lemma exists_diagonal_family_of_normal
   let Hlin : E →ₗ[ℂ] E := Matrix.toEuclideanLin H
   let Klin : E →ₗ[ℂ] E := Matrix.toEuclideanLin K
   have hHlin : Hlin.IsSymmetric := by
-    simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := H)).mp hH)
+    simpa only using ((Matrix.isSymmetric_toEuclideanLin_iff (A := H)).mpr hH)
   have hKlin : Klin.IsSymmetric := by
-    simpa only using ((Matrix.isHermitian_iff_isSymmetric (A := K)).mp hK)
+    simpa only using ((Matrix.isSymmetric_toEuclideanLin_iff (A := K)).mpr hK)
   have hEuclMul := Internal.toEuclideanLin_mul (D := D)
   have hHKlin : Commute Hlin Klin :=
     hEuclMul H K |>.trans (congrArg Matrix.toEuclideanLin hHKmat.eq) |>.trans (hEuclMul K H).symm
@@ -326,4 +326,3 @@ theorem map_conjTranspose_mul_map_le_of_normal_of_subunital
     diagonal_family_schwarz_le (B := B) hB hsub eig
 
 end PositiveOnAbelian
-
