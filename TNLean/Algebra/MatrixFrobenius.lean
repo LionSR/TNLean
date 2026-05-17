@@ -20,8 +20,6 @@ variable {D : ℕ}
 
 /-- Positive-definiteness of the identity matrix, used to define the Frobenius inner product. -/
 theorem frobenius_posDef_one :
-    (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
-  classical
-  simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+    (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
 
 end Matrix

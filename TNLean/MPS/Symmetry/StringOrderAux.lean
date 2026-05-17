@@ -379,15 +379,12 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     funext i
     simpa [B, C, X, Xin] using hX i
   have hXinQ : Xin * Q * Xinᴴ = 1 := by
-    calc
-      Xin * Q * Xinᴴ = (Xin * X) * Xᴴ * Xinᴴ := by
-        simp [Q, Matrix.mul_assoc]
-      _ = Xᴴ * Xinᴴ := by
-        simp [hX_inv_mul]
-      _ = (Xin * X)ᴴ := by
-        simp [Matrix.conjTranspose_mul]
-      _ = 1 := by
-        simp [hX_inv_mul]
+    have hXhXinh : Xᴴ * Xinᴴ = 1 :=
+      calc Xᴴ * Xinᴴ = (Xin * X)ᴴ := (Matrix.conjTranspose_mul Xin X).symm
+        _ = 1 := by rw [hX_inv_mul, Matrix.conjTranspose_one]
+    calc Xin * Q * Xinᴴ
+        = Xin * X * (Xᴴ * Xinᴴ) := by simp [Q, Matrix.mul_assoc]
+      _ = 1 := by rw [hX_inv_mul, Matrix.one_mul, hXhXinh]
   have hQ_eigC : transferMap C Q = Q := by
     calc
       transferMap C Q = X * transferMap A (Xin * Q * Xinᴴ) * Xᴴ := by
@@ -437,8 +434,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
       injective_implies_irreducibleCP A hA
     have hCPA : IsCPMap (transferMap (d := d) (D := D) A) :=
       transferMap_isCPMap A
-    have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := by
-      simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+    have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
     have hone_eig : transferMap A 1 = ((1 : ℝ) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
       simpa using hNorm
     exact
@@ -451,8 +447,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted
     simpa [hζ_sq_eq_one] using hQ_eigA
   have hIrrA : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
     injective_implies_irreducibleCP A hA
-  have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
   rcases posSemidef_fixedPoint_unique_of_irreducible (A := A) hIrrA
       (1 : Matrix (Fin D) (Fin D) ℂ) Q hone_psd one_ne_zero hQ_psd hNorm hQ_fix with
     ⟨c, hQ_scalar⟩

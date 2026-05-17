@@ -110,8 +110,7 @@ theorem transferMap_adjoint_blocked_eq_pow
     transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X =
       ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
   classical
-  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
   letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
   letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=

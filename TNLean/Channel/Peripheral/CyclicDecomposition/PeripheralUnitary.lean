@@ -128,8 +128,7 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
             (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
               rw [LinearMap.map_smul]
       _ = H - (c0 : ℂ) • 1 := by simp only [hfix, hone_fix, Complex.coe_smul]
-  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
   rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
       (1 : MatrixAlg D) (H - (c0 : ℂ) • 1) hone_psd one_ne_zero hshift_psd hone_fix hshift_fix with
     ⟨d, hd⟩
@@ -285,8 +284,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     intro h
     apply hX_ne
     exact Matrix.conjTranspose_mul_self_eq_zero.mp h
-  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
   have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
