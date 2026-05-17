@@ -155,21 +155,8 @@ private lemma sqrtFactor_isUnit' [DecidableEq (Fin D)]
 private lemma diagonal_sub_smul_one' [DecidableEq (Fin D)] (v : Fin D → ℝ) (c : ℝ) :
     Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
       Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
-  ext i j
-  by_cases h : i = j
-  · subst h
-    have hone : ((↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)) i i = ↑c := by
-      change ((↑c : ℂ) • ((1 : Matrix (Fin D) (Fin D) ℂ) i)) i = ↑c
-      rw [Pi.smul_apply, Matrix.one_apply_eq]
-      simp
-    rw [Matrix.sub_apply, Matrix.diagonal_apply_eq, Matrix.diagonal_apply_eq, hone]
-    simp
-  · have hone : ((↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)) i j = 0 := by
-      change ((↑c : ℂ) • ((1 : Matrix (Fin D) (Fin D) ℂ) i)) j = 0
-      rw [Pi.smul_apply, Matrix.one_apply_ne h]
-      simp
-    rw [Matrix.sub_apply, Matrix.diagonal_apply_ne _ h, Matrix.diagonal_apply_ne _ h, hone]
-    simp
+  rw [← Matrix.diagonal_one, ← Matrix.diagonal_smul, Matrix.diagonal_sub]
+  congr 1; ext i; simp [Pi.smul_apply, Complex.ofReal_sub]
 
 private lemma hermitian_sub_scalar_spectral [DecidableEq (Fin D)]
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) (c : ℝ) :

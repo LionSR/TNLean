@@ -70,9 +70,9 @@ theorem exists_posSemidef_fixedPoint
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hD : 0 < D) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧
-      transferMap (d := d) (D := D) A ρ = ρ := by
-  have hCh := MPSTensor.transferMap_isChannel A hNorm
-  exact hCh.exists_posSemidef_fixedPoint (E := transferMap A) hD
+      transferMap (d := d) (D := D) A ρ = ρ :=
+  (MPSTensor.transferMap_isChannel A hNorm).exists_posSemidef_fixedPoint
+    (E := transferMap A) hD
 
 end Existence
 
@@ -112,7 +112,7 @@ private lemma posDef_zero_fin0 : (0 : Matrix (Fin 0) (Fin 0) ℂ).PosDef :=
     (fun x hx => absurd (Subsingleton.elim x 0) hx)
 
 /-- **Injectivity implies unique fixed point** (without the `0 < D` hypothesis).
-Wraps `quantum_perron_frobenius` with a vacuous case for `D = 0`. -/
+Extends `quantum_perron_frobenius` to the case `D = 0`, which holds vacuously. -/
 theorem injective_transfer_unique_fixed_point' [DecidableEq (Fin D)]
     (A : MPSTensor d D) (hA : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :

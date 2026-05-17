@@ -22,7 +22,7 @@ geometric extrapolation and Newton--Girard steps below are the finite-sequence
 algebra needed to recover the weight lists from those power sums once the basis
 blocks have been matched.
 
-The endpoint below uses the unequal-cardinality finite-range power-sum theorem
+The main theorem below uses the unequal-cardinality finite-range power-sum theorem
 directly, as in the Appendix comparison.  Without nonzero weights, positive
 powers would only determine the nonzero submultiset.
 

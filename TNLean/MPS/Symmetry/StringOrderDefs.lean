@@ -187,7 +187,7 @@ private lemma stringOrderParam_one_eq_one
 /-- The virtual-boundary version of the string-order expression:
 `tr(Λ X ℰ_u^L(Y))`.
 
-This generalizes the paper's endpoint operators `x,y` to arbitrary
+This generalizes the paper's boundary operators `x,y` to arbitrary
 virtual boundary matrices `X,Y`.  For injective tensors, every virtual
 boundary matrix can be realized by sufficiently long physical boundary
 insertions, so this single definition captures all boundary choices
@@ -269,8 +269,8 @@ def IsLocalSymmetry (A : MPSTensor d D)
       ∑ j : Fin d, u i j • A j = μ • (V * A i * Vᴴ)
 
 /-- String order exists if some virtual boundary pair produces a uniformly
-non-decaying twisted-transfer overlap. This is the matrix-level version of the
-paper's endpoint-operator criterion. -/
+non-decaying twisted-transfer overlap.  This is the matrix-level version of the
+paper's boundary-operator criterion. -/
 def HasStringOrder (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)
     (Λ : Matrix (Fin D) (Fin D) ℂ) : Prop :=

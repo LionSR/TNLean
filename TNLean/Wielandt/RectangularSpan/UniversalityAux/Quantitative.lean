@@ -269,7 +269,7 @@ The hypothesis `n₀` is the key degree of freedom. Different bounds on `n₀`
 give different final bounds:
 - `n₀ = D² - 2D + 2` (normality witness): gives `D² + D = ⊤` (coarse)
 - `n₀ = D² - 4D + 3` (from induction on D): gives `D² - D + 1 = ⊤` (sharp) -/
-theorem wielandt_parametric_assembly [NeZero D]
+theorem wielandt_parametric_span [NeZero D]
     (A : MPSTensor d D)
     (hNormal : IsNormal (d := d) (D := D) A)
     -- Column eigenvector
@@ -309,7 +309,7 @@ theorem wielandt_length_from_stabilization [NeZero D]
     (hstab : rectSpan ((A i₀) ^ D) A n₀ =
              LinearMap.range (LinearMap.mulLeft ℂ ((A i₀) ^ D))) :
     wordSpan A (3 * D + n₀ - 2) = ⊤ := by
-  have htop := wielandt_parametric_assembly A hNormal i₀ μ hμ φ hφ heigφ
+  have htop := wielandt_parametric_span A hNormal i₀ μ hμ φ hφ heigφ
     i₁ ν hν ψ₀ hψ₀ heigψ hstab
   have hlen : 3 * D + n₀ - 2 = (D - 1) + ((D + n₀) + (D - 1)) := by omega
   rwa [hlen]

@@ -64,8 +64,8 @@ These are **paper-level statements only**. The internal proof route flows throug
 `IsNormal`, `IsPrimitiveMPS`, `HasPrimitiveFixedPoint`, etc. The full equivalence of
 all three Proposition 3 conditions is assembled in `Primitivity/Equivalence.lean`.
 
-At present this layer is not imported by the canonical / FT / BNT assembly in
-`TNLean.MPS.*` or `TNLean.PiAlgebra.*`; it serves the standalone theorem modules below.
+At present this layer is not imported by `TNLean.MPS.*` or `TNLean.PiAlgebra.*`;
+it serves the standalone theorem modules below.
 
 ## References
 

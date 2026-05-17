@@ -92,12 +92,13 @@ sums.
 
 The block-matching conclusion (block-count, bond-dimension, and
 gauge-phase identification of corresponding sectors) and the global
-gauge identification are now formalised on the paper-faithful BNT
-canonical-form surface of Chapter~\ref{ch:bnt}; see
-\texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data} and
-\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge}.  The literal
-\(\mathrm{II\_cor2}\) coordinate packaging
-(CPSV16 lines 1184--1192) is the in-flight follow-up.
+gauge identification are formalised on the BNT canonical form of
+Chapter~\ref{ch:bnt}. The coordinate packaging of
+\cite[\S~II.C, lines 1184--1192]{Cirac2017MPDO_AnnPhys} is the
+in-flight follow-up.
+% Maintainer note (Lean): see the declarations
+% MPSTensor.ft_paper_bnt_equal_sector_data and
+% MPSTensor.ft_paper_bnt_equal_global_gauge.
 
 \begin{theorem}[Bond dimension equality from unit overlap]%
 \label{thm:equalMPS_dimension_from_unit_overlap}
@@ -139,14 +140,16 @@ canonical-form surface of Chapter~\ref{ch:bnt}; see
 \begin{proof}
 	\leanok
 	\uses{lem:ft_canonical}
-	On the paper-faithful BNT surface this is the specialization of
-	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} (in
-	\texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}) to the
-	situation where $P$ and $Q$ share a common $(g, D_k, \mu_k)$ block
-	structure: the basis bijection $\beta$ is trivial, the per-block gauge
-	matrices $X_{\text{block}}\,k$ provide the per-pair gauge equivalences,
-	and the flattened direct-sum gauge $X$ assembles them into the global
-	conjugation on $\bigoplus_k\mu_k A_k$ and $\bigoplus_k\mu_k B_k$.
+	On the BNT canonical form this is the specialization of the global-gauge
+	equality theorem (Chapter~\ref{ch:bnt}) to the case where $P$ and $Q$
+	share a common $(g, D_k, \mu_k)$ block structure: the basis bijection
+	$\beta$ is trivial, the per-block gauge matrices $X_k$ furnish the
+	per-pair gauge equivalences, and the flattened direct-sum gauge $X$
+	assembles them into the global conjugation on $\bigoplus_k \mu_k A_k$
+	and $\bigoplus_k \mu_k B_k$.
+	% Maintainer note (Lean): see
+	% MPSTensor.ft_paper_bnt_equal_global_gauge in
+	% TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
 \end{proof}
 
 \subsection{Sector multiplicities and weight recovery}%
@@ -1140,17 +1143,18 @@ block-matching conclusions for the common primitive sectors.
 	\cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys},
 	restated in \cite[Corollary~IV.5]{Cirac2021Matrix}.
 
-	The paper-faithful Lean formalization of this route is split into two
-	theorems in \texttt{TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean}:
-	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data} packages the BNT
-	basis bijection $\beta$, the per-block gauge-phase witnesses, copy-count
-	equality, and the scalar coefficient comparison
-	$Q.\text{weight}_k\,q=(\zeta_k)^{-1}\,P.\text{weight}_{\beta k}\,(\tau\,q)$
-	matching the source power-sum identity displayed above; and
-	\texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge} assembles the
-	per-block gauge matrices $Y_j=X_{\text{block}}\,k$ on the flattened
-	direct sum to produce the global conjugation~$X$, matching the appendix
+	The formalization of this route is split into two theorems. The first
+	packages the BNT basis bijection $\beta$, the per-block gauge-phase
+	witnesses, copy-count equality, and the scalar coefficient comparison
+	$\nu_{k,q} = \zeta_k^{-1}\,\mu_{\beta(k),\tau(q)}$
+	matching the source power-sum identity displayed above. The second
+	assembles the per-block gauge matrices $Y_j = X_k$ on the flattened
+	direct sum to produce the global conjugation $X$, matching the appendix
 	construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
+	% Maintainer note (Lean): the two theorems are
+	% MPSTensor.ft_paper_bnt_equal_sector_data and
+	% MPSTensor.ft_paper_bnt_equal_global_gauge in
+	% TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
 
 	The comparison theorems above formalize only the part of this route after the
 	common blocked nonzero sectors and their BNT matching data have been supplied.
@@ -1187,7 +1191,7 @@ Chapter~\ref{ch:canonical}.  They are reduction steps of the fundamental-theorem
 proof rather than statements about canonical-form data, so they are collected
 here.
 
-\subsection{Block-sum fundamental-theorem wrappers}%
+\subsection{Block-diagonal corollaries of the single-block theorem}%
 \label{subsec:ft_block_sum_wrappers}
 
 \begin{remark}

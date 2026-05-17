@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.PrimitiveOverlap
 
 /-!
-# Primitivity bridge
+# Spectral-gap primitivity and MPV overlap convergence
 
 This module connects the **spectral-gap definition of primitivity** to the overlap and
 canonical-form hypotheses used elsewhere in the library.
@@ -34,7 +34,7 @@ This file supplies one corner of the codebase's primitivity vocabulary:
   `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` is the transfer-map formulation around
   `_root_.IsPrimitive`.
 * `MPSTensor.IsPrimitivePaper` in
-  `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` is the paper-faithful uniform
+  `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` is the uniform
   spreading definition.
 * `HasPrimitiveFixedPoint` here is the existential spectral-gap formulation used by the MPS
   proof chain.
@@ -92,7 +92,7 @@ with `IsPrimitiveMPS A ρ`.
 Equivalently, this is the existential formulation `∃ ρ, IsPrimitiveMPS A ρ`. It is the
 MPS-specific spectral-gap formulation, distinct from the generic peripheral-spectrum predicate
 `_root_.IsPrimitive`, the transfer-map formulation `MPSTensor.IsPeripherallyPrimitive`, and the
-paper-faithful spreading predicate `MPSTensor.IsPrimitivePaper`. -/
+spreading predicate `MPSTensor.IsPrimitivePaper`. -/
 def HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
   ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ
 

@@ -621,33 +621,34 @@ and~\cite{Cirac2021Matrix}.
     a separate explicit-coefficient equal-case theorem.
 \end{remark}
 
-\section{Paper-faithful BNT canonical form: basic API}
+\section{The BNT canonical form on a sector decomposition}
 \label{sec:paper_bnt_api}
 
-This section records the basic API for the paper-faithful BNT canonical-form
-predicate of
+This section introduces the BNT canonical-form predicate following
 \cite[\S II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
-\cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}. The predicate
-operates on a sector decomposition carrying raw sector weights
-$\mu_{j,q}$ and a coefficient
-$\operatorname{coeff} N\,j = \sum_q \mu_{j,q}^{\,N}$; no equal-modulus
+\cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}. The predicate is
+defined on a sector decomposition with raw sector weights $\mu_{j,q}$ and
+sector coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$; no equal-modulus
 factorization is assumed.
+% Maintainer note (Lean): this is the predicate `IsBNTCanonicalForm` on a
+% `SectorDecomposition`. The blueprint prose uses standard mathematical
+% notation; the `\lean{...}` tag below carries the link.
 
-\begin{definition}[Paper-faithful BNT canonical form]%
+\begin{definition}[BNT canonical form]%
     \label{def:paper_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
     \uses{def:paper_sector_data}
-    Given a sector decomposition $P$, the paper-faithful BNT
-    canonical-form predicate records the minimal CPSV16/CPSV21
-    BNT canonical-form data without any equal-modulus or strict-ordering
-    condition on the raw sector weights. Specifically it asserts:
-    each basis block has positive bond dimension, is injective,
-    irreducible, and left-canonical; the normalized self-overlap of every
-    basis block converges to~$1$; the basis MPV family is eventually
-    linearly independent; distinct same-dimension basis blocks are not
-    gauge-phase equivalent in the cast-compatible shape; and the
-    CPSV16 \S II.A line-246 normalization convention holds, namely
+    Given a sector decomposition $P$, the BNT canonical-form predicate
+    records the minimal BNT data of
+    \cite{Cirac2017MPDO_AnnPhys,Cirac2021Matrix} without any equal-modulus
+    or strict-ordering condition on the raw sector weights. It asserts that
+    each basis block has positive bond dimension, is injective, irreducible,
+    and left-canonical; the normalized self-overlap of every basis block
+    converges to $1$; the basis MPV family is eventually linearly
+    independent; distinct same-dimension basis blocks are not gauge-phase
+    equivalent in the cast-compatible shape; and the
+    \cite[\S II.A, line 246]{Cirac2017MPDO_AnnPhys} normalization holds,
     \[
         \lVert \mu_{j,q} \rVert \le 1 \text{ for every }  (j,q),
         \qquad
@@ -662,9 +663,9 @@ factorization is assumed.
     \]
     matching \cite[\S~II, lines 271--301]{Cirac2017MPDO_AnnPhys}
     and \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
-    The line-246 normalization fields admit every paper-faithful example
+    The line-246 normalization admits every example of the source paper
     (in particular $C \oplus D$, $C \oplus (-C)$,
-    $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and are
+    $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
     not derivable from the per-block normality data alone.
 \end{definition}
 
@@ -676,8 +677,7 @@ factorization is assumed.
     For every sector decomposition $P$, every length $N$, and every basis
     index $j$, the sector coefficient is the raw power sum
     \[
-        P.\operatorname{coeff}\,N\,j =
-        \sum_{q=1}^{r_j} (P.\operatorname{weight}\,j\,q)^N.
+        c_N^{(j)} = \sum_{q=1}^{r_j} \mu_{j,q}^N.
     \]
     This is \cite[eq.~II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
     \cite[Definition~4.3, lines 1846--1884]{Cirac2021Matrix}.
@@ -697,7 +697,7 @@ factorization is assumed.
     $\lVert\mu_{j,q}\rVert \le 1$, and the triangle inequality bounds
     the norm of the sector coefficient by the multiplicity:
     \[
-        \lVert P.\operatorname{coeff}\,N\,j \rVert \le  r_j.
+        \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j.
     \]
 \end{lemma}
 
@@ -712,10 +712,10 @@ factorization is assumed.
     \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
     \leanok
     \uses{def:mpv_overlap, def:paper_bnt_cf}
-    If $P$ carries a paper-faithful BNT canonical form and $j \neq k$,
-    then $O_{P_j P_k}(N) \to 0$ as $N \to \infty$, where $P_j$ and
-    $P_k$ are the basis blocks at indices $j$ and $k$. The dispatch
-    follows the normal-tensor overlap dichotomy of
+    If $P$ is a BNT canonical form and $j \neq k$, then
+    $O_{P_j P_k}(N) \to 0$ as $N \to \infty$, where $P_j$ and $P_k$ are the
+    basis blocks at indices $j$ and $k$. The argument follows the
+    normal-tensor overlap dichotomy of
     \cite[lines 1080--1091]{Cirac2017MPDO_AnnPhys}: differing bond dimensions
     force decay, and matching bond dimensions are ruled out by the
     gauge-phase distinctness clause of
@@ -723,11 +723,11 @@ factorization is assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    Case on whether the bond dimensions match. If the dimensions differ,
-    apply the dimension-mismatch overlap-decay theorem.
-    If they agree, the basis-distinctness clause of the paper-faithful BNT
-    canonical form rules out gauge-phase equivalence in the
-    cast-compatible shape, so the equal-dimension overlap-decay theorem
+    Case on whether the bond dimensions match. If they differ, apply the
+    dimension-mismatch overlap-decay theorem. If they agree, the
+    basis-distinctness clause of the BNT canonical form rules out
+    gauge-phase equivalence in the cast-compatible shape, so the
+    equal-dimension overlap-decay theorem
     applies.
 \end{proof}
 
@@ -737,18 +737,16 @@ factorization is assumed.
     \leanok
     \uses{lem:bnt_two_family_overlap_orthonormal_li,
         lem:paper_bnt_cross_overlap_basis_tendsto_zero}
-    Let $P$ and $Q$ each carry a paper-faithful BNT canonical form, and
-    suppose every mixed overlap $O_{P_j Q_k}(N)$ tends to~$0$. Then the
-    union family
+    Let $P$ and $Q$ each be a BNT canonical form, and suppose every mixed
+    overlap $O_{P_j Q_k}(N)$ tends to $0$. Then the union family
     \[
         \bigl\{\ket{V^{(N)}(P_j)}\bigr\}_{j=1}^{g_P}
         \cup
         \bigl\{\ket{V^{(N)}(Q_k)}\bigr\}_{k=1}^{g_Q}
     \]
-    is linearly independent for all sufficiently large~$N$. This is the
-    paper-faithful instantiation of the corollary~\texttt{Lem1} of
-    \cite[lines 1121--1132]{Cirac2017MPDO_AnnPhys} and matches the BNT
-    linear-independence input recorded at
+    is linearly independent for all sufficiently large $N$. This is the
+    corollary at \cite[lines 1121--1132]{Cirac2017MPDO_AnnPhys}, matching
+    the BNT linear-independence input recorded at
     \cite[line 1850]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -765,13 +763,14 @@ factorization is assumed.
     \lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
     \leanok
     \uses{def:paper_bnt_cf, lem:paper_bnt_norm_coeff_le_copies}
-    Under the strengthened paper-faithful canonical form, the structural
-    field encoding CPSV16 \S II.A line~246 yields directly
+    Under the BNT canonical form, the
+    \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} normalization yields
+    directly
     \[
-        \lVert P.\operatorname{coeff}\,N\,j \rVert \le  r_j
+        \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j
     \]
-    for every $N$ and basis index~$j$, without an additional
-    explicit modulus-bound hypothesis at the call site.
+    for every $N$ and basis index $j$, without an additional explicit
+    modulus-bound hypothesis at the call site.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -784,10 +783,10 @@ factorization is assumed.
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
     \uses{def:paper_bnt_cf}
-    Re-exposes the unit-modulus existential field
-    (CPSV16 \S II.A line~246) at the API layer: under the strengthened
-    paper-faithful canonical form, there exist indices~$(j_*, q_*)$ with
-    $\lVert P.\operatorname{weight}\,j_*\,q_* \rVert = 1$.
+    Under the BNT canonical form, the
+    \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} unit-modulus existential
+    provides indices $(j_*, q_*)$ with
+    $\lVert \mu_{j_*, q_*} \rVert = 1$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -801,13 +800,13 @@ factorization is assumed.
     \leanok
     \uses{def:paper_bnt_cf}
     The single-sector two-copy decomposition with raw weights
-    $(1, 1/2)$ demonstrates that the strengthened paper-faithful BNT
-    canonical form admits unequal-modulus copies: the modulus-bound field
-    holds because $\lVert 1 \rVert \le 1$ and
-    $\lVert 1/2 \rVert = 1/2 \le 1$, and the unit-modulus existential is
-    witnessed by the first copy with weight~$1$. This is the CPSV16
-    \S II.A line~246 convention in positive form, reifying the
-    $C \oplus (1/2)C$ example.
+    $(1, 1/2)$ demonstrates that the BNT canonical form admits
+    unequal-modulus copies: the modulus bound holds because
+    $\lVert 1 \rVert \le 1$ and $\lVert 1/2 \rVert = 1/2 \le 1$, and the
+    unit-modulus existential is witnessed by the first copy with
+    weight $1$. This is the
+    \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} normalization in
+    positive form, applied to the $C \oplus (1/2)C$ example.
 \end{example}
 
 \section{Ces\`aro non-decay and unit-block coefficient}
@@ -857,36 +856,33 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
     \leanok
     \uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
-    Let $P$ be a sector decomposition carrying a paper-faithful BNT
-    canonical form and let $j_0$ be any sector index such that some copy
-    of sector $j_0$ carries a unit-modulus weight, i.e.\ there exists
-    $q$ with $\lVert P.\operatorname{weight}\,j_0\,q\rVert = 1$.
-    Then the sector-$j_0$ coefficient
-    $c_{j_0}(N) = \sum_q (P.\operatorname{weight}\,j_0\,q)^N$ does not
+    Let $P$ be a BNT canonical form and let $j_0$ be a sector index such
+    that some copy of sector $j_0$ carries a unit-modulus weight, that is,
+    there exists $q$ with $\lVert \mu_{j_0, q}\rVert = 1$. Then the
+    sector-$j_0$ coefficient $c_N^{(j_0)} = \sum_q \mu_{j_0, q}^N$ does not
     tend to $0$ as $N \to \infty$.
 
-    This is the paper-parametrised reading of the CPSV16 \S~II.A line~246
-    + line~1244 normalization. The unit-modulus witness is supplied
-    externally (as the hypothesis above) because CPSV16 line~246 is a
-    \emph{global} statement (``at least one of them equals one'' over the
-    two-layer index $(j, q)$) and does not pin the witness to a specific
-    sector.
+    This reads the \cite[\S~II.A, lines 246 and 1244]{Cirac2017MPDO_AnnPhys}
+    normalization sector by sector. The unit-modulus witness is supplied
+    externally (as the hypothesis above) because the source statement is
+    global (``at least one of them equals one'' over the two-layer index
+    $(j, q)$) and does not pin the witness to a specific sector.
 \end{lemma}
 
 \begin{proof}\leanok
     Apply Lemma~\ref{lem:paper_bnt_cesaro_nondecay} to the family
-    $\mu := P.\operatorname{weight}\,j_0$, feeding in the modulus-bound
-    field (giving $\lVert\mu_q\rVert \le 1$ for every $q$) and the
-    supplied per-sector unit-modulus existential hypothesis.
+    $q \mapsto \mu_{j_0, q}$, using the modulus bound
+    $\lVert \mu_{j_0, q}\rVert \le 1$ from the canonical-form normalization
+    together with the per-sector unit-modulus hypothesis.
 \end{proof}
 
 \begin{remark}
-    Consuming this lemma inside the matching theorem of
-    \cite[\S~II, lines~1181--1188]{Cirac2017MPDO_AnnPhys} supplies the
-    non-decay step on $P.\operatorname{coeff} \cdot\,j_0$. The matching
-    theorem now takes the unit-block sector and witness as explicit
-    parameters, faithfully mirroring the global character of CPSV16
-    line~246.
+    Used inside the matching theorem of
+    \cite[\S~II, lines 1181--1188]{Cirac2017MPDO_AnnPhys} this lemma
+    supplies the non-decay step on $c_N^{(j_0)}$. The matching theorem takes
+    the unit-modulus sector and witness as explicit parameters, mirroring
+    the global character of the source normalization at
+    \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
 \subsection{Matched-sector weight multiset equality}
@@ -894,19 +890,18 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 Given a matched basis-sector pair $(j_0, \tilde k_0)$ and a nonzero
 scalar $\zeta \in \mathbb{C}\setminus\{0\}$ such that the matched
 coefficient identity
-$P.\operatorname{coeff}\,N\,j_0 = \zeta^N \cdot Q.\operatorname{coeff}\,N\,\tilde k_0$
+$c_N^{(j_0)}(P) = \zeta^N \cdot c_N^{(\tilde k_0)}(Q)$
 holds for every $N$ past some threshold $N_0$, this subsection
 records the two algebraic conclusions: the \emph{matched-sector weight
     multiset equality} derived from the coefficient identity by power-sum
 recovery (Theorem~\ref{thm:power_sum_multiset}), and the
 \emph{matched-sector weight-permutation extractor} upgrading the multiset
 equality to an explicit per-copy indexing. Together they realise the
-$\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ recovery
-of~\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}. The
-coefficient identity itself is the Step~1 linear-independence projection
-of \cite[\S~II, \texttt{II\_cor2}, lines 1170--1192]{Cirac2017MPDO_AnnPhys}
-and is supplied by the global-gauge / full-basis route of
-Phase~B-$\gamma$ below.
+$\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ recovery of
+\cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}. The coefficient
+identity itself is the linear-independence projection step of
+\cite[\S~II, lines 1170--1192]{Cirac2017MPDO_AnnPhys} and is supplied by
+the substitution argument of \S\ref{subsec:paper_bnt_substitution} below.
 
 \begin{lemma}[Matched-sector weight multiset equality]%
     \label{lem:paper_bnt_matched_sector_weight_multiset_eq}
@@ -914,40 +909,33 @@ Phase~B-$\gamma$ below.
     \leanok
     \uses{def:paper_sector_data,
         thm:power_sum_multiset}
-    Let $P, Q$ be sector decompositions, and fix indices $j_0$, $\tilde k_0$,
-    and a nonzero scalar $\zeta \in \mathbb{C}\setminus\{0\}$. Suppose
+    Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
+    $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
+    $\zeta \in \mathbb{C}\setminus\{0\}$. Suppose that for every $N > N_0$,
     \[
-        P.\operatorname{coeff}\,N\,j_0
-        =
-        \zeta^N \cdot Q.\operatorname{coeff}\,N\,\tilde k_0
-        \qquad \text{for every } N > N_0.
+        c_N^{(j_0)}(P) = \zeta^N \cdot c_N^{(\tilde k_0)}(Q).
     \]
-    Then the per-sector multiplicities match,
-    $P.\operatorname{copies}\,j_0 = Q.\operatorname{copies} \tilde k_0$, and the
-    rescaled per-copy weight multisets coincide.
+    Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
+    and the rescaled per-copy weight multisets coincide.
     This is \cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}
     ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ and matching
-    $r_{a,j} = r_{b,j}$) read on a single matched sector.
+    multiplicities $r_{a,j} = r_{b,j}$) read on a single matched sector.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:bounded_power_sum_multiset}
     Unfold both sides of the coefficient identity to per-copy power sums
-    $\sum_{q} (P.\operatorname{weight}\,j_0\,q)^N$ and
-    $\sum_{q'} (Q.\operatorname{weight} \tilde k_0\,q')^N$ and distribute
-    $\zeta^N$ through the $Q$-side sum to obtain the rescaled identity
+    $\sum_q \mu_{j_0, q}^N$ and $\sum_{q'} \nu_{\tilde k_0, q'}^N$, and
+    distribute $\zeta^N$ through the right-hand sum to obtain, for every
+    $N > N_0$,
     \[
-        \sum_{q} (P.\operatorname{weight}\,j_0\,q)^N
-        =
-        \sum_{q'} (\zeta \cdot Q.\operatorname{weight} \tilde k_0\,q')^N
-        \qquad \text{for every } N > N_0.
+        \sum_q \mu_{j_0, q}^N = \sum_{q'} (\zeta \cdot \nu_{\tilde k_0, q'})^N.
     \]
-    Extend to all positive exponents and apply the
-    unequal-cardinality multiset-recovery lemma
-    (Theorem~\ref{thm:bounded_power_sum_multiset}); nonzero weights are
-    required, supplied by $\zeta \neq 0$ together with the weight
-    non-vanishing field. This delivers both
-    the multiplicity match and the multiset equality.
+    Extend to all positive exponents and apply the unequal-cardinality
+    multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset}),
+    using $\zeta \neq 0$ together with the weight non-vanishing assumption
+    to ensure the input weights are nonzero. This yields the multiplicity
+    match and the multiset equality.
 \end{proof}
 
 \begin{lemma}[Matched-sector weight-permutation extractor]%
@@ -956,15 +944,12 @@ Phase~B-$\gamma$ below.
     \leanok
     \uses{lem:paper_bnt_matched_sector_weight_multiset_eq}
     Under the hypotheses of
-    Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq}, there
-    exist a per-sector multiplicity match and an explicit permutation
-    between the per-copy index sets identifying the individual per-copy
-    weights up to the gauge phase:
+    Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq}, the
+    per-sector multiplicities agree and there is a permutation $\tau$ of
+    the per-copy index set identifying the individual weights up to the
+    gauge phase: for every $q$,
     \[
-        Q.\operatorname{weight} \tilde k_0\,(\tau\,q)
-        =
-        \zeta^{-1} \cdot P.\operatorname{weight}\,j_0\,q
-        \qquad \text{for every } q.
+        \nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}.
     \]
     This is the per-copy realisation of
     \cite[\S~II, line 1188]{Cirac2017MPDO_AnnPhys}
@@ -984,31 +969,29 @@ Phase~B-$\gamma$ below.
     pointwise identity to $\zeta^{-1}$ on the left.
 \end{proof}
 
-\section{Phase B-$\alpha$: paper-faithful strong existential matching}
+\section{Strong existential matching of unit-modulus sectors}
+\label{sec:paper_bnt_strong_match}
 
-This section records the paper-faithful Phase~B-$\alpha$ lifting of
-the weak existential $\exists j,\exists k$ to the strong existential
-$\forall k,\exists j$ matching theorem on the original
-(un-dropped) pair of BNT canonical forms. No recursion, no partial
-sector dropping, no combined-LI obligation on a partial union: the
-result is a single $\forall k,\exists j$ existential statement on the
-original $(P, Q)$, iterated externally over each $Q$-side
-unit-block sector.
+This section lifts the weak existential matching $\exists j,\exists k$ to
+the strong existential $\forall k,\exists j$ on the original pair of BNT
+canonical forms, without recursion, partial sector dropping, or any
+combined-linear-independence obligation on a partial union. The result is
+a single $\forall k,\exists j$ statement on the original $(P, Q)$,
+iterated externally over each $Q$-side unit-modulus sector.
 
-The unit-block restriction on $k$ is paper-faithful:
-\cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} records the modulus-one
-hypothesis as a single \emph{global} existential over the two-layer
-$(j, q)$ index of the BNT display, not a per-block one. Sectors
-whose weights all have modulus strictly less than one have
-coefficients $Q.\operatorname{coeff}\,N\,k = \sum_q (Q.\operatorname{weight}\,k\,q)^N$
-that decay exponentially to zero, contribute nothing to the
-thermodynamic state, and are not constrained by the matching
-(\cite[\S~II.C, lines~1244--1248]{Cirac2017MPDO_AnnPhys} returns to
-this point via the $\mathbb{E}^N$-fixed-point characterisation).
-The downstream Phase~B-$\beta$ bijective-matching layer will apply
-this theorem twice (with $(P, Q)$ swapped) to derive the cardinality
-identity and the per-pair bijection / gauge data on the full basis
-(every sector is a unit block under the Phase~D per-block
+The unit-modulus restriction on $k$ matches the source convention:
+\cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} records the
+modulus-one hypothesis as a single \emph{global} existential over the
+two-layer $(j, q)$ index of the BNT display, not a per-block one. Sectors
+whose weights all have modulus strictly less than one have coefficients
+$c_N^{(k)}(Q) = \sum_q \nu_{k,q}^N$ that decay exponentially to zero,
+contribute nothing to the thermodynamic state, and are not constrained by
+the matching (\cite[\S~II.C, lines 1244--1248]{Cirac2017MPDO_AnnPhys}
+returns to this point through the transfer-power fixed-point
+characterisation). The bijective-matching theorem below applies the
+strong existential theorem twice (with $(P, Q)$ swapped) to derive the
+cardinality identity and the per-pair bijection / gauge data on the full
+basis (every sector is a unit-modulus block under the per-block
 normalization).
 
 \begin{theorem}[Strong existential matching, full-basis form]
@@ -1018,78 +1001,75 @@ normalization).
     \uses{def:paper_bnt_cf,
         lem:paper_bnt_combined_family_eventually_li,
         lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
-    Let $P, Q$ be two paper-faithful BNT canonical forms with the
-    same MPV family. For every sector $k$ there exists a sector $j$
-    with matched bond dimension $h : P.\operatorname{basisDim}\,j = Q.\operatorname{basisDim}\,k$,
-    a gauge-phase equivalence between the cast basis tensors, and a
-    non-decaying cross-overlap.
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. For
+    every sector $k$ there exist a sector $j$ with matched bond dimension
+    $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence between the cast
+    basis tensors, and a non-decaying cross-overlap.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:paper_bnt_combined_family_eventually_li,
         lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
-    The CPSV16 \S II.C lines 1182--1186 Step 1 contrapositive of
-    \cite[Lemma~\texttt{Lem1}, lines 1131--1133]{Cirac2017MPDO_AnnPhys},
-    combined-LI on the \emph{full} family
-    $\{A^{[j]}\}_j \cup \{B^{[k]}\}_k$, is iterated externally over
-    each sector $k$. Each iteration is discharged by
-    the full-basis matching theorem
-    (\texttt{MPSTensor.exists\_block\_match\_of\_sameMPV}) with the
-    roles of $P$ and $Q$ swapped: feed the canonical-form data in
-    the reversed order, supply the basis non-emptiness witness from the
-    retained global unit witness, and supply the proportional-MPV
-    hypothesis via the pointwise-symmetric flip.
-    Re-orient the resulting conclusion via symmetry of gauge-phase
-    equivalence across a bond-dim cast and symmetry of overlap
-    convergence to zero.
+    The contrapositive of
+    \cite[\S~II.C, lines 1182--1186]{Cirac2017MPDO_AnnPhys}, combined with
+    linear independence on the full family
+    $\{P_j\}_j \cup \{Q_k\}_k$, is iterated externally over each sector
+    $k$. Each iteration is discharged by the full-basis weak existential
+    matching theorem with the roles of $P$ and $Q$ swapped: supply the
+    canonical-form data in reversed order, the basis non-emptiness witness
+    from the retained global unit-modulus witness, and the
+    proportional-MPV hypothesis through its pointwise-symmetric flip. The
+    resulting conclusion is re-oriented by symmetry of gauge-phase
+    equivalence across a bond-dimension cast and symmetry of overlap
+    convergence.
 \end{proof}
 
-\begin{remark}[No partial-union LI]
+\begin{remark}[Linear independence on the full family]
     \label{rem:paper_bnt_strong_match_no_partial_li}
     Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     consumes \emph{only} the weak existential matching theorem, which
-    itself routes through the combined-LI step
+    itself routes through the linear-independence step
     (Lemma~\ref{lem:paper_bnt_combined_family_eventually_li}) on the
-    \emph{full} $P.\operatorname{basis} \sqcup Q.\operatorname{basis}$ family (the
-    \texttt{Lem1} input of CPSV16 lines 1131--1133), not on any
-    partial union. This is the paper-faithful realization and closes
-    the open obligation at the strong-matching layer.
+    \emph{full} family $\{P_j\}_j \sqcup \{Q_k\}_k$, the corollary
+    input of \cite[\S~II.C, lines 1131--1133]{Cirac2017MPDO_AnnPhys}, not
+    on any partial union.
 \end{remark}
 
-\subsection{Phase B-$\beta$: bijective matching by symmetry}
+\subsection{Bijective matching by symmetry}
 \label{subsec:paper_bnt_strong_match_bijective_symmetry}
 
-\emph{CPSV16 \S II.C lines 1184--1186, the symmetry argument
-    $g_a \ge g_b \wedge g_b \ge g_a \Rightarrow g_a = g_b$.}
+This subsection derives the symmetry argument of
+\cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}:
+$g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
 
-Phase B-$\alpha$
+The strong existential matching theorem
 (Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
-gives one direction of the matching on the unit-block subset.
+gives one direction of the matching on the unit-modulus subset.
 Applying the same theorem once more with the roles of $P$ and $Q$
-swapped (and the trivially-symmetric flip of the proportional-MPV
+swapped (and the trivially symmetric flip of the proportional-MPV
 hypothesis) gives the other direction. The two matchings, combined
 with the basis-distinctness clause of the canonical-form predicate
-(CPSV16 lines 264--279), force \emph{injectivity in both directions}.
+\cite[\S~II, lines 264--279]{Cirac2017MPDO_AnnPhys}, force injectivity
+in both directions.
 
-\paragraph{Honest scoping.}
-The literal paper conclusion ``$g_a = g_b$ and a relabelling
+\paragraph{Scope.}
+The literal source conclusion ``$g_a = g_b$ and a relabelling
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
-(\cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}) would read as a
+(\cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}) reads as a
 bijection between the unit-modulus subsets of the two BNT canonical
-forms. Phase B-$\beta$ delivers the \emph{symmetric injective
-    matching} (the literal CPSV16 line~1186 ``$g_a \ge g_b \wedge g_b \ge g_a$''
-step) on the cleanest paper-faithful surface: two
-injective embeddings, one in each direction, codomains in the full
-basis of $P$ and $Q$ respectively. Upgrading the codomains to the
-unit-modulus subsets (and packaging as a bijection) requires the
+forms. The theorem below delivers the symmetric injective matching
+(the source's $g_a \ge g_b \wedge g_b \ge g_a$ step) on the cleanest
+surface: two injective embeddings, one in each direction, with codomains
+in the full basis of $P$ and $Q$ respectively. Upgrading the codomains to
+the unit-modulus subsets (and packaging as a bijection) requires the
 additional per-sector weight-equivariance argument of
-\cite[Lemma~\texttt{equalMPS}, lines 1148--1167]{Cirac2017MPDO_AnnPhys}
-combined with the gauge-phase identity on the weighted sectors
-$\sum_q (\mu_{j,q})^N |V^N(P.\operatorname{basis}\,j)\rangle$; the
-non-decay output of Phase B-$\alpha$ is on the \emph{basis} MPV
-states, not on the weighted sectors, and so does not by itself force
-the matched $j$ to carry a unit-modulus weight. This upgrade is
-isolated as a follow-up phase.
+\cite[\S~II.C, lines 1148--1167]{Cirac2017MPDO_AnnPhys} combined with the
+gauge-phase identity on the weighted sectors
+$\sum_q \mu_{j,q}^N \ket{V^{(N)}(P_j)}$; the non-decay output of the
+strong existential theorem is on the basis MPV states, not on the
+weighted sectors, and so does not by itself force the matched $j$ to
+carry a unit-modulus weight. That upgrade is left to the substitution
+argument of \S\ref{subsec:paper_bnt_substitution}.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:paper_bnt_bijective_match_of_sameMPV}
@@ -1097,22 +1077,21 @@ isolated as a follow-up phase.
     \leanok
     \uses{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
         def:paper_bnt_cf}
-    Let $P, Q$ be two paper-faithful BNT canonical forms with the
-    same MPV family. Write
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. Write
     \[
-        \texttt{UnitP} := \{ j \mid \exists q,\, |P.\operatorname{weight}\,j\,q| = 1 \}
+        J_1(P) := \{ j \in J(P) : \exists q,\ |\mu_{j,q}| = 1 \}
     \]
-    and $\texttt{UnitQ}$ symmetrically on $Q$. Then there exist
-    injective embeddings
+    and let $J_1'(Q)$ denote the analogous unit-modulus subset of
+    $Q$-sectors. Then there exist injective embeddings
     \[
-        \varphi : \texttt{UnitQ} \hookrightarrow P.\operatorname{basisIndex},
+        \varphi : J_1'(Q) \hookrightarrow J(P),
         \qquad
-        \psi : \texttt{UnitP} \hookrightarrow Q.\operatorname{basisIndex},
+        \psi : J_1(P) \hookrightarrow J(Q),
     \]
-    such that for every $k \in \texttt{UnitQ}$ the bond dimensions
-    match, the basis tensors are gauge-phase equivalent (cast-left
-    shape), and the basis cross-overlap does not tend to zero; and
-    symmetrically for every $j \in \texttt{UnitP}$ via $\psi$.
+    such that for every $k \in J_1'(Q)$ the bond dimensions match, the
+    basis tensors $P_{\varphi(k)}$ and $Q_k$ are gauge-phase equivalent in
+    the cast-left shape, and the basis cross-overlap does not tend to
+    zero; and symmetrically for every $j \in J_1(P)$ through $\psi$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1123,73 +1102,70 @@ isolated as a follow-up phase.
     $(Q, P)$ and the symmetric flipped hypothesis to obtain the
     symmetric raw function.
 
-    \emph{Forward injectivity.}  Suppose $\varphi_0(k_1) = \varphi_0(k_2) = j$.
-    The two matching witnesses give a common centre
-    $P.\operatorname{basis}\,j$ with two gauge-phase equivalences (after
-    cast) to $Q.\operatorname{basis}\,k_1$ and $Q.\operatorname{basis}\,k_2$.
-    Composing through this centre (cast-aware transitivity of
-    gauge-phase equivalence) gives a gauge-phase equivalence between
-    $Q.\operatorname{basis}\,k_1$ and $Q.\operatorname{basis}\,k_2$ for the
-    dimension equality
-    $h_Q : Q.\operatorname{basisDim}\,k_1 = Q.\operatorname{basisDim}\,k_2$.
-    The basis-distinctness clause of the canonical-form predicate on $Q$
-    (CPSV16 lines 264--279) then forces $k_1 = k_2$. The backward
-    injectivity is symmetric.
+    \emph{Forward injectivity.} Suppose $\varphi_0(k_1) = \varphi_0(k_2) = j$.
+    The two matching witnesses give a common centre $P_j$ with two
+    gauge-phase equivalences (after a bond-dimension cast) to $Q_{k_1}$ and
+    $Q_{k_2}$. Composing through this centre (cast-aware transitivity of
+    gauge-phase equivalence) yields a gauge-phase equivalence between
+    $Q_{k_1}$ and $Q_{k_2}$ under the dimension equality
+    $\dim_Q(k_1) = \dim_Q(k_2)$. The basis-distinctness clause of the
+    canonical-form predicate on $Q$
+    (\cite[\S~II, lines 264--279]{Cirac2017MPDO_AnnPhys}) then forces
+    $k_1 = k_2$. Backward injectivity is symmetric.
 
-    \emph{Wrapping as injective embeddings.}  The injective
-    functions, paired with the injectivity proofs, are exactly the
-    embedding pair stated in the theorem. The matching data are
-    extracted by re-applying the classical-choice spec at each subtype
-    index.
+    \emph{Injective embeddings.} The injective functions, paired with the
+    injectivity proofs, are exactly the embedding pair stated in the
+    theorem. The matching data are extracted by re-applying the
+    classical-choice specification at each subtype index.
 \end{proof}
 
-\subsection{Phase B-$\gamma$: CPSV16 \S{}II.C lines 1187--1188 Corollary substitution}
+\subsection{Substitution argument for the unit-modulus subset}
+\label{subsec:paper_bnt_substitution}
 
-Given the matched gauges from Phase B-$\alpha$
-encoded as the injection from Phase B-$\beta$, the \emph{per-block
-    coefficient identity} of CPSV16 \S~II.C lines 1187--1188
-(arXiv:1606.00608, the Corollary \texttt{II\_cor2}'s substitution argument)
-follows by substituting the per-pair gauge identity
-$\operatorname{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \operatorname{mpv}(A_{\varphi(k)})(\sigma)$
-into the original proportional-MPV hypothesis and projecting the
-resulting overlap onto each basis tensor $A_{j_0}$.
+Given the matched gauges produced by the strong existential theorem
+(Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+encoded as the injection from
+\S\ref{subsec:paper_bnt_strong_match_bijective_symmetry}, the per-block
+coefficient identity of
+\cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys} follows by
+substituting the per-pair gauge identity
+$V^{(N)}(Q_k)_\sigma = \zeta_k^N \cdot V^{(N)}(P_{\varphi(k)})_\sigma$
+into the proportional-MPV hypothesis and projecting the resulting overlap
+onto each basis tensor $P_{j_0}$.
 
-\paragraph{Honest scoping.}
-The user-requested literal form of the matched-pair clause is
-\emph{eventual exact} equality
-$P.\operatorname{coeff}\,N\,(\varphi\,k) = \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}$
-for all sufficiently large $N$. Deriving eventual exact equality
-from the partial-bijection data ($\texttt{UnitQ}$ only, with non-unit
-$Q$-blocks unconstrained) requires combined LI on a partial union,
-the precise partial-union LI not naturally derivable from the
-paper-faithful BNT canonical form alone. We deliver the
-\emph{asymptotic-difference} form
-$\operatorname{Tendsto}\,(P.\operatorname{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}) \operatorname{atTop}\,(\mathcal{N}\,0)$,
-which is the natural output of the overlap-projection argument; the
-upgrade to the eventual-exact form is provided downstream by the
-multiset-rigidity lemma of Theorem~\ref{thm:power_sum_multiset}, the
-Newton--Girard input behind CPSV16 lines 1187--1188. The
-non-matched-decay clause is delivered in full.
+\paragraph{Scope.}
+The literal form of the matched-pair clause is the eventual exact
+equality $c_N^{(\varphi(k))}(P) = \zeta_k^N \cdot c_N^{(k)}(Q)$ for all
+sufficiently large $N$. Deriving the eventual exact equality from the
+partial-bijection data (with non-unit $Q$-sectors unconstrained) requires
+linear independence on the partial union of bases, which is not naturally
+available from the canonical-form predicate alone. The theorem below
+delivers the asymptotic-difference form
+$c_N^{(\varphi(k))}(P) - \zeta_k^N \cdot c_N^{(k)}(Q) \to 0$ as
+$N \to \infty$, which is the natural output of the overlap-projection
+argument; the upgrade to the eventual-exact form is provided downstream
+by the multiset-rigidity Theorem~\ref{thm:power_sum_multiset}, the
+Newton--Girard input behind \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys}.
+The non-matched decay clause is delivered in full.
 
-\begin{lemma}[Ces\`aro converse: coefficient decay for subnormal sectors]
+\begin{lemma}[Coefficient decay for subnormal sectors]
     \label{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_tendsto_zero_of_all_weights_subnorm}
     \leanok
     \uses{def:paper_bnt_cf}
-    Let $P$ be a paper-faithful BNT canonical form, and let $j$ be
-    a sector for which every copy weight is strictly subnormal,
-    $\lVert P.\operatorname{weight}\,j\,q \rVert < 1$ for every $q$.
-    Then $\lim_{N \to \infty} P.\operatorname{coeff}\,N\,j = 0$.
+    Let $P$ be a BNT canonical form and let $j$ be a sector for which
+    every copy weight is strictly subnormal, that is,
+    $\lVert \mu_{j, q}\rVert < 1$ for every $q$. Then
+    $\lim_{N \to \infty} c_N^{(j)} = 0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    The coefficient $P.\operatorname{coeff}\,N\,j = \sum_q (P.\operatorname{weight}\,j\,q)^N$
-    is a finite sum. Each summand $(P.\operatorname{weight}\,j\,q)^N$ tends
-    to $0$ as $N \to \infty$ by the closed-unit-disk strict subnorm
-    hypothesis. A finite sum of null sequences is null.
+    The coefficient $c_N^{(j)} = \sum_q \mu_{j,q}^N$ is a finite sum. Each
+    summand $\mu_{j,q}^N$ tends to $0$ as $N \to \infty$ by the strict
+    subnormality hypothesis. A finite sum of null sequences is null.
 \end{proof}
 
-\begin{theorem}[CPSV16 \S{}II.C lines 1187--1188 Corollary substitution]
+\begin{theorem}[Substitution argument for the unit-modulus subset]
     \label{thm:paper_bnt_coeff_identity_via_global_gauge}
     \lean{MPSTensor.coeff_identity_via_global_gauge}
     \leanok
@@ -1198,27 +1174,28 @@ non-matched-decay clause is delivered in full.
         thm:paper_bnt_bijective_match_of_sameMPV,
         lem:paper_bnt_combined_family_eventually_li,
         thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
-    Let $P, Q$ be two paper-faithful BNT canonical forms generating
-    proportional MPVs. Let
+    Let $P, Q$ be two BNT canonical forms generating proportional MPVs. Let
     \[
-        \texttt{UnitQ} := \{ k \mid \exists\,q,\ \lVert Q.\operatorname{weight}\,k\,q \rVert = 1 \}
+        J_1'(Q) := \{ k \in J(Q) \mid \exists q,\ \lVert \nu_{k, q}\rVert = 1 \}
     \]
-    be the unit-modulus subset of $Q$-sectors (CPSV16 \S~II.A line~246
-    normalization), and let $\varphi : \texttt{UnitQ} \hookrightarrow P.\operatorname{basisIndex}$
-    be an injection equipped with per-pair matched-gauge data
-    for every $k \in \texttt{UnitQ}$. Then:
+    be the unit-modulus subset of $Q$-sectors
+    (\cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} normalization), and
+    let $\varphi : J_1'(Q) \hookrightarrow J(P)$ be an injection equipped
+    with per-pair matched-gauge data for every $k \in J_1'(Q)$. Then:
     \begin{enumerate}
-        \item \emph{Matched-pair asymptotic identity}: for every
-              $k \in \texttt{UnitQ}$ there exists a phase $\zeta_k \in \mathbb{C}$
-              with $\lVert\zeta_k\rVert = 1$ such that the asymptotic difference
-              of coefficient sequences vanishes,
+        \item \emph{Matched-pair asymptotic identity.} For every
+              $k \in J_1'(Q)$ there exists a phase $\zeta_k \in \mathbb{C}$
+              with $\lVert \zeta_k \rVert = 1$ such that the asymptotic
+              difference of coefficient sequences vanishes,
               \[
-                  \lim_{N \to \infty}\ P.\operatorname{coeff}\,N\,(\varphi\,k) - \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val}\ =\ 0.
+                  \lim_{N \to \infty}\
+                  \bigl( c_N^{(\varphi(k))}(P) - \zeta_k^N \cdot c_N^{(k)}(Q) \bigr)
+                  = 0.
               \]
-        \item \emph{Non-matched-decay}: for every $j_0 \in P.\operatorname{basisIndex}$
-              outside the range of $\varphi$,
+        \item \emph{Non-matched decay.} For every $j_0 \in J(P)$ outside
+              the range of $\varphi$,
               \[
-                  \lim_{N \to \infty}\ P.\operatorname{coeff}\,N\,j_0\ =\ 0.
+                  \lim_{N \to \infty}\ c_N^{(j_0)}(P) = 0.
               \]
     \end{enumerate}
 \end{theorem}
@@ -1227,58 +1204,62 @@ non-matched-decay clause is delivered in full.
     \leanok
     \uses{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
         lem:paper_bnt_cross_overlap_basis_tendsto_zero}
-    Fix $j_0$ and project the proportional-MPV identity onto the
-    overlap with $P.\operatorname{basis}\,j_0$:
+    Fix $j_0$ and project the proportional-MPV identity onto the overlap
+    with $P_{j_0}$:
     \[
-        \sum_j P.\operatorname{coeff}\,N\,j \cdot \langle V_N(A_j) \mid V_N(A_{j_0}) \rangle
+        \sum_j c_N^{(j)}(P) \cdot \braket{V^{(N)}(P_j)}{V^{(N)}(P_{j_0})}
         =
-        \sum_k Q.\operatorname{coeff}\,N\,k \cdot \langle V_N(B_k) \mid V_N(A_{j_0}) \rangle.
+        \sum_k c_N^{(k)}(Q) \cdot \braket{V^{(N)}(Q_k)}{V^{(N)}(P_{j_0})}.
     \]
-    \emph{LHS.} The off-diagonal $j \neq j_0$ terms decay by
-    Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero} (CPSV16
-    lines 1080--1091) and the diagonal term
-    \(P.\operatorname{coeff}\,N\,j_0 \cdot
-    (\langle V_N(A_{j_0}) \mid V_N(A_{j_0}) \rangle - 1)\)
-    decays by the normalized self-overlap (CPSV21 line 1818). Hence
-    $\text{LHS} - P.\operatorname{coeff}\,N\,j_0 \to 0$.
+    On the left-hand side, the off-diagonal terms $j \neq j_0$ decay by
+    Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    (\cite[lines 1080--1091]{Cirac2017MPDO_AnnPhys}), and the diagonal
+    term
+    $c_N^{(j_0)}(P) \cdot (\braket{V^{(N)}(P_{j_0})}{V^{(N)}(P_{j_0})} - 1)$
+    decays by the normalized self-overlap
+    (\cite[line 1818]{Cirac2021Matrix}). Hence
+    $\text{LHS} - c_N^{(j_0)}(P) \to 0$.
 
-    \emph{RHS.} Split $k$ into $\texttt{UnitQ}$ and its complement.
+    On the right-hand side, split $k$ into $J_1'(Q)$ and its complement.
     \begin{itemize}
-        \item For $k \in \texttt{UnitQ}$: substitute via the gauge identity
-              $\operatorname{mpv}(B_k)(\sigma) = \zeta_k^N \cdot \operatorname{mpv}(A_{\varphi(k)})(\sigma)$
-              (CPSV16 line 1186; the unit-modulus closure
-              $\lVert\zeta_k\rVert = 1$ follows from the norm-from-overlap
-              lemma and both per-block normalized self-overlaps tending to 1).
-              If $\varphi(k) = j_0$: self-overlap diagonal, contributes
-              $Q.\operatorname{coeff}\,N\,k \cdot \zeta_k^N + o(1)$.
-              If $\varphi(k) \neq j_0$: cross-overlap decay, contributes $o(1)$.
-        \item For $k \notin \texttt{UnitQ}$: every copy weight has strict
-              modulus $< 1$, so $Q.\operatorname{coeff}\,N\,k \to 0$ by
+        \item For $k \in J_1'(Q)$, substitute via the gauge identity
+              $V^{(N)}(Q_k)_\sigma = \zeta_k^N \cdot V^{(N)}(P_{\varphi(k)})_\sigma$
+              of \cite[line 1186]{Cirac2017MPDO_AnnPhys}; the unit-modulus
+              closure $\lVert\zeta_k\rVert = 1$ follows from the
+              norm-from-overlap lemma and the convergence of both per-block
+              normalized self-overlaps to $1$. If $\varphi(k) = j_0$, the
+              diagonal self-overlap contributes
+              $c_N^{(k)}(Q) \cdot \zeta_k^N + o(1)$; otherwise the
+              cross-overlap decay gives $o(1)$.
+        \item For $k \notin J_1'(Q)$, every copy weight has strict modulus
+              $< 1$, so $c_N^{(k)}(Q) \to 0$ by
               Lemma~\ref{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
               combined with the uniform overlap bound from left-canonical
-              normalization (CPSV21 lines 1815--1837), the contribution decays
-              to $0$.
+              normalization (\cite[lines 1815--1837]{Cirac2021Matrix}), the
+              contribution decays to $0$.
     \end{itemize}
-    Combining all per-$k$ pieces:
-    $\text{RHS} - \sum_{k \in \texttt{UnitQ}, \varphi(k) = j_0} \zeta_k^N \cdot Q.\operatorname{coeff}\,N\,k.\operatorname{val} \to 0$.
-    Since $\varphi$ is an embedding, the sum has at most one term.
-    With $\text{LHS} = \text{RHS}$ (the projection identity), we obtain
-    $P.\operatorname{coeff}\,N\,j_0 - (\text{matched term}) \to 0$.
+    Combining the per-$k$ contributions yields
+    \[
+        \text{RHS} - \sum_{k \in J_1'(Q),\ \varphi(k) = j_0} \zeta_k^N \cdot c_N^{(k)}(Q) \to 0.
+    \]
+    Since $\varphi$ is an embedding the inner sum has at most one term.
+    With $\text{LHS} = \text{RHS}$ (the projection identity), this gives
+    $c_N^{(j_0)}(P) - (\text{matched term}) \to 0$.
 
-    Specialising: if $j_0 = \varphi(k_0)$ for some $k_0 \in \texttt{UnitQ}$,
-    the matched term is $\zeta_{k_0}^N \cdot Q.\operatorname{coeff}\,N\,k_0.\operatorname{val}$,
-    giving clause~(1). If $j_0 \notin \operatorname{range}(\varphi)$, the
-    matched term is empty (0), giving clause~(2).
+    Specialising: if $j_0 = \varphi(k_0)$ for some $k_0 \in J_1'(Q)$ the
+    matched term is $\zeta_{k_0}^N \cdot c_N^{(k_0)}(Q)$, giving clause~(1);
+    if $j_0 \notin \operatorname{range}(\varphi)$ the matched term is $0$,
+    giving clause~(2).
 \end{proof}
 
 \begin{remark}
-    Theorem~\ref{thm:paper_bnt_coeff_identity_via_global_gauge}
-    realises the substitution route of CPSV16 \S~II.C lines 1187--1188:
-    substitute the per-pair gauge phases into the original proportional-MPV
-    identity, reduce to the $A$-only relation, and extract per-$j$
-    coefficient identities using the cross-overlap decay clause alone.
-    The result handles the $\texttt{UnitQ}$-restricted bijection
-    setting; the full bijection on
-    $P.\operatorname{basisIndex} \simeq Q.\operatorname{basisIndex}$ is not
-    delivered by Phase~B-$\beta$ (see the scoping discussion above).
+    Theorem~\ref{thm:paper_bnt_coeff_identity_via_global_gauge} realises
+    the substitution route of
+    \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys}: substitute
+    the per-pair gauge phases into the proportional-MPV identity, reduce
+    to the $P$-only relation, and extract per-$j$ coefficient identities
+    from cross-overlap decay alone. The result handles the
+    $J_1'(Q)$-restricted bijection setting; the full bijection
+    $J(P) \simeq J(Q)$ is not delivered by the bijective-matching theorem
+    (see the scope discussion above).
 \end{remark}

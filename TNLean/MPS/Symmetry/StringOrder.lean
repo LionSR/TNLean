@@ -324,8 +324,8 @@ theorem localSymmetry_iff_spectralRadius_one
 /-- **Theorem 1** (arXiv:0802.0447, virtual-boundary form): String order
 exists for a pure canonical FCS if and only if `u` is a local symmetry.
 
-The Lean definition `HasStringOrder A u Λ` encodes the paper's endpoint
-operators `x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
+The definition `HasStringOrder A u Λ` encodes the paper's boundary operators
+`x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
 stated directly at the transfer-matrix level. -/
 theorem stringOrder_iff_localSymmetry
     (A : MPSTensor d D)

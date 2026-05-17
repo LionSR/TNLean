@@ -9,12 +9,11 @@ import TNLean.MPS.Overlap.CastDecay
 import TNLean.Analysis.ConvergenceHelpers
 
 /-!
-# Full-block matching on the paper-faithful BNT canonical-form surface
+# Single-block gauge-phase matching for BNT canonical forms
 
-This module is **Phase 4b-ii** of the CPSV16/CPSV21 fundamental-theorem
-clean-slate plan (issue #1688).  It produces the **gauge-phase match** for a
-single BNT basis block of one BNT canonical form against some block of the
-other, under `SameMPV₂` of the assembled tensors.
+This module produces the **gauge-phase match** for a single BNT basis block of
+one BNT canonical form against some block of the other, under `SameMPV₂` of
+the assembled tensors.
 
 The module has three layers:
 
@@ -30,7 +29,7 @@ The module has three layers:
    equivalent (cast-left shape) to the `P`-block at `j₀`,
    and with a non-decaying cross-overlap.
 
-## Hypothesis disclosure (paper-faithful)
+## Hypothesis structure
 
 The block matching at a **user-supplied** sector index
 `j₀ : Fin P.basisCount` (with an externally provided unit-modulus
@@ -89,7 +88,7 @@ strong-induction step of the CPSV16 `II_cor2` argument.
 ## Tags
 
 matrix product states, fundamental theorem, BNT, BNT basis block,
-gauge-phase equivalence, non-decaying overlap, paper-faithful BNT canonical
+gauge-phase equivalence, non-decaying overlap, BNT canonical
 form
 -/
 
@@ -495,9 +494,8 @@ theorem exists_block_match_of_sameMPVPos
         (hNot := hNot)
   exact ⟨k₀, hDim, hGPE, hk₀⟩
 
-/-- Compatibility wrapper: the legacy all-length `SameMPV₂` form of the block
-match.  Forwards to the positive-length core variant via the forgetful
-projection `SameMPV₂.toSameMPV₂Pos`. -/
+/-- Reformulation for the all-length `SameMPV₂` form.  Forwards to the
+positive-length core via `SameMPV₂.toSameMPV₂Pos`. -/
 theorem exists_block_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

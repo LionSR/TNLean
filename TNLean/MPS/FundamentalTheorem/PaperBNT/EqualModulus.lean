@@ -53,8 +53,7 @@ factoring `P.weight j q = spectral_level j · phase_weight j q`.
 
 It captures the sub-class of BNT canonical forms in which every sector's
 copies share a common modulus.  It is NOT required by, nor part of, the
-core paper-faithful BNT predicate `IsBNTCanonicalForm` (see
-`PaperBNT/Basic.lean`).  The audit
+core BNT predicate `IsBNTCanonicalForm` (see `PaperBNT/Basic.lean`).  The audit
 `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
 shows that `C ⊕ (1/2)C` is a valid CPSV BNT canonical form that admits no
 such factorization.

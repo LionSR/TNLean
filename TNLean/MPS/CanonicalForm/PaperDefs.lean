@@ -9,9 +9,9 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
-# Paper-faithful definitions: NT, CF, BNT (CPSV16)
+# Normal tensor, canonical form, and basis of normal tensors (CPSV16)
 
-This module records the **paper-faithful** definitions of the three central notions
+This module records the definitions of the three central notions
 from arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete, "Matrix product density
 operators: Renormalization fixed points and boundary theories"):
 
@@ -86,7 +86,7 @@ variable {d D : ℕ}
 /-! ## Normal tensor (NT) -/
 
 /--
-`MPSTensor.IsNormalTensor A` is the paper-faithful **normal tensor** predicate from
+`MPSTensor.IsNormalTensor A` is the **normal tensor** predicate from
 arXiv:1606.00608, Definition before eq. `II_CF1` (`Papers/1606.00608/MPDO-22-12-17-2.tex:233-235`):
 
 * (i) `A` admits no nontrivial invariant orthogonal projection, and
@@ -121,7 +121,7 @@ theorem IsNormalTensor.of_irreducible_and_primitive
 /-! ## Canonical form (CF) -/
 
 /--
-`MPSTensor.CanonicalFormPaperData A` is the data of a paper-faithful canonical-form
+`MPSTensor.CanonicalFormPaperData A` is the data of a canonical-form
 decomposition of `A` from arXiv:1606.00608 eq. `II_CF1` plus the normalization paragraph
 immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
 
@@ -154,8 +154,8 @@ structure CanonicalFormPaperData (A : MPSTensor d D) where
   weight_unit_exists : ∃ k, ‖weights k‖ = 1
 
 /--
-`MPSTensor.IsCanonicalFormPaper A` is the propositional paper-faithful **canonical form**
-predicate (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
+`MPSTensor.IsCanonicalFormPaper A` is the propositional **canonical form**
+predicate from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
 direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least one
 `|μ_k| = 1`.
 
@@ -174,9 +174,8 @@ theorem IsCanonicalFormPaper.of_data
 /-! ## Basis of normal tensors (BNT) -/
 
 /--
-`MPSTensor.IsBNTPaper A blocks` is the paper-faithful **basis of normal tensors** predicate
-from arXiv:1606.00608, Definition `prop:char-BNT` is preceded by the BNT definition at
-`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`:
+`MPSTensor.IsBNTPaper A blocks` is the **basis of normal tensors** predicate
+from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 
 * (i) each `blocks j` is a CPSV16 normal tensor,
 * (ii) for each system length `N`, the MPV family of `A` is in the linear span of
