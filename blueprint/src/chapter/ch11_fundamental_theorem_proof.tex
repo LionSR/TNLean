@@ -936,14 +936,12 @@ block-matching conclusions for the common primitive sectors.
     theorem, and the phase-cover hypotheses imply the span hypotheses.
 \end{proof}
 
+% Lean: MPSTensor.BlockMatchingGaugePhaseData and its projections
+% (ofConclusion, reindexB, castA, globalGL, globalX) live in
+% TNLean/MPS/CanonicalForm/SectorComparison/CommonPrimitiveBlockMatchingData.lean,
+% which is outside the root import graph; see the per-subsection note above.
 \begin{definition}[Per-block block-matching gauge-phase data]%
     \label{def:block_matching_gauge_phase_data}
-    \lean{MPSTensor.BlockMatchingGaugePhaseData,
-        MPSTensor.BlockMatchingGaugePhaseData.ofConclusion,
-        MPSTensor.BlockMatchingGaugePhaseData.reindexB,
-        MPSTensor.BlockMatchingGaugePhaseData.castA,
-        MPSTensor.BlockMatchingGaugePhaseData.globalGL,
-        MPSTensor.BlockMatchingGaugePhaseData.globalX}
     \uses{def:common_primitive_block_matching_hypotheses, def:gauge_phase_equiv}
     The block-matching conclusion can be unpacked into explicit
     per-block data: a permutation matching the two block families, equalities of
@@ -956,10 +954,11 @@ block-matching conclusions for the common primitive sectors.
     dependent and flattened block-diagonal gauges assembled from the $X_k$.
 \end{definition}
 
+% Lean: MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj
+% and MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks
+% (same out-of-import-graph source file as above).
 \begin{theorem}[Per-block gauge phases assemble to an explicit global gauge]%
     \label{thm:block_matching_globalX_conj}
-    \lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-        MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
     \uses{def:block_matching_gauge_phase_data, def:block_diagonal_tensor,
         def:gauge_equiv}
     If the block weights absorb the per-block phases,
