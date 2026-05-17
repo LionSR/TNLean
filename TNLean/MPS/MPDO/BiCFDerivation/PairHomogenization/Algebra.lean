@@ -624,8 +624,9 @@ private theorem matrixAlgEquiv_dim_eq {D₁ D₂ : ℕ}
     (e : MatD D₁ ≃ₐ[ℂ] MatD D₂) :
     D₁ = D₂ := by
   have hfin := LinearEquiv.finrank_eq (e : MatD D₁ ≃ₗ[ℂ] MatD D₂)
-  simp [MatD, Module.finrank_matrix, Fintype.card_fin] at hfin
-  exact Nat.mul_self_inj.mp hfin
+  have hdim : D₁ * D₁ = D₂ * D₂ := by
+    simpa [MatD, Module.finrank_matrix, Fintype.card_fin] using hfin
+  exact Nat.mul_self_inj.mp hdim
 
 private noncomputable def matrixPairSubalgebra_algEquiv_of_axisIdealsHetero_eq_bot {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))

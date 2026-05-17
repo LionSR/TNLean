@@ -182,11 +182,13 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.WrappingWindow
-import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.Axioms.Beigi
 import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Martingale
+-- The finite-chain uniqueness capstone is kept out of the default root until
+-- the wrapped-window comparison and degenerate-window cases are proved.
+-- It remains available as `TNLean.MPS.ParentHamiltonian.UniqueGroundState`.
 
 -- Layer 4: Fundamental theorem (single block)
 import TNLean.MPS.Structure.LinearExtension
@@ -359,4 +361,5 @@ import TNLean.PEPS.Defs
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.LocalGauge
-import TNLean.PEPS.FundamentalTheorem
+-- The PEPS fundamental theorem is an exploratory capstone with recorded
+-- paper-alignment gaps; it is deliberately not part of the default root.

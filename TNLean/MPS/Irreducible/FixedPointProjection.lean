@@ -396,9 +396,11 @@ matrix, and are essential for the "strict dimension decrease" argument used when
 iterating the canonical-form splitting step.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): the recursion terminates
-  because each irreducible block has strictly smaller bond dimension.
-* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly different presentation.
+* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): the
+  recursion terminates because each irreducible block has strictly smaller bond
+  dimension.
+* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly
+  different presentation.
 -/
 
 section SupportProjNontriviality
