@@ -1519,46 +1519,6 @@ which is then combined with overlap estimates and the leading-block peel.
 \end{proof}
 
 %% ---------------------------------------------------------
-\section{Per-block to global proportional gauge}%
-\label{sec:proportional_gauge}
-%% ---------------------------------------------------------
-
-The block-permutation gauge-phase conclusion (see
-Definition~\ref{def:block_matching_gauge_phase_data}) provides per-block
-gauge matrices $X_k$ and phases $\zeta_k$.  Using the block-diagonal $\GL$
-construction of Definition~\ref{def:global_gauge_of_blocks}, one assembles
-these per-block gauges into a single global gauge matrix acting on the total
-bond space of the weighted direct sum.  This is the \emph{global
-    proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
-
-\begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
-    \lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-        MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
-    \leanok
-    \uses{thm:block_matching_globalX_conj, def:global_gauge_of_blocks,
-        def:gauge_equiv}
-    Let the block weights absorb the per-block phases via
-    $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  Then the weighted direct sum of
-    the permuted right-side blocks is conjugate to the weighted direct sum of
-    the cast left-side blocks by the flattened block-diagonal gauge
-    $X = \bigoplus_k X_k$.  Consequently the two assembled tensors
-    are gauge equivalent.
-\end{theorem}
-
-\begin{proof}\leanok
-    Let $\tilde A_k$ denote the block $A_k$ transported along the dimension
-    equality $\dim^A_k = \dim^B_{\sigma(k)}$.
-    Absorb each phase $\zeta_k$ into the corresponding weight via the
-    identity $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  After this absorption
-    each weighted block satisfies an ordinary conjugation relation
-    $\mu_B(\sigma(k)) B_{\sigma(k)}^i
-        = X_k\, \bigl(\mu_A(k)\, \tilde A_k^i\bigr)\, X_k^{-1}$.
-    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the
-    per-block $X_k$ into the global block-diagonal gauge
-    $X = \bigoplus_k X_k$.
-\end{proof}
-
-%% ---------------------------------------------------------
 \section{Translation-invariant reduction}%
 \label{sec:ti_reduction}
 %% ---------------------------------------------------------

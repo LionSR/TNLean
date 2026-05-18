@@ -606,12 +606,9 @@ data are packaged at the two-sided comparison layer.
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The current comparison uses
-`afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common phase-cover
-or BNT comparison theorems. This avoids keeping separate common-block comparison
-variants as public waypoints: the formal residue is the paper-level residue,
-namely blocked-word relabeling, finite-length nonzero-block span comparison,
-and BNT sector matching.
+The comparison data are kept at the paper-level boundary: blocked-word
+relabeling, finite-length nonzero-block span comparison, and BNT sector
+matching.
 
 The blocked-word relabeling and common primitive irreducible nonzero-block
 decompositions are now part of this file's structural reduction. The remaining
