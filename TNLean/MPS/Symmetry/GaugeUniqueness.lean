@@ -90,8 +90,9 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
               (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp
 
-/-- A Same-MPV corollary: after obtaining any two gauges from the single-block FT,
-they are unique up to a nonzero scalar.
+/-- Gauge uniqueness for tensors with identical matrix product vector families: after
+obtaining any two gauges from the single-block fundamental theorem, they are unique up
+to a nonzero scalar.
 
 Although the hypothesis that $A$ and $B$ generate the same matrix product vector
 family is not needed for the conclusion — gauge uniqueness follows from
