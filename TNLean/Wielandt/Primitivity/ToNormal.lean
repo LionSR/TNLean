@@ -15,10 +15,8 @@ import TNLean.Spectral.MixedTransfer
 
 This file collects spectral-gap consequences of `IsPrimitiveMPS` together with
 basic transfer-map compatibility lemmas. It stops short of proving any
-`IsNormal` theorem; the actual primitive-to-normal implication now lives in
-`Primitivity/StronglyIrreducibleToFullRank.lean`, while `QuantumWielandt.lean`
-keeps a backward-compatible exact-word-span witness theorem whose public
-statement still carries an aperiodicity parameter.
+`IsNormal` theorem; the actual primitive-to-normal implication lives in
+`Primitivity/StronglyIrreducibleToFullRank.lean`.
 
 ## Main results
 
@@ -215,8 +213,7 @@ not force `ρ.PosDef`; the standard rank-deficient `2 × 2` example still applie
 So the paper's primitive condition is stronger than the bare spectral-gap data
 formalized here.
 
-For the legacy exact-word-span witness theorem with an explicit aperiodicity
-parameter, see `QuantumWielandt.lean`. For the actual
+For the aperiodicity route, see the theorems above. For the actual
 `IsPrimitiveMPS + PosDef → IsNormal` implication, see
 `Primitivity/StronglyIrreducibleToFullRank.lean`.
 -/

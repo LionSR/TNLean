@@ -142,6 +142,34 @@ a matrix $X\in S_1(A)$ which is singular but has a nonzero eigenvalue. The
 formal proof again uses the redundant-generator construction, so the theorem is
 stated for an arbitrary such $X$, not only for a distinguished Kraus matrix.
 
+\section{Primitive-to-normal theorem with a chosen positive fixed point}
+
+The theorem
+\leanid{MPSTensor.isNormal\_of\_isPrimitiveMPS\_with\_posDef}\footnote{%
+    \path{TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean}.}
+proves normality from a chosen fixed point $\rho$ satisfying the local
+spectral-gap predicate \leanid{IsPrimitiveMPS} and the additional hypothesis
+$\rho>0$.
+
+This is the formal argument for Proposition~3(c)$\Rightarrow$(b) of
+\cite{Sanz2010Quantum}: the proof first views the hypotheses as strong
+irreducibility with a positive-definite fixed point, then applies the
+eventual-full-Kraus-rank theorem. The positive definiteness is used in the
+trace-pairing argument $B\mapsto \operatorname{Re}\operatorname{tr}(B^\dagger
+\rho B)$, where it gives a nondegenerate quadratic form and, by compactness of
+the unit sphere, a uniform positive lower bound. With only
+$\rho\geq 0$, this bound can vanish on the kernel of $\rho$.
+
+Consequently, the explicit $\rho>0$ hypothesis is a genuine hypothesis of this
+auxiliary route, not an accidental artefact. This theorem should not be cited as
+the source theorem itself. The formal statements following the paper remain the
+primitive-channel statements in
+\path{TNLean/Wielandt/SourceTheorems/WielandtInequality.lean} and the
+primitive/even\-tual-full-rank equivalence in
+\path{TNLean/Wielandt/Primitivity/Equivalence.lean}. CPSV16 Section~2.3 should
+be cited through those primitive-channel statements rather than through the
+auxiliary positive-definite-fixed-point theorem.
+
 \section{What is not a discrepancy}
 
 The replacement of $d$ by $\operatorname{kr}(A)=\dim S_1(A)$ is not a paper

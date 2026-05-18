@@ -71,9 +71,9 @@ These statements record Theorem 1 of arXiv:0909.5347 / Wolf Section 6.9 in the
 notation of the source; the FT/BNT formalization does not use them.
 
 This file is the preferred public entry point for the currently formalized
-Theorem 1 statements. The auxiliary module `QuantumWielandt.lean` keeps a
-backward-compatible exact-word-span witness theorem with an explicit
-aperiodicity argument in its statement; it is not the default paper-level formulation.
+Theorem 1 statements. The positive-definite primitive-to-normal theorem lives in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
+default paper-level formulation of Theorem 1.
 
 ### Part 4 — Case (1): general bound
 

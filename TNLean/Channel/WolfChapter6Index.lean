@@ -173,9 +173,10 @@ Current paper-level statements live in `TNLean.Wielandt.SourceTheorems.WielandtI
 * `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` /
   `iIndex_le_sq_of_noninvertible_eigenvector`
 
-The auxiliary aperiodicity-based assembly remains in
-`TNLean.Wielandt.QuantumWielandt`; it is not the default paper-facing
-conclusion.
+The positive-definite primitive-to-normal theorem is
+`MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef` in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
+default paper-facing conclusion.
 
 ---
 

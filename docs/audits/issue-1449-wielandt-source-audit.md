@@ -111,7 +111,6 @@ These are the **standalone paper-level** declarations -- correct as-is:
 | `SourceTheorems/NonzeroTraceWord.lean` | Standalone Lemma 1. |
 | `Primitivity/Equivalence.lean` | Standalone Proposition 3 full equivalence. |
 | `Primitivity/PaperDefinitions.lean` | Paper-facing definition layer (`iIndex`, `qIndex`, `IsPrimitivePaper`). |
-| `QuantumWielandt.lean` | Backward-compatible auxiliary (uses aperiodicity). |
 | `RankOne/ExtractionFull.lean` | Contains `wielandt_lemma2b` (existential Lemma 2(b)). Not directly imported by MPS pipeline. |
 | `Channel/WolfChapter6Index.lean` | Documentation-only index. |
 
@@ -143,7 +142,6 @@ The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength
 | `qIndex_le_iIndex_of_isPrimitivePaper` | `WielandtInequality.lean` | Theorem 1, q <= i (Prop. 3/Prop. 1) |
 | `iIndex_le_of_mem_wordSpan_one_of_isUnit` | `WielandtInequality.lean` | Theorem 1, case (2) -- paper-faithful |
 | `iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector` | `WielandtInequality.lean` | Theorem 1, case (3) -- paper-faithful |
-| `isNormal_of_isPrimitiveMPS_of_posDef` | `QuantumWielandt.lean` | Primitive -> normal (Proposition 3) |
 | `wielandt_lemma2b` | `RankOne/ExtractionFull.lean` | Lemma 2(b) -- existential |
 
 ### Convenience corollaries (keep)
@@ -165,7 +163,7 @@ The cumulative-span variety in `WielandtBound.lean` is imported by `FiniteLength
 | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` | `Primitivity/ImpliesIrreducible.lean` | `ProportionalPrimitive.lean` |
 | `isNormal_of_isPrimitiveMPS_with_posDef` | `Primitivity/StronglyIrreducibleToFullRank.lean` | `Existence.lean`, `TPPrimitiveReduction.lean` |
 
-### Verdict: **No retirements needed.** Every declaration has a clear role: paper-facing theorem, convenience corollary, or pipeline internal. No dead declarations found.
+### Verdict: **Compatibility wrapper retired.** Every remaining mathematical result has a clear role as a paper-facing theorem, convenience corollary, or pipeline internal result. The former root-visible `QuantumWielandt.lean` wrapper had no independent mathematical role and was removed.
 
 ---
 
