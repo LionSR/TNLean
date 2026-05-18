@@ -1021,10 +1021,10 @@ Chapter~\ref{ch:periodic_ft_apps}.
 
 \begin{lemma}[Canonical form from peripheral primitivity]%
     \label{thm:canonical_from_primitive}
-    \uses{def:is_canonical_form, def:irreducible_tensor, def:tp_kraus}
-    Let $(\mu_k,A_k)_{k=1}^r$ be a family of nonzero weights and left-canonical
-    irreducible blocks with positive bond dimensions, with strictly decreasing
-    moduli $|\mu_1|>\cdots>|\mu_r|>0$ and $|\mu_1|=1$, and assume each transfer
+    \uses{def:is_canonical_form, def:injective, def:tp_kraus}
+    Let $(\mu_k,A_k)_{k=1}^r$ be a family of nonzero weights and injective,
+    left-canonical blocks with positive bond dimensions, with strictly
+    decreasing moduli $|\mu_1|>\cdots>|\mu_r|>0$, and assume each transfer
     map satisfies $\sigma_\partial(\E_{A_k}) = \{1\}$ (peripheral-spectrum
     primitivity). Then $(\mu_k,A_k)_{k=1}^r$ satisfies the canonical-form
     conditions of Definition~\ref{def:is_canonical_form}. In particular,
@@ -1124,7 +1124,7 @@ Chapter~\ref{ch:periodic_ft_apps}.
     \label{thm:iterated_blocking_transfer}
     \lean{MPSTensor.transferMap_blockTensor_mul}\leanok
     \uses{def:blocked_tensor, def:transfer_map}
-    For any MPS tensor $A$ and integers $m,n \ge 1$,
+    For any MPS tensor $A$ and natural numbers $m,n \ge 0$,
     \[
         \E_{(A^{[m]})^{[n]}} =  \E_{A^{[mn]}}.
     \]
