@@ -346,7 +346,7 @@ directly to periodic tensors.
     \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
     \leanok
     \uses{def:common_period_blocking, thm:iterated_blocking_transfer,
-          thm:primitive_blocking_divisible}
+        thm:primitive_blocking_divisible}
     If each tensor $B_i$ has a primitive transfer map after blocking by its own
     positive period $p_i$, then blocking the entire family to the common
     LCM period preserves primitivity of each member's transfer map.
@@ -369,8 +369,8 @@ unconditional result.
 \begin{theorem}[Periodic Fundamental Theorem]\notready
     \label{thm:periodic_ft}
     \lean{MPSTensor.zgauge_construction, MPSTensor.equalCase_zgauge_of_power_sums,
-          MPSTensor.fundamentalTheorem_periodic_equalCase_matching,
-          MPSTensor.fundamentalTheorem_periodic_equalCase}
+        MPSTensor.fundamentalTheorem_periodic_equalCase_matching,
+        MPSTensor.fundamentalTheorem_periodic_equalCase}
     \uses{def:irreducible_form, def:z_gauge_equiv}
     Let $A$ and $B$ be MPS tensors in irreducible form,
     with bases of periodic blocks
@@ -419,7 +419,7 @@ unconditional result.
     \uses{def:periodic_tensor}
     A family of compressed sector tensors
     $(C_k)_{k=0}^{m-1}$ on corner bond spaces forms a \emph{cyclic sector
-    decomposition} of the blocked tensor $A^{(m)}$ if there exist orthogonal
+        decomposition} of the blocked tensor $A^{(m)}$ if there exist orthogonal
     projections $P_0,\dotsc,P_{m-1}$ on the ambient bond space such that
     $\sum_k P_k = \Id$, the projections satisfy the cyclic-shift relation
     $\E_A^\dagger(P_{k+1}) = P_k$ with the index $k+1$ taken cyclically
@@ -523,9 +523,9 @@ unconditional result.
     \lean{MPSTensor.periodicOverlapDichotomy}
     \notready
     \uses{thm:periodic_overlap_zero_ne_period,
-          thm:periodic_overlap_zero_no_sector_match,
-          thm:periodic_overlap_zero_ne_dim,
-          thm:periodic_overlap_gauge_equiv_sector_match}
+        thm:periodic_overlap_zero_no_sector_match,
+        thm:periodic_overlap_zero_ne_dim,
+        thm:periodic_overlap_gauge_equiv_sector_match}
     Let $A$ and $B$ be periodic tensors. Then at least one of the following
     alternatives holds:
     \begin{enumerate}
@@ -582,7 +582,7 @@ unconditional result.
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV}
     \notready
     \uses{def:periodic_tensor, thm:periodic_overlap_dichotomy,
-          thm:periodic_self_overlap_tendsto}
+        thm:periodic_self_overlap_tendsto}
     Let $A$ and $B$ be periodic tensors with the same matrix product vectors.
     Then their bond dimensions agree, and after identifying the bond spaces,
     $A$ and $B$ are equivalent up to repeated blocks.
@@ -635,7 +635,7 @@ unconditional result.
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
     \leanok
     \uses{def:irreducible_form, def:z_gauge_equiv, def:on_site_symmetric,
-          def:twisted_tensor, thm:periodic_ft}
+        def:twisted_tensor, thm:periodic_ft}
     Let $A$ be an MPS tensor in irreducible form~II and let
     $U : G \to \GL_d(\C)$ be a representation of a group $G$ on the
     physical leg, acting unitarily ($U(g)\, U(g)^{\dagger} = \Id$).
@@ -657,7 +657,7 @@ unconditional result.
 
 \begin{proof}\leanok
     \uses{def:rotate_physical, thm:periodic_ft,
-          thm:irreducible_form_rotate_physical, cor:symmetry_periodic_assembly}
+        thm:irreducible_form_rotate_physical, cor:symmetry_periodic_assembly}
     The twisted tensor $\widetilde{A}_g$ coincides with the physical-index
     rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
     By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
@@ -701,7 +701,7 @@ unconditional result.
     \lean{MPSTensor.cor_4_1_projective_rep}
     \leanok
     \uses{cor:cor_4_1_physical_symmetry_zgauge,
-          def:periodic_projective_rigidity}
+        def:periodic_projective_rigidity}
     Under the hypotheses of Corollary~\ref{cor:cor_4_1_physical_symmetry_zgauge}
     together with the periodic projective-rigidity hypothesis
     (Definition~\ref{def:periodic_projective_rigidity}), the $Y_g$
@@ -720,7 +720,7 @@ unconditional result.
 
 \begin{proof}\leanok
     \uses{cor:cor_4_1_physical_symmetry_zgauge,
-          def:periodic_projective_rigidity}
+        def:periodic_projective_rigidity}
     Unpack the rigidity hypothesis to extract the family
     $(Y, u)$ together with the intertwiners from
     \cite[Corollary~4.1]{DeLasCuevas2017Irreducible}. Set
@@ -816,8 +816,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
         V^{(N)}(A^{[p]})_\tau
         \;=\;
         \sum_{\sigma \in \{0,\ldots,d-1\}^N}
-            \Big(\prod_{k} W_{\tau(k),\,\sigma(k)}\Big)\,
-            V^{(N)}(B)_\sigma
+        \Big(\prod_{k} W_{\tau(k),\,\sigma(k)}\Big)\,
+        V^{(N)}(B)_\sigma
     \]
     for every $N \in \N$ and every
     $\tau \in \{0,\ldots,d^p-1\}^N$.
@@ -893,8 +893,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_zgauge_sameMPV,
-          def:peripheral_equalcase_root_from_zgauge,
-          def:peripheral_equalcase_periodicFT_sameMPV}
+        def:peripheral_equalcase_root_from_zgauge,
+        def:peripheral_equalcase_periodicFT_sameMPV}
     If the blocked equal-case Z-gauge extraction hypothesis and the
     blocked-to-root reconstruction hypothesis both hold, then the combined
     blocked equal-case root hypothesis holds.
@@ -911,8 +911,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
-          def:irreducible_form, def:p_refinable,
-          thm:p_refinement_pullback_irreducible_form}
+        def:irreducible_form, def:p_refinable,
+        thm:p_refinement_pullback_irreducible_form}
     Assume the blocked equal-case root hypothesis. Then every
     $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical root
     $A'$ with $\mathcal E_B = \mathcal E_{A'^{[p]}}$.
@@ -933,8 +933,8 @@ for the irreducible-form framework in \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
     \leanok
     \uses{def:peripheral_equalcase_periodicFT_sameMPV,
-          def:irreducible_form, def:p_refinable, def:p_divisible_channel,
-          thm:p_refinement_forward_equalcase_reduction}
+        def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+        thm:p_refinement_forward_equalcase_reduction}
     Assume the blocked equal-case root hypothesis. Then for every tensor
     $B$ in irreducible form~II, $p$-refinability of $B$ implies
     $p$-divisibility of $\mathcal E_B$.
@@ -955,8 +955,8 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.thm_4_1_p_refinement}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
-          thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
-          thm:thm_4_1_p_refinement_reverse}
+        thm:periodic_ft, thm:thm_4_1_p_refinement_forward,
+        thm:thm_4_1_p_refinement_reverse}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume the two root hypotheses used in the one-way statements: the forward
     left-canonical root hypothesis for refinability $\Rightarrow$ divisibility
@@ -1001,7 +1001,7 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
     \leanok
     \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv,
-          def:p_divisible_channel}
+        def:p_divisible_channel}
     Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
     $\mathcal E'$ such that
     $\mathcal E_C = (\mathcal E')^p$ and the Choi/Kraus rank of
@@ -1014,7 +1014,7 @@ equivalence from \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}
     \leanok
     \uses{def:peripheral_equalcase_root_channel_from_zgauge,
-          def:peripheral_equalcase_root_from_zgauge}
+        def:peripheral_equalcase_root_from_zgauge}
     If the blocked-to-root channel-root hypothesis holds, then the tensor-level
     blocked-to-root reconstruction hypothesis holds as well.
 \end{theorem}

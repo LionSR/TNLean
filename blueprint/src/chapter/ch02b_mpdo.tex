@@ -214,7 +214,7 @@ legs cyclically and taking the resulting trace.
     \[
         M^{\sigma_1 \tau_1} \cdots M^{\sigma_N \tau_N}
         = \bigl(\sum_{\kappa} P_\kappa \otimes \overline{Q_\kappa}\bigr)
-          \big|_{e},
+        \big|_{e},
     \]
     where $P_\kappa = A^{(\sigma_1,\kappa_1)} \cdots A^{(\sigma_N,\kappa_N)}$
     and $Q_\kappa = A^{(\tau_1,\kappa_1)} \cdots A^{(\tau_N,\kappa_N)}$.
@@ -520,7 +520,7 @@ strong subadditivity for a normalized three-site reduced state.
     \[
         \eta_{k,h}
         := \tr_C\bigl(\rho_{b_2 C}^{(k)}\bigr)
-            \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
+        \otimes \tr_A\bigl(\rho_{A b_1}^{(h)}\bigr).
     \]
     Positive semidefiniteness of each $\eta_{k,h}$ follows from the fact
     that partial traces preserve positivity and that positive
@@ -859,10 +859,10 @@ retract.
     MPO tensor consists of a subspace $\mathcal{A}_n \subseteq M_D(\mathbb{C})$
     together with linear maps
     $$T_n : M_D(\mathbb{C}) \to \mathcal{A}_n, \qquad
-      S_n : \mathcal{A}_n \to M_D(\mathbb{C})$$
+        S_n : \mathcal{A}_n \to M_D(\mathbb{C})$$
     such that
     $$T_n \circ S_n = \operatorname{id}_{\mathcal{A}_n},
-      \qquad S_n \circ T_n = E_n,$$
+        \qquad S_n \circ T_n = E_n,$$
     where $E_n$ denotes the blocked transfer map.
 \end{definition}
 
@@ -885,11 +885,11 @@ retract.
     The fusion-isometry formulation implies the MPDO RFP condition.
 \end{theorem}
 \begin{proof}\leanok
-Apply the definition at blocked size $n = 1$.
-If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
-$$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
-Since $E_1$ is the original transfer map, this is exactly the MPDO RFP
-condition.
+    Apply the definition at blocked size $n = 1$.
+    If $E_1 = S_1 \circ T_1$ and $T_1 \circ S_1 = \operatorname{id}$, then
+    $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
+    Since $E_1$ is the original transfer map, this is exactly the MPDO RFP
+    condition.
 \end{proof}
 
 \begin{theorem}[Transfer-map fusion criterion for MPDO RFP]%
@@ -900,10 +900,10 @@ condition.
     The fusion-isometry formulation is equivalent to the MPDO RFP condition.
 \end{theorem}
 \begin{proof}\leanok\uses{thm:mpdo_rfp_of_fusion}
-The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
-Conversely, if the transfer map $E$ is idempotent, then every positive blocked
-transfer map equals $E$ and therefore factors through its range.
-This range-factorization gives the required fusion-isometry data.
+    The forward implication is Theorem~\ref{thm:mpdo_rfp_of_fusion}.
+    Conversely, if the transfer map $E$ is idempotent, then every positive blocked
+    transfer map equals $E$ and therefore factors through its range.
+    This range-factorization gives the required fusion-isometry data.
 \end{proof}
 
 \begin{corollary}[Pure-state recovery]%
@@ -915,8 +915,8 @@ This range-factorization gives the required fusion-isometry data.
     formulation reduces to the usual pure-state RFP condition.
 \end{corollary}
 \begin{proof}\leanok
-Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
-recovery theorem for the MPO predicate.
+    Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
+    recovery theorem for the MPO predicate.
 \end{proof}
 
 \section{Algebra structure}
@@ -961,10 +961,10 @@ recovery theorem for the MPO predicate.
     multiplication and inclusions given by the identity.
 \end{theorem}
 \begin{proof}\leanok
-Under the trace-preserving normalization and the faithful fixed point, Wolf's
-fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
-Idempotence identifies every positive blocked transfer map with the original
-one, so the same fixed-point algebra works at every blocking size.
+    Under the trace-preserving normalization and the faithful fixed point, Wolf's
+    fixed-point-algebra theorem gives a $*$-subalgebra of adjoint fixed points.
+    Idempotence identifies every positive blocked transfer map with the original
+    one, so the same fixed-point algebra works at every blocking size.
 \end{proof}
 
 \begin{theorem}[Fusion yields a stationary algebra tower under a faithful fixed point]%
@@ -978,8 +978,8 @@ one, so the same fixed-point algebra works at every blocking size.
     renormalization fixed-point condition.
 \end{theorem}
 \begin{proof}\leanok
-Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
-Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
+    Combine Theorem~\ref{thm:mpdo_rfp_of_fusion} with
+    Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
 \end{proof}
 
 \begin{theorem}[Stabilized blocked adjoint fixed points yield algebra data]%
@@ -994,10 +994,10 @@ Theorem~\ref{thm:mpdo_rfp_via_algebra_from_rfp}.
     algebra-structure formulation holds.
 \end{theorem}
 \begin{proof}\leanok
-Use the adjoint fixed-point algebra of the original transfer map as a constant
-support-algebra tower. The stabilization hypothesis identifies that same
-algebra with the adjoint fixed-point space of every positive blocked transfer
-map, so the stationary family satisfies the definition.
+    Use the adjoint fixed-point algebra of the original transfer map as a constant
+    support-algebra tower. The stabilization hypothesis identifies that same
+    algebra with the adjoint fixed-point space of every positive blocked transfer
+    map, so the stationary family satisfies the definition.
 \end{proof}
 
 This does not give the full converse direction of
@@ -1027,8 +1027,8 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     expansion $\sum_i a_i b_i$ in $\mathcal{A}_n$.
 \end{theorem}
 \begin{proof}\leanok
-This is exactly the finite-basis reconstruction formula for the chosen basis of
-$\mathcal{A}_n$.
+    This is exactly the finite-basis reconstruction formula for the chosen basis of
+    $\mathcal{A}_n$.
 \end{proof}
 
 \begin{definition}[Blocked multiplication coefficients]%
@@ -1051,9 +1051,9 @@ $\mathcal{A}_n$.
     $\mathcal{A}_{2n}$ weighted by these extracted coefficients.
 \end{theorem}
 \begin{proof}\leanok
-Apply the reconstruction formula of
-Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
-$m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
+    Apply the reconstruction formula of
+    Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
+    $m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
 \end{proof}
 
 \begin{theorem}[Compatible adjoint fixed points reconstruct from blocked coefficients]%
@@ -1067,9 +1067,9 @@ $m_n(b_i,b_j) \in \mathcal{A}_{2n}$.
     family.
 \end{theorem}
 \begin{proof}\leanok
-Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
-$E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
-Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
+    Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
+    $E_n$, so the fixed point first becomes an element of $\mathcal{A}_n$ and then
+    Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
 \end{proof}
 
 \begin{theorem}[Adjoint fixed points descend through the algebra tower]%
@@ -1083,13 +1083,13 @@ Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} reconstructs it.
     transfer map $E_1$.
 \end{theorem}
 \begin{proof}\leanok
-Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
-$\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, and since $\iota_n$ is just an
-inclusion it does not change the underlying operator, so we continue to
-denote the lifted element by $X$. Thus compatibility at size $n + 1$ yields
-$E_{n+1}^{\dagger} X = X$. Rewriting $E_{n+1} = E_n \circ E_1$ and applying
-$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
-hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
+    Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion map
+    $\iota_n$ lifts $X$ into $\mathcal{A}_{n+1}$, and since $\iota_n$ is just an
+    inclusion it does not change the underlying operator, so we continue to
+    denote the lifted element by $X$. Thus compatibility at size $n + 1$ yields
+    $E_{n+1}^{\dagger} X = X$. Rewriting $E_{n+1} = E_n \circ E_1$ and applying
+    $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$ together with the
+    hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
 \end{proof}
 
 \begin{lemma}[Reverse inclusion of adjoint fixed points]%
@@ -1100,13 +1100,13 @@ hypothesis $E_n^{\dagger} X = X$ extracts $E_1^{\dagger} X = X$.
     adjoint fixed point of every blocked transfer map $E_n$.
 \end{lemma}
 \begin{proof}\leanok
-Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
-$(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
-$E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
-Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
-fixed-point equality
-$\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
-blocking size under the algebra-structure predicate.
+    Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
+    $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
+    $E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
+    Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
+    fixed-point equality
+    $\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
+    blocking size under the algebra-structure predicate.
 \end{proof}
 
 \begin{remark}[Why algebra data do not imply fusion data]%
@@ -1118,7 +1118,7 @@ blocking size under the algebra-structure predicate.
     Theorem
     \ref{thm:mpdo_adjoint_fix_descent} already gives the strongest available
     consequence of the algebra-structure data -- exclusion of \emph{finite
-    order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
+        order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
     map, since any such eigenvalue would produce a new adjoint fixed point
     at some positive blocking size. This does \emph{not}, however, exclude
     unit-modulus eigenvalues of irrational phase, nor force idempotence of
@@ -1127,12 +1127,12 @@ blocking size under the algebra-structure predicate.
     For instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ take
     \[
         E(X)
-            = \varepsilon\, X
-              + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
+        = \varepsilon\, X
+        + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
     \]
     where $\Pi_{\mathrm{diag}}$ is the projection that zeroes the
     off-diagonal entries of $X$; then $\Pi_{\mathrm{diag}} \circ
-    \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
+        \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
     peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at every
     blocking size, yet $E \circ E \neq E$. Closing the converse therefore
     requires strengthening the predicate to the coefficient formulation of
@@ -1140,7 +1140,7 @@ blocking size under the algebra-structure predicate.
     matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3 and the
     coefficient identity
     $c^{(L)}_{\alpha,\beta,\gamma}
-      = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+        = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
     of Appendix~C.4. The scalar Newton--Girard power-sum identity needed
     for the latter step is already available as
     Theorem~\ref{thm:newton_girard}.
@@ -1173,14 +1173,14 @@ the elementary trace-power identity for diagonal matrices.
     has size $r_{\alpha,\beta,\gamma}$, then for every $L \ge 0$,
     \[
         \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
-            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
-                \chi_{\alpha,\beta,\gamma,k}^{L},
+        = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+        \chi_{\alpha,\beta,\gamma,k}^{L},
     \]
     where $\chi_{\alpha,\beta,\gamma,k}$ are the diagonal entries.
 \end{theorem}
 \begin{proof}\leanok
-Diagonal matrices raise to powers entrywise and the trace of a diagonal matrix
-is the sum of its entries.
+    Diagonal matrices raise to powers entrywise and the trace of a diagonal matrix
+    is the sum of its entries.
 \end{proof}
 
 \begin{definition}[Trace-power form of a structure-coefficient family]%
@@ -1193,9 +1193,9 @@ is the sum of its entries.
     pair $(c, \chi)$ is said to be in \emph{trace-power form} when
     \[
         c^{(L)}_{\alpha,\beta,\gamma}
-            = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
-            = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
-                \chi_{\alpha,\beta,\gamma,k}^{L}
+        = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr)
+        = \sum_{k=1}^{r_{\alpha,\beta,\gamma}}
+        \chi_{\alpha,\beta,\gamma,k}^{L}
     \]
     for every $L \ge 0$ and every triple $(\alpha, \beta, \gamma)$, where
     $r_{\alpha,\beta,\gamma}$ is the size of $\chi_{\alpha,\beta,\gamma}$. This
@@ -1250,8 +1250,8 @@ is the sum of its entries.
 \end{theorem}
 
 \begin{proof}\leanok
-A positive normalization constant converts commuting-form data into a GSNNCH
-witness, and every GSNNCH witness remembers its underlying commuting-form data.
+    A positive normalization constant converts commuting-form data into a GSNNCH
+    witness, and every GSNNCH witness remembers its underlying commuting-form data.
 \end{proof}
 
 \begin{definition}[GSNNCH with zero correlation length]
@@ -1274,8 +1274,8 @@ witness, and every GSNNCH witness remembers its underlying commuting-form data.
 \end{theorem}
 
 \begin{proof}\leanok
-Unfold the definition of GSNNCH with zero correlation length and apply
-Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
+    Unfold the definition of GSNNCH with zero correlation length and apply
+    Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
 \begin{definition}[$\eta$-local commuting-form data]
@@ -1298,17 +1298,17 @@ Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{theorem}
 
 \begin{proof}\leanok
-For each $N \ge 2$, take the commuting-form datum given by these data.
+    For each $N \ge 2$, take the commuting-form datum given by these data.
 \end{proof}
 
 \begin{remark}[Entropy-side construction]
-The entropy-side theorem still to be supplied constructs the local data needed for
-Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} from the SAL
-and ZCL hypotheses. In particular, one must extract explicit neighboring
-operators $\eta_{k,h}$ from the Hayashi Markov decomposition. Once these
-operators are available, Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
-yields the commuting-form conclusion and hence the GSNNCH branch of the
-simple-MPDO equivalence.
+    The entropy-side theorem still to be supplied constructs the local data needed for
+    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} from the SAL
+    and ZCL hypotheses. In particular, one must extract explicit neighboring
+    operators $\eta_{k,h}$ from the Hayashi Markov decomposition. Once these
+    operators are available, Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    yields the commuting-form conclusion and hence the GSNNCH branch of the
+    simple-MPDO equivalence.
 \end{remark}
 
 \section{Blocked-RFP construction for simple MPDOs}
@@ -1350,11 +1350,11 @@ simple-MPDO equivalence.
 \end{theorem}
 
 \begin{proof}\leanok
-Zero correlation length is the MPDO RFP condition.
-Applying the converse direction of
-Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
-fusion-isometry data at every positive blocked size; evaluating it at size $2$
-produces the blocked witness.
+    Zero correlation length is the MPDO RFP condition.
+    Applying the converse direction of
+    Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to that RFP witness yields
+    fusion-isometry data at every positive blocked size; evaluating it at size $2$
+    produces the blocked witness.
 \end{proof}
 
 \begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
@@ -1372,12 +1372,12 @@ produces the blocked witness.
 \end{theorem}
 
 \begin{proof}\leanok
-The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
-branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
-The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
-full transfer-map fusion formulation follows by applying the converse direction
-of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
-is the MPDO RFP condition.
+    The commuting-form and zero-correlation-length hypotheses give the GSNNCH--ZCL
+    branch via Theorem~\ref{thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl}.
+    The blocked witness is Theorem~\ref{thm:structural_implies_rfp_blocked}. The
+    full transfer-map fusion formulation follows by applying the converse direction
+    of Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} to zero correlation length, which
+    is the MPDO RFP condition.
 \end{proof}
 
 \begin{remark}[SAL--ZCL implication for the GSNNCH--ZCL criterion]

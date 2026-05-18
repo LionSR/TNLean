@@ -106,7 +106,7 @@ and proves the GKSL theorem.
     \leanok
     Chain rule applied to the composition
     $\R \xrightarrow{t \mapsto t \cdot L} \mathrm{End}(\MN{D})
-     \xrightarrow{\exp} \mathrm{End}(\MN{D})$.
+        \xrightarrow{\exp} \mathrm{End}(\MN{D})$.
 \end{proof}
 
 \begin{theorem}[Derivative at the origin]
@@ -185,7 +185,7 @@ and proves the GKSL theorem.
     \label{thm:expSemigroup_isDynSemigroup_ch12}
     \lean{expSemigroup_isDynSemigroup}\leanok
     \uses{def:dyn_semigroup_ch12, thm:expSemigroup_toCLM_ch12,
-          thm:expSemigroup_zero_ch12, thm:expSemigroupCLM_add_ch12}
+        thm:expSemigroup_zero_ch12, thm:expSemigroupCLM_add_ch12}
     The family $t \mapsto e^{tL}$ satisfies the semigroup law and the initial
     condition, hence is a dynamical semigroup.
 \end{theorem}
@@ -233,7 +233,7 @@ and proves the GKSL theorem.
     Let $\Delta = L' - L$. For $t \ge 0$,
     \[
         e^{tL'} - e^{tL}
-          = \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
+        = \int_0^t e^{(t-s)L} \Delta\,e^{sL'}\,ds.
     \]
     This is \cite[Lem.~7.1]{Wolf2012Quantum}.
 \end{theorem}
@@ -252,9 +252,9 @@ and proves the GKSL theorem.
     For $t \ge 0$,
     \[
         \bigl\|e^{tL'} - e^{tL}\bigr\|
-          \le t\,\|\Delta\|
-             \cdot \sup_{s \in [0,t]}\|e^{sL}\|
-             \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
+        \le t\,\|\Delta\|
+        \cdot \sup_{s \in [0,t]}\|e^{sL}\|
+        \cdot \sup_{s \in [0,t]}\|e^{sL'}\|,
     \]
     where $\Delta = L' - L$.
     This is \cite[Corollary~7.1]{Wolf2012Quantum}.
@@ -288,8 +288,8 @@ and proves the GKSL theorem.
     \lean{summable_dysonTerm_of_factorial_bound}\leanok
     Assume a factorial majorant of Dyson--Phillips iterates:
     \[
-      \|D_n(t)\|
-      \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
+        \|D_n(t)\|
+        \le M\,\frac{(t\,\|L'-L\|\,M)^n}{n!}.
     \]
     Then the Dyson series is summable in operator norm.
 \end{lemma}
@@ -306,8 +306,8 @@ and proves the GKSL theorem.
     \uses{def:exp_semigroup_ch12}
     For $s \in [0,t]$ and $M = \sup_{u \in [0,t]} \|e^{uL}\|$,
     \[
-      \|\widetilde{T}^{(n)}_s\|
-      \le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
+        \|\widetilde{T}^{(n)}_s\|
+        \le M\,\frac{(s\,\|\Delta\|\,M)^n}{n!}.
     \]
 \end{theorem}
 
@@ -344,8 +344,8 @@ and proves the GKSL theorem.
     For $t \ge 0$, setting $s=t$ in Theorem~\ref{thm:norm_dysonTerm_le_ch12}
     gives
     \[
-      \|\widetilde{T}^{(n)}_t\|
-      \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
+        \|\widetilde{T}^{(n)}_t\|
+        \le M\,\frac{(t\,\|\Delta\|\,M)^n}{n!},
     \]
     where $M = \sup_{u \in [0,t]} \|e^{uL}\|$.
 \end{corollary}
@@ -381,15 +381,15 @@ and proves the GKSL theorem.
     For $s \in [0,t]$, $M = \sup_{u \in [0,t]}\|e^{uL}\|$,
     and $M' = \sup_{u \in [0,t]}\|e^{uL'}\|$:
     \[
-      \bigl\|T'_s - \textstyle\sum_{n < N}\widetilde{T}^{(n)}_s\bigr\|
-      \le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
+        \bigl\|T'_s - \textstyle\sum_{n < N}\widetilde{T}^{(n)}_s\bigr\|
+        \le M'\,\frac{(s\,\|\Delta\|\,M)^N}{N!}.
     \]
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:duhamel_formula_ch12, thm:norm_dysonTerm_le_ch12,
-          thm:dysonTerm_continuous_ch12}
+        thm:dysonTerm_continuous_ch12}
     Induction on $N$. The base case is the semigroup supremum bound.
     The inductive step uses the telescoping remainder identity
     $R_{N+1}(s) = \int_0^s e^{(s-u)L}\,\Delta\,R_N(u)\,du$
@@ -404,7 +404,7 @@ and proves the GKSL theorem.
     For $t \ge 0$, the Dyson--Phillips series equals the perturbed
     semigroup:
     \[
-      \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}.
+        \sum_{n=0}^{\infty} \widetilde{T}^{(n)}_t = e^{tL'}.
     \]
 \end{theorem}
 
@@ -413,7 +413,7 @@ and proves the GKSL theorem.
     \uses{thm:norm_dysonRemainder_le_ch12, cor:summable_dysonTerm_ch12}
     The partial-sum remainder
     $\|e^{tL'} - \sum_{n<N}\widetilde{T}^{(n)}_t\|
-    \le M'\,(t\|\Delta\|M)^N/N!$
+        \le M'\,(t\|\Delta\|M)^N/N!$
     tends to zero as $N \to \infty$, since $c^N/N! \to 0$ for any
     constant $c$. Together with the summability of the series
     (Corollary~\ref{cor:summable_dysonTerm_ch12}), this identifies
@@ -462,7 +462,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{IsCCP}\leanok
     \uses{def:generator_decomp}
     A linear map $L : \MN{d} \to \MN{d}$ is \emph{conditionally
-    completely positive} (CCP) if it admits a generator decomposition,
+        completely positive} (CCP) if it admits a generator decomposition,
     i.e.\ there exist a CP map $\phi$ and a matrix $\kappa$ such that
     $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$.
     This is condition~1 of \cite[Proposition~7.2]{Wolf2012Quantum}.
@@ -488,7 +488,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:traceAnnihilating_of_traceConstraint}
     \lean{GeneratorDecomp.traceAnnihilating_of_traceConstraint}\leanok
     \uses{def:generator_decomp, def:is_trace_annihilating,
-          def:is_trace_constraint}
+        def:is_trace_constraint}
     If $(\phi, \kappa)$ satisfies $\phi^*(\Id) = \kappa + \kappa^\dagger$,
     then $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ is
     trace-annihilating.
@@ -499,11 +499,11 @@ which shows that such generators have the standard Lindblad form.
     Let $\phi(\rho) = \sum_i K_i \rho K_i^\dagger$.
     By the cyclic property of trace,
     $\tr(L(\rho))
-    = \tr((\sum_i K_i^\dagger K_i)\rho)
-    - \tr(\kappa\rho)
-    - \tr(\kappa^\dagger\rho)
-    = \tr((\kappa + \kappa^\dagger)\rho)
-    - \tr(\kappa\rho) - \tr(\kappa^\dagger\rho) = 0$.
+        = \tr((\sum_i K_i^\dagger K_i)\rho)
+        - \tr(\kappa\rho)
+        - \tr(\kappa^\dagger\rho)
+        = \tr((\kappa + \kappa^\dagger)\rho)
+        - \tr(\kappa\rho) - \tr(\kappa^\dagger\rho) = 0$.
 \end{proof}
 
 \subsection{The Lindblad form}
@@ -517,8 +517,8 @@ which shows that such generators have the standard Lindblad form.
         L(\rho)
         = i[\rho, H]
         + \sum_{j} \Bigl(        L_j \rho L_j^\dagger
-            - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
-          \Bigr),
+        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
+        \Bigr),
     \]
     where $[A,B] = AB - BA$ and $\{A,B\}_+ = AB + BA$.
     This is \cite[Equation~(7.21)]{Wolf2012Quantum}.
@@ -537,7 +537,7 @@ which shows that such generators have the standard Lindblad form.
     $\tr(i[\rho,H]) = 0$ by the cyclic property.
     Each dissipator term satisfies
     $\tr(L_j \rho L_j^\dagger) = \tr(L_j^\dagger L_j \rho)
-    = \tr(\rho L_j^\dagger L_j)$,
+        = \tr(\rho L_j^\dagger L_j)$,
     so the three terms sum to zero.
 \end{proof}
 
@@ -558,10 +558,10 @@ which shows that such generators have the standard Lindblad form.
     using $H^\dagger = H$ and $(A^\dagger A)^\dagger = A^\dagger A$.
     Setting $S = \sum_j L_j^\dagger L_j$, expand
     $\phi(\rho) - \kappa\rho - \rho\kappa^\dagger
-    = \sum_j L_j\rho L_j^\dagger - iH\rho - \tfrac{1}{2}S\rho
-      + i\rho H - \tfrac{1}{2}\rho S$,
+        = \sum_j L_j\rho L_j^\dagger - iH\rho - \tfrac{1}{2}S\rho
+        + i\rho H - \tfrac{1}{2}\rho S$,
     which is $i[\rho,H] + \sum_j(L_j\rho L_j^\dagger
-    - \tfrac{1}{2}L_j^\dagger L_j\rho - \tfrac{1}{2}\rho L_j^\dagger L_j)$.
+        - \tfrac{1}{2}L_j^\dagger L_j\rho - \tfrac{1}{2}\rho L_j^\dagger L_j)$.
 \end{proof}
 
 \begin{theorem}[Lindblad form is CCP]
@@ -587,8 +587,8 @@ which shows that such generators have the standard Lindblad form.
         L(\rho)
         = i[\rho, H]
         + \tfrac{1}{2}\sum_{j}
-          \bigl([L_j,\,\rho L_j^\dagger]
-                + [L_j\rho,\,L_j^\dagger]\bigr),
+        \bigl([L_j,\,\rho L_j^\dagger]
+        + [L_j\rho,\,L_j^\dagger]\bigr),
     \]
     where $[A,B] = AB - BA$.
     This is \cite[Equation~(7.22)]{Wolf2012Quantum}.
@@ -758,7 +758,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:generatorDecomp_traceless_unique_kappa}
     \lean{generatorDecomp_traceless_unique_kappa_modPhase}\leanok
     \uses{def:lindblad_form, def:has_traceless_kraus, def:generator_decomp,
-          thm:generatorDecomp_traceless_unique_phi}
+        thm:generatorDecomp_traceless_unique_phi}
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then their drift matrices
     differ by an imaginary scalar: $\kappa' = \kappa + i\lambda\,\Id$
@@ -783,7 +783,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:generatorDecomp_traceless_unique}
     \lean{generatorDecomp_traceless_unique}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
-          thm:generatorDecomp_traceless_unique_kappa}
+        thm:generatorDecomp_traceless_unique_kappa}
     If two Lindblad forms $F, F'$ induce the same generator and
     both have traceless Kraus operators, then $\phi = \phi'$ and
     $\kappa' = \kappa + i\lambda\,\Id$ for some $\lambda \in \R$.
@@ -791,7 +791,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}\leanok
     \uses{thm:generatorDecomp_traceless_unique_phi,
-          thm:generatorDecomp_traceless_unique_kappa}
+        thm:generatorDecomp_traceless_unique_kappa}
     Combine Theorems~\ref{thm:generatorDecomp_traceless_unique_phi}
     and~\ref{thm:generatorDecomp_traceless_unique_kappa}.
 \end{proof}
@@ -840,7 +840,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:gksl_of_generatorDecomp}
     \lean{gksl_of_generatorDecomp_with_traceConstraint}\leanok
     \uses{def:cp_map, def:is_gksl_generator, def:generator_decomp,
-          def:is_trace_constraint}
+        def:is_trace_constraint}
     If $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with
     $\phi$ CP and $\phi^*(\Id) = \kappa + \kappa^\dagger$,
     then $L$ is a GKSL generator.
@@ -850,7 +850,7 @@ which shows that such generators have the standard Lindblad form.
 \begin{proof}
     \leanok
     \uses{thm:ccp_implies_cp_semigroup, thm:traceAnnihilating_of_traceConstraint,
-          thm:ta_implies_tp_semigroup}
+        thm:ta_implies_tp_semigroup}
     CP follows from Theorem~\ref{thm:ccp_implies_cp_semigroup}.
     The trace constraint implies trace-annihilation by
     Theorem~\ref{thm:traceAnnihilating_of_traceConstraint}, so
@@ -887,7 +887,7 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}\leanok
     \uses{thm:cp_semigroup_implies_ccp, thm:ccp_implies_cp_semigroup,
-          thm:ta_implies_tp_semigroup, thm:tp_semigroup_implies_ta}
+        thm:ta_implies_tp_semigroup, thm:tp_semigroup_implies_ta}
     Forward: apply Theorem~\ref{thm:cp_semigroup_implies_ccp} to the CP part and
     Theorem~\ref{thm:tp_semigroup_implies_ta} to the TP part.
     Reverse: combine Theorem~\ref{thm:ccp_implies_cp_semigroup} with
@@ -903,8 +903,8 @@ which shows that such generators have the standard Lindblad form.
         L(\rho)
         = i[\rho, H]
         + \sum_j \Bigl(        L_j \rho L_j^\dagger
-            - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
-          \Bigr)
+        - \tfrac{1}{2}\{L_j^\dagger L_j, \rho\}_+
+        \Bigr)
     \]
     with $H = H^\dagger$.
     This is \cite[Theorem~7.1]{Wolf2012Quantum}.
@@ -912,9 +912,9 @@ which shows that such generators have the standard Lindblad form.
 
 \begin{proof}\leanok
     \uses{thm:generatorDecomp_of_gksl, thm:gksl_iff_ccp_ta,
-          thm:lindbladForm_eq_generatorDecomp, thm:lindbladForm_isCCP,
-          thm:lindbladForm_isTraceAnnihilating,
-          thm:exists_traceless_kraus_shift}
+        thm:lindbladForm_eq_generatorDecomp, thm:lindbladForm_isCCP,
+        thm:lindbladForm_isTraceAnnihilating,
+        thm:exists_traceless_kraus_shift}
     Forward: apply Theorem~\ref{thm:generatorDecomp_of_gksl} to write
     $L(\rho) = \phi(\rho) - \kappa\rho - \rho\kappa^\dagger$ with trace
     constraint. Then choose traceless Kraus operators by
@@ -937,8 +937,8 @@ which shows that such generators have the standard Lindblad form.
         L(\rho)
         = i[\rho, H]
         + \tfrac{1}{2}\sum_{k,l} C_{lk}\bigl(
-            [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
-          \bigr).
+        [F_k, \rho F_l^\dagger] + [F_k\rho, F_l^\dagger]
+        \bigr).
     \]
     In Wolf's formula one takes $\{F_k\}$ to be a basis of traceless matrices;
     here we keep only the algebraic data needed for the conversion to
@@ -1138,7 +1138,7 @@ which shows that such generators have the standard Lindblad form.
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12,
-          thm:peripheral_trace_ne_zero_eigenvector_ch12}
+        thm:peripheral_trace_ne_zero_eigenvector_ch12}
     Combine Theorem~\ref{thm:peripheral_trace_ne_zero_eigenvector_ch12} with
     Theorem~\ref{thm:eigenvalue_eq_one_trace_preserving_eigenvector_ch12}.
 \end{proof}
@@ -1203,7 +1203,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{residualSliceIndex}\leanok
     For $u \ge 0$ and $s > 0$, the residual slice index is
     \[
-      m_n = \left\lfloor \frac{nu}{s} \right\rfloor.
+        m_n = \left\lfloor \frac{nu}{s} \right\rfloor.
     \]
 \end{definition}
 
@@ -1212,7 +1212,7 @@ which shows that such generators have the standard Lindblad form.
     \lean{residualSliceTime}\leanok
     For $u \ge 0$ and $s > 0$, the residual slice time is the remainder
     \[
-      r_n = s\,\mathrm{fract}\!\left(\frac{nu}{s}\right).
+        r_n = s\,\mathrm{fract}\!\left(\frac{nu}{s}\right).
     \]
 \end{definition}
 
@@ -1222,7 +1222,7 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:residual_slice_index_ch12, def:residual_slice_time_ch12}
     For $u \ge 0$ and $s > 0$, one has $r_n \in [0,s]$ and
     \[
-      nu = m_n s + r_n.
+        nu = m_n s + r_n.
     \]
 \end{theorem}
 
@@ -1287,7 +1287,7 @@ which shows that such generators have the standard Lindblad form.
     If $t_0 > 0$, $T_{t_0}$ is irreducible, and $\sigma$ is fixed for all times,
     then there exists a positive time step $u$ such that
     \[
-      T_{t_0} = (T_u)^{(\dim \MN{D})!},
+        T_{t_0} = (T_u)^{(\dim \MN{D})!},
     \]
     the slice $T_u$ is a channel, $T_u$ is irreducible, and $T_u(\sigma)=\sigma$.
 \end{theorem}
@@ -1320,10 +1320,10 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:irreducible_all_of_irreducible_time_ch12}
     \lean{irreducible_all_of_irreducible_time}\leanok
     \uses{def:is_quantum_dyn_semigroup_ch12,
-          thm:fixed_density_fixed_for_all_times_ch12,
-          thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12,
-          thm:exists_primitive_fraction_slice_ch12,
-          thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
+        thm:fixed_density_fixed_for_all_times_ch12,
+        thm:fixedPoint_eq_trace_smul_at_irreducible_time_ch12,
+        thm:exists_primitive_fraction_slice_ch12,
+        thm:fixedPoint_eq_trace_smul_of_primitive_slice_ch12}
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then every positive-time slice $T_s$ is
     irreducible.
 \end{theorem}
@@ -1343,8 +1343,8 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:irreducible_semigroup_implies_primitive}
     \lean{irreducible_semigroup_implies_primitive}\leanok
     \uses{def:is_quantum_dyn_semigroup_ch12,
-          thm:irreducible_all_of_irreducible_time_ch12,
-          thm:primitive_of_irreducible_all_ch12}
+        thm:irreducible_all_of_irreducible_time_ch12,
+        thm:primitive_of_irreducible_all_ch12}
     Let $T_t = e^{tL}$ be a quantum dynamical semigroup.
     If $T_{t_0}$ is irreducible for some $t_0 > 0$, then
     $T_t$ is primitive (and irreducible) for every $t > 0$.
@@ -1398,10 +1398,10 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:lindblad_form}
     For a Lindblad operator $L_j$, the adjoint dissipator on observables is
     \[
-      \mathcal{D}_{L_j}^*(A)
+        \mathcal{D}_{L_j}^*(A)
         = L_j^\dagger A L_j
-          - \tfrac12 L_j^\dagger L_j A
-          - \tfrac12 A L_j^\dagger L_j.
+        - \tfrac12 L_j^\dagger L_j A
+        - \tfrac12 A L_j^\dagger L_j.
     \]
 \end{definition}
 
@@ -1411,7 +1411,7 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:lindblad_form, def:adjoint_dissipator_ch12}
     The adjoint generator of a Lindblad form is
     \[
-      L^*(A) = i[H,A] + \sum_j \mathcal{D}_{L_j}^*(A).
+        L^*(A) = i[H,A] + \sum_j \mathcal{D}_{L_j}^*(A).
     \]
 \end{definition}
 
@@ -1421,7 +1421,7 @@ which shows that such generators have the standard Lindblad form.
     \uses{def:adjoint_generator_ch12, def:lindblad_form}
     For every density matrix $\rho$ and every observable $A$,
     \[
-      \tr(\rho\,L^*(A)) = \tr(L(\rho)\,A).
+        \tr(\rho\,L^*(A)) = \tr(L(\rho)\,A).
     \]
 \end{theorem}
 
@@ -1448,7 +1448,7 @@ which shows that such generators have the standard Lindblad form.
 \begin{theorem}[Commutant lies in the adjoint kernel]
     \label{thm:commutant_subset_adjointKernel_ch12}
     \lean{LindbladForm.mem_adjointKernel_of_mem_commutant,
-          LindbladForm.commutant_subset_adjointKernel}\leanok
+        LindbladForm.commutant_subset_adjointKernel}\leanok
     \uses{def:adjoint_generator_ch12, def:commutant_ch12, def:adjoint_kernel_ch12}
     If an observable commutes with $H$, with every $L_j$, and with every
     $L_j^\dagger$, then it lies in $\ker(L^*)$.
@@ -1464,7 +1464,7 @@ which shows that such generators have the standard Lindblad form.
     \label{thm:adjointKernel_eq_commutant}
     \lean{LindbladForm.mem_commutant_of_mem_adjointKernel_of_hasFaithfulStationaryState}\leanok
     \uses{def:lindblad_form, def:has_faithful_stationary_state_ch12,
-          def:commutant_ch12, def:adjoint_kernel_ch12}
+        def:commutant_ch12, def:adjoint_kernel_ch12}
     Let $L$ be a GKSL generator in Lindblad form with Hamiltonian $H$
     and Lindblad operators $\{L_j\}$.
     Define the adjoint generator $L^*$ by
@@ -1565,7 +1565,7 @@ The four equivalent reducibility conditions of
     \uses{def:has_invariant_compression}
     For a projection $P$, the generator preserves the compression $P M_d(\C) P$ if
     \[
-      P\,L(PXP)\,P = L(PXP)
+        P\,L(PXP)\,P = L(PXP)
     \]
     for every $X \in M_d(\C)$.
 \end{definition}
@@ -1615,7 +1615,7 @@ The four equivalent reducibility conditions of
 \begin{proof}
     \leanok
     \uses{thm:generator_preserves_compression_from_semigroup_ch12,
-          thm:semigroup_preserves_compression_from_generator_ch12}
+        thm:semigroup_preserves_compression_from_generator_ch12}
     Combine Theorems~\ref{thm:generator_preserves_compression_from_semigroup_ch12}
     and~\ref{thm:semigroup_preserves_compression_from_generator_ch12}.
 \end{proof}
@@ -1624,7 +1624,7 @@ The four equivalent reducibility conditions of
     \label{thm:wolf_prop_7_6_one_iff_two}
     \lean{wolf_prop_7_6_one_iff_two}\leanok
     \uses{def:has_rank_deficient_fixed_density,
-          def:has_rank_deficient_kernel_element}
+        def:has_rank_deficient_kernel_element}
     A rank-deficient density matrix is a fixed point of $e^{tL}$ for all
     $t \ge 0$ if and only if it lies in $\ker L$.
     This is \cite[Proposition~7.6, (1)$\leftrightarrow$(2)]{Wolf2012Quantum}.
@@ -1640,7 +1640,7 @@ The four equivalent reducibility conditions of
     \label{thm:wolf_prop_7_6_one_implies_three}
     \lean{wolf_prop_7_6_one_implies_three}\leanok
     \uses{def:has_rank_deficient_fixed_density,
-          def:has_invariant_compression, def:is_gksl_generator}
+        def:has_invariant_compression, def:is_gksl_generator}
     If $L$ is a GKSL generator and there exists a rank-deficient fixed
     density matrix, then the semigroup preserves a nontrivial compression.
     This is \cite[Proposition~7.6, (1)$\to$(3)]{Wolf2012Quantum}.
@@ -1659,7 +1659,7 @@ The four equivalent reducibility conditions of
     \label{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
     \lean{hasBlockUpperTriangularLindblad_of_hasInvariantCompression}\leanok
     \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
-          def:is_gksl_generator, def:generator_preserves_compression_ch12}
+        def:is_gksl_generator, def:generator_preserves_compression_ch12}
     If a GKSL generator preserves a nontrivial compression, then its Lindblad data can be chosen
     block-upper-triangular with respect to that compression.
 \end{theorem}
@@ -1677,7 +1677,7 @@ The four equivalent reducibility conditions of
     \label{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
     \lean{hasInvariantCompression_of_hasBlockUpperTriangularLindblad}\leanok
     \uses{def:has_invariant_compression, def:has_block_upper_triangular_lindblad,
-          def:generator_preserves_compression_ch12}
+        def:generator_preserves_compression_ch12}
     If the Lindblad data are block-upper-triangular with respect to a nontrivial projection,
     then the associated semigroup preserves that compression.
 \end{theorem}
@@ -1693,7 +1693,7 @@ The four equivalent reducibility conditions of
     \label{thm:wolf_prop_7_6_three_iff_four}
     \lean{wolf_prop_7_6_three_implies_four, wolf_prop_7_6_four_implies_three}\leanok
     \uses{def:has_invariant_compression,
-          def:has_block_upper_triangular_lindblad, def:is_gksl_generator}
+        def:has_block_upper_triangular_lindblad, def:is_gksl_generator}
     For a GKSL generator $L$, the semigroup preserves a nontrivial
     compression if and only if the Lindblad data can be chosen
     block-upper-triangular.
@@ -1702,7 +1702,7 @@ The four equivalent reducibility conditions of
 
 \begin{proof}\leanok
     \uses{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12,
-          thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
+        thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
     Combine Theorems~\ref{thm:hasInvariantCompression_of_hasBlockUpperTriangularLindblad_ch12}
     and~\ref{thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}.
 \end{proof}
@@ -1711,7 +1711,7 @@ The four equivalent reducibility conditions of
     \label{thm:blockUpperTriangular_implies_rankDeficient}
     \lean{hasRankDeficientKernelElement_of_hasBlockUpperTriangularLindblad}\leanok
     \uses{def:has_block_upper_triangular_lindblad,
-          def:has_rank_deficient_kernel_element, def:is_gksl_generator}
+        def:has_rank_deficient_kernel_element, def:is_gksl_generator}
     If the Lindblad data of a GKSL generator are block-upper-triangular
     with respect to some nontrivial projector $P$,
     then there exists a density matrix $\rho_0$ with nontrivial kernel
@@ -1736,9 +1736,9 @@ The four equivalent reducibility conditions of
     \label{thm:wolf_prop_7_6_full}
     \lean{wolf_prop_7_6_full_equivalence}\leanok
     \uses{def:is_gksl_generator, def:has_rank_deficient_fixed_density,
-          def:has_rank_deficient_kernel_element,
-          def:has_invariant_compression,
-          def:has_block_upper_triangular_lindblad}
+        def:has_rank_deficient_kernel_element,
+        def:has_invariant_compression,
+        def:has_block_upper_triangular_lindblad}
     For a GKSL generator $L : \MN{D} \to \MN{D}$, the four conditions
     \begin{enumerate}
         \item rank-deficient fixed density,
@@ -1752,9 +1752,9 @@ The four equivalent reducibility conditions of
 
 \begin{proof}\leanok
     \uses{thm:wolf_prop_7_6_one_iff_two,
-          thm:wolf_prop_7_6_one_implies_three,
-          thm:wolf_prop_7_6_three_iff_four,
-          thm:blockUpperTriangular_implies_rankDeficient}
+        thm:wolf_prop_7_6_one_implies_three,
+        thm:wolf_prop_7_6_three_iff_four,
+        thm:blockUpperTriangular_implies_rankDeficient}
     The cycle (1)$\leftrightarrow$(2), (1)$\to$(3),
     (3)$\leftrightarrow$(4), and (4)$\to$(2) closes
     the equivalence chain.
@@ -1815,7 +1815,7 @@ The four equivalent reducibility conditions of
     \label{thm:full_algebra_gen_no_block_ut}
     \lean{full_algebra_generation_implies_no_blockUpperTriangular}\leanok
     \uses{def:lindblad_form, def:has_block_upper_triangular_lindblad,
-          thm:kappa_block_generator_compression}
+        thm:kappa_block_generator_compression}
     Let $(H, \{L_j\})$ be a Lindblad form.
     If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
     matrix algebra $M_d(\C)$, then the Lindblad data do not admit a
@@ -1837,8 +1837,8 @@ The four equivalent reducibility conditions of
     \label{thm:herm_span_trivial_commutant_no_block_ut}
     \lean{hermitian_span_trivial_commutant_implies_no_blockUpperTriangular}\leanok
     \uses{def:lindblad_form, def:is_lindblad_span_hermitian_closed,
-          def:has_lindblad_span_trivial_commutant,
-          def:has_block_upper_triangular_lindblad}
+        def:has_lindblad_span_trivial_commutant,
+        def:has_block_upper_triangular_lindblad}
     If the Lindblad span is closed under Hermitian conjugation and its
     commutant is $\C \cdot \Id$, then the Lindblad data do not admit a
     block-upper-triangular decomposition.
@@ -1857,7 +1857,7 @@ The four equivalent reducibility conditions of
     \uses{def:kossakowski_rank, def:has_block_upper_triangular_lindblad}
     If the Kossakowski rank satisfies
     \[
-      \operatorname{rank}(C) + d \ge d^2 + 1,
+        \operatorname{rank}(C) + d \ge d^2 + 1,
     \]
     then no block-upper-triangular Lindblad form exists.
 \end{theorem}
@@ -1872,7 +1872,7 @@ The four equivalent reducibility conditions of
     \label{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     \lean{not_isReducibleQDS_of_no_blockUpperTriangular_lindblad}\leanok
     \uses{def:is_reducible_qds_ch12, def:has_block_upper_triangular_lindblad,
-          thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
+        thm:hasBlockUpperTriangularLindblad_of_hasInvariantCompression_ch12}
     If a GKSL generator admits no block-upper-triangular Lindblad form, then the associated
     quantum dynamical semigroup is not reducible.
 \end{theorem}
@@ -1888,15 +1888,15 @@ The four equivalent reducibility conditions of
     \label{thm:not_isReducible_of_generates_full_algebra}
     \lean{not_isReducible_of_generates_full_algebra}\leanok
     \uses{def:is_gksl_generator, def:lindblad_form,
-          thm:full_algebra_gen_no_block_ut,
-          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+        thm:full_algebra_gen_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the algebra generated by $\{L_j\}$ and $\kappa$ is the entire
     matrix algebra $M_d(\C)$, then the QDS is not reducible.
     This is \cite[Corollary~7.2, condition~1]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:full_algebra_gen_no_block_ut,
-          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     By Theorem~\ref{thm:full_algebra_gen_no_block_ut}, no block-upper-triangular
     decomposition exists. Then apply
     Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
@@ -1906,16 +1906,16 @@ The four equivalent reducibility conditions of
     \label{thm:not_isReducible_of_hermitian_span_trivial_commutant}
     \lean{not_isReducible_of_hermitian_span_trivial_commutant}\leanok
     \uses{def:is_gksl_generator, def:is_lindblad_span_hermitian_closed,
-          def:has_lindblad_span_trivial_commutant,
-          thm:herm_span_trivial_commutant_no_block_ut,
-          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+        def:has_lindblad_span_trivial_commutant,
+        thm:herm_span_trivial_commutant_no_block_ut,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If the Lindblad span is Hermitian-closed and its commutant is trivial,
     then the QDS is not reducible.
     This is \cite[Corollary~7.2, condition~2]{Wolf2012Quantum}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:herm_span_trivial_commutant_no_block_ut,
-          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     By Theorem~\ref{thm:herm_span_trivial_commutant_no_block_ut}, no
     block-upper-triangular decomposition exists. Then apply
     Theorem~\ref{thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}.
@@ -1925,8 +1925,8 @@ The four equivalent reducibility conditions of
     \label{thm:not_isReducible_of_kossakowski_rank_ge}
     \lean{not_isReducible_of_kossakowski_rank_ge}\leanok
     \uses{def:is_gksl_generator, def:kossakowski_rank,
-          thm:large_kossakowski_rank_no_block_ut_ch12,
-          thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
+        thm:large_kossakowski_rank_no_block_ut_ch12,
+        thm:not_isReducibleQDS_of_no_blockUpperTriangular_ch12}
     If $\rank(C) > d^2 - d$, then the QDS is not reducible.
     This is \cite[Corollary~7.2, condition~3]{Wolf2012Quantum}.
 \end{theorem}
