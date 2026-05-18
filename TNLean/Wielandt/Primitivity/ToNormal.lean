@@ -213,8 +213,7 @@ not force `ρ.PosDef`; the standard rank-deficient `2 × 2` example still applie
 So the paper's primitive condition is stronger than the bare spectral-gap data
 formalized here.
 
-For the aperiodicity route, see the theorems above. For the actual
-`IsPrimitiveMPS + PosDef → IsNormal` implication, see
+For the actual `IsPrimitiveMPS + PosDef → IsNormal` implication, see
 `Primitivity/StronglyIrreducibleToFullRank.lean`.
 -/
 
