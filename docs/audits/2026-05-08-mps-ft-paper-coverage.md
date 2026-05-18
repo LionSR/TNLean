@@ -293,7 +293,9 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 9. Coverage crosswalk: SPGWC09 (arXiv:0909.5347) — Quantum Wielandt's Inequality
 
-**Existing audit**: `docs/audits/issue-1449-wielandt-source-audit.md` (2026-05-07) covers the Theorem 1 statement faithfulness and MPS pipeline import inventory. This section provides an expanded source-paper crosswalk.
+**Existing audit**: `docs/audits/issue-1449-wielandt-source-audit.md`
+(2026-05-07) covers the Theorem 1 statement faithfulness and the MPS import
+inventory. This section provides an expanded source-paper crosswalk.
 
 **Overall status**: **All Wielandt source theorems are `leanok` — zero sorrys, zero axioms** in `TNLean/Wielandt/`. The formalization is fully proved.
 
@@ -302,30 +304,30 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | **Proposition 3** `prop:equiv` (l.504) | 504–509 | (a) primitive ⇔ (b) eventually full Kraus rank ⇔ (c) strongly irreducible | `TNLean/Wielandt/Primitivity/Equivalence.lean` (full circular equivalence); `Primitivity/EasyDirections.lean` (b→a); `Primitivity/ImpliesStronglyIrreducibleAux.lean` (a→c); `Primitivity/StronglyIrreducibleToFullRank.lean` (c→b) | `leanok` |
-| Prop `prop:iq` (l.447) | 447–449 | q(E_A) ≤ i(A) | `TNLean/Wielandt/SourceTheorems/WielandtInequality.lean` (`qIndex_le_iIndex_of_isPrimitivePaper`) | `leanok` |
+| Prop `prop:iq` (l.447) | 447–449 | q(E_A) ≤ i(A) | `TNLean/Wielandt/Inequality/Bounds.lean` (`qIndex_le_iIndex_of_isPrimitivePaper`) | `leanok` |
 | Prop (l.478) | 478–482 | For classical stochastic A: p(A)=q(A)=i(A) | **out of scope** (classical specialization) | — |
 
 ### 9.2 Lemma 1 — Nonzero-trace word (l.572–590)
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Lemma 1** `lemma1` (l.572) | 572–576 | Primitive ⇒ ∃ word of length ≤ D²−d+1 with nonzero trace | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp`); internal proof via `SpanGrowth/NonzeroTraceProduct.lean` | `leanok` |
-| Cumulative corollary (l.580–584) | 580–584 | dim[T_{D²−d+1}(A)] = D² | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`cumulativeSpan_eq_top_of_isPrimitivePaper_sharp`) | `leanok` |
-| Positive-length variant | — | For D ≥ 2, positive-length word with nonzero trace exists | `TNLean/Wielandt/SourceTheorems/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos`) | `leanok` |
+| **Lemma 1** `lemma1` (l.572) | 572–576 | Primitive ⇒ ∃ word of length ≤ D²−d+1 with nonzero trace | `TNLean/Wielandt/Inequality/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp`); internal proof via `SpanGrowth/NonzeroTraceProduct.lean` | `leanok` |
+| Cumulative corollary (l.580–584) | 580–584 | dim[T_{D²−d+1}(A)] = D² | `TNLean/Wielandt/Inequality/NonzeroTraceWord.lean` (`cumulativeSpan_eq_top_of_isPrimitivePaper_sharp`) | `leanok` |
+| Positive-length variant | — | For D ≥ 2, positive-length word with nonzero trace exists | `TNLean/Wielandt/Inequality/NonzeroTraceWord.lean` (`exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos`) | `leanok` |
 
 ### 9.3 Lemma 2 — Spreading and spanning (l.593–641)
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Lemma 2(a)** `lemma2` (l.593) | 593–599 | Primitive + A₁ eigenvector ⇒ H_{D−1}(A,φ) = ℂ^D | `TNLean/Wielandt/SourceTheorems/EigenvectorSpreading.lean` (`vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector`); internal proof via `SpanGrowth/EigenvectorSpreading.lean` | `leanok` |
-| **Lemma 2(b)** (l.593) | 593–599 | Primitive + noninvertible A₁ ⇒ |φ⟩⟨ψ| ∈ S_{D²−D+1}(A) | `TNLean/Wielandt/SourceTheorems/MatrixSpanSharpBound.lean` (`vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector`); internal proof via `RectangularSpan/Universality.lean` | `leanok` |
-| Coarse existential 2(b) | — | ∃ N : S_N(A) = M_D(ℂ) | `TNLean/Wielandt/SourceTheorems/MatrixSpanExistence.lean` (`exists_wordSpan_eq_top_of_isPrimitivePaper`) | `leanok` |
+| **Lemma 2(a)** `lemma2` (l.593) | 593–599 | Primitive + A₁ eigenvector ⇒ H_{D−1}(A,φ) = ℂ^D | `TNLean/Wielandt/Inequality/EigenvectorSpreading.lean` (`vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector`); internal proof via `SpanGrowth/EigenvectorSpreading.lean` | `leanok` |
+| **Lemma 2(b)** (l.593) | 593–599 | Primitive + noninvertible A₁ ⇒ |φ⟩⟨ψ| ∈ S_{D²−D+1}(A) | `TNLean/Wielandt/Inequality/MatrixSpanSharpBound.lean` (`vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector`); internal proof via `RectangularSpan/Universality.lean` | `leanok` |
+| Coarse existential 2(b) | — | ∃ N : S_N(A) = M_D(ℂ) | `TNLean/Wielandt/Inequality/MatrixSpanExistence.lean` (`exists_wordSpan_eq_top_of_isPrimitivePaper`) | `leanok` |
 
 ### 9.4 Theorem 1 — Quantum Wielandt's inequality (l.645–655)
 
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
-| **Theorem 1** `thm:mainthm` (l.645) | 645–655 | Main theorem: i(A) bounds in three cases | `TNLean/Wielandt/SourceTheorems/WielandtInequality.lean` | `leanok` |
+| **Theorem 1** `thm:mainthm` (l.645) | 645–655 | Main theorem: i(A) bounds in three cases | `TNLean/Wielandt/Inequality/Bounds.lean` | `leanok` |
 | Case (1) general bound | l.649 | i(A) ≤ (D² − d + 1) D² | `iIndex_le_general_of_isPrimitivePaper` | `leanok` |
 | Case (2) invertible | l.650–651 | i(A) ≤ D² − d + 1 | `iIndex_le_of_mem_wordSpan_one_of_isUnit` (paper-faithful: X ∈ wordSpan A 1) | `leanok` |
 | Case (3) noninvertible | l.652–653 | i(A) ≤ D² | `iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector` (paper-faithful) | `leanok` |
@@ -346,9 +348,10 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | **Theorem** (l.828) | 828–831 | If L > i(A), MPS is unique ground state of parent Hamiltonian with spectral gap | PGVWC07 `uniqueGS` / `ParentHamiltonian/UniqueGroundState.lean` (partial, 3 sorrys) | **partial** — see §4.2 |
 | **Theorem** (l.850) | 850–858 | Dichotomy for ground states of frustration-free Hamiltonians: D either O(1) or ≥ Ω(N^{1/5}) | **out of scope** | — |
 
-### 9.7 MPS pipeline usage of Wielandt infrastructure
+### 9.7 MPS use of Wielandt infrastructure
 
-The MPS pipeline imports a focused subset of Wielandt declarations (detail in `docs/audits/issue-1449-wielandt-source-audit.md`, §4):
+The MPS development imports a focused subset of Wielandt declarations (detail
+in `docs/audits/issue-1449-wielandt-source-audit.md`, §4):
 
 | MPS file | Wielandt import | Key declaration |
 |---|---|---|
@@ -360,7 +363,8 @@ The MPS pipeline imports a focused subset of Wielandt declarations (detail in `d
 | `ParentHamiltonian/IntersectionProperty.lean` | `SpanGrowth/CumulativeToWordSpan` | Same |
 | `ParentHamiltonian/WrappingWindow.lean` | `SpanGrowth/VectorToMatrixSpan` | Vector-to-matrix lemmas |
 
-The `SourceTheorems/` files are **standalone paper-facing** declarations and are not imported by the MPS pipeline — correct design.
+The `Inequality/` files are standalone Wielandt declarations and are not
+imported by the MPS development.
 
 ### 9.8 Sorry/axiom status for Wielandt
 

@@ -660,7 +660,7 @@ into Proposition 3(c)→(b), which yields eventual full Kraus rank (hence
 normality) directly, without passing through an aperiodicity argument.
 
 Paper: Proposition 3 (a)⟹(c) of arXiv:0909.5347.
-This is the full paper-level (a)→(c) direction. -/
+This is the full (a)→(c) direction. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)

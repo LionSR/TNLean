@@ -359,8 +359,8 @@ Under `IsNormal`, there exists a word `w` of length
 Paper: "If E_A is primitive, then there exists A^(n) ∈ S_n(A)
 with n ≤ D²−d+1 such that tr(A^(n)) ≠ 0."
 
-We use `dim(S₁(A))` (which equals `krausRank A` in the paper-facing
-layer) instead of the ambient alphabet size `d`, since in general
+We use `dim(S₁(A))` (which equals `krausRank A` in the Wielandt inequality
+notation) instead of the ambient alphabet size `d`, since in general
 `dim(S₁(A)) ≤ d` and `dim(S₁(A))` is the tight quantity.
 (arXiv:0909.5347, Lemma 1) -/
 theorem exists_nonzero_trace_word_sharp [NeZero D]

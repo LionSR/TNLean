@@ -14,8 +14,8 @@ This file records the **cumulative** Wielandt chain: the four standard
 consequences of normality that feed into the fixed-length Wielandt bound
 (Theorem 1 of arXiv:0909.5347).
 
-The paper-facing Theorem 1 statements (case (1), (2), (3) bounds on the
-Kraus-rank index $i(A)$) are in `SourceTheorems/WielandtInequality.lean`.
+The Theorem 1 statements (case (1), (2), (3) bounds on the Kraus-rank index
+$i(A)$) are in `Inequality/Bounds.lean`.
 This file only provides the cumulative-span and eigenvector-spreading
 inputs needed by the Proposition 3(c)→(b) proof in `Primitivity/Normal.lean`.
 
@@ -57,8 +57,8 @@ the four standard cumulative consequences hold simultaneously.
 **Paper**: arXiv:0909.5347, proof of Theorem 1, before the fixed-length
 upgrade in Lemma 2(b).
 
-The fixed-length paper-facing bounds on `i(A)` (cases (1), (2), (3)) are
-assembled in `SourceTheorems/WielandtInequality.lean`.
+The fixed-length bounds on `i(A)` (cases (1), (2), (3)) are in
+`Inequality/Bounds.lean`.
 -/
 theorem wielandt_chain [NeZero D]
     (A : MPSTensor d D) (hN : IsNormal A) :

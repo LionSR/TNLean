@@ -93,9 +93,9 @@ theorem exists_nonzero_trace_word_of_isPrimitivePaper_sharp [NeZero D]
       Matrix.trace (evalWord A w) ≠ 0 := by
   exact exists_nonzero_trace_word_sharp A (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
-/-- **Lemma 1, sharp cumulative span** (paper-level statement).
+/-- **Lemma 1, sharp cumulative span**.
 
-If `A` is normalized and primitive under the source theorem hypotheses, then the cumulative
+If `A` is normalized and primitive in the spreading sense, then the cumulative
 span reaches ⊤ by step D² − krausRank(A) + 1:
   T_{D²−krausRank(A)+1}(A) = M_D(ℂ).
 
@@ -109,10 +109,10 @@ theorem cumulativeSpan_eq_top_of_isPrimitivePaper_sharp [NeZero D]
   exact cumulativeSpan_eq_top_of_isNormal_sharp A
     (isNormal_of_isPrimitivePaper A hNorm hPrim)
 
-/-- **Lemma 1, sharp positive-length version** (paper-level statement).
+/-- **Lemma 1, sharp positive-length version**.
 
-For `D ≥ 2`, if `A` is normalized and primitive under the source theorem hypotheses, then there
-exists a **positive-length** word `w` with `|w| ≤ D² − krausRank(A) + 1`
+For `D ≥ 2`, if `A` is normalized and primitive in the spreading sense, then
+there exists a **positive-length** word `w` with `|w| ≤ D² − krausRank(A) + 1`
 such that `tr(evalWord A w) ≠ 0`.
 
 This strengthens `exists_nonzero_trace_word_of_isPrimitivePaper_sharp` by

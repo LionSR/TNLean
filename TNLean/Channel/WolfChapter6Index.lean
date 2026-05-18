@@ -152,13 +152,13 @@ Other items: PARTIALLY via spectral gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 
-* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.PaperDefinitions`
+* `IsPrimitivePaper` — `TNLean.Wielandt.Primitivity.Definitions`
   (item 3: `Kₘ = M_d(ℂ)` for `m ≥ q`)
-* Pairwise equivalences from Proposition 3 assembly:
+* Pairwise equivalences from Proposition 3:
   * `primitivePaper_iff_hasEventuallyFullKrausRank` / `primitivePaper_iff_stronglyIrreducible`
     (in `TNLean.Wielandt.Primitivity.Equivalence`)
   * `hasEventuallyFullKrausRank_iff_isNormal`
-    (in `TNLean.Wielandt.Primitivity.PaperDefinitions`)
+    (in `TNLean.Wielandt.Primitivity.Definitions`)
 * Formulated Wolf-facing formulations:
   * `wolf_theorem_6_8_kraus_span`
   * `wolf_theorem_6_8_conjunction`
@@ -166,16 +166,17 @@ Other items: PARTIALLY via spectral gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.9 (Quantum Wielandt inequality)
 
-Current paper-level statements live in `TNLean.Wielandt.SourceTheorems.WielandtInequality`:
+Current formal statements live in `TNLean.Wielandt.Inequality.Bounds`:
 * `qIndex_le_iIndex_of_isPrimitivePaper`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_isUnit` /
   `iIndex_le_of_isPrimitivePaper_of_isUnit`
 * `wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector` /
   `iIndex_le_sq_of_noninvertible_eigenvector`
 
-The auxiliary aperiodicity-based assembly remains in
-`TNLean.Wielandt.QuantumWielandt`; it is not the default paper-facing
-conclusion.
+The positive-definite primitive-to-normal theorem is
+`MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef` in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
+Wielandt index bound itself.
 
 ---
 

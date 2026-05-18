@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Algebra.MatrixAux
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan
 import TNLean.Wielandt.RectangularSpan.Universality
 import Mathlib.LinearAlgebra.Dimension.Finrank

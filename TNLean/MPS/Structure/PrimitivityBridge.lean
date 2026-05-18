@@ -31,10 +31,10 @@ This file supplies one corner of the codebase's primitivity vocabulary:
 * `_root_.IsPrimitive` in `TNLean/Channel/Peripheral/Spectrum.lean` is the canonical
   peripheral-spectrum predicate for an arbitrary linear map.
 * `MPSTensor.IsPeripherallyPrimitive` in
-  `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` is the transfer-map formulation around
+  `TNLean/Wielandt/Primitivity/Definitions.lean` is the transfer-map formulation around
   `_root_.IsPrimitive`.
 * `MPSTensor.IsPrimitivePaper` in
-  `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` is the uniform
+  `TNLean/Wielandt/Primitivity/Definitions.lean` is the uniform
   spreading definition.
 * `HasPrimitiveFixedPoint` here is the existential spectral-gap formulation used by the MPS
   proof chain.
@@ -60,7 +60,7 @@ see `HasPrimitiveFixedPoint`.
 
 This is the operational definition used in the proof chain. The connection to the standard
 peripheral-spectrum predicate `_root_.IsPrimitive`, the transfer-map formulation
-`MPSTensor.IsPeripherallyPrimitive`, and the paper-facing spreading predicate
+`MPSTensor.IsPeripherallyPrimitive`, and the spreading predicate
 `MPSTensor.IsPrimitivePaper` is deferred to later connection results. -/
 structure IsPrimitiveMPS {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop where
