@@ -480,13 +480,13 @@ The source comparison above translates into the following formal targets.
 The present formalization already separates the source theorem into the same
 mathematical layers.
 
-The canonical-form BNT surface is encoded as canonical form plus strict weight
-ordering and non-equivalence of distinct
-representatives.\footnote{\leanid{IsCanonicalFormBNT},
+The surviving one-copy normal-canonical BNT formulation is encoded by
+\leanid{IsNormalCanonicalFormBNT}, together with the explicit separated-block
+hypotheses used by the BNT comparison lemmas.\footnote{%
 \path{TNLean/MPS/BNT/Construction.lean}.}
-This is a restricted already-grouped surface: it suppresses the repeated-copy
-data $r_j,\mu_{j,q}$ that appear in the BNT expansion and Appendix BNT
-characterization of \cite{Cirac2016MPDO_arXiv}.
+This is a restricted already-grouped formulation: it suppresses the
+repeated-copy data $r_j,\mu_{j,q}$ that appear in the BNT expansion and
+Appendix BNT characterization of \cite{Cirac2016MPDO_arXiv}.
 The former coefficient-array structures and conditional proportional comparison
 theorems have been deleted. Their one-shot bounded coefficient hypotheses did
 not encode the residual peeling or power-sum comparison in the source paper.

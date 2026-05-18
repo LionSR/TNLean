@@ -420,9 +420,9 @@ This structure is a deliberate parameterization — the analytic half of the
 overlap-rigidity route.  It records the per-family convergence properties that follow
 from the basis-of-normal-tensors definition in arXiv:1606.00608, Section II, lines 271–274.
 The combined two-family structure `SectorBasisOverlapSpanHypotheses` adds the injectivity
-and span-comparison fields.  When the after-blocking BNT cover is discharged
+and span-comparison fields. When the after-blocking BNT cover is discharged
 (tracker #1498, sub-issue #1501), the fields recorded here are consequences of the
-CF-BNT structure already present in `IsCanonicalFormBNT`. -/
+paper-faithful sector structure recorded in `IsBNTCanonicalForm`. -/
 structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
   /-- The basis blocks have nonzero bond dimension. -/
   dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j

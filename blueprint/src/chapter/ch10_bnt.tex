@@ -125,55 +125,6 @@ and~\cite{Cirac2021Matrix}.
     blocks are not gauge-phase equivalent.
 \end{definition}
 
-\begin{definition}[Canonical form with BNT separation]\label{def:cf_bnt}
-    \lean{MPSTensor.IsCanonicalFormBNT}
-    \leanok
-    \uses{def:is_canonical_form, def:blocks_not_gauge_phase_equiv}
-    A family is in \emph{canonical form with BNT separation}
-    if it satisfies Definition~\ref{def:is_canonical_form} and,
-    in addition:
-    \begin{enumerate}
-        \item the moduli are \emph{strictly} decreasing:
-              $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$
-              (strengthened from the non-increasing ordering
-              of Definition~\ref{def:is_canonical_form}),
-        \item distinct blocks of the same bond dimension are
-              \emph{not} gauge-phase equivalent.
-    \end{enumerate}
-    This is an already grouped special case. In the source BNT expansion
-    of \cite[Section~2.3]{Cirac2016MPDO_arXiv}, repeated copies of a
-    selected basis tensor appear as
-    \[
-        A^i
-        = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
-        \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1}.
-    \]
-    The coefficients $\mu_{j,q}$, multiplicities $r_j$, and gauges
-    $X_{j,q}$ are not part of this restricted single-representative
-    definition. This definition therefore records only strict weight
-    ordering and the absence of phase-gauge equivalence among the selected
-    blocks. It is not the source notion of block-injective canonical form,
-    which is the fixed-length direct-sum span condition discussed in
-    Chapter~\ref{ch:wielandt} and Chapter~\ref{ch:ft_proof}.
-\end{definition}
-
-\begin{theorem}[Distinct bond dimensions force BNT separation]
-    \label{thm:cf_bnt_distinct_dims}
-    \lean{MPSTensor.IsCanonicalForm.toIsCanonicalFormBNT_of_distinct_dims}
-    \leanok
-    \uses{def:is_canonical_form, def:cf_bnt}
-    If a canonical-form family has strictly decreasing weight moduli and
-    pairwise distinct bond dimensions, then it is in canonical form with BNT
-    separation.
-\end{theorem}
-
-\begin{proof}\leanok
-    The only new clause in Definition~\ref{def:cf_bnt} is the prohibition on
-    gauge-phase equivalence between distinct blocks of the same bond
-    dimension. When the bond dimensions are pairwise distinct, this clause is
-    vacuous.
-\end{proof}
-
 \begin{definition}[Normal canonical form with BNT separation]\label{def:normal_cf_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT}\leanok
     \uses{def:is_normal_canonical_form, def:blocks_not_gauge_phase_equiv}
@@ -188,9 +139,8 @@ and~\cite{Cirac2021Matrix}.
         \item the dominant block has unit modulus, $\|\mu_1\| = 1$
               (\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
     \end{enumerate}
-    As in Definition~\ref{def:cf_bnt}, the strict ordering describes an
-    already selected or grouped representative family. It is not the source
-    BNT expansion
+    The strict ordering describes an already selected or grouped
+    representative family. It is not the source BNT expansion
     \[
         A^i
         = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
@@ -243,20 +193,6 @@ and~\cite{Cirac2021Matrix}.
     Theorem~\ref{thm:overlap_decay} gives the decay.
 \end{proof}
 
-\begin{theorem}[Cross-overlap decay for BNT-separated blocks]\label{thm:cross_overlap_zero}
-    \lean{MPSTensor.IsCanonicalFormBNT.cross_overlap_tendsto_zero}
-    \leanok
-    \uses{def:cf_bnt, def:mpv_overlap}
-    If $((\mu_k), (A_k))$ is in canonical form with BNT separation and
-    $j \neq k$, then $O_{A_j A_k}(N) \to 0$.
-\end{theorem}
-
-\begin{proof}\leanok\uses{def:cf_bnt, thm:cross_overlap_zero_split}
-    Definition~\ref{def:cf_bnt} supplies injectivity, left-canonical
-    normalization, and the BNT separation hypothesis, so
-    Theorem~\ref{thm:cross_overlap_zero_split} applies directly.
-\end{proof}
-
 \begin{lemma}[BNT from explicit blockwise hypotheses]
     \label{lem:cf_bnt_is_bnt_split}
     \lean{MPSTensor.isBNT_of_separated_CFBNT_data}
@@ -277,21 +213,6 @@ and~\cite{Cirac2021Matrix}.
     Theorem~\ref{thm:cross_overlap_zero_split} supplies the off-diagonal
     decay. Therefore Lemma~\ref{lem:bnt_overlap_orthonormal_li} gives the
     eventual linear independence required in Definition~\ref{def:bnt}.
-\end{proof}
-
-\begin{lemma}[Restricted CF-BNT hypotheses yield a basis of normal tensors]\label{lem:cf_bnt_is_bnt}
-    \lean{MPSTensor.IsCanonicalFormBNT.isBNT}
-    \leanok
-    \uses{def:cf_bnt, def:bnt}
-    If $((\mu_k), (A_k))$ is in canonical form with BNT separation, then
-    the block tensors form a basis of normal tensors for the
-    block-diagonal tensor $\bigoplus_k \mu_k A_k$.
-\end{lemma}
-
-\begin{proof}\leanok\uses{def:cf_bnt, lem:cf_bnt_is_bnt_split}
-    Definition~\ref{def:cf_bnt} provides injective blocks, left-canonical
-    normalization, normalized self-overlaps, and BNT separation. Hence
-    Lemma~\ref{lem:cf_bnt_is_bnt_split} applies.
 \end{proof}
 
 \begin{remark}[Comparing the two normality conditions]%
@@ -449,7 +370,6 @@ and~\cite{Cirac2021Matrix}.
 \begin{lemma}[Strict-dominance coefficient ratios]
     \label{lem:strict_dominance_coefficient_ratios}
     \notready
-    \uses{def:cf_bnt}
     Let $(\mu_k)_k$ be a strictly ordered nonzero weight family with
     $\mu_0$ dominant. Then the normalized powers
     $(\mu_k/\mu_0)^N$ converge to $1$ for the dominant block and to

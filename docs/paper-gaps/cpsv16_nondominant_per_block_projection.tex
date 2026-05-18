@@ -8,7 +8,7 @@
 \input{command}
 
 \title{Non-Dominant Per-Block Projection in CPSV16 \S II Step~1\\
-       under the One-Copy \leanid{IsCanonicalFormBNT} Surface}
+       under the One-Copy Normal-Canonical BNT Formulation}
 \author{}
 \date{2026-05-13}
 
@@ -43,14 +43,15 @@ $c_N\ne 0$ cofinally,
 formalized as
 \leanid{EventuallyNonzeroProportionalMPV\textsubscript{2}}.
 
-The BNT canonical form \leanid{IsCanonicalFormBNT} carries a single
-weight $\mu_k$ per sector with strict ordering
+The surviving one-copy normal-canonical BNT formulation
+\leanid{IsNormalCanonicalFormBNT} carries a single weight $\mu_k$ per
+sector with strict ordering
 \begin{align}
     \|\mu_1\|>\|\mu_2\|>\cdots>\|\mu_r\|
     \tag{\leanid{mu\_strict\_anti}}
 \end{align}
 across the entire family.\footnote{%
-    \leanid{MPSTensor.IsCanonicalFormBNT.mu\_strict\_anti} in
+    \leanid{MPSTensor.IsNormalCanonicalFormBNT.mu\_strict\_anti} in
     \doclink{TNLean/MPS/BNT/Construction}.}
 Together with the dominant normalization $\|\mu_1\|=1$, every
 sub-dominant block has modulus strictly less than~$1$.
@@ -59,7 +60,7 @@ source structure as a two-layer canonical form: spectral levels
 $\lambda_j$ with $\|\lambda_1\|>\cdots>\|\lambda_g\|$ factored from
 within-sector unit-modulus weights $\mu_{j,q}$ ($\|\mu_{j,q}\|=1$)
 with sector multiplicities $r_j\ge 1$. The
-\leanid{IsCanonicalFormBNT} surface is the one-copy specialization
+\leanid{IsNormalCanonicalFormBNT} formulation is the one-copy specialization
 $r_j=1$ of that structure; see
 \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 
@@ -89,7 +90,8 @@ The formal target is, for $k_0:\mathrm{Fin}\,r_B$ arbitrary,\footnote{%
     \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}
     at line~152.}
 \leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}:
-given \leanid{IsCanonicalFormBNT} on both $\mu^A,A$ and $\mu^B,B$,
+given the one-copy normal-canonical BNT hypotheses on both $\mu^A,A$ and
+$\mu^B,B$,
 \leanid{EventuallyNonzeroProportionalMPV\textsubscript{2}} between the
 assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$ and the hypothesis
 $\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
@@ -119,7 +121,9 @@ and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangl
 With $\|\mu^A_j\|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
 \eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
 BNT cross-overlap decay\footnote{%
-    \leanid{MPSTensor.IsCanonicalFormBNT.cross\_overlap\_tendsto\_zero}.}
+    \leanid{MPSTensor.IsNormalCanonicalFormBNT.cross\_overlap\_tendsto\_zero};
+    the explicit separated-hypotheses form is
+    \leanid{MPSTensor.cross\_overlap\_tendsto\_zero\_of\_separated\_CFBNT\_data}.}
 gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$
 and a nonzero limit $\ell$ at $k=k_0$, so
 $\mathrm{RHS}_N=c_N(\mu^B_{k_0})^N(\ell+o(1))$.
@@ -218,8 +222,8 @@ because the cited mechanism requires either
 The collapse $r_j=1$ enforced by \leanid{mu\_strict\_anti}
 identifies the two layers into a single weight; once collapsed, the
 non-dominant Step~1 conclusion cannot be reached by per-block
-projection on the \leanid{IsCanonicalFormBNT} surface because both
-sides of the projected proportionality decay together.
+projection under the one-copy normal-canonical BNT formulation because
+both sides of the projected proportionality decay together.
 
 \bibliographystyle{alpha}
 \bibliography{references}
