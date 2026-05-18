@@ -42,7 +42,7 @@ so this file remains intentionally excluded from `TNLean.lean`.
 
 No stable in-repo module currently depends on this older CFII development
 exactly. We keep the full file as a checked alternate proof instead of
-collapsing it to a thinner compatibility wrapper, but its auxiliary lemmas are
+replacing it by an older reformulation, but its auxiliary lemmas are
 archival implementation details rather than supported library API.
 -/
 
@@ -316,61 +316,6 @@ end Similarity
 /-! ## Support projector: kernel inclusion and range equality -/
 
 section SupportProj
-
-/-- If `ρ` is PSD and `ρ *ᵥ v = 0`, then the support projector also kills `v`.
-
-This is the key kernel inclusion `ker(ρ) ≤ ker(supportProj ρ)`. -/
-lemma supportProj_mulVec_eq_zero_of_mulVec_eq_zero
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef)
-    (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) :
-    supportProj (D := D) ρ hρ *ᵥ v = 0 := by
-  classical
-  let hH : ρ.IsHermitian := hρ.isHermitian
-  -- Work with the unitary diagonalization `ρ = U * diag(λ) * Uᴴ`.
-  let U : Matrix (Fin D) (Fin D) ℂ := ↑hH.eigenvectorUnitary
-  let s : Fin D → ℂ := fun i => if 0 < hH.eigenvalues i then 1 else 0
-  have hUU : Uᴴ * U = 1 := by
-    -- direct from unitarity
-    simpa [U] using eig_conj_mul (D := D) (M := ρ) hH
-  -- Work in the eigenbasis: `w := Uᴴ *ᵥ v`.
-  let w : Fin D → ℂ := Uᴴ *ᵥ v
-  have hΛw : Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w = 0 := by
-    have hρ_spec : ρ = U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ := by
-      simpa [U] using (spectral_decomp_eq (D := D) (M := ρ) hH)
-    have hρv : (U * Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) * Uᴴ) *ᵥ v = 0 := by
-      -- Rewrite `ρ` using its spectral decomposition.
-      have hv' := hv
-      -- After rewriting, `hv'` has exactly the desired type.
-      -- (We use `rw` rather than `simp` to avoid recursion-depth issues.)
-      rw [hρ_spec] at hv'
-      exact hv'
-    have hUΛw : U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
-      simpa [w, Matrix.mulVec_mulVec, Matrix.mul_assoc] using hρv
-    have hUΛw' : Uᴴ *ᵥ (U *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w)) = 0 := by
-      simp [hUΛw]
-    -- Cancel `Uᴴ * U = 1`.
-    have : (Uᴴ * U) *ᵥ (Matrix.diagonal (fun j => (↑(hH.eigenvalues j) : ℂ)) *ᵥ w) = 0 := by
-      simpa [Matrix.mulVec_mulVec, Matrix.mul_assoc] using hUΛw'
-    simpa [Matrix.mulVec_mulVec, hUU] using this
-  have h_comp : ∀ j, (↑(hH.eigenvalues j) : ℂ) * w j = 0 := fun j => by
-    have := congrFun hΛw j
-    simpa [Matrix.mulVec, dotProduct, Matrix.diagonal_apply] using this
-  have hSw : Matrix.diagonal s *ᵥ w = 0 := by
-    ext j
-    rw [Matrix.mulVec_diagonal]
-    by_cases hjpos : 0 < hH.eigenvalues j
-    · have : w j = 0 := by
-        have hEig_ne : (↑(hH.eigenvalues j) : ℂ) ≠ 0 := by
-          exact_mod_cast (ne_of_gt hjpos)
-        exact (mul_eq_zero.mp (h_comp j)).resolve_left hEig_ne
-      simp [s, hjpos, this]
-    · simp [s, hjpos]
-  have hP_def : supportProj (D := D) ρ hρ = U * Matrix.diagonal s * Uᴴ := by
-    -- Unfolding `supportProj` matches exactly our `U` and `s` definitions.
-    rfl
-  have : (U * Matrix.diagonal s * Uᴴ) *ᵥ v = U *ᵥ (Matrix.diagonal s *ᵥ w) := by
-    simp [w, U, Matrix.mulVec_mulVec, Matrix.mul_assoc]
-  simp [hP_def, this, hSw]
 
 -- Blank lines between `have` groups aid readability; tolerated here.
 set_option linter.style.emptyLine false in
