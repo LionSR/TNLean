@@ -10,11 +10,8 @@ import Mathlib.Algebra.BigOperators.Fin
 # Shared block-diagonal gauge infrastructure
 
 This file factors out the pure-linear-algebra block-diagonal gauge machinery
-that is consumed by both:
-
-* the block-gauge construction in `TNLean.MPS.FundamentalTheorem.Multi`, and
-* the canonical-form sector-comparison data layer
-  (`TNLean.MPS.CanonicalForm.SectorComparison.CommonPrimitiveBlockMatchingData`).
+used by the block-gauge constructions in the multi-block and BNT fundamental
+theorem arguments.
 
 Exports:
 
@@ -26,9 +23,8 @@ Exports:
   identity: per-block conjugation lifts to a `globalGaugeOfBlocks`-conjugation
   of `toTensorFromBlocks`.
 
-These declarations are pure linear-algebra intermediate constructions not specific to the
-fundamental theorem; placing them in `SharedInfra` avoids a dependency inversion
-where `CanonicalForm/...` had to import `FundamentalTheorem.Multi`.
+These declarations are pure linear-algebra intermediate constructions rather
+than statements of the fundamental theorem itself.
 
 ## Reference
 
