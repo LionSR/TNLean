@@ -229,8 +229,7 @@ lemma smul_mul_conjTranspose_of_norm_eq_one {m n : ℕ}
     (μ : ℂ) (hμ : ‖μ‖ = 1) (N : Matrix (Fin m) (Fin n) ℂ) :
     (μ • N) * (μ • N)ᴴ = N * Nᴴ := by
   have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [Complex.normSq_eq_norm_sq, hμ, one_pow, Complex.ofReal_one]
+    rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
   calc
     (μ • N) * (μ • N)ᴴ = (star μ * μ) • (N * Nᴴ) := by
       simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]

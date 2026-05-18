@@ -98,8 +98,7 @@ theorem ks_equality_of_peripheral_eigenvector (K : Fin d → Matrix (Fin D) (Fin
       -- i.e., star μ * μ * trace(X†X) = trace(X†X)
       rw [smul_smul]
       have hμ_norm : star μ * μ = 1 := by
-        rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-        simp [Complex.normSq_eq_norm_sq, hμ]
+        rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
       rw [hμ_norm, one_smul]
     rw [h1, h2, sub_self]
   -- PSD + trace 0 → gap = 0

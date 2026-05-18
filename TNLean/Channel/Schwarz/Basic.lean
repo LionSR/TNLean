@@ -254,15 +254,8 @@ theorem ks_equality_of_peripheral_eigenvector_of_fixedPoint
     -- Second term: use the eigenvector equation `E(X)=μX` and `‖μ‖=1`.
     have h2 : Matrix.trace (ρ * ((map K X)ᴴ * map K X)) = Matrix.trace (ρ * (Xᴴ * X)) := by
       -- Rewrite `‖μ‖ = 1` as `conj μ * μ = 1`.
-      have hnormSq : Complex.normSq μ = 1 := by
-        calc
-          Complex.normSq μ = ‖μ‖ ^ 2 := Complex.normSq_eq_norm_sq μ
-          _ = 1 := by simp [hμ]
       have hconjmul : (starRingEnd ℂ) μ * μ = (1 : ℂ) := by
-        calc
-          (starRingEnd ℂ) μ * μ = (↑(Complex.normSq μ) : ℂ) := by
-            simpa using (Complex.normSq_eq_conj_mul_self (z := μ)).symm
-          _ = 1 := by simp [hnormSq]
+        rw [Complex.conj_mul', hμ]; simp
       have hmulconj : μ * (starRingEnd ℂ) μ = (1 : ℂ) := by
         simpa [mul_comm] using hconjmul
       have hkey : (μ • X)ᴴ * (μ • X) = Xᴴ * X := by

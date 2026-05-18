@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.FundamentalTheorem.Full
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
@@ -111,9 +110,7 @@ private theorem exists_cyclic_sector_decomp_after_blocking_of_isPeriodic
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
-  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := by
-    classical
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+  have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
   letI : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
   letI : SeminormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -280,9 +277,7 @@ private lemma cornerRestriction_primitive_and_irreducible_of_cyclicDecomp
       KadisonSchwarz.krausMap_mul_left_of_mem_multiplicativeDomain
         (K := K) (hMulDomain k) X
   obtain ⟨ω, hωprim⟩ := hP.primitiveRoot
-  have hM : (1 : MatrixAlg D).PosDef := by
-    classical
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ))
+  have hM : (1 : MatrixAlg D).PosDef := Matrix.PosDef.one
   letI : NormedAddCommGroup (MatrixAlg D) :=
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
   letI : SeminormedAddCommGroup (MatrixAlg D) :=

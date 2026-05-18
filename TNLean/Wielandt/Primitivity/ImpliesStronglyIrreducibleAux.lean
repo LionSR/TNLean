@@ -108,14 +108,6 @@ theorem transferMap_pow_conjTranspose_eigenvector_of_root_of_unity
 
 /-! ### Step 3: Hermitian parts are fixed points -/
 
-/-- `X + X†` is always Hermitian. -/
-private lemma isHermitian_add_conjTranspose
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (X + Xᴴ).IsHermitian := by
-  unfold Matrix.IsHermitian
-  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose]
-  abel
-
 /-- `i • (X† - X)` is always Hermitian. -/
 private lemma isHermitian_smul_I_sub_conjTranspose
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -253,11 +245,11 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
   have htr := trace_eigenvector_eq_zero A hNorm hEig hμ_ne
   rcases hermitianParts_not_both_zero hX_ne with h | h
   · exact ⟨X + Xᴴ,
-      isHermitian_add_conjTranspose X, h,
+      Matrix.isHermitian_add_transpose_self X, h,
       trace_hermitianPart_eq_zero htr,
       transferMap_pow_hermitianPart_fixedPoint A hEig hroot,
       not_posSemidef_of_hermitian_ne_zero_trace_eq_zero
-        (isHermitian_add_conjTranspose X) h (trace_hermitianPart_eq_zero htr)⟩
+        (Matrix.isHermitian_add_transpose_self X) h (trace_hermitianPart_eq_zero htr)⟩
   · exact ⟨Complex.I • (Xᴴ - X),
       isHermitian_smul_I_sub_conjTranspose X, h,
       trace_antiHermitianPart_eq_zero htr,
