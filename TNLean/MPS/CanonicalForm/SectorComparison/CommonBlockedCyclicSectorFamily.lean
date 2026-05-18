@@ -740,11 +740,13 @@ theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ 
 `(B_k^{[m_k]})^{[e_k]}` produce the same MPV family after the canonical
 alphabet identification. -/
 theorem blocked_word_comparison (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (hCast : F.groupedBlockCastAgrees k) :
+    (k : Fin r) :
     SameMPV₂
       (blockTensor (d := d) (D := dim k) (blocks k) F.p)
       (F.commonReindexedBlock k) :=
-  F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k hCast
+  F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k
+    (groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+      (fun hp_eq h_card i => flattenWordOfBlock_cast_eq hp_eq h_card i) F k)
 
 end CommonBlockedCyclicSectorFamily
 
