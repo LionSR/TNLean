@@ -1269,7 +1269,7 @@ The non-matched decay clause is delivered in full.
 \label{subsec:paper_bnt_full_basis_global_gauge}
 
 The preceding substitution theorem works on the unit-modulus subset. The
-following two statements record the full-basis form used by the matched-coordinate
+following two statements record the full-basis form used by the sector-permuted
 global gauge. Their hypotheses explicitly require a unit-modulus copy in every
 sector on both sides; under this normalization, the matching covers the whole
 BNT basis.
@@ -1381,32 +1381,33 @@ BNT basis.
     \uses{def:paper_bnt_cf}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
     MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
-    least one copy weight of modulus $1$. Then the total bond dimensions agree,
-    and there is
+    least one copy weight of modulus $1$. Then the total bond dimensions agree;
+    write their common value as $D$. There is
     \[
-        Y\in \GL_{\dim Q_{\mathrm{tot}}}(\C)
+        Y\in \GL_D(\C)
     \]
     such that, for every physical index $i$,
     \[
         Q_{\mathrm{tot}}^i
         =
-        Y\,\bigl(\operatorname{cast}_{\dim P_{\mathrm{tot}}=\dim Q_{\mathrm{tot}}}
-            P_{\mathrm{tot}}^i\bigr)\,Y^{-1}.
+        Y\,P_{\mathrm{tot}}^i\,Y^{-1},
     \]
-    This is the literal cast-of-$P_{\mathrm{tot}}$ form of
+    where $P_{\mathrm{tot}}^i$ and $Q_{\mathrm{tot}}^i$ are both regarded as
+    matrices in $\MN{D}$ using the total bond-dimension equality. This is the
+    normalized BNT form of
     \cite[Corollary~II.2 and \S~II.C, lines 1189--1192]
-        {Cirac2017MPDO_AnnPhys},
-    under the same unit-modulus-copy normalization as
-    Theorem~\ref{thm:paper_bnt_equal_global_gauge}.
+        {Cirac2017MPDO_AnnPhys}, under the same unit-modulus-copy normalization
+    as Theorem~\ref{thm:paper_bnt_equal_global_gauge}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:paper_bnt_equal_global_gauge}
     Apply Theorem~\ref{thm:paper_bnt_equal_global_gauge} to obtain the
-    matched-coordinate flattened gauge. The sector-coordinate permutation
-    induced by the basis matching, the copy permutations, and the
-    bond-dimension equalities identifies the matched $P$-coordinates with the
-    literal total tensor $P_{\mathrm{tot}}$, transported along the total
-    bond-dimension equality. Composing this permutation gauge with the
-    matched-coordinate gauge gives the displayed single matrix $Y$.
+    flattened gauge after the sectors of $P$ have been reindexed by the
+    bijection between basis blocks of $P$ and $Q$. The sector-coordinate
+    permutation $\rho$, induced by this bijection, the copy permutations, and
+    the bond-dimension equalities, identifies the reindexed $P$-side direct sum
+    with the total tensor $P_{\mathrm{tot}}$, transported along the total
+    bond-dimension equality. Composing the permutation gauge for $\rho$ with
+    the sector-permuted gauge gives the displayed single matrix $Y$.
 \end{proof}
