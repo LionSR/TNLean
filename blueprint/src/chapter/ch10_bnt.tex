@@ -1373,3 +1373,40 @@ BNT basis.
     conjugacies into the flattened direct-sum conjugation by
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
+
+\begin{theorem}[Literal equal-MPV gauge after sector-coordinate permutation]%
+    \label{thm:paper_bnt_equal_mps_gaugeEquiv_literal}
+    \lean{MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv_literal}
+    \leanok
+    \uses{def:paper_bnt_cf}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
+    MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
+    least one copy weight of modulus $1$. Then the total bond dimensions agree,
+    and there is
+    \[
+        Y\in \GL_{\dim Q_{\mathrm{tot}}}(\C)
+    \]
+    such that, for every physical index $i$,
+    \[
+        Q_{\mathrm{tot}}^i
+        =
+        Y\,\bigl(\operatorname{cast}_{\dim P_{\mathrm{tot}}=\dim Q_{\mathrm{tot}}}
+            P_{\mathrm{tot}}^i\bigr)\,Y^{-1}.
+    \]
+    This is the literal cast-of-$P_{\mathrm{tot}}$ form of
+    \cite[Corollary~II.2 and \S~II.C, lines 1189--1192]
+        {Cirac2017MPDO_AnnPhys},
+    under the same unit-modulus-copy normalization as
+    Theorem~\ref{thm:paper_bnt_equal_global_gauge}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:paper_bnt_equal_global_gauge}
+    Apply Theorem~\ref{thm:paper_bnt_equal_global_gauge} to obtain the
+    matched-coordinate flattened gauge. The sector-coordinate permutation
+    induced by the basis matching, the copy permutations, and the
+    bond-dimension equalities identifies the matched $P$-coordinates with the
+    literal total tensor $P_{\mathrm{tot}}$, transported along the total
+    bond-dimension equality. Composing this permutation gauge with the
+    matched-coordinate gauge gives the displayed single matrix $Y$.
+\end{proof}
