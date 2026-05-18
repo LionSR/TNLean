@@ -980,34 +980,61 @@ satisfying those conditions.
     weight-norm conditions.
 \end{proof}
 
+\begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
+    \label{thm:paperbnt_supplier_after_blocking}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
+    \leanok
+    \uses{thm:paperbnt_supplier_prepared}
+    Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
+    a finite family of nonzero weights $\mu_k$ and blocks $B_k$ over the
+    blocked physical alphabet, such that:
+    \begin{enumerate}
+        \item every block has positive bond dimension;
+        \item every block is TP-normalized, primitive, irreducible, and
+              injective;
+        \item the $p$-blocked tensor $A^{[p]}$ and the weighted direct sum
+              $\bigoplus_k \mu_k B_k$ generate the same MPV family at every
+              positive length.
+    \end{enumerate}
+    Moreover, under the explicit normalization hypotheses
+    $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least one $k$, then
+    there exists a sector decomposition $P$ over the blocked physical alphabet
+    such that $P$ is in the strengthened BNT canonical form of
+    Chapter~\ref{ch:bnt}, and $A^{[p]}$ and $P$ generate the same MPV family at
+    every positive length.
+\end{theorem}
+
+\begin{proof}\leanok
+    The after-blocking reduction supplies the TP-normalized primitive
+    irreducible injective blocks and the positive-length MPV identity. The
+    normalized-weight hypotheses are additional hypotheses in the formal
+    statement, corresponding to the normalization that
+    \cite[Section~II.A, line~246]{Cirac2017MPDO_AnnPhys} treats as a choice.
+    The missing rescaling step is recorded in
+    \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex}.
+    Applying Theorem~\ref{thm:paperbnt_supplier_prepared} to this prepared
+    family gives the sector decomposition, in the spirit of the BNT selection
+    described in
+    \cite[Proposition~\texttt{char-BNT}]{Cirac2017MPDO_AnnPhys}.
+\end{proof}
+
 \begin{remark}[Arbitrary-input reduction]%
     \label{rem:arbitrary_input_bridge_gap}
     \leanok
-    Theorem~\ref{thm:paperbnt_supplier_prepared} starts from a pre-normalized
-    block family. For an arbitrary MPS tensor $A$,
-    Theorem~\ref{thm:tp_primitive_blockdecomp} in
-    Chapter~\ref{ch:canonical_after_blocking} supplies, after blocking by a
-    period $p$, a zero-tail/primitive-block decomposition. For every spin
-    configuration $\sigma$ of length $N$,
-    \[
-        V^{(N)}(A^{[p]})_\sigma
-        = V^{(N)}(\mathbf{0}_{d^{[p]},D_0})_\sigma
-        + V^{(N)}\!(\textstyle\bigoplus_k \mu_k B_k)_\sigma.
-    \]
-    At $N \ge 1$ the zero-tail term vanishes, so the nonzero blocks suffice to
-    identify the MPV. The length-zero contribution is the bond-dimension trace
-    $D_0$ of the zero-tail factor; matching it to the input bond dimension is
-    the zero-tail identity. The remaining normalization hypotheses in the
-    strengthened BNT formulation built from
-    Definition~\ref{def:bnt_paper}---the bound $|\mu_k|\le 1$ and the
-    unit-modulus witness $\exists k, |\mu_k|=1$---are normalization
-    conventions. When the nonzero block family is nonempty, scaling the input by
-    a single scalar makes $\max_k |\mu_k|=1$, and the bound $|\mu_k|\le 1$
-    follows once a global unit witness is fixed. Thus the arbitrary-input
-    statement at $N \ge 1$ is provided by
-    Theorem~\ref{thm:tp_primitive_blockdecomp}, and the BNT predicate
-    (Definition~\ref{def:bnt_paper}) is obtained by a global rescaling and
-    reordering of weights.
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking} gives the
+    arbitrary-input reduction used here, conditional on the two weight
+    normalization hypotheses displayed in that theorem. It is a positive-length
+    statement: the all-zero
+    summand in the block decomposition contributes only at length zero, so the
+    nonzero primitive blocks identify the MPV family for $N\ge 1$. The proof
+    that the prepared weights can always be rescaled to satisfy the displayed
+    normalization is not part of this entry; the theorem instead records the
+    sector-decomposition conclusion once that normalization choice is supplied.
+    This is a scope restriction relative to the source theorem; see
+    \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex}.
+    The length-zero trace identity and the fully unblocked canonical-form
+    statement remain part of the surrounding reduction in
+    Chapter~\ref{ch:canonical_after_blocking}.
 \end{remark}
 
 \subsection{Auxiliary lemmas}%
