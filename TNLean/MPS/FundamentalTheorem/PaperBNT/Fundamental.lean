@@ -181,7 +181,7 @@ theorem ft_paper_bnt_equal_global_gaugePos
       (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
       (ζ : Fin Q.basisCount → ℂ)
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
-      (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
       (∀ (k : Fin Q.basisCount) (i : Fin d),
         Q.basis k i =
           ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
@@ -213,8 +213,6 @@ theorem ft_paper_bnt_equal_global_gaugePos
   let Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
     fun k => (hGPE k).choose
   let ζ : Fin Q.basisCount → ℂ := fun k => (hGPE k).choose_spec.choose
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
-    (hGPE k).choose_spec.choose_spec.1
   have hConj : ∀ (k : Fin Q.basisCount) (i : Fin d),
       Q.basis k i =
         ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
@@ -230,6 +228,24 @@ theorem ft_paper_bnt_equal_global_gaugePos
       (A := cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k)))
       (B := Q.basis k) (Xblock k) (ζ k) (hConj k) N σ,
       mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
+  have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
+    intro k
+    have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hP.basis_normalized_self_overlap (β k)).norm
+      simpa using h1
+    have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hQ.basis_normalized_self_overlap k).norm
+      simpa using h1
+    have hScale :=
+      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
+        (ζ := ζ k) (hMpv k)
+    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
+    intro k hzero
+    have hnorm := hζ_norm k
+    simp [hzero] at hnorm
   have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
   have hWeightData : ∀ k : Fin Q.basisCount,
       ∃ (hCopies : P.copies (β k) = Q.copies k)
@@ -297,7 +313,7 @@ theorem ft_paper_bnt_equal_global_gaugePos
         toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis := by
     funext i
     simp [toTensorFromBlocks]
-  refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, ?_⟩
+  refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, ?_⟩
   refine ⟨globalGaugeOfBlocks Xcoord, rfl, ?_⟩
   intro i
   calc
@@ -337,7 +353,7 @@ theorem ft_paper_bnt_equal_global_gauge
       (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
       (ζ : Fin Q.basisCount → ℂ)
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
-      (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
       (∀ (k : Fin Q.basisCount) (i : Fin d),
         Q.basis k i =
           ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
