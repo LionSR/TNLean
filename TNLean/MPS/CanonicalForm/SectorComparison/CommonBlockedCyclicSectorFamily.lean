@@ -716,7 +716,9 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
 
 /-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
 tensor `B_k^{[p]}` (under the canonical alphabet identification) in the sense of
-generating the same MPV family. -/
+generating the same MPV family.  By definition, `commonReindexedBlock k` is the direct
+$p$-blocked tensor of block $k$, transported to the common alphabet $d^{[p]}$ via the
+canonical reindexing. -/
 theorem reindexed_sameMPV₂ (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
@@ -727,7 +729,9 @@ theorem reindexed_sameMPV₂ (F : CommonBlockedCyclicSectorFamily blocks) (k : F
 
 /-- The nonzero-part decomposition of a weighted block sum `⨁_k μ_k B_k` transports
 through the common-alphabet identification: the common-alphabet sectors have the same
-nonzero-part decomposition as the direct `p`-blocked tensors. -/
+nonzero-part decomposition as the direct `p`-blocked tensors.  Here
+`commonReindexedBlock k` is definitionally the direct $p$-blocked tensor $B_k^{[p]}$
+transferred to the common alphabet $d^{[p]}$. -/
 theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
