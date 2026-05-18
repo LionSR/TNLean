@@ -93,11 +93,10 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
 /-- A Same-MPV corollary: after obtaining any two gauges from the single-block FT,
 they are unique up to a nonzero scalar.
 
-The hypothesis `_hAB : SameMPV A B` matches the blueprint's statement
-(the theorem is stated for tensors generating the same MPV family), but the proof
-does not use it: gauge uniqueness follows from injectivity alone, together with
-the two gauge equations $B_i = X A_i X^{-1}$ and $B_i = Y A_i Y^{-1}$.
-The hypothesis is retained for faithfulness to the blueprint declaration. -/
+Although the matching-MPV hypothesis is not needed for the conclusion — gauge
+uniqueness follows from injectivity alone, together with the two gauge equations
+$B_i = X A_i X^{-1}$ and $B_i = Y A_i Y^{-1}$ — it is retained to match the
+blueprint statement faithfully. -/
 theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
     (hA : IsInjective A) (_hAB : SameMPV A B)
     {X Y : GL (Fin D) ℂ}
