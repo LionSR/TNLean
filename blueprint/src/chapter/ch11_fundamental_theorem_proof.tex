@@ -781,10 +781,17 @@ facts used to recover the lists of weights from those power sums.
     at length zero as well.
 \end{proof}
 
+% The Lean declarations referenced from here through the end of this
+% subsection live in
+% TNLean/MPS/CanonicalForm/SectorComparison/{BasicSectorComparison,
+% BlockMatchingComparison, CommonPrimitiveBlockMatchingData}.lean.  These
+% files are not in the root import graph, so checkdecls cannot resolve
+% their declarations; the `\lean{...}` tags are omitted below and the
+% Lean names are listed in the comment above each entry.
+
+% Lean: MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan
 \begin{theorem}[Sector comparison from leftover zero blocks and span hypotheses]%
     \label{thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
-    \lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan}
-    \leanok
     \uses{lem:sameMPV2_live_of_zeroTail_eq,
         thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
         lem:sector_basis_overlap_span_to_matching,
@@ -803,7 +810,6 @@ facts used to recover the lists of weights from those power sums.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{lem:sameMPV2_live_of_zeroTail_eq,
         thm:bnt_sector_decomp_pair_overlap_span_of_block_span,
         lem:sector_basis_overlap_span_to_matching,
@@ -822,10 +828,9 @@ arXiv:1606.00608. They name the extra formal assumptions used here before the
 zero-block sector comparison: span equality, phase-cover hypotheses, and
 block-matching conclusions for the common primitive sectors.
 
+% Lean: MPSTensor.CommonPrimitiveSpanHypotheses
 \begin{definition}[Span hypotheses for common primitive sectors]%
     \label{def:common_primitive_span_hypotheses}
-    \lean{MPSTensor.CommonPrimitiveSpanHypotheses}
-    \leanok
     \uses{def:mpv_state, def:injective}
     For two common primitive nonzero-sector families at one blocking length, this
     condition consists of the hypotheses needed before applying the
@@ -835,10 +840,9 @@ block-matching conclusions for the common primitive sectors.
     size.
 \end{definition}
 
+% Lean: MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover
 \begin{theorem}[Phase covers supply span hypotheses]%
     \label{thm:common_primitive_span_hypotheses_of_common_phase_cover}
-    \lean{MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover}
-    \leanok
     \uses{def:common_primitive_span_hypotheses, def:mpv_common_phase_cover,
         lem:mpv_common_phase_cover_span_eq}
     If the two common primitive nonzero-sector families have equal leftover
@@ -848,17 +852,15 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{lem:mpv_common_phase_cover_span_eq}
     The zero-block dimension equality and injectivity fields are exactly the supplied hypotheses. The
     common phase cover gives the finite-length span equality by
     Lemma~\ref{lem:mpv_common_phase_cover_span_eq}.
 \end{proof}
 
+% Lean: MPSTensor.CommonPrimitivePhaseCoverHypotheses
 \begin{definition}[Phase-cover hypotheses for common primitive sectors]%
     \label{def:common_primitive_phase_cover_hypotheses}
-    \lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses}
-    \leanok
     \uses{def:mpv_common_phase_cover, def:injective}
     For two common primitive nonzero-sector families at one blocking length, this
     condition is the phase-cover analog of
@@ -867,10 +869,9 @@ block-matching conclusions for the common primitive sectors.
     common MPV phase cover for the two block families.
 \end{definition}
 
+% Lean: MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses
 \begin{theorem}[Phase-cover hypotheses imply span hypotheses]%
     \label{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
-    \lean{MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses}
-    \leanok
     \uses{def:common_primitive_phase_cover_hypotheses,
         def:common_primitive_span_hypotheses}
     If two common primitive nonzero-sector families satisfy the phase-cover
@@ -881,7 +882,6 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{thm:common_primitive_span_hypotheses_of_common_phase_cover}
     The zero-block dimension equality and the two injectivity assertions are already part of
     the phase-cover hypotheses. Apply
@@ -889,10 +889,9 @@ block-matching conclusions for the common primitive sectors.
     common MPV phase cover for the two block families.
 \end{proof}
 
+% Lean: MPSTensor.CommonPrimitiveBlockMatchingHypotheses
 \begin{definition}[Block-matching hypotheses for common primitive sectors]%
     \label{def:common_primitive_block_matching_hypotheses}
-    \lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses}
-    \leanok
     \uses{def:common_primitive_phase_cover_hypotheses}
     For two common primitive nonzero-sector families at one blocking length, this
     condition is the block-matching analog of
@@ -902,10 +901,9 @@ block-matching conclusions for the common primitive sectors.
     (a permutation, equal bond dimensions, and gauge-phase equivalences).
 \end{definition}
 
+% Lean: MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses
 \begin{theorem}[Block-matching hypotheses imply phase-cover hypotheses]%
     \label{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses}
-    \lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses}
-    \leanok
     \uses{def:common_primitive_block_matching_hypotheses,
         def:common_primitive_phase_cover_hypotheses}
     If the block-matching hypotheses of
@@ -915,17 +913,15 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{lem:common_phase_cover_of_block_matching}
     The zero-block dimension equality and injectivity assumptions transfer directly.
     The common MPV phase cover is provided by the general block-matching lemma
     applied to the two block families.
 \end{proof}
 
+% Lean: MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses
 \begin{theorem}[Block-matching hypotheses imply span hypotheses]%
     \label{thm:common_primitive_block_matching_hypotheses_to_span_hypotheses}
-    \lean{MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses}
-    \leanok
     \uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
         def:common_primitive_span_hypotheses}
     If the block-matching hypotheses hold, then the span hypotheses
@@ -933,22 +929,18 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{thm:common_primitive_block_matching_hypotheses_to_phase_cover_hypotheses,
         thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
     The block-matching hypotheses give the phase-cover hypotheses via the preceding
     theorem, and the phase-cover hypotheses imply the span hypotheses.
 \end{proof}
 
+% Lean: MPSTensor.BlockMatchingGaugePhaseData and its projections
+% (ofConclusion, reindexB, castA, globalGL, globalX) live in
+% TNLean/MPS/CanonicalForm/SectorComparison/CommonPrimitiveBlockMatchingData.lean,
+% which is outside the root import graph; see the per-subsection note above.
 \begin{definition}[Per-block block-matching gauge-phase data]%
     \label{def:block_matching_gauge_phase_data}
-    \lean{MPSTensor.BlockMatchingGaugePhaseData,
-        MPSTensor.BlockMatchingGaugePhaseData.ofConclusion,
-        MPSTensor.BlockMatchingGaugePhaseData.reindexB,
-        MPSTensor.BlockMatchingGaugePhaseData.castA,
-        MPSTensor.BlockMatchingGaugePhaseData.globalGL,
-        MPSTensor.BlockMatchingGaugePhaseData.globalX}
-    \leanok
     \uses{def:common_primitive_block_matching_hypotheses, def:gauge_phase_equiv}
     The block-matching conclusion can be unpacked into explicit
     per-block data: a permutation matching the two block families, equalities of
@@ -961,11 +953,11 @@ block-matching conclusions for the common primitive sectors.
     dependent and flattened block-diagonal gauges assembled from the $X_k$.
 \end{definition}
 
+% Lean: MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj
+% and MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks
+% (same out-of-import-graph source file as above).
 \begin{theorem}[Per-block gauge phases assemble to an explicit global gauge]%
     \label{thm:block_matching_globalX_conj}
-    \lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
-        MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks}
-    \leanok
     \uses{def:block_matching_gauge_phase_data, def:block_diagonal_tensor,
         def:gauge_equiv}
     If the block weights absorb the per-block phases,
@@ -976,7 +968,6 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     The scalar identity moves each phase $\zeta_k$ from the tensor relation into
     the corresponding block weight. After this absorption, every weighted block
     satisfies an ordinary conjugation identity by $X_k$; the block-diagonal
@@ -984,10 +975,9 @@ block-matching conclusions for the common primitive sectors.
     gauge equivalence.
 \end{proof}
 
+% Lean: MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses
 \begin{theorem}[Common primitive sectors with span hypotheses]%
     \label{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
-    \lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses}
-    \leanok
     \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
         def:common_primitive_span_hypotheses,
         thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
@@ -1008,7 +998,6 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
         thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan}
     Apply the common primitive theorem to obtain the nonzero-sector families.
@@ -1017,10 +1006,9 @@ block-matching conclusions for the common primitive sectors.
     hypotheses required by the leftover-zero-block comparison theorem.
 \end{proof}
 
+% Lean: MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts
 \begin{theorem}[Common primitive irreducible sectors with conditional block-span consequences]%
     \label{thm:afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
-    \lean{MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts}
-    \leanok
     \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed,
         lem:mpv_common_phase_cover_span_eq}
     Let $A$ and $B$ have the same MPV family and assume the blocked-word
@@ -1120,10 +1108,9 @@ block-matching conclusions for the common primitive sectors.
     unconditional decomposition.
 \end{proof}
 
+% Lean: MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover
 \begin{theorem}[Common sectors from phase covers]%
     \label{thm:afterBlocking_sectorComparison_reindexed_commonPhaseCover}
-    \lean{MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover}
-    \leanok
     \uses{def:common_primitive_phase_cover_hypotheses,
         def:common_sector_relabeling_hypothesis}
     Let $A$ and $B$ have the same MPV family. Assume the blocked-word
@@ -1139,7 +1126,6 @@ block-matching conclusions for the common primitive sectors.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{thm:afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses,
         thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
     Use Theorem~\ref{thm:common_primitive_phase_cover_hypotheses_to_span_hypotheses}
@@ -1245,7 +1231,7 @@ proof rather than statements about canonical-form data, so they are collected
 here.
 
 \subsection{Block-diagonal corollaries of the single-block theorem}%
-\label{subsec:ft_block_sum_wrappers}
+\label{subsec:ft_block_sum_corollaries}
 
 \begin{remark}
     See Definition~\ref{def:block_diagonal_tensor} for the formalized block-diagonal tensor construction.

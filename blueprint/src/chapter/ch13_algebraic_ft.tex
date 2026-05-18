@@ -322,7 +322,7 @@ conjugacy of the middle-bond insertion data.
     The $\mc{V}(A) = \mc{V}(B)$ hypothesis gives, for every $X \in \MN{D}$,
     equality of the virtual-insertion trace coefficients:
     $\tr(A_0^{i_0} X\, A_1^{i_1} A_2^{i_2})
-     = \tr(B_0^{i_0} Y\, B_1^{i_1} B_2^{i_2})$
+        = \tr(B_0^{i_0} Y\, B_1^{i_1} B_2^{i_2})$
     for some $Y$ depending on $X$.
     Since all three site tensors on each side are injective,
     the physical realisation maps $O_A, O_B$ are algebra homomorphisms
@@ -347,7 +347,7 @@ Lemma~2 of~\cite{Molnar2018NormalPEPS} shows that this agreement
 forces the local tensors to be proportional.
 
 \begin{lemma}[Aligned gauges force proportionality --
-    Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
+        Lemma~2 of \protect\cite{Molnar2018NormalPEPS}]%
     \label{lem:tensor_proportional}
     \lean{MPSTensor.tensor_proportional}
     \leanok
@@ -358,10 +358,10 @@ forces the local tensors to be proportional.
     all $Y \in \MN{D}$ (on the external bond), and all physical indices $i,j$,
     \begin{align}
         \tr(A_1^{i}\, X\, A_2^{j})
-         &= \tr(B_1^{i}\, X\, B_2^{j})
-        \label{eq:internal_bond}\\
+         & = \tr(B_1^{i}\, X\, B_2^{j})
+        \label{eq:internal_bond}        \\
         \tr(A_2^{j}\, Y\, A_1^{i})
-         &= \tr(B_2^{j}\, Y\, B_1^{i})
+         & = \tr(B_2^{j}\, Y\, B_1^{i})
         \label{eq:external_bond}
     \end{align}
     Diagrammatically, inserting $X$ on the bond between the two sites
@@ -395,8 +395,8 @@ forces the local tensors to be proportional.
     give, for all physical indices $i,j$,
     \[
         \begin{aligned}
-        A_2^{j} A_1^{i} &= B_2^{j} B_1^{i},\\
-        A_1^{i} A_2^{j} &= B_1^{i} B_2^{j}.
+            A_2^{j} A_1^{i} & = B_2^{j} B_1^{i}, \\
+            A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}.
         \end{aligned}
     \]
     Write $\Id_D = \sum_j c_j A_2^j$ using the decomposition map
@@ -1529,7 +1529,7 @@ gauge matrices $X_k$ and phases $\zeta_k$.  Using the block-diagonal $\GL$
 construction of Definition~\ref{def:global_gauge_of_blocks}, one assembles
 these per-block gauges into a single global gauge matrix acting on the total
 bond space of the weighted direct sum.  This is the \emph{global
-proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
+    proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO_AnnPhys}.
 
 \begin{theorem}[Global conjugation from per-block gauge-phase data]\label{thm:global_x_conj}
     \lean{MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj,
@@ -1552,7 +1552,7 @@ proportionality matrix} of~\cite[Corollary~II.2, lines~1155--1192]{Cirac2017MPDO
     identity $\mu_A(k) = \mu_B(\sigma(k))\,\zeta_k$.  After this absorption
     each weighted block satisfies an ordinary conjugation relation
     $\mu_B(\sigma(k)) B_{\sigma(k)}^i
-     = X_k\, \bigl(\mu_A(k)\, \tilde A_k^i\bigr)\, X_k^{-1}$.
+        = X_k\, \bigl(\mu_A(k)\, \tilde A_k^i\bigr)\, X_k^{-1}$.
     Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} then assembles the
     per-block $X_k$ into the global block-diagonal gauge
     $X = \bigoplus_k X_k$.
