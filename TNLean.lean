@@ -229,7 +229,11 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.Examples
 import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
 import TNLean.MPS.FundamentalTheorem.PaperBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.PaperBNT.Supplier
+import TNLean.MPS.Periodic.Overlap
+import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.ZGauge
+import TNLean.MPS.Periodic.Symmetry
+import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.CanonicalForm.Reduction
