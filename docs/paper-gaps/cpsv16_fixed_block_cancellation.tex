@@ -65,11 +65,11 @@ The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
     \right)
     =r_A+1.
 \end{align}
-From this, formalized declarations of finite-weight eventual LI are available on
-both sides:
-\leanid{MPSTensor.eventually\_linearIndependent\_all\_left\_single\_right\_of\_all\_overlaps\_decay\_CFBNT}
-and
-\leanid{MPSTensor.eventually\_linearIndependent\_all\_right\_single\_left\_of\_all\_overlaps\_decay\_CFBNT}.
+In the present PaperBNT development the relevant linear-independence input is
+the combined-family statement
+\leanid{IsBNTCanonicalForm.combined\_family\_eventually\_li}, which applies
+when all cross-overlaps between the two BNT basis families vanish.\footnote{%
+    \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.}
 The exact contradiction step is still open:
 \begin{align}
     (\forall j,  \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\to 0)
@@ -80,11 +80,10 @@ The exact contradiction step is still open:
       c_N\sum_k \nu_k^N\,V^{(N)}(B_k)
     \right).
 \end{align}
-The two blocked theorems are the fixed-right and fixed-left cancellation
-statements.\footnote{\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT};
-\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}. Tracked in issue~\#1607.}
-which are the source-faithful fixed-block cancellations
-\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.
+This is the source-faithful fixed-block cancellation step
+\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.  It remains a mathematical
+obligation in the proportional PaperBNT route rather than a live declaration on
+the retired one-copy surface.
 
 The earlier conditional helpers requiring combined-family linear independence
 (\path{_phase_sum_li}) and the residual-span variants have been retired in
@@ -130,19 +129,19 @@ analytic hypotheses:
   \item an eventual positive lower bound $\|c_N\| \geq \delta > 0$.
 \end{enumerate}
 Hypotheses~(1)--(3) are present in the source via the BNT structure
-\cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}.  Hypothesis~(4) is not
-directly supplied: the cited argument rules out cancellation by appeal to the
-dominant-adjusted scalar limit, but deriving the explicit lower bound
-$\|c_N\|\geq\delta$ from the structural data of the canonical form is not yet
-formalized and is recorded as an open obligation in
-\path{audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.\footnote{%
-  The universally-quantified non-cancellation discharge is
-  \leanid{MPSTensor.hNoCancel\_of\_unitModulus\_decay\_c\_norm\_lower}.
-  The two assembled contradictions are
-  \leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_paperFaithful}
-  and
-  \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_paperFaithful};
-  both carry hypothesis~(4) as an explicit parameter.}
+\cite[Theorem~\texttt{thm1}]{Cirac2016MPDO_arXiv}.  On the present PaperBNT
+surface they are represented by the following formal statements:
+\leanid{IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero},
+\leanid{IsBNTCanonicalForm.combined\_family\_eventually\_li}, and
+\leanid{IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}; the
+coefficient boundedness used in the same estimates is
+\leanid{IsBNTCanonicalForm.norm\_coeff\_le\_copies}.\footnote{%
+  All four declarations are in
+  \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.}
+Hypothesis~(4) is not directly supplied: the cited argument rules out
+cancellation by appeal to the dominant-adjusted scalar limit, but deriving the
+explicit lower bound $\|c_N\|\geq\delta$ from the structural data of the
+canonical form remains an open obligation in the proportional route.
 
 \bibliographystyle{alpha}
 \bibliography{references}

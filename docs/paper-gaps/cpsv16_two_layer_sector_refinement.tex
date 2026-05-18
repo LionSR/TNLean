@@ -6,10 +6,9 @@
 
 \input{command}
 
-\title{Two-Layer Sector Refinement of CPSV16 \texttt{eq:II\_ABasicTensors}\\
-in \leanid{IsBNTCanonicalFormSD}}
+\title{Equal-Modulus Refinements of CPSV16 \texttt{eq:II\_ABasicTensors}}
 \author{}
-\date{2026-05-13}
+\date{2026-05-18}
 
 \begin{document}
 \maketitle
@@ -17,104 +16,82 @@ in \leanid{IsBNTCanonicalFormSD}}
 \section{The source assertion}
 
 Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2016~\cite{Cirac2016MPDO_arXiv}
-expresses any tensor $A$ in canonical form in terms of its basis of normal
-tensors (BNT) $A_j$ as
+expresses a tensor $A$ in canonical form in terms of its basis of normal
+tensors $A_j$ as
 \begin{equation}
   \label{eq:bnt-general}
   A^i = \bigoplus_{j=1}^{g} \bigoplus_{q=1}^{r_j}
-        \mu_{j,q}\, X_{j,q}\, A^i_j\, X_{j,q}^{-1},
+        \mu_{j,q}\, X_{j,q}\, A^i_j\, X_{j,q}^{-1}.
   \tag{\texttt{eq:II\_ABasicTensors}}
 \end{equation}
-where $\mu_{j,q} \in \mathbb{C}$ are \emph{arbitrary} complex coefficients
-(no ordering or unit-modulus condition is imposed), $X_{j,q}$ are invertible
-gauge matrices, and $A_j$ are the BNT normal blocks. The eventual linear
-independence of the BNT vectors $\lvert V^{(N)}(A_j)\rangle$ is recorded
-separately in Definition~\texttt{def:4:BNT} of
-\cite{Cirac2021Matrix}.
+The coefficients $\mu_{j,q}$ are raw complex weights.  The display does not
+require the weights in a fixed sector $j$ to have the same modulus, nor does it
+strictly order the moduli of different sectors.  The normalization stated
+earlier in CPSV16 is only the global convention
+\begin{align}
+    |\mu_{j,q}|\leq 1
+    \quad\text{for every }j,q,
+    \qquad
+    |\mu_{j,q}|=1
+    \quad\text{for at least one }j,q.
+\end{align}
 
-\section{The extra hypotheses in \leanid{IsBNTCanonicalFormSD}}
+\section{The present formal surface}
 
-The \Lean{} predicate \leanid{IsBNTCanonicalFormSD} in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}
-is a \emph{project-specific specialization} of
-\eqref{eq:bnt-general}. It adds three hypotheses beyond what
-\eqref{eq:bnt-general} asserts:
+The current PaperBNT formulation follows \eqref{eq:bnt-general} directly.
+The core predicate
+\leanid{IsBNTCanonicalForm}\footnote{%
+    \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Basic}.}
+keeps the raw coefficients $\mu_{j,q}$ and records only the CPSV line-246
+normalization:
+\begin{align}
+    |\mu_{j,q}|\leq 1
+    \quad\text{for every }j,q,
+    \qquad
+    \exists j,q,\ |\mu_{j,q}|=1.
+\end{align}
+The per-block unit-modulus condition needed in the projection step of the
+fundamental theorem is not a field of the predicate.  It appears as an explicit
+theorem-level hypothesis in the coefficient non-vanishing statement
+\leanid{IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}.\footnote{%
+    \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.}
 
-\begin{enumerate}
-  \item \textbf{Strict spectral ordering.}
-        The predicate requires the existence of spectral-level coefficients
-        $\lambda_j \in \mathbb{C}$ (one per BNT sector $j$) with
-        $\|\lambda_0\| > \|\lambda_1\| > \cdots > \|\lambda_{g-1}\|$
-        (recorded as \leanid{StrictAnti (fun j => \|spectralLevel j\|)}).
-        No such ordering is present in \eqref{eq:bnt-general}.
+\section{The optional equal-modulus layer}
 
-  \item \textbf{Unit-modulus within-sector factors.}
-        Each weight $\mu_{j,q}$ is required to factor as
-        $\mu_{j,q} = \lambda_j \cdot \nu_{j,q}$ with $|\nu_{j,q}| = 1$,
-        recorded as $\|\textit{weight}_{j,q} / \lambda_j\| = 1$
-        (\leanid{weight\_factor}).
-        The general form \eqref{eq:bnt-general} allows $|\mu_{j,q}|$
-        to vary arbitrarily within a sector. The unit-modulus factorization
-        is conceptually related to the RFP characterization in
-        \texttt{thm:charact-MPS} of~\cite{Cirac2016MPDO_arXiv}
-        (lines 543--555), which is a strict sub-class of the general BNT.
+Some estimates become cleaner under the stronger factorization
+\begin{align}
+    \mu_{j,q}=\lambda_j\nu_{j,q},
+    \qquad
+    |\nu_{j,q}|=1.
+    \label{eq:equal-modulus-layer}
+\end{align}
+This is now represented only by the optional structure
+\leanid{HasEqualModulusWeightLayer}.\footnote{%
+    \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/EqualModulus}.}
+It is not part of \leanid{IsBNTCanonicalForm}.  The separation is essential:
+the BNT form $C\oplus (1/2)C$ has a single basis tensor with two copies whose
+weights have distinct moduli, so it satisfies \eqref{eq:bnt-general} but does
+not admit \eqref{eq:equal-modulus-layer}.
 
-  \item \textbf{Dominant normalization.}
-        The dominant spectral level satisfies $\|\lambda_0\| = 1$
-        (\leanid{spectralLevel\_dom\_norm\_one}). This mirrors the
-        \leanid{IsNormalCanonicalFormBNT.mu\_dom\_norm\_one} convention in
-        \doclink{TNLean/MPS/BNT/Construction}; it is not imposed by
-        \eqref{eq:bnt-general}.
-\end{enumerate}
+The optional layer also uses a non-strict ordering of the moduli
+$|\lambda_j|$.  A strict ordering would exclude valid canonical forms such as
+$C\oplus D$ with two non-equivalent normal tensors and weights of equal
+modulus.
 
-\section{What these hypotheses collectively define}
+\section{Classification}
 
-Together, the three conditions define a \emph{specialization} of
-\eqref{eq:bnt-general} in which equal-modulus blocks have been grouped
-into sectors, a common spectral factor $\lambda_j$ extracted, and the
-dominant sector normalized to $|\lambda_0| = 1$. This is the
-structure computed by the \leanid{SectorDecomposition} grouping in the
-project, and it subsumes the RFP case of
-\texttt{thm:charact-MPS}~\cite{Cirac2016MPDO_arXiv}.
+\emph{Scope restriction.}  Any theorem that assumes
+\leanid{HasEqualModulusWeightLayer} proves a result for the equal-modulus
+subclass of the CPSV BNT form, not for the general statement
+\eqref{eq:bnt-general}.  Such a theorem may be used as a restricted result, but
+it should not be marked as the source theorem unless the displayed
+factorization \eqref{eq:equal-modulus-layer} is stated as an explicit
+hypothesis.
 
-The three conditions are a \emph{specialization} (additional hypotheses
-on top of \eqref{eq:bnt-general}), not a deviation: every
-\leanid{IsBNTCanonicalFormSD} instance arises from a valid
-\eqref{eq:bnt-general} decomposition by grouping and normalizing.
-The planned adapter from the one-copy normal-canonical BNT formulation to
-\leanid{IsBNTCanonicalFormSD} must now be stated from
-\leanid{IsNormalCanonicalFormBNT}, or from explicit separated-block
-hypotheses, via rescaling by $\rho = \|\mu_0\|$.
-
-\section{Scope restriction}
-
-The adapter absorbs only the one-copy-per-sector case ($r_j = 1$ for all $j$).
-The full multi-copy BNT form with $r_j > 1$ - and the associated
-Newton--Girard recovery of multiplicities from $\sum_q \mu_{j,q}^N$ - is a
-separate paper-level gap documented in
-\path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
-The \leanid{SectorDecomposition} surface is multi-copy-ready
-(\leanid{copies j} may exceed 1), but the current adapter does not
-populate it beyond $r_j = 1$.
-
-\section{Formal declarations}
-
-The relevant formal declarations are:
-\begin{itemize}
-  \item \leanid{IsBNTCanonicalFormSD} -
-        the predicate (\doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}).
-  \item \leanid{IsBNTCanonicalFormSD.spectralLevel\_strict\_anti} -
-        the \leanid{StrictAnti} accessor.
-  \item \leanid{IsBNTCanonicalFormSD.weight\_factor} -
-        the unit-modulus factorization accessor.
-  \item \leanid{IsBNTCanonicalFormSD.spectralLevel\_dom\_norm\_one} -
-        the dominant normalization accessor.
-  \item A future adapter from \leanid{IsNormalCanonicalFormBNT}, or from
-        explicit separated-block hypotheses, to \leanid{IsBNTCanonicalFormSD}.
-\end{itemize}
-See also \ghpr{1657} (branch \path{feat/mps-ft-path-beta-pr1-two-layer})
-and the audit memo
-\path{audits/2026-05-13_cpsv16_ft_path_beta_scout.md} §``PR~1.5 amendment''.
+The general PaperBNT route should use the raw-weight results in
+\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}: coefficient boundedness,
+cross-overlap decay, combined-family eventual linear independence, and
+coefficient non-vanishing under a supplied unit-modulus copy.
 
 \bibliographystyle{alpha}
 \bibliography{references}
