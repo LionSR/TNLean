@@ -10,11 +10,11 @@ import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 /-!
 # Proposition 3 — Full Equivalence (arXiv:0909.5347)
 
-This file contains the paper-level development of **Proposition 3** from
+This file contains the formal development of **Proposition 3** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
 (arXiv:0909.5347, Section II), and establishes the full circular equivalence.
 
-## Proposition 3 (paper statement)
+## Proposition 3
 
 The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 

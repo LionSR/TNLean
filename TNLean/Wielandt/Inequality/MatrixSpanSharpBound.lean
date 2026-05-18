@@ -7,11 +7,12 @@ import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.RectangularSpan.Universality
 
 /-!
-# Lemma 2(b) — exact D²−D+1 paper-level statement (arXiv:0909.5347)
+# Lemma 2(b) — exact D²−D+1 rank-one word span (arXiv:0909.5347)
 
-This file states the **exact paper-level** version of **Lemma 2(b)** from
+This file states the exact fixed-length version of **Lemma 2(b)** from
 Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequality*
-(arXiv:0909.5347), in the `IsPrimitivePaper` language of the paper.
+(arXiv:0909.5347), using the spreading-primitivity predicate
+`IsPrimitivePaper`.
 
 ## Main results
 
@@ -28,16 +29,16 @@ Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's inequalit
 
 ## Quantitative status
 
-Unlike `SourceTheorems/MatrixSpanExistence.lean` (which provides only a coarse existential `∃ N`
-witness), this file delivers the **exact paper bound** `D² − D + 1` under
+Unlike `Inequality/MatrixSpanExistence.lean` (which provides only a coarse existential `∃ N`
+witness), this file delivers the **exact bound** `D² − D + 1` under
 the additional hypotheses that a specific Kraus operator `A i₀` is
 noninvertible and possesses a nonzero eigenvector `φ`.
 
 These hypotheses match the paper's Lemma 2(b) statement precisely.
 Consequently, this file supplies the exact fixed-length ingredient behind the
-blocked noninvertible branch of `SourceTheorems/WielandtInequality.lean`; it is
+blocked noninvertible branch of `Inequality/Bounds.lean`; it is
 strictly stronger than the qualitative `∃ N` statement exported by
-`SourceTheorems/MatrixSpanExistence.lean`.
+`Inequality/MatrixSpanExistence.lean`.
 
 ## Proof strategy
 

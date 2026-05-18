@@ -69,7 +69,7 @@ $\operatorname{kr}(A)$ is therefore not a change in the mathematical bound.
 \footnote{The formal definitions are \leanid{MPSTensor.wordSpan} in
     \path{TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean:57--64} and
     \leanid{MPSTensor.krausRank} in
-    \path{TNLean/Wielandt/Primitivity/PaperDefinitions.lean:85--91}. The local
+    \path{TNLean/Wielandt/Primitivity/Definitions.lean:84--90}. The local
     source identifies $d$ as the number of linearly independent Kraus operators in
     \path{Papers/0909.5347/main.tex:360--365}; the proof of Lemma~1 uses
     $\dim T_1(A)=d$ in \path{Papers/0909.5347/main.tex:579--583}.}
@@ -81,9 +81,9 @@ The general inequality is formalized for the same index $i(A)$:
 The proof passes through the usual eventual full-rank formulation and a
 blocking argument, but the conclusion is the equality
 $S_n(A)=M_D(\mathbb C)$ for one fixed length $n$. It is not merely a statement
-about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The paper-facing
-    general theorem is \leanid{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
-    in \path{TNLean/Wielandt/SourceTheorems/WielandtInequality.lean:394--473}. The
+about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The general
+    theorem is \leanid{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
+    in \path{TNLean/Wielandt/Inequality/Bounds.lean:389--468}. The
     formal equivalence between the primitive condition used by Sanz--P\'erez-Garc\'ia--Wolf--Cirac
     and eventual full Kraus rank under normalization is in
     \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
@@ -102,7 +102,7 @@ under that assumption it proves
 \]
 These are the hypotheses in \cite[Theorem~1]{Sanz2010Quantum}. The older
 chosen-Kraus statements are still present, but only as corollaries obtained by
-taking $X=A_{i_0}$.\footnote{The paper-facing declarations are
+taking $X=A_{i_0}$.\footnote{The relevant declarations are
     \leanid{MPSTensor.wordSpan\_\allowbreak eq\_\allowbreak top\_\allowbreak of\_\allowbreak
         isPrimitivePaper\_\allowbreak of\_\allowbreak mem\_\allowbreak wordSpan\_\allowbreak one\_\allowbreak
         of\_\allowbreak isUnit} and
@@ -115,7 +115,7 @@ taking $X=A_{i_0}$.\footnote{The paper-facing declarations are
         mem\_\allowbreak wordSpan\_\allowbreak one\_\allowbreak of\_\allowbreak noninvertible\_\allowbreak
         eigenvector} for
     the non-invertible case, all in
-    \path{TNLean/Wielandt/SourceTheorems/WielandtInequality.lean}. The shorter
+    \path{TNLean/Wielandt/Inequality/Bounds.lean}. The shorter
     chosen-generator statements in the same file are corollaries.}
 
 \section{Resolved one-step-subspace issue}
@@ -164,7 +164,7 @@ Consequently, the explicit $\rho>0$ hypothesis is a genuine hypothesis of this
 auxiliary route, not an accidental artefact. This theorem should not be cited as
 the source theorem itself. The formal statements following the paper remain the
 primitive-channel statements in
-\path{TNLean/Wielandt/SourceTheorems/WielandtInequality.lean} and the
+\path{TNLean/Wielandt/Inequality/Bounds.lean} and the
 primitive/even\-tual-full-rank equivalence in
 \path{TNLean/Wielandt/Primitivity/Equivalence.lean}. CPSV16 Section~2.3 should
 be cited through those primitive-channel statements rather than through the
@@ -182,12 +182,13 @@ Nor is the use of the increasing spaces
 \]
 by itself a theorem-level deviation. Some intermediate formal results prove
 $T_{D^2}(A)=M_D(\mathbb C)$ under normality. These results are weaker than the
-full quantum Wielandt theorem, but the paper-facing theorem proves the stated
-bound for $i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
+full quantum Wielandt theorem, but the theorem in
+\path{TNLean/Wielandt/Inequality/Bounds.lean} proves the stated bound for
+$i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
 \footnote{The cumulative-span theorem is
     \leanid{MPSTensor.cumulativeSpan\_eq\_top} in
     \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
-    paper-facing theorem for the spaces $S_n(A)$ is the general theorem cited above.
+    theorem for the spaces $S_n(A)$ is the general theorem cited above.
     The blueprint makes this distinction in
     \path{blueprint/src/chapter/ch07_wielandt.tex:461--490} and states the general
     bound in \path{blueprint/src/chapter/ch07_wielandt.tex:492--548}.}
@@ -205,11 +206,11 @@ with the paper's linearly independent Kraus count made explicit. The two
 improved estimates have also been upgraded to the paper's hypotheses: the
 distinguished matrix is any element of $S_1(A)$ with the required spectral
 property. The chosen-Kraus statements remain useful corollaries, but they should
-not be cited as the paper-facing theorem surface.
+not be cited as the theorem itself.
 
 The remaining caution is theorem-surface hygiene. Cumulative-span declarations
 and bundled analysis chains are useful support lemmas for the proof, while the
-paper-facing results are the exact-length statements about $S_n(A)$ and the
+Wielandt results are the exact-length statements about $S_n(A)$ and the
 index $i(A)$.
 
 \bibliographystyle{alpha}

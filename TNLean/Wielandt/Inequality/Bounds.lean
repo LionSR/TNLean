@@ -4,17 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Wielandt.SourceTheorems.EigenvectorSpreading
-import TNLean.Wielandt.SourceTheorems.MatrixSpanSharpBound
-import TNLean.Wielandt.SourceTheorems.NonzeroTraceWord
+import TNLean.Wielandt.Inequality.EigenvectorSpreading
+import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
+import TNLean.Wielandt.Inequality.NonzeroTraceWord
 import TNLean.Wielandt.SpanGrowth.InvertibleWordSpan
 import TNLean.Wielandt.RankOne.Products
 
 /-!
 # Theorem 1 — Quantum Wielandt's inequality (arXiv:0909.5347 / Wolf Section 6.9)
 
-This file contains the public paper-level statements for the currently
-formalized parts of **Theorem 1** from Sanz–Pérez-García–Wolf–Cirac,
+This file contains the stated index bounds in **Theorem 1** of
+Sanz–Pérez-García–Wolf–Cirac,
 *A quantum version of Wielandt's inequality* (arXiv:0909.5347), equivalently
 Wolf's Theorem 6.9 in *Quantum Channels & Operations: Guided Tour*.
 
@@ -64,16 +64,17 @@ and `iIndex_le_of_isPrimitivePaper_of_isUnit` are retained as corollaries. The
 proofs add the chosen one-step element as a redundant generator and use the
 word-span invariance lemmas from `SpanGrowth/InvertibleWordSpan.lean`.
 
-Within TNLean these results are currently standalone paper-level theorem statements:
-the canonical / FT / BNT development does not import them directly.
+Within TNLean these results are standalone Wielandt inequality statements:
+the canonical-form, fundamental-theorem, and BNT development does not import
+them directly.
 
 These statements record Theorem 1 of arXiv:0909.5347 / Wolf Section 6.9 in the
 notation of the source; the FT/BNT formalization does not use them.
 
-This file is the preferred public entry point for the currently formalized
-Theorem 1 statements. The positive-definite primitive-to-normal theorem lives in
+This file is the preferred entry point for the currently formalized Theorem 1
+bounds. The positive-definite primitive-to-normal theorem lives in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`; it is not the
-default paper-level formulation of Theorem 1.
+Theorem 1 bound itself.
 
 ### Part 4 — Case (1): general bound
 
