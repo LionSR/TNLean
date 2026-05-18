@@ -7,7 +7,7 @@
 \input{command}
 
 \title{Two-Layer Sector Refinement of CPSV16 \texttt{eq:II\_ABasicTensors}\\
-in \leanid{IsBNTCanonicalFormSD}}
+on the \leanid{PaperBNT} Sector Surface}
 \author{}
 \date{2026-05-13}
 
@@ -32,27 +32,26 @@ independence of the BNT vectors $\lvert V^{(N)}(A_j)\rangle$ is recorded
 separately in Definition~\texttt{def:4:BNT} of
 \cite{Cirac2021Matrix}.
 
-\section{The extra hypotheses in \leanid{IsBNTCanonicalFormSD}}
+\section{The retired specialization}
 
-The \Lean{} predicate \leanid{IsBNTCanonicalFormSD} in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}
-is a \emph{project-specific specialization} of
-\eqref{eq:bnt-general}. It adds three hypotheses beyond what
-\eqref{eq:bnt-general} asserts:
+An earlier formal route introduced a project-specific specialization of
+\eqref{eq:bnt-general}.  That route grouped equal-modulus blocks into
+sectors, extracted a common spectral factor, and imposed three hypotheses
+which are stronger than the source display:
 
 \begin{enumerate}
   \item \textbf{Strict spectral ordering.}
         The predicate requires the existence of spectral-level coefficients
         $\lambda_j \in \mathbb{C}$ (one per BNT sector $j$) with
         $\|\lambda_0\| > \|\lambda_1\| > \cdots > \|\lambda_{g-1}\|$
-        (recorded as \leanid{StrictAnti (fun j => \|spectralLevel j\|)}).
+        (formerly recorded as a strict-antitone condition on the chosen
+        spectral levels).
         No such ordering is present in \eqref{eq:bnt-general}.
 
   \item \textbf{Unit-modulus within-sector factors.}
         Each weight $\mu_{j,q}$ is required to factor as
         $\mu_{j,q} = \lambda_j \cdot \nu_{j,q}$ with $|\nu_{j,q}| = 1$,
-        recorded as $\|\textit{weight}_{j,q} / \lambda_j\| = 1$
-        (\leanid{weight\_factor}).
+        recorded by an explicit unit-modulus factorization condition.
         The general form \eqref{eq:bnt-general} allows $|\mu_{j,q}|$
         to vary arbitrarily within a sector. The unit-modulus factorization
         is conceptually related to the RFP characterization in
@@ -60,37 +59,38 @@ is a \emph{project-specific specialization} of
         (lines 543--555), which is a strict sub-class of the general BNT.
 
   \item \textbf{Dominant normalization.}
-        The dominant spectral level satisfies $\|\lambda_0\| = 1$
-        (\leanid{spectralLevel\_dom\_norm\_one}). This mirrors the
-        \leanid{IsNormalCanonicalFormBNT.mu\_dom\_norm\_one} convention in
-        \doclink{TNLean/MPS/BNT/Construction}; it is not imposed by
-        \eqref{eq:bnt-general}.
+        The dominant spectral level satisfies $\|\lambda_0\| = 1$.
+        This mirrors the \leanid{IsNormalCanonicalFormBNT.mu\_dom\_norm\_one}
+        convention in \doclink{TNLean/MPS/BNT/Construction}; it is not
+        imposed by \eqref{eq:bnt-general}.
 \end{enumerate}
 
-\section{What these hypotheses collectively define}
+\section{The surviving formal surface}
 
-Together, the three conditions define a \emph{specialization} of
-\eqref{eq:bnt-general} in which equal-modulus blocks have been grouped
-into sectors, a common spectral factor $\lambda_j$ extracted, and the
-dominant sector normalized to $|\lambda_0| = 1$. This is the
-structure computed by the \leanid{SectorDecomposition} grouping in the
-project, and it subsumes the RFP case of
-\texttt{thm:charact-MPS}~\cite{Cirac2016MPDO_arXiv}.
+The surviving surface separates the source display into two pieces.
+\leanid{SectorDecomposition} stores the basis blocks, their copy
+multiplicities, and the raw weights $\mu_{j,q}$ through the coefficient
+\[
+    P.\mathtt{coeff}\,N\,j=\sum_q (P.\mathtt{weight}\,j\,q)^N .
+\]
+\leanid{IsBNTCanonicalForm} then records the BNT hypotheses used by the
+fundamental-theorem route: irreducibility, left canonical normalization,
+gauge-phase distinctness of equal-dimensional basis blocks, eventual
+linear independence of the basis MPVs, bounded weights, and existence of
+at least one unit-modulus weight.
 
-The three conditions are a \emph{specialization} (additional hypotheses
-on top of \eqref{eq:bnt-general}), not a deviation: every
-\leanid{IsBNTCanonicalFormSD} instance arises from a valid
-\eqref{eq:bnt-general} decomposition by grouping and normalizing.
-The planned adapter from the one-copy normal-canonical BNT formulation to
-\leanid{IsBNTCanonicalFormSD} must now be stated from
-\leanid{IsNormalCanonicalFormBNT}, or from explicit separated-block
-hypotheses, via rescaling by $\rho = \|\mu_0\|$.
+This keeps the two-layer information visible without assuming strict
+ordering of spectral levels or a factorization
+$\mu_{j,q}=\lambda_j\nu_{j,q}$ as part of the BNT predicate.  When such a
+factorization is needed, it should be stated as an additional theorem
+hypothesis rather than hidden in the canonical-form predicate.
 
 \section{Scope restriction}
 
-The adapter absorbs only the one-copy-per-sector case ($r_j = 1$ for all $j$).
-The full multi-copy BNT form with $r_j > 1$ - and the associated
-Newton--Girard recovery of multiplicities from $\sum_q \mu_{j,q}^N$ - is a
+The one-copy normal-canonical formulation
+\leanid{IsNormalCanonicalFormBNT} covers only the case $r_j=1$ for all
+$j$.  The full multi-copy BNT form with $r_j>1$ -- and the associated
+Newton--Girard recovery of multiplicities from $\sum_q\mu_{j,q}^N$ -- is a
 separate paper-level gap documented in
 \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 The \leanid{SectorDecomposition} surface is multi-copy-ready
@@ -99,18 +99,21 @@ populate it beyond $r_j = 1$.
 
 \section{Formal declarations}
 
-The relevant formal declarations are:
+The relevant surviving formal declarations are:
 \begin{itemize}
-  \item \leanid{IsBNTCanonicalFormSD} -
-        the predicate (\doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}).
-  \item \leanid{IsBNTCanonicalFormSD.spectralLevel\_strict\_anti} -
-        the \leanid{StrictAnti} accessor.
-  \item \leanid{IsBNTCanonicalFormSD.weight\_factor} -
-        the unit-modulus factorization accessor.
-  \item \leanid{IsBNTCanonicalFormSD.spectralLevel\_dom\_norm\_one} -
-        the dominant normalization accessor.
+  \item \leanid{SectorDecomposition} -
+        the raw two-layer sector surface
+        (\doclink{TNLean/MPS/SharedInfra/SectorDecomposition}).
+  \item \leanid{IsBNTCanonicalForm} -
+        the BNT canonical-form predicate
+        (\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Basic}).
+  \item \leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero},
+        \leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li},
+        \leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block},
+        and \leanid{MPSTensor.IsBNTCanonicalForm.thermodynamic\_limit\_nonvanishing}
+        in \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.
   \item A future adapter from \leanid{IsNormalCanonicalFormBNT}, or from
-        explicit separated-block hypotheses, to \leanid{IsBNTCanonicalFormSD}.
+        explicit separated-block hypotheses, to \leanid{IsBNTCanonicalForm}.
 \end{itemize}
 See also \ghpr{1657} (branch \path{feat/mps-ft-path-beta-pr1-two-layer})
 and the audit memo

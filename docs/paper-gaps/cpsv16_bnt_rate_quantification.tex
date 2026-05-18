@@ -8,7 +8,7 @@
 \input{command}
 
 \title{Rate-Quantified BNT Cross-Overlap Decay\\
-       on the \leanid{SectorDecomposition} Surface}
+       on the \leanid{PaperBNT} Sector Surface}
 \author{}
 \date{2026-05-13}
 
@@ -62,26 +62,24 @@ The argument as written does not quantify the rate of decay in
 
 Definition~4.3 of~\cite{Cirac2021Matrix} packages
 \eqref{eq:qual} indirectly under \emph{eventual linear independence} of
-the basis MPVs and does not state a rate. The formal counterpart is
-the predicate
-\leanid{MPSTensor.HasBNTSectorData}\footnote{%
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition} at
-    \leanid{HasBNTSectorData}.}
-in the formalization, and \eqref{eq:qual} is provided pointwise by
+the basis MPVs and does not state a rate. The formalization records this
+eventual linear-independence input in the shared sector-decomposition
+infrastructure,\footnote{%
+    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition}.}
+while \eqref{eq:qual} is provided pointwise by
 \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left\_of\_irreducible\_TP}.\footnote{%
     \doclink{TNLean/MPS/Overlap/CastDecay}.}
 Neither source equips $\eta_{j,k}$ with a quantitative relation
 to the spectral weight ratios.
 
-\section{The formal hypothesis}
+\section{The retired rate hypothesis}
 
-The structural predicate
-\leanid{HasRateQuantifiedCrossOverlapDecay}\footnote{%
-    Declaration \leanid{MPSTensor.HasRateQuantifiedCrossOverlapDecay} in
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/RateQuantifiedDecay}.}
-takes a sector decomposition $P$ and an explicit spectral level
-$\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$ and asserts
-the existence of non-negative families $C,\eta$ such that for every
+An earlier formal route introduced an explicit rate hypothesis on a
+sector decomposition $P$ and a chosen spectral level
+$\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$.  That route
+has since been retired together with the per-block-projection layer.  The
+mathematical hypothesis it was trying to isolate remains the following:
+there should exist non-negative families $C,\eta$ such that for every
 $j\ne k$,
 \begin{align}
     0\le C_{j,k},\quad 0\le\eta_{j,k}<1,
@@ -90,37 +88,25 @@ $j\ne k$,
     \label{eq:hyp}
 \end{align}
 together with the geometric bound~\eqref{eq:rate} for all $N$.
-The accessors \leanid{rateC}, \leanid{rateEta}, \leanid{rate\_nonneg},
-\leanid{rate\_lt\_one}, \leanid{rate\_compatible}, and
-\leanid{overlap\_bound} expose the components individually.
 
-The spectral level $\lambda$ is an \emph{explicit parameter}, not an
-existentially packaged field. The accessors of
-\leanid{IsBNTCanonicalFormSD}\footnote{%
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD}.}
-extract a specific $\lambda$ from its inner existential through
-\verb|Classical.choose|; the rate-quantified predicate avoids that
-coupling by taking $\lambda$ from the caller. A caller holding
-$h:\leanid{IsBNTCanonicalFormSD}\,P$ instantiates
-$\lambda:=h.\leanid{spectralLevel}$; a caller with concrete weights
-instantiates $\lambda$ directly.
+The surviving \leanid{PaperBNT} surface does not package such constants.
+It keeps the raw BNT weights in \leanid{SectorDecomposition} and records
+qualitative consequences in
+\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}: the coefficient
+bound \leanid{SectorDecomposition.norm\_coeff\_le\_copies\_of\_norm\_weight\_le\_one},
+within-family cross-decay
+\leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}, the
+combined-family linear-independence criterion
+\leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li}, and the
+non-vanishing coefficient statement
+\leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}.  None of
+these declarations supplies the constants in~\eqref{eq:hyp}.
 
-\section{Where the hypothesis is needed}
+\section{Where such a hypothesis would be needed}
 
-The two-layer per-block-projection lemmas
-\begin{itemize}
-  \item \leanid{fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_sectorDecomp\_twoLayer}\\
-        in
-        \path{TNLean/MPS/FundamentalTheorem/SectorDecomposition/PerBlockProjection.lean}
-        (line~363), and
-  \item \leanid{fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_paperFaithful\_twoLayer}\\
-        in
-        \path{TNLean/MPS/FundamentalTheorem/SectorDecomposition/HNoCancelDischarge.lean}
-        (line~446),
-\end{itemize}
-carry an abstract hypothesis $\leanid{hNoCancel}$ that rules out
-asymptotic cancellation of the assembled overlap against the chosen
-projection block~$k_0$. The obstruction analysis in
+The retired per-block-projection route carried an abstract hypothesis
+excluding asymptotic cancellation of the assembled overlap against a
+chosen projection block~$k_0$.  The obstruction analysis in
 \path{audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} shows that
 for a non-dominant $k_0$ the discharge requires, after isolating
 $V^{(N)}(P.\mathtt{basis}\,k_0)$ on the right and renormalising by
@@ -139,8 +125,7 @@ content of the new hypothesis.
 
 \section{Classification}
 
-\emph{Open gap.}  The hypothesis
-\leanid{HasRateQuantifiedCrossOverlapDecay} is a structural input
+\emph{Open gap.}  The rate condition~\eqref{eq:hyp} is a structural input
 beyond what \cite[\S II]{Cirac2016MPDO_arXiv} and
 \cite[Definition~4.3]{Cirac2021Matrix} make explicit. Its rate is
 in principle derivable from the spectral gap of the mixed transfer
@@ -153,14 +138,11 @@ BNT structure and must be either imposed or established analytically.
 The analytic derivation from the transfer matrix spectral gap is the
 subject of \emph{Option~2} in the design memo
 \path{audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} and is
-not addressed in this note. The hypothesis is needed to discharge the
-non-dominant branch of the abstract $\leanid{hNoCancel}$ field on the
-two-layer surface and ultimately to close the
-\leanid{IsNormalCanonicalFormBNT}-formulation declarations
-\leanid{fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV\textsubscript{2}\_CFBNT}
-and its symmetric counterpart
-in
-\path{TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap/FixedBlockDecay.lean}.
+not addressed in this note. The current \leanid{PaperBNT} route instead
+keeps the coefficient comparison and the combined-family linear
+independence in \path{TNLean/MPS/FundamentalTheorem/PaperBNT}; any future
+rate-quantified argument should be stated against that surviving surface,
+not against the retired per-block-projection layer.
 
 \bibliographystyle{alpha}
 \bibliography{references}

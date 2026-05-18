@@ -65,12 +65,14 @@ The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
     \right)
     =r_A+1.
 \end{align}
-From this, formalized declarations of finite-weight eventual LI are available on
-both sides:
-\leanid{MPSTensor.eventually\_linearIndependent\_all\_left\_single\_right\_of\_all\_overlaps\_decay\_CFBNT}
-and
-\leanid{MPSTensor.eventually\_linearIndependent\_all\_right\_single\_left\_of\_all\_overlaps\_decay\_CFBNT}.
-The exact contradiction step is still open:
+The surviving \leanid{PaperBNT} API does not currently contain this
+single-block linear-independence formulation.  It supplies the stronger
+full-family mechanism
+\leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li},
+under all-pairwise cross-overlap decay; this is sufficient for the
+coefficient-comparison contradiction, but it is not the literal
+single-block statement displayed above.
+The exact fixed-block contradiction step is still open:
 \begin{align}
     (\forall j,  \langle V^{(N)}(B_{k_0}),V^{(N)}(A_j)\rangle\to 0)
     \Longrightarrow
@@ -80,11 +82,11 @@ The exact contradiction step is still open:
       c_N\sum_k \nu_k^N\,V^{(N)}(B_k)
     \right).
 \end{align}
-The two blocked theorems are the fixed-right and fixed-left cancellation
-statements.\footnote{\leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT};
-\leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_of\_eventuallyNonzeroProportionalMPV₂\_CFBNT}. Tracked in issue~\#1607.}
-which are the source-faithful fixed-block cancellations
-\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}.
+No current Lean declaration carries the retired fixed-right or fixed-left
+one-copy fixed-block names.  The mathematical target remains the
+source-faithful fixed-block cancellation at
+\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}, now to be stated on the
+\leanid{PaperBNT} sector surface.
 
 The earlier conditional helpers requiring combined-family linear independence
 (\path{_phase_sum_li}) and the residual-span variants have been retired in
@@ -119,8 +121,8 @@ all residual blocks on both sides.
 
 \textit{Classification: Scope restriction.}
 
-The non-cancellation conclusion is formally established under four explicit
-analytic hypotheses:
+The intended factored analytic discharge uses four explicit analytic
+hypotheses:
 \begin{enumerate}
   \item unit-modulus sector weights on both the $A$-family and the $B$-family;
   \item off-diagonal cross-overlap decay on the fixed-block family, i.e.,
@@ -135,14 +137,9 @@ directly supplied: the cited argument rules out cancellation by appeal to the
 dominant-adjusted scalar limit, but deriving the explicit lower bound
 $\|c_N\|\geq\delta$ from the structural data of the canonical form is not yet
 formalized and is recorded as an open obligation in
-\path{audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.\footnote{%
-  The universally-quantified non-cancellation discharge is
-  \leanid{MPSTensor.hNoCancel\_of\_unitModulus\_decay\_c\_norm\_lower}.
-  The two assembled contradictions are
-  \leanid{MPSTensor.fixed\_right\_all\_overlaps\_decay\_false\_paperFaithful}
-  and
-  \leanid{MPSTensor.fixed\_left\_all\_overlaps\_decay\_false\_paperFaithful};
-  both carry hypothesis~(4) as an explicit parameter.}
+\path{audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md}.  The earlier
+non-cancellation helpers carrying this lower-bound hypothesis were part of
+the retired Tier~3 route and should not be cited as present declarations.
 
 \bibliographystyle{alpha}
 \bibliography{references}
