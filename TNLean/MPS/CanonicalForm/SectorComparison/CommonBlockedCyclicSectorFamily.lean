@@ -700,6 +700,74 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
   simpa [commonFlatBlocksAt] using
     F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hRelabel
 
+/-- Each sector tensor in the common reblocked cyclic-sector family is trace-preserving,
+has primitive transfer map, is tensor-irreducible, and has positive bond dimension. -/
+theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) (s : Fin (F.period k)) :
+    (∑ i : Fin (blockPhysDim d F.p),
+        (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
+    _root_.IsPrimitive
+        (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+          (F.commonSectorBlock k s)) ∧
+    IsIrreducibleTensor (F.commonSectorBlock k s) ∧
+    0 < F.sectorDim k s :=
+  ⟨F.commonSectorBlock_tp k s, F.commonSectorBlock_primitive k s,
+    F.commonSectorBlock_irreducible k s, F.commonSectorBlock_dim_pos k s⟩
+
+/-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
+tensor `B_k^{[p]}` (under the canonical alphabet identification) in the sense of
+generating the same MPV family.  By definition, `commonReindexedBlock k` is the direct
+$p$-blocked tensor of block $k$, transported to the common alphabet $d^{[p]}$ via the
+canonical reindexing. -/
+theorem reindexed_sameMPV₂ (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+    SameMPV₂
+      (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
+        (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
+          (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k)))
+      (F.commonReindexedBlock k) :=
+  F.nestedBlock_sameMPV₂_commonReindexedBlock k
+
+/-- Direct blocking at length `p = m_k * e_k` and iterated blocking
+`(B_k^{[m_k]})^{[e_k]}` produce the same MPV family after the canonical
+alphabet identification. -/
+theorem blocked_word_comparison (F : CommonBlockedCyclicSectorFamily blocks)
+    (k : Fin r) :
+    SameMPV₂
+      (blockTensor (d := d) (D := dim k) (blocks k) F.p)
+      (F.commonReindexedBlock k) :=
+  F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k
+    (groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+      (fun hp_eq => flattenWordOfBlock_cast_eq hp_eq) F k)
+
+/-- The nonzero-part decomposition of a weighted block sum $\bigoplus_k \mu_k B_k$
+transports through the common-alphabet identification: the common-alphabet sectors
+have the same nonzero-part decomposition as the direct $p$-blocked tensors. -/
+theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
+    SameMPV₂
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := fun k : Fin r => (μ k) ^ F.p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+      (toTensorFromBlocks (d := blockPhysDim d F.p)
+        (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) := by
+  intro N σ
+  have hCommon : ∀ k, mpv (blockTensor (d := d) (D := dim k) (blocks k) F.p) σ =
+      mpv (F.commonReindexedBlock k) σ := fun k => F.blocked_word_comparison k N σ
+  calc mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+            (μ := fun k => (μ k) ^ F.p)
+            (fun k => blockTensor (blocks k) F.p)) σ
+      = ∑ k : Fin r,
+          ((μ k) ^ F.p) ^ N • mpv (blockTensor (blocks k) F.p) σ :=
+        mpv_toTensorFromBlocks_eq_sum _ _ σ
+    _ = ∑ k : Fin r,
+          ((μ k) ^ F.p) ^ N • mpv (F.commonReindexedBlock k) σ :=
+        Finset.sum_congr rfl fun k _ => by rw [hCommon k]
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+              (μ := fun k => (μ k) ^ F.p) (F.commonReindexedBlock)) σ :=
+        (mpv_toTensorFromBlocks_eq_sum _ _ σ).symm
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
+              (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) σ :=
+        F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ
+
 end CommonBlockedCyclicSectorFamily
 
 end MPSTensor

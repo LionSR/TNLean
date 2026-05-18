@@ -128,8 +128,7 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
             (c0 : ℂ) • transferMap (d := r) (D := D) K 1 := by
               rw [LinearMap.map_smul]
       _ = H - (c0 : ℂ) • 1 := by simp only [hfix, hone_fix, Complex.coe_smul]
-  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
   rcases posSemidef_fixedPoint_unique_of_irreducible (A := K) hIrr
       (1 : MatrixAlg D) (H - (c0 : ℂ) • 1) hone_psd one_ne_zero hshift_psd hone_fix hshift_fix with
     ⟨d, hd⟩
@@ -263,10 +262,9 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     Kraus.ks_equality_of_peripheral_eigenvector_of_fixedPoint
       K hUnital' hρ hρfix X γ hEig_map hγ_norm
   have hγ_star_mul : star γ * γ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [normSq_eq_norm_sq, hγ_norm, one_pow, ofReal_one]
+    rw [← starRingEnd_apply, Complex.conj_mul', hγ_norm]; simp
   have hγ_starRing_mul : (starRingEnd ℂ) γ * γ = 1 := by
-    simpa [Complex.star_def] using hγ_star_mul
+    rwa [starRingEnd_apply]
   have hXX_fix_map : Kraus.map K (Xᴴ * X) = Xᴴ * X := by
     calc
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X := hKS_map
@@ -285,8 +283,7 @@ theorem exists_peripheral_unitary_of_irreducible_schwarz
     intro h
     apply hX_ne
     exact Matrix.conjTranspose_mul_self_eq_zero.mp h
-  have hone_psd : (1 : MatrixAlg D).PosSemidef := by
-    simpa using (Matrix.PosDef.one (n := Fin D) (R := ℂ)).posSemidef
+  have hone_psd : (1 : MatrixAlg D).PosSemidef := Matrix.PosSemidef.one
   have hone_fix : transferMap (d := r) (D := D) K (1 : MatrixAlg D) = 1 := by
     simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap,
       KadisonSchwarz.IsUnitalKraus] using hUnital
@@ -434,17 +431,10 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   have hα_unit : star α * α = 1 := by
     simpa [Complex.star_def, mul_comm] using hα_unit_mul
   have hα_sq : ‖α‖ ^ 2 = 1 := by
-    have hnormSqC : (↑(Complex.normSq α) : ℂ) = 1 := by
-      calc
-        (↑(Complex.normSq α) : ℂ) = star α * α := by
-          rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-        _ = 1 := hα_unit
-    have hnormSq : Complex.normSq α = 1 := by
-      exact_mod_cast hnormSqC
-    simpa [Complex.normSq_eq_norm_sq] using hnormSq
+    have h : (starRingEnd ℂ) α * α = 1 := by rwa [starRingEnd_apply]
+    exact_mod_cast Complex.conj_mul' α ▸ h
   have hα_norm : ‖α‖ = 1 := by
-    have hnonneg : 0 ≤ ‖α‖ := norm_nonneg α
-    nlinarith
+    nlinarith [norm_nonneg α]
   set β : ℂ := α⁻¹ ^ (m⁻¹ : ℂ)
   have hβm : β ^ m = α⁻¹ := by
     simpa [β] using (Complex.cpow_nat_inv_pow (α⁻¹) (NeZero.ne m))
@@ -456,10 +446,9 @@ theorem exists_normalized_peripheral_unitary_of_irreducible_schwarz
   have hβ_norm : ‖β‖ = 1 :=
     (pow_eq_one_iff_of_nonneg (norm_nonneg β) (NeZero.ne m)).1 hβ_norm_pow
   have hβ_unit : star β * β = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp only [normSq_eq_norm_sq, hβ_norm, one_pow, ofReal_one]
+    rw [← starRingEnd_apply, Complex.conj_mul', hβ_norm]; simp
   have hβ_starRing_mul : (starRingEnd ℂ) β * β = 1 := by
-    simpa [Complex.star_def] using hβ_unit
+    rwa [starRingEnd_apply]
   have hU_star_mul : ((U : MatrixAlg D)ᴴ * (U : MatrixAlg D)) = 1 :=
     Matrix.UnitaryGroup.star_mul_self U
   refine ⟨⟨β • (U : MatrixAlg D), by

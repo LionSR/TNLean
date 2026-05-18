@@ -78,8 +78,7 @@ theorem isUnit_peripheral_eigenvector
             * KadisonSchwarz.krausMap (d := d) (D := D) K X := by
     simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
   have hμ_star_mul : star μ * μ = 1 := by
-    rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-    simp [Complex.normSq_eq_norm_sq, hμ]
+    rw [← starRingEnd_apply, Complex.conj_mul', hμ]; simp
   have hfix_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X) = Xᴴ * X := by
     calc
       KadisonSchwarz.krausMap (d := d) (D := D) K (Xᴴ * X)

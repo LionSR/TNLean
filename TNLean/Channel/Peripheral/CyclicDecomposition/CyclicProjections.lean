@@ -39,10 +39,9 @@ private abbrev cyclicOneIdx (m : ℕ) [NeZero m] : ℕ := ((1 : Fin m) : ℕ)
 /-- A primitive root has unit modulus, written as `star γ * γ = 1`. -/
 private lemma star_mul_self_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :
     star γ * γ = 1 := by
-  have hm0 : m ≠ 0 := NeZero.ne m
-  have hγ_norm : ‖γ‖ = 1 := Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one hm0
-  rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self]
-  simp only [normSq_eq_norm_sq, hγ_norm, one_pow, ofReal_one]
+  have hγ_norm : ‖γ‖ = 1 :=
+    Complex.norm_eq_one_of_pow_eq_one hγprim.pow_eq_one (NeZero.ne m)
+  rw [← starRingEnd_apply, Complex.conj_mul', hγ_norm]; simp
 
 /-- A primitive root has unit modulus, written as `γ * star γ = 1`. -/
 private lemma self_mul_star_of_primitiveRoot {γ : ℂ} (hγprim : IsPrimitiveRoot γ m) :

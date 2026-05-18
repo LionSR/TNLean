@@ -219,18 +219,9 @@ lemma hasStringOrder_of_localSymmetry
       ∀ L : ℕ, ((twistedTransferMap A u) ^ L) V = μ ^ L • V := by
     intro L
     induction L with
-    | zero =>
-        simp
+    | zero => simp
     | succ n ih =>
-        calc
-          ((twistedTransferMap A u) ^ (n + 1)) V
-              = twistedTransferMap A u (((twistedTransferMap A u) ^ n) V) := by
-                  simp [pow_succ']
-          _ = twistedTransferMap A u (μ ^ n • V) := by rw [ih]
-          _ = μ ^ n • twistedTransferMap A u V := by simp
-          _ = μ ^ n • (μ • V) := by rw [hEig]
-          _ = μ ^ (n + 1) • V := by
-                simp [pow_succ, smul_smul, mul_comm]
+        rw [pow_succ', Module.End.mul_apply, ih, map_smul, hEig, smul_smul, ← pow_succ]
   refine ⟨Vᴴ, V, (1 / 2 : ℝ), by norm_num, ?_⟩
   intro L
   have hparam :
@@ -240,10 +231,8 @@ lemma hasStringOrder_of_localSymmetry
           = Matrix.trace (Λ * Vᴴ * (((twistedTransferMap A u) ^ L) V)) := by
               simp [stringOrderBoundaryParam, twistedTransferIter]
       _ = Matrix.trace (Λ * Vᴴ * (μ ^ L • V)) := by rw [hpow L]
-      _ = Matrix.trace ((μ ^ L) • (Λ * (Vᴴ * V))) := by
-            simp [Matrix.mul_assoc]
-      _ = μ ^ L * Matrix.trace (Λ * (Vᴴ * V)) := by
-            simp [Matrix.trace_smul]
+      _ = Matrix.trace ((μ ^ L) • (Λ * (Vᴴ * V))) := by simp [Matrix.mul_assoc]
+      _ = μ ^ L * Matrix.trace (Λ * (Vᴴ * V)) := by simp [Matrix.trace_smul]
       _ = μ ^ L := by simp [hV', hΛtr]
   have hnorm_pow : ‖μ ^ L‖ = 1 := by
     simp [norm_pow, hμ]
