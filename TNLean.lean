@@ -287,7 +287,7 @@ import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.Decorrelation
 
--- Layer 6a: Quantum Wielandt backend / span-growth infrastructure
+-- Layer 6a: Quantum Wielandt span-growth infrastructure
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
 import TNLean.Wielandt.FittingDecomposition
@@ -297,24 +297,21 @@ import TNLean.Wielandt.RankOne.Construction
 import TNLean.Wielandt.RankOne.Products
 import TNLean.Wielandt.WielandtBound
 
--- Layer 6b: Preferred paper-facing Proposition 3 / Theorem 1 endpoints.
--- `SourceTheorems/` records the theorems of arXiv:0909.5347 / Wolf §6.9
--- in the notation of the source; the FT/BNT formalization does not use them.
--- These wrappers remain standalone with respect to the canonical / FT / BNT
--- assembly above. `Prop3.lean` is the preferred Proposition 3 entry point; the
--- direction-specific files `Prop3_ac` and `Prop3_cb` remain available
--- transitively through `Prop3` for specialized use.
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+-- Layer 6b: Proposition 3 and the quantum Wielandt inequality.
+-- `Inequality/` records the bounds of arXiv:0909.5347 / Wolf §6.9 in their
+-- standard notation. These declarations are independent of the MPS fundamental
+-- theorem development above.
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Wielandt.SourceTheorems.NonzeroTraceWord
-import TNLean.Wielandt.SourceTheorems.EigenvectorSpreading
-import TNLean.Wielandt.SourceTheorems.MatrixSpanExistence
-import TNLean.Wielandt.SourceTheorems.MatrixSpanSharpBound
-import TNLean.Wielandt.SourceTheorems.WielandtInequality
+import TNLean.Wielandt.Inequality.NonzeroTraceWord
+import TNLean.Wielandt.Inequality.EigenvectorSpreading
+import TNLean.Wielandt.Inequality.MatrixSpanExistence
+import TNLean.Wielandt.Inequality.MatrixSpanSharpBound
+import TNLean.Wielandt.Inequality.Bounds
 
--- Layer 6c: Conditional / backend Wielandt assembly
+-- Layer 6c: Conditional Wielandt arguments
 -- These modules support specialized span-growth and aperiodicity routes. They
 -- are not on the active canonical / FT / BNT path, but they remain root-visible
 -- where convenient for direct users.
@@ -334,7 +331,6 @@ import TNLean.Wielandt.RectangularSpan.Universality
 import TNLean.Wielandt.RankOne.BoundedWord
 import TNLean.Wielandt.RankOne.ExtractionFull
 import TNLean.Wielandt.SpanGrowth.CumulativeToWordSpan
-import TNLean.Wielandt.QuantumWielandt
 
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.Cycles

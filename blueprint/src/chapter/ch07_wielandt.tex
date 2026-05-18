@@ -1274,7 +1274,7 @@ used to produce rank-one elements.
     $\rho > 0$; see Remark~\ref{rem:prim_definition_mismatch}.
     The stronger positive-definite hypothesis is imposed separately in
     Theorems~\ref{thm:primitive_implies_irreducible}
-    and~\ref{thm:primitive_posDef_aperiodic_normal}.
+    and~\ref{thm:normal_from_primitive_posdef}.
 \end{definition}
 
 \begin{theorem}[Primitive overlap convergence]\label{thm:prim_overlap_one}
@@ -1764,24 +1764,6 @@ span.
     $\algspn(A) = \MN{D}$.
     By Theorem~\ref{thm:algspan_to_normal} with the
     aperiodicity hypothesis, $A$ is normal.
-\end{proof}
-
-\begin{theorem}[Primitive + positive definite fixed point imply normality]%
-    \label{thm:primitive_posDef_aperiodic_normal}
-    \lean{MPSTensor.isNormal_of_isPrimitiveMPS_of_posDef}
-    \leanok
-    \uses{def:primitive_mps, def:normal}
-    If $A$ is a primitive MPS tensor with fixed point $\rho$ and
-    $\rho$ is positive definite, then $A$ is normal.
-    No aperiodicity assumption is needed.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:strongly_irred_from_primitive, thm:wolf_6_8_conjunction}
-    By Theorem~\ref{thm:strongly_irred_from_primitive},
-    $A$ is strongly irreducible, i.e.\ primitive in Wolf's sense.
-    Under normalization, Theorem~\ref{thm:wolf_6_8_conjunction}
-    therefore gives normality directly, hence eventual full Kraus rank.
 \end{proof}
 
 \begin{remark}[Normal canonical form avoids the aperiodicity step]\label{rem:d1_bypasses_aperiodicity}

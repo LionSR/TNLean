@@ -32,8 +32,8 @@ claiming the paper's exact bound.
 They state only the qualitative conclusion `∃ N, S_N(A) = M_D(ℂ)`. In
 particular, they do **not** track the explicit `D²` blocked noninvertible bound
 or the sharp `D² − D + 1` fixed-length bound. Those quantitative statements are
-formalized separately in `SourceTheorems/MatrixSpanSharpBound.lean` and in the
-case analysis of `SourceTheorems/WielandtInequality.lean`.
+formalized separately in `Inequality/MatrixSpanSharpBound.lean` and in the
+case analysis of `Inequality/Bounds.lean`.
 
 ## Proof strategy
 

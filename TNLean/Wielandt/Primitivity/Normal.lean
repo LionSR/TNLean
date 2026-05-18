@@ -15,9 +15,9 @@ Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
 It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
-from paper-style primitivity to normality with an additional positive-definite
-fixed point hypothesis is assembled in `QuantumWielandt.lean`; exact-length
-positivity witnesses still require the separate aperiodicity input.
+from spectral-gap primitivity to normality with an additional positive-definite
+fixed point hypothesis is assembled in
+`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`.
 
 ## Main results
 
@@ -153,9 +153,10 @@ lemma wielandt_full_analysis [NeZero D]
 /-! ## Part 4: Status of the primitive → normal implication
 
 The unconditional implication `HasPrimitiveFixedPoint → IsNormal` is still open
-in this file. The currently formalized route in `QuantumWielandt.lean` proves
-`IsNormal` from `IsPrimitiveMPS A ρ` under the extra hypotheses that `ρ` is
-positive definite and `1 ∈ wordSpan A 1`.
+in this file. The currently formalized route in
+`Primitivity/StronglyIrreducibleToFullRank.lean` proves `IsNormal` from
+`IsPrimitiveMPS A ρ` under the additional hypothesis that `ρ` is positive
+definite.
 
 What remains here is the gap from bare spectral-gap primitivity to eventual
 full matrix spanning. Conceptually this should follow from irreducibility plus a

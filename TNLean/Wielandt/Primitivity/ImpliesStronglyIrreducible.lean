@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Overlap.PeripheralToSpectralGap

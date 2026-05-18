@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 
 import TNLean.MPS.Core.Transfer
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Wielandt.Primitivity.ToNormal
@@ -14,7 +14,7 @@ import TNLean.Channel.Irreducible.FromSpectral
 /-!
 # Connecting results for primitive MPS and spectral-gap conditions
 
-This module collects the connection between the paper-facing transfer-map
+This module collects the connection between the transfer-map
 condition `IsStronglyIrreduciblePaper` and the spectral-gap predicate
 `IsPrimitiveMPS`.  These results are used by the Proposition 3(c)→(b) proof in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` and by downstream
@@ -79,7 +79,7 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
 
 /-- A primitive MPS tensor in the spectral-gap sense is peripherally primitive in
-the paper-facing transfer-map sense.
+the transfer-map sense.
 
 This is the easy spectral implication: if the complementary map `E - P_ρ` has
 spectral radius less than one, then every eigenvalue of `E - P_ρ` has norm less

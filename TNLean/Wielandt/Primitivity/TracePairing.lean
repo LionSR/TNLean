@@ -6,7 +6,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.TraceExpansion
 import TNLean.MPS.Core.Transfer
-import TNLean.Wielandt.Primitivity.PaperDefinitions
+import TNLean.Wielandt.Primitivity.Definitions
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Trace

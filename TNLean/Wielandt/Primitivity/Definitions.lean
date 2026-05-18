@@ -8,22 +8,21 @@ import TNLean.MPS.Core.Transfer
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
-# Paper-level definition layer for primitivity (arXiv:0909.5347)
+# Primitivity and index definitions for the quantum Wielandt theorem
 
-This file provides **paper-faithful definitions** that mirror the notation and
-terminology of Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's
-inequality* (arXiv:0909.5347) and Wolf's lecture notes (Chapter 6).
+This file gives the primitivity, strong irreducibility, and index definitions
+used by Sanz–Pérez-García–Wolf–Cirac, *A quantum version of Wielandt's
+inequality* (arXiv:0909.5347), and by Wolf's lecture notes, Chapter 6.
 
-All definitions here are concise restatements of existing codebase constructs.
-They provide the public paper-notation formulation of Proposition 3 and the
-Wielandt bound, without changing the internal proof argument.
+The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
+`q(E_A)`, and the three equivalent primitivity conditions of Proposition 3.
 
 ## Main definitions
 
 * `krausRank A`: the dimension of `S₁(A) = wordSpan A 1`, i.e.
   `dim(span{A₁,…,Aₐ})`.
 * `HasEventuallyFullKrausRank A`: `∃ i, S_i(A) = M_D(ℂ)`, i.e. `IsNormal A`.
-* `IsPrimitivePaper A`: paper-faithful primitivity — there exists `q` such that
+* `IsPrimitivePaper A`: spreading primitivity — there exists `q` such that
   for every nonzero φ, `H_q(A,φ) = ℂ^D`. This is Proposition 3(a) of the paper.
 * `IsStronglyIrreduciblePaper A`: Proposition 3(c) — the transfer map `E_A` has
   unique peripheral eigenvalue 1 with a positive-definite fixed point.
@@ -41,7 +40,7 @@ There are four distinct primitivity predicates in the codebase:
   `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential statement
   `∃ ρ, IsPrimitiveMPS A ρ`, encoding the spectral-gap formulation used in the MPS
   proof route.
-* `IsPrimitivePaper A` in this file: the paper-faithful uniform spreading condition from
+* `IsPrimitivePaper A` in this file: the uniform spreading condition from
   Proposition 3(a).
 * `IsPeripherallyPrimitive A` in this file: the transfer-map formulation of
   `_root_.IsPrimitive (transferMap A)`.
@@ -60,12 +59,11 @@ The intended relationships are:
 
 ## Design notes
 
-These are **paper-level statements only**. The internal proof route flows through
-`IsNormal`, `IsPrimitiveMPS`, `HasPrimitiveFixedPoint`, etc. The full equivalence of
-all three Proposition 3 conditions is assembled in `Primitivity/Equivalence.lean`.
+These are the notation-bearing statements for Proposition 3. The full
+equivalence of the three conditions is assembled in `Primitivity/Equivalence.lean`.
 
 At present this layer is not imported by `TNLean.MPS.*` or `TNLean.PiAlgebra.*`;
-it serves the standalone theorem modules below.
+it serves the Wielandt inequality modules below.
 
 ## References
 
