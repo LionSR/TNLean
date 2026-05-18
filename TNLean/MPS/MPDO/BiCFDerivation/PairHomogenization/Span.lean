@@ -360,11 +360,12 @@ certificates required by `hPad`.
 Wielandt-bound construction is not formalized here. The auxiliary results
 `exists_pairTraceSeparatingAt_of_not_gaugePhaseEquiv_of_pairWordTupleSpanTop_period_window`
 (single-pair, same-dimension case) and
-`exists_forall_pairTraceSeparatingAt_of_isCanonicalFormBNT_of_identity_period_windows`
-(canonical-form BNT family) reduce the missing implication to a
-period-window hypothesis on the homogeneous pair span. A formal
-Wielandt-bound theorem would produce that period-window hypothesis from
-the canonical-form hypotheses and thereby establish `hPad`. -/
+`exists_forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv`
+(finite-family separated blocks, with the direct-sum injectivity hypotheses
+still explicit) isolate the missing input as a homogeneous pair-span
+period-window hypothesis. A formal Wielandt-bound theorem would produce that
+period-window hypothesis from the canonical-form hypotheses and thereby
+establish `hPad`. -/
 theorem pairWordTupleSpanTop_of_pairCumulativeWordTupleSpanTop_of_identity_padding
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S T : ℕ}
     (hST : S ≤ T)

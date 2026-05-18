@@ -62,9 +62,10 @@ identities in $N$, without any passage to a limit.
 
 \section{The one-copy-per-sector restriction}
 
-The formal canonical form structures\footnote{%
-    \path{TNLean/MPS/BNT/Construction.lean}: \leanid{IsCanonicalFormBNT} at lines
-    96--104, \leanid{IsNormalCanonicalFormBNT} at lines 181--198.} impose
+The surviving formal one-copy canonical form structure\footnote{%
+    \path{TNLean/MPS/BNT/Construction.lean}: \leanid{IsNormalCanonicalFormBNT}.
+    The earlier non-normal wrapper was retired after its downstream consumers
+    were replaced by explicit separated-block hypotheses.} imposes
 \emph{strict} decreasing moduli across the entire index set: every block has a
 distinct modulus. This is a stronger condition than the source structure, which
 only requires strict ordering of the modulus \emph{classes} while allowing
@@ -110,13 +111,14 @@ linear-independence data and the equal-MPV condition is still not carried out.
 This derivation is logically prior to applying \texttt{Lem:app\_simple}.
 
 \textbf{Multi-copy sector structure.}
-The formal structures \leanid{IsCanonicalFormBNT} and
-\leanid{IsNormalCanonicalFormBNT} would need a field allowing equal-modulus
-groups: rather than a global strict ordering on the full index set, the
-condition should be a strict ordering on the set of modulus classes, with each
-class admitting an arbitrary finite number of representative blocks. Relaxing
-\leanid{mu\_strict\_anti} to this weaker form is the necessary type-level
-change. Without it, the general-multiplicity versions of
+The surviving one-copy structure \leanid{IsNormalCanonicalFormBNT}, and any
+future non-normal analogue stated with explicit separated-block hypotheses,
+would need a field allowing equal-modulus groups: rather than a global strict
+ordering on the full index set, the condition should be a strict ordering on
+the set of modulus classes, with each class admitting an arbitrary finite
+number of representative blocks. Relaxing \leanid{mu\_strict\_anti} to this
+weaker form is the necessary type-level change. Without it, the
+general-multiplicity versions of
 Corollary~\texttt{II\_cor2} and of the gauge assembly step cannot be stated.
 
 \textbf{Global gauge assembly.}

@@ -67,7 +67,7 @@ The source lives in `TNLean/` and is organized into **layers 0-6 with sublayers*
 - `IsInjective A` — matrices of `A` span the full matrix algebra
 - `SameMPV A B` / `SameMPV₂` — same matrix product vector family
 - `GaugeEquiv A B` — conjugation by invertible matrix (`B i = X * A i * X⁻¹`)
-- `IsCanonicalFormBNT` — basis-normal-triangular canonical form predicate
+- `IsBNTCanonicalForm` — paper-faithful basis-of-normal-tensors canonical form predicate
 - `cumulativeSpan A n` — span of all products of length <= n
 - `IsNormal A` — the project's normality notion for Wielandt theory
 - `transferMap A` — the CP map `rho -> sum_i A_i * rho * (A_i)^H`

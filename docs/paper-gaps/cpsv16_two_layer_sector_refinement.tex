@@ -81,9 +81,10 @@ The three conditions are a \emph{specialization} (additional hypotheses
 on top of \eqref{eq:bnt-general}), not a deviation: every
 \leanid{IsBNTCanonicalFormSD} instance arises from a valid
 \eqref{eq:bnt-general} decomposition by grouping and normalizing.
-The adapter \leanid{IsCanonicalFormBNT.toIsBNTCanonicalFormSD} constructs
-this decomposition from the one-copy-per-sector
-\leanid{IsCanonicalFormBNT} predicate via rescaling by $\rho = \|\mu_0\|$.
+The planned adapter from the one-copy normal-canonical BNT formulation to
+\leanid{IsBNTCanonicalFormSD} must now be stated from
+\leanid{IsNormalCanonicalFormBNT}, or from explicit separated-block
+hypotheses, via rescaling by $\rho = \|\mu_0\|$.
 
 \section{Scope restriction}
 
@@ -108,8 +109,8 @@ The relevant formal declarations are:
         the unit-modulus factorization accessor.
   \item \leanid{IsBNTCanonicalFormSD.spectralLevel\_dom\_norm\_one} -
         the dominant normalization accessor.
-  \item \leanid{IsCanonicalFormBNT.toIsBNTCanonicalFormSD} -
-        the adapter from the one-copy-per-sector surface.
+  \item A future adapter from \leanid{IsNormalCanonicalFormBNT}, or from
+        explicit separated-block hypotheses, to \leanid{IsBNTCanonicalFormSD}.
 \end{itemize}
 See also \ghpr{1657} (branch \path{feat/mps-ft-path-beta-pr1-two-layer})
 and the audit memo
