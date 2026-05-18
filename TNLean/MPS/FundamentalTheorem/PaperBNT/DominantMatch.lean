@@ -55,12 +55,12 @@ sector's coefficient is then derived inside the proof via
 `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
 (`PaperBNT/Api.lean`), now also taking the same per-block hypothesis.
 
-These hypotheses are weaker than the legacy `IsCanonicalFormBNT` package
-(which baked in `mu_strict_anti` + a single per-sector "spectral level"
-weight); they are also weaker than the optional `HasEqualModulusWeightLayer`
-layer of `PaperBNT/EqualModulus.lean`, which would imply both bounds via the
-`spectral_level_dom_norm_one` + `spectral_level_antitone` + `phase_weight`
-factorisation.
+These hypotheses are weaker than the older already-separated canonical-form
+hypotheses, which combined strict weight-modulus ordering with a single
+per-sector spectral-level weight. They are also weaker than the optional
+`HasEqualModulusWeightLayer` layer of `PaperBNT/EqualModulus.lean`, which would
+imply both bounds via the `spectral_level_dom_norm_one` +
+`spectral_level_antitone` + `phase_weight` factorisation.
 
 ## Output for Phase 4b-iii
 

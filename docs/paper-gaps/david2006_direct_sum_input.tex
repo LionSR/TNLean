@@ -141,14 +141,12 @@ The two branches are combined for all ordered pairs of distinct blocks of a
 BNT family at the common length $3L$, and the result is fed into the
 selector and product-span construction.\footnote{%
 \leanid{MPSTensor.forall\_pairTraceSeparatingAt\_threeBlock\_of\_blocksNotGaugePhaseEquiv};
-\leanid{MPSTensor.exists\_pos\_productWordSpan\_of\_isCanonicalFormBNT\_of\_directSum\_threeBlock}.}
+\leanid{MPSTensor.exists\_forall\_pairTraceSeparatingAt\_threeBlock\_of\_blocksNotGaugePhaseEquiv}.}
 
-The already-injective BNT surface is closed by three wrapper
-theorems:\footnote{%
-\leanid{MPSTensor.forall\_pairTraceSeparatingAt\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks},
-\leanid{MPSTensor.exists\_pos\_productWordSpan\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks},
-\leanid{MPSTensor.exists\_wordTupleSpanTop\_of\_isCanonicalFormBNT\_of\_directSum\_injectiveBlocks}.}
-when the selected BNT blocks are already injective at the required common
+The already-injective BNT conclusion should now be stated either from
+\leanid{IsNormalCanonicalFormBNT} together with the required injective-block
+hypotheses, or directly from explicit separated-block hypotheses. In that
+form, when the selected BNT blocks are already injective at the required common
 length, the exact-length direct-sum span is a theorem rather than a remaining
 identity-padding assumption.
 
@@ -167,17 +165,19 @@ exact-length span for a canonical-form BNT family.\footnote{%
 \section{Conclusion}
 
 The formalized wrappers cover the $L_0=1$ case: when the selected BNT blocks
-are already injective at length one (as supplied by \leanid{IsCanonicalFormBNT}
-combined with irreducible-block hypotheses), their pairwise
-not-gauge-phase-equivalence data and the fixed lengths from one-site injectivity
-imply the homogeneous pair-trace separation and product-word-span conclusions
-needed downstream. For this special case the formal result matches the
+are already injective at length one (as supplied by the one-copy
+normal-canonical BNT formulation together with irreducible-block hypotheses),
+their pairwise not-gauge-phase-equivalence data and the fixed lengths from
+one-site injectivity imply the homogeneous pair-trace separation and
+product-word-span conclusions needed downstream. For this special case the
+formal result matches the
 paper's conclusion: distinct BNT representatives yield a direct-sum span at a
 common finite length. However, it does not formalize the full generality of the
 paper's direct-sum theorem. The older representation paper states the result for
 arbitrary $L_0$, ordered block sizes, and $b\ge2$ blocks; those features are
-replaced here by the \leanid{IsCanonicalFormBNT} assumptions. The general-$L_0$
-case, in which each normal block needs a Wielandt-type blocking step to reach
+replaced here by one-copy normal-canonical BNT and explicit separated-block
+hypotheses. The general-$L_0$ case, in which each normal block needs a
+Wielandt-type blocking step to reach
 length-$L_0$ injectivity, is not covered by these wrappers alone; it requires
 the separate bounded and common injective-blocking results. The old warning
 against replacing exact-length span by cumulative span therefore remains
