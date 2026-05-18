@@ -54,7 +54,8 @@ noncomputable def twistedTransferMap (A : MPSTensor d D)
       ((LinearMap.mulLeft ℂ (A n)).comp
         (LinearMap.mulRight ℂ (A n')ᴴ))
 
-/-- Computation rule for the twisted transfer map: `ℰ_u(X) = ∑_{n,n'} u_{n'n} A_n X A_{n'}†`. -/
+/-- The twisted transfer map acts on $X$ by
+$\mathcal{E}_u(X) = \sum_{n, n'} u_{n' n}\, A_n X A_{n'}^{\dagger}$. -/
 @[simp]
 lemma twistedTransferMap_apply (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ)

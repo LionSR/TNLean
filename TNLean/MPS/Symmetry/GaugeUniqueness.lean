@@ -96,8 +96,8 @@ they are unique up to a nonzero scalar.
 The hypothesis `_hAB : SameMPV A B` matches the blueprint's statement
 (the theorem is stated for tensors generating the same MPV family), but the proof
 does not use it: gauge uniqueness follows from injectivity alone, together with
-the explicit gauge equations `hX` and `hY`.  The hypothesis is retained for
-faithfulness to the blueprint declaration. -/
+the two gauge equations $B_i = X A_i X^{-1}$ and $B_i = Y A_i Y^{-1}$.
+The hypothesis is retained for faithfulness to the blueprint declaration. -/
 theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
     (hA : IsInjective A) (_hAB : SameMPV A B)
     {X Y : GL (Fin D) ℂ}
