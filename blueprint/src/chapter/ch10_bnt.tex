@@ -1265,3 +1265,111 @@ The non-matched decay clause is delivered in full.
     (see the scope discussion above).
 \end{remark}
 
+\subsection{Full-basis coefficient identity and global gauge}
+\label{subsec:paper_bnt_full_basis_global_gauge}
+
+The preceding substitution theorem works on the unit-modulus subset. The
+following two statements record the full-basis form used by the matched-coordinate
+global gauge. Their hypotheses explicitly require a unit-modulus copy in every
+sector on both sides; under this normalization, the matching covers the whole
+BNT basis.
+
+\begin{lemma}[Full-basis coefficient identity from matched phases]%
+    \label{lem:paper_bnt_coeff_identity_via_matched_mpv_phase}
+    \lean{MPSTensor.coeff_identity_via_matched_mpv_phase}
+    \leanok
+    \uses{def:paper_bnt_cf}
+    Let $P$ be a BNT canonical form, let $Q$ be a sector decomposition, and
+    assume $P_{\mathrm{tot}}$ and $Q_{\mathrm{tot}}$ have the same MPV family.
+    Suppose that there is a bijection
+    \[
+        \beta : J(Q) \simeq J(P)
+    \]
+    and scalars $\zeta_k \in \C$ such that, for every $k \in J(Q)$, every
+    length $N$, and every spin configuration $\sigma$ of length $N$,
+    \[
+        V^{(N)}(Q_k)_\sigma
+        =
+        \zeta_k^N\,V^{(N)}(P_{\beta(k)})_\sigma .
+    \]
+    Then for every $k \in J(Q)$ there is $N_0$ such that, for all $N>N_0$,
+    \[
+        c_N^{(\beta(k))}(P)
+        =
+        \zeta_k^N\,c_N^{(k)}(Q).
+    \]
+    This is the coefficient-comparison step of
+    \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys} in full-basis
+    form.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:eventual_coeff_eq_of_eventual_li}
+    Expand the equality of the total MPVs in the $P$-basis and the $Q$-basis.
+    Substitute the displayed phase relation for every $Q_k$, and reindex the
+    resulting $Q$-sum by $\beta$. The BNT linear independence of the $P$-basis,
+    through Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li}, forces equality
+    of the corresponding coefficients for all sufficiently large lengths.
+\end{proof}
+
+\begin{theorem}[Full-basis global gauge in matched coordinates]%
+    \label{thm:paper_bnt_equal_global_gauge}
+    \lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
+    \leanok
+    \uses{def:paper_bnt_cf,
+        thm:paper_bnt_bijective_match_of_sameMPV,
+        lem:paper_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:paper_bnt_matched_sector_weight_equiv,
+        lem:tensor_from_blocks_globalGauge_conj}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
+    MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
+    least one copy weight of modulus $1$. Then there exist:
+    \begin{itemize}
+        \item a bijection $\beta:J(Q)\simeq J(P)$,
+        \item bond-dimension equalities
+              $\dim P_{\beta(k)}=\dim Q_k$,
+        \item copy-number equalities $r_{\beta(k)}(P)=r_k(Q)$ and
+              copy permutations $\tau_k$,
+        \item phases $\zeta_k\neq 0$ and block gauges $X_k$,
+    \end{itemize}
+    such that, for every sector $k$, copy $q$, and physical index $i$,
+    \[
+        Q_k^i
+        =
+        \zeta_k\,X_k P_{\beta(k)}^i X_k^{-1},
+        \qquad
+        \nu_{k,q}
+        =
+        \zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+    \]
+    Moreover, if
+    \[
+        X=\bigoplus_k (\mathbf{1}_{r_k}\otimes X_k)
+    \]
+    is the flattened block-diagonal gauge, then in the flattened
+    $Q$-coordinates,
+    \[
+        Q_{\mathrm{flat}}^i
+        =
+        X\,P_{\mathrm{matched}}^i\,X^{-1}
+    \]
+    for every physical index $i$. This is the explicit direct-sum gauge
+    construction of
+    \cite[\S~II.C, lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:paper_bnt_bijective_match_of_sameMPV,
+        lem:paper_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:paper_bnt_matched_sector_weight_equiv,
+        lem:tensor_from_blocks_globalGauge_conj}
+    The full-basis matching theorem gives $\beta$, the bond-dimension
+    identifications, and the gauge-phase equivalences between $Q_k$ and
+    $P_{\beta(k)}$. Lemma~\ref{lem:paper_bnt_coeff_identity_via_matched_mpv_phase}
+    gives the eventual exact coefficient identities for the same phases
+    $\zeta_k$. The matched-sector weight-permutation theorem then gives the
+    copy permutations and the displayed pointwise weight identities. Finally
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} assembles the block
+    conjugacies into the flattened direct-sum conjugation by
+    $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
+\end{proof}

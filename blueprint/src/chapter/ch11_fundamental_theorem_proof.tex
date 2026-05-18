@@ -176,8 +176,6 @@ in-flight follow-up.
 \end{proof}
 
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
-    \lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
-    \leanok
     \uses{def:bnt, def:gauge_equiv}
     Fix a common block structure: the same number of blocks~$g$,
     the same bond dimensions $(D_k)_{k=1}^g$, and the same weights
@@ -192,8 +190,7 @@ in-flight follow-up.
 \end{lemma}
 
 \begin{proof}
-    \leanok
-    \uses{lem:ft_canonical}
+    \uses{thm:paper_bnt_equal_global_gauge}
     On the BNT canonical form this is the specialization of the global-gauge
     equality theorem (Chapter~\ref{ch:bnt}) to the case where $P$ and $Q$
     share a common $(g, D_k, \mu_k)$ block structure: the basis bijection
