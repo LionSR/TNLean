@@ -76,10 +76,8 @@ cyclic sectors.
 It deliberately does not identify that period-removal length with the later
 finite blocking length used for common refinement or injectivity.
 
-The formal comparison uses the zero-tail block-span theorem
-`afterBlocking_sectorComparison_zeroTail_of_blockSpan` and the common
-phase-cover or BNT comparison theorems.  The mathematical assumptions are:
-zero-block cancellation, finite-length span equality, and BNT sector matching.
+The comparison data separated here are zero-block cancellation, finite-length
+span equality, and BNT sector matching.
 
 The common-sector theorem then rewrites the cyclic sectors at one common
 physical blocking length.  The remaining assumptions are one-site injectivity

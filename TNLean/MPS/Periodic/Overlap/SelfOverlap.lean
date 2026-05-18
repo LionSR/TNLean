@@ -9,7 +9,7 @@ import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
-import TNLean.MPS.CanonicalForm.SectorComparison
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
