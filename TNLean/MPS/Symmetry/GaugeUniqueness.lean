@@ -90,13 +90,15 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : IsInjective A)
               (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp
 
-/-- A Same-MPV corollary: after obtaining any two gauges from the single-block FT,
-they are unique up to a nonzero scalar.
+/-- Gauge uniqueness for tensors with identical matrix product vector families: after
+obtaining any two gauges from the single-block fundamental theorem, they are unique up
+to a nonzero scalar.
 
-Although the matching-MPV hypothesis is not needed for the conclusion — gauge
-uniqueness follows from injectivity alone, together with the two gauge equations
-$B_i = X A_i X^{-1}$ and $B_i = Y A_i Y^{-1}$ — it is retained to match the
-blueprint statement faithfully. -/
+Although the hypothesis that $A$ and $B$ generate the same matrix product vector
+family is not needed for the conclusion — gauge uniqueness follows from
+injectivity alone, together with the two gauge equations $B_i = X A_i X^{-1}$
+and $B_i = Y A_i Y^{-1}$ — it is retained to match the blueprint statement
+faithfully. -/
 theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
     (hA : IsInjective A) (_hAB : SameMPV A B)
     {X Y : GL (Fin D) ℂ}
