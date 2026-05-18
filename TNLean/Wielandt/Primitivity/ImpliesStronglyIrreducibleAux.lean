@@ -108,7 +108,6 @@ theorem transferMap_pow_conjTranspose_eigenvector_of_root_of_unity
 
 /-! ### Step 3: Hermitian parts are fixed points -/
 
-
 /-- `i • (X† - X)` is always Hermitian. -/
 private lemma isHermitian_smul_I_sub_conjTranspose
     (X : Matrix (Fin D) (Fin D) ℂ) :
