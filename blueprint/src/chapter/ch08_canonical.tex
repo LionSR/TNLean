@@ -935,9 +935,64 @@ is the normality of a TP-primitive irreducible block.
 
 The basis-of-normal-tensors predicate of~\cite{Cirac2017MPDO_AnnPhys}
 (Definition~\ref{def:bnt_paper}) is strengthened in Chapter~\ref{ch:bnt} by
-multiplicity, span, and weight-norm conditions. The following theorem starts
-from normalized weights and blocks and produces a sector decomposition
-satisfying those conditions.
+multiplicity, span, and weight-norm conditions. The results below separate the
+after-blocking preparation of suitable blocks from the later normalized-weight
+BNT construction.
+
+\begin{lemma}[Common injective blocking for primitive irreducible families]%
+    \label{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    \lean{MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family}
+    \leanok
+    \uses{thm:tp_primitive_irred_block_injective,
+        thm:tp_primitive_irreducible_extra_blocking}
+    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension MPS
+    tensors. Assume that every $B_k$ is trace-preserving, primitive, and
+    tensor-irreducible. Then there is a single integer $L\ge 1$ such that each
+    blocked tensor $B_k^{[L]}$ is one-site injective, and the same blocking
+    preserves trace preservation, primitivity, and tensor irreducibility for
+    every block.
+\end{lemma}
+
+\begin{proof}\leanok
+    For each block, Theorem~\ref{thm:tp_primitive_irred_block_injective}
+    gives a positive length at which that block becomes one-site injective.
+    Taking the product of these finitely many lengths gives a common positive
+    length. Injectivity persists under positive further blocking, and
+    Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the
+    trace-preserving, primitive, and irreducible hypotheses at the common
+    length.
+\end{proof}
+
+\begin{theorem}[Prepared BNT blocks after blocking]%
+    \label{thm:prepared_bnt_blocks_after_blocking}
+    \lean{MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos}
+    \leanok
+    \uses{thm:unconditional_common_primitive_irreducible_blocks,
+        thm:common_injective_blocking_tp_primitive_irreducible_family}
+    Let $A$ be an MPS tensor. Then there is a blocking length $p\ge 1$, a finite
+    family of nonzero weights $\mu_k$, and blocks $B_k$ over the $p$-blocked
+    physical alphabet such that:
+    \begin{enumerate}
+        \item each block has positive bond dimension;
+        \item each block is trace-preserving, primitive, tensor-irreducible,
+              and one-site injective;
+        \item the blocked tensor $A^{[p]}$ and the weighted direct sum
+              $\bigoplus_k \mu_k B_k$ generate the same MPV family at every
+              positive length.
+    \end{enumerate}
+    No weight-modulus normalization is asserted at this stage.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the common primitive irreducible block decomposition to the pair
+    $(A,A)$. This gives a positive blocking length and a nonzero weighted
+    family of trace-preserving primitive irreducible blocks with the required
+    positive-length MPV identity.
+    Lemma~\ref{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    supplies one common further blocking that makes every block one-site
+    injective while preserving the other block hypotheses. Finally, identify
+    the iterated blocked alphabet with the direct blocked alphabet.
+\end{proof}
 
 \begin{theorem}[BNT from normal blocks with normalized weights]%
     \label{thm:paperbnt_supplier_prepared}
@@ -984,7 +1039,8 @@ satisfying those conditions.
     \label{thm:paperbnt_supplier_after_blocking}
     \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
     \leanok
-    \uses{thm:paperbnt_supplier_prepared}
+    \uses{thm:prepared_bnt_blocks_after_blocking,
+        thm:paperbnt_supplier_prepared}
     Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
     a finite family of nonzero weights $\mu_k$ and blocks $B_k$ over the
     blocked physical alphabet, such that:
@@ -1023,8 +1079,12 @@ satisfying those conditions.
     \leanok
     Theorem~\ref{thm:paperbnt_supplier_after_blocking} gives the
     arbitrary-input reduction used here, conditional on the two weight
-    normalization hypotheses displayed in that theorem. It is a positive-length
-    statement: the all-zero
+    normalization hypotheses displayed in that theorem. The preparatory
+    after-blocking part is Theorem~\ref{thm:prepared_bnt_blocks_after_blocking}:
+    it produces the TP-normalized primitive irreducible injective blocks and the
+    positive-length MPV identity, but not the weight normalization. The final
+    BNT sector decomposition is therefore still conditional on the displayed
+    weight hypotheses. This is a positive-length statement: the all-zero
     summand in the block decomposition contributes only at length zero, so the
     nonzero primitive blocks identify the MPV family for $N\ge 1$. The proof
     that the prepared weights can always be rescaled to satisfy the displayed
