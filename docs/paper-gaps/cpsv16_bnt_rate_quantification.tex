@@ -8,9 +8,9 @@
 \input{command}
 
 \title{Rate-Quantified BNT Cross-Overlap Decay\\
-       on the \leanid{PaperBNT} Sector Surface}
+       under an Equal-Modulus Refinement}
 \author{}
-\date{2026-05-13}
+\date{2026-05-18}
 
 \begin{document}
 \maketitle
@@ -18,11 +18,11 @@
 \section{Notation}
 
 Fix a sector decomposition $P$ with basis blocks
-$\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$ and a spectral level
-$\lambda_j\in\mathbb C\setminus\{0\}$ with
-$\|\lambda_0\|>\|\lambda_1\|>\cdots>\|\lambda_{g-1}\|$ and
-$\|\lambda_0\|=1$. The bilinear cross-overlap between basis blocks
-$j$ and $k$ at length $N$ is
+$\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$.  Suppose an additional
+equal-modulus refinement has supplied nonzero spectral levels
+$\lambda_j\in\mathbb C$ such that the moduli are non-increasing in $j$,
+and the first level has modulus $1$ when $g>0$.  The bilinear
+cross-overlap between basis blocks $j$ and $k$ at length $N$ is
 \begin{align}
     O_{j,k}(N) := 
     \mathtt{mpvOverlap}\bigl(P.\mathtt{basis}\,j,
@@ -62,25 +62,23 @@ The argument as written does not quantify the rate of decay in
 
 Definition~4.3 of~\cite{Cirac2021Matrix} packages
 \eqref{eq:qual} indirectly under \emph{eventual linear independence} of
-the basis MPVs and does not state a rate. The formalization records this
-eventual linear-independence input in the shared sector-decomposition
-infrastructure,\footnote{%
-    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition}.}
-while \eqref{eq:qual} is provided pointwise by
+the basis MPVs and does not state a rate. The formal counterpart is
+the predicate
+\leanid{MPSTensor.HasBNTSectorData}\footnote{%
+    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition} at
+    \leanid{HasBNTSectorData}.}
+in the formalization, and \eqref{eq:qual} is provided pointwise by
 \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left\_of\_irreducible\_TP}.\footnote{%
     \doclink{TNLean/MPS/Overlap/CastDecay}.}
 Neither source equips $\eta_{j,k}$ with a quantitative relation
 to the spectral weight ratios.
 
-\section{The retired rate hypothesis}
+\section{The rate condition}
 
-An earlier formal route introduced an explicit rate hypothesis on a
-sector decomposition $P$ and a chosen spectral level
-$\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$.  That route
-has since been retired together with the per-block-projection layer.  The
-mathematical hypothesis it was trying to isolate remains the following:
-there should exist non-negative families $C,\eta$ such that for every
-$j\ne k$,
+The rate condition that would discharge the non-dominant projection argument
+takes a sector decomposition $P$ and a spectral level
+$\lambda:\mathrm{Fin}\,P.\mathtt{basisCount}\to\mathbb C$. It asserts the
+existence of non-negative families $C,\eta$ such that for every $j\ne k$,
 \begin{align}
     0\le C_{j,k},\quad 0\le\eta_{j,k}<1,
         \qquad
@@ -89,24 +87,29 @@ $j\ne k$,
 \end{align}
 together with the geometric bound~\eqref{eq:rate} for all $N$.
 
-The surviving \leanid{PaperBNT} surface does not package such constants.
-It keeps the raw BNT weights in \leanid{SectorDecomposition} and records
-qualitative consequences in
-\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}: the coefficient
-bound \leanid{SectorDecomposition.norm\_coeff\_le\_copies\_of\_norm\_weight\_le\_one},
-within-family cross-decay
-\leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}, the
-combined-family linear-independence criterion
-\leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li}, and the
-non-vanishing coefficient statement
-\leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}.  None of
-these declarations supplies the constants in~\eqref{eq:hyp}.
+This condition is not currently a formal declaration.  It is meaningful only
+after choosing an equal-modulus refinement that separates a common spectral
+level $\lambda_j$ from within-sector phases.  The present paper-faithful route
+keeps the raw CPSV weights $\mu_{j,q}$ in the core BNT predicate and does not
+impose such a factorization.
 
-\section{Where such a hypothesis would be needed}
+The surviving formal statements used in the current route are the qualitative
+and coefficient estimates in
+\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.  In particular,
+\leanid{IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero} gives
+the limit~\eqref{eq:qual},
+\leanid{IsBNTCanonicalForm.combined\_family\_eventually\_li} gives the
+combined-family linear-independence conclusion from vanishing cross-overlaps,
+\leanid{IsBNTCanonicalForm.norm\_coeff\_le\_copies} bounds the raw sector
+coefficient under the CPSV line-246 normalization, and
+\leanid{IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block} gives the
+non-vanishing conclusion for a block carrying a unit-modulus copy.
 
-The retired per-block-projection route carried an abstract hypothesis
-excluding asymptotic cancellation of the assembled overlap against a
-chosen projection block~$k_0$.  The obstruction analysis in
+\section{Where the rate condition would be used}
+
+The retired two-layer per-block-projection lemmas carried an abstract
+non-cancellation hypothesis ruling out asymptotic cancellation of the assembled
+overlap against the chosen projection block~$k_0$.  The obstruction analysis in
 \path{audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} shows that
 for a non-dominant $k_0$ the discharge requires, after isolating
 $V^{(N)}(P.\mathtt{basis}\,k_0)$ on the right and renormalising by
@@ -121,15 +124,15 @@ The right-hand side of~\eqref{eq:product} converges to $0$ exactly when
 \eqref{eq:hyp} holds. The qualitative limit~\eqref{eq:qual} alone
 gives $\eta_{j,k_0}<1$ but not the comparison
 $\eta_{j,k_0}\cdot\|\lambda_j/\lambda_{k_0}\|<1$, which is the
-content of the new hypothesis.
+content of the rate condition.
 
 \section{Classification}
 
-\emph{Open gap.}  The rate condition~\eqref{eq:hyp} is a structural input
-beyond what \cite[\S II]{Cirac2016MPDO_arXiv} and
-\cite[Definition~4.3]{Cirac2021Matrix} make explicit. Its rate is
-in principle derivable from the spectral gap of the mixed transfer
-operator that powers
+\emph{Open gap.}  The rate condition above is a structural input beyond what
+\cite[\S II]{Cirac2016MPDO_arXiv} and
+\cite[Definition~4.3]{Cirac2021Matrix} make explicit. Its rate is in
+principle derivable from the spectral gap of the mixed transfer operator that
+powers
 \leanid{mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left\_of\_irreducible\_TP},
 but the compatibility inequality
 $\eta_{j,k}\cdot\|\lambda_j/\lambda_k\|<1$ is not implied by the
@@ -138,11 +141,13 @@ BNT structure and must be either imposed or established analytically.
 The analytic derivation from the transfer matrix spectral gap is the
 subject of \emph{Option~2} in the design memo
 \path{audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} and is
-not addressed in this note. The current \leanid{PaperBNT} route instead
-keeps the coefficient comparison and the combined-family linear
-independence in \path{TNLean/MPS/FundamentalTheorem/PaperBNT}; any future
-rate-quantified argument should be stated against that surviving surface,
-not against the retired per-block-projection layer.
+not addressed in this note.  The current PaperBNT route instead records the
+source-faithful qualitative overlap decay, coefficient boundedness, and
+coefficient non-vanishing separately in
+\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}; any future use of the
+rate condition should be added as a theorem-level hypothesis or proved from
+the mixed-transfer spectral gap, not by reviving the deleted two-layer
+projection surface.
 
 \bibliographystyle{alpha}
 \bibliography{references}

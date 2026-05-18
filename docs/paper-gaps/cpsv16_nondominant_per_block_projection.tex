@@ -10,7 +10,7 @@
 \title{Non-Dominant Per-Block Projection in CPSV16 \S II Step~1\\
        under the One-Copy Normal-Canonical BNT Formulation}
 \author{}
-\date{2026-05-13}
+\date{2026-05-18}
 
 \begin{document}
 \maketitle
@@ -81,21 +81,23 @@ $\{V^{(N)}(A_j)\}_j\cup\{V^{(N)}(B_{k_0})\}$ from~\eqref{eq:Hk0} and
 combines it with the proportionality identity at
 \cite[eq.~\texttt{eq:II\_ABasicTensors}, line~286]{Cirac2016MPDO_arXiv}.
 
-\section{Formal target}
+\section{Formal boundary}
 
-The mathematical target is, for $k_0:\mathrm{Fin}\,r_B$ arbitrary:
-given the one-copy normal-canonical BNT hypotheses on both $\mu^A,A$ and
-$\mu^B,B$,
-\leanid{EventuallyNonzeroProportionalMPV\textsubscript{2}} between the
-assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$ and the hypothesis
-$\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
-$\bot$.
-The old one-copy fixed-block declarations for this target have been
-retired.  The surviving route is the \leanid{PaperBNT} proportional
-matching layer, which keeps the raw coefficients of
-\leanid{SectorDecomposition} visible and uses the API lemmas in
-\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.  The universally
-quantified fixed-block cancellation remains a mathematical obligation.
+The earlier one-copy formal target tried to prove, for an arbitrary
+$k_0:\mathrm{Fin}\,r_B$, that eventual proportionality of the two assembled
+families contradicts
+$\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$.  That route
+belonged to the retired one-copy fundamental-theorem development.
+
+The present PaperBNT route keeps the raw weights $\mu_{j,q}$ in a sector
+decomposition.  The available formal ingredients are
+\leanid{IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero},
+\leanid{IsBNTCanonicalForm.combined\_family\_eventually\_li},
+\leanid{IsBNTCanonicalForm.norm\_coeff\_le\_copies}, and
+\leanid{IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}.\footnote{%
+    \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.}
+The obstruction below records why a direct per-block projection is not the
+right replacement for the source's linear-independence argument.
 
 \section{Where the per-block projection fails for non-dominant
 \texorpdfstring{$k_0$}{k0}}
@@ -112,14 +114,23 @@ and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangl
 \end{align}
 With $\|\mu^A_j\|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
 \eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
-the current cross-overlap decay statement
-\leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}
-gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$,
-while the diagonal block has a nonzero limiting coefficient, so
+BNT cross-overlap decay\footnote{%
+    In the present PaperBNT surface this is
+    \leanid{IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}.}
+gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$
+and a nonzero limit $\ell$ at $k=k_0$, so
 $\mathrm{RHS}_N=c_N(\mu^B_{k_0})^N(\ell+o(1))$.
-In the dominant block, the proportionality identity and the BNT normalizations
-give the dominant-adjusted scalar limit
-$\bigl\|c_N(\mu^B_0/\mu^A_0)^N\bigr\|\to 1$.  Therefore
+For the dominant pair, the proportionality identity projected onto the matched
+dominant block, together with normalized self-overlap and vanishing
+off-diagonal overlaps, gives the scalar comparison
+\begin{align}
+    \bigl\|c_N(\mu^B_0)^N\bigr\|
+    \sim \|(\mu^A_0)^N\|.
+\end{align}
+Equivalently,
+$\bigl\|c_N(\mu^B_0/\mu^A_0)^N\bigr\|\to 1$.  This is the dominant
+normalization calculation in the CPSV16 Step~1 argument
+\cite[lines~1170--1180]{Cirac2016MPDO_arXiv}.  Therefore
 \begin{align}
     \bigl\|c_N(\mu^B_{k_0})^N\bigr\|
     &\sim
@@ -133,8 +144,7 @@ $\mathrm{RHS}_N\to 0$ together with $\mathrm{LHS}_N$. No contradiction
 is available from the per-block projection. The dominant case
 $k_0=0$ is the unique index for which the ratio in~\eqref{eq:decay}
 is the constant~$1$ and the bound stays uniform; that is the analytic
-content that the dominant fixed-block statement captured before the
-retirement of the old one-copy layer.
+content of the dominant special case.
 
 Two independent probes confirm the obstruction. Path~$\alpha$
 (\path{audits/2026-05-13_cpsv16_ft_exact_leading_coeff.md},
@@ -143,8 +153,7 @@ $c_N(\mu^B_0)^N\zeta^N=(\mu^A_0)^N$ fails at $r_A=r_B=2$ with distinct
 sub-dominant moduli. Path~$\beta$ scope adjustment
 (\path{audits/2026-05-13_cpsv16_ft_path_beta_scout.md},
 \ghpr{1664}) shows the lifted per-block projection on the
-\leanid{SectorDecomposition} surface inherits the same decay
-mismatch.
+sector-decomposition surface inherits the same decay mismatch.
 
 \section{The argument the source uses}
 
@@ -174,35 +183,36 @@ identification, contradicting $c_N\ne 0$ and $\mu^B_{k_0}\ne 0$. The
 mechanism uses only the coefficient match forced by linear
 independence; it requires neither side to stay bounded away from~$0$.
 
-The current \leanid{PaperBNT} API provides the combined-family
-linear-independence mechanism as
-\leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li}.
-The remaining task is to combine that statement with the proportional
-coefficient identity in the fixed-block setting, without appealing to the
-retired per-block-projection layer.
+The present formalization provides the combined-family eventual linear
+independence statement as
+\leanid{IsBNTCanonicalForm.combined\_family\_eventually\_li}, assuming the
+inter-family cross-overlaps vanish.  The remaining work is to use that
+linear-independence conclusion in the proportional PaperBNT argument without
+returning to the failed per-block projection.
 
 \section{Classification}
 
-\emph{Scope restriction combined with an open gap.} The retired dominant
-fixed-block declarations proved the Step~1 conclusion for
-$k_0=\langle 0,\_\rangle$ on the one-copy surface. The universally
-quantified statements stay open because the cited mechanism requires
-either
+\emph{Scope restriction combined with an open gap.}  The direct projection
+argument works only for a dominant block on the one-copy surface.  The
+universally quantified statement should instead proceed by one of the following
+mathematical routes:
 
 \begin{enumerate}
     \item the combined-family \texttt{Lem1} statement
           \eqref{eq:largeLem1} with all-pairwise cross-overlap decay,
           enabling the coefficient-identification step
           of~\eqref{eq:isolate}; or
-    \item the two-layer paper-faithful structure of
-          \cite[Definition~4.3]{Cirac2021Matrix}, separating spectral
-          levels $\lambda_j$ from within-sector unit-modulus weights
-          $\mu_{j,q}$.  On the surviving \leanid{SectorDecomposition}
-          surface this means keeping the raw coefficients
-          $\sum_q\mu_{j,q}^N$ visible and using
-          \leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}
-          rather than collapsing the sector to a single weight before the
-          projection argument.  Tracked in \ghissue{1641}.
+    \item an additional equal-modulus factorization
+          $\mu_{j,q}=\lambda_j\nu_{j,q}$ with $|\nu_{j,q}|=1$, together
+          with the rate estimates needed to compare the cross-overlap decay
+          with $|\lambda_j/\lambda_{k_0}|^N$.  In the present formal
+          development such a factorization is represented only by the optional
+          structure \leanid{HasEqualModulusWeightLayer}\footnote{%
+              \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/EqualModulus}.}
+          and is not part of the core predicate
+          \leanid{IsBNTCanonicalForm}.\footnote{%
+              \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Basic}.}
+          Tracked in \ghissue{1641}.
 \end{enumerate}
 
 The collapse $r_j=1$ enforced by \leanid{mu\_strict\_anti}
