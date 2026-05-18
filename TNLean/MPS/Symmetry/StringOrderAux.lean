@@ -283,7 +283,7 @@ theorem twistedTPGaugeSetup_hasEigenvalue [NeZero D]
                   rw [hB'eq]; simp [Matrix.conjTranspose_mul, Matrix.mul_assoc]
           _ = setup.S⁻¹ * (setup.B i)ᴴ * setup.S := by
                 rw [setup.hS_inv_herm, setup.hS_herm]
-      -- Extract the two inner cancellations as local helpers.
+      -- Extract the two inner cancellations as auxiliary lemmas.
       have hSV : setup.S⁻¹ * (setup.S * V * setup.S) = V * setup.S :=
         calc setup.S⁻¹ * (setup.S * V * setup.S)
             = (setup.S⁻¹ * setup.S) * V * setup.S := by simp [Matrix.mul_assoc]
