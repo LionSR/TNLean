@@ -28,8 +28,7 @@ with an extra $Z$-gauge degree of freedom.
 % Lean targets: \texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data},
 % \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge}.
 % The literal $\mathrm{II\_cor2}$ coordinate packaging (CPSV16 lines 1184--1192)
-% is the in-flight follow-up; the matched-coordinate global gauge is already
-% complete.
+% is recorded in Chapter~\ref{ch:bnt} for the unit-modulus BNT normalization.
 
 \section{Source theorems}\label{sec:ft_source_theorems}
 
@@ -147,12 +146,14 @@ sums.
 The block-matching conclusion (block-count, bond-dimension, and
 gauge-phase identification of corresponding sectors) and the global
 gauge identification are formalised on the BNT canonical form of
-Chapter~\ref{ch:bnt}. The coordinate packaging of
-\cite[\S~II.C, lines 1184--1192]{Cirac2017MPDO_AnnPhys} is the
-in-flight follow-up.
+Chapter~\ref{ch:bnt}. The literal coordinate packaging of
+\cite[Corollary~II.2 and \S~II.C, lines 1184--1192]
+    {Cirac2017MPDO_AnnPhys}
+is recorded there under the unit-modulus-copy normalization.
 % Maintainer note (Lean): see the declarations
 % MPSTensor.ft_paper_bnt_equal_sector_data and
-% MPSTensor.ft_paper_bnt_equal_global_gauge.
+% MPSTensor.ft_paper_bnt_equal_global_gauge, and
+% MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv_literal.
 
 \begin{theorem}[Bond dimension equality from unit overlap]%
     \label{thm:equalMPS_dimension_from_unit_overlap}
