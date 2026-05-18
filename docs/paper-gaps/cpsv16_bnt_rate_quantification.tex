@@ -8,7 +8,7 @@
 \input{command}
 
 \title{Rate-Quantified BNT Cross-Overlap Decay\\
-       for the Paper-Faithful BNT Surface}
+       under an Equal-Modulus Refinement}
 \author{}
 \date{2026-05-13}
 
@@ -18,11 +18,11 @@
 \section{Notation}
 
 Fix a sector decomposition $P$ with basis blocks
-$\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$ and a spectral level
-$\lambda_j\in\mathbb C\setminus\{0\}$ with
-$\|\lambda_0\|>\|\lambda_1\|>\cdots>\|\lambda_{g-1}\|$ and
-$\|\lambda_0\|=1$. The bilinear cross-overlap between basis blocks
-$j$ and $k$ at length $N$ is
+$\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$.  Suppose an additional
+equal-modulus refinement has supplied nonzero spectral levels
+$\lambda_j\in\mathbb C$ such that the moduli are non-increasing in $j$,
+and the first level has modulus $1$ when $g>0$.  The bilinear
+cross-overlap between basis blocks $j$ and $k$ at length $N$ is
 \begin{align}
     O_{j,k}(N) := 
     \mathtt{mpvOverlap}\bigl(P.\mathtt{basis}\,j,
@@ -65,7 +65,7 @@ Definition~4.3 of~\cite{Cirac2021Matrix} packages
 the basis MPVs and does not state a rate. The formal counterpart is
 the predicate
 \leanid{MPSTensor.HasBNTSectorData}\footnote{%
-    \doclink{TNLean/MPS/FundamentalTheorem/SectorDecomposition} at
+    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition} at
     \leanid{HasBNTSectorData}.}
 in the formalization, and \eqref{eq:qual} is provided pointwise by
 \leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_not\_gaugePhaseEquiv\_cast\_left\_of\_irreducible\_TP}.\footnote{%
@@ -87,11 +87,11 @@ existence of non-negative families $C,\eta$ such that for every $j\ne k$,
 \end{align}
 together with the geometric bound~\eqref{eq:rate} for all $N$.
 
-This condition is not currently a formal declaration.  It arose during the
-retired two-layer sector-refinement route, where a common spectral level
-$\lambda_j$ was separated from within-sector phases.  The present
-paper-faithful route keeps the raw CPSV weights $\mu_{j,q}$ in the core BNT
-predicate and does not impose such a factorization.
+This condition is not currently a formal declaration.  It is meaningful only
+after choosing an equal-modulus refinement that separates a common spectral
+level $\lambda_j$ from within-sector phases.  The present paper-faithful route
+keeps the raw CPSV weights $\mu_{j,q}$ in the core BNT predicate and does not
+impose such a factorization.
 
 The surviving formal statements used in the current route are the qualitative
 and coefficient estimates in
