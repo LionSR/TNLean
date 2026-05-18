@@ -2,9 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
-import TNLean.MPS.BNT.Basic
-import TNLean.MPS.Overlap.CastDecay
+import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
 
 /-!
 # Weak non-decaying-overlap existential for BNT canonical forms
@@ -68,63 +66,6 @@ open Filter Topology
 namespace MPSTensor
 
 variable {d : ℕ}
-
-namespace IsBNTCanonicalForm
-
-/-! ### Cross-overlap between distinct basis blocks of one family
-
-The following local lemma is the same-family cross-decay step needed by the
-combined-family `Lem1` input.  It is logically independent of the
-proportionality hypothesis.
-
-TODO: once `PaperBNT/Api.lean` (PR #1694) is merged, this lemma will
-migrate there as `IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero`;
-the local copy is kept here until that landing. -/
-
-/-- **Cross-overlap between distinct basis blocks decays** (same family).
-
-For any two distinct basis indices `j ≠ k` of a BNT canonical form
-satisfying `IsBNTCanonicalForm`, the MPV overlap
-`mpvOverlap (P.basis j) (P.basis k) N` tends to `0` as `N → ∞`.
-
-Dispatch follows the CPSV16 lines 1080–1091 normal-tensor overlap dichotomy:
-
-* if the two basis blocks have unequal bond dimensions, decay follows from
-  `mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP` (CPSV16 line 1080
-  unequal-dimension case);
-* if the bond dimensions agree, the cast-compatible `basis_distinct` field
-  of `IsBNTCanonicalForm` rules out gauge-phase equivalence (CPSV16 lines
-  264–279 grouping rule), and decay follows from
-  `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`
-  (CPSV16 line 1085 equal-dimension non-gauge-equivalent case).
-
-This statement consumes only the per-block irreducibility, left-canonical
-normalisation, and gauge-phase distinctness fields of `IsBNTCanonicalForm`,
-together with the bond-dimension positivity field providing the local
-`NeZero` instances required by the decay lemmas in
-`TNLean/MPS/Overlap/CastDecay.lean`. -/
-lemma cross_overlap_basis_tendsto_zero
-    {P : SectorDecomposition d} (h : IsBNTCanonicalForm P)
-    {j k : Fin P.basisCount} (hjk : j ≠ k) :
-    Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis k) N)
-      atTop (𝓝 0) := by
-  haveI hjpos : NeZero (P.basisDim j) := ⟨(h.basis_dim_pos j).ne'⟩
-  haveI hkpos : NeZero (P.basisDim k) := ⟨(h.basis_dim_pos k).ne'⟩
-  by_cases hdim : P.basisDim j = P.basisDim k
-  · exact mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
-      (hdim := hdim) (A := P.basis j) (B := P.basis k)
-      (hA_irr := h.basis_irreducible j)
-      (hB_irr := h.basis_irreducible k)
-      (hA_norm := h.basis_left_canonical j)
-      (hB_norm := h.basis_left_canonical k)
-      (hNot := h.basis_distinct j k hjk hdim)
-  · exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
-      (P.basis j) (P.basis k)
-      (h.basis_irreducible j) (h.basis_irreducible k)
-      (h.basis_left_canonical j) (h.basis_left_canonical k)
-      hdim
-
-end IsBNTCanonicalForm
 
 /-! ### Eventual weighted-state identity from eventual proportionality
 
