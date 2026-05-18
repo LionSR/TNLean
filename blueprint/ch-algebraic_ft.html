@@ -390,7 +390,7 @@
   <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">9.6</span> <span class="toc_entry">Normal canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+  <a href="ch-canonical.html#sec:canonical_construction_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">9.8</span> <span class="toc_entry">TP-gauge reduction for arbitrary tensors</span></a>
@@ -516,7 +516,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-ft_proof.html#subsec:ft_block_sum_wrappers"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
+  <a href="ch-ft_proof.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
  </li>
 <li class="">
   <a href="ch-ft_proof.html#subsec:ft_proportional_single_block"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Proportional single-block ingredient</span></a>
@@ -2071,8 +2071,8 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7ffa2bf3bef0>">
-  \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) & = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond}\\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) & = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f3ea4e2fcb0>">
+  \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) &  = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond} \\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) &  = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-94d204c7b461ceb8.svg" alt="\TNInternalTraceInsertion{i}{j}{X}"> </div>
@@ -2097,7 +2097,7 @@
   <div class="proof_content">
   <p> By cyclicity and non-degeneracy of the trace pairing, the conditions in Eqs.&#160;(??) and&#160;(??) give, for all physical indices \(i,j\), </p>
 <div class="displaymath" id="a0000001092">
-  \[  \begin{aligned}  A_2^{j} A_1^{i} & = B_2^{j} B_1^{i},\\ A_1^{i} A_2^{j} & = B_1^{i} B_2^{j}. \end{aligned}  \]
+  \[  \begin{aligned}  A_2^{j} A_1^{i} &  = B_2^{j} B_1^{i}, \\ A_1^{i} A_2^{j} &  = B_1^{i} B_2^{j}. \end{aligned}  \]
 </div>
 <p> Write \(\mathbb {1}_D = \sum _j c_j A_2^j\) using the decomposition map \(\Psi _{A_2}\), and define \(Z := \sum _j c_j B_2^j \in M_{D}(\mathbb {C})\). This is the point where the two-site comparison collapses to a single boundary matrix: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-ba1da95cefb484e1.svg" alt="\TNBoundaryRegrow{Z}{i}{j}{2}"> &#8195;&#8195;<img class="tn-svg" src="tn_svg/tn-e10ffce40f9e899b.svg" alt="\TNLocalEqualityStep{Z}{\lambda \mathbb {1}}{i}"> </div>

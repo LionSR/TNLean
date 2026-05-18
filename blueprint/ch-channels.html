@@ -390,7 +390,7 @@
   <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">9.6</span> <span class="toc_entry">Normal canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+  <a href="ch-canonical.html#sec:canonical_construction_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">9.8</span> <span class="toc_entry">TP-gauge reduction for arbitrary tensors</span></a>
@@ -516,7 +516,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-ft_proof.html#subsec:ft_block_sum_wrappers"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
+  <a href="ch-ft_proof.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
  </li>
 <li class="">
   <a href="ch-ft_proof.html#subsec:ft_proportional_single_block"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Proportional single-block ingredient</span></a>
@@ -2732,7 +2732,7 @@
 	, Proposition&#160;6.1
 	]
 </span>, so these coincide with the eigenvalues of maximal modulus. </p>
-<p><b class="bfseries">Note:</b> The condition \(|\lambda | = 1\) is appropriate for channels, since the spectral radius of a channel is&#160;\(1\). For a general linear map with spectral radius \(r \neq 1\) the condition would generalise to \(|\lambda | = r\). </p>
+<p>The condition \(|\lambda | = 1\) is appropriate for channels, since the spectral radius of a channel is&#160;\(1\); for a general linear map with spectral radius \(r \neq 1\) the condition would generalise to \(|\lambda | = r\). </p>
 
   </div>
 </div>
@@ -10053,33 +10053,12 @@
     <span class="definition_thmtitle">SL-filtering operation</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channels.html#def:sl_filtering">#</a>
     
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.SLFiltering" class="lean_decl">Wolf.SLFiltering</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -10097,33 +10076,12 @@
     <span class="definition_thmtitle">Doubly-stochastic map</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channels.html#def:doubly_stochastic">#</a>
     
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.DoublyStochastic" class="lean_decl">Wolf.DoublyStochastic</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -10154,29 +10112,10 @@
     
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.infimum_is_attained" class="lean_decl">Wolf.infimum_is_attained</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\operatorname{SL}(D, \mathbb {C})\) and the extreme-value theorem. </p>
+  <p> For a positive-definite Choi matrix \(\tau \), the infimum of \(\operatorname{tr}\! [(S_{2} \otimes _{k} S_{1}) \tau (S_{2} \otimes _{k} S_{1})^{\dagger }]\) over \(S_{1}, S_{2} \in M_{D}(\mathbb {C})\) with \(\det S_{1} = \det S_{2} = 1\) is attained. <b class="bfseries">Not yet proved</b>—requires compactness of bounded subsets of \(\operatorname{SL}(D, \mathbb {C})\) and the extreme-value theorem. </p>
 
   </div>
 </div>
@@ -10220,29 +10159,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.exists_normal_form_generic" class="lean_decl">Wolf.exists_normal_form_generic</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">4.127</a>. </p>
+  <p>  Let \(T : M_{D}(\mathbb {C}) \to M_{D}(\mathbb {C})\) be a completely positive map whose Choi matrix is positive-definite (equivalently, \(T\) has full Kraus rank). Then there exist SL-filterings \(\Phi _{1}, \Phi _{2}\) such that \(\Phi _{2} \circ T \circ \Phi _{1}\) is doubly-stochastic. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">4.127</a>. </p>
 
   </div>
 </div>
@@ -10255,33 +10175,12 @@
     <span class="definition_thmtitle">Diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channels.html#def:lorentz_diagonal">#</a>
     
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.IsLorentzDiagonal" class="lean_decl">Wolf.IsLorentzDiagonal</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -10299,33 +10198,12 @@
     <span class="definition_thmtitle">Non-diagonal Lorentz normal form</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channels.html#def:lorentz_non_diagonal">#</a>
     
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.IsLorentzNonDiagonal" class="lean_decl">Wolf.IsLorentzNonDiagonal</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -10334,35 +10212,35 @@
 <div class="displaymath" id="a0000000337">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
-& 0
-
-\\ 0 
-
-& x/\sqrt{3} 
-
-& 0 
-
-& 0
+&  0 
 
 \\ 0 
 
-& 0 
+&  x/\sqrt{3} 
 
-& x/\sqrt{3} 
+&  0 
 
-& 0
+&  0 
+
+\\ 0 
+
+&  0 
+
+&  x/\sqrt{3} 
+
+&  0 
 
 \\ 2/3 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
-& 1/3 
+&  1/3 
 
 \end{pmatrix}.  \]
 </div>
@@ -10379,33 +10257,12 @@
     <span class="definition_thmtitle">Singular Lorentz normal form</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="ch-channels.html#def:lorentz_singular">#</a>
     
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.IsLorentzSingular" class="lean_decl">Wolf.IsLorentzSingular</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -10414,35 +10271,35 @@
 <div class="displaymath" id="a0000000338">
   \[  \widehat{T'} = \begin{pmatrix}  1 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
-& 0
-
-\\ 0 
-
-& 0 
-
-& 0 
-
-& 0
+&  0 
 
 \\ 0 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
-& 0
+&  0 
+
+\\ 0 
+
+&  0 
+
+&  0 
+
+&  0 
 
 \\ 1 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
-& 0 
+&  0 
 
 \end{pmatrix},  \]
 </div>
@@ -10494,29 +10351,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/Wolf.exists_lorentz_normal_form_qubit" class="lean_decl">Wolf.exists_lorentz_normal_form_qubit</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">4.127</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
+  <p>  For every qubit channel \(T : M_{2}(\mathbb {C}) \to M_{2}(\mathbb {C})\), there exist \(\operatorname{SL}(2, \mathbb {C})\)-filterings \(\Phi _{1}, \Phi _{2}\) such that the filtered channel \(T' = \Phi _{2} \circ T \circ \Phi _{1}\) is in one of the three Lorentz normal forms: diagonal, non-diagonal, or singular. <b class="bfseries">Not yet proved</b>—proof blocked on Lemma&#160;<a href="ch-channels.html#lem:infimum_is_attained">4.127</a> and the Lorentz group classification of \(\operatorname{SL}(2, \mathbb {C})\) orbits. </p>
 
   </div>
 </div>

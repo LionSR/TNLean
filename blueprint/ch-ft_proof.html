@@ -390,7 +390,7 @@
   <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">9.6</span> <span class="toc_entry">Normal canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+  <a href="ch-canonical.html#sec:canonical_construction_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">9.8</span> <span class="toc_entry">TP-gauge reduction for arbitrary tensors</span></a>
@@ -516,7 +516,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-ft_proof.html#subsec:ft_block_sum_wrappers"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
+  <a href="ch-ft_proof.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
  </li>
 <li class="">
   <a href="ch-ft_proof.html#subsec:ft_proportional_single_block"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Proportional single-block ingredient</span></a>
@@ -3525,8 +3525,6 @@
     <span class="theorem_thmtitle">Sector comparison from leftover zero blocks and span hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3571,29 +3569,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan" class="lean_decl">MPSTensor.afterBlocking_sectorComparison_zeroTail_of_blockSpan</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Fix \(p{\gt}0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as an all-zero leftover block plus a weighted nonzero part, with all blocks in the nonzero part trace-preserving, primitive, irreducible, injective, and with nonzero weights. If the two leftover zero-block dimensions agree and the two nonzero-weight block families have equal finite-length MPV spans at every system size, then there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT bases, and their sector weights satisfy the matched sector-weight conclusion. </p>
+  <p>  Let \(A\) and \(B\) have the same MPV family. Fix \(p{\gt}0\) and suppose \(A^{[p]}\) and \(B^{[p]}\) each decompose as an all-zero leftover block plus a weighted nonzero part, with all blocks in the nonzero part trace-preserving, primitive, irreducible, injective, and with nonzero weights. If the two leftover zero-block dimensions agree and the two nonzero-weight block families have equal finite-length MPV spans at every system size, then there exist a period \(p' {\gt} 0\) and sector decompositions \(P,Q\) such that \(A^{[p']}\) and \(B^{[p']}\) agree with the corresponding sector tensors at every positive length, \(P\) and \(Q\) have the same full MPV family, both have BNT bases, and their sector weights satisfy the matched sector-weight conclusion. </p>
 
   </div>
 </div>
@@ -3619,8 +3598,6 @@
     <span class="definition_thmtitle">Span hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3650,29 +3627,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitiveSpanHypotheses" class="lean_decl">MPSTensor.CommonPrimitiveSpanHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For two common primitive nonzero-sector families at one blocking length, this condition consists of the hypotheses needed before applying the zero-block sector comparison: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and equality of the finite-length MPV spans of the two block families for every system size. </p>
+  <p>  For two common primitive nonzero-sector families at one blocking length, this condition consists of the hypotheses needed before applying the zero-block sector comparison: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and equality of the finite-length MPV spans of the two block families for every system size. </p>
 
   </div>
 </div>
@@ -3685,8 +3643,6 @@
     <span class="theorem_thmtitle">Phase covers supply span hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3723,29 +3679,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover" class="lean_decl">MPSTensor.CommonPrimitiveSpanHypotheses.of_commonPhaseCover</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the two common primitive nonzero-sector families have equal leftover zero-block dimensions, are one-site injective, and are equipped with a common MPV phase cover, then they satisfy the span hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>. </p>
+  <p>  If the two common primitive nonzero-sector families have equal leftover zero-block dimensions, are one-site injective, and are equipped with a common MPV phase cover, then they satisfy the span hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>. </p>
 
   </div>
 </div>
@@ -3770,8 +3707,6 @@
     <span class="definition_thmtitle">Phase-cover hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3801,29 +3736,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitivePhaseCoverHypotheses" class="lean_decl">MPSTensor.CommonPrimitivePhaseCoverHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For two common primitive nonzero-sector families at one blocking length, this condition is the phase-cover analog of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a common MPV phase cover for the two block families. </p>
+  <p>  For two common primitive nonzero-sector families at one blocking length, this condition is the phase-cover analog of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a common MPV phase cover for the two block families. </p>
 
   </div>
 </div>
@@ -3836,8 +3752,6 @@
     <span class="theorem_thmtitle">Phase-cover hypotheses imply span hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3872,29 +3786,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses" class="lean_decl">MPSTensor.CommonPrimitivePhaseCoverHypotheses.toSpanHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two common primitive nonzero-sector families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>, then they satisfy the span hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>. </p>
+  <p>  If two common primitive nonzero-sector families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>, then they satisfy the span hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>. </p>
 
   </div>
 </div>
@@ -3919,8 +3814,6 @@
     <span class="definition_thmtitle">Block-matching hypotheses for common primitive sectors</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3948,29 +3841,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitiveBlockMatchingHypotheses" class="lean_decl">MPSTensor.CommonPrimitiveBlockMatchingHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For two common primitive nonzero-sector families at one blocking length, this condition is the block-matching analog of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a BNT block-matching conclusion for the two block families (a permutation, equal bond dimensions, and gauge-phase equivalences). </p>
+  <p>  For two common primitive nonzero-sector families at one blocking length, this condition is the block-matching analog of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>: equality of the two leftover zero-block dimensions, one-site injectivity of all blocks on both sides, and a BNT block-matching conclusion for the two block families (a permutation, equal bond dimensions, and gauge-phase equivalences). </p>
 
   </div>
 </div>
@@ -3983,8 +3857,6 @@
     <span class="theorem_thmtitle">Block-matching hypotheses imply phase-cover hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4019,29 +3891,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses" class="lean_decl">MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toPhaseCoverHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the block-matching hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_block_matching_hypotheses">12.38</a> hold, then the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a> hold. </p>
+  <p>  If the block-matching hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_block_matching_hypotheses">12.38</a> hold, then the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a> hold. </p>
 
   </div>
 </div>
@@ -4066,8 +3919,6 @@
     <span class="theorem_thmtitle">Block-matching hypotheses imply span hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4104,29 +3955,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses" class="lean_decl">MPSTensor.CommonPrimitiveBlockMatchingHypotheses.toSpanHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the block-matching hypotheses hold, then the span hypotheses hold by passing through the phase-cover hypotheses. </p>
+  <p>  If the block-matching hypotheses hold, then the span hypotheses hold by passing through the phase-cover hypotheses. </p>
 
   </div>
 </div>
@@ -4151,8 +3983,6 @@
     <span class="definition_thmtitle">Per-block block-matching gauge-phase data</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4182,39 +4012,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.ofConclusion" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.ofConclusion</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.reindexB" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.reindexB</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.castA" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.castA</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.globalGL" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.globalGL</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.globalX" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.globalX</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   The block-matching conclusion can be unpacked into explicit per-block data: a permutation matching the two block families, equalities of matched bond dimensions, gauges \(X_k\), and nonzero phases \(\zeta _k\) such that </p>
+  <p>  The block-matching conclusion can be unpacked into explicit per-block data: a permutation matching the two block families, equalities of matched bond dimensions, gauges \(X_k\), and nonzero phases \(\zeta _k\) such that </p>
 <div class="displaymath" id="a0000000822">
   \[  B_{\sigma (k)}^i=\zeta _k X_k A_k^i X_k^{-1}  \]
 </div>
@@ -4231,8 +4032,6 @@
     <span class="theorem_thmtitle">Per-block gauge phases assemble to an explicit global gauge</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4267,31 +4066,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.toTensorFromBlocks_reindexB_eq_globalX_conj</a></li>
-          
-          <li><a href="../docs/find/#doc/MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks" class="lean_decl">MPSTensor.BlockMatchingGaugePhaseData.gaugeEquiv_toTensorFromBlocks</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If the block weights absorb the per-block phases, \(\mu _A(k)=\mu _B(\sigma (k))\zeta _k\), then the weighted direct sum of the permuted right blocks is conjugate to the weighted direct sum of the cast left blocks by the explicit flattened gauge \(X=\bigoplus _k X_k\). Consequently this global matrix witnesses the gauge equivalence of the two assembled tensors. </p>
+  <p>  If the block weights absorb the per-block phases, \(\mu _A(k)=\mu _B(\sigma (k))\zeta _k\), then the weighted direct sum of the permuted right blocks is conjugate to the weighted direct sum of the cast left blocks by the explicit flattened gauge \(X=\bigoplus _k X_k\). Consequently this global matrix witnesses the gauge equivalence of the two assembled tensors. </p>
 
   </div>
 </div>
@@ -4316,8 +4094,6 @@
     <span class="theorem_thmtitle">Common primitive sectors with span hypotheses</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4356,29 +4132,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses" class="lean_decl">MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_spanHypotheses</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume \(A\) and \(B\) have the same MPV family and that the canonically blocked nonzero parts agree with the same families written after identifying blocked physical words. The common primitive theorem then produces one positive blocking length with \(A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and \(B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and trace-preserving primitive irreducible nonzero-sector families with positive bond dimensions and nonzero weights. If these produced families also satisfy Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>, then the leftover zero-block sector comparison conclusion holds: after a positive blocking, there are sector decompositions \(P,Q\) agreeing with \(A\) and \(B\) at all positive lengths, with \(P\) and \(Q\) generating the same full MPV family, with BNT bases, and with their sector weights matched up to a permutation and nonzero phases. </p>
+  <p>  Assume \(A\) and \(B\) have the same MPV family and that the canonically blocked nonzero parts agree with the same families written after identifying blocked physical words. The common primitive theorem then produces one positive blocking length with \(A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and \(B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and trace-preserving primitive irreducible nonzero-sector families with positive bond dimensions and nonzero weights. If these produced families also satisfy Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_span_hypotheses">12.34</a>, then the leftover zero-block sector comparison conclusion holds: after a positive blocking, there are sector decompositions \(P,Q\) agreeing with \(A\) and \(B\) at all positive lengths, with \(P\) and \(Q\) generating the same full MPV family, with BNT bases, and with their sector weights matched up to a permutation and nonzero phases. </p>
 
   </div>
 </div>
@@ -4403,8 +4160,6 @@
     <span class="theorem_thmtitle">Common primitive irreducible sectors with conditional block-span consequences</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4434,29 +4189,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts" class="lean_decl">MPSTensor.afterBlocking_commonSector_blockSpan_of_reindexedNonzeroParts</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family and assume the blocked-word identification for the common-sector families. The common primitive irreducible-block theorem supplies one positive blocking length and trace-preserving, primitive, irreducible nonzero-sector families on both sides. This theorem records that, for exactly those families, either a common MPV phase cover or a BNT block-matching conclusion supplies the finite-length block-span equality required by Theorem&#160;<a href="ch-ft_proof.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">12.33</a>. Thus the remaining mathematical inputs – the blocked-word identification and the later common-phase or BNT matching comparison – are kept explicit. </p>
+  <p>  Let \(A\) and \(B\) have the same MPV family and assume the blocked-word identification for the common-sector families. The common primitive irreducible-block theorem supplies one positive blocking length and trace-preserving, primitive, irreducible nonzero-sector families on both sides. This theorem records that, for exactly those families, either a common MPV phase cover or a BNT block-matching conclusion supplies the finite-length block-span equality required by Theorem&#160;<a href="ch-ft_proof.html#thm:afterBlocking_sectorComparison_zeroTail_of_blockSpan">12.33</a>. Thus the remaining mathematical inputs – the blocked-word identification and the later common-phase or BNT matching comparison – are kept explicit. </p>
 
   </div>
 </div>
@@ -4830,8 +4566,6 @@
     <span class="theorem_thmtitle">Common sectors from phase covers</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4868,29 +4602,10 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover" class="lean_decl">MPSTensor.afterBlocking_sectorComparison_zeroTail_of_reindexedNonzeroParts_commonPhaseCover</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Assume the blocked-word identification for the common-sector families. The common-sector structural theorem then produces a common blocking length with \(A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and \(B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>, then the sector decompositions obtained from the two sides have BNT bases, agree as full MPV families, and their sector weights satisfy the matched sector-weight conclusion. </p>
+  <p>  Let \(A\) and \(B\) have the same MPV family. Assume the blocked-word identification for the common-sector families. The common-sector structural theorem then produces a common blocking length with \(A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}\) and \(B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}\), and trace-preserving, primitive, irreducible nonzero-sector families on both sides. If those families satisfy the phase-cover hypotheses of Definition&#160;<a href="ch-ft_proof.html#def:common_primitive_phase_cover_hypotheses">12.36</a>, then the sector decompositions obtained from the two sides have BNT bases, agree as full MPV families, and their sector weights satisfy the matched sector-weight conclusion. </p>
 
   </div>
 </div>
@@ -5035,7 +4750,7 @@
 <h1 id="sec:ft_auxiliary_from_ch08">12.4 Auxiliary constructions relocated from Chapter&#160;<a href="ch-canonical.html">9</a></h1>
 
 <p>The following auxiliary results were previously presented in Chapter&#160;<a href="ch-canonical.html">9</a>. They are reduction steps of the fundamental-theorem proof rather than statements about canonical-form data, so they are collected here. </p>
-<h2 id="subsec:ft_block_sum_wrappers">12.4.1 Block-diagonal corollaries of the single-block theorem</h2>
+<h2 id="subsec:ft_block_sum_corollaries">12.4.1 Block-diagonal corollaries of the single-block theorem</h2>
 
 <div class="remark_thmwrapper theorem-style-remark" id="a0000000835">
   <div class="remark_thmheading">

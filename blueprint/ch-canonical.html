@@ -390,7 +390,7 @@
   <a href="ch-canonical.html#sec:normal_canonical_form"><span class="toc_ref">9.6</span> <span class="toc_entry">Normal canonical form</span></a>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:canonical_pipeline_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
+  <a href="ch-canonical.html#sec:canonical_construction_1606"><span class="toc_ref">9.7</span> <span class="toc_entry">Steps toward canonical form existence</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:tp_gauge_arbitrary"><span class="toc_ref">9.8</span> <span class="toc_entry">TP-gauge reduction for arbitrary tensors</span></a>
@@ -516,7 +516,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-ft_proof.html#subsec:ft_block_sum_wrappers"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
+  <a href="ch-ft_proof.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Block-diagonal corollaries of the single-block theorem</span></a>
  </li>
 <li class="">
   <a href="ch-ft_proof.html#subsec:ft_proportional_single_block"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Proportional single-block ingredient</span></a>
@@ -2474,7 +2474,7 @@
 
   </div>
 </div>
-<h1 id="sec:canonical_pipeline_1606">9.7 Steps toward canonical form existence</h1>
+<h1 id="sec:canonical_construction_1606">9.7 Steps toward canonical form existence</h1>
 
 <p>This section combines the components of the canonical-form construction following&#160;<span class="cite">
 	[
@@ -3752,7 +3752,7 @@
 </div>
 <h1 id="sec:open_directions">9.12 Scope and BNT input reductions</h1>
 
-<div class="remark_thmwrapper theorem-style-remark" id="rem:canonical_pipeline_gaps">
+<div class="remark_thmwrapper theorem-style-remark" id="rem:canonical_construction_gaps">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -3766,7 +3766,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#rem:canonical_pipeline_gaps">#</a>
+    <a class="icon proof" href="ch-canonical.html#rem:canonical_construction_gaps">#</a>
     
     
     
@@ -4765,7 +4765,13 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.derivedProperties" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.derivedProperties</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_tp" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_tp</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_primitive" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_primitive</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatBlocks_irreducible</a></li>
+          
+          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatDim_pos</a></li>
           
         </ul>
     
@@ -4789,8 +4795,6 @@
     <span class="lemma_thmtitle">Common-alphabet flattening</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4818,25 +4822,6 @@
 
     
     
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_sameMPV</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
         </div>
   </div>
   <div class="lemma_thmcontent">
@@ -4853,8 +4838,6 @@
     <span class="lemma_thmtitle">Reindexed nonzero-part transport</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -4881,25 +4864,6 @@
     </div>
 
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzeroPart" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzeroPart</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
@@ -5045,8 +5009,6 @@
     <span class="lemma_thmtitle">Direct and iterated blocking comparison</span>
     <div class="thm_header_extras">
 
-    
-    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -5075,25 +5037,6 @@
     </div>
 
     
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.CommonBlockedCyclicSectorFamily.blocked_word_comparison" class="lean_decl">MPSTensor.CommonBlockedCyclicSectorFamily.blocked_word_comparison</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
     
         </div>
   </div>
