@@ -702,7 +702,7 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
 
 /-- Each sector tensor in the common reblocked cyclic-sector family is trace-preserving,
 has primitive transfer map, is tensor-irreducible, and has positive bond dimension. -/
-theorem derivedProperties (F : CommonBlockedCyclicSectorFamily blocks)
+theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
     (∑ i : Fin (blockPhysDim d F.p),
         (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
@@ -717,7 +717,7 @@ theorem derivedProperties (F : CommonBlockedCyclicSectorFamily blocks)
 /-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
 tensor `B_k^{[p]}` (under the canonical alphabet identification) in the sense of
 generating the same MPV family. -/
-theorem reindexed_sameMPV (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
+theorem reindexed_sameMPV₂ (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
         (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
@@ -728,7 +728,7 @@ theorem reindexed_sameMPV (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin 
 /-- The nonzero-part decomposition of a weighted block sum `⨁_k μ_k B_k` transports
 through the common-alphabet identification: the common-alphabet sectors have the same
 nonzero-part decomposition as the direct `p`-blocked tensors. -/
-theorem reindexed_nonzeroPart (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
+theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p) (F.commonReindexedBlock))
