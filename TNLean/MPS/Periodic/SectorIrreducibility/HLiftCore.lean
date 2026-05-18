@@ -3,23 +3,21 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.SectorIrreducibility.OrbitSum
-import TNLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 
 /-!
-# Sector irreducibility from orbit sums
+# Auxiliary orbit-sum results for sector irreducibility
 
-The fixed-point upgrade and orbit-sum lift give the first sector-irreducibility
-step for cyclic decompositions. Corner preservation becomes fixedness in the
-irreducible trace-preserving case, sector-supported operators are recovered
-from their orbit sums, and the resulting lift hypotheses imply irreducibility
-on each cyclic-sector corner.
+Two auxiliary orbit-sum results enter the cyclic-sector irreducibility proof.
+Corner preservation becomes fixedness in the irreducible trace-preserving case,
+and sector-supported operators are recovered from their orbit sums by compression
+to the original sector.
 
 ## Main statements
 
-The main results show that invariant corners for the adjoint transfer map are
-fixed, that compressing an orbit sum to its original sector recovers the
-sector-supported operator, and that these facts imply irreducibility of each
-corner map in a cyclic decomposition.
+* `hFixUpgrade_of_peripheral` — corner preservation for an adjoint transfer-map
+  power upgrades to fixedness.
+* `recover_supported_from_orbitSumProjection` — a sector-supported operator is
+  recovered by compressing its orbit sum to the original sector.
 
 ## Tags
 
@@ -33,8 +31,7 @@ namespace MPSTensor
 
 variable {d D m : ℕ}
 
-/-- The fixed-point upgrade in `hLift_cyclicDecomp_mps_of_fixUpgrade` is automatic for the
-adjoint transfer map of an irreducible trace-preserving tensor.
+/-- Fixed-point upgrade for the adjoint transfer map of an irreducible trace-preserving tensor.
 
 If an orthogonal projection `Q` satisfies `PreservesCorner Q ((transferMap A†)^m)`, then
 `((transferMap A†)^m) Q = Q`. The proof uses a positive definite fixed point `ρ` of
@@ -181,221 +178,5 @@ theorem recover_supported_from_orbitSumProjection
       _ = 0 := by simp
   · intro hmem
     exact absurd (Finset.mem_univ (0 : Fin m)) hmem
-
-/-- Orbit-sum lift for cyclic-sector irreducibility.
-
-Given the cyclic-sector setup, a one-step projection-preservation hypothesis
-`hProjStep` on sectors, and a fixed-point upgrade `hFixUpgrade` promoting
-`PreservesCorner Q (T^m)` to `(T^m) Q = Q`, the orbit sum
-`R := ∑ l, T^l Q` witnesses the `hLift` conclusion: it is an orthogonal
-projection that preserves the corner under `T`, and the zero/full-sector
-equivalences hold.
-
-The construction uses sector support of the iterates, pairwise orthogonality of
-the sector projections, fixedness of the orbit sum, and the equivalence between
-the original corner being zero or full and the same statement for the orbit
-sum. -/
-theorem hLift_cyclicDecomp_mps_of_fixUpgrade
-    [NeZero m]
-    {A : MPSTensor d D}
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic :
-      ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (hMulLeft :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
-    (hMulRight :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
-    (hProjStep :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        IsOrthogonalProjection X →
-        X * P k = X → P k * X = X →
-        IsOrthogonalProjection
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X))
-    (hFixUpgrade :
-      ∀ (k : Fin m) (Q : MatrixAlg D),
-        IsOrthogonalProjection Q →
-        Q * P k = Q → P k * Q = Q →
-        PreservesCorner Q
-          ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
-        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) Q = Q) :
-    ∀ k : Fin m, ∀ Q : MatrixAlg D,
-      IsOrthogonalProjection Q →
-      Q * P k = Q → P k * Q = Q →
-      PreservesCorner Q
-        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
-      ∃ R : MatrixAlg D,
-        IsOrthogonalProjection R ∧
-        PreservesCorner R
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
-        (Q = 0 ↔ R = 0) ∧
-        (Q = P k ↔ R = 1) := by
-  classical
-  intro k Q hQproj hQP hPQ hQcorner
-  set T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-  -- Upgrade corner preservation to a fixed-point
-  have hQfix : (T ^ m) Q = Q := hFixUpgrade k Q hQproj hQP hPQ hQcorner
-  -- Sublemma 1: sector support of orbit iterates
-  have hsupp := orbit_iterate_supported_on_shifted_sector
-    (T := T) (P := P) hcyclic hMulLeft hMulRight (k := k) (Q := Q) hQP hPQ
-  -- Sublemma 2: orbit iterates are projections
-  have hprojL := orbit_iterate_isOrthogonalProjection
-    (T := T) (P := P) hcyclic hMulLeft hMulRight hProjStep
-    (k := k) (Q := Q) hQproj hQP hPQ
-  -- Sublemma 3: pairwise orthogonality of cyclic sectors
-  have hPPair := pairwise_mul_zero_of_orthogonalProjection_sum_one
-    (P := P) hPproj hPsum
-  -- Derived: pairwise orthogonality of orbit iterates (via shifted sectors)
-  have horbPair : ∀ l l' : Fin m, l ≠ l' →
-      ((T ^ (l : ℕ)) Q) * ((T ^ (l' : ℕ)) Q) = 0 := by
-    intro l l' hll
-    have h1 : (T ^ (l : ℕ)) Q * P (k - l) = (T ^ (l : ℕ)) Q := (hsupp l).1
-    have h2 : P (k - l') * (T ^ (l' : ℕ)) Q = (T ^ (l' : ℕ)) Q := (hsupp l').2
-    have hPneq : (k - l : Fin m) ≠ (k - l' : Fin m) := by
-      intro heq
-      exact hll (sub_right_injective heq)
-    have hP0 : P (k - l) * P (k - l') = 0 := hPPair hPneq
-    calc ((T ^ (l : ℕ)) Q) * ((T ^ (l' : ℕ)) Q)
-        = ((T ^ (l : ℕ)) Q * P (k - l)) *
-            (P (k - l') * (T ^ (l' : ℕ)) Q) := by rw [h1, h2]
-      _ = ((T ^ (l : ℕ)) Q) * (P (k - l) * P (k - l')) *
-            ((T ^ (l' : ℕ)) Q) := by simp only [mul_assoc]
-      _ = ((T ^ (l : ℕ)) Q) * 0 * ((T ^ (l' : ℕ)) Q) := by rw [hP0]
-      _ = 0 := by
-            simp only [Matrix.mul_zero, Matrix.zero_mul]
-  -- The orbit-sum projection (shared Hermitian/idempotent proof, reused
-  -- both as the `hLift` projection conjunct and as the `hP` argument of
-  -- `preservesCorner_of_adjoint_fixed_projection`).
-  have hRproj : IsOrthogonalProjection
-      (orbitSumProjection (D := D) (m := m) T Q) := by
-    refine ⟨?_, ?_⟩
-    · -- Hermitian via conjTranspose_sum + each iterate Hermitian
-      change (orbitSumProjection (D := D) (m := m) T Q)ᴴ =
-        orbitSumProjection (D := D) (m := m) T Q
-      simp only [orbitSumProjection, Matrix.conjTranspose_sum]
-      refine Finset.sum_congr rfl ?_
-      intro l _
-      exact (hprojL l).1.eq
-    · -- Idempotent via diagonal/off-diagonal split
-      change (∑ l : Fin m, (T ^ (l : ℕ)) Q) * (∑ l : Fin m, (T ^ (l : ℕ)) Q) =
-        ∑ l : Fin m, (T ^ (l : ℕ)) Q
-      rw [Finset.sum_mul]
-      refine Finset.sum_congr rfl ?_
-      intro l _
-      rw [Finset.mul_sum]
-      rw [Finset.sum_eq_single l]
-      · exact (hprojL l).2
-      · intro l' _ hne
-        exact horbPair l l' (Ne.symm hne)
-      · intro hmem
-        exact absurd (Finset.mem_univ l) hmem
-  -- The orbit-sum witness
-  refine ⟨orbitSumProjection (D := D) (m := m) T Q, hRproj, ?_, ?_, ?_⟩
-  · -- Corner preservation under T: follows from T-fixedness + adjoint-TP
-    have hRfix : T (orbitSumProjection (D := D) (m := m) T Q) =
-        orbitSumProjection (D := D) (m := m) T Q :=
-      orbitSumProjection_fixed_of_pow_fix (T := T) (Q := Q) (m := m) hQfix
-    exact preservesCorner_of_adjoint_fixed_projection (A := A) hTP
-      (P := orbitSumProjection (D := D) (m := m) T Q) hRproj (hFix := hRfix)
-  · -- Zero equivalence
-    -- Forward: Q = 0 ⇒ R = 0
-    -- Reverse: use R * Q = Q (diagonal picks out l = 0, others kill by horbPair)
-    have hRQ : (orbitSumProjection (D := D) (m := m) T Q) * Q = Q := by
-      simp only [orbitSumProjection, Finset.sum_mul]
-      rw [Finset.sum_eq_single (0 : Fin m)]
-      · simp only [Fin.val_zero, pow_zero, Module.End.one_apply]
-        exact hQproj.2
-      · intros l _ hne
-        have hzero := horbPair l 0 hne
-        simpa using hzero
-      · intro hmem
-        exact absurd (Finset.mem_univ (0 : Fin m)) hmem
-    refine ⟨?_, ?_⟩
-    · intro hQ0
-      simp only [orbitSumProjection, hQ0, map_zero, Finset.sum_const_zero]
-    · intro hR0
-      have := hRQ
-      rw [hR0] at this
-      simpa using this.symm
-  · -- Full-sector equivalence
-    -- Forward: Q = P k ⇒ R = orbitSumProjection T (P k) = 1 (by full_sector lemma)
-    -- Reverse: use P k * R * P k = Q, so R = 1 ⇒ P k = Q
-    have hPRP : P k * (orbitSumProjection (D := D) (m := m) T Q) * P k = Q :=
-      recover_supported_from_orbitSumProjection
-        (D := D) (m := m) (T := T) P hPproj hPsum hcyclic hMulLeft hMulRight hQP hPQ
-    refine ⟨?_, ?_⟩
-    · intro hQ
-      rw [hQ]
-      exact orbitSumProjection_eq_one_of_full_sector
-        (T := T) (P := P) hPsum hcyclic k
-    · intro hR1
-      have := hPRP
-      rw [hR1] at this
-      simpa [(hPproj k).2] using this.symm
-
-/-- The orbit-sum lift with the `hFixUpgrade` input discharged by
-`hFixUpgrade_of_peripheral`.
-
-This reduces the abstract statement to the one-step projection-preservation
-statement `hProjStep`; the unconditional theorem is `hLift_cyclicDecomp_mps`. -/
-theorem hLift_cyclicDecomp_mps_of_projStep
-    [NeZero D] [NeZero m]
-    {A : MPSTensor d D}
-    (hIrrAdj :
-      IsIrreducibleMap (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (P : Fin m → MatrixAlg D)
-    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
-    (hPsum : ∑ k : Fin m, P k = 1)
-    (hcyclic :
-      ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (hMulLeft :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k * X) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)
-    (hMulRight :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (X * P k) =
-          transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X *
-            transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k))
-    (hProjStep :
-      ∀ k : Fin m, ∀ X : MatrixAlg D,
-        IsOrthogonalProjection X →
-        X * P k = X → P k * X = X →
-        IsOrthogonalProjection
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) X)) :
-    ∀ k : Fin m, ∀ Q : MatrixAlg D,
-      IsOrthogonalProjection Q →
-      Q * P k = Q → P k * Q = Q →
-      PreservesCorner Q
-        ((transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) →
-      ∃ R : MatrixAlg D,
-        IsOrthogonalProjection R ∧
-        PreservesCorner R
-          (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ∧
-        (Q = 0 ↔ R = 0) ∧
-        (Q = P k ↔ R = 1) := by
-  have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isIrreducibleMap_conjTranspose (A := A) hIrrAdj
-  have hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrrTensor
-  intro k Q hQproj hQP hPQ hQcorner
-  exact
-    hLift_cyclicDecomp_mps_of_fixUpgrade
-      (A := A) (m := m) hTP P hPproj hPsum hcyclic hMulLeft hMulRight hProjStep
-      (fun (_k : Fin m) (Q : MatrixAlg D) hQproj _hQP _hPQ hQinv =>
-        hFixUpgrade_of_peripheral (A := A) (period := m) hTP hIrr hQproj hQinv)
-      k Q hQproj hQP hPQ hQcorner
 
 end MPSTensor
