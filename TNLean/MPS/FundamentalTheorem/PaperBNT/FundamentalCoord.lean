@@ -19,7 +19,7 @@ exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$;
 * matched copy multiplicities $r_{βk}^P = r_k^Q$;
 * matched copy permutations $τ_k$;
-* per-block gauge phases $ζ_k \in \mathbb{C}^\times$;
+* per-block unit-modulus gauge phases $ζ_k$;
 * per-block gauge matrices $X_k \in \mathrm{GL}(D_Q^{(k)},\mathbb{C})$;
 * the equality of total bond dimensions $\sum_k r_k D_k$;
 * the explicit global gauge $X \in \mathrm{GL}(\sum_s D^{(s)},\mathbb{C})$;
@@ -66,7 +66,7 @@ same MPV family, then there exist:
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$,
 * matched copy multiplicities $r_{βk}^P = r_k^Q$,
 * per-block copy permutations $τ_k$,
-* per-block gauge phases $ζ_k \in \mathbb{C}^\times$,
+* per-block unit-modulus gauge phases $ζ_k$,
 * per-block gauge matrices $X_k \in \mathrm{GL}(D_Q^{(k)},\mathbb{C})$,
 * a total bond-dimension equality $\sum_k r_k D_k = \sum_k r_k' D_k'$, and
 * an explicit global gauge $X \in \mathrm{GL}\bigl(\sum_s D^{(s)},
@@ -99,7 +99,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
       (_hTotal : P.totalDim = Q.totalDim)
       (X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ),
-      (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
       (∀ (k : Fin Q.basisCount) (i : Fin d),
         Q.basis k i =
           ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
@@ -119,13 +119,13 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
               Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
-  obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_ne, hConj, hWeight, X, _hXdef, hGauge⟩ :=
+  obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, _hXdef, hGauge⟩ :=
     ft_paper_bnt_equal_global_gaugePos hP hQ hUnitP hUnitQ hEqual
   -- `P.totalDim = Q.totalDim` follows from `sectorFlatEquiv` plus matched dims
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
   -- the bond-dimension index `Q.totalDim` and `∑ s, Q.flatDim s` agree definitionally
-  refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hTotal, X, hζ_ne, hConj, hWeight, ?_⟩
+  refine ⟨β, hDim, hCopies, τ, ζ, Xblock, hTotal, X, hζ_norm, hConj, hWeight, ?_⟩
   intro i
   exact hGauge i
 
@@ -144,7 +144,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
       (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
       (_hTotal : P.totalDim = Q.totalDim)
       (X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ),
-      (∀ k : Fin Q.basisCount, ζ k ≠ 0) ∧
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
       (∀ (k : Fin Q.basisCount) (i : Fin d),
         Q.basis k i =
           ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
