@@ -9,11 +9,9 @@ public chapter-index modules and the chapter-facing semigroup modules are
 included so that blueprint links and the generated documentation can see
 them.
 
-The following legacy archival modules are intentionally excluded
+The following archival modules are intentionally excluded
 (they live in `TNLean/Archive/`):
 
-* the legacy bi-canonical periodicity wrappers
-  `TNLean.Archive.PeripheralClosure` and `TNLean.Archive.BlockingPeriodicity`;
 * the archival alternate proof `TNLean.Archive.BlockingPeriodicityCFII2`;
 * the documentary counterexample `TNLean.Archive.BlockSepCounterexample`.
 -/

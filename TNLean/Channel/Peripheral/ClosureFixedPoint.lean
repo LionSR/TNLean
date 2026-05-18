@@ -28,9 +28,8 @@ The key new input is the weighted Kadison–Schwarz equality
 (the equality case of the Kadison–Schwarz inequality for peripheral
 eigenvectors).
 
-The older special-case formulation `TNLean/Archive/PeripheralClosure.lean` is
-retained only for compatibility and is intentionally off the stable root
-import surface.
+The older special-case formulation that assumed both unitality and trace
+preservation has been removed from the maintained theorem surface.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators

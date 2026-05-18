@@ -7,4 +7,9 @@ This directory contains retired and documentary Lean files.
 - They are **not** part of the active TNLean library surface.
 - They are excluded from the root `TNLean.lean` import list.
 
-The compatibility shims at the old module paths have been removed as part of the post-reorganization cleanup. Code that previously imported `TNLean.Channel.PeripheralClosure`, `TNLean.MPS.BlockingPeriodicity`, or `TNLean.MPS.BlockingPeriodicityCFII2` should be updated to use the new `TNLean.Archive.*` paths or the current active modules.
+The old public modules at the former paths have been removed as part of the
+post-reorganization cleanup.  The archived bi-canonical periodicity
+reformulations were also removed: code should use the current
+positive-fixed-point peripheral theorem and
+`TNLean.MPS.BlockingPeriodicityCFII_viaAdjoint` rather than the old
+unital-and-trace-preserving formulations.
