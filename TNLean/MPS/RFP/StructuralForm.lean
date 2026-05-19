@@ -203,7 +203,7 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
   have hIrrTensor : IsIrreducibleTensor (d := d) (D := D) A :=
     isIrreducibleTensor_of_isIrreducibleMap A hIrrMap
   have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  exact exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
+  exact exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
     (d := d) (D := D) A hLeft hIrrTensor hD
 
 /-- **Rank-one classification** (arXiv:1606.00608, Appendix B): for an injective

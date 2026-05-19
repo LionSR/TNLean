@@ -60,9 +60,11 @@ unital identity `∑ᵢ Aᵢ Aᵢ† = I`.
 
 /-! ### Additive split conditions for canonical-form hypotheses
 
-The existing `IsCanonicalForm` predicate is kept unchanged for backwards compatibility.  The
-structures below expose weaker conditions so theorem signatures can migrate gradually without
-forcing an immediate project-wide reorganization.
+The structures below isolate the separate hypotheses used in the block-separation
+argument: injectivity, left-canonical normalization, weight ordering, and
+self-overlap normalization. The bundled `IsCanonicalForm` predicate remains the
+compact mathematical statement, while these records make the proofs expose only
+the assumptions used at each step.
 -/
 
 /-- Each block in the family is algebraically injective. -/
@@ -228,7 +230,7 @@ end HasNormalizedSelfOverlap
 The weight ordering is `Antitone` (non-increasing by modulus), matching the paper definitions
 (PGVWC07, Cirac--Perez-Garcia--Schuch--Verstraete 2021) which allow blocks with equal moduli.
 The strictly decreasing variant
-is a one-copy-per-sector artifact; the source-paper predicate `IsBNTCanonicalForm` uses sector
+is a one-copy-per-sector specialization; the CPSV predicate `IsBNTCanonicalForm` uses sector
 multiplicities and does not require strict ordering. -/
 structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
@@ -242,8 +244,7 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   mu_ne_zero : ∀ k, μ k ≠ 0
   /-- **Aperiodicity / overlap normalization**: the MPV self-overlap converges to `1`.
 
-  This field is kept for backward compatibility with the original separated FT interface. In the
-  normal-canonical-form formulation the same conclusion is derived from irreducibility,
+  In the normal-canonical-form formulation this conclusion is derived from irreducibility,
   left-canonical normalization, and peripheral-spectrum primitivity via
   `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
   overlap_tendsto_one :

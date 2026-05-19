@@ -19,8 +19,8 @@ to that representative family.
 
 All theorems here are properties of the representative indices derived
 from the `CommonBlockedCyclicSectorFamily` record.  They are
-consumed by the normal canonical-form existence proof chain, not directly
-by paper-level statements.
+consumed by the normal canonical-form existence proof chain, rather than
+stating independent theorems of CPSV.
 -/
 
 namespace MPSTensor

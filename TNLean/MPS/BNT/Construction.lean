@@ -17,7 +17,7 @@ This module records the separated blockwise hypotheses used to pass from
 canonical-form and normal-canonical-form hypotheses to the basis-of-normal-tensors
 formulation. The source BNT expansion in arXiv:1606.00608, Section II keeps
 repeated copies inside a sector with coefficients `μ_{j,q}` and multiplicities
-`M_j`; that paper-faithful structure is represented by `IsBNTCanonicalForm` in the
+`M_j`; that CPSV sector structure is represented by `IsBNTCanonicalForm` in the
 fundamental-theorem files. The results here are auxiliary tools for already
 separated finite block families.
 
@@ -46,8 +46,8 @@ tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
 coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
 proportionality constant. In the grouped setting, the normalized sums can still oscillate:
-unit-modulus terms may survive inside a single group. The source-faithful treatment of these
-coefficients is carried out in the sector-decomposition results and the paper-BNT canonical
+unit-modulus terms may survive inside a single group. The CPSV treatment of these
+coefficients is carried out in the sector-decomposition results and BNT canonical
 form constructions.
 -/
 
@@ -150,7 +150,7 @@ lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
   · exact absurd k.isLt (by omega)
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus the BNT separation
-assumption and the source-faithful dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
+assumption and the CPSV dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)

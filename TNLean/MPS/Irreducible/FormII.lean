@@ -271,24 +271,6 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
   · -- Fixed point of conjugated transfer map
     exact hΛ_fix
 
-/-- Preferred alias for `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor`
-using the project's left-canonical terminology. -/
-theorem exists_unitary_diag_posDef_fixedPoint_of_leftCanonical_of_isIrreducibleTensor
-    [DecidableEq (Fin D)]
-    (A : MPSTensor d D)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hD : 0 < D) :
-    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
-      (Λ : Matrix (Fin D) (Fin D) ℂ),
-        Λ.PosDef ∧ Λ.IsDiag ∧
-        (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
-                      * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        transferMap (d := d) (D := D)
-          (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
-  simpa using exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
-    (d := d) (D := D) A hLeft hIrr hD
-
 end CFII
 
 end MPSTensor

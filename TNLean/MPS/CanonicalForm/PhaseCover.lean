@@ -87,7 +87,7 @@ end MPVBlockPhaseEquiv
 
 The data consist of the finite common family, the class maps from the two block
 families to it, the MPV-phase equivalences between each block and its chosen
-common block, and surjectivity of both class maps.  These are the paper-level
+common block, and surjectivity of both class maps.  These are the CPSV comparison
 data needed by the span comparison result; constructing them from the full
 structural `SameMPV₂` data is a separate comparison step. -/
 structure MPVCommonPhaseCover {d rA rB : ℕ}
