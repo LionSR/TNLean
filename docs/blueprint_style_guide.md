@@ -109,6 +109,15 @@ enforced by the dedicated `Blueprint Sync & Prose Review` CI workflow.
 Tensor-network diagram conventions are recorded separately in
 [`docs/tn_diagram_grammar.md`](tn_diagram_grammar.md).
 
+The tensor-network TikZ layer is split into private drawing primitives and a
+public mathematical vocabulary. The private primitives live in
+`blueprint/src/macros/tn_core.tex`; that file defines the common glyphs,
+lengths, and atomic drawing commands. Chapter-facing diagrams are defined in
+`blueprint/src/macros/tn_print.tex` and should be named by the mathematical
+move they depict. The web renderer in `blueprint/src/Packages/tn_diagrams.py`
+uses the same public commands and treats both TeX files as part of the diagram
+source.
+
 ## Lean Blueprint Macros
 - `\lean{Namespace.DeclName}` — links to Lean declaration
 - `\leanok` — marks definition/theorem/proof as fully formalized

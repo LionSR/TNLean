@@ -1,12 +1,14 @@
 r"""plasTeX renderers for TNLean tensor-network diagrams.
 
 The PDF blueprint renders the chapter-facing ``\TN...`` macros with TikZ from
-``macros/tn_print.tex``.  The web blueprint uses the same macro calls and asks
+``macros/tn_print.tex``.  Its private drawing kernel lives in
+``macros/tn_core.tex``.  The web blueprint uses the same macro calls and asks
 this package for a cached SVG.  Thus TikZ remains the single source of truth.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import logging
 import os
@@ -30,6 +32,7 @@ _CACHE_DIR = _SRC_DIR / ".tn_svg_cache"
 _SVG_SUBDIR = "tn_svg"
 _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/common.tex",
+    _SRC_DIR / "macros/tn_core.tex",
     _SRC_DIR / "macros/tn_print.tex",
 )
 
@@ -82,6 +85,35 @@ _DIAGRAM_ARGS: dict[str, str] = {
 
 def _diagram_arity(args: str) -> int:
     return len(args.split())
+
+
+def _sample_arg_value(name: str) -> str:
+    values = {
+        "tensor": "A",
+        "label": "i",
+        "left": "i",
+        "middle": "j",
+        "right": "k",
+        "length": "L",
+        "top": "i",
+        "bottom": "j",
+        "top_left": "i_1",
+        "bottom_left": "j_1",
+        "top_right": "i_N",
+        "bottom_right": "j_N",
+        "physical": "i",
+        "virtual": "X",
+        "twist": "u",
+        "permutation": "\\sigma",
+        "left_virtual": "X",
+        "right_virtual": "Y",
+    }
+    return values.get(name, "x")
+
+
+def _sample_tex_call(name: str) -> str:
+    args = _DIAGRAM_ARGS[name].split()
+    return rf"\{name}" + "".join("{" + _sample_arg_value(arg) + "}" for arg in args)
 
 
 def _assert_diagram_args_match_print_macros() -> None:
@@ -313,6 +345,20 @@ def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
     return svg_path.name
 
 
+def _smoke_render(names: Iterable[str]) -> list[Path]:
+    rendered = []
+    for name in names:
+        if name not in _DIAGRAM_ARGS:
+            raise ValueError(f"Unknown tensor-network diagram macro: {name}")
+        tex_call = _sample_tex_call(name)
+        stem = f"tn-smoke-{name}"
+        svg_path = _CACHE_DIR / "smoke" / f"{stem}.svg"
+        if _compile_svg(tex_call, stem, svg_path) is None:
+            raise RuntimeError("TikZ SVG smoke check needs LaTeX and dvisvgm on PATH.")
+        rendered.append(svg_path)
+    return rendered
+
+
 def _svg_for(obj: Command, tex_call: str) -> str | None:
     stem = f"tn-{_hash_tex(tex_call)}"
     output_dir = _output_dir(obj.ownerDocument)
@@ -353,3 +399,43 @@ for _macro_name, _args in _DIAGRAM_ARGS.items():
         (_TNTikZDiagram,),
         {"args": _args, "macroName": _macro_name},
     )
+
+
+def _main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Check TNLean tensor-network diagram TeX/Python synchronization."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="check that Python arities match public TeX macros",
+    )
+    parser.add_argument(
+        "--smoke-render",
+        nargs="*",
+        metavar="MACRO",
+        help=(
+            "render sample SVGs for the named public macros; with no names, "
+            "render every registered macro"
+        ),
+    )
+    args = parser.parse_args(argv)
+
+    if not args.check and args.smoke_render is None:
+        parser.print_help()
+        return 0
+
+    if args.check:
+        _assert_diagram_args_match_print_macros()
+        print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram arities")
+
+    if args.smoke_render is not None:
+        names = args.smoke_render or list(_DIAGRAM_ARGS)
+        rendered = _smoke_render(names)
+        print(f"rendered {len(rendered)} tensor-network diagram SVGs")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_main())

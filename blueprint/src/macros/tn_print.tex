@@ -5,86 +5,13 @@
 %
 % Layout policy:
 % - Public \TN... macros are chapter-facing and semantically named.
-% - Private \TN@... helpers provide the atomic drawing vocabulary.
+% - Private \TN@... helpers in macros/tn_core.tex provide the atomic drawing
+%   vocabulary.
 % - Public diagrams default to unlabeled tensor glyphs; the surrounding
 %   formula/prose carries the tensor names.
-\usetikzlibrary{calc}
-
-\tikzset{
-  tn picture/.style={
-    baseline=-0.1cm,
-    transform shape,
-    font=\scriptsize
-  },
-  tn tensor dot/.style={
-    draw,
-    fill,
-    shape=circle,
-    inner sep=0.055cm
-  },
-  tn operator dot/.style={
-    tn tensor dot,
-    red
-  },
-  tn leg/.style={line width=0.4pt},
-  tn phys leg/.style={line width=0.7pt}
-}
+\input{macros/tn_core}
 
 \makeatletter
-
-\def\TN@physleglen{0.42}
-\def\TN@physlabeloff{0.68}
-\def\TN@doublelayersep{0.50}
-
-% ---------- Atomic helpers ----------
-
-\newcommand{\TN@tensordot}[2]{%
-  \node[tn tensor dot] (#1) at #2 {};%
-}
-
-\newcommand{\TN@opdot}[2]{%
-  \node[tn operator dot] (#1) at #2 {};%
-}
-
-\newcommand{\TN@opdotabove}[3]{%
-  \node[tn operator dot, label=above:$#3$] (#1) at #2 {};%
-}
-
-\newcommand{\TN@opdotbelow}[3]{%
-  \node[tn operator dot, label=below:$#3$] (#1) at #2 {};%
-}
-
-\newcommand{\TN@opdotleft}[3]{%
-  \node[tn operator dot, label=left:$#3$] (#1) at #2 {};%
-}
-
-\newcommand{\TN@opdotright}[3]{%
-  \node[tn operator dot, label=right:$#3$] (#1) at #2 {};%
-}
-
-\newcommand{\TN@leftleg}[2]{%
-  \draw[tn leg] (#1.west) -- ++(-#2,0);%
-}
-
-\newcommand{\TN@rightleg}[2]{%
-  \draw[tn leg] (#1.east) -- ++(#2,0);%
-}
-
-\newcommand{\TN@upleg}[2]{%
-  \draw[tn phys leg] (#1.north) -- ++(0,#2);%
-}
-
-\newcommand{\TN@downleg}[2]{%
-  \draw[tn phys leg] (#1.south) -- ++(0,-#2);%
-}
-
-\newcommand{\TN@uplabel}[3]{%
-  \node at ($(#1.north)+(0,#2)$) {$#3$};%
-}
-
-\newcommand{\TN@downlabel}[3]{%
-  \node at ($(#1.south)+(0,-#2)$) {$#3$};%
-}
 
 % ---------- Public semantic macros ----------
 
