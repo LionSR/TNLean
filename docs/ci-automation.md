@@ -248,6 +248,14 @@ runs only after a maintainer has checked the mathematical source and added
 
 **No label required** — this runs on all PRs automatically.
 
+The "Lint blueprint" and "Blueprint" workflows also run
+`Packages/tn_diagrams.py --check --check-peps-usage --smoke-render` after the
+blueprint dependencies are installed. This checks that public tensor-network
+diagram commands in `tn_print.tex` have the same arities as their Python
+renderers, that every public PEPS diagram command is either used in Chapter
+13a or explicitly recorded as intentionally unused, and that the registered
+diagrams render to SVG.
+
 ---
 
 ### Oversized Lean File Guard (`oversized-lean-files.yml`)
