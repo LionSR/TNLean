@@ -120,6 +120,8 @@ jobs:
       - name: Set up Lean toolchain and cache
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
         uses: ./.trusted-actions/.github/actions/setup-lean
+        with:
+          use-github-cache: false
 
       - name: Run Claude Code Review
         if: steps.claude-switch.outputs.skip != 'true' && steps.bot-check.outputs.skip != 'true' && steps.provider-token.outputs.skip != 'true'
