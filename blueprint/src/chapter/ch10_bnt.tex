@@ -559,7 +559,7 @@ factorization is assumed.
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     Given a sector decomposition $P$, the BNT canonical-form predicate
     records the minimal BNT hypotheses of
     \cite{Cirac2017MPDO_AnnPhys,Cirac2021Matrix} without any equal-modulus
@@ -594,7 +594,7 @@ factorization is assumed.
     \label{lem:sector_bnt_coeff_eq_sum_weight_pow}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     For every sector decomposition $P$, every length $N$, and every basis
     index $j$, the sector coefficient is the raw power sum
     \[
@@ -826,7 +826,7 @@ the substitution argument of Section~\ref{subsec:sector_bnt_substitution} below.
     \label{lem:sector_bnt_matched_sector_weight_multiset_eq}
     \lean{MPSTensor.matched_sector_weight_multiset_eq}
     \leanok
-    \uses{def:paper_sector_data,
+    \uses{def:sector_weight_data,
         thm:power_sum_multiset}
     Let $P, Q$ be sector decompositions with weights $\mu_{j,q}$ and
     $\nu_{k,q'}$, and fix indices $j_0$, $\tilde k_0$, and a nonzero scalar
