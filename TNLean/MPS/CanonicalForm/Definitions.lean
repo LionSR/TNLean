@@ -121,7 +121,7 @@ theorem IsNormalTensor.of_irreducible_and_primitive
 /-! ## Canonical form (CF) -/
 
 /--
-`MPSTensor.CanonicalFormPaperData A` is the data of a canonical-form
+`MPSTensor.CPSVCanonicalFormData A` is the data of a canonical-form
 decomposition of `A` from arXiv:1606.00608 eq. `II_CF1` plus the normalization paragraph
 immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
 
@@ -135,7 +135,7 @@ immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
 
 This is **data** (a `Type`); the propositional version is `IsCPSVCanonicalForm` below.
 -/
-structure CanonicalFormPaperData (A : MPSTensor d D) where
+structure CPSVCanonicalFormData (A : MPSTensor d D) where
   /-- Number of blocks `r` in the direct-sum decomposition `A^i = ⊕_{k=1}^r μ_k A_k^i`. -/
   r : ℕ
   /-- Bond dimensions of the blocks `dim k = D_k`. -/
@@ -160,15 +160,15 @@ predicate from arXiv:1606.00608
 direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least one
 `|μ_k| = 1`.
 
-This is `Nonempty (CanonicalFormPaperData A)` — i.e. existence of a paper-CF
+This is `Nonempty (CPSVCanonicalFormData A)` — i.e. existence of a CPSV canonical-form
 decomposition witness.
 -/
 def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
-  Nonempty (CanonicalFormPaperData A)
+  Nonempty (CPSVCanonicalFormData A)
 
-/-- Promote a paper-CF data witness to the propositional predicate. -/
+/-- Promote a CPSV canonical-form data witness to the propositional predicate. -/
 theorem IsCPSVCanonicalForm.of_data
-    {A : MPSTensor d D} (h : CanonicalFormPaperData A) :
+    {A : MPSTensor d D} (h : CPSVCanonicalFormData A) :
     IsCPSVCanonicalForm A :=
   ⟨h⟩
 

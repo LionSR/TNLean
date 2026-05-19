@@ -196,7 +196,7 @@ structure HasEqualModulusWeightLayer (P : SectorDecomposition d) where
   weight_factor : ∀ j q, P.weight j q = spectral_level j * phase_weight j q
 ```
 
-This optional layer should not be imported by the CPSV CPSV16 §II Step 1 theorem unless an extra equal-modulus hypothesis is explicitly intended.
+This optional layer should not be imported by the CPSV16 §II Step 1 theorem unless an extra equal-modulus hypothesis is explicitly intended.
 
 ## Compatibility notes
 

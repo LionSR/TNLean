@@ -237,7 +237,7 @@ theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
 
 /-! ### Arbitrary-input prepared-block supplier
 
-This is the arbitrary-input layer of the paper-BNT supplier path.  Starting
+This is the arbitrary-input layer of the SectorBNT supplier path.  Starting
 from any MPS tensor `A`, after a single positive blocking length `p` we
 produce a finite family of prepared blocks that are simultaneously
 left-canonical, primitive, irreducible, and one-site injective, with nonzero
@@ -453,12 +453,12 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     rw [hLeft, hRight] at hReindex
     exact hReindex
 
-/-! ### End-to-end arbitrary-input SectorBNT supplier
+/-! ### Arbitrary-input SectorBNT supplier
 
 Composing the prepared-block supplier `exists_prepared_BNT_blocks_afterBlocking_pos`
 with the prepared-block BNT constructor
 `exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` closes the
-arbitrary-input path on the paper-BNT side, with one explicit user assumption.
+arbitrary-input path on the SectorBNT construction, with one explicit user assumption.
 
 The CPSV16 paper makes the weight normalization (absolute value of every weight
 at most one and at least one of unit modulus) an explicit user choice: see
