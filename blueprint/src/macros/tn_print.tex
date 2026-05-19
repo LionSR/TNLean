@@ -372,17 +372,7 @@
 \newcommand{\TNPEPSEdgeBlockingReduction}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@tensordot{blockCone}{(0,0)}
-      \TN@tensordot{blockCtwo}{(1.00,0)}
-      \TN@tensordot{blockCthree}{(1.50,1.00)}
-      \TN@tensordot{blockCfour}{(0.60,1.50)}
-      \TN@tensordot{blockCfive}{(-0.60,1.50)}
-      \foreach \n in {blockCone,blockCtwo,blockCthree,blockCfour,blockCfive} {
-        \TN@upleg{\n}{0.50}
-      }
-      \draw[tn leg] (blockCone) -- (blockCtwo) -- (blockCthree) --
-        (blockCfour) -- (blockCfive) -- (blockCone);
-      \draw[tn leg] (blockCtwo) -- (blockCfive);
+      \TN@pepsFiveSitePatch{blockC}
       \draw[red, line width=0.45pt] (blockCone) circle (0.30cm);
       \draw[red, line width=0.45pt] (blockCfive) circle (0.30cm);
       \draw[red, rounded corners=2mm, line width=0.45pt]
@@ -460,42 +450,16 @@
 \newcommand{\TNPEPSEdgeInsertionEquality}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@tensordot{edgeEqAone}{(0,0)}
-      \TN@tensordot{edgeEqAtwo}{(1.00,0)}
-      \TN@tensordot{edgeEqAthree}{(1.50,1.00)}
-      \TN@tensordot{edgeEqAfour}{(0.60,1.50)}
-      \TN@tensordot{edgeEqAfive}{(-0.60,1.50)}
-      \foreach \n in {edgeEqAone,edgeEqAtwo,edgeEqAthree,edgeEqAfour,edgeEqAfive} {
-        \TN@upleg{\n}{0.50}
-      }
-      \node at ($(edgeEqAone.south)+(0,-0.25)$) {$A_1$};
-      \node at ($(edgeEqAtwo.south)+(0,-0.25)$) {$A_2$};
-      \node at ($(edgeEqAthree.south)+(0,-0.25)$) {$A_3$};
-      \node at ($(edgeEqAfour.south)+(0,-0.25)$) {$A_4$};
-      \node at ($(edgeEqAfive.south)+(0,-0.25)$) {$A_5$};
-      \draw[tn leg] (edgeEqAone) -- (edgeEqAtwo) -- (edgeEqAthree) --
-        (edgeEqAfour) -- (edgeEqAfive) -- (edgeEqAone);
-      \draw[tn leg] (edgeEqAtwo) -- (edgeEqAfive);
+      \TN@pepsFiveSitePatch{edgeEqA}
+      \TN@pepsFiveSitePatchLabels{edgeEqA}{A_1}{A_2}{A_3}{A_4}{A_5}
       \TN@opdotright{edgeInsA}{($(edgeEqAtwo)!0.50!(edgeEqAfive)$)}{X}
     \end{scope}
     \node at (2.75,0.70) {$=$};
     \begin{scope}[xshift=4.15cm]
-      \TN@tensordot{edgeEqBone}{(0,0)}
-      \TN@tensordot{edgeEqBtwo}{(1.00,0)}
-      \TN@tensordot{edgeEqBthree}{(1.50,1.00)}
-      \TN@tensordot{edgeEqBfour}{(0.60,1.50)}
-      \TN@tensordot{edgeEqBfive}{(-0.60,1.50)}
-      \foreach \n in {edgeEqBone,edgeEqBtwo,edgeEqBthree,edgeEqBfour,edgeEqBfive} {
-        \TN@upleg{\n}{0.50}
-      }
-      \node at ($(edgeEqBone.south)+(0,-0.25)$) {$\widetilde B_1$};
-      \node at ($(edgeEqBtwo.south)+(0,-0.25)$) {$\widetilde B_2$};
-      \node at ($(edgeEqBthree.south)+(0,-0.25)$) {$\widetilde B_3$};
-      \node at ($(edgeEqBfour.south)+(0,-0.25)$) {$\widetilde B_4$};
-      \node at ($(edgeEqBfive.south)+(0,-0.25)$) {$\widetilde B_5$};
-      \draw[tn leg] (edgeEqBone) -- (edgeEqBtwo) -- (edgeEqBthree) --
-        (edgeEqBfour) -- (edgeEqBfive) -- (edgeEqBone);
-      \draw[tn leg] (edgeEqBtwo) -- (edgeEqBfive);
+      \TN@pepsFiveSitePatch{edgeEqB}
+      \TN@pepsFiveSitePatchLabels{edgeEqB}
+        {\widetilde B_1}{\widetilde B_2}{\widetilde B_3}
+        {\widetilde B_4}{\widetilde B_5}
       \TN@opdotright{edgeInsB}{($(edgeEqBtwo)!0.50!(edgeEqBfive)$)}{X}
     \end{scope}
   \end{tikzpicture}%
@@ -536,33 +500,11 @@
 \newcommand{\TNPEPSTwoInjectiveTensorInsertionComparison}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@tensordot{twoInjAone}{(0,0)}
-      \TN@tensordot{twoInjAtwo}{(2.50,0)}
-      \TN@upleg{twoInjAone}{0.42}
-      \TN@upleg{twoInjAtwo}{0.42}
-      \TN@opdotabove{twoInjAX}{(1.25,0.45)}{X}
-      \draw[tn leg] (twoInjAone) to[out=30,in=180] (twoInjAX.west);
-      \draw[tn leg] (twoInjAX.east) to[out=0,in=150] (twoInjAtwo);
-      \draw[tn leg] (twoInjAone) to[bend right=12] (twoInjAtwo);
-      \draw[tn leg] (twoInjAone) to[bend right=38] (twoInjAtwo);
-      \node at (1.25,-0.08) {$\vdots$};
-      \node at ($(twoInjAone.south)+(0,-0.30)$) {$A_1$};
-      \node at ($(twoInjAtwo.south)+(0,-0.30)$) {$A_2$};
+      \TN@twoInjectiveInsertionPair{twoInjA}{A_1}{A_2}{X}
     \end{scope}
     \node at (3.20,0) {$=$};
     \begin{scope}[xshift=3.90cm]
-      \TN@tensordot{twoInjBone}{(0,0)}
-      \TN@tensordot{twoInjBtwo}{(2.50,0)}
-      \TN@upleg{twoInjBone}{0.42}
-      \TN@upleg{twoInjBtwo}{0.42}
-      \TN@opdotabove{twoInjBX}{(1.25,0.45)}{X}
-      \draw[tn leg] (twoInjBone) to[out=30,in=180] (twoInjBX.west);
-      \draw[tn leg] (twoInjBX.east) to[out=0,in=150] (twoInjBtwo);
-      \draw[tn leg] (twoInjBone) to[bend right=12] (twoInjBtwo);
-      \draw[tn leg] (twoInjBone) to[bend right=38] (twoInjBtwo);
-      \node at (1.25,-0.08) {$\vdots$};
-      \node at ($(twoInjBone.south)+(0,-0.30)$) {$B_1$};
-      \node at ($(twoInjBtwo.south)+(0,-0.30)$) {$B_2$};
+      \TN@twoInjectiveInsertionPair{twoInjB}{B_1}{B_2}{X}
     \end{scope}
   \end{tikzpicture}%
 }
@@ -570,34 +512,19 @@
 \newcommand{\TNPEPSTwoInjectiveGaugeScalarReduction}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@tensordot{gaugeRedA}{(0,0)}
-      \TN@upleg{gaugeRedA}{0.42}
-      \draw[tn leg] (gaugeRedA) -- ++(0.75,0.45);
-      \draw[tn leg] (gaugeRedA) -- ++(0.78,-0.05);
-      \draw[tn leg] (gaugeRedA) -- ++(0.65,-0.55);
-      \node at ($(gaugeRedA.south)+(0,-0.30)$) {$A_1$};
+      \TN@threeLegTensorFan{gaugeRedA}{A_1}
     \end{scope}
     \node at (1.25,0) {$=$};
     \begin{scope}[xshift=2.05cm]
-      \TN@tensordot{gaugeRedBZ}{(0,0)}
-      \TN@upleg{gaugeRedBZ}{0.42}
-      \draw[tn leg] (gaugeRedBZ) -- ++(0.75,0.45);
-      \draw[tn leg] (gaugeRedBZ) -- ++(0.78,-0.05);
-      \draw[tn leg] (gaugeRedBZ) -- ++(0.65,-0.55);
+      \TN@threeLegTensorFan{gaugeRedBZ}{B_1}
       \draw[red, line width=0.9pt] (0.35,-0.46) arc (-55:5:0.55);
       \node[red] at (0.70,-0.24) {$Z$};
-      \node at ($(gaugeRedBZ.south)+(0,-0.30)$) {$B_1$};
     \end{scope}
     \node at (3.30,0) {$=$};
     \begin{scope}[xshift=4.10cm]
-      \TN@tensordot{gaugeRedBU}{(0,0)}
-      \TN@upleg{gaugeRedBU}{0.42}
-      \draw[tn leg] (gaugeRedBU) -- ++(0.75,0.45);
-      \draw[tn leg] (gaugeRedBU) -- ++(0.78,-0.05);
-      \draw[tn leg] (gaugeRedBU) -- ++(0.65,-0.55);
+      \TN@threeLegTensorFan{gaugeRedBU}{B_1}
       \draw[red, line width=0.9pt] (0.35,-0.06) arc (-10:45:0.55);
       \node[red] at (0.72,0.24) {$U$};
-      \node at ($(gaugeRedBU.south)+(0,-0.30)$) {$B_1$};
     \end{scope}
     \node at (5.35,0) {$=$};
     \begin{scope}[xshift=6.15cm]
