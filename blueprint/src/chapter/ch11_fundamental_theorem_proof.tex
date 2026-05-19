@@ -249,7 +249,7 @@ geometric extrapolation and Newton--Girard steps are external finite-sequence
 facts used to recover the lists of weights from those power sums.
 
 \begin{definition}[Sector weights and sector decomposition]%
-    \label{def:paper_sector_data}
+    \label{def:sector_weight_data}
     \lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
     \leanok
     A sector-weight tuple over $g$ basis blocks consists of
@@ -268,7 +268,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:paper_decomp_formula}
     \lean{MPSTensor.SectorDecomposition.mpv_toTensor_eq_sum_coeff}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     For a sector decomposition $S$ with associated tensor $A_{\mathrm{tot}}$,
     the MPV satisfies
     \[
@@ -281,7 +281,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:coeff_eventually_eq}
     \lean{MPSTensor.SectorWeightData.coeff_eventually_eq_of_sameMPV}
     \leanok
-    \uses{def:paper_sector_data, def:bnt}
+    \uses{def:sector_weight_data, def:bnt}
     If two sector-weight tuples $S, T$ over the same basis, with coefficient arrays
     $c_{S,j}^{(N)}$ and $c_{T,j}^{(N)}$, produce equal total MPVs
     and the basis is eventually linearly independent (the BNT property),
@@ -296,7 +296,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:bnt_power_sum_recover_copies_weights}
     \lean{MPSTensor.SectorWeightData.exists_copies_eq_and_weight_multiset_eq_of_sameMPV_bnt}
     \leanok
-    \uses{def:paper_sector_data, def:bnt}
+    \uses{def:sector_weight_data, def:bnt}
     Let $S$ and $T$ be two sector-weight tuples over the same basis, without assuming
     their multiplicities agree. If the basis is eventually linearly
     independent and the total MPVs of $S$ and $T$ agree, then there are
@@ -332,7 +332,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:phase_match_recover_copies_weights}
     \lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
     $\pi$ matching the basis blocks and, for each $j$, a nonzero complex
     number $\zeta_j$ such that
@@ -361,7 +361,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:phase_match_sector_weights}
     \lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
     $\pi$ matching the basis blocks, the multiplicities satisfy
     $r_j^P = r_{\pi(j)}^Q$, and for each $j$ there is a nonzero complex number
@@ -388,7 +388,7 @@ facts used to recover the lists of weights from those power sums.
     \label{lem:gauge_phase_matched_basis_sector_weights}
     \lean{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
     \leanok
-    \uses{def:paper_sector_data, def:gauge_phase_equiv}
+    \uses{def:sector_weight_data, def:gauge_phase_equiv}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
     $\pi$ matching the basis blocks, the multiplicities satisfy
     $r_j^P = r_{\pi(j)}^Q$, and each matched pair of basis blocks is
@@ -412,7 +412,7 @@ facts used to recover the lists of weights from those power sums.
     \label{def:sector_basis_matching}
     \lean{MPSTensor.SectorBasisMatching}
     \leanok
-    \uses{def:paper_sector_data, def:gauge_phase_equiv}
+    \uses{def:sector_weight_data, def:gauge_phase_equiv}
     A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
     consists of
     \begin{enumerate}
@@ -432,7 +432,7 @@ facts used to recover the lists of weights from those power sums.
     \label{def:sector_basis_pre_matching}
     \lean{MPSTensor.SectorBasisPreMatching}
     \leanok
-    \uses{def:paper_sector_data, def:gauge_phase_equiv}
+    \uses{def:sector_weight_data, def:gauge_phase_equiv}
     A \emph{sector basis pre-matching} between sector decompositions $P$
     and $Q$ consists of a permutation of their basis blocks, equality of the
     matched bond dimensions, and gauge-phase equivalence of each matched pair.
@@ -445,7 +445,7 @@ facts used to recover the lists of weights from those power sums.
     \label{def:sector_basis_overlap_ortho_hyps}
     \lean{MPSTensor.SectorBasisOverlapOrthoHypotheses}
     \leanok
-    \uses{def:paper_sector_data, def:mpv_overlap}
+    \uses{def:sector_weight_data, def:mpv_overlap}
     For one sector decomposition $P$, this condition states positive basis
     dimensions, trace-preserving normalization of all basis blocks,
     self-overlap limits equal to~$1$, and off-overlap limits equal to~$0$.
@@ -455,7 +455,7 @@ facts used to recover the lists of weights from those power sums.
     \label{def:sector_basis_overlap_span_hyps}
     \lean{MPSTensor.SectorBasisOverlapSpanHypotheses}
     \leanok
-    \uses{def:paper_sector_data, def:mpv_overlap, def:mpv_state,
+    \uses{def:sector_weight_data, def:mpv_overlap, def:mpv_state,
         def:sector_basis_overlap_ortho_hyps}
     For sector decompositions $P$ and $Q$, this condition states the
     primitive overlap-rigidity hypotheses for their basis blocks: nonzero
@@ -513,7 +513,7 @@ facts used to recover the lists of weights from those power sums.
     \label{thm:sector_basis_matching_from_overlap_ortho_span}
     \lean{MPSTensor.exists_sectorBasisMatching_of_overlapOrtho_span_sameMPV}
     \leanok
-    \uses{def:paper_sector_data, def:sector_basis_matching, def:mpv_overlap}
+    \uses{def:sector_weight_data, def:sector_basis_matching, def:mpv_overlap}
     Assume the basis blocks of two sector decompositions have nonzero bond
     dimensions, are trace-preserving and injective, have asymptotically
     orthonormal overlaps within each family, and span the same MPV subspace at

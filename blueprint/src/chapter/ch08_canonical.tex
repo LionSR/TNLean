@@ -69,7 +69,7 @@ structure---left-canonical normalization, strict modulus ordering,
 one-copy-per-sector---which is not present in the CPSV
 definitions stated below.
 
-\begin{definition}[CPSV normal tensor (NT)]\label{def:nt_paper}
+\begin{definition}[CPSV normal tensor (NT)]\label{def:nt_cpsv}
     \lean{MPSTensor.IsNormalTensor}
     \leanok
     A tensor $A$ of physical dimension $d$ and bond dimension $D$ is a
@@ -79,7 +79,7 @@ definitions stated below.
     after the spectral-radius normalization in~\cite[paragraph preceding the NT definition]{Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
-\begin{definition}[CPSV canonical form (CF)]\label{def:cf_paper}
+\begin{definition}[CPSV canonical form (CF)]\label{def:cf_cpsv}
     \lean{MPSTensor.IsCPSVCanonicalForm}
     \leanok
     A tensor $A$ is in \emph{canonical form} if there is a finite family
@@ -95,13 +95,13 @@ definitions stated below.
     $|\mu_k| = 1$ for at least one $k$.
 \end{definition}
 
-\begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_paper}
+\begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
     \leanok
     A finite family $\{A_j\}_{j=1}^g$ of normal tensors, with bond dimension
     allowed to depend on $j$, is a \emph{basis of normal tensors} for $A$ if:
     \begin{enumerate}
-        \item each $A_j$ is normal in the sense of Definition~\ref{def:nt_paper};
+        \item each $A_j$ is normal in the sense of Definition~\ref{def:nt_cpsv};
         \item for every system length $N$ there exist coefficients
               $c_j^{(N)} \in \C$ with
               \[
@@ -116,7 +116,7 @@ definitions stated below.
 \begin{remark}[Relation to the strong predicates]
     A tensor $A$ which is both irreducible (Definition~\ref{def:irreducible_tensor})
     and has primitive transfer map is normal in the sense of
-    Definition~\ref{def:nt_paper}. The reverse implications from the
+    Definition~\ref{def:nt_cpsv}. The reverse implications from the
     stronger predicates of Definition~\ref{def:is_normal_canonical_form} and
     of Chapter~\ref{ch:bnt} require either the fundamental-theorem step or
     the algebraic-to-spectral normality equivalence; these appear in
@@ -335,7 +335,7 @@ see in particular Theorem~\ref{thm:irreducible_action_cumulative_span}.
 \section{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
 
 The canonical form conditions
-(Definition~\ref{def:cf_paper})
+(Definition~\ref{def:cf_cpsv})
 include an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
@@ -347,7 +347,7 @@ primitive, removing periodicity.
 \begin{remark}[Two routes to the canonical-form predicate from normal blocks]
     Given a family of injective, left-canonical, strictly-ordered
     nonzero-weight blocks $(\mu_k, A_k)$, the canonical-form conditions of
-    Definition~\ref{def:cf_paper} can be discharged from either of two
+    Definition~\ref{def:cf_cpsv} can be discharged from either of two
     spectral hypotheses on the per-block transfer map $\E_{A_k}$: a
     positive-definite primitive fixed point, or the peripheral-spectrum
     condition $\sigma_\partial(\E_{A_k}) = \{1\}$. In both cases the
@@ -837,7 +837,7 @@ is the normality of a TP-primitive irreducible block.
     \label{def:trivial_sector_decomp}
     \lean{MPSTensor.trivialSectorDecomp}
     \leanok
-    \uses{def:paper_sector_data}
+    \uses{def:sector_weight_data}
     Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
     \emph{granular sector decomposition} has $r$ sectors, one basis block
     $B_k$ per sector, multiplicity~$1$ in each sector, and sector weight
@@ -933,7 +933,7 @@ is the normality of a TP-primitive irreducible block.
 \label{subsec:paperbnt_supplier}
 
 The basis-of-normal-tensors predicate of~\cite{Cirac2017MPDO_AnnPhys}
-(Definition~\ref{def:bnt_paper}) is strengthened in Chapter~\ref{ch:bnt} by
+(Definition~\ref{def:bnt_cpsv}) is strengthened in Chapter~\ref{ch:bnt} by
 multiplicity, span, and weight-norm conditions. The results below separate the
 after-blocking preparation of suitable blocks from the later normalized-weight
 BNT construction.
@@ -1019,7 +1019,7 @@ BNT construction.
         \item $P$ and the assembled tensor $\bigoplus_{k=1}^{r} \mu_k B_k$
               generate the same MPV family at every length, and
         \item $P$ satisfies the canonical-form basis-of-normal-tensors conditions
-              of Definition~\ref{def:bnt_paper}, together with the multiplicity,
+              of Definition~\ref{def:bnt_cpsv}, together with the multiplicity,
               span, and weight-bound conditions used in Chapter~\ref{ch:bnt}.
     \end{itemize}
 \end{theorem}
