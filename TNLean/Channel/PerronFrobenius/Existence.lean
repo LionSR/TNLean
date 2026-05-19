@@ -24,9 +24,8 @@ The core existence theorem `exists_posSemidef_eigenvector` is proved via Brouwer
 fixed-point theorem applied to the normalization map
 `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
-The required density-matrix Brouwer theorem is now proved in
-`TNLean.Axioms.BrouwerFixedPointDensityMatrices` (the legacy path name is kept for
-backwards compatibility even though the file no longer introduces an axiom).
+The required density-matrix Brouwer theorem is proved in
+`TNLean.Axioms.BrouwerFixedPoint`.
 
 ## Main results
 
