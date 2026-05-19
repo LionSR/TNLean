@@ -185,23 +185,6 @@
   \end{tikzpicture}%
 }
 
-\newcommand{\TNLPDO}[5]{%
-  \begin{tikzpicture}[tn picture]
-    \TN@tensordot{tnA}{(0,\TN@doublelayersep)}
-    \TN@tensordot{tnB}{(0,-\TN@doublelayersep)}
-    \TN@leftleg{tnA}{0.8}
-    \TN@leftleg{tnB}{0.8}
-    \TN@rightleg{tnA}{0.8}
-    \TN@rightleg{tnB}{0.8}
-    \TN@upleg{tnA}{\TN@physleglen}
-    \TN@downleg{tnB}{\TN@physleglen}
-    \TN@uplabel{tnA}{\TN@physlabeloff}{#4}
-    \TN@downlabel{tnB}{\TN@physlabeloff}{#5}
-    \draw[tn leg] (tnA.south) -- (tnB.north);
-    \node at ($(tnA.south)!0.5!(tnB.north)+(0.28,0)$) {$#3$};
-  \end{tikzpicture}%
-}
-
 \newcommand{\TNGaugeConjugation}[3]{%
   \begin{tikzpicture}[tn picture]
     \TN@opdotabove{tnXl}{(-1.10,0)}{#1}
