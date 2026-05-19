@@ -52,28 +52,6 @@ The formal Lean declaration:
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
 open Matrix Filter
 
-/-!
-## Step 0: naming hygiene
-
-`TNLean.Channel.Peripheral.Spectrum` currently defines its primitivity predicate and spectral-gap
-lemmas in the root namespace. For clarity (and to avoid confusion with
-`MPSTensor.HasPrimitiveFixedPoint`), we provide local aliases in the namespace
-`PeripheralSpectrum`.
--/
-
-namespace PeripheralSpectrum
-
-/-- Channel-level primitivity: `peripheralEigenvalues E = {1}`.
-
-This is an alias for the root-level definition from
-`TNLean.Channel.Peripheral.Spectrum`, placed in a dedicated namespace to avoid
-confusion with `MPSTensor.HasPrimitiveFixedPoint`. -/
-abbrev IsPrimitive {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (E : V →ₗ[ℂ] V) : Prop :=
-  _root_.IsPrimitive E
-
-end PeripheralSpectrum
-
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -308,7 +286,7 @@ private theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_aux
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A))
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
     (hρ_ne : ρ ≠ 0)
@@ -379,7 +357,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
     (A : MPSTensor d D)
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosSemidef ∧ ρ ≠ 0 ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
         ∃ htr : Matrix.trace ρ ≠ 0,
@@ -420,7 +398,7 @@ theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
     (A : MPSTensor d D)
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     MPSTensor.HasPrimitiveFixedPoint A := by
   classical
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive
@@ -438,7 +416,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive
     (A : MPSTensor d D)
     (hInj : IsInjective A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
@@ -454,7 +432,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosSemidef ∧ ρ ≠ 0 ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
         ∃ htr : Matrix.trace ρ ≠ 0,
@@ -491,7 +469,7 @@ theorem hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     MPSTensor.HasPrimitiveFixedPoint A := by
   classical
   rcases spectralRadius_compl_lt_one_of_peripheralPrimitive_of_irreducible
@@ -508,7 +486,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleTensor A)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : PeripheralSpectrum.IsPrimitive (transferMap (d := d) (D := D) A)) :
+    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
   have hP : MPSTensor.HasPrimitiveFixedPoint A :=
