@@ -422,7 +422,7 @@ from the basis-of-normal-tensors definition in arXiv:1606.00608, Section II, lin
 The combined two-family structure `SectorBasisOverlapSpanHypotheses` adds the injectivity
 and span-comparison fields. When the after-blocking BNT cover is discharged
 (tracker #1498, sub-issue #1501), the fields recorded here are consequences of the
-paper-faithful sector structure recorded in `IsBNTCanonicalForm`. -/
+BNT sector structure recorded in `IsBNTCanonicalForm`. -/
 structure SectorBasisOverlapOrthoHypotheses (P : SectorDecomposition d) : Prop where
   /-- The basis blocks have nonzero bond dimension. -/
   dim_pos : ∀ j : Fin P.basisCount, 0 < P.basisDim j

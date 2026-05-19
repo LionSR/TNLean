@@ -7,7 +7,7 @@
 \input{command}
 
 \title{Two-Layer Sector Refinement of CPSV16 \texttt{eq:II\_ABasicTensors}\\
-on the \leanid{PaperBNT} Sector Surface}
+on the \leanid{SectorBNT} Sector Surface}
 \author{}
 \date{2026-05-13}
 
@@ -91,7 +91,7 @@ The one-copy normal-canonical formulation
 \leanid{IsNormalCanonicalFormBNT} covers only the case $r_j=1$ for all
 $j$.  The full multi-copy BNT form with $r_j>1$ -- and the associated
 Newton--Girard recovery of multiplicities from $\sum_q\mu_{j,q}^N$ -- is a
-separate paper-level gap documented in
+separate mathematical gap documented in
 \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 The \leanid{SectorDecomposition} surface is multi-copy-ready
 (\leanid{copies j} may exceed 1), but the current adapter does not
@@ -106,12 +106,12 @@ The relevant surviving formal declarations are:
         (\doclink{TNLean/MPS/SharedInfra/SectorDecomposition}).
   \item \leanid{IsBNTCanonicalForm} -
         the BNT canonical-form predicate
-        (\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Basic}).
+        (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic}).
   \item \leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero},
         \leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li},
         \leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block},
         and \leanid{MPSTensor.IsBNTCanonicalForm.thermodynamic\_limit\_nonvanishing}
-        in \doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.
+        in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.
   \item A future adapter from \leanid{IsNormalCanonicalFormBNT}, or from
         explicit separated-block hypotheses, to \leanid{IsBNTCanonicalForm}.
 \end{itemize}

@@ -231,7 +231,7 @@ preserved.
 This is the finite-family analogue of
 `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible`, packaged so
 that the consumer can feed the resulting prepared blocks into the
-`PaperBNT` prepared-block supplier.
+`SectorBNT` prepared-block supplier.
 
 Paper anchor: CPSV16 §II.A discussion around blocking to common normal form
 (Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section II.A,

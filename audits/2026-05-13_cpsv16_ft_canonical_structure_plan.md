@@ -10,11 +10,11 @@
 
 ## Executive summary
 
-This memo plans the **complete retirement** of the one-copy `IsCanonicalFormBNT` surface and the **clean-slate construction** of a paper-faithful multi-copy BNT canonical form, on which the entire FT chain (and its downstream consumers in RFP, ParentHamiltonian, PiAlgebra) will be re-proved from first principles.
+This memo plans the **complete retirement** of the one-copy `IsCanonicalFormBNT` surface and the **clean-slate construction** of a CPSV multi-copy BNT canonical form, on which the entire FT chain (and its downstream consumers in RFP, ParentHamiltonian, PiAlgebra) will be re-proved from first principles.
 
 **Hard constraints (from the user's directives):**
 
-1. **No adapter from `IsCanonicalFormBNT` to the new structure.** The mathematical obstructions in such adapters (e.g., the Choice B rescaling residue, the multiplicity-recovery Newton-Girard gap) are not paper-level facts; any adapter would carry assumptions we cannot discharge.
+1. **No adapter from `IsCanonicalFormBNT` to the new structure.** The mathematical obstructions in such adapters (e.g., the Choice B rescaling residue, the multiplicity-recovery Newton-Girard gap) are not CPSV facts; any adapter would carry assumptions we cannot discharge.
 2. **No use of the one-copy surface in new work**, anywhere in the codebase.
 3. **The new structure must stand on its own** — defined directly from `SectorDecomposition` data without reference to `IsCanonicalFormBNT`.
 4. **All theorems formerly proved on `IsCanonicalFormBNT` must be re-proved** on the new surface, not adapted.
@@ -35,9 +35,9 @@ The CPSV16/CPSV21 paper's structure carries:
 - Equal modulus within sector: `‖μ_{j,1}‖ = ⋯ = ‖μ_{j,r_j}‖ = λ_j` (the spectral level).
 - Strict ordering between sectors: `λ_1 > λ_2 > ⋯ > λ_g`.
 
-The one-copy surface is the specialization `r_j = 1` for all `j`. The user's recommendation document gives explicit counterexamples (the `C ⊕ (-C)` and `C ⊕ e^{iθ}C` examples in §2-3) showing that this specialization **collapses** genuine paper-level data: `V_N(C ⊕ -C) = (1 + (-1)^N) V_N(C)` cannot be written as `μ^N V_N(C)` for any single scalar `μ`.
+The one-copy surface is the specialization `r_j = 1` for all `j`. The user's recommendation document gives explicit counterexamples (the `C ⊕ (-C)` and `C ⊕ e^{iθ}C` examples in §2-3) showing that this specialization **collapses** genuine CPSV data: `V_N(C ⊕ -C) = (1 + (-1)^N) V_N(C)` cannot be written as `μ^N V_N(C)` for any single scalar `μ`.
 
-## The paper-faithful structure
+## The CPSV structure
 
 The new primary predicate `IsBNTCanonicalForm` (or chosen name) carries, given a `SectorDecomposition P : SectorDecomposition d`:
 
@@ -118,7 +118,7 @@ The factor `(λ j)^N · (∑_q (ω j q)^N)` is the **sector coefficient** descri
 
 ### Phase 1 — design the new primary predicate
 
-Create `TNLean/MPS/FundamentalTheorem/PaperBNT/Basic.lean` (or chosen location, NOT under `SectorDecomposition/`) with:
+Create `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean` (or chosen location, NOT under `SectorDecomposition/`) with:
 
 ```lean
 structure IsBNTCanonicalForm (P : SectorDecomposition d) : Prop where

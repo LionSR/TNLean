@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.ProportionalMatch.Core
+import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
 
 /-!
 # Proportional sector matching for two BNT canonical forms
@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.PaperBNT.ProportionalMatch.Core
 This file assembles the full-basis and bijective matching consequences from the
 analytic core into the final proportional sector-matching theorem.
 
-The main theorem `MPSTensor.ft_paper_bnt_proportional_sector_match` delivers
+The main theorem `MPSTensor.ft_sector_bnt_proportional_sector_match` delivers
 the basis-count identity $g_P = g_Q$, a basis bijection
 $\beta : \{1,\dots,g_Q\} \to \{1,\dots,g_P\}$, per-block bond-dimension
 equality $D_P^{(\beta k)} = D_Q^{(k)}$, and per-block gauge-phase equivalence
@@ -65,7 +65,7 @@ common centre.  The cast-aware symmetry and transitivity lemmas
 (`gaugePhaseEquiv_symm_same_dim`, `gaugePhaseEquiv_swap_cast`,
 `gaugePhaseEquiv_trans_same_dim`, `gaugePhaseEquiv_cast_compose_via_centre`)
 are shared with the equal-MPV variant in
-`PaperBNT/StrongMatch.lean`. -/
+`SectorBNT/StrongMatch.lean`. -/
 
 /-- **Bijective proportional matching.**
 
@@ -205,11 +205,11 @@ per-block gauge-phase equivalence.
 Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), lines 1167–1170
 (theorem statement), lines 1182–1188 (proof); CPSV21 lines 1891–1894
 (proportional-MPV theorem-level target).  This is the proportional analogue
-of `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses` (`PaperBNT/FundamentalCoord.lean`)
+of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` (`SectorBNT/FundamentalCoord.lean`)
 in the matching layer; the global-gauge upgrade further requires the
 per-block coefficient identification, which lies in the next module of the
 proof chain. -/
-theorem ft_paper_bnt_proportional_sector_match
+theorem ft_sector_bnt_proportional_sector_match
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)

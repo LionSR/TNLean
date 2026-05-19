@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 
 /-!
 # Weak non-decaying-overlap existential for BNT canonical forms
@@ -29,7 +29,7 @@ The proof is the canonical CPSV16 combined-family contradiction:
   (`TNLean.MPS.BNT.Basic`, line 172) forces every joint-family coefficient to
   vanish; specialising at the zeroth `Q`-block index gives
   `c N · Q.coeff N 0 = 0` eventually, hence `Q.coeff N 0 = 0` eventually;
-* `IsBNTCanonicalForm.coeff_not_eventually_zero` from `PaperBNT/Basic.lean`
+* `IsBNTCanonicalForm.coeff_not_eventually_zero` from `SectorBNT/Basic.lean`
   rules this out, contradicting the contrapositive assumption.
 
 The conclusion is the **weak existential**: there exist indices `j`, `k`
@@ -166,7 +166,7 @@ Paper anchors:
 * CPSV16 lines 287–301 — raw sector coefficient
   `P.coeff N j = ∑_q (P.weight j q)^N`;
 * CPSV16 lines 1184–1188 — raw power-sum coefficient comparison; combined
-  with `coeff_not_eventually_zero` (`PaperBNT/Basic.lean`) to
+  with `coeff_not_eventually_zero` (`SectorBNT/Basic.lean`) to
   discharge the dominant block index.
 
 This is the weak `∃-∃` form.  The full pairwise conjunction (∀ j, ∃ k,
@@ -287,7 +287,7 @@ theorem exists_nondecaying_overlap_pair_of_eventuallyProportional
     rcases mul_eq_zero.mp hMulN with hzC | hzCoeff
     · exact (hcN hzC).elim
     · exact hzCoeff
-  -- But `coeff_not_eventually_zero` (`PaperBNT/Basic.lean`)
+  -- But `coeff_not_eventually_zero` (`SectorBNT/Basic.lean`)
   -- rules this out for any sector — in particular for the chosen
   -- `⟨0, hQ_pos⟩` of the `Q`-family.
   exact hQ.coeff_not_eventually_zero ⟨0, hQ_pos⟩ hQzero

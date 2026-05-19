@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.DominantMatch
+import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
 
 /-!
 # Strong existential and bijective sector matching (CPSV16 §II.C lines 1182–1186)
@@ -12,7 +12,7 @@ The strong existential matching theorem states the CPSV16 §II.C lines 1182–11
 forms, iterated over each sector `k` of `Q` that carries a unit-modulus copy.
 
 The coefficient identity of CPSV16 §II.C lines 1187–1188 (Corollary substitution)
-lives in the companion module `PaperBNT/CoeffIdentity.lean`.
+lives in the companion module `SectorBNT/CoeffIdentity.lean`.
 
 ## Paper anchor
 
@@ -44,7 +44,7 @@ no `dropSector` usage, and no combined-LI obligation on a partial
 union: the entire proof routes through the existing
 `exists_block_match_of_sameMPV` lemma (which itself routes
 through the full-family combined LI `combined_family_eventually_li`,
-`PaperBNT/Api.lean`).
+`SectorBNT/Api.lean`).
 
 The bijective matching (`bijective_match_of_sameMPVPos`) applies the
 forward existential twice — once with `(P, Q)` and once with `(Q, P)` —
@@ -54,7 +54,7 @@ to derive `P.basisCount = Q.basisCount` and the full bijection
 ## Proof of the existential
 
 Given a sector `k` of `Q` with a unit-modulus weight, apply the
-existing `exists_block_match_of_sameMPV` (`PaperBNT/DominantMatch`)
+existing `exists_block_match_of_sameMPV` (`SectorBNT/DominantMatch`)
 **with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);

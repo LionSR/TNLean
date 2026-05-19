@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
-import TNLean.MPS.FundamentalTheorem.PaperBNT.EqualModulus
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
 
 /-!
 # Executable examples for `IsBNTCanonicalForm`
@@ -34,7 +34,7 @@ which fundamental-theorem theorems consume as an explicit hypothesis
 A fourth example exercises the **optional** equal-modulus layer
 `HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
 that the equal-modulus subclass is non-empty.  Following the audit
-counter-example `C ⊕ (1/2)C` (`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md`
+counter-example `C ⊕ (1/2)C` (`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
 §Q4), the `halvedDecomp` construction below admits `IsBNTCanonicalForm`
 but does not admit `HasEqualModulusWeightLayer` (its two copies have
 unequal moduli, ruling out a single per-sector spectral level).
@@ -50,7 +50,7 @@ open scoped Matrix BigOperators
 open Filter Topology
 
 namespace MPSTensor
-namespace PaperBNT.Examples
+namespace SectorBNT.Examples
 
 variable {d D : ℕ}
 
@@ -309,12 +309,12 @@ predicate (with the CPSV16 §II.A line-246 fields `weight_norm_le_one`
 and `weight_unit_exists`) admits decompositions whose copies have
 **unequal** moduli: the construction below has one unit-modulus copy
 and one `1/2`-modulus copy.  This is exactly the
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
+`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 counter-example, here written as a positive example: the strengthened
 predicate follows line 246 verbatim and admits the example.
 
 The decomposition does NOT admit `HasEqualModulusWeightLayer`: the
-optional equal-modulus layer of `PaperBNT/EqualModulus.lean` would
+optional equal-modulus layer of `SectorBNT/EqualModulus.lean` would
 require a single per-sector `spectral_level` with all phase weights of
 unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 
@@ -345,7 +345,7 @@ is witnessed by the first copy with weight `1`.
 Paper anchor: CPSV16 §II.A line 246, the line-246 normalization
 convention permits any `|μ_{j,q}| ≤ 1` provided at least one of them
 equals `1`.  See also
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
+`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 for the original counter-example. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
@@ -394,5 +394,5 @@ lemma halvedDecomp_weight_unit_per_block (C : MPSTensor d D) :
   change ‖(if (0 : Fin 2) = 0 then (1 : ℂ) else (1 / 2 : ℂ))‖ = 1
   simp
 
-end PaperBNT.Examples
+end SectorBNT.Examples
 end MPSTensor

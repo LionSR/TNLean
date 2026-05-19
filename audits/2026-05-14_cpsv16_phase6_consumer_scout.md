@@ -2,7 +2,7 @@
 
 ## Scope and bottom line
 
-This memo surveys the remaining non-FT files that mention the old one-copy `IsCanonicalFormBNT` surface and records what a move to the paper-faithful `IsBNTCanonicalForm` surface would require.
+This memo surveys the remaining non-FT files that mention the old one-copy `IsCanonicalFormBNT` surface and records what a move to the CPSV `IsBNTCanonicalForm` surface would require.
 
 Short summary:
 
@@ -42,7 +42,7 @@ Short summary:
 | external `hIrr.block_irreducible j` | `hP.basis_irreducible j` | New surface often makes the external argument unnecessary. |
 | `hCF.toHasStrictOrderedNonzeroWeights.mu_ne_zero j` | no direct basis-level scalar; use `P.weight_ne_zero j q` for a selected copy, or `hP.coeff_not_eventually_zero j` for eventual coefficient nonvanishing | This is the main issue. Fixed-length proofs that invert `(mu j)^m` are one-copy artifacts. |
 | `hCF.mu_strict_anti` | no core replacement | This strict order is intentionally absent. It belongs only to a separate special subcase if ever needed. |
-| `IsCanonicalFormBNT.cross_overlap_tendsto_zero` | `hP.cross_overlap_basis_tendsto_zero` from `PaperBNT/Api.lean` | Exact same BNT-basis conclusion. |
+| `IsCanonicalFormBNT.cross_overlap_tendsto_zero` | `hP.cross_overlap_basis_tendsto_zero` from `SectorBNT/Api.lean` | Exact same BNT-basis conclusion. |
 | old LI via `toHasNormalizedSelfOverlap` plus cross decay | `hP.combined_family_eventually_li hQ hAB` or `hP.bnt_data` | Use `bnt_data` for one family; use the API lemma for two families. |
 | old `toTensorFromBlocks mu A` | `P.toTensor` with flattened copies, or a grouped theorem stated directly over `P.basis` and `P.coeff` | This is not a drop-in replacement when copies repeat a basis block. |
 
@@ -237,7 +237,7 @@ These declarations are old one-copy FT infrastructure. The source theorem and pr
 
 ### Mapping to `IsBNTCanonicalForm`
 
-There is no direct non-FT port. For any future source-faithful FT work, replace strict scalar weights by `SectorDecomposition.coeff`, `coeff_not_eventually_zero`, `combined_family_eventually_li`, and Newton-Girard/power-sum recovery. Do not source `mu_strict_anti` from `IsBNTCanonicalForm`, since the new core deliberately omits it.
+There is no direct non-FT port. For any future CPSV FT work, replace strict scalar weights by `SectorDecomposition.coeff`, `coeff_not_eventually_zero`, `combined_family_eventually_li`, and Newton-Girard/power-sum recovery. Do not source `mu_strict_anti` from `IsBNTCanonicalForm`, since the new core deliberately omits it.
 
 ### Multiplicity preservation check
 
@@ -271,7 +271,7 @@ No facts are projected from `IsCanonicalFormBNT`. This file defines the old addi
 
 ### Paper anchors
 
-Canonical/normal form anchors are CPSV16 lines 217-246 and CPSV21 lines 1772-1837. BNT multiplicity anchors are CPSV16 lines 271-301 and CPSV21 lines 1846-1884. The strict-order statements in comments are not source-faithful for full BNT; they describe the old one-copy surface only.
+Canonical/normal form anchors are CPSV16 lines 217-246 and CPSV21 lines 1772-1837. BNT multiplicity anchors are CPSV16 lines 271-301 and CPSV21 lines 1846-1884. The strict-order statements in comments are not CPSV for full BNT; they describe the old one-copy surface only.
 
 ### Mapping to `IsBNTCanonicalForm`
 

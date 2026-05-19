@@ -58,7 +58,7 @@ after-blocking statement are recorded in Chapter~\ref{ch:canonical_after_blockin
 (Theorem~\ref{thm:zero_block_separation} and
 Theorem~\ref{thm:tp_primitive_blockdecomp}).
 
-\section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:paper_faithful_defs}
+\section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
 This section records the unstrengthened definitions of \emph{normal tensor},
 \emph{canonical form}, and \emph{basis of normal tensors} from~\cite{Cirac2017MPDO_AnnPhys}.
@@ -66,7 +66,7 @@ The stronger predicates used elsewhere in
 this chapter (Definition~\ref{def:is_normal_canonical_form} and the
 canonical-form BNT predicate of Chapter~\ref{ch:bnt}) bundle additional
 structure---left-canonical normalization, strict modulus ordering,
-one-copy-per-sector---which is not present in the literal source-paper
+one-copy-per-sector---which is not present in the CPSV
 definitions stated below.
 
 \begin{definition}[CPSV normal tensor (NT)]\label{def:nt_paper}
@@ -80,7 +80,7 @@ definitions stated below.
 \end{definition}
 
 \begin{definition}[CPSV canonical form (CF)]\label{def:cf_paper}
-    \lean{MPSTensor.IsCanonicalFormPaper}
+    \lean{MPSTensor.IsCPSVCanonicalForm}
     \leanok
     A tensor $A$ is in \emph{canonical form} if there is a finite family
     of normal tensors $A_k$ of physical dimension $d$ and bond dimension $D_k$,
@@ -96,7 +96,7 @@ definitions stated below.
 \end{definition}
 
 \begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_paper}
-    \lean{MPSTensor.IsBNTPaper}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
     \leanok
     A finite family $\{A_j\}_{j=1}^g$ of normal tensors, with bond dimension
     allowed to depend on $j$, is a \emph{basis of normal tensors} for $A$ if:
@@ -339,7 +339,7 @@ The canonical form conditions
 include an explicit hypothesis
 that the self-overlap $O_{A_k A_k}(N) \to 1$
 for each block.
-The single source-faithful result of this section is
+The CPSV result of this section is
 Theorem~\ref{thm:blocking_primitivity}: blocking an irreducible TP block by the
 least common multiple of its peripheral periods makes the resulting transfer map
 primitive, removing periodicity.

@@ -32,8 +32,8 @@ variable {d : ℕ}
 
 /-- The concrete sector decomposition obtained from representatives of MPV phase classes.
 
-Made non-`private` so the prepared-block PaperBNT constructor
-(`TNLean.MPS.FundamentalTheorem.PaperBNT.Supplier`) can construct an
+Made non-`private` so the prepared-block SectorBNT constructor
+(`TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier`) can construct an
 `IsBNTCanonicalForm P` directly on top of this concrete `P`, with full access
 to the underlying phase-class representatives. -/
 noncomputable def collapsedBntSectorDecomp
@@ -61,7 +61,7 @@ noncomputable def collapsedBntSectorDecomp
 
 /-- The total tensor of `collapsedBntSectorDecomp` has the same MPV at every length
 as the original `toTensorFromBlocks μ blocks`.  Exposed (was previously `private`)
-for the prepared-block PaperBNT constructor. -/
+for the prepared-block SectorBNT constructor. -/
 theorem collapsedBntSectorDecomp_sameMPV₂
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
@@ -101,7 +101,7 @@ theorem collapsedBntSectorDecomp_sameMPV₂
             simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
 /-- `collapsedBntSectorDecomp` carries `HasBNTSectorData`.  Exposed (was previously
-`private`) for the prepared-block PaperBNT constructor. -/
+`private`) for the prepared-block SectorBNT constructor. -/
 theorem collapsedBntSectorDecomp_hasBNT
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
@@ -223,7 +223,7 @@ finite-length span equality for the original blocks to the two independently cho
 Thus the theorem proves `SectorBasisOverlapSpanHypotheses` without assuming that
 relation directly.
 
-The remaining paper-level task, not proved here, is to derive the displayed block-span
+The remaining mathematical task, not proved here, is to derive the displayed block-span
 equality from the global `SameMPV₂` and structural reduction data. -/
 theorem exists_bnt_sectorDecomp_pair_with_overlapSpan_of_block_span_eq
     {rA rB : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}

@@ -91,10 +91,10 @@ assembled tensors, an index $k_0:\mathrm{Fin}\,r_B$ and the hypothesis
 $\forall j,\langle V^{(N)}(A_j),V^{(N)}(B_{k_0})\rangle\to 0$, derive
 $\bot$.
 The old one-copy fixed-block declarations for this target have been
-retired.  The surviving route is the \leanid{PaperBNT} proportional
+retired.  The surviving route is the \leanid{SectorBNT} proportional
 matching layer, which keeps the raw coefficients of
 \leanid{SectorDecomposition} visible and uses the API lemmas in
-\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}.  The universally
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}.  The universally
 quantified fixed-block cancellation remains a mathematical obligation.
 
 \section{Where the per-block projection fails for non-dominant
@@ -174,7 +174,7 @@ identification, contradicting $c_N\ne 0$ and $\mu^B_{k_0}\ne 0$. The
 mechanism uses only the coefficient match forced by linear
 independence; it requires neither side to stay bounded away from~$0$.
 
-The current \leanid{PaperBNT} API provides the combined-family
+The current \leanid{SectorBNT} API provides the combined-family
 linear-independence mechanism as
 \leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li}.
 The remaining task is to combine that statement with the proportional
@@ -194,7 +194,7 @@ either
           \eqref{eq:largeLem1} with all-pairwise cross-overlap decay,
           enabling the coefficient-identification step
           of~\eqref{eq:isolate}; or
-    \item the two-layer paper-faithful structure of
+    \item the two-layer CPSV structure of
           \cite[Definition~4.3]{Cirac2021Matrix}, separating spectral
           levels $\lambda_j$ from within-sector unit-modulus weights
           $\mu_{j,q}$.  On the surviving \leanid{SectorDecomposition}

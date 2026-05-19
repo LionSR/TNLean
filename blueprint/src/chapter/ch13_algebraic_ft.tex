@@ -1483,7 +1483,7 @@ which is then combined with overlap estimates and the leading-block peel.
 
 \begin{lemma}[Heterogeneous equal-case block matching]%
     \label{lem:fundamentalTheorem_equalMPV_CFBNT_hetero}
-    \lean{MPSTensor.ft_paper_bnt_equal_sector_data}
+    \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
     \leanok
     \uses{def:same_mpv, def:bnt, def:gauge_phase_equiv}
     Let $P$ and $Q$ be two BNT sector decompositions
@@ -1501,8 +1501,8 @@ which is then combined with overlap estimates and the leading-block peel.
     the corresponding global gauge corollary is recorded in
     Chapter~\ref{ch:ft_proof}.
     % Maintainer note (Lean): the global-gauge companion is
-    % MPSTensor.ft_paper_bnt_equal_global_gauge in
-    % TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
+    % MPSTensor.ft_sector_bnt_equal_global_gauge in
+    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
 \end{lemma}
 
 \begin{proof}
@@ -1516,7 +1516,7 @@ which is then combined with overlap estimates and the leading-block peel.
     % StrongMatch.bijective_match_of_sameMPV,
     % CoeffIdentity.coeff_identity_via_global_gauge, and
     % WeightEquiv.matched_sector_weight_equiv in
-    % TNLean/MPS/FundamentalTheorem/PaperBNT/.
+    % TNLean/MPS/FundamentalTheorem/SectorBNT/.
 \end{proof}
 
 %% ---------------------------------------------------------

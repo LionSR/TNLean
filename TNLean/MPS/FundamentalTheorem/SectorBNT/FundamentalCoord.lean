@@ -2,16 +2,16 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Fundamental
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
 
 /-!
 # BNT equal-MPV gauge equivalence: bundled `II_cor2` witness
 
-This module states the equal-MPV theorem `ft_paper_bnt_equal_global_gauge`
+This module states the equal-MPV theorem `ft_sector_bnt_equal_global_gauge`
 in the form of the literal `II_cor2` statement of CPSV16 §II.C lines 354–361
 / appendix lines 1184–1192.
 
-The bundled-witness theorem `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses`
+The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
 `IsBNTCanonicalForm` and generating the same MPV family:
 
@@ -85,7 +85,7 @@ data through the matched bijections gives the
 `toTensorFromBlocks`-tensor that conjugates to $Q.toTensor$ under $X$.
 
 CPSV16 §II.C lines 354–361 / 1184–1192. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -120,7 +120,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) := by
   classical
   obtain ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, _hXdef, hGauge⟩ :=
-    ft_paper_bnt_equal_global_gaugePos hP hQ hUnitP hUnitQ hEqual
+    ft_sector_bnt_equal_global_gaugePos hP hQ hUnitP hUnitQ hEqual
   -- `P.totalDim = Q.totalDim` follows from `sectorFlatEquiv` plus matched dims
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -130,7 +130,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
   exact hGauge i
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -163,7 +163,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_witnesses
             (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
               Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                      (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ)) :=
-  ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos
+  ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 /-- **CPSV16 `II_cor2` literal form, sector data + total bond-dimension equality.**
@@ -175,10 +175,10 @@ coordinates.
 
 This is the literal CPSV16 II_cor2 statement of gauge equivalence between
 two BNT canonical forms with the same expectation values; the witness
-bundle is provided by `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses`.
+bundle is provided by `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`.
 
 CPSV16 §II.C lines 354–361. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquivPos
+theorem ft_sector_bnt_equal_mps_gaugeEquivPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -201,12 +201,12 @@ theorem ft_paper_bnt_equal_mps_gaugeEquivPos
                        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
-    ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hUnitP hUnitQ hEqual
+    ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hUnitP hUnitQ hEqual
   exact ⟨SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ,
     β, hDim, τ, X, hGauge⟩
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquiv
+theorem ft_sector_bnt_equal_mps_gaugeEquiv
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -227,7 +227,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv
               (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
                 Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :=
-  ft_paper_bnt_equal_mps_gaugeEquivPos
+  ft_sector_bnt_equal_mps_gaugeEquivPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 /-! ## Coordinate identification between matched and literal blocks
@@ -237,7 +237,7 @@ differ only by a $\Sigma$-level permutation of flattened sector indices
 along `sectorFlatSigmaEquiv`; equivalently a permutation of
 `Fin Q.totalDim` (after the bond-dimension equality) by
 `sectorFlatDimEquiv`.  This lets us upgrade
-`ft_paper_bnt_equal_mps_gaugeEquiv` from the matched-coordinate form to the
+`ft_sector_bnt_equal_mps_gaugeEquiv` from the matched-coordinate form to the
 literal CPSV16 II_cor2 form (CPSV16 §II.C lines 354–361). -/
 
 /-- Cast of an `MPSTensor` along a bond-dimension equality, evaluated at one
@@ -516,12 +516,12 @@ at every physical site $i$, where the inner factor is the bond-dim cast of the
 literal $P$-tensor along the total-dimension equality.
 
 This packages the matched-coordinate gauge equation
-`ft_paper_bnt_equal_mps_gaugeEquiv` (CPSV16 lines 1189–1192) into the verbatim
+`ft_sector_bnt_equal_mps_gaugeEquiv` (CPSV16 lines 1189–1192) into the verbatim
 II_cor2 statement of CPSV16 §II.C lines 354–361 by composing the matched-coord
 global gauge with the sector-permutation `sectorFlatDimEquiv`.
 
 CPSV16 §II.C lines 354–361. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquiv_literalPos
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -539,7 +539,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_literalPos
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) := by
   classical
   obtain ⟨β, hDim, _hCopies, τ, _ζ, _Xblock, _hTotal, X, _, _, _, hGauge⟩ :=
-    ft_paper_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hUnitP hUnitQ hEqual
+    ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos hP hQ hUnitP hUnitQ hEqual
   -- Total bond dimensions agree.
   have hTotal : P.totalDim = Q.totalDim :=
     SectorDecomposition.totalDim_eq_of_match (P := P) (Q := Q) β hDim τ
@@ -631,7 +631,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_literalPos
   simp only [Matrix.mul_assoc]
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_paper_bnt_equal_mps_gaugeEquiv_literal
+theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -647,7 +647,7 @@ theorem ft_paper_bnt_equal_mps_gaugeEquiv_literal
               (P.toTensor i) *
             (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
-  ft_paper_bnt_equal_mps_gaugeEquiv_literalPos
+  ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 end MPSTensor

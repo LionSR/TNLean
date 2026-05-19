@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
-import TNLean.MPS.FundamentalTheorem.PaperBNT.CesaroNonDecay
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CesaroNonDecay
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.CastDecay
 
@@ -11,10 +11,10 @@ import TNLean.MPS.Overlap.CastDecay
 # Auxiliary lemmas for the BNT canonical-form predicate `IsBNTCanonicalForm`
 
 Elementary lemmas for the predicate `IsBNTCanonicalForm` introduced in
-`PaperBNT/Basic.lean`.  All lemmas here use the **raw** sector data
+`SectorBNT/Basic.lean`.  All lemmas here use the **raw** sector data
 `P.weight j q` and `P.coeff N j = ∑_q (P.weight j q)^N`; no equal-modulus
 factorisation is assumed.  The optional `HasEqualModulusWeightLayer`
-specialisation lives in `PaperBNT/EqualModulus.lean` and is intentionally
+specialisation lives in `SectorBNT/EqualModulus.lean` and is intentionally
 not imported here.
 
 ## Contents
