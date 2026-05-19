@@ -21,6 +21,3 @@ name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
 
 name: TNPEPSGaugeCancellation TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
 {{ obj.tn_svg_html }}
-
-name: TNMPOCellDiagram TNMPOChainDiagram TNLPDODiagram
-{{ obj.tn_svg_html }}
