@@ -19,7 +19,7 @@ open Filter
 This file collects the arbitrary-tensor reductions toward the canonical-form construction for
 MPS tensors from Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608.
 
-We currently have the following components:
+The file contains the following reductions:
 
 * Section 2.3: iterated invariant-projection splitting → irreducible block decomposition.
 * Appendix A (PF / TP gauge): irreducible + nonzero Kraus operator → Perron--Frobenius
@@ -220,8 +220,8 @@ theorem exists_blockTensor_leftCanonical_isPrimitive
     exists_blockTensor_isPrimitive (A := A) hTP hIrr
   refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
 
-/-- **Reduction compatibility theorem:** spectral-gap primitivity with a positive-definite
-fixed point implies normality. -/
+/-- **Reduction theorem:** spectral-gap primitivity with a positive-definite fixed point implies
+normality. -/
 theorem isNormal_of_isPrimitiveMPS
     [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -330,12 +330,12 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 The strongest arbitrary-input statement proved here is the blockwise PF / TP-gauge reduction below:
 after decomposing `A` into irreducible blocks, one may apply the theorem to each block once one
 separately knows that the block has a nonzero Kraus operator. This explicit side condition is
-essential because, under the current `SameMPV₂` relation, zero scalar blocks cannot simply be
-discarded: the `N = 0` sector is remembered.
+essential because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot simply be
+discarded.
 
 The normal-canonical-form file starts from a primitive weighted block family with positive bond
-dimensions and distinct nonzero weights. This file does **not** currently construct that input from
-an arbitrary tensor.
+dimensions and distinct nonzero weights. This file does **not** construct that input from an
+arbitrary tensor.
 
 Remaining gap for a complete canonical-form existence theorem:
 
@@ -353,9 +353,8 @@ From an arbitrary tensor `A` we produce an irreducible block decomposition. For 
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
-This is the available unconditional reduction from arbitrary input under the
-current statements. The nonzero side condition is explicit because `SameMPV₂`
-remembers the `N = 0` sector, so zero scalar blocks cannot be silently
+This is the unconditional reduction from arbitrary input proved here. The nonzero side condition is
+explicit because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot be silently
 discarded. -/
 theorem exists_irreducible_blockDecomp_with_tpGauge
     (A : MPSTensor d D) :
@@ -560,8 +559,9 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       rw [h, mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
     -- Expand the nonzero-block toTensorFromBlocks.
-    have hNonzero : mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
-        ∑ j : Fin r, mpv (newBlocks j) σ := by
+    have hNonzero :
+        mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
+          ∑ j : Fin r, mpv (newBlocks j) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
       simp only [one_pow, one_smul]
     -- Split the original sum into nonzero and zero parts.
