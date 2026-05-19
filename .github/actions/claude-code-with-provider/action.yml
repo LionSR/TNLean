@@ -372,6 +372,7 @@ runs:
         write_output anthropic_api_key "$anthropic_api_key"
         write_output base_url "$base_url"
         write_output model "$model"
+        write_output model_tier "$model_tier"
         write_output provider "$provider"
         write_output allowed_bots "$allowed_bots"
         write_output branch_name_template "$branch_name_template"
@@ -383,6 +384,23 @@ runs:
         write_output prompt "$prompt"
         write_output claude_args "$claude_args"
         write_output append_system_prompt "$append_system_prompt"
+
+    - name: Report provider and model
+      shell: bash
+      env:
+        RESOLVED_PROVIDER: ${{ steps.resolve.outputs.provider }}
+        RESOLVED_MODEL: ${{ steps.resolve.outputs.model }}
+        RESOLVED_MODEL_TIER: ${{ steps.resolve.outputs.model_tier }}
+      run: |
+        set -euo pipefail
+        echo "::notice title=Claude Code provider::provider=${RESOLVED_PROVIDER}, model=${RESOLVED_MODEL}, tier=${RESOLVED_MODEL_TIER}"
+        {
+          echo "### Claude Code provider"
+          echo
+          echo "- Provider: \`${RESOLVED_PROVIDER}\`"
+          echo "- Model: \`${RESOLVED_MODEL}\`"
+          echo "- Tier: \`${RESOLVED_MODEL_TIER}\`"
+        } >> "$GITHUB_STEP_SUMMARY"
 
     - name: Run Claude Code
       uses: anthropics/claude-code-action@v1
