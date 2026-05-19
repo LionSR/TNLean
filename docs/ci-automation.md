@@ -654,6 +654,12 @@ review runs use the same wrapper in `deepseek` provider mode and select
 Codex-based workflows run via `openai/codex-action` and use their own
 model/configuration mechanism rather than Claude `--model` flags.
 
+Every workflow that calls `.github/actions/claude-code-with-provider` writes a
+GitHub Actions notice and job summary section named `Claude Code provider`. It
+records the resolved provider, model, and tier for that run, so maintainers can
+distinguish Anthropic-backed and DeepSeek-backed runs without reading the
+workflow environment.
+
 ### Review providers
 
 To run one or both review engines, set this repository variable:
