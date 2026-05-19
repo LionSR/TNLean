@@ -120,5 +120,8 @@ by a diagram before reading the surrounding proof.
 - Public commands should be built from the common glyphs above. If a diagram
   requires a new glyph, first record the mathematical meaning here and then add
   the corresponding private TikZ primitive and web-rendering support.
+- Repeated chain and square-lattice diagrams should be built from the layout
+  commands in `blueprint/src/macros/tn_core.tex`, so that the public command
+  records the tensor network rather than a coordinate calculation.
 - Private glyphs and lengths belong in `blueprint/src/macros/tn_core.tex`.
   Chapter-facing diagrams belong in `blueprint/src/macros/tn_print.tex`.
