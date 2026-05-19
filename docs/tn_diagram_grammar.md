@@ -119,4 +119,6 @@ by a diagram before reading the surrounding proof.
   step is a specific contraction, insertion, blocking, or gauge absorption.
 - Public commands should be built from the common glyphs above. If a diagram
   requires a new glyph, first record the mathematical meaning here and then add
-  the corresponding TikZ and web-rendering support.
+  the corresponding private TikZ primitive and web-rendering support.
+- Private glyphs and lengths belong in `blueprint/src/macros/tn_core.tex`.
+  Chapter-facing diagrams belong in `blueprint/src/macros/tn_print.tex`.
