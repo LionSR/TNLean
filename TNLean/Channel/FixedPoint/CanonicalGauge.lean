@@ -8,9 +8,7 @@ This file states the two standard one-sided similarity gauges extracted from
 fixed points of the transfer map and its adjoint. It is **not** a formalization
 of a doubly stochastic gauge. Instead, `gauged_unital` gives the
 right-canonical/unital gauge, while `gauged_tracePreserving` gives the
-left-canonical/trace-preserving gauge. The aliases `gauged_rightCanonical` and
-`gauged_leftCanonical` state the same formulas in the project's MPS
-terminology.
+left-canonical/trace-preserving gauge.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -60,16 +58,6 @@ theorem gauged_unital
       Matrix.mul_assoc, Matrix.mul_assoc, hStmul_inv, Matrix.mul_one, hSinv_mul]
 
 omit [NeZero D] in
-/-- Right-canonical alias of `gauged_unital`. -/
-theorem gauged_rightCanonical
-    (A : MPSTensor d D) (S : Matrix (Fin D) (Fin D) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ)
-    (hS_inv : S.det ≠ 0)
-    (hSS : S * Sᴴ = ρ)
-    (hfix : transferMap (d := d) (D := D) A ρ = ρ) :
-    ∑ i : Fin d, (S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ = 1 :=
-  gauged_unital A S ρ hS_inv hSS hfix
-
-omit [NeZero D] in
 /-- If `S` is invertible and `Sᴴ * S = σ`, then the gauged operators
 `A'_i = S * A_i * S⁻¹` satisfy `∑ A'_iᴴ * A'_i = I` whenever
 `E_A†(σ) = σ`.
@@ -100,15 +88,5 @@ theorem gauged_tracePreserving
     simpa [transferMap_apply] using hfix
   rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hStS,
     Matrix.mul_assoc, Matrix.mul_assoc, hSmul_inv, Matrix.mul_one, hStinv_mul]
-
-omit [NeZero D] in
-/-- Left-canonical alias of `gauged_tracePreserving`. -/
-theorem gauged_leftCanonical
-    (A : MPSTensor d D) (S : Matrix (Fin D) (Fin D) ℂ) (σ : Matrix (Fin D) (Fin D) ℂ)
-    (hS_inv : S.det ≠ 0)
-    (hStS : Sᴴ * S = σ)
-    (hfix : transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ) :
-    ∑ i : Fin d, (S * A i * S⁻¹)ᴴ * (S * A i * S⁻¹) = 1 :=
-  gauged_tracePreserving A S σ hS_inv hStS hfix
 
 end CanonicalGauge
