@@ -41,9 +41,9 @@ tensor on the corner bond space, as produced by
 `exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
 
 The nontriviality hypothesis `dim u ≠ 0` excludes the degenerate
-zero-dimensional "missing sector" case. With the current definitions, an
-`MPSTensor _ 0` may satisfy block-injectivity/normality vacuously, so this
-assumption is used to focus on genuine nonempty sectors.
+zero-dimensional "missing sector" case. An `MPSTensor _ 0` may satisfy
+block-injectivity/normality vacuously, so this assumption focuses the statement
+on genuine nonempty sectors.
 
 The `hBlocks_mpv` hypothesis ties the compressed block decomposition back to
 the original blocked tensor, and `hCyclic` ensures the block indexing
@@ -241,10 +241,9 @@ equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
 `hNondegA` supplies the nonzero-sector condition for the returned `A` sector, while
 `hNondegB` provides the typeclass needed to apply the mixed-sector overlap dichotomy.
 Both come from the periodic sector decomposition constructed by
-`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`.
-The current interface does not yet expose that uniqueness theorem in this
-compressed-sector form, so the missing step is isolated here as the only missing
-ingredient. -/
+`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`. The missing
+mathematical input is the compressed-sector form of this uniqueness theorem,
+isolated here as the only missing ingredient. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]

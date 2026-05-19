@@ -616,9 +616,9 @@ Through `IsCyclicSectorDecomp`, those traces are
 decomposition are orthogonal corners, so for `u ≠ v` these corner states cannot
 be related by an invertible gauge and nonzero scalar.
 
-The current cyclic-sector interface exposes the trace formula and projection data
-but does not yet state this orthogonal-corner rigidity as a reusable theorem, so
-we isolate exactly that missing step here. -/
+The cyclic-sector decomposition supplies the trace formula and projection data. The
+missing mathematical input is orthogonal-corner rigidity: distinct cyclic corners
+cannot be related by an invertible gauge and a nonzero scalar. -/
 private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (_hP : IsPeriodic m A)
@@ -652,7 +652,7 @@ After blocking by the period, the cyclic sector decomposition should make each
 compressed sector a primitive normalized tensor, while distinct sectors are
 asymptotically orthogonal.
 
-This is the remaining step from the cyclic-sector decomposition interface to the
+This theorem isolates the passage from cyclic-sector decomposition data to the
 overlap-asymptotic statement. -/
 private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
