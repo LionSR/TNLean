@@ -75,8 +75,8 @@ theorem mixedTransferSpectralRadius₂_eq
 /-! ## Rectangular Frobenius norm and Euclidean-space embedding
 
 The general definitions `frobSq`, `matToES`, and their basic lemmas are imported from
-`TNLean.Spectral.FrobeniusNorm`.  This file adds the mixed-shape
-submultiplicativity lemma. -/
+`TNLean.Spectral.FrobeniusNorm`; the mixed-shape submultiplicativity lemma is proved
+below. -/
 
 private lemma norm_matToES_rect_mul_le
     (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
