@@ -16,7 +16,8 @@ inputs:
     required: true
   autofix-label:
     description: 'Label to add when the trigger text contains an auto-fix keyword'
-    required: true
+    required: false
+    default: ''
   event-name:
     description: 'github.event_name; selects which fields to scan for the auto-fix keyword'
     required: true
@@ -132,7 +133,9 @@ runs:
           TRIGGER_TEXT="$ISSUE_BODY $ISSUE_TITLE_INPUT"
         fi
 
-        if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
+        if echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix' && [ -n "$AUTOFIX_LABEL" ]; then
           echo "Autofix keyword detected — adding '${AUTOFIX_LABEL}' label to PR #${PR_NUM}"
           gh pr edit "$PR_NUM" --repo "$REPO" --add-label "$AUTOFIX_LABEL" || true
+        elif echo "$TRIGGER_TEXT" | grep -qiE 'auto[_ -]?fix'; then
+          echo "Autofix keyword detected, but no autofix label is configured for ${CREATOR_NAME}."
         fi
