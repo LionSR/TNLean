@@ -76,6 +76,12 @@ not retain repeated equal-modulus sectors; the full multiplicity structure (weig
 `μ_{j,q}` and multiplicities `M_j` as in arXiv:1606.00608) is recorded in
 `SectorDecomposition` and the sector-weight comparison theorems.
 
+**Scope restriction (one-copy-per-sector):** This is the already grouped
+single-representative surface, not the full CPSV16 BNT multiplicity structure.
+CPSV16 lines 287-301 keep the repeated copies of one basis tensor visible
+through the raw coefficients `μ_{j,q}`. The restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
+
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
 (`IsNormalCanonicalForm`), while the later `IsBNT` hypotheses ask for blockwise
 `IsNormal` (the equivalent algebraic eventual-block-injectivity notion). The
@@ -149,8 +155,14 @@ lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
     exact hanti
   · exact absurd k.isLt (by omega)
 
-/-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus the BNT separation
-assumption and the CPSV dominant-block normalization `‖μ ⟨0, _⟩‖ = 1`. -/
+/-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
+the BNT separation assumption and the CPSV dominant-block normalization
+`‖μ ⟨0, _⟩‖ = 1`.
+
+**Scope restriction (one-copy-per-sector):** The strict weight-ordering input
+selects one representative per modulus class. This constructor does not recover
+the multiplicity data of the full CPSV16 BNT decomposition at lines 287-301;
+see `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
@@ -368,7 +380,11 @@ namespace IsNormalCanonicalFormBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Cross-overlap decay for normal-CF-BNT blocks. -/
+/-- Cross-overlap decay for normal-CF-BNT blocks.
+
+**Scope restriction (one-copy-per-sector):** The hypothesis
+`IsNormalCanonicalFormBNT` is the separated, already grouped variant documented
+in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem cross_overlap_tendsto_zero
     [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
@@ -381,7 +397,11 @@ theorem cross_overlap_tendsto_zero
 
 /-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
 structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are
-supplied explicitly. -/
+supplied explicitly.
+
+**Scope restriction (one-copy-per-sector):** The hypothesis
+`IsNormalCanonicalFormBNT` is the separated, already grouped variant documented
+in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :
