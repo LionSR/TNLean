@@ -75,12 +75,8 @@ theorem mixedTransferSpectralRadius₂_eq
 /-! ## Rectangular Frobenius norm and Euclidean-space embedding
 
 The general definitions `frobSq`, `matToES`, and their basic lemmas are imported from
-`TNLean.Spectral.FrobeniusNorm`.  We introduce `frobSq₂` as a deprecated alias kept
-for local readability, and add the mixed-shape submultiplicativity lemma. -/
-
-/-- Deprecated alias: `frobSq₂ = frobSq` for rectangular matrices.
-Kept for local readability in this file. -/
-noncomputable abbrev frobSq₂ (X : Matrix (Fin D₁) (Fin D₂) ℂ) : ℝ := frobSq X
+`TNLean.Spectral.FrobeniusNorm`.  This file adds the mixed-shape
+submultiplicativity lemma. -/
 
 private lemma norm_matToES_rect_mul_le
     (A : Matrix (Fin D₁) (Fin D₁) ℂ) (B : Matrix (Fin D₁) (Fin D₂) ℂ) :
@@ -107,9 +103,9 @@ section HSContraction
 /-- Right-sum identity: `∑_σ ‖X · w_B(σ)†‖_F² = ‖X‖_F²` for rectangular X.
 
 The proof uses trace cycling: `frobSq(v M†) = tr(M† M · v† v).re`, then sum over σ. -/
-private lemma sum_frobSq₂_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+private lemma sum_frobSq_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (v : Matrix (Fin D₁) (Fin D₂) ℂ) (n : ℕ) :
-    ∑ σ : Fin n → Fin d, frobSq₂ (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq₂ v := by
+    ∑ σ : Fin n → Fin d, frobSq (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq v := by
   -- Trace-cycle: tr((v M†)† (v M†)) = tr(M† M v† v)
   have trace_cycle : ∀ M : Matrix (Fin D₂) (Fin D₂) ℂ,
       ((v * Mᴴ)ᴴ * (v * Mᴴ)).trace = (Mᴴ * M * (vᴴ * v)).trace := by
@@ -128,9 +124,9 @@ private lemma sum_frobSq₂_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B
     word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
 
 /-- Word Frobenius norm sum for square matrices: `∑_σ ‖w_K(σ)‖_F² = D₁`. -/
-private lemma sum_frobSq₂_words (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
+private lemma sum_frobSq_words (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
     (n : ℕ) :
-    ∑ σ : Fin n → Fin d, frobSq₂ (evalWord K (List.ofFn σ)) = (D₁ : ℝ) := by
+    ∑ σ : Fin n → Fin d, frobSq (evalWord K (List.ofFn σ)) = (D₁ : ℝ) := by
   simp_rw [frobSq_trace]
   rw [← Complex.re_sum, ← Matrix.trace_sum, word_conjTranspose_mul_sum K hK n]
   simp [Matrix.trace_one, Fintype.card_fin]
@@ -141,13 +137,13 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (X : Matrix (Fin D₁) (Fin D₂) ℂ)
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1) (n : ℕ) :
-    frobSq₂ (((mixedTransferMap₂ A B) ^ n) X) ≤ (D₁ : ℝ) ^ 2 * frobSq₂ X := by
+    frobSq (((mixedTransferMap₂ A B) ^ n) X) ≤ (D₁ : ℝ) ^ 2 * frobSq X := by
   rw [mixedTransferMap₂_pow_apply, show (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * X * (evalWord B (List.ofFn σ))ᴴ) =
     (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ)) from by
     congr 1; ext σ; rw [Matrix.mul_assoc]]
-  rw [show frobSq₂ (∑ σ : Fin n → Fin d,
+  rw [show frobSq (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ)) =
     ‖matToES (∑ σ : Fin n → Fin d,
     evalWord A (List.ofFn σ) * (X * (evalWord B (List.ofFn σ))ᴴ))‖ ^ 2 from
@@ -161,16 +157,16 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
       (Finset.sum_le_sum fun σ _ => norm_matToES_rect_mul_le _ _)
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
-    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq₂_words A hA_norm n
-  have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq₂ X := by
-    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq₂_right B hB_norm X n
+    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
+  have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
+    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_right B hB_norm X n
   calc ‖matToES _‖ ^ 2
       ≤ (∑ σ : Fin n → Fin d, fA σ * fB σ) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) h_chain 2
     _ ≤ (∑ σ, fA σ ^ 2) * (∑ σ, fB σ ^ 2) :=
         Finset.sum_mul_sq_le_sq_mul_sq Finset.univ fA fB
-    _ = (D₁ : ℝ) * frobSq₂ X := by rw [h_A, h_B]
-    _ ≤ (D₁ : ℝ) ^ 2 * frobSq₂ X := by
+    _ = (D₁ : ℝ) * frobSq X := by rw [h_A, h_B]
+    _ ≤ (D₁ : ℝ) ^ 2 * frobSq X := by
         nlinarith [sq_nonneg ((D₁ : ℝ) - 1), frobSq_nonneg X,
           show (1 : ℝ) ≤ D₁ from by exact_mod_cast NeZero.one_le (n := D₁)]
 
@@ -194,7 +190,7 @@ theorem eigenvalue_norm_le_one₂ [NeZero D₁] [NeZero D₂]
   have h_bound : ∀ n : ℕ, ‖μ‖ ^ (2 * n) ≤ (D₁ : ℝ) ^ 2 := fun n => by
     have h1 := hs_contraction_rect A B v hA_norm hB_norm n
     rw [eigenvector_pow _ v μ hFv n] at h1
-    simp only [frobSq₂, frobSq_smul, norm_pow] at h1
+    simp only [frobSq_smul, norm_pow] at h1
     calc ‖μ‖ ^ (2 * n) = (‖μ‖ ^ n) ^ 2 := by ring
     _ ≤ _ := le_of_mul_le_mul_right (by linarith) h_pos
   have htend := tendsto_pow_atTop_atTop_of_one_lt (by nlinarith : 1 < ‖μ‖ ^ 2)
