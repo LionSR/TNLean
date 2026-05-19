@@ -5,11 +5,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
 import TNLean.MPS.Core.PhysicalReindexTransport
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Overlap.PeripheralToSpectralGap
 
 /-!
-# Prepared-block PaperBNT constructor
+# Prepared-block SectorBNT constructor
 
 Given a finite family of **already prepared** TP / primitive / irreducible /
 injective blocks with nonzero weights satisfying the CPSV16 §II.A line-246
@@ -42,11 +42,11 @@ phase-equivalent TP/primitive/irreducible blocks.
 
 ## Layering
 
-This module lives in the `FundamentalTheorem.PaperBNT.*` layer because it
+This module lives in the `FundamentalTheorem.SectorBNT.*` layer because it
 consumes both canonical-form data (`CanonicalForm.PhaseClassSectorData`) and
-the FT-side `IsBNTCanonicalForm` contract (`FundamentalTheorem.PaperBNT.Basic`).
-Placing it in `FundamentalTheorem.PaperBNT.Supplier` re-establishes the natural
-layering: `FundamentalTheorem.PaperBNT` is above `CanonicalForm`, so importing
+the FT-side `IsBNTCanonicalForm` contract (`FundamentalTheorem.SectorBNT.Basic`).
+Placing it in `FundamentalTheorem.SectorBNT.Supplier` re-establishes the natural
+layering: `FundamentalTheorem.SectorBNT` is above `CanonicalForm`, so importing
 from both directions here is consistent with the overall layer order.
 -/
 
@@ -113,13 +113,13 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     simpa using h1
   exact norm_eq_one_of_selfOverlap_scale hXX hYY hScale
 
-/-! ### Prepared-block PaperBNT constructor -/
+/-! ### Prepared-block SectorBNT constructor -/
 
 /--
-**Prepared-block PaperBNT constructor.**
+**Prepared-block SectorBNT constructor.**
 
 Given a finite family of TP, primitive, irreducible, injective blocks with
-nonzero weights satisfying the PaperBNT normalization conditions, produce a
+nonzero weights satisfying the SectorBNT normalization conditions, produce a
 `SectorDecomposition P` and a proof that `IsBNTCanonicalForm P` and the
 assembled tensor agrees with the original direct sum.
 
@@ -453,7 +453,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     rw [hLeft, hRight] at hReindex
     exact hReindex
 
-/-! ### End-to-end arbitrary-input PaperBNT supplier
+/-! ### End-to-end arbitrary-input SectorBNT supplier
 
 Composing the prepared-block supplier `exists_prepared_BNT_blocks_afterBlocking_pos`
 with the prepared-block BNT constructor

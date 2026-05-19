@@ -16,24 +16,24 @@ from arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete, "Matrix pro
 operators: Renormalization fixed points and boundary theories"):
 
 * normal tensor (NT), `MPSTensor.IsNormalTensor`,
-* canonical form (CF), `MPSTensor.IsCanonicalFormPaper`, and
-* basis of normal tensors (BNT), `MPSTensor.IsBNTPaper`.
+* canonical form (CF), `MPSTensor.IsCPSVCanonicalForm`, and
+* basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
 The existing TNLean canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) ships several *strengthenings* of these definitions
 (adding left-canonical normalization, strict modulus ordering, one-copy-per-sector,
 etc.) that are convenient for downstream FT proofs but drift from the paper text.
-The predicates here are the literal source-paper formulations.
+The predicates here are the CPSV formulations.
 
 ## Paper anchors
 
 * `MPSTensor.IsNormalTensor`: `Papers/1606.00608/MPDO-22-12-17-2.tex:233-235`
   (Definition: NT is no nontrivial invariant projector + unique modulus-1
   eigenvalue of the associated CPM equal to its spectral radius equal to one).
-* `MPSTensor.IsCanonicalFormPaper`: `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`
+* `MPSTensor.IsCPSVCanonicalForm`: `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`
   (Definition: CF is `A^i = ⊕_k μ_k A_k^i` with each `A_k` normal; combined with
   the normalization paragraph at line 246: `|μ_k| ≤ 1` and at least one `|μ_k| = 1`).
-* `MPSTensor.IsBNTPaper`: `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`
+* `MPSTensor.IsCPSVBasisOfNormalTensors`: `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`
   (Definition: BNT `{A_j}` of `A` is `A_j` all normal, MPV family of `A`
   spanned by MPV families of the `A_j` at every length, and eventually linearly
   independent).
@@ -62,11 +62,11 @@ One direct connection is provided:
 Two further connections are intentionally **not** provided here, in keeping with the
 "clean layer, no `sorry`" quality bar:
 
-* A CF connection `IsCanonicalFormPaper.of_isNormalCanonicalForm` would need to import
+* A CF connection `IsCPSVCanonicalForm.of_isNormalCanonicalForm` would need to import
   `TNLean.PiAlgebra.CanonicalFormSepAux` which transitively imports
-  `TNLean.MPS.FundamentalTheorem.*`; we keep `PaperDefs.lean` in a clean pre-FT
+  `TNLean.MPS.FundamentalTheorem.*`; we keep `Definitions.lean` in a clean pre-FT
   layer. Such a connection belongs in a separate downstream file.
-* A BNT connection `IsBNTPaper.of_isBNT` would require the implication
+* A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
   block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
   formulation. That equivalence requires Wielandt-style spectral arguments not
@@ -96,7 +96,7 @@ arXiv:1606.00608, Definition before eq. `II_CF1` (`Papers/1606.00608/MPDO-22-12-
 Clause (ii) is encoded via `_root_.IsPrimitive (transferMap A)`, which states that the
 peripheral eigenvalue set of the transfer map is exactly `{1}`. Combined with the
 implicit spectral-radius normalization the paper assumes (cf. `MPDO-22-12-17-2.tex:231`),
-this is the source-faithful formulation.
+this is the CPSV formulation.
 
 This predicate is intentionally *weaker* than the TNLean strong predicate
 `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` (it does not require
@@ -133,7 +133,7 @@ immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
   `SameMPV₂ A (toTensorFromBlocks weights blocks)`),
 * modulus normalization `‖weights k‖ ≤ 1` for all `k`, and at least one `‖weights k‖ = 1`.
 
-This is **data** (a `Type`); the propositional version is `IsCanonicalFormPaper` below.
+This is **data** (a `Type`); the propositional version is `IsCPSVCanonicalForm` below.
 -/
 structure CanonicalFormPaperData (A : MPSTensor d D) where
   /-- Number of blocks `r` in the direct-sum decomposition `A^i = ⊕_{k=1}^r μ_k A_k^i`. -/
@@ -154,7 +154,7 @@ structure CanonicalFormPaperData (A : MPSTensor d D) where
   weight_unit_exists : ∃ k, ‖weights k‖ = 1
 
 /--
-`MPSTensor.IsCanonicalFormPaper A` is the propositional **canonical form**
+`MPSTensor.IsCPSVCanonicalForm A` is the propositional **canonical form**
 predicate from arXiv:1606.00608
 (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
 direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least one
@@ -163,19 +163,19 @@ direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least 
 This is `Nonempty (CanonicalFormPaperData A)` — i.e. existence of a paper-CF
 decomposition witness.
 -/
-def IsCanonicalFormPaper (A : MPSTensor d D) : Prop :=
+def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
   Nonempty (CanonicalFormPaperData A)
 
 /-- Promote a paper-CF data witness to the propositional predicate. -/
-theorem IsCanonicalFormPaper.of_data
+theorem IsCPSVCanonicalForm.of_data
     {A : MPSTensor d D} (h : CanonicalFormPaperData A) :
-    IsCanonicalFormPaper A :=
+    IsCPSVCanonicalForm A :=
   ⟨h⟩
 
 /-! ## Basis of normal tensors (BNT) -/
 
 /--
-`MPSTensor.IsBNTPaper A blocks` is the **basis of normal tensors** predicate
+`MPSTensor.IsCPSVBasisOfNormalTensors A blocks` is the **basis of normal tensors** predicate
 from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 
 * (i) each `blocks j` is a CPSV16 normal tensor,
@@ -187,7 +187,7 @@ from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 Here `blocks` is a heterogeneous family `(j : Fin g) → Σ Dj, MPSTensor d Dj` to allow
 different per-block bond dimensions.
 -/
-structure IsBNTPaper {g : ℕ} (A : MPSTensor d D)
+structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
     (blocks : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj) : Prop where
   /-- (i) each basis tensor `A_j` is a CPSV16 normal tensor. -/
   blocks_normal : ∀ j, IsNormalTensor (blocks j).2

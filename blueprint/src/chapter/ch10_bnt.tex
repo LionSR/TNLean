@@ -543,7 +543,7 @@ and~\cite{Cirac2021Matrix}.
 \end{remark}
 
 \section{The BNT canonical form on a sector decomposition}
-\label{sec:paper_bnt_api}
+\label{sec:sector_bnt_api}
 
 This section introduces the BNT canonical-form predicate following
 \cite[\S II, lines 287--301]{Cirac2017MPDO_AnnPhys} and
@@ -556,7 +556,7 @@ factorization is assumed.
 % notation; the `\lean{...}` tag below carries the link.
 
 \begin{definition}[BNT canonical form]%
-    \label{def:paper_bnt_cf}
+    \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
     \uses{def:paper_sector_data}
@@ -591,7 +591,7 @@ factorization is assumed.
 \end{definition}
 
 \begin{lemma}[Raw two-layer sector coefficient identity]%
-    \label{lem:paper_bnt_coeff_eq_sum_weight_pow}
+    \label{lem:sector_bnt_coeff_eq_sum_weight_pow}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow}
     \leanok
     \uses{def:paper_sector_data}
@@ -609,10 +609,10 @@ factorization is assumed.
 \end{proof}
 
 \begin{lemma}[Sector coefficient bound by multiplicity]%
-    \label{lem:paper_bnt_norm_coeff_le_copies}
+    \label{lem:sector_bnt_norm_coeff_le_copies}
     \lean{MPSTensor.SectorDecomposition.norm_coeff_le_copies_of_norm_weight_le_one}
     \leanok
-    \uses{lem:paper_bnt_coeff_eq_sum_weight_pow}
+    \uses{lem:sector_bnt_coeff_eq_sum_weight_pow}
     Under the optional global modulus normalization
     \cite[\S II, lines 217--246]{Cirac2017MPDO_AnnPhys}, every raw weight satisfies
     $\lVert \mu_{j,q} \rVert \le 1$, and the triangle inequality bounds
@@ -624,15 +624,15 @@ factorization is assumed.
 
 \begin{proof}\leanok
     Apply the triangle inequality to the raw power sum from
-    Lemma~\ref{lem:paper_bnt_coeff_eq_sum_weight_pow} and bound each term by
+    Lemma~\ref{lem:sector_bnt_coeff_eq_sum_weight_pow} and bound each term by
     $1$ using $\lVert \mu_{j,q} \rVert \le 1$.
 \end{proof}
 
 \begin{lemma}[Cross-overlap decay between distinct basis blocks]%
-    \label{lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    \label{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
     \leanok
-    \uses{def:mpv_overlap, def:paper_bnt_cf}
+    \uses{def:mpv_overlap, def:sector_bnt_cf}
     If $P$ is a BNT canonical form and $j \neq k$, then
     $O_{P_j P_k}(N) \to 0$ as $N \to \infty$, where $P_j$ and $P_k$ are the
     basis blocks at indices $j$ and $k$. The argument follows the
@@ -653,11 +653,11 @@ factorization is assumed.
 \end{proof}
 
 \begin{lemma}[Combined-family eventual linear independence]%
-    \label{lem:paper_bnt_combined_family_eventually_li}
+    \label{lem:sector_bnt_combined_family_eventually_li}
     \lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
     \leanok
     \uses{lem:bnt_two_family_overlap_orthonormal_li,
-        lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     Let $P$ and $Q$ each be a BNT canonical form, and suppose every mixed
     overlap $O_{P_j Q_k}(N)$ tends to $0$. Then the union family
     \[
@@ -674,16 +674,16 @@ factorization is assumed.
 \begin{proof}\leanok
     Feed the per-family normalized self-overlaps (from the canonical-form
     hypotheses), the within-family cross-overlap decay
-    (Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}), and the
+    (Lemma~\ref{lem:sector_bnt_cross_overlap_basis_tendsto_zero}), and the
     inter-family decay hypothesis into the two-family overlap-orthonormality
     criterion (Lemma~\ref{lem:bnt_two_family_overlap_orthonormal_li}).
 \end{proof}
 
 \begin{lemma}[Sector coefficient bound from the line-246 normalization]%
-    \label{lem:paper_bnt_norm_coeff_le_copies_struct}
+    \label{lem:sector_bnt_norm_coeff_le_copies_struct}
     \lean{MPSTensor.IsBNTCanonicalForm.norm_coeff_le_copies}
     \leanok
-    \uses{def:paper_bnt_cf, lem:paper_bnt_norm_coeff_le_copies}
+    \uses{def:sector_bnt_cf, lem:sector_bnt_norm_coeff_le_copies}
     Under the BNT canonical form, the
     \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} normalization yields
     directly
@@ -696,14 +696,14 @@ factorization is assumed.
 
 \begin{proof}\leanok
     Feed the global modulus normalization hypothesis into
-    Lemma~\ref{lem:paper_bnt_norm_coeff_le_copies}.
+    Lemma~\ref{lem:sector_bnt_norm_coeff_le_copies}.
 \end{proof}
 
 \begin{lemma}[Unit-modulus weight witness from the line-246 normalization]%
-    \label{lem:paper_bnt_weight_unit_exists_of_struct}
+    \label{lem:sector_bnt_weight_unit_exists_of_struct}
     \lean{MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct}
     \leanok
-    \uses{def:paper_bnt_cf}
+    \uses{def:sector_bnt_cf}
     Under the BNT canonical form, the
     \cite[\S~II.A, line~246]{Cirac2017MPDO_AnnPhys} unit-modulus existential
     provides indices $(j_*, q_*)$ with
@@ -716,10 +716,10 @@ factorization is assumed.
 \end{proof}
 
 \begin{example}[$C \oplus (1/2)C$, unequal-modulus admissibility]%
-    \label{ex:paper_bnt_halvedDecomp}
-    \lean{MPSTensor.PaperBNT.Examples.halvedDecomp}
+    \label{ex:sector_bnt_halvedDecomp}
+    \lean{MPSTensor.SectorBNT.Examples.halvedDecomp}
     \leanok
-    \uses{def:paper_bnt_cf}
+    \uses{def:sector_bnt_cf}
     The single-sector two-copy decomposition with raw weights
     $(1, 1/2)$ demonstrates that the BNT canonical form admits
     unequal-modulus copies: the modulus bound holds because
@@ -731,7 +731,7 @@ factorization is assumed.
 \end{example}
 
 \section{Ces\`aro non-decay and unit-block coefficient}
-\label{sec:paper_bnt_cesaro_nondecay}
+\label{sec:sector_bnt_cesaro_nondecay}
 
 This section formalizes the analytic input that supplies, for any
 sector $j_0$ carrying a unit-modulus weight, the
@@ -755,7 +755,7 @@ so $M_T \to \#\{\text{matching pairs}\} \ge 1 > 0$, contradicting
 $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 
 \begin{lemma}[Ces\`aro non-decay of a finite power sum]%
-    \label{lem:paper_bnt_cesaro_nondecay}
+    \label{lem:sector_bnt_cesaro_nondecay}
     \lean{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}
     \leanok
     Let $\mu : \{0, \ldots, r-1\} \to \C$ satisfy $|\mu_q| \le 1$
@@ -771,10 +771,10 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 \end{proof}
 
 \begin{lemma}[Unit-block coefficient non-decay]%
-    \label{lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    \label{lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
     \leanok
-    \uses{def:paper_bnt_cf, lem:paper_bnt_cesaro_nondecay}
+    \uses{def:sector_bnt_cf, lem:sector_bnt_cesaro_nondecay}
     Let $P$ be a BNT canonical form and let $j_0$ be a sector index such
     that some copy of sector $j_0$ carries a unit-modulus weight, that is,
     there exists $q$ with $\lVert \mu_{j_0, q}\rVert = 1$. Then the
@@ -789,7 +789,7 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply Lemma~\ref{lem:paper_bnt_cesaro_nondecay} to the family
+    Apply Lemma~\ref{lem:sector_bnt_cesaro_nondecay} to the family
     $q \mapsto \mu_{j_0, q}$, using the modulus bound
     $\lVert \mu_{j_0, q}\rVert \le 1$ from the canonical-form normalization
     together with the per-sector unit-modulus hypothesis.
@@ -820,10 +820,10 @@ $\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ recovery of
 \cite[\S~II, lines 1184--1188]{Cirac2017MPDO_AnnPhys}. The coefficient
 identity itself is the linear-independence projection step of
 \cite[\S~II, lines 1170--1192]{Cirac2017MPDO_AnnPhys} and is supplied by
-the substitution argument of Section~\ref{subsec:paper_bnt_substitution} below.
+the substitution argument of Section~\ref{subsec:sector_bnt_substitution} below.
 
 \begin{lemma}[Matched-sector weight multiset equality]%
-    \label{lem:paper_bnt_matched_sector_weight_multiset_eq}
+    \label{lem:sector_bnt_matched_sector_weight_multiset_eq}
     \lean{MPSTensor.matched_sector_weight_multiset_eq}
     \leanok
     \uses{def:paper_sector_data,
@@ -858,12 +858,12 @@ the substitution argument of Section~\ref{subsec:paper_bnt_substitution} below.
 \end{proof}
 
 \begin{lemma}[Matched-sector weight-permutation extractor]%
-    \label{lem:paper_bnt_matched_sector_weight_equiv}
+    \label{lem:sector_bnt_matched_sector_weight_equiv}
     \lean{MPSTensor.matched_sector_weight_equiv}
     \leanok
-    \uses{lem:paper_bnt_matched_sector_weight_multiset_eq}
+    \uses{lem:sector_bnt_matched_sector_weight_multiset_eq}
     Under the hypotheses of
-    Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq}, the
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq}, the
     per-sector multiplicities agree and there is a permutation $\tau$ of
     the per-copy index set identifying the individual weights up to the
     gauge phase: for every $q$,
@@ -873,13 +873,13 @@ the substitution argument of Section~\ref{subsec:paper_bnt_substitution} below.
     This is the per-copy realisation of
     \cite[\S~II, line 1188]{Cirac2017MPDO_AnnPhys}
     ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$): the multiset equality
-    from Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} is
+    from Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} is
     upgraded to a concrete indexing between the matched $P$- and
     $Q$-copies.
 \end{lemma}
 
 \begin{proof}\leanok
-    Invoke Lemma~\ref{lem:paper_bnt_matched_sector_weight_multiset_eq} to
+    Invoke Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} to
     obtain the cardinality match and the multiset equality.
     From this multiset-map equality extract a permutation matching the
     elements pointwise (proved by induction on the cardinality).
@@ -889,7 +889,7 @@ the substitution argument of Section~\ref{subsec:paper_bnt_substitution} below.
 \end{proof}
 
 \section{Strong existential matching of unit-modulus sectors}
-\label{sec:paper_bnt_strong_match}
+\label{sec:sector_bnt_strong_match}
 
 This section lifts the weak existential matching $\exists j, \exists k$ to
 the strong existential $\forall k, \exists j$ on the original pair of BNT
@@ -914,12 +914,12 @@ basis (every sector is a unit-modulus block under the per-block
 normalization).
 
 \begin{theorem}[Strong existential matching, full-basis form]
-    \label{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
-    \uses{def:paper_bnt_cf,
-        lem:paper_bnt_combined_family_eventually_li,
-        lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    \uses{def:sector_bnt_cf,
+        lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
     Let $P, Q$ be two BNT canonical forms with the same MPV family. For
     every sector $k$ there exist a sector $j$ with matched bond dimension
     $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence after identifying
@@ -927,8 +927,8 @@ normalization).
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:paper_bnt_combined_family_eventually_li,
-        lem:paper_bnt_coeff_not_tendsto_zero_at_unit_block}
+    \uses{lem:sector_bnt_combined_family_eventually_li,
+        lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
     The contrapositive of
     \cite[\S~II.C, lines 1182--1186]{Cirac2017MPDO_AnnPhys}, combined with
     linear independence on the full family
@@ -944,25 +944,25 @@ normalization).
 \end{proof}
 
 \begin{remark}[Linear independence on the full family]
-    \label{rem:paper_bnt_strong_match_no_partial_li}
-    Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \label{rem:sector_bnt_strong_match_no_partial_li}
+    Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     consumes \emph{only} the weak existential matching theorem, which
     itself routes through the linear-independence step
-    (Lemma~\ref{lem:paper_bnt_combined_family_eventually_li}) on the
+    (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}) on the
     \emph{full} family $\{P_j\}_j \sqcup \{Q_k\}_k$, the corollary
     input of \cite[\S~II.C, lines 1131--1133]{Cirac2017MPDO_AnnPhys}, not
     on any partial union.
 \end{remark}
 
 \subsection{Bijective matching by symmetry}
-\label{subsec:paper_bnt_strong_match_bijective_symmetry}
+\label{subsec:sector_bnt_strong_match_bijective_symmetry}
 
 This subsection derives the symmetry argument of
 \cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}:
 $g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
 
 The strong existential matching theorem
-(Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+(Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
 gives one direction of the matching on the unit-modulus subset.
 Applying the same theorem once more with the roles of $P$ and $Q$
 swapped (and the trivially symmetric flip of the proportional-MPV
@@ -988,14 +988,14 @@ $\sum_q \mu_{j,q}^N \ket{V^{(N)}(P_j)}$; the non-decay output of the
 strong existential theorem is on the basis MPV states, not on the
 weighted sectors, and so does not by itself force the matched $j$ to
 carry a unit-modulus weight. That upgrade is left to the substitution
-argument of Section~\ref{subsec:paper_bnt_substitution}.
+argument of Section~\ref{subsec:sector_bnt_substitution}.
 
 \begin{theorem}[Bijective matching by symmetry]
-    \label{thm:paper_bnt_bijective_match_of_sameMPV}
+    \label{thm:sector_bnt_bijective_match_of_sameMPV}
     \lean{MPSTensor.bijective_match_of_sameMPV}
     \leanok
-    \uses{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
-        def:paper_bnt_cf}
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        def:sector_bnt_cf}
     Let $P, Q$ be two BNT canonical forms with the same MPV family. Write
     \[
         J_1(P) := \{ j \in J(P) : \exists q,\ |\mu_{j,q}| = 1 \}
@@ -1015,8 +1015,8 @@ argument of Section~\ref{subsec:paper_bnt_substitution}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
-    Apply Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
+    Apply Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     first with $(P, Q)$ and the original hypothesis to obtain a raw
     matched-sector function via classical choice, and then again with
     $(Q, P)$ and the symmetric flipped hypothesis to obtain the
@@ -1041,12 +1041,12 @@ argument of Section~\ref{subsec:paper_bnt_substitution}.
 \end{proof}
 
 \subsection{Substitution argument for the unit-modulus subset}
-\label{subsec:paper_bnt_substitution}
+\label{subsec:sector_bnt_substitution}
 
 Given the matched gauges produced by the strong existential theorem
-(Theorem~\ref{thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
+(Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
 encoded as the injection from
-Section~\ref{subsec:paper_bnt_strong_match_bijective_symmetry}, the per-block
+Section~\ref{subsec:sector_bnt_strong_match_bijective_symmetry}, the per-block
 coefficient identity of
 \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys} follows by
 substituting the per-pair gauge identity
@@ -1070,10 +1070,10 @@ Newton--Girard input behind \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPh
 The non-matched decay clause is delivered in full.
 
 \begin{lemma}[Coefficient decay for subnormal sectors]
-    \label{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+    \label{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
     \lean{MPSTensor.IsBNTCanonicalForm.coeff_tendsto_zero_of_all_weights_subnorm}
     \leanok
-    \uses{def:paper_bnt_cf}
+    \uses{def:sector_bnt_cf}
     Let $P$ be a BNT canonical form and let $j$ be a sector for which
     every copy weight is strictly subnormal, that is,
     $\lVert \mu_{j, q}\rVert < 1$ for every $q$. Then
@@ -1087,14 +1087,14 @@ The non-matched decay clause is delivered in full.
 \end{proof}
 
 \begin{theorem}[Substitution argument for the unit-modulus subset]
-    \label{thm:paper_bnt_coeff_identity_via_global_gauge}
+    \label{thm:sector_bnt_coeff_identity_via_global_gauge}
     \lean{MPSTensor.coeff_identity_via_global_gauge}
     \leanok
-    \uses{def:paper_bnt_cf,
-        thm:paper_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
-        thm:paper_bnt_bijective_match_of_sameMPV,
-        lem:paper_bnt_combined_family_eventually_li,
-        thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
+    \uses{def:sector_bnt_cf,
+        thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
+        thm:sector_bnt_bijective_match_of_sameMPV,
+        lem:sector_bnt_combined_family_eventually_li,
+        thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
     Let $P, Q$ be two BNT canonical forms generating proportional MPVs. Let
     \[
         J_1'(Q) := \{ k \in J(Q) \mid \exists q,\ \lVert \nu_{k, q}\rVert = 1 \}
@@ -1123,8 +1123,8 @@ The non-matched decay clause is delivered in full.
 
 \begin{proof}
     \leanok
-    \uses{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
-        lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    \uses{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
+        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     Fix $j_0$ and project the proportional-MPV identity onto the overlap
     with $P_{j_0}$:
     \[
@@ -1133,7 +1133,7 @@ The non-matched decay clause is delivered in full.
         \sum_k c_N^{(k)}(Q) \cdot \braket{V^{(N)}(Q_k)}{V^{(N)}(P_{j_0})}.
     \]
     On the left-hand side, the off-diagonal terms $j \neq j_0$ decay by
-    Lemma~\ref{lem:paper_bnt_cross_overlap_basis_tendsto_zero}
+    Lemma~\ref{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     (\cite[lines 1080--1091]{Cirac2017MPDO_AnnPhys}), and the diagonal
     term
     $c_N^{(j_0)}(P) \cdot (\braket{V^{(N)}(P_{j_0})}{V^{(N)}(P_{j_0})} - 1)$
@@ -1154,7 +1154,7 @@ The non-matched decay clause is delivered in full.
               cross-overlap decay gives $o(1)$.
         \item For $k \notin J_1'(Q)$, every copy weight has strict modulus
               $< 1$, so $c_N^{(k)}(Q) \to 0$ by
-              Lemma~\ref{thm:paper_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
+              Lemma~\ref{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
               combined with the uniform overlap bound from left-canonical
               normalization (\cite[lines 1815--1837]{Cirac2021Matrix}), the
               contribution decays to $0$.
@@ -1174,7 +1174,7 @@ The non-matched decay clause is delivered in full.
 \end{proof}
 
 \begin{remark}
-    Theorem~\ref{thm:paper_bnt_coeff_identity_via_global_gauge} realises
+    Theorem~\ref{thm:sector_bnt_coeff_identity_via_global_gauge} realises
     the substitution route of
     \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys}: substitute
     the per-pair gauge phases into the proportional-MPV identity, reduce
@@ -1186,7 +1186,7 @@ The non-matched decay clause is delivered in full.
 \end{remark}
 
 \subsection{Full-basis coefficient identity and global gauge}
-\label{subsec:paper_bnt_full_basis_global_gauge}
+\label{subsec:sector_bnt_full_basis_global_gauge}
 
 The preceding substitution theorem works on the unit-modulus subset. The
 following two statements record the full-basis form used by the sector-permuted
@@ -1195,10 +1195,10 @@ sector on both sides; under this normalization, the matching covers the whole
 BNT basis.
 
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
-    \label{lem:paper_bnt_coeff_identity_via_matched_mpv_phase}
+    \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     \lean{MPSTensor.coeff_identity_via_matched_mpv_phase}
     \leanok
-    \uses{def:paper_bnt_cf}
+    \uses{def:sector_bnt_cf}
     Let $P$ be a BNT canonical form, let $Q$ be a sector decomposition, and
     assume $P_{\mathrm{tot}}$ and $Q_{\mathrm{tot}}$ have the same MPV family.
     Suppose that there is a bijection
@@ -1233,13 +1233,13 @@ BNT basis.
 \end{proof}
 
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
-    \label{thm:paper_bnt_equal_global_gauge}
-    \lean{MPSTensor.ft_paper_bnt_equal_global_gauge}
+    \label{thm:sector_bnt_equal_global_gauge}
+    \lean{MPSTensor.ft_sector_bnt_equal_global_gauge}
     \leanok
-    \uses{def:paper_bnt_cf,
-        thm:paper_bnt_bijective_match_of_sameMPV,
-        lem:paper_bnt_coeff_identity_via_matched_mpv_phase,
-        lem:paper_bnt_matched_sector_weight_equiv,
+    \uses{def:sector_bnt_cf,
+        thm:sector_bnt_bijective_match_of_sameMPV,
+        lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:sector_bnt_matched_sector_weight_equiv,
         lem:tensor_from_blocks_globalGauge_conj}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
     MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
@@ -1280,13 +1280,13 @@ BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:paper_bnt_bijective_match_of_sameMPV,
-        lem:paper_bnt_coeff_identity_via_matched_mpv_phase,
-        lem:paper_bnt_matched_sector_weight_equiv,
+    \uses{thm:sector_bnt_bijective_match_of_sameMPV,
+        lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:sector_bnt_matched_sector_weight_equiv,
         lem:tensor_from_blocks_globalGauge_conj}
     The full-basis matching theorem gives $\beta$, the bond-dimension
     identifications, and the gauge-phase equivalences between $Q_k$ and
-    $P_{\beta(k)}$. Lemma~\ref{lem:paper_bnt_coeff_identity_via_matched_mpv_phase}
+    $P_{\beta(k)}$. Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     gives the eventual exact coefficient identities for the same phases
     $\zeta_k$. The normalized self-overlap limits in the BNT hypotheses force
     $|\zeta_k|=1$ for every matched sector. The matched-sector
@@ -1298,10 +1298,10 @@ BNT basis.
 \end{proof}
 
 \begin{theorem}[Literal equal-MPV gauge after sector-coordinate permutation]%
-    \label{thm:paper_bnt_equal_mps_gaugeEquiv_literal}
-    \lean{MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv_literal}
+    \label{thm:sector_bnt_equal_mps_gaugeEquiv_literal}
+    \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}
     \leanok
-    \uses{def:paper_bnt_cf}
+    \uses{def:sector_bnt_cf}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
     MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
     least one copy weight of modulus $1$. Then the total bond dimensions agree;
@@ -1320,12 +1320,12 @@ BNT basis.
     normalized BNT form of
     \cite[Corollary~II.2 and \S~II.C, lines 1189--1192]
         {Cirac2017MPDO_AnnPhys}, under the same unit-modulus-copy normalization
-    as Theorem~\ref{thm:paper_bnt_equal_global_gauge}.
+    as Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:paper_bnt_equal_global_gauge}
-    Apply Theorem~\ref{thm:paper_bnt_equal_global_gauge} to obtain the
+    \uses{thm:sector_bnt_equal_global_gauge}
+    Apply Theorem~\ref{thm:sector_bnt_equal_global_gauge} to obtain the
     flattened gauge after the sectors of $P$ have been reindexed by the
     bijection between basis blocks of $P$ and $Q$. The sector-coordinate
     permutation $\rho$, induced by this bijection, the copy permutations, and

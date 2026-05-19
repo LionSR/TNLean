@@ -24,7 +24,7 @@ which gives a fundamental theorem valid for periodic tensors directly,
 with an extra $Z$-gauge degree of freedom.
 
 % NOTE: The aperiodic Fundamental Theorem proof is now formalised on the
-% paper-faithful BNT canonical-form surface, see Chapter~\ref{ch:bnt}.
+% BNT canonical-form statements, see Chapter~\ref{ch:bnt}.
 % Lean targets: \texttt{MPSTensor.ft\_paper\_bnt\_equal\_sector\_data},
 % \texttt{MPSTensor.ft\_paper\_bnt\_equal\_global\_gauge}.
 % The literal $\mathrm{II\_cor2}$ coordinate packaging (CPSV16 lines 1184--1192)
@@ -151,9 +151,9 @@ Chapter~\ref{ch:bnt}. The literal coordinate packaging of
     {Cirac2017MPDO_AnnPhys}
 is recorded there under the unit-modulus-copy normalization.
 % Maintainer note (Lean): see the declarations
-% MPSTensor.ft_paper_bnt_equal_sector_data and
-% MPSTensor.ft_paper_bnt_equal_global_gauge, and
-% MPSTensor.ft_paper_bnt_equal_mps_gaugeEquiv_literal.
+% MPSTensor.ft_sector_bnt_equal_sector_data and
+% MPSTensor.ft_sector_bnt_equal_global_gauge, and
+% MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal.
 
 \begin{theorem}[Bond dimension equality from unit overlap]%
     \label{thm:equalMPS_dimension_from_unit_overlap}
@@ -191,7 +191,7 @@ is recorded there under the unit-modulus-copy normalization.
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:paper_bnt_equal_global_gauge}
+    \uses{thm:sector_bnt_equal_global_gauge}
     On the BNT canonical form this is the specialization of the global-gauge
     equality theorem (Chapter~\ref{ch:bnt}) to the case where $P$ and $Q$
     share a common $(g, D_k, \mu_k)$ block structure: the basis bijection
@@ -200,8 +200,8 @@ is recorded there under the unit-modulus-copy normalization.
     assembles them into the global conjugation on $\bigoplus_k \mu_k A_k$
     and $\bigoplus_k \mu_k B_k$.
     % Maintainer note (Lean): see
-    % MPSTensor.ft_paper_bnt_equal_global_gauge in
-    % TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
+    % MPSTensor.ft_sector_bnt_equal_global_gauge in
+    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
 \end{proof}
 
 \subsection{Sector multiplicities and weight recovery}%
@@ -787,7 +787,7 @@ facts used to recover the lists of weights from those power sums.
     identifying blocked physical words. It isolates the coordinate equality between
     direct and iterated blocking. The
     coordinate-grouping theorem below supplies this condition in the theorems that
-    take it as a hypothesis, so it is not a new paper-level mathematical hypothesis.
+    take it as a hypothesis, so it is not a new mathematical hypothesis.
 \end{definition}
 
 \begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
@@ -902,9 +902,9 @@ facts used to recover the lists of weights from those power sums.
     direct sum to produce the global conjugation $X$, matching the appendix
     construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
     % Maintainer note (Lean): the two theorems are
-    % MPSTensor.ft_paper_bnt_equal_sector_data and
-    % MPSTensor.ft_paper_bnt_equal_global_gauge in
-    % TNLean/MPS/FundamentalTheorem/PaperBNT/Fundamental.lean.
+    % MPSTensor.ft_sector_bnt_equal_sector_data and
+    % MPSTensor.ft_sector_bnt_equal_global_gauge in
+    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
 
     The comparison theorems above formalize only the part of this route after the
     common blocked nonzero sectors and their BNT matching data have been supplied.
@@ -929,7 +929,7 @@ facts used to recover the lists of weights from those power sums.
     Lemma~\ref{lem:common_phase_cover_of_block_matching} constructs
     such covers from BNT block-matching data. Establishing the missing
     representative BNT comparison and exact-length block-injective span remains the
-    open source-faithful passage from equality of total MPV vectors to the
+    open CPSV passage from equality of total MPV vectors to the
     componentwise power-sum identities.
 \end{remark}
 

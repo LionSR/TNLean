@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Api
-import TNLean.MPS.FundamentalTheorem.PaperBNT.WeakExistential
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
+import TNLean.MPS.FundamentalTheorem.SectorBNT.WeakExistential
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.Analysis.ConvergenceHelpers
@@ -21,7 +21,7 @@ The module has three layers:
    `EventuallyNonzeroProportionalMPV₂` with constant scalar `1`.
 2. **Lemma 2** — specialise the Phase 3 weak existential
    (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
-   `PaperBNT/WeakExistential.lean`) to the `SameMPV₂` hypothesis: some pair
+   `SectorBNT/WeakExistential.lean`) to the `SameMPV₂` hypothesis: some pair
    of basis blocks has a non-decaying cross-overlap.
 3. **Lemma 3** — the **block matching** statement: for any sector
    `j₀ : Fin P.basisCount`, the structural per-block unit-modulus witness
@@ -53,20 +53,20 @@ together with a per-sector unit-modulus existential
 `hUnitP_at_j₀ : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
 sector's coefficient is then derived inside the proof via
 `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
-(`PaperBNT/Api.lean`), now also taking the same per-block hypothesis.
+(`SectorBNT/Api.lean`), now also taking the same per-block hypothesis.
 
 These hypotheses are weaker than the older already-separated canonical-form
 hypotheses, which combined strict weight-modulus ordering with a single
 per-sector spectral-level weight. They are also weaker than the optional
-`HasEqualModulusWeightLayer` layer of `PaperBNT/EqualModulus.lean`, which would
+`HasEqualModulusWeightLayer` layer of `SectorBNT/EqualModulus.lean`, which would
 imply both bounds via the `spectral_level_dom_norm_one` +
 `spectral_level_antitone` + `phase_weight` factorisation.
 
 ## Output for Phase 4b-iii
 
 The matched gauge-phase data produced here will be consumed in Phase 4b-iii
-(matched-sector subtraction) together with `PaperBNT/DropSector.lean`
-(Phase 4a) and `PaperBNT/NewtonGirard.lean` (Phase 4b-i) to drive the
+(matched-sector subtraction) together with `SectorBNT/DropSector.lean`
+(Phase 4a) and `SectorBNT/NewtonGirard.lean` (Phase 4b-i) to drive the
 strong-induction step of the CPSV16 `II_cor2` argument.
 
 ## References
@@ -127,7 +127,7 @@ theorem SameMPV₂.toEventuallyNonzeroProportionalMPV₂
 
 The Phase 3 weak existential
 (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
-`PaperBNT/WeakExistential.lean`) immediately specialises to the
+`SectorBNT/WeakExistential.lean`) immediately specialises to the
 `SameMPV₂` hypothesis via Lemma 1.
 
 Paper anchor: CPSV16 lines 1121–1132 (Lem1, combined-family eventual LI),
@@ -187,7 +187,7 @@ the `j₀`-th `P`-block).
 * `SameMPV₂` makes both sides equal, so `P.coeff N j₀` tends to `0`,
   contradicting `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block`
   applied to the user-supplied unit-modulus witness `hUnit` via the
-  Cesàro non-decay lemma in `PaperBNT/CesaroNonDecay.lean`.
+  Cesàro non-decay lemma in `SectorBNT/CesaroNonDecay.lean`.
 
 The extracted `k₀` then satisfies (i) equal bond dimensions, via the
 contrapositive of

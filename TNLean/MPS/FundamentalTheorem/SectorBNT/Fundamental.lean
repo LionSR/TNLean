@@ -2,8 +2,8 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.CoeffIdentity
-import TNLean.MPS.FundamentalTheorem.PaperBNT.WeightEquiv
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
+import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
@@ -83,7 +83,7 @@ same MPV family, then their BNT basis sectors are bijectively matched by
 gauge-phase equivalence.  For each matched sector, the copy multiplicities
 agree and the raw copy weights agree after multiplying by the inverse of the
 gauge phase and permuting the copies. -/
-theorem ft_paper_bnt_equal_sector_dataPos
+theorem ft_sector_bnt_equal_sector_dataPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -134,7 +134,7 @@ theorem ft_paper_bnt_equal_sector_dataPos
   simpa using hpoint
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_paper_bnt_equal_sector_data
+theorem ft_sector_bnt_equal_sector_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -147,7 +147,7 @@ theorem ft_paper_bnt_equal_sector_data
       ∃ ζ : Fin Q.basisCount → ℂ, (∀ k, ‖ζ k‖ = 1) ∧
         ∀ k, ∃ τ : Fin (Q.copies k) ≃ Fin (P.copies (β k)),
           ∀ q : Fin (Q.copies k), Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ q) :=
-  ft_paper_bnt_equal_sector_dataPos
+  ft_sector_bnt_equal_sector_dataPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 /-- **Global gauge in matched flattened coordinates (CPSV16 §II.C lines 1189–1192).**
@@ -169,7 +169,7 @@ matched-coordinate presentation to a literal `GaugeEquiv P.toTensor Q.toTensor`
 is only a coordinate permutation/cast of the flattened direct sum and is
 intentionally not hidden here; the theorem exposes the explicit CPSV16 witness
 rather than an opaque existential. -/
-theorem ft_paper_bnt_equal_global_gaugePos
+theorem ft_sector_bnt_equal_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -341,7 +341,7 @@ theorem ft_paper_bnt_equal_global_gaugePos
             rw [hLeft]
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
-theorem ft_paper_bnt_equal_global_gauge
+theorem ft_sector_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
@@ -374,7 +374,7 @@ theorem ft_paper_bnt_equal_global_gauge
               (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
                 Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                   (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :=
-  ft_paper_bnt_equal_global_gaugePos
+  ft_sector_bnt_equal_global_gaugePos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
 end MPSTensor

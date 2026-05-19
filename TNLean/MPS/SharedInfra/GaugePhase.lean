@@ -161,7 +161,7 @@ theorem norm_gaugePhase_eq_one_of_irr_TP_primitive
 
 The following four lemmas record purely algebraic facts about the
 `GaugePhaseEquiv` predicate (defined in `MPS.Defs`).  They were originally
-local auxiliary lemmas in `MPS/FundamentalTheorem/PaperBNT/StrongMatch.lean` for the
+local auxiliary lemmas in `MPS/FundamentalTheorem/SectorBNT/StrongMatch.lean` for the
 bijective-matching argument, but are module-agnostic and so
 live here, next to the existing gauge-phase shared infrastructure. -/
 

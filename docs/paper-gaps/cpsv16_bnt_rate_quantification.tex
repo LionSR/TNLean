@@ -8,7 +8,7 @@
 \input{command}
 
 \title{Rate-Quantified BNT Cross-Overlap Decay\\
-       on the \leanid{PaperBNT} Sector Surface}
+       on the \leanid{SectorBNT} Sector Surface}
 \author{}
 \date{2026-05-13}
 
@@ -89,10 +89,10 @@ $j\ne k$,
 \end{align}
 together with the geometric bound~\eqref{eq:rate} for all $N$.
 
-The surviving \leanid{PaperBNT} surface does not package such constants.
+The surviving \leanid{SectorBNT} surface does not package such constants.
 It keeps the raw BNT weights in \leanid{SectorDecomposition} and records
 qualitative consequences in
-\doclink{TNLean/MPS/FundamentalTheorem/PaperBNT/Api}: the coefficient
+\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the coefficient
 bound \leanid{SectorDecomposition.norm\_coeff\_le\_copies\_of\_norm\_weight\_le\_one},
 within-family cross-decay
 \leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}, the
@@ -138,9 +138,9 @@ BNT structure and must be either imposed or established analytically.
 The analytic derivation from the transfer matrix spectral gap is the
 subject of \emph{Option~2} in the design memo
 \path{audits/2026-05-13_cpsv16_ft_path_beta_pr2_5_design.md} and is
-not addressed in this note. The current \leanid{PaperBNT} route instead
+not addressed in this note. The current \leanid{SectorBNT} route instead
 keeps the coefficient comparison and the combined-family linear
-independence in \path{TNLean/MPS/FundamentalTheorem/PaperBNT}; any future
+independence in \path{TNLean/MPS/FundamentalTheorem/SectorBNT}; any future
 rate-quantified argument should be stated against that surviving surface,
 not against the retired per-block-projection layer.
 

@@ -62,7 +62,7 @@ The proposed `IsBNTCanonicalForm` is a real improvement over the one-copy surfac
 
 ## Q6. Per-block normality fields
 
-**Verdict:** missing constraints / naming risk.  The listed fields are useful for the current overlap lemmas, but they are not a source-faithful single normality predicate.
+**Verdict:** missing constraints / naming risk.  The listed fields are useful for the current overlap lemmas, but they are not a CPSV single normality predicate.
 
 **Reference / counter-check:** CPSV16 lines 233-234 define a normal tensor by irreducibility plus a unique peripheral eigenvalue after the chosen blocking convention.  CPSV21 lines 1815-1830 describe primitive transfer operators after blocking.  Existing Lean cross-overlap lemmas use irreducibility plus left-canonical normalization, while `IsBNT` elsewhere may need an `IsNormal` witness.
 
@@ -95,7 +95,7 @@ using `P.copies_pos`, `P.weight_ne_zero`, and `geom_sum_eventually_zero`.  Also 
 
 **Verdict:** correct; the proposed structure admits this example.
 
-**Reference / counter-check:** with one basis sector, two copies, weights `(1, -1)`, choose `spectralLevel 0 = 1` and `phaseWeight = (1, -1)`.  The coefficient is `1 + (-1)^N`, exactly as in the recommendation note and CPSV16 line 301.  The companion Lean example in commit `b77532f1`, `PaperBNT/Examples.lean`, constructs this as `signFlipDecomp`.
+**Reference / counter-check:** with one basis sector, two copies, weights `(1, -1)`, choose `spectralLevel 0 = 1` and `phaseWeight = (1, -1)`.  The coefficient is `1 + (-1)^N`, exactly as in the recommendation note and CPSV16 line 301.  The companion Lean example in commit `b77532f1`, `SectorBNT/Examples.lean`, constructs this as `signFlipDecomp`.
 
 **Recommendation:** keep this example.  It validates multiplicities with equal modulus, but it does not validate the stronger claim that all paper BNT multiplicities have equal modulus.
 
@@ -196,7 +196,7 @@ structure HasEqualModulusWeightLayer (P : SectorDecomposition d) where
   weight_factor : ∀ j q, P.weight j q = spectral_level j * phase_weight j q
 ```
 
-This optional layer should not be imported by the source-faithful CPSV16 §II Step 1 theorem unless an extra equal-modulus hypothesis is explicitly intended.
+This optional layer should not be imported by the CPSV CPSV16 §II Step 1 theorem unless an extra equal-modulus hypothesis is explicitly intended.
 
 ## Compatibility notes
 
