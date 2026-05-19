@@ -24,9 +24,8 @@ The core existence theorem `exists_posSemidef_eigenvector` is proved via Brouwer
 fixed-point theorem applied to the normalization map
 `ρ ↦ E(ρ) / tr(E(ρ))` on the compact convex set of density matrices.
 
-The required density-matrix Brouwer theorem is now proved in
-`TNLean.Axioms.BrouwerFixedPointDensityMatrices` (the legacy path name is kept for
-backwards compatibility even though the file no longer introduces an axiom).
+The required density-matrix Brouwer theorem is proved in
+`TNLean.Axioms.BrouwerFixedPoint`.
 
 ## Main results
 
@@ -369,22 +368,5 @@ theorem exists_tp_data_of_irreducible
     rfl
   -- GaugeEquiv: A' matches the stated rescaled tensor.
   · convert hB_gauge using 1
-
-/-- Preferred alias for `exists_tp_data_of_irreducible` using the project's
-left-canonical terminology. -/
-theorem exists_leftCanonical_data_of_irreducible
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
-    (hA : ∃ i, A i ≠ 0) :
-    ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
-      σ.PosDef ∧ 0 < r ∧
-      (∀ i : Fin d,
-        B i = CFC.sqrt σ *
-          ((↑((Real.sqrt r)⁻¹) : ℂ) • A i) * (CFC.sqrt σ)⁻¹) ∧
-      (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
-      GaugeEquiv (d := d) (D := D)
-        (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
-  simpa using exists_tp_data_of_irreducible (A := A) hIrr hA
 
 end MPSTensor
