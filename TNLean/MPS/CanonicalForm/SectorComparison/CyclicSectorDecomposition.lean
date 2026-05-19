@@ -34,7 +34,7 @@ The file therefore
 
 The bulk of the projection-multiplicativity and orbit-lift
 arguments are internal to the period-removal step; they are not
-exposed as independent paper-level results.
+exposed as independent results of CPSV.
 
 ## References
 
@@ -114,7 +114,7 @@ section SectorOrbitLift
 The remaining theorems in this section prove that the cyclic-sector
 blocks produced by period removal are primitive and tensor-irreducible.
 These are internal lemmas that close the orbit-sum / corner-compression
-argument; they are not independent paper-level results.
+argument; they are not independent results of CPSV.
 
 The sequence of theorems proceeds through progressively weaker
 hypotheses (corner-irreducible → proj-step → fixed-algebra-rigidity

@@ -46,7 +46,7 @@ variable {d D : ℕ}
 After blocking, the canonical-form reduction writes an MPS tensor as an
 all-zero summand together with a weighted direct sum of nonzero sectors:
 `blockTensor A p ~ zeroMPSTensor d D₀ + toTensorFromBlocks μ sectors`, with
-`p > 0`.  This is the formal counterpart of the source-paper allowance
+`p > 0`.  This is the formal counterpart of the CPSV allowance
 `∑ k, D_k ≤ D`, where zero blocks may occur.
 
 The full proof chain is:
@@ -59,7 +59,7 @@ The full proof chain is:
 
 The after-blocking primitive block decomposition provides:
 - A blocking period `p > 0`
-- A trivial all-zero block of dimension `zeroTailDim`, representing the source-paper
+- A trivial all-zero block of dimension `zeroTailDim`, representing the CPSV
   allowance `∑ k, D_k ≤ D` where zero blocks may occur
 - A family of TP sector blocks
 - The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
@@ -70,7 +70,7 @@ now has a one-sided phase-class BNT construction for TP primitive irreducible
 nonzero-weight blocks, one-sided overlap data, and zero-tail sector comparison
 from finite-length span or BNT comparison hypotheses. The theorem
 `afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂`
-keeps the faithful paper order: first separate the all-zero leftover block and
+follows the CPSV order: first separate the all-zero leftover block and
 TP-gauge the irreducible nonzero-weight blocks, then remove each block's period by
 cyclic sectors.
 It deliberately does not identify that period-removal length with the later

@@ -409,19 +409,4 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- Then use `hprim_pow`.
   simpa only [MPSTensor.transferMap_blockTensor (A := A) (L := p)] using hprim_pow
 
-/-- Preferred alias for `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`
-using the project's left-canonical terminology. -/
-theorem exists_blockTensor_isPrimitive_of_leftCanonical_of_isIrreducibleTensor
-    {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D)
-    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrrT : IsIrreducibleTensor (d := d) (D := D) A)
-    (hDpos : 0 < D) :
-    ∃ p : ℕ, 0 < p ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D)
-          (blockTensor (d := d) (D := D) A p)) := by
-  simpa only using exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
-    (A := A) hLeft hIrrT hDpos
-
 end MPSTensor

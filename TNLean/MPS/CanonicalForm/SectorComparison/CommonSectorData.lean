@@ -18,7 +18,7 @@ all-zero leftover block and TP-gauge decomposition, it records the per-block
 cyclic-sector data, chooses common blocking lengths, and states the relabeled
 common-sector data needed to compare the resulting sector families.  The
 `zeroTail` variables below name the total bond dimension of the all-zero blocks,
-corresponding to the source-paper allowance `∑ k, D_k ≤ D`.
+corresponding to the CPSV allowance `∑ k, D_k ≤ D`.
 
 ## Main statements
 
@@ -281,7 +281,7 @@ theorem afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂
 
 set_option maxHeartbeats 800000 in
 -- The next theorem has a large dependent existential conclusion, matching the
--- paper data used by the later sector comparison.
+-- CPSV data used by the later sector comparison.
 
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
@@ -599,15 +599,15 @@ theorem afterBlocking_commonLengthCommonSectorData_of_reindexed
 ### What remains for the full 1606.00608 Fundamental Theorem
 
 The complete fundamental theorem should take two tensors `A, B` with `SameMPV₂ A B`
-and pass from the blocked reduction data to the paper's basis-of-normal-tensors
+and pass from the blocked reduction data to the CPSV basis-of-normal-tensors
 sector comparison. The one-sided phase-class BNT construction is available as
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; the remaining overlap/span
 data are packaged at the two-sided comparison layer.
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The comparison data are kept at the paper-level boundary: blocked-word
-relabeling, finite-length nonzero-block span comparison, and BNT sector
+The comparison data match the CPSV boundary: blocked-word relabeling,
+finite-length nonzero-block span comparison, and BNT sector
 matching.
 
 The blocked-word relabeling and common primitive irreducible nonzero-block
@@ -624,9 +624,9 @@ formal work for the completely unconditional
 
 Thus the common-period arithmetic, the blocked-word relabeling, the common
 primitive irreducible nonzero-sector families, and the abstract sector-matching
-witness are no longer the main blockers. The remaining gap is the paper-level
-derivation of the listed zero-tail, injectivity, and span/comparison facts for
-the actual sector tensors produced by the after-blocking reduction.
+witness have already been supplied. What remains is the CPSV derivation of the
+listed zero-tail, injectivity, and span/comparison facts for the actual sector
+tensors produced by the after-blocking reduction.
 -/
 
 end FundamentalTheoremAfterBlocking
