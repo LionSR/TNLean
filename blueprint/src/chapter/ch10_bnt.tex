@@ -1202,6 +1202,43 @@ global gauge. Their hypotheses explicitly require a unit-modulus copy in every
 sector on both sides; under this normalization, the matching covers the whole
 BNT basis.
 
+\begin{theorem}[Proportional sector matching with unit phases]%
+    \label{thm:sector_bnt_proportional_sector_match_witnesses}
+    \lean{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        def:gauge_phase_equiv,
+        thm:gauge_phase_mpv_scaling}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
+    eventually nonzero proportional MPV families. Assume that every sector of
+    $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
+    Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
+    equalities $\dim P_{\beta(k)}=\dim Q_k$, scalars
+    $\zeta_k\in\C$, and block gauges $X_k$ such that $|\zeta_k|=1$ and
+    \[
+        Q_k^i=\zeta_k X_k P_{\beta(k)}^i X_k^{-1}
+    \]
+    for every sector $k$ and physical index $i$. Equivalently,
+    \[
+        V^{(N)}(Q_k)_\sigma
+        =
+        \zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma
+    \]
+    for every length $N$ and word $\sigma$. This is the per-block phase
+    output of
+    \cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}; the following
+    coefficient-comparison step is separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional sector-matching theorem to obtain the bijection and
+    dimension-compatible gauge-phase equivalences. Choosing the gauges and
+    scalars gives the displayed block identities. The normalized self-overlap
+    limits of the matched BNT blocks force the chosen scalars to have modulus
+    $1$, and the MPV scalar-power identity follows from gauge-phase
+    equivalence.
+\end{proof}
+
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
     \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     \lean{MPSTensor.coeff_identity_via_matched_mpv_phase}

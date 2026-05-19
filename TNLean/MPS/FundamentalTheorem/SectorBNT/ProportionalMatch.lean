@@ -230,4 +230,81 @@ theorem ft_sector_bnt_proportional_sector_match
     obtain ⟨h, hGE, _⟩ := hβ k
     exact ⟨h, hGE⟩
 
+/-- **Proportional sector matching with explicit unit phases and block gauges.**
+
+This is the witness form of `ft_sector_bnt_proportional_sector_match`: after
+the proportional BNT block matching of CPSV16 §II.C lines 1184–1186, the
+matched gauge-phase equivalences provide actual matrices `Xblock k` and
+scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
+these are the unit phases appearing in the source text before the final
+coefficient comparison and block-diagonal gauge assembly of lines 1187–1192.
+
+The theorem intentionally stops before the raw coefficient identity.  Under
+`EventuallyNonzeroProportionalMPV₂`, that step still has to control the
+length-dependent proportionality scalar; it is not the equal-MPV coefficient
+identity from `CoeffIdentity.lean`. -/
+theorem ft_sector_bnt_proportional_sector_match_witnesses
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
+      (∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+        mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ) := by
+  classical
+  obtain ⟨β, hβ⟩ :=
+    bijective_match_of_eventuallyProportional hP hQ hUnitP hUnitQ hProp
+  let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
+    fun k => (hβ k).choose
+  let hGPE : ∀ k : Fin Q.basisCount,
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
+    fun k => (hβ k).choose_spec.1
+  let Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
+    fun k => (hGPE k).choose
+  let ζ : Fin Q.basisCount → ℂ := fun k => (hGPE k).choose_spec.choose
+  have hConj : ∀ (k : Fin Q.basisCount) (i : Fin d),
+      Q.basis k i =
+        ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+          (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+            Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)) := by
+    intro k i
+    exact (hGPE k).choose_spec.choose_spec.2 i
+  have hMpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ := by
+    intro k N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k)))
+      (B := Q.basis k) (Xblock k) (ζ k) (hConj k) N σ,
+      mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
+  have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
+    intro k
+    have hAA : Tendsto
+        (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hP.basis_normalized_self_overlap (β k)).norm
+      simpa using h1
+    have hBB : Tendsto
+        (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hQ.basis_normalized_self_overlap k).norm
+      simpa using h1
+    have hScale :=
+      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
+        (ζ := ζ k) (hMpv k)
+    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+  exact ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, hMpv⟩
+
 end MPSTensor
