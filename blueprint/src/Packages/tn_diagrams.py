@@ -141,6 +141,30 @@ def _assert_diagram_args_match_print_macros() -> None:
         )
 
 
+def _assert_peps_macros_used_in_chapter() -> None:
+    intentionally_unused: set[str] = set()
+    pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
+    source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
+    peps_macros = sorted(set(pattern.findall(source)))
+    chapter = (_SRC_DIR / "chapter/ch13a_peps_ft.tex").read_text(encoding="utf-8")
+    stale_records = sorted(intentionally_unused - set(peps_macros))
+    if stale_records:
+        raise RuntimeError(
+            "Recorded intentionally unused PEPS diagram macros are not public "
+            f"macros in tn_print.tex: {stale_records}"
+        )
+    unused = [
+        name
+        for name in peps_macros
+        if rf"\{name}" not in chapter and name not in intentionally_unused
+    ]
+    if unused:
+        raise RuntimeError(
+            "Public PEPS diagram macros must be used in Chapter 13a or recorded "
+            f"as intentionally unused: {unused}"
+        )
+
+
 _assert_diagram_args_match_print_macros()
 
 
@@ -411,6 +435,11 @@ def _main(argv: list[str] | None = None) -> int:
         help="check that Python arities match public TeX macros",
     )
     parser.add_argument(
+        "--check-peps-usage",
+        action="store_true",
+        help="check that public PEPS diagram macros are used in Chapter 13a",
+    )
+    parser.add_argument(
         "--smoke-render",
         nargs="*",
         metavar="MACRO",
@@ -421,13 +450,17 @@ def _main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    if not args.check and args.smoke_render is None:
+    if not args.check and not args.check_peps_usage and args.smoke_render is None:
         parser.print_help()
         return 0
 
     if args.check:
         _assert_diagram_args_match_print_macros()
         print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram arities")
+
+    if args.check_peps_usage:
+        _assert_peps_macros_used_in_chapter()
+        print("checked public PEPS diagram usage in Chapter 13a")
 
     if args.smoke_render is not None:
         names = args.smoke_render or list(_DIAGRAM_ARGS)

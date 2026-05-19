@@ -59,6 +59,14 @@ jobs:
       - name: Install blueprint Python dependencies
         run: python3 -m pip install -r .github/requirements/blueprint-python.txt
 
+      - name: Check tensor-network diagram macros
+        run: |
+          cd blueprint/src
+          PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
+            --check \
+            --check-peps-usage \
+            --smoke-render
+
       - name: Lint LaTeX (chktex)
         run: |
           find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
