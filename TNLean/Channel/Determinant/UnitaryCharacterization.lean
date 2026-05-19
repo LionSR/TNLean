@@ -39,14 +39,9 @@ quantum channel, determinant, unitary channel, Skolem-Noether
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
 
 /-- Column-stacking vectorization as a linear equivalence. -/
 private noncomputable def matrixVecLinearEquiv (d : ℕ) :

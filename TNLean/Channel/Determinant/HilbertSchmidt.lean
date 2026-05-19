@@ -43,21 +43,9 @@ quantum channel, determinant, Hilbert-Schmidt norm, standard basis, AM-GM
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators Kronecker Matrix.Norms.Frobenius
 open Matrix
+open ChannelDeterminant.Internal
 
 variable {d : ℕ}
-
-/-- File-local alias for the shared internal matrix-algebra model. -/
-private abbrev MatrixAlg (d : ℕ) := ChannelDeterminant.Internal.MatrixAlg d
-
-/-- File-local alias for endomorphisms of `M_d(ℂ)`. -/
-private abbrev MatrixEnd (d : ℕ) := ChannelDeterminant.Internal.MatrixEnd d
-
-/-- File-local alias for the shared basis index type. -/
-private abbrev MatrixBasisIndex (d : ℕ) := ChannelDeterminant.Internal.MatrixBasisIndex d
-
-/-- File-local alias for the shared standard basis of `M_d(ℂ)`. -/
-private noncomputable abbrev matrixSpaceBasis (d : ℕ) :=
-  ChannelDeterminant.Internal.matrixSpaceBasis d
 
 section WolfStatements
 
