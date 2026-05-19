@@ -61,7 +61,7 @@ private theorem sum_trace_mul_star_eq [NeZero D]
       simp only [Matrix.mul_assoc]
     rw [hdist, Matrix.sum_apply]
     congr 1; ext σ
-    exact entry_mul_single_mul
+    exact entry_mul_single_mul₂
       (Bᴴ * evalWord A (List.ofFn σ))
       ((evalWord A (List.ofFn σ))ᴴ * B) i k
   simp_rw [hpush]

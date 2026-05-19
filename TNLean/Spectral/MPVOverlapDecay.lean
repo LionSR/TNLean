@@ -32,7 +32,7 @@ equivalent, then the MPV overlaps decay to `0` as `N → ∞`.
 1. Use `trace_mixedTransferMap_pow_eq_mpvOverlap` to rewrite the overlap as the
    operator trace of `((mixedTransferMap A B)^N)`.
 2. Expand `LinearMap.trace` as a finite double sum over matrix units
-   `Matrix.single p q 1` using `linearMap_trace_eq_sum_apply_single`.
+   `Matrix.single p q 1` using `linearMap_trace_eq_sum_apply_single₂`.
 3. For each fixed `(p,q)`, apply the spectral-gap lemma `mixedTransfer_pow_tendsto_zero`
    to get `((mixedTransferMap A B)^N) (Matrix.single p q 1) → 0`.
 4. Extract the `(p,q)` entry using the continuous linear functional
@@ -97,7 +97,7 @@ theorem mpvOverlap_tendsto_zero
   have htraceEq : ∀ N : ℕ,
       (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)) ((mixedTransferMap A B) ^ N)
         = ∑ p : Fin D, ∑ q : Fin D, term p q N := fun N => by
-    simpa [term] using linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap A B) ^ N))
+    simpa [term] using linearMap_trace_eq_sum_apply_single₂ (T := ((mixedTransferMap A B) ^ N))
   -- Step 1: lift convergence from the sum-of-terms to the operator trace.
   have htrace :
       Filter.Tendsto

@@ -26,19 +26,15 @@ This module proves the key identity (standard in the MPS literature) expressing 
 \]
 as the trace of the $N$-th power of the mixed transfer operator.
 
-The trace-expansion helpers (`linearMap_trace_eq_sum_apply_single`,
-`entry_mul_single_mul`) are now provided by
-`TNLean.Spectral.TraceExpansion` and are also available from this module
-for backwards compatibility.
-
-## Rectangular (heterogeneous bond dimensions)
+## Rectangular trace expansion
 
 `trace_mixedTransferMap₂_pow_eq_mpvOverlap` is the rectangular analogue, where
 `A : MPSTensor d D₁` and `B : MPSTensor d D₂` may have different bond dimensions and the
 mixed transfer map acts on `Matrix (Fin D₁) (Fin D₂) ℂ`.
 
-The rectangular trace-expansion helpers (`linearMap_trace_eq_sum_apply_single₂`,
-`entry_mul_single_mul₂`) are provided by `TNLean.Spectral.TraceExpansion`.
+Both the square and rectangular proofs below use the rectangular trace-expansion helpers
+`linearMap_trace_eq_sum_apply_single₂` and `entry_mul_single_mul₂` from
+`TNLean.Spectral.TraceExpansion`.
 -/
 
 section Main
@@ -54,11 +50,11 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
       = mpvOverlap (d := d) A B N := by
   classical
   -- Expand the operator trace as a sum over matrix units.
-  rw [linearMap_trace_eq_sum_apply_single (T := ((mixedTransferMap A B) ^ N))]
+  rw [linearMap_trace_eq_sum_apply_single₂ (T := ((mixedTransferMap A B) ^ N))]
   -- Expand the iterated mixed transfer map on each matrix unit.
   simp only [mixedTransferMap_pow_apply (A := A) (B := B) (N := N)]
   -- Push the `(p,q)` entry inside the σ-sum using `Finset.sum_apply`, then
-  -- apply `entry_mul_single_mul` to simplify each summand.
+  -- apply `entry_mul_single_mul₂` to simplify each summand.
   have h1 :
       (∑ p : Fin D, ∑ q : Fin D,
           (∑ σ : Fin N → Fin d,
@@ -67,7 +63,7 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
         = ∑ p : Fin D, ∑ q : Fin D, ∑ σ : Fin N → Fin d,
             evalWord A (List.ofFn σ) p p * (evalWord B (List.ofFn σ))ᴴ q q := by
     refine Fintype.sum_congr _ _ fun p => Fintype.sum_congr _ _ fun q => ?_
-    simp only [Matrix.sum_apply, entry_mul_single_mul]
+    simp only [Matrix.sum_apply, entry_mul_single_mul₂]
   -- Reorder the triple sum so that σ is outermost.
   have hswap :
       (∑ p : Fin D, ∑ q : Fin D, ∑ σ : Fin N → Fin d,

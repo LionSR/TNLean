@@ -23,8 +23,6 @@ complex-number imports. Downstream files instantiate `𝕜 := ℂ`.
   (rectangular, general bond dimensions).
 - `entry_mul_single_mul₂`: `(p, q)` entry of `M * single p q 1 * N` equals `M p p * N q q`
   (rectangular, general).
-- `linearMap_trace_eq_sum_apply_single`: square specialization of `…single₂`.
-- `entry_mul_single_mul`: square specialization of `…mul₂`.
 -/
 
 open scoped Matrix BigOperators
@@ -86,30 +84,5 @@ lemma entry_mul_single_mul₂
   · simp
 
 end TraceExpansion
-
-section SingleEntrySquare
-
-variable {𝕜 : Type*} [CommRing 𝕜]
-
-/-- Square specialization of `linearMap_trace_eq_sum_apply_single₂`.
-
-Provided for backwards compatibility with lemmas in `MPVOverlapTrace`. -/
-lemma linearMap_trace_eq_sum_apply_single
-    {D : ℕ} [NeZero D]
-    (T : Matrix (Fin D) (Fin D) 𝕜 →ₗ[𝕜] Matrix (Fin D) (Fin D) 𝕜) :
-    (LinearMap.trace 𝕜 (Matrix (Fin D) (Fin D) 𝕜)) T
-      = ∑ p : Fin D, ∑ q : Fin D, (T (Matrix.single p q (1 : 𝕜))) p q :=
-  linearMap_trace_eq_sum_apply_single₂ T
-
-/-- Square specialization of `entry_mul_single_mul₂`.
-
-Provided for backwards compatibility with lemmas in `MPVOverlapTrace`. -/
-lemma entry_mul_single_mul
-    {D : ℕ} [NeZero D]
-    (M N : Matrix (Fin D) (Fin D) 𝕜) (p q : Fin D) :
-    (M * Matrix.single p q (1 : 𝕜) * N) p q = M p p * N q q :=
-  entry_mul_single_mul₂ M N p q
-
-end SingleEntrySquare
 
 end MPSTensor
