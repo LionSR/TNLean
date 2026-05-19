@@ -3,9 +3,9 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- The forward direction and contraction algebra are formalized. The converse
--- PEPS fundamental theorem still depends on the mathematical hypotheses listed
--- below.
+-- The contraction algebra is proved. The forward PEPS theorem is stated with
+-- the remaining bond-dimension obligation separated below, and the converse
+-- still depends on the mathematical hypotheses listed below.
 --
 -- Provability note: `IsVertexInjective` in `PEPS.Defs` is the
 -- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
@@ -39,9 +39,9 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 **Root-only.** This module is currently not imported downstream — it
 records the full statement of the PEPS Fundamental Theorem
-(arXiv:1804.04964 §3, Theorem 2) with its forward direction fully proved
-and the converse gaps documented explicitly.  See issue #1512 for the
-root-only audit.
+(arXiv:1804.04964 §3, Theorem 2), with the forward bond-dimension
+obligation and converse gaps documented explicitly.  See issue #1512 for
+the root-only audit.
 
 This file develops the Fundamental Theorem for injective PEPS on simple graphs
 (arXiv:1804.04964, Theorem 2, Section 3):
