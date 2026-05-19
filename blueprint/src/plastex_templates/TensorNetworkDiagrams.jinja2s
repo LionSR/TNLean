@@ -1,4 +1,4 @@
-name: TNMPSLocal TNMPSWord TNMPV TNTransferMap TNMPOCell TNMPOChain TNLPDO
+name: TNMPSLocal TNMPSWord TNMPV TNTransferMap TNMPOCell TNMPOChain
 {{ obj.tn_svg_html }}
 
 name: TNGaugeConjugation TNPhysicalRealization TNLinearTwist
