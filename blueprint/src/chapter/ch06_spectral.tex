@@ -115,16 +115,16 @@ mixed transfer power.
 \begin{lemma}[Trace expansion over matrix units]\label{lem:trace_expansion}
     \lean{MPSTensor.linearMap_trace_eq_sum_apply_single}
     \leanok
-    For any linear endomorphism $T$ on $\MN{D}$,
+    For any linear endomorphism $T$ on $M_{D_1 \times D_2}(\C)$,
     the operator trace can be expanded as
     \[
         \Tr(T)
         =
-        \sum_{p,q = 0}^{D-1}
+        \sum_{p=0}^{D_1-1} \sum_{q=0}^{D_2-1}
         (T(E_{pq}))_{pq},
     \]
-    where $E_{pq}$ is the matrix with $1$ in position $(p,q)$
-    and $0$ elsewhere.
+    where $E_{pq} \in M_{D_1 \times D_2}(\C)$ is the matrix with
+    $1$ in position $(p,q)$ and $0$ elsewhere.
 \end{lemma}
 
 \begin{proof}\leanok

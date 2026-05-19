@@ -88,11 +88,6 @@ The definition and basic lemmas (`frobSq`, `frobSq_nonneg`, `frobSq_eq_zero_iff`
 provided by `TNLean.Spectral.FrobeniusNorm` for general rectangular matrices.
 Below we add the square-matrix-specific lemma `frobSq_mul_le`. -/
 
-/-- `frobSq X = ∑ i j, ‖X i j‖²` (definitional; kept for backward compatibility). -/
-lemma frobSq_eq_sum (X : Matrix (Fin D) (Fin D) ℂ) :
-    frobSq X = ∑ i : Fin D, ∑ j : Fin D, ‖X i j‖ ^ 2 := rfl
-
-
 /-! ### Eigenvector iteration -/
 
 /-- If `F(v) = μ • v`, then `F^n(v) = μ^n • v`. -/
