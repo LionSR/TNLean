@@ -34,7 +34,7 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
 - References should use BibTeX entries
 
 ### PR and issue title conventions
-@codex and @claude generate inconsistent titles. Unify before merging:
+@codex, @claude, and @deepseek can generate inconsistent titles. Unify before merging:
 - **Title format**: `type(scope): description`, for example
   `feat(Wolf Chapter 6): add conditional expectation (Theorem 6.15)`.
 - **Types**: `feat` (new formalization), `fix` (mathematical or proof correction),
@@ -47,7 +47,7 @@ PRs should follow the mathlib review checklist — review for: **style**, **docu
   theorem/proposition numbers where applicable.
 - **Body**: should have `### Motivation`, `### Description`, and
   `### Testing` sections. Reference the issue number. List files changed.
-- **Clean up bot-generated titles** before merging. Codex/Claude often produce
+- **Clean up bot-generated titles** before merging. Codex, Claude, and DeepSeek often produce
   verbose or inconsistent titles like `[PR #165 follow-up] BlockedChainFT style
   cleanups and term-mode endpoint`. Rename to, for example,
   `style(MPS/Chain): BlockedChainFT term-mode endpoint and naming cleanup`.
@@ -103,13 +103,13 @@ Interpretation:
 Three SEPARATE places comments live on a PR. Must check ALL three.
 
 ### 1. Inline review comments (on specific diff lines)
-- **What**: Bugbot (cursor[bot]), Copilot, Codex (chatgpt-codex-connector), and Claude inline findings on specific lines
+- **What**: Bugbot (cursor[bot]), Copilot, Codex (chatgpt-codex-connector), Claude, and DeepSeek inline findings on specific lines
 - **API**: `gh api repos/OWNER/REPO/pulls/N/comments`
 - **NOT returned by**: `gh pr view --json comments` or `--json reviews`
 - **Key fields**: `path`, `line`, `body`, `user.login`, `in_reply_to_id`
 
 ### 2. PR-level comments (conversation thread)
-- **What**: Claude review summaries, human comments, @codex/@claude responses
+- **What**: Claude or DeepSeek review summaries, human comments, @codex/@claude/@deepseek responses
 - **API**: `gh api repos/OWNER/REPO/issues/N/comments` OR `gh pr view N --json comments`
 - **Key fields**: `body`, `author.login`, `createdAt`
 - **Watch for**: Claude sometimes embeds inline-style nits here when it can't post inline
@@ -144,7 +144,8 @@ gh api "repos/$REPO/pulls/$PR/reviews" --jq '.[] | "REVIEW [\(.user.login)] stat
 The active review-repair loop is label-gated. A pull request with
 `auto-fix-claude` or `auto-fix-codex` is already assigned to the corresponding
 auto-fix workflow. Do not add `@claude auto fix`, `@chatgpt auto fix`, or
-similar trigger comments to a PR that already has one of these labels.
+`@deepseek auto fix` trigger comments to a PR that already has one of these
+labels.
 Do not use PR replies as an auto-fix control surface for labeled PRs.
 
 In particular, a PR reply such as `@claude auto fix ...` is not the
@@ -167,17 +168,21 @@ the review-fix loop. See `docs/ci-automation.md` for the workflow details.
 
 ### When to use direct mentions
 
-Direct `@claude` / `@chatgpt` mentions are separate from labeled auto-fix.
+Direct `@claude`, `@chatgpt`, and `@deepseek` mentions are separate from
+labeled auto-fix.
 Use them only for a new delegated task where a separate branch or explicit
 one-off answer is intended.
 They are not a repair mechanism for a PR that is already on the auto-fix label
 lane.
 
-Opening an issue whose body contains `@claude` or `@chatgpt` can trigger the
-mention handler, but editing an existing issue body later does not reliably
-create a new task. Post a new issue comment when an existing issue should start
-a mention-handler task. For new issue-based work, mention comments create fresh
-work from `main`, so do not use them for ordinary nits on an existing PR branch.
+Opening an issue whose body contains `@claude`, `@chatgpt`, or `@deepseek` can
+trigger the mention handler, but editing an existing issue body later does not
+reliably create a new task. Post a new issue comment when an existing issue
+should start a mention-handler task. For new issue-based work, mention comments
+create fresh work from `main`, so do not use them for ordinary nits on an
+existing PR branch.
+The DeepSeek mention path is mention-only: it uses `deepseek/issue-<number>-...`
+branches for issue-created work and does not add an auto-fix label.
 
 ### Branch-name caveat for mention handlers
 

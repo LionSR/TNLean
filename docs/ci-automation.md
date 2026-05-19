@@ -20,6 +20,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Claude Mention Handler](#claude-mention-handler-claudeyml)
   - [Codex Mention Handler](#codex-mention-handler-codexyml)
+  - [DeepSeek Mention Handler](#deepseek-mention-handler-deepseekyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
   - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
 - [Safety Mechanisms](#safety-mechanisms)
@@ -30,6 +31,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [To enable the review-fix loop](#to-enable-the-review-fix-loop)
   - [Human intervention while auto-fix is active](#human-intervention-while-auto-fix-is-active)
   - [To ask Claude for help directly](#to-ask-claude-for-help-directly)
+  - [To ask DeepSeek for help directly](#to-ask-deepseek-for-help-directly)
 - [Commit Message Conventions](#commit-message-conventions)
 - [Permissions](#permissions)
 - [Changing the Configuration](#changing-the-configuration)
@@ -122,6 +124,13 @@ When you push to a PR branch, several things happen in parallel:
   │  │                                                              │
   │  │  Codex Mention Handler (codex.yml)                           │
   │  │  General-purpose Codex responder for ad-hoc requests.        │
+  │  └──────────────────────────────────────────────────────────────┘
+  │
+  │  ┌──────────────────────────────────────────────────────────────┐
+  │  │ Runs when someone writes "@deepseek" in a comment            │
+  │  │                                                              │
+  │  │  DeepSeek Mention Handler (deepseek.yml)                     │
+  │  │  General-purpose DeepSeek responder for ad-hoc requests.     │
   │  └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -359,6 +368,32 @@ restore the default enabled behavior.
 
 ---
 
+### DeepSeek Mention Handler (`deepseek.yml`)
+
+**What it does**: A general-purpose responder for requests that mention
+`@deepseek`. It uses the shared Claude Code wrapper in explicit `deepseek`
+provider mode, with `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL`, and the optional
+`DEEPSEEK_OPUS_MODEL` / `DEEPSEEK_SONNET_MODEL` repository variables.
+
+**When it runs**: On issue comments, PR comments, PR review comments, PR review
+bodies, and issue title/body text that contain `@deepseek`; the triggering
+author must have write access to the repository, the event sender must not be a
+bot, and the same trigger must not also mention `@claude` or `@chatgpt`.
+
+**Branch naming**: Issue-started work uses `deepseek/issue-<number>-...`
+branches. If the DeepSeek run pushes such a branch, the follow-up step opens a
+pull request against `main`.
+
+**Auto-fix labels**: The DeepSeek mention handler is mention-only. It does not
+define a third label-gated repair loop and does not add an auto-fix label to
+issue-created pull requests, even if the trigger text contains `auto fix`.
+
+**Global switch**: Set repository variable `DEEPSEEK_MENTION_ENABLED=false` to
+disable the `@deepseek` responder globally. Unset it, or set another value, to
+restore the default enabled behavior.
+
+---
+
 ### Shared CI Auto-Fix Template (`_ci-auto-fix-shared.yml`)
 
 **What it does**: A reusable workflow template called by the CI-fix and
@@ -471,18 +506,19 @@ pull-request workflow needs opt-in.
 - Adding either label directly to an issue does not trigger TNLean's auto-fix
   workflows.
 
-**General issue-started workflow behavior.** The Claude responder starts from
-issue titles, issue bodies, or issue comments that contain `@claude`, provided
-the triggering author has write access to the repository and the GitHub event
-sender is not a bot. For issue titles and issue bodies, this applies when the
-issue is opened or assigned; for comments, it applies when the comment is
-created.
+**General issue-started workflow behavior.** The mention responders start from
+issue titles, issue bodies, or issue comments that contain their exact trigger
+(`@claude`, `@chatgpt`, or `@deepseek`), provided the triggering author has
+write access to the repository and the GitHub event sender is not a bot. For
+issue titles and issue bodies, this applies when the issue is opened or
+assigned; for comments, it applies when the comment is created.
 
 **TNLean issue-started workflow behavior.** When the responder creates a pull
 request from issue work, the follow-up action scans the same triggering text for
 the magic phrase `auto[_ -]?fix`, matching `auto-fix`, `auto fix`, or `autofix`.
 If it finds one of those forms, it adds `auto-fix-claude` to the created pull
-request.
+request. The Codex responder analogously adds `auto-fix-codex`. The DeepSeek
+responder intentionally adds no auto-fix label.
 
 **Pull-request comments are different.** The `auto fix` phrase in a
 pull-request comment does not enable the label-gated auto-fix loop. A comment
@@ -552,6 +588,12 @@ resulting pull request should receive an auto-fix label. For a pull request,
 add the label or make a direct one-off request without the `auto fix` trigger
 language after the label-gated loop has stopped.
 
+### To ask DeepSeek for help directly
+
+Write a comment on any issue or PR that includes `@deepseek` followed by the
+request. Do not combine it with `@claude` or `@chatgpt` in the same triggering
+comment; only one mention-handler workflow should own a task.
+
 ---
 
 ## Commit Message Conventions
@@ -605,7 +647,12 @@ label name, update `.github/workflows/auto-fix.yml` and the
 
 ### Model
 
-All Claude-based workflows use `claude-opus-4-7`, configured via `--model` in the `claude_args` parameter of the relevant workflow file. Codex-based workflows run via `openai/codex-action` and use their own model/configuration mechanism rather than Claude `--model` flags.
+Anthropic Claude workflows use `claude-opus-4-7`, configured via `--model` in
+the `claude_args` parameter of the relevant workflow file. DeepSeek mention and
+review runs use the same wrapper in `deepseek` provider mode and select
+`deepseek-v4-pro[1m]` by default unless the repository variables override it.
+Codex-based workflows run via `openai/codex-action` and use their own
+model/configuration mechanism rather than Claude `--model` flags.
 
 ### Review providers
 
@@ -615,6 +662,7 @@ To run one or both review engines, set this repository variable:
 |---|---|---|
 | `CLAUDE_CODE_REVIEW_PROVIDERS` | JSON array string, for example `["anthropic","deepseek"]` | Selects which review jobs run in parallel for `claude-code-review.yml`. If unset, the workflow uses `CLAUDE_CODE_PROVIDER` as a single default. |
 | `CLAUDE_CODE_PROVIDER` | `anthropic` or `deepseek` | Legacy fallback provider when no multi-provider list is set. |
+| `DEEPSEEK_MENTION_ENABLED` | `false` disables; unset or any other value enables | Controls only `deepseek.yml`, the `@deepseek` mention handler. |
 
 Set `CLAUDE_CODE_REVIEW_PROVIDERS` to `["anthropic"]` to force single Anthropic review.
 Set `CLAUDE_CODE_REVIEW_PROVIDERS` to `["deepseek"]` to force only DeepSeek review.
