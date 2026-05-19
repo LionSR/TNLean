@@ -1087,7 +1087,7 @@
 	
 	]
 </span>. The stronger predicates used elsewhere in this chapter (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.19</a> and the canonical-form BNT predicate of Chapter&#160;<a href="ch-bnt.html">11</a>) bundle additional structure—left-canonical normalization, strict modulus ordering, one-copy-per-sector—which is not present in the CPSV definitions stated below. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:nt_paper">
+<div class="definition_thmwrapper theorem-style-definition" id="def:nt_cpsv">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -1101,7 +1101,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#def:nt_paper">#</a>
+    <a class="icon proof" href="ch-canonical.html#def:nt_cpsv">#</a>
     
     
     
@@ -1137,7 +1137,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:cf_paper">
+<div class="definition_thmwrapper theorem-style-definition" id="def:cf_cpsv">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -1151,7 +1151,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#def:cf_paper">#</a>
+    <a class="icon proof" href="ch-canonical.html#def:cf_cpsv">#</a>
     
     
     
@@ -1185,7 +1185,7 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:bnt_paper">
+<div class="definition_thmwrapper theorem-style-definition" id="def:bnt_cpsv">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
@@ -1199,7 +1199,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#def:bnt_paper">#</a>
+    <a class="icon proof" href="ch-canonical.html#def:bnt_cpsv">#</a>
     
     
     
@@ -1227,7 +1227,7 @@
   <div class="definition_thmcontent">
   <p>  A finite family \(\{ A_j\} _{j=1}^g\) of normal tensors, with bond dimension allowed to depend on \(j\), is a <em>basis of normal tensors</em> for \(A\) if: </p>
 <ol class="enumerate">
-  <li><p>each \(A_j\) is normal in the sense of Definition&#160;<a href="ch-canonical.html#def:nt_paper">9.2</a>; </p>
+  <li><p>each \(A_j\) is normal in the sense of Definition&#160;<a href="ch-canonical.html#def:nt_cpsv">9.2</a>; </p>
 </li>
   <li><p>for every system length \(N\) there exist coefficients \(c_j^{(N)} \in \mathbb {C}\) with </p>
 <div class="displaymath" id="a0000000651">
@@ -1259,7 +1259,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> A tensor \(A\) which is both irreducible (Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">9.12</a>) and has primitive transfer map is normal in the sense of Definition&#160;<a href="ch-canonical.html#def:nt_paper">9.2</a>. The reverse implications from the stronger predicates of Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.19</a> and of Chapter&#160;<a href="ch-bnt.html">11</a> require either the fundamental-theorem step or the algebraic-to-spectral normality equivalence; these appear in downstream chapters. </p>
+  <p> A tensor \(A\) which is both irreducible (Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">9.12</a>) and has primitive transfer map is normal in the sense of Definition&#160;<a href="ch-canonical.html#def:nt_cpsv">9.2</a>. The reverse implications from the stronger predicates of Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.19</a> and of Chapter&#160;<a href="ch-bnt.html">11</a> require either the fundamental-theorem step or the algebraic-to-spectral normality equivalence; these appear in downstream chapters. </p>
 
   </div>
 </div>
@@ -1922,7 +1922,7 @@
 <p>The Burnside-style passage from irreducible tensors to full algebra spanning is developed alongside the Wielandt material in Chapter&#160;<a href="ch-wielandt.html">8</a>; see in particular Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_action_cumulative_span">8.73</a>. </p>
 <h1 id="sec:canonical_from_primitivity">9.5 Canonical form from primitivity</h1>
 
-<p>The canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:cf_paper">9.3</a>) include an explicit hypothesis that the self-overlap \(O_{A_k A_k}(N) \to 1\) for each block. The CPSV result of this section is Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">9.17</a>: blocking an irreducible TP block by the least common multiple of its peripheral periods makes the resulting transfer map primitive, removing periodicity. </p>
+<p>The canonical form conditions (Definition&#160;<a href="ch-canonical.html#def:cf_cpsv">9.3</a>) include an explicit hypothesis that the self-overlap \(O_{A_k A_k}(N) \to 1\) for each block. The CPSV result of this section is Theorem&#160;<a href="ch-canonical.html#thm:blocking_primitivity">9.17</a>: blocking an irreducible TP block by the least common multiple of its peripheral periods makes the resulting transfer map primitive, removing periodicity. </p>
 <div class="remark_thmwrapper theorem-style-remark" id="a0000000660">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
@@ -1942,7 +1942,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Given a family of injective, left-canonical, strictly-ordered nonzero-weight blocks \((\mu _k, A_k)\), the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:cf_paper">9.3</a> can be discharged from either of two spectral hypotheses on the per-block transfer map \(\mathcal{E}_{A_k}\): a positive-definite primitive fixed point, or the peripheral-spectrum condition \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). In both cases the overlap clause \(O_{A_k A_k}(N) \to 1\) follows from the spectral-gap criterion of Chapter&#160;<a href="ch-spectral.html">7</a>. Both statements assume the blocks are already in the required normal form; they are not the arbitrary-input canonical-form existence theorem of&#160;<span class="cite">
+  <p> Given a family of injective, left-canonical, strictly-ordered nonzero-weight blocks \((\mu _k, A_k)\), the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:cf_cpsv">9.3</a> can be discharged from either of two spectral hypotheses on the per-block transfer map \(\mathcal{E}_{A_k}\): a positive-definite primitive fixed point, or the peripheral-spectrum condition \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). In both cases the overlap clause \(O_{A_k A_k}(N) \to 1\) follows from the spectral-gap criterion of Chapter&#160;<a href="ch-spectral.html">7</a>. Both statements assume the blocks are already in the required normal form; they are not the arbitrary-input canonical-form existence theorem of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
@@ -3515,7 +3515,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-ft_proof.html#def:paper_sector_data">Definition 13.6</a></li>
+          <li><a href="ch-ft_proof.html#def:sector_weight_data">Definition 13.6</a></li>
           
         </ul>
     
@@ -3836,7 +3836,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	
 	]
-</span> (Definition&#160;<a href="ch-canonical.html#def:bnt_paper">9.4</a>) is strengthened in Chapter&#160;<a href="ch-bnt.html">11</a> by multiplicity, span, and weight-norm conditions. The results below separate the after-blocking preparation of suitable blocks from the later normalized-weight BNT construction. </p>
+</span> (Definition&#160;<a href="ch-canonical.html#def:bnt_cpsv">9.4</a>) is strengthened in Chapter&#160;<a href="ch-bnt.html">11</a> by multiplicity, span, and weight-norm conditions. The results below separate the after-blocking preparation of suitable blocks from the later normalized-weight BNT construction. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="thm:common_injective_blocking_tp_primitive_irreducible_family">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -4074,7 +4074,7 @@
 <ul class="itemize">
   <li><p>\(P\) and the assembled tensor \(\bigoplus _{k=1}^{r} \mu _k B_k\) generate the same MPV family at every length, and </p>
 </li>
-  <li><p>\(P\) satisfies the canonical-form basis-of-normal-tensors conditions of Definition&#160;<a href="ch-canonical.html#def:bnt_paper">9.4</a>, together with the multiplicity, span, and weight-bound conditions used in Chapter&#160;<a href="ch-bnt.html">11</a>. </p>
+  <li><p>\(P\) satisfies the canonical-form basis-of-normal-tensors conditions of Definition&#160;<a href="ch-canonical.html#def:bnt_cpsv">9.4</a>, together with the multiplicity, span, and weight-bound conditions used in Chapter&#160;<a href="ch-bnt.html">11</a>. </p>
 </li>
 </ul>
 
