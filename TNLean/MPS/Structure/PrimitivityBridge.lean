@@ -98,20 +98,6 @@ def HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
 
 /-! ## Part 2: Derive overlap → 1 from primitivity -/
 
-/-- Alias emphasizing that `IsPrimitiveMPS.norm` is the one-sided
-trace-preserving normalization `∑ᵢ Aᵢ† Aᵢ = I`. -/
-theorem IsPrimitiveMPS.tp_gauge {d D : ℕ} [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
-    ∑ i : Fin d, (A i)ᴴ * A i = 1 :=
-  hP.norm
-
-/-- Preferred alias for `IsPrimitiveMPS.tp_gauge` using the project's left-canonical
-terminology. -/
-theorem IsPrimitiveMPS.leftCanonical {d D : ℕ} [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
-    ∑ i : Fin d, (A i)ᴴ * A i = 1 :=
-  hP.tp_gauge
-
 /-- A primitive MPS tensor has self-overlap converging to 1.
 
 This is a direct application of `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`
