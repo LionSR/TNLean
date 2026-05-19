@@ -78,9 +78,6 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSGaugeCancellation": "",
     "TNPEPSLocalGaugeExtraction": "",
     "TNPEPSGlobalConsistency": "",
-    "TNMPOCellDiagram": "tensor top bottom",
-    "TNMPOChainDiagram": "",
-    "TNLPDODiagram": "",
 }
 
 
