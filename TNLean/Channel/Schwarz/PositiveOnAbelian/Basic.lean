@@ -86,9 +86,10 @@ noncomputable def blockQuadraticForm {n D : ℕ}
 /-- A map is **positive on commuting block families** if it preserves
 block-quadratic-form positivity whenever the image family is pairwise commuting.
 
-This is the concrete stand-in for "the restriction to a commutative
-`*`-subalgebra is completely positive" that is sufficient for the normal-input
-Schwarz argument used later in the project. -/
+This formulation records the exact condition used by the normal-input Schwarz
+argument: after applying the map to each block, the resulting family commutes
+pairwise, and positivity of the original block quadratic form remains
+positivity of the transformed form. -/
 def IsPositiveOnCommuting
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ {n : ℕ} (a : Matrix (Fin n) (Fin n) (Matrix (Fin D) (Fin D) ℂ)),
