@@ -42,6 +42,10 @@ Every PR body must contain three sections:
 - Why this change is needed (1--3 bullets).
 - For mathematical work, cite the paper theorem, blueprint entry, or issue
   that fixes the scope.
+- For mathematical work whose source is in `blueprint/`, `Papers/`, or
+  `Notes/`, give the source file path, line range,
+  theorem/lemma/definition/equation label when available, and a short quotation
+  of the source statement.
 
 ### Description
 - What was changed: files added/modified, definitions introduced, lemmas proved.
@@ -122,11 +126,12 @@ MPS/Symmetry: twisted tensor and on-site symmetry
 Label with **area** + **arXiv paper** + **topic** as applicable.
 
 The body must identify the mathematical source precisely. Include the paper or
-book citation, the theorem/lemma/definition label when available, the repository
-file path and line number when the source is in `blueprint/`, `Papers/`, or
-`Notes/`, and either a short quotation or a precise paraphrase of the claim.
-Avoid AI vocabulary, software-process metaphors, and local shorthand when
-describing the mathematics.
+book citation and, when the source is in `blueprint/`, `Papers/`, or `Notes/`,
+the repository file path, line range, theorem/lemma/definition/equation label
+when available, and a short quotation of the source statement. Use a precise
+paraphrase only when the source is not available as repository text. Avoid AI
+vocabulary, software-process metaphors, and local shorthand when describing the
+mathematics.
 
 ### Multi-part work
 

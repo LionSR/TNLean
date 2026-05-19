@@ -13,6 +13,8 @@ Examples:
 <!-- Why this change is needed (1--3 bullets). -->
 <!-- Write in mathematical prose. Avoid AI or process slang in public mathematical discussion. -->
 <!-- For mathematical work, cite the source theorem, blueprint label, or issue. -->
+<!-- If the source is in blueprint/, Papers/, or Notes/, give the source file,
+     line range, theorem/lemma/equation label when available, and a short quote. -->
 
 -
 
