@@ -8,7 +8,7 @@ import TNLean.PiAlgebra.CanonicalFormSepAux
 # Separated canonical-form hypotheses and block separation
 
 This file proves the core block-separation result from the separated canonical-form hypotheses
-defined in `CanonicalFormSepAux`, and then rebuilds legacy canonical-form formulations on top.
+defined in `CanonicalFormSepAux`, and then derives the bundled canonical-form formulations.
 
 ## Main results
 

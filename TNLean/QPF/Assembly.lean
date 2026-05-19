@@ -6,7 +6,7 @@ import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
 import TNLean.MPS.Core.CPPrimitive
 -- Needed for `IsChannel.exists_posSemidef_fixedPoint`.
--- We import it directly here instead of relying on a legacy transitive route.
+-- The fixed-point existence theorem is used explicitly below.
 import TNLean.Channel.FixedPoint.Cesaro
 
 /-!
