@@ -448,8 +448,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_edgeMiddleConfigToOpenMiddleConfig,
         def:peps_edgeOpenMiddleConfigToMiddleConfig}
     For fixed edge-boundary data, ordinary middle configurations are equivalent
-    to compatible open-middle configurations. This packages the finite
-    reindexing used when the inserted matrix is the identity.
+    to compatible open-middle configurations. This is the finite reindexing
+    used when the inserted matrix is the identity.
 \end{definition}
 
 \begin{definition}[Edge insertion coefficient]%
@@ -581,7 +581,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     If \(A\) is vertex-injective, then for every edge \(e=(u,v)\), the two
     endpoint tensors together with the tensor obtained by blocking all vertices
     outside \(u\) and \(v\) form an injective three-site MPS. This is the
-    formal version of the assertion after the diagram
+    precise assertion after the diagram
     \(\textup{eq:block\_to\_mps}\) in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
@@ -728,9 +728,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     steps in that argument are recorded separately as
     Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization} and
     \ref{thm:peps_physicalToVirtualInsertion}.
-    In the paper route, once the post-absorption insertion equality of
-    Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} has supplied the
-    factorized local gauge hypothesis, injectivity on the star neighborhood
+    After Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} supplies
+    the factorized local gauge hypothesis, injectivity on the star neighborhood
     provides a left inverse that isolates the local edge gauges:
     \begin{center}
         \TNPEPSLocalGaugeExtraction
@@ -993,7 +992,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The local left inverse $\Psi_v$, the realization map $T \mapsto O_T$,
     the split at one incident edge, and the partition
     $V = \{u\} \sqcup (V \setminus \{u,v\}) \sqcup \{v\}$ isolate the local
-    data needed for the edge-centered reduction of
+    indices and maps needed for the edge-centered reduction of
     \cite[Section~3]{Molnar2018NormalPEPS}. The middle-region blocked coefficient is
     constructed by the preceding definitions; the remaining local-gauge step is
     the comparison with the corresponding three-site injective chain.
