@@ -27,36 +27,13 @@
 
 \newcommand{\TNMPSWord}[4]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{tnL}{(0,0)}
-    \TN@tensordot{tnM}{(1.45,0)}
-    \TN@tensordot{tnR}{(4.20,0)}
-    \TN@upleg{tnL}{\TN@physleglen}
-    \TN@upleg{tnM}{\TN@physleglen}
-    \TN@upleg{tnR}{\TN@physleglen}
-    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
-    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
-    \TN@leftleg{tnL}{0.8}
-    \draw[tn leg] (tnL.east) -- (tnM.west);
-    \draw[tn leg] (tnM.east) -- ++(0.62,0);
-    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
-    \TN@rightleg{tnR}{0.8}
-    \node at (2.82,0) {$\cdots$};
-    \node at (2.82,-0.56) {$#4$};
+    \TN@openMPSword{tn}{#2}{#3}{#4}
   \end{tikzpicture}%
 }
 
 \newcommand{\TNMPV}[4]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{tnL}{(0,0)}
-    \TN@tensordot{tnM}{(1.45,0)}
-    \TN@tensordot{tnR}{(4.20,0)}
-    \TN@upleg{tnL}{\TN@physleglen}
-    \TN@upleg{tnM}{\TN@physleglen}
-    \TN@upleg{tnR}{\TN@physleglen}
-    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
-    \TN@uplabel{tnR}{\TN@physlabeloff}{#3}
-    \draw[tn leg] (-0.48,0) rectangle (4.68,-0.44);
-    \node at (2.82,0) {$\cdots$};
+    \TN@blockedMPSword{tn}{#2}{#3}
   \end{tikzpicture}%
 }
 
@@ -89,26 +66,7 @@
 
 \newcommand{\TNMPOChain}[6]{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{tnL}{(0,0)}
-    \TN@tensordot{tnM}{(1.45,0)}
-    \TN@tensordot{tnR}{(4.20,0)}
-    \TN@upleg{tnL}{\TN@physleglen}
-    \TN@downleg{tnL}{\TN@physleglen}
-    \TN@upleg{tnM}{\TN@physleglen}
-    \TN@downleg{tnM}{\TN@physleglen}
-    \TN@upleg{tnR}{\TN@physleglen}
-    \TN@downleg{tnR}{\TN@physleglen}
-    \TN@uplabel{tnL}{\TN@physlabeloff}{#2}
-    \TN@downlabel{tnL}{\TN@physlabeloff}{#3}
-    \TN@uplabel{tnR}{\TN@physlabeloff}{#4}
-    \TN@downlabel{tnR}{\TN@physlabeloff}{#5}
-    \TN@leftleg{tnL}{0.8}
-    \draw[tn leg] (tnL.east) -- (tnM.west);
-    \draw[tn leg] (tnM.east) -- ++(0.62,0);
-    \draw[tn leg] ($(tnR.west)+(-0.62,0)$) -- (tnR.west);
-    \TN@rightleg{tnR}{0.8}
-    \node at (2.82,0) {$\cdots$};
-    \node at (2.82,-1.02) {$#6$};
+    \TN@openMPOword{tn}{#2}{#3}{#4}{#5}{#6}
   \end{tikzpicture}%
 }
 
@@ -451,48 +409,18 @@
 
 \newcommand{\TNPEPSEdgeInsertedCoeff}{%
   \begin{tikzpicture}[tn picture]
-    \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-    \TN@tensordot{edgeCoeffL}{(1.00,0)}
-    \TN@tensordot{edgeCoeffM}{(2.00,0)}
-    \TN@tensordot{edgeCoeffR}{(3.00,0)}
-    \foreach \n in {edgeCoeffL,edgeCoeffM,edgeCoeffR} {
-      \TN@upleg{\n}{0.46}
-    }
-    \TN@opdotabove{edgeCoeffX}{(1.50,0)}{X}
-    \node at ($(edgeCoeffL.south)+(0,-0.30)$) {$A'_1$};
-    \node at ($(edgeCoeffM.south)+(0,-0.30)$) {$A'_3$};
-    \node at ($(edgeCoeffR.south)+(0,-0.30)$) {$A'_2$};
+    \TN@boxedThreeSiteInsertion{edgeCoeff}{A'_1}{A'_3}{A'_2}{X}
   \end{tikzpicture}%
 }
 
 \newcommand{\TNPEPSThreeSiteInsertionComparison}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{insAone}{(1.00,0)}
-      \TN@tensordot{insAtwo}{(2.00,0)}
-      \TN@tensordot{insAthree}{(3.00,0)}
-      \foreach \n in {insAone,insAtwo,insAthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotabove{insX}{(1.50,0)}{X}
-      \node at ($(insAone.south)+(0,-0.30)$) {$A_1$};
-      \node at ($(insAtwo.south)+(0,-0.30)$) {$A_2$};
-      \node at ($(insAthree.south)+(0,-0.30)$) {$A_3$};
+      \TN@boxedThreeSiteInsertion{insA}{A_1}{A_2}{A_3}{X}
     \end{scope}
     \node at (4.20,0) {$=$};
     \begin{scope}[xshift=4.90cm]
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{insBone}{(1.00,0)}
-      \TN@tensordot{insBtwo}{(2.00,0)}
-      \TN@tensordot{insBthree}{(3.00,0)}
-      \foreach \n in {insBone,insBtwo,insBthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotabove{insY}{(1.50,0)}{Y}
-      \node at ($(insBone.south)+(0,-0.30)$) {$B_1$};
-      \node at ($(insBtwo.south)+(0,-0.30)$) {$B_2$};
-      \node at ($(insBthree.south)+(0,-0.30)$) {$B_3$};
+      \TN@boxedThreeSiteInsertion{insB}{B_1}{B_2}{B_3}{Y}
     \end{scope}
   \end{tikzpicture}%
 }
@@ -500,49 +428,15 @@
 \newcommand{\TNPEPSInsertionPhysicalRealization}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{realAone}{(1.00,0)}
-      \TN@tensordot{realAtwo}{(2.00,0)}
-      \TN@tensordot{realAthree}{(3.00,0)}
-      \foreach \n in {realAone,realAtwo,realAthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotabove{realX}{(1.50,0)}{X}
-      \node at ($(realAone.south)+(0,-0.30)$) {$A_1$};
-      \node at ($(realAtwo.south)+(0,-0.30)$) {$A_2$};
-      \node at ($(realAthree.south)+(0,-0.30)$) {$A_3$};
+      \TN@boxedThreeSiteInsertion{realA}{A_1}{A_2}{A_3}{X}
     \end{scope}
     \node at (3.75,0) {$=$};
     \begin{scope}[xshift=4.15cm]
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{realLone}{(1.00,0)}
-      \TN@tensordot{realLtwo}{(2.00,0)}
-      \TN@tensordot{realLthree}{(3.00,0)}
-      \foreach \n in {realLone,realLtwo,realLthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotleft{realOone}{(1.00,0.72)}{O_1}
-      \draw[tn phys leg] (realLone.north) -- (realOone.south);
-      \draw[tn phys leg, red] (realOone.north) -- ++(0,0.36);
-      \node at ($(realLone.south)+(0,-0.30)$) {$A_1$};
-      \node at ($(realLtwo.south)+(0,-0.30)$) {$A_2$};
-      \node at ($(realLthree.south)+(0,-0.30)$) {$A_3$};
+      \TN@boxedThreeSitePhysicalOne{realL}{A_1}{A_2}{A_3}{O_1}
     \end{scope}
     \node at (7.95,0) {$=$};
     \begin{scope}[xshift=8.35cm]
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{realRone}{(1.00,0)}
-      \TN@tensordot{realRtwo}{(2.00,0)}
-      \TN@tensordot{realRthree}{(3.00,0)}
-      \foreach \n in {realRone,realRtwo,realRthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotleft{realOtwo}{(2.00,0.72)}{O_2}
-      \draw[tn phys leg] (realRtwo.north) -- (realOtwo.south);
-      \draw[tn phys leg, red] (realOtwo.north) -- ++(0,0.36);
-      \node at ($(realRone.south)+(0,-0.30)$) {$A_1$};
-      \node at ($(realRtwo.south)+(0,-0.30)$) {$A_2$};
-      \node at ($(realRthree.south)+(0,-0.30)$) {$A_3$};
+      \TN@boxedThreeSitePhysicalTwo{realR}{A_1}{A_2}{A_3}{O_2}
     \end{scope}
   \end{tikzpicture}%
 }
@@ -550,49 +444,15 @@
 \newcommand{\TNPEPSPhysicalToVirtualInsertion}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{physVirtLone}{(1.00,0)}
-      \TN@tensordot{physVirtLtwo}{(2.00,0)}
-      \TN@tensordot{physVirtLthree}{(3.00,0)}
-      \foreach \n in {physVirtLone,physVirtLtwo,physVirtLthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotleft{physVirtOone}{(1.00,0.72)}{O_1}
-      \draw[tn phys leg] (physVirtLone.north) -- (physVirtOone.south);
-      \draw[tn phys leg, red] (physVirtOone.north) -- ++(0,0.36);
-      \node at ($(physVirtLone.south)+(0,-0.30)$) {$B_1$};
-      \node at ($(physVirtLtwo.south)+(0,-0.30)$) {$B_2$};
-      \node at ($(physVirtLthree.south)+(0,-0.30)$) {$B_3$};
+      \TN@boxedThreeSitePhysicalOne{physVirtL}{B_1}{B_2}{B_3}{O_1}
     \end{scope}
     \node at (3.75,0) {$=$};
     \begin{scope}[xshift=4.15cm]
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{physVirtRone}{(1.00,0)}
-      \TN@tensordot{physVirtRtwo}{(2.00,0)}
-      \TN@tensordot{physVirtRthree}{(3.00,0)}
-      \foreach \n in {physVirtRone,physVirtRtwo,physVirtRthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotleft{physVirtOtwo}{(2.00,0.72)}{O_2}
-      \draw[tn phys leg] (physVirtRtwo.north) -- (physVirtOtwo.south);
-      \draw[tn phys leg, red] (physVirtOtwo.north) -- ++(0,0.36);
-      \node at ($(physVirtRone.south)+(0,-0.30)$) {$B_1$};
-      \node at ($(physVirtRtwo.south)+(0,-0.30)$) {$B_2$};
-      \node at ($(physVirtRthree.south)+(0,-0.30)$) {$B_3$};
+      \TN@boxedThreeSitePhysicalTwo{physVirtR}{B_1}{B_2}{B_3}{O_2}
     \end{scope}
     \node at (7.95,0) {$\Longrightarrow$};
     \begin{scope}[xshift=8.40cm]
-      \draw[tn leg] (0.40,0) rectangle (3.50,-0.46);
-      \TN@tensordot{physVirtWone}{(1.00,0)}
-      \TN@tensordot{physVirtWtwo}{(2.00,0)}
-      \TN@tensordot{physVirtWthree}{(3.00,0)}
-      \foreach \n in {physVirtWone,physVirtWtwo,physVirtWthree} {
-        \TN@upleg{\n}{0.46}
-      }
-      \TN@opdotabove{physVirtW}{(1.50,0)}{W}
-      \node at ($(physVirtWone.south)+(0,-0.30)$) {$B_1$};
-      \node at ($(physVirtWtwo.south)+(0,-0.30)$) {$B_2$};
-      \node at ($(physVirtWthree.south)+(0,-0.30)$) {$B_3$};
+      \TN@boxedThreeSiteInsertion{physVirtW}{B_1}{B_2}{B_3}{W}
     \end{scope}
   \end{tikzpicture}%
 }
@@ -814,12 +674,7 @@
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
       \clip (-0.25,0.75) rectangle (2.25,3.25);
-      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
-      \foreach \x in {0,0.5,...,3} {
-        \foreach \y in {0,0.5,...,3} {
-          \node[tn tensor dot] at (\x,\y) {};
-        }
-      }
+      \TN@normalPepsGrid
       \draw[red, fill=red!35, thick, rounded corners=1mm]
         (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
         (1.7,2.7) -- (0.3,2.7) -- cycle;
@@ -828,12 +683,7 @@
     \node at (2.85,2.00) {and};
     \begin{scope}[xshift=3.55cm]
       \clip (-0.25,0.75) rectangle (2.25,3.25);
-      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
-      \foreach \x in {0,0.5,...,3} {
-        \foreach \y in {0,0.5,...,3} {
-          \node[tn tensor dot] at (\x,\y) {};
-        }
-      }
+      \TN@normalPepsGrid
       \draw[red, fill=red!35, thick, rounded corners=1mm]
         (0.3,1.3) rectangle (1.7,2.7);
       \node at (1.00,2.00) {$S$};
@@ -844,12 +694,7 @@
 \newcommand{\TNPEPSNormalRegionT}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \clip (-0.25,0.25) rectangle (3.25,3.25);
-    \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
-    \foreach \x in {0,0.5,...,3} {
-      \foreach \y in {0,0.5,...,3} {
-        \node[tn tensor dot] at (\x,\y) {};
-      }
-    }
+    \TN@normalPepsGrid
     \filldraw[draw=red, fill=red!35, thick, rounded corners=1mm,
       even odd rule]
       (0.3,2.7) -- (1.2,2.7) -- (1.2,1.7) -- (2.7,1.7) --
@@ -863,13 +708,9 @@
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
       \clip (-0.25,-0.25) rectangle (3.25,3.25);
-      \draw[step=0.5, tn leg] (-1,-1) grid (4,4);
+      \TN@normalPepsGridLines
       \draw[line width=0.6mm, green!65!black] (1,1.5) -- (1.5,1.5);
-      \foreach \x in {0,0.5,...,3} {
-        \foreach \y in {0,0.5,...,3} {
-          \node[tn tensor dot] at (\x,\y) {};
-        }
-      }
+      \TN@normalPepsGridDots
       \draw[red, thick, rounded corners=1mm] (0.3,1.3) rectangle (1.2,2.7);
       \draw[blue, thick, rounded corners=1mm] (1.3,1.7) rectangle (2.7,0.8);
     \end{scope}
