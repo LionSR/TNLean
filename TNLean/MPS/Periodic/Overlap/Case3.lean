@@ -36,9 +36,10 @@ variable {d D : ℕ}
 
 /-- Nonzero sector dimensions propagate one step around a cyclic sector decomposition.
 
-This part uses only the currently exposed cyclic-sector interface: if `dim u ≠ 0` then the
-projection `P u` is nonzero by the `N = 0` trace identity. If `P (u + 1)` were zero,
-the cyclic relation `E†(P (u + 1)) = P u` would force `P u = 0`, contradiction. -/
+The proof uses only the projection-shift and trace identities in a cyclic sector decomposition:
+if `dim u ≠ 0` then the projection `P u` is nonzero by the `N = 0` trace identity. If
+`P (u + 1)` were zero, the cyclic relation `E†(P (u + 1)) = P u` would force `P u = 0`,
+contradiction. -/
 private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
     [NeZero D] (A : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -75,10 +76,10 @@ private lemma sectorDim_ne_zero_succ_of_cyclicSectorDecomp
 
 /-- Missing cyclic gauge-transport statement.
 
-This is the precise interface still needed for Equation A.8 of arXiv:1708.00029. From the
-current `IsCyclicSectorDecomp` data one knows the projection shift
-`E†(P (k+1)) = P k` and the blocked trace realization of each compressed sector.
-To prove this statement, the cyclic-sector construction must additionally expose
+This is the precise interface still needed for Equation A.8 of arXiv:1708.00029. From
+`IsCyclicSectorDecomp` one knows the projection shift `E†(P (k+1)) = P k` and the
+blocked trace realization of each compressed sector. To prove this statement, the
+cyclic-sector construction must additionally expose
 one-site corner transition tensors, for example the compressions of
 `P k * A i * P (k+1)` and `Q l * B i * Q (l+1)`, together with an identification
 of their `m`-fold cyclic products with the supplied `blocksA k` and `blocksB l`.
@@ -275,12 +276,11 @@ for each sector `u`, normality gives a repetition length after which
 `decompositionMap` to contract the repeated blocked products and recover
 per-site proportionality with a single telescoped phase.
 
-The current chain library provides `decompositionMap` /
-`exists_rightInverse` in `MPS/Chain/OneSidedInverse.lean` and the two-site
-proportionality theorem `tensor_proportional` in
-`MPS/Chain/TensorEquality.lean`, but it does not yet provide the `m`-factor
-cyclic contraction theorem needed to pass from `hBlockMatch` to a global
-`RepeatedBlocks` witness. -/
+The available chain inputs are `decompositionMap` / `exists_rightInverse` in
+`MPS/Chain/OneSidedInverse.lean` and the two-site proportionality theorem
+`tensor_proportional` in `MPS/Chain/TensorEquality.lean`. The remaining mathematical
+input is the `m`-factor cyclic contraction theorem that passes from `hBlockMatch` to a
+global `RepeatedBlocks` witness. -/
 private lemma repeatedBlocks_of_blockedSectorGaugePhase
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -318,9 +318,8 @@ private lemma repeatedBlocks_of_blockedSectorGaugePhase
   -- Missing ingredient: a reusable `m`-factor cyclic contraction theorem,
   -- built from `decompositionMap`, that upgrades the per-sector blocked
   -- gauge data in `hBlockMatch` to one global phase and one global gauge.
-  -- The current library only provides the two-site theorem
-  -- `tensor_proportional`, so the full-cycle step from Eqs. A.14-A.18 of
-  -- arXiv:1708.00029 still has to be formalized separately.
+  -- The available two-site theorem is `tensor_proportional`; the missing step is
+  -- the full-cycle contraction from Eqs. A.14-A.18 of arXiv:1708.00029.
   sorry
 
 /-- **Per-site proportionality** (Equation A.14 of arXiv:1708.00029):
