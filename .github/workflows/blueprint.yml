@@ -45,6 +45,14 @@ jobs:
       - name: Install leanblueprint
         run: pip install -r .github/requirements/blueprint-python.txt
 
+      - name: Check tensor-network diagram macros
+        run: |
+          cd blueprint/src
+          PYTHONPATH=Packages python3 Packages/tn_diagrams.py \
+            --check \
+            --check-peps-usage \
+            --smoke-render
+
       - name: Write status badges
         run: python3 scripts/write_badges.py
 
