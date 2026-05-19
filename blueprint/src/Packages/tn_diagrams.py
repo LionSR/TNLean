@@ -41,7 +41,6 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNTransferMap": "tensor",
     "TNMPOCell": "tensor top bottom",
     "TNMPOChain": "tensor top_left bottom_left top_right bottom_right length",
-    "TNLPDO": "upper lower bond top bottom",
     "TNGaugeConjugation": "left physical right",
     "TNPhysicalRealization": "virtual physical",
     "TNLinearTwist": "twist label",
