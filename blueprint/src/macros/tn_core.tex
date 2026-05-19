@@ -172,6 +172,52 @@
   \draw[tn phys leg, red] (#1O.north) -- ++(0,0.36);%
 }
 
+\newcommand{\TN@pepsFiveSitePatch}[1]{%
+  \TN@tensordot{#1one}{(0,0)}
+  \TN@tensordot{#1two}{(1.00,0)}
+  \TN@tensordot{#1three}{(1.50,1.00)}
+  \TN@tensordot{#1four}{(0.60,1.50)}
+  \TN@tensordot{#1five}{(-0.60,1.50)}
+  \foreach \n in {#1one,#1two,#1three,#1four,#1five} {
+    \TN@upleg{\n}{0.50}
+  }
+  \draw[tn leg] (#1one) -- (#1two) -- (#1three) --
+    (#1four) -- (#1five) -- (#1one);
+  \draw[tn leg] (#1two) -- (#1five);%
+}
+
+\newcommand{\TN@pepsFiveSitePatchLabels}[6]{%
+  \node at ($(#1one.south)+(0,-0.25)$) {$#2$};
+  \node at ($(#1two.south)+(0,-0.25)$) {$#3$};
+  \node at ($(#1three.south)+(0,-0.25)$) {$#4$};
+  \node at ($(#1four.south)+(0,-0.25)$) {$#5$};
+  \node at ($(#1five.south)+(0,-0.25)$) {$#6$};%
+}
+
+\newcommand{\TN@twoInjectiveInsertionPair}[4]{%
+  \TN@tensordot{#1one}{(0,0)}
+  \TN@tensordot{#1two}{(2.50,0)}
+  \TN@upleg{#1one}{0.42}
+  \TN@upleg{#1two}{0.42}
+  \TN@opdotabove{#1X}{(1.25,0.45)}{#4}
+  \draw[tn leg] (#1one) to[out=30,in=180] (#1X.west);
+  \draw[tn leg] (#1X.east) to[out=0,in=150] (#1two);
+  \draw[tn leg] (#1one) to[bend right=12] (#1two);
+  \draw[tn leg] (#1one) to[bend right=38] (#1two);
+  \node at (1.25,-0.08) {$\vdots$};
+  \node at ($(#1one.south)+(0,-0.30)$) {$#2$};
+  \node at ($(#1two.south)+(0,-0.30)$) {$#3$};%
+}
+
+\newcommand{\TN@threeLegTensorFan}[2]{%
+  \TN@tensordot{#1}{(0,0)}
+  \TN@upleg{#1}{0.42}
+  \draw[tn leg] (#1) -- ++(0.75,0.45);
+  \draw[tn leg] (#1) -- ++(0.78,-0.05);
+  \draw[tn leg] (#1) -- ++(0.65,-0.55);
+  \node at ($(#1.south)+(0,-0.30)$) {$#2$};%
+}
+
 \newcommand{\TN@normalPepsGridLines}{%
   \draw[step=0.5, tn leg] (-1,-1) grid (4,4);%
 }

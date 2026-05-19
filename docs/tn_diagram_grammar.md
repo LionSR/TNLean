@@ -123,5 +123,9 @@ by a diagram before reading the surrounding proof.
 - Repeated chain and square-lattice diagrams should be built from the layout
   commands in `blueprint/src/macros/tn_core.tex`, so that the public command
   records the tensor network rather than a coordinate calculation.
+- Repeated PEPS graph motifs, such as a five-site edge patch, a two-injective
+  comparison pair, or a trivalent residual-gauge vertex, should likewise be
+  factored through private layout commands before being used in theorem-level
+  public diagrams.
 - Private glyphs and lengths belong in `blueprint/src/macros/tn_core.tex`.
   Chapter-facing diagrams belong in `blueprint/src/macros/tn_print.tex`.
