@@ -103,7 +103,7 @@ section HSContraction
 /-- Right-sum identity: `∑_σ ‖X · w_B(σ)†‖_F² = ‖X‖_F²` for rectangular X.
 
 The proof uses trace cycling: `frobSq(v M†) = tr(M† M · v† v).re`, then sum over σ. -/
-private lemma sum_frobSq_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
+private lemma sum_frobSq_right_rect (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (v : Matrix (Fin D₁) (Fin D₂) ℂ) (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (v * (evalWord B (List.ofFn σ))ᴴ) = frobSq v := by
   -- Trace-cycle: tr((v M†)† (v M†)) = tr(M† M v† v)
@@ -124,7 +124,7 @@ private lemma sum_frobSq_right (B : MPSTensor d D₂) (hB : ∑ i : Fin d, (B i)
     word_conjTranspose_mul_sum B hB n, Matrix.one_mul]
 
 /-- Word Frobenius norm sum for square matrices: `∑_σ ‖w_K(σ)‖_F² = D₁`. -/
-private lemma sum_frobSq_words (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
+private lemma sum_frobSq_words_rect (K : MPSTensor d D₁) (hK : ∑ i : Fin d, (K i)ᴴ * K i = 1)
     (n : ℕ) :
     ∑ σ : Fin n → Fin d, frobSq (evalWord K (List.ofFn σ)) = (D₁ : ℝ) := by
   simp_rw [frobSq_trace]
@@ -157,9 +157,9 @@ private lemma hs_contraction_rect [NeZero D₁] [NeZero D₂]
     ((by rw [matToES_finset_sum]; exact norm_sum_le _ _) : ‖matToES _‖ ≤ _).trans
       (Finset.sum_le_sum fun σ _ => norm_matToES_rect_mul_le _ _)
   have h_A : ∑ σ : Fin n → Fin d, fA σ ^ 2 = (D₁ : ℝ) := by
-    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words A hA_norm n
+    simp_rw [hfA_def, norm_matToES_sq]; exact sum_frobSq_words_rect A hA_norm n
   have h_B : ∑ σ : Fin n → Fin d, fB σ ^ 2 = frobSq X := by
-    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_right B hB_norm X n
+    simp_rw [hfB_def, norm_matToES_sq]; exact sum_frobSq_right_rect B hB_norm X n
   calc ‖matToES _‖ ^ 2
       ≤ (∑ σ : Fin n → Fin d, fA σ * fB σ) ^ 2 :=
         pow_le_pow_left₀ (norm_nonneg _) h_chain 2
