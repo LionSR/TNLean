@@ -17,7 +17,7 @@ so that all sectors can be compared in a uniform canonical form.
 
 The structure and its derived theorems are intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
-not paper-level results of 1606.00608 or 2011.12127.
+not independent results of 1606.00608 or 2011.12127.
 -/
 
 namespace MPSTensor
@@ -34,7 +34,7 @@ unit-weight sum of reblocked cyclic sectors.
 
 This is an auxiliary construction: the flattened common-sector family is derived
 canonically from these data, and all attached theorems are properties of the
-record's fields.  There is no paper-level theorem that this record directly
+record's fields.  There is no theorem in CPSV that this record directly
 instantiates; it is consumed by the normal canonical-form existence proof chain. -/
 structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) where
@@ -351,7 +351,7 @@ The remaining theorems compare the directly-blocked and iteratively-blocked
 forms of each nonzero-weight block.  They verify that the canonical
 identification of blocked physical words is compatible with the consecutive
 grouping of digits.  These are internal to the common-blocking construction
-and do not correspond to independent paper-level results.
+and do not correspond to independent results of CPSV.
 -/
 
 /-- The canonical identification from the common blocked alphabet to one iterated blocked alphabet

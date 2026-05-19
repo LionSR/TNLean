@@ -151,7 +151,7 @@ theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sam
 
 This combines the positive-length theorem with the single additional
 length-zero datum needed to remove the all-zero leftover blocks. It does not assert that the
-leftover dimensions agree automatically; that remains a separate paper-level length-zero
+leftover dimensions agree automatically; that remains a separate CPSV length-zero
 condition for the unconditional after-blocking sector comparison. -/
 theorem nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
     {d D₁ D₂ rA rB : ℕ}
