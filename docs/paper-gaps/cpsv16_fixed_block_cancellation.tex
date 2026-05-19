@@ -65,7 +65,7 @@ The formal boundary in \cite{Cirac2016MPDO_arXiv} is narrower:
     \right)
     =r_A+1.
 \end{align}
-The surviving \leanid{PaperBNT} API does not currently contain this
+The surviving \leanid{SectorBNT} API does not currently contain this
 single-block linear-independence formulation.  It supplies the stronger
 full-family mechanism
 \leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li},
@@ -84,9 +84,9 @@ The exact fixed-block contradiction step is still open:
 \end{align}
 No current Lean declaration carries the retired fixed-right or fixed-left
 one-copy fixed-block names.  The mathematical target remains the
-source-faithful fixed-block cancellation at
+CPSV fixed-block cancellation at
 \cite[lines~1181--1185]{Cirac2016MPDO_arXiv}, now to be stated on the
-\leanid{PaperBNT} sector surface.
+\leanid{SectorBNT} sector surface.
 
 The earlier conditional helpers requiring combined-family linear independence
 (\path{_phase_sum_li}) and the residual-span variants have been retired in
@@ -112,7 +112,7 @@ prove an exact eventual leading-coefficient identity
     c_N\,\mu^B_{0}{}^N\,\zeta^N=(\mu^A_{0})^N
 \end{align}
 for all sufficiently large $N$ from the proportionality identity and the BNT
-linear independence on the source-faithful fixed-block family.  Once this
+linear independence on the CPSV fixed-block family.  Once this
 identity is available, the proportional case can clone the equal-MPV tail
 subtraction and induction architecture, without assuming linear independence of
 all residual blocks on both sides.

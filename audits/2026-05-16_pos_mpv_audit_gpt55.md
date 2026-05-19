@@ -1,32 +1,32 @@
-# Audit: feasibility of arbitrary-input PaperBNT supplier path via `SameMPV₂Pos`
+# Audit: feasibility of arbitrary-input SectorBNT supplier path via `SameMPV₂Pos`
 
 **Date:** 2026-05-16  
 **Scope:** scout only; no Lean source edits.  
-**Target stack:** `TNLean/MPS/FundamentalTheorem/PaperBNT/`, plus the arbitrary-input reduction chain under `TNLean/MPS/CanonicalForm/Reduction.lean`, `TNLean/MPS/CanonicalForm/Existence.lean`, and `TNLean/MPS/CanonicalForm/SectorComparison/*.lean`.
+**Target stack:** `TNLean/MPS/FundamentalTheorem/SectorBNT/`, plus the arbitrary-input reduction chain under `TNLean/MPS/CanonicalForm/Reduction.lean`, `TNLean/MPS/CanonicalForm/Existence.lean`, and `TNLean/MPS/CanonicalForm/SectorComparison/*.lean`.
 
 ## Executive summary
 
-The `PaperBNT` equal-MPV stack does **not** materially use the `N = 0` case of `SameMPV₂` in the mathematical argument.  The few proof-body uses of `hEqual N σ` occur inside eventual/asymptotic arguments, or in symmetry wrappers.  I found no `hEqual 0` call and no hidden `funext`/`mpv_ext` proof in `PaperBNT` that needs length zero.
+The `SectorBNT` equal-MPV stack does **not** materially use the `N = 0` case of `SameMPV₂` in the mathematical argument.  The few proof-body uses of `hEqual N σ` occur inside eventual/asymptotic arguments, or in symmetric theorem variants.  I found no `hEqual 0` call and no hidden `funext`/`mpv_ext` proof in `SectorBNT` that needs length zero.
 
 Refactoring the equal-FT path from `SameMPV₂` to `SameMPV₂Pos` is therefore feasible and low-to-moderate risk.  The only non-mechanical work is converting three pointwise/all-`N` proof subblocks to eventual/positive-length subblocks:
 
 1. `DominantMatch.lean`: the overlap identity currently stated for all `N`.
 2. `CoeffIdentity.lean`: two coefficient-substitution identities currently proved by `Filter.Eventually.of_forall`.
-3. symmetric wrappers in `StrongMatch.lean`: change `fun N σ => ...` to `fun N hN σ => ...`.
+3. symmetric theorem variants in `StrongMatch.lean`: change `fun N σ => ...` to `fun N hN σ => ...`.
 
-The arbitrary-input chain already exposes the key positive-length interface: after zero-tail removal it naturally produces `SameMPV₂Pos`, not full `SameMPV₂`.  The closest existing theorem is `unconditional_commonPrimitiveIrreducibleBlocks` in `CommonSectorTransport.lean`, which gives common blocked nonzero parts with `SameMPV₂Pos` and TP/primitive/irreducible blocks.  What is still missing for a full arbitrary-input `PaperBNT` supplier is not primarily the `N = 0` issue; it is:
+The arbitrary-input chain already exposes the key positive-length interface: after zero-tail removal it naturally produces `SameMPV₂Pos`, not full `SameMPV₂`.  The closest existing theorem is `unconditional_commonPrimitiveIrreducibleBlocks` in `CommonSectorTransport.lean`, which gives common blocked nonzero parts with `SameMPV₂Pos` and TP/primitive/irreducible blocks.  What is still missing for a full arbitrary-input `SectorBNT` supplier is not primarily the `N = 0` issue; it is:
 
 * packaging a one-sided version (or extracting one side) from the two-sided common-sector theorem;
 * adding a finite common injective reblocking and transporting the positive-length MPV equality;
-* satisfying the `PaperBNT.Supplier` normalization inputs `‖μ k‖ ≤ 1` and `∃ k, ‖μ k‖ = 1` without changing exact positive-length MPVs;
+* satisfying the `SectorBNT.Supplier` normalization inputs `‖μ k‖ ≤ 1` and `∃ k, ‖μ k‖ = 1` without changing exact positive-length MPVs;
 * handling all-zero inputs / empty nonzero block families;
 * if the result is intended to feed the current equal-FT theorems, supplying the per-block unit witnesses required by those FT theorem statements.
 
-My recommendation is **Option C in implementation form**: add `SameMPV₂Pos` variants as the primary/core equal-FT theorems, and keep the current `SameMPV₂` theorems as thin compatibility wrappers.  This preserves existing callers while enabling the arbitrary-input supplier path to use the paper-faithful positive-length equality relation.
+My recommendation is **Option C in implementation form**: add `SameMPV₂Pos` variants as the primary equal-FT theorems, and keep the current `SameMPV₂` theorem statements as derived corollaries.  This preserves existing callers while enabling the arbitrary-input supplier path to use the CPSV-compatible positive-length equality relation.
 
 ---
 
-## 1. Inventory of `SameMPV₂` usage in `PaperBNT`
+## 1. Inventory of `SameMPV₂` usage in `SectorBNT`
 
 ### 1.1 Code-level usages
 
@@ -48,18 +48,18 @@ My recommendation is **Option C in implementation form**: add `SameMPV₂Pos` va
 | `CoeffIdentity.lean:137` | local `hStateEq` | proof-body direct use | `simpa ... using hEqual N σ`. |
 | `CoeffIdentity.lean:217` | `coeff_identity_via_global_gauge` | hypothesis type | Wrapper coefficient identity takes `hEqual`. |
 | `CoeffIdentity.lean:276` | local `hStateEq` | proof-body direct use | `simpa ... using hEqual N σ`. |
-| `Fundamental.lean:92` | `ft_paper_bnt_equal_sector_data` | hypothesis type | Top-level sector-data theorem takes `hEqual`. |
-| `Fundamental.lean:101` | `ft_paper_bnt_equal_sector_data` | proof call | Passes `hEqual` to `bijective_match_of_sameMPV`. |
-| `Fundamental.lean:107` | `ft_paper_bnt_equal_sector_data` | proof call | Passes `hEqual` to `coeff_identity_via_global_gauge`. |
-| `Fundamental.lean:161` | `ft_paper_bnt_equal_global_gauge` | hypothesis type | Global-gauge witness theorem takes `hEqual`. |
-| `Fundamental.lean:190` | `ft_paper_bnt_equal_global_gauge` | proof call | Passes `hEqual` to `bijective_match_of_sameMPV`. |
-| `Fundamental.lean:217` | `ft_paper_bnt_equal_global_gauge` | proof call | Passes `hEqual` to `coeff_identity_via_matched_mpv_phase`. |
-| `FundamentalCoord.lean:93` | `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses` | hypothesis type | Witness bundle takes `hEqual`. |
-| `FundamentalCoord.lean:123` | `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses` | proof call | Passes `hEqual` to `ft_paper_bnt_equal_global_gauge`. |
-| `FundamentalCoord.lean:149` | `ft_paper_bnt_equal_mps_gaugeEquiv` | hypothesis type | Matched-coordinate gauge theorem takes `hEqual`. |
-| `FundamentalCoord.lean:167` | `ft_paper_bnt_equal_mps_gaugeEquiv` | proof call | Passes `hEqual` to witness theorem. |
-| `FundamentalCoord.lean:466` | `ft_paper_bnt_equal_mps_gaugeEquiv_literal` | hypothesis type | Literal cast-of-`P.toTensor` theorem takes `hEqual`. |
-| `FundamentalCoord.lean:479` | `ft_paper_bnt_equal_mps_gaugeEquiv_literal` | proof call | Passes `hEqual` to witness theorem. |
+| `Fundamental.lean:92` | `ft_sector_bnt_equal_sector_data` | hypothesis type | Top-level sector-data theorem takes `hEqual`. |
+| `Fundamental.lean:101` | `ft_sector_bnt_equal_sector_data` | proof call | Passes `hEqual` to `bijective_match_of_sameMPV`. |
+| `Fundamental.lean:107` | `ft_sector_bnt_equal_sector_data` | proof call | Passes `hEqual` to `coeff_identity_via_global_gauge`. |
+| `Fundamental.lean:161` | `ft_sector_bnt_equal_global_gauge` | hypothesis type | Global-gauge witness theorem takes `hEqual`. |
+| `Fundamental.lean:190` | `ft_sector_bnt_equal_global_gauge` | proof call | Passes `hEqual` to `bijective_match_of_sameMPV`. |
+| `Fundamental.lean:217` | `ft_sector_bnt_equal_global_gauge` | proof call | Passes `hEqual` to `coeff_identity_via_matched_mpv_phase`. |
+| `FundamentalCoord.lean:93` | `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` | hypothesis type | Witness bundle takes `hEqual`. |
+| `FundamentalCoord.lean:123` | `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` | proof call | Passes `hEqual` to `ft_sector_bnt_equal_global_gauge`. |
+| `FundamentalCoord.lean:149` | `ft_sector_bnt_equal_mps_gaugeEquiv` | hypothesis type | Matched-coordinate gauge theorem takes `hEqual`. |
+| `FundamentalCoord.lean:167` | `ft_sector_bnt_equal_mps_gaugeEquiv` | proof call | Passes `hEqual` to witness theorem. |
+| `FundamentalCoord.lean:466` | `ft_sector_bnt_equal_mps_gaugeEquiv_literal` | hypothesis type | Literal cast-of-`P.toTensor` theorem takes `hEqual`. |
+| `FundamentalCoord.lean:479` | `ft_sector_bnt_equal_mps_gaugeEquiv_literal` | proof call | Passes `hEqual` to witness theorem. |
 | `Supplier.lean:140` | `exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` | conclusion type | Prepared-block supplier returns full `SameMPV₂`. |
 | `Supplier.lean:168` | local `hSame` | local type | Uses `collapsedBntSectorDecomp_sameMPV₂`, exact for prepared blocks. |
 
@@ -86,7 +86,7 @@ These are descriptive only and have no proof dependency, but they should be upda
 
 ### 2.1 Search result for explicit `N = 0` uses
 
-I searched for direct patterns such as `hEqual 0`, `hSame 0`, and related uses in `TNLean/MPS/FundamentalTheorem/PaperBNT/`.  There is **no proof-body `hEqual 0` use** in `PaperBNT`.  The only match was a doc-comment sentence in `DominantMatch.lean:169`.
+I searched for direct patterns such as `hEqual 0`, `hSame 0`, and related uses in `TNLean/MPS/FundamentalTheorem/SectorBNT/`.  There is **no proof-body `hEqual 0` use** in `SectorBNT`.  The only match was a doc-comment sentence in `DominantMatch.lean:169`.
 
 ### 2.2 Direct proof-body uses
 
@@ -126,7 +126,7 @@ hEqual : SameMPV₂Pos P.toTensor Q.toTensor
 
 rather than full `SameMPV₂ P.toTensor Q.toTensor`.
 
-**Type-signature updates.** About 11 equal-FT theorem statements in `PaperBNT` should change, plus one new converter theorem:
+**Type-signature updates.** About 11 equal-FT theorem statements in `SectorBNT` should change, plus one new converter theorem:
 
 1. `exists_nondecaying_overlap_pair_of_sameMPV`
 2. `exists_block_match_of_sameMPV`
@@ -134,26 +134,26 @@ rather than full `SameMPV₂ P.toTensor Q.toTensor`.
 4. `bijective_match_of_sameMPV`
 5. `coeff_identity_via_matched_mpv_phase`
 6. `coeff_identity_via_global_gauge`
-7. `ft_paper_bnt_equal_sector_data`
-8. `ft_paper_bnt_equal_global_gauge`
-9. `ft_paper_bnt_equal_mps_gaugeEquiv_witnesses`
-10. `ft_paper_bnt_equal_mps_gaugeEquiv`
-11. `ft_paper_bnt_equal_mps_gaugeEquiv_literal`
+7. `ft_sector_bnt_equal_sector_data`
+8. `ft_sector_bnt_equal_global_gauge`
+9. `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
+10. `ft_sector_bnt_equal_mps_gaugeEquiv`
+11. `ft_sector_bnt_equal_mps_gaugeEquiv_literal`
 
-The existing `SameMPV₂.toEventuallyNonzeroProportionalMPV₂` can be kept for compatibility; add a sibling theorem for `SameMPV₂Pos` rather than deleting it.
+The existing `SameMPV₂.toEventuallyNonzeroProportionalMPV₂` can be kept as a derived theorem; add a sibling theorem for `SameMPV₂Pos` rather than deleting it.
 
 **Body updates.** Approximately 6 direct proof-body call sites need an added positive-length proof or eventification:
 
 * `DominantMatch.lean:139`: replace converter.
 * `DominantMatch.lean:258`: add `0 < N` or eventual identity.
-* `StrongMatch.lean:209`, `338`: symmetric `SameMPV₂Pos` wrapper.
+* `StrongMatch.lean:209`, `338`: symmetric `SameMPV₂Pos` theorem variant.
 * `CoeffIdentity.lean:137`, `276`: pass `0 < N` in the eventual coefficient-substitution proof.
 
 **Difficulty.** Low-to-moderate.  The only nontrivial patch is making the overlap/coefficient equalities eventual instead of pointwise all-`N`.  The needed positivity is trivial from `atTop` tails (`N ≥ 1`) or from existing strict inequalities `N > N₀` after possibly increasing `N₀`.
 
-**Pros.** Most paper-faithful: the FT does not pretend that the unobservable empty chain fixes the bond dimension.  It directly matches the zero-tail output of the arbitrary-input reduction chain.
+**Pros.** Closest to the CPSV argument: the FT does not pretend that the unobservable empty chain fixes the bond dimension.  It directly matches the zero-tail output of the arbitrary-input reduction chain.
 
-**Cons.** Breaks existing callers unless wrappers are added; theorem names containing `sameMPV` become mildly misleading if their hypothesis is `SameMPV₂Pos`.
+**Cons.** Breaks existing callers unless derived corollaries are added; theorem names containing `sameMPV` become mildly misleading if their hypothesis is `SameMPV₂Pos`.
 
 ### Option B: keep `SameMPV₂`, build supplier with a no-zero-block hypothesis or extension trick
 
@@ -167,11 +167,11 @@ There are two conceivable variants:
 * The no-zero-tail hypothesis excludes exactly the arbitrary-input cases that motivated this audit.
 * A zero-tail summand is not a valid `IsBNTCanonicalForm` sector: its tensor is all zero, fails left-canonical normalization in positive dimension, and cannot satisfy the nonzero-weight sector-data contract.
 * Padding the BNT tensor by an external zero block would require a new theorem surface that says "BNT plus zero tail", not the current `IsBNTCanonicalForm P` FT surface.
-* The resulting theorem would still be less source-faithful than simply ignoring the degenerate empty-chain coefficient.
+* The resulting theorem would still be less aligned with CPSV than simply ignoring the degenerate empty-chain coefficient.
 
 **Cost/risk.** Medium-to-high, and it leaves the main conceptual mismatch intact.
 
-### Option C: dual-form FT theorems (`SameMPV₂Pos` core + `SameMPV₂` wrappers)
+### Option C: dual-form FT theorems (`SameMPV₂Pos` primary statements + `SameMPV₂` corollaries)
 
 This is my recommended implementation strategy.
 
@@ -182,7 +182,7 @@ theorem exists_block_match_of_sameMPVPos ...
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) : ...
 ```
 
-Then keep the existing `SameMPV₂` theorem names as wrappers:
+Then keep the existing `SameMPV₂` theorem names as corollaries:
 
 ```lean
 theorem exists_block_match_of_sameMPV ...
@@ -194,7 +194,7 @@ The same pattern applies upward through `StrongMatch`, `CoeffIdentity`, `Fundame
 
 **Why this is best.** It gives the arbitrary-input supplier path the positive-length theorem it needs, keeps current callers stable, and allows a later cleanup to decide whether to rename the Pos variants as canonical.
 
-**Effort estimate.** About 200-350 LoC for the FT refactor including wrappers and doc updates.  Risk is low-to-moderate; most failures should be local type mismatches.
+**Effort estimate.** About 200-350 LoC for the FT refactor including corollaries and doc updates.  Risk is low-to-moderate; most failures should be local type mismatches.
 
 ---
 
@@ -226,7 +226,7 @@ So the premise in the task is correct: full `SameMPV₂` remembers the total bon
 | `SectorComparison/TPPrimitiveReduction.lean:130` | `exists_tp_primitive_blockDecomp_after_blocking` | Produces `p > 0`, zero tail, and TP primitive blocks after blocking, with nonzero weights and positive dimensions. | Statement does not provide tensor irreducibility for the blocked blocks; docs explicitly note blocking irreducibility is not automatic here. |
 | `SectorComparison/CyclicSectorDecomposition.lean:590` | `exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` | For a TP irreducible block, after period removal gives primitive irreducible sector blocks. | One block at a time; used by common-sector family machinery. |
 | `SectorComparison/CommonBlockedCyclicSectorConstruction.lean:200` | `exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors` | Packages per-block cyclic-sector data into one common blocked sector family. | One-sided, but lower-level than the final arbitrary-input theorem. |
-| `SectorComparison/CommonSectorTransport.lean:624` | `unconditional_commonPrimitiveIrreducibleBlocks` | For two tensors with `SameMPV₂ A B`, produces common `p > 0`, zero-tail equations, `SameMPV₂Pos` from each blocked tensor to its nonzero part, `SameMPV₂Pos` between nonzero parts, and TP/primitive/irreducible blocks with positive dimensions and nonzero weights. | Closest existing arbitrary-input chain.  It is two-sided and does not yet supply injectivity or PaperBNT normalization. |
+| `SectorComparison/CommonSectorTransport.lean:624` | `unconditional_commonPrimitiveIrreducibleBlocks` | For two tensors with `SameMPV₂ A B`, produces common `p > 0`, zero-tail equations, `SameMPV₂Pos` from each blocked tensor to its nonzero part, `SameMPV₂Pos` between nonzero parts, and TP/primitive/irreducible blocks with positive dimensions and nonzero weights. | Closest existing arbitrary-input chain.  It is two-sided and does not yet supply injectivity or SectorBNT normalization. |
 
 ### 4.3 Pairwise sector-comparison pieces
 
@@ -260,7 +260,7 @@ The closest path would be:
    * `exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible` (`NormalityChain.lean:193`), and
    * `tp_primitive_irreducible_extra_blocking` (`PrimitiveBlocks.lean:203`) to preserve TP/primitive/irreducible under the extra positive blocking.
 3. Transport weights and positive-length equality through the extra common blocking using `sameMPV₂Pos_blockTensor` and `sameMPV₂Pos_toTensorFromBlocks_blockPower` from `Core/BlockingInfrastructure.lean:222` and `:240`.
-4. Feed the prepared family to `PaperBNT.Supplier.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` (`Supplier.lean:127`).
+4. Feed the prepared family to `SectorBNT.Supplier.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` (`Supplier.lean:127`).
 
 The unresolved inputs at step 4 are the weight normalization assumptions:
 
@@ -283,19 +283,19 @@ There is also an all-zero edge case: if the stripped nonzero family is empty, `I
 
 **Files likely touched:**
 
-* `TNLean/MPS/Defs.lean` or `PaperBNT/DominantMatch.lean` for helper lemmas:
+* `TNLean/MPS/Defs.lean` or `SectorBNT/DominantMatch.lean` for helper lemmas:
   * `SameMPV₂.toSameMPV₂Pos`
   * `SameMPV₂Pos.symm`
   * `SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂`
-* `PaperBNT/DominantMatch.lean`
-* `PaperBNT/StrongMatch.lean`
-* `PaperBNT/CoeffIdentity.lean`
-* `PaperBNT/Fundamental.lean`
-* `PaperBNT/FundamentalCoord.lean`
+* `SectorBNT/DominantMatch.lean`
+* `SectorBNT/StrongMatch.lean`
+* `SectorBNT/CoeffIdentity.lean`
+* `SectorBNT/Fundamental.lean`
+* `SectorBNT/FundamentalCoord.lean`
 
-**Risk:** low-to-moderate.  No mathematical obstruction found.  The main Lean risk is eventifying equalities currently proved with `Filter.Eventually.of_forall` and avoiding stale theorem names / wrappers.
+**Risk:** low-to-moderate.  No mathematical obstruction found.  The main Lean risk is eventifying equalities currently proved with `Filter.Eventually.of_forall` and avoiding stale theorem names or derived corollaries.
 
-### 5.2 Conditional arbitrary-input PaperBNT supplier
+### 5.2 Conditional arbitrary-input SectorBNT supplier
 
 If scoped as a conditional supplier that assumes or obtains normalized weights and excludes the all-zero case:
 
@@ -306,12 +306,12 @@ Likely components:
 * one-sided extraction theorem from `unconditional_commonPrimitiveIrreducibleBlocks` or a factored one-sided version: 150-250 LoC;
 * finite common injective reblocking for TP/primitive/irreducible families: 200-350 LoC;
 * positive-length MPV transport through the extra blocking: 100-200 LoC;
-* call to `PaperBNT.Supplier.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` plus packaging as `SameMPV₂Pos (blockTensor A p) P.toTensor`: 100-200 LoC;
+* call to `SectorBNT.Supplier.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` plus packaging as `SameMPV₂Pos (blockTensor A p) P.toTensor`: 100-200 LoC;
 * docs/audit/blueprint updates: 50-150 LoC.
 
 **Risk:** medium.  Most ingredients exist, but the dependent reindexing and additional blocking over finite families will be tedious.
 
-### 5.3 Unconditional arbitrary-input PaperBNT supplier
+### 5.3 Unconditional arbitrary-input SectorBNT supplier
 
 If the goal is a truly unconditional theorem for every `A : MPSTensor d D`, with exact positive-length MPV equality to a normalized `IsBNTCanonicalForm`:
 
@@ -326,9 +326,9 @@ Remaining blockers:
 
 ### 5.4 Recommended next PR sequence
 
-1. **Add `SameMPV₂Pos` FT variants and wrappers** (Option C).  This directly removes the zero-tail / `N = 0` blocker and is well-scoped.
+1. **Add `SameMPV₂Pos` FT variants and derived corollaries** (Option C).  This directly removes the zero-tail / `N = 0` blocker and is well-scoped.
 2. **Add a small one-sided positive-length supplier skeleton** that stops at TP/primitive/irreducible blocks and explicitly states the missing normalization/injectivity inputs if necessary.
-3. **Add finite common injective reblocking** for a prepared TP/primitive/irreducible family and feed it into `PaperBNT.Supplier` under explicit normalization assumptions.
+3. **Add finite common injective reblocking** for a prepared TP/primitive/irreducible family and feed it into `SectorBNT.Supplier` under explicit normalization assumptions.
 4. Only after that, decide whether the normalization problem should be handled by extra theorem hypotheses, a proportional-MPV supplier, or a revised normalized-canonical-form surface.
 
-**Bottom line:** the `SameMPV₂ → SameMPV₂Pos` refactor is feasible and should be done.  It removes the zero-tail obstacle cleanly.  It does not, by itself, complete the arbitrary-input PaperBNT supplier; the remaining hard part is normalized prepared-block data, especially exact-MPV-compatible weight normalization.
+**Bottom line:** the `SameMPV₂ → SameMPV₂Pos` refactor is feasible and should be done.  It removes the zero-tail obstacle cleanly.  It does not, by itself, complete the arbitrary-input SectorBNT supplier; the remaining hard part is normalized prepared-block data, especially exact-MPV-compatible weight normalization.

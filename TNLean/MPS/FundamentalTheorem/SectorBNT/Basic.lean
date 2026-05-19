@@ -34,7 +34,7 @@ CPSV16 §II.A line 246 (which is global) nor in CPSV21 §III.2 lines 1846–1884
 copy coefficients) — is **not** a structural field of `IsBNTCanonicalForm`.
 The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
 `exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
-`ft_paper_bnt_equal_*`) take the per-block witness as an explicit
+`ft_sector_bnt_equal_*`) take the per-block witness as an explicit
 hypothesis at the theorem level, keeping the canonical-form predicate
 minimal and the line-1182 implicit convention local to the theorems
 that actually need it.
@@ -45,7 +45,7 @@ condition on the raw sector weights `P.weight j q`.  CPSV16
 use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not
 require `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order
 on the moduli of distinct BNT basis elements.  The audit memo
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` collects
+`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` collects
 the counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that
 motivate keeping the equal-modulus layer out of the core predicate; all of
 them are admitted by the line-246 normalization fields below (every weight
@@ -53,9 +53,9 @@ has modulus `≤ 1`, and at least one copy of one basis sector has unit
 modulus).
 
 An optional equal-modulus weight layer is provided separately as
-`HasEqualModulusWeightLayer` in `PaperBNT/EqualModulus.lean`.  Some
+`HasEqualModulusWeightLayer` in `SectorBNT/EqualModulus.lean`.  Some
 downstream estimates may consume that layer; it is not part of the
-source-faithful core.
+core BNT predicate.
 
 ## References
 
@@ -100,7 +100,7 @@ i.e. CPSV16 §II's two-layer BNT display (lines 271–301) and CPSV21
 Definition 4.3 (lines 1846–1884) with **raw** `μ_{j,q}` entries and
 coefficient `∑_q μ_{j,q}^N`.
 
-The audit `audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md`
+The audit `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
 records the counter-examples that motivate keeping equal-modulus/spectral
 data out of this core predicate.
 -/
@@ -144,7 +144,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   choose `|μ_k| ≤ 1`"; reinvoked in the body of the FT proof at line 1244
   ("the assumed normalization `|μ_{jq}| ≤ 1` … implies that `𝔼^N` converges").
   This convention admits all counter-examples of the prior audit
-  (`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md`):
+  (`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`):
   `C ⊕ D` (weights `(1, 1)`), `C ⊕ (-C)` (weights `(1, -1)`),
   `C ⊕ (1/2)C` (weights `(1, 1/2)`), and `C ⊕ (-C) ⊕ (1/2)C`. -/
   weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),

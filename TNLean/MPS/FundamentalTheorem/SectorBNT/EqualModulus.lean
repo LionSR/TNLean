@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.MPS.FundamentalTheorem.PaperBNT.Basic
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 
 /-!
 # Optional equal-modulus weight layer for BNT canonical forms
@@ -15,9 +15,9 @@ factoring the raw sector weights as `P.weight j q = λ_j · ν_{j,q}`.
 
 This layer captures the **sub-class** of BNT canonical forms in which every
 sector's copies share a common modulus.  It is NOT part of the
-source-faithful BNT predicate `IsBNTCanonicalForm` in
-`PaperBNT/Basic.lean`; see the audit memo
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4 for
+core BNT predicate `IsBNTCanonicalForm` in
+`SectorBNT/Basic.lean`; see the audit memo
+`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4 for
 the counter-example `C ⊕ (1/2)C` (a single BNT basis element with coefficient
 `1 + (1/2)^N` whose copies have unequal moduli, so no `λ_j` factorization
 with unit `ν_{j,q}` is possible).
@@ -53,8 +53,8 @@ factoring `P.weight j q = spectral_level j · phase_weight j q`.
 
 It captures the sub-class of BNT canonical forms in which every sector's
 copies share a common modulus.  It is NOT required by, nor part of, the
-core BNT predicate `IsBNTCanonicalForm` (see `PaperBNT/Basic.lean`).  The audit
-`audits/2026-05-13_cpsv16_paper_bnt_phase_1_multiplicity_audit.md` §Q4
+core BNT predicate `IsBNTCanonicalForm` (see `SectorBNT/Basic.lean`).  The audit
+`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
 shows that `C ⊕ (1/2)C` is a valid CPSV BNT canonical form that admits no
 such factorization.
 
