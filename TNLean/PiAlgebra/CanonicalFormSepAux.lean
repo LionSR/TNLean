@@ -143,11 +143,6 @@ def ofForall (hA : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1) :
     IsLeftCanonicalBlockFamily (d := d) A where
   leftCanonical := hA
 
-/-- Alias emphasizing that left-canonical blocks are trace-preserving. -/
-theorem tp_gauge (hA : IsLeftCanonicalBlockFamily (d := d) A) :
-    ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1 :=
-  hA.leftCanonical
-
 end IsLeftCanonicalBlockFamily
 
 /-- Non-increasing weight ordering together with nonvanishing coefficients.
