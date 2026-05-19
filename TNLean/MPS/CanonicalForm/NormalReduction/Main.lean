@@ -299,11 +299,12 @@ Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
 Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
 translation-invariant MPS representation.
 
-**Scope restriction (prepared primitive block decomposition):** this theorem assumes an existing
-weighted block decomposition, irreducibility, trace-preserving normalization, primitivity,
-pairwise distinct weight moduli, nonzero weights, and positive bond dimensions. Those hypotheses
-are not assumptions of the source theorem. See
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+**Scope restriction (prepared primitive block decomposition):** This theorem
+assumes an existing weighted block decomposition, irreducibility,
+trace-preserving normalization, primitivity, pairwise distinct weight moduli,
+nonzero weights, and positive bond dimensions. The cited source theorem starts
+from an arbitrary translation-invariant MPS representation and derives these
+structures; see `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_normalCanonicalForm_of_primitive_blockDecomp
     (A : MPSTensor d D)
     {r1 : ℕ} {dim1 : Fin r1 → ℕ}

@@ -322,9 +322,9 @@ together with the rigidity theorem
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`.
 
 **Scope restriction (same bond dimension):** The source Lemma equalMPS also
-concludes equality of the two bond dimensions in the unit-overlap case; this
-theorem assumes a common bond dimension as a hypothesis instead. The
-rectangular component is proved separately as
+concludes equality of the two bond dimensions in the unit-overlap case. This
+theorem proves the gauge recovery after the common bond dimension has already
+been identified. The rectangular component is proved separately as
 `dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP` in this file; together
 the two theorems recover the full structural conclusion of the source lemma. -/
 theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
