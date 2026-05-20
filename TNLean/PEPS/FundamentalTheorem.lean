@@ -61,7 +61,8 @@ tensor family, the proof obtains the equality labelled `eq:inj_equal_edge`:
 for every edge and every matrix `X`, inserting `X` on that edge in the first
 PEPS gives the same state as inserting `X` on the same edge in the modified
 second PEPS. Blocking one vertex against its complement and applying
-`inj_equal_tensors_2` then gives `A_v = λ_v • Btilde_v`; the scalars `λ_v` are
+`inj_equal_tensors_2` then gives $A_v = \lambda_v \tilde{B}_v$; the scalars
+$\lambda_v$ are
 absorbed into the edge gauges.
 
 ## References
