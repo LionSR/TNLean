@@ -1303,9 +1303,8 @@ BNT basis.
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
     \leanok
-    \uses{def:sector_bnt_cf,
-        lem:tensor_from_blocks_globalGauge_conj}
-    Suppose that the sectors of two BNT decompositions $P$ and $Q$ are matched
+    \uses{lem:tensor_from_blocks_globalGauge_conj}
+    Suppose that the sectors of two sector decompositions $P$ and $Q$ are matched
     by a bijection $\beta:J(Q)\simeq J(P)$, with bond-dimension equalities,
     copy permutations $\tau_k$, nonzero phases $\zeta_k$, and block gauges
     $X_k$. If, for every sector $k$, copy $q$, and physical index $i$,
@@ -1391,7 +1390,7 @@ BNT basis.
     \uses{thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
         lem:sector_bnt_matched_sector_weight_equiv,
-        lem:tensor_from_blocks_globalGauge_conj}
+        thm:sector_bnt_global_gauge_of_matched_weights}
     The full-basis matching theorem gives $\beta$, the bond-dimension
     identifications, and the gauge-phase equivalences between $Q_k$ and
     $P_{\beta(k)}$. Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
