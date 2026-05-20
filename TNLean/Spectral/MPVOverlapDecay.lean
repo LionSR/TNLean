@@ -39,7 +39,7 @@ equivalent, then the MPV overlaps decay to `0` as `N → ∞`.
    `Matrix.entryLinearMap ℂ ℂ p q`.
 5. Reassemble the finite sum using `tendsto_finset_sum`.
 
-## Rectangular (heterogeneous bond dimensions)
+## Rectangular overlaps for different bond dimensions
 
 `mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one` handles the case where
 `A : MPSTensor d D₁` and `B : MPSTensor d D₂` may have different bond dimensions,
@@ -125,7 +125,7 @@ theorem mpvInner_tendsto_zero
 
 end
 
-/-! ## Rectangular (heterogeneous bond dimensions) -/
+/-! ## Rectangular overlaps for different bond dimensions -/
 
 section TraceDecay
 

@@ -23,7 +23,7 @@ variable {d : ℕ}
 
 /-! ### Section 4. MPV phase-class representatives -/
 
-/-- Heterogeneous MPV phase equivalence between two individual blocks.
+/-- MPV phase equivalence between two individual blocks with possibly different bond dimensions.
 
 `MPVBlockPhaseEquiv A B` means that the finite-chain MPV of `B` is a nonzero
 scalar power times the finite-chain MPV of `A`, uniformly in the chain length and
@@ -34,11 +34,11 @@ def MPVBlockPhaseEquiv {d DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
 
 namespace MPVBlockPhaseEquiv
 
-/-- Reflexivity of heterogeneous MPV phase equivalence. -/
+/-- Reflexivity of MPV phase equivalence for different bond dimensions. -/
 lemma refl {D : ℕ} (A : MPSTensor d D) : MPVBlockPhaseEquiv A A :=
   ⟨1, one_ne_zero, fun N σ => by simp⟩
 
-/-- Symmetry of heterogeneous MPV phase equivalence. -/
+/-- Symmetry of MPV phase equivalence for different bond dimensions. -/
 lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
     (h : MPVBlockPhaseEquiv A B) : MPVBlockPhaseEquiv B A := by
   rcases h with ⟨ζ, hζ, hmpv⟩
@@ -47,7 +47,7 @@ lemma symm {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   rw [hmpv N σ]
   rw [inv_pow, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero N hζ), one_mul]
 
-/-- Transitivity of heterogeneous MPV phase equivalence. -/
+/-- Transitivity of MPV phase equivalence for different bond dimensions. -/
 lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
     {C : MPSTensor d DC} (hAB : MPVBlockPhaseEquiv A B)
     (hBC : MPVBlockPhaseEquiv B C) : MPVBlockPhaseEquiv A C := by
@@ -58,7 +58,7 @@ lemma trans {DA DB DC : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
   rw [hηmpv N σ, hζmpv N σ, mul_pow]
   ring
 
-/-- Gauge-phase equivalence after a dimension cast gives heterogeneous MPV phase equivalence. -/
+/-- Gauge-phase equivalence after a dimension cast gives rectangular MPV phase equivalence. -/
 lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor d DB)
     (hdim : DA = DB)
     (hGPE : GaugePhaseEquiv (d := d)
@@ -71,7 +71,7 @@ lemma of_gaugePhaseEquiv_cast {DA DB : ℕ} (A : MPSTensor d DA) (B : MPSTensor 
     (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hX N σ,
     mpv_cast_dim hdim A N σ]
 
-/-- Heterogeneous MPV phase equivalence gives a scalar-power equality of MPV state vectors. -/
+/-- MPV phase equivalence gives a scalar-power equality of MPV state vectors. -/
 lemma exists_mpvState_eq_smul {DA DB : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) :
     ∃ ζ : ℂ, ζ ≠ 0 ∧ mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
@@ -113,8 +113,8 @@ finite family by this relation is enough to absorb all repeated scalar-power
 copies into sector weights.
 
 This is the family-indexed specialization of `MPVBlockPhaseEquiv`, so the
-homogeneous phase-class relation shares the heterogeneous block-level relation
-rather than duplicating it. -/
+fixed-family phase-class relation shares the block-level relation for different
+bond dimensions rather than duplicating it. -/
 def MPVPhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     (blocks : (k : Fin r) → MPSTensor d (dim k)) (j k : Fin r) : Prop :=
   MPVBlockPhaseEquiv (blocks j) (blocks k)

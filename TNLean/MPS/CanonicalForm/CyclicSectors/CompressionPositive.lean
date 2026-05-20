@@ -30,9 +30,10 @@ section CompressionPositiveMPV
 
 /-- A supported-projection compression preserves MPVs at all positive lengths.
 
-This is the usable replacement for a heterogeneous `SameMPV₂` statement: compression changes the
-`N = 0` coefficient from `trace 1 = D` to `trace P`, so exact all-length equality is false in
-general, but every positive-length MPV is preserved. -/
+This is the usable replacement for a rectangular `SameMPV₂` statement:
+compression changes the `N = 0` coefficient from `trace 1 = D` to `trace P`,
+so exact all-length equality is false in general, but every positive-length MPV
+is preserved. -/
 theorem exists_compressedTensor_of_supported_projection_pos_mpv
     (A : MPSTensor d D) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
