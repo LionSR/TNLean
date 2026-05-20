@@ -230,8 +230,9 @@ $\mu_{j,q}$.  The per-block witness is implicit in CPSV16 §II.C line 1182's
 projection step and is
 therefore exposed here as a per-theorem hypothesis.
 
-Paper anchor: CPSV16 §II.C lines 1158–1167 (power-sum non-decay / exact
-comparison input), CPSV16 §II.C line 1182 (per-block projection step). -/
+Paper anchor: CPSV16 §II.C Lemma `Lem:app_simple`, lines 1155--1163
+(finite power-sum comparison), and CPSV16 §II.C line 1182 (per-block
+projection step). -/
 theorem coeff_not_tendsto_zero_at_block
     (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
     (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
