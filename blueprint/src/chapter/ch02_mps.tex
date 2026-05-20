@@ -197,6 +197,23 @@ boundary conditions (PBC).
     $\ket{V^{(N)}(A)} = \ket{V^{(N)}(B)}$ for every $N > 0$.
 \end{definition}
 
+\begin{lemma}[Length-zero MPV coefficient]\label{lem:mpv_zero_length}
+    \lean{MPSTensor.mpv_zero_length}
+    \leanok
+    \uses{def:mpv}
+    For any MPS tensor $A$ with bond dimension $D$, the length-zero MPV
+    coefficient is $D$, the trace of the identity on the bond space.
+\end{lemma}
+
+\begin{lemma}[Positive-length equality with equal bond dimensions]%
+    \label{lem:samempv2pos_to_samempv2_of_bonddim_eq}
+    \lean{MPSTensor.SameMPV₂Pos.toSameMPV₂_of_bondDim_eq}
+    \leanok
+    \uses{def:same_mpv2_pos, def:same_mpv2, lem:mpv_zero_length}
+    If two tensors have the same positive-length MPV family and the same bond
+    dimension, then they have the same MPV family at every length.
+\end{lemma}
+
 \begin{remark}\leanok
     Definition~\ref{def:same_mpv} is the same-bond-dimension
     specialization of Definition~\ref{def:same_mpv2}.
