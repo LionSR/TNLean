@@ -200,7 +200,6 @@ identified with one another.
     \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
     gauge theorem. It is a source-level theorem only for one injective block,
     not for the multi-block BNT comparison.
-<<<<<<< HEAD
   \item The SectorBNT equal-MPV declarations
     \path{MPSTensor.ft_sector_bnt_equal_sector_data} and
     \path{MPSTensor.ft_sector_bnt_equal_global_gauge} are the current formal
@@ -210,14 +209,11 @@ identified with one another.
     equal-MPV corollary is obtained after the canonical-form supplier has put
     the input tensors on this surface with the required unit-modulus-copy
     normalization.
-  \item The older sector-decomposition comparison theorem
-=======
   \item The former strict canonical-form BNT equal-MPV declaration was only a
     strict representative form and is no longer part of the active Lean tree.
     The former proportional wrapper has also been removed because its one-shot
     coefficient hypotheses did not imply the full BNT matching conclusion.
   \item The sector-decomposition theorem
->>>>>>> 33c39579 (doc(audits): remove retired equal-MPV names)
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
     sector-basis matching, linear independence, and equality of total MPV
@@ -243,17 +239,11 @@ $\mu_{j,q}$ in the sums
 \[
   \sum_q \mu_{j,q}^N.
 \]
-<<<<<<< HEAD
 The current SectorBNT equal-MPV declarations
 \path{ft_sector_bnt_equal_sector_data} and
 \path{ft_sector_bnt_equal_global_gauge} are therefore the relevant formal
 statements on the BNT surface, not the older one-copy \texttt{CFBNT} surface.
 The proportional wrapper that formerly assumed explicit coefficient data has
-=======
-The former strict-representative equal-MPV declaration was therefore only a
-special-case statement and has been removed from the active Lean tree. The
-proportional wrapper that formerly assumed explicit coefficient data has also
->>>>>>> 33c39579 (doc(audits): remove retired equal-MPV names)
 been deleted; such data do not by themselves encode the residual peeling or
 power-sum comparison in the source proof. The equal-MPV common-block comparison
 assumes the repeated-copy structure has already been matched into common

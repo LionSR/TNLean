@@ -52,7 +52,7 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
 | Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | No current source-faithful theorem identified; `FundamentalTheorem/FiniteLength.lean` proves a different single-block finite-length agreement result | **open** — do not cite the finite-length single-block theorem as the block-injective-after-blocking proposition; tracked by #1685 |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | No faithful Lean theorem at present. The former restricted proportional-comparison declarations were deleted because their coefficient-array hypotheses are not part of the source statement. | **open** |
-| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | Single-block results in `FundamentalTheorem/Basic.lean`; conditional sector-matching results in `FundamentalTheorem/SectorDecomposition.lean` | **partial** — the single-block theorem and sector-matching corollaries are proved, but no current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; tracked by #1685 |
+| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | Single-block results in `FundamentalTheorem/Basic.lean`; conditional sector-matching results in `FundamentalTheorem/SectorDecomposition.lean` | **not formalized** — the single-block theorem and conditional sector-matching corollaries are related constituent reductions, but no current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; tracked by #1685 |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
 
@@ -247,10 +247,10 @@ Open target:
 - Faithful proportional theorem: CPSV21 Theorem 4.4, corresponding to CPSV16
   Theorem II.1 (`thm1`).
 
-| Lean declaration | Paper | CPSV16 label |
+| Lean declaration | Paper | CPSV16 relation |
 |---|---|---|
 | `fundamentalTheorem_singleBlock` | single injective-block case | special case only |
-| `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching` | conditional sector-matching equal-MPV conclusion | auxiliary step toward CPSV16 Corollary II.2 (`II_cor2`) |
+| `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching` | conditional sector-matching equal-MPV conclusion | conditional input used only toward a future formalization of CPSV16 Corollary II.2 (`II_cor2`) |
 
 ---
 
@@ -271,9 +271,9 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
-| High | CPSV16 | Section II.A proposition, lines 249–251 (canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
-| High | CPSV16 | Section II.A proposition, lines 253–255 (canonical-form characterization) | Source characterization by absence of periodic vectors and invariant projections not yet packaged as a Lean theorem | #1685 |
-| High | CPSV16 | Section II.A proposition, lines 342–345 (block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
+| High | CPSV16 | CPSV16 §II.A Prop. (l.249, canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
+| High | CPSV16 | CPSV16 §II.A Prop. (l.253, canonical-form characterization) | Source characterization by absence of periodic vectors and invariant projections not yet packaged as a Lean theorem | #1685 |
+| High | CPSV16 | CPSV16 §II.A Prop. (l.342, block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
 | High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
