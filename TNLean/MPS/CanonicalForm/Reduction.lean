@@ -14,6 +14,16 @@ Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3
 (around eq. `\label{eq:II_Aiplusk1}`).
 It also corresponds to the invariant-subspace splitting used inside
 PGVWC07, Theorem `Th:TIcanonical`, lines 765–833.
+The source proof is ordered as follows: lines 765–770 handle spectral-radius
+normalization and the full-rank fixed-point gauge; lines 771–783 derive the
+invariant support from a singular positive fixed point; lines 785–815 split the
+finite-ring trace over that support and its orthogonal complement; lines 816–826
+iterate the split and use a non-scalar fixed point to force uniqueness of the
+identity fixed point.  This file formalizes only the abstract splitting once an
+invariant projection is available; a faithful proof of the full theorem must
+also derive that projection from the positive fixed-point argument in
+lines 771–783 and perform the dual fixed-point diagonalization at
+lines 827–832.
 
 Starting from an arbitrary MPS tensor `A : MPSTensor d D`, we iteratively apply
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict` — which produces two blocks each with
@@ -129,10 +139,11 @@ bond dimension, then apply the induction hypothesis to each block.
 
 **Scope restriction (PGVWC07 canonical-form proof step):** This theorem proves
 only the recursive invariant-projection splitting from the proof of
-PGVWC07, Theorem `Th:TIcanonical`, lines 765–833. It does not prove the full
+PGVWC07, Theorem `Th:TIcanonical`, lines 771–826. It does not prove the full
 source theorem's positive weights, unital normalization, diagonal full-rank dual
-fixed points, uniqueness of the identity fixed point, or final bond-dimension
-bound. The remaining source boundary is recorded in
+fixed points, or final bond-dimension bound; it also does not perform the
+dual-map diagonalization of lines 827–832. The remaining source boundary is
+recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
