@@ -55,7 +55,8 @@ The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 ## Key references
 
 * arXiv:1708.00029 (De las Cuevas–Schuch–Pérez-García–Cirac, 2017)
-* `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean` — structural template for Theorem 3.4
+* `MPSTensor.ft_sector_bnt_proportional_sector_match` — current
+  sector-decomposition matching template for the non-periodic theorem
 * Z-gauge construction lemmas in `ZGauge.lean` (PR #94)
 -/
 
@@ -279,7 +280,8 @@ their bases of periodic tensors match: equal block counts, a bijection, and per-
 In the paper, proportional MPVs imply the overlap dichotomy; here the dichotomy is
 taken as a direct hypothesis via `PeriodicOverlapHypothesis`.
 
-The proof mirrors `blocks_match_of_sameMPV₂_CFBNT` in `Full.lean`:
+The proof follows the same finite-matching pattern as the current
+sector-decomposition matching theorem:
 1. Non-decaying overlap → `HetRepeatedBlocks` matching for each block.
 2. Injectivity from `HetRepeatedBlocks.trans` + non-repetition.
 3. Injective maps on finite types → equal cardinalities.
