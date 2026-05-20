@@ -116,10 +116,10 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
 ### Bond dimensions inside a prepared phase class
 
 The phase quotient in `CanonicalForm.PhaseClassSectorData` is deliberately
-heterogeneous: `MPVBlockPhaseEquiv` only records proportional MPVs, not equality
-of bond dimensions.  For the prepared blocks used by the BNT supplier, the
-rectangular overlap gap forces equality of bond dimensions inside each phase
-class.
+allowed to group blocks of differing bond dimensions: `MPVBlockPhaseEquiv` only
+records proportional MPVs, not equality of bond dimensions.  For the prepared
+blocks used by the BNT supplier, the rectangular overlap gap forces equality of
+bond dimensions inside each phase class.
 -/
 
 /--

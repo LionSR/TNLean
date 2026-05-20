@@ -1084,12 +1084,12 @@ BNT construction.
     \label{lem:collapsed_bnt_sector_decomp_total_dim}
     \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
     \leanok
-    \uses{thm:paperbnt_supplier_prepared}
     In the phase-class quotient used by the prepared-block BNT supplier,
-    suppose that every block in a phase class has the same bond dimension as
-    the chosen representative of that class. Then the total bond dimension of
-    the collapsed sector decomposition is the sum of the bond dimensions of the
-    original prepared blocks.
+    suppose that every original copy weight is nonzero and that every block in
+    a phase class has the same bond dimension as the chosen representative of
+    that class. Then the total bond dimension of the collapsed sector
+    decomposition is the sum of the bond dimensions of the original prepared
+    blocks.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1149,9 +1149,10 @@ BNT construction.
     % canonical-form weight convention; lines 271--279 and 1135--1148 are
     % prop:char-BNT and its construction of phase classes.
     For prepared trace-preserving, primitive, irreducible blocks of positive
-    bond dimension, the phase-class quotient used in the BNT supplier does not
-    change the total bond dimension: the collapsed sector decomposition has
-    total bond dimension equal to the sum of the original block dimensions.
+    bond dimension, with all copy weights nonzero, the phase-class quotient
+    used in the BNT supplier does not change the total bond dimension: the
+    collapsed sector decomposition has total bond dimension equal to the sum of
+    the original block dimensions.
 \end{lemma}
 
 \begin{proof}\leanok

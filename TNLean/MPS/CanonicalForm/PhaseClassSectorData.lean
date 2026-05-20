@@ -108,8 +108,9 @@ decomposition has the same total bond dimension as the original direct sum.
 
 This is the dimension bookkeeping needed in the arbitrary-input supplier:
 without the displayed same-dimension hypothesis, the quotient is allowed to
-identify heterogeneous MPV-phase-equivalent blocks, and the length-zero MPV
-coefficient need not be preserved by dimension counting alone. -/
+identify MPV-phase-equivalent blocks of differing bond dimensions, and the
+length-zero MPV coefficient need not be preserved by dimension counting
+alone. -/
 theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
