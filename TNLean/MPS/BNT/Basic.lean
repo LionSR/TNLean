@@ -364,7 +364,7 @@ Given a finite family of MPS tensors `A j` (with possibly different bond dimensi
 whose pairwise overlaps converge to the Kronecker delta, the MPV states `mpvState (A j) N` are
 linearly independent for all sufficiently large `N`.
 
-This is a direct repackaging of
+This is a direct restatement of
 `MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal`
 in the exact form used by the BNT permutation-matching argument.
 -/
