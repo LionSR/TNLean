@@ -36,8 +36,8 @@ The conclusion is the **weak existential**: there exist indices `j`, `k`
 such that the cross-overlap does not decay to zero.  Promoting this to the
 full pairwise conjunction `(∀ j, ∃ k, overlap does not decay) ∧ (∀ k, ∃ j,
 overlap does not decay)` is a stronger statement that requires induction on
-`P.basisCount + Q.basisCount`, mirroring CPSV16 §II_cor2's "fixed `k_0`
-move-everything-else" argument (lines 1172–1192).
+`P.basisCount + Q.basisCount`, mirroring the CPSV16 equal-MPV corollary's
+"fixed `k_0` move-everything-else" argument (lines 1172–1192).
 
 ## References
 
@@ -45,8 +45,9 @@ move-everything-else" argument (lines 1172–1192).
   *Matrix Product Density Operators: Renormalization Fixed Points and Boundary
   Theories*, arXiv:1606.00608.  Lines 287–301 (raw two-layer BNT display
   with coefficient `∑_q μ_{j,q}^N`), 1080–1091 (normal-tensor overlap
-  dichotomy), 1121–1132 (corollary `Lem1`), 1184–1188 (multiplicity recovery
-  via raw power-sum coefficient comparison), 1172–1192 (corollary `II_cor2`,
+  dichotomy), 1121–1132 (combined-family linear-independence corollary),
+  1184–1188 (multiplicity recovery via raw power-sum coefficient comparison),
+  1172–1192 (equal-MPV corollary,
   fixed `k_0` move-everything-else argument).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
   *Matrix product states and projected entangled pair states*,
@@ -159,10 +160,10 @@ non-decaying cross-overlap.
 
 Paper anchors:
 
-* CPSV16 lines 1121–1132 (corollary `Lem1`) — combined-family eventual
+* CPSV16 lines 1121–1132 — combined-family eventual
   linear-independence input;
-* CPSV16 lines 1172–1192 (corollary `II_cor2`) — the contrapositive route
-  via coefficient comparison after combined-family `Lem1`;
+* CPSV16 lines 1172–1192 — the equal-MPV corollary's contrapositive route
+  via coefficient comparison after the combined-family input;
 * CPSV16 lines 287–301 — raw sector coefficient
   `P.coeff N j = ∑_q (P.weight j q)^N`;
 * CPSV16 lines 1184–1188 — raw power-sum coefficient comparison; combined
