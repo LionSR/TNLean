@@ -15,14 +15,15 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 -- uniqueness statement `gauge_unique_mod_edge_scalars`.
 --
 -- The unproved converse ingredients split into three groups:
--- * `gaugeConsistency` requires the full edge-centred reduction from
---   arXiv:1804.04964 Section 3. The local left inverse and the elementary
---   blocking data are developed in `PEPS/VirtualInsertion` and `PEPS/Blocking`,
---   and `localGauge_exists` has been reduced to the sharper local hypothesis
---   `HasFactorizedLocalGauge`. The edge-blocked coefficient and middle tensor are
---   developed in `PEPS/Blocking`; the abbreviation `BlockedMiddleGaugeFormula`
---   isolates the remaining implication from `SameState` to the explicit local
---   gauge formula.  Tracked by #780.
+-- * `gaugeConsistency` requires the edge-centred reduction from
+--   arXiv:1804.04964, Section 3: after choosing an edge `e = (u,v)`,
+--   blocking all vertices other than `u` and `v` gives a three-site injective
+--   MPS; Lemma `inj_isomorph` assigns an edge gauge, and the gauges obtained
+--   from all edges are absorbed into the second tensor family before the
+--   equation labelled `eq:inj_equal_edge`. The local left inverse is in
+--   `PEPS/VirtualInsertion`, the edge-blocked contraction is in `PEPS/Blocking`,
+--   and `BlockedMiddleGaugeFormula` isolates the remaining implication from
+--   `SameState` to the explicit local gauge formula.  Tracked by #780.
 -- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
 --   conditional theorem `fundamentalTheorem_PEPS_of_bondDim`, so that the
 --   bond-dimension equality is orthogonal to `gaugeConsistency`. Its derivation
@@ -50,19 +51,18 @@ This file develops the Fundamental Theorem for injective PEPS on simple graphs
 > the same state iff the generating tensors are related by local gauges on each
 > edge, with uniqueness understood modulo balanced edge scalars on the graph.
 
-## Strategy
+## Source proof shape
 
-The proof (from the paper) generalises the 1D MPS Fundamental Theorem
-(`TNLean.MPS.FundamentalTheorem.Basic`) to arbitrary graph geometries:
-
-1. At each vertex `v`, injectivity gives a left inverse for the local tensor map.
-2. `SameState` plus contraction over all vertices except `v` yields a local
-   gauge relation at `v`.
-3. Consistency across adjacent vertices forces the gauges to be compatible,
-   giving a global gauge equivalence.
-
-This parallels the MPS proof's linear-extension → multiplicativity →
-Skolem–Noether proof chain, but replaces chain algebra with graph-local reasoning.
+For a chosen edge `e = (u,v)`, the source proof blocks all vertices other than
+`u` and `v` into a middle tensor. The two endpoint tensors and this middle tensor
+form a three-site injective MPS. Lemma `inj_isomorph` then assigns an edge gauge.
+After repeating this for every edge and absorbing the gauges into the second
+tensor family, the proof obtains the equality labelled `eq:inj_equal_edge`:
+for every edge and every matrix `X`, inserting `X` on that edge in the first
+PEPS gives the same state as inserting `X` on the same edge in the modified
+second PEPS. Blocking one vertex against its complement and applying
+`inj_equal_tensors_2` then gives `A_v = λ_v • B̃_v`; the scalars `λ_v` are
+absorbed into the edge gauges.
 
 ## References
 
@@ -526,13 +526,22 @@ theorem localGauge_exists (A B : Tensor G d)
 
 /-! ### Gauge consistency across edges -/
 
-/-- Local gauges extracted at adjacent vertices are consistent: for an edge
-`e = (u, v)`, the gauge at `u`'s side of `e` and the gauge at `v`'s side of
-`e` satisfy `X_u(e) = (X_v(e)⁻¹)ᵀ` (up to the orientation convention).
+/-- Edge gauges obtained from the three-site reductions give one global gauge
+family.
 
-This is the combinatorial heart of the PEPS FT proof. In the MPS case,
-consistency is automatic because there is only one gauge matrix. For PEPS on a
-graph, one must verify that the local gauges "match up" along every edge. -/
+Source: arXiv:1804.04964, Section 3, after the equation labelled
+`eq:TN_5_particle_eq`: for each edge, block all other vertices into the middle
+site of a three-site injective MPS and apply Lemma `inj_isomorph`. After the
+resulting edge gauges are absorbed into `B`, the source proves the insertion
+identity labelled `eq:inj_equal_edge`.
+
+This theorem records the global-gauge conclusion needed by the injective PEPS
+Fundamental Theorem under the already separated bond-dimension equality
+hypothesis.
+
+**Proof status:** The statement is still open. It depends on the edge-blocked
+three-site injective MPS comparison and the passage from the source insertion
+identity to the factorized local gauge formula; see issue #780. -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -557,16 +566,14 @@ theorem gaugeConsistency (A B : Tensor G d)
 /-- **Fundamental Theorem for injective PEPS, conditional on bond-dimension
 equality** (arXiv:1804.04964, Theorem 2).
 
-Given matching bond dimensions, two vertex-injective PEPS that generate the
-same state are gauge-equivalent. This isolates the two unproved ingredients of
-`fundamentalTheorem_PEPS` into orthogonal hypotheses:
+If the bond spaces of `A` and `B` are already identified, equality of their PEPS
+states and vertex injectivity imply the gauge formula
+`B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge.
 
-* the bond-dimension equality `hDim`, and
-* the globally consistent edge gauges produced by `gaugeConsistency`.
-
-Downstream consumers that already have a specific bond-dimension witness can
-call this conditional form directly, without waiting for the boundary-insertion
-argument that derives `hDim` from `SameState` alone. -/
+**Proof status:** This theorem is proved from the conditional global-gauge
+statement `gaugeConsistency`. The source theorem does not assume matching bond
+dimensions separately; removing `hDim` requires the boundary-insertion argument
+tracked by issue #874. -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim) :
@@ -576,19 +583,15 @@ theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
 
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
-If two PEPS tensors on a simple graph are both vertex-injective and generate
-the same state, then they are gauge-equivalent: there exist invertible matrices
-`X_e` on each edge such that `B` is the gauge transform of `A`.
+For PEPS tensors on a finite simple graph, if `A` and `B` are vertex-injective
+and have the same state coefficients, then there are invertible edge matrices
+`X_e` such that, at every vertex, `B_v` is obtained from `A_v` by the oriented
+endpoint action of the matrices `X_e` on the incident virtual legs.
 
-The proof proceeds in two stages:
-1. **Local extraction** (`localGauge_exists`): after proving the sharper local
-   hypothesis `HasFactorizedLocalGauge`, injectivity and the chosen left inverse
-   produce a factorized local gauge relation.
-2. **Global consistency** (`gaugeConsistency`): local gauges along shared
-   edges are shown to be compatible, yielding a single coherent family of
-   edge gauges.
-
-In the MPS (1D chain) case, this reduces to `fundamentalTheorem_singleBlock`. -/
+**Proof status:** The theorem is stated with the source's hypothesis set. The
+remaining formal proof obligations are the bond-dimension equality from
+`SameState` and vertex injectivity (#874), and the edge-centred gauge extraction
+recorded in `gaugeConsistency` (#780). -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) :
@@ -689,13 +692,22 @@ private lemma edgeGaugeProduct_eq_of_gaugeVertex_eq
   simpa [gaugeVertex, Finset.sum_apply, Pi.smul_apply, smul_eq_mul] using h η σ
 
 /-- **Gauge uniqueness modulo balanced edge scalars** (arXiv:1804.04964,
-Theorem 2, uniqueness clause, repaired form).
+Theorem 2, uniqueness clause, corrected graph quotient).
 
-If `X` and `Y` are two gauge families relating the same pair of injective PEPS,
-then they represent the same gauge class modulo edge-wise nonzero
-scalars whose oriented product is `1` at every vertex. This replaces the
-earlier global-scalar conclusion, which is refuted by the connected-triangle,
-bond-dimension-`1` counterexample discussed in issue #762. -/
+If `X` and `Y` are two gauge families relating the same injective PEPS tensor
+`A` to the same tensor `B`, then their oriented endpoint actions differ by
+edge scalars `c_e` whose product around every vertex is `1`.
+
+**Local correction (balanced edge scalars):** The source states that the gauges
+are unique up to a multiplicative constant. On a general graph the connected
+triangle with one-dimensional bonds refutes uniqueness modulo one global scalar.
+The graph-correct quotient is uniqueness modulo vertex-balanced edge scalars;
+see `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
+
+**Proof status:** The proof has been reduced to equality of products of
+incident edge-gauge entries at each vertex. The remaining step extracts the
+local scalar ratios and reconciles them into one vertex-balanced edge-scalar
+family; see issue #842. -/
 theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim)
