@@ -19,9 +19,9 @@ Corollary 5.2 from the operator Jensen inequality
 (`OperatorConvexity.lean`).
 
 **Status note:** The Corollary 5.2 theorems in this file depend on Jensen-type lemmas
-imported from `OperatorConvexity.lean` that are currently `sorry` placeholders.
-They should be understood as conditional on those axioms and are not yet fully
-verified Lean theorems.
+imported from `OperatorConvexity.lean` that are proved from explicit axioms in
+`TNLean.Axioms.OperatorConvexity`. They should be understood as conditional on
+those matrix-analysis inputs and are not yet derived from Mathlib theorems alone.
 
 ### Proof strategy for Corollary 5.2
 

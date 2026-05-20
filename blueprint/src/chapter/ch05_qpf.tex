@@ -178,6 +178,22 @@ and~\cite{Evans1978Spectral}.
     matrix $H = (S^\dagger)^{-1} \sigma S^{-1}$.
 \end{remark}
 
+\begin{theorem}[Irreducible fixed-point uniqueness]\label{thm:psd_fp_unique_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_unique_of_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_pd_irred}
+    Let $A$ be an MPS tensor whose transfer map is irreducible.
+    If $\rho,\sigma\ge 0$ are fixed points of $\E_A$, and if
+    $\rho$ is nonzero, then $\sigma=c\rho$ for some scalar $c$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The irreducible positive-definiteness theorem
+    (Theorem~\ref{thm:psd_fp_pd_irred}) upgrades every nonzero positive
+    semidefinite fixed point to a positive definite one.  The same minimal
+    eigenvalue argument used in Theorem~\ref{thm:psd_fp_unique} then applies.
+\end{proof}
+
 \begin{theorem}[Uniqueness of positive eigenvalue for irreducible CP maps]%
     \label{thm:eigenvalue_unique_irred}
     \lean{eigenvalue_unique_of_irreducible_cp}
@@ -262,6 +278,26 @@ and~\cite{Evans1978Spectral}.
     \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
     Combine Theorems~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
     and~\ref{thm:psd_fp_unique}.
+\end{proof}
+
+\begin{theorem}[Quantum Perron--Frobenius for irreducible transfer maps]
+    \label{thm:qpf_irreducible}
+    \lean{MPSTensor.quantum_perron_frobenius_irreducible}
+    \leanok
+    \uses{def:irreducible_cp, def:transfer_map, thm:psd_fp_exists,
+        thm:psd_fp_pd_irred, thm:psd_fp_unique_irred}
+    Assume $D\ge 1$. Let $A$ be an MPS tensor whose transfer map is irreducible
+    and whose adjoint normalization satisfies
+    $\sum_i (A^i)^\dagger A^i=\Id$.
+    Then $\E_A$ has a unique positive definite fixed point, up to scalar
+    multiple.
+\end{theorem}
+
+\begin{proof}\leanok
+    Existence is the channel fixed-point theorem
+    (Theorem~\ref{thm:psd_fp_exists}).  Irreducibility upgrades the fixed point
+    to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
+    uniqueness up to scalar multiple.
 \end{proof}
 
 \section{Right- and left-canonical gauges}
