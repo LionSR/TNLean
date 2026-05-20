@@ -78,7 +78,7 @@ noncomputable def matched_block_gauge {Q : SectorDecomposition d}
 
 /-- **Global block gauge from matched sector and weight data.**
 
-Assume the sectors of two BNT decompositions have already been matched, and
+Assume the sectors of two sector decompositions have already been matched, and
 assume that the block gauges, phases, and copy-weight identities all use the
 same phases. Then the flattened `Q`-tensor is obtained by conjugating the
 matched-coordinate `P`-tensor by the direct sum
