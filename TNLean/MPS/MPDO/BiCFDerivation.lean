@@ -28,8 +28,9 @@ The supporting modules are:
   obstruction showing that blockwise injectivity, left-canonicality, and
   nonzero weights do not imply the biCF property.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput` — the trace-dual algebraic
-  input from David--Perez-Garcia--Schuch--Wolf Lemma `lem:direct-sum` that
-  follows from the two-sided nonzero span lemma.
+  input from the direct-sum decomposition lemma of
+  David--Perez-Garcia--Schuch--Wolf that follows from the two-sided nonzero
+  span lemma.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace` — the corresponding
   inclusion/equality of finite-chain image spaces.
 * `TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness` — the parent-Hamiltonian
@@ -44,7 +45,8 @@ The supporting modules are:
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345]
-* [David--Perez-Garcia--Schuch--Wolf 2006, Lemmas `lem1` and `lem:direct-sum`]
+* [David--Perez-Garcia--Schuch--Wolf 2006, two-sided nonzero span and direct-sum
+  decomposition lemmas]
 
 ## Tags
 
