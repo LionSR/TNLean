@@ -91,10 +91,13 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     % Source anchors:
     % Papers/1606.00608/MPDO-22-12-17-2.tex:227--231 removes periodic
     % peripheral components by blocking; lines 233--235 define normal tensors;
-    % lines 237--246 are eq:II_CF1 and the weight normalization; lines 249--251
-    % state that any tensor becomes canonical after blocking.  The later BNT
-    % quotient used by the supplier is prop:char-BNT at lines 271--279 and the
-    % two-layer expansion eq:II_ABasicTensors/decBSV at lines 283--301.
+    % lines 237--246 are the definition containing the display labelled
+    % eq:II_CF1 and the subsequent weight normalization; lines 249--251 state
+    % that any tensor becomes canonical after blocking. The phase-class
+    % quotient used by the BNT supplier is prop:char-BNT at lines 271--280,
+    % restated and proved in
+    % Appendix A at lines 1135--1146. The two-layer expansion is
+    % eq:II_ABasicTensors/decBSV at lines 283--301.
     % Papers/2011.12127/TN-Review-main.tex:1793--1803 gives the invariant-
     % subspace reduction; lines 1815--1820 give period removal; lines 1827--1839
     % give def:4:normal-tensor-mps and eq:II_CF1; lines 1846--1859 give the
@@ -121,10 +124,14 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     \cite[display labelled \texttt{eq:II\_Aiplusk1}, lines~216--225]
         {Cirac2017MPDO_AnnPhys}
     and in
-    \cite[definition labelled \texttt{eq:II\_CF1}, lines~237--246]
-        {Cirac2017MPDO_AnnPhys}.
+    \cite[canonical-form definition containing \texttt{eq:II\_CF1} and
+    subsequent weight normalization,
+    lines~237--246]{Cirac2017MPDO_AnnPhys}.
     The basis-of-normal-tensors refinement is
-    \cite[proposition labelled \texttt{prop:char-BNT}, lines~278--280]
+    \cite[definition and proposition around \texttt{prop:char-BNT},
+    lines~271--280]{Cirac2017MPDO_AnnPhys},
+    with its appendix restatement and proof in
+    \cite[Appendix proof of \texttt{prop:char-BNT}, lines~1135--1146]
         {Cirac2017MPDO_AnnPhys},
     and the two-layer display is
     \cite[displays labelled \texttt{eq:II\_ABasicTensors} and
@@ -1166,8 +1173,8 @@ BNT construction.
     \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
     \leanok
     % Source anchors:
-    % Papers/1606.00608/MPDO-22-12-17-2.tex:271--279 states prop:char-BNT;
-    % lines 1135--1148 restate it and give the construction.
+    % Papers/1606.00608/MPDO-22-12-17-2.tex:271--280 states prop:char-BNT;
+    % lines 1135--1146 restate it and give the construction.
     In a prepared family of positive-bond-dimension blocks, assume that every
     block is trace-preserving, primitive, and irreducible. Then every block in
     an MPV phase class has the same bond dimension as the representative of
@@ -1186,8 +1193,8 @@ BNT construction.
     % Source anchors:
     % The canonical-form source is
     % Papers/1606.00608/MPDO-22-12-17-2.tex, eq:II_CF1 at lines 237--246.
-    % The phase-class quotient is prop:char-BNT at lines 271--279 and its
-    % appendix restatement/construction at lines 1135--1148.
+    % The phase-class quotient is prop:char-BNT at lines 271--280 and its
+    % appendix restatement/construction at lines 1135--1146.
     For prepared trace-preserving, primitive, irreducible blocks of positive
     bond dimension, with all copy weights nonzero, the phase-class quotient
     used in the BNT supplier does not change the total bond dimension: the
