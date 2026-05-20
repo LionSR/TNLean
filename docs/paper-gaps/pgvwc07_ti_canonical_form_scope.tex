@@ -64,15 +64,20 @@ canonical-form theorems. The source proof proceeds as follows.
           \(X^{1/2}\) to obtain the unital condition
           \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
 
-    \item Lines~771--815 treat a non-full-rank positive fixed point. The
+    \item Lines~771--783 treat a non-full-rank positive fixed point. The
           support projection \(P_R\) is not an independent hypothesis: it is
           derived from the spectral decomposition of the singular positive
           fixed point, using the positivity contradiction in lines~775--783.
-          Only after this derivation does the proof use
+          This is the point at which the invariant-subspace hypothesis is
+          proved; it is not an assumption imported from a prepared block
+          decomposition.
+
+    \item Lines~785--815 use the derived relation
           \(A_iP_R=P_RA_iP_R\) to split the trace over the finite ring into the
-          \(R\) and \(R^\perp\) restrictions. This is the source of the
-          recursive block decomposition and of the bond-dimension
-          non-increase.
+          \(R\) and \(R^\perp\) restrictions. The cyclic trace calculation is a
+          finite-ring argument: the \(P_R\)-term passes through the product and
+          cancels against \(P_{R^\perp}\). This is the source of the recursive
+          block decomposition and of the bond-dimension non-increase.
 
     \item Lines~816--826 iterate the same splitting on each block and then use
           a non-scalar fixed point \(X\neq\mathbf{1}\) to produce the positive
@@ -88,7 +93,8 @@ canonical-form theorems. The source proof proceeds as follows.
 Thus the source theorem is not a primitive-block theorem, an injective-block
 theorem, or a prepared-family theorem. Nor is the invariant-projection lemma by
 itself enough: the projection must be obtained from the positive fixed-point
-argument in the cited lines. A formal proof of
+argument in the cited lines, and the finite-ring trace split must then be
+carried out before the recursive decomposition is asserted. A formal proof of
 Theorem~\texttt{Th:TIcanonical} should reconstruct these steps from an
 arbitrary translation-invariant representation and use later notions only as
 lemmas after their hypotheses have been obtained in this proof order.
