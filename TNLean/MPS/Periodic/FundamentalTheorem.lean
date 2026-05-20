@@ -64,11 +64,13 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ## Heterogeneous RepeatedBlocks -/
+/-! ## Repeated blocks for different bond dimensions -/
 
-/-- Heterogeneous version of `RepeatedBlocks`: allows blocks with different bond dimensions
-by packing a dimension-equality witness. This avoids explicit `cast` manipulation in
-theorems involving families of varying-dimension blocks (e.g., `IsIrreducibleForm`). -/
+/-- Version of `RepeatedBlocks` for blocks with different ambient bond dimensions.
+
+The witness includes equality of the two bond dimensions, avoiding explicit
+`cast` manipulation in theorems involving families of varying-dimension blocks
+(for example, `IsIrreducibleForm`). -/
 def HetRepeatedBlocks {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∃ (h : D₁ = D₂), RepeatedBlocks (cast (congr_arg (MPSTensor d) h) A) B
 
@@ -97,7 +99,7 @@ theorem HetRepeatedBlocks.of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
 /-! ## Periodic block matching witness -/
 
 /-- Witness for periodic block matching: equal block counts, a bijection, and per-block
-heterogeneous `RepeatedBlocks` equivalence. This is the periodic analogue of
+`RepeatedBlocks` equivalence after matching bond dimensions. This is the periodic analogue of
 `BlockPermutationGaugePhaseConclusion`. -/
 abbrev PeriodicBlockMatchingWitness
     {rA rB : ℕ}
@@ -291,8 +293,8 @@ The single-block proportional-to-equal reduction is now split explicitly.
 `PeripheralProportionalCaseRootFromRescaling` provides the missing phase-rescaling
 step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
 once this step is available, the exact-MPV theorem
-`peripheralProportionalCase_periodicFT_of_sameMPV` yields the heterogeneous
-repeated-block conclusion. Thus the remaining mathematical gap is the multi-block
+`peripheralProportionalCase_periodicFT_of_sameMPV` yields the repeated-block
+conclusion for different bond dimensions. Thus the remaining mathematical gap is the multi-block
 existence step that turns proportionality of the assembled tensors into the
 non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.
 

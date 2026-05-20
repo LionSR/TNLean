@@ -715,7 +715,7 @@ assertion implies the coordinate-level one required by `groupedBlockCastAgrees`,
 sector-comparison theorem uses it to remove the former blocking-coordinate hypothesis.
 -/
 
-/-- Casting the physical dimension of both tensors preserves heterogeneous MPV equality. -/
+/-- Casting the physical dimension of both tensors preserves rectangular MPV equality. -/
 theorem sameMPV₂_cast_physDim {d₁ d₂ D₁ D₂ : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D₁) (B : MPSTensor d₁ D₂) :
     SameMPV₂
