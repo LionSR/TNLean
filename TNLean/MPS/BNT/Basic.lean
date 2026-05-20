@@ -188,10 +188,12 @@ lemma coefficient_eventually_eq_of_eventually_linearIndependent
 /-- Eventual linear independence for the union of two asymptotically orthonormal
 MPV families whose mixed overlaps vanish.
 
-Source context: arXiv:1606.00608, lines 1170--1192, where the
+Source context: arXiv:1606.00608, Lemma `Lem1`, lines 1131--1133, and the
+application in Theorem `thm1`, proof line 1182, where the
 linear-independence corollary is applied after adjoining one block from one BNT
 family to the other family.  This auxiliary lemma records the symmetric
-two-family strengthening of that Gram-matrix input. -/
+two-family strengthening of that Gram-matrix input; it is not the equal-MPV
+coefficient comparison of lines 1184--1192. -/
 lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     {d : ℕ} {gA gB : ℕ} {dimA : Fin gA → ℕ} {dimB : Fin gB → ℕ}
     (A : (j : Fin gA) → MPSTensor d (dimA j))

@@ -99,9 +99,9 @@ then `SameMPV₂ P.toTensor Q.toTensor` and the BNT linear independence of the
 `P.coeff N (β k) = (ζ k)^N * Q.coeff N k`.
 
 Unlike `coeff_identity_via_global_gauge`, this statement keeps the phase
-function explicit.  The coefficient/weight comparison is coupled to the
-per-block gauge matrices that are later combined into
-`X = ⊕_k (𝟙_{r_k} ⊗ X_k)`, following CPSV16 §II.C lines 1187–1192. -/
+function explicit.  The coefficient/weight comparison is the line 1187--1188
+part of the equal-MPV corollary; the per-block gauge matrices are combined
+afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in lines 1189--1192. -/
 theorem coeff_identity_via_matched_mpv_phasePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
