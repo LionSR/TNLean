@@ -124,8 +124,9 @@ MPDO/RFP parts of the tensor-network story, not as a completed classification
 proof.
 
 The PEPS directory gives finite-graph tensor definitions, state coefficients,
-virtual insertion and blocking infrastructure, local gauge operations, and the
-current scaffold for the injective PEPS Fundamental Theorem.  The PEPS theorem
+virtual insertion, identity-edge insertion, and blocking infrastructure, local
+gauge operations, and the current scaffold for the injective PEPS Fundamental
+Theorem.  The PEPS theorem
 statements are intentionally present near the definitions they require, but the
 complete proof of the two-dimensional theorem is still future work.
 
@@ -151,7 +152,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
 | `TNLean/Wielandt` | Quantum Wielandt span growth, rank-one constructions, rectangular span, primitivity equivalences, and paper-facing endpoints. |
-| `TNLean/PEPS` | PEPS definitions, virtual insertions, blocking, local gauge transformations, and the injective PEPS theorem frontier. |
+| `TNLean/PEPS` | PEPS definitions, virtual insertions, identity-edge insertions, blocking, local gauge transformations, and the injective PEPS theorem frontier. |
 | `TNLean/PiAlgebra` | Algebraic Fundamental-Theorem variants and block-separation statements. |
 | `blueprint/`, `docs/` | The LeanBlueprint, style and contribution guides, CI documentation, and paper-gap notes. |
 
