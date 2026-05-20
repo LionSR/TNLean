@@ -41,10 +41,11 @@ that actually need it.
 
 The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
-`eq:II_ABasicTensors` (line 286) and CPSV21 Definition 4.3 (lines 1846–1884)
-use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not
-require `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order
-on the moduli of distinct BNT basis elements.  The audit memo
+`eq:II_ABasicTensors` (line 286), CPSV21 Definition 4.2 (lines 1846–1850),
+and the CPSV21 two-layer display (lines 1864–1884) use raw entries
+`μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not require
+`|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order on the
+moduli of distinct BNT basis elements.  The audit memo
 `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` collects
 the counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that
 motivate keeping the equal-modulus layer out of the core predicate; all of
@@ -97,7 +98,8 @@ mpv P.toTensor σ
 ```
 
 i.e. CPSV16 §II's two-layer BNT display (lines 271–301) and CPSV21
-Definition 4.3 (lines 1846–1884) with **raw** `μ_{j,q}` entries and
+Definition 4.2 (lines 1846–1850) together with the two-layer display
+(lines 1864–1884) with **raw** `μ_{j,q}` entries and
 coefficient `∑_q μ_{j,q}^N`.
 
 The audit `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
@@ -127,7 +129,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
     Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
   /-- **BNT eventual linear independence** of the basis MPV states
-  (CPSV21 Definition 4.3, lines 1846–1850; combined-family LI input at
+  (CPSV21 Definition 4.2, lines 1846–1850; combined-family LI input at
   CPSV16 lines 1121–1132). -/
   bnt_data : HasBNTSectorData P
   /-- **Block distinctness.**  No gauge-phase equivalence between distinct

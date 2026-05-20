@@ -11,17 +11,18 @@ import TNLean.MPS.CanonicalForm.PhaseCover
 This module contains the CPSV16 §II.C lines 1187–1188 coefficient
 comparison in the full-basis bijection form.  The full basis bijection
 `β : Fin Q.basisCount ≃ Fin P.basisCount` (from `StrongMatch`) together with
-`IsBNTCanonicalForm`'s CPSV21 §III.2 / Definition 4.3 per-block
-spectral-radius-one normalization ensures the substitution has no residual
-unmatched terms.  BNT linear independence of the `P`-basis
+`IsBNTCanonicalForm`'s CPSV21 §III.2 / Definition 4.2 BNT input and
+per-block spectral-radius-one normalization ensure the substitution has no
+residual unmatched terms.  BNT linear independence of the `P`-basis
 (`hP.bnt_data`) then yields eventual **exact** coefficient identities.
 
 Paper anchors:
 
 * CPSV16 §II.C lines 1182–1188: match every BNT basis tensor, substitute the
   gauge-phase identities, and compare the coefficients of the BNT basis.
-* CPSV21 Definition 4.3 lines 1846–1884: per-block BNT normalization that
-  makes every sector participate in the full-basis matching.
+* CPSV21 Definition 4.2 lines 1846–1850 and the two-layer display at
+  lines 1864–1884: per-block BNT normalization that makes every sector
+  participate in the full-basis matching.
 
 No `dropSector` recursion and no partial-union combined LI are used here.
 -/

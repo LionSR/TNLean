@@ -421,7 +421,7 @@ structure SectorBasisOverlapSpanHypotheses {d : ℕ} (P Q : SectorDecomposition 
 /-- **BNT linear-independence hypothesis for sector bases.**
 
 `HasBNTSectorData P` asserts that the basis of the sector decomposition `P` is
-a basis of normal tensors in the sense of Definition 4.3 of arXiv:2011.12127,
+a basis of normal tensors in the sense of Definition 4.2 of arXiv:2011.12127,
 lines 1846–1850: for all sufficiently large system sizes `N`, the MPV states
 `mpvState (P.basis j) N` are linearly independent.  The statement records only
 the eventual condition; no witness is included.

@@ -98,8 +98,8 @@ CPSV16 §II.C line 1182's projection argument; it is taken here as an
 explicit theorem-level hypothesis (CPSV16 §II.A line 246 records only
 the global unit witness).
 
-Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608) and CPSV21
-Definition 4.3 lines 1846–1884. -/
+Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608), CPSV21
+Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
