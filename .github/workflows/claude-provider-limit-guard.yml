@@ -1,0 +1,262 @@
+name: Claude Provider Limit Guard
+
+on:
+  workflow_run:
+    workflows:
+      - Auto Fix (Lean)
+      - Claude Code Review (Lean)
+      - Lean linter-warning auto-fix
+      - Blueprint Sync & Prose Review
+      - PR Cleanup (bot-generated)
+      - Issue Tracker
+    types: [completed]
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  detect-provider-limit:
+    if: |
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Map workflow to switch
+        id: switch
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+        run: |
+          set -euo pipefail
+          case "$WORKFLOW_NAME" in
+            "Auto Fix (Lean)"|"Lean linter-warning auto-fix")
+              switch_name="CLAUDE_AUTO_FIX_ENABLED"
+              until_name="CLAUDE_AUTO_FIX_DISABLED_UNTIL"
+              reason_name="CLAUDE_AUTO_FIX_DISABLE_REASON"
+              ;;
+            "Claude Code Review (Lean)"|\
+            "Blueprint Sync & Prose Review"|\
+            "PR Cleanup (bot-generated)"|\
+            "Issue Tracker")
+              switch_name="CLAUDE_REVIEW_ENABLED"
+              until_name="CLAUDE_REVIEW_DISABLED_UNTIL"
+              reason_name="CLAUDE_REVIEW_DISABLE_REASON"
+              ;;
+            *)
+              switch_name=""
+              until_name=""
+              reason_name=""
+              ;;
+          esac
+          {
+            echo "switch_name=$switch_name"
+            echo "until_name=$until_name"
+            echo "reason_name=$reason_name"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Download workflow logs
+        if: steps.switch.outputs.switch_name != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/claude-run-logs"
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$REPOSITORY/actions/runs/$RUN_ID/logs" \
+            -o "$RUNNER_TEMP/claude-run-logs.zip"
+          unzip -q "$RUNNER_TEMP/claude-run-logs.zip" -d "$RUNNER_TEMP/claude-run-logs"
+
+      - name: Classify provider-limit failure
+        if: steps.switch.outputs.switch_name != ''
+        id: classify
+        run: |
+          python3 scripts/classify_claude_provider_limit.py \
+            "$RUNNER_TEMP/claude-run-logs" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Disable matching Claude switch
+        if: steps.classify.outputs.matched == 'true'
+        id: disable
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+          GH_REPO: ${{ github.repository }}
+          SWITCH_NAME: ${{ steps.switch.outputs.switch_name }}
+          UNTIL_NAME: ${{ steps.switch.outputs.until_name }}
+          REASON_NAME: ${{ steps.switch.outputs.reason_name }}
+          PROVIDER: ${{ steps.classify.outputs.provider }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+        run: |
+          set -euo pipefail
+          disabled_until="$(date -u -d '+6 hours' '+%Y-%m-%dT%H:%M:%SZ')"
+          reason="Provider-limit failure detected for ${PROVIDER} in ${WORKFLOW_NAME}: ${RUN_URL}"
+
+          gh variable set "$SWITCH_NAME" --body false
+          gh variable set "$UNTIL_NAME" --body "$disabled_until"
+          gh variable set "$REASON_NAME" --body "$reason"
+
+          {
+            echo "disabled_until=$disabled_until"
+            echo "reason=$reason"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Summarize classification
+        if: steps.switch.outputs.switch_name != ''
+        env:
+          MATCHED: ${{ steps.classify.outputs.matched }}
+          CLASSIFICATION: ${{ steps.classify.outputs.json }}
+          SWITCH_NAME: ${{ steps.switch.outputs.switch_name }}
+          DISABLED_UNTIL: ${{ steps.disable.outputs.disabled_until }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          set -euo pipefail
+          {
+            echo "### Claude provider-limit guard"
+            echo
+            echo "- Workflow run: $RUN_URL"
+            echo "- Switch: \`$SWITCH_NAME\`"
+            echo "- Provider-limit match: \`$MATCHED\`"
+            if [ -n "$DISABLED_UNTIL" ]; then
+              echo "- Disabled until: \`$DISABLED_UNTIL\`"
+            fi
+            echo
+            echo '```json'
+            printf '%s\n' "$CLASSIFICATION"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on pull request
+        if: steps.classify.outputs.matched == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number || '' }}
+          SWITCH_NAME: ${{ steps.switch.outputs.switch_name }}
+          PROVIDER: ${{ steps.classify.outputs.provider }}
+          DISABLED_UNTIL: ${{ steps.disable.outputs.disabled_until }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          set -euo pipefail
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No pull request is attached to this workflow run; no comment will be posted."
+            exit 0
+          fi
+          body="$RUNNER_TEMP/claude-provider-limit-comment.md"
+          {
+            printf '%s\n' "Claude automation was paused after a provider-limit failure."
+            printf '\n'
+            printf '%s\n' "- Provider: \`$PROVIDER\`"
+            printf '%s\n' "- Disabled switch: \`$SWITCH_NAME=false\`"
+            printf '%s\n' "- Re-enable time: \`$DISABLED_UNTIL\`"
+            printf '%s\n' "- Source run: $RUN_URL"
+            printf '\n'
+            printf '%s\n' "The scheduled guard will set the switch back to \`true\` after the cooldown."
+          } > "$body"
+          gh pr comment "$PR_NUMBER" --body-file "$body"
+
+  reenable-after-cooldown:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-enable expired Claude switches
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          now="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          reenabled_any=false
+
+          get_variable_json() {
+            local variable_name="$1"
+            gh api "repos/$GH_REPO/actions/variables/$variable_name" 2>/dev/null || true
+          }
+
+          json_field() {
+            local json="$1"
+            local field="$2"
+            if [ -z "$json" ]; then
+              return 0
+            fi
+            jq -r "$field // \"\"" <<<"$json"
+          }
+
+          check_switch() {
+            local switch_name="$1"
+            local until_name="$2"
+            local reason_name="$3"
+
+            local switch_json
+            local until_json
+            local reason_json
+            local switch_value
+            local switch_updated_at
+            local disabled_until
+            local until_updated_at
+            local reason_value
+
+            switch_json="$(get_variable_json "$switch_name")"
+            until_json="$(get_variable_json "$until_name")"
+            reason_json="$(get_variable_json "$reason_name")"
+            switch_value="$(json_field "$switch_json" '.value')"
+            switch_updated_at="$(json_field "$switch_json" '.updated_at')"
+            disabled_until="$(json_field "$until_json" '.value')"
+            until_updated_at="$(json_field "$until_json" '.updated_at')"
+            reason_value="$(json_field "$reason_json" '.value')"
+
+            if [ "$switch_value" != "false" ] || [ -z "$disabled_until" ]; then
+              return 0
+            fi
+
+            if [[ "$reason_value" != Provider-limit\ failure\ detected* ]]; then
+              echo "$switch_name remains disabled; no guard-owned reason was found." \
+                >> "$GITHUB_STEP_SUMMARY"
+              return 0
+            fi
+
+            if [ -n "$switch_updated_at" ] && [ -n "$until_updated_at" ] &&
+               [[ "$switch_updated_at" > "$until_updated_at" ]]; then
+              echo "$switch_name remains disabled; it was changed after the cooldown metadata." \
+                >> "$GITHUB_STEP_SUMMARY"
+              return 0
+            fi
+
+            if [[ "$disabled_until" > "$now" ]]; then
+              echo "$switch_name remains disabled until $disabled_until." >> "$GITHUB_STEP_SUMMARY"
+              return 0
+            fi
+
+            gh variable set "$switch_name" --body true
+            gh variable delete "$until_name" || true
+            gh variable delete "$reason_name" || true
+            echo "$switch_name re-enabled at $now after cooldown ending $disabled_until." \
+              >> "$GITHUB_STEP_SUMMARY"
+            reenabled_any=true
+          }
+
+          check_switch \
+            CLAUDE_AUTO_FIX_ENABLED \
+            CLAUDE_AUTO_FIX_DISABLED_UNTIL \
+            CLAUDE_AUTO_FIX_DISABLE_REASON
+          check_switch \
+            CLAUDE_REVIEW_ENABLED \
+            CLAUDE_REVIEW_DISABLED_UNTIL \
+            CLAUDE_REVIEW_DISABLE_REASON
+
+          if [ "$reenabled_any" = "false" ]; then
+            echo "No Claude switch was ready for re-enable at $now." >> "$GITHUB_STEP_SUMMARY"
+          fi

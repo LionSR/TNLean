@@ -23,6 +23,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [DeepSeek Mention Handler](#deepseek-mention-handler-deepseekyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
   - [Shared CI Auto-Fix Template (Codex)](#shared-ci-auto-fix-template-codex-_codex-auto-fix-sharedyml)
+  - [Claude Provider Limit Guard](#claude-provider-limit-guard-claude-provider-limit-guardyml)
 - [Safety Mechanisms](#safety-mechanisms)
 - [How to Use](#how-to-use)
   - [For any PR (automatic)](#for-any-pr-automatic)
@@ -422,6 +423,47 @@ attach, shared iteration guarding, failed-job log collection, and `openai/codex-
 
 ---
 
+### Claude Provider Limit Guard (`claude-provider-limit-guard.yml`)
+
+**What it does**: Watches selected Claude-backed workflows after they fail,
+downloads the completed run logs, and classifies whether the failure was a hard
+provider limit such as an API quota, credit, or HTTP 429 limit. Ordinary Lean,
+blueprint, review, and prompt failures are not enough to trip the guard.
+
+**When it runs**:
+
+- On failed completed runs of `auto-fix.yml`, `claude-code-review.yml`,
+  `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`,
+  `pr-cleanup.yml`, and `tracking-issue-sync.yml`, only when the failed run's
+  head repository is the TNLean repository itself.
+- Hourly by schedule, to re-enable switches whose cooldown has elapsed.
+- Manually through `workflow_dispatch`, which runs the same re-enable check.
+
+**What it disables**:
+
+- Provider-limit failures in auto-fix workflows set
+  `CLAUDE_AUTO_FIX_ENABLED=false`.
+- Provider-limit failures in review, prose-review, cleanup, or tracking
+  workflows set `CLAUDE_REVIEW_ENABLED=false`.
+- Codex workflows are not touched by this guard. They are controlled by their
+  own `CODEX_*` variables.
+
+**Cooldown path**: The guard also writes a matching
+`CLAUDE_AUTO_FIX_DISABLED_UNTIL` or `CLAUDE_REVIEW_DISABLED_UNTIL` repository
+variable, six hours after the detected failure. The scheduled job sets the
+disabled switch back to `true` once that timestamp is in the past and removes
+the cooldown metadata variables. If the failed run is attached to a pull
+request, the guard comments on that pull request with the provider, disabled
+switch, source run, and re-enable time.
+
+The log classifier is `scripts/classify_claude_provider_limit.py`. It is meant
+to be conservative: it recognizes API-limit phrases, not arbitrary appearances
+of the words "quota" or "limit" in ordinary output. It also requires the
+matching line to identify Anthropic, Claude, or DeepSeek, so unrelated GitHub
+API throttling does not pause Claude automation.
+
+---
+
 ## Safety Mechanisms
 
 These workflows have several safeguards to prevent runaway automation:
@@ -468,6 +510,25 @@ gh variable set CODEX_MENTION_ENABLED --body false
 
 Re-enable by deleting the variable or setting it to any value other than
 `false`.
+
+The Claude provider-limit guard may set `CLAUDE_AUTO_FIX_ENABLED=false` or
+`CLAUDE_REVIEW_ENABLED=false` automatically after a provider-limit failure. In
+that case it also writes one of these cooldown variables:
+
+| Variable | Meaning |
+|----------|---------|
+| `CLAUDE_AUTO_FIX_DISABLED_UNTIL` | UTC timestamp after which Claude auto-fix may be restored |
+| `CLAUDE_REVIEW_DISABLED_UNTIL` | UTC timestamp after which Claude review automation may be restored |
+| `CLAUDE_AUTO_FIX_DISABLE_REASON` | Source run and provider for the auto-fix pause |
+| `CLAUDE_REVIEW_DISABLE_REASON` | Source run and provider for the review pause |
+
+The scheduled guard restores the corresponding switch to `true` after the
+timestamp has passed, provided the disable reason still records a
+provider-limit guard pause and the switch has not been changed after the
+cooldown metadata was written. This prevents an old cooldown timestamp from
+undoing a later manual disable. To restore earlier, set the switch back to
+`true` by hand. Repository variable writes use `BOT_PAT` when that secret is
+available, falling back to `GITHUB_TOKEN`.
 
 ### Fork Guard
 
