@@ -434,7 +434,8 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 - On failed completed runs of `auto-fix.yml`, `claude-code-review.yml`,
   `lean-linter-warning-autofix.yml`, `blueprint-prose-review.yml`,
-  `pr-cleanup.yml`, and `tracking-issue-sync.yml`.
+  `pr-cleanup.yml`, and `tracking-issue-sync.yml`, only when the failed run's
+  head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
 - Manually through `workflow_dispatch`, which runs the same re-enable check.
 
