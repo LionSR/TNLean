@@ -131,7 +131,9 @@ The phase-gauge relation used in the BNT characterization is labelled
   \tilde A_k = e^{i\phi_k} X_k A_j X_k^{-1}
   \tag{\texttt{eq:II:A=XAX}}
 \]
-The BNT characterization is \texttt{prop:char-BNT}, and the BNT decomposition is
+The BNT characterization is \texttt{prop:char-BNT}
+\cite[lines~278--280 and 1135--1148]{Cirac2016MPDO_arXiv}, and the BNT
+decomposition is
 the subequation labelled \texttt{eq:II\_ABasicTensors}:
 \[
   A^i =
@@ -170,8 +172,11 @@ rules for the formal theorem surface.
   the omitted all-zero summand. It is not an additional normal tensor, a BNT
   representative, or a separate scalar weight in the paper decomposition.
 
-  \item The phase-gauge relation \texttt{eq:II:A=XAX} and the characterization
-  \texttt{prop:char-BNT} quotient the canonical-form blocks by phase and gauge.
+  \item The phase-gauge relation \texttt{eq:II:A=XAX}
+  \cite[lines~264--268]{Cirac2016MPDO_arXiv} and the characterization
+  \texttt{prop:char-BNT}
+  \cite[lines~278--280 and 1135--1148]{Cirac2016MPDO_arXiv} quotient the
+  canonical-form blocks by phase and gauge.
   Thus the paper's BNT is a list of representatives of equivalence classes.
   A formal common phase cover on raw cyclic sectors is not yet the paper's BNT
   matching statement until it has been pushed down to these representatives.
@@ -298,9 +303,11 @@ compares the coefficients in the BNT decompositions by the power-sum identity
   \sum_{q=1}^{r_{b,j}}(\nu_{j,q}e^{i\phi_j})^N
 \]
 for each matched basis tensor and all lengths $N$. The elementary power-sum
-lemma recovers the multiplicities and weights, and the blockwise gauges assemble
-into the global conjugating matrix
-\cite[lines~1155--1192]{Cirac2016MPDO_arXiv}.
+lemma \texttt{Lem:app\_simple}
+\cite[lines~1155--1163]{Cirac2016MPDO_arXiv} recovers the multiplicities and
+weights, and the blockwise gauges assemble into the global conjugating matrix in
+the proof of Corollary~\texttt{II\_cor2}
+\cite[lines~1184--1192]{Cirac2016MPDO_arXiv}.
 
 \section{Fixed-length span after blocking}
 
@@ -536,8 +543,9 @@ on published theorem names.
   positive-length MPVs; lines~214--255 give canonical form and period removal;
   lines~271--302 define and use BNTs; lines~317--345 define injectivity,
   block-injective canonical form, and the $3D^5$ bound; lines~347--360 state
-  the Fundamental Theorem and equal-case corollary; lines~1155--1192 contain
-  the power-sum comparison in the equal case; lines~1984--1988 use
+  the Fundamental Theorem and equal-case corollary; lines~1155--1163 state
+  \texttt{Lem:app\_simple}; lines~1184--1192 contain the power-sum comparison
+  and global gauge assembly in the equal case; lines~1984--1988 use
   $C_L(V)=\operatorname{span}(V^L)$ as an exact-length span.
 
   \item \path{Papers/quant-ph_0608197/MPSarchive.tex}: lines~742--763 state the
@@ -611,7 +619,7 @@ blocked not-gauge-phase equivalence, zero-tail identities, and the common
 injective blocking length through the nested-to-flat reblocking map, and then
 feed the resulting families into the BNT sector-data comparison.\footnote{%
 The live target side is the sector-data theorem
-\leanid{MPSTensor.ft_sector_bnt_equal_sector_data}; the now-available inputs are
+\leanid{MPSTensor.ft\_sector\_bnt\_equal\_sector\_data}; the now-available inputs are
 the bounded and common injective-blocking theorems for normal-CF-BNT blocks and
 the already-injective direct-sum trace-separation theorems.}  The
 paper suppresses this bookkeeping in notation; Lean must make it explicit.
