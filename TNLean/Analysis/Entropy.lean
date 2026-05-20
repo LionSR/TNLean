@@ -306,12 +306,14 @@ end BipartiteHermiticity
 
 /-! ## SSA equality condition
 
-The Hayashi (2003) characterization of equality in strong subadditivity is
-defined as a predicate. The theorem (equality ↔ recovery map condition) is the
-sanctioned axiom `hayashi_ssa_equality_characterization` in
+The Hayashi characterization of equality in strong subadditivity is defined as
+a predicate. The theorem (equality ↔ recovery map condition) is the sanctioned
+axiom `hayashi_ssa_equality_characterization` in
 `TNLean/Axioms/Entropy.lean`.
 
-Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24; Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246,
+359--374 (2004);
 blueprint `def:ssa_equality`.
 
 TODO: Replace with a proof following Hayashi, "Quantum Information: An
@@ -329,7 +331,8 @@ Formula: `S(ρ_ABC) + S(ρ_B) = S(ρ_AB) + S(ρ_BC)`.
 
 Source: blueprint `def:ssa_equality`;
 Lieb--Ruskai, JMP 14, 1938 (1973);
-Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208. -/
+Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24. -/
 def IsSSAEquality
     (ρ_ABC : Matrix (Fin dA × Fin dB × Fin dC)
       (Fin dA × Fin dB × Fin dC) ℂ)

@@ -43,7 +43,8 @@ case of strong subadditivity. A faithful formalization is expected to require:
 
 * Lieb, Ruskai, "Proof of the strong subadditivity of quantum-mechanical
   entropy", JMP 14, 1938 (1973) — source of SSA
-* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208 — SSA equality
+* Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+  Theorem 5.24 — SSA equality and quantum Markov structure
 * Ruskai, "Inequalities for quantum entropy: A review with conditions for
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
@@ -133,7 +134,8 @@ conjugating `ρ_ABC` by `1_A ⊗ U_B ⊗ 1_C` and reindexing `B` along the chose
 finite decomposition, the state becomes the block-diagonal direct sum
 `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
-Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24;
 Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
 blueprint `def:hayashi_markov_decomposition`. -/
 structure HayashiMarkovDecomposition {dA dB dC : ℕ}
@@ -226,7 +228,8 @@ operator-algebra and recovery-map theory that is not yet formalized in
 Mathlib or in this repository. Downstream consumers should import the theorem
 statement from `TNLean/Entropy/MarkovChain.lean`, not this axiom module.
 
-Source: Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208;
+Source: Hayashi, *Quantum Information: An Introduction*, Springer 2006,
+Theorem 5.24;
 Ruskai, JMP 43, 4358 (2002);
 Hayden--Jozsa--Petz--Winter, Commun. Math. Phys. 246, 359--374 (2004);
 arXiv:1606.00608 Appendix C;
