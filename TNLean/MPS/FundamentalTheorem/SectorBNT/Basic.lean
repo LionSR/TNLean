@@ -66,8 +66,8 @@ core BNT predicate.
   Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.  Source-line tags used
   below: 217–246 (global modulus normalization), 264–279 (gauge-phase
   grouping rule), 271–301 (two-layer BNT display with raw `μ_{j,q}`),
-  1121–1132 (combined-family LI input), 1181–1188 (multiplicity recovery
-  via power-sum comparison).
+  1121–1132 (combined-family LI input), 1182 (BNT projection step),
+  and 1184–1188 (equal-case multiplicity recovery via power-sum comparison).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete, *Matrix product states and
   projected entangled pair states: Concepts, symmetries, theorems*,
   Rev. Mod. Phys. **93**, 045003 (2021); arXiv:2011.12127.  Source-line tags
@@ -175,8 +175,8 @@ rules out the pathological cancellation that would obstruct the CPSV16 §II
 Step 1 coefficient-comparison argument: once combined-family LI isolates
 the `j`-th sector coefficient (CPSV16 lines 1121–1132), the surviving
 relation cannot be `0 = 0` for large `N`, so the multiplicity-recovery
-argument of CPSV16 lines 1181–1188 has a nonvanishing left-hand side to
-compare against.
+argument of CPSV16 lines 1184–1188 has a nonvanishing left-hand side to
+compare against after the line-1182 matching step.
 
 The proof feeds nonzero weights `P.weight j q ≠ 0` (from
 `P.weight_ne_zero`) into `geom_sum_eventually_zero`
