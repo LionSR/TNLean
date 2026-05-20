@@ -358,6 +358,7 @@ import TNLean.Channel.Determinant
 import TNLean.PEPS.Defs
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.LocalGauge
 -- The PEPS fundamental theorem is an exploratory capstone with recorded
 -- paper-alignment gaps; it is deliberately not part of the default root.

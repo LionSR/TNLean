@@ -503,18 +503,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Identity insertion recovers the edge-blocked coefficient]%
     \label{thm:peps_edgeInsertedCoeff_identity}
-    \notready
+    \lean{TNLean.PEPS.edgeInsertedCoeff_identity}
+    \leanok
     \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBlockedCoeff,
         def:peps_edgeBoundaryToInsertedBoundaryConfig,
         def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig,
         thm:peps_edgeInsertedCoeff_identity_diagonal_summand,
         thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
     If the inserted matrix on the distinguished edge is the identity, then the
-    edge insertion coefficient is the ordinary edge-blocked coefficient. After
-    the diagonal summand comparison, the remaining proof is the finite
-    reindexing of the inserted-boundary sum along the diagonal and the
-    off-diagonal vanishing of the identity matrix.
+    edge insertion coefficient is the ordinary edge-blocked coefficient.
 \end{theorem}
+\begin{proof}\leanok
+    Split the inserted-boundary sum into the diagonal part, where the two
+    inserted bond indices agree, and the off-diagonal part. The off-diagonal
+    summands vanish for the identity matrix, while the diagonal summands
+    reindex through the equivalence with ordinary edge-boundary data.
+\end{proof}
 
 \begin{definition}[Blocked middle tensor at an edge]%
     \label{def:peps_edgeMiddleWeight}
@@ -560,6 +564,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     factors are reconstructed from the same boundary data.
 \end{proof}
 
+\begin{theorem}[Identity insertion equals the PEPS coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_identity_eq_stateCoeff}
+    \leanok
+    \uses{thm:peps_edgeInsertedCoeff_identity,
+        thm:peps_edgeBlockedCoeff_eq_stateCoeff}
+    If the inserted matrix on the distinguished edge is the identity, then the
+    edge insertion coefficient is the original PEPS state coefficient.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the identity-insertion reindexing with the edge-blocking
+    reindexing of the ordinary PEPS coefficient.
+\end{proof}
+
 \begin{theorem}[Same state gives the same edge-blocked coefficients]%
     \label{thm:peps_sameState_edgeBlockedCoeff_eq}
     \lean{TNLean.PEPS.SameState.edgeBlockedCoeff_eq}
@@ -570,6 +588,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 \begin{proof}\leanok
     Rewrite both edge-blocked coefficients as the corresponding PEPS state
+    coefficients and apply the same-state hypothesis.
+\end{proof}
+
+\begin{theorem}[Same state gives the same identity insertions]%
+    \label{thm:peps_sameState_edgeInsertedCoeff_identity_eq}
+    \lean{TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq}
+    \leanok
+    \uses{def:peps_same_state,
+        thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
+    If two PEPS tensors have the same state, then their edge-centered identity
+    insertions agree at every edge and every physical configuration.
+\end{theorem}
+\begin{proof}\leanok
+    Rewrite both identity insertions as the corresponding PEPS state
     coefficients and apply the same-state hypothesis.
 \end{proof}
 
