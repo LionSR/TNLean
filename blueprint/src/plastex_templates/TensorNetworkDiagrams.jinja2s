@@ -1,3 +1,6 @@
+name: TNTikZDiagram
+{{ obj.tn_svg_html }}
+
 name: TNMPSLocal TNMPSWord TNMPV TNTransferMap TNMPOCell TNMPOChain
 {{ obj.tn_svg_html }}
 

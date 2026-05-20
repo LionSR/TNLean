@@ -869,7 +869,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
     four parts \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
     \((A\cup B)^c\), and applies the two available left inverses in sequence:
     \begin{center}
-        \TNPEPSInjectiveRegionUnion
+        \TNTikZDiagram{TNPEPSInjectiveRegionUnion}{%
+            \begin{tikzpicture}[tn picture]
+                \node[tn tensor dot] (unionAB) at (0,0) {};
+                \node[tn tensor dot] (unionI) at (0.70,0.70) {};
+                \node[tn tensor dot] (unionBA) at (2.00,0) {};
+                \node[tn tensor dot] (unionC) at (1.30,-0.70) {};
+                \foreach \n in {unionAB,unionI,unionBA,unionC} {
+                    \draw[tn phys leg] (\n.north) -- ++(0,0.42);
+                }
+                \draw[tn leg] (unionAB) -- (unionI) -- (unionBA) -- (unionC) --
+                    (unionAB) -- (unionBA);
+                \draw[tn leg] (unionI) -- (unionC);
+                \node[anchor=east] at ($(unionAB)+(-0.12,-0.20)$)
+                    {$A\setminus B$};
+                \node[anchor=west] at ($(unionI)+(0.12,0.02)$) {$A\cap B$};
+                \node[anchor=west] at ($(unionBA)+(0.12,-0.20)$)
+                    {$B\setminus A$};
+                \node at ($(unionC)+(0,-0.38)$) {$(A\cup B)^c$};
+            \end{tikzpicture}%
+        }
     \end{center}
 \end{lemma}
 
@@ -881,11 +900,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Lemma~\ref{lem:peps_injectiveRegion_union} then implies that the regions
     \(R\), \(S\), and \(T\) below are injective:
     \begin{center}
-        \TNPEPSNormalRegionsRS
+        \TNTikZDiagram{TNPEPSNormalRegionsRS}{%
+            \begin{tikzpicture}[tn picture, scale=0.90]
+                \begin{scope}
+                    \clip (-0.25,0.75) rectangle (2.25,3.25);
+                    \pepsNormalSquareLattice
+                    \pepsNormalRegionR
+                \end{scope}
+                \node at (2.85,2.00) {and};
+                \begin{scope}[xshift=3.55cm]
+                    \clip (-0.25,0.75) rectangle (2.25,3.25);
+                    \pepsNormalSquareLattice
+                    \pepsNormalRegionS
+                \end{scope}
+            \end{tikzpicture}%
+        }
 
         \vspace{0.5em}
 
-        \TNPEPSNormalRegionT
+        \TNTikZDiagram{TNPEPSNormalRegionT}{%
+            \begin{tikzpicture}[tn picture, scale=0.90]
+                \clip (-0.25,0.25) rectangle (3.25,3.25);
+                \pepsNormalSquareLattice
+                \pepsNormalRegionT
+            \end{tikzpicture}%
+        }
     \end{center}
 \end{definition}
 
@@ -901,7 +940,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective-chain insertion argument used in the injective PEPS theorem
     applies to the blocked normal PEPS:
     \begin{center}
-        \TNPEPSNormalEdgeBlockingReduction
+        \TNTikZDiagram{TNPEPSNormalEdgeBlockingReduction}{%
+            \begin{tikzpicture}[tn picture, scale=0.90]
+                \begin{scope}
+                    \clip (-0.25,-0.25) rectangle (3.25,3.25);
+                    \pepsNormalSquareLatticeLines
+                    \pepsNormalDistinguishedEdge
+                    \pepsNormalSquareLatticeDots
+                    \pepsNormalRedBlock
+                    \pepsNormalBlueBlock
+                \end{scope}
+                \node at (3.75,1.45) {$\Rightarrow$};
+                \begin{scope}[xshift=4.45cm,yshift=1.50cm]
+                    \pepsBlockedNormalChain
+                \end{scope}
+            \end{tikzpicture}%
+        }
     \end{center}
 \end{theorem}
 
@@ -916,7 +970,34 @@ injective and normal PEPS, following Theorems~2 and~3 of
     matrices into \(B\) gives a tensor \(\widetilde B\), equivalently the final
     local gauge formula of \cite[Theorem~3]{Molnar2018NormalPEPS}:
     \begin{center}
-        \TNPEPSTINormalGaugeAbsorption
+        \TNTikZDiagram{TNPEPSTINormalGaugeAbsorption}{%
+            \begin{tikzpicture}[tn picture]
+                \begin{scope}
+                    \pepsSquareTensor{tiB}{(0,0)}
+                    \node at ($(tiB.south)+(0,-0.88)$) {$B$};
+                \end{scope}
+                \node at (1.25,0) {$=$};
+                \begin{scope}[xshift=2.35cm]
+                    \node[tn tensor dot] (tiA) at (0,0) {};
+                    \node[tn operator dot, label=left:$X$] (tiXL) at (-0.76,0) {};
+                    \node[tn operator dot, label=right:$X^{-1}$] (tiXR)
+                        at (0.76,0) {};
+                    \node[tn operator dot, label=below:$Y$] (tiYD) at (0,-0.76) {};
+                    \node[tn operator dot, label=above:$Y^{-1}$] (tiYU)
+                        at (0,0.76) {};
+                    \draw[tn phys leg] (tiA.north) -- ++(0,0.46);
+                    \draw[tn leg] (tiXL.west) -- ++(-0.24,0);
+                    \draw[tn leg] (tiXL.east) -- (tiA.west);
+                    \draw[tn leg] (tiA.east) -- (tiXR.west);
+                    \draw[tn leg] (tiXR.east) -- ++(0.24,0);
+                    \draw[tn leg] (tiYD.south) -- ++(0,-0.24);
+                    \draw[tn leg] (tiYD.north) -- (tiA.south);
+                    \draw[tn leg] (tiA.north) -- (tiYU.south);
+                    \draw[tn leg] (tiYU.north) -- ++(0,0.24);
+                    \node at ($(tiA.south)+(0,-1.20)$) {$\lambda A$};
+                \end{scope}
+            \end{tikzpicture}%
+        }
     \end{center}
 \end{theorem}
 
