@@ -45,9 +45,10 @@ field
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖weight j q‖ = 1` is
 **not** a structural field — CPSV16 line 246 is **global** (the
-unit-modulus copy can sit in any sector), while CPSV21 §III.2 Definition 4.2
-(lines 1846–1850) defines the BNT basis and the display at lines 1864–1884
-normalizes the spectral radius of the *basis* tensors, not the copy
+unit-modulus copy can sit in any sector), while CPSV21 Section IV.A,
+Definition 4.2 (lines 1846–1850), defines the BNT basis, and the display at
+lines 1864–1884 normalizes the spectral radius of the *basis* tensors, not
+the copy
 coefficients.  The matching theorem below therefore takes
 the unit-modulus sector as an **explicit parameter** `j₀ : Fin P.basisCount`
 together with a per-sector unit-modulus existential
