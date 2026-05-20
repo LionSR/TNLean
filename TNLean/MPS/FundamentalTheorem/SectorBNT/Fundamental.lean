@@ -77,7 +77,7 @@ noncomputable def matched_block_gauge {Q : SectorDecomposition d}
   change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
   exact Xblock (Q.flatIndexEquiv.symm s).1
 
-/-- **Global block gauge from matched sector and weight data.**
+/-- **Global block gauge from matched sectors and copy weights.**
 
 Assume the sectors of two sector decompositions have already been matched, and
 assume that the block gauges, phases, and copy-weight identities all use the
