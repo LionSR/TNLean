@@ -127,5 +127,15 @@ by a diagram before reading the surrounding proof.
   comparison pair, or a trivalent residual-gauge vertex, should likewise be
   factored through private layout commands before being used in theorem-level
   public diagrams.
+- If a theorem needs a diagram whose mathematical content is clearer in the
+  chapter source than behind a single figure command, wrap the local TikZ
+  picture in `\TNTikZDiagram{RegisteredDiagram}{...}`. The first argument is
+  the registered diagram used by the web blueprint; the second is the local
+  picture used by the printed blueprint. The two pictures must depict the same
+  diagram. Shared helpers such as `\pepsNormalSquareLattice`,
+  `\pepsNormalRegionR`, `\pepsNormalRegionS`, `\pepsNormalRegionT`,
+  `\pepsNormalDistinguishedEdge`, `\pepsNormalRedBlock`,
+  `\pepsNormalBlueBlock`, `\pepsBlockedNormalChain`, and `\pepsSquareTensor`
+  are used to keep the registered and local forms aligned.
 - Private glyphs and lengths belong in `blueprint/src/macros/tn_core.tex`.
   Chapter-facing diagrams belong in `blueprint/src/macros/tn_print.tex`.

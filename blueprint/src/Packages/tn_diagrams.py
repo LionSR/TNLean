@@ -38,6 +38,7 @@ _RENDER_SOURCE_FILES = (
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
+    "TNTikZDiagram": "rendered body",
     "TNMPSLocal": "tensor label",
     "TNMPSWord": "tensor left right length",
     "TNMPV": "tensor left right length",
@@ -107,6 +108,12 @@ def _sample_arg_value(name: str) -> str:
         "permutation": "\\sigma",
         "left_virtual": "X",
         "right_virtual": "Y",
+        "rendered": "\\TNPEPSNormalRegionT",
+        "body": (
+            "\\begin{tikzpicture}[tn picture]"
+            "\\node[tn tensor dot] at (0,0) {};"
+            "\\end{tikzpicture}"
+        ),
     }
     return values.get(name, "x")
 
@@ -156,7 +163,11 @@ def _assert_peps_macros_used_in_chapter() -> None:
     unused = [
         name
         for name in peps_macros
-        if rf"\{name}" not in chapter and name not in intentionally_unused
+        if (
+            rf"\{name}" not in chapter
+            and rf"\TNTikZDiagram{{{name}}}" not in chapter
+            and name not in intentionally_unused
+        )
     ]
     if unused:
         raise RuntimeError(
@@ -169,6 +180,13 @@ _assert_diagram_args_match_print_macros()
 
 
 def _tex_call(obj: Command) -> str:
+    if obj.macroName == "TNTikZDiagram":
+        rendered = stringify_tex_item(obj.attributes.get("rendered", "")).strip()
+        if rendered:
+            if rendered.startswith("\\"):
+                return rendered
+            return "\\" + rendered
+
     source = getattr(obj, "source", "").strip()
     if source.startswith(rf"\{obj.macroName}"):
         return source
@@ -347,7 +365,8 @@ def _missing_tools_html(tex_call: str) -> str:
 def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
     svg_path.parent.mkdir(parents=True, exist_ok=True)
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    (_CACHE_DIR / f"{stem}.tex").write_text(_latex_document(tex_call), encoding="utf-8")
+    tex_path = _CACHE_DIR / f"{stem}.tex"
+    tex_path.write_text(_latex_document(tex_call), encoding="utf-8")
 
     engine = _engine_command(stem)
     if engine is None:
@@ -366,6 +385,7 @@ def _compile_svg(tex_call: str, stem: str, svg_path: Path) -> str | None:
         log_path.write_text(svg_result.stdout, encoding="utf-8")
         raise RuntimeError(f"dvisvgm failed for {tex_call}; see {log_path}")
 
+    tex_path.unlink(missing_ok=True)
     return svg_path.name
 
 
