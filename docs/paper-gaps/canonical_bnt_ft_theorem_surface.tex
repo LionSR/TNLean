@@ -85,7 +85,8 @@ The source BNT characterization selects one representative from each
 phase-gauge equivalence class and compares the power sums of weights. The
 formalization separates this into overlap decay, eventual linear independence,
 permutation rigidity, sector-weight comparison, and phase absorption. The
-heterogeneous block-matching theorem is a genuine formal conclusion for the
+rectangular block-matching theorem, allowing the two sector decompositions to
+have different bases before matching, is a genuine formal conclusion for the
 block-matching part, while the final global weighted gauge equivalence remains
 the paper-level equal-MPV target.
 The overlap-to-linear-independence and change-of-basis declarations are
@@ -199,19 +200,22 @@ identified with one another.
     \path{MPSTensor.fundamentalTheorem_singleBlock} is the injective-block
     gauge theorem. It is a source-level theorem only for one injective block,
     not for the multi-block BNT comparison.
-  \item The strict canonical-form BNT equal-MPV declaration
-    \path{MPSTensor.fundamentalTheorem_equalMPV_CFBNT} is a strict
-    representative form. The former proportional wrapper has been removed
-    because its one-shot coefficient hypotheses did not imply the full BNT
-    matching conclusion.
-  \item The sector-decomposition theorem
+  \item The SectorBNT equal-MPV declarations
+    \path{MPSTensor.ft_sector_bnt_equal_sector_data} and
+    \path{MPSTensor.ft_sector_bnt_equal_global_gauge} are the current formal
+    statements closest to the BNT part of the source proof. They work with raw
+    sector weights and derive the sector matching, copy-count equalities, and
+    matched copy-weight identities on the SectorBNT surface. The source-level
+    equal-MPV corollary is obtained after the canonical-form supplier has put
+    the input tensors on this surface with the required unit-modulus-copy
+    normalization.
+  \item The older sector-decomposition comparison theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
-    is the current formal statement closest to the BNT part of the source
-    proof: from a supplied sector-basis matching, linear independence, and
-    equality of total MPV families, it proves the corresponding equality of
-    sector-weight multisets, up to the phases in the matching. The source-level
-    equal-MPV corollary is obtained only after the sector-basis matching itself
-    is derived from the source hypotheses.
+    is now an auxiliary rectangular comparison statement: from a supplied
+    sector-basis matching, linear independence, and equality of total MPV
+    families, it proves the corresponding equality of sector-weight multisets,
+    up to the phases in the matching. It should not be presented as the
+    paper-level equal-MPV corollary.
 \end{enumerate}
 
 Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
@@ -231,18 +235,20 @@ $\mu_{j,q}$ in the sums
 \[
   \sum_q \mu_{j,q}^N.
 \]
-The current strict-representative equal-MPV declaration
-\path{fundamentalTheorem_equalMPV_CFBNT} is therefore a special-case statement.
+The current SectorBNT equal-MPV declarations
+\path{ft_sector_bnt_equal_sector_data} and
+\path{ft_sector_bnt_equal_global_gauge} are therefore the relevant formal
+statements on the BNT surface, not the older one-copy \texttt{CFBNT} surface.
 The proportional wrapper that formerly assumed explicit coefficient data has
 been deleted; such data do not by themselves encode the residual peeling or
 power-sum comparison in the source proof. The equal-MPV common-block comparison
 assumes the repeated-copy structure has already been matched into common
 weights and dimensions. It should not be cited as the general
 arXiv:1606.00608 theorem unless the missing BNT multiplicity comparison has
-already been discharged. Heterogeneous variants that state the
-permutation, phases, gauges, and weight matching for possibly different sector
-indices are legitimate theorem statements only when their hypotheses are
-obtained from the same BNT comparison.
+already been discharged. Rectangular variants that state the permutation,
+phases, gauges, and weight matching for sector decompositions with different
+bases are legitimate theorem statements only when their hypotheses are obtained
+from the same BNT comparison.
 
 \paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source
@@ -315,8 +321,9 @@ paper-level theorems.
       \texttt{perBlock\_sameMPV\_of\_equalMPV\_CFBNT}
     \]
     is only the extraction of the blockwise equality conclusion from the
-    common-block equal-MPV lemma. Neither should be counted as an additional source-level
-    Fundamental Theorem.
+    common-block equal-MPV lemma. These old names are retained here only to
+    identify the retired one-copy route; neither should be counted as an
+    additional source-level Fundamental Theorem.
   \item The implication
     \[
       \texttt{sameMPV}_{2}\texttt{\_implies\_proportionalMPV}_{2}
@@ -336,10 +343,11 @@ paper-level theorems.
     \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch}
     and
     \path{fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_matched_basis}
-    are also lemma-level. They transport the same coefficient and multiset
-    formulas across a supplied phase or matched-basis identification. The
-    theorem-level surface begins only when the proof supplies the actual
-    matching data from the BNT hypotheses.
+    are also lemma-level. The names are legacy names for rectangular comparison
+    adapters; they transport the same coefficient and multiset formulas across a
+    supplied phase or matched-basis identification. The theorem-level surface
+    begins only when the proof supplies the actual matching data from the BNT
+    hypotheses.
 \end{itemize}
 
 \section{Statements to keep visibly conditional}
