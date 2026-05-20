@@ -45,6 +45,13 @@ What is **not** yet proved here:
 
 Accordingly, this file gives reduction lemmas and explicit conditional statements,
 **not** a complete canonical-form existence theorem for arbitrary input tensors.
+Relative to PGVWC07, Theorem `Th:TIcanonical`, lines 742–763, the missing
+source-level conclusion is the single theorem that starts from an arbitrary
+translation-invariant representation and simultaneously constructs positive
+weights, unital blocks, diagonal full-rank dual fixed points, uniqueness of the
+identity fixed point for each block transfer map, and the stated bond-dimension
+bound. The audit boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
@@ -77,7 +84,8 @@ The iterated invariant-projection splitting in Section 2.3 (Wolf/Cirac/Verstraet
 canonical-form reduction) is formalized in `TNLean.MPS.Structure.InvariantSubspaceDecomp`.
 This external input provides:
 
-> **Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803).**
+> **Perez-Garcia et al., quant-ph/0608197, proof of Theorem
+> `Th:TIcanonical` (lines 765–833).**
 > An invariant orthogonal projection `P` on the bond space (satisfying
 > `(1-P) A_i P = 0` for all `i`) yields an MPV-equivalent two-block direct-sum
 > tensor with strictly smaller block dimensions.

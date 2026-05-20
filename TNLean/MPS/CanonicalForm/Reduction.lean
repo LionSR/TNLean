@@ -12,6 +12,8 @@ open scoped Matrix BigOperators
 This module implements the "iterate until all blocks are irreducible" step from
 Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3
 (around eq. `\label{eq:II_Aiplusk1}`).
+It also corresponds to the invariant-subspace splitting used inside
+PGVWC07, Theorem `Th:TIcanonical`, lines 765–833.
 
 Starting from an arbitrary MPS tensor `A : MPSTensor d D`, we iteratively apply
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict` — which produces two blocks each with
@@ -28,12 +30,16 @@ orthogonal projections. Strong induction on `D` guarantees termination.
 * Periodicity removal / Perron–Frobenius normalization.
 * Gauge normalization (CFII, left-canonical gauge).
 * Blocking to remove periodicity.
+* The positive weights, unital block orientation, diagonal full-rank dual fixed
+  points, uniqueness of the identity fixed point, and total bond-dimension bound
+  in PGVWC07, Theorem `Th:TIcanonical`, lines 742–763.
 These are separate steps in the canonical-form construction.
 
 ## References
 
 * Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3, eq. II_Aiplusk1.
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3, lines 769–803.
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 765–833.
 -/
 
 namespace MPSTensor
@@ -120,6 +126,14 @@ The proof proceeds by strong induction on `D`: in the inductive step, `HasInvari
 nontrivial invariant projection `P`, which we use via
 `exists_twoBlock_decomp_of_lowerZero_strict` to split `A` into two blocks of *strictly smaller*
 bond dimension, then apply the induction hypothesis to each block.
+
+**Scope restriction (PGVWC07 canonical-form proof step):** This theorem proves
+only the recursive invariant-projection splitting from the proof of
+PGVWC07, Theorem `Th:TIcanonical`, lines 765–833. It does not prove the full
+source theorem's positive weights, unital normalization, diagonal full-rank dual
+fixed points, uniqueness of the identity fixed point, or final bond-dimension
+bound. The remaining source boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
