@@ -186,8 +186,10 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
 /--
 **Prepared phase classes preserve the original bond dimensions.**
 
-Source: arXiv:1606.00608, `prop:char-BNT` in
-`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271-279 and 1135-1148.
+Source: arXiv:1606.00608, `equalMPS` in
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1080-1117, supplies the
+same-dimension conclusion; `prop:char-BNT` at lines 271-279 and 1135-1148
+uses this comparison to form phase classes.
 In a prepared family of left-canonical, primitive, irreducible blocks, every
 member of an MPV phase class has the same bond dimension as its chosen
 representative.
