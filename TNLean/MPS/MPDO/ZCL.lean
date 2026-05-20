@@ -9,7 +9,7 @@ import TNLean.MPS.RFP.Defs
 # Zero correlation length for MPO tensors
 
 Definitions of zero-correlation-length conditions for mixed-state tensor
-networks, following arXiv:1606.00608, Definition 4.2.
+networks, following arXiv:1606.00608, Definition `DefinitionZCL`, lines 736–741.
 
 ## Main definitions
 
@@ -31,7 +31,8 @@ variable {d D : ℕ}
 /-- An MPO tensor has **zero correlation length** when its transfer map is
 idempotent: `E_M ∘ E_M = E_M`.
 
-See arXiv:1606.00608, Definition 4.2 and arXiv:2011.12127, Definition 4.2. -/
+See arXiv:1606.00608, Definition `DefinitionZCL`, lines 736–741, and
+arXiv:2011.12127, Section III.C, lines 937–939. -/
 def IsZCL (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 

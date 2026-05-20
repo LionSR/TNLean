@@ -11,7 +11,7 @@ import TNLean.MPS.RFP.Defs
 
 This file collects the local purification data used by `MPOTensor.IsLPDO` and
 defines the mixed-state purification RFP condition from arXiv:1606.00608,
-Definition 4.3.
+Definition `def:Puri-RFP`, lines 756–759.
 
 ## Main definitions
 
@@ -69,7 +69,7 @@ theorem isLPDO_iff_exists_witness (M : MPOTensor d D) :
 purifying family `A` whose purifying MPS tensor is a pure-state renormalization
 fixed point: `IsLPDO M` and `MPSTensor.IsRFP (purifyingMPSTensor A)`.
 
-See arXiv:1606.00608, Definition 4.3. -/
+See arXiv:1606.00608, Definition `def:Puri-RFP`, lines 756–759. -/
 def IsPRFP (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
