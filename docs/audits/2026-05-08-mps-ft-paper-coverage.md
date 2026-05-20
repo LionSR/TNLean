@@ -46,7 +46,7 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | §II Defn (l.132) | 132–139 | MPV definition (`MPV`) | `TNLean/MPS/Defs.lean` | `leanok` |
-| Prop (l.249) | 249–251 | After blocking, any tensor can be put in CF generating same MPV | `TNLean/MPS/CanonicalForm/Reduction.lean` (`exists_irreducible_blockDecomp`); `CanonicalForm/Existence.lean` | `leanok` |
+| Prop (l.249) | 249–251 | After blocking, any tensor can be put in CF generating same MPV | Constituent reductions in `TNLean/MPS/CanonicalForm/Reduction.lean` and `CanonicalForm/Existence.lean`; all-zero-block and after-blocking statements are recorded separately in the blueprint | **not formalized** — the formal declarations cover invariant-subspace splitting, TP gauge, and conditional after-blocking constructions, not the full proposition from an arbitrary tensor to a canonical-form representative after blocking; tracked by #1685 |
 | Prop (l.253) | 253–255 | Characterization of CF (no p-periodic, P Aⁱ = P Aⁱ P ⇒ Aⁱ P = P Aⁱ P) | `TNLean/MPS/CanonicalForm/FromPeripheralPrimitive.lean` (`isCanonicalForm_of_peripheralPrimitive`) | `leanok` |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
@@ -267,6 +267,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
+| High | CPSV16 | Section II.A proposition, lines 249–251 (canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
 | High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
