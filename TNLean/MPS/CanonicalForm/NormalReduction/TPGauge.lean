@@ -295,15 +295,15 @@ Every nonzero block satisfies:
 
 The MPV of `A` equals the zero-block contribution plus the weighted nonzero-block sum.
 
-**Scope restriction (PGVWC07 canonical-form proof step):** PGVWC07,
-Theorem `Th:TIcanonical`, lines 765--770 use a full-rank positive fixed point
-to gauge a block into the unital orientation
-`∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual left-canonical TP
-orientation after the all-zero-block separation. It is therefore not the full
-PGVWC07 translation-invariant canonical form theorem: it does not also prove
-the source theorem's unital orientation, diagonal full-rank dual fixed points,
-uniqueness of the identity fixed point, or total bond-dimension bound. The
-boundary is recorded in
+**Scope restriction (translation-invariant canonical-form proof step):**
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 765--770 use a full-rank positive fixed point to gauge a block into the
+unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
+left-canonical TP orientation after the all-zero-block separation. It is therefore not the full
+translation-invariant canonical form theorem of Pérez-García, Verstraete,
+Wolf, and Cirac: it does not also prove the source theorem's unital orientation,
+diagonal full-rank dual fixed points, uniqueness of the identity fixed point, or
+total bond-dimension bound. The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
