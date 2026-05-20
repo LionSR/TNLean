@@ -42,7 +42,7 @@ converges to an idempotent (the RFP).
   *Matrix Product Density Operators: Renormalization Fixed Points
   and Boundary Theories*, arXiv:1606.00608.
   Appendix B, lines 1211--1244 (RFP as idempotent limit for canonical-form
-  tensors) and lines 1264--1268 (use of `Lem:app_simple`).
+  tensors) and lines 1264--1268 (finite power-sum nonvanishing estimate).
   Source: `Papers/1606.00608/`
 -/
 
