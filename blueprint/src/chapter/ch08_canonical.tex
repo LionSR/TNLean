@@ -28,7 +28,35 @@ canonical form conditions.
 The reduction draws on~\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
 
-\begin{theorem}[Translation-invariant canonical form]%
+\begin{theorem}[PGVWC07 translation-invariant canonical form]%
+    \label{thm:pgvwc07_ti_canonical_form}
+    \notready
+    Let a translation-invariant MPS representation on a finite ring have bond
+    dimension $D$. Then the matrices may be decomposed as
+    \[
+        A^i =
+        \begin{pmatrix}
+            \lambda_1 A_1^i &0                 &0\\
+            0               &\lambda_2 A_2^i   &0\\
+            0               &0                 &\cdots
+        \end{pmatrix},
+    \]
+    with $1 \ge \lambda_k > 0$. For each block,
+    \[
+        \sum_i A_k^i(A_k^i)^\dagger = \Id,
+        \qquad
+        \sum_i (A_k^i)^\dagger \Lambda_k A_k^i = \Lambda_k,
+    \]
+    where $\Lambda_k$ is diagonal, positive, and full-rank. Moreover $\Id$ is
+    the only fixed point of
+    $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$, and the total bond dimension
+    of the decomposition is at most $D$.
+
+    This is the source statement
+    of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{theorem}[Blocked CPSV canonical-form reduction]%
     \label{thm:cpgsv_canonical_form_source}
     \notready
     This is the canonical-form reduction of
@@ -50,10 +78,11 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
 \end{theorem}
 
-This chapter develops the constituent steps of this reduction:
+Theorem~\ref{thm:pgvwc07_ti_canonical_form} is not yet formalized. This
+chapter develops constituent steps of the PGVWC07 and CPSV reductions:
 invariant-subspace decomposition (Theorem~\ref{thm:irred_decomp}), TP gauge
 (Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
-(Section~\ref{sec:cyclic_sectors}). Zero-tail separation and the combined
+(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the combined
 after-blocking statement are recorded in Chapter~\ref{ch:canonical_after_blocking}
 (Theorem~\ref{thm:zero_block_separation} and
 Theorem~\ref{thm:tp_primitive_blockdecomp}).
