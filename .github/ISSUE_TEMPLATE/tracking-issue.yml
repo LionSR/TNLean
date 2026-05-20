@@ -53,20 +53,18 @@ body:
   - type: textarea
     id: tasks
     attributes:
-      label: Sub-issues
+      label: Initial sub-issue references
       description: |
-        List issue numbers that should be attached in GitHub's native
-        Sub-issues panel after this issue is created. Each line should contain
-        only an issue reference. Put mathematical descriptions in the
-        sub-issue titles and bodies.
-      value: |
-        #42
-        #43
+        Optional: list existing issue numbers that should be attached using
+        GitHub's native Sub-issues panel after this issue is created. This
+        field is not the authoritative child-issue list; it is only a reminder
+        for the initial attachment step. Put mathematical descriptions in the
+        child issue titles and bodies.
       placeholder: |
         #42
         #43
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: notes
