@@ -124,7 +124,7 @@ theorem collapsedBntSectorDecomp_hasBNT
         (blocks (classes.repr j)) (hIrr (classes.repr j))
         (hTP (classes.repr j)) (hPrim (classes.repr j))
     · intro i j hij
-      exact cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+      exact cross_overlap_tendsto_zero_of_separated_normal_bnt_data
         (fun j : Fin classes.g => blocks (classes.repr j))
         (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
         (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))
@@ -207,7 +207,7 @@ private theorem bntSectorDecomp_overlapData_basisSpan_aux
       (hPrim (classes.repr j))
   · intro i j hij
     simpa [P, collapsedBntSectorDecomp] using
-      cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+      cross_overlap_tendsto_zero_of_separated_normal_bnt_data
       (fun j : Fin classes.g => blocks (classes.repr j))
       (HasIrreducibleBlocks.ofForall (fun j => hIrr (classes.repr j)))
       (IsLeftCanonicalBlockFamily.ofForall (fun j => hTP (classes.repr j)))

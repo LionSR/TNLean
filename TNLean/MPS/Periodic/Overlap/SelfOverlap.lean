@@ -578,7 +578,7 @@ converse true.  Once that converse is proved, the `sorry` below can be
 discharged by the procedure outlined above. -/
   -- (Implementation: the forward BDCF direction follows from
   --  `exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal` together with
-  --  `cross_overlap_tendsto_zero_of_separated_normalCFBNT_data`; the missing converse
+  --  `cross_overlap_tendsto_zero_of_separated_normal_bnt_data`; the missing converse
   --  would be a lemma in `CanonicalForm/BlockDiagonalCommutant`.)
 private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
