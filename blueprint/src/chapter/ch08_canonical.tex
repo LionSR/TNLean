@@ -54,6 +54,10 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 
     This is the source statement
     of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+    In the local source file \texttt{Papers/quant-ph\_0608197/MPSarchive.tex},
+    the label \texttt{Th:TIcanonical} begins at line~742; the block
+    decomposition is lines~742--752, the three block conditions are
+    lines~753--758, and the final bond-dimension bound is lines~761--762.
 \end{theorem}
 
 \begin{theorem}[Blocked CPSV canonical-form reduction]%
@@ -76,16 +80,38 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     dimension $d^{[p]}$ and bond dimension $D_0$, and the tensors $B_k$ are
     normal tensors. If $r>0$, the weights $\mu_k$ may be normalized so that
     $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
+
+    Source locations in the local papers are as follows.  In
+    \texttt{Papers/1606.00608/MPDO-22-12-17-2.tex}, the removal of periodic
+    peripheral components by blocking is lines~227--231; the normal-tensor
+    definition is lines~233--235; the canonical-form display
+    \texttt{eq:II\_CF1} is lines~237--246; and the proposition that any tensor
+    becomes canonical after blocking is lines~249--251.  The BNT quotient
+    used later in the reduction is lines~271--279
+    (\texttt{prop:char-BNT}) and lines~283--301
+    (\texttt{eq:II\_ABasicTensors}, \texttt{decBSV}).  In the review
+    \texttt{Papers/2011.12127/TN-Review-main.tex}, the invariant-subspace
+    reduction is lines~1793--1803, the period-removal blocking step is
+    lines~1815--1820, the normal/canonical definition
+    \texttt{def:4:normal-tensor-mps} and display \texttt{eq:II\_CF1} are
+    lines~1827--1839, and the BNT definition/characterization is
+    lines~1846--1859.
 \end{theorem}
 
-Theorem~\ref{thm:pgvwc07_ti_canonical_form} is not yet formalized. This
-chapter develops constituent steps of the PGVWC07 and CPSV reductions:
-invariant-subspace decomposition (Theorem~\ref{thm:irred_decomp}), TP gauge
+Theorems~\ref{thm:pgvwc07_ti_canonical_form}
+and~\ref{thm:cpgsv_canonical_form_source} are source-level targets and are
+not yet formalized as stated. This chapter develops constituent steps of the
+PGVWC07 and CPSV reductions: invariant-subspace decomposition
+(Theorem~\ref{thm:irred_decomp}), TP gauge
 (Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
-(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the combined
-after-blocking statement are recorded in Chapter~\ref{ch:canonical_after_blocking}
+(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the
+structural after-blocking primitive-block decomposition are recorded in
+Chapter~\ref{ch:canonical_after_blocking}
 (Theorem~\ref{thm:zero_block_separation} and
-Theorem~\ref{thm:tp_primitive_blockdecomp}).
+Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
+yet supply the source normalization $|\mu_k|\le 1$ with at least one
+unit-modulus weight, so they should not be cited as
+Theorem~\ref{thm:cpgsv_canonical_form_source}.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -1076,6 +1102,72 @@ BNT construction.
     The same-dimension hypothesis replaces each representative dimension by the
     dimension of the enumerated original block, and the phase-class regrouping
     identity then recovers the original direct-sum dimension.
+\end{proof}
+
+\begin{lemma}[Prepared phase-equivalent blocks have the same bond dimension]%
+    \label{lem:prepared_phase_equiv_dim_eq}
+    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible MPS blocks of
+    positive bond dimension. If their MPV families differ by a nonzero scalar
+    power, then their bond dimensions are equal.
+
+    This is the dimension part of
+    \texttt{Papers/1606.00608/MPDO-22-12-17-2.tex}, Lemma
+    \texttt{equalMPS}: the label begins at line~1080, the dimension conclusion
+    is stated at line~1090, and the proof of the dimension equality is
+    lines~1115--1117.
+\end{lemma}
+
+\begin{proof}\leanok
+    The self-overlap normalization forces the scalar relating the two MPV
+    families to have unit modulus. Hence the rectangular overlap between the
+    two blocks has norm tending to $1$. If the two bond dimensions were
+    different, the rectangular overlap-decay theorem would force the same
+    overlap to tend to $0$, which is impossible.
+\end{proof}
+
+\begin{lemma}[Prepared phase classes preserve bond dimension]%
+    \label{lem:prepared_phase_class_dim_eq}
+    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
+    \leanok
+    \uses{lem:prepared_phase_equiv_dim_eq}
+    In a prepared family of positive-bond-dimension blocks, assume that every
+    block is trace-preserving, primitive, and irreducible. Then every block in
+    an MPV phase class has the same bond dimension as the representative of
+    that class.
+
+    The phase-class source is
+    \texttt{Papers/1606.00608/MPDO-22-12-17-2.tex},
+    \texttt{prop:char-BNT}: the statement is lines~271--279, and the proof
+    restatement and construction are lines~1135--1148.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative
+    and each member of its phase class.
+\end{proof}
+
+\begin{lemma}[Prepared collapsed BNT total dimension]%
+    \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
+    \leanok
+    \uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
+    For prepared trace-preserving, primitive, irreducible blocks of positive
+    bond dimension, the phase-class quotient used in the BNT supplier does not
+    change the total bond dimension: the collapsed sector decomposition has
+    total bond dimension equal to the sum of the original block dimensions.
+
+    The canonical-form source is
+    \texttt{Papers/1606.00608/MPDO-22-12-17-2.tex},
+    \texttt{eq:II\_CF1} at lines~237--246, and the phase-class quotient is
+    \texttt{prop:char-BNT} at lines~271--279 and 1135--1148.
+\end{lemma}
+
+\begin{proof}\leanok
+    The previous lemma supplies the same-dimension hypothesis in
+    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim}.
 \end{proof}
 
 \begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%

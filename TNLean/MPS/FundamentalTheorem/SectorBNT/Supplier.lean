@@ -112,6 +112,133 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     simpa using h1
   exact norm_eq_one_of_selfOverlap_scale hXX hYY hScale
 
+/-!
+### Bond dimensions inside a prepared phase class
+
+The phase quotient in `CanonicalForm.PhaseClassSectorData` is deliberately
+heterogeneous: `MPVBlockPhaseEquiv` only records proportional MPVs, not equality
+of bond dimensions.  For the prepared blocks used by the BNT supplier, the
+rectangular overlap gap forces equality of bond dimensions inside each phase
+class.
+-/
+
+/--
+**Bond dimensions of prepared phase-equivalent blocks agree.**
+
+Source: arXiv:1606.00608, Lemma `equalMPS` in
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1080-1117, especially
+the dimension conclusion at lines 1090 and 1115-1117; the phase-class
+quotient is `prop:char-BNT`, lines 271-279 and 1135-1148.
+
+If two left-canonical, primitive, irreducible blocks have MPV families related
+by a nonzero scalar power, then their bond dimensions are equal.  The proof
+uses the self-overlap normalization to show that the scalar has unit modulus;
+then a rectangular overlap of the two blocks has norm tending to `1`, whereas
+different bond dimensions would force that overlap to tend to `0`.
+-/
+theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
+    {DX DY : ℕ} [NeZero DX] [NeZero DY]
+    {X : MPSTensor d DX} {Y : MPSTensor d DY}
+    (hTPX : IsLeftCanonical X)
+    (hTPY : IsLeftCanonical Y)
+    (hPrimX : _root_.IsPrimitive (transferMap (d := d) (D := DX) X))
+    (hPrimY : _root_.IsPrimitive (transferMap (d := d) (D := DY) Y))
+    (hIrrX : IsIrreducibleTensor X)
+    (hIrrY : IsIrreducibleTensor Y)
+    (h : MPVBlockPhaseEquiv X Y) :
+    DX = DY := by
+  classical
+  have hζ_norm : ‖h.choose‖ = 1 :=
+    norm_choose_MPVBlockPhaseEquiv_eq_one
+      (X := X) (Y := Y) hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
+  have hXX_c : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
+    overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+      (d := d) (D := DX) X hIrrX hTPX hPrimX
+  have hXX : Tendsto (fun N => ‖mpvOverlap (d := d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
+    simpa using hXX_c.norm
+  have hYX_eq : ∀ N : ℕ,
+      mpvOverlap (d := d) Y X N =
+        h.choose ^ N * mpvOverlap (d := d) X X N := by
+    intro N
+    exact mpvOverlap_eq_mul_of_mpv_eq_mul
+      (d := d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N) X
+  have hYX_norm_eq : ∀ N : ℕ,
+      ‖mpvOverlap (d := d) Y X N‖ = ‖mpvOverlap (d := d) X X N‖ := by
+    intro N
+    rw [hYX_eq N, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
+  have hYX : Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
+    hXX.congr fun N => (hYX_norm_eq N).symm
+  have hDYDX : DY = DX := by
+    by_contra hD
+    have hzero :
+        Tendsto (fun N => mpvOverlap (d := d) Y X N) atTop (𝓝 (0 : ℂ)) :=
+      mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
+        Y X hIrrY hIrrX hTPY hTPX hD
+    have hnorm_zero :
+        Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (0 : ℝ)) := by
+      simpa using hzero.norm
+    have h10 : (1 : ℝ) = 0 := tendsto_nhds_unique hYX hnorm_zero
+    exact one_ne_zero h10
+  exact hDYDX.symm
+
+/--
+**Prepared phase classes preserve the original bond dimensions.**
+
+Source: arXiv:1606.00608, `prop:char-BNT` in
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271-279 and 1135-1148.
+In a prepared family of left-canonical, primitive, irreducible blocks, every
+member of an MPV phase class has the same bond dimension as its chosen
+representative.
+-/
+theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
+    {r : ℕ} {dim : Fin r → ℕ}
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, IsLeftCanonical (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k)) :
+    ∀ j q,
+      dim ((mpvPhaseClassData blocks).enum j q) =
+        dim ((mpvPhaseClassData blocks).repr j) := by
+  classical
+  haveI : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
+  let classes := mpvPhaseClassData (d := d) blocks
+  intro j q
+  have hEq :
+      dim (classes.repr j) = dim (classes.enum j q) :=
+    dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
+      (X := blocks (classes.repr j)) (Y := blocks (classes.enum j q))
+      (hTP (classes.repr j)) (hTP (classes.enum j q))
+      (hPrim (classes.repr j)) (hPrim (classes.enum j q))
+      (hIrr (classes.repr j)) (hIrr (classes.enum j q))
+      (classes.enum_phase j q)
+  exact hEq.symm
+
+/--
+**Total bond dimension of the prepared collapsed BNT decomposition.**
+
+Source: arXiv:1606.00608, `eq:II_CF1` and `prop:char-BNT` in
+`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237-246, 271-279, and
+1135-1148.  For prepared blocks, the phase-class quotient does not change the
+total bond dimension: quotienting only groups phase-equivalent copies with the
+same bond dimension.
+-/
+theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hDim : ∀ k, 0 < dim k)
+    (hTP : ∀ k, IsLeftCanonical (blocks k))
+    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (blocks k)))
+    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
+    (hμne : ∀ k, μ k ≠ 0) :
+    (collapsedBntSectorDecomp (d := d) μ blocks hμne).totalDim =
+      ∑ k : Fin r, dim k :=
+  collapsedBntSectorDecomp_totalDim_eq_sum_dim (d := d) μ blocks hμne
+    (mpvPhaseClassData_dim_eq_of_tp_primitive_irr blocks hDim hTP hPrim hIrr)
+
 /-! ### Prepared-block SectorBNT constructor -/
 
 /--
