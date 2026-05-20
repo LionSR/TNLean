@@ -707,7 +707,7 @@
   <a href="ch-algebraic_ft.html#sec:block_separation"><span class="toc_ref">16.11</span> <span class="toc_entry">Block separation from ordered canonical-form data</span></a>
  </li>
 <li class="">
-  <a href="ch-algebraic_ft.html#sec:hetero_equal_case_ft"><span class="toc_ref">16.12</span> <span class="toc_entry">Heterogeneous equal-case block matching</span></a>
+  <a href="ch-algebraic_ft.html#sec:different_bond_dimension_equal_case_ft"><span class="toc_ref">16.12</span> <span class="toc_entry">Equal-case block matching with differing bond dimensions</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#sec:ti_reduction"><span class="toc_ref">16.13</span> <span class="toc_entry">Translation-invariant reduction</span></a>
@@ -2078,7 +2078,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f242696d310>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f69d87112b0>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) &  = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond} \\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) &  = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
@@ -5815,15 +5815,15 @@
 
   </div>
 </div>
-<h1 id="sec:hetero_equal_case_ft">16.12 Heterogeneous equal-case block matching</h1>
+<h1 id="sec:different_bond_dimension_equal_case_ft">16.12 Equal-case block matching with differing bond dimensions</h1>
 
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:fundamentalTheorem_equalMPV_CFBNT_hetero">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:ft_sector_bnt_equal_sector_data_different_dims">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">16.62</span>
-    <span class="lemma_thmtitle">Heterogeneous equal-case block matching</span>
+    <span class="lemma_thmtitle">Equal-case block matching with differing bond dimensions</span>
     <div class="thm_header_extras">
 
     
@@ -5831,7 +5831,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_equalMPV_CFBNT_hetero">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:ft_sector_bnt_equal_sector_data_different_dims">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001168"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -5849,7 +5849,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
+          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 11.1</a></li>
           
@@ -5884,7 +5884,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be two BNT sector decompositions (Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a>), each admitting a unit-modulus copy weight in every basis sector, possibly with different block counts and different bond dimensions in corresponding blocks. If their block-diagonal tensors generate the same MPV family (Definition&#160;<a href="ch-mps.html#def:same_mpv">2.11</a>), then the basis sectors are bijectively matched by a permutation \(\beta \), each matched basis pair is gauge-phase equivalent (Definition&#160;<a href="ch-mps.html#def:gauge_phase_equiv">2.23</a>), the matched copy multiplicities agree, and the copy weights agree up to a unit-modulus phase \(\zeta \) and a copy-index reindexing. This is the sector-data form of the equal-case theorem <span class="cite">
+  <p>   Let \(P\) and \(Q\) be two BNT sector decompositions (Definition&#160;<a href="ch-bnt.html#def:bnt">11.1</a>), each admitting a unit-modulus copy weight in every basis sector, possibly with different block counts and different bond dimensions in corresponding blocks. If their block-diagonal tensors generate the same MPV family (Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>), then the basis sectors are bijectively matched by a permutation \(\beta \), each matched basis pair is gauge-phase equivalent (Definition&#160;<a href="ch-mps.html#def:gauge_phase_equiv">2.23</a>), the matched copy multiplicities agree, and the copy weights agree up to a unit-modulus phase \(\zeta \) and a copy-index reindexing. This is the sector-data form of the equal-case theorem <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
