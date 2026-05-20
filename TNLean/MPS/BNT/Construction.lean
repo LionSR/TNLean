@@ -308,7 +308,7 @@ section SeparatedNormalBNT
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Separated-hypotheses version of normal-CF-BNT cross-overlap decay.
+/-- Separated-hypotheses version of normal BNT cross-overlap decay.
 
 Only irreducibility, left-canonical normalization, and the BNT non-equivalence
 assumption are used. -/
