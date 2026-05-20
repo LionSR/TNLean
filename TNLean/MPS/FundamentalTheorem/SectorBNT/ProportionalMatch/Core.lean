@@ -32,7 +32,7 @@ equivalence then follow as in the equal case.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), 1182–1188 (proof).
+  (restatement), 1182–1186 (proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
@@ -345,7 +345,7 @@ eventual nonzero proportionality and unit-modulus copy weights at $Q$-sector
 $k_0$ and auxiliary $P$-sector $j_0$, some $P$-block $j_1$ has matched bond
 dimension, cast-compatible gauge-phase equivalence, and non-decaying
 cross-overlap with $Q.\mathrm{basis}\,k_0$.  Paper anchor: CPSV16 §II.C
-lines 349–352, 1167–1170, 1182–1188. -/
+lines 349–352, 1167–1170, 1182–1186. -/
 theorem exists_block_match_at_Q_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

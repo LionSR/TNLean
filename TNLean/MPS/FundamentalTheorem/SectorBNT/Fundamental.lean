@@ -196,10 +196,13 @@ For proportional MPV families, the proportional sector-matching theorem supplies
 the matched BNT basis, unit phases, and block gauges of CPSV16 §II.C lines
 1184--1186. If the remaining coefficient-comparison step supplies copy
 permutations whose weights obey the same phases, then the direct-sum gauge
-assembly of lines 1189--1192 follows.
+assembly uses the same algebra as the equal-MPV corollary in lines 1189--1192.
 
 This theorem isolates the exact residual input for the proportional
-global-gauge upgrade: the copy-weight identity. -/
+global-gauge upgrade: the copy-weight identity. That residual input is not
+provided by the CPSV16 proportional theorem; lines 1187--1192 are the
+equal-MPV corollary, where the length-dependent proportionality scalar is
+identically one. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_weight_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

@@ -145,8 +145,8 @@ def ProportionalMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor
 
 /-- Nonzero proportionality of MPV families.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
-formal reading of the source phrase that two tensors generate MPV that are
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. This is the
+formal reading of the source statement that two tensors generate MPV that are
 proportional to each other: at each length the two MPV vectors lie on the same
 nonzero projective line, with proportionality scalar allowed to depend on the
 length.
@@ -177,7 +177,7 @@ def EventuallyNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
 
 /-- Nonzero MPV proportionality forgets to weak MPV proportionality.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. This is the
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. This is the
 forgetful implication from the projective, nonzero reading of the paper's
 proportionality hypothesis to the weaker scalar-multiple predicate used by older
 single-block lemmas. -/
@@ -203,7 +203,7 @@ theorem NonzeroProportionalMPV₂.eventually {d D₁ D₂ : ℕ}
 
 /-- Nonzero MPV proportionality is symmetric.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192. The scalar at each
+Source: arXiv:1606.00608, Theorem `thm1`, lines 1167--1170. The scalar at each
 length is inverted, using the nonvanishing part of the proportionality
 hypothesis. -/
 theorem NonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
@@ -242,7 +242,7 @@ theorem EventuallyNonzeroProportionalMPV₂.symm {d D₁ D₂ : ℕ}
 Source: arXiv:1606.00608, Corollary `II_cor2`, lines 1205--1217, supplies an
 equal-MPV hypothesis. This lemma only re-states that hypothesis as the
 corresponding instance of the proportional hypothesis in Theorem `thm1`, lines
-1170--1192. It is not a formalization of Corollary `II_cor2` itself. -/
+1167--1170. It is not a formalization of Corollary `II_cor2` itself. -/
 theorem SameMPV₂.toNonzeroProportionalMPV₂ {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : SameMPV₂ A B) :
