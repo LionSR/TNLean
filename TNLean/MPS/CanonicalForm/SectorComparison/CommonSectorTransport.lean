@@ -48,7 +48,13 @@ representative weights are strictly ordered and the representatives are
 BNT-separated.
 
 It combines the representative normal-canonical-form statement with the
-explicit hypothesis that distinct representatives are not gauge-phase equivalent. -/
+explicit hypothesis that distinct representatives are not gauge-phase equivalent.
+
+**Scope restriction (one-copy-per-sector):** The output is an
+`IsNormalCanonicalFormBNT` structure on the already chosen representative
+family. It keeps one representative for each strict weight-modulus class and
+does not reconstruct the repeated-copy CPSV16 BNT sector data. The restriction
+is documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
     {d r : ℕ} {dim : Fin r → ℕ}
     {blocks : (k : Fin r) → MPSTensor d (dim k)}

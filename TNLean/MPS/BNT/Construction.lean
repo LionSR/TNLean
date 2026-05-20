@@ -17,9 +17,9 @@ This module records the separated blockwise hypotheses used to pass from
 canonical-form and normal-canonical-form hypotheses to the basis-of-normal-tensors
 formulation. The source BNT expansion in arXiv:1606.00608, Section II keeps
 repeated copies inside a sector with coefficients `μ_{j,q}` and multiplicities
-`M_j`; that CPSV sector structure is represented by `IsBNTCanonicalForm` in the
-fundamental-theorem files. The results here are auxiliary tools for already
-separated finite block families.
+`M_j`; that paper-faithful sector structure is represented by
+`IsBNTCanonicalForm` in the fundamental-theorem files. The results here are
+auxiliary tools for already separated finite block families.
 
 ## Main results
 
@@ -46,9 +46,9 @@ tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
 In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
 coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
 proportionality constant. In the grouped setting, the normalized sums can still oscillate:
-unit-modulus terms may survive inside a single group. The CPSV treatment of these
-coefficients is carried out in the sector-decomposition results and BNT canonical
-form constructions.
+unit-modulus terms may survive inside a single group. The source-faithful
+treatment of these coefficients is carried out in the sector-decomposition
+results and BNT canonical-form constructions.
 -/
 
 open scoped Matrix BigOperators
@@ -78,8 +78,8 @@ not retain repeated equal-modulus sectors; the full multiplicity structure (weig
 
 **Scope restriction (one-copy-per-sector):** This is the already grouped
 single-representative surface, not the full CPSV16 BNT multiplicity structure.
-CPSV16 lines 287-301 keep the repeated copies of one basis tensor visible
-through the raw coefficients `μ_{j,q}`. The restriction is documented in
+The general source decomposition allows repeated equal-modulus copies inside a
+sector through the raw coefficients `μ_{j,q}`. The restriction is documented in
 `docs/paper-gaps/ft_one_copy_scope_restriction.tex`.
 
 `IsNormalCanonicalFormBNT` uses the spectral/primitive-transfer-map version of normality
@@ -156,13 +156,13 @@ lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
   · exact absurd k.isLt (by omega)
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
-the BNT separation assumption and the CPSV dominant-block normalization
-`‖μ ⟨0, _⟩‖ = 1`.
+the BNT separation assumption and the source-faithful dominant-block
+normalization `‖μ ⟨0, _⟩‖ = 1`.
 
 **Scope restriction (one-copy-per-sector):** The strict weight-ordering input
 selects one representative per modulus class. This constructor does not recover
-the multiplicity data of the full CPSV16 BNT decomposition at lines 287-301;
-see `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
+the multiplicity data of the full CPSV16 BNT decomposition; see
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
     (hLeft : IsLeftCanonicalBlockFamily (d := d) A)

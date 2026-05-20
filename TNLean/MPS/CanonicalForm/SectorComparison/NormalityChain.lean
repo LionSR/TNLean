@@ -41,6 +41,12 @@ shows that blocking keeps normality.
 * `exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT` — the
   same common-blocking conclusion simultaneously for two finite BNT families.
 
+The two normal-CF-BNT statements inherit the one-copy-per-sector restriction of
+`IsNormalCanonicalFormBNT`: the input family is already separated and strictly
+ordered by representative weight modulus. These statements give common injective
+blocking for that restricted surface; they do not recover the full CPSV16 BNT
+multiplicity data with repeated copies inside one sector.
+
 ## References
 
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
@@ -411,7 +417,12 @@ irreducible, and has primitive transfer map.  Hence each block is normal, and
 the bounded Wielandt injective-blocking theorem gives a positive injective
 blocking length for that block.  Taking the product of these finitely many
 positive lengths gives one common positive length; fixed-length injectivity
-persists at positive multiples. -/
+persists at positive multiples.
+
+**Scope restriction (one-copy-per-sector):** The hypothesis
+`IsNormalCanonicalFormBNT` is the already separated representative surface, not
+the full CPSV16 BNT multiplicity decomposition. The restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective
     [∀ k, NeZero (dim k)]
     (h : IsNormalCanonicalFormBNT (d := d) μ blocks) :
@@ -449,7 +460,13 @@ end IsNormalCanonicalFormBNT
 
 Given two normal canonical BNT block families with the same physical dimension,
 there is a single positive blocking length at which every block on both sides is
-one-site injective. -/
+one-site injective.
+
+**Scope restriction (one-copy-per-sector):** Both `IsNormalCanonicalFormBNT`
+hypotheses are already separated representative families. This theorem is a
+two-family common-blocking result for that restricted surface, not the
+source-level CPSV16 multiplicity theorem. The restriction is documented in
+`docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
 theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
     {d rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
