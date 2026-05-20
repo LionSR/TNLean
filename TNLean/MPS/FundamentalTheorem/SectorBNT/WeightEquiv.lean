@@ -26,15 +26,15 @@ These statements are exact-algebraic: they consume only
 `SectorWeightComparison.lean`, together with a generic
 `Multiset.map`-permutation extractor over `Fin n` proved by induction
 on `n`.  No dominant-pair-matching surface, drop-sector recursion, or
-Newton–Girard inversion is involved.
+Newton--Girard inversion is involved.
 
 ## Paper anchors
 
-* CPSV16 §II.C lines 1158–1167, 1184, 1188 (arXiv:1606.00608): for a
-  fixed matched sector, equal power sums (eventually in `N`) and nonzero
-  per-copy weights imply equal cardinalities and equal weight multisets,
-  hence the per-copy gauge-phase identification
-  `μ_{j,q} = ν_{j,τ(q)} · e^{i\phi_j}`.
+* CPSV16 Appendix Lemma `Lem:app_simple`, lines 1155--1163, and the
+  `II_cor2` proof, lines 1184--1188 (arXiv:1606.00608): for a fixed
+  matched sector, equal power sums and nonzero per-copy weights imply equal
+  cardinalities and equal weight multisets, hence the per-copy gauge-phase
+  identification `μ_{j,q} = ν_{j,τ(q)} · e^{i\phi_j}`.
 
 ## Tags
 
@@ -57,9 +57,10 @@ per-copy weight multisets agree:
 `Multiset.map (P.weight j₀) Finset.univ.val
    = Multiset.map (fun q => ζ * Q.weight k₀' q) Finset.univ.val`.
 
-This is CPSV16 line 1188 read on a single matched sector: equal power
-sums (eventually in `N`) and nonzero entries imply equal multisets, hence
-equal cardinalities.
+This is CPSV16 line 1188 read on a single matched sector, with the
+power-sum rigidity supplied by Appendix Lemma `Lem:app_simple`, lines
+1155--1163: equal power sums (eventually in `N`) and nonzero entries imply
+equal multisets, hence equal cardinalities.
 
 The proof composes `power_sums_eq_of_eventually_eq_hetero` (extension
 from eventual to all positive exponents) with
@@ -160,8 +161,8 @@ theorem matched_sector_weight_multiset_eq
 The multiset equality above is upgraded to an *explicit* permutation
 `τ : Fin (P.copies j₀) ≃ Fin (Q.copies k₀')` matching individual per-copy
 weights up to the gauge-phase factor `ζ`.  This is the per-copy form of
-CPSV16 line 1188 (`μ_{j,q} = ν_{j,q} · e^{i\phi_j}` for an indexing of
-the `Q`-copies determined by a matching).
+CPSV16 line 1188 (`μ_{j,q} = ν_{j,q} · e^{i\phi_j}` after choosing the
+indexing of the `Q`-copies determined by Appendix Lemma `Lem:app_simple`).
 
 The proof reduces to a generic auxiliary lemma extracting an `Equiv.Perm` from a
 multiset-map equality on `Fin`, then composes with the cardinality cast
@@ -249,7 +250,8 @@ set_option linter.unusedVariables false in
 Refines `matched_sector_weight_multiset_eq` into an explicit permutation
 `τ` realising CPSV16 line 1188's per-copy identification.
 
-Paper anchor: CPSV16 §II.C lines 1158-1167, 1184, 1188 (arXiv:1606.00608). -/
+Paper anchor: CPSV16 Appendix Lemma `Lem:app_simple`, lines 1155--1163,
+and `II_cor2` proof lines 1184--1188 (arXiv:1606.00608). -/
 theorem matched_sector_weight_equiv
     {P Q : SectorDecomposition d}
     (j₀ : Fin P.basisCount) (k₀' : Fin Q.basisCount)
