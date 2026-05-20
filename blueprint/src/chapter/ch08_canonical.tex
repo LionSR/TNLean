@@ -1129,7 +1129,6 @@ BNT construction.
     \label{lem:prepared_phase_class_dim_eq}
     \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
     \leanok
-    \uses{lem:prepared_phase_equiv_dim_eq}
     % Source anchors:
     % Papers/1606.00608/MPDO-22-12-17-2.tex:271--279 states prop:char-BNT;
     % lines 1135--1148 restate it and give the construction.
@@ -1139,7 +1138,7 @@ BNT construction.
     that class.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{lem:prepared_phase_equiv_dim_eq}
     Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative
     and each member of its phase class.
 \end{proof}
@@ -1148,8 +1147,6 @@ BNT construction.
     \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
     \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
     \leanok
-    \uses{lem:collapsed_bnt_sector_decomp_total_dim,
-        lem:prepared_phase_class_dim_eq}
     % Source anchors:
     % The canonical-form source is
     % Papers/1606.00608/MPDO-22-12-17-2.tex, eq:II_CF1 at lines 237--246.
@@ -1162,7 +1159,8 @@ BNT construction.
     the original block dimensions.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
     The previous lemma supplies the same-dimension hypothesis in
     Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim}.
 \end{proof}
