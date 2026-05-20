@@ -24,16 +24,16 @@ $$E_A(X) = \sum_i A_i X A_i^\dagger,$$
 then the support projection $P = \mathrm{supp}(\rho)$ is invariant under each Kraus operator:
 $$(1-P) A_i P = 0.$$
 
-In PGVWC07 this is the first half of the singular-fixed-point case in the proof
-of Theorem `Th:TIcanonical`: lines 771–774 introduce the spectral support
-projection $P_R$, and lines 775–783 prove the invariant relation by a
-positivity contradiction.  The finite-ring trace split is the subsequent
-step, lines 785–815, and is formalized in `InvariantSubspaceDecomp`.  Thus the
-results here should be used before, not instead of, the source trace-splitting
-argument.
+In Pérez-García, Verstraete, Wolf, and Cirac, this is the first half of the
+singular-fixed-point case in the proof of Theorem Th:TIcanonical: lines 771–774
+introduce the spectral support projection $P_R$, and lines 775–783 prove the
+invariant relation by a positivity contradiction.  The finite-ring trace split
+is the subsequent step, lines 785–815, and is handled by the
+invariant-subspace decomposition results.  Thus the results here should be used
+before, not instead of, the source trace-splitting argument.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
   proof lines 771–783 (singular positive fixed point gives an invariant
   support projection)
 -/
@@ -322,10 +322,11 @@ private lemma ker_invariant_under_adjoint
 /-- If `ρ` is a PSD fixed point of the transfer map, then its support projection is invariant:
 `(1 - P) * A i * P = 0` for all Kraus operators `A i`.
 
-This is the formal counterpart of PGVWC07, Theorem `Th:TIcanonical`, proof
-lines 771–783.  The source writes the fixed point as
-`X = ∑_α λ_α |α⟩⟨α|`, lets `P_R` be its support projection, and proves
-`A_i P_R = P_R A_i P_R` by the positivity contradiction in lines 775–783.
+This proves the support-projection assertion in Pérez-García et al., Theorem
+Th:TIcanonical, proof lines 771–783.  The source writes the fixed point as
+$X = \sum_\alpha \lambda_\alpha |\alpha\rangle\langle\alpha|$, lets $P_R$ be
+its support projection, and proves $A_i P_R = P_R A_i P_R$ by the positivity
+contradiction in lines 775–783.
 -/
 theorem lowerZero_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
@@ -410,7 +411,7 @@ matrix, and are essential for the "strict dimension decrease" argument used when
 iterating the canonical-form splitting step.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
   proof lines 771–783 for the support projection and lines 785–815 for the
   finite-ring trace split whose recursive blocks have smaller dimensions.
 * Cirac et al., arXiv:1606.00608, lines 201–217: invariant subspaces are split
@@ -498,7 +499,7 @@ projection $P := \mathrm{supp}(\rho)$ is invariant under the Kraus operators `(A
 explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
   proof lines 771–783 for the support projection and lines 785–815 for the
   finite-ring trace split.
 * Cirac et al., arXiv:1606.00608, lines 201–217 for the corresponding
@@ -541,7 +542,7 @@ The proof composes:
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
   proof lines 771–783 for deriving the invariant support projection and
   lines 785–815 for the trace split into two smaller blocks.
 * Cirac et al., arXiv:1606.00608, lines 201–217 for the invariant-subspace

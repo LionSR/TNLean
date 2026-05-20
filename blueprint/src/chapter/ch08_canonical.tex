@@ -317,11 +317,6 @@ definitions stated below.
     for each~$i$.
     Since $\rho$ is supported on the range of $P$,
     this forces $(\Id - P) A^i P = 0$.
-    This is the formal counterpart of the singular fixed-point step in
-    \cite[Theorem~\texttt{Th:TIcanonical}, lines~771--783]
-        {PerezGarcia2007Matrix}: the source derives the support projection from
-    the fixed point and proves the invariant relation before the trace split of
-    lines~785--815.
 
     This is the finite-dimensional version of~\cite[Proposition~6.10]{Wolf2012Quantum}
     (``Stationary subspaces'': the support projection
@@ -340,10 +335,10 @@ definitions stated below.
     % Papers/quant-ph_0608197/MPSarchive.tex:771--783 supplies the invariant
     % support projection from a singular positive fixed point; lines 785--815
     % split the finite-ring trace into supported and orthogonal summands.
-    If the transfer map has a PSD fixed point $\rho$ that is
-    \emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
-    kernel), then there exist MPS tensors $A_1, A_2$ of smaller
-    bond dimensions such that the two-block tensor
+    If the transfer map has a nonzero PSD fixed point $\rho$ that is
+    \emph{not} positive definite (i.e.\ $\rho$ has a nontrivial kernel), then
+    there exist MPS tensors $A_1, A_2$ of smaller bond dimensions such that the
+    two-block tensor
     $A_1 \oplus A_2$ generates the same MPV family as~$A$:
     $\mc{V}(A) = \mc{V}(A_1 \oplus A_2)$.
 \end{theorem}
@@ -364,9 +359,6 @@ definitions stated below.
     of the diagonal-block traces, so the block-diagonal tensor
     obtained by discarding the off-diagonal blocks has the same MPV
     coefficients as the conjugated tensor, and hence as~$A$.
-    These are precisely the two halves of the singular fixed-point step in
-    \cite[Theorem~\texttt{Th:TIcanonical}, lines~771--815]
-        {PerezGarcia2007Matrix}.
 \end{proof}
 
 \section{Iterated reduction}
