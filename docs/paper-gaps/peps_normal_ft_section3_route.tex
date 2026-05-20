@@ -147,27 +147,30 @@ alone. The following additional obligations remain.
 
 \section{Blueprint diagrams}
 
-The normal route now has its own semantic tensor-network commands. These are
-not substitutes for the injective theorem diagrams; they attach the additional
-normal blocking layer to named proof nodes.
+The normal route has its own tensor-network diagrams. These are not substitutes
+for the injective theorem diagrams; they attach the additional normal blocking
+layer to named proof nodes.\footnote{In Chapter~13a these pictures are local
+TikZ figures wrapped in $\backslash$\texttt{TNTikZDiagram}, which also records
+the corresponding registered diagram command used by the web blueprint. The
+local figures and the registered commands share the normal-lattice commands in
+\path{blueprint/src/macros/tn_print.tex}.}
 
 \begin{itemize}
-    \item $\backslash$\texttt{TNPEPSInjectiveRegionUnion} depicts the four
-          regions used in Lemma \path{injective_union}.
-    \item $\backslash$\texttt{TNPEPSNormalRegionsRS} depicts the regions $R$
-          and $S$ from the square-lattice proof.
-    \item $\backslash$\texttt{TNPEPSNormalRegionT} depicts the region $T$.
-    \item $\backslash$\texttt{TNPEPSNormalEdgeBlockingReduction} depicts the
+    \item Lemma \path{injective_union} shows the four regions
+          $A\setminus B$, $A\cap B$, $B\setminus A$, and $(A\cup B)^c$.
+    \item Definition \path{peps_normalSquareBlockingRegions} shows the regions
+          $R$, $S$, and $T$ from the square-lattice proof.
+    \item Theorem \path{peps_normalEdgeBlockingToInjectiveChain} shows the
           red/blue/complementary blocking around a distinguished edge and the
           resulting three-site chain.
-    \item $\backslash$\texttt{TNPEPSTINormalGaugeAbsorption} depicts the final
-          translationally invariant local gauge formula with horizontal gauge $X$ and
-          vertical gauge $Y$.
+    \item Theorem \path{peps_tiNormalGaugeAbsorption} shows the final
+          translationally invariant local gauge formula with horizontal gauge
+          $X$ and vertical gauge $Y$.
 \end{itemize}
 
-All of these commands are registered in
-\path{blueprint/src/Packages/tn_diagrams.py}, so the PDF and web blueprint use
-the same public diagram names.
+The wrapper command and the five normal-PEPS diagram commands are registered in
+\path{blueprint/src/Packages/tn_diagrams.py}, so the web blueprint renders the
+same mathematical diagrams rather than a separate hand-written fallback.
 
 \section{Conclusion}
 

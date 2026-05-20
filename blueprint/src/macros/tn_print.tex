@@ -15,6 +15,8 @@
 
 % ---------- Public semantic macros ----------
 
+\newcommand{\TNTikZDiagram}[2]{#2}
+
 \newcommand{\TNMPSLocal}[2]{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnA}{(0,0)}
@@ -578,14 +580,79 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\pepsNormalSquareLattice}{%
+  \TN@normalPepsGrid%
+}
+
+\newcommand{\pepsNormalSquareLatticeLines}{%
+  \TN@normalPepsGridLines%
+}
+
+\newcommand{\pepsNormalSquareLatticeDots}{%
+  \TN@normalPepsGridDots%
+}
+
+\newcommand{\pepsNormalRegionR}{%
+  \draw[red, fill=red!35, thick, rounded corners=1mm]
+    (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
+    (1.7,2.7) -- (0.3,2.7) -- cycle;
+  \node at (0.75,2.0) {$R$};%
+}
+
+\newcommand{\pepsNormalRegionS}{%
+  \draw[red, fill=red!35, thick, rounded corners=1mm]
+    (0.3,1.3) rectangle (1.7,2.7);
+  \node at (1.00,2.00) {$S$};%
+}
+
+\newcommand{\pepsNormalRegionT}{%
+  \filldraw[draw=red, fill=red!35, thick, rounded corners=1mm,
+    even odd rule]
+    (0.3,2.7) -- (1.2,2.7) -- (1.2,1.7) -- (2.7,1.7) --
+    (2.7,0.8) -- (1.3,0.8) -- (1.3,1.3) -- (0.3,1.3) -- cycle
+    (-0.25,0.25) rectangle (3.25,3.25);
+  \node at (2.0,2.3) {$T$};%
+}
+
+\newcommand{\pepsNormalDistinguishedEdge}{%
+  \draw[line width=0.6mm, green!65!black] (1,1.5) -- (1.5,1.5);%
+}
+
+\newcommand{\pepsNormalRedBlock}{%
+  \draw[red, thick, rounded corners=1mm] (0.3,1.3) rectangle (1.2,2.7);%
+}
+
+\newcommand{\pepsNormalBlueBlock}{%
+  \draw[blue, thick, rounded corners=1mm] (1.3,1.7) rectangle (2.7,0.8);%
+}
+
+\newcommand{\pepsBlockedNormalChain}{%
+  \draw[tn leg] (0.50,0) rectangle (3.50,-0.46);
+  \draw[line width=0.6mm, green!65!black] (1.00,0) -- (2.00,0);
+  \foreach \x/\c/\lab in {1/red/A_1,2/blue/A_2,3/black/A_3} {
+    \TN@tensordot{normalBlock\x}{(\x,0)}
+    \TN@upleg{normalBlock\x}{0.46}
+    \node[\c] at ($(normalBlock\x.south)+(0,-0.30)$) {$\lab$};
+  }%
+}
+
+\newcommand{\pepsSquareTensor}[2]{%
+  \TN@tensordot{#1}{#2}
+  \TN@upleg{#1}{0.46}
+  \draw[tn leg] (#1.west) -- ++(-0.60,0);
+  \draw[tn leg] (#1.east) -- ++(0.60,0);
+  \draw[tn leg] (#1.south) -- ++(0,-0.60);
+  \draw[tn leg] (#1.north) -- ++(0,0.38);%
+}
+
 \newcommand{\TNPEPSInjectiveRegionUnion}{%
   \begin{tikzpicture}[tn picture]
-    \TN@tensordot{unionAB}{(0,0)}
-    \TN@tensordot{unionI}{(0.70,0.70)}
-    \TN@tensordot{unionBA}{(2.00,0)}
-    \TN@tensordot{unionC}{(1.30,-0.70)}
+    \node[tn tensor dot] (unionAB) at (0,0) {};
+    \node[tn tensor dot] (unionI) at (0.70,0.70) {};
+    \node[tn tensor dot] (unionBA) at (2.00,0) {};
+    \node[tn tensor dot] (unionC) at (1.30,-0.70) {};
     \foreach \n in {unionAB,unionI,unionBA,unionC} {
-      \TN@upleg{\n}{0.42}
+      \draw[tn phys leg] (\n.north) -- ++(0,0.42);
     }
     \draw[tn leg] (unionAB) -- (unionI) -- (unionBA) -- (unionC) --
       (unionAB) -- (unionBA);
@@ -601,19 +668,14 @@
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
       \clip (-0.25,0.75) rectangle (2.25,3.25);
-      \TN@normalPepsGrid
-      \draw[red, fill=red!35, thick, rounded corners=1mm]
-        (0.3,1.3) -- (1.2,1.3) -- (1.2,1.8) -- (1.7,1.8) --
-        (1.7,2.7) -- (0.3,2.7) -- cycle;
-      \node at (0.75,2.0) {$R$};
+      \pepsNormalSquareLattice
+      \pepsNormalRegionR
     \end{scope}
     \node at (2.85,2.00) {and};
     \begin{scope}[xshift=3.55cm]
       \clip (-0.25,0.75) rectangle (2.25,3.25);
-      \TN@normalPepsGrid
-      \draw[red, fill=red!35, thick, rounded corners=1mm]
-        (0.3,1.3) rectangle (1.7,2.7);
-      \node at (1.00,2.00) {$S$};
+      \pepsNormalSquareLattice
+      \pepsNormalRegionS
     \end{scope}
   \end{tikzpicture}%
 }
@@ -621,13 +683,8 @@
 \newcommand{\TNPEPSNormalRegionT}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \clip (-0.25,0.25) rectangle (3.25,3.25);
-    \TN@normalPepsGrid
-    \filldraw[draw=red, fill=red!35, thick, rounded corners=1mm,
-      even odd rule]
-      (0.3,2.7) -- (1.2,2.7) -- (1.2,1.7) -- (2.7,1.7) --
-      (2.7,0.8) -- (1.3,0.8) -- (1.3,1.3) -- (0.3,1.3) -- cycle
-      (-0.25,0.25) rectangle (3.25,3.25);
-    \node at (2.0,2.3) {$T$};
+    \pepsNormalSquareLattice
+    \pepsNormalRegionT
   \end{tikzpicture}%
 }
 
@@ -635,21 +692,15 @@
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
       \clip (-0.25,-0.25) rectangle (3.25,3.25);
-      \TN@normalPepsGridLines
-      \draw[line width=0.6mm, green!65!black] (1,1.5) -- (1.5,1.5);
-      \TN@normalPepsGridDots
-      \draw[red, thick, rounded corners=1mm] (0.3,1.3) rectangle (1.2,2.7);
-      \draw[blue, thick, rounded corners=1mm] (1.3,1.7) rectangle (2.7,0.8);
+      \pepsNormalSquareLatticeLines
+      \pepsNormalDistinguishedEdge
+      \pepsNormalSquareLatticeDots
+      \pepsNormalRedBlock
+      \pepsNormalBlueBlock
     \end{scope}
     \node at (3.75,1.45) {$\Rightarrow$};
     \begin{scope}[xshift=4.45cm,yshift=1.50cm]
-      \draw[tn leg] (0.50,0) rectangle (3.50,-0.46);
-      \draw[line width=0.6mm, green!65!black] (1.00,0) -- (2.00,0);
-      \foreach \x/\c/\lab in {1/red/A_1,2/blue/A_2,3/black/A_3} {
-        \TN@tensordot{normalBlock\x}{(\x,0)}
-        \TN@upleg{normalBlock\x}{0.46}
-        \node[\c] at ($(normalBlock\x.south)+(0,-0.30)$) {$\lab$};
-      }
+      \pepsBlockedNormalChain
     \end{scope}
   \end{tikzpicture}%
 }
@@ -657,22 +708,17 @@
 \newcommand{\TNPEPSTINormalGaugeAbsorption}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@tensordot{tiB}{(0,0)}
-      \TN@upleg{tiB}{0.46}
-      \draw[tn leg] (tiB.west) -- ++(-0.60,0);
-      \draw[tn leg] (tiB.east) -- ++(0.60,0);
-      \draw[tn leg] (tiB.south) -- ++(0,-0.60);
-      \draw[tn leg] (tiB.north) -- ++(0,0.38);
+      \pepsSquareTensor{tiB}{(0,0)}
       \node at ($(tiB.south)+(0,-0.88)$) {$B$};
     \end{scope}
     \node at (1.25,0) {$=$};
     \begin{scope}[xshift=2.35cm]
-      \TN@tensordot{tiA}{(0,0)}
-      \TN@upleg{tiA}{0.46}
-      \TN@opdotleft{tiXL}{(-0.76,0)}{X}
-      \TN@opdotright{tiXR}{(0.76,0)}{X^{-1}}
-      \TN@opdotbelow{tiYD}{(0,-0.76)}{Y}
-      \TN@opdotabove{tiYU}{(0,0.76)}{Y^{-1}}
+      \node[tn tensor dot] (tiA) at (0,0) {};
+      \node[tn operator dot, label=left:$X$] (tiXL) at (-0.76,0) {};
+      \node[tn operator dot, label=right:$X^{-1}$] (tiXR) at (0.76,0) {};
+      \node[tn operator dot, label=below:$Y$] (tiYD) at (0,-0.76) {};
+      \node[tn operator dot, label=above:$Y^{-1}$] (tiYU) at (0,0.76) {};
+      \draw[tn phys leg] (tiA.north) -- ++(0,0.46);
       \draw[tn leg] (tiXL.west) -- ++(-0.24,0);
       \draw[tn leg] (tiXL.east) -- (tiA.west);
       \draw[tn leg] (tiA.east) -- (tiXR.west);
