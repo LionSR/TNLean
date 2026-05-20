@@ -894,10 +894,13 @@ facts used to recover the lists of weights from those power sums.
         B_j^i=e^{i\phi_j}Y_jA_j^iY_j^{-1}.
     \]
     Only after this representative matching does the equal case compare the scalar
-    coefficient power sums: for each matched block $j$ and every positive length
-    $N$, the sum of the $N$th powers of the $A$-copy weights equals the
-    corresponding sum of the $B$-copy weights after multiplication by
-    $e^{i\phi_j}$.
+    coefficient power sums. For each matched block $j$ and every positive length
+    $N$,
+    \[
+        \sum_{q=1}^{r^A_j}(\mu^A_{j,q})^N
+        =
+        \sum_{q=1}^{r^B_j}(\mu^B_{j,q}e^{i\phi_j})^N .
+    \]
     Newton--Girard then recovers the multiplicities and weight multisets, and the
     block gauges $Y_j$ are placed on the diagonal to give the global conjugating
     matrix. This is the equal-case corollary
