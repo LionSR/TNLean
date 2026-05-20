@@ -150,6 +150,30 @@ brings the dominant-block normalization into alignment with the source
 convention. Under this normalization and the strict modulus ordering, every
 sub-dominant block has $\|\mu_j\| < 1$.
 
+\section{Downstream audit status}
+
+The downstream CPSV16 surfaces that currently consume
+\leanid{IsNormalCanonicalFormBNT} have been audited against the
+one-copy-per-sector boundary. The public BNT construction API marks
+\leanid{IsNormalCanonicalFormBNT}, the constructor
+\leanid{IsNormalCanonicalFormBNT.ofSeparatedData}, the cross-overlap theorem,
+and the restricted \leanid{IsNormalCanonicalFormBNT.isBNT} theorem as scoped
+one-copy-per-sector statements. The Fundamental Theorem files using
+\leanid{IsCanonicalFormBNT} in the proportional-MPV chain carry the same
+scope marker on their public theorem surfaces.
+
+The remaining normal-CF-BNT consumers are the common-sector representative
+constructor and the uniform injective-blocking theorems:
+\leanid{isNormalCanonicalFormBNT\_commonRepresentativeBlocksAt},
+\leanid{IsNormalCanonicalFormBNT.exists\_common\_blockTensor\_isInjective},
+and
+\leanid{exists\_common\_blockTensor\_isInjective\_two\_of\_isNormalCanonicalFormBNT}.
+These statements are conditional consequences of an already chosen
+representative family. They do not introduce a new canonical-form existence
+theorem and do not recover the repeated-copy sector data of the source BNT
+decomposition. Their docstrings and the corresponding Wielandt blueprint
+corollary therefore carry the same one-copy-per-sector marker.
+
 \section{Conclusion}
 
 The present formalization proves the proportional Fundamental Theorem in the
