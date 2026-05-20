@@ -32,7 +32,7 @@ equivalence then follow as in the equal case.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), 1182–1186 (proof).
+  (restatement), and line 1182 (matching proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
@@ -52,8 +52,9 @@ $P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)
   = \sum_{q,p}(\mu_{j,q}^P\,\mu_{k,p}^Q)^N$
 has a unit-modulus summand at $(q^*,p^*)$.  By
 `CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus` the sum does not
-tend to zero.  Paper anchor: CPSV16 §II.A line 246 and §II.C lines
-1181–1188. -/
+tend to zero.  This is the analytic input used to formalize the non-decay
+contradiction in CPSV16 §II.C line 1182, together with the line-246
+normalization. -/
 lemma joint_coeff_not_tendsto_zero
     {P Q : SectorDecomposition d}
     (j : Fin P.basisCount) (k : Fin Q.basisCount)
@@ -345,7 +346,7 @@ eventual nonzero proportionality and unit-modulus copy weights at $Q$-sector
 $k_0$ and auxiliary $P$-sector $j_0$, some $P$-block $j_1$ has matched bond
 dimension, cast-compatible gauge-phase equivalence, and non-decaying
 cross-overlap with $Q.\mathrm{basis}\,k_0$.  Paper anchor: CPSV16 §II.C
-lines 349–352, 1167–1170, 1182–1186. -/
+lines 349–352, 1167–1170, and 1182. -/
 theorem exists_block_match_at_Q_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

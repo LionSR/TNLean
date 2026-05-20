@@ -5,9 +5,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
 
 /-!
-# Strong existential and bijective sector matching (CPSV16 §II.C lines 1182–1186)
+# Strong existential and bijective sector matching (CPSV16 §II.C line 1182)
 
-The strong existential matching theorem states the CPSV16 §II.C lines 1182–1186
+The strong existential matching theorem states the CPSV16 §II.C line 1182
 *Step 1* conclusion directly on the original pair `(P, Q)` of BNT canonical
 forms, iterated over each sector `k` of `Q` that carries a unit-modulus copy.
 
@@ -16,8 +16,8 @@ lives in the companion module `SectorBNT/CoeffIdentity.lean`.
 
 ## Paper anchor
 
-CPSV16 (arXiv:1606.00608) §II.C lines 1182–1186 give the *entire* "Step 1"
-of the equal-MPV corollary proof.  In mathematical terms, Step 1 fixes a
+CPSV16 (arXiv:1606.00608) §II.C line 1182 gives the *entire* matching step
+of the proportional theorem proof.  In mathematical terms, this step fixes a
 block $B_k$ and observes that its overlaps with the $A_j$ blocks cannot all
 decay to zero, since then the two MPV families would fail to be proportional
 for all lengths.  The equal-vector corollary then gives an index $j_k$ with
@@ -80,9 +80,9 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Strong existential matching: CPSV16 §II.C lines 1182–1186 -/
+/-! ### Strong existential matching: CPSV16 §II.C line 1182 -/
 
-/-- **CPSV16 §II.C lines 1182–1186 Step 1 (full-basis form).**
+/-- **CPSV16 §II.C line 1182 Step 1 (full-basis form).**
 
 For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
 bond dimension, gauge-phase equivalent to `Q.basis k` after the dimension
@@ -96,7 +96,7 @@ CPSV16 §II.C line 1182's projection argument; it is taken here as an
 explicit theorem-level hypothesis (CPSV16 §II.A line 246 records only
 the global unit witness).
 
-Paper anchor: CPSV16 §II.C lines 1182–1186 (arXiv:1606.00608), CPSV21
+Paper anchor: CPSV16 §II.C line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
@@ -146,7 +146,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
 
 /-! ### Bijective sector matching by symmetry -/
 
-/-- **CPSV16 §II.C lines 1184–1186 full-basis bijection.**
+/-- **CPSV16 §II.C line 1182 full-basis bijection.**
 
 Applying `forall_k_exists_j_nondecaying_overlap_of_sameMPV` in both
 directions gives injective maps `Fin Q.basisCount → Fin P.basisCount` and
