@@ -50,7 +50,7 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Prop (l.253) | 253–255 | Characterization of CF (no p-periodic, P Aⁱ = P Aⁱ P ⇒ Aⁱ P = P Aⁱ P) | `TNLean/MPS/CanonicalForm/FromPeripheralPrimitive.lean` (`isCanonicalForm_of_peripheralPrimitive`) | `leanok` |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
-| Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | Uses Wielandt; `FundamentalTheorem/FiniteLength.lean` imports `WielandtBound` for word-span results | **needs verification** |
+| Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | No current source-faithful theorem identified; `FundamentalTheorem/FiniteLength.lean` proves a different single-block finite-length agreement result | **open** — do not cite the finite-length single-block theorem as the block-injective-after-blocking proposition; tracked by #1685 |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | No faithful Lean theorem at present. The former restricted proportional-comparison declarations were deleted because their coefficient-array hypotheses are not part of the source statement. | **open** |
 | **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | Single-block results in `FundamentalTheorem/Basic.lean`; conditional sector-matching results in `FundamentalTheorem/SectorDecomposition.lean` | **partial** — the single-block theorem and sector-matching corollaries are proved, but no current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; tracked by #1685 |
 
@@ -92,7 +92,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Defn CFII (l.1058) | 1058–1060 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Existence.lean` (`CFII` data) | `leanok` |
-| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/CanonicalForm/` (distributed); `CanonicalForm/GaugePhaseFromOverlap.lean` | **needs verification** |
+| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | Same-bond-dimension gauge recovery and the rectangular bond-dimension step are in `FundamentalTheorem/Proportional.lean`; overlap decay lives in `TNLean/MPS/Overlap/` | **partial** — the components are present, but the source lemma is not yet packaged as one theorem with the source hypothesis set |
 | **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | Used in BNT construction | **needs verification** |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
 | **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; used by `FundamentalTheorem/SectorWeightComparison.lean` | `leanok` |
@@ -362,8 +362,7 @@ in `docs/audits/issue-1449-wielandt-source-audit.md`, §4):
 
 | MPS file | Wielandt import | Key declaration |
 |---|---|---|
-| `FundamentalTheorem/FiniteLength.lean` | `WielandtBound` | `wordSpan_eq_top_of_isInjective` |
-| `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity/ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
+| `FundamentalTheorem/FiniteLength.lean` | `SpanGrowth/CumulativeSpan` | local `wordSpan_eq_top_of_isInjective` |
 | `CanonicalForm/Existence.lean` | `Primitivity/StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth/VectorToMatrixSpan`, `SpanGrowth/CumulativeSpan`, `RectangularSpan/Basic`, `Primitivity/ToNormal`, `Primitivity/StronglyIrreducibleToFullRank` | Multiple span and primitivity lemmas |
 | `ParentHamiltonian/UniqueGroundState.lean` | `SpanGrowth/CumulativeToWordSpan` | `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one` |
