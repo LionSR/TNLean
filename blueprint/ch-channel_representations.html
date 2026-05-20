@@ -546,22 +546,18 @@
  </li>
 <li class="">
   <a href="ch-channel_representations.html#sec:povm_naimark"><span class="toc_ref">14.7</span> <span class="toc_entry">POVMs and Naimark dilation</span></a>
-  <span class="expand-toc">▶</span>
-  <ul class="sub-toc-2">
-     <li class="">
-  <a href="ch-channel_representations.html#subsec:trace_pairing_expansion"><span class="toc_ref">14.7.1</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
  </li>
 <li class="">
-  <a href="ch-channel_representations.html#subsec:svd_normal_form"><span class="toc_ref">14.7.2</span> <span class="toc_entry">SVD normal form (existence)</span></a>
+  <a href="ch-channel_representations.html#sec:trace_pairing_expansion"><span class="toc_ref">14.8</span> <span class="toc_entry">Trace-pairing expansion in transfer-matrix form</span></a>
  </li>
 <li class="">
-  <a href="ch-channel_representations.html#subsec:lorentz_normal_form"><span class="toc_ref">14.7.3</span> <span class="toc_entry">Lorentz normal form</span></a>
- </li>
-
-  </ul>
+  <a href="ch-channel_representations.html#sec:svd_normal_form"><span class="toc_ref">14.9</span> <span class="toc_entry">SVD normal form (existence)</span></a>
  </li>
 <li class="">
-  <a href="ch-channel_representations.html#sec:channel_determinant"><span class="toc_ref">14.8</span> <span class="toc_entry">Determinant of a quantum channel</span></a>
+  <a href="ch-channel_representations.html#sec:lorentz_normal_form"><span class="toc_ref">14.10</span> <span class="toc_entry">Lorentz normal form</span></a>
+ </li>
+<li class="">
+  <a href="ch-channel_representations.html#sec:channel_determinant"><span class="toc_ref">14.11</span> <span class="toc_entry">Determinant of a quantum channel</span></a>
  </li>
 
   </ul>
@@ -1017,7 +1013,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Chapter&#160;2
 	]
-</span>: the Choi–Jamiołkowski isomorphism, Kraus representation theorems, Stinespring and Naimark dilations, and normal forms. These results are important for the channel theory developed in the following chapters, but they are not prerequisites for the matrix-product-state Fundamental Theorem. </p>
+</span>: the Choi–Jamiołkowski isomorphism, Kraus representation theorems, Stinespring and Naimark dilations, ordered completely positive maps, Radon–Nikodym and open-system representations, trace-pairing expansions, SVD and Lorentz normal forms, and the channel determinant. These results are important for the channel theory developed in the following chapters, but they are not prerequisites for the matrix-product-state Fundamental Theorem. </p>
 <h1 id="sec:representations_infrastructure">14.1 Representations</h1>
 
 <p>The following definitions support the Choi–Jamiol\- kowski isomorphism (Theorem&#160;<a href="ch-channel_representations.html#thm:cp_iff_choi_posSemidef">14.6</a>) and the representation theorems of&#160;<span class="cite">
@@ -6029,7 +6025,7 @@
 
   </div>
 </div>
-<h2 id="subsec:trace_pairing_expansion">14.7.1 Trace-pairing expansion in transfer-matrix form</h2>
+<h1 id="sec:trace_pairing_expansion">14.8 Trace-pairing expansion in transfer-matrix form</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:trace_pairing_self_dual_basis">
   <div class="definition_thmheading">
@@ -6229,7 +6225,7 @@
 
   </div>
 </div>
-<h2 id="subsec:svd_normal_form">14.7.2 SVD normal form (existence)</h2>
+<h1 id="sec:svd_normal_form">14.9 SVD normal form (existence)</h1>
 
 <p><span class="cite">
 	[
@@ -6243,7 +6239,7 @@
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Propositions&#160;2.9 and&#160;2.11
 	]
-</span>; see Subsection&#160;<a href="ch-channel_representations.html#subsec:lorentz_normal_form">14.7.3</a>. </p>
+</span>; see Section&#160;<a href="ch-channel_representations.html#sec:lorentz_normal_form">14.10</a>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:svd_posSemidef">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -6445,7 +6441,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Direct specialisation of Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">14.71</a> to the index type \(\{ 1,\ldots ,D\}  \times \{ 1,\ldots ,D\} \) used by the transfer-matrix representation. </p>
+  <p>Direct specialisation of Theorem&#160;<a href="ch-channel_representations.html#thm:svd_of_isUnit">14.71</a> to the index type \(\{ 0,\ldots ,D-1\}  \times \{ 0,\ldots ,D-1\} \) used by the transfer-matrix representation. </p>
 
   </div>
 </div>
@@ -6478,9 +6474,9 @@
 
   </div>
 </div>
-<h2 id="subsec:lorentz_normal_form">14.7.3 Lorentz normal form</h2>
+<h1 id="sec:lorentz_normal_form">14.10 Lorentz normal form</h1>
 
-<p>This subsection states the existence theorems from <span class="cite">
+<p>This section states the existence theorems from <span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
@@ -6801,7 +6797,7 @@
 
   </div>
 </div>
-<h1 id="sec:channel_determinant">14.8 Determinant of a quantum channel</h1>
+<h1 id="sec:channel_determinant">14.11 Determinant of a quantum channel</h1>
 
 <div class="definition_thmwrapper theorem-style-definition" id="def:channel_det">
   <div class="definition_thmheading">
