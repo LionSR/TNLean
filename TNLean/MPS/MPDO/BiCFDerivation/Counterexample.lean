@@ -16,7 +16,7 @@ exist.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Proposition IV.3]
+* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345]
 
 ## Tags
 
