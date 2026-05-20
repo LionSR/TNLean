@@ -469,12 +469,6 @@ theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
     exact mpv_eq_zero_of_all_zero (zeroMPSTensor d' D')
       (fun _ => rfl) σ hpos
 
-/-- At `N = 0`, the mpv of an arbitrary tensor `A : MPSTensor d D` on the unique
-spin configuration `σ : Fin 0 → Fin d` equals `(D : ℂ)` (the trace of the identity). -/
-private theorem mpv_eq_dim_at_zero (A : MPSTensor d' D') (σ : Fin 0 → Fin d') :
-    mpv A σ = (D' : ℂ) := by
-  simp [mpv, coeff, Matrix.trace_one]
-
 /-- **Zero-block separation** (arXiv:1606.00608 Section 2.3).
 
 The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, some blocks may
@@ -591,7 +585,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
         -- Each block contributes `dim₀ k` at N=0 (trace of identity).
         have : zeroSet.sum (fun k => mpv (blocks₀ k) σ) =
             zeroSet.sum (fun k => (dim₀ k : ℂ)) :=
-          Finset.sum_congr rfl (fun k _ => mpv_eq_dim_at_zero (blocks₀ k) σ)
+          Finset.sum_congr rfl (fun k _ => mpv_zero_length (blocks₀ k) σ)
         rw [this, ← Nat.cast_sum]
       case isFalse hN =>
         apply Finset.sum_eq_zero
