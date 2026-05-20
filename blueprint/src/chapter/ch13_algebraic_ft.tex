@@ -1064,6 +1064,86 @@ decomposition.
     $\bigoplus_k \mu_A(k) A_k$ to $\bigoplus_k \mu_B(k) B_k$.
 \end{proof}
 
+\subsection{Same-index direct-sum consequences of the single-block theorem}%
+\label{subsec:ft_block_sum_corollaries}
+
+\begin{remark}
+    See Definition~\ref{def:block_diagonal_tensor} for the formalized
+    block-diagonal tensor construction.  The results in this subsection assume
+    that the block correspondence has already been fixed; they do not prove
+    \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}.
+\end{remark}
+
+\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective}
+    If all block tensors $A_k$ are injective and the per-block
+    same-MPV condition holds ($A_k$ and $B_k$ generate the same
+    MPV family for each~$k$),
+    then each pair $(A_k, B_k)$ is gauge equivalent.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ft_single}
+    Apply the single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) to each block independently.
+\end{proof}
+
+\begin{remark}[Per-block restatement, not the multi-block paper theorem]
+    This is a block-sum reformulation of the per-block injective single-block FT:
+    the block pairing $(A_k, B_k)$ is assumed already given and the blocks already
+    matched. It is not the multi-block Fundamental Theorem of
+    \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}, which derives the
+    block matching and permutation from only the global same-MPV hypothesis.
+\end{remark}
+
+\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
+    \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:same_mpv}
+    If $A_k$ and $B_k$ generate the same MPV family for each
+    block~$k$, then the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
+    also generate the same MPV family.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:mpv_decomposition}
+    By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
+    each MPV is $\sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
+    Per-block equality of MPV coefficients gives global equality.
+\end{proof}
+
+\begin{remark}[Direct-sum congruence]
+    This is a direct-sum congruence statement: per-block MPV equality lifts to
+    global MPV equality via the block-diagonal decomposition formula.
+\end{remark}
+
+\begin{theorem}[Gauge equivalence for same-index direct sums]\label{thm:multi_block_global}
+    \lean{MPSTensor.fundamentalTheorem_multiBlock_global}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:injective, def:same_mpv, thm:multi_block_ft}
+    If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
+    the same MPV family, then the block-diagonal tensors
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
+\end{theorem}
+
+\begin{proof}\leanok\uses{thm:multi_block_ft}
+    Apply the per-block single-block Fundamental Theorem
+    (Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
+    equivalences from injectivity and equality of MPV families, then
+    combine them into a global gauge for the block-diagonal tensors.
+\end{proof}
+
+\begin{remark}[Block-diagonal gauge assembly, not the FT block-matching theorem]
+    This combines per-block gauges into a block-diagonal gauge for the global
+    assembled tensor, given pre-matched same-index blocks. It is not the FT
+    block-matching theorem: it does not derive the block pairing or permutation
+    from a global same-MPV hypothesis; the block correspondence is assumed in
+    advance.
+\end{remark}
+
 \begin{lemma}[Gauge equivalence of direct sums from per-block MPV equality]%
     \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
