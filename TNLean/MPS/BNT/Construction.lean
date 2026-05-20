@@ -26,13 +26,13 @@ auxiliary tools for already separated finite block families.
 1. **`BlocksNotGaugePhaseEquiv`**: the separation condition asserting that distinct
    equal-dimension blocks are not gauge-phase equivalent.
 
-2. **`cross_overlap_tendsto_zero_of_separated_CFBNT_data`**: separated injective
+2. **`cross_overlap_tendsto_zero_of_separated_bnt_data`**: separated injective
    left-canonical blocks have decaying cross-overlaps. The proof combines:
    - Dimension-mismatch case: `mpvOverlap_tendsto_zero_of_dim_ne`
    - Same-dimension case: `mpvOverlap_tendsto_zero` (using `blocks_not_equiv` to supply
      `¬GaugePhaseEquiv`)
 
-3. **`isBNT_of_separated_CFBNT_data`**: the separated block hypotheses give
+3. **`isBNT_of_separated_bnt_data`**: the separated block hypotheses give
    a valid `IsBNT` structure with the required overlap and independence properties.
 
 4. **`IsNormalCanonicalFormBNT`**: normal-canonical separated hypotheses retained for
@@ -246,17 +246,17 @@ lemma exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal
   obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hOrtho
   exact ⟨N0, fun N hN => hN0 N (le_of_lt hN)⟩
 
-/-! ### Cross-overlap decay from separated CF-BNT hypotheses -/
+/-! ### Cross-overlap decay from separated BNT hypotheses -/
 
-section SeparatedCFBNT
+section SeparatedBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Separated-hypotheses version of CF-BNT cross-overlap decay.
+/-- Separated-hypotheses version of BNT cross-overlap decay.
 
 Only injectivity, left-canonical normalization, and the BNT non-equivalence assumption are used. -/
-theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
+theorem cross_overlap_tendsto_zero_of_separated_bnt_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : HasInjectiveBlocks (d := d) A)
@@ -283,7 +283,7 @@ theorem cross_overlap_tendsto_zero_of_separated_CFBNT_data
 
 The only role of `μ` is to specify the block-diagonal tensor `toTensorFromBlocks μ A` and its
 obvious coefficient decomposition.  Strict weight ordering is not used here. -/
-lemma isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
+lemma isBNT_of_separated_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : HasInjectiveBlocks (d := d) A)
@@ -297,22 +297,22 @@ lemma isBNT_of_separated_CFBNT_data [∀ k, NeZero (dim k)]
     exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
       hOverlap.overlap_tendsto_one
       (fun i j hij =>
-        cross_overlap_tendsto_zero_of_separated_CFBNT_data A hInj hLeft hBlocks i j hij)
+        cross_overlap_tendsto_zero_of_separated_bnt_data A hInj hLeft hBlocks i j hij)
 
-end SeparatedCFBNT
+end SeparatedBNT
 
-/-! ### Cross-overlap decay from separated normal-CF-BNT hypotheses -/
+/-! ### Cross-overlap decay from separated normal BNT hypotheses -/
 
-section SeparatedNormalCFBNT
+section SeparatedNormalBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
 
-/-- Separated-hypotheses version of normal-CF-BNT cross-overlap decay.
+/-- Separated-hypotheses version of normal BNT cross-overlap decay.
 
 Only irreducibility, left-canonical normalization, and the BNT non-equivalence
 assumption are used. -/
-theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
+theorem cross_overlap_tendsto_zero_of_separated_normal_bnt_data
     [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hIrr : HasIrreducibleBlocks (d := d) A)
@@ -338,7 +338,7 @@ theorem cross_overlap_tendsto_zero_of_separated_normalCFBNT_data
 /-- The NT hypotheses already supply the `spans_mpv` and `eventually_li` hypotheses used by the
 proportional-FT / permutation arguments. The only missing ingredient for a full `IsBNT`
 construction is blockwise `IsNormal`. -/
-theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
+theorem spans_mpv_and_eventually_li_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
@@ -351,7 +351,7 @@ theorem spans_mpv_and_eventually_li_of_separated_normalCFBNT_data [∀ k, NeZero
    exists_eventually_linearIndependent_of_overlap_tendsto_orthonormal A
      (fun j => hNCF.overlap_tendsto_one j)
      (fun i j hij =>
-       cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+       cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
          hNCF.toHasIrreducibleBlocks
          hNCF.toIsLeftCanonicalBlockFamily
          hBlocks i j hij)⟩
@@ -362,7 +362,7 @@ Here `hNCF` supplies normality via the primitive-transfer-map characterization f
 `IsNormalCanonicalForm`, while `hNormal` supplies the equivalent algebraic `IsNormal` hypotheses
 (eventual block injectivity) required by `IsBNT`. In applications `hNormal` comes from the
 Wielandt / primitive-to-normal implication. -/
-theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
+theorem isBNT_of_separated_normal_bnt_data [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ)
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNCF : IsNormalCanonicalForm μ A)
@@ -370,10 +370,10 @@ theorem isBNT_of_separated_normalCFBNT_data [∀ k, NeZero (dim k)]
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A) :
     IsBNT (toTensorFromBlocks μ A) r dim A := by
   obtain ⟨hSpans, hLI⟩ :=
-    spans_mpv_and_eventually_li_of_separated_normalCFBNT_data μ A hNCF hBlocks
+    spans_mpv_and_eventually_li_of_separated_normal_bnt_data μ A hNCF hBlocks
   exact ⟨hNormal, hSpans, hLI⟩
 
-end SeparatedNormalCFBNT
+end SeparatedNormalBNT
 
 namespace IsNormalCanonicalFormBNT
 
@@ -389,7 +389,7 @@ theorem cross_overlap_tendsto_zero
     [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
     Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
-  cross_overlap_tendsto_zero_of_separated_normalCFBNT_data A
+  cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
     hNCF.toHasIrreducibleBlocks
     hNCF.toIsLeftCanonicalBlockFamily
     hNCF.blocks_not_equiv
@@ -406,7 +406,7 @@ lemma isBNT [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A)
     (hNormal : ∀ j, IsNormal (A j)) :
     IsBNT (toTensorFromBlocks μ A) r dim A :=
-  isBNT_of_separated_normalCFBNT_data μ A
+  isBNT_of_separated_normal_bnt_data μ A
     hNCF.toIsNormalCanonicalForm
     hNormal
     hNCF.blocks_not_equiv
