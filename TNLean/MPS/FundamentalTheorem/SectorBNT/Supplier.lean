@@ -610,7 +610,7 @@ the prepared-block BNT constructor delivers a full `IsBNTCanonicalForm`
 decomposition together with positive-length MPV agreement.
 -/
 
-/-- **Arbitrary-input BNT block preparation (CPSV16 §II.A lines 237–280).**
+/-- **Arbitrary-input BNT block preparation from the canonical-form and BNT source lines.**
 
 For any tensor `A : MPSTensor d D`, after at most one positive blocking length
 `p`, there is a finite family of **prepared** blocks (left-canonical,
