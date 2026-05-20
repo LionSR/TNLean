@@ -20,7 +20,7 @@ $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), 1182–1188 (proof).
+  (restatement), 1182–1186 (proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
@@ -37,7 +37,7 @@ bond dimension, gauge-phase equivalent in the cast-compatible shape, and
 with non-decaying cross-overlap.  This is the proportional analogue of
 `StrongMatch.forall_k_exists_j_nondecaying_overlap_of_sameMPV`.
 
-Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182–1188. -/
+Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182–1186. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -204,12 +204,13 @@ there is a basis bijection carrying matched bond-dimension equality and
 per-block gauge-phase equivalence.
 
 Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), lines 1167–1170
-(theorem statement), lines 1182–1188 (proof); CPSV21 lines 1891–1894
+(theorem statement), lines 1182–1186 (proof); CPSV21 lines 1891–1894
 (proportional-MPV theorem-level target).  This is the proportional analogue
 of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` (`SectorBNT/FundamentalCoord.lean`)
-in the matching layer; the global-gauge upgrade further requires the
-per-block coefficient identification, which lies in the next module of the
-proof chain. -/
+in the matching layer. The source proportional theorem stops at sector
+matching; the weight comparison and global gauge in CPSV16 lines 1187–1192
+belong to the equal-MPV corollary unless an additional proportional
+coefficient theorem controls the length-dependent scalar. -/
 theorem ft_sector_bnt_proportional_sector_match
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -237,13 +238,13 @@ This is the witness form of `ft_sector_bnt_proportional_sector_match`: after
 the proportional BNT block matching of CPSV16 §II.C lines 1184–1186, the
 matched gauge-phase equivalences provide actual matrices `Xblock k` and
 scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
-these are the unit phases appearing in the source text before the final
-coefficient comparison and block-diagonal gauge construction of lines 1187–1192.
+these are the unit phases appearing in the source proportional theorem.
 
 The theorem intentionally stops before the raw coefficient identity.  Under
 `EventuallyNonzeroProportionalMPV₂`, that step still has to control the
 length-dependent proportionality scalar; it is not the equal-MPV coefficient
-identity proved by `coeff_identity_via_matched_mpv_phase`. -/
+identity proved by `coeff_identity_via_matched_mpv_phase`, and it is not
+contained in CPSV16 lines 1187–1192 without the equal-MPV specialization. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
