@@ -455,7 +455,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     exists_common_injective_blocking_of_tp_primitive_irr_family
       (d := blockPhysDim d p₀) (r := rA) (dim := dimA)
       (blocks := blocksA) hDimA hTPA hPrimA hIrrA
-  -- Step 3: package the result.  The final blocks live in the direct
+  -- Step 3: assemble the result.  The final blocks live in the direct
   -- `blockPhysDim d (p₀ * L)` alphabet via `flattenedIteratedBlockTensor`.
   refine ⟨p₀ * L, Nat.mul_pos hp₀ hL, rA, dimA, fun k => (μA k) ^ L,
     fun k => flattenedIteratedBlockTensor

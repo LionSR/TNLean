@@ -11,7 +11,7 @@ import TNLean.MPS.Overlap.CastDecay
 # Auxiliary lemmas for the BNT canonical-form predicate `IsBNTCanonicalForm`
 
 Elementary lemmas for the predicate `IsBNTCanonicalForm` introduced in
-`SectorBNT/Basic.lean`.  All lemmas here use the **raw** sector data
+`SectorBNT/Basic.lean`.  All lemmas here use the **raw** sector coefficients
 `P.weight j q` and `P.coeff N j = ∑_q (P.weight j q)^N`; no equal-modulus
 factorisation is assumed.  The optional `HasEqualModulusWeightLayer`
 specialisation lives in `SectorBNT/EqualModulus.lean` and is intentionally
@@ -230,8 +230,8 @@ $\mu_{j,q}$.  The per-block witness is implicit in CPSV16 §II.C line 1182's
 projection step and is
 therefore exposed here as a per-theorem hypothesis.
 
-Paper anchor: CPSV16 §II.C Lemma `Lem:app_simple`, lines 1155--1163
-(finite power-sum comparison), and CPSV16 §II.C line 1182 (per-block
+Paper anchor: CPSV16 appendix power-sum lemma, lines 1155--1163, and
+CPSV16 §II.C line 1182 (per-block
 projection step). -/
 theorem coeff_not_tendsto_zero_at_block
     (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)

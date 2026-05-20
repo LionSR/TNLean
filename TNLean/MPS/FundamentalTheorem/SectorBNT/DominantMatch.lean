@@ -17,7 +17,7 @@ the assembled tensors.
 
 The module has three layers:
 
-1. **Lemma 1** — package `SameMPV₂` as a special case of
+1. **Lemma 1** — interpret `SameMPV₂` as a special case of
    `EventuallyNonzeroProportionalMPV₂` with constant scalar `1`.
 2. **Lemma 2** — specialise the Phase 3 weak existential
    (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
@@ -66,10 +66,10 @@ imply both bounds via the `spectral_level_dom_norm_one` +
 
 ## Output for Phase 4b-iii
 
-The matched gauge-phase data produced here will be consumed in Phase 4b-iii
+The matched gauge-phase witnesses produced here will be consumed in Phase 4b-iii
 (matched-sector subtraction) together with `SectorBNT/DropSector.lean`
 (Phase 4a) and `SectorBNT/NewtonGirard.lean` (Phase 4b-i) to drive the
-strong-induction step of the CPSV16 `II_cor2` argument.
+strong-induction step of the CPSV16 equal-MPV corollary argument.
 
 ## References
 
@@ -79,7 +79,7 @@ strong-induction step of the CPSV16 `II_cor2` argument.
   217–246 (global modulus normalization; dominant-norm-1 weight assumption),
   234–246 (the BNT basis block is selected by normality + modulus-1 dominant
   weight), 264–279 (gauge-phase grouping rule), 287–301 (raw two-layer BNT
-  display), 1080–1091 (overlap dichotomy), 1172–1188 (`II_cor2` proof:
+  display), 1080–1091 (overlap dichotomy), 1172–1188 (equal-MPV corollary proof:
   BNT basis block projection forces non-decay; multiplicity recovery via
   power-sum coefficient comparison).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
@@ -108,9 +108,9 @@ variable {d : ℕ}
 `SameMPV₂` is the equal-MPV hypothesis.  By taking the proportionality scalar
 to be the constant `1`, it is a degenerate special case of
 `EventuallyNonzeroProportionalMPV₂` (per-`N` nonzero scalar with
-eventual scope).  The conversion is purely `Filter.Eventually` packaging.
+eventual scope).  The conversion is a direct `Filter.Eventually` argument.
 
-Paper anchor: CPSV16 corollary `II_cor2`, lines 1172–1192, instantiates
+Paper anchor: CPSV16 equal-MPV corollary, lines 1172–1192, instantiates
 `thm1` with equal MPV; the proportionality scalar is `1`.
 -/
 theorem SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
@@ -135,8 +135,8 @@ The Phase 3 weak existential
 `SameMPV₂` hypothesis via Lemma 1.
 
 Paper anchor: CPSV16 lines 1121–1132 (Lem1, combined-family eventual LI),
-applied along the contrapositive route of CPSV16 lines 1172–1192
-(`II_cor2`).
+applied along the contrapositive route of the CPSV16 equal-MPV corollary,
+lines 1172–1192.
 -/
 theorem exists_nondecaying_overlap_pair_of_sameMPVPos
     {P Q : SectorDecomposition d}

@@ -8,10 +8,10 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
-# BNT equal-MPV sector data theorem (CPSV16 §II.C lines 1182–1192)
+# BNT equal-MPV sector witnesses (CPSV16 §II.C lines 1182–1192)
 
 This module combines the full-basis matching (`StrongMatch`) and the
-exact coefficient identity (`CoeffIdentity`) into the sector-data
+exact coefficient identity (`CoeffIdentity`) into the sector-witness
 conclusion of the CPSV16/CPSV21 fundamental theorem on the
 `IsBNTCanonicalForm` surface.
 
@@ -28,7 +28,7 @@ Paper anchors:
   projection argument — is taken as an explicit theorem-level hypothesis
   here, not as a structural field of `IsBNTCanonicalForm`.
 
-The theorem below exposes the sector-level data needed before assembling
+The theorem below exposes the sector-level witnesses needed before assembling
 the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  It does not use
 `dropSector` recursion, partial-union combined LI, or asymptotic-difference
 multiset recovery.
@@ -248,7 +248,7 @@ theorem ft_sector_bnt_proportional_global_gauge_of_weight_data
   exact sector_bnt_global_gauge_of_matched_weights
     (P := P) (Q := Q) β hDim τ ζ Xblock hζ_ne hConj hWeight
 
-/-- **BNT equal-MPV sector-data theorem (CPSV16 §II.C lines 1184–1188).**
+/-- **BNT equal-MPV sector-witness theorem (CPSV16 §II.C lines 1184–1188).**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
 same MPV family, then their BNT basis sectors are bijectively matched by
