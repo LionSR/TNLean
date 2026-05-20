@@ -1096,10 +1096,8 @@ The non-matched decay clause is delivered in full.
     subnormality hypothesis. A finite sum of null sequences is null.
 \end{proof}
 
-\begin{theorem}[Substitution argument for the unit-modulus subset]
-    \label{thm:sector_bnt_coeff_identity_via_global_gauge}
-    \lean{MPSTensor.coeff_identity_via_global_gauge}
-    \leanok
+\begin{theorem}[Projected substitution for the unit-modulus subset]\notready
+    \label{thm:sector_bnt_projected_substitution_unit_subset}
     \uses{def:sector_bnt_cf,
         thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
         thm:sector_bnt_bijective_match_of_sameMPV,
@@ -1132,7 +1130,6 @@ The non-matched decay clause is delivered in full.
 \end{theorem}
 
 \begin{proof}
-    \leanok
     \uses{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
         lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     Fix $j_0$ and project the proportional-MPV identity onto the overlap
@@ -1184,7 +1181,10 @@ The non-matched decay clause is delivered in full.
 \end{proof}
 
 \begin{remark}
-    Theorem~\ref{thm:sector_bnt_coeff_identity_via_global_gauge} realises
+    Theorem~\ref{thm:sector_bnt_projected_substitution_unit_subset} is the
+    open proportional scalar-control target. It should not be identified with
+    Lemma~\ref{lem:sector_bnt_coeff_identity_via_global_gauge}, which is a
+    full-basis equal-MPV statement. The projected theorem follows
     the substitution route of
     \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys}: substitute
     the per-pair gauge phases into the proportional-MPV identity, reduce
@@ -1198,11 +1198,11 @@ The non-matched decay clause is delivered in full.
 \subsection{Full-basis coefficient identity and global gauge}
 \label{subsec:sector_bnt_full_basis_global_gauge}
 
-The preceding substitution theorem works on the unit-modulus subset. The
-following two statements record the full-basis form used by the sector-permuted
-global gauge. Their hypotheses explicitly require a unit-modulus copy in every
-sector on both sides; under this normalization, the matching covers the whole
-BNT basis.
+The preceding substitution theorem is not yet formalized and works on the
+unit-modulus subset. The following statements record the full-basis form used by
+the sector-permuted global gauge. Their hypotheses explicitly require a
+unit-modulus copy in every sector on both sides; under this normalization, the
+matching covers the whole BNT basis.
 
 \begin{lemma}[Unit phase from matched normalized BNT blocks]%
     \label{lem:sector_bnt_norm_phase_of_matched_mpv}
@@ -1299,6 +1299,38 @@ BNT basis.
     resulting $Q$-sum by $\beta$. The BNT linear independence of the $P$-basis,
     through Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li}, forces equality
     of the corresponding coefficients for all sufficiently large lengths.
+\end{proof}
+
+\begin{lemma}[Full-basis coefficient identity from global gauges]%
+    \label{lem:sector_bnt_coeff_identity_via_global_gauge}
+    \lean{MPSTensor.coeff_identity_via_global_gauge}
+    \leanok
+    \uses{def:sector_bnt_cf,
+        def:gauge_phase_equiv,
+        lem:sector_bnt_norm_phase_of_matched_mpv,
+        lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
+    Let $P$ and $Q$ be BNT canonical forms with the same MPV family. Suppose
+    that there is a bijection
+    \[
+        \beta : J(Q) \simeq J(P)
+    \]
+    and, for every $k\in J(Q)$, a bond-dimension equality and a gauge-phase
+    equivalence between $Q_k$ and $P_{\beta(k)}$. Then for every $k$ there are
+    a unit-modulus scalar $\zeta_k$ and an integer $N_0$ such that, for all
+    $N>N_0$,
+    \[
+        c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q).
+    \]
+    This is the full-basis equal-MPV coefficient comparison of
+    \cite[\S~II.C, lines 1187--1188]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose the scalar-power MPV identity associated to each gauge-phase
+    equivalence. Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
+    unit modulus for each scalar. Applying
+    Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} to these
+    phases gives the eventual coefficient identities.
 \end{proof}
 
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
