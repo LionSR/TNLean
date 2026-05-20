@@ -116,13 +116,13 @@ boundary conditions (PBC).
     framework appears in Chapter~\ref{ch:channels}.
 \end{remark}
 
-\section{Site-dependent periodic chains}
+\section{Site-periodic tensor families}
 
-\begin{definition}[Periodic-chain tensor family]\label{def:periodic_mps_tensor}
+\begin{definition}[Site-periodic tensor family]\label{def:periodic_mps_tensor}
     \lean{MPSTensor.PeriodicMPSTensor}
     \leanok
-    For a fixed period $m$, a \emph{periodic-chain tensor family} is a
-    site-dependent family of local tensors indexed by $\{0,\ldots,m{-}1\}$, with
+    For a fixed period $m$, a \emph{site-periodic tensor family} is a
+    family of local tensors indexed by $\{0,\ldots,m{-}1\}$, with
     local physical dimension~$d$ and bond dimension~$D$.
 \end{definition}
 
@@ -131,9 +131,9 @@ boundary conditions (PBC).
     \lean{MPSTensor.PeriodicMPSTensor.GaugeEquiv}
     \leanok
     \uses{def:periodic_mps_tensor}
-    For periodic-chain tensors $A,B$ at fixed period~$m$:
+    For site-periodic tensors $A,B$ at fixed period~$m$:
     \begin{itemize}
-        \item equality of the induced periodic-chain states;
+        \item equality of the induced site-periodic states;
         \item cyclic gauge equivalence.
     \end{itemize}
 \end{definition}
