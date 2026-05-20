@@ -34,7 +34,7 @@ with an extra $Z$-gauge degree of freedom.
 % BNT canonical-form statements, see Chapter~\ref{ch:bnt}.
 % Lean targets: \texttt{MPSTensor.ft\_sector\_bnt\_equal\_sector\_data},
 % \texttt{MPSTensor.ft\_sector\_bnt\_equal\_global\_gauge}.
-% The literal $\mathrm{II\_cor2}$ coordinate packaging (CPSV16 lines 1184--1192)
+% The literal $\mathrm{II\_cor2}$ coordinate form (CPSV16 lines 1184--1192)
 % is recorded in Chapter~\ref{ch:bnt} for the unit-modulus BNT normalization.
 
 \section{Source theorems}\label{sec:ft_source_theorems}
@@ -159,7 +159,7 @@ sums.
 The block-matching conclusion (block-count, bond-dimension, and
 gauge-phase identification of corresponding sectors) and the global
 gauge identification are formalised on the BNT canonical form of
-Chapter~\ref{ch:bnt}. The literal coordinate packaging of
+Chapter~\ref{ch:bnt}. The literal coordinate form of
 \cite[Corollary~II.2 and \S~II.C, lines 1184--1192]
     {Cirac2017MPDO_AnnPhys}
 is recorded there under the unit-modulus-copy normalization.
@@ -894,12 +894,10 @@ facts used to recover the lists of weights from those power sums.
         B_j^i=e^{i\phi_j}Y_jA_j^iY_j^{-1}.
     \]
     Only after this representative matching does the equal case compare the scalar
-    coefficient power sums, for $j=1,\ldots,g$ and $N\ge 1$:
-    \[
-        \sum_{q=1}^{r^A_j}(\mu^A_{j,q})^N
-        =
-        \sum_{q=1}^{r^B_j}(\mu^B_{j,q}e^{i\phi_j})^N.
-    \]
+    coefficient power sums: for each matched block $j$ and every positive length
+    $N$, the sum of the $N$th powers of the $A$-copy weights equals the
+    corresponding sum of the $B$-copy weights after multiplication by
+    $e^{i\phi_j}$.
     Newton--Girard then recovers the multiplicities and weight multisets, and the
     block gauges $Y_j$ are placed on the diagonal to give the global conjugating
     matrix. This is the equal-case corollary
@@ -907,10 +905,10 @@ facts used to recover the lists of weights from those power sums.
     restated in \cite[Corollary~IV.5]{Cirac2021Matrix}.
 
     The formalization of this route is split into two theorems. The first
-    packages the BNT basis bijection $\beta$, the per-block gauge-phase
+    gives the BNT basis bijection $\beta$, the per-block gauge-phase
     witnesses, copy-count equality, and the scalar coefficient comparison
-    $\nu_{k,q} = \zeta_k^{-1} \mu_{\beta(k),\tau(q)}$
-    matching the source power-sum identity displayed above. The second
+    $\nu_{k,q} = \zeta_k^{-1} \mu_{\beta(k),\tau(q)}$ that follows from the
+    source power-sum comparison. The second
     assembles the per-block gauge matrices $Y_j = X_k$ on the flattened
     direct sum to produce the global conjugation $X$, matching the appendix
     construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
