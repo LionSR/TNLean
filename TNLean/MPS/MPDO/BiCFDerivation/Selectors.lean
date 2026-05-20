@@ -392,8 +392,8 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
             exact False.elim (hmem (Finset.mem_univ _))
     _ = M j a b := rfl
 
-/-- The linear-independence criterion above gives the abstract Proposition IV.3
-selector data as a corollary. -/
+/-- The linear-independence criterion above gives the abstract selector data
+modeled on arXiv:1606.00608, proposition `propblockinj`, lines 340--345. -/
 theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
@@ -410,8 +410,8 @@ theorem hasBiCF_of_wordEntryFamily_linearIndependent
   hasBiCF_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI)
 
-/-- Abstract finite-length data isolating the content of Proposition IV.3
-(`propblockinj`) from arXiv:1606.00608.
+/-- Abstract finite-length data isolating the content of proposition
+`propblockinj` from arXiv:1606.00608, lines 340--345.
 
 A family is `PropBlockInjective` if there is a common blocking length making
 all blocks injective, together with a second finite family of words selecting
@@ -422,7 +422,7 @@ def PropBlockInjective
   ∃ L S : ℕ, (∀ k, IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
 
 /-- Common block injectivity plus pairwise block-separating word polynomials
-produce the abstract Proposition IV.3 selector data. -/
+produce the abstract `propblockinj` selector data. -/
 theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
     (A : (k : Fin r) → MPSTensor d (dim k))
     {L S : ℕ}
@@ -556,8 +556,8 @@ theorem hasBiCF_of_common_blockInjective_of_pairBlockSeparatingWords
   hasBiCF_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords A hInj hPair)
 
-/-- The abstract Proposition IV.3 selector data imply the finite-length
-word-tuple span condition. -/
+/-- The abstract `propblockinj` selector data imply the finite-length word-tuple
+span condition. -/
 theorem wordTupleSpanTop_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
@@ -566,7 +566,7 @@ theorem wordTupleSpanTop_of_propBlockInjective
   exact ⟨L + S,
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords A hInj hSel⟩
 
-/-- The abstract Proposition IV.3 selector data imply `HasBiCF`. -/
+/-- The abstract `propblockinj` selector data imply `HasBiCF`. -/
 theorem hasBiCF_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hProp : PropBlockInjective A) :
@@ -619,8 +619,8 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
   horizontalCFData_of_wordTupleSpanTop A hInj hLeft hμne
     ⟨L, MPSTensor.wordTupleSpanTop_of_wordEntryFamily_linearIndependent A hLI⟩
 
-/-- Proposition IV.3-style selector data yield `HorizontalCFData` through the
-finite-length span criterion. -/
+/-- The abstract `propblockinj` selector data yield `HorizontalCFData` through
+the finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hInj : ∀ k, MPSTensor.IsInjective (A k))
@@ -658,7 +658,7 @@ The new predicate `PropBlockInjective` expresses one abstract finite-length rout
 while `wordEntryFamily` gives a second, equivalent linear-algebra criterion.
 What remains open is to derive either of those finite-length witnesses from the
 repository's current BNT / canonical-form hypotheses, i.e. to formalize the full
-content of Proposition IV.3 of arXiv:1606.00608.
+content of arXiv:1606.00608, proposition `propblockinj`, lines 340--345.
 -/
 
 end MPOTensor

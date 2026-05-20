@@ -43,7 +43,8 @@ The supporting modules are:
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Proposition IV.3]
+* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
+  Proposition `propblockinj`, lines 340--345]
 * [David--Perez-Garcia--Schuch--Wolf 2006, Lemmas `lem1` and `lem:direct-sum`]
 
 ## Tags
