@@ -86,7 +86,8 @@ strong-induction step of the CPSV16 `II_cor2` argument.
   *Matrix product states and projected entangled pair states*, Rev. Mod.
   Phys. **93**, 045003 (2021); arXiv:2011.12127.  Definition 4.2
   (lines 1846–1850), Proposition 4.3 (lines 1852–1859), the two-layer
-  display (lines 1864–1884), and Theorem 4.5 (lines 1891–1900).
+  display (lines 1864–1884), Theorem 4.4 (lines 1891–1894), and
+  Corollary 4.5 (lines 1896–1900).
 
 ## Tags
 
