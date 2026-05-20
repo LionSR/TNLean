@@ -46,8 +46,8 @@ overlap does not decay)` is a stronger statement that requires induction on
   Theories*, arXiv:1606.00608.  Lines 287–301 (raw two-layer BNT display
   with coefficient `∑_q μ_{j,q}^N`), 1080–1091 (normal-tensor overlap
   dichotomy), 1121–1132 (combined-family linear-independence corollary),
-  1184–1188 (multiplicity recovery via raw power-sum coefficient comparison),
-  1172–1192 (equal-MPV corollary,
+  1182 (BNT projection/matching step), 1184–1188 (multiplicity recovery via
+  raw power-sum coefficient comparison), 1172–1192 (equal-MPV corollary,
   fixed `k_0` move-everything-else argument).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
   *Matrix product states and projected entangled pair states*,
