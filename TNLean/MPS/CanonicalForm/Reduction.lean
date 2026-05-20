@@ -10,10 +10,11 @@ open scoped Matrix BigOperators
 # Iterated invariant-projection splitting: irreducible block decomposition
 
 This module implements the "iterate until all blocks are irreducible" step from
-Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3
-(around eq. `\label{eq:II_Aiplusk1}`).
+Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219
+(the display labelled eq:II_Aiplusk1 is at lines 214–218).
 It also corresponds to the invariant-subspace splitting used inside
-PGVWC07, Theorem `Th:TIcanonical`, lines 765–833.
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 765–833.
 The source proof is ordered as follows: lines 765–770 handle spectral-radius
 normalization and the full-rank fixed-point gauge; lines 771–783 derive the
 invariant support from a singular positive fixed point; lines 785–815 split the
@@ -21,7 +22,7 @@ finite-ring trace over that support and its orthogonal complement; lines 816–8
 iterate the split and use a non-scalar fixed point to force uniqueness of the
 identity fixed point.  This file formalizes only the abstract splitting once an
 invariant projection is available; a faithful proof of the full theorem must
-also derive that projection from the positive fixed-point argument in
+also derive that projection from the singular positive fixed-point argument in
 lines 771–783 and perform the dual fixed-point diagonalization at
 lines 827–832.
 
@@ -42,14 +43,16 @@ orthogonal projections. Strong induction on `D` guarantees termination.
 * Blocking to remove periodicity.
 * The positive weights, unital block orientation, diagonal full-rank dual fixed
   points, uniqueness of the identity fixed point, and total bond-dimension bound
-  in PGVWC07, Theorem `Th:TIcanonical`, lines 742–763.
+  in Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+  lines 742–763.
 These are separate steps in the canonical-form construction.
 
 ## References
 
-* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3, eq. II_Aiplusk1.
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
-  proof lines 765–833.
+* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219,
+  with eq:II_Aiplusk1 at lines 214–218.
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical, proof
+  lines 765–833.
 -/
 
 namespace MPSTensor
@@ -126,7 +129,8 @@ private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : M
 
 /-! ## Main theorem: iterated irreducible block decomposition -/
 
-/-- **Iterated invariant-projection splitting** (Cirac–Pérez-García–Schuch–Verstraete Section 2.3).
+/-- **Iterated invariant-projection splitting**
+(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219).
 
 Every MPS tensor `A : MPSTensor d D` is `SameMPV₂`-equivalent to a block-diagonal tensor
 `toTensorFromBlocks (μ ≡ 1) blocks` whose every block is irreducible (has no nontrivial invariant
@@ -137,9 +141,10 @@ nontrivial invariant projection `P`, which we use via
 `exists_twoBlock_decomp_of_lowerZero_strict` to split `A` into two blocks of *strictly smaller*
 bond dimension, then apply the induction hypothesis to each block.
 
-**Scope restriction (PGVWC07 canonical-form proof step):** This theorem proves
-only the recursive invariant-projection splitting from the proof of
-PGVWC07, Theorem `Th:TIcanonical`, lines 771–826. It does not prove the full
+**Scope restriction (translation-invariant canonical-form proof step):** This
+theorem proves only the recursive invariant-projection splitting from the proof of
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 771–826. It does not prove the full
 source theorem's positive weights, unital normalization, diagonal full-rank dual
 fixed points, or final bond-dimension bound; it also does not perform the
 dual-map diagonalization of lines 827–832. The remaining source boundary is
