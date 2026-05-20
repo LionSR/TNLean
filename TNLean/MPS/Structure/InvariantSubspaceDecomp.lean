@@ -23,9 +23,9 @@ arguments before blocking/normalization.
 
 This file formalizes the direct-sum decomposition step once an invariant
 projection has already been obtained.  In Pérez-García, Verstraete, Wolf, and
-Cirac this is deliberately the second part of the singular fixed-point
-argument, not a replacement for the positive fixed-point argument that produces
-the projection:
+Cirac this is deliberately the trace-splitting part of the singular positive
+fixed-point argument, not a replacement for the preceding singular positive
+fixed-point step that produces the projection:
 
 > **Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
 > proof lines 771–815.**
