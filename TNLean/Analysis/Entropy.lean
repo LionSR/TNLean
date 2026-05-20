@@ -23,6 +23,8 @@ the basic quantum entropy infrastructure needed for MPDO / RFP applications.
 
 ## Main results
 
+* `vonNeumannEntropy_nonneg_of_posSemidef_trace_one`: `S(ρ) ≥ 0` for
+  positive semidefinite matrices of trace `1`, over any finite index type
 * `vonNeumannEntropy_nonneg`: `S(ρ) ≥ 0` for density matrices
 * `traceA_ABC_isHermitian`, `traceC_ABC_isHermitian`, `traceAC_ABC_isHermitian`:
   tripartite partial traces preserve Hermiticity
@@ -42,7 +44,7 @@ subadditivity theorem lives in `TNLean.Axioms.Entropy`, which is imported from
 The entropy definition uses the eigenvalue-based formula via
 `Matrix.IsHermitian.eigenvalues` and Mathlib's `Real.negMulLog`. The index
 type `n` is kept polymorphic (`[Fintype n] [DecidableEq n]`) so that von
-Neumann entropy can be applied to matrices indexed by product types arising
+Neumann entropy can be applied to matrices indexed by product index sets arising
 from partial traces.
 
 Tripartite partial traces are defined directly as matrix entry sums, avoiding
@@ -85,7 +87,40 @@ noncomputable def vonNeumannEntropy
 
 end VonNeumannEntropy
 
-/-! ### Basic properties for `Fin D` density matrices -/
+/-! ### Basic properties for density matrices -/
+
+section VonNeumannEntropyDensity
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- The eigenvalues of a positive semidefinite trace-one matrix sum to `1`. -/
+theorem posSemidef_trace_one_eigenvalues_sum_one
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) :
+    ∑ i : n, hρ.isHermitian.eigenvalues i = 1 := by
+  have h := hρ.isHermitian.trace_eq_sum_eigenvalues
+  have key : (∑ i : n, (hρ.isHermitian.eigenvalues i : ℂ)) = 1 :=
+    h ▸ hρ_tr
+  exact_mod_cast key
+
+/-- The eigenvalues of a positive semidefinite trace-one matrix lie in `[0, 1]`. -/
+theorem posSemidef_trace_one_eigenvalues_le_one
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) (i : n) :
+    hρ.isHermitian.eigenvalues i ≤ 1 := by
+  have h_nonneg := hρ.eigenvalues_nonneg
+  have h_sum := posSemidef_trace_one_eigenvalues_sum_one hρ hρ_tr
+  nlinarith [Finset.single_le_sum (f := fun j => hρ.isHermitian.eigenvalues j)
+    (fun j _ => h_nonneg j) (Finset.mem_univ i)]
+
+/-- Von Neumann entropy is nonnegative for positive semidefinite trace-one matrices. -/
+theorem vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hρ_tr : ρ.trace = 1) :
+    0 ≤ vonNeumannEntropy ρ hρ.isHermitian := by
+  apply Finset.sum_nonneg
+  intro i _
+  exact negMulLog_nonneg (hρ.eigenvalues_nonneg i)
+    (posSemidef_trace_one_eigenvalues_le_one hρ hρ_tr i)
+
+end VonNeumannEntropyDensity
 
 section VonNeumannEntropyFinD
 
@@ -94,21 +129,14 @@ variable {D : ℕ}
 /-- The eigenvalues of a density matrix sum to 1 (real version). -/
 theorem densityMatrices_eigenvalues_sum_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
-    ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 := by
-  have h := hρ.1.isHermitian.trace_eq_sum_eigenvalues
-  have h_tr := hρ.2
-  have key : (∑ i : Fin D, (hρ.1.isHermitian.eigenvalues i : ℂ)) = 1 :=
-    h ▸ h_tr
-  exact_mod_cast key
+    ∑ i : Fin D, hρ.1.isHermitian.eigenvalues i = 1 :=
+  posSemidef_trace_one_eigenvalues_sum_one hρ.1 hρ.2
 
 /-- The eigenvalues of a density matrix lie in `[0, 1]`. -/
 theorem densityMatrices_eigenvalues_le_one
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D)
-    (i : Fin D) : hρ.1.isHermitian.eigenvalues i ≤ 1 := by
-  have h_nonneg := hρ.1.eigenvalues_nonneg
-  have h_sum := densityMatrices_eigenvalues_sum_one hρ
-  nlinarith [Finset.single_le_sum (f := fun j => hρ.1.isHermitian.eigenvalues j)
-    (fun j _ => h_nonneg j) (Finset.mem_univ i)]
+    (i : Fin D) : hρ.1.isHermitian.eigenvalues i ≤ 1 :=
+  posSemidef_trace_one_eigenvalues_le_one hρ.1 hρ.2 i
 
 /-- Von Neumann entropy is nonneg for density matrices.
 
@@ -119,11 +147,8 @@ Source: [Wolf, Chapter 8, Section 8.2][Wolf2012QChannels];
 blueprint `thm:entropy_nonneg`. -/
 theorem vonNeumannEntropy_nonneg
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ ∈ densityMatrices D) :
-    0 ≤ vonNeumannEntropy ρ hρ.1.isHermitian := by
-  apply Finset.sum_nonneg
-  intro i _
-  exact negMulLog_nonneg (hρ.1.eigenvalues_nonneg i)
-    (densityMatrices_eigenvalues_le_one hρ i)
+    0 ≤ vonNeumannEntropy ρ hρ.1.isHermitian :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one hρ.1 hρ.2
 
 /-- Von Neumann entropy is bounded above by `log D`.
 
