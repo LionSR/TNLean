@@ -1339,6 +1339,43 @@ BNT basis.
     gauge.
 \end{proof}
 
+\begin{theorem}[Conditional proportional global gauge from copy weights]%
+    \label{thm:sector_bnt_proportional_global_gauge_of_weight_data}
+    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_weight_data}
+    \leanok
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
+        thm:sector_bnt_global_gauge_of_matched_weights}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
+    eventually nonzero proportional MPV families. Assume that every sector of
+    $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
+    Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
+    equalities, unit-modulus phases $\zeta_k$, and block gauges $X_k$ such
+    that
+    \[
+        Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}.
+    \]
+    Moreover, if copy permutations $\tau_k$ satisfy
+    \[
+        \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)},
+    \]
+    then the flattened $Q$-tensor is obtained from the matched-coordinate
+    $P$-tensor by the block-diagonal gauge
+    \[
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+    Thus, after the remaining proportional coefficient comparison supplies
+    the displayed copy-weight identities, the direct-sum gauge assembly of
+    \cite[\S~II.C, lines 1189--1192]{Cirac2017MPDO_AnnPhys} follows.
+\end{theorem}
+
+\begin{proof}\leanok
+    The proportional sector-matching theorem supplies $\beta$, the
+    bond-dimension equalities, the phases, and the block gauges. The
+    unit-modulus conclusion gives nonzero phases. With the displayed
+    copy-weight identities as input, apply
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+\end{proof}
+
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
     \label{thm:sector_bnt_equal_global_gauge}
     \lean{MPSTensor.ft_sector_bnt_equal_global_gauge}

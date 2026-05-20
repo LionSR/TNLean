@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
+import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Multi
 
@@ -187,6 +188,61 @@ theorem sector_bnt_global_gauge_of_matched_weights
             Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
               (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
             rw [hLeft]
+
+/-- **Conditional proportional global gauge from matched copy weights.**
+
+For proportional MPV families, the proportional sector-matching theorem supplies
+the matched BNT basis, unit phases, and block gauges of CPSV16 §II.C lines
+1184--1186. If the remaining coefficient-comparison step supplies copy
+permutations whose weights obey the same phases, then the direct-sum gauge
+assembly of lines 1189--1192 follows.
+
+This theorem isolates the exact residual input for the proportional
+global-gauge upgrade: the copy-weight identity. -/
+theorem ft_sector_bnt_proportional_global_gauge_of_weight_data
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
+      ∀ (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))),
+        (∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
+          Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) →
+        ∃ X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ,
+          X = globalGaugeOfBlocks (matched_block_gauge (Q := Q) Xblock) ∧
+          ∀ i : Fin d,
+            toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+              (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
+                toTensorFromBlocks (d := d)
+                  (μ := matched_p_weight (P := P) (Q := Q) β τ)
+                  (matched_p_basis (P := P) (Q := Q) β hDim) i *
+                (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+                  Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                    (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
+  classical
+  obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, _hMpv⟩ :=
+    ft_sector_bnt_proportional_sector_match_witnesses
+      (P := P) (Q := Q) hP hQ hUnitP hUnitQ hProp
+  refine ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ?_⟩
+  intro τ hWeight
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
+    intro k hzero
+    have hnorm := hζ_norm k
+    simp [hzero] at hnorm
+  exact sector_bnt_global_gauge_of_matched_weights
+    (P := P) (Q := Q) β hDim τ ζ Xblock hζ_ne hConj hWeight
 
 /-- **BNT equal-MPV sector-data theorem (CPSV16 §II.C lines 1184–1188).**
 
