@@ -13,7 +13,7 @@ import Mathlib.Data.Fintype.BigOperators
 /-!
 # Sector decomposition comparison theorems
 
-This chapter compares two finite sector decompositions that describe the same
+This module compares two finite sector decompositions that describe the same
 matrix-product vector family.  It combines the coefficient comparison, the
 recovery of sector weights from power sums, and the equal-case corollaries
 needed to match sectors up to permutation and nonzero phase factors.
@@ -22,9 +22,10 @@ needed to match sectors up to permutation and nonzero phase factors.
 
 - [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac, *Matrix Product State Representations*,
   Quantum Inf. Comput. 7 (2007), arXiv:quant-ph/0608197.
-- [CPSV17] Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density
+- [CPSV16] Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density
   Operators: Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608
-  (2017).
+  (2016), especially Appendix Lemma `Lem:app_simple`, lines 1155--1163, and
+  the equal-MPV corollary proof, lines 1184--1192.
 - [CPSV21] Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected
   entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021),
   arXiv:2011.12127.
@@ -52,9 +53,9 @@ The result formalized here is the BNT coefficient comparison that recovers both
 multiplicities and sector weights. A global gauge-equivalence statement for the
 block-diagonal tensors still requires deriving the block matching and phase
 relations from bare equality of matrix-product vectors. In sector form the
-coefficients are finite sums of powers of unit-modulus weights, so convergence is
-not automatic without a dominant weight, normalization, or an explicit
-common-phase comparison.
+coefficients are finite sums of powers of nonzero weights, so comparison is
+carried out through the CPSV16 Appendix `Lem:app_simple` power-sum argument,
+not through a limiting coefficient argument.
 -/
 
 /-- **Phase matching and total MPV equality recover multiplicities and sector weights.**
@@ -66,8 +67,11 @@ independent, then the multiplicities are forced to agree. After absorbing the sa
 phases into the weights of `Q`, the per-basis sector weight multisets agree.
 
 This is the coefficient-extraction part of the comparison: equality of multiplicities
-is recovered from the exponent-zero case of the power-sum identity after eventual
-coefficient equality has been extrapolated to all exponents. -/
+is recovered by the unequal-cardinality power-sum identity after eventual
+coefficient equality has been extrapolated to all exponents.  This is the
+formal version of the CPSV16 `II_cor2` coefficient comparison, lines
+1184--1188, with Appendix Lemma `Lem:app_simple`, lines 1155--1163, providing
+the finite power-sum rigidity. -/
 lemma fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_phaseMatch_exists_copies
     (P Q : SectorDecomposition d)
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)

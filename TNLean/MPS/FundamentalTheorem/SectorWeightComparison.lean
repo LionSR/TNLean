@@ -16,14 +16,18 @@ sector decompositions over a common BNT basis.  Eventual coefficient equality is
 upgraded to equality of the sector-weight multisets by a geometric-sequence
 extrapolation and the Newton identities.
 
-In arXiv:1606.00608, Theorem IV.13 and its appendix proof use positive diagonal
-matrices whose traces enter the structure coefficients as power sums.  The
-geometric extrapolation and Newton--Girard steps below are the finite-sequence
-algebra needed to recover the weight lists from those power sums once the basis
-blocks have been matched.
+In CPSV16, the relevant coefficient comparison is the equal-MPV corollary
+`II_cor2`: after the BNT sectors have been matched, the proof compares the
+power sums of the copy weights in each matched sector
+(`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1184--1188).  The finite
+power-sum rigidity input is Appendix Lemma `Lem:app_simple`
+(lines 1155--1163).  The geometric extrapolation below is a formal
+strengthening needed because the Lean coefficient identity is often available
+eventually in the length parameter rather than at the first
+`max{x_a,x_b}` positive exponents.
 
-The main theorem below uses the unequal-cardinality finite-range power-sum theorem
-directly, as in the Appendix comparison.  Without nonzero weights, positive
+The main theorem below uses the unequal-cardinality finite-range power-sum
+theorem directly, as in `Lem:app_simple`.  Without nonzero weights, positive
 powers would only determine the nonzero submultiset.
 
 ## References
@@ -31,7 +35,8 @@ powers would only determine the nonzero submultiset.
 - [PGVWC07] Pérez-García, Verstraete, Wolf, Cirac, *Matrix Product State Representations*,
   Quantum Inf. Comput. 7 (2007), arXiv:quant-ph/0608197.
 - [CPSV16] Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
-  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2016).
+  Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608 (2016),
+  `Lem:app_simple` lines 1155--1163 and `II_cor2` proof lines 1184--1188.
 - [CPSV21] Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected
   entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. 93 (2021),
   arXiv:2011.12127.
@@ -57,7 +62,7 @@ is eventually linearly independent (the BNT property), then the coefficient arra
 `S.coeff N j` and `T.coeff N j` agree for all sufficiently large `N`.
 
 This is the key step converting MPV equality into the algebraic statement needed for
-Newton–Girard. -/
+Newton--Girard. -/
 lemma coeff_eventually_eq_of_sameMPV
     {dim : Fin g → ℕ}
     (basis : (j : Fin g) → MPSTensor d (dim j))
@@ -204,8 +209,9 @@ weight multisets.
 For each basis tensor, eventual equality is first extrapolated to all positive
 exponents.  The finite-range unequal-cardinality power-sum theorem then gives the
 copy count and the multiset of weights, using the nonzero-entry hypotheses carried
-by `SectorWeightData`.  This is the formal counterpart of the Appendix power-sum
-comparison in arXiv:1606.00608. -/
+by `SectorWeightData`.  This is the formal counterpart of CPSV16 Appendix
+Lemma `Lem:app_simple`, lines 1155--1163, applied to the matched-sector
+power sums in the proof of `II_cor2`, lines 1184--1188. -/
 lemma copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq
     (S T : SectorWeightData g)
     {N0 : ℕ}
