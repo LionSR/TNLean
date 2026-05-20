@@ -16,18 +16,26 @@ import TNLean.MPS.Structure.InvariantSubspaceDecomp
 /-!
 # Fixed point ⇒ invariant support projection (MPS transfer map)
 
-This module implements the standard “support projection argument” used in canonical-form
-existence proofs for matrix product states.
+This module implements the fixed-point-to-support-projection step used in
+canonical-form existence proofs for matrix product states.
 
 If $\rho \succeq 0$ is a fixed point of the transfer map
 $$E_A(X) = \sum_i A_i X A_i^\dagger,$$
 then the support projection $P = \mathrm{supp}(\rho)$ is invariant under each Kraus operator:
 $$(1-P) A_i P = 0.$$
 
+In PGVWC07 this is the first half of the singular-fixed-point case in the proof
+of Theorem `Th:TIcanonical`: lines 771–774 introduce the spectral support
+projection $P_R$, and lines 775–783 prove the invariant relation by a
+positivity contradiction.  The finite-ring trace split is the subsequent
+step, lines 785–815, and is formalized in `InvariantSubspaceDecomp`.  Thus the
+results here should be used before, not instead of, the source trace-splitting
+argument.
+
 References:
 * Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
-  proof lines 771–783 (support projector argument)
-* Cirac et al., arXiv:1606.00608, Section 2.3
+  proof lines 771–783 (singular positive fixed point gives an invariant
+  support projection)
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -313,6 +321,11 @@ private lemma ker_invariant_under_adjoint
 
 /-- If `ρ` is a PSD fixed point of the transfer map, then its support projection is invariant:
 `(1 - P) * A i * P = 0` for all Kraus operators `A i`.
+
+This is the formal counterpart of PGVWC07, Theorem `Th:TIcanonical`, proof
+lines 771–783.  The source writes the fixed point as
+`X = ∑_α λ_α |α⟩⟨α|`, lets `P_R` be its support projection, and proves
+`A_i P_R = P_R A_i P_R` by the positivity contradiction in lines 775–783.
 -/
 theorem lowerZero_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
@@ -398,10 +411,10 @@ iterating the canonical-form splitting step.
 
 References:
 * Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
-  proof lines 771–815: invariant support, finite-ring trace split, and strict
-  decrease of the recursive blocks.
-* Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly
-  different presentation.
+  proof lines 771–783 for the support projection and lines 785–815 for the
+  finite-ring trace split whose recursive blocks have smaller dimensions.
+* Cirac et al., arXiv:1606.00608, lines 201–217: invariant subspaces are split
+  into diagonal blocks in the canonical-form construction.
 -/
 
 section SupportProjNontriviality
@@ -486,8 +499,10 @@ explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
 * Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
-  proof lines 771–783 (support projection argument)
-* Cirac et al., arXiv:1606.00608, Section 2.3
+  proof lines 771–783 for the support projection and lines 785–815 for the
+  finite-ring trace split.
+* Cirac et al., arXiv:1606.00608, lines 201–217 for the corresponding
+  invariant-subspace block splitting in the canonical-form construction.
 -/
 
 /-- If `ρ` is a PSD fixed point of the transfer map, then `A` is MPV-equivalent to a
@@ -527,8 +542,10 @@ The proof composes:
 
 References:
 * Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
-  proof lines 771–815
-* Cirac et al., arXiv:1606.00608, Section 2.3
+  proof lines 771–783 for deriving the invariant support projection and
+  lines 785–815 for the trace split into two smaller blocks.
+* Cirac et al., arXiv:1606.00608, lines 201–217 for the invariant-subspace
+  direct-sum step in the canonical-form construction.
 -/
 theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (A : MPSTensor d D)
