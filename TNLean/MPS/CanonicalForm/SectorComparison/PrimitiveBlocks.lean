@@ -229,7 +229,7 @@ normalization, transfer-map primitivity, and tensor irreducibility are all
 preserved.
 
 This is the finite-family analogue of
-`exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible`, packaged so
+`exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible`, stated so
 that the consumer can feed the resulting prepared blocks into the
 `SectorBNT` prepared-block supplier.
 

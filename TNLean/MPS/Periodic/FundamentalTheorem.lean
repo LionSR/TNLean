@@ -155,7 +155,7 @@ its proof transitively depends on admitted lemmas in the split overlap developme
 `TNLean.MPS.Periodic.Overlap.Case2` for the no-sector-match decay route,
 `TNLean.MPS.Periodic.Overlap.Case3` for the sector-match repeated-block route, and
 `TNLean.MPS.Periodic.Overlap.Dichotomy` for the final dichotomy and eventual
-linear-independence packaging. Subsequent users of this constructor therefore inherit
+linear-independence statement. Subsequent users of this constructor therefore inherit
 those obligations and
 should not treat the resulting `PeriodicOverlapHypothesis` as unconditionally proven. -/
 def PeriodicOverlapHypothesis.ofIsPeriodic

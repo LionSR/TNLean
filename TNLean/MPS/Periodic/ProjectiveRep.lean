@@ -27,7 +27,7 @@ representation data — the cocycle identity and the construction of a
 
 ## Main definitions and results
 
-* `MPSTensor.PeriodicProjectiveRigidity` — the analytic hypothesis packaging
+* `MPSTensor.PeriodicProjectiveRigidity` — the analytic hypothesis recording
   the existence of a compatible family `Y : G → GL (Fin D) ℂ` together with a
   scalar 2-cochain `u : G × G → ℂˣ` satisfying the projective law on the
   bond space while every `Y g` realises the Corollary-4.1 intertwining with
@@ -150,7 +150,7 @@ theorem cor_4_1_projective_rep_cocycle
 
 /-- **Projective representation from the periodic projective-rigidity hypothesis.**
 
-High-level packaging of `cor_4_1_projective_rep` together with the cocycle
+High-level consequence of `cor_4_1_projective_rep` together with the cocycle
 condition of `cor_4_1_projective_rep_cocycle`: the rigidity hypothesis upgrades
 the bond-space symmetry data of Corollary 4.1 to a coherent projective
 representation of `G` on the bond space, with factor system satisfying the

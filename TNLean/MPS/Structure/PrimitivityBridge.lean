@@ -101,7 +101,8 @@ def HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
 /-- A primitive MPS tensor has self-overlap converging to 1.
 
 This is a direct application of `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`
-from `PrimitiveOverlap.lean`, packaging the hypotheses from the `IsPrimitiveMPS` structure. -/
+from `PrimitiveOverlap.lean`, using the hypotheses recorded in the `IsPrimitiveMPS`
+structure. -/
 theorem IsPrimitiveMPS.overlap_tendsto_one {d D : ℕ} [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) :=

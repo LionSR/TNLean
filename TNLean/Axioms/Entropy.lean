@@ -218,8 +218,8 @@ subsystem `B`: after a unitary change of basis on `B`, the Hilbert space of
 block-diagonal form
 `⊕_j p_j (ρ_{A B_jᴸ} ⊗ ρ_{B_jᴿ C})`.
 
-The right-hand side is packaged by the structure
-`HayashiMarkovDecomposition ρ_ABC`, which stores the explicit dimensions, the
+The right-hand side is recorded by the structure
+`HayashiMarkovDecomposition ρ_ABC`, whose fields store the explicit dimensions, the
 unitary basis change on `B`, the probabilities `p_j`, the component density
 matrices, and the block-diagonal equality.
 

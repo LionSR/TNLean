@@ -29,7 +29,7 @@ normality/canonical-form reductions.
 * `isIrreducibleMap_of_isPrimitiveMPS_of_posDef` — primitive spectral-gap data
   with a positive-definite fixed point gives irreducibility of the transfer map.
 * `isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef` — the previous two
-  implications packaged as paper strong irreducibility.
+  implications stated as paper strong irreducibility.
 * `IsPrimitiveMPS.transferMap_pow_apply_tendsto` — pointwise convergence of
   transfer-map powers to the fixed-point projection.
 

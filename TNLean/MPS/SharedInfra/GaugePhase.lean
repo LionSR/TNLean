@@ -221,7 +221,7 @@ theorem gaugePhaseEquiv_symm_same_dim {d D : ℕ} {A B : MPSTensor d D}
     have := congrArg (fun M => (ζ⁻¹ : ℂ) • M) hSandwich
     simp only [smul_smul, inv_mul_cancel₀ hζ, one_smul] at this
     exact this.symm
-  -- Repackage with the inverse of `X⁻¹` being `X`.
+  -- Use the inverse of `X⁻¹`, which is `X`.
   -- The goal expects `((X⁻¹)⁻¹ : GL).val = X.val`.
   change A i = ζ⁻¹ • (XinvM * B i *
     (((X⁻¹)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))

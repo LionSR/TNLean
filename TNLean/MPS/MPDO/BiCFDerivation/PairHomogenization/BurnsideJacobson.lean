@@ -11,7 +11,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.Span
 This module contains the finite-family separation and the Burnside–Jacobson
 connection to the existence of a homogeneous trace-separating length.  It
 imports the algebra-density and identity-padding parts of the
-pair-homogenization subpackage and completes the pair-span homogenization
+pair-homogenization development and completes the pair-span homogenization
 layer.
 -/
 

@@ -205,7 +205,7 @@ theorem eigenvector_mem_range_toLin_pow'
   rw [Matrix.toLin'_apply, Matrix.mulVec_smul, hpow, smul_smul,
       ← mul_pow, inv_mul_cancel₀ hμ, one_pow, one_smul]
 
-/-! ### Combined packaging: eigenvector rank-one in wordSpan -/
+/-! ### Combining eigenvector range data with rectangular span universality -/
 
 /-- **Eigenvector rank-one matrices land in `wordSpan` via stabilized `rectSpan`.**
 

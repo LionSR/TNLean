@@ -119,7 +119,7 @@ noncomputable def flatBasis (P : SectorDecomposition d) :
 
 Marked `@[reducible]` so that `Fin P.totalDim` and `Fin (∑ s, P.flatDim s)`
 unify during type-class instance synthesis (needed for the literal
-`GaugeEquiv` packaging that compares matrices indexed by both forms). -/
+`GaugeEquiv` statement that compares matrices indexed by both forms). -/
 @[reducible]
 noncomputable def totalDim (P : SectorDecomposition d) : ℕ :=
   ∑ s : Fin P.totalCopies, P.flatDim s
@@ -301,7 +301,7 @@ theorem totalDim_eq_of_match
 
 The `sectorFlatEquiv` already permutes the flattened copy index
 `Fin Q.totalCopies ≃ Fin P.totalCopies` and `flatDim_sectorFlatEquiv` certifies
-that the per-flat-copy bond dimensions agree.  The next equivalence packages
+that the per-flat-copy bond dimensions agree.  The next equivalence combines
 both pieces as a single permutation of the Σ-index that underlies
 `toTensor`/`toTensorFromBlocks`, and induces an equivalence on
 `Fin · .totalDim`.  Both are needed to convert the matched-coordinate gauge

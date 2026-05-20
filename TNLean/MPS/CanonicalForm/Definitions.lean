@@ -57,7 +57,7 @@ duplicated.
 One direct connection is provided:
 
 * `MPSTensor.IsNormalTensor.of_irreducible_and_primitive` —
-  package an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
+  combine an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
 
 Two further connections are intentionally **not** provided here, in keeping with the
 "clean layer, no `sorry`" quality bar:
@@ -70,7 +70,7 @@ Two further connections are intentionally **not** provided here, in keeping with
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
   block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
   formulation. That equivalence requires Wielandt-style spectral arguments not
-  packaged at this layer.
+  developed at this layer.
 
 ## Style
 
