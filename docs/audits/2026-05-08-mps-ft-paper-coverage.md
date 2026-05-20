@@ -272,6 +272,8 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
 | High | CPSV16 | Section II.A proposition, lines 249–251 (canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
+| High | CPSV16 | Section II.A proposition, lines 253–255 (canonical-form characterization) | Source characterization by absence of periodic vectors and invariant projections not yet packaged as a Lean theorem | #1685 |
+| High | CPSV16 | Section II.A proposition, lines 342–345 (block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
 | High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
