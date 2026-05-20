@@ -417,10 +417,12 @@ end IsNormalCanonicalFormBNT
 
 /-- Conclusion of the CPSV16 BNT block-matching step.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192.  The source proves
-this conclusion from canonical-form BNT data and proportional MPV families.  This
-abbreviation records only the conclusion, not a theorem asserting it from extra
-coefficient-array hypotheses. -/
+Source: arXiv:1606.00608, Theorem `thm1`, statement lines 1167--1170 and proof
+line 1182.  The source proves this block-matching conclusion from
+canonical-form BNT data and proportional MPV families.  This abbreviation
+records only the conclusion, not a theorem asserting it from extra
+coefficient-array hypotheses; the copy-weight comparison and global gauge in
+lines 1184--1192 belong to the equal-MPV corollary. -/
 abbrev BlockPermutationGaugePhaseConclusion
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
