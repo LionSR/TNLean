@@ -96,15 +96,57 @@ hypotheses are stronger and more structured than the source theorem's
 hypotheses. Treating them as the full source theorem would import extra
 assumptions into any later argument that cites canonical-form existence.
 
+\section{Current proof-path audit}
+\label{sec:current-proof-path-audit}
+
+The earlier existence path now has the following formal pieces.
+
+\begin{enumerate}
+    \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
+          recursive invariant-projection splitting used in the proof of
+          Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
+          arbitrary tensor and gives a finite direct sum of irreducible blocks
+          with the same matrix-product-vector coefficients. This is a faithful
+          partial proof step. It is not the full source theorem, because it does
+          not construct the weights $\lambda_j$, the unital block orientation,
+          the diagonal full-rank matrices $\Lambda^j$, the uniqueness of the
+          identity fixed point, or the final bond-dimension bound.
+
+    \item \path|MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks|
+          separates the all-zero blocks from the irreducible summands and keeps
+          the length-zero trace contribution. This matches the paper's statement
+          that zero blocks may occur, but it is still only an intermediate
+          decomposition before Perron--Frobenius normalization.
+
+    \item \path|MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail|
+          applies Perron--Frobenius normalization block by block after the
+          all-zero summands have been separated. It produces nonzero
+          irreducible blocks in the local left-canonical orientation
+          $\sum_i (B_k^i)^\dagger B_k^i = \mathbf{1}$. This is the dual
+          orientation of the unital condition in
+          Theorem~\texttt{Th:TIcanonical}; the conversion is a convention issue
+          only when the adjoint transfer map is carried along explicitly.
+
+    \item \path|MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp|
+          is a prepared-block theorem. It assumes a weighted block decomposition,
+          irreducibility, trace-preserving normalization, primitivity, pairwise
+          distinct weight moduli, nonzero weights, and positive bond dimensions.
+          It should remain a conditional corollary, not a citation target for
+          PGVWC07 Theorem~\texttt{Th:TIcanonical}.
+\end{enumerate}
+
+Thus no current \verb|\leanok| statement in the canonical-form
+chapter should be read as the full PGVWC07 translation-invariant canonical-form
+theorem. The blueprint now records the source theorem as a separate not-ready
+statement, and the checked reductions are marked as partial or scoped results.
+
 \section{Formal boundary}
 
 The currently checked primitive, peripheral-primitive, and
 normal-canonical-form reductions should therefore be read as conditional
 canonical-form theorems rather than as
 formalizations of the full source theorem.\footnote{The formal declarations are
-    \texttt{MPSTensor.isCanonicalForm\_of\_primitive},
-    \texttt{MPSTensor.isCanonicalForm\_of\_peripheralPrimitive}, and
-    \texttt{MPSTensor.exists\_normalCanonicalForm\_of\_primitive\_blockDecomp}.}
+    listed in Section~\ref{sec:current-proof-path-audit}.}
 They may be used after their hypotheses have been proved from earlier
 source-faithful reductions, but they should not be cited as giving canonical
 form directly from an arbitrary translation-invariant MPS representation.
