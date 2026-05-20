@@ -32,8 +32,11 @@ Wiener / Cesaro one:
   contradiction.
 
 This is a general analytic ingredient about complex power sums of
-unit-modulus families (arXiv:1606.00608, Theorem `thm1`, lines
-1170--1192).
+unit-modulus families.  In the CPSV16 fundamental-theorem proof it belongs to
+the formal replacement for the non-vanishing obstruction used at line 1182,
+where the paper invokes Lemma `Lem1` to rule out the alternative that all
+overlaps with a fixed block decay.  It is not the equal-MPV coefficient
+comparison of lines 1184--1192.
 
 The module is purely about complex power sums; it has no MPS
 dependencies and uses no `sorry`/`axiom`/`unsafe`.
@@ -42,8 +45,8 @@ dependencies and uses no `sorry`/`axiom`/`unsafe`.
 
 * Cirac, Pérez-García, Schuch, Verstraete, *Matrix Product Density Operators:
   Renormalization Fixed Points and Boundary Theories*, arXiv:1606.00608
-  (2017), Theorem `thm1`, lines 1170--1192 (the unit-modulus power-sum
-  non-decay used inside the per-block projection step).
+  (2017), Theorem `thm1`, proof line 1182, together with Lemma `Lem1`
+  (lines 1131--1133).
 -/
 
 open scoped BigOperators
@@ -124,9 +127,11 @@ to zero.**
 For `μ : Fin r → ℂ` with `r > 0` and `‖μ q‖ = 1` for every `q`, the
 sequence `N ↦ ∑_q (μ q) ^ N` does not tend to `0` as `N → ∞`.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1170--1192 (the
-unit-modulus power-sum non-decay used inside the per-block projection
-step).  Proof via Cesaro averaging of `‖S N‖²` in `ℂ`. -/
+Source context: arXiv:1606.00608, Theorem `thm1`, proof line 1182, where the
+projection step needs a non-vanishing obstruction after Lemma `Lem1`
+(lines 1131--1133).  This analytic lemma is a formal auxiliary for that
+obstruction, not a statement of the equal-MPV corollary in lines 1184--1192.
+Proof via Cesaro averaging of `‖S N‖²` in `ℂ`. -/
 theorem unitModulus_power_sum_not_tendsto_zero
     {r : ℕ} (hr : 0 < r) (μ : Fin r → ℂ) (hμ : ∀ q, ‖μ q‖ = 1) :
     ¬ Tendsto (fun N : ℕ => ∑ q : Fin r, (μ q) ^ N) atTop (nhds 0) := by
