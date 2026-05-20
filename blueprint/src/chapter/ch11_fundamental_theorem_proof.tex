@@ -16,14 +16,12 @@ and the BNT permutation arguments of Chapter~\ref{ch:bnt}.
 The common after-blocking reductions of
 Chapter~\ref{ch:canonical_after_blocking} are placed immediately before this
 chapter because they produce the common primitive block decompositions used in
-the equal-MPV comparison. The auxiliary direct-sum reductions remain in
-Section~\ref{sec:ft_auxiliary_from_ch08}, inside the proof chapter, because
-they turn the single-block Fundamental Theorem into the block-diagonal
-gauge statements used after the block correspondence has been fixed. Thus the
-chapter boundary separates the preparation of the common blocked surface from
-the later assembly of gauges and MPV equalities; it does not place any
-channel-representation or semigroup material among the hypotheses of the
-aperiodic Fundamental Theorem.
+the equal-MPV comparison. The direct-sum gauge assembly statements belong to
+the algebraic assembly layer of Chapter~\ref{ch:algebraic_ft}, where the
+block correspondence is already fixed. Thus the chapter boundary separates the
+preparation of the common blocked surface from the later assembly of gauges and
+MPV equalities; it does not place any channel-representation or semigroup
+material among the hypotheses of the aperiodic Fundamental Theorem.
 
 The theorems in this chapter follow the approach of
 \cite{Cirac2017MPDO_AnnPhys}:
@@ -73,7 +71,7 @@ Chapter~\ref{ch:canonical_after_blocking}. The BNT matching and coefficient
 comparison are developed in Chapter~\ref{ch:bnt}; the per-block gauge-phase
 witnesses and the block-diagonal gauge are then assembled as
 Theorem~\ref{thm:multi_block_global} of
-Section~\ref{sec:ft_auxiliary_from_ch08}.
+Chapter~\ref{ch:algebraic_ft}.
 
 % Audit 2026-05-20 (#328): the old equal-case blockers #944, #1133, #1170,
 % and #1178 are closed.  This source corollary nevertheless stays not ready
@@ -947,93 +945,16 @@ facts used to recover the lists of weights from those power sums.
     componentwise power-sum identities.
 \end{remark}
 
-\section{Auxiliary reductions for the Fundamental Theorem}%
-\label{sec:ft_auxiliary_from_ch08}
+\section{Overlap and BNT preparation for the Fundamental Theorem}%
+\label{sec:ft_overlap_bnt_preparation}
 
-The following auxiliary results are reduction steps of the Fundamental-Theorem
-proof rather than statements about canonical-form decompositions. They are
-collected here because they turn blockwise single-block conclusions into
-statements about the direct-sum tensors appearing in the proof. In particular,
-this section is not part of the after-blocking canonical-form reduction: the
-block decomposition is already fixed, and the task here is to assemble the
-resulting gauges and MPV equalities.
-
-\subsection{Block-diagonal corollaries of the single-block theorem}%
-\label{subsec:ft_block_sum_corollaries}
-
-\begin{remark}
-    See Definition~\ref{def:block_diagonal_tensor} for the formalized block-diagonal tensor construction.
-\end{remark}
-
-\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
-    \leanok
-    \uses{def:block_diagonal_tensor, def:injective}
-    If all block tensors $A_k$ are injective and the per-block
-    same-MPV condition holds ($A_k$ and $B_k$ generate the same
-    MPV family for each~$k$),
-    then each pair $(A_k, B_k)$ is gauge equivalent.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:ft_single}
-    Apply the single-block fundamental theorem
-    (Theorem~\ref{thm:ft_single}) to each block independently.
-\end{proof}
-
-\begin{remark}[Per-block restatement, not the multi-block paper theorem]
-    This is a block-sum reformulation of the per-block injective single-block FT:
-    the block pairing $(A_k, B_k)$ is assumed already given and the blocks already
-    matched. It is not the multi-block fundamental theorem of
-    \cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}, which derives the
-    block matching and permutation from only the global same-MPV hypothesis.
-\end{remark}
-
-\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
-    \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
-    \leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv}
-    If $A_k$ and $B_k$ generate the same MPV family for each
-    block~$k$, then the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    also generate the same MPV family.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:mpv_decomposition}
-    By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
-    each MPV is $\sum_k \mu_k^N V^{(N)}(A_k)_\sigma$.
-    Per-block equality of MPV coefficients gives global equality.
-\end{proof}
-
-\begin{remark}[Direct-sum congruence]
-    This is a direct-sum congruence statement: per-block MPV equality lifts to
-    global MPV equality via the block-diagonal decomposition formula.
-\end{remark}
-
-\begin{theorem}[Global multi-block fundamental theorem]\label{thm:multi_block_global}
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_global}
-    \leanok
-    \uses{def:block_diagonal_tensor, def:injective, def:same_mpv, thm:multi_block_ft}
-    If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
-    the same MPV family, then the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
-\end{theorem}
-
-\begin{proof}\leanok\uses{thm:multi_block_ft}
-    Apply the per-block single-block fundamental theorem
-    (Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
-    equivalences from injectivity and equality of MPV families, then
-    combine them into a global gauge for the block-diagonal tensors.
-\end{proof}
-
-\begin{remark}[Block-diagonal gauge assembly, not the FT block-matching theorem]
-    This combines per-block gauges into a block-diagonal gauge for the global
-    assembled tensor, given pre-matched same-index blocks. It is not the FT
-    block-matching theorem: it does not derive the block pairing or permutation
-    from a global same-MPV hypothesis; the block correspondence is assumed in
-    advance.
-\end{remark}
+The following results are source-relevant overlap and basis-of-normal-tensors
+preparation steps. They are not part of the after-blocking canonical-form
+reduction, and they are not direct consequences of the injective single-block
+Fundamental Theorem. Instead, they supply the overlap dichotomy, phase
+normalization, and eventual linear independence used when passing from normal
+blocks to BNT representatives. The purely same-index direct-sum assembly
+statements are collected in Chapter~\ref{ch:algebraic_ft}.
 
 \subsection{Proportional single-block ingredient}%
 \label{subsec:ft_proportional_single_block}
