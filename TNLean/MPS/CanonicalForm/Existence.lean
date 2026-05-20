@@ -77,7 +77,7 @@ step in the canonical-form existence argument: it upgrades the cumulative word
 span to single-site injectivity, which then yields block injectivity at every
 positive length.
 
-The formal Lean declaration:
+The formal statement:
 
 > `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves the implication
 > `IsStronglyIrreduciblePaper A → krausRank A = D` (equivalently,
@@ -96,11 +96,11 @@ This external input provides:
 > `(1-P) A_i P = 0` for all `i`) yields an MPV-equivalent two-block direct-sum
 > tensor with strictly smaller block dimensions.
 
-The formal Lean declaration:
+The formal statement:
 
 > `MPSTensor.exists_twoBlock_decomp_of_lowerZero` produces a two-block
 > block-diagonal tensor MPV-equivalent to the original, with a strict dimension
-> decrease (`exists_strict_twoBlock_decomp_of_lowerZero`).
+> decrease (`exists_twoBlock_decomp_of_lowerZero_strict`).
 
 ## External input — Wolf spectral theory: Perron-Frobenius fixed point
 
