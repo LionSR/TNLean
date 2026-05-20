@@ -961,10 +961,10 @@ a common dilation space.
     \lean{POVM}
     \leanok
     A \emph{positive operator-valued measure} with $n$ outcomes on $\C^D$
-    is a family $\{E_i\}_{i=1}^n$ of positive semidefinite
+    is a family $\{E_i\}_{i=0}^{n-1}$ of positive semidefinite
     operators on $\C^D$ satisfying the resolution of identity
     \[
-        \sum_{i=1}^n E_i = \Id_D.
+        \sum_{i=0}^{n-1} E_i = \Id_D.
     \]
 \end{definition}
 
@@ -1001,7 +1001,7 @@ a common dilation space.
     The \emph{Naimark isometry} $V : \C^D \to \C^D \otimes \C^n$ of a POVM
     is the Stinespring-type construction
     \[
-        V = \sum_{i=1}^n M_i \otimes \ket{i},
+        V = \sum_{i=0}^{n-1} M_i \otimes \ket{i},
         \qquad V_{(a,i),\,k} = (M_i)_{a,k}.
     \]
 \end{definition}
@@ -1053,7 +1053,7 @@ a common dilation space.
     \leanok
     \uses{def:povm, def:naimark_isometry, def:naimark_projection,
         thm:naimark_isometry_isometry, thm:naimark_projection_axioms}
-    Every POVM $\{E_i\}_{i=1}^n$ arises as a projective measurement on a
+    Every POVM $\{E_i\}_{i=0}^{n-1}$ arises as a projective measurement on a
     dilation: for the isometry $V$ and projectors $P_i$ above,
     \[
         E_i = V^\dagger P_i V.
@@ -1139,7 +1139,7 @@ a common dilation space.
     \lean{POVM.ofPSDResolutionOfIdentity}
     \leanok
     Given an isometry $V : \C^D \to \C^{d'}$ with $V^\dagger V = \Id_D$
-    and a family $\{P_i\}_{i=1}^n$ of positive semidefinite operators on
+    and a family $\{P_i\}_{i=0}^{n-1}$ of positive semidefinite operators on
     $\C^{d'}$ summing to the identity, the pulled-back operators
     \[
         E_i := V^\dagger P_i V
@@ -1154,7 +1154,7 @@ a common dilation space.
     \leanok
     \uses{def:cp_map, def:trace_preserving}
     A \emph{quantum instrument} with $n$ outcomes is a family
-    $\{\Phi_i\}_{i=1}^n$ of completely positive maps on $\MN{D}$ whose
+    $\{\Phi_i\}_{i=0}^{n-1}$ of completely positive maps on $\MN{D}$ whose
     sum $\sum_i \Phi_i$ is trace-preserving.
 \end{definition}
 
