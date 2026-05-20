@@ -3,8 +3,10 @@
 This chapter collects the representation material for finite-dimensional quantum
 channels from \cite[Chapter~2]{Wolf2012Quantum}: the Choi--Jamio\l{}kowski
 isomorphism, Kraus representation theorems, Stinespring and Naimark dilations,
-and normal forms. These results are important for the channel theory developed
-in the following chapters, but they are not prerequisites for the
+ordered completely positive maps, Radon--Nikodym and open-system
+representations, trace-pairing expansions, SVD and Lorentz normal forms, and the
+channel determinant. These results are important for the channel theory
+developed in the following chapters, but they are not prerequisites for the
 matrix-product-state Fundamental Theorem.
 
 %% =========================================================
@@ -1217,8 +1219,8 @@ a common dilation space.
 \end{proof}
 
 %% =========================================================
-\subsection{Trace-pairing expansion in transfer-matrix form}
-\label{subsec:trace_pairing_expansion}
+\section{Trace-pairing expansion in transfer-matrix form}
+\label{sec:trace_pairing_expansion}
 %% =========================================================
 
 \begin{definition}[Trace-self-dual basis]\label{def:trace_pairing_self_dual_basis}
@@ -1265,8 +1267,8 @@ a common dilation space.
 \end{proof}
 
 %% =========================================================
-\subsection{SVD normal form (existence)}
-\label{subsec:svd_normal_form}
+\section{SVD normal form (existence)}
+\label{sec:svd_normal_form}
 %% =========================================================
 
 \cite[Section~2.3]{Wolf2012Quantum} discusses two families of normal forms for
@@ -1277,7 +1279,7 @@ normal form is proved below. The Lorentz normal form theorem
 (Theorem~\ref{thm:lorentz_normal_form_qubit}) requires the compactness and
 minimisation argument for $\SL(2, \C)$ filterings in
 \cite[Propositions~2.9 and~2.11]{Wolf2012Quantum}; see
-Subsection~\ref{subsec:lorentz_normal_form}.
+Section~\ref{sec:lorentz_normal_form}.
 
 \begin{theorem}[SVD for positive semidefinite matrices]
     \label{thm:svd_posSemidef}
@@ -1332,7 +1334,7 @@ Subsection~\ref{subsec:lorentz_normal_form}.
 
 \begin{proof}\leanok
     Direct specialisation of Theorem~\ref{thm:svd_of_isUnit} to the index type
-    $\{1,\ldots,D\} \times \{1,\ldots,D\}$ used by the transfer-matrix
+    $\{0,\ldots,D-1\} \times \{0,\ldots,D-1\}$ used by the transfer-matrix
     representation.
 \end{proof}
 
@@ -1347,13 +1349,13 @@ Subsection~\ref{subsec:lorentz_normal_form}.
 \end{remark}
 
 %% =========================================================
-\subsection{Lorentz normal form}
-\label{subsec:lorentz_normal_form}
+\section{Lorentz normal form}
+\label{sec:lorentz_normal_form}
 %% =========================================================
 
-This subsection states the existence theorems from
+This section states the existence theorems from
 \cite[Section~2.3]{Wolf2012Quantum}.
-% The Wolf.* declarations referenced in this subsection live in
+% The Wolf.* declarations referenced in this section live in
 % TNLean/Channel/LorentzNormalForm.lean, which is not in the root import
 % graph because its core minimisation lemma is still on `sorry`. The
 % `\lean{...}` tags are omitted here so that checkdecls passes; the Lean
