@@ -152,27 +152,28 @@ sub-dominant block has $\|\mu_j\| < 1$.
 
 \section{Downstream audit status}
 
-The downstream CPSV16 surfaces that currently consume
-\leanid{IsNormalCanonicalFormBNT} have been audited against the
-one-copy-per-sector boundary. The public BNT construction API marks
-\leanid{IsNormalCanonicalFormBNT}, the constructor
-\leanid{IsNormalCanonicalFormBNT.ofSeparatedData}, the cross-overlap theorem,
-and the restricted \leanid{IsNormalCanonicalFormBNT.isBNT} theorem as scoped
-one-copy-per-sector statements. The Fundamental Theorem files using
-\leanid{IsCanonicalFormBNT} in the proportional-MPV chain carry the same
-scope marker on their public theorem surfaces.
+The downstream CPSV16 surfaces that currently consume the restricted
+normal-CF-BNT predicate have been audited against the one-copy-per-sector
+boundary.\footnote{The relevant Lean surfaces are
+    \leanid{IsNormalCanonicalFormBNT},
+    \leanid{IsNormalCanonicalFormBNT.ofSeparatedData},
+    \leanid{IsNormalCanonicalFormBNT.cross\_overlap\_tendsto\_zero},
+    \leanid{IsNormalCanonicalFormBNT.isBNT},
+    \leanid{isNormalCanonicalFormBNT\_commonRepresentativeBlocksAt},
+    \leanid{IsNormalCanonicalFormBNT.exists\_common\_blockTensor\_isInjective},
+    and
+    \leanid{exists\_common\_blockTensor\_isInjective\_two\_of\_isNormalCanonicalFormBNT}.}
+Each of these public surfaces either assumes or constructs an already chosen
+representative family, strictly ordered by weight modulus. They do not
+introduce a source-faithful canonical-form existence theorem and do not recover
+the repeated-copy sector data of the source BNT decomposition. Their docstrings
+and the corresponding Wielandt blueprint corollary therefore carry the same
+one-copy-per-sector marker.
 
-The remaining normal-CF-BNT consumers are the common-sector representative
-constructor and the uniform injective-blocking theorems:
-\leanid{isNormalCanonicalFormBNT\_commonRepresentativeBlocksAt},
-\leanid{IsNormalCanonicalFormBNT.exists\_common\_blockTensor\_isInjective},
-and
-\leanid{exists\_common\_blockTensor\_isInjective\_two\_of\_isNormalCanonicalFormBNT}.
-These statements are conditional consequences of an already chosen
-representative family. They do not introduce a new canonical-form existence
-theorem and do not recover the repeated-copy sector data of the source BNT
-decomposition. Their docstrings and the corresponding Wielandt blueprint
-corollary therefore carry the same one-copy-per-sector marker.
+This audit does not apply that marker to the sector-BNT development based on
+\leanid{IsBNTCanonicalForm}. That predicate is the paper-faithful sector
+surface used for the CPSV16 coefficient and weight-multiplicity arguments,
+where repeated copies inside one sector remain explicit.
 
 \section{Conclusion}
 
