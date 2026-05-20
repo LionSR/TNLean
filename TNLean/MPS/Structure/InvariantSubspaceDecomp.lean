@@ -21,14 +21,18 @@ arguments before blocking/normalization.
 
 ## External input — Perez-Garcia et al. canonical-form recursion
 
-This file formalizes the invariant-subspace decomposition from two sources:
+This file formalizes the direct-sum decomposition step once an invariant
+projection has already been obtained.  For PGVWC07 this is deliberately the
+second part of the argument, not a replacement for the positive fixed-point
+argument that produces the projection:
 
 > **Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
 > proof lines 771–815.**
-> The recursion on bond dimension: a singular positive fixed point of the transfer
-> map yields an invariant support projection in lines 771–783; after the finite-ring
-> trace split of lines 785–815, the tensor is replaced by a direct sum of smaller
-> blocks.  The strict dimension decrease
+> The source first derives the invariant support projection from a singular
+> positive fixed point in lines 771–783.  The declarations below take such an
+> invariant projection as an input and formalize the finite-ring trace split of
+> lines 785–815, where the tensor is replaced by a direct sum of smaller blocks.
+> The strict dimension decrease
 > (`exists_strict_twoBlock_decomp_of_lowerZero`) guarantees termination of the
 > canonical-form recursion.
 
