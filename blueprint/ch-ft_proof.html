@@ -1219,7 +1219,7 @@
 	, Corollary&#160;II.2
 	]
 </span>. In the proof, this corollary is obtained by matching the BNT blocks and then comparing the sector-weight power sums. </p>
-<p>The block-matching conclusion (block-count, bond-dimension, and gauge-phase identification of corresponding sectors) and the global gauge identification are formalised on the BNT canonical form of Chapter&#160;<a href="ch-bnt.html">11</a>. The literal coordinate packaging of <span class="cite">
+<p>The block-matching conclusion (block-count, bond-dimension, and gauge-phase identification of corresponding sectors) and the global gauge identification are formalised on the BNT canonical form of Chapter&#160;<a href="ch-bnt.html">11</a>. The literal coordinate form of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3902,11 +3902,7 @@
 <div class="displaymath" id="a0000000861">
   \[  B_j^i=e^{i\phi _j}Y_jA_j^iY_j^{-1}.  \]
 </div>
-<p> Only after this representative matching does the equal case compare the scalar coefficient power sums, for \(j=1,\ldots ,g\) and \(N\ge 1\): </p>
-<div class="displaymath" id="a0000000862">
-  \[  \sum _{q=1}^{r^A_j}(\mu ^A_{j,q})^N = \sum _{q=1}^{r^B_j}(\mu ^B_{j,q}e^{i\phi _j})^N.  \]
-</div>
-<p> Newton–Girard then recovers the multiplicities and weight multisets, and the block gauges \(Y_j\) are placed on the diagonal to give the global conjugating matrix. This is the equal-case corollary <span class="cite">
+<p> Only after this representative matching does the equal case compare the scalar coefficient power sums: for each \(j=1,\ldots ,g\) and \(N\ge 1\), the sums \(\sum _{q=1}^{r^A_j}(\mu ^A_{j,q})^N\) and \(\sum _{q=1}^{r^B_j}(\mu ^B_{j,q}e^{i\phi _j})^N\) are equal. Newton–Girard then recovers the multiplicities and weight multisets, and the block gauges \(Y_j\) are placed on the diagonal to give the global conjugating matrix. This is the equal-case corollary <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3919,7 +3915,7 @@
 	, Corollary&#160;IV.5
 	]
 </span>. </p>
-<p>The formalization of this route is split into two theorems. The first packages the BNT basis bijection \(\beta \), the per-block gauge-phase witnesses, copy-count equality, and the scalar coefficient comparison \(\nu _{k,q} = \zeta _k^{-1} \mu _{\beta (k),\tau (q)}\) matching the source power-sum identity displayed above. The second assembles the per-block gauge matrices \(Y_j = X_k\) on the flattened direct sum to produce the global conjugation \(X\), matching the appendix construction at <span class="cite">
+<p>The formalization of this route is split into two theorems. The first gives the BNT basis bijection \(\beta \), the per-block gauge-phase witnesses, copy-count equality, and the scalar coefficient comparison \(\nu _{k,q} = \zeta _k^{-1} \mu _{\beta (k),\tau (q)}\) that follows from the source power-sum comparison. The second assembles the per-block gauge matrices \(Y_j = X_k\) on the flattened direct sum to produce the global conjugation \(X\), matching the appendix construction at <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3927,7 +3923,7 @@
 	]
 </span>. </p>
 <p>The comparison theorems above formalize only the part of this route after the common blocked nonzero sectors and their BNT matching data have been supplied. The structural reduction supplies a common positive blocking length and decompositions </p>
-<div class="displaymath" id="a0000000863">
+<div class="displaymath" id="a0000000862">
   \[  A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}, \qquad B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}, \qquad z_A=z_B,  \]
 </div>
 <p> with trace-preserving, primitive, irreducible nonzero sectors. The remaining inputs are the one-site injectivity of those sectors and the BNT block-matching comparison for the representative families. These are genuine upstream assumptions of the conditional statements here; they are not proved from equality of MPV families in this chapter. </p>
@@ -3940,7 +3936,7 @@
 <p>The following auxiliary results are reduction steps of the Fundamental-Theorem proof rather than statements about canonical-form decompositions. They are collected here because they turn blockwise single-block conclusions into statements about the direct-sum tensors appearing in the proof. In particular, this section is not part of the after-blocking canonical-form reduction: the block decomposition is already fixed, and the task here is to assemble the resulting gauges and MPV equalities. </p>
 <h2 id="subsec:ft_block_sum_corollaries">13.4.1 Block-diagonal corollaries of the single-block theorem</h2>
 
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000864">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000863">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -3951,7 +3947,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000864">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000863">#</a>
     
     
     
@@ -3978,7 +3974,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:multi_block_ft">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000865"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000864"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4033,7 +4029,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000865">
+<div class="proof_wrapper" id="a0000000864">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4045,7 +4041,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000866">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000865">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -4057,7 +4053,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000866">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000865">#</a>
     
     
     
@@ -4090,7 +4086,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:block_to_global_mpv">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000867"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000866"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4145,7 +4141,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000867">
+<div class="proof_wrapper" id="a0000000866">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4157,7 +4153,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000868">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000867">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -4169,7 +4165,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000868">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000867">#</a>
     
     
     
@@ -4196,7 +4192,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:multi_block_global">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000869"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000868"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4255,7 +4251,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000869">
+<div class="proof_wrapper" id="a0000000868">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4267,7 +4263,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000870">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000869">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -4279,7 +4275,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000870">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000869">#</a>
     
     
     
@@ -4308,7 +4304,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:proportional_ft">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000870"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4365,7 +4361,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000871">
+<div class="proof_wrapper" id="a0000000870">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4402,7 +4398,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:unit_modulus_phase_tp_prim_irred">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4459,7 +4455,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000872">
+<div class="proof_wrapper" id="a0000000871">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4471,7 +4467,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000873">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000872">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -4482,7 +4478,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000873">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000872">#</a>
     
     
     
@@ -4509,7 +4505,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_li_from_overlap_limits_exists">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000873"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4562,7 +4558,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000874">
+<div class="proof_wrapper" id="a0000000873">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4590,7 +4586,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sector_decomp_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4649,7 +4645,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000875">
+<div class="proof_wrapper" id="a0000000874">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4725,7 +4721,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4784,7 +4780,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000876">
+<div class="proof_wrapper" id="a0000000875">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
