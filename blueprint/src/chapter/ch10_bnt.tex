@@ -1299,6 +1299,83 @@ BNT basis.
     of the corresponding coefficients for all sufficiently large lengths.
 \end{proof}
 
+\begin{theorem}[Global gauge from matched sector and weight data]%
+    \label{thm:sector_bnt_global_gauge_of_matched_weights}
+    \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
+    \leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj}
+    Suppose that the sectors of two sector decompositions $P$ and $Q$ are matched
+    by a bijection $\beta:J(Q)\simeq J(P)$, with bond-dimension equalities,
+    copy permutations $\tau_k$, nonzero phases $\zeta_k$, and block gauges
+    $X_k$. If, for every sector $k$, copy $q$, and physical index $i$,
+    \[
+        Q_k^i
+        =
+        \zeta_k\,X_k P_{\beta(k)}^i X_k^{-1},
+        \qquad
+        \nu_{k,q}
+        =
+        \zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)},
+    \]
+    then, in the flattened $Q$-coordinates,
+    \[
+        Q_{\mathrm{flat}}^i
+        =
+        X\,P_{\mathrm{matched}}^i\,X^{-1},
+        \qquad
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+    This is the direct-sum gauge assembly of
+    \cite[\S~II.C, lines 1189--1192]{Cirac2017MPDO_AnnPhys}, separated from
+    the coefficient-comparison step that supplies the weight identities.
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiply the displayed sector identity by the matching copy weight
+    identity. The phase $\zeta_k$ cancels against $\zeta_k^{-1}$, giving a
+    conjugation identity for every flattened weighted block. Applying
+    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} to the flattened
+    family assembles these block conjugacies into the displayed direct-sum
+    gauge.
+\end{proof}
+
+\begin{theorem}[Conditional proportional global gauge from copy weights]%
+    \label{thm:sector_bnt_proportional_global_gauge_of_weight_data}
+    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_weight_data}
+    \leanok
+    \uses{thm:sector_bnt_proportional_sector_match_witnesses,
+        thm:sector_bnt_global_gauge_of_matched_weights}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
+    eventually nonzero proportional MPV families. Assume that every sector of
+    $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
+    Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
+    equalities, unit-modulus phases $\zeta_k$, and block gauges $X_k$ such
+    that
+    \[
+        Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}.
+    \]
+    Moreover, if copy permutations $\tau_k$ satisfy
+    \[
+        \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)},
+    \]
+    then the flattened $Q$-tensor is obtained from the matched-coordinate
+    $P$-tensor by the block-diagonal gauge
+    \[
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+    Thus, after the remaining proportional coefficient comparison supplies
+    the displayed copy-weight identities, the direct-sum gauge assembly of
+    \cite[\S~II.C, lines 1189--1192]{Cirac2017MPDO_AnnPhys} follows.
+\end{theorem}
+
+\begin{proof}\leanok
+    The proportional sector-matching theorem supplies $\beta$, the
+    bond-dimension equalities, the phases, and the block gauges. The
+    unit-modulus conclusion gives nonzero phases. With the displayed
+    copy-weight identities as input, apply
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+\end{proof}
+
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
     \label{thm:sector_bnt_equal_global_gauge}
     \lean{MPSTensor.ft_sector_bnt_equal_global_gauge}
@@ -1307,7 +1384,7 @@ BNT basis.
         thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
         lem:sector_bnt_matched_sector_weight_equiv,
-        lem:tensor_from_blocks_globalGauge_conj}
+        thm:sector_bnt_global_gauge_of_matched_weights}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
     MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
     least one copy weight of modulus $1$. Then there exist:
@@ -1350,7 +1427,7 @@ BNT basis.
     \uses{thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
         lem:sector_bnt_matched_sector_weight_equiv,
-        lem:tensor_from_blocks_globalGauge_conj}
+        thm:sector_bnt_global_gauge_of_matched_weights}
     The full-basis matching theorem gives $\beta$, the bond-dimension
     identifications, and the gauge-phase equivalences between $Q_k$ and
     $P_{\beta(k)}$. Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
@@ -1359,8 +1436,8 @@ BNT basis.
     $|\zeta_k|=1$ for every matched sector. The matched-sector
     weight-permutation theorem then gives the copy permutations and the
     displayed pointwise weight identities. Finally
-    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} assembles the block
-    conjugacies into the flattened direct-sum conjugation by
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights} assembles the
+    block conjugacies into the flattened direct-sum conjugation by
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 
