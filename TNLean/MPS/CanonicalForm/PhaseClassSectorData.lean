@@ -100,6 +100,68 @@ theorem collapsedBntSectorDecomp_sameMPV₂
             symm
             simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
+/-- **Total dimension of a dimension-preserving phase-class quotient.**
+
+If every block in an MPV phase class has the same bond dimension as the
+chosen representative of that class, then the collapsed BNT sector
+decomposition has the same total bond dimension as the original direct sum.
+
+This is the dimension bookkeeping needed in the arbitrary-input supplier:
+without the displayed same-dimension hypothesis, the quotient is allowed to
+identify MPV-phase-equivalent blocks of differing bond dimensions, and the
+length-zero MPV coefficient need not be preserved by dimension counting
+alone. -/
+theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim
+    {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hDim : ∀ j q,
+      dim ((mpvPhaseClassData blocks).enum j q) =
+        dim ((mpvPhaseClassData blocks).repr j)) :
+    (collapsedBntSectorDecomp (d := d) μ blocks hμne).totalDim =
+      ∑ k : Fin r, dim k := by
+  classical
+  let classes := mpvPhaseClassData blocks
+  let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+  have hRegroupC :
+      (∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
+          (dim (classes.enum j q) : ℂ)) =
+        ∑ k : Fin r, (dim k : ℂ) :=
+    classes.regroup (fun k : Fin r => (dim k : ℂ))
+  have hRegroupN :
+      (∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
+          dim (classes.enum j q)) =
+        ∑ k : Fin r, dim k := by
+    exact_mod_cast hRegroupC
+  have hRepEnum :
+      (∑ j : Fin classes.g, ∑ q : Fin (classes.copies j), dim (classes.repr j)) =
+        ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
+          dim (classes.enum j q) := by
+    refine Finset.sum_congr rfl fun j _ => ?_
+    refine Finset.sum_congr rfl fun q _ => ?_
+    exact (hDim j q).symm
+  have hFlat :
+      P.totalDim =
+        ∑ x : (j : Fin classes.g) × Fin (classes.copies j), dim (classes.repr x.1) := by
+    change (∑ s : Fin (∑ j : Fin classes.g, classes.copies j),
+        dim (classes.repr ((finSigmaFinEquiv.symm s).1))) =
+      ∑ x : (j : Fin classes.g) × Fin (classes.copies j), dim (classes.repr x.1)
+    symm
+    simpa using
+      (Equiv.sum_comp
+        (finSigmaFinEquiv (m := classes.g) (n := classes.copies))
+        (fun s : Fin (∑ j : Fin classes.g, classes.copies j) =>
+          dim (classes.repr ((finSigmaFinEquiv.symm s).1))))
+  calc
+    P.totalDim =
+        ∑ x : (j : Fin classes.g) × Fin (classes.copies j), dim (classes.repr x.1) := hFlat
+    _ = ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j), dim (classes.repr j) := by
+      rw [Fintype.sum_sigma]
+    _ = ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j), dim (classes.enum j q) :=
+      hRepEnum
+    _ = ∑ k : Fin r, dim k := hRegroupN
+
 /-- `collapsedBntSectorDecomp` carries `HasBNTSectorData`.  Exposed (was previously
 `private`) for the prepared-block SectorBNT constructor. -/
 theorem collapsedBntSectorDecomp_hasBNT

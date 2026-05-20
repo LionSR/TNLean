@@ -31,6 +31,20 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \begin{theorem}[PGVWC07 translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
     \notready
+    % Source anchors:
+    % Papers/quant-ph_0608197/MPSarchive.tex:742 label Th:TIcanonical.
+    % Lines 742--752 state the block decomposition; lines 753--758 state the
+    % three block conditions; lines 761--762 state the bond-dimension bound.
+    % The proof order is lines 765--770 for spectral-radius normalization and
+    % the full-rank fixed-point gauge; lines 771--815 for the invariant support
+    % split when the positive fixed point is not full rank; lines 816--826 for
+    % iteration and further splitting when a block has a non-scalar fixed point;
+    % and lines 827--832 for the dual fixed point and final unitary
+    % diagonalization. Follow this order when formalizing the theorem: derive
+    % the invariant support from the singular positive fixed point as in
+    % lines 771--783 before invoking any abstract block-splitting lemma, and do
+    % not replace the source proof by a later primitive-block or prepared-family
+    % canonical-form theorem.
     Let a translation-invariant MPS representation on a finite ring have bond
     dimension $D$. Then the matrices may be decomposed as
     \[
@@ -59,6 +73,17 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 \begin{theorem}[Blocked CPSV canonical-form reduction]%
     \label{thm:cpgsv_canonical_form_source}
     \notready
+    % Source anchors:
+    % Papers/1606.00608/MPDO-22-12-17-2.tex:227--231 removes periodic
+    % peripheral components by blocking; lines 233--235 define normal tensors;
+    % lines 237--246 are eq:II_CF1 and the weight normalization; lines 249--251
+    % state that any tensor becomes canonical after blocking.  The later BNT
+    % quotient used by the supplier is prop:char-BNT at lines 271--279 and the
+    % two-layer expansion eq:II_ABasicTensors/decBSV at lines 283--301.
+    % Papers/2011.12127/TN-Review-main.tex:1793--1803 gives the invariant-
+    % subspace reduction; lines 1815--1820 give period removal; lines 1827--1839
+    % give def:4:normal-tensor-mps and eq:II_CF1; lines 1846--1859 give the
+    % BNT definition/characterization.
     This is the canonical-form reduction of
     \cite[Section~II.A]{Cirac2017MPDO_AnnPhys}; see also
     \cite[Theorems~4.2 and~4.4]{Cirac2021Matrix}. Every
@@ -78,14 +103,20 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
 \end{theorem}
 
-Theorem~\ref{thm:pgvwc07_ti_canonical_form} is not yet formalized. This
-chapter develops constituent steps of the PGVWC07 and CPSV reductions:
-invariant-subspace decomposition (Theorem~\ref{thm:irred_decomp}), TP gauge
+Theorems~\ref{thm:pgvwc07_ti_canonical_form}
+and~\ref{thm:cpgsv_canonical_form_source} are source-level targets and are
+not yet formalized as stated. This chapter develops constituent steps of the
+PGVWC07 and CPSV reductions: invariant-subspace decomposition
+(Theorem~\ref{thm:irred_decomp}), TP gauge
 (Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
-(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the combined
-after-blocking statement are recorded in Chapter~\ref{ch:canonical_after_blocking}
+(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the
+structural after-blocking primitive-block decomposition are recorded in
+Chapter~\ref{ch:canonical_after_blocking}
 (Theorem~\ref{thm:zero_block_separation} and
-Theorem~\ref{thm:tp_primitive_blockdecomp}).
+Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
+yet supply the source normalization $|\mu_k|\le 1$ with at least one
+unit-modulus weight, so they should not be cited as
+Theorem~\ref{thm:cpgsv_canonical_form_source}.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -1057,6 +1088,85 @@ BNT construction.
     The resulting sector decomposition inherits the span and multiplicity
     conditions, and the bounded-weight and global-unit hypotheses give the
     weight-norm conditions.
+\end{proof}
+
+\begin{lemma}[Total dimension of a dimension-preserving phase-class quotient]%
+    \label{lem:collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
+    \leanok
+    In the phase-class quotient used by the prepared-block BNT supplier,
+    suppose that every original copy weight is nonzero and that every block in
+    a phase class has the same bond dimension as the chosen representative of
+    that class. Then the total bond dimension of the collapsed sector
+    decomposition is the sum of the bond dimensions of the original prepared
+    blocks.
+\end{lemma}
+
+\begin{proof}\leanok
+    Sum the representative bond dimensions over the copies in each phase class.
+    The same-dimension hypothesis replaces each representative dimension by the
+    dimension of the enumerated original block, and the phase-class regrouping
+    identity then recovers the original direct-sum dimension.
+\end{proof}
+
+\begin{lemma}[Prepared phase-equivalent blocks have the same bond dimension]%
+    \label{lem:prepared_phase_equiv_dim_eq}
+    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    % Source anchors:
+    % Papers/1606.00608/MPDO-22-12-17-2.tex:1080 begins Lemma equalMPS;
+    % line 1090 states the dimension conclusion; lines 1115--1117 prove it.
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible MPS blocks of
+    positive bond dimension. If their MPV families differ by a nonzero scalar
+    power, then their bond dimensions are equal.
+\end{lemma}
+
+\begin{proof}\leanok\uses{thm:overlap_decay_rect_irr_tp}
+    The self-overlap normalization forces the scalar relating the two MPV
+    families to have unit modulus. Hence the rectangular overlap between the
+    two blocks has norm tending to $1$. If the two bond dimensions were
+    different, the rectangular overlap-decay theorem would force the same
+    overlap to tend to $0$, which is impossible.
+\end{proof}
+
+\begin{lemma}[Prepared phase classes preserve bond dimension]%
+    \label{lem:prepared_phase_class_dim_eq}
+    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
+    \leanok
+    % Source anchors:
+    % Papers/1606.00608/MPDO-22-12-17-2.tex:271--279 states prop:char-BNT;
+    % lines 1135--1148 restate it and give the construction.
+    In a prepared family of positive-bond-dimension blocks, assume that every
+    block is trace-preserving, primitive, and irreducible. Then every block in
+    an MPV phase class has the same bond dimension as the representative of
+    that class.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:prepared_phase_equiv_dim_eq}
+    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative
+    and each member of its phase class.
+\end{proof}
+
+\begin{lemma}[Prepared collapsed BNT total dimension]%
+    \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
+    \leanok
+    % Source anchors:
+    % The canonical-form source is
+    % Papers/1606.00608/MPDO-22-12-17-2.tex, eq:II_CF1 at lines 237--246.
+    % The phase-class quotient is prop:char-BNT at lines 271--279 and its
+    % appendix restatement/construction at lines 1135--1148.
+    For prepared trace-preserving, primitive, irreducible blocks of positive
+    bond dimension, with all copy weights nonzero, the phase-class quotient
+    used in the BNT supplier does not change the total bond dimension: the
+    collapsed sector decomposition has total bond dimension equal to the sum of
+    the original block dimensions.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
+    The previous lemma supplies the same-dimension hypothesis in
+    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim}.
 \end{proof}
 
 \begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%

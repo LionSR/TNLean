@@ -297,7 +297,9 @@ Conclusion: after a common blocking (currently `p = 1`) and reordering by decrea
 
 Source context: Perez-Garcia--Verstraete--Wolf--Cirac 2007,
 Theorem Th:TIcanonical, lines 742--763, starts from an arbitrary
-translation-invariant MPS representation.
+translation-invariant MPS representation. Its proof first performs the
+fixed-point gauge and invariant-support splitting of lines 765--826, then
+the dual fixed-point diagonalization of lines 827--832.
 
 **Scope restriction (prepared primitive block decomposition):** This theorem
 assumes an existing weighted block decomposition, irreducibility,

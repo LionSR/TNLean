@@ -52,6 +52,47 @@ canonical form has been obtained
 and the generic uniqueness discussion is a separate theorem
 \cite[Theorem~\texttt{thm-uniq}, lines~1002--1015]{PerezGarcia2007MPSReps}.
 
+\section{Faithful proof order}
+
+The proof of Theorem~\texttt{Th:TIcanonical} is short but highly ordered, and
+the formalization should preserve that order rather than replace it by later
+canonical-form theorems. The source proof proceeds as follows.
+
+\begin{enumerate}
+    \item Lines~765--770 normalize the spectral radius and, when the positive
+          fixed point is full rank, gauge the tensor by \(X^{-1/2}\) and
+          \(X^{1/2}\) to obtain the unital condition
+          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
+
+    \item Lines~771--815 treat a non-full-rank positive fixed point. The
+          support projection \(P_R\) is not an independent hypothesis: it is
+          derived from the spectral decomposition of the singular positive
+          fixed point, using the positivity contradiction in lines~775--783.
+          Only after this derivation does the proof use
+          \(A_iP_R=P_RA_iP_R\) to split the trace over the finite ring into the
+          \(R\) and \(R^\perp\) restrictions. This is the source of the
+          recursive block decomposition and of the bond-dimension
+          non-increase.
+
+    \item Lines~816--826 iterate the same splitting on each block and then use
+          a non-scalar fixed point \(X\neq\mathbf{1}\) to produce the positive
+          non-full-rank fixed point
+          \(\mathbf{1}-\lambda_1^{-1}X\). This is the step that enforces
+          uniqueness of the identity fixed point in each final block.
+
+    \item Lines~827--832 apply the analogous argument to the dual map and use a
+          unitary conjugation to diagonalize the resulting full-rank positive
+          fixed point, producing the matrices \(\Lambda^j\) in the theorem.
+\end{enumerate}
+
+Thus the source theorem is not a primitive-block theorem, an injective-block
+theorem, or a prepared-family theorem. Nor is the invariant-projection lemma by
+itself enough: the projection must be obtained from the positive fixed-point
+argument in the cited lines. A formal proof of
+Theorem~\texttt{Th:TIcanonical} should reconstruct these steps from an
+arbitrary translation-invariant representation and use later notions only as
+lemmas after their hypotheses have been obtained in this proof order.
+
 \section{Normalization orientation}
 
 There is also a convention difference in the direction of the canonical
