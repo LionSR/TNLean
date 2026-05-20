@@ -297,6 +297,12 @@ definitions stated below.
     \lean{MPSTensor.lowerZero_of_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
+    % Source anchor:
+    % Papers/quant-ph_0608197/MPSarchive.tex:771--774 introduce the support
+    % projection of a singular positive fixed point in the proof of
+    % Th:TIcanonical, and lines 775--783 prove the invariant relation
+    % A_i P_R = P_R A_i P_R by positivity.  The finite-ring trace split begins
+    % only afterward, at lines 785--815.
     Let $\rho \ge 0$ be a fixed point of $\E_A$,
     and let $P$ be the support projection of $\rho$.
     Then for all~$i$, $(\Id - P) A^i P = 0$:
@@ -311,6 +317,11 @@ definitions stated below.
     for each~$i$.
     Since $\rho$ is supported on the range of $P$,
     this forces $(\Id - P) A^i P = 0$.
+    This is the formal counterpart of the singular fixed-point step in
+    \cite[Theorem~\texttt{Th:TIcanonical}, lines~771--783]
+        {PerezGarcia2007Matrix}: the source derives the support projection from
+    the fixed point and proves the invariant relation before the trace split of
+    lines~785--815.
 
     This is the finite-dimensional version of~\cite[Proposition~6.10]{Wolf2012Quantum}
     (``Stationary subspaces'': the support projection
@@ -325,6 +336,10 @@ definitions stated below.
     \lean{MPSTensor.exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict}
     \leanok
     \uses{def:transfer_map, def:same_mpv2}
+    % Source anchor:
+    % Papers/quant-ph_0608197/MPSarchive.tex:771--783 supplies the invariant
+    % support projection from a singular positive fixed point; lines 785--815
+    % split the finite-ring trace into supported and orthogonal summands.
     If the transfer map has a PSD fixed point $\rho$ that is
     \emph{not} positive definite (i.e.\ $\rho$ has a nontrivial
     kernel), then there exist MPS tensors $A_1, A_2$ of smaller
@@ -349,6 +364,9 @@ definitions stated below.
     of the diagonal-block traces, so the block-diagonal tensor
     obtained by discarding the off-diagonal blocks has the same MPV
     coefficients as the conjugated tensor, and hence as~$A$.
+    These are precisely the two halves of the singular fixed-point step in
+    \cite[Theorem~\texttt{Th:TIcanonical}, lines~771--815]
+        {PerezGarcia2007Matrix}.
 \end{proof}
 
 \section{Iterated reduction}
