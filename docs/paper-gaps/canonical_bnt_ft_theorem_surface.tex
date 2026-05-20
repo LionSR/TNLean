@@ -209,7 +209,7 @@ identified with one another.
     equal-MPV corollary is obtained after the canonical-form supplier has put
     the input tensors on this surface with the required unit-modulus-copy
     normalization.
-  \item The older sector-decomposition comparison theorem
+  \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
     sector-basis matching, linear independence, and equality of total MPV
@@ -217,6 +217,11 @@ identified with one another.
     up to the phases in the matching. It should not be presented as the
     paper-level equal-MPV corollary.
 \end{enumerate}
+
+The former strict canonical-form BNT equal-MPV declaration was only a strict
+representative form and is no longer part of the active Lean tree. The former
+proportional wrapper has also been removed because its one-shot coefficient
+hypotheses did not imply the full BNT matching conclusion.
 
 Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
 Rather, the paper suppresses the formal separation between deriving the BNT
@@ -287,10 +292,7 @@ paper-level theorems.
     \]
     It is now lemma-level. It is not the full equal-MPV corollary from the
     papers, since it assumes the coefficient arrays and their nonzero limits.
-  \item The former proportional result
-    \[
-      \texttt{fundamentalTheorem\_proportionalMPV\_CFBNT}
-    \]
+  \item The former proportional result on the old strict-representative surface
     has been deleted from the active formal route. It used explicit coefficient
     arrays, their limits, and non-vanishing assumptions, while the source
     theorem derives the relevant BNT coefficient comparison from the
@@ -316,13 +318,14 @@ paper-level theorems.
       \texttt{power\_sum\_eq\_implies\_multiset\_eq}
     \]
     is a lemma-level restatement of the elementary Newton--Girard input used in
-    the equal-MPV proof. Likewise,
+    the equal-MPV proof. The former declaration
     \[
       \texttt{perBlock\_sameMPV\_of\_equalMPV\_CFBNT}
     \]
-    is only the extraction of the blockwise equality conclusion from the
-    common-block equal-MPV lemma. These old names are retained here only to
-    identify the retired one-copy route; neither should be counted as an
+    extracting the blockwise equality conclusion from the common-block
+    equal-MPV lemma has likewise been removed from the active Lean tree. These
+    old names are retained here only to identify the retired one-copy route;
+    neither should be counted as an
     additional source-level Fundamental Theorem.
   \item The implication
     \[

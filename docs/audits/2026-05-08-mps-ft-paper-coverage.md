@@ -10,7 +10,7 @@
   Source TeX: `Papers/0909.5347/main.tex`
 
 **Leaning on** (not audited in detail):
-- **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127 — used in `FundamentalTheorem/EqualProportional.lean` for Theorem 4.4 naming.
+- **CPSV21**: Cirac, Pérez-García, Schuch, Verstraete, *Matrix product states and projected entangled pair states: Concepts, symmetries, theorems*, Rev. Mod. Phys. **93**, 045003 (2021), arXiv:2011.12127 — used for the rendered numbering of the BNT and Fundamental Theorem statements.
 - **DSSPC17**: De las Cuevas, Schuch, Pérez-García, Cirac, *Continuum limits of matrix product states*, arXiv:1708.00029 — used in `Periodic/FundamentalTheorem.lean`.
 
 **Scope**: This audit covers MPS / pure-state sections of PGVWC07 and CPSV16, plus a full Wielandt source-paper crosswalk (§9). The MPDO / mixed-state sections of CPSV16 (§IV, Appendix C) are listed for completeness but not deeply traced. A separate MPDO coverage audit is recommended.
@@ -46,13 +46,13 @@ The periodic overlap dichotomy cluster (`Case2`, `Case3`, `Dichotomy`, `SelfOver
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | §II Defn (l.132) | 132–139 | MPV definition (`MPV`) | `TNLean/MPS/Defs.lean` | `leanok` |
-| Prop (l.249) | 249–251 | After blocking, any tensor can be put in CF generating same MPV | `TNLean/MPS/CanonicalForm/Reduction.lean` (`exists_irreducible_blockDecomp`); `CanonicalForm/Existence.lean` | `leanok` |
-| Prop (l.253) | 253–255 | Characterization of CF (no p-periodic, P Aⁱ = P Aⁱ P ⇒ Aⁱ P = P Aⁱ P) | `TNLean/MPS/CanonicalForm/FromPeripheralPrimitive.lean` (`isCanonicalForm_of_peripheralPrimitive`) | `leanok` |
+| Prop (l.249) | 249–251 | After blocking, any tensor can be put in CF generating same MPV | Constituent reductions in `TNLean/MPS/CanonicalForm/Reduction.lean` and `CanonicalForm/Existence.lean`; all-zero-block and after-blocking statements are recorded separately in the blueprint | **not formalized** — the formal declarations cover invariant-subspace splitting, TP gauge, and conditional after-blocking constructions, not the full proposition from an arbitrary tensor to a canonical-form representative after blocking; tracked by #1685 |
+| Prop (l.253) | 253–255 | Characterization of CF (no p-periodic, P Aⁱ = P Aⁱ P ⇒ Aⁱ P = P Aⁱ P) | No current theorem with this source hypothesis set identified; related peripheral and cyclic-sector reductions live under `TNLean/MPS/CanonicalForm/SectorComparison/` | **open** — the formerly cited `FromPeripheralPrimitive.lean` declaration is no longer in the active tree; tracked by #1685 |
 | Prop 2.7 (l.278, `prop:char-BNT`) | 278–280 | BNT characterization: each CF NT is gauge-phase-equivalent to some basis element | `TNLean/MPS/CanonicalForm/BNTGrouping.lean`; `PhaseClassSectorData.lean` (`exists_bnt_sectorDecomp_*`) | **partial** — full BNT construction from CF not yet proved; `BNTGrouping.lean` handles norm-sorting special case; tracked by #1501 |
 | Defn "injective" (l.317, `defnbi`) | 317–322 | NT injective if matrices span full M_D; biCF for block-injective CF | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`); `CanonicalForm/BlockDiagonalCommutant.lean` (block-diagonal commutant theorems) | `leanok` |
-| Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | Uses Wielandt; `FundamentalTheorem/FiniteLength.lean` imports `WielandtBound` for word-span results | **needs verification** |
+| Prop (l.342, `propblockinj`) | 342–345 | After blocking ≤ 3D⁵ spins, any CF tensor becomes biCF | No current source-faithful theorem identified; `FundamentalTheorem/FiniteLength.lean` proves a different single-block finite-length agreement result | **open** — do not cite the finite-length single-block theorem as the block-injective-after-blocking proposition; tracked by #1685 |
 | **Theorem II.1** (l.349, `thm1`) | 349–352 | **Fundamental Theorem of MPV (proportional case)** | No faithful Lean theorem at present. The former restricted proportional-comparison declarations were deleted because their coefficient-array hypotheses are not part of the source statement. | **open** |
-| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (`fundamentalTheorem_equalMPV_CFBNT`); `FundamentalTheorem/Basic.lean` (`fundamentalTheorem_singleBlock`, `sameMPV_iff_gaugeEquiv_of_injective`) | `leanok` |
+| **Corollary II.2** (l.354, `II_cor2`) | 354–360 | **Equal MPV case**: same MPVs ⇒ conjugate by invertible X | Single-block results in `FundamentalTheorem/Basic.lean`; conditional sector-matching results in `FundamentalTheorem/SectorDecomposition.lean` | **not formalized** — the single-block theorem and conditional sector-matching corollaries are related constituent reductions, but no current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; tracked by #1685 |
 
 ### 2.2 Section III — Pure States: Renormalization of MPS (RFP / ZCL / NNCPH)
 
@@ -92,11 +92,11 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | Paper label | Lines | Paper description | Lean location | Status |
 |---|---|---|---|---|
 | Defn CFII (l.1058) | 1058–1060 | CFII: CF + trace-preserving CPM + full-rank diagonal fixed point | `TNLean/MPS/CanonicalForm/Existence.lean` (`CFII` data) | `leanok` |
-| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | `TNLean/MPS/CanonicalForm/` (distributed); `CanonicalForm/GaugePhaseFromOverlap.lean` | **needs verification** |
+| **Lemma `equalMPS`** (l.1080) | 1080–1091 | Two NMPVs: overlap → 0 or 1; if 1, gauge-phase equivalent | Same-bond-dimension gauge recovery and the rectangular bond-dimension step are in `FundamentalTheorem/Proportional.lean`; overlap decay lives in `TNLean/MPS/Overlap/` | **partial** — the components are present, but the source lemma is not yet packaged as one theorem with the source hypothesis set |
 | **Corollary `eqV`** (l.1121) | 1121–1128 | NMPV overlap → 0 or equal up to phase factor e^{iφN} | Used in BNT construction | **needs verification** |
 | **Corollary `Lem1`** (l.1131) | 1131–1133 | Orthogonal NMPVs are eventually linearly independent | `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` (`exists_eventually_linearIndependent_of_tp_primitive_irr_blocks_of_blocksNotGaugePhaseEquiv`) | `leanok` |
-| **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean` (imported by `FundamentalTheorem/EqualProportional.lean`) | `leanok` |
-| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | `TNLean/MPS/FundamentalTheorem/EqualProportional.lean` (CFII variant of fundamental theorem) | **needs verification** |
+| **Lemma `Lem:app_simple`** (l.1156) | 1156–1163 | Power-sum equality ⇒ multiset equality | `TNLean/Algebra/ScalarPowerSumIdentity.lean`; used by `FundamentalTheorem/SectorWeightComparison.lean` | `leanok` |
+| **Corollary `thm:Fundamental-CFII`** (l.1197) | 1197–1199 | CFII version: X, X_k unitary | No current source-faithful Lean theorem identified; CFII normalization data live in `TNLean/MPS/CanonicalForm/Existence.lean` | **open** |
 
 ### 2.5 Appendix B — Proofs of Section III (pure RFP)
 
@@ -152,7 +152,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | **Theorem `thm:OBC-Vidal`** (l.431) | 431–443 | Completeness and canonical form for OBC (Vidal form) | `TNLean/MPS/Chain/Defs.lean` (OBC chain definition); left-canonical/right-canonical conditions in `Core/` | `leanok` (definitions); **needs verification** (full completeness theorem) |
 | **Theorem `free-OBC`** (l.466) | 466–486 | Freedom in OBC: all representations related by local Y_j, Z_j | `TNLean/MPS/Chain/GaugePhase.lean` (gauge transformations) | `leanok` |
 | Theorem "Site-independent matrices" (l.620) | 620–630 | TI state has site-independent MPS representation (bond dim ≤ ND) | `TNLean/MPS/Chain/Defs.lean` (TI chain definitions) | **needs verification** |
-| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | TI canonical form: block-diagonal with λ_j > 0, each block satisfies left/right canonical + unique fixed point | `TNLean/MPS/CanonicalForm/Reduction.lean` (`exists_irreducible_blockDecomp`); `CanonicalForm/Existence.lean` (`exists_CFII_data_of_TP_of_isIrreducibleTensor`) | `leanok` |
+| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | TI canonical form: block-diagonal with λ_j > 0, each block satisfies left/right canonical + unique fixed point | Constituent reductions in `TNLean/MPS/CanonicalForm/Reduction.lean` and `CanonicalForm/Existence.lean`; scope boundary recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex` | **not formalized** — the formal declarations prove invariant-subspace splitting, TP gauge, and conditional prepared-block reductions, not the full arbitrary-input source theorem with positive weights, unital blocks, diagonal full-rank dual fixed points, identity fixed-point uniqueness, and the bond-dimension bound; tracked by #1685 |
 | **Theorem `Th:periodic`** (l.849) | 849–858 | Periodic decomposition: p eigenvalues of modulus 1 ⇒ superposition of p p-periodic states | `TNLean/MPS/Periodic/Symmetry.lean`, `Periodic/ProjectiveRep.lean` | **partial** — periodic symmetry theory formalized; full theorem statement needs verification |
 | Prop `prop-inj` (l.911) | 911–? | C1 condition ⇒ Γ_L injective for L ≥ L₀ | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`), Wielandt span-growth infrastructure | **needs verification** |
 | Theorem "Interpretation of Λ" (l.987) | 987–993 | Λ eigenvalues converge to half-chain density matrix eigenvalues | **out of scope** | — |
@@ -234,9 +234,12 @@ The CPSV16 Theorem 3.10 (RFP ⇔ NNCPH) proof in `ParentHamiltonian/Commuting.le
 
 ## 5. Note on Theorem 4.4 (CPSV21) naming
 
-The `FundamentalTheorem/EqualProportional.lean` module now records the equal-MPV route and the
-power-sum ingredients.  A faithful Lean statement for the CPSV21 proportional theorem, i.e. the
-CPSV16 Fundamental Theorem of MPV (Theorem II.1 / `thm1`), remains open after removal of the
+The equal-MPV route now runs through the single-block theorem and the conditional
+sector-matching statements in `FundamentalTheorem/SectorDecomposition.lean`.
+The old equal/proportional comparison module and its strict-representative
+declaration names have been removed from the active Lean tree. A faithful Lean
+statement for the CPSV21 proportional theorem, i.e. the CPSV16 Fundamental
+Theorem of MPV (Theorem II.1 / `thm1`), remains open after removal of the
 restricted coefficient-array theorem surface.
 
 Open target:
@@ -244,9 +247,10 @@ Open target:
 - Faithful proportional theorem: CPSV21 Theorem 4.4, corresponding to CPSV16
   Theorem II.1 (`thm1`).
 
-| Lean declaration | Paper | CPSV16 label |
+| Lean declaration | Paper | CPSV16 relation |
 |---|---|---|
-| `fundamentalTheorem_equalMPV_CFBNT` | CPSV21 Corollary after Theorem 4.4 | CPSV16 Corollary II.2 (`II_cor2`) |
+| `fundamentalTheorem_singleBlock` | single injective-block case | special case only |
+| `fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching` | conditional sector-matching equal-MPV conclusion | conditional input used only toward a future formalization of CPSV16 Corollary II.2 (`II_cor2`) |
 
 ---
 
@@ -267,7 +271,13 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
+| High | CPSV16 | CPSV16 §II.A Prop. (l.249, canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
+| High | CPSV16 | CPSV16 §II.A Prop. (l.253, canonical-form characterization) | Source characterization by absence of periodic vectors and invariant projections not yet packaged as a Lean theorem | #1685 |
+| High | CPSV16 | CPSV16 §II.A Prop. (l.342, block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
+| High | CPSV16 | Theorem II.1 (l.349, `thm1`, Fundamental Theorem of MPV, proportional case) | No faithful Lean theorem; former restricted coefficient-array declarations were removed because their hypotheses are not in the source statement | #1685 |
+| High | CPSV16 | Corollary II.2 (l.354, `II_cor2`, equal-MPV case) | No current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; only constituent single-block and conditional sector-matching results exist | #1685 |
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
+| High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
 | High | PGVWC07 | Theorem `uniqueGS` (Uniqueness with TI+PBC) | Proof incomplete (3 sorrys) | #1475 / #460 |
 | Medium | CPSV16 | Prop 2.7 (`prop:char-BNT`) | Full BNT construction from CF not yet proved | #1501 |
@@ -282,6 +292,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 - Source paper lines counted in `Papers/1606.00608/MPDO-22-12-17-2.tex` and `Papers/quant-ph_0608197/MPSarchive.tex`.
 - Lean locations determined by grep for paper citations, theorem names, and type signatures in `TNLean/MPS/`.
 - `leanok` status: verified via `rg "\bsorry\b|axiom"` in the referenced Lean files — no sorry/axiom in those specific files means the theorem body compiles. Does **not** guarantee full correctness relative to the paper; formal proof review is separate.
+- A source theorem is marked **not formalized** when no Lean theorem has the same hypothesis set and conclusion, even if proved constituent reductions are available.
 - `needs verification`: paper label exists but Lean mapping is uncertain, incomplete, or unconfirmed. Items marked `needs verification` should be re-checked by a domain expert before claiming coverage.
 - `out of scope`: paper result considered outside the MPS Fundamental Theorem core (e.g., simulation bounds, entropy theorems, sequential generation).
 
@@ -355,8 +366,7 @@ in `docs/audits/issue-1449-wielandt-source-audit.md`, §4):
 
 | MPS file | Wielandt import | Key declaration |
 |---|---|---|
-| `FundamentalTheorem/FiniteLength.lean` | `WielandtBound` | `wordSpan_eq_top_of_isInjective` |
-| `FundamentalTheorem/ProportionalPrimitive.lean` | `Primitivity/ImpliesIrreducible` | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` |
+| `FundamentalTheorem/FiniteLength.lean` | `SpanGrowth/CumulativeSpan` | local `wordSpan_eq_top_of_isInjective` |
 | `CanonicalForm/Existence.lean` | `Primitivity/StronglyIrreducibleToFullRank` | `isNormal_of_isPrimitiveMPS_with_posDef` |
 | `CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `SpanGrowth/VectorToMatrixSpan`, `SpanGrowth/CumulativeSpan`, `RectangularSpan/Basic`, `Primitivity/ToNormal`, `Primitivity/StronglyIrreducibleToFullRank` | Multiple span and primitivity lemmas |
 | `ParentHamiltonian/UniqueGroundState.lean` | `SpanGrowth/CumulativeToWordSpan` | `cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one` |
