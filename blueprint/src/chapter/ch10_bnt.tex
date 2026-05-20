@@ -1182,7 +1182,8 @@ The non-matched decay clause is delivered in full.
 
 \begin{remark}
     Theorem~\ref{thm:sector_bnt_projected_substitution_unit_subset} is the
-    open proportional scalar-control target. It should not be identified with
+    open statement that the projected coefficient identities hold for
+    proportional MPV families. It should not be identified with
     Lemma~\ref{lem:sector_bnt_coeff_identity_via_global_gauge}, which is a
     full-basis equal-MPV statement. The projected theorem follows
     the substitution route of
@@ -1306,9 +1307,7 @@ matching covers the whole BNT basis.
     \lean{MPSTensor.coeff_identity_via_global_gauge}
     \leanok
     \uses{def:sector_bnt_cf,
-        def:gauge_phase_equiv,
-        lem:sector_bnt_norm_phase_of_matched_mpv,
-        lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
+        def:gauge_phase_equiv}
     Let $P$ and $Q$ be BNT canonical forms with the same MPV family. Suppose
     that there is a bijection
     \[
@@ -1316,8 +1315,8 @@ matching covers the whole BNT basis.
     \]
     and, for every $k\in J(Q)$, a bond-dimension equality and a gauge-phase
     equivalence between $Q_k$ and $P_{\beta(k)}$. Then for every $k$ there are
-    a unit-modulus scalar $\zeta_k$ and an integer $N_0$ such that, for all
-    $N>N_0$,
+    a unit-modulus scalar $\zeta_k$ and a natural number $N_0$ such that, for
+    all $N>N_0$,
     \[
         c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q).
     \]
@@ -1326,6 +1325,8 @@ matching covers the whole BNT basis.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:sector_bnt_norm_phase_of_matched_mpv,
+        lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     Choose the scalar-power MPV identity associated to each gauge-phase
     equivalence. Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
     unit modulus for each scalar. Applying
