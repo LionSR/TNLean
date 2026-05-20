@@ -27,7 +27,8 @@ product algebra automorphism, then applies the block-permutation decomposition t
 ## References
 
 * [PerezGarcia2007String] Pérez-García, Verstraete, Wolf, Cirac (quant-ph/0608197)
-* [Cirac2017MPS] De las Cuevas, Schuch, Pérez-García, Cirac (arXiv:2011.12127)
+* [CPSV21] Cirac, Pérez-García, Schuch, Verstraete,
+  *Matrix product states and projected entangled pair states*, arXiv:2011.12127.
 -/
 
 open scoped Matrix BigOperators
