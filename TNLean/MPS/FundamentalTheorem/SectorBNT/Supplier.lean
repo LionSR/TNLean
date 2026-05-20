@@ -29,9 +29,15 @@ phase-equivalent TP/primitive/irreducible blocks.
 
 ## Paper anchor
 
-* `Papers/1606.00608/MPDO-22-12-17-2.tex:271-301` — BNT existence in the
-  prepared-data setting (`A^i = ⊕_{j,q} μ_{j,q} A_j^i` with normal `A_j` and
-  the §II.A normalization).
+* `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237–246 — the canonical-form
+  display labelled eq:II_CF1 and the subsequent weight normalization.
+* `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271–279 and 1135–1148 —
+  the BNT characterization labelled prop:char-BNT, its appendix construction,
+  and the same-CF uniqueness note.
+* `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 283–301 — the two-layer
+  expansion in terms of BNT sectors and copy weights.
+* `Papers/2011.12127/TN-Review-main.tex`, lines 1827–1839, 1846–1859, and
+  1864–1884 — the review-paper canonical-form, BNT, and two-layer display.
 
 ## Gap record
 
@@ -125,10 +131,12 @@ bond dimensions inside each phase class.
 /--
 **Bond dimensions of prepared phase-equivalent blocks agree.**
 
-Source: arXiv:1606.00608, Lemma `equalMPS` in
+Source: arXiv:1606.00608, Lemma equalMPS in
 `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1080-1117, especially
 the dimension conclusion at lines 1090 and 1115-1117; the phase-class
-quotient is `prop:char-BNT`, lines 271-279 and 1135-1148.
+quotient is prop:char-BNT, labelled at line 278 with statement at line 279;
+the appendix restatement, construction, and same-CF uniqueness note are lines
+1135–1148.
 
 If two left-canonical, primitive, irreducible blocks have MPV families related
 by a nonzero scalar power, then their bond dimensions are equal.  The proof
@@ -186,10 +194,12 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
 /--
 **Prepared phase classes preserve the original bond dimensions.**
 
-Source: arXiv:1606.00608, `equalMPS` in
+Source: arXiv:1606.00608, Lemma equalMPS in
 `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1080-1117, supplies the
-same-dimension conclusion; `prop:char-BNT` at lines 271-279 and 1135-1148
-uses this comparison to form phase classes.
+same-dimension conclusion.  The source phase-class quotient is prop:char-BNT,
+labelled at line 278 with statement at line 279, and its appendix
+restatement/construction plus same-CF uniqueness note are lines 1135–1148.
+This comparison is the dimension input for those phase classes.
 In a prepared family of left-canonical, primitive, irreducible blocks, every
 member of an MPV phase class has the same bond dimension as its chosen
 representative.
@@ -221,11 +231,11 @@ theorem mpvPhaseClassData_dim_eq_of_tp_primitive_irr
 /--
 **Total bond dimension of the prepared collapsed BNT decomposition.**
 
-Source: arXiv:1606.00608, `eq:II_CF1` and `prop:char-BNT` in
-`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 237-246, 271-279, and
-1135-1148.  For prepared blocks, the phase-class quotient does not change the
-total bond dimension: quotienting only groups phase-equivalent copies with the
-same bond dimension.
+Source: arXiv:1606.00608, eq:II_CF1 at lines 237–246 and prop:char-BNT
+labelled at line 278 with statement at line 279.  Appendix A restates and
+constructs the BNT quotient at lines 1135–1148.  For prepared blocks, the
+phase-class quotient does not change the total bond dimension: quotienting only
+groups phase-equivalent copies with the same bond dimension.
 -/
 theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr
     {r : ℕ} {dim : Fin r → ℕ}
@@ -251,8 +261,9 @@ nonzero weights satisfying the SectorBNT normalization conditions, produce a
 `SectorDecomposition P` and a proof that `IsBNTCanonicalForm P` and the
 assembled tensor agrees with the original direct sum.
 
-Paper anchor: `Papers/1606.00608/MPDO-22-12-17-2.tex:271-301` (BNT existence
-in the prepared-data setting).
+Paper anchor: `Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 271–279 and
+1135–1148 for prop:char-BNT, and lines 283–301 for the two-layer BNT/copy
+expansion.
 -/
 theorem exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks
     {r : ℕ} {dim : Fin r → ℕ}
@@ -380,9 +391,10 @@ or hypothesis passes those facts to the prepared-block supplier
 `exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks` to obtain
 the full `IsBNTCanonicalForm` conclusion.
 
-Paper anchor: CPSV16 §II.A line 237-280 (canonical form definition,
-normalization, and BNT discussion), Cirac–Pérez-García–Schuch–Verstraete,
-arXiv:1606.00608.
+Paper anchor: Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608,
+lines 237–246 for eq:II_CF1 and the weight normalization, lines 249–251 for
+after-blocking canonical-form existence, and lines 271–279 for the BNT
+definition and prop:char-BNT statement.
 -/
 
 private lemma sameMPV₂Pos_reindexPhysical_aux
@@ -598,7 +610,7 @@ the prepared-block BNT constructor delivers a full `IsBNTCanonicalForm`
 decomposition together with positive-length MPV agreement.
 -/
 
-/-- **Arbitrary-input BNT block preparation (CPSV16 §II.A L237-280).**
+/-- **Arbitrary-input BNT block preparation (CPSV16 §II.A lines 237–280).**
 
 For any tensor `A : MPSTensor d D`, after at most one positive blocking length
 `p`, there is a finite family of **prepared** blocks (left-canonical,
@@ -615,8 +627,10 @@ writes "we can always *choose* this normalization, which we will assume from
 now on".  We therefore expose the prepared-block family and embed the
 conditional sector-decomposition supplier inside the existential.
 
-Paper anchor: arXiv:1606.00608 §II.A line 237-280; proposition
-char-BNT line 1135-1149. -/
+Paper anchor: arXiv:1606.00608, lines 237–246 for eq:II_CF1 and the weight
+normalization, lines 271–279 for the BNT definition and prop:char-BNT
+statement, lines 1135–1148 for its appendix construction and same-CF uniqueness
+note, and lines 283–301 for the two-layer BNT/copy expansion. -/
 theorem exists_isBNTCanonicalForm_afterBlocking_pos
     {d D : ℕ} (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧
