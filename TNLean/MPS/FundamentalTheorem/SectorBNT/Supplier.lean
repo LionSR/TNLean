@@ -133,8 +133,8 @@ quotient is `prop:char-BNT`, lines 271-279 and 1135-1148.
 If two left-canonical, primitive, irreducible blocks have MPV families related
 by a nonzero scalar power, then their bond dimensions are equal.  The proof
 uses the self-overlap normalization to show that the scalar has unit modulus;
-then a rectangular overlap of the two blocks has norm tending to `1`, whereas
-different bond dimensions would force that overlap to tend to `0`.
+then a rectangular overlap of the two blocks has norm tending to one, whereas
+different bond dimensions would force that overlap to tend to zero.
 -/
 theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {DX DY : ℕ} [NeZero DX] [NeZero DY]
