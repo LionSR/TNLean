@@ -25,7 +25,8 @@ then the support projection $P = \mathrm{supp}(\rho)$ is invariant under each Kr
 $$(1-P) A_i P = 0.$$
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (support projector argument)
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 771–783 (support projector argument)
 * Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 
@@ -396,9 +397,9 @@ matrix, and are essential for the "strict dimension decrease" argument used when
 iterating the canonical-form splitting step.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): the
-  recursion terminates because each irreducible block has strictly smaller bond
-  dimension.
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 771–815: invariant support, finite-ring trace split, and strict
+  decrease of the recursive blocks.
 * Cirac et al., arXiv:1606.00608, Section 2.3: the same argument in a slightly
   different presentation.
 -/
@@ -484,7 +485,8 @@ projection $P := \mathrm{supp}(\rho)$ is invariant under the Kraus operators `(A
 explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (support projection argument)
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 771–783 (support projection argument)
 * Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 
@@ -524,7 +526,8 @@ The proof composes:
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 771–815
 * Cirac et al., arXiv:1606.00608, Section 2.3
 -/
 theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict

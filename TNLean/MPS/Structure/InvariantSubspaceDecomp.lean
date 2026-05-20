@@ -23,10 +23,12 @@ arguments before blocking/normalization.
 
 This file formalizes the invariant-subspace decomposition from two sources:
 
-> **Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803).**
-> The recursion on bond dimension: a PSD fixed point of the transfer map yields an
-> invariant support projection; after block-diagonalization, the tensor splits into
-> a direct sum of smaller blocks.  The strict dimension decrease
+> **Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+> proof lines 771–815.**
+> The recursion on bond dimension: a singular positive fixed point of the transfer
+> map yields an invariant support projection in lines 771–783; after the finite-ring
+> trace split of lines 785–815, the tensor is replaced by a direct sum of smaller
+> blocks.  The strict dimension decrease
 > (`exists_strict_twoBlock_decomp_of_lowerZero`) guarantees termination of the
 > canonical-form recursion.
 
@@ -423,7 +425,8 @@ both returned block dimensions are *strictly smaller* than `D`. This is the key
 ingredient for proving termination of the canonical-form recursion.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem 3 (lines 769–803): recursion on bond dimension.
+* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+  proof lines 771–815: invariant support and finite-ring trace split.
 * Cirac et al., arXiv:1606.00608, Section 2.3: the same step in the "canonical forms" reduction.
 -/
 
