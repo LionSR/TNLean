@@ -29,9 +29,10 @@ a `SectorDecomposition`.  It records:
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit
 in CPSV16 §II.C line 1182's projection step and not explicitly stated in
-CPSV16 §II.A line 246 (which is global) nor in CPSV21 §III.2 lines 1846–1884
-(which normalizes the spectral radius of the BNT *basis tensors*, not the
-copy coefficients) — is **not** a structural field of `IsBNTCanonicalForm`.
+CPSV16 §II.A line 246 (which is global) nor in CPSV21 Section IV.A,
+lines 1846–1884 (which normalizes the spectral radius of the BNT *basis
+tensors*, not the copy coefficients) — is **not** a structural field of
+`IsBNTCanonicalForm`.
 The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
 `exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
 `ft_sector_bnt_equal_*`) take the per-block witness as an explicit
@@ -41,10 +42,11 @@ that actually need it.
 
 The structure does **not** impose an equal-modulus or strict-order
 condition on the raw sector weights `P.weight j q`.  CPSV16
-`eq:II_ABasicTensors` (line 286) and CPSV21 Definition 4.3 (lines 1846–1884)
-use raw entries `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not
-require `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order
-on the moduli of distinct BNT basis elements.  The audit memo
+`eq:II_ABasicTensors` (line 286), CPSV21 Definition 4.2 (lines 1846–1850),
+and the CPSV21 two-layer display (lines 1864–1884) use raw entries
+`μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not require
+`|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order on the
+moduli of distinct BNT basis elements.  The audit memo
 `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` collects
 the counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that
 motivate keeping the equal-modulus layer out of the core predicate; all of
@@ -97,7 +99,8 @@ mpv P.toTensor σ
 ```
 
 i.e. CPSV16 §II's two-layer BNT display (lines 271–301) and CPSV21
-Definition 4.3 (lines 1846–1884) with **raw** `μ_{j,q}` entries and
+Definition 4.2 (lines 1846–1850) together with the two-layer display
+(lines 1864–1884) with **raw** `μ_{j,q}` entries and
 coefficient `∑_q μ_{j,q}^N`.
 
 The audit `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
@@ -127,7 +130,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
     Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
   /-- **BNT eventual linear independence** of the basis MPV states
-  (CPSV21 Definition 4.3, lines 1846–1850; combined-family LI input at
+  (CPSV21 Definition 4.2, lines 1846–1850; combined-family LI input at
   CPSV16 lines 1121–1132). -/
   bnt_data : HasBNTSectorData P
   /-- **Block distinctness.**  No gauge-phase equivalence between distinct

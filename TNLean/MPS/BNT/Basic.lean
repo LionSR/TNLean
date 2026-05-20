@@ -14,7 +14,7 @@ This module combines two natural units:
 ## Part 1: Basic BNT definitions (from `BasisNormalTensors`)
 
 Introduces the basic definitions for the **basis of normal tensors** (BNT) notion, as in
-Definition 4.2 of arXiv:2011.12127.
+Definition 4.2 of arXiv:2011.12127, lines 1846–1850.
 
 A decomposition into a basis of normal tensors for a tensor `A_total` is a finite family of
 normal tensors which
@@ -66,7 +66,7 @@ namespace MPSTensor
 
 /--
 `IsBNT A_total g dim A_bnt` means that the family `A_bnt` is a **basis of normal tensors** (BNT)
-for `A_total` in the sense of Definition 4.2 of arXiv:2011.12127.
+for `A_total` in the sense of Definition 4.2 of arXiv:2011.12127, lines 1846–1850.
 
 Informally, `A_bnt` is a finite family of normal tensors which spans the MPV family of `A_total`
 and whose MPV states become linearly independent for large enough system size. Here `IsNormal`

@@ -45,9 +45,11 @@ field
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖weight j q‖ = 1` is
 **not** a structural field — CPSV16 line 246 is **global** (the
-unit-modulus copy can sit in any sector) and CPSV21 §III.2 Definition 4.3
-(lines 1846–1884) normalizes the spectral radius of the *basis* tensors,
-not the copy coefficients.  The matching theorem below therefore takes
+unit-modulus copy can sit in any sector), while CPSV21 Section IV.A,
+Definition 4.2 (lines 1846–1850), defines the BNT basis, and the display at
+lines 1864–1884 normalizes the spectral radius of the *basis* tensors, not
+the copy
+coefficients.  The matching theorem below therefore takes
 the unit-modulus sector as an **explicit parameter** `j₀ : Fin P.basisCount`
 together with a per-sector unit-modulus existential
 `hUnitP_at_j₀ : ∃ q, ‖P.weight j₀ q‖ = 1`.  The non-decay of the matched
@@ -82,8 +84,10 @@ strong-induction step of the CPSV16 `II_cor2` argument.
   power-sum coefficient comparison).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete,
   *Matrix product states and projected entangled pair states*, Rev. Mod.
-  Phys. **93**, 045003 (2021); arXiv:2011.12127.  Definition 4.3
-  (lines 1846–1884), Theorem 4.5 (lines 1891–1900).
+  Phys. **93**, 045003 (2021); arXiv:2011.12127.  Definition 4.2
+  (lines 1846–1850), Proposition 4.3 (lines 1852–1859), the two-layer
+  display (lines 1864–1884), Theorem 4.4 (lines 1891–1894), and
+  Corollary 4.5 (lines 1896–1900).
 
 ## Tags
 

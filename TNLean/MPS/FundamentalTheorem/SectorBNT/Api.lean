@@ -222,10 +222,12 @@ copy witness `hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`, the power-sum coefficie
 The per-block unit-modulus hypothesis `hUnit` is taken as an explicit
 theorem-level argument rather than a structural field of
 `IsBNTCanonicalForm`: CPSV16 §II.A line 246 records only the *global*
-normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, and CPSV21 §III.2
-Definition 4.3 (lines 1846–1884) normalizes the spectral radius of the
-*basis* tensors, not the copy coefficients $\mu_{j,q}$.  The per-block
-witness is implicit in CPSV16 §II.C line 1182's projection step and is
+normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, while CPSV21
+Section IV.A uses Definition 4.2 (lines 1846–1850) for the BNT basis and
+the display at lines 1864–1884 for the two-layer expansion.  It normalizes
+the spectral radius of the *basis* tensors, not the copy coefficients
+$\mu_{j,q}$.  The per-block witness is implicit in CPSV16 §II.C line 1182's
+projection step and is
 therefore exposed here as a per-theorem hypothesis.
 
 Paper anchor: CPSV16 §II.C lines 1158–1167 (power-sum non-decay / exact

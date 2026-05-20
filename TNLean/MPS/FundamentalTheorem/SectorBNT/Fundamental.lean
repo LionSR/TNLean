@@ -21,8 +21,9 @@ Paper anchors:
   contradiction and symmetry argument.
 * CPSV16 §II.C lines 1187–1188: exact power-sum coefficient comparison,
   recovering copy multiplicities and weights up to the matched phase.
-* CPSV21 Definition 4.3 lines 1846–1884: per-block BNT normalization on
-  the basis tensors.  The per-block convention on copy coefficients
+* CPSV21 Definition 4.2 lines 1846–1850 and the two-layer display at
+  lines 1864–1884: per-block BNT normalization on the basis tensors.
+  The per-block convention on copy coefficients
   `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit in CPSV16 §II.C line 1182's
   projection argument — is taken as an explicit theorem-level hypothesis
   here, not as a structural field of `IsBNTCanonicalForm`.
