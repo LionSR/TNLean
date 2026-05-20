@@ -33,6 +33,32 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
+/-- **Unit phase from matched normalized BNT blocks.**
+
+If two normalized BNT basis tensors have MPV families related by a scalar
+power `ζ^N`, then `ζ` has norm one. This is the self-overlap normalization
+closure used after the equal-MPS lemma of CPSV16 (lines 1080–1097) in the
+non-periodic BNT setting. -/
+theorem IsBNTCanonicalForm.norm_phase_of_matched_mpv
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    {j : Fin P.basisCount} {k : Fin Q.basisCount} {ζ : ℂ}
+    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis k) σ = ζ ^ N * mpv (P.basis j) σ) :
+    ‖ζ‖ = 1 := by
+  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis j) (P.basis j) N‖)
+      atTop (𝓝 (1 : ℝ)) := by
+    have h1 := (hP.basis_normalized_self_overlap j).norm
+    simpa using h1
+  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+      atTop (𝓝 (1 : ℝ)) := by
+    have h1 := (hQ.basis_normalized_self_overlap k).norm
+    simpa using h1
+  have hScale :=
+    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis j) (B := Q.basis k)
+      (ζ := ζ) hmpv
+  exact norm_eq_one_of_selfOverlap_scale (ζ := ζ) hAA hBB hScale
+
 /-- **Auxiliary lemma: gauge-phase data gives an MPV-level scalar-power identity with unit phase.**
 
 Given a matched bond-dimension equality `h : P.basisDim j = Q.basisDim k`
@@ -56,18 +82,7 @@ private lemma extract_unit_gauge_phase_mpv
   obtain ⟨ζ, _hζne, hmpv⟩ :=
     MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast (P.basis j) (Q.basis k) h hGPE
   refine ⟨ζ, ?_, hmpv⟩
-  have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis j) (P.basis j) N‖)
-      atTop (𝓝 (1 : ℝ)) := by
-    have h1 := (hP.basis_normalized_self_overlap j).norm
-    simpa using h1
-  have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
-      atTop (𝓝 (1 : ℝ)) := by
-    have h1 := (hQ.basis_normalized_self_overlap k).norm
-    simpa using h1
-  have hScale :=
-    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis j) (B := Q.basis k)
-      (ζ := ζ) hmpv
-  exact norm_eq_one_of_selfOverlap_scale (ζ := ζ) hAA hBB hScale
+  exact hP.norm_phase_of_matched_mpv hQ hmpv
 
 /-- **CPSV16 §II.C lines 1187–1188, coefficient identity from fixed MPV phases.**
 
