@@ -672,7 +672,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The insertion correspondence obtained from the three-site injective-chain
     theorem is an isomorphism between full matrix algebras on the chosen bond.
     Hence the two bond dimensions on that edge are equal, and the isomorphism is
-    implemented by conjugation with an invertible edge matrix \(Z_e\):
+    realized by conjugation with an invertible edge matrix \(Z_e\):
     \(Y=Z_e X Z_e^{-1}\). The matrix \(Z_e\) is unique up to multiplication by
     a nonzero scalar. This is the finite-dimensional matrix-algebra step used in
     \cite[Section~3]{Molnar2018NormalPEPS} after Lemma~\(\mathrm{inj\_isomorph}\).
@@ -776,11 +776,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:gaugeConsistency}
     \lean{TNLean.PEPS.gaugeConsistency}
     \notready
-    \uses{thm:localGauge_exists, def:gaugeVertex}
-    Local gauges extracted at adjacent vertices are consistent across
-    shared edges, yielding a global gauge family.
-    On a shared edge, the two neighboring local extractions match as one
-    edge gauge:
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
+        thm:localGauge_exists, def:gaugeVertex}
+    Choose an edge $e=(u,v)$ and block all other vertices into one middle
+    tensor. The three resulting tensors form an injective chain, so the
+    one-dimensional injective comparison assigns an invertible matrix to the
+    edge $e$. Repeating this for every edge and absorbing these matrices into
+    the second tensor family gives the post-absorption insertion equality
+    $\textup{eq:inj\_equal\_edge}$ of
+    \cite[Section~3]{Molnar2018NormalPEPS}. Applying the local extraction at
+    each vertex then gives one edge gauge family whose endpoint actions
+    transform the first tensor family into the second:
     \begin{center}
         \TNPEPSGlobalConsistency
     \end{center}
@@ -873,10 +879,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison,
         def:GaugeEquivPEPS, def:IsVertexInjective}
-    Given matching bond dimensions, two vertex-injective PEPS that generate the
-    same state are gauge-equivalent. This conditional form isolates the
-    bond-dimension obligation from the edge-centered consistency obligation of
-    the global gauge construction.
+    Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
+    already identified. If $A$ and $B$ are vertex-injective and give the same
+    PEPS state, then there are invertible matrices $X_e$, one for each edge,
+    such that at every vertex the tensor $B_v$ is obtained from $A_v$ by the
+    oriented endpoint action of the incident matrices.
 \end{theorem}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS]%
@@ -885,9 +892,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS,
         def:IsVertexInjective}
-    If two PEPS tensors on a simple graph are both vertex-injective and
-    generate the same state, then they are gauge-equivalent
-    (Theorem~2 of~\cite{Molnar2018NormalPEPS}).
+    Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
+    graph. If they give the same PEPS state, then their corresponding virtual
+    edge spaces have the same dimensions and, after identifying these spaces,
+    there are invertible matrices $X_e$, one for each edge, such that $B_v$ is
+    obtained from $A_v$ by the oriented endpoint action of the matrices incident
+    to $v$. This is Theorem~2 of
+    \cite{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \section{Normal PEPS}
@@ -1095,10 +1106,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \notready
     \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective}
-    If two gauge families relate the same injective PEPS tensor to the same
-    target tensor, then they define the same class modulo balanced edge
-    scalars. This replaces the earlier global-scalar claim, which is false on
-    a triangle with bond dimension $1$.
+    If two gauge families relate the same vertex-injective PEPS tensor to the
+    same target tensor, then their edge gauges differ by nonzero scalars
+    $c_e$ whose oriented product at every vertex is $1$. Thus the correct
+    graph quotient is by balanced edge scalars. The phrase ``unique up to a
+    multiplicative constant'' in the source is correct for the one-dimensional
+    chain situation, but for a general graph it must be read with this
+    vertex-balance condition; the correction is recorded in
+    \texttt{docs/paper-gaps/peps\_gauge\_edge\_scalars.tex}.
 \end{theorem}
 
 \begin{remark}
