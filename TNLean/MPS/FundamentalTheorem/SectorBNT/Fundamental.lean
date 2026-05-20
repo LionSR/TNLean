@@ -17,7 +17,7 @@ conclusion of the CPSV16/CPSV21 fundamental theorem on the
 
 Paper anchors:
 
-* CPSV16 §II.C lines 1182–1186: full BNT basis matching by the `Lem1`
+* CPSV16 §II.C line 1182: full BNT basis matching by the `Lem1`
   contradiction and symmetry argument.
 * CPSV16 §II.C lines 1187–1188: exact power-sum coefficient comparison,
   recovering copy multiplicities and weights up to the matched phase.
@@ -194,7 +194,7 @@ theorem sector_bnt_global_gauge_of_matched_weights
 
 For proportional MPV families, the proportional sector-matching theorem supplies
 the matched BNT basis, unit phases, and block gauges of CPSV16 §II.C lines
-1184--1186. If the remaining coefficient-comparison step supplies copy
+1167--1170 and line 1182. If the remaining coefficient-comparison step supplies copy
 permutations whose weights obey the same phases, then the direct-sum gauge
 assembly uses the same algebra as the equal-MPV corollary in lines 1189--1192.
 

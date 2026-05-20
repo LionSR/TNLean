@@ -20,7 +20,7 @@ $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), 1182–1186 (proof).
+  (restatement), and line 1182 (matching proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
@@ -37,7 +37,7 @@ bond dimension, gauge-phase equivalent in the cast-compatible shape, and
 with non-decaying cross-overlap.  This is the proportional analogue of
 `StrongMatch.forall_k_exists_j_nondecaying_overlap_of_sameMPV`.
 
-Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182–1186. -/
+Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -76,7 +76,7 @@ the forward one into an equivalence $\beta : \{1,\dots,g_Q\} \to
 \{1,\dots,g_P\}$, carrying the matched bond-dimension equality,
 gauge-phase equivalence, and non-decaying overlap for every sector of $Q$.
 
-Paper anchor: CPSV16 §II.C lines 1184–1186, the symmetry step
+Paper anchor: CPSV16 §II.C line 1182, the symmetry step
 "$g_A \ge g_B$ and $g_B \ge g_A$". -/
 theorem bijective_match_of_eventuallyProportional
     {P Q : SectorDecomposition d}
@@ -204,7 +204,7 @@ there is a basis bijection carrying matched bond-dimension equality and
 per-block gauge-phase equivalence.
 
 Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), lines 1167–1170
-(theorem statement), lines 1182–1186 (proof); CPSV21 lines 1891–1894
+(theorem statement), and line 1182 (matching proof); CPSV21 lines 1891–1894
 (proportional-MPV theorem-level target).  This is the proportional analogue
 of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` (`SectorBNT/FundamentalCoord.lean`)
 in the matching layer. The source proportional theorem stops at sector
@@ -235,7 +235,7 @@ theorem ft_sector_bnt_proportional_sector_match
 /-- **Proportional sector matching with explicit unit phases and block gauges.**
 
 This is the witness form of `ft_sector_bnt_proportional_sector_match`: after
-the proportional BNT block matching of CPSV16 §II.C lines 1184–1186, the
+the proportional BNT block matching of CPSV16 §II.C line 1182, the
 matched gauge-phase equivalences provide actual matrices `Xblock k` and
 scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
 these are the unit phases appearing in the source proportional theorem.
