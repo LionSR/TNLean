@@ -10,8 +10,8 @@ open scoped Matrix BigOperators
 # Iterated invariant-projection splitting: irreducible block decomposition
 
 This module implements the "iterate until all blocks are irreducible" step from
-Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–217
-(the display labelled eq:II_Aiplusk1 is at lines 214–217).
+Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219
+(the display labelled eq:II_Aiplusk1 is at lines 214–218).
 It also corresponds to the invariant-subspace splitting used inside
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
 lines 765–833.
@@ -49,8 +49,8 @@ These are separate steps in the canonical-form construction.
 
 ## References
 
-* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–217,
-  with eq:II_Aiplusk1 at lines 214–217.
+* Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219,
+  with eq:II_Aiplusk1 at lines 214–218.
 * Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical, proof
   lines 765–833.
 -/
@@ -130,7 +130,7 @@ private lemma mpv_twoBlockTensor_eq {n m : ℕ} (A₁ : MPSTensor d n) (A₂ : M
 /-! ## Main theorem: iterated irreducible block decomposition -/
 
 /-- **Iterated invariant-projection splitting**
-(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–217).
+(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219).
 
 Every MPS tensor `A : MPSTensor d D` is `SameMPV₂`-equivalent to a block-diagonal tensor
 `toTensorFromBlocks (μ ≡ 1) blocks` whose every block is irreducible (has no nontrivial invariant

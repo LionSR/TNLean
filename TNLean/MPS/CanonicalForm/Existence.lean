@@ -88,7 +88,7 @@ The formal statement:
 ## External input — Pérez-García et al. invariant subspace decomposition
 
 The iterated invariant-projection splitting in arXiv:1606.00608, lines
-201–217 (Wolf/Cirac/Verstraete canonical-form reduction), is formalized in
+201–219 (Wolf/Cirac/Verstraete canonical-form reduction), is formalized in
 `TNLean.MPS.Structure.InvariantSubspaceDecomp`.
 This external input provides:
 
