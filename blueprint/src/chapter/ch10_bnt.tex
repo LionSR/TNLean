@@ -1202,31 +1202,53 @@ global gauge. Their hypotheses explicitly require a unit-modulus copy in every
 sector on both sides; under this normalization, the matching covers the whole
 BNT basis.
 
+\begin{lemma}[Unit phase from matched normalized BNT blocks]%
+    \label{lem:sector_bnt_norm_phase_of_matched_mpv}
+    \lean{MPSTensor.IsBNTCanonicalForm.norm_phase_of_matched_mpv}
+    \leanok
+    \uses{def:sector_bnt_cf}
+    Let $P$ and $Q$ be BNT canonical forms. If, for every length $N$ and word
+    $\sigma$, a sector $P_j$ and a sector $Q_k$ have MPV families related by
+    \[
+        V^{(N)}(Q_k)_\sigma=\zeta^N V^{(N)}(P_j)_\sigma
+    \]
+    then $|\zeta|=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The BNT normalization gives self-overlap limits of modulus $1$ for both
+    sectors. The displayed MPV identity scales the $Q_k$ self-overlap by
+    $(\zeta\overline{\zeta})^N$ times the $P_j$ self-overlap. Taking limits
+    forces $|\zeta|=1$.
+\end{proof}
+
 \begin{theorem}[Proportional sector matching with unit phases]%
     \label{thm:sector_bnt_proportional_sector_match_witnesses}
     \lean{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}
     \leanok
     \uses{def:sector_bnt_cf,
         def:gauge_phase_equiv,
-        thm:gauge_phase_mpv_scaling}
+        thm:gauge_phase_mpv_scaling,
+        lem:sector_bnt_norm_phase_of_matched_mpv}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families. Assume that every sector of
     $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
     Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
     equalities $\dim P_{\beta(k)}=\dim Q_k$, scalars
-    $\zeta_k\in\C$, and block gauges $X_k$ such that $|\zeta_k|=1$ and
+    $\zeta_k\in\C$, and block gauges $X_k$ such that $|\zeta_k|=1$ and, for
+    every sector $k$ and physical index $i$,
     \[
         Q_k^i=\zeta_k X_k P_{\beta(k)}^i X_k^{-1}
     \]
-    for every sector $k$ and physical index $i$. Equivalently,
+    Equivalently, for every length $N$ and word $\sigma$,
     \[
         V^{(N)}(Q_k)_\sigma
         =
         \zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma
     \]
-    for every length $N$ and word $\sigma$. This is the per-block phase
-    output of
-    \cite[\S~II.C, lines 1184--1186]{Cirac2017MPDO_AnnPhys}; the following
+    This records the per-block phase conclusion of
+    \cite[\S~II.C, lines 1167--1170]{Cirac2017MPDO_AnnPhys}; lines
+    1184--1186 give the corresponding proof step. The following
     coefficient-comparison step is separate.
 \end{theorem}
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
+import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 
 /-!
 # Proportional sector matching for two BNT canonical forms
@@ -237,12 +238,12 @@ the proportional BNT block matching of CPSV16 §II.C lines 1184–1186, the
 matched gauge-phase equivalences provide actual matrices `Xblock k` and
 scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
 these are the unit phases appearing in the source text before the final
-coefficient comparison and block-diagonal gauge assembly of lines 1187–1192.
+coefficient comparison and block-diagonal gauge construction of lines 1187–1192.
 
 The theorem intentionally stops before the raw coefficient identity.  Under
 `EventuallyNonzeroProportionalMPV₂`, that step still has to control the
 length-dependent proportionality scalar; it is not the equal-MPV coefficient
-identity from `CoeffIdentity.lean`. -/
+identity proved by `coeff_identity_via_matched_mpv_phase`. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -291,20 +292,7 @@ theorem ft_sector_bnt_proportional_sector_match_witnesses
       mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
   have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
     intro k
-    have hAA : Tendsto
-        (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
-        atTop (𝓝 (1 : ℝ)) := by
-      have h1 := (hP.basis_normalized_self_overlap (β k)).norm
-      simpa using h1
-    have hBB : Tendsto
-        (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
-        atTop (𝓝 (1 : ℝ)) := by
-      have h1 := (hQ.basis_normalized_self_overlap k).norm
-      simpa using h1
-    have hScale :=
-      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
-        (ζ := ζ k) (hMpv k)
-    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+    exact hP.norm_phase_of_matched_mpv hQ (hMpv k)
   exact ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, hMpv⟩
 
 end MPSTensor
