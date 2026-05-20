@@ -152,7 +152,7 @@ Listed for completeness; detailed MPDO coverage audit is out of scope.
 | **Theorem `thm:OBC-Vidal`** (l.431) | 431–443 | Completeness and canonical form for OBC (Vidal form) | `TNLean/MPS/Chain/Defs.lean` (OBC chain definition); left-canonical/right-canonical conditions in `Core/` | `leanok` (definitions); **needs verification** (full completeness theorem) |
 | **Theorem `free-OBC`** (l.466) | 466–486 | Freedom in OBC: all representations related by local Y_j, Z_j | `TNLean/MPS/Chain/GaugePhase.lean` (gauge transformations) | `leanok` |
 | Theorem "Site-independent matrices" (l.620) | 620–630 | TI state has site-independent MPS representation (bond dim ≤ ND) | `TNLean/MPS/Chain/Defs.lean` (TI chain definitions) | **needs verification** |
-| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | TI canonical form: block-diagonal with λ_j > 0, each block satisfies left/right canonical + unique fixed point | `TNLean/MPS/CanonicalForm/Reduction.lean` (`exists_irreducible_blockDecomp`); `CanonicalForm/Existence.lean` (`exists_CFII_data_of_TP_of_isIrreducibleTensor`) | `leanok` |
+| **Theorem `Th:TIcanonical`** (l.742) | 742–763 | TI canonical form: block-diagonal with λ_j > 0, each block satisfies left/right canonical + unique fixed point | Constituent reductions in `TNLean/MPS/CanonicalForm/Reduction.lean` and `CanonicalForm/Existence.lean`; scope boundary recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex` | **not formalized** — the formal declarations prove invariant-subspace splitting, TP gauge, and conditional prepared-block reductions, not the full arbitrary-input source theorem with positive weights, unital blocks, diagonal full-rank dual fixed points, identity fixed-point uniqueness, and the bond-dimension bound; tracked by #1685 |
 | **Theorem `Th:periodic`** (l.849) | 849–858 | Periodic decomposition: p eigenvalues of modulus 1 ⇒ superposition of p p-periodic states | `TNLean/MPS/Periodic/Symmetry.lean`, `Periodic/ProjectiveRep.lean` | **partial** — periodic symmetry theory formalized; full theorem statement needs verification |
 | Prop `prop-inj` (l.911) | 911–? | C1 condition ⇒ Γ_L injective for L ≥ L₀ | `TNLean/MPS/Core/CPPrimitive.lean` (`IsInjective`), Wielandt span-growth infrastructure | **needs verification** |
 | Theorem "Interpretation of Λ" (l.987) | 987–993 | Λ eigenvalues converge to half-chain density matrix eigenvalues | **out of scope** | — |
@@ -268,6 +268,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | Priority | Paper | Theorem | Gap description | Tracked by |
 |---|---|---|---|---|
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
+| High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |
 | High | PGVWC07 | Theorem `uniqueGS` (Uniqueness with TI+PBC) | Proof incomplete (3 sorrys) | #1475 / #460 |
 | Medium | CPSV16 | Prop 2.7 (`prop:char-BNT`) | Full BNT construction from CF not yet proved | #1501 |
@@ -282,6 +283,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 - Source paper lines counted in `Papers/1606.00608/MPDO-22-12-17-2.tex` and `Papers/quant-ph_0608197/MPSarchive.tex`.
 - Lean locations determined by grep for paper citations, theorem names, and type signatures in `TNLean/MPS/`.
 - `leanok` status: verified via `rg "\bsorry\b|axiom"` in the referenced Lean files — no sorry/axiom in those specific files means the theorem body compiles. Does **not** guarantee full correctness relative to the paper; formal proof review is separate.
+- A source theorem is marked **not formalized** when no Lean theorem has the same hypothesis set and conclusion, even if proved constituent reductions are available.
 - `needs verification`: paper label exists but Lean mapping is uncertain, incomplete, or unconfirmed. Items marked `needs verification` should be re-checked by a domain expert before claiming coverage.
 - `out of scope`: paper result considered outside the MPS Fundamental Theorem core (e.g., simulation bounds, entropy theorems, sequential generation).
 
