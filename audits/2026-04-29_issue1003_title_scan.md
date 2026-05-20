@@ -3,6 +3,50 @@
 This scan records repository titles that still visibly differ from the naming
 conventions in `docs/CONTRIBUTING.md`.
 
+## Status after 2026-05-20 cleanup
+
+The 2026-04-29 scan below is preserved as the original audit record. On
+2026-05-20, a historical metadata cleanup renamed 194 issue and pull-request
+titles from that audit family:
+
+- old issue titles beginning with `formalization(...)`, `infrastructure(...)`,
+  `cleanup(...)`, `refactor:`, or bracketed source tags were rewritten as plain
+  mathematical issue titles;
+- old pull-request titles beginning with `feat: formalization(...)`,
+  `cleanup(...)`, bracketed agent tags, or bare `ci:` / `chore:` / `style:`
+  prefixes were rewritten into the current `type(scope): description` form;
+- old daily-record titles using the long dash separator were rewritten as
+  `Daily Standup -- YYYY-MM-DD`.
+
+The final scan was:
+
+```bash
+gh issue list --state all --limit 1000 --json number,title,state,url \
+  > /tmp/tnlean_issues_after2.json
+jq -r '.[] | select(.title|test("^(formalization|infrastructure|feat|fix|doc|style|ci|chore|refactor|cleanup)\\(|^(feat|fix|doc|style|ci|chore|refactor):|^\\[|—|=>")) | "#\(.number) [\(.state)] \(.title)"' \
+  /tmp/tnlean_issues_after2.json
+
+gh pr list --state all --limit 1000 --json number,title,state,url \
+  > /tmp/tnlean_prs_after2.json
+jq -r '.[] | select(.title|test("formalization\\(|^\\[|^(feat|fix|doc|style|ci|chore|refactor): |^cleanup\\(|^Unconditionalize|^Fix Docs|=>")) | "#\(.number) [\(.state)] \(.title)"' \
+  /tmp/tnlean_prs_after2.json
+```
+
+The pull-request scan returned no hits. The issue scan returned only
+GitHub Agentic Workflows records:
+
+- #1810 `[aw] Docs & Blueprint Sync failed`;
+- #1394 `[aw] Docs & Blueprint Sync failed`;
+- #1208 `[aw] No-Op Runs`;
+- #1116 `[aw] Docs & Blueprint Sync failed`;
+- #1076 `[aw] Docs & Blueprint Sync failed`;
+- #1059 `[aw] Docs & Blueprint Sync failed`.
+
+These `[aw]` issues are generated and managed by GitHub Agentic Workflows.
+The live record #1208 explicitly says not to assign or close it, so the
+bracketed workflow marker is treated as an external-system exception rather
+than a TNLean naming-convention violation.
+
 Commands used on 2026-04-29:
 
 ```bash
