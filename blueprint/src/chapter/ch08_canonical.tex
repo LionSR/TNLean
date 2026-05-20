@@ -1069,6 +1069,28 @@ BNT construction.
     \cite[Proposition~\texttt{char-BNT}]{Cirac2017MPDO_AnnPhys}.
 \end{proof}
 
+\begin{theorem}[Conditional BNT form after blocking with length-zero discharge]%
+    \label{thm:paperbnt_supplier_after_blocking_total_dim}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_of_totalDim}
+    \leanok
+    \uses{thm:paperbnt_supplier_after_blocking,
+        def:same_mpv2,
+        def:same_mpv2_pos}
+    In the setting of Theorem~\ref{thm:paperbnt_supplier_after_blocking}, the
+    same prepared blocks may be chosen so that, after the normalized BNT sector
+    decomposition $P$ is constructed, the positive-length MPV identity upgrades
+    to all lengths whenever the total bond dimension of $P$ is equal to the
+    bond dimension of the blocked input tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive-length statement is Theorem~\ref{thm:paperbnt_supplier_after_blocking}.
+    At length zero the MPV coefficient of a tensor is the trace of the identity
+    matrix on its bond space, hence its bond dimension. Therefore equality of
+    the two total bond dimensions supplies exactly the missing length-zero
+    coefficient, and the positive-length identity gives all remaining lengths.
+\end{proof}
+
 \begin{remark}[Arbitrary-input reduction]%
     \label{rem:arbitrary_input_reduction_gap}
     Theorem~\ref{thm:paperbnt_supplier_after_blocking} gives the

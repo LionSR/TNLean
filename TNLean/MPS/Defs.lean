@@ -75,6 +75,12 @@ def mpv (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) : ℂ :=
 @[simp] lemma mpv_eq (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
     mpv A σ = coeff A (List.ofFn σ) := rfl
 
+/-- At length zero, every MPV coefficient is the trace of the identity, hence the bond
+dimension. -/
+@[simp] lemma mpv_zero_length (A : MPSTensor d D) (σ : Fin 0 → Fin d) :
+    mpv A σ = (D : ℂ) := by
+  simp [mpv, coeff]
+
 /-- Gauge equivalence: `A` and `B` are related by simultaneous similarity
 `B i = X * A i * X⁻¹` for some `X ∈ GL(D,ℂ)`. -/
 def GaugeEquiv (A B : MPSTensor d D) : Prop :=
@@ -108,6 +114,19 @@ theorem SameMPV₂.toSameMPV₂Pos {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : SameMPV₂ A B) : SameMPV₂Pos A B :=
   fun N _hN σ => h N σ
+
+/-- Positive-length MPV equality plus equality of bond dimensions gives full MPV equality.
+
+This isolates the length-zero bookkeeping: at `N = 0`, the MPV coefficient is just the
+bond dimension. -/
+theorem SameMPV₂Pos.toSameMPV₂_of_bondDim_eq {d D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (h : SameMPV₂Pos A B) (hD : D₁ = D₂) : SameMPV₂ A B := by
+  intro N σ
+  by_cases hN : N = 0
+  · subst N
+    rw [mpv_zero_length, mpv_zero_length, hD]
+  · exact h N (Nat.pos_of_ne_zero hN) σ
 
 /-- Positive-length MPV equality is symmetric. -/
 theorem SameMPV₂Pos.symm {d D₁ D₂ : ℕ}

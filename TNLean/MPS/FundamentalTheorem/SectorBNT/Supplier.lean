@@ -33,12 +33,11 @@ phase-equivalent TP/primitive/irreducible blocks.
   prepared-data setting (`A^i = ⊕_{j,q} μ_{j,q} A_j^i` with normal `A_j` and
   the §II.A normalization).
 
-## Scout memo
+## Gap record
 
-* `audits/2026-05-16_phase_C_feasibility_gpt55.md` §1, §2.3, §2.4 — the
-  feasibility analysis that identified this prepared-block constructor as the
-  pragmatic Phase C target (with the exact-`SameMPV₂` zero-tail and global
-  rescaling issues quarantined behind the prepared-data hypotheses).
+* `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex` —
+  records the remaining canonical-form weight-normalization and length-zero
+  bookkeeping gaps for the arbitrary-input supplier path.
 
 ## Layering
 
@@ -521,5 +520,49 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
   -- `hSame`:    `mpv P.toTensor σ = mpv (toTensorFromBlocks μ blocks) σ` for all `N`.
   intro N hN σ
   exact (hSamePos N hN σ).trans (hSame N σ).symm
+
+/-- **Arbitrary-input BNT block preparation with explicit length-zero discharge.**
+
+This is a bookkeeping refinement of
+`exists_isBNTCanonicalForm_afterBlocking_pos`.  The theorem keeps the same
+prepared-block output and the same CPSV16 §II.A line-246 normalization
+hypotheses.  In addition, after a normalized BNT sector decomposition is
+chosen, it records that the positive-length MPV identity upgrades to full
+`SameMPV₂` as soon as the zero-length trace identity is supplied in the
+concrete form `D = P.totalDim`.
+
+It does not prove the missing normalization or the total-dimension equality;
+those are precisely the remaining arbitrary-input bridge obligations recorded
+in `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex`. -/
+theorem exists_isBNTCanonicalForm_afterBlocking_of_totalDim
+    {d D : ℕ} (A : MPSTensor d D) :
+    ∃ p : ℕ, 0 < p ∧
+    ∃ r : ℕ, ∃ dim : Fin r → ℕ, ∃ μ : Fin r → ℂ,
+    ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
+      (∀ k, 0 < dim k) ∧
+      (∀ k, IsLeftCanonical (blocks k)) ∧
+      (∀ k, _root_.IsPrimitive (transferMap (blocks k))) ∧
+      (∀ k, IsIrreducibleTensor (blocks k)) ∧
+      (∀ k, IsInjective (blocks k)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+      (∀ (_hμLe : ∀ k, ‖μ k‖ ≤ 1) (_hμUnit : ∃ k, ‖μ k‖ = 1),
+        ∃ P : SectorDecomposition (blockPhysDim d p),
+          SameMPV₂Pos (blockTensor (d := d) (D := D) A p) P.toTensor ∧
+          (D = P.totalDim →
+            SameMPV₂ (blockTensor (d := d) (D := D) A p) P.toTensor) ∧
+          IsBNTCanonicalForm P) := by
+  classical
+  obtain ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne,
+      hSamePos, hMake⟩ :=
+    exists_isBNTCanonicalForm_afterBlocking_pos (d := d) (D := D) A
+  refine ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, hInj, hμne,
+    hSamePos, ?_⟩
+  intro hμLe hμUnit
+  obtain ⟨P, hPPos, hBNT⟩ := hMake hμLe hμUnit
+  refine ⟨P, hPPos, ?_, hBNT⟩
+  intro hDimEq
+  exact hPPos.toSameMPV₂_of_bondDim_eq hDimEq
 
 end MPSTensor
