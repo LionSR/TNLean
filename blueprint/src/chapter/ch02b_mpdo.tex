@@ -144,7 +144,9 @@ legs cyclically and taking the resulting trace.
         \E_M \circ \E_M = \E_M.
     \]
     This is the mixed-state analogue of the renormalization fixed-point
-    condition for MPS tensors; see \cite[Definition~4.2]{Cirac2021Matrix}.
+    condition for MPS tensors; see \cite[definition of MPDO zero correlation
+    length, lines~736--741]{Cirac2017MPDO_AnnPhys} and
+    \cite[Section~II.E.2, lines~937--939]{Cirac2021Matrix}.
 \end{definition}
 
 \begin{theorem}[MPO ZCL iff doubled-index MPS RFP]%
@@ -252,7 +254,8 @@ legs cyclically and taking the resulting trace.
     An MPO tensor $M$ has a \emph{purification RFP} if it admits an LPDO
     witness whose purifying MPS tensor is a pure-state renormalization
     fixed point.
-    This is \cite[Definition~4.3]{Cirac2021Matrix}.
+    This is \cite[definition of purification RFP, lines~756--759]
+        {Cirac2017MPDO_AnnPhys}.
 \end{definition}
 
 \begin{remark}[PRFP does not imply MPO ZCL]\label{rem:prfp_not_implies_zcl}
@@ -763,13 +766,14 @@ strong subadditivity for a normalized three-site reduced state.
     but the block-injective canonical-form separation condition fails and no
     blocking length makes the entrywise family linearly independent.
 
-    \cite[Proposition~IV.3]{Cirac2021Matrix} gives a concrete sufficient criterion for the spanning
-    condition: after a common blocking length each block is block-injective,
-    and after a further finite blocking length one can form linear combinations
-    of word evaluations which equal the identity on one chosen block and vanish
-    on all others. Concatenating an injective prefix with this finite
-    block-separation data produces the product-algebra spanning condition, hence the
-    horizontal canonical-form data.
+    The block-injectivity proposition in
+    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys} gives a concrete sufficient
+    criterion for the spanning condition: after a common blocking length each
+    block is block-injective, and after a further finite blocking length one
+    can form linear combinations of word evaluations which equal the identity
+    on one chosen block and vanish on all others. Concatenating an injective
+    prefix with this finite block-separation data produces the product-algebra
+    spanning condition, hence the horizontal canonical-form data.
 \end{remark}
 
 \begin{theorem}[Finite block-separation criterion]
@@ -778,7 +782,9 @@ strong subadditivity for a normalized three-site reduced state.
     \leanok
     \uses{rem:word_tuple_span_top}
     If a block family admits the finite-length data described in
-    \cite[Proposition~IV.3]{Cirac2021Matrix}, then it is in block-injective canonical form.
+    the block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys}, then it is in
+    block-injective canonical form.
 \end{theorem}
 
 \begin{proof}
@@ -786,8 +792,9 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{rem:word_tuple_span_top}
     This is the direct implication from the finite-length data to the
     finite-length trace-separation statement. What remains open in the full
-    \cite[Proposition~IV.3]{Cirac2021Matrix} is the derivation of this finite witness from separated
-    canonical-form / BNT data.
+    block-injectivity proposition of
+    \cite[lines~340--345]{Cirac2017MPDO_AnnPhys} is the derivation of this
+    finite witness from separated canonical-form / BNT data.
 \end{proof}
 
 \begin{lemma}[Blockwise equality from agreement on the MPV family]
