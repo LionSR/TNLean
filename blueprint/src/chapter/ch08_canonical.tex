@@ -56,12 +56,27 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
 
+\begin{remark}[Source proof order for PGVWC07]\label{rem:pgvwc07_ti_canonical_source_order}
+    A faithful proof of Theorem~\ref{thm:pgvwc07_ti_canonical_form}
+    should follow the proof of
+    \cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix}
+    in its given order. Lines~765--770 normalize the spectral radius and use a
+    full-rank positive fixed point to obtain the unital gauge. Lines~771--783
+    show that the support of a singular positive fixed point is invariant.
+    Lines~785--815 split the finite-ring trace into the supported and
+    orthogonal summands. Lines~816--826 iterate this decomposition and use a
+    non-scalar fixed point to split further until the identity is the only
+    fixed point of each block. Finally, lines~827--832 repeat the fixed-point
+    argument for the dual map and diagonalize the resulting full-rank positive
+    fixed point by a unitary gauge.
+\end{remark}
+
 \begin{theorem}[Blocked CPSV canonical-form reduction]%
     \label{thm:cpgsv_canonical_form_source}
     \notready
     This is the canonical-form reduction of
-    \cite[Section~II.A]{Cirac2017MPDO_AnnPhys}; see also
-    \cite[Theorems~4.2 and~4.4]{Cirac2021Matrix}. Every
+    \cite[Section~II.A, lines~217--246]{Cirac2017MPDO_AnnPhys}; see also
+    \cite[Section~IV.A, lines~1815--1837]{Cirac2021Matrix}. Every
     translation-invariant MPS tensor $A$ is, after blocking by a period
     $p \ge 1$, replaced by a tensor $B$ generating the same MPV family and
     whose nonzero part is in canonical form. Thus, for each physical index $i$,
@@ -76,6 +91,17 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     dimension $d^{[p]}$ and bond dimension $D_0$, and the tensors $B_k$ are
     normal tensors. If $r>0$, the weights $\mu_k$ may be normalized so that
     $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
+
+    In the source, the canonical-form display is
+    \texttt{eq:II\_Aiplusk1} at lines~216--225 and
+    \texttt{eq:II\_CF1} at lines~237--246 of
+    \cite{Cirac2017MPDO_AnnPhys}. The basis-of-normal-tensors refinement is
+    \texttt{prop:char-BNT} at lines~271--279, and the two-layer display
+    \texttt{eq:II\_ABasicTensors}--\texttt{decBSV} is at lines~287--301.
+    The review exposition records the same normal-tensor and canonical-form
+    definitions at lines~1827--1837, the basis-of-normal-tensors definition and
+    characterization at lines~1846--1859, and the two-layer decomposition at
+    lines~1864--1884 of~\cite{Cirac2021Matrix}.
 \end{theorem}
 
 Theorem~\ref{thm:pgvwc07_ti_canonical_form} is not yet formalized. This
