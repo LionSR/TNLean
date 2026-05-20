@@ -782,11 +782,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     tensor. The three resulting tensors form an injective chain, so the
     one-dimensional injective comparison assigns an invertible matrix to the
     edge $e$. Repeating this for every edge and absorbing these matrices into
-    the second tensor family gives the post-absorption insertion equality
-    $\textup{eq:inj\_equal\_edge}$ of
-    \cite[Section~3]{Molnar2018NormalPEPS}. Applying the local extraction at
-    each vertex then gives one edge gauge family whose endpoint actions
-    transform the first tensor family into the second:
+    the second tensor family gives the post-absorption insertion equality of
+    \cite[Section~3]{Molnar2018NormalPEPS}: for every edge and every matrix,
+    inserting that matrix on the edge in the first PEPS gives the same state as
+    inserting it on the same edge in the modified second PEPS. Applying the
+    local extraction at each vertex then gives one edge gauge family whose
+    endpoint actions transform the first tensor family into the second:
     \begin{center}
         \TNPEPSGlobalConsistency
     \end{center}
@@ -1109,11 +1110,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     If two gauge families relate the same vertex-injective PEPS tensor to the
     same target tensor, then their edge gauges differ by nonzero scalars
     $c_e$ whose oriented product at every vertex is $1$. Thus the correct
-    graph quotient is by balanced edge scalars. The phrase ``unique up to a
-    multiplicative constant'' in the source is correct for the one-dimensional
-    chain situation, but for a general graph it must be read with this
-    vertex-balance condition; the correction is recorded in
-    \texttt{docs/paper-gaps/peps\_gauge\_edge\_scalars.tex}.
+    graph quotient is by balanced edge scalars.
+    % Correction documented in docs/paper-gaps/peps_gauge_edge_scalars.tex.
 \end{theorem}
 
 \begin{remark}

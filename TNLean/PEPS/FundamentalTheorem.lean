@@ -698,7 +698,7 @@ If `X` and `Y` are two gauge families relating the same injective PEPS tensor
 `A` to the same tensor `B`, then their oriented endpoint actions differ by
 edge scalars `c_e` whose product around every vertex is `1`.
 
-**Local correction (balanced edge scalars):** The source states that the gauges
+**Local fix (balanced edge scalars):** The source states that the gauges
 are unique up to a multiplicative constant. On a general graph the connected
 triangle with one-dimensional bonds refutes uniqueness modulo one global scalar.
 The graph-correct quotient is uniqueness modulo vertex-balanced edge scalars;
