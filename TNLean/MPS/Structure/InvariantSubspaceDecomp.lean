@@ -19,14 +19,15 @@ equivalent to a block-diagonal tensor with two smaller bond dimensions.
 This is the "invariant subspace ⇒ direct sum decomposition" step used in canonical-form existence
 arguments before blocking/normalization.
 
-## External input — Perez-Garcia et al. canonical-form recursion
+## External input — Pérez-García et al. canonical-form recursion
 
 This file formalizes the direct-sum decomposition step once an invariant
-projection has already been obtained.  For PGVWC07 this is deliberately the
-second part of the argument, not a replacement for the positive fixed-point
-argument that produces the projection:
+projection has already been obtained.  In Pérez-García, Verstraete, Wolf, and
+Cirac this is deliberately the second part of the singular fixed-point
+argument, not a replacement for the positive fixed-point argument that produces
+the projection:
 
-> **Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+> **Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
 > proof lines 771–815.**
 > The source first derives the invariant support projection from a singular
 > positive fixed point in lines 771–783.  The results below take such an
@@ -36,7 +37,7 @@ argument that produces the projection:
 > (`exists_twoBlock_decomp_of_lowerZero_strict`) guarantees termination of the
 > canonical-form recursion.
 
-> **Cirac et al., arXiv:1606.00608, Section 2.3.**
+> **Cirac et al., arXiv:1606.00608, lines 201–217.**
 > The same step in the "canonical forms" reduction: invariant projection ⇒
 > block upper-triangular ⇒ drop strict off-diagonal blocks ⇒ explicit 2-block
 > direct sum.  This is the Wolf/Cirac/Verstraete canonical-form reduction.
@@ -429,9 +430,10 @@ both returned block dimensions are *strictly smaller* than `D`. This is the key
 ingredient for proving termination of the canonical-form recursion.
 
 References:
-* Perez-Garcia et al., quant-ph/0608197, Theorem `Th:TIcanonical`,
+* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
   proof lines 771–815: invariant support and finite-ring trace split.
-* Cirac et al., arXiv:1606.00608, Section 2.3: the same step in the "canonical forms" reduction.
+* Cirac et al., arXiv:1606.00608, lines 201–217: the corresponding
+  invariant-subspace step in the "canonical forms" reduction.
 -/
 
 section StrictDimDecrease
