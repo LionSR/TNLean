@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Finite-Length Block Separation in Cirac--Perez-Garcia--Schuch--Verstraete 2017 Proposition IV.3}
+\title{Finite-Length Block Separation in the CPGSV17 Proposition \texttt{propblockinj}}
 \author{}
 \date{2026-04-30}
 
@@ -16,9 +16,9 @@
 
 \section{The assertion}
 
-The finite-length block-separation step in Proposition IV.3 of Cirac,
-P\'erez-Garc\'ia, Schuch, and Verstraete is the point at issue
-\cite{Cirac2016MPDO_arXiv,Cirac2017MPDO_AnnPhys}.\footnote{For traceability,
+The finite-length block-separation step in the proposition labelled
+\texttt{propblockinj} in Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete is the
+point at issue \cite[lines~340--345]{Cirac2016MPDO_arXiv}.\footnote{For traceability,
     this note corresponds to \href{https://github.com/LionSR/TNLean/issues/1043}{issue \#1043}.
     Related formal work is recorded in
     \href{https://github.com/LionSR/TNLean/issues/587}{issue \#587} and
@@ -45,11 +45,12 @@ cross-block step: if $L$ is a blocking length after which every normal block is
 injective, then after $3(L+1)(D-1)$ blockings the tensor is block
 injective. The proposition records the resulting bound in the following form: after
 blocking at most $3D^5$ spins, every tensor in canonical form is in
-block-injective canonical form. This is the assertion labelled Cirac--Perez-Garcia--Schuch--Verstraete 2017,
-Proposition~IV.3.
-The local source is
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines 271--345. The cited
-reference is the paper's item \texttt{David2006}, namely
+block-injective canonical form. This is the assertion labelled
+\texttt{propblockinj} in the local source
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex}, lines~340--345. The definition of
+block-injective canonical form immediately preceding it is
+\texttt{defnbi}, lines~318--322. The cited reference is the paper's item
+\texttt{David2006}, namely
 P\'erez-Garc\'ia--Verstraete--Wolf--Cirac
 \cite{PerezGarcia2007MPSReps}.
 
@@ -78,7 +79,7 @@ entrywise linear-independence criterion: the scalar functions
 $w\mapsto (A_j^w)_{\alpha\beta}$, indexed by the block and by a matrix entry in
 that block, are linearly independent at one common length. This implies the
 product-algebra span, hence the trace-separation property. The third is a
-selector-word formulation of Proposition IV.3: after a common blocking length
+selector-word formulation of \texttt{propblockinj}: after a common blocking length
 each block is injective, and after a further finite length there are word
 polynomials which are the identity on one chosen block and vanish on all the
 others. Concatenating an injective prefix with such a selector suffix gives the
@@ -97,7 +98,7 @@ horizontal canonical-form trace-separation conclusion.\footnote{The criteria are
     \texttt{HorizontalCFData} constructors such as
     \texttt{horizontalCFData\_of\_propBlockInjective}. The blueprint records the same
     state in \path{blueprint/src/chapter/ch02b_mpdo.tex}, lines 708--787.}
-Thus Proposition IV.3 has not been asserted without proof. The formal statements
+Thus \texttt{propblockinj} has not been asserted without proof. The formal statements
 prove that several finite-length witnesses are sufficient, while the derivation
 of such a witness from the full canonical-form and basis-of-normal-tensors
 hypotheses remains open.
@@ -120,9 +121,9 @@ This example is formalized in
 \path{docs/counterexamples.md}, lines 29--35. It shows that the additional
 finite-length witness in the formal hypotheses is genuinely stronger than the
 other horizontal canonical-form assumptions. It does not refute
-Cirac--Perez-Garcia--Schuch--Verstraete 2017 Proposition IV.3. The duplicate scalar blocks are related by similarity
-and phase, and therefore do not form a minimal basis of normal tensors in the
-sense of the source characterization.
+the CPGSV17 proposition \texttt{propblockinj}. The duplicate scalar blocks are
+related by similarity and phase, and therefore do not form a minimal basis of
+normal tensors in the sense of the source characterization.
 
 \section{Conclusion}
 
