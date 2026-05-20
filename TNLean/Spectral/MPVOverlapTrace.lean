@@ -29,7 +29,7 @@ as the trace of the $N$-th power of the mixed transfer operator.
 The trace-expansion helpers (`linearMap_trace_eq_sum_apply_single`,
 `entry_mul_single_mul`) are provided by `TNLean.Spectral.TraceExpansion`.
 
-## Rectangular (heterogeneous bond dimensions)
+## Rectangular overlaps for different bond dimensions
 
 `trace_mixedTransferMap₂_pow_eq_mpvOverlap` is the rectangular analogue, where
 `A : MPSTensor d D₁` and `B : MPSTensor d D₂` may have different bond dimensions and the
@@ -99,7 +99,7 @@ theorem trace_mixedTransferMap_pow_eq_mpvOverlap {d D : ℕ} [NeZero D]
 
 end Main
 
-/-! ## Rectangular (heterogeneous bond dimensions) -/
+/-! ## Rectangular overlaps for different bond dimensions -/
 
 section MainRect
 

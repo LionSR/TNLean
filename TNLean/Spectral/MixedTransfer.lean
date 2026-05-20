@@ -24,7 +24,7 @@ multi-block fundamental theorem.
 * `mixedTransferMap_pow_apply`: `F_{AB}^N(X) = ∑_σ w_A(σ) X w_B(σ)†`
 * `trace_mixedTransferMap_pow_identity`: trace formula for MPV cross-correlations
 
-## Rectangular (heterogeneous bond dimensions)
+## Rectangular mixed transfer maps for different bond dimensions
 
 `mixedTransferMap₂` generalizes `mixedTransferMap` to tensors `A : MPSTensor d D₁` and
 `B : MPSTensor d D₂` with possibly different bond dimensions, acting on
@@ -158,7 +158,7 @@ theorem mpv_inner_product_via_trace (A B : MPSTensor d D) (N : ℕ)
 
 end IteratedTransfer
 
-/-! ## Rectangular (heterogeneous bond dimensions) -/
+/-! ## Rectangular mixed transfer maps for different bond dimensions -/
 
 variable {D₁ D₂ : ℕ}
 
@@ -171,7 +171,7 @@ It acts on `D₁ × D₂` matrices by
 `X ↦ ∑ i, A i * X * (B i)ᴴ`.
 
 We implement it using `mulLeftLinearMap` / `mulRightLinearMap` from
-`Mathlib.Data.Matrix.Bilinear` (these support heterogeneous matrix multiplication). -/
+`Mathlib.Data.Matrix.Bilinear`, which support rectangular matrix multiplication. -/
 noncomputable def mixedTransferMap₂ {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
     Matrix (Fin D₁) (Fin D₂) ℂ →ₗ[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ :=

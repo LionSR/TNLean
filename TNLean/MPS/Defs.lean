@@ -93,8 +93,9 @@ def SameMPV (A B : MPSTensor d D) : Prop :=
 
 /-- MPV equality for possibly different bond dimensions.
 
-This is the heterogeneous version of `SameMPV`, used later when comparing
-block decompositions whose summands need not live in the same matrix algebra. -/
+This is the version of `SameMPV` for different bond dimensions, used later
+when comparing block decompositions whose summands need not live in the same
+matrix algebra. -/
 def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = mpv B σ
 

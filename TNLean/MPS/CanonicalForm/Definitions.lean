@@ -184,8 +184,8 @@ from arXiv:1606.00608 (`Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`):
 * (iii) there is some `N₀` such that for all `N > N₀`, the MPV states
       `mpvState (blocks j) N` are linearly independent.
 
-Here `blocks` is a heterogeneous family `(j : Fin g) → Σ Dj, MPSTensor d Dj` to allow
-different per-block bond dimensions.
+Here `blocks` is a family `(j : Fin g) → Σ Dj, MPSTensor d Dj`, allowing
+different bond dimensions for different blocks.
 -/
 structure IsCPSVBasisOfNormalTensors {g : ℕ} (A : MPSTensor d D)
     (blocks : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj) : Prop where
