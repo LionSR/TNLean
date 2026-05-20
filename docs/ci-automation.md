@@ -523,9 +523,12 @@ that case it also writes one of these cooldown variables:
 | `CLAUDE_REVIEW_DISABLE_REASON` | Source run and provider for the review pause |
 
 The scheduled guard restores the corresponding switch to `true` after the
-timestamp has passed. To restore earlier, set the switch back to `true` by hand.
-Repository variable writes use `BOT_PAT` when that secret is available, falling
-back to `GITHUB_TOKEN`.
+timestamp has passed, provided the disable reason still records a
+provider-limit guard pause and the switch has not been changed after the
+cooldown metadata was written. This prevents an old cooldown timestamp from
+undoing a later manual disable. To restore earlier, set the switch back to
+`true` by hand. Repository variable writes use `BOT_PAT` when that secret is
+available, falling back to `GITHUB_TOKEN`.
 
 ### Fork Guard
 

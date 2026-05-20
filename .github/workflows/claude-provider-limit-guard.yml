@@ -181,11 +181,18 @@ jobs:
           now="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
           reenabled_any=false
 
-          get_variable() {
+          get_variable_json() {
             local variable_name="$1"
-            gh variable list \
-              --json name,value \
-              --jq ".[] | select(.name == \"$variable_name\") | .value" || true
+            gh api "repos/$GH_REPO/actions/variables/$variable_name" 2>/dev/null || true
+          }
+
+          json_field() {
+            local json="$1"
+            local field="$2"
+            if [ -z "$json" ]; then
+              return 0
+            fi
+            jq -r "$field // \"\"" <<<"$json"
           }
 
           check_switch() {
@@ -193,12 +200,38 @@ jobs:
             local until_name="$2"
             local reason_name="$3"
 
+            local switch_json
+            local until_json
+            local reason_json
             local switch_value
+            local switch_updated_at
             local disabled_until
-            switch_value="$(get_variable "$switch_name")"
-            disabled_until="$(get_variable "$until_name")"
+            local until_updated_at
+            local reason_value
+
+            switch_json="$(get_variable_json "$switch_name")"
+            until_json="$(get_variable_json "$until_name")"
+            reason_json="$(get_variable_json "$reason_name")"
+            switch_value="$(json_field "$switch_json" '.value')"
+            switch_updated_at="$(json_field "$switch_json" '.updated_at')"
+            disabled_until="$(json_field "$until_json" '.value')"
+            until_updated_at="$(json_field "$until_json" '.updated_at')"
+            reason_value="$(json_field "$reason_json" '.value')"
 
             if [ "$switch_value" != "false" ] || [ -z "$disabled_until" ]; then
+              return 0
+            fi
+
+            if [[ "$reason_value" != Provider-limit\ failure\ detected* ]]; then
+              echo "$switch_name remains disabled; no guard-owned reason was found." \
+                >> "$GITHUB_STEP_SUMMARY"
+              return 0
+            fi
+
+            if [ -n "$switch_updated_at" ] && [ -n "$until_updated_at" ] &&
+               [[ "$switch_updated_at" > "$until_updated_at" ]]; then
+              echo "$switch_name remains disabled; it was changed after the cooldown metadata." \
+                >> "$GITHUB_STEP_SUMMARY"
               return 0
             fi
 
