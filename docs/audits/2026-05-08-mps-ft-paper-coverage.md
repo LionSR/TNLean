@@ -274,6 +274,8 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 | High | CPSV16 | CPSV16 §II.A Prop. (l.249, canonical form after blocking) | Full arbitrary-input after-blocking canonical-form reduction not yet formalized; current results cover constituent reductions only | #1685 |
 | High | CPSV16 | CPSV16 §II.A Prop. (l.253, canonical-form characterization) | Source characterization by absence of periodic vectors and invariant projections not yet packaged as a Lean theorem | #1685 |
 | High | CPSV16 | CPSV16 §II.A Prop. (l.342, block-injective after blocking) | The block-injective-after-blocking proposition is not formalized; current finite-length single-block theorem is a different statement | #1685 |
+| High | CPSV16 | Theorem II.1 (l.349, `thm1`, Fundamental Theorem of MPV, proportional case) | No faithful Lean theorem; former restricted coefficient-array declarations were removed because their hypotheses are not in the source statement | #1685 |
+| High | CPSV16 | Corollary II.2 (l.354, `II_cor2`, equal-MPV case) | No current Lean theorem starts from the full source hypotheses of the equal-MPV corollary; only constituent single-block and conditional sector-matching results exist | #1685 |
 | High | CPSV16 | Theorem 3.10 (RFP⇔NNCPH) | `rfp_implies_nncph` / `nncph_implies_rfp` are axiom-backed | #1484, #1485 |
 | High | PGVWC07 | Theorem `Th:TIcanonical` (TI canonical form) | Full arbitrary-input canonical-form theorem not yet formalized; current results cover constituent reductions only | #1685 |
 | High | PGVWC07 | Theorem `thm-uniq` (Uniqueness of TI CF) | Multi-block TI case with general hypotheses not formalized | #1529 |

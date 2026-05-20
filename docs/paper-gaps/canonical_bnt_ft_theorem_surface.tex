@@ -209,10 +209,6 @@ identified with one another.
     equal-MPV corollary is obtained after the canonical-form supplier has put
     the input tensors on this surface with the required unit-modulus-copy
     normalization.
-  \item The former strict canonical-form BNT equal-MPV declaration was only a
-    strict representative form and is no longer part of the active Lean tree.
-    The former proportional wrapper has also been removed because its one-shot
-    coefficient hypotheses did not imply the full BNT matching conclusion.
   \item The sector-decomposition theorem
     \path{MPSTensor.fundamentalTheorem_equalMPV_sectorDecomposition_hetero_of_sectorMatching}
     is now an auxiliary rectangular comparison statement: from a supplied
@@ -221,6 +217,11 @@ identified with one another.
     up to the phases in the matching. It should not be presented as the
     paper-level equal-MPV corollary.
 \end{enumerate}
+
+The former strict canonical-form BNT equal-MPV declaration was only a strict
+representative form and is no longer part of the active Lean tree. The former
+proportional wrapper has also been removed because its one-shot coefficient
+hypotheses did not imply the full BNT matching conclusion.
 
 Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
 Rather, the paper suppresses the formal separation between deriving the BNT
