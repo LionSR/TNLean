@@ -3900,10 +3900,15 @@
     <span class="theorem_thmtitle">Identity insertion recovers the edge-blocked coefficient</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_identity">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001175"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -3937,10 +3942,41 @@
 
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeInsertedCoeff_identity" class="lean_decl">TNLean.PEPS.edgeInsertedCoeff_identity</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>  If the inserted matrix on the distinguished edge is the identity, then the edge insertion coefficient is the ordinary edge-blocked coefficient. After the diagonal summand comparison, the remaining proof is the finite reindexing of the inserted-boundary sum along the diagonal and the off-diagonal vanishing of the identity matrix. </p>
+  <p>   If the inserted matrix on the distinguished edge is the identity, then the edge insertion coefficient is the ordinary edge-blocked coefficient. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001175">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Split the inserted-boundary sum into the diagonal part, where the two inserted bond indices agree, and the off-diagonal part. The off-diagonal summands vanish for the identity matrix, while the diagonal summands reindex through the equivalence with ordinary edge-boundary data. </p>
 
   </div>
 </div>
@@ -4097,7 +4133,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeBlockedCoeff_eq_stateCoeff">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001175"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001176"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4158,7 +4194,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001175">
+<div class="proof_wrapper" id="a0000001176">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4170,12 +4206,93 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_sameState_edgeBlockedCoeff_eq">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">17.49</span>
+    <span class="theorem_thmtitle">Identity insertion equals the PEPS coefficient</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_identity">Theorem 17.45</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedCoeff_eq_stateCoeff">Theorem 17.48</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeInsertedCoeff_identity_eq_stateCoeff" class="lean_decl">TNLean.PEPS.edgeInsertedCoeff_identity_eq_stateCoeff</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If the inserted matrix on the distinguished edge is the identity, then the edge insertion coefficient is the original PEPS state coefficient. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001177">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Combine the identity-insertion reindexing with the edge-blocking reindexing of the ordinary PEPS coefficient. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_sameState_edgeBlockedCoeff_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.50</span>
     <span class="theorem_thmtitle">Same state gives the same edge-blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -4186,7 +4303,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_sameState_edgeBlockedCoeff_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001176"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001178"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4239,7 +4356,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001176">
+<div class="proof_wrapper" id="a0000001178">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4251,12 +4368,93 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_sameState_edgeInsertedCoeff_identity_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.51</span>
+    <span class="theorem_thmtitle">Same state gives the same identity insertions</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:peps_sameState_edgeInsertedCoeff_identity_eq">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001179"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_same_state">Definition 17.6</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff">Theorem 17.49</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq" class="lean_decl">TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two PEPS tensors have the same state, then their edge-centered identity insertions agree at every edge and every physical configuration. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001179">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Rewrite both identity insertions as the corresponding PEPS state coefficients and apply the same-state hypothesis. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:peps_edgeBlockedThreeSiteInjective">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.50</span>
+    <span class="theorem_thmlabel">17.52</span>
     <span class="theorem_thmtitle">Edge blocking preserves injectivity</span>
     <div class="thm_header_extras">
 
@@ -4309,7 +4507,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.51</span>
+    <span class="theorem_thmlabel">17.53</span>
     <span class="theorem_thmtitle">Virtual insertion realized physically on either endpoint</span>
     <div class="thm_header_extras">
 
@@ -4362,7 +4560,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.52</span>
+    <span class="theorem_thmlabel">17.54</span>
     <span class="theorem_thmtitle">Equal neighboring physical actions recover a virtual insertion</span>
     <div class="thm_header_extras">
 
@@ -4407,7 +4605,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.53</span>
+    <span class="theorem_thmlabel">17.55</span>
     <span class="theorem_thmtitle">Edge-blocked insertion algebra isomorphism</span>
     <div class="thm_header_extras">
 
@@ -4429,13 +4627,13 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedThreeSiteInjective">Theorem 17.50</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedThreeSiteInjective">Theorem 17.52</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">Theorem 17.51</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">Theorem 17.53</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_physicalToVirtualInsertion">Theorem 17.52</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_physicalToVirtualInsertion">Theorem 17.54</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_sameState_edgeBlockedCoeff_eq">Theorem 17.49</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_sameState_edgeBlockedCoeff_eq">Theorem 17.50</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_edgeInsertedCoeff">Definition 17.41</a></li>
           
@@ -4459,7 +4657,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.54</span>
+    <span class="theorem_thmlabel">17.56</span>
     <span class="theorem_thmtitle">Edge gauge from the insertion algebra isomorphism</span>
     <div class="thm_header_extras">
 
@@ -4481,7 +4679,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.53</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.55</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -4510,7 +4708,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.55</span>
+    <span class="definition_thmlabel">17.57</span>
     <span class="definition_thmtitle">Factorized local gauge datum</span>
     <div class="thm_header_extras">
 
@@ -4582,7 +4780,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.56</span>
+    <span class="definition_thmlabel">17.58</span>
     <span class="definition_thmtitle">Blocked-middle local gauge formula</span>
     <div class="thm_header_extras">
 
@@ -4626,7 +4824,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.57</span>
+    <span class="theorem_thmlabel">17.59</span>
     <span class="theorem_thmtitle">Blocked-middle formula implies factorized local gauge</span>
     <div class="thm_header_extras">
 
@@ -4637,7 +4835,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001180"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4653,9 +4851,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_blockedMiddleGaugeFormula">Definition 17.56</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_blockedMiddleGaugeFormula">Definition 17.58</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_hasFactorizedLocalGauge">Definition 17.55</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_hasFactorizedLocalGauge">Definition 17.57</a></li>
           
         </ul>
     
@@ -4690,7 +4888,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001177">
+<div class="proof_wrapper" id="a0000001180">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4707,7 +4905,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.58</span>
+    <span class="theorem_thmlabel">17.60</span>
     <span class="theorem_thmtitle">Absorbing edge gauges into the second PEPS</span>
     <div class="thm_header_extras">
 
@@ -4729,7 +4927,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism">Theorem 17.54</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism">Theorem 17.56</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -4754,7 +4952,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.59</span>
+    <span class="theorem_thmlabel">17.61</span>
     <span class="theorem_thmtitle">Post-absorption edge insertion equality</span>
     <div class="thm_header_extras">
 
@@ -4776,7 +4974,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.58</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.60</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_edgeInsertedCoeff">Definition 17.41</a></li>
           
@@ -4807,7 +5005,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.60</span>
+    <span class="theorem_thmlabel">17.62</span>
     <span class="theorem_thmtitle">Local gauge extraction</span>
     <div class="thm_header_extras">
 
@@ -4818,7 +5016,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:localGauge_exists">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001178"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001181"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4834,7 +5032,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_hasFactorizedLocalGauge">Definition 17.55</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_hasFactorizedLocalGauge">Definition 17.57</a></li>
           
         </ul>
     
@@ -4865,12 +5063,12 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Under the factorized local gauge hypothesis, the local gauge formula follows. What remains open is to upgrade equality of the edge-blocked coefficients to the blocked-middle formula using the corresponding three-site injective-chain argument. The physical-realization and physical-to-virtual steps in that argument are recorded separately as Theorems&#160;<a href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">17.51</a> and <a href="sec-peps_ft.html#thm:peps_physicalToVirtualInsertion">17.52</a>. After Theorem&#160;<a href="sec-peps_ft.html#thm:peps_postAbsorptionEdgeInsertionEquality">17.59</a> supplies the factorized local gauge hypothesis, injectivity on the star neighborhood provides a left inverse that isolates the local edge gauges: </p>
+  <p>   Under the factorized local gauge hypothesis, the local gauge formula follows. What remains open is to upgrade equality of the edge-blocked coefficients to the blocked-middle formula using the corresponding three-site injective-chain argument. The physical-realization and physical-to-virtual steps in that argument are recorded separately as Theorems&#160;<a href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">17.53</a> and <a href="sec-peps_ft.html#thm:peps_physicalToVirtualInsertion">17.54</a>. After Theorem&#160;<a href="sec-peps_ft.html#thm:peps_postAbsorptionEdgeInsertionEquality">17.61</a> supplies the factorized local gauge hypothesis, injectivity on the star neighborhood provides a left inverse that isolates the local edge gauges: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-9f856bb95d94a6a1.svg" alt="\TNPEPSLocalGaugeExtraction"></div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001178">
+<div class="proof_wrapper" id="a0000001181">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4887,7 +5085,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.61</span>
+    <span class="theorem_thmlabel">17.63</span>
     <span class="theorem_thmtitle">Gauge consistency</span>
     <div class="thm_header_extras">
 
@@ -4909,7 +5107,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:localGauge_exists">Theorem 17.60</a></li>
+          <li><a href="sec-peps_ft.html#thm:localGauge_exists">Theorem 17.62</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -4947,18 +5145,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001181">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001184">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.62</span>
+    <span class="remark_thmlabel">17.64</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001181">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001184">#</a>
     
     
     
@@ -4980,7 +5178,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.63</span>
+    <span class="theorem_thmlabel">17.65</span>
     <span class="theorem_thmtitle">Scalar reduction of the residual two-tensor gauges</span>
     <div class="thm_header_extras">
 
@@ -5017,7 +5215,7 @@
   <p>  In the proof of the generalized two-injective-tensor comparison, applying the inverse of the second injective tensor leaves three possible virtual operators on the exposed legs of the first tensor: </p>
 <div class="centered"> </div>
 <p> Inverting the first injective tensor then shows that the corresponding tensor decompositions </p>
-<div class="displaymath" id="a0000001182">
+<div class="displaymath" id="a0000001185">
   \[  \sum _i I\otimes Z_i^{(1)}\otimes Z_i^{(2)} = \sum _i U_i^{(1)}\otimes U_i^{(2)}\otimes I = \sum _i W_i^{(1)}\otimes I\otimes W_i^{(2)}  \]
 </div>
 <p> force the residual virtual operators to be scalar multiples of the identity. This is the scalar step in the proof of Lemma&#160;\(\mathrm{inj\_ equal\_ tensors\_ 2}\). </p>
@@ -5029,7 +5227,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.64</span>
+    <span class="theorem_thmlabel">17.66</span>
     <span class="theorem_thmtitle">Generalized two-injective-tensor comparison</span>
     <div class="thm_header_extras">
 
@@ -5053,7 +5251,7 @@
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_twoInjectiveGaugeScalarReduction">Theorem 17.63</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_twoInjectiveGaugeScalarReduction">Theorem 17.65</a></li>
           
         </ul>
     
@@ -5082,7 +5280,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.65</span>
+    <span class="theorem_thmlabel">17.67</span>
     <span class="theorem_thmtitle">One-vertex versus complement comparison</span>
     <div class="thm_header_extras">
 
@@ -5106,9 +5304,9 @@
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_postAbsorptionEdgeInsertionEquality">Theorem 17.59</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_postAbsorptionEdgeInsertionEquality">Theorem 17.61</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_twoInjectiveTensorInsertionComparison">Theorem 17.64</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_twoInjectiveTensorInsertionComparison">Theorem 17.66</a></li>
           
         </ul>
     
@@ -5137,7 +5335,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.66</span>
+    <span class="theorem_thmlabel">17.68</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS, conditional on bond-dimension equality</span>
     <div class="thm_header_extras">
 
@@ -5159,9 +5357,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:gaugeConsistency">Theorem 17.61</a></li>
+          <li><a href="sec-peps_ft.html#thm:gaugeConsistency">Theorem 17.63</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.65</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.67</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 17.10</a></li>
           
@@ -5205,7 +5403,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.67</span>
+    <span class="theorem_thmlabel">17.69</span>
     <span class="theorem_thmtitle">Fundamental Theorem for injective PEPS</span>
     <div class="thm_header_extras">
 
@@ -5227,7 +5425,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 17.66</a></li>
+          <li><a href="sec-peps_ft.html#thm:fundamentalTheorem_PEPS_of_bondDim">Theorem 17.68</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 17.10</a></li>
           
@@ -5278,7 +5476,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.68</span>
+    <span class="lemma_thmlabel">17.70</span>
     <span class="lemma_thmtitle">Union of injective regions</span>
     <div class="thm_header_extras">
 
@@ -5328,7 +5526,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.69</span>
+    <span class="definition_thmlabel">17.71</span>
     <span class="definition_thmtitle">Normal square-lattice blocking regions</span>
     <div class="thm_header_extras">
 
@@ -5342,7 +5540,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p> In the translationally invariant square-lattice proof, the source paper assumes that every \(2\times 3\) and \(3\times 2\) region is injective. Lemma&#160;<a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">17.68</a> then implies that the regions \(R\), \(S\), and \(T\) below are injective: </p>
+  <p> In the translationally invariant square-lattice proof, the source paper assumes that every \(2\times 3\) and \(3\times 2\) region is injective. Lemma&#160;<a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">17.70</a> then implies that the regions \(R\), \(S\), and \(T\) below are injective: </p>
 <div class="centered"><p> <img class="tn-svg" src="tn_svg/tn-047199feb4156938.svg" alt="\TNPEPSNormalRegionsRS"> </p>
 
 <p><img class="tn-svg" src="tn_svg/tn-907474bf2db0358c.svg" alt="\TNPEPSNormalRegionT"> </p>
@@ -5355,7 +5553,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.70</span>
+    <span class="theorem_thmlabel">17.72</span>
     <span class="theorem_thmtitle">Normal edge blocking to a three-site injective chain</span>
     <div class="thm_header_extras">
 
@@ -5377,11 +5575,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">Lemma 17.68</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">Lemma 17.70</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.69</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.71</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.53</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.55</a></li>
           
         </ul>
     
@@ -5409,7 +5607,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.71</span>
+    <span class="theorem_thmlabel">17.73</span>
     <span class="theorem_thmtitle">Translationally invariant normal gauge absorption</span>
     <div class="thm_header_extras">
 
@@ -5431,9 +5629,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.70</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.72</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.58</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.60</a></li>
           
         </ul>
     
@@ -5461,7 +5659,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.72</span>
+    <span class="theorem_thmlabel">17.74</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal square-lattice PEPS</span>
     <div class="thm_header_extras">
 
@@ -5483,9 +5681,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.71</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.73</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.65</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.67</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 17.10</a></li>
           
@@ -5514,7 +5712,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.73</span>
+    <span class="theorem_thmlabel">17.75</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal PEPS</span>
     <div class="thm_header_extras">
 
@@ -5536,9 +5734,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.70</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.72</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.65</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.67</a></li>
           
           <li><a href="sec-peps_ft.html#def:GaugeEquivPEPS">Definition 17.10</a></li>
           
@@ -5567,7 +5765,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.74</span>
+    <span class="definition_thmlabel">17.76</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -5631,7 +5829,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.75</span>
+    <span class="theorem_thmlabel">17.77</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -5642,7 +5840,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001188"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001191"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5658,11 +5856,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.74</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.76</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.74</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.76</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -5699,7 +5897,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001188">
+<div class="proof_wrapper" id="a0000001191">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5716,7 +5914,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.76</span>
+    <span class="theorem_thmlabel">17.78</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -5738,7 +5936,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.74</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.76</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
@@ -5775,18 +5973,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001189">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001192">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.77</span>
+    <span class="remark_thmlabel">17.79</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001189">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001192">#</a>
     
     
     
