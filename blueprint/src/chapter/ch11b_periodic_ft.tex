@@ -444,11 +444,12 @@ unconditional result.
 \end{definition}
 
 % Audit 2026-05-20 (#328): the remaining overlap proof obligations are now
-% tracked by #448, #450, and #1807.  The no-sector-match theorem below is
-% already statement-level leanok; the surrounding dichotomy is still not ready.
+% tracked by #448, #450, and #1807.  The self-overlap and no-sector-match
+% theorems below are already statement-level leanok; the surrounding dichotomy
+% is still not ready.
 \begin{theorem}[Self-overlap along period multiples]\label{thm:periodic_self_overlap_tendsto}
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
-    \notready
+    \leanok
     \uses{def:periodic_tensor}
     If $A$ is $m$-periodic, then the self-overlap along multiples of $m$
     converges to $m$ (the period, viewed as a scalar).

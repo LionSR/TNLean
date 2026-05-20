@@ -63,10 +63,14 @@ The entry `thm:periodic_overlap_zero_no_sector_match` is now statement-level
 counted among the remaining not-ready entries, although the surrounding
 periodic-overlap proof family is not complete.
 
+The same statement-level criterion applies to
+`thm:periodic_self_overlap_tendsto`: the corresponding Lean declaration
+exists with the stated type, so the blueprint marks the theorem `\leanok`.
+Its proof still depends on the BDCF converse obligation listed below.
+
 The following periodic entries remain `\notready` in Chapter 11b:
 
 - `thm:periodic_ft`.
-- `thm:periodic_self_overlap_tendsto`.
 - `lem:sector_match_propagation`.
 - `lem:sector_tensor_proportional_blocked_match`.
 - `thm:periodic_overlap_gauge_equiv_sector_match`.
