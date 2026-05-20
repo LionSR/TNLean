@@ -586,7 +586,7 @@ theorem isUnit_det_of_self_mul_conjTranspose_scalar [NeZero D]
         simp only [smul_smul, inv_mul_cancel₀ hc, one_smul]
   exact Matrix.isUnit_det_of_right_inverse hX_right_inv
 
-/-- Generic square endgame: once the gauged intertwiner is invertible, it upgrades to
+/-- Generic square gauge construction: once the gauged intertwiner is invertible, it upgrades to
 gauge-phase equivalence for the original tensors. -/
 theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
     (A B : MPSTensor d D)
@@ -666,7 +666,7 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
     simp only [A', gaugeTensor, Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
 
-/-- Generic rectangular endgame: the two intertwining relations force equality of dimensions
+/-- Generic rectangular dimension comparison: the two intertwining relations force equality of dimensions
 once both gauged tensor families are injective. -/
 theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

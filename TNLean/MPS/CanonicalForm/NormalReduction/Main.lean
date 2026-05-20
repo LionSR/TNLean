@@ -18,7 +18,7 @@ weight moduli and produces blocked normal canonical-form data.
 
 The supporting private declarations show that the present development already
 has a common blocking at length `p = 1` and that the block family can be
-reordered by decreasing weight norm before the final packaging step.
+reordered by decreasing weight norm before the final normal-form statement.
 -/
 
 namespace MPSTensor

@@ -12,7 +12,7 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 
 This file states algebraic lemmas for the finite-POVM / compression route to
 operator Jensen inequalities. The main target is the concave real-power case in
-Wolf Corollary 5.2, but the final Löwner-integral packaging is still absent.
+Wolf Corollary 5.2, but the final Löwner-integral argument is still absent.
 
 ## Main statements
 
@@ -39,7 +39,7 @@ These lemmas formalize the compression / finite-POVM half of the direct proof
 route for the concave real-power Jensen inequality. The diagonal-inverse formula
 (`povmDiagonal_inv`) and the finite-POVM resolvent inequality
 (`povm_resolvent_inv_le`) are now proved. The remaining unfinished step is the
-Löwner-integral packaging that carries the pointwise resolvent inequality
+Löwner-integral argument that carries the pointwise resolvent inequality
 through the integral representation of `rpow` to discharge
 `posMap_rpow_concave_jensen`.
 -/
