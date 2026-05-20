@@ -124,8 +124,8 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   `Δ k : Matrix (Fin (dim k)) (Fin (dim k)) ℂ` pairs to zero against every
   length-`L` block-diagonal product, then each `Δ k` vanishes individually.
 
-  This is the block-decomposed surrogate for the proposition labelled
-  `propblockinj` in Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
+  This is the block-decomposed surrogate for the block-injectivity proposition
+  in Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
   lines 340--345: after blocking at most `3 D^5` spins,
   where `D` denotes the bond dimension in the paper (in this block-decomposed
   setting one may take `D` to be a global bound such as `⨆ k, dim k`),
@@ -138,7 +138,7 @@ structure HorizontalCFData {r : ℕ} {dim : Fin r → ℕ}
   (`PropBlockInjective`), and from the more concrete linear-independence criterion
   `wordEntryFamily`. What is still open is to derive one of those finite-length
   witnesses from the remaining canonical-form/BNT data alone, i.e. the actual
-  proposition labelled `propblockinj` in Cirac--Perez-Garcia--Schuch--Verstraete,
+  block-injectivity proposition in Cirac--Perez-Garcia--Schuch--Verstraete,
   arXiv:1606.00608, lines 340--345. -/
   biCF : ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
     (∀ w : Fin L → Fin d,

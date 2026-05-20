@@ -16,8 +16,7 @@ exist.
 
 ## References
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
-  Proposition `propblockinj`, lines 340--345]
+* [Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345]
 
 ## Tags
 

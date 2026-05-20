@@ -27,13 +27,12 @@ sufficient conditions for deriving that field.
    independent, then those tuple-valued word evaluations already span the full
    product algebra. This reduces biCF to a concrete linear-algebra condition.
 
-3. An abstract **`propblockinj` selector-data criterion**: if each block is
+3. An abstract **block-injectivity selector-data criterion**: if each block is
    block-injective at some common length and a second finite family of words
    isolates the individual blocks (identity on one block, zero on the others),
    then concatenating the two families yields the preceding span condition.
-   This captures the finite-length block-separation content of the proposition
-   labelled `propblockinj` in Cirac--Perez-Garcia--Schuch--Verstraete,
-   arXiv:1606.00608, lines 340--345.
+   This captures the finite-length block-separation content of
+   Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345.
 
 4. A **pairwise-to-global selector reduction**: if every ordered pair of
    distinct blocks admits a finite word polynomial that is the identity on the
