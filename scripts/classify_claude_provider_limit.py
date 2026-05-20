@@ -96,6 +96,8 @@ def classify(paths: list[Path], fallback_provider: str, max_excerpts: int) -> di
                 continue
             if any(pattern.search(line) for pattern in LIMIT_PATTERNS):
                 provider = detect_provider(line, fallback_provider)
+                if provider == "unknown":
+                    continue
                 provider_votes[provider] = provider_votes.get(provider, 0) + 1
                 if len(matches) < max_excerpts:
                     matches.append({"file": str(path), "provider": provider, "line": line})

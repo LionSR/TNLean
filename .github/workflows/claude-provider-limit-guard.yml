@@ -18,7 +18,7 @@ permissions:
   actions: write
   contents: read
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   detect-provider-limit:
@@ -89,7 +89,7 @@ jobs:
         if: steps.classify.outputs.matched == 'true'
         id: disable
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
           GH_REPO: ${{ github.repository }}
           SWITCH_NAME: ${{ steps.switch.outputs.switch_name }}
           UNTIL_NAME: ${{ steps.switch.outputs.until_name }}
@@ -139,7 +139,7 @@ jobs:
       - name: Comment on pull request
         if: steps.classify.outputs.matched == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
           GH_REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number || '' }}
           SWITCH_NAME: ${{ steps.switch.outputs.switch_name }}
@@ -153,16 +153,16 @@ jobs:
             exit 0
           fi
           body="$RUNNER_TEMP/claude-provider-limit-comment.md"
-          cat > "$body" <<EOF
-          Claude automation was paused after a provider-limit failure.
-
-          - Provider: \`$PROVIDER\`
-          - Disabled switch: \`$SWITCH_NAME=false\`
-          - Re-enable time: \`$DISABLED_UNTIL\`
-          - Source run: $RUN_URL
-
-          The scheduled guard will set the switch back to \`true\` after the cooldown.
-          EOF
+          {
+            printf '%s\n' "Claude automation was paused after a provider-limit failure."
+            printf '\n'
+            printf '%s\n' "- Provider: \`$PROVIDER\`"
+            printf '%s\n' "- Disabled switch: \`$SWITCH_NAME=false\`"
+            printf '%s\n' "- Re-enable time: \`$DISABLED_UNTIL\`"
+            printf '%s\n' "- Source run: $RUN_URL"
+            printf '\n'
+            printf '%s\n' "The scheduled guard will set the switch back to \`true\` after the cooldown."
+          } > "$body"
           gh pr comment "$PR_NUMBER" --body-file "$body"
 
   reenable-after-cooldown:
@@ -171,7 +171,7 @@ jobs:
     steps:
       - name: Re-enable expired Claude switches
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_PAT || github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail

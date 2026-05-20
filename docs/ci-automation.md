@@ -457,7 +457,9 @@ switch, source run, and re-enable time.
 
 The log classifier is `scripts/classify_claude_provider_limit.py`. It is meant
 to be conservative: it recognizes API-limit phrases, not arbitrary appearances
-of the words "quota" or "limit" in ordinary output.
+of the words "quota" or "limit" in ordinary output. It also requires the
+matching line to identify Anthropic, Claude, or DeepSeek, so unrelated GitHub
+API throttling does not pause Claude automation.
 
 ---
 
@@ -521,6 +523,8 @@ that case it also writes one of these cooldown variables:
 
 The scheduled guard restores the corresponding switch to `true` after the
 timestamp has passed. To restore earlier, set the switch back to `true` by hand.
+Repository variable writes use `BOT_PAT` when that secret is available, falling
+back to `GITHUB_TOKEN`.
 
 ### Fork Guard
 
