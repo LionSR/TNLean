@@ -36,7 +36,7 @@ the namespace abbreviation for the quantum-Markov-chain decomposition.
 
 ## References
 
-* Hayashi, J. Phys. A: Math. Gen. 37 (2004) L205--L208
+* Hayashi, *Quantum Information: An Introduction*, Springer 2006, Theorem 5.24
 * Ruskai, "Inequalities for quantum entropy: A review with conditions for
   equality", JMP 43, 4358 (2002)
 * Hayden, Jozsa, Petz, Winter, Commun. Math. Phys. 246, 359--374 (2004)
