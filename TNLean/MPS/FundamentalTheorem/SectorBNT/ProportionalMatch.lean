@@ -20,7 +20,7 @@ $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), 1182–1188 (proof).
+  (restatement), 1182–1186 (proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 
@@ -37,7 +37,7 @@ bond dimension, gauge-phase equivalent in the cast-compatible shape, and
 with non-decaying cross-overlap.  This is the proportional analogue of
 `StrongMatch.forall_k_exists_j_nondecaying_overlap_of_sameMPV`.
 
-Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182–1188. -/
+Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182–1186. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
