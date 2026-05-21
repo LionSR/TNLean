@@ -20,6 +20,9 @@ reduction.
 
 Its public outputs are:
 
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — the
+  single-block PGVWC07 unital gauge, scalar fixed-point, and dual
+  diagonalization package.
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
