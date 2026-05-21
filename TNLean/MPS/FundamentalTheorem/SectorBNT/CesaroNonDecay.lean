@@ -73,7 +73,7 @@ For `z : ℂ` with `‖z‖ ≤ 1`, the average `(T)⁻¹ · ∑_{N < T} z^N` te
 * `0` if `z ≠ 1` (the partial sum is bounded by `2 / ‖z - 1‖`, divided
   by `T → ∞`).
 
-Paper context: this is the analytic workhorse behind the line 246
+Paper context: this is the analytic workhorse behind the source line 246
 normalization when it is used in the CPSV16 Appendix MPV proof, line 1182,
 projection argument.  The unit case captures the contribution of pairs with
 `μ_p · conj(μ_q) = 1`; the non-unit case shows all other pairs contribute
@@ -145,7 +145,7 @@ Let `μ : Fin r → ℂ` satisfy `‖μ q‖ ≤ 1` for every `q` and let some
 `q*` satisfy `‖μ q*‖ = 1`.  Then the sequence
 `N ↦ ∑ q, (μ q)^N` does not tend to `0`.
 
-This is the analytic lemma underlying the CPSV16 §II.C line 246
+This is the analytic lemma underlying the CPSV16 §II.C, line 246
 "`|μ_k| ≤ 1` and `∃ k, |μ_k| = 1`" normalization convention when that
 normalization is read sector-by-sector in the CPSV16 Appendix MPV proof,
 line 1182, projection argument.
