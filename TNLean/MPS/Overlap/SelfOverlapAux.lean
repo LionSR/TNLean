@@ -35,7 +35,7 @@ lemma tendsto_norm_selfOverlap_one
 
 /-- MPV-state norm-convergence form of normalized self-overlap convergence.
 
-Source: arXiv:1606.00608, Theorem `thm1`, lines 1182--1186. In the
+Source: arXiv:1606.00608, Theorem `thm1`, Appendix MPV proof line 1182. In the
 block-selection contradiction, normalized BNT blocks have self-overlap tending
 to one; this lemma rewrites that normalization as convergence of the Hilbert
 space norm of the corresponding MPV state. -/
