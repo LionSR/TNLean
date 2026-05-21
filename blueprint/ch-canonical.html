@@ -1989,8 +1989,6 @@
           
           <li><a href="ch-canonical.html#thm:two_block_decomp">Theorem 9.13</a></li>
           
-          <li><a href="ch-qpf.html#thm:pf_eigenvector_existence">Theorem 6.20</a></li>
-          
         </ul>
     
       </div>
@@ -2032,7 +2030,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By strong induction on the bond dimension&#160;\(D\). If \(A\) is already irreducible, take \(r = 1\). Otherwise, by Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">9.15</a>, \(A\) has a nontrivial invariant projection&#160;\(P\). Diagonalizing&#160;\(P\) yields the same two-block upper-triangular splitting used in Theorem&#160;<a href="ch-canonical.html#thm:two_block_decomp">9.13</a>; the block-diagonal tensor obtained by discarding the off-diagonal part has the same MPV family as&#160;\(A\), and the two diagonal blocks have strictly smaller bond dimensions. Iterating this splitting produces a block-diagonal tensor \(\bigoplus _k A_k\) whose blocks are irreducible. Apply the induction hypothesis to each block and concatenate. (If one prefers a positive-eigenvector argument without assuming TP normalization, the correct replacement for the channel-specific Cesàro theorem is Theorem&#160;<a href="ch-qpf.html#thm:pf_eigenvector_existence">6.20</a>; the induction itself needs only the invariant projection.) </p>
+  <p> By strong induction on the bond dimension&#160;\(D\). If \(A\) is already irreducible, take \(r = 1\). Otherwise, by Definition&#160;<a href="ch-canonical.html#def:irreducible_tensor">9.15</a>, \(A\) has a nontrivial invariant projection&#160;\(P\). Diagonalizing&#160;\(P\) yields the same two-block upper-triangular splitting used in Theorem&#160;<a href="ch-canonical.html#thm:two_block_decomp">9.13</a>; the block-diagonal tensor obtained by discarding the off-diagonal part has the same MPV family as&#160;\(A\), and the two diagonal blocks have strictly smaller bond dimensions. Iterating this splitting produces a block-diagonal tensor \(\bigoplus _k A_k\) whose blocks are irreducible. Apply the induction hypothesis to each block and concatenate. </p>
 <p>Both&#160;<span class="cite">
 	[
 	
@@ -2045,19 +2043,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Section&#160;IV.A.1
 	]
-</span> obtain the block decomposition by the same invariant-projection splitting used here. An alternative derivation, developed in&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Theorem&#160;6.14
-	]
-</span>, characterises the fixed-point set of a quantum channel as a \(*\)-algebra and then applies the Wedderburn–Artin decomposition (<span class="cite">
-	[
-	
-	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
-	, Equation&#160;(1.39)
-	]
-</span>) to read off the block structure directly. The block decomposition is obtained by iterating the invariant-projection splitting and using strong induction on&#160;\(D\) to ensure termination. </p>
+</span> obtain the block decomposition by the same invariant-projection splitting used here. The block decomposition is obtained by iterating the invariant-projection splitting and using strong induction on&#160;\(D\) to ensure termination. </p>
 
   </div>
 </div>
@@ -3420,6 +3406,8 @@
           <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.33</a></li>
           
           <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.33</a></li>
+          
+          <li><a href="ch-mps.html#lem:mpv_zero_length">Lemma 2.14</a></li>
           
         </ul>
     
