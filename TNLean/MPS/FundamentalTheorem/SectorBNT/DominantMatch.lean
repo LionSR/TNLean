@@ -35,7 +35,7 @@ The block matching at a **user-supplied** sector index
 `j₀ : Fin P.basisCount` (with an externally provided unit-modulus
 witness) does not single out any particular sector internally: the
 `IsBNTCanonicalForm` fields are deliberately invariant under
-relabelling of sectors.  Following the CPSV16 §II.A line-246
+relabelling of sectors.  Following the CPSV16 §II.C line-246
 normalization convention, `IsBNTCanonicalForm` carries the modulus-bound
 field
 
@@ -179,7 +179,7 @@ the `j₀`-th `P`-block).
   – `basis_normalized_self_overlap` at `j = j₀` (`overlap → 1`);
   – `cross_overlap_basis_tendsto_zero` at `j ≠ j₀` (`overlap → 0`);
   – the structural field `weight_norm_le_one` of `IsBNTCanonicalForm`
-    (CPSV16 §II.A line 246) feeds into
+    (CPSV16 §II.C line 246) feeds into
     `norm_coeff_le_copies_of_norm_weight_le_one` (`Api.lean`) and gives
     the coefficient bound `‖P.coeff N j‖ ≤ P.copies j`.
 
@@ -200,7 +200,7 @@ gauge-phase equivalence, via the contrapositive of
 `mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`.
 
 Hypothesis disclosure: the modulus bound `weight_norm_le_one` is a
-structural field of `IsBNTCanonicalForm` (CPSV16 §II.A line 246) and
+structural field of `IsBNTCanonicalForm` (CPSV16 §II.C line 246) and
 need not be supplied externally.  The unit-modulus witness at the
 chosen sector `j₀` is supplied externally because CPSV16 line 246 is
 **global** (the unit-modulus copy can sit in any sector); the
@@ -230,7 +230,7 @@ theorem exists_block_match_of_sameMPVPos
   -- used directly in the proof.
   have _hP_pos_used : 0 < P.basisCount := hP_pos
   have _hQ_pos_used : 0 < Q.basisCount := hQ_pos
-  -- Derive the CPSV16 §II.A line-246 modulus bounds from the strengthened
+  -- Derive the CPSV16 §II.C line-246 modulus bounds from the strengthened
   -- `IsBNTCanonicalForm` predicate.  The structural fields replace what
   -- used to be supplied as explicit parameters at the call site.
   have hP_weight_le := hP.weight_norm_le_one

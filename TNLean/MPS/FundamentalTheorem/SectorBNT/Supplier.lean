@@ -12,7 +12,7 @@ import TNLean.MPS.Overlap.PeripheralToSpectralGap
 # Prepared-block SectorBNT constructor
 
 Given a finite family of **already prepared** TP / primitive / irreducible /
-injective blocks with nonzero weights satisfying the CPSV16 §II.A line-246
+injective blocks with nonzero weights satisfying the CPSV16 §II.C line-246
 normalization (`|μ_k| ≤ 1` and at least one `|μ_k| = 1`), this file produces a
 `SectorDecomposition` `P` together with a proof that
 
@@ -383,7 +383,7 @@ left-canonical, primitive, irreducible, and one-site injective, with nonzero
 weights, and matching the blocked input in positive-length MPVs.
 
 This is the "everything except the weight normalization" layer.  The
-remaining ingredient is the CPSV16 §II.A line 246 normalization
+remaining ingredient is the CPSV16 §II.C line 246 normalization
 (absolute value of every weight at most one and at least one of unit modulus),
 which the source paper makes an explicit user choice ("we can always choose
 this normalization, which we will assume").  A separate normalization layer
@@ -414,7 +414,7 @@ positive blocking length `p` and a finite family of prepared blocks
 weights and positive bond dimensions) whose direct-sum tensor matches the
 `p`-blocked input `blockTensor A p` at every positive length.
 
-The CPSV16 §II.A line 246 weight normalization is **not** delivered
+The CPSV16 §II.C line 246 weight normalization is **not** delivered
 here, since the source paper makes this an explicit user assumption.  A
 separate normalization hypothesis is composed with the prepared
 blocks here to feed the `IsBNTCanonicalForm` constructor
@@ -602,10 +602,10 @@ arbitrary-input path on the SectorBNT construction, with one explicit user assum
 
 The CPSV16 paper makes the weight normalization (absolute value of every weight
 at most one and at least one of unit modulus) an explicit user choice: see
-arXiv:1606.00608, §II.A line 246 ("we can always *choose* this normalization,
+arXiv:1606.00608, §II.C line 246 ("we can always *choose* this normalization,
 which we will assume from now on").  Accordingly the end-to-end entry below
 exposes the prepared-block family produced by blocking and lets the user
-supply the §II.A line 246 normalization on those specific weights, after which
+supply the §II.C line 246 normalization on those specific weights, after which
 the prepared-block BNT constructor delivers a full `IsBNTCanonicalForm`
 decomposition together with positive-length MPV agreement.
 -/
@@ -670,7 +670,7 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
 
 This is a bookkeeping refinement of
 `exists_isBNTCanonicalForm_afterBlocking_pos`.  The theorem keeps the same
-prepared-block output and the same CPSV16 §II.A line-246 normalization
+prepared-block output and the same CPSV16 §II.C line-246 normalization
 hypotheses.  In addition, after a normalized BNT sector decomposition is
 chosen, it records that the positive-length MPV identity upgrades to full
 `SameMPV₂` as soon as the zero-length trace identity is supplied in the

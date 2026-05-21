@@ -22,7 +22,7 @@ core examples have a single BNT basis sector (`basisCount = 1`):
   equal-modulus grouping with a non-trivial phase.
 * **Example 5** — `C ⊕ (1/2)C` (`halvedDecomp`): single sector, two
   copies with raw weights `(1, 1/2)`.  Demonstrates that unequal-modulus
-  copies are admissible by the CPSV16 §II.A line-246 normalization
+  copies are admissible by the CPSV16 §II.C line-246 normalization
   (`weight_norm_le_one` holds because both `1` and `1/2` have modulus
   `≤ 1`; `weight_unit_exists` is witnessed by the first copy).
 
@@ -305,7 +305,7 @@ noncomputable example
 /-! ## Example 5 — `C ⊕ (1/2)C`, unequal-modulus admissibility
 
 This example demonstrates that the strengthened `IsBNTCanonicalForm`
-predicate (with the CPSV16 §II.A line-246 fields `weight_norm_le_one`
+predicate (with the CPSV16 §II.C line-246 fields `weight_norm_le_one`
 and `weight_unit_exists`) admits decompositions whose copies have
 **unequal** moduli: the construction below has one unit-modulus copy
 and one `1/2`-modulus copy.  This is exactly the
@@ -342,7 +342,7 @@ not a scalar power.  Demonstrates that the strengthened
 holds because `‖1‖ ≤ 1` and `‖1/2‖ = 1/2 ≤ 1`, and `weight_unit_exists`
 is witnessed by the first copy with weight `1`.
 
-Paper anchor: CPSV16 §II.A line 246, the line-246 normalization
+Paper anchor: CPSV16 §II.C line 246, the line-246 normalization
 convention permits any `|μ_{j,q}| ≤ 1` provided at least one of them
 equals `1`.  See also
 `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4

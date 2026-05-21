@@ -23,13 +23,13 @@ a `SectorDecomposition`.  It records:
 * **block distinctness** in the cast-compatible gauge-phase shape, ruling out
   gauge-phase equivalence between distinct basis blocks of equal bond
   dimension;
-* the CPSV16 §II.A line-246 **normalization convention** on the raw sector
+* the CPSV16 §II.C line-246 **normalization convention** on the raw sector
   weights `μ_{j,q}`: `|μ_{j,q}| ≤ 1` and at least one of them equals one
   (lines 246 and 1244).
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit
 in CPSV16 §II.C line 1182's projection step and not explicitly stated in
-CPSV16 §II.A line 246 (which is global) nor in CPSV21 Section IV.A,
+CPSV16 §II.C line 246 (which is global) nor in CPSV21 Section IV.A,
 lines 1846–1884 (which normalizes the spectral radius of the BNT *basis
 tensors*, not the copy coefficients) — is **not** a structural field of
 `IsBNTCanonicalForm`.
@@ -143,7 +143,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
       ¬ GaugePhaseEquiv
           (cast (congr_arg (MPSTensor d) h) (P.basis j)) (P.basis k)
   /-- **CPSV16 line-246 normalization, modulus bound.**  Every raw sector
-  weight has modulus at most one.  CPSV16 §II.A line 246: "we can always
+  weight has modulus at most one.  CPSV16 §II.C line 246: "we can always
   choose `|μ_k| ≤ 1`"; reinvoked in the body of the FT proof at line 1244
   ("the assumed normalization `|μ_{jq}| ≤ 1` … implies that `𝔼^N` converges").
   This convention admits all counter-examples of the prior audit
@@ -153,7 +153,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ ≤ 1
   /-- **CPSV16 line-246 global unit witness.**  At least one copy of one
-  basis sector has unit-modulus weight.  CPSV16 §II.A line 246: "we can
+  basis sector has unit-modulus weight.  CPSV16 §II.C line 246: "we can
   always choose `|μ_k| ≤ 1` and at least one of them equals one."  This
   is the global (not per-block) normalization condition; the per-block
   refinement `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` is paper-implicit in CPSV16 §II.C
