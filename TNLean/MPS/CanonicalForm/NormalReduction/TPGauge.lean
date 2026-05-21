@@ -22,11 +22,13 @@ Its public outputs are:
 
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — the
   single-block PGVWC07 unital gauge, scalar fixed-point, and dual
-  diagonalization package.
+  diagonalization theorem.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` — the same PGVWC07
-  package applied blockwise to a prepared nonzero irreducible decomposition.
+  construction applied blockwise to a prepared nonzero irreducible decomposition.
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` —
+  the arbitrary-input version with the all-zero summands kept as a zero block.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
   arbitrary-input result obtained after zero-block separation.
 
@@ -263,7 +265,7 @@ private theorem scalar_fixedPoints_unitaryConj
     _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
           simp [hVV]
 
-/-- **Blockwise PGVWC07 unital and dual-diagonal package.**
+/-- **Blockwise PGVWC07 unital and dual-diagonal theorem.**
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
 lines 765--770 and 816--832, after the recursive invariant-subspace splitting
@@ -576,24 +578,88 @@ theorem exists_tp_gauge_blockwise
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
-## Zero-block separation and trace-preserving gauge threading
+## Zero-block separation and blockwise gauge threading
 
 This section composes the zero-block separation from `Existence.lean` with the
-blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
-arbitrary-input result: from any `A : MPSTensor d D`, we obtain:
+blockwise Perron--Frobenius gauge theorems above, producing arbitrary-input
+results: from any `A : MPSTensor d D`, we obtain:
 
 * a zero-block dimension `zeroTailDim` (accumulating all-zero irreducible blocks --
   the Lean formalization uses "zero tail" as a bookkeeping name; the source paper says
   "there can be zero blocks"), and
-* a TP-gauged family of irreducible blocks with nonzero weights.
+* a weighted family of nonzero blocks in either the PGVWC07 unital orientation
+  with dual-diagonal fixed points or the older TP-gauge orientation.
 
 The MPV relationship accounts exactly for both contributions:
 
   `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ blocks) σ`
 
-This is the furthest unconditional arbitrary-input step available before periodicity removal and
-the cyclic-sector and equal-weight arguments.
+The PGVWC07 unital statement below is the strongest unconditional arbitrary-input
+step available here before the final total bond-dimension bound is threaded
+through the construction.
 -/
+
+/-- **Arbitrary-input PGVWC07 unital dual-diagonal form with zero blocks.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 765--770 and 816--832, after the recursive invariant-subspace splitting
+and all-zero-block separation have been carried out.  From any tensor `A`, the
+theorem separates a zero-block contribution and applies
+`exists_pgvwc07_unital_dualDiag_blockwise` to the remaining nonzero irreducible
+blocks.
+
+Every nonzero output block is in the source's unital orientation
+`∑ i, C i * (C i)ᴴ = 1`, has only scalar fixed points for its transfer map, and
+has a diagonal positive-definite fixed point for the adjoint transfer map.  The
+weights are positive real spectral-radius weights, and the MPV family of `A`
+is the sum of the zero-block contribution and the weighted nonzero-block
+direct sum.
+
+**Scope restriction:** This is still not the full `Th:TIcanonical` statement:
+the zero block is kept explicitly, and the final total bond-dimension bound is
+not included.  The boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
+    (A : MPSTensor d D) :
+    ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      (∀ k, 0 < dim k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) := by
+  classical
+  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hMPV₀⟩ :=
+    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hΛData₁, hScalar₁, hμPos₁, hμNe₁,
+    hDim₁⟩ :=
+    exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
+      hNonzero₀
+  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hΛData₁, hScalar₁, hμPos₁, hμNe₁,
+    hDim₁, ?_⟩
+  intro N σ
+  calc
+    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
+    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁) σ := by
+        congr 1
+        exact hSame₁ N σ
 
 /-- **Arbitrary-input trace-preserving gauge reduction.**
 
@@ -619,12 +685,11 @@ The MPV of `A` equals the zero-block contribution plus the weighted nonzero-bloc
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
 lines 765--770 use a full-rank positive fixed point to gauge a block into the
 unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
-left-canonical trace-preserving orientation after the all-zero-block
-separation. It is therefore not the full translation-invariant canonical form
-theorem of Pérez-García, Verstraete, Wolf, and Cirac: it does not also prove the
-source theorem's unital orientation, diagonal full-rank dual fixed points,
-uniqueness of the identity fixed point, or total bond-dimension bound. The
-boundary is recorded in
+left-canonical trace-preserving orientation after the all-zero-block separation.
+The PGVWC07 unital-orientation analogue is
+`exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` above.  This
+theorem remains useful as a TP-gauge reduction but is not the source-facing
+canonical-form statement.  The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
