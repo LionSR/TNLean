@@ -15,8 +15,8 @@
 
 \section{Source passage}
 
-This note concerns the proof of CPSV16 Theorem~\texttt{thm1}, lines
-1181--1185 of \cite{Cirac2016MPDO_arXiv}. The paper fixes a block
+This note concerns the proof of CPSV16 Theorem~\texttt{thm1},
+Appendix MPV proof line~1182 of \cite{Cirac2016MPDO_arXiv}. The paper fixes a block
 $k_0\in\{1,\ldots,r_B\}$ and writes
 \begin{align}
     \forall j, 
@@ -50,7 +50,7 @@ decay, the family
 \end{align}
 for all sufficiently large $N$. Equivalently, the displayed family is linearly
 independent, so the selected block cannot be absorbed by the others without
-contradiction. \cite[lines~1181--1185]{Cirac2016MPDO_arXiv}
+contradiction. \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}
 
 \section{Formal boundary}
 
@@ -85,7 +85,7 @@ The exact fixed-block contradiction step is still open:
 No current Lean declaration carries the retired fixed-right or fixed-left
 one-copy fixed-block names.  The mathematical target remains the
 CPSV fixed-block cancellation at
-\cite[lines~1181--1185]{Cirac2016MPDO_arXiv}, now to be stated on the
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}, now to be stated on the
 \leanid{SectorBNT} sector surface.
 
 The earlier conditional helpers requiring combined-family linear independence
@@ -93,7 +93,7 @@ The earlier conditional helpers requiring combined-family linear independence
 the 2026-05-13 audit; see
 \path{audits/2026-05-13_cpsv16_ft_paper_vs_code_structural_map.md}.
 Those helpers should not be used as replacements for the fixed-block sentence at
-lines~1181--1185, because the needed combined-family independence is not
+Appendix MPV proof line~1182, because the needed combined-family independence is not
 supplied by Corollary~\texttt{Lem1}.  The remaining open obligation is the
 fixed-block cancellation itself, to be discharged without combined-family LI or
 residual-span exclusion.
