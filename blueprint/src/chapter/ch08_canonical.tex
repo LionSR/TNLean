@@ -437,7 +437,7 @@ definitions stated below.
 
 \begin{proof}
     \leanok
-    \uses{thm:two_block_decomp, thm:pf_eigenvector_existence}
+    \uses{thm:two_block_decomp}
     By strong induction on the bond dimension~$D$.
     If $A$ is already irreducible, take $r = 1$.
     Otherwise, by Definition~\ref{def:irreducible_tensor},
@@ -450,21 +450,10 @@ definitions stated below.
     Iterating this splitting produces a block-diagonal tensor
     $\bigoplus_k A_k$ whose blocks are irreducible.
     Apply the induction hypothesis to each block and concatenate.
-    (If one prefers a positive-eigenvector argument without assuming TP
-    normalization, the correct replacement for the channel-specific
-    Ces\`aro theorem is Theorem~\ref{thm:pf_eigenvector_existence};
-    the induction itself needs only the invariant projection.)
 
     Both~\cite[Theorem~4]{PerezGarcia2007Matrix} and~\cite[Section~IV.A.1]{Cirac2021Matrix}
     obtain the block decomposition by
     the same invariant-projection splitting used here.
-    An alternative derivation, developed
-    in~\cite[Theorem~6.14]{Wolf2012Quantum},
-    characterises the fixed-point set of a quantum channel
-    as a $*$-algebra and then applies the
-    Wedderburn--Artin decomposition
-    (\cite[Equation~(1.39)]{Wolf2012Quantum})
-    to read off the block structure directly.
     The block decomposition is obtained by iterating
     the invariant-projection splitting and using strong
     induction on~$D$ to ensure termination.
@@ -935,7 +924,8 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package,
+        lem:mpv_zero_length}
     Evaluate the MPV identity of
     Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
     empty word.  The length-zero coefficient of a bond-\(D\) tensor is \(D\);
