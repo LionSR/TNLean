@@ -210,6 +210,16 @@ peripheral-primitive, and normal-canonical-form reductions can then be used
 only after the source argument has produced the corresponding hypotheses or
 after a later theorem has explicitly assumed them.
 
+This is a composition gap, not a mathematical obstruction.  The formal proof
+has to compose the source steps in order: Perron--Frobenius fixed-point existence
+and spectral-radius normalization; support projection from a singular positive
+fixed point; finite-ring trace splitting over the support and orthogonal
+support; dimension-decreasing iteration, including the split forced by a
+non-scalar fixed point; and, finally, the dual-map fixed point and unitary
+diagonalization.  None of these steps may be replaced by a theorem that starts
+from an already prepared primitive or trace-preserving block family, because
+those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 

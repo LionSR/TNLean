@@ -1,17 +1,18 @@
 
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter reduces a general MPS tensor to block-diagonal decompositions via
-iterated invariant-subspace decomposition. Two reduction schemes are relevant.
-The block-injective reduction aims at injective TP-normalized blocks and the
-canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
-reduction uses a weighted family of irreducible TP-normalized blocks with
-primitive transfer maps and pairwise distinct nonzero weight moduli, in the
-sense of~\cite{Cirac2017MPDO_AnnPhys}.
-Thus the reductions recorded here are conditional
-primitive-block results. They should not be read as the full
+This chapter records several steps in the reduction of MPS tensors to
+block-diagonal forms. Two reduction schemes are relevant. The block-injective
+reduction aims at injective TP-normalized blocks and the canonical form
+conditions of Chapter~\ref{ch:block_perm}. The normal-canonical reduction uses
+a weighted family of irreducible TP-normalized blocks with primitive transfer
+maps and pairwise distinct nonzero weight moduli, in the sense
+of~\cite{Cirac2017MPDO_AnnPhys}.
+The checked reductions in this chapter are therefore conditional
+primitive-block results. They do not yet give the full
 translation-invariant canonical-form theorem of
-\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}.
+\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}, whose
+input is an arbitrary translation-invariant representation on a finite ring.
 The normalization convention is also dual to the one used in the cited theorem:
 the blocks are written in the unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
@@ -171,6 +172,18 @@ Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
 yet supply the source normalization $|\mu_k|\le 1$ with at least one
 unit-modulus weight, so they should not be cited as
 Theorem~\ref{thm:cpgsv_canonical_form_source}.
+
+For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, what remains is not a
+different canonical-form theorem, but the composition of the source proof from its
+arbitrary initial representation.  One must start with the positive
+Perron--Frobenius fixed point of the original transfer map, derive the
+invariant support projection when that fixed point is singular, split the
+finite-ring trace over the support and its orthogonal complement, iterate this
+dimension-decreasing decomposition until the identity is the only fixed point
+of each block, and finally apply the dual fixed-point argument and unitary
+diagonalization that produces the matrices $\Lambda_k$.  Only after these
+steps have been composed can the existing conditional TP-normalized and
+primitive-block results be used as corollaries of the source theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
