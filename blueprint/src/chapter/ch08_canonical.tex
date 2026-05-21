@@ -919,6 +919,31 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     identities gives the displayed zero-block formula.
 \end{proof}
 
+\begin{theorem}[Bond-dimension bound for the zero-block PGVWC07 form]%
+    \label{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound}
+    \leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    In the decomposition of
+    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}, the
+    zero-block bond dimension and the nonzero block dimensions satisfy
+    \[
+        D_0+\sum_k D_k = D .
+    \]
+    In particular, the total bond dimension of the nonzero blocks is at most
+    the original bond dimension \(D\).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    Evaluate the MPV identity of
+    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
+    empty word.  The length-zero coefficient of a bond-\(D\) tensor is \(D\);
+    the zero block contributes \(D_0\), and the direct sum of the nonzero
+    blocks contributes \(\sum_k D_k\).  This gives the displayed identity, and
+    the inequality follows because \(D_0\geq 0\).
+\end{proof}
+
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
     \label{thm:irreducible_block_decomp_with_cfii}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
