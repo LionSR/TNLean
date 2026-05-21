@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.MatrixFunctionalCalculus
+import TNLean.MPS.Irreducible.ScalarFixedPoint
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.CanonicalForm.Existence
@@ -114,6 +115,90 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
   exact
     isIrreducibleTensor_of_isIrreducibleAction
       (d := d) (D := D) (tpGauge (d := d) (D := D) A σ) hActionGauge
+
+/-- **Single irreducible-block PGVWC07 canonical-form data.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 765--770 and 816--832.  For one irreducible nonzero block, the
+Perron--Frobenius eigenvector gives the source theorem's unital gauge.  In
+that unital gauge every fixed point is scalar, and a final unitary conjugation
+diagonalizes a positive-definite fixed point of the dual transfer map.
+
+This is still a single-block statement.  It does not yet thread the construction
+through the recursive finite-ring block decomposition, nor does it prove the
+total bond-dimension bound of the full translation-invariant canonical-form
+theorem. -/
+theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hA : ∃ i, A i ≠ 0) :
+    ∃ (B C : MPSTensor d D)
+      (r : ℝ)
+      (ρ Λ : Matrix (Fin D) (Fin D) ℂ)
+      (U : Matrix.unitaryGroup (Fin D) ℂ),
+        ρ.PosDef ∧
+        0 < r ∧
+        (∀ i : Fin d,
+          B i =
+            (↑((Real.sqrt r)⁻¹) : ℂ) •
+              ((CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ)) ∧
+        GaugeEquiv (d := d) (D := D)
+          (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B ∧
+        (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
+        (∀ X : Matrix (Fin D) (Fin D) ℂ,
+          transferMap (d := d) (D := D) B X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
+        (let C' : MPSTensor d D :=
+          fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * B i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ);
+          C = C' ∧
+          SameMPV₂ B C ∧
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
+          transferMap (d := d) (D := D) (fun i => (C i)ᴴ) Λ = Λ) := by
+  classical
+  obtain ⟨B, r, ρ, hρ, hr, hB_form, hB_unital, hGauge⟩ :=
+    exists_unital_data_of_irreducible (d := d) (D := D) A hIrr hA
+  let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
+  have hroot_ne : (↑(Real.sqrt r) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr hr)
+  have hc_ne : c ≠ 0 := by
+    dsimp [c]
+    simp [hroot_ne]
+  have hIrr_scaled :
+      IsIrreducibleTensor (d := d) (D := D) (fun i => c • A i) :=
+    isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
+  have hActionScaled :
+      IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
+    isIrreducibleAction_of_isIrreducibleTensor
+      (d := d) (D := D) (fun i => c • A i) hIrr_scaled
+  have hActionB : IsIrreducibleAction (d := d) (D := D) B :=
+    isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
+  have hIrrB : IsIrreducibleTensor (d := d) (D := D) B :=
+    isIrreducibleTensor_of_isIrreducibleAction (d := d) (D := D) B hActionB
+  have hB_unital_map : transferMap (d := d) (D := D) B 1 = 1 := by
+    simpa [transferMap_apply, Matrix.mul_one] using hB_unital
+  haveI : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have hScalar :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        transferMap (d := d) (D := D) B X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    intro X hX
+    exact fixed_eq_scalar_of_isIrreducibleTensor_unital
+      (d := d) (D := D) B hIrrB hB_unital_map X hX
+  obtain ⟨U, Λ, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩ :=
+    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
+      (d := d) (D := D) B hB_unital hIrrB (NeZero.pos D)
+  let C : MPSTensor d D :=
+    fun i =>
+      (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * B i *
+        (↑U : Matrix (Fin D) (Fin D) ℂ)
+  refine ⟨B, C, r, ρ, Λ, U, hρ, hr, hB_form, ?_, hB_unital, hScalar, ?_⟩
+  · simpa [c] using hGauge
+  · exact ⟨rfl, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩
 
 /-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
 
