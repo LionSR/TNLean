@@ -233,8 +233,8 @@ This is the finite-family analogue of
 that the consumer can feed the resulting prepared blocks into the
 `SectorBNT` prepared-block supplier.
 
-Paper anchor: CPSV16 §II.A discussion around blocking to common normal form
-(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section II.A,
+Paper anchor: CPSV16 §II.C discussion around blocking to common normal form
+(Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section II.C,
 lines 237–280).
 -/
 
