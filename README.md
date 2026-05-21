@@ -84,9 +84,15 @@ theorem exists_posSemidef_eigenvector [NeZero D]
 
 The formalized Wolf material is selective rather than a chapter-by-chapter
 completion.  Chapters on Schwarz inequalities, spectral theory, fixed points, and
-semigroups are the most developed; entropy and some operator-convexity facts are
-recorded as explicit axiomatized interfaces while the corresponding finite-
-dimensional analysis is built out.
+semigroups are the most developed.  Strong subadditivity and some
+operator-convexity facts are recorded as explicit axiomatized interfaces.
+Mutual-information monotonicity $I(A{:}B) \le I(A{:}BC)$
+(`Entropy.mutualInformation_monotone_tripartite`,
+arXiv:1606.00608 Prop C.1) and the area-law bound
+$I(A{:}B) \le \log d_A + \log d_B$
+(`Entropy.mutualInformation_le_log_dim_add_log_dim`,
+arXiv:1606.00608 line 1319) are proved as theorems from strong subadditivity,
+while further operator-convexity facts await upstream Mathlib coverage.
 
 ### Quantum Wielandt theory
 
