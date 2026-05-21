@@ -238,7 +238,7 @@ The earlier existence path now has the following formal pieces.
 
     \item
           \path|MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise|
-          applies the preceding single-block package to a prepared family of
+          applies the preceding single-block theorem to a prepared family of
           nonzero irreducible summands with unit weights.  It constructs the
           positive spectral-radius weights, unital block representatives,
           scalar fixed-point endpoints, and diagonal positive-definite dual
@@ -249,6 +249,19 @@ The earlier existence path now has the following formal pieces.
           nonzero irreducible decomposition and does not yet incorporate the
           arbitrary-input zero-block separation or the final total
           bond-dimension bound.
+
+    \item
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail|
+          composes the zero-block separation with the preceding blockwise
+          PGVWC07 theorem.  Starting from an arbitrary tensor, it retains the
+          all-zero summands as one zero block and puts the nonzero part into
+          the unital orientation, with positive spectral-radius weights,
+          scalar fixed-point endpoints, and diagonal positive-definite dual
+          fixed points.  This removes the prepared-family hypothesis from the
+          blockwise statement while still keeping the zero-block contribution
+          explicit in the finite-ring MPV identity.  It is still not the full
+          source theorem, because the final total bond-dimension bound has not
+          yet been promoted to a separate conclusion.
 
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
