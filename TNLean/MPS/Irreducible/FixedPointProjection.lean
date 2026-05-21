@@ -33,7 +33,7 @@ invariant-subspace decomposition results.  Thus the results here should be used
 before, not instead of, the source trace-splitting argument.
 
 References:
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 771–783 (singular positive fixed point gives an invariant
   support projection)
 -/
@@ -322,11 +322,11 @@ private lemma ker_invariant_under_adjoint
 /-- If `ρ` is a PSD fixed point of the transfer map, then its support projection is invariant:
 `(1 - P) * A i * P = 0` for all Kraus operators `A i`.
 
-This proves the support-projection assertion in Pérez-García et al., Theorem
-Th:TIcanonical, proof lines 771–783.  The source writes the fixed point as
-$X = \sum_\alpha \lambda_\alpha |\alpha\rangle\langle\alpha|$, lets $P_R$ be
-its support projection, and proves $A_i P_R = P_R A_i P_R$ by the positivity
-contradiction in lines 775–783.
+This proves the support-projection assertion in Pérez-García, Verstraete, Wolf,
+and Cirac, Theorem Th:TIcanonical, proof lines 771–783.  The source writes the
+fixed point as $X = \sum_\alpha \lambda_\alpha |\alpha\rangle\langle\alpha|$,
+lets $P_R$ be its support projection, and proves $A_i P_R = P_R A_i P_R$ by
+the positivity contradiction in lines 775–783.
 -/
 theorem lowerZero_of_posSemidef_fixedPoint
     (A : MPSTensor d D)
@@ -411,11 +411,12 @@ matrix, and are essential for the "strict dimension decrease" argument used when
 iterating the canonical-form splitting step.
 
 References:
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 771–783 for the support projection and lines 785–815 for the
   finite-ring trace split whose recursive blocks have smaller dimensions.
-* Cirac et al., arXiv:1606.00608, lines 201–217: invariant subspaces are split
-  into diagonal blocks in the canonical-form construction.
+* Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608,
+  lines 201–217: invariant subspaces are split into diagonal blocks in the
+  canonical-form construction.
 -/
 
 section SupportProjNontriviality
@@ -499,10 +500,11 @@ projection $P := \mathrm{supp}(\rho)$ is invariant under the Kraus operators `(A
 explicit two-block block-diagonal tensor which is MPV-equivalent to `A`.
 
 References:
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 771–783 for the support projection and lines 785–815 for the
   finite-ring trace split.
-* Cirac et al., arXiv:1606.00608, lines 201–217 for the corresponding
+* Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608,
+  lines 201–217 for the corresponding
   invariant-subspace block splitting in the canonical-form construction.
 -/
 
@@ -542,11 +544,12 @@ The proof composes:
 4. `exists_twoBlock_decomp_of_lowerZero_strict` — strict dimension bounds.
 
 References:
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 771–783 for deriving the invariant support projection and
   lines 785–815 for the trace split into two smaller blocks.
-* Cirac et al., arXiv:1606.00608, lines 201–217 for the invariant-subspace
-  direct-sum step in the canonical-form construction.
+* Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608,
+  lines 201–217 for the invariant-subspace direct-sum step in the
+  canonical-form construction.
 -/
 theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (A : MPSTensor d D)

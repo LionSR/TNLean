@@ -986,6 +986,15 @@ decomposition.
 \label{sec:multi_block_ft}
 %% ---------------------------------------------------------
 
+The first lemmas in this section are bookkeeping for block-diagonal tensors:
+they assemble already-known block gauges, and they record the easy consequences
+of applying the injective single-block theorem to each block separately. They do
+not derive the block matching appearing in
+\cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}. In the source proof, that matching
+is obtained from BNT overlap, independence, and coefficient comparison; the
+corresponding global gauge assembly is
+Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
+
 \begin{definition}[Flattened block-diagonal gauge]%
     \label{def:global_gauge_of_blocks}
     \lean{MPSTensor.blockDiagonalGL, MPSTensor.globalGaugeOfBlocks}

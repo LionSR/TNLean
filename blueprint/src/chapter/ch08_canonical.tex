@@ -10,11 +10,13 @@ primitive transfer maps and pairwise distinct nonzero weight moduli, in the
 sense of~\cite{Cirac2017MPDO_AnnPhys}.
 Thus the reductions recorded here are conditional
 primitive-block results. They should not be read as the full
-translation-invariant canonical-form theorem of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+translation-invariant canonical-form theorem of
+\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}.
 The normalization convention is also dual to the one used in the cited theorem:
 the blocks are written in the unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
-$\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$~\cite[Theorem~\texttt{Th:TIcanonical}, lines~754--758]{PerezGarcia2007Matrix},
+$\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$
+\cite[Theorem~Th:TIcanonical, lines~754--758]{PerezGarcia2007Matrix},
 whereas this chapter uses
 the trace-preserving, or left-canonical, orientation
 $\sum_i (A_k^i)^\dagger A_k^i=\Id$.
@@ -28,7 +30,7 @@ canonical form conditions.
 The reduction draws on~\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
 and~\cite[Chapter~6]{Wolf2012Quantum}.
 
-\begin{theorem}[PGVWC07 translation-invariant canonical form]%
+\begin{theorem}[Translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
     \notready
     % Source anchors for the exact source statement:
@@ -68,13 +70,13 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     of the decomposition is at most $D$.
 
     This is the source statement
-    of~\cite[Theorem~\texttt{Th:TIcanonical}, lines~742--763]{PerezGarcia2007Matrix}.
+    of~\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}.
 \end{theorem}
 
-\begin{remark}[Source proof order for PGVWC07]\label{rem:pgvwc07_ti_canonical_source_order}
+\begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
     A faithful proof of Theorem~\ref{thm:pgvwc07_ti_canonical_form}
     should follow the proof of
-    \cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix}
+    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}
     in its given order. Lines~765--770 normalize the spectral radius and use a
     full-rank positive fixed point to obtain the unital gauge. Lines~771--783
     derive the invariant support projection from a singular positive fixed
@@ -98,7 +100,8 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     % Papers/1606.00608/MPDO-22-12-17-2.tex:227--231 removes periodic
     % peripheral components by blocking; lines 233--235 define normal tensors;
     % lines 237--246 are the definition containing the display labelled
-    % eq:II_CF1 and the subsequent weight normalization; lines 249--251 state
+    % eq:II_CF1 at line 240 and the subsequent weight normalization at
+    % line 246; lines 249--251 state
     % that any tensor becomes canonical after blocking. The phase-class
     % quotient used by the BNT supplier is prop:char-BNT, labelled at line 278
     % with statement at line 279, in the definition/proposition passage
@@ -129,7 +132,8 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
 
     In the source, the canonical-form construction is recorded in
-    \cite[display labelled eq:II\_Aiplusk1, lines~216--225]
+    \cite[display labelled eq:II\_Aiplusk1, lines~216--218,
+    followed by the spectral-radius normalization at lines~219--225]
         {Cirac2017MPDO_AnnPhys}
     and in
     \cite[canonical-form definition containing eq:II\_CF1 and
@@ -137,7 +141,7 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     lines~237--246]{Cirac2017MPDO_AnnPhys}.
     The basis-of-normal-tensors refinement is
     \cite[BNT definition and proposition labelled prop:char-BNT,
-    lines~271--280]{Cirac2017MPDO_AnnPhys},
+    lines~271--279]{Cirac2017MPDO_AnnPhys},
     with its appendix restatement and proof in
     \cite[Appendix proof of prop:char-BNT and same-CF uniqueness note,
     lines~1135--1148]
@@ -154,7 +158,8 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 Theorems~\ref{thm:pgvwc07_ti_canonical_form}
 and~\ref{thm:cpgsv_canonical_form_source} are source-level targets and are
 not yet formalized as stated. This chapter develops constituent steps of the
-PGVWC07 and CPSV reductions: invariant-subspace decomposition
+translation-invariant and density-operator canonical-form reductions:
+invariant-subspace decomposition
 (Theorem~\ref{thm:irred_decomp}), TP gauge
 (Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
 (Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the
@@ -472,7 +477,8 @@ primitive, removing periodicity.
     overlap clause $O_{A_k A_k}(N) \to 1$ follows from the spectral-gap
     criterion of Chapter~\ref{ch:spectral}. Both statements assume the
     blocks are already in the required normal form; they are not the
-    arbitrary-input canonical-form existence theorem of~\cite[Theorem~\texttt{Th:TIcanonical}]{PerezGarcia2007Matrix}.
+    arbitrary-input canonical-form existence theorem of
+    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
 \end{remark}
 
 \begin{remark}\label{rem:primitivity_reduces_assumptions}
@@ -1213,7 +1219,9 @@ BNT construction.
     \leanok
     % Source anchors:
     % The canonical-form source is
-    % Papers/1606.00608/MPDO-22-12-17-2.tex, eq:II_CF1 at lines 237--246.
+    % Papers/1606.00608/MPDO-22-12-17-2.tex, eq:II_CF1 labelled at
+    % line 240, with the surrounding definition and normalization at
+    % lines 237--246.
     % The phase-class quotient is prop:char-BNT, labelled at line 278 with
     % statement at line 279 in the passage lines 271--279, and its appendix
     % restatement/construction and same-CF BNT uniqueness note at
@@ -1261,7 +1269,7 @@ BNT construction.
     irreducible injective blocks and the positive-length MPV identity. The
     normalized-weight hypotheses are additional hypotheses in the formal
     statement, corresponding to the normalization that
-    \cite[Section~II.A, line~246]{Cirac2017MPDO_AnnPhys} treats as a choice.
+    \cite[Section~II.C, line~246]{Cirac2017MPDO_AnnPhys} treats as a choice.
     The missing rescaling step is recorded in
     \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex}.
     Applying Theorem~\ref{thm:paperbnt_supplier_prepared} to this prepared
