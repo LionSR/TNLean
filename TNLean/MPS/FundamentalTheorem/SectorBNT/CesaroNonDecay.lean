@@ -145,7 +145,7 @@ Let `μ : Fin r → ℂ` satisfy `‖μ q‖ ≤ 1` for every `q` and let some
 `q*` satisfy `‖μ q*‖ = 1`.  Then the sequence
 `N ↦ ∑ q, (μ q)^N` does not tend to `0`.
 
-This is the analytic lemma underlying the CPSV16 §II.A line-246
+This is the analytic lemma underlying the CPSV16 §II.C line-246
 "`|μ_k| ≤ 1` and `∃ k, |μ_k| = 1`" normalization convention when that
 normalization is read sector-by-sector in the CPSV16 §II.C line-1182
 projection argument.

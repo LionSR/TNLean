@@ -192,7 +192,7 @@ lemma combined_family_eventually_li
 /-- **Coefficient norm bound under the line-246 normalization.**
 
 A direct consequence of the structural field `weight_norm_le_one`
-(CPSV16 §II.A line 246): the sector coefficient
+(CPSV16 §II.C line 246): the sector coefficient
 `P.coeff N j = ∑_q (P.weight j q)^N` is bounded in modulus by the
 multiplicity `P.copies j`.  This is the structural-field reading of the
 prior explicit-hypothesis lemma
@@ -205,7 +205,7 @@ lemma norm_coeff_le_copies
 
 /-- **Global unit-modulus weight witness from the canonical-form normalization.**
 
-Re-states the structural field `weight_unit_exists` (CPSV16 §II.A
+Re-states the structural field `weight_unit_exists` (CPSV16 §II.C
 line 246) for direct access by downstream callers that want to extract a
 global unit-modulus weight without depending on the structure layout. -/
 lemma weight_unit_exists_of_struct (h : IsBNTCanonicalForm P) :
@@ -221,7 +221,7 @@ copy witness `hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`, the power-sum coefficie
 
 The per-block unit-modulus hypothesis `hUnit` is taken as an explicit
 theorem-level argument rather than a structural field of
-`IsBNTCanonicalForm`: CPSV16 §II.A line 246 records only the *global*
+`IsBNTCanonicalForm`: CPSV16 §II.C line 246 records only the *global*
 normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, while CPSV21
 Section IV.A uses Definition 4.2 (lines 1846–1850) for the BNT basis and
 the display at lines 1864–1884 for the two-layer expansion.  It normalizes
@@ -251,14 +251,14 @@ For any sector `j : Fin P.basisCount` such that every copy weight satisfies
 `P.coeff N j = ∑_q (P.weight j q)^N` tends to `0` as `N → ∞`.
 
 This is the **converse** of `coeff_not_tendsto_zero_at_block`: under the
-CPSV16 §II.A line-246 normalization (`weight_norm_le_one`), if **no** copy of
+CPSV16 §II.C line-246 normalization (`weight_norm_le_one`), if **no** copy of
 sector `j` carries a unit-modulus weight, then the sector's coefficient
 decays exponentially.  The argument is elementary: each summand
 `(P.weight j q)^N` tends to `0` because the closed-unit-disk strict
 inequality `‖w‖ < 1` makes the geometric sequence vanish, and a finite sum
 of vanishing sequences vanishes.
 
-Paper anchor: CPSV16 §II.A line 246 + line 1244 (the convergence half of
+Paper anchor: CPSV16 §II.C line 246 + line 1244 (the convergence half of
 the line-246 dichotomy: unit-modulus weights survive; subnormal weights
 decay).  After the Phase D per-block normalization this lemma is no longer
 on the FT critical path, but it remains a useful peripheral/subnormal-sector
@@ -286,7 +286,7 @@ theorem coeff_tendsto_zero_of_all_weights_subnorm
 A user-facing alias for `coeff_not_tendsto_zero_at_block`, named
 in the language of the audit memo
 `thermodynamic_limit_normalization_audit_2026-05-14` §Q-C: the
-CPSV16 §II.A line-246 normalization picks out the unit-modulus block(s)
+CPSV16 §II.C line-246 normalization picks out the unit-modulus block(s)
 whose power-sum coefficient does **not** vanish in the thermodynamic
 limit.
 

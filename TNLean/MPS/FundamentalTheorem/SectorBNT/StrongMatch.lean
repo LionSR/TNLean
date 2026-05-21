@@ -27,7 +27,7 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
 
 The paper's "given $k$" is *iterated externally* over each unit-block
 sector of `Q` (those with at least one unit-modulus weight, per the
-CPSV16 §II.A line-246 normalization which is recorded **globally** —
+CPSV16 §II.C line-246 normalization which is recorded **globally** —
 not per-block — in `IsBNTCanonicalForm.weight_unit_exists`).  Non-unit
 blocks contribute coefficients that decay exponentially and so do not
 constrain the matching; the paper restricts attention to the
@@ -93,7 +93,7 @@ with `(P, Q)` swapped, so it consumes the per-block unit-modulus
 witnesses on the *swapped* side, namely `hUnitQ : ∀ k, ∃ q, ‖μ_{k,q}‖ = 1`
 for $Q$.  The per-block unit-modulus convention is paper-implicit in
 CPSV16 §II.C line 1182's projection argument; it is taken here as an
-explicit theorem-level hypothesis (CPSV16 §II.A line 246 records only
+explicit theorem-level hypothesis (CPSV16 §II.C line 246 records only
 the global unit witness).
 
 Paper anchor: CPSV16 §II.C line 1182 (arXiv:1606.00608), CPSV21
@@ -162,7 +162,7 @@ once with $(Q,P)$, hence it consumes per-block unit-modulus witnesses on
 both sides: `hUnitP : ∀ j, ∃ q, ‖μ_{j,q}^P‖ = 1` and `hUnitQ : ∀ k, ∃ q,
 ‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 §II.C line 1182's
 projection argument and are taken as explicit theorem-level hypotheses
-here (CPSV16 §II.A line 246 records only the global unit witness). -/
+here (CPSV16 §II.C line 246 records only the global unit witness). -/
 theorem bijective_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
