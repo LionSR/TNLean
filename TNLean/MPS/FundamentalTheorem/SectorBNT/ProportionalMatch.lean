@@ -37,7 +37,9 @@ bond dimension, gauge-phase equivalent in the cast-compatible shape, and
 with non-decaying cross-overlap.  This is the proportional analogue of
 `StrongMatch.forall_k_exists_j_nondecaying_overlap_of_sameMPV`.
 
-Paper anchor: CPSV16 §II.C lines 349–352 / 1167–1170 / 1182. -/
+Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`);
+Appendix MPV theorem statement lines 1167–1170 and Appendix MPV proof
+line 1182 (matching). -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
