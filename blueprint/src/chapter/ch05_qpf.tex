@@ -568,6 +568,37 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
+\begin{theorem}[Unital-gauge existence for irreducible tensors]%
+    \label{thm:unital_data_irreducible}
+    \lean{MPSTensor.exists_unital_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor, thm:posDef_adjoint_eigenvector,
+        thm:unital_gauge_of_pd_fixed_point}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive real~$r$, a positive definite
+    matrix~$\rho$, and a gauge-equivalent tensor~$B$ such that
+    \[
+        B^i = r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}
+    \]
+    is unital:
+    $\sum_i B^i(B^i)^\dagger = \Id$.
+
+    This is the Perron--Frobenius unital-gauge orientation used in
+    \cite[Theorem~Th:TIcanonical, lines~765--770]{PerezGarcia2007Matrix},
+    stated for one irreducible nonzero block.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
+    conjugate-transposed Kraus family.  Irreducibility transfers to that
+    family, and the nonzero Kraus hypothesis is preserved by taking adjoints.
+    Translating the resulting adjoint eigenvector equation back gives
+    $\E_A(\rho)=r\rho$ with $\rho$ positive definite and $r>0$.  The unital
+    gauge theorem then gives the displayed unital representative, and the
+    same square-root similarity gives gauge equivalence to $r^{-1/2}A$.
+\end{proof}
+
 \section{Exponential positivity for irreducible CP maps}
 
 \begin{theorem}[Exponential truncation is positive definite]
