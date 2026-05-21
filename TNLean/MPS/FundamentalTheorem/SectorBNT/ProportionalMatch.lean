@@ -20,7 +20,7 @@ $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$.
 ## References
 
 * CPSV16: arXiv:1606.00608, lines 349–352 (theorem `thm1`), 1167–1170
-  (restatement), and line 1182 (matching proof).
+  (restatement), and Appendix MPV proof, line 1182 (matching proof).
 * CPSV21: arXiv:2011.12127, lines 1891–1894 (proportional target).
 -/
 

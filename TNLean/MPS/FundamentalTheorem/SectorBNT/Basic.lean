@@ -37,7 +37,7 @@ The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
 `exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
 `ft_sector_bnt_equal_*`) take the per-block witness as an explicit
 hypothesis at the theorem level, keeping the canonical-form predicate
-minimal and the line-1182 implicit convention local to the theorems
+minimal and the line 1182 implicit convention local to the theorems
 that actually need it.
 
 The structure does **not** impose an equal-modulus or strict-order
@@ -177,7 +177,7 @@ Step 1 coefficient-comparison argument: once combined-family LI isolates
 the `j`-th sector coefficient (CPSV16 lines 1121–1132), the surviving
 relation cannot be `0 = 0` for large `N`, so the multiplicity-recovery
 argument of CPSV16 Appendix MPV proof, lines 1184–1188, has a nonvanishing
-left-hand side to compare against after the line-1182 matching step.
+left-hand side to compare against after the line 1182 matching step.
 
 The proof feeds nonzero weights `P.weight j q ≠ 0` (from
 `P.weight_ne_zero`) into `geom_sum_eventually_zero`

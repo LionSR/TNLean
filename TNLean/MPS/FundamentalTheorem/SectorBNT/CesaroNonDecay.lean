@@ -15,9 +15,9 @@ import Mathlib.Data.Fintype.BigOperators
 # Cesàro non-decay for finite power sums on the closed unit disk
 
 This module proves the pure-analytic lemma underlying the sector-coefficient
-non-decay input used when the CPSV16 §II.C proof projects onto a matched BNT
-block.  The lemma is independent of MPS data and is stated in terms of complex
-numbers only.
+non-decay input used when the CPSV16 Appendix MPV proof, line 1182, projects
+onto a matched BNT block.  The lemma is independent of MPS data and is stated
+in terms of complex numbers only.
 
 ## Main result
 
@@ -53,8 +53,8 @@ limit is `≥ 1 > 0`, contradicting the previous limit `0`.
 
 * CPSV16: Cirac–Pérez-García–Schuch–Verstraete, *Matrix Product Density
   Operators*, arXiv:1606.00608.  Line 246 gives the `|μ_k| ≤ 1` and
-  `∃ k, |μ_k| = 1` normalization convention; line 1182 is the BNT
-  projection step where a nonzero sector coefficient is needed.
+  `∃ k, |μ_k| = 1` normalization convention; Appendix MPV proof, line 1182,
+  is the BNT projection step where a nonzero sector coefficient is needed.
 * Cesàro mean limit: `Filter.Tendsto.cesaro_smul` in
   `Mathlib.Analysis.Asymptotics.SpecificAsymptotics`.
 -/
@@ -74,8 +74,8 @@ For `z : ℂ` with `‖z‖ ≤ 1`, the average `(T)⁻¹ · ∑_{N < T} z^N` te
   by `T → ∞`).
 
 Paper context: this is the analytic workhorse behind the line-246
-normalization when it is used in the CPSV16 §II.C line-1182 projection
-argument.  The unit case captures the contribution of pairs with
+normalization when it is used in the CPSV16 Appendix MPV proof, line 1182,
+projection argument.  The unit case captures the contribution of pairs with
 `μ_p · conj(μ_q) = 1`; the non-unit case shows all other pairs contribute
 `0`. -/
 lemma tendsto_cesaro_geom (z : ℂ) (hz : ‖z‖ ≤ 1) :
@@ -147,8 +147,8 @@ Let `μ : Fin r → ℂ` satisfy `‖μ q‖ ≤ 1` for every `q` and let some
 
 This is the analytic lemma underlying the CPSV16 §II.C line-246
 "`|μ_k| ≤ 1` and `∃ k, |μ_k| = 1`" normalization convention when that
-normalization is read sector-by-sector in the CPSV16 §II.C line-1182
-projection argument.
+normalization is read sector-by-sector in the CPSV16 Appendix MPV proof,
+line 1182, projection argument.
 
 The proof is the elementary Cesàro-mean argument outlined in the module
 docstring. -/
