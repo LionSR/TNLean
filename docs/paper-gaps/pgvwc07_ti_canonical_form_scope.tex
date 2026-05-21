@@ -149,6 +149,49 @@ assumptions into any later argument that cites canonical-form existence.
 The earlier existence path now has the following formal pieces.
 
 \begin{enumerate}
+    \item
+          \path|MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector|
+          formalizes the spectral-radius normalization part of
+          Theorem~\texttt{Th:TIcanonical}, lines 765--769.  Given a positive
+          definite eigenvector \(\rho\) with
+          \(\mathcal{E}_A(\rho)=r\rho\) and \(r>0\), it proves that
+          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) satisfies
+          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
+
+    \item \path|MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint|
+          formalizes the full-rank fixed-point gauge in
+          Theorem~\texttt{Th:TIcanonical}, lines 767--769.  Given a positive
+          definite fixed point \(\rho\) of \(\mathcal{E}_A\), it constructs the
+          right-canonical gauge \(B_i=\rho^{-1/2}A_i\rho^{1/2}\) and proves
+          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).  The companion theorem
+          \path|MPSTensor.sameMPV_unitalGauge| records preservation of the
+          finite-ring coefficients under this similarity.
+
+    \item
+          \path|MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint|
+          formalizes the fixed-point shift in
+          Theorem~\texttt{Th:TIcanonical}, lines 819--826.  For a unital block,
+          a Hermitian fixed point which is not a scalar multiple of the identity
+          gives the singular positive fixed point
+          \(\lambda_{\max}\mathbf{1}-X\).  The companion theorem
+          \path|MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint|
+          composes this shift with the support-projection split, giving a
+          strict two-block MPV-equivalent decomposition.  The formal hypothesis
+          uses ``non-scalar'' rather than merely \(X\ne\mathbf{1}\), since every
+          scalar multiple of the identity is fixed by a unital linear map and
+          cannot force a nontrivial split.
+
+    \item
+          \path|MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital|
+          formalizes the fixed-point endpoint in
+          Theorem~\texttt{Th:TIcanonical}, lines 816--826.  Once the block is
+          irreducible and unital, every fixed point of its transfer map is a
+          scalar multiple of \(\mathbf{1}\).  The proof uses the MPS
+          irreducible-tensor/irreducible-map bridge and the already formalized
+          channel theorem \path|MPSTensor.fixed_eq_scalar_of_irreducible_unital|
+          (Wolf Theorem 6.6).  Thus the identity is the unique fixed point
+          after the usual scalar normalization of the fixed-point line.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
@@ -209,6 +252,16 @@ while preserving the stated bond-dimension bound. The conditional primitive,
 peripheral-primitive, and normal-canonical-form reductions can then be used
 only after the source argument has produced the corresponding hypotheses or
 after a later theorem has explicitly assumed them.
+
+This is a composition gap, not a mathematical obstruction.  The formal proof
+has to compose the source steps in order: Perron--Frobenius fixed-point existence
+and spectral-radius normalization; support projection from a singular positive
+fixed point; finite-ring trace splitting over the support and orthogonal
+support; dimension-decreasing iteration, including the split forced by a
+non-scalar fixed point; and, finally, the dual-map fixed point and unitary
+diagonalization.  None of these steps may be replaced by a theorem that starts
+from an already prepared primitive or trace-preserving block family, because
+those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
