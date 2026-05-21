@@ -174,16 +174,17 @@ unit-modulus weight, so they should not be cited as
 Theorem~\ref{thm:cpgsv_canonical_form_source}.
 
 For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, what remains is not a
-different canonical-form theorem, but the composition of the source proof from its
-arbitrary initial representation.  One must start with the positive
-Perron--Frobenius fixed point of the original transfer map, derive the
-invariant support projection when that fixed point is singular, split the
-finite-ring trace over the support and its orthogonal complement, iterate this
-dimension-decreasing decomposition until the identity is the only fixed point
-of each block, and finally apply the dual fixed-point argument and unitary
-diagonalization that produces the matrices $\Lambda_k$.  Only after these
-steps have been composed can the existing conditional TP-normalized and
-primitive-block results be used as corollaries of the source theorem.
+different canonical-form theorem, but the composition of the source proof from
+its arbitrary initial representation.  One must use the positive
+Perron--Frobenius fixed point of the original transfer map to normalize the
+spectral radius and obtain the weights, derive the invariant support projection
+when that fixed point is singular, split the finite-ring trace over the support
+and its orthogonal complement, iterate this dimension-decreasing decomposition
+until the identity is the only fixed point of each block, and finally apply the
+dual fixed-point argument and unitary diagonalization that produces the
+matrices $\Lambda_k$.  Only after these steps have been composed can the
+existing conditional TP-normalized and primitive-block results be used as
+corollaries of the source theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -435,6 +436,33 @@ definitions stated below.
     The block decomposition is obtained by iterating
     the invariant-projection splitting and using strong
     induction on~$D$ to ensure termination.
+\end{proof}
+
+\begin{theorem}[Unital gauge from a full-rank fixed point]%
+    \label{thm:unital_gauge_of_pd_fixed_point}
+    \lean{MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint}
+    \lean{MPSTensor.sameMPV_unitalGauge}
+    \leanok
+    Let $\rho$ be a positive definite fixed point of
+    $\E_A(X)=\sum_i A^i X(A^i)^\dagger$.  For
+    $B^i := \rho^{-1/2}A^i\rho^{1/2}$,
+    \[
+        \sum_i B^i(B^i)^\dagger = \Id.
+    \]
+    Moreover $A$ and $B$ generate the same MPV family.
+
+    This is the full-rank fixed-point gauge used in
+    \cite[Theorem~Th:TIcanonical, lines~767--769]
+        {PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive square root of $\rho$ is invertible.  Substituting
+    $B^i=\rho^{-1/2}A^i\rho^{1/2}$ into
+    $\sum_i B^i(B^i)^\dagger$ and using $\E_A(\rho)=\rho$
+    gives the identity.  The change from $A$ to $B$ is a similarity
+    transformation, so cyclicity of the trace gives equality of all
+    finite-ring MPV coefficients.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}

@@ -139,4 +139,79 @@ theorem sameMPV_tpGauge (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (h
     SameMPV (d := d) (D := D) A (tpGauge (d := d) (D := D) A ρ) :=
   GaugeEquiv.sameMPV (gaugeEquiv_tpGauge (d := d) (D := D) A ρ hρ)
 
+/-! ## Unital gauge from a transfer-map fixed point -/
+
+/-- Gauge-transformed tensor `B i = ρ^{-1/2} A i ρ^{1/2}`.
+
+This is the right-canonical, or unital, analogue of `tpGauge`. -/
+noncomputable def unitalGauge
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
+  fun i => (CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ
+
+/-- **Unital normalisation from a transfer-map fixed point.**
+
+Assume `ρ` is positive definite and fixed by the transfer map
+`X ↦ ∑ i, A i * X * (A i)ᴴ`. Then the gauged tensor
+`unitalGauge A ρ` satisfies
+`∑ i, B i * (B i)ᴴ = I`.
+
+This is the formal version of the full-rank fixed-point gauge in
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`,
+proof lines 767--769. -/
+theorem unitalGauge_isUnital_of_transferMap_fixedPoint
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (hρ : ρ.PosDef)
+    (hfix : transferMap (d := d) (D := D) A ρ = ρ) :
+    ∑ i : Fin d,
+      unitalGauge (d := d) (D := D) A ρ i *
+        (unitalGauge (d := d) (D := D) A ρ i)ᴴ = 1 := by
+  classical
+  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ
+  have hS_mul : S * S = ρ := by
+    simpa [S] using cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
+  have hS_herm : Sᴴ = S := by
+    simpa [S] using conjTranspose_cfc_sqrt (D := D) ρ
+  have hSS : S * Sᴴ = ρ := by
+    simpa [hS_herm] using hS_mul
+  have hdet : IsUnit S.det := by
+    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
+  have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hdet
+  have hdetT : IsUnit (Sᴴ.det) := by
+    simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
+  have hStmul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hdetT
+  have h_term : ∀ i : Fin d,
+      (S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ =
+        S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹ := by
+    intro i
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_nonsing_inv]
+    simp [Matrix.mul_assoc, ← hSS]
+  have h_sum_eq : ∑ i : Fin d, A i * ρ * (A i)ᴴ = ρ := by
+    simpa [transferMap_apply, Matrix.mul_assoc] using hfix
+  change
+    (∑ i : Fin d, (S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ) = 1
+  simp_rw [h_term]
+  rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hSS]
+  simp [Matrix.mul_assoc, hSinv_mul, hStmul_inv]
+
+/-- The gauge-transformed tensor `unitalGauge A ρ` is gauge-equivalent to `A`
+when `ρ` is positive definite. -/
+theorem gaugeEquiv_unitalGauge
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    GaugeEquiv (d := d) (D := D) A (unitalGauge (d := d) (D := D) A ρ) := by
+  classical
+  let X : GL (Fin D) ℂ :=
+    Matrix.GeneralLinearGroup.mk'' (CFC.sqrt ρ)
+      (by
+        simpa using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ)
+  refine ⟨X⁻¹, ?_⟩
+  intro i
+  simp [unitalGauge, X]
+
+/-- **MPV invariance** under the unital gauge transform `unitalGauge`. -/
+theorem sameMPV_unitalGauge
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
+    SameMPV (d := d) (D := D) A (unitalGauge (d := d) (D := D) A ρ) :=
+  GaugeEquiv.sameMPV (gaugeEquiv_unitalGauge (d := d) (D := D) A ρ hρ)
+
 end MPSTensor
