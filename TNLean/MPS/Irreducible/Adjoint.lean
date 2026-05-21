@@ -148,12 +148,10 @@ lines 827--832.  If an irreducible block is already in the unital orientation
 `∑ᵢ Aᵢ Aᵢ† = I`, then applying the fixed-point argument to the conjugate-transposed
 Kraus family gives a positive-definite fixed point of the dual map.  A unitary
 gauge diagonalizes that fixed point while preserving the unital normalization
-and the finite-ring matrix product vectors.
-
-This theorem is deliberately a wrapper around
-`exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` applied to
-`i ↦ (A i)ᴴ`; it records the PGVWC07 orientation without duplicating the
-trace-preserving diagonalization proof. -/
+and the finite-ring matrix product vectors. -/
+/- Note (for maintainers): the proof reuses the trace-preserving diagonalization
+theorem for the conjugate-transposed Kraus family. This keeps the PGVWC07
+orientation explicit without repeating the spectral argument. -/
 theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
     (A : MPSTensor d D)
     (hUnital : ∑ i : Fin d, A i * (A i)ᴴ = 1)
