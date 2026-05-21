@@ -24,6 +24,7 @@ The supporting modules are:
 The imported modules provide the original public declarations:
 
 * `MPSTensor.exists_tp_gauge_blockwise`
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise`
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
 -/
