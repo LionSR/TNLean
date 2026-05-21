@@ -31,6 +31,8 @@ Its public outputs are:
   the arbitrary-input version with the all-zero summands kept as a zero block.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` —
   the preceding theorem together with the length-zero bond-dimension identity.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` —
+  the positive-length version with the explicit zero-block summand removed.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
   arbitrary-input result obtained after zero-block separation.
 
@@ -665,7 +667,7 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
 
 /-- **Bond-dimension identity for the arbitrary-input PGVWC07 zero-block form.**
 
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, lines
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
 761--762, after the zero-block contribution has been retained explicitly.
 The length-zero coefficient of the MPV identity gives
 $D_0 + \sum_k D_k = D$; therefore the total bond dimension of the nonzero
@@ -718,6 +720,54 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
     omega
   exact ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hMPV,
     hBond, hBound⟩
+
+/-- **Positive-length PGVWC07 unital dual-diagonal form.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+761--762 and 816--832.  This is the zero-block theorem above after omitting the
+explicit zero summand from the displayed MPV identity.  The omission is valid for
+nonempty rings because the all-zero summand has zero MPV coefficient in positive
+length.
+
+The theorem keeps the mathematically relevant bond-dimension estimate
+\(\sum_k D_k\leq D\).  It deliberately states MPV equality only for positive
+lengths; at length zero the omitted zero block would contribute its bond
+dimension. -/
+theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
+    (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
+      (∀ k, μ k ≠ 0) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hMPV,
+    _hBond, hBound⟩ :=
+    exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
+      (d := d) (D := D) A
+  refine ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, ?_, hBound⟩
+  intro N hN σ
+  calc
+    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
+    _ = 0 + mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+        rw [mpv_zeroMPSTensor]
+        simp [Nat.ne_of_gt hN]
+    _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+        simp
 
 /-- **Arbitrary-input trace-preserving gauge reduction.**
 
