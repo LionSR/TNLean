@@ -108,7 +108,7 @@ lemma mpvOverlap_eq_sum_of_decomp_left
 state vectors.
 
 This algebraic identity is used in the proof of arXiv:1606.00608,
-Theorem II.1, lines 1182--1186, to lift the BNT decomposition to a
+Theorem II.1, Appendix MPV proof line 1182, to lift the BNT decomposition to a
 state-vector identity before taking inner products with individual blocks. -/
 lemma mpvState_eq_sum_of_decomp
     {d g Dtot : ℕ} {dim : Fin g → ℕ}
@@ -130,8 +130,8 @@ lemma mpvState_eq_sum_of_decomp
 decomposition.
 
 This algebraic identity is used in the proof of arXiv:1606.00608,
-Theorem II.1, lines 1182--1186, when projecting the full proportionality
-relation onto one block MPV. -/
+Theorem II.1, Appendix MPV proof line 1182, when projecting the full
+proportionality relation onto one block MPV. -/
 lemma mpvInner_eq_sum_of_decomp_right
     {d g D Dtot : ℕ} {dim : Fin g → ℕ}
     (A_total : MPSTensor d Dtot)
@@ -153,7 +153,8 @@ decomposition.
 
 This is the conjugate-linear companion of
 `mpvInner_eq_sum_of_decomp_right`, used for the symmetric projection in the
-block-matching argument of arXiv:1606.00608, Theorem II.1, lines 1182--1186. -/
+block-matching argument of arXiv:1606.00608, Theorem II.1, Appendix MPV proof
+line 1182. -/
 lemma mpvInner_eq_sum_of_decomp_left
     {d g D Dtot : ℕ} {dim : Fin g → ℕ}
     (A_total : MPSTensor d Dtot)
