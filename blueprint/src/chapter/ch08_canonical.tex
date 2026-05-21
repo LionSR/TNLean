@@ -944,6 +944,41 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     the inequality follows because \(D_0\geq 0\).
 \end{proof}
 
+\begin{theorem}[Positive-length PGVWC07 unital dual-diagonal form]%
+    \label{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound}
+    \leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    For any MPS tensor \(A\) of bond dimension \(D\), there are nonzero blocks
+    \(C_k\) and positive real weights \(\mu_k\) such that each block is in the
+    unital orientation,
+    \[
+        \sum_i C_k^i(C_k^i)^\dagger=\Id,
+    \]
+    has only scalar fixed points for its transfer map, and has a diagonal
+    positive-definite fixed point for the dual transfer map,
+    \[
+        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
+    \]
+    Moreover, for
+    every chain length \(N>0\) and word
+    \(\sigma\in\{0,\ldots,d-1\}^N\),
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        \operatorname{MPV}_{\bigoplus_k \mu_k C_k}(\sigma),
+    \]
+    and the nonzero block dimensions satisfy \(\sum_k D_k\leq D\).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    Apply Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}.
+    The all-zero summand contributes zero to every positive-length coefficient,
+    so it may be omitted from the displayed MPV identity for \(N>0\).  The
+    bound \(\sum_k D_k\leq D\) is one of the conclusions of that theorem.
+\end{proof}
+
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
     \label{thm:irreducible_block_decomp_with_cfii}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
