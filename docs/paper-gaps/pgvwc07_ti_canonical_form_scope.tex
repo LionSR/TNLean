@@ -263,6 +263,16 @@ The earlier existence path now has the following formal pieces.
           source theorem, because the final total bond-dimension bound has not
           yet been promoted to a separate conclusion.
 
+    \item
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
+          adds the length-zero trace calculation to the preceding arbitrary
+          tensor theorem.  It proves
+          \(D_0+\sum_k D_k=D\), where \(D_0\) is the retained zero-block bond
+          dimension and the \(D_k\) are the nonzero block dimensions.  Hence
+          \(\sum_k D_k\leq D\), matching the total bond-dimension estimate in
+          Theorem~\texttt{Th:TIcanonical}, lines 761--762, while still keeping
+          the zero block explicit.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
