@@ -438,31 +438,34 @@ definitions stated below.
     induction on~$D$ to ensure termination.
 \end{proof}
 
-\begin{theorem}[Unital gauge from a full-rank fixed point]%
+\begin{theorem}[Unital gauge from a full-rank Perron--Frobenius eigenvector]%
     \label{thm:unital_gauge_of_pd_fixed_point}
+    \lean{MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector}
     \lean{MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint}
     \lean{MPSTensor.sameMPV_unitalGauge}
     \leanok
-    Let $\rho$ be a positive definite fixed point of
-    $\E_A(X)=\sum_i A^i X(A^i)^\dagger$.  For
-    $B^i := \rho^{-1/2}A^i\rho^{1/2}$,
+    Let $\rho$ be positive definite and suppose
+    $\E_A(\rho)=r\rho$ for some $r>0$.  For
+    $B^i := r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$,
     \[
         \sum_i B^i(B^i)^\dagger = \Id.
     \]
-    Moreover $A$ and $B$ generate the same MPV family.
+    In particular, if $r=1$, then the unscaled gauge
+    $B^i := \rho^{-1/2}A^i\rho^{1/2}$ is unital and
+    generates the same MPV family as $A$.
 
-    This is the full-rank fixed-point gauge used in
-    \cite[Theorem~Th:TIcanonical, lines~767--769]
+    This is the spectral-radius normalization and full-rank fixed-point gauge
+    used in \cite[Theorem~Th:TIcanonical, lines~765--769]
         {PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
     The positive square root of $\rho$ is invertible.  Substituting
-    $B^i=\rho^{-1/2}A^i\rho^{1/2}$ into
-    $\sum_i B^i(B^i)^\dagger$ and using $\E_A(\rho)=\rho$
-    gives the identity.  The change from $A$ to $B$ is a similarity
-    transformation, so cyclicity of the trace gives equality of all
-    finite-ring MPV coefficients.
+    $B^i=r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$ into
+    $\sum_i B^i(B^i)^\dagger$ and using $\E_A(\rho)=r\rho$
+    gives the identity.  In the case $r=1$, the change from $A$ to $B$
+    is a similarity transformation, so cyclicity of the trace gives
+    equality of all finite-ring MPV coefficients.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}

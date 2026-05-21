@@ -194,6 +194,90 @@ theorem unitalGauge_isUnital_of_transferMap_fixedPoint
   rw [← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq, ← hSS]
   simp [Matrix.mul_assoc, hSinv_mul, hStmul_inv]
 
+/-- Rescaled right-canonical gauge
+`B i = r^{-1/2} ρ^{-1/2} A i ρ^{1/2}`. -/
+noncomputable def spectralUnitalGauge
+    (A : MPSTensor d D) (r : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ) : MPSTensor d D :=
+  fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • unitalGauge (d := d) (D := D) A ρ i
+
+/-- **Unital normalisation from a positive transfer-map eigenvector.**
+
+Assume `ρ` is positive definite and
+`E_A(ρ) = rρ` for a positive real number `r`. Then the rescaled right-canonical
+gauge
+`B i = r^{-1/2} ρ^{-1/2} A i ρ^{1/2}` satisfies
+`∑ i, B i * (B i)ᴴ = I`.
+
+This is the spectral-radius normalization step in Pérez-García, Verstraete,
+Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines 765--769. -/
+theorem spectralUnitalGauge_isUnital_of_transferMap_eigenvector
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ)
+    (hρ : ρ.PosDef)
+    (hr : 0 < r)
+    (hfix : transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ) :
+    ∑ i : Fin d,
+      spectralUnitalGauge (d := d) (D := D) A r ρ i *
+        (spectralUnitalGauge (d := d) (D := D) A r ρ i)ᴴ = 1 := by
+  classical
+  set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ
+  let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
+  have hc_star : star c = c := by
+    rw [show c = (↑((Real.sqrt r)⁻¹) : ℂ) from rfl, RCLike.star_def,
+      Complex.conj_ofReal]
+  have hc_sq : c * c = (r : ℂ)⁻¹ := by
+    have hcc : (Real.sqrt r)⁻¹ * (Real.sqrt r)⁻¹ = r⁻¹ := by
+      rw [← sq, inv_pow, Real.sq_sqrt hr.le]
+    rw [show c = (↑((Real.sqrt r)⁻¹) : ℂ) from rfl, ← Complex.ofReal_mul, hcc,
+      Complex.ofReal_inv]
+  have hS_mul : S * S = ρ := by
+    simpa [S] using cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
+  have hS_herm : Sᴴ = S := by
+    simpa [S] using conjTranspose_cfc_sqrt (D := D) ρ
+  have hSS : S * Sᴴ = ρ := by
+    simpa [hS_herm] using hS_mul
+  have hdet : IsUnit S.det := by
+    simpa [S] using isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
+  have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hdet
+  have hdetT : IsUnit (Sᴴ.det) := by
+    simpa [Matrix.det_conjTranspose] using (IsUnit.star hdet)
+  have hStmul_inv : Sᴴ * (Sᴴ)⁻¹ = 1 := Matrix.mul_nonsing_inv Sᴴ hdetT
+  have h_term : ∀ i : Fin d,
+      (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S))ᴴ =
+        (r : ℂ)⁻¹ • (S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹) := by
+    intro i
+    rw [Matrix.conjTranspose_smul, hc_star]
+    calc
+      (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S)ᴴ)
+          = (c * c) • ((S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ) := by
+              simp [smul_smul]
+      _ = (r : ℂ)⁻¹ • ((S⁻¹ * A i * S) * (S⁻¹ * A i * S)ᴴ) := by
+              rw [hc_sq]
+      _ = (r : ℂ)⁻¹ • (S⁻¹ * (A i * ρ * (A i)ᴴ) * (Sᴴ)⁻¹) := by
+              congr 1
+              rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+                Matrix.conjTranspose_nonsing_inv]
+              simp [Matrix.mul_assoc, ← hSS]
+  have h_sum_eq : ∑ i : Fin d, A i * ρ * (A i)ᴴ = (r : ℂ) • ρ := by
+    simpa [transferMap_apply, Matrix.mul_assoc] using hfix
+  change
+    (∑ i : Fin d, (c • (S⁻¹ * A i * S)) * (c • (S⁻¹ * A i * S))ᴴ) = 1
+  simp_rw [h_term]
+  rw [← Finset.smul_sum, ← Finset.sum_mul, ← Finset.mul_sum, h_sum_eq]
+  have hr_ne : (r : ℂ) ≠ 0 := by
+    exact_mod_cast hr.ne'
+  change (r : ℂ)⁻¹ • (S⁻¹ * ((r : ℂ) • ρ) * (Sᴴ)⁻¹) = 1
+  calc
+    (r : ℂ)⁻¹ • (S⁻¹ * ((r : ℂ) • ρ) * (Sᴴ)⁻¹)
+        = (r : ℂ)⁻¹ • ((r : ℂ) • (S⁻¹ * ρ * (Sᴴ)⁻¹)) := by
+            simp [Matrix.mul_assoc]
+    _ = ((r : ℂ)⁻¹ * (r : ℂ)) • (S⁻¹ * ρ * (Sᴴ)⁻¹) := by
+            rw [smul_smul]
+    _ = S⁻¹ * ρ * (Sᴴ)⁻¹ := by
+            rw [inv_mul_cancel₀ hr_ne, one_smul]
+    _ = 1 := by
+            rw [← hSS]
+            simp [Matrix.mul_assoc, hSinv_mul, hStmul_inv]
+
 /-- The gauge-transformed tensor `unitalGauge A ρ` is gauge-equivalent to `A`
 when `ρ` is positive definite. -/
 theorem gaugeEquiv_unitalGauge

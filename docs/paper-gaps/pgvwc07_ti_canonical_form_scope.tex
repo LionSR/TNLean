@@ -149,6 +149,15 @@ assumptions into any later argument that cites canonical-form existence.
 The earlier existence path now has the following formal pieces.
 
 \begin{enumerate}
+    \item
+          \path|MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector|
+          formalizes the spectral-radius normalization part of
+          Theorem~\texttt{Th:TIcanonical}, lines 765--769.  Given a positive
+          definite eigenvector \(\rho\) with
+          \(\mathcal{E}_A(\rho)=r\rho\) and \(r>0\), it proves that
+          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) satisfies
+          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
+
     \item \path|MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint|
           formalizes the full-rank fixed-point gauge in
           Theorem~\texttt{Th:TIcanonical}, lines 767--769.  Given a positive
