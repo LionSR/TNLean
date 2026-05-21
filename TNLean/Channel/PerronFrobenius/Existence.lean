@@ -39,6 +39,8 @@ The required density-matrix Brouwer theorem is proved in
     PosDef eigenvector for the adjoint transfer map
 * `MPSTensor.exists_tp_data_of_irreducible`:
     TP-normalized tensor from an irreducible one
+* `MPSTensor.exists_unital_data_of_irreducible`:
+    unital PGVWC07-orientation tensor from an irreducible one
 
 ## References
 
