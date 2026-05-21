@@ -470,6 +470,30 @@ definitions stated below.
     induction on~$D$ to ensure termination.
 \end{proof}
 
+\begin{theorem}[Scalar fixed points in an irreducible unital block]%
+    \label{thm:irreducible_unital_scalar_fixed_point}
+    \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
+    \leanok
+    \uses{def:transfer_map, def:irreducible_tensor}
+    Suppose $A$ is irreducible and unital, $\E_A(\Id)=\Id$.  If
+    $\E_A(X)=X$, then $X$ is a scalar multiple of the identity.
+
+    This is the fixed-point endpoint in
+    \cite[Theorem~Th:TIcanonical, lines~816--826]{PerezGarcia2007Matrix}:
+    after the invariant-projection decomposition has been iterated until no
+    proper invariant projection remains, a non-scalar fixed point would give
+    another two-block split by
+    Theorem~\ref{thm:unital_nonscalar_fixed_point_split}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Tensor irreducibility gives irreducibility of the corresponding completely
+    positive transfer map.  The unital equation is the Kraus unitality
+    condition.  The channel fixed-point theorem for irreducible unital Kraus
+    maps, in the form of Wolf's Theorem~6.6, then gives that every fixed point
+    is scalar.
+\end{proof}
+
 \begin{theorem}[Unital gauge from a full-rank Perron--Frobenius eigenvector]%
     \label{thm:unital_gauge_of_pd_fixed_point}
     \lean{MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector}

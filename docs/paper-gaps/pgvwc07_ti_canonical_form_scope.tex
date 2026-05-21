@@ -181,6 +181,17 @@ The earlier existence path now has the following formal pieces.
           scalar multiple of the identity is fixed by a unital linear map and
           cannot force a nontrivial split.
 
+    \item
+          \path|MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital|
+          formalizes the fixed-point endpoint in
+          Theorem~\texttt{Th:TIcanonical}, lines 816--826.  Once the block is
+          irreducible and unital, every fixed point of its transfer map is a
+          scalar multiple of \(\mathbf{1}\).  The proof uses the MPS
+          irreducible-tensor/irreducible-map bridge and the already formalized
+          channel theorem \path|MPSTensor.fixed_eq_scalar_of_irreducible_unital|
+          (Wolf Theorem 6.6).  Thus the identity is the unique fixed point
+          after the usual scalar normalization of the fixed-point line.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
