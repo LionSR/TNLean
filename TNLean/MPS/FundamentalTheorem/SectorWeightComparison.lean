@@ -19,9 +19,9 @@ extrapolation and the Newton identities.
 In CPSV16, the relevant coefficient comparison is the equal-MPV corollary:
 after the BNT sectors have been matched, the proof compares the
 power sums of the copy weights in each matched sector
-(`Papers/1606.00608/MPDO-22-12-17-2.tex`, lines 1184--1188).  The finite
-power-sum rigidity input is the appendix power-sum lemma at lines
-1155--1163.  The geometric extrapolation below is a formal
+(`Papers/1606.00608/MPDO-22-12-17-2.tex`, Appendix MPV proof,
+lines 1184--1188).  The finite power-sum rigidity input is the appendix
+power-sum lemma at lines 1155--1163.  The geometric extrapolation below is a formal
 strengthening needed because the Lean coefficient identity is often available
 eventually in the length parameter rather than at the first
 `max{x_a,x_b}` positive exponents.
@@ -212,7 +212,7 @@ exponents.  The finite-range unequal-cardinality power-sum theorem then gives th
 copy count and the multiset of weights, using the nonzero-entry hypotheses carried
 by `SectorWeightData`.  This is the formal counterpart of the CPSV16 appendix
 power-sum lemma, lines 1155--1163, applied to the matched-sector power sums in
-the equal-MPV corollary proof, lines 1184--1188. -/
+the Appendix MPV proof of the equal-MPV corollary, lines 1184--1188. -/
 lemma copies_eq_and_weight_multiset_eq_of_eventually_coeff_eq
     (S T : SectorWeightData g)
     {N0 : ℕ}

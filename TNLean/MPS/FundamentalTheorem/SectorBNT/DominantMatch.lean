@@ -168,8 +168,8 @@ witness `∃ q, ‖P.weight j₀ q‖ = 1` at a user-supplied sector index
 match `Q.basis k₀` of equal bond dimension, gauge-phase equivalent in
 the cast-left shape, and with a non-decaying cross-overlap.
 
-The proof is a direct read of the CPSV16 lines 1172–1188 unit-block
-projection: assume by contradiction that **all** cross-overlaps
+The proof is a direct read of the CPSV16 Appendix MPV proof, lines 1172–1188,
+unit-block projection: assume by contradiction that **all** cross-overlaps
 `mpvOverlap (P.basis j₀) (Q.basis k)` decay; project the `SameMPV₂`
 identity onto `mpvState (P.basis j₀)` (taking the bilinear overlap with
 the `j₀`-th `P`-block).

@@ -5,22 +5,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
 
 /-!
-# Strong existential and bijective sector matching (CPSV16 §II.C line 1182)
+# Strong existential and bijective sector matching
 
-The strong existential matching theorem states the CPSV16 §II.C line 1182
-*Step 1* conclusion directly on the original pair `(P, Q)` of BNT canonical
-forms, iterated over each sector `k` of `Q` that carries a unit-modulus copy.
+The strong existential matching theorem states the CPSV16 Appendix MPV proof,
+line 1182, matching conclusion directly on the original pair `(P, Q)` of BNT
+canonical forms, iterated over each sector `k` of `Q` that carries a
+unit-modulus copy.
 
-The coefficient identity of CPSV16 §II.C lines 1187–1188 (Corollary substitution)
-lives in the companion module `SectorBNT/CoeffIdentity.lean`.
+The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
+(Corollary substitution) lives in the companion module
+`SectorBNT/CoeffIdentity.lean`.
 
 ## Paper anchor
 
-CPSV16 (arXiv:1606.00608) §II.C line 1182 gives the *entire* matching step
-of the proportional theorem proof.  In mathematical terms, this step fixes a
-block $B_k$ and observes that its overlaps with the $A_j$ blocks cannot all
-decay to zero, since then the two MPV families would fail to be proportional
-for all lengths.  The equal-vector corollary then gives an index $j_k$ with
+CPSV16 (arXiv:1606.00608) Appendix MPV proof, line 1182, gives the matching
+step of the proportional theorem proof.  In mathematical terms, this step
+fixes a block $B_k$ and observes that its overlaps with the $A_j$ blocks cannot
+all decay to zero, since then the two MPV families would fail to be
+proportional for all lengths.  The equal-vector corollary then gives an index $j_k$ with
 $|V^{(N)}(B_k)\rangle = e^{i\phi_k N} |V^{(N)}(A_{j_k})\rangle$, and the
 single-block fundamental theorem gives
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
@@ -80,9 +82,9 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Strong existential matching: CPSV16 §II.C line 1182 -/
+/-! ### Strong existential matching: CPSV16 Appendix MPV proof, line 1182 -/
 
-/-- **CPSV16 §II.C line 1182 Step 1 (full-basis form).**
+/-- **CPSV16 Appendix MPV proof, line 1182, Step 1 (full-basis form).**
 
 For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
 bond dimension, gauge-phase equivalent to `Q.basis k` after the dimension
@@ -92,11 +94,11 @@ The proof iterates `exists_block_match_of_sameMPV` over every `Q`-sector
 with `(P, Q)` swapped, so it consumes the per-block unit-modulus
 witnesses on the *swapped* side, namely `hUnitQ : ∀ k, ∃ q, ‖μ_{k,q}‖ = 1`
 for $Q$.  The per-block unit-modulus convention is paper-implicit in
-CPSV16 §II.C line 1182's projection argument; it is taken here as an
-explicit theorem-level hypothesis (CPSV16 §II.C line 246 records only
+CPSV16 Appendix MPV proof, line 1182's projection argument; it is taken here
+as an explicit theorem-level hypothesis (CPSV16 §II.C line 246 records only
 the global unit witness).
 
-Paper anchor: CPSV16 §II.C line 1182 (arXiv:1606.00608), CPSV21
+Paper anchor: CPSV16 Appendix MPV proof, line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     {P Q : SectorDecomposition d}
@@ -146,7 +148,7 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
 
 /-! ### Bijective sector matching by symmetry -/
 
-/-- **CPSV16 §II.C line 1182 full-basis bijection.**
+/-- **CPSV16 Appendix MPV proof, line 1182, full-basis bijection.**
 
 Applying `forall_k_exists_j_nondecaying_overlap_of_sameMPV` in both
 directions gives injective maps `Fin Q.basisCount → Fin P.basisCount` and
@@ -160,9 +162,9 @@ and $g_B \geq g_A$".  The proof invokes
 `forall_k_exists_j_nondecaying_overlap_of_sameMPV` once with $(P,Q)$ and
 once with $(Q,P)$, hence it consumes per-block unit-modulus witnesses on
 both sides: `hUnitP : ∀ j, ∃ q, ‖μ_{j,q}^P‖ = 1` and `hUnitQ : ∀ k, ∃ q,
-‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 §II.C line 1182's
-projection argument and are taken as explicit theorem-level hypotheses
-here (CPSV16 §II.C line 246 records only the global unit witness). -/
+‖μ_{k,q}^Q‖ = 1`.  These are paper-implicit in CPSV16 Appendix MPV proof,
+line 1182's projection argument and are taken as explicit theorem-level
+hypotheses here (CPSV16 §II.C line 246 records only the global unit witness). -/
 theorem bijective_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
