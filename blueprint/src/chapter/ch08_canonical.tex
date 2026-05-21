@@ -986,6 +986,20 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
 \end{definition}
 
+\begin{lemma}[Positive PGVWC07 witness weights are nonzero]%
+    \label{lem:pgvwc07_positive_length_witness_weight_ne_zero}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.weight_ne_zero}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    In a positive-length PGVWC07 canonical-form witness, every block weight is
+    nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    Each weight is the complex embedding of a strictly positive real number.
+\end{proof}
+
 \begin{theorem}[Existence of the positive-length PGVWC07 witness]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}

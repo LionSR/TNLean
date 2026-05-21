@@ -91,8 +91,6 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
           ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   /-- Every block weight is a positive real number, embedded into `ℂ`. -/
   weight_pos : ∀ k, ∃ a : ℝ, 0 < a ∧ weights k = (a : ℂ)
-  /-- Every block weight is nonzero. -/
-  weight_ne_zero : ∀ k, weights k ≠ 0
   /-- Every nonzero block has positive bond dimension. -/
   dim_pos : ∀ k, 0 < dim k
   /-- On nonempty rings, the original tensor and the weighted block tensor have
@@ -101,6 +99,20 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   /-- The total bond dimension of the nonzero canonical blocks is at most the
   original bond dimension. -/
   bondDim_le : ∑ k : Fin r, dim k ≤ D
+
+/-- Positive PGVWC07 witness weights are nonzero.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+751--752, writes the canonical-form weights as positive real numbers.  In the
+positive-length witness, nonvanishing is therefore a consequence of the
+positive-real weight field. -/
+theorem PGVWC07PositiveLengthWitness.weight_ne_zero
+    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A) :
+    ∀ k, W.weights k ≠ 0 := by
+  intro k
+  obtain ⟨a, ha_pos, hweight⟩ := W.weight_pos k
+  rw [hweight]
+  exact_mod_cast (ne_of_gt ha_pos)
 
 private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
     (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where
@@ -843,7 +855,7 @@ theorem exists_pgvwc07_positiveLengthWitness
     (A : MPSTensor d D) :
     Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
   classical
-  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hSame, hBound⟩ :=
+  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, _, hDim, hSame, hBound⟩ :=
     exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
       (d := d) (D := D) A
   exact ⟨
@@ -854,7 +866,6 @@ theorem exists_pgvwc07_positiveLengthWitness
       dual_fixed := hΛ
       scalar_fixed := hScalar
       weight_pos := hμPos
-      weight_ne_zero := hμNe
       dim_pos := hDim
       sameMPV_pos := hSame
       bondDim_le := hBound }⟩
