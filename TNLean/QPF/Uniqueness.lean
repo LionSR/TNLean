@@ -36,12 +36,6 @@ variable {d D : ℕ}
 
 section Uniqueness
 
-private lemma eigenvectorUnitary_isUnit' [DecidableEq (Fin D)]
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.IsHermitian) :
-    IsUnit (↑hA.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.isUnit_iff_isUnit_det]
-  exact Matrix.UnitaryGroup.det_isUnit hA.eigenvectorUnitary
-
 /-! ### Square root diagonal functions -/
 
 private noncomputable def sqrtΛ' [DecidableEq (Fin D)]
@@ -282,7 +276,7 @@ lemma exists_critical_scalar [Nonempty (Fin D)]
     exact (Matrix.IsUnit.posDef_star_left_conjugate_iff hB_unit).mpr hσ_pd
   set c₀ := minEigenvalue' hH_herm
   set V : Matrix (Fin D) (Fin D) ℂ := ↑hH_herm.eigenvectorUnitary
-  have hV_unit := eigenvectorUnitary_isUnit' hH_herm
+  have hV_unit := eigenvectorUnitary_isUnit hH_herm
   have h_shift := hermitian_sub_scalar_spectral hH_herm c₀
   have hct : ∀ f, V * Matrix.diagonal f * Vᴴ = V * Matrix.diagonal f * star V :=
     fun _ => by simp [Matrix.star_eq_conjTranspose]

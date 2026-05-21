@@ -51,6 +51,13 @@ theorem eig_mul_conj [DecidableEq (Fin D)]
   rw [← Matrix.star_eq_conjTranspose]
   exact Unitary.mul_star_self_of_mem hM.eigenvectorUnitary.prop
 
+/-- The eigenvector unitary of a Hermitian matrix is a unit in the matrix ring. -/
+theorem eigenvectorUnitary_isUnit [DecidableEq (Fin D)]
+    {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :
+    IsUnit (↑hM.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) := by
+  rw [Matrix.isUnit_iff_isUnit_det]
+  exact Matrix.UnitaryGroup.det_isUnit hM.eigenvectorUnitary
+
 /-- The spectral decomposition of a Hermitian matrix in `U * diagonal * Uᴴ` form. -/
 theorem spectral_decomp_eq [DecidableEq (Fin D)]
     {M : Matrix (Fin D) (Fin D) ℂ} (hM : M.IsHermitian) :

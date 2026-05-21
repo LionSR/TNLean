@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 
@@ -574,26 +575,13 @@ private lemma smul_one_sub_hermitian_spectral
         congr 1
         exact diagonal_smul_one_sub hX.eigenvalues c
 
-private lemma eigenvectorUnitary_isUnit_of_isHermitian
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
-    IsUnit (↑hX.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [Matrix.isUnit_iff_isUnit_det]
-  have hmul :
-      (↑hX.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ) *
-        (↑hX.eigenvectorUnitary : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    simp
-  have hdet := congrArg Matrix.det hmul
-  rw [Matrix.det_mul, Matrix.det_one] at hdet
-  exact IsUnit.of_mul_eq_one _ hdet
-
 private lemma max_shift_posSemidef [Nonempty (Fin D)]
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
     ((↑(maxEigenvalue hX) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X).PosSemidef := by
   classical
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
   have hU_unit : IsUnit U := by
-    simpa [U] using eigenvectorUnitary_isUnit_of_isHermitian (D := D) hX
+    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
   rw [smul_one_sub_hermitian_spectral hX (maxEigenvalue hX)]
   rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]]
   exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).mpr
@@ -610,7 +598,7 @@ private lemma max_shift_not_posDef [Nonempty (Fin D)]
   intro h_pd
   set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
   have hU_unit : IsUnit U := by
-    simpa [U] using eigenvectorUnitary_isUnit_of_isHermitian (D := D) hX
+    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
   have h_diag_pd :
       (Matrix.diagonal (fun j => (↑(maxEigenvalue hX - hX.eigenvalues j) : ℂ)) :
         Matrix (Fin D) (Fin D) ℂ).PosDef := by
