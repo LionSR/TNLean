@@ -142,7 +142,7 @@ section CFII
 conjugation of the original transfer map.
 
 For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
-theorem transferMap_unitaryConj [DecidableEq (Fin D)]
+theorem transferMap_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (d := d) (D := D)
@@ -166,7 +166,7 @@ theorem transferMap_unitaryConj [DecidableEq (Fin D)]
   repeat rw [Matrix.mul_assoc]
 
 /-- The TP condition is preserved by unitary conjugation. -/
-private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
+private lemma tp_of_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ *
@@ -205,7 +205,6 @@ unitary `U` and a diagonal positive-definite matrix `Λ` such that:
 This is the key step in reducing to "Canonical Form II" from
 Cirac et al. arXiv:1606.00608 Appendix A. -/
 theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
-    [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
