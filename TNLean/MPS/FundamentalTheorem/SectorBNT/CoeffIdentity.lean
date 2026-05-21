@@ -6,9 +6,9 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
 import TNLean.MPS.CanonicalForm.PhaseCover
 
 /-!
-# Coefficient identity for full BNT basis matching (CPSV16 §II.C lines 1187–1188)
+# Coefficient identity for full BNT basis matching
 
-This module contains the CPSV16 §II.C lines 1187–1188 coefficient
+This module contains the CPSV16 Appendix MPV proof, lines 1187–1188, coefficient
 comparison in the full-basis bijection form.  The full basis bijection
 `β : Fin Q.basisCount ≃ Fin P.basisCount` (from `StrongMatch`) together with
 `IsBNTCanonicalForm`'s CPSV21 Section IV.A / Definition 4.2 BNT input and
@@ -18,8 +18,9 @@ residual unmatched terms.  BNT linear independence of the `P`-basis
 
 Paper anchors:
 
-* CPSV16 §II.C lines 1182–1188: match every BNT basis tensor, substitute the
-  gauge-phase identities, and compare the coefficients of the BNT basis.
+* CPSV16 Appendix MPV proof, line 1182: match every BNT basis tensor.
+* CPSV16 Appendix MPV proof, lines 1187–1188: substitute the gauge-phase
+  identities and compare the coefficients of the BNT basis.
 * CPSV21 Definition 4.2 lines 1846–1850 and the two-layer display at
   lines 1864–1884: per-block BNT normalization that makes every sector
   participate in the full-basis matching.
@@ -85,7 +86,7 @@ private lemma extract_unit_gauge_phase_mpv
   refine ⟨ζ, ?_, hmpv⟩
   exact hP.norm_phase_of_matched_mpv hQ hmpv
 
-/-- **CPSV16 §II.C lines 1187–1188, coefficient identity from fixed MPV phases.**
+/-- **Coefficient identity from fixed MPV phases.**
 
 This auxiliary lemma isolates the linear-independence part of the global-gauge
 substitution.  If a full basis bijection `β` has already been equipped with
@@ -99,9 +100,10 @@ then `SameMPV₂ P.toTensor Q.toTensor` and the BNT linear independence of the
 `P.coeff N (β k) = (ζ k)^N * Q.coeff N k`.
 
 Unlike `coeff_identity_via_global_gauge`, this statement keeps the phase
-function explicit.  The coefficient/weight comparison is the line 1187--1188
-part of the equal-MPV corollary; the per-block gauge matrices are combined
-afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in lines 1189--1192. -/
+function explicit.  The coefficient/weight comparison is the CPSV16 Appendix
+MPV proof, lines 1187--1188, part of the equal-MPV corollary; the per-block
+gauge matrices are combined afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in
+lines 1189--1192. -/
 theorem coeff_identity_via_matched_mpv_phasePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P)
@@ -227,7 +229,7 @@ theorem coeff_identity_via_matched_mpv_phase
   coeff_identity_via_matched_mpv_phasePos
     (P := P) (Q := Q) hP hEqual.toSameMPV₂Pos β ζ hζ_mpv
 
-/-- **CPSV16 §II.C lines 1187–1188, full-basis coefficient identity.**
+/-- **Full-basis coefficient identity.**
 
 Assume a full matched-basis equivalence `β : Fin Q.basisCount ≃
 Fin P.basisCount`, with every `Q`-block gauge-phase equivalent to the
@@ -238,9 +240,9 @@ an eventual exact coefficient identity
 
 `P.coeff N (β k) = ζ_k^N * Q.coeff N k`.
 
-This is the formal counterpart of CPSV16 line 1188's exact power-sum
-comparison; it deliberately avoids the unsound asymptotic-difference to
-full-multiset route noted in the multiplicity-audit memo. -/
+This is the formal counterpart of CPSV16 Appendix MPV proof, line 1188's exact
+power-sum comparison; it deliberately avoids the unsound asymptotic-difference
+to full-multiset route noted in the multiplicity-audit memo. -/
 theorem coeff_identity_via_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

@@ -53,7 +53,7 @@ $P.\mathrm{coeff}(N,j)\cdot Q.\mathrm{coeff}(N,k)
 has a unit-modulus summand at $(q^*,p^*)$.  By
 `CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus` the sum does not
 tend to zero.  This is the analytic input used to formalize the non-decay
-contradiction in CPSV16 §II.C line 1182, together with the line-246
+contradiction in CPSV16 Appendix MPV proof, line 1182, together with the line-246
 normalization. -/
 lemma joint_coeff_not_tendsto_zero
     {P Q : SectorDecomposition d}
@@ -346,7 +346,8 @@ eventual nonzero proportionality and unit-modulus copy weights at $Q$-sector
 $k_0$ and auxiliary $P$-sector $j_0$, some $P$-block $j_1$ has matched bond
 dimension, cast-compatible gauge-phase equivalence, and non-decaying
 cross-overlap with $Q.\mathrm{basis}\,k_0$.  Paper anchor: CPSV16 §II.C
-lines 349–352, 1167–1170, and 1182. -/
+lines 349–352, Appendix MPV statement lines 1167–1170, and Appendix MPV
+proof line 1182. -/
 theorem exists_block_match_at_Q_of_eventuallyProportional
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

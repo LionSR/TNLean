@@ -29,7 +29,7 @@ core examples have a single BNT basis sector (`basisCount = 1`):
 Each example additionally exposes a named lemma `<example>_weight_unit_per_block`
 witnessing the per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1`,
 which fundamental-theorem theorems consume as an explicit hypothesis
-(paper-implicit in CPSV16 §II.C line 1182's projection argument).
+(paper-implicit in CPSV16 Appendix MPV proof, line 1182's projection argument).
 
 A fourth example exercises the **optional** equal-modulus layer
 `HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
@@ -103,7 +103,7 @@ noncomputable example
 
 Fundamental-theorem theorems on `IsBNTCanonicalForm` take the per-block
 unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` (paper-implicit in
-CPSV16 §II.C line 1182's projection argument) as an explicit
+CPSV16 Appendix MPV proof, line 1182's projection argument) as an explicit
 hypothesis.  For `singletonDecomp C`, the unique copy carries
 weight `1`. -/
 lemma singletonDecomp_weight_unit_per_block (C : MPSTensor d D) :
@@ -174,7 +174,7 @@ noncomputable example
 
 For each (unique) BNT basis sector, the copy `q = 0` carries weight
 `μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
 line 1182's projection argument). -/
 lemma signFlipDecomp_weight_unit_per_block (C : MPSTensor d D) :
     ∀ j : Fin (signFlipDecomp C).basisCount,
@@ -251,7 +251,7 @@ noncomputable example
 
 For each (unique) BNT basis sector, the copy `q = 0` carries weight
 `μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
 line 1182's projection argument). -/
 lemma phaseDecomp_weight_unit_per_block (C : MPSTensor d D) (θ : ℝ) :
     ∀ j : Fin (phaseDecomp C θ).basisCount,
@@ -383,7 +383,7 @@ noncomputable example
 
 For each (unique) BNT basis sector, the copy `q = 0` carries the unit
 weight `μ = 1`.  Consumed by FT theorems on `IsBNTCanonicalForm` as the
-explicit per-block hypothesis (paper-implicit in CPSV16 §II.C
+explicit per-block hypothesis (paper-implicit in CPSV16 Appendix MPV proof,
 line 1182's projection argument). -/
 lemma halvedDecomp_weight_unit_per_block (C : MPSTensor d D) :
     ∀ j : Fin (halvedDecomp C).basisCount,
