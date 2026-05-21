@@ -1016,17 +1016,17 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	
 	]
-</span>. Thus the reductions recorded here are conditional primitive-block results. They should not be read as the full translation-invariant canonical-form theorem of&#160;<span class="cite">
+</span>. Thus the reductions recorded here are conditional primitive-block results. They should not be read as the full translation-invariant canonical-form theorem of <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;<span class="ttfamily">Th:TIcanonical</span>, lines&#160;742–763
+	, Theorem&#160;Th:TIcanonical, lines&#160;742–763
 	]
-</span>. The normalization convention is also dual to the one used in the cited theorem: the blocks are written in the unital orientation \(\sum _i A_k^i(A_k^i)^\dagger =\mathbb {1}\) for \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \)&#160;<span class="cite">
+</span>. The normalization convention is also dual to the one used in the cited theorem: the blocks are written in the unital orientation \(\sum _i A_k^i(A_k^i)^\dagger =\mathbb {1}\) for \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \) <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;<span class="ttfamily">Th:TIcanonical</span>, lines&#160;754–758
+	, Theorem&#160;Th:TIcanonical, lines&#160;754–758
 	]
 </span>, whereas this chapter uses the trace-preserving, or left-canonical, orientation \(\sum _i (A_k^i)^\dagger A_k^i=\mathbb {1}\). Passing to the conjugate-transposed Kraus family \(K_i := (A^i)^\dagger \) exchanges the two orientations: the transfer map of \(K\) is the Frobenius adjoint of \(\mathcal{E}_A\). The Perron–Frobenius eigenvector existence and TP-gauge construction are in Chapter&#160;<a href="ch-qpf.html">6</a>; this chapter uses them to produce left-canonical normalizations and decompositions satisfying the normal canonical form conditions. The reduction draws on&#160;<span class="cite">
 	[
@@ -1053,7 +1053,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">9.1</span>
-    <span class="theorem_thmtitle">PGVWC07 translation-invariant canonical form</span>
+    <span class="theorem_thmtitle">Translation-invariant canonical form</span>
     <div class="thm_header_extras">
 
         </div>
@@ -1097,7 +1097,7 @@
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;<span class="ttfamily">Th:TIcanonical</span>, lines&#160;742–763
+	, Theorem&#160;Th:TIcanonical, lines&#160;742–763
 	]
 </span>. </p>
 
@@ -1109,7 +1109,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">9.2</span>
-    <span class="remark_thmtitle">Source proof order for PGVWC07</span>
+    <span class="remark_thmtitle">Source proof order</span>
     <div class="thm_header_extras">
 
         </div>
@@ -1126,7 +1126,7 @@
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;<span class="ttfamily">Th:TIcanonical</span>
+	, Theorem&#160;Th:TIcanonical
 	]
 </span> in its given order. Lines&#160;765–770 normalize the spectral radius and use a full-rank positive fixed point to obtain the unital gauge. Lines&#160;771–783 derive the invariant support projection from a singular positive fixed point, using the positivity contradiction in lines&#160;775–783; this projection is not a prepared hypothesis. Lines&#160;785–815 split the finite-ring trace into the supported and orthogonal summands. Lines&#160;816–826 iterate this decomposition and use a non-scalar fixed point to split further until the identity is the only fixed point of each block. Finally, lines&#160;827–832 repeat the fixed-point argument for the dual map and diagonalize the resulting full-rank positive fixed point by a unitary gauge. Thus a formal proof should reconstruct the proof from an arbitrary translation-invariant representation in this order, using later primitive-block or prepared-family results only after their hypotheses have been obtained from the source argument. </p>
 
@@ -1172,7 +1172,7 @@
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, display labelled eq:II_Aiplusk1, lines&#160;216–225
+	, display labelled eq:II_Aiplusk1, lines&#160;216–218, followed by the spectral-radius normalization at lines&#160;219–225
 	]
 </span> and in <span class="cite">
 	[
@@ -1184,7 +1184,7 @@
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, BNT definition and proposition labelled prop:char-BNT, lines&#160;271–280
+	, BNT definition and proposition labelled prop:char-BNT, lines&#160;271–279
 	]
 </span>, with its appendix restatement and proof in <span class="cite">
 	[
@@ -1208,7 +1208,7 @@
 
   </div>
 </div>
-<p>Theorems&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> and&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a> are source-level targets and are not yet formalized as stated. This chapter develops constituent steps of the PGVWC07 and CPSV reductions: invariant-subspace decomposition (Theorem&#160;<a href="ch-canonical.html#thm:irred_decomp">9.15</a>), TP gauge (Section&#160;<a href="ch-canonical.html#sec:tp_gauge_arbitrary">9.8</a>), and period-removal cyclic sectors (Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>). All-zero-block separation and the structural after-blocking primitive-block decomposition are recorded in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_block_separation">12.3</a> and Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.31</a>). These checked statements do not yet supply the source normalization \(|\mu _k|\le 1\) with at least one unit-modulus weight, so they should not be cited as Theorem&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a>. </p>
+<p>Theorems&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> and&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a> are source-level targets and are not yet formalized as stated. This chapter develops constituent steps of the translation-invariant and density-operator canonical-form reductions: invariant-subspace decomposition (Theorem&#160;<a href="ch-canonical.html#thm:irred_decomp">9.15</a>), TP gauge (Section&#160;<a href="ch-canonical.html#sec:tp_gauge_arbitrary">9.8</a>), and period-removal cyclic sectors (Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>). All-zero-block separation and the structural after-blocking primitive-block decomposition are recorded in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_block_separation">12.3</a> and Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.31</a>). These checked statements do not yet supply the source normalization \(|\mu _k|\le 1\) with at least one unit-modulus weight, so they should not be cited as Theorem&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a>. </p>
 <h1 id="sec:cpsv_canonical_defs">9.1 Normal tensors, canonical forms, and bases of normal tensors</h1>
 
 <p>This section records the unstrengthened definitions of <em>normal tensor</em>, <em>canonical form</em>, and <em>basis of normal tensors</em> from&#160;<span class="cite">
@@ -2073,11 +2073,11 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Given a family of injective, left-canonical, strictly-ordered nonzero-weight blocks \((\mu _k, A_k)\), the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:cf_cpsv">9.5</a> can be discharged from either of two spectral hypotheses on the per-block transfer map \(\mathcal{E}_{A_k}\): a positive-definite primitive fixed point, or the peripheral-spectrum condition \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). In both cases the overlap clause \(O_{A_k A_k}(N) \to 1\) follows from the spectral-gap criterion of Chapter&#160;<a href="ch-spectral.html">7</a>. Both statements assume the blocks are already in the required normal form; they are not the arbitrary-input canonical-form existence theorem of&#160;<span class="cite">
+  <p> Given a family of injective, left-canonical, strictly-ordered nonzero-weight blocks \((\mu _k, A_k)\), the canonical-form conditions of Definition&#160;<a href="ch-canonical.html#def:cf_cpsv">9.5</a> can be discharged from either of two spectral hypotheses on the per-block transfer map \(\mathcal{E}_{A_k}\): a positive-definite primitive fixed point, or the peripheral-spectrum condition \(\sigma _\partial (\mathcal{E}_{A_k}) = \{ 1\} \). In both cases the overlap clause \(O_{A_k A_k}(N) \to 1\) follows from the spectral-gap criterion of Chapter&#160;<a href="ch-spectral.html">7</a>. Both statements assume the blocks are already in the required normal form; they are not the arbitrary-input canonical-form existence theorem of <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	, Theorem&#160;<span class="ttfamily">Th:TIcanonical</span>
+	, Theorem&#160;Th:TIcanonical
 	]
 </span>. </p>
 
@@ -4549,7 +4549,7 @@
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Section&#160;II.A, line&#160;246
+	, Section&#160;II.C, line&#160;246
 	]
 </span> treats as a choice. The missing rescaling step is recorded in <span class="ttfamily">docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex</span>. Applying Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_prepared">9.48</a> to this prepared family gives the sector decomposition, in the spirit of the BNT selection described by the source characterization in <span class="cite">
 	[
