@@ -839,6 +839,44 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     diagonalization of the dual fixed point.
 \end{proof}
 
+\begin{theorem}[Blockwise PGVWC07 unital and dual-diagonal data]%
+    \label{thm:pgvwc07_blockwise_unital_dual_package}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
+    \leanok
+    \uses{def:irreducible_tensor,
+        thm:pgvwc07_irreducible_unital_dual_package}
+    Let a tensor~$A$ be represented, in finite-ring MPV coefficients, by a
+    finite direct sum of nonzero irreducible blocks with unit weights.  Then
+    there is a weighted direct sum with the same MPV family such that every
+    block is in the unital orientation,
+    \[
+        \sum_i C_k^i(C_k^i)^\dagger=\Id ,
+    \]
+    every fixed point of the block transfer map is a scalar multiple of the
+    identity, and each block has a diagonal positive definite dual fixed point
+    \[
+        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
+    \]
+    The weights are the positive spectral-radius weights produced by applying
+    the single-block Perron--Frobenius gauge to each summand.
+
+    This is a blockwise assembly of
+    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
+        {PerezGarcia2007Matrix} after the recursive splitting has already
+    produced the nonzero irreducible summands.  It is not yet the full source
+    theorem, because it does not start from an arbitrary representation and
+    does not prove the final total bond-dimension bound.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_irreducible_unital_dual_package}
+    Apply Theorem~\ref{thm:pgvwc07_irreducible_unital_dual_package} to each
+    nonzero irreducible block.  Gauge equivalence and the final unitary
+    conjugation preserve the block MPV coefficients up to the displayed
+    spectral-radius weights, and unitary conjugation transports the scalar
+    fixed-point property of the unital transfer map.
+\end{proof}
+
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
     \label{thm:irreducible_block_decomp_with_cfii}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}

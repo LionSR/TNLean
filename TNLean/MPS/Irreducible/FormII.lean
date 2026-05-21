@@ -142,7 +142,7 @@ section CFII
 conjugation of the original transfer map.
 
 For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
-private lemma transferMap_unitaryConj [DecidableEq (Fin D)]
+theorem transferMap_unitaryConj [DecidableEq (Fin D)]
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (d := d) (D := D)
