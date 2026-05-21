@@ -207,28 +207,6 @@ recorded in the accompanying paper-gap note.\footnote{%
     block permutation together with per-block inner automorphisms.
 \end{proof}
 
-\begin{lemma}[Per-block same-MPV condition gives global gauge equivalence]\label{lem:per_block_gauge}
-    \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
-    \leanok
-    \uses{def:injective, def:gauge_equiv, def:block_diagonal_tensor}
-    If all block tensors $A_k$ are injective, and $B_k$ are
-    block tensors of the same bond dimensions such that the per-block
-    same-MPV condition holds, then each pair $(A_k, B_k)$ is gauge
-    equivalent, and the block-diagonal tensors
-    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
-    are globally gauge equivalent.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:ft_single, lem:multi_block_global}
-    Per-block gauge equivalence follows from the single-block
-    fundamental theorem (Theorem~\ref{thm:ft_single}) applied to each block.
-    Global gauge equivalence follows by placing the
-    per-block gauge matrices on the block diagonal
-    (Lemma~\ref{lem:multi_block_global}).
-\end{proof}
-
 \section{Burnside and invariant projections}
 
 \begin{lemma}[The algebra span reaches a finite cumulative span]\label{lem:algspan_cumulative_span}
@@ -545,9 +523,9 @@ We use this notation throughout the block-separation argument.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_sep, lem:per_block_gauge}
+    \uses{lem:block_sep, lem:fundamentalTheorem_multiBlock_full}
     Lemma~\ref{lem:block_sep} gives per-block same MPV.
-    Lemma~\ref{lem:per_block_gauge} then converts this to
+    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} then converts this to
     per-block gauge equivalence and then to global gauge equivalence
     of the block-diagonal tensors.
 \end{proof}
