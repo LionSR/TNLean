@@ -655,7 +655,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-algebraic_ft.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">16.10.1</span> <span class="toc_entry">Same-index direct-sum consequences of the single-block theorem</span></a>
+  <a href="ch-algebraic_ft.html#subsec:ft_block_sum_corollaries"><span class="toc_ref">16.10.1</span> <span class="toc_entry">Same-index direct-sum lemmas from the single-block theorem</span></a>
  </li>
 <li class="">
   <a href="ch-algebraic_ft.html#subsec:mpv_reindexing"><span class="toc_ref">16.10.2</span> <span class="toc_entry">MPV invariance under reindexing</span></a>
@@ -2087,7 +2087,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7ff593e881d0>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fabfe1a0170>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) &  = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond} \\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) &  = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
@@ -4040,7 +4040,7 @@
 </div>
 <h1 id="sec:multi_block_ft">16.10 Gauge equivalence for direct sums</h1>
 
-<p>The first lemmas in this section are bookkeeping for block-diagonal tensors: they assemble already-known block gauges, and they record the easy consequences of applying the injective single-block theorem to each block separately. They do not derive the block matching appearing in <span class="cite">
+<p>The first lemmas in this section are elementary facts about block-diagonal tensors: they assemble already-known block gauges, and they record the easy consequences of applying the injective single-block theorem to each block separately. They do not derive the block matching appearing in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -4368,7 +4368,7 @@
 
   </div>
 </div>
-<h2 id="subsec:ft_block_sum_corollaries">16.10.1 Same-index direct-sum consequences of the single-block theorem</h2>
+<h2 id="subsec:ft_block_sum_corollaries">16.10.1 Same-index direct-sum lemmas from the single-block theorem</h2>
 
 <div class="remark_thmwrapper theorem-style-remark" id="a0000001049">
   <div class="remark_thmheading">
@@ -4398,13 +4398,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:multi_block_ft">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:multi_block_ft">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">16.45</span>
-    <span class="theorem_thmtitle">Per-block single-block FT</span>
+    <span class="lemma_thmlabel">16.45</span>
+    <span class="lemma_thmtitle">Per-block application of the single-block theorem</span>
     <div class="thm_header_extras">
 
     
@@ -4412,7 +4412,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#thm:multi_block_ft">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:multi_block_ft">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4464,7 +4464,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If all block tensors \(A_k\) are injective and the per-block same-MPV condition holds (\(A_k\) and \(B_k\) generate the same MPV family for each&#160;\(k\)), then each pair \((A_k, B_k)\) is gauge equivalent. </p>
 
   </div>
@@ -4510,13 +4510,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:block_to_global_mpv">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_to_global_mpv">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">16.47</span>
-    <span class="theorem_thmtitle">Per-block same MPV implies global same MPV</span>
+    <span class="lemma_thmlabel">16.47</span>
+    <span class="lemma_thmtitle">Per-block same MPV implies global same MPV</span>
     <div class="thm_header_extras">
 
     
@@ -4524,7 +4524,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#thm:block_to_global_mpv">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:block_to_global_mpv">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4576,7 +4576,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If \(A_k\) and \(B_k\) generate the same MPV family for each block&#160;\(k\), then the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) also generate the same MPV family. </p>
 
   </div>
@@ -4616,13 +4616,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:multi_block_global">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:multi_block_global">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
     </span>
-    <span class="theorem_thmlabel">16.49</span>
-    <span class="theorem_thmtitle">Gauge equivalence for same-index direct sums</span>
+    <span class="lemma_thmlabel">16.49</span>
+    <span class="lemma_thmtitle">Gauge equivalence for same-index direct sums</span>
     <div class="thm_header_extras">
 
     
@@ -4630,7 +4630,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#thm:multi_block_global">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:multi_block_global">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001054"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -4654,9 +4654,9 @@
           
           <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_ft">Theorem 16.45</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_ft">Lemma 16.45</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_ft">Theorem 16.45</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_ft">Lemma 16.45</a></li>
           
         </ul>
     
@@ -4686,7 +4686,7 @@
     
         </div>
   </div>
-  <div class="theorem_thmcontent">
+  <div class="lemma_thmcontent">
   <p>   If each block \(A_k\) is injective and each pair \((A_k, B_k)\) generates the same MPV family, then the block-diagonal tensors \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\) are gauge equivalent. </p>
 
   </div>
@@ -4699,7 +4699,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the per-block single-block Fundamental Theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:multi_block_ft">16.45</a>) to obtain blockwise gauge equivalences from injectivity and equality of MPV families, then combine them into a global gauge for the block-diagonal tensors. </p>
+  <p> Apply the per-block single-block Fundamental Theorem (Lemma&#160;<a href="ch-algebraic_ft.html#lem:multi_block_ft">16.45</a>) to obtain blockwise gauge equivalences from injectivity and equality of MPV families, then combine them into a global gauge for the block-diagonal tensors. </p>
 
   </div>
 </div>
@@ -4768,9 +4768,9 @@
           
           <li><a href="ch-algebraic_ft.html#lem:tensor_from_blocks_globalGauge_conj">Lemma 16.41</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_ft">Theorem 16.45</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_ft">Lemma 16.45</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_global">Theorem 16.49</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_global">Lemma 16.49</a></li>
           
         </ul>
     
@@ -5361,11 +5361,11 @@
           
           <li><a href="ch-algebraic_ft.html#lem:canonical_toTensor_eq">Lemma 16.57</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_global">Theorem 16.49</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_global">Lemma 16.49</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:canonical_toTensor_eq">Lemma 16.57</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:multi_block_global">Theorem 16.49</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:multi_block_global">Lemma 16.49</a></li>
           
         </ul>
     
@@ -5408,7 +5408,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Rewrite \(T_C\) as a weighted block-diagonal tensor via Lemma&#160;<a href="ch-algebraic_ft.html#lem:canonical_toTensor_eq">16.57</a>, then apply the multi-block global fundamental theorem (Theorem&#160;<a href="ch-algebraic_ft.html#thm:multi_block_global">16.49</a>). </p>
+  <p> Rewrite \(T_C\) as a weighted block-diagonal tensor via Lemma&#160;<a href="ch-algebraic_ft.html#lem:canonical_toTensor_eq">16.57</a>, then apply the multi-block global gauge-equivalence lemma (Lemma&#160;<a href="ch-algebraic_ft.html#lem:multi_block_global">16.49</a>). </p>
 
   </div>
 </div>
