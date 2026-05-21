@@ -801,7 +801,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     \label{thm:pgvwc07_irreducible_unital_dual_package}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, thm:unital_gauge_of_pd_fixed_point,
+    \uses{def:irreducible_tensor, thm:unital_data_irreducible,
         thm:irreducible_unital_scalar_fixed_point,
         thm:pgvwc07_dual_diag_unital}
     Let $A$ be an irreducible nonzero MPS block with positive bond dimension.
@@ -830,7 +830,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{theorem}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:unital_gauge_of_pd_fixed_point} gives the unital gauge.
+    Theorem~\ref{thm:unital_data_irreducible} gives the unital gauge.
     Gauge equivalence preserves irreducibility of the bond-space action, so
     Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} gives the scalar
     fixed-point endpoint for the unital representative.  Then
