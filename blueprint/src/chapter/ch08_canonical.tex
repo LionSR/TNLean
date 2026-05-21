@@ -182,8 +182,10 @@ when that fixed point is singular, split the finite-ring trace over the support
 and its orthogonal complement, iterate this dimension-decreasing decomposition
 until the identity is the only fixed point of each block, and finally apply the
 dual fixed-point argument and unitary diagonalization that produces the
-matrices $\Lambda_k$.  Only after these steps have been composed can the
-existing conditional TP-normalized and primitive-block results be used as
+matrices $\Lambda_k$.  The last step is now available for an irreducible
+unital block as Theorem~\ref{thm:pgvwc07_dual_diag_unital}; the remaining work
+is to thread it through the whole source recursion.  Only after these steps
+have been composed can the existing conditional TP-normalized and primitive-block results be used as
 corollaries of the source theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
@@ -766,6 +768,35 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     the diagonal PD fixed point.
     Unitary conjugation preserves trace-preservation and the MPV
     family (Theorem~\ref{thm:samempv_unitary}).
+\end{proof}
+
+\begin{theorem}[Dual diagonalization for irreducible unital blocks]%
+    \label{thm:pgvwc07_dual_diag_unital}
+    \lean{MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor in the unital gauge
+    $\sum_i A^i(A^i)^\dagger=\Id$ with positive bond dimension.
+    Then there exist a unitary~$U$ and a diagonal positive definite
+    matrix~$\Lambda$ such that, for $B^i:=U^\dagger A^iU$,
+    \[
+        \sum_i B^i(B^i)^\dagger=\Id,
+        \qquad
+        \sum_i (B^i)^\dagger\Lambda B^i=\Lambda,
+    \]
+    and $A$ and $B$ generate the same MPV family.
+    This is the dual-map fixed-point and unitary-diagonalization step of
+    \cite[Theorem~Th:TIcanonical, lines~827--832]{PerezGarcia2007Matrix},
+    stated after the preceding recursion has already produced an irreducible
+    unital block.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:CFII_data, thm:samempv_unitary}
+    Apply Theorem~\ref{thm:CFII_data} to the conjugate-transposed Kraus family
+    $i\mapsto (A^i)^\dagger$.  Unitality of $A$ is trace preservation for this
+    family, and its transfer map is the dual map of $A$.  Translating back gives
+    the displayed equations for $B$.
 \end{proof}
 
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
