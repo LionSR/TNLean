@@ -8,7 +8,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Multi
 
 /-!
-# BNT equal-MPV sector witnesses (CPSV16 §II.C lines 1182–1192)
+# BNT equal-MPV sector witnesses
 
 This module combines the full-basis matching (`StrongMatch`) and the
 exact coefficient identity (`CoeffIdentity`) into the sector-witness
@@ -17,16 +17,17 @@ conclusion of the CPSV16/CPSV21 fundamental theorem on the
 
 Paper anchors:
 
-* CPSV16 §II.C line 1182: full BNT basis matching by the `Lem1`
+* CPSV16 Appendix MPV proof, line 1182: full BNT basis matching by the `Lem1`
   contradiction and symmetry argument.
-* CPSV16 §II.C lines 1187–1188: exact power-sum coefficient comparison,
-  recovering copy multiplicities and weights up to the matched phase.
+* CPSV16 Appendix MPV proof, lines 1187–1188: exact power-sum coefficient
+  comparison, recovering copy multiplicities and weights up to the matched
+  phase.
 * CPSV21 Definition 4.2 lines 1846–1850 and the two-layer display at
   lines 1864–1884: per-block BNT normalization on the basis tensors.
   The per-block convention on copy coefficients
-  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit in CPSV16 §II.C line 1182's
-  projection argument — is taken as an explicit theorem-level hypothesis
-  here, not as a structural field of `IsBNTCanonicalForm`.
+  `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit in CPSV16 Appendix MPV proof,
+  line 1182's projection argument — is taken as an explicit theorem-level
+  hypothesis here, not as a structural field of `IsBNTCanonicalForm`.
 
 The theorem below exposes the sector-level witnesses needed before assembling
 the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  It does not use
@@ -47,8 +48,9 @@ For a matched basis bijection `β : Fin Q.basisCount ≃ Fin P.basisCount` and
 per-block copy permutations `τ k`, this is the weight array appearing in the
 coordinate-level direct sum
 `⊕_{(k,q)} P.weight (β k) (τ k q) • P.basis (β k)`.
-It is the Lean counterpart of the reindexing implicit in CPSV16 §II.C lines
-1189–1192 before forming the global gauge `⊕_k (𝟙_{r_k} ⊗ X_k)`. -/
+It is the Lean counterpart of the reindexing implicit in CPSV16 Appendix MPV
+proof, lines 1189–1192, before forming the global gauge
+`⊕_k (𝟙_{r_k} ⊗ X_k)`. -/
 noncomputable def matched_p_weight {P Q : SectorDecomposition d}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
@@ -71,7 +73,8 @@ noncomputable def matched_p_basis {P Q : SectorDecomposition d}
 
 /-- Duplicate the per-basis gauge matrices over all copies in the flattened `Q` coordinates.
 
-This realizes the `𝟙_{r_k} ⊗ X_k` part of CPSV16 §II.C line 1191. -/
+This realizes the `𝟙_{r_k} ⊗ X_k` part of CPSV16 Appendix MPV proof,
+line 1191. -/
 noncomputable def matched_block_gauge {Q : SectorDecomposition d}
     (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ) :
     (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ := fun s => by
@@ -86,8 +89,9 @@ same phases. Then the flattened `Q`-tensor is obtained by conjugating the
 matched-coordinate `P`-tensor by the direct sum
 `⊕_k (𝟙_{r_k} ⊗ X_k)`.
 
-This is the pure assembly part of CPSV16 §II.C lines 1189–1192. It does not
-prove the coefficient comparison that supplies the weight identities. -/
+This is the pure assembly part of CPSV16 Appendix MPV proof, lines 1189–1192.
+It does not prove the coefficient comparison that supplies the weight
+identities. -/
 theorem sector_bnt_global_gauge_of_matched_weights
     {P Q : SectorDecomposition d}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -193,16 +197,17 @@ theorem sector_bnt_global_gauge_of_matched_weights
 /-- **Conditional proportional global gauge from matched copy weights.**
 
 For proportional MPV families, the proportional sector-matching theorem supplies
-the matched BNT basis, unit phases, and block gauges of CPSV16 §II.C lines
-1167--1170 and line 1182. If the remaining coefficient-comparison step supplies copy
-permutations whose weights obey the same phases, then the direct-sum gauge
-assembly uses the same algebra as the equal-MPV corollary in lines 1189--1192.
+the matched BNT basis, unit phases, and block gauges of CPSV16 Appendix MPV
+theorem statement, lines 1167--1170, and Appendix MPV proof, line 1182. If the
+remaining coefficient-comparison step supplies copy permutations whose weights
+obey the same phases, then the direct-sum gauge assembly uses the same algebra
+as the equal-MPV corollary in CPSV16 Appendix MPV proof, lines 1189--1192.
 
 This theorem isolates the exact residual input for the proportional
 global-gauge upgrade: the copy-weight identity. That residual input is not
-provided by the CPSV16 proportional theorem; lines 1187--1192 are the
-equal-MPV corollary, where the length-dependent proportionality scalar is
-identically one. -/
+provided by the CPSV16 proportional theorem; Appendix MPV proof,
+lines 1187--1192, prove the equal-MPV corollary, where the length-dependent
+proportionality scalar is identically one. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_weight_data
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -248,7 +253,7 @@ theorem ft_sector_bnt_proportional_global_gauge_of_weight_data
   exact sector_bnt_global_gauge_of_matched_weights
     (P := P) (Q := Q) β hDim τ ζ Xblock hζ_ne hConj hWeight
 
-/-- **BNT equal-MPV sector-witness theorem (CPSV16 §II.C lines 1184–1188).**
+/-- **BNT equal-MPV sector-witness theorem.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
 same MPV family, then their BNT basis sectors are bijectively matched by
@@ -322,7 +327,7 @@ theorem ft_sector_bnt_equal_sector_data
   ft_sector_bnt_equal_sector_dataPos
     (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
 
-/-- **Global gauge in matched flattened coordinates (CPSV16 §II.C lines 1189–1192).**
+/-- **Global gauge in matched flattened coordinates.**
 
 This is the coordinate-level construction of the global gauge.  Starting
 from equal MPV families on the BNT canonical-form surface, it produces:
@@ -339,8 +344,8 @@ The final displayed equality says that the unfolded flattened presentation of
 matrix `⊕_k (𝟙_{r_k} ⊗ X_k)`.  The remaining conversion from this
 matched-coordinate presentation to a literal `GaugeEquiv P.toTensor Q.toTensor`
 is only a coordinate permutation/cast of the flattened direct sum and is
-intentionally not hidden here; the theorem exposes the explicit CPSV16 witness
-rather than an opaque existential. -/
+intentionally not hidden here; the theorem exposes the explicit CPSV16
+Appendix MPV proof witness rather than an opaque existential. -/
 theorem ft_sector_bnt_equal_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

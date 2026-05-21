@@ -28,8 +28,8 @@ a `SectorDecomposition`.  It records:
   (lines 246 and 1244).
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` — implicit
-in CPSV16 §II.C line 1182's projection step and not explicitly stated in
-CPSV16 §II.C line 246 (which is global) nor in CPSV21 Section IV.A,
+in CPSV16 Appendix MPV proof, line 1182's projection step and not explicitly
+stated in CPSV16 §II.C line 246 (which is global) nor in CPSV21 Section IV.A,
 lines 1846–1884 (which normalizes the spectral radius of the BNT *basis
 tensors*, not the copy coefficients) — is **not** a structural field of
 `IsBNTCanonicalForm`.
@@ -66,8 +66,9 @@ core BNT predicate.
   Ann. Phys. **378**, 100 (2017); arXiv:1606.00608.  Source-line tags used
   below: 217–246 (global modulus normalization), 264–279 (gauge-phase
   grouping rule), 271–301 (two-layer BNT display with raw `μ_{j,q}`),
-  1121–1132 (combined-family LI input), 1182 (BNT projection step),
-  and 1184–1188 (equal-case multiplicity recovery via power-sum comparison).
+  1121–1132 (combined-family LI input), Appendix MPV proof line 1182
+  (BNT projection step), and Appendix MPV proof lines 1184–1188
+  (equal-case multiplicity recovery via power-sum comparison).
 * CPSV21: Cirac–Pérez-García–Schuch–Verstraete, *Matrix product states and
   projected entangled pair states: Concepts, symmetries, theorems*,
   Rev. Mod. Phys. **93**, 045003 (2021); arXiv:2011.12127.  Source-line tags
@@ -156,9 +157,9 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   basis sector has unit-modulus weight.  CPSV16 §II.C line 246: "we can
   always choose `|μ_k| ≤ 1` and at least one of them equals one."  This
   is the global (not per-block) normalization condition; the per-block
-  refinement `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` is paper-implicit in CPSV16 §II.C
-  line 1182's projection argument and is therefore taken as an explicit
-  per-theorem hypothesis on the fundamental-theorem theorems, rather
+  refinement `∀ j, ∃ q, ‖μ_{j,q}‖ = 1` is paper-implicit in CPSV16 Appendix
+  MPV proof, line 1182's projection argument and is therefore taken as an
+  explicit per-theorem hypothesis on the fundamental-theorem theorems, rather
   than baked into this structural predicate. -/
   weight_unit_exists : ∃ (j : Fin P.basisCount) (q : Fin (P.copies j)),
     ‖P.weight j q‖ = 1
@@ -175,8 +176,8 @@ rules out the pathological cancellation that would obstruct the CPSV16 §II
 Step 1 coefficient-comparison argument: once combined-family LI isolates
 the `j`-th sector coefficient (CPSV16 lines 1121–1132), the surviving
 relation cannot be `0 = 0` for large `N`, so the multiplicity-recovery
-argument of CPSV16 lines 1184–1188 has a nonvanishing left-hand side to
-compare against after the line-1182 matching step.
+argument of CPSV16 Appendix MPV proof, lines 1184–1188, has a nonvanishing
+left-hand side to compare against after the line-1182 matching step.
 
 The proof feeds nonzero weights `P.weight j q ≠ 0` (from
 `P.weight_ne_zero`) into `geom_sum_eventually_zero`

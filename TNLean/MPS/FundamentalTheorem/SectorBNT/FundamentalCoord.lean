@@ -11,7 +11,7 @@ This module states the equal-MPV theorem `ft_sector_bnt_equal_global_gauge`
 in the form of the equal-MPV corollary labelled II_cor2 in CPSV16 §II.C:
 the main-text statement is at lines 354–361, the appendix restatement is at
 lines 1172–1179, the copy-weight comparison is at line 1188, and the
-global-gauge construction is at lines 1189–1192.
+global-gauge construction is at lines 1189–1192 of the Appendix MPV proof.
 
 The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
@@ -26,7 +26,8 @@ exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
 * the equality of total bond dimensions $\sum_k r_k D_k$;
 * the explicit global gauge $X \in \mathrm{GL}(\sum_s D^{(s)},\mathbb{C})$;
 
-together with the three CPSV16 conjugation identities from the appendix proof:
+together with the three CPSV16 conjugation identities from the Appendix MPV
+proof:
 
 * $B_k = ζ_k\,X_k\,A_{βk}\,X_k^{-1}$ (per basis block, lines 1182–1183);
 * $ν_{k,q} = ζ_k^{-1}\,μ_{βk,\,τ_k q}$ (per copy weight, line 1188);
@@ -34,7 +35,8 @@ together with the three CPSV16 conjugation identities from the appendix proof:
   flattened-copy coordinates, lines 1189–1192).
 
 The global equation is stated in the matched coordinates of $Q$'s flattened
-copy index; this is the direct-sum gauge construction of CPSV16 lines 1189–1192.
+copy index; this is the direct-sum gauge construction of CPSV16 Appendix MPV
+proof, lines 1189–1192.
 Converting the right-hand side from the matched-coordinate `toTensorFromBlocks`
 into a literal `cast`-of-`P.toTensor` requires assembling a sector-permutation
 matrix from `sectorFlatEquiv` and conjugating; the present module records the
@@ -43,13 +45,13 @@ the permutation-matrix conjugation is left for a follow-up module.
 
 Paper anchors:
 
-* CPSV16 §II.C lines 354–361 and 1172–1179: statement of the equal-MPV
-  corollary labelled II_cor2.
-* CPSV16 §II.C lines 1182–1183: per-basis-block gauge-phase matching from the
-  proportional theorem.
-* CPSV16 §II.C line 1188: copy multiplicity and copy-weight identification
-  from finite power-sum comparison.
-* CPSV16 §II.C lines 1189–1192: explicit global gauge
+* CPSV16 §II.C lines 354–361 and Appendix MPV proof lines 1172–1179:
+  statement of the equal-MPV corollary labelled II_cor2.
+* CPSV16 Appendix MPV proof, lines 1182–1183: per-basis-block gauge-phase
+  matching from the proportional theorem.
+* CPSV16 Appendix MPV proof, line 1188: copy multiplicity and copy-weight
+  identification from finite power-sum comparison.
+* CPSV16 Appendix MPV proof, lines 1189–1192: explicit global gauge
   $X = \bigoplus_k (𝟙_{r_k} \otimes X_k)$ and the global conjugation equation.
 -/
 
@@ -75,21 +77,21 @@ same MPV family, then there exist:
 * an explicit global gauge $X \in \mathrm{GL}\bigl(\sum_s D^{(s)},
   \mathbb{C}\bigr)$ of the form $X = \bigoplus_k (𝟙_{r_k}\otimes X_k)$,
 
-such that the three CPSV16 identities
+such that the three CPSV16 Appendix MPV proof identities
 
-* $B_k = ζ_k\,X_k\,A_{βk}\,X_k^{-1}$ (per basis block, CPSV16 lines 1182–1183),
-* $ν_{k,q} = ζ_k^{-1}\,μ_{βk,\,τ_k q}$ (per copy weight, CPSV16 line 1188),
+* $B_k = ζ_k\,X_k\,A_{βk}\,X_k^{-1}$ (per basis block, lines 1182–1183),
+* $ν_{k,q} = ζ_k^{-1}\,μ_{βk,\,τ_k q}$ (per copy weight, line 1188),
 * $V_Q^i = X\,V_P^i\,X^{-1}$ at every physical site $i$ (global gauge,
-  CPSV16 lines 1189–1192),
+  lines 1189–1192),
 
 hold simultaneously.  The final global identity is exposed here in the
 matched flattened-copy coordinates of $Q$: writing the $P$-side block tensors
 through the matched bijections gives the
 `toTensorFromBlocks`-tensor that conjugates to $Q.toTensor$ under $X$.
 
-CPSV16 §II.C lines 354–361 and 1172–1179 state the equal-MPV corollary;
-lines 1182–1192 supply the block matching, copy-weight comparison, and
-global-gauge construction used here. -/
+CPSV16 §II.C lines 354–361 and Appendix MPV proof lines 1172–1179 state the
+equal-MPV corollary; Appendix MPV proof lines 1182–1192 supply the block
+matching, copy-weight comparison, and global-gauge construction used here. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -175,7 +177,8 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_witnesses
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
 same MPV family, their total bond dimensions agree and there exists a matrix $X$
-realizing the direct-sum global gauge of CPSV16 lines 1189–1192 in
+realizing the direct-sum global gauge of CPSV16 Appendix MPV proof,
+lines 1189–1192 in
 $Q$'s flattened sector coordinates.
 
 This is the CPSV16 equal-MPV corollary, labelled II_cor2, in gauge-equivalence
@@ -521,9 +524,10 @@ at every physical site $i$, where the inner factor is the bond-dim cast of the
 literal $P$-tensor along the total-dimension equality.
 
 This reformulates the matched-coordinate gauge equation
-`ft_sector_bnt_equal_mps_gaugeEquiv` (CPSV16 lines 1189–1192) into the
-equal-MPV corollary labelled II_cor2 in CPSV16 §II.C lines 354–361 by
-composing the matched-coordinate global gauge with the sector permutation.
+`ft_sector_bnt_equal_mps_gaugeEquiv` (CPSV16 Appendix MPV proof,
+lines 1189–1192) into the equal-MPV corollary labelled II_cor2 in CPSV16
+§II.C lines 354–361 by composing the matched-coordinate global gauge with the
+sector permutation.
 
 CPSV16 §II.C lines 354–361. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos

@@ -226,12 +226,12 @@ normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, while CPSV21
 Section IV.A uses Definition 4.2 (lines 1846–1850) for the BNT basis and
 the display at lines 1864–1884 for the two-layer expansion.  It normalizes
 the spectral radius of the *basis* tensors, not the copy coefficients
-$\mu_{j,q}$.  The per-block witness is implicit in CPSV16 §II.C line 1182's
-projection step and is
+$\mu_{j,q}$.  The per-block witness is implicit in CPSV16 Appendix MPV proof,
+line 1182's projection step and is
 therefore exposed here as a per-theorem hypothesis.
 
 Paper anchor: CPSV16 appendix power-sum lemma, lines 1155--1163, and
-CPSV16 §II.C line 1182 (per-block
+CPSV16 Appendix MPV proof, line 1182 (per-block
 projection step). -/
 theorem coeff_not_tendsto_zero_at_block
     (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
