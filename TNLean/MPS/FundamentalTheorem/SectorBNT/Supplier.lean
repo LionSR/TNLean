@@ -617,12 +617,14 @@ For any tensor `A : MPSTensor d D`, after at most one positive blocking length
 primitive, irreducible, one-site injective, with nonzero weights and positive
 bond dimensions) whose direct-sum tensor matches the `p`-blocked input
 `blockTensor A p` at every positive length.  When the user supplies the
-CPSV16 §II.A line 246 normalization choice on those weights (every weight
-has absolute value at most one and at least one of unit modulus), there is a
-BNT canonical-form sector decomposition `P` satisfying `IsBNTCanonicalForm`
-with `blockTensor A p` matching `P.toTensor` at every positive length.
+arXiv:1606.00608, line 246 normalization choice on those weights (every
+weight has absolute value at most one and at least one of unit modulus), there
+is a BNT canonical-form sector decomposition `P` satisfying
+`IsBNTCanonicalForm` with `blockTensor A p` matching `P.toTensor` at every
+positive length.
 
-The normalization is, per CPSV16 line 246, an explicit user choice:  the paper
+The normalization is, per arXiv:1606.00608, line 246, an explicit user choice:
+the paper
 writes "we can always *choose* this normalization, which we will assume from
 now on".  We therefore expose the prepared-block family and embed the
 conditional sector-decomposition supplier inside the existential.
