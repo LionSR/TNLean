@@ -383,6 +383,38 @@ definitions stated below.
     coefficients as the conjugated tensor, and hence as~$A$.
 \end{proof}
 
+\begin{theorem}[Non-scalar fixed point gives a further split]%
+    \label{thm:unital_nonscalar_fixed_point_split}
+    \lean{MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint}
+    \lean{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
+    \leanok
+    \uses{def:transfer_map, def:same_mpv2, thm:two_block_decomp}
+    Suppose $A$ is unital, $\E_A(\Id)=\Id$.  If $X$ is a Hermitian fixed point
+    of $\E_A$ which is not a scalar multiple of the identity, then there is a
+    nonzero positive semidefinite fixed point $\rho$ which is not positive
+    definite.  Consequently $A$ admits a two-block MPV-equivalent decomposition
+    with both block dimensions strictly smaller than the original bond
+    dimension.
+
+    This is the fixed-point shift and further decomposition step in
+    \cite[Theorem~Th:TIcanonical, lines~819--826]{PerezGarcia2007Matrix}.
+    The formal statement uses "not a scalar multiple of the identity", because
+    scalar multiples of the identity are fixed by every unital linear map and do
+    not yield a nontrivial support projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\lambda_{\max}$ be the largest eigenvalue of the Hermitian matrix $X$.
+    Then
+    \[
+        \rho := \lambda_{\max}\Id - X
+    \]
+    is positive semidefinite and singular.  Since $X$ is not scalar, $\rho$ is
+    nonzero.  Unitality and the fixed-point equation for $X$ give
+    $\E_A(\rho)=\rho$.  The strict two-block decomposition is then
+    Theorem~\ref{thm:two_block_decomp}.
+\end{proof}
+
 \section{Iterated reduction}
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}

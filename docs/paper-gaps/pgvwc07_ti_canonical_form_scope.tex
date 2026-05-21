@@ -167,6 +167,20 @@ The earlier existence path now has the following formal pieces.
           \path|MPSTensor.sameMPV_unitalGauge| records preservation of the
           finite-ring coefficients under this similarity.
 
+    \item
+          \path|MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint|
+          formalizes the fixed-point shift in
+          Theorem~\texttt{Th:TIcanonical}, lines 819--826.  For a unital block,
+          a Hermitian fixed point which is not a scalar multiple of the identity
+          gives the singular positive fixed point
+          \(\lambda_{\max}\mathbf{1}-X\).  The companion theorem
+          \path|MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint|
+          composes this shift with the support-projection split, giving a
+          strict two-block MPV-equivalent decomposition.  The formal hypothesis
+          uses ``non-scalar'' rather than merely \(X\ne\mathbf{1}\), since every
+          scalar multiple of the identity is fixed by a unital linear map and
+          cannot force a nontrivial split.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
