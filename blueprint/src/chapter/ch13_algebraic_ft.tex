@@ -986,7 +986,7 @@ decomposition.
 \label{sec:multi_block_ft}
 %% ---------------------------------------------------------
 
-The first lemmas in this section are bookkeeping for block-diagonal tensors:
+The first lemmas in this section are elementary facts about block-diagonal tensors:
 they assemble already-known block gauges, and they record the easy consequences
 of applying the injective single-block theorem to each block separately. They do
 not derive the block matching appearing in
@@ -1073,7 +1073,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     $\bigoplus_k \mu_A(k) A_k$ to $\bigoplus_k \mu_B(k) B_k$.
 \end{proof}
 
-\subsection{Same-index direct-sum consequences of the single-block theorem}%
+\subsection{Same-index direct-sum lemmas from the single-block theorem}%
 \label{subsec:ft_block_sum_corollaries}
 
 \begin{remark}
@@ -1083,7 +1083,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}.
 \end{remark}
 
-\begin{theorem}[Per-block single-block FT]\label{thm:multi_block_ft}
+\begin{lemma}[Per-block application of the single-block theorem]\label{lem:multi_block_ft}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
     \leanok
     \uses{def:block_diagonal_tensor, def:injective}
@@ -1091,7 +1091,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     same-MPV condition holds ($A_k$ and $B_k$ generate the same
     MPV family for each~$k$),
     then each pair $(A_k, B_k)$ is gauge equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1108,7 +1108,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     block matching and permutation from only the global same-MPV hypothesis.
 \end{remark}
 
-\begin{theorem}[Per-block same MPV implies global same MPV]\label{thm:block_to_global_mpv}
+\begin{lemma}[Per-block same MPV implies global same MPV]\label{lem:block_to_global_mpv}
     \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
     \leanok
     \uses{def:block_diagonal_tensor, def:same_mpv}
@@ -1116,7 +1116,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     block~$k$, then the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
     also generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:mpv_decomposition}
     By the MPV decomposition (Theorem~\ref{thm:mpv_decomposition}),
@@ -1129,18 +1129,18 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     global MPV equality via the block-diagonal decomposition formula.
 \end{remark}
 
-\begin{theorem}[Gauge equivalence for same-index direct sums]\label{thm:multi_block_global}
+\begin{lemma}[Gauge equivalence for same-index direct sums]\label{lem:multi_block_global}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_global}
     \leanok
-    \uses{def:block_diagonal_tensor, def:injective, def:same_mpv, thm:multi_block_ft}
+    \uses{def:block_diagonal_tensor, def:injective, def:same_mpv, lem:multi_block_ft}
     If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
     the same MPV family, then the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}\leanok\uses{thm:multi_block_ft}
+\begin{proof}\leanok\uses{lem:multi_block_ft}
     Apply the per-block single-block Fundamental Theorem
-    (Theorem~\ref{thm:multi_block_ft}) to obtain blockwise gauge
+    (Lemma~\ref{lem:multi_block_ft}) to obtain blockwise gauge
     equivalences from injectivity and equality of MPV families, then
     combine them into a global gauge for the block-diagonal tensors.
 \end{proof}
@@ -1178,7 +1178,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \]
 \end{lemma}
 
-\begin{proof}\leanok\uses{thm:multi_block_ft, thm:multi_block_global}
+\begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
@@ -1303,7 +1303,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{theorem}[Fundamental theorem for canonical forms with the same block structure]\label{thm:ft_canonical_form_same_structure}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
-    \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
+    \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
     Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
     tensors $A_k^C$.  Let $\{B_k\}$ be a family of MPS tensors on the same
     block dimensions, and assume that each $A_k^C$ is injective and generates
@@ -1312,11 +1312,11 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:canonical_toTensor_eq, thm:multi_block_global}
+    \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
     Rewrite $T_C$ as a weighted block-diagonal tensor via
     Lemma~\ref{lem:canonical_toTensor_eq}, then apply the multi-block
-    global fundamental theorem
-    (Theorem~\ref{thm:multi_block_global}).
+    global gauge-equivalence lemma
+    (Lemma~\ref{lem:multi_block_global}).
 \end{proof}
 
 \begin{lemma}[Per-block equality of MPV families and per-block gauge equivalence]%
