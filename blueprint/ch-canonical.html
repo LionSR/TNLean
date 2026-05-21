@@ -3551,12 +3551,148 @@
 
   </div>
 </div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:pgvwc07_positive_length_witness">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">9.36</span>
+    <span class="definition_thmtitle">Positive-length PGVWC07 canonical-form witness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#def:pgvwc07_positive_length_witness">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.PGVWC07PositiveLengthWitness" class="lean_decl">MPSTensor.PGVWC07PositiveLengthWitness</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A positive-length PGVWC07 canonical-form witness for an MPS tensor \(A\) consists of a finite family of nonzero unital blocks, positive real weights, diagonal positive-definite dual fixed points, scalar fixed-point conclusions, positive block dimensions, positive-length MPV equality with \(A\), and the total bond-dimension bound \(\sum _k D_k\leq D\). </p>
+<p>This definition records the exact-MPV, nonempty-ring part of the PGVWC07 construction. It still does not include the source theorem’s upper normalization \(1\geq \lambda _k\), which depends on the global spectral-radius normalization convention of <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, Theorem&#160;Th:TIcanonical, lines&#160;765–766
+	]
+</span>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:pgvwc07_positive_length_witness">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">9.37</span>
+    <span class="theorem_thmtitle">Existence of the positive-length PGVWC07 witness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:pgvwc07_positive_length_witness">#</a>
+    
+    <a class="icon proof" href="ch-canonical.html#a0000000605"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.36</a></li>
+          
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.35</a></li>
+          
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.36</a></li>
+          
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.35</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pgvwc07_positiveLengthWitness" class="lean_decl">MPSTensor.exists_pgvwc07_positiveLengthWitness</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   For every MPS tensor \(A\), the conclusions of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.35</a> give a positive-length PGVWC07 canonical-form witness. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000605">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> Unpack Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.35</a> and use its conclusions as the fields of the witness. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:irreducible_block_decomp_with_cfii">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.36</span>
+    <span class="theorem_thmlabel">9.38</span>
     <span class="theorem_thmtitle">Irreducible block decomposition with left-canonical normalization</span>
     <div class="thm_header_extras">
 
@@ -3567,7 +3703,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:irreducible_block_decomp_with_cfii">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000605"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000606"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3622,7 +3758,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000605">
+<div class="proof_wrapper" id="a0000000606">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3639,7 +3775,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.37</span>
+    <span class="theorem_thmlabel">9.39</span>
     <span class="theorem_thmtitle">Normal canonical form from a primitive block decomposition</span>
     <div class="thm_header_extras">
 
@@ -3650,7 +3786,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:exists_normal_canonical_form">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000606"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000607"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3720,7 +3856,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000606">
+<div class="proof_wrapper" id="a0000000607">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3732,26 +3868,26 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000607">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000608">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">9.38</span>
-    <span class="remark_thmtitle">Scope of Theorem&#160;<a href="ch-canonical.html#thm:exists_normal_canonical_form">9.37</a></span>
+    <span class="remark_thmlabel">9.40</span>
+    <span class="remark_thmtitle">Scope of Theorem&#160;<a href="ch-canonical.html#thm:exists_normal_canonical_form">9.39</a></span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical.html#a0000000607">#</a>
+    <a class="icon proof" href="ch-canonical.html#a0000000608">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Theorem&#160;<a href="ch-canonical.html#thm:exists_normal_canonical_form">9.37</a> assumes all six block hypotheses—irreducibility, TP normalization, primitivity, distinct nonzero weight moduli, and positive bond dimensions—in advance, and produces the normal canonical form by reordering. It is <em>not</em> the arbitrary-input canonical-form existence theorem of&#160;<span class="cite">
+  <p> Theorem&#160;<a href="ch-canonical.html#thm:exists_normal_canonical_form">9.39</a> assumes all six block hypotheses—irreducibility, TP normalization, primitivity, distinct nonzero weight moduli, and positive bond dimensions—in advance, and produces the normal canonical form by reordering. It is <em>not</em> the arbitrary-input canonical-form existence theorem of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3768,7 +3904,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.39</span>
+    <span class="theorem_thmlabel">9.41</span>
     <span class="theorem_thmtitle">TP-gauge reduction for arbitrary tensors with zero-block separation</span>
     <div class="thm_header_extras">
 
@@ -3779,7 +3915,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:tp_gauge_arbitrary">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000608"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000609"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3840,14 +3976,14 @@
 </li>
 </ol>
 <p> such that </p>
-<div class="displaymath" id="a0000000609">
+<div class="displaymath" id="a0000000610">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,D_0})_\sigma + V^{(N)}\! (\textstyle \bigoplus _{k=1}^r \mu _k B_k)_\sigma .  \]
 </div>
 <p> This is the furthest unconditional reduction step available for arbitrary tensors before periodicity removal. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000608">
+<div class="proof_wrapper" id="a0000000609">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3867,7 +4003,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.40</span>
+    <span class="theorem_thmlabel">9.42</span>
     <span class="theorem_thmtitle">Common blocking period for a block family</span>
     <div class="thm_header_extras">
 
@@ -3878,7 +4014,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_blocking_period">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000610"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3929,7 +4065,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000610">
+<div class="proof_wrapper" id="a0000000611">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3967,7 +4103,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.41</span>
+    <span class="theorem_thmlabel">9.43</span>
     <span class="theorem_thmtitle">Period removal by blocking</span>
     <div class="thm_header_extras">
 
@@ -3978,7 +4114,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000611"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000612"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4052,7 +4188,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000611">
+<div class="proof_wrapper" id="a0000000612">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4069,7 +4205,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.42</span>
+    <span class="theorem_thmlabel">9.44</span>
     <span class="theorem_thmtitle">Period removal for irreducible TP tensors</span>
     <div class="thm_header_extras">
 
@@ -4080,7 +4216,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000612"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000613"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4100,7 +4236,7 @@
           
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
           
-          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.41</a></li>
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.43</a></li>
           
         </ul>
     
@@ -4141,7 +4277,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000612">
+<div class="proof_wrapper" id="a0000000613">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4149,7 +4285,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Left-canonicality gives \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the conjugate-transposed family \(K_i := (A^i)^\dagger \) is unital; irreducibility passes to the adjoint map, and the quantum Perron–Frobenius theorem provides a positive-definite fixed point. The cyclic peripheral-spectrum theorem then provides a period&#160;\(m\) and the cyclic projections and compression equivalences, and Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.41</a> produces the decomposition. </p>
+  <p> Left-canonicality gives \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), so the conjugate-transposed family \(K_i := (A^i)^\dagger \) is unital; irreducibility passes to the adjoint map, and the quantum Perron–Frobenius theorem provides a positive-definite fixed point. The cyclic peripheral-spectrum theorem then provides a period&#160;\(m\) and the cyclic projections and compression equivalences, and Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.43</a> produces the decomposition. </p>
 
   </div>
 </div>
@@ -4158,7 +4294,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.43</span>
+    <span class="theorem_thmlabel">9.45</span>
     <span class="theorem_thmtitle">Period removal with primitive irreducible sectors</span>
     <div class="thm_header_extras">
 
@@ -4169,7 +4305,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000613"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000614"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4185,13 +4321,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.41</a></li>
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.43</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 12.30</a></li>
           
           <li><a href="ch-spectral.html#thm:peripheral_cyclic_structure">Theorem 7.74</a></li>
           
-          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.41</a></li>
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">Theorem 9.43</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">Theorem 12.30</a></li>
           
@@ -4225,11 +4361,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a left-canonical irreducible tensor. Then there is a period \(m \ge 1\) and a unit-weight decomposition of \(A^{[m]}\) into sector blocks \((C_k)_{k=1}^m\) such that every \(C_k\) is left-canonical, has primitive transfer map, is tensor-irreducible, and has nonzero bond dimension. </p>
-<p>Equivalently: the cyclic-sector decomposition of \(A^{[m]}\) produces unit blocks that already satisfy the trace-preservation, primitivity, and irreducibility hypotheses needed for the common-blocking step (Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a>). </p>
+<p>Equivalently: the cyclic-sector decomposition of \(A^{[m]}\) produces unit blocks that already satisfy the trace-preservation, primitivity, and irreducibility hypotheses needed for the common-blocking step (Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.73</a>). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000613">
+<div class="proof_wrapper" id="a0000000614">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4237,7 +4373,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The proof repeats the cyclic-sector construction of Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">9.42</a>, keeps the projections and compression equivalences, and applies Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">12.30</a> to the resulting sector blocks. </p>
+  <p> The proof repeats the cyclic-sector construction of Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp">9.44</a>, keeps the projections and compression equivalences, and applies Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">12.30</a> to the resulting sector blocks. </p>
 
   </div>
 </div>
@@ -4249,7 +4385,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.44</span>
+    <span class="theorem_thmlabel">9.46</span>
     <span class="theorem_thmtitle">TP-primitive irreducible tensor is normal</span>
     <div class="thm_header_extras">
 
@@ -4260,7 +4396,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:normal_tp_primitive_irred">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000614"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000615"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4319,7 +4455,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000614">
+<div class="proof_wrapper" id="a0000000615">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4337,7 +4473,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.45</span>
+    <span class="theorem_thmlabel">9.47</span>
     <span class="theorem_thmtitle">Sorting by strictly decreasing weight norms</span>
     <div class="thm_header_extras">
 
@@ -4352,7 +4488,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Let \((\mu _k)_{k=1}^r\) be nonzero complex weights whose moduli are pairwise distinct. Then there exists a permutation \(\sigma \) of \(\{ 1,\ldots ,r\} \) such that </p>
-<div class="displaymath" id="a0000000615">
+<div class="displaymath" id="a0000000616">
   \[  |\mu _{\sigma (1)}| {\gt} |\mu _{\sigma (2)}| {\gt} \cdots {\gt} |\mu _{\sigma (r)}| {\gt} 0.  \]
 </div>
 
@@ -4363,7 +4499,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.46</span>
+    <span class="theorem_thmlabel">9.48</span>
     <span class="theorem_thmtitle">Sorted decomposition preserves the represented MPS family</span>
     <div class="thm_header_extras">
 
@@ -4385,7 +4521,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:bnt_sorted_reindexing">Theorem 9.45</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sorted_reindexing">Theorem 9.47</a></li>
           
         </ul>
     
@@ -4398,7 +4534,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the same hypothesis, with \(\sigma \) as above and \(\tilde\mu _k := \mu _{\sigma (k)}\), \(\tilde B_k := B_{\sigma (k)}\), </p>
-<div class="displaymath" id="a0000000616">
+<div class="displaymath" id="a0000000617">
   \[  \mathcal{V}\! (\textstyle \bigoplus _k \mu _k B_k) = \mathcal{V}\! (\textstyle \bigoplus _k \tilde\mu _k \tilde B_k), \qquad |\tilde\mu _1| {\gt} \cdots {\gt} |\tilde\mu _r|.  \]
 </div>
 
@@ -4409,7 +4545,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.47</span>
+    <span class="theorem_thmlabel">9.49</span>
     <span class="theorem_thmtitle">Normal canonical form after sorting</span>
     <div class="thm_header_extras">
 
@@ -4433,7 +4569,7 @@
           
           <li><a href="ch-canonical.html#def:is_normal_canonical_form">Definition 9.24</a></li>
           
-          <li><a href="ch-canonical.html#thm:bnt_sorted_blockdecomp">Theorem 9.46</a></li>
+          <li><a href="ch-canonical.html#thm:bnt_sorted_blockdecomp">Theorem 9.48</a></li>
           
         </ul>
     
@@ -4454,7 +4590,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.48</span>
+    <span class="definition_thmlabel">9.50</span>
     <span class="definition_thmtitle">Granular sector decomposition</span>
     <div class="thm_header_extras">
 
@@ -4510,7 +4646,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    Given nonzero weights \((\mu _k)_{k=1}^r\) and blocks \((B_k)_{k=1}^r\), the <em>granular sector decomposition</em> has \(r\) sectors, one basis block \(B_k\) per sector, multiplicity&#160;\(1\) in each sector, and sector weight \(\mu _k\) on the \(k\)th sector. Equivalently, as a finite sum, </p>
-<div class="displaymath" id="a0000000617">
+<div class="displaymath" id="a0000000618">
   \[  \sum _{k=1}^{r} \mu _k^{\, N} V^{(N)}(B_k)_\sigma = V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma .  \]
 </div>
 
@@ -4521,7 +4657,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.49</span>
+    <span class="lemma_thmlabel">9.51</span>
     <span class="lemma_thmtitle">Granular sector decomposition preserves the represented family</span>
     <div class="thm_header_extras">
 
@@ -4532,7 +4668,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000618"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000619"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4548,9 +4684,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.48</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.50</a></li>
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.48</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.50</a></li>
           
         </ul>
     
@@ -4585,7 +4721,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000618">
+<div class="proof_wrapper" id="a0000000619">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4602,7 +4738,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.50</span>
+    <span class="theorem_thmlabel">9.52</span>
     <span class="theorem_thmtitle">Trivial sector decomposition for the sorted distinct-norm case</span>
     <div class="thm_header_extras">
 
@@ -4624,9 +4760,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.48</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.50</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.49</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.51</a></li>
           
         </ul>
     
@@ -4647,7 +4783,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.51</span>
+    <span class="definition_thmlabel">9.53</span>
     <span class="definition_thmtitle">Norm-class partition</span>
     <div class="thm_header_extras">
 
@@ -4662,7 +4798,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  Let \((\mu _k)_{k=1}^r\) be a finite family of complex weights. A <em>norm-class partition</em> consists of: a number of classes \(s \le r\); representative values \(\lambda _1 {\gt} \cdots {\gt} \lambda _s {\gt} 0\); multiplicities \((m_j)_{j=1}^s\) with \(\sum _j m_j = r\); for each \(j\) an enumeration \(\iota _j : \{ 1,\ldots ,m_j\}  \hookrightarrow \{ 1,\ldots ,r\} \) of the indices \(k\) with \(|\mu _k| = \lambda _j\); and the regrouping identity </p>
-<div class="displaymath" id="a0000000619">
+<div class="displaymath" id="a0000000620">
   \[  \sum _{k=1}^{r} f(k) = \sum _{j=1}^{s} \sum _{q=1}^{m_j} f(\iota _j(q)),  \]
 </div>
 <p> for every function \(f\). </p>
@@ -4674,7 +4810,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.52</span>
+    <span class="definition_thmlabel">9.54</span>
     <span class="definition_thmtitle">Norm-class enumeration in decreasing order</span>
     <div class="thm_header_extras">
 
@@ -4696,7 +4832,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:norm_class_grouping_data">Definition 9.51</a></li>
+          <li><a href="ch-canonical.html#def:norm_class_grouping_data">Definition 9.53</a></li>
           
         </ul>
     
@@ -4708,7 +4844,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   For any finite family \((\mu _k)_{k=1}^r\) of complex weights, sorting the distinct moduli \(\{ |\mu _k| : 1 \le k \le r,\  \mu _k \neq 0\} \) in strictly decreasing order yields a norm-class partition (in the sense of Definition&#160;<a href="ch-canonical.html#def:norm_class_grouping_data">9.51</a>) with representative values \(\lambda _1 {\gt} \cdots {\gt} \lambda _s\). </p>
+  <p>   For any finite family \((\mu _k)_{k=1}^r\) of complex weights, sorting the distinct moduli \(\{ |\mu _k| : 1 \le k \le r,\  \mu _k \neq 0\} \) in strictly decreasing order yields a norm-class partition (in the sense of Definition&#160;<a href="ch-canonical.html#def:norm_class_grouping_data">9.53</a>) with representative values \(\lambda _1 {\gt} \cdots {\gt} \lambda _s\). </p>
 
   </div>
 </div>
@@ -4719,7 +4855,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">9.53</span>
+    <span class="remark_thmlabel">9.55</span>
     <span class="remark_thmtitle">Canonical-form reduction before the equal-case comparison</span>
     <div class="thm_header_extras">
 
@@ -4740,7 +4876,7 @@
 	, Section&#160;2.3 and Appendix&#160;A
 	]
 </span>. </p>
-<p>The invariant-subspace decomposition, TP gauges, and one-block period-removal statements are recorded above. Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> contains the common-blocking construction, the zero-tail identities, and the common-sector decompositions over one blocked physical alphabet. The distinct-norm case is covered by the sorted normal-canonical-form theorem (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">9.47</a>); equal-norm families require the basis-of-normal-tensors and multiplicity comparison developed in Chapter&#160;<a href="ch-bnt.html">11</a>. </p>
+<p>The invariant-subspace decomposition, TP gauges, and one-block period-removal statements are recorded above. Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> contains the common-blocking construction, the zero-tail identities, and the common-sector decompositions over one blocked physical alphabet. The distinct-norm case is covered by the sorted normal-canonical-form theorem (Theorem&#160;<a href="ch-canonical.html#thm:bnt_sorted_ncf">9.49</a>); equal-norm families require the basis-of-normal-tensors and multiplicity comparison developed in Chapter&#160;<a href="ch-bnt.html">11</a>. </p>
 
   </div>
 </div>
@@ -4749,7 +4885,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">9.54</span>
+    <span class="remark_thmlabel">9.56</span>
     <span class="remark_thmtitle">Scope relative to <span class="cite">
 	[
 	
@@ -4787,7 +4923,7 @@
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:periodic
 	]
-</span> is recorded as Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.41</a> of Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>; the explicit decomposition of the state vector into \(p\)-periodic summands lies outside the present chapter. </p>
+</span> is recorded as Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_after_blocking">9.43</a> of Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>; the explicit decomposition of the state vector into \(p\)-periodic summands lies outside the present chapter. </p>
 
   </div>
 </div>
@@ -4805,7 +4941,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.55</span>
+    <span class="lemma_thmlabel">9.57</span>
     <span class="lemma_thmtitle">Common injective blocking for primitive irreducible families</span>
     <div class="thm_header_extras">
 
@@ -4816,7 +4952,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000620"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000621"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4869,7 +5005,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000620">
+<div class="proof_wrapper" id="a0000000621">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4886,7 +5022,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.56</span>
+    <span class="theorem_thmlabel">9.58</span>
     <span class="theorem_thmtitle">Prepared BNT blocks after blocking</span>
     <div class="thm_header_extras">
 
@@ -4897,7 +5033,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:prepared_bnt_blocks_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000621"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000622"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4915,7 +5051,7 @@
           
           <li><a href="ch-ft_proof.html#thm:unconditional_common_primitive_irreducible_blocks">Theorem 13.37</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">Lemma 9.55</a></li>
+          <li><a href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">Lemma 9.57</a></li>
           
         </ul>
     
@@ -4959,7 +5095,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000621">
+<div class="proof_wrapper" id="a0000000622">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4967,7 +5103,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the common primitive irreducible block decomposition to the pair \((A,A)\). This gives a positive blocking length and a nonzero weighted family of trace-preserving primitive irreducible blocks with the required positive-length MPV identity. Lemma&#160;<a href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">9.55</a> supplies one common further blocking that makes every block one-site injective while preserving the other block hypotheses. Finally, identify the iterated blocked alphabet with the direct blocked alphabet. </p>
+  <p>Apply the common primitive irreducible block decomposition to the pair \((A,A)\). This gives a positive blocking length and a nonzero weighted family of trace-preserving primitive irreducible blocks with the required positive-length MPV identity. Lemma&#160;<a href="ch-canonical.html#thm:common_injective_blocking_tp_primitive_irreducible_family">9.57</a> supplies one common further blocking that makes every block one-site injective while preserving the other block hypotheses. Finally, identify the iterated blocked alphabet with the direct blocked alphabet. </p>
 
   </div>
 </div>
@@ -4976,7 +5112,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.57</span>
+    <span class="theorem_thmlabel">9.59</span>
     <span class="theorem_thmtitle">BNT from normal blocks with normalized weights</span>
     <div class="thm_header_extras">
 
@@ -4987,7 +5123,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:paperbnt_supplier_prepared">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000622"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000623"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5043,7 +5179,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000622">
+<div class="proof_wrapper" id="a0000000623">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5060,7 +5196,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.58</span>
+    <span class="lemma_thmlabel">9.60</span>
     <span class="lemma_thmtitle">Total dimension of a dimension-preserving phase-class quotient</span>
     <div class="thm_header_extras">
 
@@ -5071,7 +5207,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:collapsed_bnt_sector_decomp_total_dim">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000623"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000624"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5102,7 +5238,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000623">
+<div class="proof_wrapper" id="a0000000624">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5119,7 +5255,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.59</span>
+    <span class="lemma_thmlabel">9.61</span>
     <span class="lemma_thmtitle">Prepared phase-equivalent blocks have the same bond dimension</span>
     <div class="thm_header_extras">
 
@@ -5130,7 +5266,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:prepared_phase_equiv_dim_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000624"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000625"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5161,7 +5297,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000624">
+<div class="proof_wrapper" id="a0000000625">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5178,7 +5314,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.60</span>
+    <span class="lemma_thmlabel">9.62</span>
     <span class="lemma_thmtitle">Prepared phase classes preserve bond dimension</span>
     <div class="thm_header_extras">
 
@@ -5189,7 +5325,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:prepared_phase_class_dim_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000625"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000626"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5220,7 +5356,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000625">
+<div class="proof_wrapper" id="a0000000626">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5228,7 +5364,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:prepared_phase_equiv_dim_eq">9.59</a> to each representative and each member of its phase class. </p>
+  <p> Apply Lemma&#160;<a href="ch-canonical.html#lem:prepared_phase_equiv_dim_eq">9.61</a> to each representative and each member of its phase class. </p>
 
   </div>
 </div>
@@ -5237,7 +5373,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.61</span>
+    <span class="lemma_thmlabel">9.63</span>
     <span class="lemma_thmtitle">Prepared collapsed BNT total dimension</span>
     <div class="thm_header_extras">
 
@@ -5248,7 +5384,7 @@
 
     <a class="icon proof" href="ch-canonical.html#lem:prepared_collapsed_bnt_sector_decomp_total_dim">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000626"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000627"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5279,7 +5415,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000626">
+<div class="proof_wrapper" id="a0000000627">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5287,7 +5423,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The previous lemma supplies the same-dimension hypothesis in Lemma&#160;<a href="ch-canonical.html#lem:collapsed_bnt_sector_decomp_total_dim">9.58</a>. </p>
+  <p> The previous lemma supplies the same-dimension hypothesis in Lemma&#160;<a href="ch-canonical.html#lem:collapsed_bnt_sector_decomp_total_dim">9.60</a>. </p>
 
   </div>
 </div>
@@ -5296,7 +5432,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.62</span>
+    <span class="theorem_thmlabel">9.64</span>
     <span class="theorem_thmtitle">Conditional BNT form after blocking for an arbitrary tensor</span>
     <div class="thm_header_extras">
 
@@ -5307,7 +5443,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000627"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000628"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5323,9 +5459,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:prepared_bnt_blocks_after_blocking">Theorem 9.56</a></li>
+          <li><a href="ch-canonical.html#thm:prepared_bnt_blocks_after_blocking">Theorem 9.58</a></li>
           
-          <li><a href="ch-canonical.html#thm:paperbnt_supplier_prepared">Theorem 9.57</a></li>
+          <li><a href="ch-canonical.html#thm:paperbnt_supplier_prepared">Theorem 9.59</a></li>
           
         </ul>
     
@@ -5369,7 +5505,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000627">
+<div class="proof_wrapper" id="a0000000628">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5383,7 +5519,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Section&#160;II.C, line&#160;246
 	]
-</span> treats as a choice. The missing rescaling step is recorded in <span class="ttfamily">docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex</span>. Applying Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_prepared">9.57</a> to this prepared family gives the sector decomposition, in the spirit of the BNT selection described by the source characterization in <span class="cite">
+</span> treats as a choice. The missing rescaling step is recorded in <span class="ttfamily">docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex</span>. Applying Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_prepared">9.59</a> to this prepared family gives the sector decomposition, in the spirit of the BNT selection described by the source characterization in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -5398,7 +5534,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.63</span>
+    <span class="theorem_thmlabel">9.65</span>
     <span class="theorem_thmtitle">Conditional BNT form after blocking with length-zero discharge</span>
     <div class="thm_header_extras">
 
@@ -5409,7 +5545,7 @@
 
     <a class="icon proof" href="ch-canonical.html#thm:paperbnt_supplier_after_blocking_total_dim">#</a>
     
-    <a class="icon proof" href="ch-canonical.html#a0000000628"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical.html#a0000000629"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5425,7 +5561,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">Theorem 9.62</a></li>
+          <li><a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">Theorem 9.64</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
@@ -5462,11 +5598,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.62</a>, the same prepared blocks may be chosen so that, after the normalized BNT sector decomposition \(P\) is constructed, the positive-length MPV identity upgrades to all lengths whenever the total bond dimension of \(P\) is equal to the bond dimension of the blocked input tensor. </p>
+  <p>   In the setting of Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.64</a>, the same prepared blocks may be chosen so that, after the normalized BNT sector decomposition \(P\) is constructed, the positive-length MPV identity upgrades to all lengths whenever the total bond dimension of \(P\) is equal to the bond dimension of the blocked input tensor. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000628">
+<div class="proof_wrapper" id="a0000000629">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5474,7 +5610,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The positive-length statement is Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.62</a>. At length zero the MPV coefficient of a tensor is the trace of the identity matrix on its bond space, hence its bond dimension. Therefore equality of the two total bond dimensions supplies exactly the missing length-zero coefficient, and the positive-length identity gives all remaining lengths. </p>
+  <p>The positive-length statement is Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.64</a>. At length zero the MPV coefficient of a tensor is the trace of the identity matrix on its bond space, hence its bond dimension. Therefore equality of the two total bond dimensions supplies exactly the missing length-zero coefficient, and the positive-length identity gives all remaining lengths. </p>
 
   </div>
 </div>
@@ -5483,7 +5619,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">9.64</span>
+    <span class="remark_thmlabel">9.66</span>
     <span class="remark_thmtitle">Arbitrary-input reduction</span>
     <div class="thm_header_extras">
 
@@ -5497,7 +5633,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.62</a> gives the arbitrary-input reduction used here, conditional on the two weight normalization hypotheses displayed in that theorem. The preparatory after-blocking part is Theorem&#160;<a href="ch-canonical.html#thm:prepared_bnt_blocks_after_blocking">9.56</a>: it produces the TP-normalized primitive irreducible injective blocks and the positive-length MPV identity, but not the weight normalization. The final BNT sector decomposition is therefore still conditional on the displayed weight hypotheses. This is a positive-length statement: the all-zero summand in the block decomposition contributes only at length zero, so the nonzero primitive blocks identify the MPV family for \(N\ge 1\). The proof that the prepared weights can always be rescaled to satisfy the displayed normalization remains the missing step recorded in the cited note. The theorem records the sector-decomposition conclusion once that normalization choice is supplied. The corresponding unrestricted statement is recorded in <span class="ttfamily">docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex</span>. The length-zero trace identity and the fully unblocked canonical-form statement remain part of the surrounding reduction in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. </p>
+  <p> Theorem&#160;<a href="ch-canonical.html#thm:paperbnt_supplier_after_blocking">9.64</a> gives the arbitrary-input reduction used here, conditional on the two weight normalization hypotheses displayed in that theorem. The preparatory after-blocking part is Theorem&#160;<a href="ch-canonical.html#thm:prepared_bnt_blocks_after_blocking">9.58</a>: it produces the TP-normalized primitive irreducible injective blocks and the positive-length MPV identity, but not the weight normalization. The final BNT sector decomposition is therefore still conditional on the displayed weight hypotheses. This is a positive-length statement: the all-zero summand in the block decomposition contributes only at length zero, so the nonzero primitive blocks identify the MPV family for \(N\ge 1\). The proof that the prepared weights can always be rescaled to satisfy the displayed normalization remains the missing step recorded in the cited note. The theorem records the sector-decomposition conclusion once that normalization choice is supplied. The corresponding unrestricted statement is recorded in <span class="ttfamily">docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex</span>. The length-zero trace identity and the fully unblocked canonical-form statement remain part of the surrounding reduction in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. </p>
 
   </div>
 </div>
@@ -5509,7 +5645,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.65</span>
+    <span class="lemma_thmlabel">9.67</span>
     <span class="lemma_thmtitle">Canonical form from peripheral primitivity</span>
     <div class="thm_header_extras">
 
@@ -5556,7 +5692,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.66</span>
+    <span class="lemma_thmlabel">9.68</span>
     <span class="lemma_thmtitle">Adjoint primitivity equivalence</span>
     <div class="thm_header_extras">
 
@@ -5620,7 +5756,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.67</span>
+    <span class="lemma_thmlabel">9.69</span>
     <span class="lemma_thmtitle">Primitivity under blocking by a multiple</span>
     <div class="thm_header_extras">
 
@@ -5686,7 +5822,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.68</span>
+    <span class="lemma_thmlabel">9.70</span>
     <span class="lemma_thmtitle">Blocking the assembled weighted block sum</span>
     <div class="thm_header_extras">
 
@@ -5746,7 +5882,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For nonzero weights \((\mu _k)_{k=1}^r\), blocks \((B_k)_{k=1}^r\), and any blocking length \(p\ge 1\), the blocked assembled tensor agrees with the assembled tensor of the blocked blocks with powered weights: </p>
-<div class="displaymath" id="a0000000629">
+<div class="displaymath" id="a0000000630">
   \[  (\textstyle \bigoplus _k \mu _k B_k)^{[p]} \sim \textstyle \bigoplus _k \mu _k^{\, p}\,  B_k^{[p]},  \]
 </div>
 <p> where \(\sim \) denotes generation of the same MPV family at every length. </p>
@@ -5758,7 +5894,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.69</span>
+    <span class="lemma_thmlabel">9.71</span>
     <span class="lemma_thmtitle">Nonzero weights survive blocking</span>
     <div class="thm_header_extras">
 
@@ -5802,7 +5938,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.70</span>
+    <span class="lemma_thmlabel">9.72</span>
     <span class="lemma_thmtitle">Primitive cyclic sectors of irreducible TP tensors</span>
     <div class="thm_header_extras">
 
@@ -5832,7 +5968,7 @@
           
           <li><a href="ch-channels.html#def:primitive_channel">Definition 4.49</a></li>
           
-          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">Theorem 9.43</a></li>
+          <li><a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">Theorem 9.45</a></li>
           
         </ul>
     
@@ -5872,7 +6008,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.71</span>
+    <span class="lemma_thmlabel">9.73</span>
     <span class="lemma_thmtitle">Common reblocking of cyclic-sector families</span>
     <div class="thm_header_extras">
 
@@ -5896,7 +6032,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.70</a></li>
+          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.72</a></li>
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
           
@@ -5938,7 +6074,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.72</span>
+    <span class="lemma_thmlabel">9.74</span>
     <span class="lemma_thmtitle">Nonzero unit weight of the common reblocked family</span>
     <div class="thm_header_extras">
 
@@ -5962,7 +6098,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.73</a></li>
           
         </ul>
     
@@ -5993,7 +6129,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  The unit weight on each sector of the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a> is nonzero. </p>
+  <p>  The unit weight on each sector of the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.73</a> is nonzero. </p>
 
   </div>
 </div>
@@ -6002,7 +6138,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.73</span>
+    <span class="lemma_thmlabel">9.75</span>
     <span class="lemma_thmtitle">Sector irreducibility for the adjoint blocked map</span>
     <div class="thm_header_extras">
 
@@ -6066,7 +6202,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.74</span>
+    <span class="lemma_thmlabel">9.76</span>
     <span class="lemma_thmtitle">Iterated blocking at the transfer-map level</span>
     <div class="thm_header_extras">
 
@@ -6124,7 +6260,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  For any MPS tensor \(A\) and natural numbers \(m,n \ge 0\), </p>
-<div class="displaymath" id="a0000000630">
+<div class="displaymath" id="a0000000631">
   \[  \mathcal{E}_{(A^{[m]})^{[n]}} = \mathcal{E}_{A^{[mn]}}.  \]
 </div>
 
@@ -6135,7 +6271,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.75</span>
+    <span class="definition_thmlabel">9.77</span>
     <span class="definition_thmtitle">Primitive irreducible cyclic-sector decomposition</span>
     <div class="thm_header_extras">
 
@@ -6205,7 +6341,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.76</span>
+    <span class="lemma_thmlabel">9.78</span>
     <span class="lemma_thmtitle">Common reblocking at a prescribed multiple</span>
     <div class="thm_header_extras">
 
@@ -6229,7 +6365,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.73</a></li>
           
         </ul>
     
@@ -6260,7 +6396,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  With hypotheses as in Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a>, and given any integer \(p\) that is a common multiple of the per-block period-removal lengths \((m_k)\), the common reblocking can be performed at the prescribed length \(p\) rather than only at some sufficiently large length. </p>
+  <p>  With hypotheses as in Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.73</a>, and given any integer \(p\) that is a common multiple of the per-block period-removal lengths \((m_k)\), the common reblocking can be performed at the prescribed length \(p\) rather than only at some sufficiently large length. </p>
 
   </div>
 </div>
@@ -6269,7 +6405,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.77</span>
+    <span class="lemma_thmlabel">9.79</span>
     <span class="lemma_thmtitle">Structural properties of the common reblocked sectors</span>
     <div class="thm_header_extras">
 
@@ -6293,7 +6429,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.73</a></li>
           
         </ul>
     
@@ -6324,7 +6460,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Each sector tensor in the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a> is trace-preserving (\(\sum _i (B^i)^\dagger B^i = \mathbb {1}\)), has primitive transfer map (\(\sigma _\partial (\mathcal{E}_B) = \{ 1\} \)), is tensor-irreducible, and has positive bond dimension. </p>
+  <p>  Each sector tensor in the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.73</a> is trace-preserving (\(\sum _i (B^i)^\dagger B^i = \mathbb {1}\)), has primitive transfer map (\(\sigma _\partial (\mathcal{E}_B) = \{ 1\} \)), is tensor-irreducible, and has positive bond dimension. </p>
 
   </div>
 </div>
@@ -6333,7 +6469,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.78</span>
+    <span class="lemma_thmlabel">9.80</span>
     <span class="lemma_thmtitle">Common-alphabet flattening</span>
     <div class="thm_header_extras">
 
@@ -6357,7 +6493,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.73</a></li>
           
         </ul>
     
@@ -6397,7 +6533,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.79</span>
+    <span class="lemma_thmlabel">9.81</span>
     <span class="lemma_thmtitle">Reindexed nonzero-part transport</span>
     <div class="thm_header_extras">
 
@@ -6421,7 +6557,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.78</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.80</a></li>
           
         </ul>
     
@@ -6452,7 +6588,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  The nonzero-part decomposition of a weighted block sum \(\bigoplus _k \mu _k B_k\) transports through the common-alphabet identification of Lemma&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">9.78</a>: the common-alphabet sectors have the same nonzero-part decomposition as the direct \(p\)-blocked tensors. </p>
+  <p>  The nonzero-part decomposition of a weighted block sum \(\bigoplus _k \mu _k B_k\) transports through the common-alphabet identification of Lemma&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">9.80</a>: the common-alphabet sectors have the same nonzero-part decomposition as the direct \(p\)-blocked tensors. </p>
 
   </div>
 </div>
@@ -6461,7 +6597,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.80</span>
+    <span class="definition_thmlabel">9.82</span>
     <span class="definition_thmtitle">Coordinate-grouping predicate</span>
     <div class="thm_header_extras">
 
@@ -6485,7 +6621,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.73</a></li>
           
         </ul>
     
@@ -6525,7 +6661,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.81</span>
+    <span class="lemma_thmlabel">9.83</span>
     <span class="lemma_thmtitle">Digit-level flattening identification</span>
     <div class="thm_header_extras">
 
@@ -6549,7 +6685,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.80</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.82</a></li>
           
         </ul>
     
@@ -6589,7 +6725,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.82</span>
+    <span class="lemma_thmlabel">9.84</span>
     <span class="lemma_thmtitle">Direct and iterated blocking comparison</span>
     <div class="thm_header_extras">
 
@@ -6613,9 +6749,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.78</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.80</a></li>
           
-          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.80</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.82</a></li>
           
         </ul>
     
@@ -6647,7 +6783,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Direct blocking at length \(p = m_k e_k\) and iterated blocking \((B_k^{[m_k]})^{[e_k]}\) produce, after the canonical alphabet identification, the same weighted finite sum: for every \(N \ge 0\) and every blocked word \(\sigma \), </p>
-<div class="displaymath" id="a0000000631">
+<div class="displaymath" id="a0000000632">
   \[  V^{(N)}\! (B_k^{[p]})_\sigma = V^{(N)}\! ((B_k^{[m_k]})^{[e_k]})_{\sigma '},  \]
 </div>
 <p> where \(\sigma '\) is the image of \(\sigma \) under the coordinate-grouping identification. </p>
