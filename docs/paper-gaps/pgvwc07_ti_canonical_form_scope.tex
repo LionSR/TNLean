@@ -209,6 +209,33 @@ The earlier existence path now has the following formal pieces.
           \]
           for diagonal positive-definite \(\Lambda\).
 
+    \item
+          \path|MPSTensor.exists_unital_data_of_irreducible| formalizes the
+          Perron--Frobenius unital-gauge step in
+          Theorem~\texttt{Th:TIcanonical}, lines 765--770, for a single
+          irreducible nonzero block.  It obtains a positive-definite
+          eigenvector \(\rho\) for the transfer map by applying the adjoint
+          Perron--Frobenius theorem to the conjugate-transposed Kraus family,
+          and then forms
+          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) with
+          \(\sum_i B_iB_i^\dagger=\mathbf{1}\).  This is a scoped
+          single-block input, not the full recursive canonical-form theorem.
+
+    \item
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible|
+          composes the single-block source steps in
+          Theorem~\texttt{Th:TIcanonical}, lines 765--770 and 816--832.  Starting
+          from one irreducible nonzero block, it constructs the
+          Perron--Frobenius unital representative
+          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\), proves that the fixed
+          points of \(\mathcal{E}_B\) are scalar multiples of the identity, and
+          then applies the dual fixed-point diagonalization to a unitary
+          conjugate of \(B\).  This removes a previous composition gap for a
+          single block.  It is still not the full source theorem, because the
+          construction has not yet been threaded through the recursive
+          finite-ring block decomposition, the positive weights, and the
+          total bond-dimension bound.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an

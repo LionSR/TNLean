@@ -797,6 +797,48 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     the displayed equations for $B$.
 \end{proof}
 
+\begin{theorem}[Single irreducible-block PGVWC07 canonical-form data]%
+    \label{thm:pgvwc07_irreducible_unital_dual_package}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible nonzero MPS block with positive bond dimension.
+    Then the Perron--Frobenius eigenvector produces a positive scalar $r$ and a
+    positive definite matrix $\rho$ such that
+    \[
+        B^i := r^{-1/2}\rho^{-1/2} A^i\rho^{1/2}
+    \]
+    is unital.  In this unital gauge every fixed point of $\E_B$ is a scalar
+    multiple of the identity.  Moreover a unitary conjugate $C^i=U^\dagger
+    B^iU$ remains unital and has a diagonal positive definite dual fixed point
+    $\Lambda$:
+    \[
+        \sum_i C^i(C^i)^\dagger=\Id,
+        \qquad
+        \sum_i (C^i)^\dagger\Lambda C^i=\Lambda .
+    \]
+    The construction preserves the finite-ring coefficients up to the
+    spectral-radius weight carried by the rescaling from $A$ to $B$.
+
+    This composes the single-block canonical-form existence steps of
+    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
+        {PerezGarcia2007Matrix}.  It is not yet the full theorem, because the
+    recursive finite-ring block decomposition and the final bond-dimension
+    bound have not been threaded through this package.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:unital_data_irreducible,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Theorem~\ref{thm:unital_data_irreducible} gives the unital gauge.
+    Gauge equivalence preserves irreducibility of the bond-space action, so
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} gives the scalar
+    fixed-point endpoint for the unital representative.  Then
+    Theorem~\ref{thm:pgvwc07_dual_diag_unital} gives the unitary
+    diagonalization of the dual fixed point.
+\end{proof}
+
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
     \label{thm:irreducible_block_decomp_with_cfii}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
