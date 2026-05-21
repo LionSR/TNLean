@@ -258,7 +258,7 @@ theorem exists_tp_gauge_blockwise
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
-## Zero-block separation + TP gauge threading (arXiv:1606.00608 Section 2.3 + App. A)
+## Zero-block separation and trace-preserving gauge threading
 
 This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron–Frobenius / TP-gauge theorem `exists_tp_gauge_blockwise`, producing an
@@ -277,9 +277,11 @@ This is the furthest unconditional arbitrary-input step available before periodi
 the cyclic-sector and equal-weight arguments.
 -/
 
-/-- **Arbitrary-input TP-gauge reduction.**
+/-- **Arbitrary-input trace-preserving gauge reduction.**
 
-arXiv:1606.00608 Section 2.3 and Appendix A, with zero-block separation.
+This combines the invariant-subspace splitting of arXiv:1606.00608,
+lines 201-219, with zero-block separation and the canonical-form-II gauge
+passage at lines 1058-1077 for the nonzero irreducible blocks.
 
 From any `A : MPSTensor d D`, produce:
 * a zero block of dimension `zeroTailDim` accumulating all-zero irreducible blocks
@@ -299,11 +301,12 @@ The MPV of `A` equals the zero-block contribution plus the weighted nonzero-bloc
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
 lines 765--770 use a full-rank positive fixed point to gauge a block into the
 unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
-left-canonical TP orientation after the all-zero-block separation. It is therefore not the full
-translation-invariant canonical form theorem of Pérez-García, Verstraete,
-Wolf, and Cirac: it does not also prove the source theorem's unital orientation,
-diagonal full-rank dual fixed points, uniqueness of the identity fixed point, or
-total bond-dimension bound. The boundary is recorded in
+left-canonical trace-preserving orientation after the all-zero-block
+separation. It is therefore not the full translation-invariant canonical form
+theorem of Pérez-García, Verstraete, Wolf, and Cirac: it does not also prove the
+source theorem's unital orientation, diagonal full-rank dual fixed points,
+uniqueness of the identity fixed point, or total bond-dimension bound. The
+boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)

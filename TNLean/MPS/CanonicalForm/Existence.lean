@@ -14,18 +14,24 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Canonical form existence reduction (arXiv:1606.00608, Section 2.3 + Appendix A)
+# Canonical form existence reductions from the source proofs
 
 This file collects the arbitrary-tensor reductions toward the canonical-form construction for
 MPS tensors from Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608.
 
-The file contains the following reductions:
+The file contains the following reductions from arXiv:1606.00608 and the
+translation-invariant canonical-form theorem of Pérez-García, Verstraete, Wolf,
+and Cirac:
 
-* Section 2.3: iterated invariant-projection splitting → irreducible block decomposition.
-* Appendix A (PF / TP gauge): irreducible + nonzero Kraus operator → Perron--Frobenius
-  eigenvector → TP-normalized representative.
-* Appendix A (CFII part): inside that TP gauge, unitary conjugation → diagonal PD fixed point.
-* Appendix A (periodicity): TP + irreducible → primitive after blocking.
+* arXiv:1606.00608, lines 201-219: iterated invariant-projection splitting gives an
+  irreducible block decomposition.
+* arXiv:1606.00608, lines 1058-1077: after canonical form has been obtained,
+  the canonical-form-II gauge makes the associated maps trace-preserving and
+  gives diagonal full-rank fixed points.
+* Pérez-García, Verstraete, Wolf, and Cirac, proof of Theorem Th:TIcanonical,
+  lines 765-770 and 827-832: the full-rank fixed-point gauge and the final
+  dual fixed-point diagonalization.
+* arXiv:1606.00608, lines 227-231: blocking removes peripheral periodicity.
 
 We also keep a couple of formulations for already-normalized primitive / injective block families,
 but those are **not** obtained from arbitrary input in this file.
@@ -53,12 +59,12 @@ diagonal full-rank dual fixed points, uniqueness of the identity fixed point for
 each block transfer map, and the stated bond-dimension bound. The audit
 boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
-For Pérez-García, Verstraete, Wolf, and Cirac, the faithful proof order is the one in
-`Papers/quant-ph_0608197/MPSarchive.tex`: lines 765–770 for spectral-radius
-normalization and the full-rank fixed-point gauge, lines 771–815 for deriving
-the invariant support from a singular positive fixed point and then splitting
-the trace, lines 816–826 for iteration and non-scalar fixed-point splitting,
-and lines 827–832 for dual fixed-point diagonalization.
+For Pérez-García, Verstraete, Wolf, and Cirac, the faithful proof order is the
+one in `Papers/quant-ph_0608197/MPSarchive.tex`: lines 765–770 for
+spectral-radius normalization and the full-rank fixed-point gauge, lines
+771–815 for deriving the invariant support from a singular positive fixed point
+and then splitting the trace, lines 816–826 for iteration and non-scalar
+fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 
@@ -85,14 +91,14 @@ The formal statement:
 > `wordSpan A 1 = ⊤`).  This proves the hardest direction
 > in the Sanz–Pérez-García–Wolf–Cirac primitivity equivalence.
 
-## External input — Pérez-García et al. invariant subspace decomposition
+## External input — invariant subspace decomposition in the canonical-form proof
 
 The iterated invariant-projection splitting in arXiv:1606.00608, lines
-201–219 (Wolf/Cirac/Verstraete canonical-form reduction), is formalized in
+201–219, is formalized in
 `TNLean.MPS.Structure.InvariantSubspaceDecomp`.
 This external input provides:
 
-> **Pérez-García et al., quant-ph/0608197, proof of Theorem
+> **Pérez-García, Verstraete, Wolf, and Cirac, proof of Theorem
 > Th:TIcanonical, lines 765–833.**
 > An invariant orthogonal projection `P` on the bond space (satisfying
 > `(1-P) A_i P = 0` for all `i`) yields an MPV-equivalent two-block direct-sum
@@ -124,14 +130,14 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-!
-## (1) Irreducible block decomposition (1606.00608 Section 2.3)
+## (1) Irreducible block decomposition
 
 We use `MPSTensor.exists_irreducible_blockDecomp` from `Reduction.lean` directly below.
 -/
 
 
 /-!
-## (2) Perron–Frobenius / TP gauge for irreducible blocks (1606.00608 Appendix A)
+## (2) Perron–Frobenius / trace-preserving gauge for irreducible blocks
 
 We use `MPSTensor.exists_tp_data_of_irreducible` from
 `Channel/PerronFrobenius/Existence.lean` directly below.
@@ -139,7 +145,7 @@ We use `MPSTensor.exists_tp_data_of_irreducible` from
 
 
 /-!
-## (3) CFII normalization for irreducible TP blocks (1606.00608 Appendix A)
+## (3) CFII normalization for irreducible trace-preserving blocks
 
 We collect `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
 fact that unitary conjugation preserves MPVs.
@@ -149,7 +155,7 @@ PF / TP-gauge step is generally a non-unitary similarity; the unitary appearing 
 after one has already moved into the one-sided TP gauge.
 -/
 
-/-- **Reduction step (1606.00608 Appendix A, CFII).**
+/-- **CFII fixed-point normalization for irreducible trace-preserving blocks.**
 
 For an irreducible tensor `A` in the TP gauge (`∑ Aᵢ†Aᵢ = I`) and with `0 < D`, there exist
 
@@ -195,13 +201,13 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
 
 
 /-!
-## (4) Periodicity removal by blocking (1606.00608 Appendix A)
+## (4) Periodicity removal by blocking
 
 This is the Appendix-A periodicity-removal step for TP irreducible blocks, routed through the
 adjoint-transfer formulation.
 -/
 
-/-- **Reduction step (1606.00608 Appendix A): periodicity removal by blocking.**
+/-- **Periodicity removal by blocking for irreducible trace-preserving blocks.**
 
 If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
 transfer map primitive. -/
@@ -217,7 +223,7 @@ theorem exists_blockTensor_isPrimitive
   simpa using
     (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
 
-/-- **Reduction step (1606.00608 Appendix A, TP normalization after blocking).**
+/-- **Trace-preserving normalization after blocking.**
 
 If `A` is trace-preserving and irreducible, then some physical blocking makes the
 blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
@@ -363,7 +369,7 @@ Remaining gap for a complete canonical-form existence theorem:
   the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
 -/
 
-/-- **Unconditional TP-gauge reduction for the 1606 theorem (1606.00608 Section 2.3 + App. A).**
+/-- **Unconditional trace-preserving gauge reduction for the 1606 theorem.**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
 resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
@@ -408,13 +414,14 @@ theorem exists_irreducible_blockDecomp_with_tpGauge
     (exists_tp_data_of_irreducible (d := d) (D := dim k)
       (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
 
-/-- **CFII fixed-point data for the 1606 reduction (1606.00608 Section 2.3 + App. A).**
+/-- **CFII fixed-point data for the 1606 reduction.**
 
 From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
 block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
 we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
 
-This is the CFII part of Appendix A, not a complete existence theorem: it does not carry the PF
+This is the CFII fixed-point part of the source proof, not a complete existence theorem:
+it does not carry the Perron-Frobenius
 / TP-gauge or periodicity-removal arguments through the block decomposition. The normal canonical
 form, for primitive weighted blocks already in hand, is treated in the normal-canonical-form
 file. -/
@@ -448,7 +455,7 @@ theorem exists_irreducible_blockDecomp_with_CFII
       (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
-## Zero-block separation (arXiv:1606.00608 Section 2.3: partition into zero + nonzero blocks)
+## Zero-block separation
 
 The irreducible block decomposition may produce all-zero blocks. Because `SameMPV₂`
 at `N = 0` includes the identity `trace(I_D) = D`, we cannot silently drop these.
@@ -485,7 +492,7 @@ theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
     exact mpv_eq_zero_of_all_zero (zeroMPSTensor d' D')
       (fun _ => rfl) σ hpos
 
-/-- **Zero-block separation** (arXiv:1606.00608 Section 2.3).
+/-- **Zero-block separation.**
 
 The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, some blocks may
 be zero: "there can be zero blocks." Every MPS tensor `A : MPSTensor d D` admits an irreducible
