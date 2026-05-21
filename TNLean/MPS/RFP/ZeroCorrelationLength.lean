@@ -5,8 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Core.Correlations
-import TNLean.MPS.BNT.Construction
-import TNLean.Spectral.SpectralGap
 
 /-!
 # Zero correlation length (ZCL) for MPS tensors
