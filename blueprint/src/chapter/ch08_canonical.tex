@@ -969,6 +969,42 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     bound \(\sum_k D_k\leq D\) is one of the conclusions of that theorem.
 \end{proof}
 
+\begin{definition}[Positive-length PGVWC07 canonical-form witness]%
+    \label{def:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
+    \leanok
+    A positive-length PGVWC07 canonical-form witness for an MPS tensor \(A\)
+    consists of a finite family of nonzero unital blocks, positive real
+    weights, diagonal positive-definite dual fixed points, scalar fixed-point
+    conclusions, positive block dimensions, positive-length MPV equality with
+    \(A\), and the total bond-dimension bound \(\sum_k D_k\leq D\).
+
+    This definition records the exact-MPV, nonempty-ring part of the PGVWC07
+    construction.  It still does not include the source theorem's upper
+    normalization \(1\geq\lambda_k\), which depends on the global
+    spectral-radius normalization convention of
+    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{theorem}[Existence of the positive-length PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    For every MPS tensor \(A\), the conclusions of
+    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    give a positive-length PGVWC07 canonical-form witness.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    Unpack
+    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    and use its conclusions as the fields of the witness.
+\end{proof}
+
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
     \label{thm:irreducible_block_decomp_with_cfii}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
