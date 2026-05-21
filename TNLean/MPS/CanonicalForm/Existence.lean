@@ -65,6 +65,10 @@ spectral-radius normalization and the full-rank fixed-point gauge, lines
 771–815 for deriving the invariant support from a singular positive fixed point
 and then splitting the trace, lines 816–826 for iteration and non-scalar
 fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
+The final dual step is now available for a single irreducible unital block in
+`MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor`;
+what is still missing here is the source-level composition over the whole
+recursive decomposition.
 
 ## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
 

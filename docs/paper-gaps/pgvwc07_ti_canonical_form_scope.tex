@@ -192,6 +192,23 @@ The earlier existence path now has the following formal pieces.
           (Wolf Theorem 6.6).  Thus the identity is the unique fixed point
           after the usual scalar normalization of the fixed-point line.
 
+    \item
+          \path|MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor|
+          formalizes the dual-map diagonalization in
+          Theorem~\texttt{Th:TIcanonical}, lines 827--832, conditional on having
+          already reached an irreducible unital block.  The proof applies the
+          existing trace-preserving diagonalization theorem to the
+          conjugate-transposed Kraus family \(i\mapsto A_i^\dagger\).  This is
+          not a duplicate spectral proof: unitality of \(A\) is trace
+          preservation for \(A^\dagger\), and translating back gives a unitary
+          gauge \(B_i=U^\dagger A_iU\) with
+          \[
+              \sum_i B_iB_i^\dagger=\mathbf{1},
+              \qquad
+              \sum_i B_i^\dagger\Lambda B_i=\Lambda,
+          \]
+          for diagonal positive-definite \(\Lambda\).
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
