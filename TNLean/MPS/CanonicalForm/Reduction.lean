@@ -23,8 +23,8 @@ iterate the split and use a non-scalar fixed point to force uniqueness of the
 identity fixed point.  This file formalizes only the abstract splitting once an
 invariant projection is available; a faithful proof of the full theorem must
 also derive that projection from the singular positive fixed-point argument in
-lines 771–783 and perform the dual fixed-point diagonalization at
-lines 827–832.
+lines 771–783 and compose the dual fixed-point diagonalization formalized in
+`TNLean.MPS.Irreducible.Adjoint` for lines 827–832.
 
 Starting from an arbitrary MPS tensor `A : MPSTensor d D`, we iteratively apply
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict` — which produces two blocks each with
