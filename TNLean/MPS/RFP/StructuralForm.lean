@@ -186,7 +186,7 @@ theorem rfp_nt_structural_of_leftCanonical [DecidableEq (Fin D)] [NeZero D]
 /-- Appendix B / CFII reduction step:
 after unitary conjugation, a left-canonical normal RFP tensor has a diagonal
 positive-definite fixed point for its transfer map. -/
-theorem rfp_nt_cfii_diagonal_fixedPoint [DecidableEq (Fin D)] [NeZero D]
+theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
     (A : MPSTensor d D)
     (hNT : IsNormal A) (hRFP : IsRFP A)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :

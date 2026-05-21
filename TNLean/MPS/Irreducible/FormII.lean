@@ -138,11 +138,7 @@ theorem isIrreducibleTensor_of_isIrreducibleMap
 
 section CFII
 
-/-- The transfer map of a unitary-conjugated tensor equals the
-conjugation of the original transfer map.
-
-For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
-private lemma transferMap_unitaryConj [DecidableEq (Fin D)]
+private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     transferMap (d := d) (D := D)
@@ -164,6 +160,21 @@ private lemma transferMap_unitaryConj [DecidableEq (Fin D)]
     Matrix.conjTranspose_conjTranspose]
   -- Both sides equal Vᴴ * (A i * (V * (X * (Vᴴ * ((A i)ᴴ * V))))) after right-association
   repeat rw [Matrix.mul_assoc]
+
+/-- The transfer map of a unitary-conjugated tensor equals the
+conjugation of the original transfer map.
+
+For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
+theorem transferMap_unitaryConj
+    (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
+    (X : Matrix (Fin D) (Fin D) ℂ) :
+    transferMap (d := d) (D := D)
+      (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) X =
+    (↑U : Matrix _ _ ℂ)ᴴ *
+      (transferMap (d := d) (D := D) A
+        ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
+    (↑U : Matrix _ _ ℂ) := by
+  exact transferMap_unitaryConj_of_decidable A U X
 
 /-- The TP condition is preserved by unitary conjugation. -/
 private lemma tp_of_unitaryConj [DecidableEq (Fin D)]
@@ -262,7 +273,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
   -- Step 9: Λ is a fixed point of the conjugated transfer map.
   have hΛ_fix : transferMap (d := d) (D := D)
       (fun i => Umatᴴ * A i * Umat) Λ = Λ := by
-    rw [transferMap_unitaryConj A U_raw Λ, ← h_spectral, hρ_fix, ← hΛ_eq]
+    rw [transferMap_unitaryConj_of_decidable A U_raw Λ, ← h_spectral, hρ_fix, ← hΛ_eq]
   -- Step 10: Assemble
   -- The goal uses `star U` whereas our lemmas use `Uᴴ`; these are definitionally equal.
   refine ⟨U_raw, Λ, hΛ_pd, hΛ_diag, ?_, ?_⟩

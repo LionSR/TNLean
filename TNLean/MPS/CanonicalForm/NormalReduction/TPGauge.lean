@@ -23,6 +23,8 @@ Its public outputs are:
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — the
   single-block PGVWC07 unital gauge, scalar fixed-point, and dual
   diagonalization package.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` — the same PGVWC07
+  package applied blockwise to a prepared nonzero irreducible decomposition.
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
@@ -202,6 +204,234 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
   refine ⟨B, C, r, ρ, Λ, U, hρ, hr, hB_form, ?_, hB_unital, hScalar, ?_⟩
   · simpa [c] using hGauge
   · exact ⟨rfl, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩
+
+private theorem scalar_fixedPoints_unitaryConj
+    {D : ℕ}
+    (A : MPSTensor d D)
+    (U : Matrix.unitaryGroup (Fin D) ℂ)
+    (hScalar :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        transferMap (d := d) (D := D) A X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      transferMap (d := d) (D := D)
+          (fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ)) X = X →
+        ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  intro X hX
+  let V : Matrix (Fin D) (Fin D) ℂ := ↑U
+  let Y : Matrix (Fin D) (Fin D) ℂ := V * X * Vᴴ
+  have hVV : Vᴴ * V = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    exact Matrix.UnitaryGroup.star_mul_self U
+  have hVV' : V * Vᴴ = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    exact Unitary.mul_star_self_of_mem U.prop
+  have hconj :
+      transferMap (d := d) (D := D)
+          (fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ)) X =
+        Vᴴ * transferMap (d := d) (D := D) A Y * V := by
+    simpa [V, Y] using transferMap_unitaryConj (d := d) (D := D) A U X
+  have hmiddle :
+      Vᴴ * transferMap (d := d) (D := D) A Y * V = X := by
+    calc
+      Vᴴ * transferMap (d := d) (D := D) A Y * V
+          = transferMap (d := d) (D := D)
+              (fun i =>
+                (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+                  (↑U : Matrix (Fin D) (Fin D) ℂ)) X := hconj.symm
+      _ = X := hX
+  have hYfix : transferMap (d := d) (D := D) A Y = Y := by
+    calc
+      transferMap (d := d) (D := D) A Y
+          = (V * Vᴴ) * transferMap (d := d) (D := D) A Y * (V * Vᴴ) := by
+              simp [hVV']
+      _ = V * (Vᴴ * transferMap (d := d) (D := D) A Y * V) * Vᴴ := by
+              simp [Matrix.mul_assoc]
+      _ = V * X * Vᴴ := by rw [hmiddle]
+      _ = Y := rfl
+  obtain ⟨c, hc⟩ := hScalar Y hYfix
+  refine ⟨c, ?_⟩
+  calc
+    X = (Vᴴ * V) * X * (Vᴴ * V) := by simp [hVV]
+    _ = Vᴴ * Y * V := by simp [Y, Matrix.mul_assoc]
+    _ = Vᴴ * (c • (1 : Matrix (Fin D) (Fin D) ℂ)) * V := by rw [hc]
+    _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+          simp [hVV]
+
+/-- **Blockwise PGVWC07 unital and dual-diagonal package.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 765--770 and 816--832, after the recursive invariant-subspace splitting
+has already produced a nonzero irreducible block family.  The theorem applies
+`exists_pgvwc07_unital_dualDiag_data_of_irreducible` to every block, records
+the positive spectral-radius weights, and preserves the finite-ring MPV family
+through the weighted direct sum.
+
+This is still a prepared-block statement.  It does not start from an arbitrary
+translation-invariant representation, does not separate all-zero blocks, and
+does not prove the total bond-dimension bound of the full source theorem. -/
+theorem exists_pgvwc07_unital_dualDiag_blockwise
+    (A : MPSTensor d D)
+    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
+    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (hIrr0 : ∀ k, IsIrreducibleTensor (blocks0 k))
+    (hSame0 :
+      SameMPV₂ A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
+    ∃ r1 : ℕ,
+      ∃ dim1 : Fin r1 → ℕ,
+      ∃ μ1 : Fin r1 → ℂ,
+      ∃ blocks1 : (k : Fin r1) → MPSTensor d (dim1 k),
+        SameMPV₂ A
+          (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
+        (∀ k,
+          ∃ Λ : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ,
+            Λ.PosDef ∧
+            Λ.IsDiag ∧
+            (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
+            transferMap (d := d) (D := dim1 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
+        (∀ k,
+          ∀ X : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ,
+            transferMap (d := d) (D := dim1 k) (blocks1 k) X = X →
+              ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim1 k)) (Fin (dim1 k)) ℂ)) ∧
+        (∀ k, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ)) ∧
+        (∀ k, μ1 k ≠ 0) ∧
+        (∀ k, 0 < dim1 k) := by
+  classical
+  have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
+    intro k hk0
+    rcases hNonzero0 k with ⟨i, hi⟩
+    have hzero : blocks0 k i = 0 := by
+      ext a b
+      exfalso
+      have ha : (a : ℕ) < 0 := by
+        simpa [hk0] using a.2
+      omega
+    exact hi hzero
+  have hcanon :
+      ∀ k : Fin r0,
+        ∃ (B C : MPSTensor d (dim0 k))
+          (r : ℝ)
+          (ρ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)
+          (U : Matrix.unitaryGroup (Fin (dim0 k)) ℂ),
+            ρ.PosDef ∧
+            0 < r ∧
+            (∀ i : Fin d,
+              B i =
+                (↑((Real.sqrt r)⁻¹) : ℂ) •
+                  ((CFC.sqrt ρ)⁻¹ * blocks0 k i * CFC.sqrt ρ)) ∧
+            GaugeEquiv (d := d) (D := dim0 k)
+              (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B ∧
+            (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
+            (∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+              transferMap (d := d) (D := dim0 k) B X = X →
+                ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
+            (let C' : MPSTensor d (dim0 k) :=
+              fun i =>
+                (↑U : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)ᴴ * B i *
+                  (↑U : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ);
+              C = C' ∧
+              SameMPV₂ B C ∧
+              Λ.PosDef ∧
+              Λ.IsDiag ∧
+              (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
+              transferMap (d := d) (D := dim0 k) (fun i => (C i)ᴴ) Λ = Λ) := by
+    intro k
+    letI : NeZero (dim0 k) := ⟨hdim0_ne k⟩
+    exact exists_pgvwc07_unital_dualDiag_data_of_irreducible
+      (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
+  choose blocksB blocks1 r1 ρ1 Λ1 U1 hρpd1 hrpos1 hform1 hGauge1 hUnitalB1
+    hScalarB1 hFinal1 using hcanon
+  let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  have hSameBlocks :
+      SameMPV₂
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
+        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
+          = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
+              simpa [smul_eq_mul] using
+                (mpv_toTensorFromBlocks_eq_sum
+                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
+      _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
+            refine Finset.sum_congr rfl ?_
+            intro k _
+            let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+            have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocksB k) :=
+              GaugeEquiv.sameMPV (hGauge1 k)
+            have hSameBC : SameMPV₂ (blocksB k) (blocks1 k) := (hFinal1 k).2.1
+            have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
+              calc
+                mpv (blocks1 k) σ = mpv (blocksB k) σ := (hSameBC N σ).symm
+                _ = mpv (fun i => c • blocks0 k i) σ := (hGaugeSame N σ).symm
+                _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
+            have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
+              exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
+            have hμc : μ1 k * c = 1 := by
+              dsimp [μ1, c]
+              simp [hroot_ne]
+            have hmulpow : (μ1 k) ^ N * c ^ N = 1 := by
+              rw [← mul_pow, hμc, one_pow]
+            have hmulpow_apply :
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) = mpv (blocks0 k) σ := by
+              calc
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ)
+                    = ((μ1 k) ^ N * c ^ N) * mpv (blocks0 k) σ := by ring
+                _ = mpv (blocks0 k) σ := by simp [hmulpow]
+            calc
+              (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
+              _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
+              _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
+            symm
+            simpa [smul_eq_mul] using
+              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
+  have hSame1 :
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv A σ
+          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
+              hSame0 N σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
+  have hΛData :
+      ∀ k : Fin r0,
+        ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim0 k) (fun i => (blocks1 k i)ᴴ) Λ = Λ := by
+    intro k
+    exact ⟨Λ1 k, (hFinal1 k).2.2.1, (hFinal1 k).2.2.2.1,
+      (hFinal1 k).2.2.2.2.1, (hFinal1 k).2.2.2.2.2⟩
+  have hScalarC :
+      ∀ k : Fin r0,
+        ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+          transferMap (d := d) (D := dim0 k) (blocks1 k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ) := by
+    intro k
+    have hCeq := (hFinal1 k).1
+    rw [hCeq]
+    exact scalar_fixedPoints_unitaryConj (d := d) (D := dim0 k)
+      (blocksB k) (U1 k) (hScalarB1 k)
+  have hμpos1 : ∀ k : Fin r0, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ) := by
+    intro k
+    exact ⟨Real.sqrt (r1 k), Real.sqrt_pos.2 (hrpos1 k), rfl⟩
+  have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
+    intro k
+    dsimp [μ1]
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
+  have hDim1 : ∀ k : Fin r0, 0 < dim0 k := by
+    intro k
+    exact Nat.pos_of_ne_zero (hdim0_ne k)
+  exact ⟨r0, dim0, μ1, blocks1, hSame1, hΛData, hScalarC, hμpos1, hμne1, hDim1⟩
 
 /-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
 

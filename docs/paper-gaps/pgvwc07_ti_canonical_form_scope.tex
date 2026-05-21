@@ -236,6 +236,20 @@ The earlier existence path now has the following formal pieces.
           finite-ring block decomposition, the positive weights, and the
           total bond-dimension bound.
 
+    \item
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise|
+          applies the preceding single-block package to a prepared family of
+          nonzero irreducible summands with unit weights.  It constructs the
+          positive spectral-radius weights, unital block representatives,
+          scalar fixed-point endpoints, and diagonal positive-definite dual
+          fixed points block by block, while preserving the weighted MPV
+          family.  This closes the blockwise assembly step after the
+          irreducible summands have already been obtained.  It is still not
+          the full source theorem, because the statement assumes the prepared
+          nonzero irreducible decomposition and does not yet incorporate the
+          arbitrary-input zero-block separation or the final total
+          bond-dimension bound.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
