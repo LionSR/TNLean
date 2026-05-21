@@ -1,17 +1,18 @@
 
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter reduces a general MPS tensor to block-diagonal decompositions via
-iterated invariant-subspace decomposition. Two reduction schemes are relevant.
-The block-injective reduction aims at injective TP-normalized blocks and the
-canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
-reduction uses a weighted family of irreducible TP-normalized blocks with
-primitive transfer maps and pairwise distinct nonzero weight moduli, in the
-sense of~\cite{Cirac2017MPDO_AnnPhys}.
-Thus the reductions recorded here are conditional
-primitive-block results. They should not be read as the full
+This chapter records several steps in the reduction of MPS tensors to
+block-diagonal forms. Two reduction schemes are relevant. The block-injective
+reduction aims at injective TP-normalized blocks and the canonical form
+conditions of Chapter~\ref{ch:block_perm}. The normal-canonical reduction uses
+a weighted family of irreducible TP-normalized blocks with primitive transfer
+maps and pairwise distinct nonzero weight moduli, in the sense
+of~\cite{Cirac2017MPDO_AnnPhys}.
+The checked reductions in this chapter are therefore conditional
+primitive-block results. They do not yet give the full
 translation-invariant canonical-form theorem of
-\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}.
+\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}, whose
+input is an arbitrary translation-invariant representation on a finite ring.
 The normalization convention is also dual to the one used in the cited theorem:
 the blocks are written in the unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
@@ -171,6 +172,19 @@ Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
 yet supply the source normalization $|\mu_k|\le 1$ with at least one
 unit-modulus weight, so they should not be cited as
 Theorem~\ref{thm:cpgsv_canonical_form_source}.
+
+For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, what remains is not a
+different canonical-form theorem, but the composition of the source proof from
+its arbitrary initial representation.  One must use the positive
+Perron--Frobenius fixed point of the original transfer map to normalize the
+spectral radius and obtain the weights, derive the invariant support projection
+when that fixed point is singular, split the finite-ring trace over the support
+and its orthogonal complement, iterate this dimension-decreasing decomposition
+until the identity is the only fixed point of each block, and finally apply the
+dual fixed-point argument and unitary diagonalization that produces the
+matrices $\Lambda_k$.  Only after these steps have been composed can the
+existing conditional TP-normalized and primitive-block results be used as
+corollaries of the source theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -369,6 +383,38 @@ definitions stated below.
     coefficients as the conjugated tensor, and hence as~$A$.
 \end{proof}
 
+\begin{theorem}[Non-scalar fixed point gives a further split]%
+    \label{thm:unital_nonscalar_fixed_point_split}
+    \lean{MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint}
+    \lean{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
+    \leanok
+    \uses{def:transfer_map, def:same_mpv2, thm:two_block_decomp}
+    Suppose $A$ is unital, $\E_A(\Id)=\Id$.  If $X$ is a Hermitian fixed point
+    of $\E_A$ which is not a scalar multiple of the identity, then there is a
+    nonzero positive semidefinite fixed point $\rho$ which is not positive
+    definite.  Consequently $A$ admits a two-block MPV-equivalent decomposition
+    with both block dimensions strictly smaller than the original bond
+    dimension.
+
+    This is the fixed-point shift and further decomposition step in
+    \cite[Theorem~Th:TIcanonical, lines~819--826]{PerezGarcia2007Matrix}.
+    The formal statement uses "not a scalar multiple of the identity", because
+    scalar multiples of the identity are fixed by every unital linear map and do
+    not yield a nontrivial support projection.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\lambda_{\max}$ be the largest eigenvalue of the Hermitian matrix $X$.
+    Then
+    \[
+        \rho := \lambda_{\max}\Id - X
+    \]
+    is positive semidefinite and singular.  Since $X$ is not scalar, $\rho$ is
+    nonzero.  Unitality and the fixed-point equation for $X$ give
+    $\E_A(\rho)=\rho$.  The strict two-block decomposition is then
+    Theorem~\ref{thm:two_block_decomp}.
+\end{proof}
+
 \section{Iterated reduction}
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
@@ -422,6 +468,61 @@ definitions stated below.
     The block decomposition is obtained by iterating
     the invariant-projection splitting and using strong
     induction on~$D$ to ensure termination.
+\end{proof}
+
+\begin{theorem}[Scalar fixed points in an irreducible unital block]%
+    \label{thm:irreducible_unital_scalar_fixed_point}
+    \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
+    \leanok
+    \uses{def:transfer_map, def:irreducible_tensor}
+    Suppose $A$ is irreducible and unital, $\E_A(\Id)=\Id$.  If
+    $\E_A(X)=X$, then $X$ is a scalar multiple of the identity.
+
+    This is the fixed-point endpoint in
+    \cite[Theorem~Th:TIcanonical, lines~816--826]{PerezGarcia2007Matrix}:
+    after the invariant-projection decomposition has been iterated until no
+    proper invariant projection remains, a non-scalar fixed point would give
+    another two-block split by
+    Theorem~\ref{thm:unital_nonscalar_fixed_point_split}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Tensor irreducibility gives irreducibility of the corresponding completely
+    positive transfer map.  The unital equation is the Kraus unitality
+    condition.  The channel fixed-point theorem for irreducible unital Kraus
+    maps, in the form of Wolf's Theorem~6.6, then gives that every fixed point
+    is scalar.
+\end{proof}
+
+\begin{theorem}[Unital gauge from a full-rank Perron--Frobenius eigenvector]%
+    \label{thm:unital_gauge_of_pd_fixed_point}
+    \lean{MPSTensor.spectralUnitalGauge_isUnital_of_transferMap_eigenvector}
+    \lean{MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint}
+    \lean{MPSTensor.sameMPV_unitalGauge}
+    \leanok
+    \uses{def:transfer_map}
+    Let $\rho$ be positive definite and suppose
+    $\E_A(\rho)=r\rho$ for some $r>0$.  For
+    $B^i := r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$,
+    \[
+        \sum_i B^i(B^i)^\dagger = \Id.
+    \]
+    In particular, if $r=1$, then the unscaled gauge
+    $B^i := \rho^{-1/2}A^i\rho^{1/2}$ is unital and
+    generates the same MPV family as $A$.
+
+    This is the spectral-radius normalization and full-rank fixed-point gauge
+    used in \cite[Theorem~Th:TIcanonical, lines~765--769]
+        {PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive square root of $\rho$ is invertible.  Substituting
+    $B^i=r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$ into
+    $\sum_i B^i(B^i)^\dagger$ and using $\E_A(\rho)=r\rho$
+    gives the identity.  In the case $r=1$, the change from $A$ to $B$
+    is a similarity transformation, so cyclicity of the trace gives
+    equality of all finite-ring MPV coefficients.
 \end{proof}
 
 \begin{theorem}[Unitary diagonal positive fixed point in TP gauge]\label{thm:form_II}

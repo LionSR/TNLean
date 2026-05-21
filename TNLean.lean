@@ -247,6 +247,7 @@ import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Irreducible.FormII
+import TNLean.MPS.Irreducible.ScalarFixedPoint
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.Core.TPGauge

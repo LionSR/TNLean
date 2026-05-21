@@ -31,62 +31,6 @@ open Matrix Finset Complex
 
 namespace MPSTensor
 
-private noncomputable def minEigenvalue {D : ℕ} [Nonempty (Fin D)]
-    {H : MatrixAlg D} (hH : H.IsHermitian) : ℝ :=
-  (Finset.univ.image hH.eigenvalues).min' (Finset.Nonempty.image Finset.univ_nonempty _)
-
-private lemma minEigenvalue_le {D : ℕ} [Nonempty (Fin D)]
-    {H : MatrixAlg D} (hH : H.IsHermitian) (i : Fin D) :
-    minEigenvalue hH ≤ hH.eigenvalues i :=
-  Finset.min'_le _ _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩)
-
-private lemma diagonal_sub_smul_one {D : ℕ} (v : Fin D → ℝ) (c : ℝ) :
-    Matrix.diagonal (fun j => (↑(v j) : ℂ)) - (↑c : ℂ) • (1 : MatrixAlg D) =
-      Matrix.diagonal (fun j => (↑(v j - c) : ℂ)) := by
-  ext i j
-  by_cases h : i = j
-  · subst h
-    have hone : ((↑c : ℂ) • (1 : MatrixAlg D)) i i = ↑c := by
-      change ((↑c : ℂ) • ((1 : MatrixAlg D) i)) i = ↑c
-      rw [Pi.smul_apply, Matrix.one_apply_eq]
-      simp only [smul_eq_mul, mul_one]
-    rw [Matrix.sub_apply, Matrix.diagonal_apply_eq, Matrix.diagonal_apply_eq, hone]
-    simp only [ofReal_sub]
-  · have hone : ((↑c : ℂ) • (1 : MatrixAlg D)) i j = 0 := by
-      change ((↑c : ℂ) • ((1 : MatrixAlg D) i)) j = 0
-      rw [Pi.smul_apply, Matrix.one_apply_ne h]
-      simp only [smul_eq_mul, mul_zero]
-    rw [Matrix.sub_apply, Matrix.diagonal_apply_ne _ h, Matrix.diagonal_apply_ne _ h, hone]
-    simp only [sub_self]
-
-private lemma hermitian_sub_scalar_spectral
-    {D : ℕ} {H : MatrixAlg D} (hH : H.IsHermitian) (c : ℝ) :
-    H - (↑c : ℂ) • 1 =
-      (↑hH.eigenvectorUnitary : MatrixAlg D) *
-      Matrix.diagonal (fun j => (↑(hH.eigenvalues j - c) : ℂ)) *
-      (↑hH.eigenvectorUnitary : MatrixAlg D)ᴴ := by
-  set U : MatrixAlg D := ↑hH.eigenvectorUnitary
-  have hUU : U * Uᴴ = 1 := by
-    simpa [U] using eig_mul_conj hH
-  have h_cI : (↑c : ℂ) • (1 : MatrixAlg D) = U * ((↑c : ℂ) • 1) * Uᴴ := by
-    calc
-      (↑c : ℂ) • (1 : MatrixAlg D) = (↑c : ℂ) • (U * Uᴴ) := by rw [hUU]
-      _ = U * ((↑c : ℂ) • 1) * Uᴴ := by
-          rw [Matrix.mul_smul, Matrix.mul_one, smul_mul_assoc]
-  calc
-    H - (↑c : ℂ) • 1
-        = U * Matrix.diagonal (fun j => ↑(hH.eigenvalues j)) * Uᴴ -
-            U * ((↑c : ℂ) • 1) * Uᴴ := by
-              conv_lhs =>
-                rw [spectral_decomp_eq hH]
-                rw [h_cI]
-    _ = U * (Matrix.diagonal (fun j => ↑(hH.eigenvalues j)) - (↑c : ℂ) • 1) * Uᴴ := by
-          noncomm_ring
-    _ = U * Matrix.diagonal (fun j => ↑(hH.eigenvalues j - c)) * Uᴴ := by
-          congr 1
-          congr 1
-          exact diagonal_sub_smul_one hH.eigenvalues c
-
 private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
     {r D : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
@@ -100,8 +44,7 @@ private theorem hermitian_fixed_eq_scalar_of_irreducible_unital
   set c0 : ℝ := minEigenvalue hH
   set U : MatrixAlg D := (↑hH.eigenvectorUnitary : MatrixAlg D)
   have hU_unit : IsUnit U := by
-    apply (Matrix.isUnit_iff_isUnit_det U).2
-    simpa [U] using Matrix.UnitaryGroup.det_isUnit hH.eigenvectorUnitary
+    simpa [U] using eigenvectorUnitary_isUnit (D := D) hH
   have hshift_eq :
       H - (c0 : ℂ) • 1 =
         U * Matrix.diagonal (fun i : Fin D => (↑(hH.eigenvalues i - c0) : ℂ)) * Uᴴ := by

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Basic
 
@@ -488,6 +489,98 @@ theorem supportProj_ne_one_of_not_posDef
 end SupportProjNontriviality
 
 /-!
+## Non-scalar fixed point → singular positive fixed point
+
+The next lemma isolates the second fixed-point split in the proof of
+PGVWC07 Theorem `Th:TIcanonical`, lines 819--826.  After a block has been
+put in the unital normalization, a non-scalar Hermitian fixed point can be
+shifted by its largest eigenvalue to give a positive fixed point which is
+singular and nonzero.  The preceding support-projection theorem can then split
+the block further.
+-/
+
+section NonScalarFixedPoint
+
+variable {d D : ℕ}
+
+private lemma max_shift_posSemidef [Nonempty (Fin D)]
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
+    ((↑(maxEigenvalue hX) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X).PosSemidef := by
+  classical
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
+  have hU_unit : IsUnit U := by
+    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
+  rw [smul_one_sub_hermitian_spectral hX (maxEigenvalue hX)]
+  rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]]
+  exact (Matrix.IsUnit.posSemidef_star_right_conjugate_iff hU_unit).mpr
+    (Matrix.posSemidef_diagonal_iff.mpr (fun i => by
+      simp only [Complex.nonneg_iff]
+      constructor
+      · exact_mod_cast sub_nonneg.mpr (le_maxEigenvalue hX i)
+      · simp [Complex.ofReal_im]))
+
+private lemma max_shift_not_posDef [Nonempty (Fin D)]
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
+    ¬ ((↑(maxEigenvalue hX) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X).PosDef := by
+  classical
+  intro h_pd
+  set U : Matrix (Fin D) (Fin D) ℂ := ↑hX.eigenvectorUnitary
+  have hU_unit : IsUnit U := by
+    simpa [U] using eigenvectorUnitary_isUnit (D := D) hX
+  have h_diag_pd :
+      (Matrix.diagonal (fun j => (↑(maxEigenvalue hX - hX.eigenvalues j) : ℂ)) :
+        Matrix (Fin D) (Fin D) ℂ).PosDef := by
+    have h_pd' := h_pd
+    rw [smul_one_sub_hermitian_spectral hX (maxEigenvalue hX)] at h_pd'
+    rw [show Uᴴ = star U by simp [Matrix.star_eq_conjTranspose]] at h_pd'
+    exact (Matrix.IsUnit.posDef_star_right_conjugate_iff hU_unit).mp h_pd'
+  rw [Matrix.posDef_diagonal_iff] at h_diag_pd
+  obtain ⟨i₀, hi₀⟩ := maxEigenvalue_achieved hX
+  have := h_diag_pd i₀
+  have hzero : maxEigenvalue hX - hX.eigenvalues i₀ = 0 := by
+    exact sub_eq_zero.mpr hi₀.symm
+  simp [hzero] at this
+
+/-- A non-scalar Hermitian fixed point of a unital MPS transfer map yields a
+nonzero singular positive fixed point.
+
+This is the formal fixed-point shift used in Pérez-García, Verstraete, Wolf,
+and Cirac, Theorem `Th:TIcanonical`, proof lines 819--826.  The paper writes
+`I - λ₁⁻¹ X`; the equivalent scalar-free form used here is
+`λ_max I - X`, which avoids a separate sign assumption on the largest
+eigenvalue. -/
+theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
+    [Nonempty (Fin D)]
+    (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (h_unital : transferMap (d := d) (D := D) A 1 = 1)
+    (hX_herm : X.IsHermitian)
+    (hX_fix : transferMap (d := d) (D := D) A X = X)
+    (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+      ρ.PosSemidef ∧ transferMap (d := d) (D := D) A ρ = ρ ∧
+        ρ ≠ 0 ∧ ¬ ρ.PosDef := by
+  classical
+  let c : ℝ := maxEigenvalue hX_herm
+  let ρ : Matrix (Fin D) (Fin D) ℂ := (↑c : ℂ) • 1 - X
+  have hρ_psd : ρ.PosSemidef := by
+    simpa [ρ, c] using max_shift_posSemidef (D := D) hX_herm
+  have hρ_not_pd : ¬ ρ.PosDef := by
+    simpa [ρ, c] using max_shift_not_posDef (D := D) hX_herm
+  have hρ_fix : transferMap (d := d) (D := D) A ρ = ρ := by
+    change transferMap (d := d) (D := D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
+    rw [map_sub, map_smul, h_unital, hX_fix]
+  have hρ_ne : ρ ≠ 0 := by
+    intro hρ_zero
+    apply hX_nonscalar
+    refine ⟨(↑c : ℂ), ?_⟩
+    have hsub : (↑c : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X = 0 := by
+      simpa [ρ] using hρ_zero
+    exact (sub_eq_zero.mp hsub).symm
+  exact ⟨ρ, hρ_psd, hρ_fix, hρ_ne, hρ_not_pd⟩
+
+end NonScalarFixedPoint
+
+/-!
 ## Fixed point → 2-block decomposition
 
 This section covers the canonical-form reduction step
@@ -572,5 +665,29 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
   have hP1 : P ≠ 1 := supportProj_ne_one_of_not_posDef ρ hρ_psd hρ_not_pd
   -- Step 4: apply strict decomposition
   exact exists_twoBlock_decomp_of_lowerZero_strict A P hP_inv.1 hP_inv.2 hP0 hP1
+
+/-- A non-scalar Hermitian fixed point of a unital transfer map gives a strict
+two-block decomposition.
+
+This composes the fixed-point shift from PGVWC07 Theorem `Th:TIcanonical`,
+lines 819--826, with the support-projection split from lines 771--815.  The
+source phrase "fixed point different from the identity" is implemented here as
+"non-scalar fixed point", since scalar multiples of the identity are fixed by
+every unital linear map and do not produce a nontrivial support projection. -/
+theorem exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint
+    [Nonempty (Fin D)]
+    (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (h_unital : transferMap (d := d) (D := D) A 1 = 1)
+    (hX_herm : X.IsHermitian)
+    (hX_fix : transferMap (d := d) (D := D) A X = X)
+    (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
+      ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),
+        SameMPV₂ A (twoBlockTensor (d := d) (n := n) (m := m) A₁ A₂) := by
+  obtain ⟨ρ, hρ_psd, hρ_fix, hρ_ne, hρ_not_pd⟩ :=
+    exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
+      (d := d) (D := D) A X h_unital hX_herm hX_fix hX_nonscalar
+  exact exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
+    (d := d) (D := D) A ρ hρ_psd hρ_fix hρ_ne hρ_not_pd
 
 end MPSTensor
