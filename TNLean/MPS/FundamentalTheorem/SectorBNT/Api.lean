@@ -38,7 +38,7 @@ not imported here.
 * `IsBNTCanonicalForm.weight_unit_exists_of_struct` — the global
   unit-modulus witness re-stated for direct access by downstream callers (CPSV16 line 246).
 * `IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block` — the Cesàro
-  non-decay reading of the line-1182 projection step, with the per-block
+  non-decay reading of the line 1182 projection step, with the per-block
   unit-modulus witness supplied as an explicit theorem-level hypothesis
   `hUnit : ∃ q, ‖μ_{j₀,q}‖ = 1`.
 
