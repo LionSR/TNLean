@@ -818,16 +818,15 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
           transferMap (d := d) (D := dim k) (blocks k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
-      (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
-  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hMPV,
+  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, _hμNe, hDim, hMPV,
     _hBond, hBound⟩ :=
     exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
       (d := d) (D := D) A
-  refine ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, ?_, hBound⟩
+  refine ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, ?_, hBound⟩
   intro N hN σ
   calc
     mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
@@ -855,7 +854,7 @@ theorem exists_pgvwc07_positiveLengthWitness
     (A : MPSTensor d D) :
     Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
   classical
-  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, _, hDim, hSame, hBound⟩ :=
+  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hSame, hBound⟩ :=
     exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
       (d := d) (D := D) A
   exact ⟨
