@@ -299,6 +299,16 @@ The earlier existence path now has the following formal pieces.
           positive-length theorem, intended to prevent later arguments from
           repeating the long existential conclusion.
 
+    \item
+          \path|MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization|
+          formalizes the finite-family scalar normalization corresponding to
+          Theorem~\texttt{Th:TIcanonical}, lines 765--766, for a witness with
+          at least one nonzero block.  Dividing the positive real weights by
+          their maximum gives normalized positive weights with
+          \(|\nu_k|\leq 1\) and equality for one block.  The theorem also
+          records the resulting global factor \(s^N\) in length-\(N\) MPV
+          coefficients.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
@@ -336,12 +346,14 @@ Thus no current \verb|\leanok| statement in the canonical-form
 chapter should be read as the full PGVWC07 translation-invariant canonical-form
 theorem. The blueprint now records the source theorem as a separate not-ready
 statement, and the checked reductions are marked as partial or scoped results.
-After the positive-length witness theorem, the remaining source-level
-normalization gap is the paper's convention \(1\geq \lambda_j>0\): the exact
-MPV statement has positive real weights, but it does not yet formalize the
-``without loss of generality'' spectral-radius normalization from
-Theorem~\texttt{Th:TIcanonical}, lines 765--766, as a transformation compatible
-with the chosen notion of equality of finite-ring coefficients.
+After the positive-length witness theorem, the finite-family part of the
+paper's convention \(1\geq \lambda_j>0\) is now formalized for a nonempty
+witness by rescaling all positive weights by their maximum.  The remaining
+source-level point is to connect this scalar normalization with the precise
+state-equivalence convention under which PGVWC07 treats the spectral-radius
+normalization in Theorem~\texttt{Th:TIcanonical}, lines 765--766, as
+``without loss of generality'': exact finite-ring coefficients acquire the
+global factor \(s^N\).
 
 \section{Formal boundary}
 
@@ -376,12 +388,12 @@ diagonalization.  None of these steps may be replaced by a theorem that starts
 from an already prepared primitive or trace-preserving block family, because
 those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
-At the current frontier, the block construction and nonempty-ring exact-MPV
-witness are available.  The remaining formal work is to state and prove the
-global normalization convention that turns the positive real weights into
-weights satisfying \(1\geq \lambda_j>0\), or to make explicit the precise
-state-equivalence relation under which the paper's spectral-radius
-renormalization is ``without loss of generality''.
+At the current frontier, the block construction, nonempty-ring exact-MPV
+witness, and finite-family weight normalization are available.  The remaining
+formal work is to make explicit the precise state-equivalence relation under
+which the paper's spectral-radius renormalization is ``without loss of
+generality'', since the normalized exact-coefficient statement differs by the
+global factor \(s^N\).
 
 \bibliographystyle{alpha}
 \bibliography{references}

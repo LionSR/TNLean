@@ -4,13 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction.Main
 import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
+import TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization
 
 /-!
 # Normal canonical-form reduction
 
 This module keeps the historical import path
 `TNLean.MPS.CanonicalForm.NormalReduction` available while the development is
-split across two supporting modules.
+split across supporting modules.
 
 The supporting modules are:
 
@@ -18,6 +19,8 @@ The supporting modules are:
   primitive weighted block decomposition to blocked normal canonical-form data.
 * `TNLean.MPS.CanonicalForm.NormalReduction.TPGauge` — the blockwise TP-gauge
   normalization results, including the arbitrary-input zero-tail statement.
+* `TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization` — scalar
+  normalization of positive PGVWC07 witness weights.
 
 ## Main statements
 
@@ -29,6 +32,7 @@ The imported modules provide the original public declarations:
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness`
+* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization`
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
 -/
