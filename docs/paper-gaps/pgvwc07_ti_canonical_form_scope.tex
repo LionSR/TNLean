@@ -284,6 +284,18 @@ The earlier existence path now has the following formal pieces.
           also quantifies over the empty word must either keep the zero block or
           separately account for its bond dimension.
 
+    \item
+          \path|MPSTensor.PGVWC07PositiveLengthWitness| and
+          \path|MPSTensor.exists_pgvwc07_positiveLengthWitness| record the
+          preceding positive-length theorem as a single package of data.  The
+          fields contain the nonzero unital blocks, positive real weights,
+          diagonal positive-definite dual fixed points, scalar fixed-point
+          conclusions, positive block dimensions, positive-length MPV equality,
+          and the total bond-dimension bound.  This is not a new proof route;
+          it is an equivalent formulation of the proved positive-length
+          theorem, intended to prevent later arguments from repeating the long
+          existential conclusion.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
@@ -321,6 +333,12 @@ Thus no current \verb|\leanok| statement in the canonical-form
 chapter should be read as the full PGVWC07 translation-invariant canonical-form
 theorem. The blueprint now records the source theorem as a separate not-ready
 statement, and the checked reductions are marked as partial or scoped results.
+After the positive-length witness theorem, the remaining source-level
+normalization gap is the paper's convention \(1\geq \lambda_j>0\): the exact
+MPV statement has positive real weights, but it does not yet formalize the
+``without loss of generality'' spectral-radius normalization from
+Theorem~\texttt{Th:TIcanonical}, lines 765--766, as a transformation compatible
+with the chosen notion of equality of finite-ring coefficients.
 
 \section{Formal boundary}
 
@@ -354,6 +372,13 @@ non-scalar fixed point; and, finally, the dual-map fixed point and unitary
 diagonalization.  None of these steps may be replaced by a theorem that starts
 from an already prepared primitive or trace-preserving block family, because
 those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
+
+At the current frontier, the block construction and nonempty-ring exact-MPV
+witness are available.  The remaining formal work is to state and prove the
+global normalization convention that turns the positive real weights into
+weights satisfying \(1\geq \lambda_j>0\), or to make explicit the precise
+state-equivalence relation under which the paper's spectral-radius
+renormalization is ``without loss of generality''.
 
 \bibliographystyle{alpha}
 \bibliography{references}

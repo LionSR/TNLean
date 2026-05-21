@@ -33,6 +33,8 @@ Its public outputs are:
   the preceding theorem together with the length-zero bond-dimension identity.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` —
   the positive-length version with the explicit zero-block summand removed.
+* `MPSTensor.exists_pgvwc07_positiveLengthWitness` — the same positive-length
+  theorem recorded as a single structured witness.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
   arbitrary-input result obtained after zero-block separation.
 
@@ -44,6 +46,61 @@ this the ``zero block'' case).
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- Witness for the exact positive-length form of the PGVWC07
+translation-invariant canonical-form construction.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 742--763, for nonempty rings and exact MPV equality.  The fields record
+the weighted nonzero-block direct sum, the unital block condition, the
+diagonal positive-definite dual fixed point, the scalar fixed-point conclusion,
+positive weights, positive block dimensions, and the total bond-dimension
+bound.
+
+**Scope restriction:** The source theorem also writes the weights with
+`1 ≥ λ_j > 0`, after the proof says that the spectral radius is normalized
+without loss of generality at lines 765--766.  That global normalization is not
+part of this exact positive-length witness; extending the witness by
+the upper-bound normalization is the remaining source-facing statement step.
+The boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
+  /-- Number of nonzero canonical blocks. -/
+  r : ℕ
+  /-- Bond dimension of each nonzero canonical block. -/
+  dim : Fin r → ℕ
+  /-- Positive block weights. -/
+  weights : Fin r → ℂ
+  /-- Nonzero canonical blocks in the unital orientation. -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Each block has a diagonal positive-definite fixed point for the adjoint
+  transfer map and satisfies the unital condition. -/
+  dual_fixed :
+    ∀ k,
+      ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        Λ.PosDef ∧
+        Λ.IsDiag ∧
+        (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+        transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ
+  /-- The fixed points of each block transfer map are exactly the scalar
+  multiples of the identity. -/
+  scalar_fixed :
+    ∀ k,
+      ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        transferMap (d := d) (D := dim k) (blocks k) X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+  /-- Every block weight is a positive real number, embedded into `ℂ`. -/
+  weight_pos : ∀ k, ∃ a : ℝ, 0 < a ∧ weights k = (a : ℂ)
+  /-- Every block weight is nonzero. -/
+  weight_ne_zero : ∀ k, weights k ≠ 0
+  /-- Every nonzero block has positive bond dimension. -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- On nonempty rings, the original tensor and the weighted block tensor have
+  the same MPV coefficients. -/
+  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := weights) blocks)
+  /-- The total bond dimension of the nonzero canonical blocks is at most the
+  original bond dimension. -/
+  bondDim_le : ∑ k : Fin r, dim k ≤ D
 
 private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
     (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where
@@ -129,7 +186,7 @@ private theorem isIrreducibleTensor_tpGauge_of_isIrreducibleTensor
 
 /-- **Single irreducible-block PGVWC07 canonical-form data.**
 
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
 lines 765--770 and 816--832.  For one irreducible nonzero block, the
 Perron--Frobenius eigenvector gives the source theorem's unital gauge.  In
 that unital gauge every fixed point is scalar, and a final unitary conjugation
@@ -271,7 +328,7 @@ private theorem scalar_fixedPoints_unitaryConj
 
 /-- **Blockwise PGVWC07 unital and dual-diagonal theorem.**
 
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
 lines 765--770 and 816--832, after the recursive invariant-subspace splitting
 has already produced a nonzero irreducible block family.  The theorem applies
 `exists_pgvwc07_unital_dualDiag_data_of_irreducible` to every block, records
@@ -605,7 +662,7 @@ through the construction.
 
 /-- **Arbitrary-input PGVWC07 unital dual-diagonal form with zero blocks.**
 
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
 lines 765--770 and 816--832, after the recursive invariant-subspace splitting
 and all-zero-block separation have been carried out.  From any tensor `A`, the
 theorem separates a zero-block contribution and applies
@@ -619,7 +676,7 @@ weights are positive real spectral-radius weights, and the MPV family of `A`
 is the sum of the zero-block contribution and the weighted nonzero-block
 direct sum.
 
-**Scope restriction:** This is still not the full `Th:TIcanonical` statement:
+**Scope restriction:** This is still not the full Th:TIcanonical statement:
 the zero block is kept explicitly, and the final total bond-dimension bound is
 not included.  The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
@@ -768,6 +825,39 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
         simp [Nat.ne_of_gt hN]
     _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
         simp
+
+/-- **Structured positive-length PGVWC07 canonical-form witness.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 742--763, after omitting the explicit zero block from positive-length
+MPV coefficients.  This theorem is the corresponding structured form of
+`exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`.
+
+**Scope restriction:** The source theorem's normalization `1 ≥ λ_j > 0` is not
+included here.  The theorem records positive real weights and exact
+positive-length MPV equality; the remaining source-facing step is to formalize
+the global spectral-radius normalization convention from lines 765--766.
+The boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_positiveLengthWitness
+    (A : MPSTensor d D) :
+    Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
+  classical
+  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hSame, hBound⟩ :=
+    exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
+      (d := d) (D := D) A
+  exact ⟨
+    { r := r
+      dim := dim
+      weights := μ
+      blocks := blocks
+      dual_fixed := hΛ
+      scalar_fixed := hScalar
+      weight_pos := hμPos
+      weight_ne_zero := hμNe
+      dim_pos := hDim
+      sameMPV_pos := hSame
+      bondDim_le := hBound }⟩
 
 /-- **Arbitrary-input trace-preserving gauge reduction.**
 
