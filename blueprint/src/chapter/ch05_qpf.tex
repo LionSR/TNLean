@@ -568,6 +568,41 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2017MPDO_AnnPhys}.
     satisfies $\sum_i (B^i)^\dagger B^i = \Id$.
 \end{proof}
 
+\begin{theorem}[Unital-gauge existence for irreducible tensors]%
+    \label{thm:unital_data_irreducible}
+    \lean{MPSTensor.exists_unital_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible MPS tensor with $D > 0$
+    and some $A^i \neq 0$.
+    Then there exist a positive real~$r$, a positive definite
+    matrix~$\rho$, and a gauge-equivalent tensor~$B$ such that
+    \[
+        B^i = r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}
+    \]
+    is unital:
+    $\sum_i B^i(B^i)^\dagger = \Id$.
+
+    This is the right-canonical analogue of
+    Theorem~\ref{thm:tp_data_irreducible}.  In the
+    translation-invariant canonical-form proof of
+    \cite[Theorem~Th:TIcanonical, lines~765--770]
+    {PerezGarcia2007Matrix}, it is the Perron--Frobenius
+    eigenvector step that produces the unital block orientation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:posDef_adjoint_eigenvector}
+    Apply Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
+    conjugate-transposed Kraus family.  Irreducibility transfers to this
+    family by the invariant-projection argument, and a nonzero Kraus operator
+    remains nonzero after conjugate transpose.  The resulting adjoint
+    eigenvector equation for the conjugate-transposed family is exactly
+    $\E_A(\rho)=r\rho$.  The unital gauge construction then gives
+    $B^i=r^{-1/2}\rho^{-1/2}A^i\rho^{1/2}$ and proves
+    $\sum_i B^i(B^i)^\dagger=\Id$.
+\end{proof}
+
 \section{Exponential positivity for irreducible CP maps}
 
 \begin{theorem}[Exponential truncation is positive definite]

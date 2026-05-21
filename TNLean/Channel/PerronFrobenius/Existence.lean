@@ -369,4 +369,70 @@ theorem exists_tp_data_of_irreducible
   -- GaugeEquiv: A' matches the stated rescaled tensor.
   · convert hB_gauge using 1
 
+/-- **Unital / right-canonical gauge data for an irreducible MPS tensor.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 765--770.  For an irreducible MPS tensor `A` with positive bond
+dimension and some nonzero Kraus operator, the Perron--Frobenius eigenvector of
+the transfer map gives a positive real `r` and a positive definite matrix `ρ`
+such that the rescaled right-canonical gauge
+`B i = r^{-1/2} ρ^{-1/2} A i ρ^{1/2}` is unital:
+`∑ᵢ Bᵢ Bᵢ† = I`.
+
+This is the source-oriented analogue of `exists_tp_data_of_irreducible`.  It is
+obtained by applying the adjoint-eigenvector theorem to the conjugate-transposed
+Kraus family. -/
+theorem exists_unital_data_of_irreducible
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hIrr : IsIrreducibleTensor (d := d) (D := D) A)
+    (hA : ∃ i, A i ≠ 0) :
+    ∃ (B : MPSTensor d D) (r : ℝ) (ρ : Matrix (Fin D) (Fin D) ℂ),
+      ρ.PosDef ∧ 0 < r ∧
+      (∀ i : Fin d,
+        B i =
+          (↑((Real.sqrt r)⁻¹) : ℂ) •
+            ((CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ)) ∧
+      (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
+      GaugeEquiv (d := d) (D := D)
+        (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
+  classical
+  let Aadj : MPSTensor d D := fun i => (A i)ᴴ
+  have hIrrAdjMap :
+      IsIrreducibleMap (transferMap (d := d) (D := D) Aadj) := by
+    simpa [Aadj] using
+      isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor
+        (d := d) (D := D) A hIrr
+  have hIrrAdj : IsIrreducibleTensor (d := d) (D := D) Aadj :=
+    isIrreducibleTensor_of_isIrreducibleMap Aadj hIrrAdjMap
+  have hAadj : ∃ i, Aadj i ≠ 0 := by
+    rcases hA with ⟨i, hi⟩
+    refine ⟨i, ?_⟩
+    intro hzero
+    apply hi
+    have h := congrArg Matrix.conjTranspose hzero
+    simpa [Aadj, Matrix.conjTranspose_conjTranspose] using h
+  obtain ⟨ρ, r, hρ_pd, hr_pos, hρ_eig_adj⟩ :=
+    exists_posDef_adjoint_eigenvector Aadj hIrrAdj hAadj
+  have hρ_eig : transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ := by
+    simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
+  let B : MPSTensor d D := spectralUnitalGauge (d := d) (D := D) A r ρ
+  have hB_unital : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
+    simpa [B] using
+      spectralUnitalGauge_isUnital_of_transferMap_eigenvector
+        (d := d) (D := D) A ρ r hρ_pd hr_pos hρ_eig
+  let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
+  let A' : MPSTensor d D := fun i => c • A i
+  have hGauge : GaugeEquiv (d := d) (D := D) A' B := by
+    have hBase : GaugeEquiv (d := d) (D := D) A'
+        (unitalGauge (d := d) (D := D) A' ρ) :=
+      gaugeEquiv_unitalGauge (d := d) (D := D) A' ρ hρ_pd
+    convert hBase using 1
+    ext i a b
+    simp [B, A', c, spectralUnitalGauge, unitalGauge, Matrix.mul_assoc]
+  refine ⟨B, r, ρ, hρ_pd, hr_pos, ?_, hB_unital, ?_⟩
+  · intro i
+    rfl
+  · convert hGauge using 1
+
 end MPSTensor

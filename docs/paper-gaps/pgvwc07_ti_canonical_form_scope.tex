@@ -158,6 +158,17 @@ The earlier existence path now has the following formal pieces.
           \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\) satisfies
           \(\sum_i B_iB_i^\dagger=\mathbf{1}\).
 
+    \item
+          \path|MPSTensor.exists_unital_data_of_irreducible|
+          formalizes the Perron--Frobenius existence input for the same
+          source step, Theorem~\texttt{Th:TIcanonical}, lines 765--770,
+          conditional on a single irreducible nonzero block.  It obtains a
+          positive definite eigenvector of \(\mathcal{E}_A\), the positive
+          eigenvalue \(r\), and the unital rescaled gauge
+          \(B_i=r^{-1/2}\rho^{-1/2}A_i\rho^{1/2}\).  This closes the
+          single-block unital-orientation step but does not yet thread that
+          step through the recursive block decomposition.
+
     \item \path|MPSTensor.unitalGauge_isUnital_of_transferMap_fixedPoint|
           formalizes the full-rank fixed-point gauge in
           Theorem~\texttt{Th:TIcanonical}, lines 767--769.  Given a positive
