@@ -19,7 +19,7 @@ equivalent to a block-diagonal tensor with two smaller bond dimensions.
 This is the "invariant subspace ⇒ direct sum decomposition" step used in canonical-form existence
 arguments before blocking/normalization.
 
-## External input — Pérez-García et al. canonical-form recursion
+## External input — canonical-form recursion of Pérez-García, Verstraete, Wolf, and Cirac
 
 This file formalizes the direct-sum decomposition step once an invariant
 projection has already been obtained.  In Pérez-García, Verstraete, Wolf, and
@@ -27,7 +27,7 @@ Cirac this is deliberately the trace-splitting part of the singular positive
 fixed-point argument, not a replacement for the preceding singular positive
 fixed-point step that produces the projection:
 
-> **Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+> **Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
 > proof lines 771–815.**
 > The source first derives the invariant support projection from a singular
 > positive fixed point in lines 771–783.  The results below take such an
@@ -37,7 +37,8 @@ fixed-point step that produces the projection:
 > (`exists_twoBlock_decomp_of_lowerZero_strict`) guarantees termination of the
 > canonical-form recursion.
 
-> **Cirac et al., arXiv:1606.00608, lines 201–217.**
+> **Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608,
+> lines 201–217.**
 > The same step in the "canonical forms" reduction: invariant projection ⇒
 > block upper-triangular ⇒ drop strict off-diagonal blocks ⇒ explicit 2-block
 > direct sum.  This is the Wolf/Cirac/Verstraete canonical-form reduction.
@@ -430,9 +431,10 @@ both returned block dimensions are *strictly smaller* than `D`. This is the key
 ingredient for proving termination of the canonical-form recursion.
 
 References:
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical,
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
   proof lines 771–815: invariant support and finite-ring trace split.
-* Cirac et al., arXiv:1606.00608, lines 201–217: the corresponding
+* Cirac, Pérez-García, Schuch, and Verstraete, arXiv:1606.00608,
+  lines 201–217: the corresponding
   invariant-subspace step in the "canonical forms" reduction.
 -/
 

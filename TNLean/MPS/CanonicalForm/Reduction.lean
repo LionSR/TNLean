@@ -51,8 +51,8 @@ These are separate steps in the canonical-form construction.
 
 * Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, lines 201–219,
   with eq:II_Aiplusk1 at lines 214–218.
-* Pérez-García et al., quant-ph/0608197, Theorem Th:TIcanonical, proof
-  lines 765–833.
+* Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+  proof lines 765–833.
 -/
 
 namespace MPSTensor
