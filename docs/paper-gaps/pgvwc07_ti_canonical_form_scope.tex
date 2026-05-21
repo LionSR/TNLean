@@ -260,8 +260,8 @@ The earlier existence path now has the following formal pieces.
           fixed points.  This removes the prepared-family hypothesis from the
           blockwise statement while still keeping the zero-block contribution
           explicit in the finite-ring MPV identity.  It is still not the full
-          source theorem, because the final total bond-dimension bound has not
-          yet been promoted to a separate conclusion.
+          source theorem; this theorem itself does not include the final
+          total bond-dimension bound.
 
     \item
           \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
@@ -272,6 +272,17 @@ The earlier existence path now has the following formal pieces.
           \(\sum_k D_k\leq D\), matching the total bond-dimension estimate in
           Theorem~\texttt{Th:TIcanonical}, lines 761--762, while still keeping
           the zero block explicit.
+
+    \item
+          \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound|
+          removes the explicit zero-block summand from the displayed MPV
+          identity by restricting the equality to positive chain lengths.
+          The zero block has no positive-length coefficients, so the nonzero
+          weighted direct sum has the same positive-length MPV family as the
+          original tensor, and the estimate \(\sum_k D_k\leq D\) is retained.
+          This matches the source theorem on nonempty rings.  A statement that
+          also quantifies over the empty word must either keep the zero block or
+          separately account for its bond dimension.
 
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
