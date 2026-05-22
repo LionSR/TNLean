@@ -18,12 +18,11 @@ normalized weight has norm at most one and one has norm one.  The statement
 also records the global scalar factor on every positive-length MPV
 coefficient.
 
-The remaining theorem-statement boundary is not the finite maximum argument,
-but which state-equivalence convention should be cited for the literal source
-theorem.  This file records both the projective convention and the exact
-convention after a positive global rescaling, with either positive-length
-equality or an explicit zero-block contribution at length zero.  The boundary
-is recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+The canonical-form existence theorem is stated with positive-length equality
+after a positive global rescaling of the original tensor.  This file also
+records the projective convention and the complementary explicit zero-block
+statement for the length-zero coefficient.  The convention is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 
 The projective formulation below makes that convention explicit: after the
 maximum normalization, the original tensor and the normalized weighted block
@@ -215,7 +214,8 @@ positive-length PGVWC07 witness with the projective weight normalization above.
 **Scope restriction:** The statement assumes that some positive-length MPV
 coefficient of the original tensor is nonzero.  This excludes the empty
 nonzero-block case and lets the normalization include a block of unit weight.
-The remaining statement choice for the unrestricted theorem is recorded in
+The arbitrary-input positive-length theorem allows the empty branch separately;
+the convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
     (A : MPSTensor d D)
@@ -320,9 +320,9 @@ either every positive-length MPV coefficient vanishes, or, after a positive
 global rescaling of the original tensor, the normalized PGVWC07 block tensor
 has exactly the same positive-length MPV coefficients.
 
-**Scope restriction:** This theorem keeps the zero positive-length branch
-explicit and therefore does not remove the final length-zero convention needed
-for an unrestricted statement of PGVWC07 Theorem Th:TIcanonical. -/
+This theorem keeps the zero positive-length branch explicit.  The following
+theorem combines the two branches as the arbitrary-input positive-length
+canonical-form statement. -/
 theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
     (A : MPSTensor d D) :
     (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
@@ -560,9 +560,9 @@ the nonzero positive-length theorem above: either all positive-length MPV
 coefficients vanish, or the tensor has a nonempty normalized projective
 PGVWC07 block form.
 
-**Scope restriction:** This is not the unrestricted source theorem.  It records
-the zero positive-length branch explicitly; the length-zero convention for
-the length-zero/all-zero case is recorded in
+**Scope restriction:** This is the projective branch statement, not the primary
+exact positive-length theorem.  It records the zero positive-length branch
+explicitly; the length-zero convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero
     (A : MPSTensor d D) :
