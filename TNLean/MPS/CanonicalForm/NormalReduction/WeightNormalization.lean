@@ -356,6 +356,78 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_e
     by_contra hσ
     exact hA ⟨N, hN, σ, hσ⟩
 
+/-- Exact positive-length PGVWC07 canonical-form witness, allowing the empty
+nonzero-block family in the zero positive-length branch.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763, is a theorem about finite rings of positive length.  The preceding
+dichotomy separates the case in which all positive-length MPV coefficients
+vanish.  This theorem records the corresponding positive-length convention for
+that branch: the nonzero-block family is empty.  Thus the positive-weight,
+unital, scalar-fixed-point, and dual-diagonal requirements are vacuous in the
+zero branch, while the positive-length MPV equality is exact after the same
+global rescaling convention used in the nonzero branch.
+
+When the block family is nonempty, at least one normalized weight has norm
+one.  This is the precise replacement for the unit-weight conclusion in the
+zero branch, where no positive block exists. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
+    (A : MPSTensor d D) :
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (0 < r → ∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  rcases exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
+      (d := d) (D := D) A with hZero | hNonzero
+  · let dim : Fin 0 → ℕ := fun k => Fin.elim0 k
+    let ν : Fin 0 → ℂ := fun k => Fin.elim0 k
+    let blocks : (k : Fin 0) → MPSTensor d (dim k) := fun k => Fin.elim0 k
+    refine ⟨1, 0, dim, ν, blocks, by norm_num, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro k
+      exact Fin.elim0 k
+    · intro hr
+      exact (Nat.not_lt_zero 0 hr).elim
+    · intro k
+      exact Fin.elim0 k
+    · intro N hN σ
+      calc
+        mpv (fun i => (((1 : ℂ)⁻¹) • A i)) σ = mpv A σ := by simp
+        _ = 0 := hZero N hN σ
+        _ = mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+          rw [mpv_toTensorFromBlocks_eq_sum]
+          simp [ν, blocks]
+    · simp [dim]
+  · rcases hNonzero with
+      ⟨scale, r, dim, ν, blocks, hscale_pos, hr, hdual, hscalar, hν_pos,
+        hν_le, hν_unit, hdim_pos, hMPV, hbond⟩
+    exact ⟨scale, r, dim, ν, blocks, hscale_pos, hdual, hscalar, hν_pos,
+      hν_le, fun _ => hν_unit, hdim_pos, hMPV, hbond⟩
+
 /-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
 canonical-form statement.
 

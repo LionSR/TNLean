@@ -360,6 +360,19 @@ The earlier existence path now has the following formal pieces.
           convention for Theorem~\texttt{Th:TIcanonical}.
 
     \item
+          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty|
+          removes the disjunction in the preceding theorem by adopting the
+          positive-length convention that the zero branch has an empty
+          nonzero-block family.  Thus the positive-weight, unital,
+          scalar-fixed-point, and dual-diagonal block conditions are vacuous in
+          the branch where every positive-length MPV coefficient vanishes.  In
+          the nonzero branch the family is nonempty and still has a normalized
+          weight of norm one.  This is an exact positive-length formulation:
+          after a positive global rescaling of the original tensor, the
+          normalized weighted block tensor has the same coefficients on every
+          nonempty ring, and \(\sum_k D_k\leq D\).
+
+    \item
           \path|MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero|
           records the arbitrary-input zero/nonzero dichotomy for this
           projective formulation.  Either all positive-length MPV coefficients
@@ -450,13 +463,13 @@ witness, finite-family weight normalization, and projective interpretation of
 the global scalar factor are available.  For tensors with at least one nonzero
 positive-length MPV coefficient, these pieces have been composed into a
 nonempty normalized projective PGVWC07 form and into an exact normalized form
-after a positive global rescaling of the original tensor.  There are also
-arbitrary-input dichotomies separating this nonzero case from the case in which
-every positive-length MPV coefficient vanishes.  The remaining formal work is to
-decide whether the unrestricted source-facing theorem should be stated in exact
-positive-length coefficients, in nonzero projective MPV families with a
-nonzero-state hypothesis, or with an explicit zero-block/length-zero convention,
-and then to promote the corresponding statement as the theorem cited against
+after a positive global rescaling of the original tensor.  The exact
+positive-length formulation has also been stated for arbitrary input by
+allowing the nonzero-block family to be empty exactly in the branch where every
+positive-length coefficient vanishes.  The remaining formal work is to decide
+whether this positive-length formulation is the desired source theorem,
+or whether the projective MPV formulation or an explicit zero-block/length-zero
+statement should instead be promoted as the declaration cited against
 Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
