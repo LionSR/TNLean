@@ -1367,6 +1367,35 @@ matching covers the whole BNT basis.
     proportional theorem it remains the separate coefficient-comparison input.
 \end{definition}
 
+\begin{lemma}[Copy-weight matching from matched-sector coefficient identities]%
+    \label{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
+    \lean{MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity}
+    \leanok
+    \uses{def:sector_bnt_copy_weight_matching,
+        lem:sector_bnt_matched_sector_weight_equiv}
+    Let the sectors of two decompositions $P$ and $Q$ be matched by
+    $\beta:J(Q)\simeq J(P)$, and let $\zeta_k\neq 0$ be the phase attached to
+    sector $k$. Suppose that for every $k$ there is $N_0$ such that, for all
+    $N>N_0$,
+    \[
+        c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q).
+    \]
+    Then the phases $\zeta_k$ determine a copy-weight matching:
+    after a copy permutation inside each matched sector,
+    \[
+        \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+    \]
+    This is, sector by sector, the content of the coefficient comparison in
+    \cite[Appendix MPV proof, line~1188]{Cirac2017MPDO_AnnPhys}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} in each
+    matched sector.  The resulting copy permutations and pointwise weight
+    identities satisfy exactly the conditions of
+    Definition~\ref{def:sector_bnt_copy_weight_matching}.
+\end{proof}
+
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
@@ -1506,6 +1535,39 @@ matching covers the whole BNT basis.
     Apply the proportional sector-matching theorem. The unit-modulus phases
     are nonzero, so the global-gauge theorem applies to any
     copy-weight matching for the resulting phases.
+\end{proof}
+
+\begin{theorem}[Conditional proportional global gauge from coefficient identities]%
+    \label{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
+    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
+    \leanok
+    \uses{lem:sector_bnt_copy_weight_matching_of_coeff_identity,
+        thm:sector_bnt_proportional_sector_match_witnesses,
+        thm:sector_bnt_global_gauge_of_copy_weight_matching}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
+    eventually nonzero proportional MPV families. Assume that every sector of
+    $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
+    Then the proportional sector-matching theorem gives $\beta$, the
+    bond-dimension equalities, unit-modulus phases $\zeta_k$, and block gauges
+    $X_k$. If these same phases satisfy the matched-sector coefficient
+    identities
+    \[
+        c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)
+    \]
+    for all sufficiently large $N$, then they determine a copy-weight matching
+    and hence the flattened $Q$-tensor is obtained from the matched-coordinate
+    $P$-tensor by the direct-sum gauge
+    \[
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional sector-matching theorem.  The unit-modulus phases
+    are nonzero.  Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
+    turns the coefficient identities into a copy-weight matching, and
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
+    direct-sum gauge.
 \end{proof}
 
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
