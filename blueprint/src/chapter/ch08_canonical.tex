@@ -1076,6 +1076,54 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     two traces.
 \end{proof}
 
+\begin{lemma}[Nonzero positive-length coefficient gives a nonempty PGVWC07 witness]%
+    \label{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:mpv_decomposition}
+    Let a positive-length PGVWC07 canonical-form witness for $A$ be given.
+    If some positive-length MPV coefficient of $A$ is nonzero, then the
+    witness has at least one block.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:mpv_decomposition}
+    If the block family were empty, the block-diagonal MPV expansion would be
+    an empty sum at every positive length.  The positive-length MPV equality in
+    the witness would then force all positive-length coefficients of $A$ to
+    vanish, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Nonzero projective PGVWC07 normalized form]%
+    \label{thm:pgvwc07_nonzero_normalized_projective_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    Suppose that some positive-length MPV coefficient of an MPS tensor $A$ is
+    nonzero.  Then $A$ has a nonempty finite family of nonzero PGVWC07 blocks
+    $C_k$ with positive normalized weights $\nu_k$ satisfying
+    $|\nu_k|\leq 1$ for all $k$ and $|\nu_{k_0}|=1$ for some block $k_0$.
+    Each block is in the unital orientation, has only scalar fixed points for
+    its transfer map, and has a diagonal positive-definite fixed point
+    $\Lambda_k$ for the dual transfer map.  Moreover the original tensor and
+    the normalized weighted block tensor generate nonzero proportional MPV
+    families, and the block dimensions satisfy $\sum_k D_k\leq D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    First use Theorem~\ref{thm:pgvwc07_positive_length_witness}.  The nonzero
+    positive-length coefficient makes the witness nonempty by
+    Lemma~\ref{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}.
+    Apply the projective weight-normalization theorem to this nonempty witness.
+\end{proof}
+
 \begin{theorem}[Existence of the positive-length PGVWC07 witness]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}

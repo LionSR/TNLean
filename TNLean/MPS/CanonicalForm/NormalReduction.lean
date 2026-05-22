@@ -34,6 +34,8 @@ The imported modules provide the original public declarations:
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness`
 * `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization`
 * `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective`
+* `MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv`
+* `MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv`
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
 -/

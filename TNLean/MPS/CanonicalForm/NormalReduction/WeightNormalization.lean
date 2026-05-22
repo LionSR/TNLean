@@ -28,6 +28,8 @@ maximum normalization, the original tensor and the normalized weighted block
 tensor are `NonzeroProportionalMPV₂`.
 -/
 
+open scoped Matrix ComplexOrder
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -169,5 +171,79 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization_projective
     refine ⟨(scale : ℂ) ^ N, pow_ne_zero N ?_, fun σ => ?_⟩
     · exact Complex.ofReal_ne_zero.mpr (ne_of_gt hscale_pos)
     · exact hMPV N hNpos σ
+
+/-- A nonzero positive-length MPV coefficient forces the PGVWC07 witness to
+have at least one block.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763, describes the nonzero canonical-form blocks.  In the positive-length
+witness, an empty block family would make the weighted nonzero-block tensor
+have zero positive-length MPV coefficients.  Thus a tensor with a nonzero
+positive-length coefficient has a nonempty witness. -/
+theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
+    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A)
+    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    0 < W.r := by
+  classical
+  obtain ⟨N, hN, σ, hσ⟩ := hA
+  by_contra hnot
+  have hr0 : W.r = 0 := Nat.eq_zero_of_not_pos hnot
+  have hblock :
+      mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ = 0 := by
+    haveI : IsEmpty (Fin W.r) := by
+      rw [hr0]
+      infer_instance
+    rw [mpv_toTensorFromBlocks_eq_sum]
+    simp
+  have hAeq : mpv A σ = 0 := by
+    calc
+      mpv A σ =
+          mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ :=
+            W.sameMPV_pos N hN σ
+      _ = 0 := hblock
+  exact hσ hAeq
+
+/-- Normalized projective PGVWC07 canonical-form blocks and weights for a
+nonzero positive-length state family.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763 and proof lines 765--766.  This theorem composes the arbitrary-input
+positive-length PGVWC07 witness with the projective weight normalization above.
+
+**Scope restriction:** The statement assumes that some positive-length MPV
+coefficient of the original tensor is nonzero.  This excludes the empty
+nonzero-block case and lets the normalization include a block of unit weight.
+The remaining source-facing choice for the unrestricted theorem is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
+    (A : MPSTensor d D)
+    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < r ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      NonzeroProportionalMPV₂ A (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨W⟩ := exists_pgvwc07_positiveLengthWitness (d := d) (D := D) A
+  have hr : 0 < W.r := W.block_count_pos_of_exists_ne_zero_mpv hA
+  obtain ⟨_scale, ν, _hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV⟩ :=
+    W.exists_weight_normalization_projective hr
+  exact ⟨W.r, W.dim, ν, W.blocks, hr, W.dual_fixed, W.scalar_fixed, hν_pos,
+    hν_le, hν_unit, W.dim_pos, hMPV, W.bondDim_le⟩
 
 end MPSTensor
