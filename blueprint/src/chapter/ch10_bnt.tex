@@ -862,7 +862,7 @@ Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
     pointwise identity to $\zeta^{-1}$ on the left.
 \end{proof}
 
-\section{Strong existential matching of unit-modulus sectors}
+\section{Strong existential matching under per-sector unit weights}
 \label{sec:sector_bnt_strong_match}
 
 This section lifts the weak existential matching $\exists j, \exists k$ to
@@ -870,23 +870,20 @@ the strong existential $\forall k, \exists j$ on the original pair of BNT
 canonical forms, without recursion, partial sector dropping, or any
 combined-linear-independence obligation on a partial union. The result is
 a single $\forall k, \exists j$ statement on the original $(P, Q)$,
-iterated externally over each $Q$-side unit-modulus sector.
+under the explicit hypothesis that every $Q$-side sector carries a
+unit-modulus copy weight.
 
-The unit-modulus restriction on $k$ matches the source convention:
+The per-sector unit-weight hypothesis is the formal version used in the
+current full-basis theorem:
 \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} records the
 modulus-one hypothesis as a single \emph{global} existential over the
-two-layer $(j, q)$ index of the BNT display, not a per-block one. Sectors
-whose weights all have modulus strictly less than one have coefficients
-$c_N^{(k)}(Q) = \sum_q \nu_{k,q}^N$ that decay exponentially to zero,
-contribute nothing to the thermodynamic state, and are not constrained by
-the matching
-(\cite[Appendix ``Proofs of Section MPS'', lines~1244--1248]{Cirac2017MPDO_AnnPhys}
-returns to this point through the transfer-power fixed-point characterisation).
+two-layer $(j, q)$ index of the BNT display, whereas the statement below
+assumes the corresponding witness in each sector. This is why the result is
+labelled as a full-basis form rather than as the unrestricted source theorem.
 The bijective-matching theorem below applies the
 strong existential theorem twice (with $(P, Q)$ swapped) to derive the
 cardinality identity and the per-pair bijection and gauges on the full
-basis (every sector is a unit-modulus block under the per-block
-normalization).
+basis, assuming the same per-sector unit-weight condition on both sides.
 
 \begin{theorem}[Strong existential matching, full-basis form]
     \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
@@ -895,10 +892,15 @@ normalization).
     \uses{def:sector_bnt_cf,
         lem:sector_bnt_combined_family_eventually_li,
         lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. For
-    every sector $k$ there exist a sector $j$ with matched bond dimension
-    $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence after identifying
-    the matched bond dimensions, and a non-decaying cross-overlap.
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. Assume
+    that every sector $k$ of $Q$ has a unit-modulus copy weight:
+    \[
+        \forall k\in J(Q),\ \exists q,\ |\nu_{k,q}|=1 .
+    \]
+    Then for every sector $k$ of $Q$ there exist a sector $j$ of $P$ with
+    matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase equivalence
+    after identifying the matched bond dimensions, and a non-decaying
+    cross-overlap.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -910,9 +912,10 @@ normalization).
     $\{P_j\}_j \cup \{Q_k\}_k$, is iterated externally over each sector
     $k$. Each iteration is discharged by the full-basis weak existential
     matching theorem with the roles of $P$ and $Q$ swapped: supply the
-    canonical-form hypotheses in reversed order, the basis non-emptiness witness
-    from the retained global unit-modulus witness, and the
-    proportional-MPV hypothesis through its pointwise-symmetric flip. The
+    canonical-form hypotheses in reversed order, the basis non-emptiness
+    witness from the retained global unit-modulus witness, the per-sector
+    unit-modulus witness for the chosen $Q$-sector, and the
+    same-MPV hypothesis through its pointwise-symmetric flip. The
     resulting conclusion is re-oriented by symmetry of gauge-phase
     equivalence under the bond-dimension identification and symmetry of overlap
     convergence.
@@ -939,34 +942,29 @@ $g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
 
 The strong existential matching theorem
 (Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
-gives one direction of the matching on the unit-modulus subset.
-Applying the same theorem once more with the roles of $P$ and $Q$
-swapped (and the trivially symmetric flip of the proportional-MPV
-hypothesis) gives the other direction. The two matchings, combined
-with the basis-distinctness clause of the canonical-form predicate
+gives one direction of the full-basis matching when every $Q$-sector has a
+unit-modulus copy weight. Applying the same theorem once more with the roles of
+$P$ and $Q$ swapped, using the corresponding per-sector hypothesis on $P$ and
+the symmetric flip of the same-MPV hypothesis, gives the other
+direction. The two matchings, combined with the basis-distinctness clause of
+the canonical-form predicate
 \cite[\S~II.C, lines~264--279]{Cirac2017MPDO_AnnPhys}, force injectivity
 in both directions.
 
 \paragraph{Scope.}
 The literal source conclusion ``$g_a = g_b$ and a relabelling
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
-(\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}) reads as a
-bijection between the unit-modulus subsets of the two BNT canonical
-forms. The theorem below delivers the symmetric injective matching
-(the source's $g_a \ge g_b \wedge g_b \ge g_a$ step) in the following
-form: two injective embeddings, one in each direction, with codomains
-in the full basis of $P$ and $Q$ respectively. Upgrading the codomains to
-the unit-modulus subsets, and then obtaining a bijection between those subsets,
-requires the additional per-sector weight-equivariance argument supplied by the
-appendix power-sum lemma
-\cite[lines~1155--1163]{Cirac2017MPDO_AnnPhys} combined with the
-gauge-phase identity on the weighted sectors
-$\sum_q \mu_{j,q}^N \ket{V^{(N)}(P_j)}$; the non-decay output of the
-strong existential theorem is on the basis MPV states, not on the
-weighted sectors, and so does not by itself force the matched $j$ to
-carry a unit-modulus weight. The full-basis theorem below instead assumes a
-unit-modulus copy in every sector, so that the matching covers the whole BNT
-basis and the coefficient comparison can be treated separately.
+(\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}) is formalized
+below under the explicit per-sector unit-weight hypotheses
+\[
+    \forall j\in J(P),\ \exists q,\ |\mu_{j,q}|=1,
+    \qquad
+    \forall k\in J(Q),\ \exists q,\ |\nu_{k,q}|=1 .
+\]
+Under these hypotheses every sector lies in the unit-modulus part, so the
+symmetric injective matchings give a bijection on the full BNT basis. The
+coefficient comparison is not folded into this matching step; it is recorded
+separately in the following subsection.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
@@ -974,22 +972,16 @@ basis and the coefficient comparison can be treated separately.
     \leanok
     \uses{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
         def:sector_bnt_cf}
-    Let $P, Q$ be two BNT canonical forms with the same MPV family. Write
+    Let $P, Q$ be two BNT canonical forms with the same MPV family. Assume
+    that every sector of $P$ and every sector of $Q$ has a unit-modulus copy
+    weight. Then there is a bijection
     \[
-        J_1(P) := \{ j \in J(P) : \exists q,\ |\mu_{j,q}| = 1 \}
+        \beta : J(Q) \simeq J(P)
     \]
-    and let $J_1'(Q)$ denote the analogous unit-modulus subset of
-    $Q$-sectors. Then there exist injective embeddings
-    \[
-        \varphi : J_1'(Q) \hookrightarrow J(P),
-        \qquad
-        \psi : J_1(P) \hookrightarrow J(Q),
-    \]
-    such that for every $k \in J_1'(Q)$ the bond dimensions match, the
-    basis tensors $P_{\varphi(k)}$ and $Q_k$ are gauge-phase equivalent
-    after identifying the matched bond dimensions, and the basis cross-overlap
-    does not tend to zero; and symmetrically for every $j \in J_1(P)$
-    through $\psi$.
+    such that for every $k \in J(Q)$ the bond dimensions match, the basis
+    tensors $P_{\beta(k)}$ and $Q_k$ are gauge-phase equivalent after
+    identifying the matched bond dimensions, and the basis cross-overlap does
+    not tend to zero.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1012,10 +1004,10 @@ basis and the coefficient comparison can be treated separately.
     (\cite[\S~II.C, lines~264--279]{Cirac2017MPDO_AnnPhys}) then forces
     $k_1 = k_2$. Backward injectivity is symmetric.
 
-    \emph{Injective embeddings.} The injective functions, paired with the
-    injectivity proofs, are exactly the embedding pair stated in the
-    theorem. The matching witnesses are extracted by re-applying the
-    classical-choice specification at each index in the domain.
+    \emph{Bijection.} The two injections give equality of the two finite
+    sector counts. Hence the forward injection is a bijection, and the
+    matching witnesses are extracted by re-applying the classical-choice
+    specification at each index in the domain.
 \end{proof}
 
 \subsection{Full-basis coefficient identity and global gauge}
