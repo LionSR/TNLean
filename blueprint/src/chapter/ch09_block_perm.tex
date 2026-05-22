@@ -1,21 +1,16 @@
 
 \chapter{Block Permutation and Separation}\label{ch:block_perm}
 
-This chapter develops the algebra of block permutations, the product-algebra maps
-built from per-block same-MPV hypotheses, the invariant-projection splitting step that
-reduces a tensor to smaller blocks, and the block-separation argument that
-recovers the individual blocks from a block-diagonal same-MPV hypothesis.
-The block-separation results in this chapter are conditional same-structure
-lemmas: they assume blockwise normalization and separation hypotheses, including
-strict ordering of the weight moduli when required below. They should not be read
-as a formalization of the translation-invariant canonical-form uniqueness theorem
-of~\cite[Theorem~thm-uniq, lines~1002--1015]{PerezGarcia2007Matrix},
-which requires injectivity at some finite blocking length, uniqueness of the
-OBC canonical representation, and a finite-size lower bound. The source theorem
-is stated in the cited passage of Pérez-García, Verstraete, Wolf, and Cirac;
-the project-level scope distinction is
-recorded in the accompanying paper-gap note.\footnote{%
-    \texttt{docs/paper-gaps/pgvwc07\_ti\_uniqueness\_scope.tex}.}
+% Project-level scope distinction recorded in
+% docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex; the same-structure
+% lemmas below are not the PGVWC07 uniqueness theorem
+% (\cite[Theorem~thm-uniq, lines~1002--1015]{PerezGarcia2007Matrix}).
+This chapter records three reduction outputs: the algebra-automorphism
+decomposition Theorem~\ref{thm:pi_auto_decomp}; the per-block linear-extension
+product automorphism Theorem~\ref{thm:pi_linear_ext}; and the strict-weight
+block separation Lemmas~\ref{lem:block_sep} and~\ref{lem:block_sep_normal},
+together with the canonical-form gauge comparison
+Lemma~\ref{lem:ft_canonical}.
 
 \section{Block permutation algebra}
 

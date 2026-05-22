@@ -1,17 +1,13 @@
 \chapter{Canonical-form reductions after blocking}\label{ch:canonical_after_blocking}
 
-This chapter records the structural decomposition of an arbitrary MPS tensor
-after blocking by a period $p$, and the joint after-blocking decomposition of
-two tensors with the same MPV family. Each side is written as the direct sum of
-an all-zero tensor $\mathbf{0}_{d,D_0}$ and a weighted direct sum of
-left-canonical, primitive, irreducible blocks over a common physical alphabet;
-these decompositions are the input to the equal-MPV comparison of
-Chapter~\ref{ch:ft_proof}. Thus this chapter is placed immediately before the
-proof of the Fundamental Theorem: it records the reductions needed to put the
-two tensors on the common blocked surface used in the comparison argument.
-It is therefore not part of the later channel-representation, symmetry, or
-semigroup material; those chapters no longer provide hypotheses for the
-Fundamental-Theorem comparison.
+\section{Scope}
+
+This chapter records the structural after-blocking decomposition of a single
+tensor (Theorem~\ref{thm:tp_primitive_blockdecomp}) and the joint two-tensor
+decomposition at a common blocking period
+(Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}).
+These two statements supply the canonical-form input to the proof of the
+Fundamental Theorem in Chapter~\ref{ch:ft_proof}.
 
 \section{Zero-tail separation}%
 \label{sec:zero_block_separation}
@@ -258,50 +254,15 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     normality are both preserved under blocking.
 \end{proof}
 
-\begin{theorem}[Structural after-blocking decomposition]%
-    \label{thm:ft_after_blocking_structural}
-    \lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
-    \leanok
-    \uses{def:blocked_tensor, def:same_mpv2, def:zero_mps_tensor, def:block_diagonal_tensor}
-    If two tensors $A$ and $B$ generate the same MPV family, then each tensor
-    admits a positive blocking length after which it decomposes into a zero-tail
-    tensor plus a weighted nonzero-block tensor. Thus, for every blocked
-    configuration $\sigma$ of length $N$ on the $p_A$-blocked alphabet,
-    \[
-        V^{(N)}\!(A^{[p_A]})_\sigma
-        = V^{(N)}\!(\mathbf{0}_{d^{[p_A]},z_A})_\sigma
-        + V^{(N)}\!\left(\textstyle\bigoplus_k \mu^A_k A_k\right)_\sigma,
-    \]
-    and, for every blocked configuration $\tau$ of length $N$ on the
-    $p_B$-blocked alphabet,
-    \[
-        V^{(N)}\!(B^{[p_B]})_\tau
-        = V^{(N)}\!(\mathbf{0}_{d^{[p_B]},z_B})_\tau
-        + V^{(N)}\!\left(\textstyle\bigoplus_\ell \mu^B_\ell B_\ell\right)_\tau.
-    \]
-    All nonzero blocks are left-canonical, have primitive transfer maps, have
-    positive bond dimensions, and have nonzero weights. The original MPV equality
-    also blocks:
-    \[
-        A^{[p_A]} \sim B^{[p_A]},
-        \qquad
-        A^{[p_B]} \sim B^{[p_B]}.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:tp_primitive_blockdecomp}
-    Apply Theorem~\ref{thm:tp_primitive_blockdecomp} separately to the two tensors.
-\end{proof}
-
-\begin{remark}[Structural after-blocking decomposition; not the FT block-matching theorem]
-    This theorem produces, for each of the two same-MPV tensors independently,
-    a TP/primitive/left-canonical block decomposition after blocking. It does
-    \emph{not} derive any block matching, gauge equivalence, or phases
-    between the two decompositions; those are produced by the subsequent
-    common-sector construction in this chapter. The statement is a
-    preliminary step for the fundamental-theorem proof, not the multi-block
-    fundamental theorem of~\cite[Theorem~II.1, lines~349--352]{Cirac2017MPDO_AnnPhys}.
+\begin{remark}[Two-tensor primitive block decomposition]%
+    \label{rem:ft_after_blocking_structural}
+    Applying Theorem~\ref{thm:tp_primitive_blockdecomp} to each of two
+    same-MPV tensors $A$ and $B$ produces, after a positive blocking length,
+    a zero-tail tensor plus a left-canonical primitive nonzero block
+    decomposition for each side. This is a preliminary step in the chain
+    leading to
+    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem},
+    where the two sides are matched.
 \end{remark}
 
 \begin{theorem}[Zero-tail decomposition after blocking]%
@@ -606,57 +567,6 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     conclusion is Theorem~\ref{thm:common_blocked_cyclic_sector_flat_weight_ne_zero}.
 \end{proof}
 
-The next results put the cyclic-sector decompositions on a common blocked
-alphabet. They compare direct blocking with iterated cyclic-sector blocking and
-transport the zero-tail identity through this comparison.
-
-\begin{theorem}[Common cyclic sectors after reblocking]%
-    \label{thm:ft_after_blocking_reindexed_common_sector_live_zero_tail}
-    \lean{MPSTensor.afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂}
-    \leanok
-    \uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
-        thm:zero_tail_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_reindexed_samempv,
-        thm:common_blocked_cyclic_sector_derived_properties}
-    For the $A$-side, let $p_A$ be the common reblocking length of the cyclic
-    sector family. Then, for every blocked configuration $\sigma$ of length
-    $N$,
-    \[
-        V^{(N)}\!(A^{[p_A]})_\sigma
-        =
-        V^{(N)}\!(\mathbf{0}_{d^{[p_A]},z_A})_\sigma
-        +
-        V^{(N)}\!\bigl(\textstyle\bigoplus_j
-        (\mu^A_j)^{p_A} (A_j)^{[p_A]}\bigr)_\sigma.
-    \]
-    Writing $\widetilde A_j$ for the directly blocked tensor
-    $(A_j)^{[p_A]}$ read in the common blocked alphabet, the reindexed
-    nonzero part agrees with the common-sector tensor:
-    \[
-        V^{(N)}\!\bigl(\textstyle\bigoplus_j
-        (\mu^A_j)^{p_A} \widetilde A_j\bigr)_\sigma
-        =
-        V^{(N)}\!\bigl(\textstyle\bigoplus_x
-        \widetilde\mu^A_x C^A_x\bigr)_\sigma.
-    \]
-    The same two identities hold on the $B$-side with $p_B$, $z_B$,
-    $(\mu^B_k)$, and $(C^B_y)$.
-    The transported weights $\widetilde\mu^A_x$ and $\widetilde\mu^B_y$ are
-    nonzero, and the common-sector blocks are left-canonical, primitive,
-    tensor-irreducible, and of positive bond dimension.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail,
-        thm:zero_tail_to_tensor_from_blocks_block_power,
-        thm:common_blocked_cyclic_sector_reindexed_samempv,
-        thm:common_blocked_cyclic_sector_derived_properties}
-    Start from the common reblocked cyclic-sector families on the two sides. Apply
-    the zero-tail reblocking theorem to the original nonzero-block decomposition,
-    then use the common-alphabet sector decomposition and the derived structural
-    properties of the common-sector family.
-\end{proof}
-
 \begin{theorem}[Common blocking length for cyclic sectors]%
     \label{thm:ft_after_blocking_common_length_common_sector_theorem}
     \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_sameMPV₂}
@@ -725,12 +635,6 @@ transport the zero-tail identity through this comparison.
 
 \begin{theorem}[Length-zero identity under compatible blocking]%
     \label{thm:zero_tail_common_flat_of_blocked_word_comparison}
-    \lean{MPSTensor.zeroTail_commonFlat_of_blockwise,
-        MPSTensor.zeroTail_commonFlat_of_word_eq,
-        MPSTensor.zeroTail_commonFlat_of_groupedBlockCastAgrees,
-        MPSTensor.zeroTail_commonFlatAt_of_groupedBlockCastAgrees,
-        MPSTensor.sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees}
-    \leanok
     \uses{thm:zero_tail_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_blocked_word_comparison,
         def:same_mpv2_pos}
@@ -761,8 +665,12 @@ transport the zero-tail identity through this comparison.
         V^{(N)}\!\bigl(\textstyle\bigoplus_x
         \widetilde\mu_x C_x\bigr)_\tau.
     \]
-    The blockwise comparison, the word equality, and the coordinate-grouping
-    condition are three ways to supply the same alphabet identification.
+    The formalization records this conclusion internally under three equivalent
+    hypothesis forms (blockwise comparison, blocked-word equality, and
+    coordinate-grouping cast equality); the externally consumed form is
+    Theorem~\ref{thm:zero_tail_common_flat_of_reindexed}, whose hypothesis is
+    the blocked-tensor same-MPV relation (Definition~\ref{def:same_mpv2})
+    provided by Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1007,57 +915,6 @@ transport the zero-tail identity through this comparison.
     with the weighted common-sector family. Combine this with the zero-tail
     identity and the nonzero-weight statement.
 \end{proof}
-
-\begin{theorem}[Common sectors at one blocking length]%
-    \label{thm:ft_after_blocking_common_length_common_sector_reindexed}
-    \lean{MPSTensor.afterBlocking_commonLengthCommonSectorData_of_reindexed}
-    \leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    If two tensors generate the same MPV family, choose a common blocking length
-    $p$ for their cyclic-sector decompositions. If each blocked nonzero part
-    agrees with its common-sector form after identifying words, then there are
-    common-sector nonzero tensors $\widetilde A_{\mathrm{nz}}$ and
-    $\widetilde B_{\mathrm{nz}}$ such that, for every blocked configuration
-    $\sigma$ of length $N$,
-    \[
-        V^{(N)}\!(A^{[p]})_\sigma
-        =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_A})_\sigma
-        +
-        V^{(N)}(\widetilde A_{\mathrm{nz}})_\sigma,
-    \]
-    \[
-        V^{(N)}\!(B^{[p]})_\sigma
-        =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_B})_\sigma
-        +
-        V^{(N)}(\widetilde B_{\mathrm{nz}})_\sigma.
-    \]
-    For $N\ge 1$,
-    \[
-        V^{(N)}(\widetilde A_{\mathrm{nz}})_\sigma
-        =
-        V^{(N)}(\widetilde B_{\mathrm{nz}})_\sigma.
-    \]
-    At length zero,
-    \[
-        z_A + V^{(0)}(\widetilde A_{\mathrm{nz}})_\varnothing
-        =
-        z_B + V^{(0)}(\widetilde B_{\mathrm{nz}})_\varnothing.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
-    The two word-identification hypotheses identify the blocked nonzero parts with the
-    weighted common-sector tensors. Substituting these MPV equalities into the
-    zero-tail equations gives the rewritten zero-tail identities, the
-    positive-length MPV equalities, and the $N=0$ identity.
-\end{proof}
-
 
 \section{Primitive-block decomposition of an arbitrary tensor}%
 \label{sec:ch11b_primitive_block_reduction}
