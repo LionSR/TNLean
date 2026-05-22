@@ -1542,15 +1542,17 @@ matching covers the whole BNT basis.
     \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
     \leanok
     \uses{lem:sector_bnt_copy_weight_matching_of_coeff_identity,
-        thm:sector_bnt_proportional_sector_match_witnesses,
-        thm:sector_bnt_global_gauge_of_copy_weight_matching}
+        thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families. Assume that every sector of
     $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
-    Then the proportional sector-matching theorem gives $\beta$, the
-    bond-dimension equalities, unit-modulus phases $\zeta_k$, and block gauges
-    $X_k$. If these same phases satisfy the matched-sector coefficient
-    identities
+    Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
+    equalities, unit-modulus phases $\zeta_k$, and block gauges $X_k$ such that
+    \[
+        Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}
+    \]
+    for every sector $k$ and physical index $i$. If these same phases satisfy
+    the matched-sector coefficient identities
     \[
         c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)
     \]
@@ -1563,11 +1565,12 @@ matching covers the whole BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the proportional sector-matching theorem.  The unit-modulus phases
-    are nonzero.  Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
-    turns the coefficient identities into a copy-weight matching, and
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
-    direct-sum gauge.
+    Apply Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    to obtain the matched sectors, phases, block gauges, and the conditional
+    global gauge for any copy-weight matching. The unit-modulus phases are
+    nonzero. Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
+    turns the coefficient identities into such a copy-weight matching, and the
+    conditional global-gauge conclusion applies.
 \end{proof}
 
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
