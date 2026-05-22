@@ -791,8 +791,10 @@ used here is the equal-MPV coefficient comparison of
 \cite[Appendix MPV proof, lines~1184--1188]{Cirac2017MPDO_AnnPhys}, followed by the
 global-gauge assembly in
 \cite[Appendix MPV proof, lines~1189--1192]{Cirac2017MPDO_AnnPhys}. The coefficient identity
-is supplied by the substitution argument of
-Section~\ref{subsec:sector_bnt_substitution} below.
+is supplied, in the equal-MPV case, by
+Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} below. In
+the proportional case it is kept as the remaining hypothesis of
+Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
 
 \begin{lemma}[Matched-sector weight multiset equality]%
     \label{lem:sector_bnt_matched_sector_weight_multiset_eq}
@@ -962,8 +964,9 @@ gauge-phase identity on the weighted sectors
 $\sum_q \mu_{j,q}^N \ket{V^{(N)}(P_j)}$; the non-decay output of the
 strong existential theorem is on the basis MPV states, not on the
 weighted sectors, and so does not by itself force the matched $j$ to
-carry a unit-modulus weight. That upgrade is left to the substitution
-argument of Section~\ref{subsec:sector_bnt_substitution}.
+carry a unit-modulus weight. The full-basis theorem below instead assumes a
+unit-modulus copy in every sector, so that the matching covers the whole BNT
+basis and the coefficient comparison can be treated separately.
 
 \begin{theorem}[Bijective matching by symmetry]
     \label{thm:sector_bnt_bijective_match_of_sameMPV}
@@ -1015,160 +1018,16 @@ argument of Section~\ref{subsec:sector_bnt_substitution}.
     classical-choice specification at each index in the domain.
 \end{proof}
 
-\subsection{Substitution argument for the unit-modulus subset}
-\label{subsec:sector_bnt_substitution}
-
-Given the matched gauges produced by the strong existential theorem
-(Theorem~\ref{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV})
-encoded as the injection from
-Section~\ref{subsec:sector_bnt_strong_match_bijective_symmetry}, the per-block
-coefficient identity of
-\cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys} follows by
-substituting the per-pair gauge identity
-$V^{(N)}(Q_k)_\sigma = \zeta_k^N \cdot V^{(N)}(P_{\varphi(k)})_\sigma$
-into the proportional-MPV hypothesis and projecting the resulting overlap
-onto each basis tensor $P_{j_0}$.
-
-\paragraph{Scope.}
-The literal form of the matched-pair clause is the eventual exact
-equality $c_N^{(\varphi(k))}(P) = \zeta_k^N \cdot c_N^{(k)}(Q)$ for all
-sufficiently large $N$. Deriving the eventual exact equality from the
-partial-bijection witnesses (with non-unit $Q$-sectors unconstrained) requires
-linear independence on the partial union of bases, which is not naturally
-available from the canonical-form predicate alone. The theorem below
-delivers the asymptotic-difference form
-$c_N^{(\varphi(k))}(P) - \zeta_k^N \cdot c_N^{(k)}(Q) \to 0$ as
-$N \to \infty$, which is the natural output of the overlap-projection
-argument; the upgrade to the eventual-exact form is provided by the
-multiset-rigidity Theorem~\ref{thm:power_sum_multiset}, the
-Newton--Girard input behind
-\cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys}.
-The non-matched decay clause is delivered in full.
-
-\begin{lemma}[Coefficient decay for subnormal sectors]
-    \label{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
-    \lean{MPSTensor.IsBNTCanonicalForm.coeff_tendsto_zero_of_all_weights_subnorm}
-    \leanok
-    \uses{def:sector_bnt_cf}
-    Let $P$ be a BNT canonical form and let $j$ be a sector for which
-    every copy weight is strictly subnormal, that is,
-    $\lVert \mu_{j, q}\rVert < 1$ for every $q$. Then
-    $\lim_{N \to \infty} c_N^{(j)} = 0$.
-\end{lemma}
-
-\begin{proof}\leanok
-    The coefficient $c_N^{(j)} = \sum_q \mu_{j,q}^N$ is a finite sum. Each
-    summand $\mu_{j,q}^N$ tends to $0$ as $N \to \infty$ by the strict
-    subnormality hypothesis. A finite sum of null sequences is null.
-\end{proof}
-
-\begin{theorem}[Projected substitution for the unit-modulus subset]\notready
-    \label{thm:sector_bnt_projected_substitution_unit_subset}
-    \uses{def:sector_bnt_cf,
-        thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV,
-        thm:sector_bnt_bijective_match_of_sameMPV,
-        lem:sector_bnt_combined_family_eventually_li,
-        thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm}
-    Let $P, Q$ be two BNT canonical forms generating proportional MPVs. Let
-    \[
-        J_1'(Q) := \{ k \in J(Q) \mid \exists q,\ \lVert \nu_{k, q}\rVert = 1 \}
-    \]
-    be the unit-modulus subset of $Q$-sectors
-    (\cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization), and
-    let $\varphi : J_1'(Q) \hookrightarrow J(P)$ be an injection equipped
-    with per-pair matched-gauge witnesses for every $k \in J_1'(Q)$. Then:
-    \begin{enumerate}
-        \item \emph{Matched-pair asymptotic identity.} For every
-              $k \in J_1'(Q)$ there exists a phase $\zeta_k \in \C$
-              with $\lVert \zeta_k \rVert = 1$ such that the asymptotic
-              difference of coefficient sequences vanishes,
-              \[
-                  \lim_{N \to \infty}
-                  ( c_N^{(\varphi(k))}(P) - \zeta_k^N \cdot c_N^{(k)}(Q) )
-                  = 0.
-              \]
-        \item \emph{Non-matched decay.} For every $j_0 \in J(P)$ outside
-              the range of $\varphi$,
-              \[
-                  \lim_{N \to \infty} c_N^{(j_0)}(P) = 0.
-              \]
-    \end{enumerate}
-\end{theorem}
-
-\begin{proof}\notready
-    \uses{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm,
-        lem:sector_bnt_cross_overlap_basis_tendsto_zero}
-    Fix $j_0$ and project the proportional-MPV identity onto the overlap
-    with $P_{j_0}$:
-    \[
-        \sum_j c_N^{(j)}(P) \cdot \braket{V^{(N)}(P_j)}{V^{(N)}(P_{j_0})}
-        =
-        \sum_k c_N^{(k)}(Q) \cdot \braket{V^{(N)}(Q_k)}{V^{(N)}(P_{j_0})}.
-    \]
-    On the left-hand side, the off-diagonal terms $j \neq j_0$ decay by
-    Lemma~\ref{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
-    (\cite[lines~1080--1091]{Cirac2017MPDO_AnnPhys}), and the diagonal
-    term
-    $c_N^{(j_0)}(P) \cdot (\braket{V^{(N)}(P_{j_0})}{V^{(N)}(P_{j_0})} - 1)$
-    decays by the normalized self-overlap
-    (\cite[line~1818]{Cirac2021Matrix}). Hence
-    $\text{LHS} - c_N^{(j_0)}(P) \to 0$.
-
-    On the right-hand side, split $k$ into $J_1'(Q)$ and its complement.
-    \begin{itemize}
-        \item For $k \in J_1'(Q)$, substitute via the gauge identity
-              $V^{(N)}(Q_k)_\sigma = \zeta_k^N \cdot V^{(N)}(P_{\varphi(k)})_\sigma$
-              supplied by the matched-sector step of
-              \cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys};
-              the unit-modulus closure $\lVert\zeta_k\rVert = 1$ follows from the
-              norm-from-overlap lemma and the convergence of both per-block
-              normalized self-overlaps to $1$. If $\varphi(k) = j_0$, the
-              diagonal self-overlap contributes
-              $c_N^{(k)}(Q) \cdot \zeta_k^N + o(1)$; otherwise the
-              cross-overlap decay gives $o(1)$.
-        \item For $k \notin J_1'(Q)$, every copy weight has strict modulus
-              $< 1$, so $c_N^{(k)}(Q) \to 0$ by
-              Lemma~\ref{thm:sector_bnt_coeff_tendsto_zero_of_all_weights_subnorm};
-              combined with the uniform overlap bound from left-canonical
-              normalization (\cite[lines~1815--1837]{Cirac2021Matrix}), the
-              contribution decays to $0$.
-    \end{itemize}
-    Combining the per-$k$ contributions yields
-    \[
-        \text{RHS} - \sum_{k \in J_1'(Q),\ \varphi(k) = j_0} \zeta_k^N \cdot c_N^{(k)}(Q) \to 0.
-    \]
-    Since $\varphi$ is an embedding the inner sum has at most one term.
-    With $\text{LHS} = \text{RHS}$ (the projection identity), this gives
-    $c_N^{(j_0)}(P) - (\text{matched term}) \to 0$.
-
-    Specialising: if $j_0 = \varphi(k_0)$ for some $k_0 \in J_1'(Q)$ the
-    matched term is $\zeta_{k_0}^N \cdot c_N^{(k_0)}(Q)$, giving clause~(1);
-    if $j_0 \notin \operatorname{range}(\varphi)$ the matched term is $0$,
-    giving clause~(2).
-\end{proof}
-
-\begin{remark}
-    Theorem~\ref{thm:sector_bnt_projected_substitution_unit_subset} is the
-    open statement that the projected coefficient identities hold for
-    proportional MPV families. It should not be identified with
-    Lemma~\ref{lem:sector_bnt_coeff_identity_via_global_gauge}, which is a
-    full-basis equal-MPV statement. The projected theorem follows
-    the substitution route of
-    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys}: substitute
-    the per-pair gauge phases into the proportional-MPV identity, reduce
-    to the $P$-only relation, and extract per-$j$ coefficient identities
-    from cross-overlap decay alone. The result handles the
-    $J_1'(Q)$-restricted bijection setting; the full bijection
-    $J(P) \simeq J(Q)$ is not delivered by the bijective-matching theorem
-    (see the scope discussion above).
-\end{remark}
-
 \subsection{Full-basis coefficient identity and global gauge}
 \label{subsec:sector_bnt_full_basis_global_gauge}
 
-The preceding substitution theorem is not yet formalized and works on the
-unit-modulus subset. The following statements record the full-basis form used by
-the sector-permuted global gauge. Their hypotheses explicitly require a
+The matching theorem above gives the sector phases and gauges. The remaining
+coefficient comparison is the step at
+\cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys}. In the
+equal-MPV setting, the full BNT basis and eventual linear independence give the
+comparison directly. In the proportional setting below, the same comparison
+is recorded as the explicit hypothesis needed before the copy weights can be
+assembled into the global gauge. The hypotheses in this subsection require a
 unit-modulus copy in every sector on both sides; under this normalization, the
 matching covers the whole BNT basis.
 
