@@ -1,5 +1,23 @@
 # PGVWC07 intermediate-step restoration report
 
+> **PR split note.** This report describes the *combined* restoration across
+> two stacked pull requests:
+>
+> * **PR #1992 (this PR, `cleanup/canonical-blueprint-trim`)** — restores the
+>   13 INTERMEDIATE PLUMBING entries to
+>   `blueprint/src/chapter/ch08_canonical.tex` in the new section
+>   `sec:pgvwc07_intermediates`. Section (a) below.
+> * **PR #1993 (companion, `cleanup/canonical-lean-trim`)** — un-privatizes
+>   the corresponding 10 Lean declarations whose blueprint entries are
+>   restored here. Section (b) below.
+>
+> All Lean declarations referenced by the restored blueprint entries are
+> *already public on `main`*, so PR #1992 stands alone:
+> `leanblueprint web` runs cleanly against `main`. The un-privatization
+> in PR #1993 only matters once the companion PR's privatization edits are
+> applied. Sections (b)–(e) below therefore describe state that exists on
+> the *stack of both PRs*, not on PR #1992 in isolation.
+
 This report records a partial reversal of Step 5.1 (blueprint trim) and Step 5.2
 (Lean privatization) of the canonical-form refactor. The 13 intermediate
 PGVWC07 entries listed in `audits/canonical_audit.md` §2 as INTERMEDIATE
