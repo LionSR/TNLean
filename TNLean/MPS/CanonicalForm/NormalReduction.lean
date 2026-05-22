@@ -19,8 +19,8 @@ The supporting modules are:
   primitive weighted block decomposition to blocked normal canonical-form data.
 * `TNLean.MPS.CanonicalForm.NormalReduction.TPGauge` — the blockwise TP-gauge
   normalization results, including the arbitrary-input zero-tail statement.
-* `TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization` — scalar
-  normalization of positive PGVWC07 witness weights.
+* `TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization` — the
+  finite-family positive-weight normalization for the positive-length witness.
 
 ## Main statements
 

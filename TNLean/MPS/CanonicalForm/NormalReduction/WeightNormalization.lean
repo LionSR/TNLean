@@ -5,10 +5,23 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
 
 /-!
-# Weight normalization for PGVWC07 positive-length witnesses
+# Positive-weight normalization for the PGVWC07 witness
 
-This module records the finite-family scalar normalization step for the
-positive-length PGVWC07 canonical-form witness.
+This module records the finite-family scalar normalization of the positive
+weights in the positive-length PGVWC07 canonical-form witness.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--766, says that the spectral radius may be normalized without loss
+of generality.  The theorem below proves the finite positive-weight part of
+that convention: divide all weights by their largest value, so that every
+normalized weight has norm at most one and one has norm one.  The statement
+also records the global scalar factor on every positive-length MPV
+coefficient.
+
+The remaining source-facing boundary is not the finite maximum argument, but
+the state-equivalence convention under which the global length-dependent
+scalar is harmless.  This boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
 namespace MPSTensor
@@ -22,8 +35,8 @@ Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
 lines 765--766, says that the spectral radius may be normalized without loss
 of generality.  This theorem records the corresponding scalar convention for
 the positive-length witness: after dividing all weights by their maximum, every
-new weight has norm at most one and one weight has norm one.  The price is the
-expected global factor `scale ^ N` on length-`N` MPV coefficients. -/
+new weight has norm at most one and one weight has norm one.  The conclusion
+also records the global factor `scale ^ N` on length-`N` MPV coefficients. -/
 theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
     {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A)
     (hr : 0 < W.r) :
