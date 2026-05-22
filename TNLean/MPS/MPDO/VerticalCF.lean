@@ -39,17 +39,17 @@ surrogate for the paper's vertical canonical form.
   canonical-form (biCF) field of `HorizontalCFData`.
 
 The full passage from horizontal to vertical canonical form
-(Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is deferred to a
-follow-up PR: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
+(Proposition IV.12 / Proposition 4.13 of arXiv:1606.00608) is still outside
+this file: its blueprint entry `thm:vertical_cf_of_horizontal_cf` is marked
 `\notready`, and the corresponding Lean statement will be introduced together
 with its proof rather than as an empty placeholder.
 
 ## Module location
 
-The MPO/MPDO/LPDO foundations introduced by issue #235 live under `TNLean/MPS/MPDO/`
-(imported as layer 3b in `TNLean.lean`) rather than as a top-level `TNLean/MPDO/`
-namespace: they sit on top of the `MPSTensor` framework from `TNLean/MPS/`, so
-the MPS-scoped location matches the existing layering.
+The MPO/MPDO/LPDO foundations live under `TNLean/MPS/MPDO/` (imported as layer
+3b in `TNLean.lean`) rather than as a top-level `TNLean/MPDO/` namespace: they
+sit on top of the `MPSTensor` framework from `TNLean/MPS/`, so the MPS-scoped
+location matches the existing layering.
 
 ## References
 
@@ -326,7 +326,7 @@ theorem blockwise_insert_eq_of_mpv_agree
 -- of arXiv:1606.00608) — every MPDO in horizontal canonical form is in vertical
 -- canonical form — is tracked by the blueprint entry
 -- `thm:vertical_cf_of_horizontal_cf` (currently `\notready`) and will be added
--- as a theorem in a follow-up PR together with its proof. See the RFP/MPDO 3/5
--- milestone in issue #235 for the forward plan.
+-- as a theorem together with its proof once the horizontal-to-vertical
+-- canonical-form argument has been formalized.
 
 end MPOTensor
