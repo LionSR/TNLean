@@ -32,12 +32,12 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
   expose the two surviving equivalent hypothesis forms supplying the
   relabeling.  (A third intermediate form `_of_word_eq` and the orphan
   `_commonFlatAt_of_groupedBlockCastAgrees` were removed in the canonical
-  refactor recorded in `audits/canonical_lean_refactor_report.md`.)
+  reorganization recorded in `audits/canonical_lean_refactor_report.md`.)
 * `CommonSectorRelabelingHypothesis` and `CommonGroupedBlockCastHypothesis`
   are two predicate forms of the same blocked-word identification.
   `CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq` proves the
-  cast-equality form unconditionally; the two predicates are kept as a
-  thin compatibility layer for callers that prefer one form over the other.
+  cast-equality form unconditionally; the two predicates are equivalent
+  reformulations kept for callers that prefer one form over the other.
 * `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
   and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural
   common-sector data into common primitive irreducible block decompositions.

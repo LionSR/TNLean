@@ -24,7 +24,8 @@ Its public outputs are:
   normalization for an irreducible block decomposition.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the arbitrary-input
   TP-gauge normalization, keeping the explicit zero-block summand.  This is the
-  bridge declaration consumed by `SectorComparison/`.
+  TP-gauge result consumed by `SectorComparison/` to supply the trace-preserving
+  block decomposition used in Chapter~12 of the blueprint.
 * The source-faithful PGVWC07 unital and dual-diagonal chain:
   `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` (single
   irreducible block), then
@@ -46,8 +47,8 @@ in the blueprint as the source-faithful PGVWC07 chain.
 
 The remaining declarations in this file (gauge-transport and irreducibility
 preservation lemmas, the scalar fixed-point unitary-conjugation transport)
-remain `private`: they are elementary supporting lemmas with no external API
-role.
+remain `private`: they are elementary supporting lemmas with no external
+mathematical role.
 -/
 
 namespace MPSTensor

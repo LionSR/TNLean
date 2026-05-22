@@ -30,9 +30,10 @@ The imported modules expose the following public declarations:
   finite-direct-sum input.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — TP-gauge
   normalization for arbitrary input, keeping the explicit zero-block summand.
-  This is the canonical-form bridge declaration consumed by
+  This is the canonical-form input statement consumed by
   `SectorComparison/CommonSectorData.lean` and
-  `SectorComparison/TPPrimitiveReduction.lean`.
+  `SectorComparison/TPPrimitiveReduction.lean`, supplying the trace-preserving
+  irreducible block decomposition used in Chapter~12 of the blueprint.
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp` — reduction
   from a primitive blocked decomposition to blocked normal canonical-form data.
 

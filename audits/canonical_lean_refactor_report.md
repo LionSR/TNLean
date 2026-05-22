@@ -72,7 +72,7 @@ Always public (cross-file callees, never privatized):
 | `NormalReduction/TPGauge.lean` | `exists_pgvwc07_positiveLengthWitness` | cross-file: called from `WeightNormalization.lean` |
 | `NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness` (structure) | cross-file: used as type in `WeightNormalization.lean` |
 | `SectorComparison/CyclicSectorDecomposition.lean` | `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` | blueprint tag `thm:cyclic_sector_decomp_irr_tp` survives Step 5.1; docstring expanded to note `_prim_irr` is the consumed variant |
-| `SectorComparison/CommonSectorTransport.lean` | `CommonSectorRelabelingHypothesis`, `CommonGroupedBlockCastHypothesis` | both blueprint-tagged; collapsing would touch >1 downstream file (audit S5.2.11 fallback). Module-head docstring now records that they are a thin compatibility layer over the unconditional `of_flattenWordOfBlock_cast_eq`. |
+| `SectorComparison/CommonSectorTransport.lean` | `CommonSectorRelabelingHypothesis`, `CommonGroupedBlockCastHypothesis` | both blueprint-tagged; collapsing would touch >1 downstream file (audit S5.2.11 fallback). Module-head docstring now records that they are equivalent reformulations connected by the unconditional `of_flattenWordOfBlock_cast_eq`. |
 
 ### Privatization rationale: cross-file PGVWC07 callees
 
