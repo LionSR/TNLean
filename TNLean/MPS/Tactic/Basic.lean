@@ -14,9 +14,8 @@ for recurring proof patterns in MPS / channel / overlap files.
 
 * `mps_block_words` : direct/iterated blocking maps, `wordOfBlock` expressions
 * `mps_transfer` : transfer map unfoldings
-* `mps_zero_tail` : zero-block MPV term simplification (the Lean formalization uses
-  "zero tail" as a bookkeeping term for the paper's "zero blocks"; see
-  `TNLean.MPS.CanonicalForm.Existence`)
+* `mps_zero_tail` : zero-block MPV term simplification; the zero block contributes
+  its bond dimension at length zero and vanishes at positive length
 
 ## Tactic macros
 
@@ -42,8 +41,7 @@ register_simp_attr mps_block_words
 /-- Simp set for transfer map unfoldings. -/
 register_simp_attr mps_transfer
 
-/-- Simp set for zero-block MPV term simplification (the paper calls these "zero blocks";
-the Lean formalization uses "zero tail" as a bookkeeping name). -/
+/-- Simp set for zero-block MPV term simplification. -/
 register_simp_attr mps_zero_tail
 
 /-! ### Tactic macros -/
@@ -117,7 +115,7 @@ rewrites `mpv (zeroMPSTensor d D) σ` to `if N = 0 then (D : ℂ) else 0`.
 The user is responsible for resolving the `if` by providing the length case (e.g.
 `hN : 0 < N` or `hN : N ≠ 0`).
 
-The name "zero tail" is a Lean internal bookkeeping term; the source paper
-(arXiv:1606.00608, Section~2.3) calls these "zero blocks."
+The source paper calls these summands "zero blocks" (arXiv:1606.00608,
+Section~2.3).
 -/
 macro "zero_tail_simp" : tactic => `(tactic| simp only [mps_zero_tail])
