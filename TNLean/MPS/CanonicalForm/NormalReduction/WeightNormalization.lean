@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder TNMatrixCFC
-
 /-!
 # Positive-weight normalization for the PGVWC07 witness
 
