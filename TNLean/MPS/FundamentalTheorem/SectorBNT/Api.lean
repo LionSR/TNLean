@@ -283,20 +283,16 @@ theorem coeff_tendsto_zero_of_all_weights_subnorm
 
 /-- **Thermodynamic-limit non-vanishing of a unit-block coefficient.**
 
-A user-facing alias for `coeff_not_tendsto_zero_at_block`, named
-in the language of the audit memo
-`thermodynamic_limit_normalization_audit_2026-05-14` §Q-C: the
-CPSV16 §II.C line-246 normalization picks out the unit-modulus block(s)
-whose power-sum coefficient does **not** vanish in the thermodynamic
-limit.
+A user-facing alias for `coeff_not_tendsto_zero_at_block`.  The CPSV16
+§II.C line-246 normalization picks out the unit-modulus copies whose
+power-sum coefficient does **not** vanish in the thermodynamic limit.
 
-This is the coefficient form of the audit's "thermodynamic-limit
-non-vanishing" condition, with the per-block unit-modulus witness
-supplied as an explicit theorem-level hypothesis.  A self-overlap form
+This is the coefficient form of that thermodynamic-limit non-vanishing
+condition, with the per-block unit-modulus witness supplied as an explicit
+theorem-level hypothesis.  A self-overlap form
 `limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication recorded by
-the audit's Q-C equivalence (forward direction), which we do not
-formalise here — the coefficient form is the operational input to the
-FT proof; the self-overlap reading is a paraphrase. -/
+the corresponding analytic equivalence in the source-facing discussion; here
+the coefficient form is the input used in the Fundamental Theorem proof. -/
 lemma thermodynamic_limit_nonvanishing
     (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
     (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :

@@ -16,16 +16,14 @@ factoring the raw sector weights as `P.weight j q = λ_j · ν_{j,q}`.
 This layer captures the **sub-class** of BNT canonical forms in which every
 sector's copies share a common modulus.  It is NOT part of the
 core BNT predicate `IsBNTCanonicalForm` in
-`SectorBNT/Basic.lean`; see the audit memo
-`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4 for
-the counter-example `C ⊕ (1/2)C` (a single BNT basis element with coefficient
+`SectorBNT/Basic.lean`.  The counter-example `C ⊕ (1/2)C` is a single
+BNT basis element with coefficient
 `1 + (1/2)^N` whose copies have unequal moduli, so no `λ_j` factorization
-with unit `ν_{j,q}` is possible).
+with unit `ν_{j,q}` is possible.
 
 The spectral level is required to be `Antitone` (≥) in `‖·‖`, not
-`StrictAnti`; the audit (§Q10) records the counter-example `C ⊕ D` with
-distinct non-gauge-equivalent normal basis tensors and weights `(1,1)`,
-which has two BNT basis elements of equal modulus.
+`StrictAnti`: `C ⊕ D` with distinct non-gauge-equivalent normal basis tensors
+and weights `(1,1)` has two BNT basis elements of equal modulus.
 
 This layer is provided for downstream estimates that genuinely need an
 equal-modulus normalization; CPSV16 §II Step 1 does not need it.
@@ -53,10 +51,8 @@ factoring `P.weight j q = spectral_level j · phase_weight j q`.
 
 It captures the sub-class of BNT canonical forms in which every sector's
 copies share a common modulus.  It is NOT required by, nor part of, the
-core BNT predicate `IsBNTCanonicalForm` (see `SectorBNT/Basic.lean`).  The audit
-`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` §Q4
-shows that `C ⊕ (1/2)C` is a valid CPSV BNT canonical form that admits no
-such factorization.
+core BNT predicate `IsBNTCanonicalForm` (see `SectorBNT/Basic.lean`).  The
+valid CPSV BNT canonical form `C ⊕ (1/2)C` admits no such factorization.
 
 Paper anchors:
 
@@ -70,8 +66,7 @@ structure HasEqualModulusWeightLayer (P : SectorDecomposition d) where
   /-- The spectral level is everywhere nonzero. -/
   spectral_level_ne_zero : ∀ j : Fin P.basisCount, spectral_level j ≠ 0
   /-- The spectral-level moduli are antitone in `j` (≥, not strict).  The
-  non-strict form admits equal-modulus distinct basis blocks; see the audit
-  §Q10. -/
+  non-strict form admits equal-modulus distinct basis blocks. -/
   spectral_level_antitone :
     Antitone (fun j : Fin P.basisCount => ‖spectral_level j‖)
   /-- **Dominant normalization**: the leading basis block has spectral
