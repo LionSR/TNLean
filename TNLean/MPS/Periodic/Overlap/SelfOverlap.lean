@@ -532,7 +532,7 @@ private theorem mpvOverlap_blockTensor_self_eq
 
 /-- Orthogonal-corner trace rigidity for compressed cyclic sectors.
 
-**Gap analysis (Issue #871).**  This lemma asserts that distinct compressed
+**Remaining BDCF converse.**  This lemma asserts that distinct compressed
 sectors from the same cyclic decomposition cannot be gauge-phase equivalent.
 The mathematical proof in arXiv:1708.00029 (Appendix A, lines 930–950) relies
 on the block-diagonal canonical form (BDCF) lemma: distinct cyclic sectors
