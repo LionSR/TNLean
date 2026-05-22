@@ -60,9 +60,8 @@ bound.
 **Scope restriction:** The source theorem also writes the weights with
 `1 ≥ λ_j > 0`, after the proof says that the spectral radius is normalized
 without loss of generality at lines 765--766.  That global normalization is not
-part of this exact positive-length witness; extending the witness by
-the upper-bound normalization is the remaining step for the statement matching
-the theorem as printed.
+part of this exact positive-length witness; it is supplied later by the
+finite-family weight-normalization theorem.
 The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
@@ -846,9 +845,9 @@ MPV coefficients.  This theorem is the corresponding structured form of
 
 **Scope restriction:** The source theorem's normalization `1 ≥ λ_j > 0` is not
 included here.  The theorem records positive real weights and exact
-positive-length MPV equality; the remaining step for the theorem as printed is
-to formalize the global spectral-radius normalization convention from
-lines 765--766.
+positive-length MPV equality; the global spectral-radius normalization
+convention from lines 765--766 is supplied later by the finite-family
+weight-normalization theorem.
 The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_positiveLengthWitness

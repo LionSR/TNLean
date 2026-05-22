@@ -403,7 +403,7 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
   · let dim : Fin 0 → ℕ := fun k => Fin.elim0 k
     let ν : Fin 0 → ℂ := fun k => Fin.elim0 k
     let blocks : (k : Fin 0) → MPSTensor d (dim k) := fun k => Fin.elim0 k
-    refine ⟨1, 0, dim, ν, blocks, by norm_num, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    refine ⟨1, 0, dim, ν, blocks, zero_lt_one, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
     · intro k
       exact Fin.elim0 k
     · intro k
