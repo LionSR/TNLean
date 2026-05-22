@@ -68,21 +68,24 @@ Always public (cross-file callees, never privatized):
 
 | File | Declaration | Reason for keeping public |
 |---|---|---|
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` | cross-file: called from `WeightNormalization.lean` |
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_positiveLengthWitness` | cross-file: called from `WeightNormalization.lean` |
-| `NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness` (structure) | cross-file: used as type in `WeightNormalization.lean` |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` | carries blueprint tag `thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound` at `ch08_canonical.tex:1742`; called only from the same file (`TPGauge.lean:821`), but `private` would break the `\lean{...}` resolution |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_positiveLengthWitness` | cross-file: called from `WeightNormalization.lean`; also carries blueprint tag `thm:pgvwc07_positive_length_witness` |
+| `NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness` (structure) | cross-file: used as type in `WeightNormalization.lean`; also carries blueprint tag `def:pgvwc07_positive_length_witness` |
 | `SectorComparison/CyclicSectorDecomposition.lean` | `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` | blueprint tag `thm:cyclic_sector_decomp_irr_tp` survives Step 5.1; docstring expanded to note `_prim_irr` is the consumed variant |
 | `SectorComparison/CommonSectorTransport.lean` | `CommonSectorRelabelingHypothesis`, `CommonGroupedBlockCastHypothesis` | both blueprint-tagged; collapsing would touch >1 downstream file (audit S5.2.11 fallback). Module-head docstring now records that they are equivalent reformulations connected by the unconditional `of_flattenWordOfBlock_cast_eq`. |
 
-### Privatization rationale: cross-file PGVWC07 callees
+### Rationale for keeping the public PGVWC07 declarations
 
-`exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`,
-`exists_pgvwc07_positiveLengthWitness`, and the structure
+`exists_pgvwc07_positiveLengthWitness` and the structure
 `PGVWC07PositiveLengthWitness` are used across the
 `TPGauge.lean` ↔ `WeightNormalization.lean` file split.  Lean 4 `private`
-is file-scoped, so privatizing them would break the build.  They remain
-public; the `NormalReduction.lean` module-header docstring is shortened
-to the headline plus a pointer to `sec:pgvwc07_intermediates` rather than
+is file-scoped, so privatizing them would break the build.
+`exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
+has only same-file callers, but it carries a blueprint `\lean{...}` tag in
+the restored `sec:pgvwc07_intermediates` section, and a `private` declaration
+cannot be referenced from the blueprint.  All three remain public; the
+`NormalReduction.lean` module-header docstring is shortened to the headline
+plus a pointer to `sec:pgvwc07_intermediates` rather than
 enumerating every intermediate.
 
 ## 3. Declarations deleted
@@ -115,7 +118,7 @@ removed from `CommonSectorData.lean` line 340.
 | `SectorComparison/CommonSectorTransport.lean` | 679 | 642 | −37 | After privatizing the five `_of_blockwise / _of_word_eq / _of_groupedBlockCastAgrees` variants, two of them (`zeroTail_commonFlat_of_word_eq` and `sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees`) had no remaining intra-file callers.  Deleted both. |
 | `SectorComparison/CommonSectorData.lean` | 634 | 366 | −268 | Combined effect of the two S5.3 deletions in this file (the dead `WithZeroTail_of_sameMPV₂` and `commonLengthCommonSectorData_of_reindexed` theorems with their docstrings). |
 | `SectorComparison/StructuralData.lean` | 228 | 176 | −52 | S5.3 deletion of `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂`. |
-| `NormalReduction.lean` | 46 | 46 | ±0 | Module docstring rewritten (LOC unchanged, but reduced from a 17-bullet list to a 4-bullet headline list). |
+| `NormalReduction.lean` | 46 | 46 | ±0 | Module docstring rewritten (LOC unchanged): the bullet list is reorganized into a 3-bullet headline summary plus a 13-bullet "Source-faithful PGVWC07 intermediate steps" subsection (the latter restored after the PGVWC07 reorganization recorded in `pgvwc07_restoration_report.md`). |
 
 Aggregate canonical-form LOC delta:
 

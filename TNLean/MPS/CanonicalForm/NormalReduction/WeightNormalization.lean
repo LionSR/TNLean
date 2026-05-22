@@ -19,14 +19,11 @@ also records the global scalar factor on every positive-length MPV
 coefficient.
 
 The canonical-form existence theorem is stated with positive-length equality
-after a positive global rescaling of the original tensor.  This file also
-records the projective convention and the complementary explicit zero-block
-statement for the length-zero coefficient.  The convention is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
-
-The projective formulation below makes that convention explicit: after the
+after a positive global rescaling of the original tensor.  This file records
+the projective formulation that makes that convention explicit: after the
 maximum normalization, the original tensor and the normalized weighted block
-tensor are `NonzeroProportionalMPV₂`.
+tensor are `NonzeroProportionalMPV₂`.  The source-paper convention is
+discussed in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 
 The source-faithful intermediate steps exposed by this file are:
 
