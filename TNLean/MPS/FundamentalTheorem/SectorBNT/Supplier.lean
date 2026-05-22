@@ -43,7 +43,7 @@ phase-equivalent TP/primitive/irreducible blocks.
 
 * `docs/paper-gaps/cpsv16_cf_normalization_and_proportional_comparison.tex` —
   records the remaining canonical-form weight-normalization and length-zero
-  bookkeeping gaps for the arbitrary-input supplier path.
+  dimension gaps for the arbitrary-input supplier path.
 
 ## Layering
 
@@ -668,13 +668,12 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos
 
 /-- **Arbitrary-input BNT block preparation with explicit length-zero discharge.**
 
-This is a bookkeeping refinement of
-`exists_isBNTCanonicalForm_afterBlocking_pos`.  The theorem keeps the same
-prepared-block output and the same CPSV16 §II.C line-246 normalization
-hypotheses.  In addition, after a normalized BNT sector decomposition is
-chosen, it records that the positive-length MPV identity upgrades to full
-`SameMPV₂` as soon as the zero-length trace identity is supplied in the
-concrete form `D = P.totalDim`.
+This theorem refines `exists_isBNTCanonicalForm_afterBlocking_pos` by adding the
+length-zero condition. It keeps the same prepared-block output and the same
+CPSV16 §II.C line-246 normalization hypotheses. In addition, after a normalized
+BNT sector decomposition is chosen, it records that the positive-length MPV
+identity upgrades to full `SameMPV₂` as soon as the zero-length trace identity is
+supplied in the concrete form `D = P.totalDim`.
 
 It does not prove the missing normalization or the total-dimension equality;
 those are precisely the remaining arbitrary-input bridge obligations recorded
