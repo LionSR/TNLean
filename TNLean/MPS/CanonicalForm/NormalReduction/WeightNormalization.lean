@@ -28,7 +28,7 @@ maximum normalization, the original tensor and the normalized weighted block
 tensor are `NonzeroProportionalMPV₂`.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder
 
 namespace MPSTensor
 
@@ -203,8 +203,8 @@ theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
       _ = 0 := hblock
   exact hσ hAeq
 
-/-- Normalized projective PGVWC07 canonical-form data for a nonzero
-positive-length state family.
+/-- Normalized projective PGVWC07 canonical-form blocks and weights for a
+nonzero positive-length state family.
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
 742--763 and proof lines 765--766.  This theorem composes the arbitrary-input
