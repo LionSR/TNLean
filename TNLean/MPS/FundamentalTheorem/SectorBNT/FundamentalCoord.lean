@@ -17,7 +17,8 @@ The bundled-witness theorem `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses`
 exposes, for any two BNT sector decompositions $P$ and $Q$ satisfying
 `IsBNTCanonicalForm` and generating the same MPV family:
 
-* the matched basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$;
+* the basis bijection $β : \{1,\dots,g_Q\} \simeq \{1,\dots,g_P\}$ between
+  corresponding BNT sectors;
 * per-block bond-dimension equalities $D_P^{(βk)} = D_Q^{(k)}$;
 * matched copy multiplicities $r_{βk}^P = r_k^Q$;
 * matched copy permutations $τ_k$;
