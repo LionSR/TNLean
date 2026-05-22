@@ -25,34 +25,51 @@ are out of scope here).
 
 ## 2. Declarations privatized
 
+> **Audit-vs-final-state correction (post-review).** A first version of this
+> report described 13 declarations as "privatized"; in fact only the
+> SectorComparison/CommonSectorTransport.lean entries received the `private`
+> keyword.  The PGVWC07 declarations in TPGauge.lean and WeightNormalization.lean
+> were planned for privatization in Step 5.2 but later restored to public
+> visibility in the PGVWC07 restoration step (see
+> `audits/pgvwc07_restoration_report.md` and the `rev:` note in the next
+> subsection below).  Only the public/private columns of the table below
+> reflect the *final state on the PR HEAD*; the "PGVWC07 stack" rows are kept
+> for historical traceability.
+
 All call-graph verifications were done with
 `grep -rln 'DeclName' TNLean --include='*.lean'` and confirmed the only
 hits were either the definition file itself or module-summary docstrings
-(no real call sites).  Lean `private` is file-scoped: I only privatized
-declarations whose call sites all live in the same `.lean` file.
+(no real call sites).  Lean `private` is file-scoped: only declarations whose
+call sites all live in the same `.lean` file are eligible for `private`.
+
+Declarations marked `private` on PR HEAD (final state):
 
 | File | Declaration | Reason |
 |---|---|---|
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_data_of_irreducible` | file-local; intermediate PGVWC07 step |
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_blockwise` | file-local; intermediate PGVWC07 step |
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` | file-local; intermediate PGVWC07 step |
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` | file-local; intermediate PGVWC07 step |
-| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.exists_weight_normalization` | file-local; weight-normalization chain |
-| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.exists_weight_normalization_projective` | file-local |
-| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv` | file-local |
-| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv` | file-local |
-| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv` | file-local |
-| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero` | file-local |
 | `SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlat_of_blockwise` | file-local; intermediate-hypothesis form |
 | `SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlat_of_groupedBlockCastAgrees` | file-local; intermediate-hypothesis form |
-| `SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlatAt_of_groupedBlockCastAgrees` | file-local; intermediate-hypothesis form |
 
-Privatization-deferred (kept public; only docstring updates):
+PGVWC07 stack — planned `private` (Step 5.2), then restored to public:
+
+| File | Declaration | Original Step-5.2 plan | Final state |
+|---|---|---|---|
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_data_of_irreducible` | privatize (file-local) | **public** (blueprint entry restored in `sec:pgvwc07_intermediates`) |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_blockwise` | privatize (file-local) | **public** (blueprint entry restored) |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` | privatize (file-local) | **public** (blueprint entry restored) |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` | privatize (file-local) | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.exists_weight_normalization` | privatize | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.exists_weight_normalization_projective` | privatize | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv` | privatize | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv` | privatize | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv` | privatize | **public** (blueprint entry restored) |
+| `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero` | privatize | **public** (blueprint entry restored) |
+
+Always public (cross-file callees, never privatized):
 
 | File | Declaration | Reason for keeping public |
 |---|---|---|
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` | cross-file: called from `WeightNormalization.lean:477` |
-| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_positiveLengthWitness` | cross-file: called from `WeightNormalization.lean:244, 289` |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` | cross-file: called from `WeightNormalization.lean` |
+| `NormalReduction/TPGauge.lean` | `exists_pgvwc07_positiveLengthWitness` | cross-file: called from `WeightNormalization.lean` |
 | `NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness` (structure) | cross-file: used as type in `WeightNormalization.lean` |
 | `SectorComparison/CyclicSectorDecomposition.lean` | `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` | blueprint tag `thm:cyclic_sector_decomp_irr_tp` survives Step 5.1; docstring expanded to note `_prim_irr` is the consumed variant |
 | `SectorComparison/CommonSectorTransport.lean` | `CommonSectorRelabelingHypothesis`, `CommonGroupedBlockCastHypothesis` | both blueprint-tagged; collapsing would touch >1 downstream file (audit S5.2.11 fallback). Module-head docstring now records that they are a thin compatibility layer over the unconditional `of_flattenWordOfBlock_cast_eq`. |
@@ -63,10 +80,10 @@ Privatization-deferred (kept public; only docstring updates):
 `exists_pgvwc07_positiveLengthWitness`, and the structure
 `PGVWC07PositiveLengthWitness` are used across the
 `TPGauge.lean` ↔ `WeightNormalization.lean` file split.  Lean 4 `private`
-is file-scoped, so privatizing them would break the build.  Following the
-orchestrator's Plan (B), they remain public; their disappearance from the
-`NormalReduction.lean` module-header docstring removes them from the
-externally-advertised API surface without breaking the call graph.
+is file-scoped, so privatizing them would break the build.  They remain
+public; the `NormalReduction.lean` module-header docstring is shortened
+to the headline plus a pointer to `sec:pgvwc07_intermediates` rather than
+enumerating every intermediate.
 
 ## 3. Declarations deleted
 
@@ -114,22 +131,25 @@ downstream consumer.
 
 ## 5. Blueprint cross-edits
 
+These blueprint edits land in the **companion PR #1992**, not in this PR.
+They are described here because the Lean-side privatizations and deletions
+in this PR motivated them.
+
 `blueprint/src/chapter/ch11b_after_blocking.tex`, theorem
 `thm:zero_tail_common_flat_of_blocked_word_comparison`:
 
 * The five-name `\lean{...}` block and the `\leanok` were removed (all
-  five Lean declarations are now `private` or deleted).
+  five Lean declarations are now `private` or deleted on this PR's HEAD).
 * The trailing sentence "The blockwise comparison, the word equality, and
   the coordinate-grouping condition are three ways to supply the same
   alphabet identification" was rewritten to a sentence pointing the reader
   to `thm:zero_tail_common_flat_of_reindexed` for the externally consumed
-  form.  The blueprint `\uses{...}` chain (lines 877 and 912 — consumers
-  in `thm:zero_tail_common_flat_transport_of_grouped_block_cast` and the
-  proof block above `thm:afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
-  was left intact: the theorem still exists as a mathematical waypoint,
-  it just no longer claims a Lean tag.
+  form.  The blueprint `\uses{...}` chain to consumers was left intact:
+  the theorem still exists as a mathematical waypoint, it just no longer
+  claims a Lean tag.
 
-No other `blueprint/src/chapter/` files were modified.
+No `blueprint/src/chapter/` files were modified by this PR; the edits
+above land in PR #1992.
 
 ## 6. Risky things deliberately not done
 

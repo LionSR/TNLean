@@ -287,17 +287,17 @@ The earlier existence path now has the following formal pieces.
     \item
           \path|MPSTensor.PGVWC07PositiveLengthWitness| and
           \path|MPSTensor.exists_pgvwc07_positiveLengthWitness| record the
-          preceding positive-length theorem as a single package of data.  The
-          fields contain the nonzero unital blocks, positive real weights,
+          preceding positive-length theorem as a single bundled structure.
+          The fields contain the nonzero unital blocks, positive real weights,
           diagonal positive-definite dual fixed points, scalar fixed-point
           conclusions, positive block dimensions, positive-length MPV equality,
-          and the total bond-dimension bound.  The companion theorem
-          \path|MPSTensor.PGVWC07PositiveLengthWitness.weight_ne_zero| derives
-          nonvanishing of the weights from their positive-real form, so that
-          nonvanishing is not an additional field of the witness.  This is not
-          a new proof route; it is an equivalent formulation of the proved
-          positive-length theorem, intended to prevent later arguments from
-          repeating the long existential conclusion.
+          and the total bond-dimension bound.  Nonvanishing of the weights
+          follows from their positive-real form (each weight is the complex
+          embedding of a strictly positive real), so it is not an additional
+          field of the witness.  This is not a new proof route; it is an
+          equivalent formulation of the proved positive-length theorem,
+          intended to prevent later arguments from repeating the long
+          existential conclusion.
 
     \item
           \path|MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization|
@@ -372,22 +372,16 @@ The earlier existence path now has the following formal pieces.
           normalized weighted block tensor has the same coefficients on every
           nonempty ring, and \(\sum_k D_k\leq D\).
 
-    \item
-          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail|
-          records the complementary explicit zero-block convention.  It keeps
-          the zero block from the arbitrary-input decomposition, normalizes the
-          positive nonzero-block weights by their maximum when the nonzero
-          family is nonempty, and proves exact MPV equality at every finite
-          length after the same positive global rescaling.  For positive
-          lengths the zero block contributes zero; at length zero the equality
-          is the dimension identity \(D_0+\sum_kD_k=D\).
-
-    \item
-          \path|MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero|
-          records the arbitrary-input zero/nonzero dichotomy for this
-          projective formulation.  Either all positive-length MPV coefficients
-          of the original tensor vanish, or the preceding nonempty normalized
-          projective PGVWC07 form exists.
+          %% Previously listed here: the explicit-zero-block exact form
+          %% \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail|
+          %% and the projective zero/nonzero dichotomy
+          %% \path|MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero|.
+          %% Both were removed from the formalization as unused leaf orphans;
+          %% see audits/canonical_audit.md and audits/canonical_lean_refactor_report.md.
+          %% The zero-block dimension identity \(D_0+\sum_k D_k=D\) is recorded
+          %% by \path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|
+          %% (an upstream member of the same chain), so no source-content gap
+          %% is introduced by the deletion.
 
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
