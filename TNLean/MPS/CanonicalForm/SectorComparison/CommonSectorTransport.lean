@@ -37,7 +37,8 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
   are two predicate forms of the same blocked-word identification.
   `CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq` proves the
   cast-equality form unconditionally; the two predicates are equivalent
-  reformulations kept for callers that prefer one form over the other.
+  reformulations of the same blocked-alphabet identification and either may be
+  used as the hypothesis of a downstream transport lemma.
 * `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
   and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural
   common-sector data into common primitive irreducible block decompositions.

@@ -203,10 +203,13 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
 
 
 /-!
-## (4) Periodicity removal by blocking
+## (4) Normality from primitive spectral-gap hypotheses
 
-This is the Appendix-A periodicity-removal step for TP irreducible blocks, routed through the
-adjoint-transfer formulation.
+The reduction from spectral-gap primitivity with a positive-definite fixed point to normality.
+The periodicity-removal step itself lives in
+`TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition`; for overlap and
+canonical-form hypotheses involving primitive transfer maps, we use the results from
+`PeripheralToSpectralGap.lean` directly.
 -/
 
 /-- **Reduction theorem:** spectral-gap primitivity with a positive-definite fixed point implies
@@ -218,14 +221,6 @@ theorem isNormal_of_isPrimitiveMPS
     (hPD : ρ.PosDef) :
     IsNormal A :=
   isNormal_of_isPrimitiveMPS_with_posDef hPrim hPD
-
-
-/-!
-## (5) Normality from primitive spectral-gap hypotheses
-
-For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
-`PeripheralToSpectralGap.lean` directly.
--/
 
 /-!
 ## Zero-block vanishing at positive length
