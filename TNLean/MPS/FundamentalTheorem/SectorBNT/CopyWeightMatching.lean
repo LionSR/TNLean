@@ -36,7 +36,8 @@ of the matched `P`-sector, and the corresponding raw weights satisfy
 The proportional theorem in CPSV16 gives the sector matching at the theorem
 statement lines 1167--1170 and the Appendix MPV proof line 1182.  The
 coefficient comparison that constructs this copy-weight matching is the
-remaining proportional task recorded in issue #1749. -/
+remaining source-faithful input before the proportional global-gauge theorem
+can be obtained without an explicit coefficient-identity hypothesis. -/
 structure SectorBNTCopyWeightMatching {P Q : SectorDecomposition d}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ) where
