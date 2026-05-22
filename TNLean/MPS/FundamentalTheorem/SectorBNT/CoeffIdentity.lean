@@ -25,7 +25,9 @@ Paper anchors:
   lines 1864–1884: per-block BNT normalization that makes every sector
   participate in the full-basis matching.
 
-No `dropSector` recursion and no partial-union combined LI are used here.
+The argument is a direct full-basis coefficient comparison: after the BNT
+basis tensors have been matched, all remaining terms are expressed in the
+same BNT basis tensor family and separated by its eventual linear independence.
 -/
 
 open scoped Matrix BigOperators
@@ -241,8 +243,9 @@ an eventual exact coefficient identity
 `P.coeff N (β k) = ζ_k^N * Q.coeff N k`.
 
 This is the formal counterpart of CPSV16 Appendix MPV proof, line 1188's exact
-power-sum comparison; it deliberately avoids the unsound asymptotic-difference
-to full-multiset route noted in the multiplicity-audit memo. -/
+power-sum comparison.  The finite power-sum recovery of copy weights is a
+separate algebraic step, applied after these eventual coefficient identities
+have been obtained. -/
 theorem coeff_identity_via_global_gaugePos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
