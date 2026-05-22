@@ -9,8 +9,8 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.DominantMatch
 
 The strong existential matching theorem states the CPSV16 Appendix MPV proof,
 line 1182, matching conclusion directly on the original pair `(P, Q)` of BNT
-canonical forms, iterated over each sector `k` of `Q` that carries a
-unit-modulus copy.
+canonical forms. The theorem is a full-basis statement: it assumes explicitly
+that every sector of `Q` carries a unit-modulus copy weight.
 
 The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 (Corollary substitution) lives in the companion module
@@ -19,36 +19,35 @@ The coefficient identity of CPSV16 Appendix MPV proof, lines 1187–1188
 ## Paper anchor
 
 CPSV16 (arXiv:1606.00608) Appendix MPV proof, line 1182, gives the matching
-step of the proportional theorem proof.  In mathematical terms, this step
+step of the proportional theorem proof. In mathematical terms, this step
 fixes a block $B_k$ and observes that its overlaps with the $A_j$ blocks cannot
 all decay to zero, since then the two MPV families would fail to be
-proportional for all lengths.  The equal-vector corollary then gives an index $j_k$ with
+proportional for all lengths. The equal-vector corollary then gives an index $j_k$ with
 $|V^{(N)}(B_k)\rangle = e^{i\phi_k N} |V^{(N)}(A_{j_k})\rangle$, and the
 single-block fundamental theorem gives
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
 
-The paper's "given $k$" is *iterated externally* over each unit-block
-sector of `Q` (those with at least one unit-modulus weight, per the
-CPSV16 §II.C line-246 normalization which is recorded **globally** —
-not per-block — in `IsBNTCanonicalForm.weight_unit_exists`).  Non-unit
-blocks contribute coefficients that decay exponentially and so do not
-constrain the matching; the paper restricts attention to the
-"physical" (unit-modulus carrying) blocks.
+The paper's "given $k$" is represented here by an explicit theorem-level
+hypothesis
+`hUnitQ : ∀ k, ∃ q, ‖Q.weight k q‖ = 1`. This is stronger than the
+structural field `IsBNTCanonicalForm.weight_unit_exists`, because CPSV16
+§II.C line 246 records only a global unit witness over the two-layer index.
+The stronger hypothesis is the condition assumed by the
+bijective matching and global-gauge theorems.
 
 ## Proof structure
 
 The result is a **single `∀ k, ∃ j` existential statement** on the
-original pair, with the paper's "given $k$" hypothesis explicitly
-encoded as the unit-modulus existential.  There is **no recursion**,
-no `dropSector` usage, and no combined-LI obligation on a partial
-union: the entire proof routes through the existing
-`exists_block_match_of_sameMPV` lemma (which itself routes
-through the full-family combined LI `combined_family_eventually_li`,
-`SectorBNT/Api.lean`).
+original pair, with the per-sector unit-modulus hypothesis supplied as an
+argument. The proof uses the full combined family at once, through
+`exists_block_match_of_sameMPV` and the full-family combined linear
+independence lemma `combined_family_eventually_li`, rather than deleting
+sectors one by one.
 
 The bijective matching (`bijective_match_of_sameMPVPos`) applies the
 forward existential twice — once with `(P, Q)` and once with `(Q, P)` —
-to derive `P.basisCount = Q.basisCount` and the full bijection
+using per-sector unit-modulus hypotheses on both sides, to derive
+`P.basisCount = Q.basisCount` and the full bijection
 `β : Fin Q.basisCount ≃ Fin P.basisCount`.
 
 ## Proof of the existential
@@ -71,8 +70,6 @@ non-decaying overlap in the `(Q.basis k, P.basis j₀)` order.  Two
 local auxiliary lemmas (`gaugePhaseEquiv_swap_cast` and
 `tendsto_mpvOverlap_zero_swap`) flip those into the `(P, Q)`-ordered
 conclusion.
-
-All proofs in this file are closed constructively.
 -/
 
 open scoped Matrix BigOperators
@@ -86,9 +83,10 @@ variable {d : ℕ}
 
 /-- **CPSV16 Appendix MPV proof, line 1182, Step 1 (full-basis form).**
 
-For every sector `k` of `Q`, there exists a sector `j` of `P` of equal
-bond dimension, gauge-phase equivalent to `Q.basis k` after the dimension
-cast, and with non-decaying cross-overlap.
+Assume that every sector `k` of `Q` has a copy weight of modulus one. Then
+for every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
+dimension, gauge-phase equivalent to `Q.basis k` after the dimension cast, and
+with non-decaying cross-overlap.
 
 The proof iterates `exists_block_match_of_sameMPV` over every `Q`-sector
 with `(P, Q)` swapped, so it consumes the per-block unit-modulus
