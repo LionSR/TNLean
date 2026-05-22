@@ -25,7 +25,8 @@ Its public outputs are:
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the arbitrary-input
   TP-gauge normalization, keeping the explicit zero-block summand.  This is the
   TP-gauge result consumed by `SectorComparison/` to supply the trace-preserving
-  block decomposition used in Chapter~12 of the blueprint.
+  block decomposition used in Chapter 12 of the blueprint
+  (`ch11b_after_blocking.tex`).
 * The source-faithful PGVWC07 unital and dual-diagonal chain:
   `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` (single
   irreducible block), then
@@ -42,8 +43,9 @@ Its public outputs are:
   which bundle the positive-length form for use in `WeightNormalization.lean`.
 
 These declarations correspond one-to-one to the intermediate construction
-steps of \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix} and are exposed
-in the blueprint as the source-faithful PGVWC07 chain.
+steps of [PGVWC07, Theorem Th:TIcanonical] (Pérez-García, Verstraete, Wolf,
+Cirac, 2007) and are exposed in the blueprint as the source-faithful PGVWC07
+chain.
 
 The remaining declarations in this file (gauge-transport and irreducibility
 preservation lemmas, the scalar fixed-point unitary-conjugation transport)
