@@ -98,6 +98,34 @@ The results follow~\cite{Sanz2010Quantum}.
     length~$L$ equals $\MN{D}$.
 \end{proof}
 
+\begin{lemma}[Zero-length word span]
+    \label{lem:wordspan_zero_ne_top}
+    \lean{MPSTensor.wordSpan_zero_ne_top_of_two_le}
+    \leanok
+    \uses{def:word_span}
+    If $D \ge 2$, then $S_0(A) \ne \MN{D}$.
+\end{lemma}
+
+\begin{proof}\leanok\uses{def:word_span}
+    The zero-length products consist only of the identity, so
+    $S_0(A)=\spn_{\C}\{\Id\}$ has dimension~$1$.  Since
+    $\dim \MN{D}=D^2 \ge 4$, this span cannot be all of $\MN{D}$.
+\end{proof}
+
+\begin{corollary}[$0$-block injectivity]
+    \label{cor:blk_inj_zero_dim_one}
+    \lean{MPSTensor.bondDim_eq_one_of_isNBlkInjective_zero}
+    \leanok
+    \uses{lem:wordspan_blk_inj}
+    If $D \ge 1$ and $A$ is $0$-block injective, then $D=1$.
+\end{corollary}
+
+\begin{proof}\leanok\uses{lem:wordspan_blk_inj, lem:wordspan_zero_ne_top}
+    By Lemma~\ref{lem:wordspan_blk_inj}, $0$-block injectivity gives
+    $S_0(A)=\MN{D}$.  Lemma~\ref{lem:wordspan_zero_ne_top} excludes
+    $D \ge 2$, hence the nonzero bond dimension must be~$1$.
+\end{proof}
+
 \begin{lemma}[Two-sided span from one nonzero matrix]
     \label{lem:two_sided_nonzero_matrix_span}
     \lean{Matrix.span_range_mul_nonzero_mul_eq_top}
