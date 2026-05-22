@@ -353,9 +353,9 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 
 The strongest arbitrary-input statement proved here is the blockwise PF / TP-gauge reduction below:
 after decomposing `A` into irreducible blocks, one may apply the theorem to each block once one
-separately knows that the block has a nonzero Kraus operator. This explicit side condition is
-essential because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot simply be
-discarded.
+separately knows that the block has a nonzero Kraus operator. This explicit side condition records
+the length-zero sector: an all-zero block contributes its bond dimension at length zero, even though
+it contributes nothing at every positive length.
 
 The normal-canonical-form file starts from a primitive weighted block family with positive bond
 dimensions and distinct nonzero weights. This file does **not** construct that input from an
@@ -363,8 +363,8 @@ arbitrary tensor.
 
 Remaining gap for a complete canonical-form existence theorem:
 
-* Apply the irreducible-to-TP-gauge theorem blockwise through the irreducible block decomposition
-  while handling possible zero blocks exactly.
+* Apply the irreducible-to-TP-gauge theorem blockwise through the irreducible block decomposition,
+  with the length-zero contribution of possible zero blocks kept explicit.
 * Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
   sector and equal-weight arguments needed for strict nonzero weight ordering.
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
@@ -378,8 +378,7 @@ resulting block, if one separately knows that the block has some nonzero Kraus o
 Perron--Frobenius / TP-gauge step can be applied to that block.
 
 This is the unconditional reduction from arbitrary input proved here. The nonzero side condition is
-explicit because `SameMPV₂` remembers the `N = 0` sector, so zero scalar blocks cannot be silently
-discarded. -/
+explicit because the length-zero sector records the bond dimension of an all-zero scalar block. -/
 theorem exists_irreducible_blockDecomp_with_tpGauge
     (A : MPSTensor d D) :
     ∃ r : ℕ, ∃ dim : Fin r → ℕ,
@@ -500,9 +499,8 @@ The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, 
 be zero: "there can be zero blocks." Every MPS tensor `A : MPSTensor d D` admits an irreducible
 block decomposition that is faithfully partitioned into:
 
-* a **zero block** of dimension `zeroTailDim` (accumulating all-zero irreducible blocks --
-  the Lean formalization uses "zero tail" as a bookkeeping term for the sum of zero-block
-  bond dimensions; the paper's wording is "zero blocks"), and
+* a **zero block** of dimension `zeroTailDim`, equal to the sum of the bond dimensions of the
+  all-zero irreducible blocks, and
 * a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
   least one nonzero Kraus operator, positive bond dimension, and irreducibility.
 
@@ -514,8 +512,8 @@ which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` redu
 `mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the zero block contributes only at
 length 0).
 
-This separation is **exact**: the zero block is not silently discarded, and the length-zero
-identity D = D_0 + Σ_k D_k from the paper is preserved. -/
+This separation is **exact**: the positive-length vectors see only the nonzero blocks, while the
+length-zero identity D = D_0 + Σ_k D_k from the paper is preserved. -/
 theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
@@ -530,7 +528,7 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
   obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀⟩ :=
     exists_irreducible_blockDecomp (d := d) (D := D) A
   -- Step 2: Classify blocks as nonzero or zero.
-  -- Use `set` to avoid `let ... in` scoping issues with big-operator notation.
+  -- Name the nonzero-block predicate and the corresponding finite set.
   set isNonzero : Fin r₀ → Prop := fun k => ∃ i, blocks₀ k i ≠ 0 with isNonzero_def
   set nonzeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => isNonzero k)
     with nonzeroSet_def
