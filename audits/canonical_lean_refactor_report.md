@@ -99,6 +99,11 @@ the definition site + module docstring lines.
 | `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail` | grep: def site + `NormalReduction.lean` docstring only |
 | `NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero` | grep: def site + `NormalReduction.lean` docstring + an unused intra-file comment line (cleaned up) |
 | `NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness.weight_ne_zero` | grep: def site only |
+| `Existence.lean` | `exists_blockTensor_isPrimitive` | thin `NeZero`-wrapper; grep: def site only |
+| `Existence.lean` | `exists_blockTensor_leftCanonical_isPrimitive` | thin `NeZero`-wrapper; grep: def site only |
+| `SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlat_of_word_eq` | grep: def site only after privatization of the `_of_blockwise` / `_of_groupedBlockCastAgrees` siblings |
+| `SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlatAt_of_groupedBlockCastAgrees` | grep: def site only; flagged in review of commit `e7172034` and deleted in `135fbb5f` |
+| `SectorComparison/CommonSectorTransport.lean` | `sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees` | grep: def site only |
 | `SectorComparison/CommonSectorData.lean` | `afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂` | grep: def site + an intra-file companion-comment reference (cleaned up) |
 | `SectorComparison/CommonSectorData.lean` | `afterBlocking_commonLengthCommonSectorData_of_reindexed` | grep: def site + module docstring bullet (cleaned up) |
 | `SectorComparison/StructuralData.lean` | `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂` | grep: def site + module docstring bullet (cleaned up) |
@@ -110,27 +115,31 @@ removed from `CommonSectorData.lean` line 340.
 
 ## 4. Plumbing trims applied (S5.4)
 
+The LOC numbers below were obtained with `wc -l` on the file's state
+upstream of `origin/main` and on PR HEAD (after the docstring corrections
+in commits `2ebaa2df`, `57356c18`, `12669658`, `ddcdbcd0`).
+
 | File | Before LOC | After LOC | Delta | Trim description |
 |---|---|---|---|---|
-| `NormalReduction/TPGauge.lean` | 935 | 918 | −17 | Deleted `PGVWC07PositiveLengthWitness.weight_ne_zero` (a 6-line theorem that was already a one-line `obtain ⟨a, ha_pos, h⟩ := W.weight_pos k; …`); no remaining callers. |
-| `NormalReduction/WeightNormalization.lean` | 598 | 432 | −166 | Deleted two dead theorems (`_after_rescaling_with_zeroTail`, `_projective_form_or_forall_pos_mpv_eq_zero`) plus tidied the docstring on `_or_forall_pos_mpv_eq_zero` private theorem. |
-| `Existence.lean` | 630 | 595 | −35 | After privatization, both `exists_blockTensor_isPrimitive` and `exists_blockTensor_leftCanonical_isPrimitive` had no remaining external callers (and only the latter consumed the former).  Both are thin `NeZero`-wrappers around `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`.  Deleted both. |
-| `SectorComparison/CommonSectorTransport.lean` | 679 | 642 | −37 | After privatizing the five `_of_blockwise / _of_word_eq / _of_groupedBlockCastAgrees` variants, two of them (`zeroTail_commonFlat_of_word_eq` and `sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees`) had no remaining intra-file callers.  Deleted both. |
-| `SectorComparison/CommonSectorData.lean` | 634 | 366 | −268 | Combined effect of the two S5.3 deletions in this file (the dead `WithZeroTail_of_sameMPV₂` and `commonLengthCommonSectorData_of_reindexed` theorems with their docstrings). |
-| `SectorComparison/StructuralData.lean` | 228 | 176 | −52 | S5.3 deletion of `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂`. |
-| `NormalReduction.lean` | 46 | 46 | ±0 | Module docstring rewritten (LOC unchanged): the bullet list is reorganized into a 3-bullet headline summary plus a 13-bullet "Source-faithful PGVWC07 intermediate steps" subsection (the latter restored after the PGVWC07 reorganization recorded in `pgvwc07_restoration_report.md`). |
+| `NormalReduction.lean` | 46 | 78 | +32 | Module docstring expanded after the PGVWC07 reorganization recorded in `pgvwc07_restoration_report.md`: a 3-bullet headline summary plus a 13-bullet "Source-faithful PGVWC07 intermediate steps" subsection. |
+| `NormalReduction/TPGauge.lean` | 935 | 931 | −4 | Deleted `PGVWC07PositiveLengthWitness.weight_ne_zero` (a short theorem inlinable at its single use site); docstring expanded to enumerate the source-faithful PGVWC07 chain. |
+| `NormalReduction/WeightNormalization.lean` | 598 | 451 | −147 | Deleted two dead theorems (`_after_rescaling_with_zeroTail`, `_projective_form_or_forall_pos_mpv_eq_zero`) and tightened the intro docstring to match the surviving six declarations. |
+| `Existence.lean` | 630 | 590 | −40 | Both `exists_blockTensor_isPrimitive` and `exists_blockTensor_leftCanonical_isPrimitive` had no remaining external callers (and only the latter consumed the former).  Both are thin `NeZero`-wrappers around `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor`.  Deleted both, plus the orphaned `## (4) Periodicity removal by blocking` section header. |
+| `SectorComparison/CommonSectorTransport.lean` | 679 | 624 | −55 | Privatized two intermediate-hypothesis lemmas (`zeroTail_commonFlat_of_blockwise`, `zeroTail_commonFlat_of_groupedBlockCastAgrees`); deleted three orphans (`zeroTail_commonFlat_of_word_eq`, `zeroTail_commonFlatAt_of_groupedBlockCastAgrees`, `sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees`). |
+| `SectorComparison/CommonSectorData.lean` | 634 | 366 | −268 | Combined effect of the two §3 deletions in this file (`afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂` and `afterBlocking_commonLengthCommonSectorData_of_reindexed`, both with their docstrings). |
+| `SectorComparison/StructuralData.lean` | 228 | 176 | −52 | §3 deletion of `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂`. |
 
 Aggregate canonical-form LOC delta:
 
 ```
-Baseline   (canonical-form files listed above): 4386
-After      (canonical-form files listed above): 3817
-Delta:                                          −569 LOC (−13%)
+Baseline   (canonical-form files listed above): 3750
+After      (canonical-form files listed above): 3216
+Delta:                                          −534 LOC (−14%)
 ```
 
 The single biggest reduction is in `CommonSectorData.lean` (−268 LOC),
-driven by removal of the two giant existential statements that had no
-downstream consumer.
+driven by removal of the two large existential statements that had no
+downstream caller.
 
 ## 5. Blueprint cross-edits
 
