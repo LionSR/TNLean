@@ -466,12 +466,19 @@ scalar factor are available.  These pieces have been composed into the
 arbitrary-input exact positive-length theorem, allowing the nonzero-block
 family to be empty exactly in the branch where every positive-length
 coefficient vanishes.  This is the statement promoted in the blueprint as the
-formal positive-length version of Theorem~\texttt{Th:TIcanonical}.  The
-explicit zero-block/length-zero formulation is also available: after the same
-positive global rescaling, the zero block and the normalized weighted nonzero
-blocks reproduce the MPV coefficients at every finite length, with
-\(D_0+\sum_kD_k=D\).  It is kept as the companion bookkeeping convention rather
-than as the primary existence theorem.
+formal positive-length version of Theorem~\texttt{Th:TIcanonical}.
+
+The length-zero dimension identity \(D_0+\sum_kD_k=D\) is also recorded, but
+under the spectral-radius unital normalization rather than the
+maximum-weight positive global rescaling.  It is the companion theorem
+\path|MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound|,
+which separates the zero block from the unital nonzero blocks at the level of
+the original tensor before any weight normalization is applied.  The combined
+``positive global rescaling + zero block + exact MPV equality at every finite
+length'' statement is not formalized in the present development; recovering it
+from the two surviving pieces (the spectral-radius zero-tail dimension
+identity and the maximum-normalized positive-length exact form) is the
+remaining bookkeeping step.
 
 \bibliographystyle{alpha}
 \bibliography{references}
