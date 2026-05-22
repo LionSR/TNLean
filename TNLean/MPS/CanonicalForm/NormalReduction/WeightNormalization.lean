@@ -250,7 +250,7 @@ theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
 canonical-form statement.
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This is a scope-separating wrapper around
+742--763 and proof lines 765--766.  This is a scope-separating formulation of
 the nonzero positive-length theorem above: either all positive-length MPV
 coefficients vanish, or the tensor has a nonempty normalized projective
 PGVWC07 block form.
