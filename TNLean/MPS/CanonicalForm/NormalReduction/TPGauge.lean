@@ -57,12 +57,11 @@ diagonal positive-definite dual fixed point, the scalar fixed-point conclusion,
 positive weights, positive block dimensions, and the total bond-dimension
 bound.
 
-**Scope restriction:** The source theorem also writes the weights with
-`1 ≥ λ_j > 0`, after the proof says that the spectral radius is normalized
-without loss of generality at lines 765--766.  That global normalization is not
-part of this exact positive-length witness; it is supplied later by the
-finite-family weight-normalization theorem.
-The boundary is recorded in
+This witness is the unnormalized positive-length form.  The source theorem also
+writes the weights with `1 ≥ λ_j > 0`, after the proof says that the spectral
+radius is normalized without loss of generality at lines 765--766.  That global
+normalization is supplied by the finite-family weight-normalization theorem.
+The positive-length convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   /-- Number of nonzero canonical blocks. -/
@@ -798,9 +797,9 @@ nonempty rings because the all-zero summand has zero MPV coefficient in positive
 length.
 
 The theorem keeps the mathematically relevant bond-dimension estimate
-\(\sum_k D_k\leq D\).  It deliberately states MPV equality only for positive
-lengths; at length zero the omitted zero block would contribute its bond
-dimension. -/
+\(\sum_k D_k\leq D\).  The canonical-form existence theorem is stated with this
+positive-length convention; the explicit zero-block theorem records the
+length-zero bookkeeping separately. -/
 theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
     (A : MPSTensor d D) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
@@ -843,12 +842,11 @@ lines 742--763, after omitting the explicit zero block from positive-length
 MPV coefficients.  This theorem is the corresponding structured form of
 `exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`.
 
-**Scope restriction:** The source theorem's normalization `1 ≥ λ_j > 0` is not
-included here.  The theorem records positive real weights and exact
-positive-length MPV equality; the global spectral-radius normalization
-convention from lines 765--766 is supplied later by the finite-family
-weight-normalization theorem.
-The boundary is recorded in
+This is the unnormalized positive-length witness.  The source theorem's
+normalization `1 ≥ λ_j > 0` is supplied later by the finite-family
+weight-normalization theorem, following the global spectral-radius
+normalization convention from lines 765--766.
+The positive-length convention is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_positiveLengthWitness
     (A : MPSTensor d D) :

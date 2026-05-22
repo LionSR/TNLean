@@ -1,25 +1,32 @@
 
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
-This chapter records several steps in the reduction of MPS tensors to
-block-diagonal forms. Two reduction schemes are relevant. The block-injective
-reduction aims at injective TP-normalized blocks and the canonical form
-conditions of Chapter~\ref{ch:block_perm}. The normal-canonical reduction uses
-a weighted family of irreducible TP-normalized blocks with primitive transfer
-maps and pairwise distinct nonzero weight moduli, in the sense
-of~\cite{Cirac2017MPDO_AnnPhys}.
-The checked reductions in this chapter are therefore conditional
-primitive-block results. They do not yet give the full
-translation-invariant canonical-form theorem of
-\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}, whose
-input is an arbitrary translation-invariant representation on a finite ring.
-The normalization convention is also dual to the one used in the cited theorem:
-the blocks are written in the unital orientation
+This chapter records reductions of MPS tensors to block-diagonal canonical
+forms. We use the standard convention that the physical ring has positive
+length. With this convention the all-zero summand contributes no coefficient,
+and the translation-invariant canonical form of
+\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}
+is stated as an exact positive-length theorem, after the global scalar
+normalization made in the proof at
+\cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
+The complementary statement retaining the zero block records the
+length-zero bookkeeping but is not the primary theorem statement.
+
+Two further reduction schemes are used later in the chapter. The
+block-injective reduction aims at injective TP-normalized blocks and the
+canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
+reduction uses a weighted family of irreducible TP-normalized blocks with
+primitive transfer maps and pairwise distinct nonzero weight moduli, in the
+sense of~\cite{Cirac2017MPDO_AnnPhys}. These later reductions are conditional
+primitive-block results and should not be confused with the arbitrary-input
+PGVWC07 theorem below.
+
+The PGVWC07 blocks are written in the unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
 $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$
 \cite[Theorem~Th:TIcanonical, lines~754--758]{PerezGarcia2007Matrix},
-whereas this chapter uses
-the trace-preserving, or left-canonical, orientation
+whereas some later reductions in this chapter use the trace-preserving, or
+left-canonical, orientation
 $\sum_i (A_k^i)^\dagger A_k^i=\Id$.
 Passing to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$
 exchanges the two orientations: the transfer map of $K$ is the Frobenius adjoint
@@ -33,7 +40,8 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
 
 \begin{theorem}[Translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
-    \notready
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
+    \leanok
     % Source anchors for the exact source statement:
     % Papers/quant-ph_0608197/MPSarchive.tex:742 labels Th:TIcanonical.
     % Lines 742--752 state the block decomposition; lines 753--758 state the
@@ -50,34 +58,36 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     % positive fixed point before invoking any abstract block-splitting lemma,
     % and do not replace the source proof by a later primitive-block or
     % prepared-family canonical-form theorem.
-    Let a translation-invariant MPS representation on a finite ring have bond
-    dimension $D$. Then the matrices may be decomposed as
+    Let $A$ be a translation-invariant MPS representation of bond
+    dimension $D$. There is a positive scalar $s$ and a finite family of
+    blocks $A_k$, possibly empty, such that the globally rescaled tensor
+    $s^{-1}A$ has the same MPV coefficients on every positive-length ring as
     \[
-        A^i =
-        \begin{pmatrix}
-            \lambda_1 A_1^i &0                 &0\\
-            0               &\lambda_2 A_2^i   &0\\
-            0               &0                 &\cdots
-        \end{pmatrix},
+        \bigoplus_k \lambda_k A_k^i .
     \]
-    with $1 \ge \lambda_k > 0$. For each block,
+    The weights are positive and satisfy $1\geq |\lambda_k|$; if the family is
+    nonempty, then some weight has norm $1$. For each block,
     \[
         \sum_i A_k^i(A_k^i)^\dagger = \Id,
         \qquad
         \sum_i (A_k^i)^\dagger \Lambda_k A_k^i = \Lambda_k,
     \]
-    where $\Lambda_k$ is diagonal, positive, and full-rank. Moreover $\Id$ is
-    the only fixed point of
+    where $\Lambda_k$ is diagonal, positive, and full-rank. Each block has
+    positive bond dimension. Moreover $\Id$ is the only fixed point of
     $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$, and the total bond dimension
     of the decomposition is at most $D$.
 
-    This is the source statement
-    of~\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}.
+    This is the positive-length form of
+    \cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix},
+    with the global spectral-radius normalization of lines~765--766 made
+    explicit. The zero-block convention for the empty word is recorded
+    separately in
+    Theorem~\ref{thm:pgvwc07_exact_rescaled_form_with_zero_tail}.
 \end{theorem}
 
 \begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
-    A faithful proof of Theorem~\ref{thm:pgvwc07_ti_canonical_form}
-    should follow the proof of
+    The proof path for Theorem~\ref{thm:pgvwc07_ti_canonical_form}
+    follows the proof of
     \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}
     in its given order. Lines~765--770 normalize the spectral radius and use a
     full-rank positive fixed point to obtain the unital gauge. Lines~771--783
@@ -89,10 +99,10 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     until the identity is the only fixed point of each block. Finally,
     lines~827--832 repeat the fixed-point argument for the dual map and
     diagonalize the resulting full-rank positive fixed point by a unitary gauge.
-    Thus a formal proof should reconstruct the proof from an arbitrary
-    translation-invariant representation in this order, using later
-    primitive-block or prepared-family results only after their hypotheses have
-    been obtained from the source argument.
+    Thus the formal proof reconstructs the theorem from an arbitrary
+    translation-invariant representation in this order; later primitive-block or
+    prepared-family results are used only after their hypotheses have been
+    obtained from the source argument.
 \end{remark}
 
 \begin{theorem}[Blocked CPSV canonical-form reduction]%
@@ -157,10 +167,11 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     lines~1864--1884 of~\cite{Cirac2021Matrix}.
 \end{theorem}
 
-Theorems~\ref{thm:pgvwc07_ti_canonical_form}
-and~\ref{thm:cpgsv_canonical_form_source} are source-level targets and are
-not yet formalized as stated. This chapter develops constituent steps of the
-translation-invariant and density-operator canonical-form reductions:
+Theorem~\ref{thm:pgvwc07_ti_canonical_form} is the checked positive-length
+form of the PGVWC07 translation-invariant canonical-form theorem.
+Theorem~\ref{thm:cpgsv_canonical_form_source} remains a source-level target for the
+blocked CPSV reduction and is not yet formalized as stated. This chapter also
+develops constituent steps of the density-operator canonical-form reductions:
 invariant-subspace decomposition
 (Theorem~\ref{thm:irred_decomp}), TP gauge
 (Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
@@ -169,13 +180,12 @@ structural after-blocking primitive-block decomposition are recorded in
 Chapter~\ref{ch:canonical_after_blocking}
 (Theorem~\ref{thm:zero_block_separation} and
 Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
-yet supply the source normalization $|\mu_k|\le 1$ with at least one
+yet supply the CPSV source normalization $|\mu_k|\le 1$ with at least one
 unit-modulus weight, so they should not be cited as
 Theorem~\ref{thm:cpgsv_canonical_form_source}.
 
-For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, the source statement itself
-remains \notready.  The source-ordered construction has now been composed into
-the exact positive-length formulation of
+For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, the source-ordered
+construction is the exact positive-length formulation of
 Theorem~\ref{thm:pgvwc07_exact_rescaled_form_allow_empty}: after a positive
 global rescaling of the original tensor, the normalized weighted block tensor
 has the same MPV coefficients on every nonempty ring.  The theorem permits an
@@ -185,10 +195,9 @@ the unital block condition, the scalar fixed-point conclusion, the diagonal
 positive-definite dual fixed point, and the bond-dimension bound.
 Theorem~\ref{thm:pgvwc07_exact_rescaled_form_with_zero_tail} records the
 companion explicit zero-block convention, where the zero block supplies the
-length-zero contribution \(D_0+\sum_k D_k=D\).  The remaining choice is which
-of the exact positive-length, projective MPV, and explicit zero-block
-formulations should be the formal statement cited for the literal source
-theorem.
+length-zero contribution \(D_0+\sum_k D_k=D\).  The projective MPV formulation
+records the same normalization as a proportionality of finite-ring state
+vectors, but it is not used as the primary existence theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
