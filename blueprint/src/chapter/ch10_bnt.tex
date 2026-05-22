@@ -155,32 +155,6 @@ and~\cite{Cirac2021Matrix}.
     their coefficients, multiplicities, and gauges.
 \end{definition}
 
-\begin{lemma}[Restricted norm-class collapse]
-    \label{lem:restricted_norm_class_collapse_bnt}
-    \uses{def:mpv}
-    Let $(\mu_k, A_k)_{k=1}^r$ be a weighted block family with
-    $\mu_k \neq 0$ for every $k$. Assume that whenever
-    $\|\mu_j\| = \|\mu_k\|$, the tensors $A_j$ and $A_k$ generate the
-    same MPV family. Then one can regroup the blocks into a sector
-    decomposition whose associated total tensor generates the same MPV family
-    as $\bigoplus_k \mu_k A_k$, and whose sector-weight norms are strictly
-    decreasing. This is a special-case regrouping lemma, not the full BNT
-    characterization of \cite[Section~2.3]{Cirac2016MPDO_arXiv}: the
-    hypothesis that equal-norm blocks already generate the same MPV family is
-    an assumption here, while the source BNT construction chooses a minimal family
-    of representatives for the phase-gauge equivalence classes of normal
-    blocks.
-\end{lemma}
-
-\begin{proof}
-    Order the distinct norms of the weights in decreasing order, choose one
-    representative block from each norm class, and retain the multiplicities
-    inside each class as sector copies. The equal-MPV hypothesis lets every
-    block in a class be replaced by the chosen representative, so the regrouped
-    decomposition has the same MPV family. By construction, the sector-weight
-    norms are strictly decreasing.
-\end{proof}
-
 \begin{theorem}[Cross-overlap decay from explicit BNT hypotheses]
     \label{thm:cross_overlap_zero_split}
     \lean{MPSTensor.cross_overlap_tendsto_zero_of_separated_bnt_data}
