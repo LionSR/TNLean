@@ -173,18 +173,19 @@ yet supply the source normalization $|\mu_k|\le 1$ with at least one
 unit-modulus weight, so they should not be cited as
 Theorem~\ref{thm:cpgsv_canonical_form_source}.
 
-For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, what remains is not a
-different canonical-form theorem, but the composition of the source proof from
-its arbitrary initial representation.  One must use the positive
-Perron--Frobenius fixed point of the original transfer map to normalize the
-spectral radius and obtain the weights, derive the invariant support projection
-when that fixed point is singular, split the finite-ring trace over the support
-and its orthogonal complement, iterate this dimension-decreasing decomposition
-until the identity is the only fixed point of each block, and finally apply the
-dual fixed-point argument and unitary diagonalization that produces the
-matrices $\Lambda_k$.  Only after these steps have been composed can the
-existing conditional TP-normalized and primitive-block results be used as
-corollaries of the source theorem.
+For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, the source statement itself
+remains \notready.  The source-ordered construction has now been composed into
+the exact positive-length formulation of
+Theorem~\ref{thm:pgvwc07_exact_rescaled_form_allow_empty}: after a positive
+global rescaling of the original tensor, the normalized weighted block tensor
+has the same MPV coefficients on every nonempty ring.  The theorem permits an
+empty nonzero-block family precisely when all positive-length coefficients
+vanish, and otherwise retains a unit-modulus normalized weight together with
+the unital block condition, the scalar fixed-point conclusion, the diagonal
+positive-definite dual fixed point, and the bond-dimension bound.  The remaining
+choice is whether this exact positive-length formulation, the projective MPV
+formulation, or an explicit zero-block/length-zero formulation should be the
+formal statement cited for the literal source theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -786,7 +787,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     the displayed equations for $B$.
 \end{proof}
 
-\begin{theorem}[Single irreducible-block PGVWC07 canonical-form data]%
+\begin{theorem}[Single irreducible-block PGVWC07 canonical-form theorem]%
     \label{thm:pgvwc07_irreducible_unital_dual_package}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
     \leanok
