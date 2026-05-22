@@ -209,41 +209,6 @@ This is the Appendix-A periodicity-removal step for TP irreducible blocks, route
 adjoint-transfer formulation.
 -/
 
-/-- **Periodicity removal by blocking for irreducible trace-preserving blocks.**
-
-If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
-transfer map primitive. -/
-theorem exists_blockTensor_isPrimitive
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    ∃ p : ℕ, 0 < p ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
-  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  simpa using
-    (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
-
-/-- **Trace-preserving normalization after blocking.**
-
-If `A` is trace-preserving and irreducible, then some physical blocking makes the
-blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
-theorem exists_blockTensor_leftCanonical_isPrimitive
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    ∃ p : ℕ, 0 < p ∧
-      (∑ i : Fin (blockPhysDim d p),
-          (blockTensor (d := d) (D := D) A p i)ᴴ *
-            blockTensor (d := d) (D := D) A p i = 1) ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
-  obtain ⟨p, hp, hPrim⟩ :=
-    exists_blockTensor_isPrimitive (A := A) hTP hIrr
-  refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
-
 /-- **Reduction theorem:** spectral-gap primitivity with a positive-definite fixed point implies
 normality. -/
 theorem isNormal_of_isPrimitiveMPS

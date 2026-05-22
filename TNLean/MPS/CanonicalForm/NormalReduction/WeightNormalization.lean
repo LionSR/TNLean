@@ -27,6 +27,28 @@ statement for the length-zero coefficient.  The convention is recorded in
 The projective formulation below makes that convention explicit: after the
 maximum normalization, the original tensor and the normalized weighted block
 tensor are `NonzeroProportionalMPV₂`.
+
+The source-faithful intermediate steps exposed by this file are:
+
+* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization` — the
+  scalar normalization on a nonempty witness, with explicit `s^N` factor.
+* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective`
+  — the projective formulation of the same normalization.
+* `MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv`
+  — a nonzero positive-length MPV coefficient forces the witness to have at
+  least one block.
+* `MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv`
+  — the projective normalized form under the nonzero-coefficient hypothesis.
+* `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv`
+  — the exact normalized form after a global rescaling, under the
+  nonzero-coefficient hypothesis.
+* `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero`
+  — the zero/nonzero dichotomy for the exact normalized form.
+
+These six declarations sit between the positive-length witness produced in
+`TPGauge.lean` and the final headline statement
+`exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`, and are
+exposed in the blueprint as the source-faithful PGVWC07 intermediate steps.
 -/
 
 open scoped Matrix ComplexOrder
@@ -314,11 +336,10 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
 canonical-form statement.
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This is the exact positive-length analogue
-of `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero`:
-either every positive-length MPV coefficient vanishes, or, after a positive
-global rescaling of the original tensor, the normalized PGVWC07 block tensor
-has exactly the same positive-length MPV coefficients.
+742--763 and proof lines 765--766.  Either every positive-length MPV
+coefficient vanishes, or, after a positive global rescaling of the original
+tensor, the normalized PGVWC07 block tensor has exactly the same
+positive-length MPV coefficients.
 
 This theorem keeps the zero positive-length branch explicit.  The following
 theorem combines the two branches as the arbitrary-input positive-length
@@ -429,170 +450,5 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
         hν_le, hν_unit, hdim_pos, hMPV, hbond⟩
     exact ⟨scale, r, dim, ν, blocks, hscale_pos, hdual, hscalar, hν_pos,
       hν_le, fun _ => hν_unit, hdim_pos, hMPV, hbond⟩
-
-/-- Exact normalized PGVWC07 canonical-form witness with an explicit zero-block
-summand.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This theorem combines the explicit
-zero-block decomposition with the finite-family maximum normalization of the
-nonzero weights.  After a positive global rescaling of the original tensor,
-the normalized nonzero blocks and the zero block reproduce all finite-ring MPV
-coefficients.  At length zero this is the dimension identity
-\(D_0 + \sum_k D_k = D\).
-
-The zero block contributes only at length zero.  Thus this is the explicit
-zero-block/length-zero convention complementary to the preceding exact
-positive-length theorem, which omits the zero block and states exact equality
-only at positive length. -/
-theorem exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail
-    (A : MPSTensor d D) :
-    ∃ (scale : ℝ) (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
-      (ν : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      0 < scale ∧
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
-      (∀ k, ‖ν k‖ ≤ 1) ∧
-      (0 < r → ∃ k, ‖ν k‖ = 1) ∧
-      (∀ k, 0 < dim k) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
-          mpv (zeroMPSTensor d zeroTailDim) σ +
-            mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ) ∧
-      zeroTailDim + ∑ k : Fin r, dim k = D ∧
-      ∑ k : Fin r, dim k ≤ D := by
-  classical
-  obtain ⟨zeroTailDim, r, dim, μ, blocks, hdual, hscalar, hμ_pos, _hμ_ne,
-    hdim_pos, hMPV, hBond, hBound⟩ :=
-    exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
-      (d := d) (D := D) A
-  by_cases hr : 0 < r
-  · let W : PGVWC07PositiveLengthWitness (d := d) (D := D) A :=
-      { r := r
-        dim := dim
-        weights := μ
-        blocks := blocks
-        dual_fixed := hdual
-        scalar_fixed := hscalar
-        weight_pos := hμ_pos
-        dim_pos := hdim_pos
-        sameMPV_pos := by
-          intro N hN σ
-          calc
-            mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-                mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
-            _ = 0 + mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-                rw [mpv_zeroMPSTensor]
-                simp [Nat.ne_of_gt hN]
-            _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-                simp
-        bondDim_le := hBound }
-    obtain ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV_norm⟩ :=
-      W.exists_weight_normalization hr
-    have hscale_ne : (scale : ℂ) ≠ 0 := by
-      exact_mod_cast (ne_of_gt hscale_pos)
-    refine ⟨scale, zeroTailDim, r, dim, ν, blocks, hscale_pos, hdual, hscalar,
-      hν_pos, hν_le, fun _ => hν_unit, hdim_pos, ?_, hBond, hBound⟩
-    intro N σ
-    by_cases hN : 0 < N
-    · have hpow : ((scale : ℂ) ^ N)⁻¹ * (scale : ℂ) ^ N = 1 := by
-        simp [pow_ne_zero N hscale_ne]
-      calc
-        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
-            ((scale : ℂ)⁻¹) ^ N * mpv A σ := mpv_smul ((scale : ℂ)⁻¹) A σ
-        _ = ((scale : ℂ)⁻¹) ^ N *
-              ((scale : ℂ) ^ N *
-                mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ) := by
-            rw [hMPV_norm N hN σ]
-        _ = (((scale : ℂ)⁻¹) ^ N * (scale : ℂ) ^ N) *
-              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
-            ring
-        _ = mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
-            simp [hpow]
-        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
-            rw [mpv_zeroMPSTensor]
-            simp [Nat.ne_of_gt hN]
-    · have hN0 : N = 0 := Nat.eq_zero_of_not_pos hN
-      subst N
-      have hBondC : (D : ℂ) = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := by
-        exact_mod_cast hBond.symm
-      calc
-        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
-            (D : ℂ) := mpv_zero_length (fun i => (((scale : ℂ)⁻¹) • A i)) σ
-        _ = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := hBondC
-        _ = (zeroTailDim : ℂ) + ∑ k : Fin r, (dim k : ℂ) := by
-            simp
-        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
-            simp
-            exact Finset.sum_congr rfl (fun _ _ => rfl)
-  · have hr0 : r = 0 := Nat.eq_zero_of_not_pos hr
-    subst r
-    refine ⟨1, zeroTailDim, 0, dim, μ, blocks, zero_lt_one, hdual, hscalar,
-      hμ_pos, ?_, ?_, hdim_pos, ?_, hBond, hBound⟩
-    · intro k
-      exact Fin.elim0 k
-    · intro hzero
-      exact (Nat.not_lt_zero 0 hzero).elim
-    · intro N σ
-      calc
-        mpv (fun i => (((1 : ℂ)⁻¹) • A i)) σ = mpv A σ := by simp
-        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-              mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
-
-/-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
-canonical-form statement.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-742--763 and proof lines 765--766.  This is a scope-separating formulation of
-the nonzero positive-length theorem above: either all positive-length MPV
-coefficients vanish, or the tensor has a nonempty normalized projective
-PGVWC07 block form.
-
-**Scope restriction:** This is the projective branch statement, not the primary
-exact positive-length theorem.  It records the zero positive-length branch
-explicitly; the length-zero convention is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
-theorem exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero
-    (A : MPSTensor d D) :
-    (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
-    ∃ (r : ℕ) (dim : Fin r → ℕ)
-      (ν : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      0 < r ∧
-      (∀ k,
-        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Λ.PosDef ∧
-          Λ.IsDiag ∧
-          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
-      (∀ k,
-        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          transferMap (d := d) (D := dim k) (blocks k) X = X →
-            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
-      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
-      (∀ k, ‖ν k‖ ≤ 1) ∧
-      (∃ k, ‖ν k‖ = 1) ∧
-      (∀ k, 0 < dim k) ∧
-      NonzeroProportionalMPV₂ A (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
-      ∑ k : Fin r, dim k ≤ D := by
-  classical
-  by_cases hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0
-  · exact Or.inr (exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv A hA)
-  · refine Or.inl ?_
-    intro N hN σ
-    by_contra hσ
-    exact hA ⟨N, hN, σ, hσ⟩
 
 end MPSTensor

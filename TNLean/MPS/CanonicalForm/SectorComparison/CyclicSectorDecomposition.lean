@@ -75,7 +75,13 @@ normal/BNT comparison in the non-periodic route of arXiv:1606.00608.
 The proof derives all intermediate channel-level hypotheses
 (`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`,
 peripheral spectrum structure) from `conjTranspose_kraus_setup` and
-passes them to `exists_cyclic_sector_decomp_after_blocking`. -/
+passes them to `exists_cyclic_sector_decomp_after_blocking`.
+
+Note: this weaker variant is retained as a stepping stone; the version
+actually consumed downstream is
+`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`,
+which additionally records the primitive/irreducible block properties used
+by `hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor`. -/
 theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)

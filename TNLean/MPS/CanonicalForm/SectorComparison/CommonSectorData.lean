@@ -24,10 +24,10 @@ corresponding to the CPSV allowance `∑ k, D_k ≤ D`.
 
 * `afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂` — per-block
   cyclic-sector data together with the zero-tail identity.
+* `afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂` — common
+  blocked cyclic-sector data with the zero-tail identity.
 * `afterBlocking_commonLengthCommonSectorData_of_sameMPV₂` — a two-sided
   common blocking length with common-sector families.
-* `afterBlocking_commonLengthCommonSectorData_of_reindexed` — the same data
-  after the blocked-word relabeling hypotheses used downstream.
 
 ## References
 
@@ -123,10 +123,7 @@ dimension.  The flattened sectors are trace-preserving, have primitive transfer
 maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
 unit weights.  The statement keeps the checked zero-tail equations,
 positive-length equality of the nonzero parts, and the length-zero identity at the unblocked
-nonzero-block level.  The companion theorem
-`afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂`
-adds the explicitly relabeled cyclic-sector flattening available after
-the iterated-blocking comparison theorem. -/
+nonzero-block level. -/
 theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -178,106 +175,6 @@ theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
     exact familyA.flatWeight_ne_zero x
   · intro x
     exact familyB.flatWeight_ne_zero x
-
-/-- **Relabeled common-sector data with zero-tail reblocking.**
-
-This companion to
-`afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂`
-uses the common cyclic-sector family to express the reindexed block data available
-after the iterated-blocking comparison theorem.  For each side, the cyclic
-sectors are expressed as derived common-alphabet blocks `family.commonFlatBlocks`,
-with weights `μ^family.p` and
-nonzero transported sector weights.  The theorem also gives the zero-tail
-identities after the corresponding common reblocking.
-
-The statement is deliberately explicit about the reindexing of blocked physical
-words: the relabeled block field is the block `B_k^[family.p]` after applying
-`iteratedBlockIndex`.  It does not assert that the canonical blocked family and
-the per-block reindexed family are identical as physical-word indexed tensors. -/
-theorem afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
-    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
-      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
-    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
-      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
-    ∃ (familyA : CommonBlockedCyclicSectorFamily blocksA),
-    ∃ (familyB : CommonBlockedCyclicSectorFamily blocksB),
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d familyA.p)),
-        mpv (blockTensor (d := d) (D := D₁) A familyA.p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d familyA.p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-              (fun k => (μA k) ^ familyA.p)
-              (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) familyA.p)) σ) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d familyB.p)),
-        mpv (blockTensor (d := d) (D := D₂) B familyB.p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d familyB.p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-              (fun k => (μB k) ^ familyB.p)
-              (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) familyB.p)) σ) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := familyA.commonFlatWeight μA) familyA.commonFlatBlocks) ∧
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock)
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := familyB.commonFlatWeight μB) familyB.commonFlatBlocks) ∧
-      (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
-      (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
-        (familyA.commonFlatBlocks x i)ᴴ * familyA.commonFlatBlocks x i = 1) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d familyB.p),
-        (familyB.commonFlatBlocks x i)ᴴ * familyB.commonFlatBlocks x i = 1) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
-          (familyA.commonFlatBlocks x))) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
-          (familyB.commonFlatBlocks x))) ∧
-      (∀ x, IsIrreducibleTensor (familyA.commonFlatBlocks x)) ∧
-      (∀ x, IsIrreducibleTensor (familyB.commonFlatBlocks x)) ∧
-      (∀ x, 0 < familyA.commonFlatDim x) ∧
-      (∀ x, 0 < familyB.commonFlatDim x) := by
-  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
-      zeroTailB, rB, dimB, μB, blocksB,
-      familyA, familyB, _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
-      hMPVA, hMPVB, _hPos, _hZero, _hUnitA, _hUnitB⟩ :=
-    afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
-  refine ⟨zeroTailA, rA, dimA, μA, blocksA,
-    zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, ?_, ?_, ?_, ?_, ?_, ?_,
-    ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · exact zeroTail_toTensorFromBlocks_blockPower
-      (d := d) (D := D₁) (r := rA) (z := zeroTailA) (p := familyA.p) (dim := dimA)
-      A μA blocksA familyA.p_pos hMPVA
-  · exact zeroTail_toTensorFromBlocks_blockPower
-      (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := familyB.p) (dim := dimB)
-      B μB blocksB familyB.p_pos hMPVB
-  · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
-  · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB
-  · intro x
-    exact familyA.commonFlatWeight_ne_zero μA hμA x
-  · intro x
-    exact familyB.commonFlatWeight_ne_zero μB hμB x
-  · intro x
-    exact familyA.commonFlatBlocks_tp x
-  · intro x
-    exact familyB.commonFlatBlocks_tp x
-  · intro x
-    exact familyA.commonFlatBlocks_primitive x
-  · intro x
-    exact familyB.commonFlatBlocks_primitive x
-  · intro x
-    exact familyA.commonFlatBlocks_irreducible x
-  · intro x
-    exact familyB.commonFlatBlocks_irreducible x
-  · intro x
-    exact familyA.commonFlatDim_pos x
-  · intro x
-    exact familyB.commonFlatDim_pos x
 
 set_option maxHeartbeats 800000 in
 -- The next theorem has a large dependent existential conclusion, matching the
@@ -429,171 +326,6 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   · intro x
     exact familyB.commonFlatDim_pos x
 
-set_option maxHeartbeats 900000 in
--- The nested existential conclusion records both sides and the conditional
--- common-sector equalities.
-/-- **Common-length cyclic sectors after reindexing blocked words.**
-
-This theorem records the common-length data in the form used by the later
-sector comparison.  It first chooses one blocking length for both tensors and
-records the common cyclic-sector families.  If the canonical blocked nonzero
-families agree with the explicitly reindexed blocked-word families, then the
-nonzero parts are equal to the weighted common-sector families, and the zero-tail
-equations are rewritten with those common-sector families. -/
-theorem afterBlocking_commonLengthCommonSectorData_of_reindexed
-    {d D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B) :
-    ∃ (p : ℕ), 0 < p ∧
-    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
-      (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
-    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
-      (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
-    ∃ (familyA : CommonBlockedCyclicSectorFamily blocksA),
-    ∃ (familyB : CommonBlockedCyclicSectorFamily blocksB),
-    ∃ (hFamilyA : familyA.p = p), ∃ (hFamilyB : familyB.p = p),
-      (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
-      (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
-        (familyA.commonFlatBlocks x i)ᴴ * familyA.commonFlatBlocks x i = 1) ∧
-      (∀ x, ∑ i : Fin (blockPhysDim d familyB.p),
-        (familyB.commonFlatBlocks x i)ᴴ * familyB.commonFlatBlocks x i = 1) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
-          (familyA.commonFlatBlocks x))) ∧
-      (∀ x, _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
-          (familyB.commonFlatBlocks x))) ∧
-      (∀ x, IsIrreducibleTensor (familyA.commonFlatBlocks x)) ∧
-      (∀ x, IsIrreducibleTensor (familyB.commonFlatBlocks x)) ∧
-      (∀ x, 0 < familyA.commonFlatDim x) ∧
-      (∀ x, 0 < familyB.commonFlatDim x) ∧
-      (SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p)
-          (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) familyA.p))
-        (toTensorFromBlocks (d := blockPhysDim d familyA.p)
-          (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock) →
-      SameMPV₂
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p)
-          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) familyB.p))
-        (toTensorFromBlocks (d := blockPhysDim d familyB.p)
-          (μ := fun k : Fin rB => (μB k) ^ familyB.p) familyB.commonReindexedBlock) →
-        SameMPV₂
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := fun k : Fin rA => (μA k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) ∧
-        SameMPV₂
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := fun k : Fin rB => (μB k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p))
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) ∧
-        (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-          mpv (blockTensor (d := d) (D := D₁) A p) σ =
-            mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-              mpv (toTensorFromBlocks (d := blockPhysDim d p)
-                (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ) ∧
-        (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-          mpv (blockTensor (d := d) (D := D₂) B p) σ =
-            mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-              mpv (toTensorFromBlocks (d := blockPhysDim d p)
-                (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ) ∧
-        SameMPV₂Pos
-          (blockTensor (d := d) (D := D₁) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) ∧
-        SameMPV₂Pos
-          (blockTensor (d := d) (D := D₂) B p)
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) ∧
-        SameMPV₂Pos
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA))
-          (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) ∧
-        (∀ σ : Fin 0 → Fin (blockPhysDim d p),
-          (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ =
-          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ)) := by
-  obtain ⟨p, hp, zeroTailA, rA, dimA, μA, blocksA,
-      zeroTailB, rB, dimB, μB, blocksB, familyA, familyB,
-      hFamilyA, hFamilyB, hZA, hZB, hPos, hZero,
-      _hReindexA, _hReindexB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
-      hIrrA, hIrrB, hDimA, hDimB⟩ :=
-    afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
-  refine ⟨p, hp, zeroTailA, rA, dimA, μA, blocksA,
-    zeroTailB, rB, dimB, μB, blocksB, familyA, familyB, hFamilyA, hFamilyB,
-    hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB, ?_⟩
-  intro hRelabelA hRelabelB
-  have hFlatA := familyA.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
-    μA hFamilyA hRelabelA
-  have hFlatB := familyB.sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
-    μB hFamilyB hRelabelB
-  have hZAflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ :=
-    zeroTail_eq_of_sameMPV₂ _ _ _ hZA hFlatA
-  have hZBflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ :=
-    zeroTail_eq_of_sameMPV₂ _ _ _ hZB hFlatB
-  have hApos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) :=
-    sameMPV₂Pos_of_zeroTail_eq _ _ hZAflat
-  have hBpos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) :=
-    sameMPV₂Pos_of_zeroTail_eq _ _ hZBflat
-  have hFlatPos : SameMPV₂Pos
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA))
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) := by
-    intro N hN σ
-    calc
-      mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ =
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μA k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ :=
-            (hFlatA N σ).symm
-      _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μB k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ :=
-            hPos N hN σ
-      _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ :=
-            hFlatB N σ
-  have hZeroFlat : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ =
-      (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ := by
-    intro σ
-    calc
-      (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := familyA.commonFlatWeight μA) (familyA.commonFlatBlocksAt hFamilyA)) σ =
-          (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μA k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ := by
-            rw [(hFlatA 0 σ).symm]
-      _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μB k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := hZero σ
-      _ = (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (μ := familyB.commonFlatWeight μB) (familyB.commonFlatBlocksAt hFamilyB)) σ := by
-            rw [hFlatB 0 σ]
-  exact ⟨hFlatA, hFlatB, hZAflat, hZBflat, hApos, hBpos, hFlatPos, hZeroFlat⟩
 
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem
