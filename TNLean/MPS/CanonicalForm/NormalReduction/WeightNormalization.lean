@@ -308,6 +308,54 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
     _ = mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
         simp [hpow]
 
+/-- Arbitrary-input zero/nonzero dichotomy for the exact rescaled PGVWC07
+canonical-form statement.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763 and proof lines 765--766.  This is the exact positive-length analogue
+of `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero`:
+either every positive-length MPV coefficient vanishes, or, after a positive
+global rescaling of the original tensor, the normalized PGVWC07 block tensor
+has exactly the same positive-length MPV coefficients.
+
+**Scope restriction:** This theorem keeps the zero positive-length branch
+explicit and therefore does not remove the final length-zero convention needed
+for a source-facing unrestricted statement of PGVWC07 Theorem Th:TIcanonical. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
+    (A : MPSTensor d D) :
+    (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      0 < r ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  by_cases hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0
+  · exact Or.inr
+      (exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv A hA)
+  · refine Or.inl ?_
+    intro N hN σ
+    by_contra hσ
+    exact hA ⟨N, hN, σ, hσ⟩
+
 /-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
 canonical-form statement.
 

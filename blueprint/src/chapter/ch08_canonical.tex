@@ -1157,6 +1157,23 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     cancel at every positive length.
 \end{proof}
 
+\begin{theorem}[Zero/nonzero dichotomy for exact rescaled PGVWC07 form]%
+    \label{thm:pgvwc07_exact_rescaled_form_zero_nonzero_dichotomy}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
+    \leanok
+    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    For every MPS tensor \(A\), either every positive-length MPV coefficient of
+    \(A\) is zero, or the exact rescaled normalized PGVWC07 form of
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form} exists.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    If some positive-length coefficient is nonzero, apply
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}.  Otherwise,
+    every positive-length coefficient is zero.
+\end{proof}
+
 \begin{theorem}[Zero/nonzero dichotomy for projective PGVWC07 form]%
     \label{thm:pgvwc07_projective_form_zero_nonzero_dichotomy}
     \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero}
