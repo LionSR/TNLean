@@ -161,8 +161,8 @@ def ofSALZCLAndCommutingForm
   commutingForm := hCommuting
   zcl := hZCL
 
-/-- The issue-#782 commuting-form data together with MPO ZCL yield the
-GSNNCH-with-ZCL branch of Theorem 4.9. -/
+/-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL branch of
+Theorem 4.9. -/
 theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
   (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨data.commutingForm, data.zcl⟩
 
@@ -204,8 +204,9 @@ From the explicit simple-MPDO hypotheses one simultaneously recovers:
 * the blocked fusion-isometry witness at size `2`, and
 * the transfer-map fusion formulation of MPDO RFP.
 
-Relative to the current repository state, this is the final construction layer
-on top of issues #781 and #782. -/
+Relative to the current formalization, this is the construction layer after the
+local simple-MPDO structure, commuting form, and zero-correlation-length
+hypotheses have been supplied explicitly. -/
 theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
     (data : SimpleMPDOBlockedRFPData K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧

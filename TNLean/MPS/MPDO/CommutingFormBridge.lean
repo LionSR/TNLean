@@ -102,9 +102,9 @@ Concretely, this structure stores the single translation-invariant bond extracte
 from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate
-commuting-form witness at each length. The future issue-#833 extraction theorem
-should construct this data from `EtaStructure` and the rank-one factorization
-of the local transfer matrix. -/
+commuting-form witness at each length. The remaining extraction theorem should
+construct this data from `EtaStructure` and the rank-one factorization of the
+local transfer matrix. -/
 structure EtaLocalStructureData (M : MPOTensor d D) where
   /-- The chain-independent nearest-neighbor bond extracted from the local
   `η_{k,h}` operators. -/
