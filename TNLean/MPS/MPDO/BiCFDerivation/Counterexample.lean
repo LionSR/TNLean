@@ -92,9 +92,10 @@ theorem duplicateScalarBlocks_not_linearIndependent_wordEntryFamily (L : ℕ) :
     simpa [x0, x1] using congrArg Sigma.fst hx
   exact Fin.zero_ne_one h01
 
-/-- Concrete obstruction to the Issue-#822 target on the current hypotheses:
-blockwise injectivity, left-canonicality, and nonzero weights do not by
-themselves imply a finite-length `wordEntryFamily` witness. -/
+/-- Concrete obstruction to deriving biCF separation from the remaining
+horizontal-canonical-form hypotheses: blockwise injectivity, left-canonicality,
+and nonzero weights do not by themselves imply a finite-length
+`wordEntryFamily` witness. -/
 theorem duplicateScalarBlocks_not_exists_linearIndependent_wordEntryFamily :
     ¬ ∃ L, LinearIndependent ℂ (wordEntryFamily duplicateScalarBlocks L) := by
   rintro ⟨L, hL⟩
