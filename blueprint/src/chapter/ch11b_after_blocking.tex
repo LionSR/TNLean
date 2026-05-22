@@ -665,18 +665,20 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         V^{(N)}\!\bigl(\textstyle\bigoplus_x
         \widetilde\mu_x C_x\bigr)_\tau.
     \]
-    The formalization records this conclusion internally under three equivalent
-    hypothesis forms (blockwise comparison, blocked-word equality, and
-    coordinate-grouping cast equality); the externally consumed form is
-    Theorem~\ref{thm:zero_tail_common_flat_of_reindexed}, whose hypothesis is
-    the blocked-tensor same-MPV relation (Definition~\ref{def:same_mpv2})
-    provided by Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}.
+    The conclusion above is proved under any of three equivalent hypothesis
+    forms — blockwise comparison, blocked-word equality, and coordinate-grouping
+    cast equality — and the same conclusion under the compact same-MPV
+    hypothesis is recorded as Theorem~\ref{thm:zero_tail_common_flat_of_reindexed}
+    below, whose hypothesis is the blocked-tensor same-MPV relation
+    (Definition~\ref{def:same_mpv2}) provided by
+    Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}.
 \end{theorem}
 
 % Proof intentionally not marked \leanok here: the three equivalent
-% Lean-internal hypothesis forms are file-local (private) and the externally
-% consumed form is the next theorem, thm:zero_tail_common_flat_of_reindexed,
-% which carries the \lean{...} tag and the \leanok status.
+% hypothesis forms above are kept as file-local auxiliary lemmas, while the
+% same conclusion under the compact same-MPV hypothesis (the next theorem,
+% thm:zero_tail_common_flat_of_reindexed) carries the \lean{...} tag and the
+% \leanok status.
 \begin{proof}
     \uses{thm:zero_tail_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_blocked_word_comparison,
