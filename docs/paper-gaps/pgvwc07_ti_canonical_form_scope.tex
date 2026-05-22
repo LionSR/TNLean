@@ -320,6 +320,24 @@ The earlier existence path now has the following formal pieces.
           tensor determine the same nonzero projective finite-ring state family
           whenever the witness has at least one block.
 
+    \item
+          \path|MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv|
+          proves that a positive-length witness is nonempty whenever the
+          original tensor has at least one nonzero positive-length MPV
+          coefficient.  If the block family were empty, the block-diagonal MPV
+          expansion would be an empty sum at every positive length, contradicting
+          the witness equality with the chosen nonzero coefficient.
+
+    \item
+          \path|MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv|
+          composes the arbitrary-input witness theorem with the preceding
+          nonemptiness lemma and the projective weight-normalization theorem.
+          Under the explicit nonzero positive-length MPV hypothesis, it gives
+          nonempty normalized PGVWC07 block data with \(|\nu_k|\leq 1\),
+          equality for one block, unital blocks, scalar fixed-point endpoints,
+          diagonal positive-definite dual fixed points, the nonzero projective
+          MPV relation, and the bound \(\sum_k D_k\leq D\).
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
@@ -401,11 +419,13 @@ those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
 At the current frontier, the block construction, nonempty-ring exact-MPV
 witness, finite-family weight normalization, and projective interpretation of
-the global scalar factor are available for nonempty witnesses.  The remaining
-formal work is to decide whether the final source-facing theorem should be
-stated in exact positive-length coefficients, in nonzero projective MPV
-families, or with an explicit zero-block/length-zero convention, and then to
-promote the corresponding statement as the theorem cited against
+the global scalar factor are available.  For tensors with at least one nonzero
+positive-length MPV coefficient, these pieces have been composed into a
+nonempty normalized projective PGVWC07 form.  The remaining formal work is to
+decide whether the unrestricted source-facing theorem should be stated in exact
+positive-length coefficients, in nonzero projective MPV families with a
+nonzero-state hypothesis, or with an explicit zero-block/length-zero convention,
+and then to promote the corresponding statement as the theorem cited against
 Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
