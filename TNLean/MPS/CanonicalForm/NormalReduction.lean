@@ -30,11 +30,10 @@ The imported modules expose the following public declarations:
   finite-direct-sum input.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — TP-gauge
   normalization for arbitrary input, keeping the explicit zero-block summand.
-  This is the canonical-form input statement consumed by
   `SectorComparison/CommonSectorData.lean` and
-  `SectorComparison/TPPrimitiveReduction.lean`, supplying the trace-preserving
-  irreducible block decomposition used in Chapter 12 of the blueprint
-  (`ch11b_after_blocking.tex`).
+  `SectorComparison/TPPrimitiveReduction.lean` build on this theorem to
+  obtain the trace-preserving irreducible block decomposition used in
+  Chapter 12 of the blueprint (`ch11b_after_blocking.tex`).
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp` — reduction
   from a primitive blocked decomposition to blocked normal canonical-form data.
 
@@ -42,11 +41,10 @@ The imported modules expose the following public declarations:
 
 The following declarations record the intermediate construction steps of
 [PGVWC07, Theorem Th:TIcanonical] (Pérez-García, Verstraete, Wolf, Cirac, 2007).
-They are not consumed by the canonical-form reduction used in the proof of the
+They are not used by the canonical-form reduction in the proof of the
 Fundamental Theorem (which goes through
-`exists_tp_gauge_from_arbitrary_with_zeroTail` and the
-after-blocking statements), but record the source proof structure for
-completeness.
+`exists_tp_gauge_from_arbitrary_with_zeroTail` and the after-blocking
+statements), but record the source proof structure for completeness.
 
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — single
   irreducible-block unital and dual-diagonal form.

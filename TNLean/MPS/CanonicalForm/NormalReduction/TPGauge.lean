@@ -23,9 +23,9 @@ Its public outputs are:
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the arbitrary-input
-  TP-gauge normalization, keeping the explicit zero-block summand.  This is the
-  TP-gauge result consumed by `SectorComparison/` to supply the trace-preserving
-  block decomposition used in Chapter 12 of the blueprint
+  TP-gauge normalization, keeping the explicit zero-block summand.  Files
+  under `SectorComparison/` build on this result to obtain the
+  trace-preserving block decomposition used in Chapter 12 of the blueprint
   (`ch11b_after_blocking.tex`).
 * The source-faithful PGVWC07 unital and dual-diagonal chain:
   `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` (single
