@@ -3,6 +3,19 @@
 Scope: blueprint chapters `ch08_canonical.tex`, `ch09_block_perm.tex`,
 `ch11b_after_blocking.tex` and their Lean files. No files modified.
 
+> **Post-audit decision.** After review, the recommendation in §5.1.2
+> below — to demote the 11 INTERMEDIATE PLUMBING PGVWC07 entries from
+> the blueprint — was *partially* reversed: the 13 intermediate entries
+> are restored as a dedicated reader-visible section
+> `sec:pgvwc07_intermediates` because they record the source proof
+> order of \cite[Th:TIcanonical]{PerezGarcia2007Matrix} and serve as
+> mathematical waypoints. Only the LEGACY DEAD BRANCH entries (no
+> consumer at all) stay deleted. See
+> `audits/pgvwc07_restoration_report.md` for the restoration log.
+> The summary and §5 recommendations below reflect the original audit
+> classification; §2 (the per-declaration classification table) and
+> §3–§4 remain accurate.
+
 ---
 
 ## 1. Summary (~10 lines)
@@ -298,6 +311,18 @@ verifiable.
      well-named internal lemma).
    * Re-state the closure as a single sentence in the proof sketch of
      `thm:pgvwc07_ti_canonical_form`.
+
+   > **Status update (post-audit).** After review, the INTERMEDIATE
+   > PLUMBING entries were restored as a dedicated blueprint section
+   > `sec:pgvwc07_intermediates` because they record the source proof
+   > order of \cite[Th:TIcanonical]{PerezGarcia2007Matrix} and are
+   > worth keeping as reader-visible mathematical waypoints. See
+   > `audits/pgvwc07_restoration_report.md` for the restoration log.
+   > The LEGACY DEAD BRANCH entries below (`_with_zero_tail`,
+   > `_projective_form_zero_nonzero_dichotomy`,
+   > `_weight_ne_zero`, and the duplicate
+   > `_exact_rescaled_form_allow_empty`) stay deleted.
+
    Specifically, drop from the blueprint:
    ```
    thm:pgvwc07_irreducible_unital_dual_package

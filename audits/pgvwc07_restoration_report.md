@@ -23,10 +23,10 @@ This report records a partial reversal of Step 5.1 (blueprint trim) and Step 5.2
 PGVWC07 entries listed in `audits/canonical_audit.md` §2 as INTERMEDIATE
 PLUMBING — recording the source proof structure of
 \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix} — have been restored to
-the blueprint, and their corresponding Lean declarations have been
-un-privatized. The four LEGACY DEAD BRANCH entries identified in the audit
-remain deleted from the blueprint, and the Lean code for those was already
-removed in Step 5.2 and stays removed.
+the blueprint (PR #1992), and their corresponding Lean declarations are
+un-privatized in companion PR #1993. The four LEGACY DEAD BRANCH entries
+identified in the audit remain deleted from the blueprint, and the Lean code
+for those is deleted in PR #1993.
 
 ## (a) Restored blueprint entries
 
@@ -94,9 +94,11 @@ The four LEGACY DEAD BRANCH labels classified in
 * `thm:pgvwc07_exact_rescaled_form_allow_empty` (duplicate of the headline
   `thm:pgvwc07_ti_canonical_form` — same Lean tag)
 * `thm:pgvwc07_exact_rescaled_form_with_zero_tail` (Lean decl deleted in
-  Step 5.2)
-* `thm:pgvwc07_projective_form_zero_nonzero_dichotomy` (Lean decl deleted)
-* `lem:pgvwc07_positive_length_witness_weight_ne_zero` (Lean decl deleted)
+  companion PR #1993)
+* `thm:pgvwc07_projective_form_zero_nonzero_dichotomy` (Lean decl deleted in
+  companion PR #1993)
+* `lem:pgvwc07_positive_length_witness_weight_ne_zero` (Lean decl deleted in
+  companion PR #1993)
 
 ## (b) `private` keywords removed
 

@@ -673,7 +673,11 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     provided by Theorem~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}.
 \end{theorem}
 
-\begin{proof}\leanok
+% Proof intentionally not marked \leanok here: the three equivalent
+% Lean-internal hypothesis forms are file-local (private) and the externally
+% consumed form is the next theorem, thm:zero_tail_common_flat_of_reindexed,
+% which carries the \lean{...} tag and the \leanok status.
+\begin{proof}
     \uses{thm:zero_tail_to_tensor_from_blocks_block_power,
         thm:common_blocked_cyclic_sector_blocked_word_comparison,
         def:same_mpv2_pos}
