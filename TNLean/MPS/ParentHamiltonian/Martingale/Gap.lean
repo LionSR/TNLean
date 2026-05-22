@@ -32,7 +32,6 @@ variable {d D : ℕ}
 -- Maintainer note: the proof of `parentHamiltonianES_gap_bound_of_friedrichs` reduces to
 -- a Friedrichs-angle estimate for pairs of overlapping cyclic-window projectors with the
 -- coefficient required by the finite-overlap row reduction in `Martingale.Reduction`.
--- Tracked by issues #952 and #460 (#190).
 /-- Friedrichs-angle and row-sum estimate for the MPS parent Hamiltonian.
 
 This is the remaining MPS-specific martingale estimate: it should produce a
@@ -53,7 +52,6 @@ theorem parentHamiltonianES_gap_bound_of_friedrichs
   -- estimate required by `parentHamiltonianES_gap_bound_of_cyclic_window_friedrichs`.
   -- Local projection structure, row cardinality, non-overlap positivity, kernel
   -- identification, and the spectral-theorem conversion are already formalized above.
-  -- Proof obligation tracked by #952 and #460 (#190).
   sorry
 
 /--

@@ -12,8 +12,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 **Root-only.** This module is currently not imported downstream — it
 formalizes the martingale-method infrastructure for the MPS
 parent-Hamiltonian spectral gap. The Friedrichs-angle estimate needed
-to close `parentHamiltonian_gapped` is tracked by issues #952 and #460
-(#190). See issue #1512 for the root-only audit.
+to close `parentHamiltonian_gapped` is the remaining analytic step; the
+root module is kept out of downstream imports until that estimate is proved.
 
 This file collects the three proof-complete infrastructure submodules:
 
