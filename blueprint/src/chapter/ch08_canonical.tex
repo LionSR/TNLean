@@ -1045,6 +1045,37 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left}.
 \end{proof}
 
+\begin{theorem}[Projective form of PGVWC07 weight normalization]%
+    \label{thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        def:nonzero_proportional_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Let a positive-length PGVWC07 canonical-form witness have at least one
+    block.  After dividing the positive real weights by their largest value,
+    the normalized weights $\nu_k$ are positive real numbers, satisfy
+    $|\nu_k|\leq 1$ for all $k$, and satisfy $|\nu_{k_0}|=1$ for some block
+    $k_0$.  Moreover the original tensor and the normalized
+    weighted block tensor generate nonzero proportional MPV families:
+    for every length $N$ there is a nonzero scalar $c_N$ such that
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        c_N\,
+        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness_weight_normalization,
+        lem:mpv_zero_length}
+    For $N>0$, take $c_N=s^N$, which is nonzero because $s>0$.  For
+    $N=0$, use the length-zero MPV coefficient and the positive total
+    dimension of the nonzero blocks to choose the nonzero scalar relating the
+    two traces.
+\end{proof}
+
 \begin{theorem}[Existence of the positive-length PGVWC07 witness]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}

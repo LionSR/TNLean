@@ -309,6 +309,17 @@ The earlier existence path now has the following formal pieces.
           records the resulting global factor \(s^N\) in length-\(N\) MPV
           coefficients.
 
+    \item
+          \path|MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective|
+          turns the preceding scalar-factor identity into the existing
+          projective MPV relation \leanid{NonzeroProportionalMPV₂}.
+          For positive lengths the proportionality scalar is \(s^N\), while at
+          length zero the scalar is the ratio between the original bond
+          dimension and the positive total dimension of the nonzero normalized
+          blocks.  Thus the maximum-normalized block tensor and the original
+          tensor determine the same nonzero projective finite-ring state family
+          whenever the witness has at least one block.
+
     \item \path|MPSTensor.exists_irreducible_blockDecomp| formalizes the
           recursive invariant-projection splitting used in the proof of
           Theorem~\texttt{Th:TIcanonical}, lines 765--833. It starts from an
@@ -348,12 +359,12 @@ theorem. The blueprint now records the source theorem as a separate not-ready
 statement, and the checked reductions are marked as partial or scoped results.
 After the positive-length witness theorem, the finite-family part of the
 paper's convention \(1\geq \lambda_j>0\) is now formalized for a nonempty
-witness by rescaling all positive weights by their maximum.  The remaining
-source-level point is to connect this scalar normalization with the precise
-state-equivalence convention under which PGVWC07 treats the spectral-radius
-normalization in Theorem~\texttt{Th:TIcanonical}, lines 765--766, as
-``without loss of generality'': exact finite-ring coefficients acquire the
-global factor \(s^N\).
+witness by rescaling all positive weights by their maximum.  The accompanying
+projective theorem records the state-equivalence convention under which
+PGVWC07 treats the spectral-radius normalization in
+Theorem~\texttt{Th:TIcanonical}, lines 765--766, as ``without loss of
+generality'': exact finite-ring coefficients acquire the global factor \(s^N\),
+and this is precisely a nonzero proportionality of MPV state vectors.
 
 \section{Formal boundary}
 
@@ -389,11 +400,13 @@ from an already prepared primitive or trace-preserving block family, because
 those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
 At the current frontier, the block construction, nonempty-ring exact-MPV
-witness, and finite-family weight normalization are available.  The remaining
-formal work is to make explicit the precise state-equivalence relation under
-which the paper's spectral-radius renormalization is ``without loss of
-generality'', since the normalized exact-coefficient statement differs by the
-global factor \(s^N\).
+witness, finite-family weight normalization, and projective interpretation of
+the global scalar factor are available for nonempty witnesses.  The remaining
+formal work is to decide whether the final source-facing theorem should be
+stated in exact positive-length coefficients, in nonzero projective MPV
+families, or with an explicit zero-block/length-zero convention, and then to
+promote the corresponding statement as the theorem cited against
+Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
