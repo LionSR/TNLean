@@ -882,7 +882,6 @@ itself comes from the peripheral spectrum of the adjoint transfer map~\cite[Theo
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking}
-    \leanok
     \uses{def:blocked_tensor}
     Let $A$ be a left-canonical irreducible tensor of period $m$.
     Then the blocked tensor $A^{[m]}$ admits:
@@ -903,7 +902,16 @@ itself comes from the peripheral spectrum of the adjoint transfer map~\cite[Theo
     (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
 
-\begin{proof}\leanok
+% Faithfulness note: the Lean theorem
+% MPSTensor.exists_cyclic_sector_decomp_after_blocking takes the
+% positive-definite adjoint fixed point, the primitive m-th root of unity
+% parametrizing the peripheral eigenvalues, and the map-level irreducibility
+% as explicit hypotheses, whereas the blueprint statement above quantifies
+% only over the period. The hypotheses are derivable from the period-m
+% hypothesis and left-canonical irreducibility via the upstream Wielandt and
+% quantum Perron-Frobenius statements; the consumed packaging is the next
+% theorem, thm:cyclic_sector_decomp_irr_tp, which carries the \leanok.
+\begin{proof}
     The cyclic decomposition of the adjoint transfer map gives projections
     $(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$. Iterating the cyclic relation $m$
     times shows $(\E_{A^\dagger})^m(P_k) = P_k$, and the blocked-transfer identity
@@ -1611,16 +1619,16 @@ Chapter~\ref{ch:periodic_ft_apps}.
 
 The theorems below record the intermediate construction steps of the proof of
 \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}. They follow the source
-proof order: single-block unital and dual-diagonal data; blockwise composition;
-arbitrary-input form with the explicit zero summand; the length-zero dimension
-identity; the positive-length form; the bundled positive-length witness; weight
-normalization; the nonzero-coefficient existence theorem; and the dichotomy
-that yields the headline statement
-Theorem~\ref{thm:pgvwc07_ti_canonical_form}. They are not consumed by the
-canonical-form reduction used in the proof of the Fundamental Theorem (which
-goes through Theorem~\ref{thm:tp_gauge_arbitrary} and the after-blocking
-statements of Chapter~\ref{ch:canonical_after_blocking}); they record the
-source structure for completeness.
+proof order: single-block unital and dual-diagonal construction; blockwise
+composition; arbitrary-input form with the explicit zero summand; the
+length-zero dimension identity; the positive-length form; the bundled
+positive-length witness; weight normalization; the nonzero-coefficient
+existence theorem; and the dichotomy that yields the headline statement
+Theorem~\ref{thm:pgvwc07_ti_canonical_form}. They are not used by the
+canonical-form reduction in the proof of the Fundamental Theorem (which goes
+through Theorem~\ref{thm:tp_gauge_arbitrary} and the after-blocking statements
+of Chapter~\ref{ch:canonical_after_blocking}); they record the source
+structure for completeness.
 
 \begin{theorem}[Single irreducible-block PGVWC07 canonical-form theorem]%
     \label{thm:pgvwc07_irreducible_unital_dual_package}
