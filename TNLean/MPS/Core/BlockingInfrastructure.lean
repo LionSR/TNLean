@@ -572,8 +572,8 @@ theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
 map returns the direct block tensor at length `m*n`.
 
 This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
-explicit bijection `directToIteratedBlockIndex` (PR #1096).  It gives a clean connection
-between iterated and direct blocking without needing `groupedBlockCastAgrees`. -/
+explicit bijection `directToIteratedBlockIndex`. It gives a direct connection between iterated
+and direct blocking without needing `groupedBlockCastAgrees`. -/
 theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
     reindexPhysical (directToIteratedBlockIndex d m n)
