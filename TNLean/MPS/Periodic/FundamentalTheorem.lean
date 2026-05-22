@@ -24,10 +24,10 @@ Z-gauge theory used in its equal-case strengthening:
 
 * **Supporting lemmas for Theorem 3.8**: The equal-case strengthening produces per-block
   Z-gauge data (diagonal Z with Z^m = 1) from the Newton–Girard identity on sector weights.
-  The Z-gauge construction theorems (`zgauge_construction`, `perBlock_zgauge_of_power_eq`)
-  combine the results from PR #94.
+  The Z-gauge construction is packaged in `zgauge_construction` and
+  `perBlock_zgauge_of_power_eq`.
 
-## Status of #81 (periodic overlap dichotomy)
+## Periodic overlap dichotomy
 
 Theorem 3.4 is stated in two forms:
 
@@ -36,8 +36,8 @@ Theorem 3.4 is stated in two forms:
 * `fundamentalTheorem_periodic_proportional_of_isPeriodic` is a variant that no
   longer takes `PeriodicOverlapHypothesis` as a parameter: the
   `hetRepeatedBlocks_of_nondecaying` field is filled inside
-  `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy` (PR #573,
-  partially addressing #81). Callers only need to supply per-block `IsPeriodic` data
+  `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy`.
+  Callers only need to supply per-block `IsPeriodic` data
   plus the existence of non-decaying cross-family overlaps (`exists_nondecaying_A/B`),
   which encode the paper's proportional-MPV assumption.
 
@@ -57,7 +57,7 @@ The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 * arXiv:1708.00029 (De las Cuevas–Schuch–Pérez-García–Cirac, 2017)
 * `MPSTensor.ft_sector_bnt_proportional_sector_match` — current
   sector-decomposition matching template for the non-periodic theorem
-* Z-gauge construction lemmas in `ZGauge.lean` (PR #94)
+* Z-gauge construction lemmas in `ZGauge.lean`
 -/
 
 namespace MPSTensor
@@ -143,8 +143,8 @@ structure PeriodicOverlapHypothesis
 
 Given block families with `IsPeriodic` data on each block, the
 `hetRepeatedBlocks_of_nondecaying` field is filled by `periodicOverlapDichotomy`
-(PR #573): for any pair `A j, B k`, the dichotomy returns either overlap decay
-(contradicting non-decay) or `HetRepeatedBlocks (A j) (B k)`.
+for any pair `A j, B k`: the dichotomy returns either overlap decay (contradicting
+non-decay) or `HetRepeatedBlocks (A j) (B k)`.
 
 The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encode the
 paper's content that proportional total MPVs force non-vanishing per-block overlaps.
@@ -300,8 +300,8 @@ non-decaying cross-overlap hypotheses `exists_nondecaying_A/B`.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses `periodicOverlapDichotomy`
-(PR #573, partially addressing #81) to fill the `hetRepeatedBlocks_of_nondecaying`
-field; see `fundamentalTheorem_periodic_proportional_of_isPeriodic`. Note that
+to fill the `hetRepeatedBlocks_of_nondecaying` field; see
+`fundamentalTheorem_periodic_proportional_of_isPeriodic`. Note that
 `periodicOverlapDichotomy` still relies on several admitted sub-lemmas in the split
 `TNLean.MPS.Periodic.Overlap.*` modules, so callers going through that route inherit
 those obligations. -/
@@ -369,9 +369,8 @@ theorem fundamentalTheorem_periodic_proportional
 
 variant of `fundamentalTheorem_periodic_proportional` that no longer takes
 `PeriodicOverlapHypothesis` as a parameter; instead, the dichotomy field is filled via
-`periodicOverlapDichotomy` (PR #573). The caller only needs to supply `IsPeriodic` data
-plus the existence of non-decaying cross-family overlaps (the content of proportional
-MPVs).
+`periodicOverlapDichotomy`. The caller only needs to supply `IsPeriodic` data plus the
+existence of non-decaying cross-family overlaps (the content of proportional MPVs).
 
 This is the form intended by the paper: two families of periodic blocks whose cross
 overlaps do not all vanish must match up to bijection and per-block `HetRepeatedBlocks`
@@ -482,10 +481,10 @@ The equal-case Fundamental Theorem of MPS in irreducible form combines:
 1. **Theorem 3.4** (`fundamentalTheorem_periodic_proportional`): block matching.
 2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`): Newton–Girard + Z-gauge diagonal.
 
-**Conditional on #81**: The `PeriodicOverlapHypothesis` and per-block weight power
-equality hypotheses will be discharged once the periodic overlap dichotomy (Proposition
-3.3) and coefficient extraction theory are formalized. The Z-gauge construction
-itself is fully proved.
+**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block weight
+power equality hypotheses remain to be discharged from the periodic overlap dichotomy
+(Proposition 3.3) and the coefficient extraction theory. The Z-gauge construction itself
+is fully proved.
 -/
 
 section EqualCase
@@ -501,8 +500,8 @@ per-block `HetRepeatedBlocks` equivalence.
 Convenience reformulation of `fundamentalTheorem_periodic_proportional` that extracts block
 families from `IsIrreducibleForm`.
 
-**Conditional on #81**: The `PeriodicOverlapHypothesis` parameter will be discharged once
-the periodic overlap dichotomy (Proposition 3.3) is formalized. -/
+**Remaining source hypothesis:** The `PeriodicOverlapHypothesis` parameter remains to be
+discharged from the periodic overlap dichotomy (Proposition 3.3). -/
 theorem fundamentalTheorem_periodic_equalCase_matching
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
@@ -525,11 +524,11 @@ overlap dichotomy and per-block weight power equality, then:
    `Z_j` with `Z_j^{m_j} = 1` and `Z_j * diag(μB_{perm j}) = diag(μA_j)`.
 3. **Weight multiset equality**: `μA_j` and `μB_{perm j}` determine the same multiset.
 
-This composes Theorem 3.4 with the Z-gauge construction from PR #94.
+This composes Theorem 3.4 with the Z-gauge construction.
 
-**Conditional on #81**: The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses will be
-discharged once the periodic overlap dichotomy and coefficient extraction theory
-are formalized. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
+**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses
+remain to be discharged from the periodic overlap dichotomy and coefficient extraction
+theory. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
 proved. -/
 theorem fundamentalTheorem_periodic_equalCase
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
