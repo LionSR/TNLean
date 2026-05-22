@@ -405,9 +405,8 @@ private theorem wrapping_window_matEq {A : MPSTensor d D} [NeZero D]
   exact key
 
 /-- Block injectivity strips the wrapped tail block and yields the one-sided
-compatibility `C_τ * A j * X = Y_τ * A j`.  This is the valid local
-replacement identified by the #730 audit; issue #761 asks for the missing mirror
-comparison on top of this step. -/
+compatibility `C_τ * A j * X = Y_τ * A j`. The complementary mirror comparison
+is the remaining local step needed for the two-sided wrapped-window relation. -/
 theorem wrapping_window_compatibility_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ M : ℕ}
     (hInj : IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hM : L₀ ≤ M)
