@@ -7,7 +7,7 @@ the canonical-form variants with BNT separation, the
 cross-overlap decay theorem, and the permutation-rigidity
 arguments used in the proof of the Fundamental Theorem.
 The chapter concludes with auxiliary results on
-coefficient convergence and Newton--Girard identities.
+Newton--Girard identities.
 The main references are
 \cite{PerezGarcia2007Matrix}, \cite{Cirac2016MPDO_arXiv},
 and~\cite{Cirac2021Matrix}.
@@ -372,54 +372,6 @@ and~\cite{Cirac2021Matrix}.
     the irreducible trace-preserving overlap decay theorem would force
     gauge-phase equivalence. This contradicts the hypothesis.
 \end{proof}
-
-\section{Coefficient convergence}
-
-\begin{lemma}[Strict-dominance coefficient ratios]
-    \label{lem:strict_dominance_coefficient_ratios}
-    \notready
-    Let $(\mu_k)_k$ be a strictly ordered nonzero weight family with
-    $\mu_0$ dominant. Then the normalized powers
-    $(\mu_k/\mu_0)^N$ converge to $1$ for the dominant block and to
-    $0$ for every other block.
-\end{lemma}
-
-\begin{proof}\notready
-    The dominant ratio is $1$. For every other block, strict ordering gives
-    $|\mu_k/\mu_0| < 1$, so its powers converge to $0$.
-\end{proof}
-
-\begin{lemma}[Dominant-weight normalization]
-    \label{lem:dominant_weight_normalization}
-    \notready
-    \uses{def:block_diagonal_tensor, def:mpv}
-    Factoring the dominant weight from a block-diagonal tensor rewrites its
-    MPV as $\mu_0^N$ times the MPV of the normalized block family. Hence
-    a proportionality relation between two such tensors induces the
-    corresponding proportionality relation between their normalized block
-    families, with the scalar adjusted by the dominant-weight ratio.
-\end{lemma}
-
-\begin{proof}\notready
-    Expand the MPV of the block-diagonal tensor as the sum over blocks and
-    factor $\mu_0^N$ from each coefficient. The proportionality statement
-    follows by dividing by the nonzero dominant power.
-\end{proof}
-
-\begin{remark}[Strict-dominance regime]\notready
-    The coefficient-ratio decay auxiliary applies when one
-    modulus is strictly dominant:
-    $|\mu_0| > |\mu_k|$ for $k \ge 1$.
-    In that restricted situation the ratios $(\mu_k/\mu_0)^N$ tend to
-    zero, and the MPV of the normalized block family gives the corresponding
-    proportional comparison after factoring out the leading weight.
-    In the more general periodic setting of
-    \cite[Equation~(72a)]{Cirac2021Matrix}, the coefficient attached to block~$j$
-    can take the form $\sum_q \mu_{j,q}^N$, where the $\mu_{j,q}$ are the
-    individual weights contributed by that block.
-    The oscillatory case with $|\mu_{j,q}| = 1$
-    is treated separately in the periodic comparison theorem.
-\end{remark}
 
 \section{Newton--Girard identities}
 
