@@ -289,10 +289,8 @@ power-sum coefficient does **not** vanish in the thermodynamic limit.
 
 This is the coefficient form of that thermodynamic-limit non-vanishing
 condition, with the per-block unit-modulus witness supplied as an explicit
-theorem-level hypothesis.  A self-overlap form
-`limsup_N ⟨A^⊕|A^⊕⟩^{(N)} ∈ (0, ∞)` is the implication recorded by
-the corresponding analytic equivalence in the source-facing discussion; here
-the coefficient form is the input used in the Fundamental Theorem proof. -/
+theorem-level hypothesis.  This coefficient form is the input used in the
+Fundamental Theorem proof. -/
 lemma thermodynamic_limit_nonvanishing
     (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
     (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :

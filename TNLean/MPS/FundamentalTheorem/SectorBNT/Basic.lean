@@ -101,9 +101,9 @@ Definition 4.2 (lines 1846–1850) together with the two-layer display
 (lines 1864–1884) with **raw** `μ_{j,q}` entries and
 coefficient `∑_q μ_{j,q}^N`.
 
-Equal-modulus or spectral-level data are therefore kept outside this core
-predicate and supplied only when a theorem genuinely assumes that additional
-normalization.
+The equal-modulus layer (`HasEqualModulusWeightLayer`) is therefore kept
+outside this core predicate and assumed only by theorems that genuinely require
+it.
 -/
 structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   /-- Every basis bond dimension is positive (needed for `NeZero` typeclass
@@ -121,9 +121,9 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   basis_left_canonical : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j)
   /-- **Per-block normalized self-overlap.**  Each basis block has
   `mpvOverlap (P.basis j) (P.basis j) N → 1` as `N → ∞`.  This selects the
-  non-periodic / after-blocking BNT surface (CPSV21 line 1818; the periodic
-  generalization at CPSV21 lines 1905–1908 is deliberately not included
-  here). -/
+  non-periodic after-blocking BNT formulation (CPSV21 line 1818; the
+  periodic generalization at CPSV21 lines 1905–1908 is deliberately not
+  included here). -/
   basis_normalized_self_overlap : ∀ j : Fin P.basisCount,
     Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
