@@ -16,8 +16,8 @@ semidefinite two-site matrix `B`, together with proofs that its translated
 copies on the periodic chain pairwise commute and that their product
 reproduces `ρ` up to a positive scalar. This is the projector-limit version of
 the commuting-form definition in arXiv:1606.00608. The actual entropy-side derivation
-`SAL ⟹ HasCommutingForm` is not yet formalized here; it is isolated as the
-preceding missing theorem stated in the accompanying audit for issue #782.
+`SAL ⟹ HasCommutingForm` is not yet formalized here; this file starts from the
+commuting-form witness and proves the GSNNCH equivalence built from that data.
 
 ## Main declarations
 
