@@ -44,9 +44,9 @@ variable {d : ℕ}
 
 /-- The `P`-side copy weight transported into the flattened copy coordinates of `Q`.
 
-For a matched basis bijection `β : Fin Q.basisCount ≃ Fin P.basisCount` and
-per-block copy permutations `τ k`, this is the weight array appearing in the
-coordinate-level direct sum
+For a bijection `β : Fin Q.basisCount ≃ Fin P.basisCount` between BNT basis
+sectors and per-block copy permutations `τ k`, this is the weight array
+appearing in the coordinate-level direct sum
 `⊕_{(k,q)} P.weight (β k) (τ k q) • P.basis (β k)`.
 It is the Lean counterpart of the reindexing implicit in CPSV16 Appendix MPV
 proof, lines 1189–1192, before forming the global gauge

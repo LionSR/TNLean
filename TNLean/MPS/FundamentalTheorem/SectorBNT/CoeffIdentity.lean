@@ -27,7 +27,7 @@ Paper anchors:
 
 The argument is a direct full-basis coefficient comparison: after the BNT
 basis tensors have been matched, all remaining terms are expressed in the
-matched basis and separated by the eventual linear independence of that basis.
+same BNT basis tensor family and separated by its eventual linear independence.
 -/
 
 open scoped Matrix BigOperators

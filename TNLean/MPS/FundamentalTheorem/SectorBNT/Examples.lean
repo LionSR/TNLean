@@ -15,8 +15,8 @@ core examples have a single BNT basis sector (`basisCount = 1`):
 * **Example 1** — single sector, single copy: `weight = (1,)`.
 * **Example 2** — `C ⊕ (-C)`: single sector, two copies with raw weights
   `(1, -1)`; the coefficient is `1 + (-1)^N`, which is *not* a scalar
-  power.  This shows why the BNT surface keeps raw copy weights rather than
-  replacing a sector coefficient by one scalar power.
+  power.  This shows why `IsBNTCanonicalForm` records raw copy weights rather
+  than replacing a sector coefficient by one scalar power.
 * **Example 3** — `C ⊕ e^{iθ}C`: single sector, two copies with raw
   weights `(1, e^{iθ})`; the coefficient is `1 + e^{iNθ}`, illustrating
   equal-modulus grouping with a non-trivial phase.
