@@ -177,19 +177,6 @@ private theorem isInjective_of_dim_one_of_exists_nonzero
     rw [← hsingle]
     exact Submodule.span_mono (Set.singleton_subset_iff.mpr (Set.mem_range_self i₀))
 
-/-- Zero-length word products cannot span a matrix algebra of dimension at least two. -/
-private theorem wordSpan_zero_ne_top_of_two_le [NeZero D]
-    (A : MPSTensor d D) (hD : 2 ≤ D) :
-    wordSpan A 0 ≠ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
-  intro h
-  have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
-    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
-  rw [h, finrank_top] at h1
-  simp only [Module.finrank_matrix, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  have hfour : 2 * 2 ≤ D * D := Nat.mul_le_mul hD hD
-  omega
-
 /-- **TP + primitive + irreducible → injective after positive blocking**.
 
 The normality witness may be zero in scalar bond dimension, so the positivity
@@ -217,11 +204,10 @@ theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D
     by_contra hL_nonpos
     have hL_zero : L = 0 := Nat.eq_zero_of_not_pos hL_nonpos
     subst L
-    have hzero :
-        wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
-      (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr
-        ((isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL)
-    exact wordSpan_zero_ne_top_of_two_le A hD_ge hzero
+    have hInj0 : IsNBlkInjective A 0 :=
+      (isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL
+    have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
+    omega
 
 /-!
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
@@ -294,7 +280,10 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
       have hL0 : L = 0 := Nat.eq_zero_of_not_pos hnot
       have hzeroTop : wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
         simpa [hL0] using hTop
-      exact wordSpan_zero_ne_top_of_two_le A hD2 hzeroTop
+      have hInj0 : IsNBlkInjective A 0 :=
+        (wordSpan_eq_top_iff_isNBlkInjective A 0).mp hzeroTop
+      have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
+      omega
     refine ⟨L, hLpos, hBound, ?_⟩
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
