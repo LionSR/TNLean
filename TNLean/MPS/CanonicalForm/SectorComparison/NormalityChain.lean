@@ -204,12 +204,8 @@ theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D
     by_contra hL_nonpos
     have hL_zero : L = 0 := Nat.eq_zero_of_not_pos hL_nonpos
     subst L
-    have hzero :
-        wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
-      (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr
-        ((isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL)
     have hInj0 : IsNBlkInjective A 0 :=
-      (wordSpan_eq_top_iff_isNBlkInjective A 0).mp hzero
+      (isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL
     have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
     omega
 
