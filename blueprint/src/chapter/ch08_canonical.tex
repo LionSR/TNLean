@@ -1124,6 +1124,23 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     Apply the projective weight-normalization theorem to this nonempty witness.
 \end{proof}
 
+\begin{theorem}[Zero/nonzero dichotomy for projective PGVWC07 form]%
+    \label{thm:pgvwc07_projective_form_zero_nonzero_dichotomy}
+    \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero}
+    \leanok
+    \uses{thm:pgvwc07_nonzero_normalized_projective_form}
+    For every MPS tensor $A$, either every positive-length MPV coefficient of
+    $A$ is zero, or $A$ has the nonempty normalized projective PGVWC07 form of
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_projective_form}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_nonzero_normalized_projective_form}
+    If some positive-length coefficient is nonzero, apply
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_projective_form}.  Otherwise,
+    every positive-length coefficient is zero.
+\end{proof}
+
 \begin{theorem}[Existence of the positive-length PGVWC07 witness]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
