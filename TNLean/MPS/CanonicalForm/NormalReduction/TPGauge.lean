@@ -61,7 +61,8 @@ bound.
 `1 ≥ λ_j > 0`, after the proof says that the spectral radius is normalized
 without loss of generality at lines 765--766.  That global normalization is not
 part of this exact positive-length witness; extending the witness by
-the upper-bound normalization is the remaining source-facing statement step.
+the upper-bound normalization is the remaining step for the statement matching
+the theorem as printed.
 The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
@@ -657,9 +658,8 @@ This section composes the zero-block separation from `Existence.lean` with the
 blockwise Perron--Frobenius gauge theorems above, producing arbitrary-input
 results: from any `A : MPSTensor d D`, we obtain:
 
-* a zero-block dimension `zeroTailDim` (accumulating all-zero irreducible blocks --
-  the Lean formalization uses "zero tail" as a bookkeeping name; the source paper says
-  "there can be zero blocks"), and
+* a zero-block dimension `zeroTailDim`, equal to the total bond dimension of the
+  all-zero irreducible blocks, and
 * a weighted family of nonzero blocks in either the PGVWC07 unital orientation
   with dual-diagonal fixed points or the older TP-gauge orientation.
 
@@ -846,8 +846,9 @@ MPV coefficients.  This theorem is the corresponding structured form of
 
 **Scope restriction:** The source theorem's normalization `1 ≥ λ_j > 0` is not
 included here.  The theorem records positive real weights and exact
-positive-length MPV equality; the remaining source-facing step is to formalize
-the global spectral-radius normalization convention from lines 765--766.
+positive-length MPV equality; the remaining step for the theorem as printed is
+to formalize the global spectral-radius normalization convention from
+lines 765--766.
 The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_positiveLengthWitness
@@ -876,9 +877,8 @@ lines 201-219, with zero-block separation and the canonical-form-II gauge
 passage at lines 1058-1077 for the nonzero irreducible blocks.
 
 From any `A : MPSTensor d D`, produce:
-* a zero block of dimension `zeroTailDim` accumulating all-zero irreducible blocks
-  (the paper calls these "zero blocks"; the Lean formalization uses "zero tail" as
-  a bookkeeping name);
+* a zero block of dimension `zeroTailDim`, equal to the total bond dimension of
+  the all-zero irreducible blocks;
 * TP-gauged irreducible blocks `blocks k` with nonzero weights `μ k`.
 
 Every nonzero block satisfies:
@@ -896,8 +896,8 @@ unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
 left-canonical trace-preserving orientation after the all-zero-block separation.
 The PGVWC07 unital-orientation analogue is
 `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` above.  This
-theorem remains useful as a TP-gauge reduction but is not the source-facing
-canonical-form statement.  The boundary is recorded in
+theorem remains useful as a TP-gauge reduction, but it is not the canonical-form
+statement matching PGVWC07 Theorem Th:TIcanonical.  The boundary is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     ∃ (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
