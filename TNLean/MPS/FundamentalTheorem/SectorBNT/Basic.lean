@@ -46,13 +46,10 @@ condition on the raw sector weights `P.weight j q`.  CPSV16
 and the CPSV21 two-layer display (lines 1864–1884) use raw entries
 `μ_{j,q}` and a coefficient `∑_q μ_{j,q}^N`; they do not require
 `|μ_{j,q}|` to be constant in `q`, nor do they impose a strict order on the
-moduli of distinct BNT basis elements.  The audit memo
-`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md` collects
-the counter-examples (`C ⊕ D`, `C ⊕ (1/2)C`, `C ⊕ (-C) ⊕ (1/2)C`) that
-motivate keeping the equal-modulus layer out of the core predicate; all of
-them are admitted by the line-246 normalization fields below (every weight
-has modulus `≤ 1`, and at least one copy of one basis sector has unit
-modulus).
+moduli of distinct BNT basis elements.  The examples `C ⊕ D`,
+`C ⊕ (1/2)C`, and `C ⊕ (-C) ⊕ (1/2)C` illustrate the point: each is
+compatible with the line-246 normalization fields below, but none should force
+an equal-modulus or strict-order structure into the core predicate.
 
 An optional equal-modulus weight layer is provided separately as
 `HasEqualModulusWeightLayer` in `SectorBNT/EqualModulus.lean`.  Some
@@ -104,9 +101,9 @@ Definition 4.2 (lines 1846–1850) together with the two-layer display
 (lines 1864–1884) with **raw** `μ_{j,q}` entries and
 coefficient `∑_q μ_{j,q}^N`.
 
-The audit `audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
-records the counter-examples that motivate keeping equal-modulus/spectral
-data out of this core predicate.
+Equal-modulus or spectral-level data are therefore kept outside this core
+predicate and supplied only when a theorem genuinely assumes that additional
+normalization.
 -/
 structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   /-- Every basis bond dimension is positive (needed for `NeZero` typeclass
@@ -147,8 +144,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   weight has modulus at most one.  CPSV16 §II.C line 246: "we can always
   choose `|μ_k| ≤ 1`"; reinvoked in the body of the FT proof at line 1244
   ("the assumed normalization `|μ_{jq}| ≤ 1` … implies that `𝔼^N` converges").
-  This convention admits all counter-examples of the prior audit
-  (`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`):
+  This convention admits equal-modulus and unequal-modulus examples such as
   `C ⊕ D` (weights `(1, 1)`), `C ⊕ (-C)` (weights `(1, -1)`),
   `C ⊕ (1/2)C` (weights `(1, 1/2)`), and `C ⊕ (-C) ⊕ (1/2)C`. -/
   weight_norm_le_one : ∀ (j : Fin P.basisCount) (q : Fin (P.copies j)),
