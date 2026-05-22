@@ -11,7 +11,7 @@ import TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization
 
 This module keeps the historical import path
 `TNLean.MPS.CanonicalForm.NormalReduction` available while the development is
-split across two supporting modules.
+split across supporting modules.
 
 The supporting modules are:
 

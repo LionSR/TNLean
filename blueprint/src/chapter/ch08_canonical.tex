@@ -1009,6 +1009,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:mpv_decomposition}
     Expand the block-diagonal MPV coefficient as a finite sum over blocks and
     factor the common scalar power out of the sum.
 \end{proof}
@@ -1017,8 +1018,7 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     \label{thm:pgvwc07_positive_length_witness_weight_normalization}
     \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
     \leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    \uses{def:pgvwc07_positive_length_witness}
     Let a positive-length PGVWC07 canonical-form witness have at least one
     nonzero block.  Then its positive real weights may be divided by their
     largest value so that the new weights \(\nu_k\) are positive,
@@ -1037,6 +1037,8 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        lem:mpv_to_tensor_from_blocks_weight_mul_left}
     Choose the largest positive real weight \(s\).  Dividing every weight by
     \(s\) gives positive weights bounded above by \(1\), and a block attaining
     the maximum has normalized weight \(1\).  The MPV identity follows from
