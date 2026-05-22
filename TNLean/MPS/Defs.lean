@@ -103,14 +103,14 @@ def SameMPV₂ {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
 
 This is useful when compressions or zero-block removals change the `N = 0`
 coefficient but preserve all nonempty-chain coefficients.  The source paper
-discusses "zero blocks" (arXiv:1606.00608, Section~2.3); the Lean formalization
-refers to these as the "zero tail" for bookkeeping. -/
+discusses "zero blocks" (arXiv:1606.00608, Section~2.3): they contribute their
+bond dimension at length zero and vanish from every positive-length coefficient. -/
 def SameMPV₂Pos {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
   ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv B σ
 
 /-- Full MPV equality (all lengths, including `N = 0`) implies positive-length
 MPV equality. Used to reuse all-length theorems where only the positive-length
-data are needed, e.g. when comparing zero-tail-stripped block decompositions. -/
+data are needed, for example after removing all-zero blocks. -/
 theorem SameMPV₂.toSameMPV₂Pos {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : SameMPV₂ A B) : SameMPV₂Pos A B :=
@@ -118,7 +118,7 @@ theorem SameMPV₂.toSameMPV₂Pos {d D₁ D₂ : ℕ}
 
 /-- Positive-length MPV equality plus equality of bond dimensions gives full MPV equality.
 
-This isolates the length-zero bookkeeping: at `N = 0`, the MPV coefficient is just the
+This isolates the length-zero contribution: at `N = 0`, the MPV coefficient is just the
 bond dimension. -/
 theorem SameMPV₂Pos.toSameMPV₂_of_bondDim_eq {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
