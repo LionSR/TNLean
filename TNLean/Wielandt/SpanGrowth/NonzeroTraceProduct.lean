@@ -386,22 +386,6 @@ The key insight is that the positive-level cumulative span
 stabilization properties as the full cumulative span `T_n`, so
 `V_{D²−d'+1} = M_D(ℂ)` for `D ≥ 2`. -/
 
-/-- For `D ≥ 2`, `wordSpan A 0 ≠ ⊤`: the span of the identity alone does not
-fill `M_D(ℂ)` when `D ≥ 2`. -/
-private theorem wordSpan_zero_ne_top (A : MPSTensor d D)
-    [NeZero D] (hD : 2 ≤ D) : wordSpan A 0 ≠ ⊤ := by
-  intro h
-  -- wordSpan A 0 = ℂ ∙ 1 has finrank 1
-  have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
-    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
-  -- But wordSpan A 0 = ⊤ has finrank D² ≥ 4
-  rw [h, finrank_top] at h1
-  simp only [Module.finrank_matrix, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  -- h1 : D * D = 1, but D ≥ 2
-  have : 2 * 2 ≤ D * D := Nat.mul_le_mul hD hD
-  omega
-
 /-- For `D ≥ 2` and `IsNormal A`, the index `N` with `wordSpan A N = ⊤` is ≥ 1. -/
 private theorem isNormal_index_pos [NeZero D] (hD : 2 ≤ D)
     (A : MPSTensor d D) (hN : IsNormal A) :
@@ -412,7 +396,7 @@ private theorem isNormal_index_pos [NeZero D] (hD : 2 ≤ D)
   by_contra hN0
   push Not at hN0
   interval_cases N
-  exact wordSpan_zero_ne_top A hD hNtop
+  exact wordSpan_zero_ne_top_of_two_le A hD hNtop
 
 /-- **Lemma 1, sharp positive-length version** (arXiv:0909.5347):
 For D ≥ 2, under `IsNormal`, there exists a **positive-length** word `w` with

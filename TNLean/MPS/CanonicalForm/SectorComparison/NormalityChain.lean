@@ -177,19 +177,6 @@ private theorem isInjective_of_dim_one_of_exists_nonzero
     rw [← hsingle]
     exact Submodule.span_mono (Set.singleton_subset_iff.mpr (Set.mem_range_self i₀))
 
-/-- Zero-length word products cannot span a matrix algebra of dimension at least two. -/
-private theorem wordSpan_zero_ne_top_of_two_le [NeZero D]
-    (A : MPSTensor d D) (hD : 2 ≤ D) :
-    wordSpan A 0 ≠ (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
-  intro h
-  have h1 : Module.finrank ℂ (wordSpan A 0) = 1 := by
-    rw [wordSpan_zero, finrank_span_singleton one_ne_zero]
-  rw [h, finrank_top] at h1
-  simp only [Module.finrank_matrix, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  have hfour : 2 * 2 ≤ D * D := Nat.mul_le_mul hD hD
-  omega
-
 /-- **TP + primitive + irreducible → injective after positive blocking**.
 
 The normality witness may be zero in scalar bond dimension, so the positivity
