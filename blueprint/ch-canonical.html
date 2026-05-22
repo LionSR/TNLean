@@ -1004,25 +1004,33 @@
 <div class="main-text">
 <h1 id="ch:canonical">9 Canonical Form Reduction</h1>
 
-<p>This chapter records several steps in the reduction of MPS tensors to block-diagonal forms. Two reduction schemes are relevant. The block-injective reduction aims at injective TP-normalized blocks and the canonical form conditions of Chapter&#160;<a href="ch-block_perm.html">10</a>. The normal-canonical reduction uses a weighted family of irreducible TP-normalized blocks with primitive transfer maps and pairwise distinct nonzero weight moduli, in the sense of&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	
-	]
-</span>. The checked reductions in this chapter are therefore conditional primitive-block results. They do not yet give the full translation-invariant canonical-form theorem of <span class="cite">
+<p>This chapter records reductions of MPS tensors to block-diagonal canonical forms. We use the standard convention that the physical ring has positive length. With this convention the all-zero summand contributes no coefficient, and the translation-invariant canonical form of <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical, lines&#160;742–763
 	]
-</span>, whose input is an arbitrary translation-invariant representation on a finite ring. The normalization convention is also dual to the one used in the cited theorem: the blocks are written in the unital orientation \(\sum _i A_k^i(A_k^i)^\dagger =\mathbb {1}\) for \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \) <span class="cite">
+</span> is stated as an exact positive-length theorem, after the global scalar normalization made in the proof at <span class="cite">
+	[
+	
+	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
+	, Theorem&#160;Th:TIcanonical, lines&#160;765–766
+	]
+</span>. The complementary statement retaining the zero block records the length-zero bookkeeping but is not the primary theorem statement. </p>
+<p>Two further reduction schemes are used later in the chapter. The block-injective reduction aims at injective TP-normalized blocks and the canonical form conditions of Chapter&#160;<a href="ch-block_perm.html">10</a>. The normal-canonical reduction uses a weighted family of irreducible TP-normalized blocks with primitive transfer maps and pairwise distinct nonzero weight moduli, in the sense of&#160;<span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	
+	]
+</span>. These later reductions are conditional primitive-block results and should not be confused with the arbitrary-input PGVWC07 theorem below. </p>
+<p>The PGVWC07 blocks are written in the unital orientation \(\sum _i A_k^i(A_k^i)^\dagger =\mathbb {1}\) for \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \) <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical, lines&#160;754–758
 	]
-</span>, whereas this chapter uses the trace-preserving, or left-canonical, orientation \(\sum _i (A_k^i)^\dagger A_k^i=\mathbb {1}\). Passing to the conjugate-transposed Kraus family \(K_i := (A^i)^\dagger \) exchanges the two orientations: the transfer map of \(K\) is the Frobenius adjoint of \(\mathcal{E}_A\). The Perron–Frobenius eigenvector existence and TP-gauge construction are in Chapter&#160;<a href="ch-qpf.html">6</a>; this chapter uses them to produce left-canonical normalizations and decompositions satisfying the normal canonical form conditions. The reduction draws on&#160;<span class="cite">
+</span>, whereas some later reductions in this chapter use the trace-preserving, or left-canonical, orientation \(\sum _i (A_k^i)^\dagger A_k^i=\mathbb {1}\). Passing to the conjugate-transposed Kraus family \(K_i := (A^i)^\dagger \) exchanges the two orientations: the transfer map of \(K\) is the Frobenius adjoint of \(\mathcal{E}_A\). The Perron–Frobenius eigenvector existence and TP-gauge construction are in Chapter&#160;<a href="ch-qpf.html">6</a>; this chapter uses them to produce left-canonical normalizations and decompositions satisfying the normal canonical form conditions. The reduction draws on&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
@@ -1050,6 +1058,8 @@
     <span class="theorem_thmtitle">Translation-invariant canonical form</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -1057,43 +1067,44 @@
     
     
     
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty" class="lean_decl">MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p> Let a translation-invariant MPS representation on a finite ring have bond dimension \(D\). Then the matrices may be decomposed as </p>
+  <p>  Let \(A\) be a translation-invariant MPS representation of bond dimension \(D\). There is a positive scalar \(s\) and a finite family of blocks \(A_k\), possibly empty, such that the globally rescaled tensor \(s^{-1}A\) has the same MPV coefficients on every positive-length ring as </p>
 <div class="displaymath" id="a0000000561">
-  \[  A^i = \begin{pmatrix}  \lambda _1 A_1^i 
-
-& 0 
-
-& 0
-
-\\ 0 
-
-& \lambda _2 A_2^i 
-
-& 0
-
-\\ 0 
-
-& 0 
-
-& \cdots 
-
-\end{pmatrix},  \]
+  \[  \bigoplus _k \lambda _k A_k^i .  \]
 </div>
-<p> with \(1 \ge \lambda _k {\gt} 0\). For each block, </p>
+<p> The weights are positive and satisfy \(1\geq |\lambda _k|\); if the family is nonempty, then some weight has norm \(1\). For each block, </p>
 <div class="displaymath" id="a0000000562">
   \[  \sum _i A_k^i(A_k^i)^\dagger = \mathbb {1}, \qquad \sum _i (A_k^i)^\dagger \Lambda _k A_k^i = \Lambda _k,  \]
 </div>
-<p> where \(\Lambda _k\) is diagonal, positive, and full-rank. Moreover \(\mathbb {1}\) is the only fixed point of \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \), and the total bond dimension of the decomposition is at most \(D\). </p>
-<p>This is the source statement of&#160;<span class="cite">
+<p> where \(\Lambda _k\) is diagonal, positive, and full-rank. Each block has positive bond dimension. Moreover \(\mathbb {1}\) is the only fixed point of \(\mathcal{E}_{A_k}(X)=\sum _i A_k^iX(A_k^i)^\dagger \), and the total bond dimension of the decomposition is at most \(D\). </p>
+<p>This is the positive-length form of <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical, lines&#160;742–763
 	]
-</span>. </p>
+</span>, with the global spectral-radius normalization of lines&#160;765–766 made explicit. The zero-block convention for the empty word is recorded separately in Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_exact_rescaled_form_with_zero_tail">9.46</a>. </p>
 
   </div>
 </div>
@@ -1116,13 +1127,13 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> A faithful proof of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> should follow the proof of <span class="cite">
+  <p> The proof path for Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> follows the proof of <span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical
 	]
-</span> in its given order. Lines&#160;765–770 normalize the spectral radius and use a full-rank positive fixed point to obtain the unital gauge. Lines&#160;771–783 derive the invariant support projection from a singular positive fixed point, using the positivity contradiction in lines&#160;775–783; this projection is not a prepared hypothesis. Lines&#160;785–815 split the finite-ring trace into the supported and orthogonal summands. Lines&#160;816–826 iterate this decomposition and use a non-scalar fixed point to split further until the identity is the only fixed point of each block. Finally, lines&#160;827–832 repeat the fixed-point argument for the dual map and diagonalize the resulting full-rank positive fixed point by a unitary gauge. Thus a formal proof should reconstruct the proof from an arbitrary translation-invariant representation in this order, using later primitive-block or prepared-family results only after their hypotheses have been obtained from the source argument. </p>
+</span> in its given order. Lines&#160;765–770 normalize the spectral radius and use a full-rank positive fixed point to obtain the unital gauge. Lines&#160;771–783 derive the invariant support projection from a singular positive fixed point, using the positivity contradiction in lines&#160;775–783; this projection is not a prepared hypothesis. Lines&#160;785–815 split the finite-ring trace into the supported and orthogonal summands. Lines&#160;816–826 iterate this decomposition and use a non-scalar fixed point to split further until the identity is the only fixed point of each block. Finally, lines&#160;827–832 repeat the fixed-point argument for the dual map and diagonalize the resulting full-rank positive fixed point by a unitary gauge. Thus the formal proof reconstructs the theorem from an arbitrary translation-invariant representation in this order; later primitive-block or prepared-family results are used only after their hypotheses have been obtained from the source argument. </p>
 
   </div>
 </div>
@@ -1202,8 +1213,8 @@
 
   </div>
 </div>
-<p>Theorems&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> and&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a> are source-level targets and are not yet formalized as stated. This chapter develops constituent steps of the translation-invariant and density-operator canonical-form reductions: invariant-subspace decomposition (Theorem&#160;<a href="ch-canonical.html#thm:irred_decomp">9.16</a>), TP gauge (Section&#160;<a href="ch-canonical.html#sec:tp_gauge_arbitrary">9.8</a>), and period-removal cyclic sectors (Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>). All-zero-block separation and the structural after-blocking primitive-block decomposition are recorded in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_block_separation">12.3</a> and Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.31</a>). These checked statements do not yet supply the source normalization \(|\mu _k|\le 1\) with at least one unit-modulus weight, so they should not be cited as Theorem&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a>. </p>
-<p>For Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>, the source statement itself remains . The source-ordered construction has now been composed into the exact positive-length formulation of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_exact_rescaled_form_allow_empty">9.45</a>: after a positive global rescaling of the original tensor, the normalized weighted block tensor has the same MPV coefficients on every nonempty ring. The theorem permits an empty nonzero-block family precisely when all positive-length coefficients vanish, and otherwise retains a unit-modulus normalized weight together with the unital block condition, the scalar fixed-point conclusion, the diagonal positive-definite dual fixed point, and the bond-dimension bound. Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_exact_rescaled_form_with_zero_tail">9.46</a> records the companion explicit zero-block convention, where the zero block supplies the length-zero contribution \(D_0+\sum _k D_k=D\). The remaining choice is which of the exact positive-length, projective MPV, and explicit zero-block formulations should be the formal statement cited for the literal source theorem. </p>
+<p>Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> is the checked positive-length form of the PGVWC07 translation-invariant canonical-form theorem. Theorem&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a> remains a source-level target for the blocked CPSV reduction and is not yet formalized as stated. This chapter also develops constituent steps of the density-operator canonical-form reductions: invariant-subspace decomposition (Theorem&#160;<a href="ch-canonical.html#thm:irred_decomp">9.16</a>), TP gauge (Section&#160;<a href="ch-canonical.html#sec:tp_gauge_arbitrary">9.8</a>), and period-removal cyclic sectors (Section&#160;<a href="ch-canonical.html#sec:cyclic_sectors">9.10</a>). All-zero-block separation and the structural after-blocking primitive-block decomposition are recorded in Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_block_separation">12.3</a> and Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.31</a>). These checked statements do not yet supply the CPSV source normalization \(|\mu _k|\le 1\) with at least one unit-modulus weight, so they should not be cited as Theorem&#160;<a href="ch-canonical.html#thm:cpgsv_canonical_form_source">9.3</a>. </p>
+<p>For Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>, the source-ordered construction is the exact positive-length formulation of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_exact_rescaled_form_allow_empty">9.45</a>: after a positive global rescaling of the original tensor, the normalized weighted block tensor has the same MPV coefficients on every nonempty ring. The theorem permits an empty nonzero-block family precisely when all positive-length coefficients vanish, and otherwise retains a unit-modulus normalized weight together with the unital block condition, the scalar fixed-point conclusion, the diagonal positive-definite dual fixed point, and the bond-dimension bound. Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_exact_rescaled_form_with_zero_tail">9.46</a> records the companion explicit zero-block convention, where the zero block supplies the length-zero contribution \(D_0+\sum _k D_k=D\). The projective MPV formulation records the same normalization as a proportionality of finite-ring state vectors, but it is not used as the primary existence theorem. </p>
 <h1 id="sec:cpsv_canonical_defs">9.1 Normal tensors, canonical forms, and bases of normal tensors</h1>
 
 <p>This section records the unstrengthened definitions of <em>normal tensor</em>, <em>canonical form</em>, and <em>basis of normal tensors</em> from&#160;<span class="cite">
