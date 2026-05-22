@@ -246,6 +246,68 @@ theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
   exact ⟨W.r, W.dim, ν, W.blocks, hr, W.dual_fixed, W.scalar_fixed, hν_pos,
     hν_le, hν_unit, W.dim_pos, hMPV, W.bondDim_le⟩
 
+/-- Normalized PGVWC07 canonical-form blocks with exact positive-length MPV
+equality after the global tensor rescaling.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--766, says that the spectral radius may be normalized without loss
+of generality.  This theorem records the exact-coefficient version of that
+convention: for a tensor with a nonzero positive-length MPV coefficient, the
+finite positive weights may be divided by their maximum, and the original
+tensor may be divided by the same positive scalar.  After this global tensor
+rescaling, the normalized block tensor has exactly the same positive-length MPV
+coefficients. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv
+    (A : MPSTensor d D)
+    (hA : ∃ (N : ℕ), 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
+    ∃ (scale : ℝ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      0 < r ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos
+        (fun i => (((scale : ℂ)⁻¹) • A i))
+        (toTensorFromBlocks (d := d) (μ := ν) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨W⟩ := exists_pgvwc07_positiveLengthWitness (d := d) (D := D) A
+  have hr : 0 < W.r := W.block_count_pos_of_exists_ne_zero_mpv hA
+  obtain ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV⟩ :=
+    W.exists_weight_normalization hr
+  have hscale_ne : (scale : ℂ) ≠ 0 := by
+    exact_mod_cast (ne_of_gt hscale_pos)
+  refine ⟨scale, W.r, W.dim, ν, W.blocks, hscale_pos, hr, W.dual_fixed,
+    W.scalar_fixed, hν_pos, hν_le, hν_unit, W.dim_pos, ?_, W.bondDim_le⟩
+  intro N hN σ
+  have hpow : ((scale : ℂ) ^ N)⁻¹ * (scale : ℂ) ^ N = 1 := by
+    simp [pow_ne_zero N hscale_ne]
+  calc
+    mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ
+        = ((scale : ℂ)⁻¹) ^ N * mpv A σ := mpv_smul ((scale : ℂ)⁻¹) A σ
+    _ = ((scale : ℂ)⁻¹) ^ N *
+          ((scale : ℂ) ^ N *
+            mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ) := by
+        rw [hMPV N hN σ]
+    _ = (((scale : ℂ)⁻¹) ^ N * (scale : ℂ) ^ N) *
+          mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+        ring
+    _ = mpv (toTensorFromBlocks (d := d) (μ := ν) W.blocks) σ := by
+        simp [hpow]
+
 /-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
 canonical-form statement.
 

@@ -1124,6 +1124,37 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     Apply the projective weight-normalization theorem to this nonempty witness.
 \end{proof}
 
+\begin{theorem}[Exact normalized PGVWC07 form after global rescaling]%
+    \label{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Suppose that some positive-length MPV coefficient of an MPS tensor \(A\) is
+    nonzero.  Then there is a positive scalar \(s\) and a nonempty finite family
+    of PGVWC07 blocks \(C_k\) with positive normalized weights \(\nu_k\)
+    satisfying \(|\nu_k|\leq 1\) for all \(k\) and
+    \(|\nu_{k_0}|=1\) for some block \(k_0\).  Each block is in the unital
+    orientation, has only scalar fixed points for its transfer map, and has a
+    diagonal positive-definite fixed point for the dual transfer map.  Moreover
+    the globally rescaled tensor \(s^{-1}A\) and the normalized weighted block
+    tensor have the same positive-length MPV coefficients, and the block
+    dimensions satisfy \(\sum_k D_k\leq D\).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Start from the positive-length witness and use the nonzero coefficient to
+    make the block family nonempty.  Divide the positive weights by their
+    maximum.  The exact coefficient identity for \(A\) contains the global
+    factor \(s^N\) at length \(N\); applying the scalar rescaling \(s^{-1}\) to
+    every matrix of \(A\) contributes the factor \(s^{-N}\), so the two factors
+    cancel at every positive length.
+\end{proof}
+
 \begin{theorem}[Zero/nonzero dichotomy for projective PGVWC07 form]%
     \label{thm:pgvwc07_projective_form_zero_nonzero_dichotomy}
     \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero}
