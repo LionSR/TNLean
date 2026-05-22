@@ -1351,6 +1351,22 @@ matching covers the whole BNT basis.
     phases gives the eventual coefficient identities.
 \end{proof}
 
+\begin{definition}[Copy-weight matching for matched BNT sectors]%
+    \label{def:sector_bnt_copy_weight_matching}
+    \lean{MPSTensor.SectorBNTCopyWeightMatching}
+    \leanok
+    Let the sectors of two decompositions $P$ and $Q$ be matched by
+    $\beta:J(Q)\simeq J(P)$, and let $\zeta_k$ be the phase attached to
+    sector $k$. A copy-weight matching consists of copy permutations
+    $\tau_k$ and the following identities: for all sectors $k$ and copies $q$,
+    \[
+        \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
+    \]
+    This is the copy-level conclusion supplied by the equal-MPV coefficient comparison in
+    \cite[Appendix MPV proof, line~1188]{Cirac2017MPDO_AnnPhys}. For the
+    proportional theorem it remains the separate coefficient-comparison input.
+\end{definition}
+
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
@@ -1389,6 +1405,33 @@ matching covers the whole BNT basis.
     Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} to the flattened
     family assembles these block conjugacies into the displayed direct-sum
     gauge.
+\end{proof}
+
+\begin{theorem}[Global gauge from a copy-weight matching]%
+    \label{thm:sector_bnt_global_gauge_of_copy_weight_matching}
+    \lean{MPSTensor.sector_bnt_global_gauge_of_copy_weight_matching}
+    \leanok
+    \uses{def:sector_bnt_copy_weight_matching,
+        thm:sector_bnt_global_gauge_of_matched_weights}
+    Suppose that the sectors of $P$ and $Q$ are matched, with
+    bond-dimension equalities, nonzero phases, and block gauges satisfying
+    \[
+        Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}.
+    \]
+    If the same phases also give a copy-weight matching, then the flattened
+    $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
+    direct-sum gauge
+    \[
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+    This is only a reformulation of
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The copy-weight matching supplies the copy permutations and the weight
+    identities. Apply
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
 \end{proof}
 
 \begin{theorem}[Conditional proportional global gauge from copy weights]%
@@ -1436,6 +1479,33 @@ matching covers the whole BNT basis.
     unit-modulus conclusion gives nonzero phases. With the displayed
     copy-weight identities as input, apply
     Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+\end{proof}
+
+\begin{theorem}[Conditional proportional global gauge from a copy-weight matching]%
+    \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    \leanok
+    \uses{def:sector_bnt_copy_weight_matching,
+        thm:sector_bnt_proportional_sector_match_witnesses,
+        thm:sector_bnt_global_gauge_of_copy_weight_matching}
+    Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
+    eventually nonzero proportional MPV families. Assume that every sector of
+    $P$ and every sector of $Q$ has at least one copy weight of modulus $1$.
+    Then the proportional sector-matching theorem gives $\beta$, the
+    bond-dimension equalities, the unit phases $\zeta_k$, and the block gauges
+    $X_k$. If the remaining proportional coefficient comparison supplies a
+    copy-weight matching for these same phases, then the flattened
+    $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
+    direct-sum gauge
+    \[
+        X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the proportional sector-matching theorem. The unit-modulus phases
+    are nonzero, so the global-gauge theorem applies to any
+    copy-weight matching for the resulting phases.
 \end{proof}
 
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
