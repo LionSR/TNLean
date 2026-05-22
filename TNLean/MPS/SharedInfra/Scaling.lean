@@ -130,4 +130,17 @@ theorem mpv_toTensorFromBlocks_normalize {r : ℕ} {dim : Fin r → ℕ}
   rw [mpv_smul, smul_eq_mul, smul_eq_mul, ← mul_assoc, ← mul_pow,
     div_mul_cancel₀ (μ k) hne]
 
+/-- Multiplying every block weight by the same scalar multiplies length-`N`
+MPV coefficients by `c ^ N`. -/
+theorem mpv_toTensorFromBlocks_weight_mul_left {r : ℕ} {dim : Fin r → ℕ}
+    (c : ℂ) (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (toTensorFromBlocks (d := d) (μ := fun k => c * μ k) A) σ =
+      c ^ N * mpv (toTensorFromBlocks (d := d) (μ := μ) A) σ := by
+  rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  simp [mul_pow, smul_eq_mul, mul_assoc]
+
 end MPSTensor

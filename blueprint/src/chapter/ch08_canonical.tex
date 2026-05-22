@@ -1000,6 +1000,49 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     Each weight is the complex embedding of a strictly positive real number.
 \end{proof}
 
+\begin{lemma}[Common scalar rescaling of block weights]%
+    \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
+    \leanok
+    Multiplying every block weight in a block-diagonal MPS tensor by the same
+    scalar \(c\) multiplies every length-\(N\) MPV coefficient by \(c^N\).
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the block-diagonal MPV coefficient as a finite sum over blocks and
+    factor the common scalar power out of the sum.
+\end{proof}
+
+\begin{theorem}[Weight normalization for a nonempty PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness_weight_normalization}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    Let a positive-length PGVWC07 canonical-form witness have at least one
+    nonzero block.  Then its positive real weights may be divided by their
+    largest value so that the new weights \(\nu_k\) are positive,
+    \(|\nu_k|\leq 1\) for all \(k\), and \(|\nu_{k_0}|=1\) for at least one
+    block \(k_0\).  If the original weights are \(\mu_k=s\nu_k\) with
+    \(s>0\), then for every chain length \(N>0\),
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        s^N
+        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
+    \]
+    This is the formal scalar normalization corresponding to
+    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix};
+    the displayed factor records the global length-dependent rescaling.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the largest positive real weight \(s\).  Dividing every weight by
+    \(s\) gives positive weights bounded above by \(1\), and a block attaining
+    the maximum has normalized weight \(1\).  The MPV identity follows from
+    Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left}.
+\end{proof}
+
 \begin{theorem}[Existence of the positive-length PGVWC07 witness]%
     \label{thm:pgvwc07_positive_length_witness}
     \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
