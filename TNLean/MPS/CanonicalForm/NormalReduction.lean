@@ -38,6 +38,8 @@ The imported modules provide the original public declarations:
 * `MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv`
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero`
+* `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`
+* `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail`
 * `MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero`
 * `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
