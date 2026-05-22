@@ -15,8 +15,8 @@ core examples have a single BNT basis sector (`basisCount = 1`):
 * **Example 1** — single sector, single copy: `weight = (1,)`.
 * **Example 2** — `C ⊕ (-C)`: single sector, two copies with raw weights
   `(1, -1)`; the coefficient is `1 + (-1)^N`, which is *not* a scalar
-  power.  This is the CPSV16 §II motivating example recorded in the
-  audit memo and in issue #1678.
+  power.  This shows why `IsBNTCanonicalForm` records raw copy weights rather
+  than replacing a sector coefficient by one scalar power.
 * **Example 3** — `C ⊕ e^{iθ}C`: single sector, two copies with raw
   weights `(1, e^{iθ})`; the coefficient is `1 + e^{iNθ}`, illustrating
   equal-modulus grouping with a non-trivial phase.
@@ -33,11 +33,10 @@ which fundamental-theorem theorems consume as an explicit hypothesis
 
 A fourth example exercises the **optional** equal-modulus layer
 `HasEqualModulusWeightLayer` on top of `signFlipDecomp`, demonstrating
-that the equal-modulus subclass is non-empty.  Following the audit
-counter-example `C ⊕ (1/2)C` (`audits/2026-05-13_cpsv16_sector_bnt_phase_1_multiplicity_audit.md`
-§Q4), the `halvedDecomp` construction below admits `IsBNTCanonicalForm`
-but does not admit `HasEqualModulusWeightLayer` (its two copies have
-unequal moduli, ruling out a single per-sector spectral level).
+that the equal-modulus subclass is non-empty.  The `halvedDecomp`
+construction below admits `IsBNTCanonicalForm` but does not admit
+`HasEqualModulusWeightLayer`: its two copies have unequal moduli, ruling out
+a single per-sector spectral level.
 
 Each example takes the per-block normality data (injectivity,
 irreducibility, left-canonical, self-overlap, eventual linear
@@ -136,8 +135,8 @@ lemma singletonDecomp_weight_unit_per_block (C : MPSTensor d D) :
 
 /-- **Example 2** — `C ⊕ (-C)`: a single BNT sector with two copies of
 raw weights `(1, -1)`.  The sector coefficient is `1 + (-1)^N`, which is
-*not* a scalar power; this is the motivating example of issue #1678 and
-the audit memo. -/
+*not* a scalar power.  This is the smallest example showing that a BNT sector
+must retain the raw copy weights in its coefficient. -/
 noncomputable example
     (C : MPSTensor d D) (hDpos : 0 < D)
     (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
@@ -208,7 +207,8 @@ phase. -/
 
 /-- **Example 3** — `C ⊕ e^{iθ}C`: a single BNT sector with two copies of
 raw weights `(1, e^{iθ})`.  The sector coefficient is `1 + e^{iNθ}`,
-illustrating equal-modulus grouping (CPSV16 §II / issue #1678). -/
+illustrating equal-modulus grouping in the CPSV16 two-layer BNT
+decomposition. -/
 noncomputable example
     (C : MPSTensor d D) (θ : ℝ) (hDpos : 0 < D)
     (hCInj : IsInjective C) (hCIrr : IsIrreducibleTensor C)
