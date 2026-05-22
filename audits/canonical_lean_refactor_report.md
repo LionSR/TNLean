@@ -159,16 +159,24 @@ above land in PR #1992.
 The orchestrator's follow-up explicitly called out three risk classes; I
 honored them.
 
-* **Cross-file PGVWC07 privatization was declined.** Three declarations
-  (`exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`,
-  `exists_pgvwc07_positiveLengthWitness`, `PGVWC07PositiveLengthWitness`)
-  are called across the `TPGauge.lean` / `WeightNormalization.lean` file
-  split.  Plan (C) — folding `WeightNormalization.lean` into `TPGauge.lean`
-  — would push the combined file to ≈1 350 LOC; this is within the
-  orchestrator's 1 500 cap but the merge would touch the
-  `exists_weight_normalization` proofs (≈250 LOC of weight-rescaling
-  algebra), which is more invasive than this refactor was meant to be.
-  I left it for a follow-up.
+* **Cross-file PGVWC07 privatization was declined.** Two declarations —
+  `exists_pgvwc07_positiveLengthWitness` and the
+  `PGVWC07PositiveLengthWitness` structure — are called across the
+  `TPGauge.lean` / `WeightNormalization.lean` file split.  Lean 4 `private`
+  is file-scoped, so privatizing them would break the build.  A third
+  declaration, `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`,
+  has only same-file callers on PR HEAD (its previous cross-file caller, the
+  now-deleted `_after_rescaling_with_zeroTail`, was removed in §3), but the
+  declaration carries the blueprint tag
+  `thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound` at
+  `ch08_canonical.tex:1742`, and a `private` declaration cannot be referenced
+  from a `\lean{...}` tag.  All three remain public.
+
+  Plan (C) — folding `WeightNormalization.lean` into `TPGauge.lean` — would
+  push the combined file to ≈1 350 LOC; this is within the orchestrator's
+  1 500 cap but the merge would touch the `exists_weight_normalization`
+  proofs (≈250 LOC of weight-rescaling algebra), which is more invasive
+  than this refactor was meant to be.  Left for a follow-up.
 
 * **`exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` was not
   privatized.**  The blueprint tag `thm:cyclic_sector_decomp_irr_tp`
