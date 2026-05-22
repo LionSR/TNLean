@@ -220,17 +220,29 @@ identified with one another.
 
 The former strict canonical-form BNT equal-MPV declaration was only a strict
 representative form and is no longer part of the active Lean tree. The former
-proportional wrapper has also been removed because its one-shot coefficient
-hypotheses did not imply the full BNT matching conclusion.
+one-shot proportional wrappers have also been removed because their hypotheses
+did not supply the full BNT matching conclusion. The current proportional
+surface is instead split into conditional SectorBNT statements. The
+sector-matching theorem\footnote{Formal declaration:
+  \path{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}.}
+supplies the matched sectors, phases, and block gauges under the present
+full-basis unit-copy hypotheses; the conditional global-gauge
+theorem\footnote{Formal declaration:
+  \path{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}.}
+then assumes the eventual matched-sector coefficient identities for those same
+phases and derives the copy-weight matching and global gauge. This is a
+conditional interface, not the unrestricted source theorem.
 
 Thus the proof gap is not that the paper has many hidden Fundamental Theorems.
 Rather, the paper suppresses the formal separation between deriving the BNT
 comparison data from the source hypotheses and applying the existing comparison
-theorems to that data. The remaining theorem-level work is to obtain the
-sector matching, copy-count equalities, and fixed-length direct-sum span
-hypotheses from the source assumptions. Once those inputs are available, the
-existing strict and sector-decomposition statements combine to give the
-paper-level theorem; they are not additional paper theorems.
+theorems to that data. The remaining theorem-level work is to derive, from the
+source proportional MPV hypothesis, the eventual matched-sector coefficient
+identities used in the conditional global-gauge theorem,
+and to discharge any full-basis unit-copy hypotheses from the source
+normalization rather than assuming them separately. Once those inputs are
+available, the SectorBNT statements combine to give the paper-level theorem;
+they are not additional paper theorems.
 
 \paragraph{Paper-level targets.}
 The proportional canonical-form theorem and the equal-MPV corollary are the
@@ -244,16 +256,17 @@ The current SectorBNT equal-MPV declarations
 \path{ft_sector_bnt_equal_sector_data} and
 \path{ft_sector_bnt_equal_global_gauge} are therefore the relevant formal
 statements on the BNT surface, not the older one-copy \texttt{CFBNT} surface.
-The proportional wrapper that formerly assumed explicit coefficient data has
-been deleted; such data do not by themselves encode the residual peeling or
-power-sum comparison in the source proof. The equal-MPV common-block comparison
-assumes the repeated-copy structure has already been matched into common
-weights and dimensions. It should not be cited as the general
-arXiv:1606.00608 theorem unless the missing BNT multiplicity comparison has
-already been discharged. Rectangular variants that state the permutation,
-phases, gauges, and weight matching for sector decompositions with different
-bases are legitimate theorem statements only when their hypotheses are obtained
-from the same BNT comparison.
+The proportional theorem on the same surface is currently conditional: it
+assumes the matched-sector coefficient identities for the phases produced by
+the sector matching theorem. It should not be cited as the general
+arXiv:1606.00608
+theorem until those coefficient identities are derived from the proportional
+MPV hypothesis. The equal-MPV common-block comparison likewise assumes the
+repeated-copy structure has already been matched into common weights and
+dimensions. Rectangular variants that state the permutation, phases, gauges,
+and weight matching for sector decompositions with different bases are
+legitimate theorem statements only when their hypotheses are obtained from the
+same BNT comparison.
 
 \paragraph{Conditional after-blocking statements.}
 The after-blocking comparison theorems are useful only after the source
@@ -363,6 +376,10 @@ should remain visibly conditional until the missing paper input is produced.
     canonical-form theorem.
   \item The explicit-coefficient equal case assumes coefficient arrays rather
     than deriving the BNT power-sum data from bare equality of MPVs.
+  \item The conditional proportional global-gauge theorem assumes the
+    matched-sector coefficient identities for the matched phases. It should
+    remain conditional until the CPSV16 Appendix MPV coefficient comparison at
+    line~1188 has been derived from proportional MPV equality.
 \end{itemize}
 
 \section{Retirement criterion}
