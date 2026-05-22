@@ -422,31 +422,29 @@ The earlier existence path now has the following formal pieces.
           PGVWC07 Theorem~\texttt{Th:TIcanonical}.
 \end{enumerate}
 
-Thus no current \verb|\leanok| statement in the canonical-form
-chapter should be read as the full PGVWC07 translation-invariant canonical-form
-theorem. The blueprint now records the source theorem as a separate not-ready
-statement, and the checked reductions are marked as partial or scoped results.
-After the positive-length witness theorem, the finite-family part of the
-paper's convention \(1\geq \lambda_j>0\) is now formalized for a nonempty
-witness by rescaling all positive weights by their maximum.  The accompanying
-projective theorem records the state-equivalence convention under which
-PGVWC07 treats the spectral-radius normalization in
-Theorem~\texttt{Th:TIcanonical}, lines 765--766, as ``without loss of
-generality'': exact finite-ring coefficients acquire the global factor \(s^N\),
-and this is precisely a nonzero proportionality of MPV state vectors.
+Thus the primitive, peripheral-primitive, and normal-canonical-form reductions
+listed above should not be read as the PGVWC07 translation-invariant
+canonical-form theorem.  The blueprint instead uses the checked positive-length
+statement as the theorem statement for
+Theorem~\texttt{Th:TIcanonical}.  The finite-family part of the paper's
+convention \(1\geq \lambda_j>0\) is formalized by rescaling all positive
+weights by their maximum.  In exact coefficients this introduces the global
+factor \(s^N\) at length \(N\), so the primary exact statement rescales the
+original tensor by \(s^{-1}\).  The accompanying projective theorem records the
+same scalar as a nonzero proportionality of MPV state vectors.
 
 \section{Formal boundary}
 
 The currently checked primitive, peripheral-primitive, and
 normal-canonical-form reductions should therefore be read as conditional
 canonical-form theorems rather than as
-formalizations of the full source theorem.\footnote{The formal declarations are
-    listed in Section~\ref{sec:current-proof-path-audit}.}
+formalizations of the arbitrary-input source theorem.\footnote{The formal
+declarations are listed in Section~\ref{sec:current-proof-path-audit}.}
 They may be used after their hypotheses have been proved from earlier
 source-faithful reductions, but they should not be cited as giving canonical
 form directly from an arbitrary translation-invariant MPS representation.
 
-\section{What remains}
+\section{Current conclusion}
 
 A faithful formalization of PGVWC07
 Theorem~\texttt{Th:TIcanonical} should start with an arbitrary
@@ -468,20 +466,18 @@ diagonalization.  None of these steps may be replaced by a theorem that starts
 from an already prepared primitive or trace-preserving block family, because
 those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
-At the present stage, the block construction, nonempty-ring exact-MPV
-witness, finite-family weight normalization, and projective interpretation of
-the global scalar factor are available.  For tensors with at least one nonzero
-positive-length MPV coefficient, these pieces have been composed into a
-nonempty normalized projective PGVWC07 form and into an exact normalized form
-after a positive global rescaling of the original tensor.  The exact
-positive-length formulation has also been stated for arbitrary input by
-allowing the nonzero-block family to be empty exactly in the branch where every
-positive-length coefficient vanishes.  The explicit zero-block/length-zero
-formulation has now also been stated: after the same positive global rescaling,
-the zero block and the normalized weighted nonzero blocks reproduce the MPV
-coefficients at every finite length, with \(D_0+\sum_kD_k=D\).  The remaining
-formal work is to decide which of these checked formulations should be promoted
-as the statement cited against Theorem~\texttt{Th:TIcanonical}.
+At the present stage, the block construction, nonempty-ring exact-MPV witness,
+finite-family weight normalization, and projective interpretation of the global
+scalar factor are available.  These pieces have been composed into the
+arbitrary-input exact positive-length theorem, allowing the nonzero-block
+family to be empty exactly in the branch where every positive-length
+coefficient vanishes.  This is the statement promoted in the blueprint as the
+formal positive-length version of Theorem~\texttt{Th:TIcanonical}.  The
+explicit zero-block/length-zero formulation is also available: after the same
+positive global rescaling, the zero block and the normalized weighted nonzero
+blocks reproduce the MPV coefficients at every finite length, with
+\(D_0+\sum_kD_k=D\).  It is kept as the companion bookkeeping convention rather
+than as the primary existence theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}
