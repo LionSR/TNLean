@@ -29,10 +29,10 @@ $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$.
 
 The paper's "given $k$" is represented here by an explicit theorem-level
 hypothesis
-`hUnitQ : ∀ k, ∃ q, ‖Q.weight k q‖ = 1`.  This is stronger than the
+`hUnitQ : ∀ k, ∃ q, ‖Q.weight k q‖ = 1`. This is stronger than the
 structural field `IsBNTCanonicalForm.weight_unit_exists`, because CPSV16
 §II.C line 246 records only a global unit witness over the two-layer index.
-The stronger hypothesis is the current full-basis surface used by the
+The stronger hypothesis is the condition assumed by the
 bijective matching and global-gauge theorems.
 
 ## Proof structure
