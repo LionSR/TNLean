@@ -205,9 +205,9 @@ need not be supplied externally.  The unit-modulus witness at the
 chosen sector `j₀` is supplied externally because CPSV16 line 246 is
 **global** (the unit-modulus copy can sit in any sector); the
 structural field `weight_unit_exists` does not pin it to a specific
-sector.  Issue #1725 Phase A retired the auxiliary dominant-block
-structural field that previously fixed `j₀ = 0` and discharged the
-unit-modulus witness implicitly. -/
+sector.  Earlier dominant-sector formulations fixed `j₀ = 0` as structural
+data, but the paper-faithful surface keeps the chosen sector and its
+unit-modulus copy witness explicit. -/
 theorem exists_block_match_of_sameMPVPos
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

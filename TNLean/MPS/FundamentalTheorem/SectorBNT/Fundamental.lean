@@ -297,8 +297,10 @@ block gauges.  If those same phases satisfy the eventual matched-sector
 coefficient identities, then the matched-sector coefficient comparison recovers
 the copy-weight matching and the direct-sum global gauge follows.
 
-The coefficient identity is the precise remaining CPSV16 Appendix MPV
-line-1188 input for issue #1749. -/
+The coefficient identity is the precise remaining CPSV16 Appendix MPV line
+1188 input; until it is derived from the proportional MPV hypothesis, this
+theorem is a conditional assembly statement rather than the unrestricted
+source theorem. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
