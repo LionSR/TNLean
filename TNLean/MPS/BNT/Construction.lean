@@ -14,13 +14,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 /-!
 # Basis of normal tensors from separated block hypotheses
 
-This module records the separated blockwise hypotheses used to pass from
-canonical-form and normal-canonical-form hypotheses to the basis-of-normal-tensors
-formulation. The source BNT expansion in arXiv:1606.00608, Section II keeps
-repeated copies inside a sector with coefficients `μ_{j,q}` and multiplicities
-`M_j`; that paper-faithful sector structure is represented by
-`IsBNTCanonicalForm` in the fundamental-theorem files. The results here are
-auxiliary tools for already separated finite block families.
+Separated blockwise hypotheses pass from canonical-form and
+normal-canonical-form hypotheses to the basis-of-normal-tensors formulation.
+The source BNT expansion in arXiv:1606.00608, Section II keeps repeated copies
+inside a sector with coefficients `μ_{j,q}` and multiplicities `M_j`; that
+paper-faithful sector structure is represented by `IsBNTCanonicalForm` in the
+fundamental-theorem files. The results here are auxiliary tools for already
+separated finite block families.
 
 ## Main results
 
@@ -44,12 +44,10 @@ auxiliary tools for already separated finite block families.
 
 In the full paper (arXiv:1606.00608, eq. decBSV), the decomposition into a basis of normal
 tensors uses summed coefficients `c_j(N) = Σ_{q in group j} μ_{j,q}^N`.
-In the strict-dominance branch one first normalizes by the dominant weight, so the relevant
-coefficients are `(μ j / μ 0)^N` and the discarded factor `μ 0^N` is absorbed into the overall
-proportionality constant. In the grouped setting, the normalized sums can still oscillate:
-unit-modulus terms may survive inside a single group. The source-faithful
-treatment of these coefficients is carried out in the sector-decomposition
-results and BNT canonical-form constructions.
+The results below concern already separated one-representative block families
+and do not perform the raw coefficient comparison for the two-layer BNT
+decomposition. That comparison is carried out for sector decompositions, where
+the sums `Σ_q μ_{j,q}^N` and their multiplicities remain visible.
 -/
 
 open scoped Matrix BigOperators
