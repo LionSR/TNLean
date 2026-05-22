@@ -182,10 +182,13 @@ has the same MPV coefficients on every nonempty ring.  The theorem permits an
 empty nonzero-block family precisely when all positive-length coefficients
 vanish, and otherwise retains a unit-modulus normalized weight together with
 the unital block condition, the scalar fixed-point conclusion, the diagonal
-positive-definite dual fixed point, and the bond-dimension bound.  The remaining
-choice is whether this exact positive-length formulation, the projective MPV
-formulation, or an explicit zero-block/length-zero formulation should be the
-formal statement cited for the literal source theorem.
+positive-definite dual fixed point, and the bond-dimension bound.
+Theorem~\ref{thm:pgvwc07_exact_rescaled_form_with_zero_tail} records the
+companion explicit zero-block convention, where the zero block supplies the
+length-zero contribution \(D_0+\sum_k D_k=D\).  The remaining choice is which
+of the exact positive-length, projective MPV, and explicit zero-block
+formulations should be the formal statement cited for the literal source
+theorem.
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -1199,6 +1202,36 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     positive length, which agrees with the zero positive-length coefficients of
     \(A\). The unit-weight conclusion is stated conditionally on the family
     being nonempty.
+\end{proof}
+
+\begin{theorem}[Exact PGVWC07 form with explicit zero block]%
+    \label{thm:pgvwc07_exact_rescaled_form_with_zero_tail}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail}
+    \leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    For every MPS tensor \(A\), there is a positive scalar \(s\), a zero-block
+    dimension \(D_0\), and a finite family of PGVWC07 blocks \(C_k\), possibly
+    empty, with positive normalized weights \(\nu_k\) satisfying
+    \(|\nu_k|\leq 1\). If the family is nonempty, then
+    \(|\nu_{k_0}|=1\) for some block \(k_0\). Each nonzero block is in the
+    unital orientation, has only scalar fixed points for its transfer map, and
+    has a diagonal positive-definite fixed point for the dual transfer map.
+    For every block \(k\), the bond dimension \(D_k\) is positive. Moreover
+    the globally rescaled tensor \(s^{-1}A\) has exactly the MPV family given
+    by the zero block plus the normalized weighted block tensor at every ring
+    length. The bond dimensions satisfy \(D_0+\sum_k D_k=D\), and in particular
+    \(\sum_kD_k\leq D\).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Start from the arbitrary-input theorem with the zero block retained.  If
+    the nonzero-block family is empty, take \(s=1\).  Otherwise normalize the
+    positive weights by their maximum.  On nonempty rings the zero block has
+    zero coefficient, so the normalized positive-length identity applies; at
+    length zero the equality is exactly \(D_0+\sum_kD_k=D\).
 \end{proof}
 
 \begin{theorem}[Zero/nonzero dichotomy for projective PGVWC07 form]%

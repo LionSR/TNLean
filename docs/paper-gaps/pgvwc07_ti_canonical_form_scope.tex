@@ -373,6 +373,16 @@ The earlier existence path now has the following formal pieces.
           nonempty ring, and \(\sum_k D_k\leq D\).
 
     \item
+          \path|MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail|
+          records the complementary explicit zero-block convention.  It keeps
+          the zero block from the arbitrary-input decomposition, normalizes the
+          positive nonzero-block weights by their maximum when the nonzero
+          family is nonempty, and proves exact MPV equality at every finite
+          length after the same positive global rescaling.  For positive
+          lengths the zero block contributes zero; at length zero the equality
+          is the dimension identity \(D_0+\sum_kD_k=D\).
+
+    \item
           \path|MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero|
           records the arbitrary-input zero/nonzero dichotomy for this
           projective formulation.  Either all positive-length MPV coefficients
@@ -458,7 +468,7 @@ diagonalization.  None of these steps may be replaced by a theorem that starts
 from an already prepared primitive or trace-preserving block family, because
 those hypotheses are not present in Theorem~\texttt{Th:TIcanonical}.
 
-At the current frontier, the block construction, nonempty-ring exact-MPV
+At the present stage, the block construction, nonempty-ring exact-MPV
 witness, finite-family weight normalization, and projective interpretation of
 the global scalar factor are available.  For tensors with at least one nonzero
 positive-length MPV coefficient, these pieces have been composed into a
@@ -466,11 +476,12 @@ nonempty normalized projective PGVWC07 form and into an exact normalized form
 after a positive global rescaling of the original tensor.  The exact
 positive-length formulation has also been stated for arbitrary input by
 allowing the nonzero-block family to be empty exactly in the branch where every
-positive-length coefficient vanishes.  The remaining formal work is to decide
-whether this positive-length formulation is the desired source theorem,
-or whether the projective MPV formulation or an explicit zero-block/length-zero
-statement should instead be promoted as the declaration cited against
-Theorem~\texttt{Th:TIcanonical}.
+positive-length coefficient vanishes.  The explicit zero-block/length-zero
+formulation has now also been stated: after the same positive global rescaling,
+the zero block and the normalized weighted nonzero blocks reproduce the MPV
+coefficients at every finite length, with \(D_0+\sum_kD_k=D\).  The remaining
+formal work is to decide which of these checked formulations should be promoted
+as the statement cited against Theorem~\texttt{Th:TIcanonical}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

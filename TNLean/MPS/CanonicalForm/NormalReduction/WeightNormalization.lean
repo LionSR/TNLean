@@ -18,10 +18,12 @@ normalized weight has norm at most one and one has norm one.  The statement
 also records the global scalar factor on every positive-length MPV
 coefficient.
 
-The remaining source-facing boundary is not the finite maximum argument, but
-the state-equivalence convention under which the global length-dependent
-scalar is treated as a projective normalization.  This boundary is recorded in
-`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+The remaining theorem-statement boundary is not the finite maximum argument,
+but which state-equivalence convention should be cited for the literal source
+theorem.  This file records both the projective convention and the exact
+convention after a positive global rescaling, with either positive-length
+equality or an explicit zero-block contribution at length zero.  The boundary
+is recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 
 The projective formulation below makes that convention explicit: after the
 maximum normalization, the original tensor and the normalized weighted block
@@ -213,7 +215,7 @@ positive-length PGVWC07 witness with the projective weight normalization above.
 **Scope restriction:** The statement assumes that some positive-length MPV
 coefficient of the original tensor is nonzero.  This excludes the empty
 nonzero-block case and lets the normalization include a block of unit weight.
-The remaining source-facing choice for the unrestricted theorem is recorded in
+The remaining statement choice for the unrestricted theorem is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv
     (A : MPSTensor d D)
@@ -320,7 +322,7 @@ has exactly the same positive-length MPV coefficients.
 
 **Scope restriction:** This theorem keeps the zero positive-length branch
 explicit and therefore does not remove the final length-zero convention needed
-for a source-facing unrestricted statement of PGVWC07 Theorem Th:TIcanonical. -/
+for an unrestricted statement of PGVWC07 Theorem Th:TIcanonical. -/
 theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero
     (A : MPSTensor d D) :
     (∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = 0) ∨
@@ -428,6 +430,127 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
     exact ⟨scale, r, dim, ν, blocks, hscale_pos, hdual, hscalar, hν_pos,
       hν_le, fun _ => hν_unit, hdim_pos, hMPV, hbond⟩
 
+/-- Exact normalized PGVWC07 canonical-form witness with an explicit zero-block
+summand.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
+742--763 and proof lines 765--766.  This theorem combines the explicit
+zero-block decomposition with the finite-family maximum normalization of the
+nonzero weights.  After a positive global rescaling of the original tensor,
+the normalized nonzero blocks and the zero block reproduce all finite-ring MPV
+coefficients.  At length zero this is the dimension identity
+\(D_0 + \sum_k D_k = D\).
+
+The zero block contributes only at length zero.  Thus this is the explicit
+zero-block/length-zero convention complementary to the preceding exact
+positive-length theorem, which omits the zero block and states exact equality
+only at positive length. -/
+theorem exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail
+    (A : MPSTensor d D) :
+    ∃ (scale : ℝ) (zeroTailDim : ℕ) (r : ℕ) (dim : Fin r → ℕ)
+      (ν : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      0 < scale ∧
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          transferMap (d := d) (D := dim k) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
+      (∀ k, ‖ν k‖ ≤ 1) ∧
+      (0 < r → ∃ k, ‖ν k‖ = 1) ∧
+      (∀ k, 0 < dim k) ∧
+      (∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
+          mpv (zeroMPSTensor d zeroTailDim) σ +
+            mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ) ∧
+      zeroTailDim + ∑ k : Fin r, dim k = D ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨zeroTailDim, r, dim, μ, blocks, hdual, hscalar, hμ_pos, _hμ_ne,
+    hdim_pos, hMPV, hBond, hBound⟩ :=
+    exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
+      (d := d) (D := D) A
+  by_cases hr : 0 < r
+  · let W : PGVWC07PositiveLengthWitness (d := d) (D := D) A :=
+      { r := r
+        dim := dim
+        weights := μ
+        blocks := blocks
+        dual_fixed := hdual
+        scalar_fixed := hscalar
+        weight_pos := hμ_pos
+        dim_pos := hdim_pos
+        sameMPV_pos := by
+          intro N hN σ
+          calc
+            mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
+                mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
+            _ = 0 + mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+                rw [mpv_zeroMPSTensor]
+                simp [Nat.ne_of_gt hN]
+            _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+                simp
+        bondDim_le := hBound }
+    obtain ⟨scale, ν, hscale_pos, hν_pos, hν_le, hν_unit, _hweight, hMPV_norm⟩ :=
+      W.exists_weight_normalization hr
+    have hscale_ne : (scale : ℂ) ≠ 0 := by
+      exact_mod_cast (ne_of_gt hscale_pos)
+    refine ⟨scale, zeroTailDim, r, dim, ν, blocks, hscale_pos, hdual, hscalar,
+      hν_pos, hν_le, fun _ => hν_unit, hdim_pos, ?_, hBond, hBound⟩
+    intro N σ
+    by_cases hN : 0 < N
+    · have hpow : ((scale : ℂ) ^ N)⁻¹ * (scale : ℂ) ^ N = 1 := by
+        simp [pow_ne_zero N hscale_ne]
+      calc
+        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
+            ((scale : ℂ)⁻¹) ^ N * mpv A σ := mpv_smul ((scale : ℂ)⁻¹) A σ
+        _ = ((scale : ℂ)⁻¹) ^ N *
+              ((scale : ℂ) ^ N *
+                mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ) := by
+            rw [hMPV_norm N hN σ]
+        _ = (((scale : ℂ)⁻¹) ^ N * (scale : ℂ) ^ N) *
+              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+            ring
+        _ = mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+            simp [hpow]
+        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+            rw [mpv_zeroMPSTensor]
+            simp [Nat.ne_of_gt hN]
+    · have hN0 : N = 0 := Nat.eq_zero_of_not_pos hN
+      subst N
+      have hBondC : (D : ℂ) = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := by
+        exact_mod_cast hBond.symm
+      calc
+        mpv (fun i => (((scale : ℂ)⁻¹) • A i)) σ =
+            (D : ℂ) := mpv_zero_length (fun i => (((scale : ℂ)⁻¹) • A i)) σ
+        _ = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := hBondC
+        _ = (zeroTailDim : ℂ) + ∑ k : Fin r, (dim k : ℂ) := by
+            simp
+        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+              mpv (toTensorFromBlocks (d := d) (μ := ν) blocks) σ := by
+            simp
+            exact Finset.sum_congr rfl (fun _ _ => rfl)
+  · have hr0 : r = 0 := Nat.eq_zero_of_not_pos hr
+    subst r
+    refine ⟨1, zeroTailDim, 0, dim, μ, blocks, zero_lt_one, hdual, hscalar,
+      hμ_pos, ?_, ?_, hdim_pos, ?_, hBond, hBound⟩
+    · intro k
+      exact Fin.elim0 k
+    · intro hzero
+      exact (Nat.not_lt_zero 0 hzero).elim
+    · intro N σ
+      calc
+        mpv (fun i => (((1 : ℂ)⁻¹) • A i)) σ = mpv A σ := by simp
+        _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+              mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
+
 /-- Arbitrary-input zero/nonzero dichotomy for the projective PGVWC07
 canonical-form statement.
 
@@ -438,7 +561,7 @@ coefficients vanish, or the tensor has a nonempty normalized projective
 PGVWC07 block form.
 
 **Scope restriction:** This is not the unrestricted source theorem.  It records
-the zero positive-length branch explicitly; the source-facing convention for
+the zero positive-length branch explicitly; the length-zero convention for
 the length-zero/all-zero case is recorded in
 `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
 theorem exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero
