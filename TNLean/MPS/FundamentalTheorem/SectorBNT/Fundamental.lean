@@ -30,9 +30,9 @@ Paper anchors:
   hypothesis here, not as a structural field of `IsBNTCanonicalForm`.
 
 The theorem below exposes the sector-level witnesses needed before assembling
-the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  It does not use
-`dropSector` recursion, partial-union combined LI, or asymptotic-difference
-multiset recovery.
+the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  The proof path is:
+full-basis matching, exact coefficient comparison, copy-weight recovery, and
+then the direct-sum gauge assembly.
 -/
 
 open scoped Matrix BigOperators
