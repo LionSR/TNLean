@@ -208,7 +208,10 @@ theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D
         wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
       (wordSpan_eq_top_iff_isNBlkInjective A 0).mpr
         ((isNBlkInjective_iff_blockTensor_isInjective A 0).2 hL)
-    exact wordSpan_zero_ne_top_of_two_le A hD_ge hzero
+    have hInj0 : IsNBlkInjective A 0 :=
+      (wordSpan_eq_top_iff_isNBlkInjective A 0).mp hzero
+    have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
+    omega
 
 /-!
 ## Combined reduction: arbitrary → IsNormal (per block, for primitive blocks)
@@ -281,7 +284,10 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
       have hL0 : L = 0 := Nat.eq_zero_of_not_pos hnot
       have hzeroTop : wordSpan A 0 = (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) := by
         simpa [hL0] using hTop
-      exact wordSpan_zero_ne_top_of_two_le A hD2 hzeroTop
+      have hInj0 : IsNBlkInjective A 0 :=
+        (wordSpan_eq_top_iff_isNBlkInjective A 0).mp hzeroTop
+      have hD_one := bondDim_eq_one_of_isNBlkInjective_zero A hInj0
+      omega
     refine ⟨L, hLpos, hBound, ?_⟩
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
