@@ -24,23 +24,55 @@ The supporting modules are:
 
 ## Main statements
 
-The imported modules provide the original public declarations:
+The imported modules expose the following public declarations:
 
-* `MPSTensor.exists_tp_gauge_blockwise`
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise`
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail`
+* `MPSTensor.exists_tp_gauge_blockwise` — blockwise TP-gauge normalization for
+  finite-direct-sum input.
+* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — TP-gauge
+  normalization for arbitrary input, keeping the explicit zero-block summand.
+  `SectorComparison/CommonSectorData.lean` and
+  `SectorComparison/TPPrimitiveReduction.lean` build on this theorem to
+  obtain the trace-preserving irreducible block decomposition used in
+  Chapter 12 of the blueprint (`ch11b_after_blocking.tex`).
+* `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp` — reduction
+  from a primitive blocked decomposition to blocked normal canonical-form data.
+
+### Source-faithful PGVWC07 intermediate steps
+
+The following declarations record the intermediate construction steps of
+[PGVWC07, Theorem Th:TIcanonical] (Pérez-García, Verstraete, Wolf, Cirac, 2007).
+They are not used by the canonical-form reduction in the proof of the
+Fundamental Theorem (which goes through
+`exists_tp_gauge_from_arbitrary_with_zeroTail` and the after-blocking
+statements), but record the source proof structure for completeness.
+
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — single
+  irreducible-block unital and dual-diagonal form.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` — blockwise composition
+  on a finite direct sum with unit weights.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` —
+  arbitrary-input form with the explicit zero summand kept.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
+  — the length-zero dimension identity for the zero-tail form.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
-* `MPSTensor.exists_pgvwc07_positiveLengthWitness`
-* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization`
+  — positive-length form after stripping the zero summand.
+* `MPSTensor.PGVWC07PositiveLengthWitness` — structure bundling the
+  positive-length form.
+* `MPSTensor.exists_pgvwc07_positiveLengthWitness` — existence of the
+  positive-length witness for every MPS tensor.
+* `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization` —
+  weight normalization on a nonempty witness.
 * `MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective`
+  — projective form of the same weight normalization.
 * `MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv`
+  — a nonzero positive-length MPV coefficient forces a nonempty witness.
 * `MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv`
+  — the nonzero-coefficient projective normalized form.
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv`
+  — the nonzero-coefficient exact normalized form after a global rescaling.
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero`
+  — the zero/nonzero dichotomy for the exact normalized form.
 * `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty`
-* `MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail`
-* `MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero`
-* `MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp`
-* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail`
+  — the source-faithful PGVWC07 translation-invariant canonical-form headline
+  statement.
 -/

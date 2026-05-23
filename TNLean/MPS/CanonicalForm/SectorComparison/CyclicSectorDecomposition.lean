@@ -75,7 +75,13 @@ normal/BNT comparison in the non-periodic route of arXiv:1606.00608.
 The proof derives all intermediate channel-level hypotheses
 (`ρ.PosDef`, `Kraus.adjointMap` fixed point, `IsIrreducibleMap`,
 peripheral spectrum structure) from `conjTranspose_kraus_setup` and
-passes them to `exists_cyclic_sector_decomp_after_blocking`. -/
+passes them to `exists_cyclic_sector_decomp_after_blocking`.
+
+Note: this weaker variant is retained for source-paper traceability; the
+stronger statement
+`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+additionally records the primitive/irreducible block properties and is used
+in the proof of `hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor`. -/
 theorem exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -120,9 +126,9 @@ The sequence of theorems proceeds through progressively weaker
 hypotheses (corner-irreducible → proj-step → fixed-algebra-rigidity
 → scalar-blocked-fixed-points) until the unconditional form
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
-is reached.  Only the unconditional form and the top-level existence theorem
-`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
-are consumed by the downstream canonical-form proof chain.
+is reached.  Downstream canonical-form proofs use only the unconditional form
+together with the top-level existence theorem
+`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`.
 -/
 
 open KadisonSchwarz
@@ -584,7 +590,7 @@ primitive, tensor-irreducible, trace-preserving sector blocks with
 positive bond dimensions.
 
 This encodes the unconditional sector-orbit lift into the single
-result consumed by the downstream common-blocking construction.  It is
+result used by the downstream common-blocking construction.  It is
 the period-removal counterpart of `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
 strengthened with primitivity and irreducibility. -/
 theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor

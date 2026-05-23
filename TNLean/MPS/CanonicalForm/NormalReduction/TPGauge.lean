@@ -20,27 +20,37 @@ reduction.
 
 Its public outputs are:
 
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — the
-  single-block PGVWC07 unital gauge, scalar fixed-point, and dual
-  diagonalization theorem.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` — the same PGVWC07
-  construction applied blockwise to a prepared nonzero irreducible decomposition.
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` —
-  the arbitrary-input version with the all-zero summands kept as a zero block.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` —
-  the preceding theorem together with the length-zero bond-dimension identity.
-* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` —
-  the positive-length version with the explicit zero-block summand removed.
-* `MPSTensor.exists_pgvwc07_positiveLengthWitness` — the same positive-length
-  theorem recorded as a single structured witness.
-* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
-  arbitrary-input result obtained after zero-block separation.
+* `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the arbitrary-input
+  TP-gauge normalization, keeping the explicit zero-block summand.  Files
+  under `SectorComparison/` build on this result to obtain the
+  trace-preserving block decomposition used in Chapter 12 of the blueprint
+  (`ch11b_after_blocking.tex`).
+* The source-faithful PGVWC07 unital and dual-diagonal chain:
+  `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` (single
+  irreducible block), then
+  `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` (blockwise composition),
+  then
+  `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail`
+  (arbitrary input with explicit zero summand), then
+  `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound`
+  (length-zero dimension identity), then
+  `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
+  (positive-length form).
+* The structure `MPSTensor.PGVWC07PositiveLengthWitness` and the
+  witness-existence theorem `MPSTensor.exists_pgvwc07_positiveLengthWitness`,
+  which bundle the positive-length form for use in `WeightNormalization.lean`.
 
-The auxiliary declarations stay file-local because they are elementary lemmas for
-rescaling, gauge transport, and the final zero-block identity (the paper calls
-this the ``zero block'' case).
+These declarations correspond one-to-one to the intermediate construction
+steps of [PGVWC07, Theorem Th:TIcanonical] (Pérez-García, Verstraete, Wolf,
+Cirac, 2007) and are exposed in the blueprint as the source-faithful PGVWC07
+chain.
+
+The remaining declarations in this file (gauge-transport and irreducibility
+preservation lemmas, the scalar fixed-point unitary-conjugation transport)
+remain `private`: they are elementary supporting lemmas with no external
+mathematical role.
 -/
 
 namespace MPSTensor
@@ -98,20 +108,6 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   /-- The total bond dimension of the nonzero canonical blocks is at most the
   original bond dimension. -/
   bondDim_le : ∑ k : Fin r, dim k ≤ D
-
-/-- Positive PGVWC07 witness weights are nonzero.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-751--752, writes the canonical-form weights as positive real numbers.  In the
-positive-length witness, nonvanishing is therefore a consequence of the
-positive-real weight field. -/
-theorem PGVWC07PositiveLengthWitness.weight_ne_zero
-    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A) :
-    ∀ k, W.weights k ≠ 0 := by
-  intro k
-  obtain ⟨a, ha_pos, hweight⟩ := W.weight_pos k
-  rw [hweight]
-  exact_mod_cast (ne_of_gt ha_pos)
 
 private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
     (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where

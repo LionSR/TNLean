@@ -23,12 +23,22 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
 
 ## Main statements
 
-* `zeroTail_commonFlat_of_reindexed` and
-  `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed` transport zero-tail
-  decompositions through the common-sector relabeling data.
-* `CommonSectorRelabelingHypothesis` and
-  `CommonGroupedBlockCastHypothesis` encode the remaining blocked-word
-  comparison data.
+* `zeroTail_commonFlat_of_reindexed`, `zeroTail_commonFlatAt_of_reindexed`,
+  `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed`, and
+  `zeroTail_commonFlat_transport_of_reindexed` transport zero-tail
+  decompositions through the common-sector relabeling data.  These four are
+  the public reindexed form; the parallel `_of_blockwise` and
+  `_of_groupedBlockCastAgrees` variants are file-local intermediates that
+  expose the two surviving equivalent hypothesis forms supplying the
+  relabeling.  (A third intermediate form `_of_word_eq` and the orphan
+  `_commonFlatAt_of_groupedBlockCastAgrees` were removed in the canonical
+  reorganization recorded in `audits/canonical_lean_refactor_report.md`.)
+* `CommonSectorRelabelingHypothesis` and `CommonGroupedBlockCastHypothesis`
+  are two predicate forms of the same blocked-word identification.
+  `CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq` proves the
+  cast-equality form unconditionally; the two predicates are equivalent
+  reformulations of the same blocked-alphabet identification and either may be
+  used as the hypothesis of a downstream transport lemma.
 * `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
   and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural
   common-sector data into common primitive irreducible block decompositions.
@@ -76,7 +86,7 @@ lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
 
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/
-lemma zeroTail_commonFlat_of_blockwise
+private lemma zeroTail_commonFlat_of_blockwise
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -99,32 +109,9 @@ lemma zeroTail_commonFlat_of_blockwise
   have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise μ hBlock
   exact zeroTail_eq_of_sameMPV₂ _ _ _ hCanon hFlat
 
-/-- If the blocked-word decodings agree for every nonzero block, the zero-tail equation
-can be written using the derived common-sector family. -/
-lemma zeroTail_commonFlat_of_word_eq
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
-      wordOfBlock d F.p i =
-        wordOfBlock d (F.period k * F.extra k)
-          (iteratedBlockIndex d (F.period k) (F.extra k)
-            (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
-  zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
-
 /-- If the canonical identifications agree with consecutive grouping for every nonzero block,
 the zero-tail equation can be written using the derived common-sector family. -/
-lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
+private lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
     {d D r z : ℕ} {dim : Fin r → ℕ}
     (A : MPSTensor d D) (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
@@ -140,48 +127,6 @@ lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
             (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
   zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
-
-/-- The preceding zero-tail rewriting from the coordinate-grouping condition, expressed at a
-prescribed common length. -/
-lemma zeroTail_commonFlatAt_of_groupedBlockCastAgrees
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := by
-  subst p
-  simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocksAt] using
-    zeroTail_commonFlat_of_groupedBlockCastAgrees A μ blocks F hMPV hCast
-
-/-- At positive lengths, the blocked tensor has the same MPV coefficients as the
-weighted common-sector family whenever the coordinate-grouping condition holds. -/
-lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_groupedBlockCastAgrees
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    SameMPV₂Pos
-      (blockTensor (d := d) (D := D) A p)
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
-  have hZeroTail := zeroTail_commonFlatAt_of_groupedBlockCastAgrees
-    (d := d) (D := D) (r := r) (z := z) (dim := dim)
-    A μ blocks F hp hMPV hCast
-  exact sameMPV₂Pos_of_zeroTail_eq _ _ hZeroTail
 
 /-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
 the zero-tail equation can be rewritten using the derived common-sector family.
