@@ -1,17 +1,15 @@
 import TNLean.PEPS.VirtualInsertion
 
 import Mathlib.Data.Matrix.Basic
-import Mathlib.Logic.Equiv.Prod
 
 /-!
 # Edge-centered decompositions for PEPS local data
 
-This file provides two elementary decompositions that recur in the PEPS
+This file records the edge-centered decompositions that recur in the PEPS
 Fundamental-Theorem argument.
 
-First, if one incident edge at a vertex is singled out, then local virtual
-configurations split as the product of the bond index on that edge and the
-remaining incident-edge indices.
+First, it uses the decomposition of local virtual configurations into the bond
+index on one singled-out incident edge and the remaining incident-edge indices.
 
 Second, for a fixed graph edge `e = (u, v)`, the vertex set splits into the
 left endpoint `{u}`, the complement of the endpoints, and the right endpoint
@@ -22,8 +20,6 @@ of a PEPS to a three-partite chain.
 
 - `edgeLeftIncident`, `edgeRightIncident`: the two endpoint incidences of an
   ordered edge.
-- `localVirtualConfigSplitAt`: split a local virtual configuration at a chosen
-  incident edge.
 - `edgeLeftVertices`, `edgeMiddleVertices`, `edgeRightVertices`: the canonical
   three-region partition attached to an edge.
 - `prod_univ_splitAtEdge`: products over the vertex set factor through the
@@ -66,65 +62,6 @@ omit [Fintype V] [DecidableRel G.Adj] in
 omit [Fintype V] [DecidableRel G.Adj] in
 theorem edgeLeft_ne_edgeRight (e : Edge G) : e.1.1 ≠ e.1.2 :=
   ne_of_lt e.2.1
-
-/-- The incident edges at `v` other than a chosen distinguished edge. -/
-abbrev OtherIncidentEdge (v : V) (ie : IncidentEdge G v) : Type _ :=
-  { je : IncidentEdge G v // je ≠ ie }
-
-/-- The residual local virtual data after removing one distinguished incident
-edge. -/
-abbrev ResidualLocalConfig (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) : Type _ :=
-  (je : OtherIncidentEdge (G := G) v ie) → Fin (A.bondDim je.1.1)
-
-instance instFintypeOtherIncidentEdge (v : V) (ie : IncidentEdge G v) :
-    Fintype (OtherIncidentEdge (G := G) v ie) :=
-  inferInstance
-
-instance instFintypeResidualLocalConfig (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) : Fintype (ResidualLocalConfig (G := G) A ie) :=
-  inferInstance
-
-/-- Split a local virtual configuration into the coordinate on one distinguished
-incident edge and the coordinates on all remaining incident edges. -/
-noncomputable def localVirtualConfigSplitAt (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) :
-    LocalVirtualConfig A v ≃ Fin (A.bondDim ie.1) × ResidualLocalConfig (G := G) A ie := by
-  classical
-  simpa [LocalVirtualConfig, ResidualLocalConfig, OtherIncidentEdge] using
-    (Equiv.piSplitAt ie fun je : IncidentEdge G v => Fin (A.bondDim je.1))
-
-omit [Fintype V] in
-@[simp] theorem localVirtualConfigSplitAt_apply_fst (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) (η : LocalVirtualConfig A v) :
-    (localVirtualConfigSplitAt (G := G) A ie η).1 = η ie := by
-  classical
-  simp [localVirtualConfigSplitAt]
-
-omit [Fintype V] in
-@[simp] theorem localVirtualConfigSplitAt_apply_snd (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v) (η : LocalVirtualConfig A v)
-    (je : OtherIncidentEdge (G := G) v ie) :
-    (localVirtualConfigSplitAt (G := G) A ie η).2 je = η je.1 := by
-  classical
-  simp [localVirtualConfigSplitAt]
-
-omit [Fintype V] in
-@[simp] theorem localVirtualConfigSplitAt_symm_apply_fst (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v)
-    (x : Fin (A.bondDim ie.1) × ResidualLocalConfig (G := G) A ie) :
-    (localVirtualConfigSplitAt (G := G) A ie).symm x ie = x.1 := by
-  classical
-  simp [localVirtualConfigSplitAt]
-
-omit [Fintype V] in
-@[simp] theorem localVirtualConfigSplitAt_symm_apply_snd (A : Tensor G d) {v : V}
-    (ie : IncidentEdge G v)
-    (x : Fin (A.bondDim ie.1) × ResidualLocalConfig (G := G) A ie)
-    (je : OtherIncidentEdge (G := G) v ie) :
-    (localVirtualConfigSplitAt (G := G) A ie).symm x je.1 = x.2 je := by
-  classical
-  simp [localVirtualConfigSplitAt, je.2]
 
 /-- The left endpoint of an edge as a singleton vertex region. -/
 def edgeLeftVertices (e : Edge G) : Finset V :=
