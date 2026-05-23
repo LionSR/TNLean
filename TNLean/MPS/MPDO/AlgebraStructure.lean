@@ -51,7 +51,13 @@ On top of the blocked-coefficient layer, this file now formalizes the target
 shape of Theorem IV.13(ii): the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, and the
 identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
-is encoded as the `HasChiTracePowerForm` predicate. The basic trace-power
+is encoded as the `HasChiTracePowerForm` predicate. For the blocked support
+tower, `AlgebraStructureData.BlockedStructureChiFamily` and
+`AlgebraStructureData.HasBlockedStructureChiTracePowerForm` record the
+length-dependent blocked-basis analogue for
+`AlgebraStructureData.blockedStructureCoefficients`. This is not yet the
+paper's uniform BNT-label chi family; the deviation is recorded in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
 directly from `Matrix.diagonal_pow` and `Matrix.trace_diagonal`.
 
@@ -605,6 +611,118 @@ theorem HasChiTracePowerForm.eq_trace_matrix_pow {I : Type*}
     (h : HasChiTracePowerForm c χ) (L : ℕ) (α β γ : I) :
     c L α β γ = (χ.matrix α β γ ^ L).trace := by
   rw [h L α β γ, χ.trace_matrix_pow]
+
+namespace AlgebraStructureData
+
+/-- A diagonal chi family indexed by the multiplication coefficients of a
+blocked support-algebra tower.
+
+For each blocking length `n`, the first two indices label basis elements of
+`A n`, while the third labels a basis element of `A (2 * n)`. Thus this is the
+dependent-index version of the matrices
+`χ_{α,β,γ}` appearing in
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] for the
+blocked structure coefficients.
+
+**Scope restriction (blocked bases):** The paper's chi matrices are indexed by
+fixed BNT labels and are uniform in the length parameter. This structure is
+instead indexed by the chosen blocked bases, so its data may depend on `n`.
+This deviation is documented in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. Elimination: introduce
+the BNT-label coefficient layer and a comparison map from blocked bases to those
+labels, then recover the uniform chi family from the paper's Appendix C.3. -/
+structure BlockedStructureChiFamily (data : AlgebraStructureData d D) where
+  /-- For each blocked length `n`, a diagonal family on the disjoint union of
+  domain and codomain basis labels. The intended triples have shape
+  `(Sum.inl i, Sum.inl j, Sum.inr k)`. -/
+  toDiagonal : (n : ℕ) →
+    DiagonalChiFamily (BlockedIndex data n ⊕ BlockedIndex data (2 * n))
+
+namespace BlockedStructureChiFamily
+
+variable {data : AlgebraStructureData d D} (χ : BlockedStructureChiFamily data)
+
+/-- Size of the diagonal matrix attached to the triple `(n, i, j, k)`. -/
+def dim (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) : ℕ :=
+  (χ.toDiagonal n).dim (Sum.inl i) (Sum.inl j) (Sum.inr k)
+
+/-- Diagonal entries of the matrix attached to `(n, i, j, k)`. -/
+def entry (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n))
+    (r : Fin (χ.dim n i j k)) : ℂ :=
+  (χ.toDiagonal n).entry (Sum.inl i) (Sum.inl j) (Sum.inr k) r
+
+/-- The diagonal matrix attached to one blocked multiplication coefficient. -/
+noncomputable def matrix (n : ℕ) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) :
+    Matrix (Fin (χ.dim n i j k)) (Fin (χ.dim n i j k)) ℂ :=
+  (χ.toDiagonal n).matrix (Sum.inl i) (Sum.inl j) (Sum.inr k)
+
+/-- The trace-power coefficient attached to one blocked multiplication triple. -/
+noncomputable def tracePowerCoeff (n : ℕ) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) (L : ℕ) : ℂ :=
+  (χ.toDiagonal n).tracePowerCoeff (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+
+/-- The `L`-th power of a blocked chi matrix is diagonal with entries raised to
+the `L`-th power. -/
+theorem matrix_pow (n : ℕ) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) (L : ℕ) :
+    χ.matrix n i j k ^ L =
+      Matrix.diagonal fun r => (χ.entry n i j k r) ^ L := by
+  exact (χ.toDiagonal n).matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+
+/-- The trace of the `L`-th power of a blocked chi matrix is the corresponding
+finite sum of `L`-th powers of its diagonal entries. -/
+theorem trace_matrix_pow (n : ℕ) (i j : BlockedIndex data n)
+    (k : BlockedIndex data (2 * n)) (L : ℕ) :
+    (χ.matrix n i j k ^ L).trace = χ.tracePowerCoeff n i j k L := by
+  exact (χ.toDiagonal n).trace_matrix_pow (Sum.inl i) (Sum.inl j) (Sum.inr k) L
+
+/-- Positivity of every diagonal entry in the blocked chi family. -/
+def PosEntries : Prop :=
+  ∀ (n : ℕ) (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)),
+    ∀ r : Fin (χ.dim n i j k), 0 < χ.entry n i j k r
+
+end BlockedStructureChiFamily
+
+/-- Trace-power form for the blocked multiplication coefficients of an
+algebra-structure tower.
+
+For each positive blocking length `n`, the coefficient of the basis element `k`
+in the product of basis elements `i` and `j` is required to be
+`tr(χ_{i,j,k}^{n})`, equivalently the sum of the `n`-th powers of the diagonal
+entries of the corresponding blocked chi matrix. This is the blocked-tower
+blocked-basis analogue of the coefficient condition in
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)]. The exponent
+`n` is the source blocking length of the two factors in `A n`; the product is
+expanded in the basis of `A (2 * n)`.
+
+**Scope restriction (blocked bases):** The source theorem uses one chi matrix
+for each BNT-label triple, uniformly for all lengths. This predicate allows the
+chi data to vary with the blocked length because its indices are the chosen
+bases of `A n` and `A (2 * n)`. This deviation is documented in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. Elimination: replace this
+length-dependent blocked-basis predicate by the BNT-label trace-power form and
+derive the present statement by comparison with the blocked bases. -/
+def HasBlockedStructureChiTracePowerForm
+    (data : AlgebraStructureData d D) (χ : BlockedStructureChiFamily data) :
+    Prop :=
+  ∀ (n : ℕ), 0 < n →
+    ∀ (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)),
+    data.blockedStructureCoefficients n i j k =
+      χ.tracePowerCoeff n i j k n
+
+/-- Trace reformulation of `HasBlockedStructureChiTracePowerForm` at a positive
+blocked length. -/
+theorem HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow
+    {data : AlgebraStructureData d D} {χ : BlockedStructureChiFamily data}
+    (h : data.HasBlockedStructureChiTracePowerForm χ)
+    (n : ℕ) (hn : 0 < n)
+    (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (χ.matrix n i j k ^ n).trace := by
+  rw [h n hn i j k, χ.trace_matrix_pow]
+
+end AlgebraStructureData
 
 end MPOTensor
 

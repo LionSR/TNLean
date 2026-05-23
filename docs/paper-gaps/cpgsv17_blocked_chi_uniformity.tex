@@ -1,0 +1,132 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{CPGSV17 Blocked-Basis Chi Families and Uniform BNT Labels}
+\author{}
+\date{2026-05-24}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete 2017 state in
+\cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys} that there is a set of
+diagonal matrices
+\[
+    \chi_{\alpha,\beta,\gamma}
+\]
+with positive entries such that, for every length \(L\), the operators
+\(O_L(M_\alpha)\) linearly span an algebra whose structure coefficients satisfy
+\[
+    c^{(L)}_{\alpha,\beta,\gamma}
+      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+\]
+The important point for the present note is that the labels
+\(\alpha,\beta,\gamma\) are BNT labels, not basis labels depending on \(L\).
+Thus the same diagonal matrix \(\chi_{\alpha,\beta,\gamma}\) is used for all
+positive lengths; only the exponent changes.
+
+Here \(O_L(M_\alpha)\) denotes the length-\(L\) operator associated to the
+normal tensor labelled by \(\alpha\) in the basis of normal tensors. The phrase
+``BNT labels'' refers to these labels \(\alpha,\beta,\gamma\). The support
+algebra \(\mathcal A_n\) below is the formal support algebra chosen for the
+blocked length \(n\) in the Lean development.
+
+\section{Formalized blocked-basis analogue}
+
+The current blocked coefficient layer in
+\path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
+algebras \(\mathcal A_n\). Its multiplication coefficients have indices
+\[
+    i,j \in \mathrm{Basis}(\mathcal A_n),
+    \qquad
+    k \in \mathrm{Basis}(\mathcal A_{2n}),
+\]
+because multiplication is represented as
+\[
+    \mathcal A_n \times \mathcal A_n \longrightarrow \mathcal A_{2n}.
+\]
+The declarations
+\leanid{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily} and
+\leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
+therefore express a positive-length, length-dependent blocked-basis analogue:
+\[
+    c^{(n)}_{i,j,k}
+      = \sum_r \chi_{n,i,j,k,r}^{\,n}
+      = \operatorname{tr}(\chi_{n,i,j,k}^{\,n}).
+\]
+Here \(n\) is the source blocking length of the two factors in
+\(\mathcal A_n\), while the coefficient \(k\) is taken in the basis of
+\(\mathcal A_{2n}\). The predicate is intentionally restricted to
+\(0 < n\), avoiding the degenerate length-zero constraint
+\(c^{(0)}_{i,j,k} = \dim(\chi_{0,i,j,k})\), which is not part of the intended
+positive-chain statement.
+
+\section{Gap}
+
+Verdict: scope restriction.
+
+This blocked-basis analogue is not the uniform BNT-label statement of
+Theorem~IV.13(ii). It allows the diagonal matrix to depend on \(n\), because
+the available indices themselves depend on the blocked bases
+\(\mathcal A_n\) and \(\mathcal A_{2n}\). The source theorem instead provides
+one matrix for each triple of BNT labels and uses that same matrix for every
+length \(L\).
+
+There is a second scope restriction in the operation being compared. In the
+paper, the coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\) belong to the
+same-length operator algebra:
+\[
+    O_L(M_\alpha) O_L(M_\beta)
+      = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
+\]
+The current Lean coefficient family comes from the blocked support-algebra
+product
+\[
+    \mathcal A_n \times \mathcal A_n \longrightarrow \mathcal A_{2n},
+\]
+so the two input factors have source length \(n\), while the result is expanded
+in a basis at length \(2n\). The exponent \(n\) in
+\[
+    c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})
+\]
+is therefore the source length of the two factors, not the codomain length.
+This convention is only a blocked-basis analogue; it is not a replacement for
+the same-length multiplication statement in Theorem~IV.13(ii).
+
+Consequently,
+\leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
+should not be cited as a formalization of Theorem~IV.13(ii). It is a local
+blocked-basis interface for the coefficient layer, useful only after the
+uniform BNT-label statement has been separated from the chosen blocked bases.
+
+\section{Elimination plan}
+
+To eliminate this gap, the formalization should introduce:
+\begin{enumerate}
+    \item the BNT-label coefficient family used in Theorem~IV.13(ii);
+    \item the positive diagonal matrices
+        \(\chi_{\alpha,\beta,\gamma}\) indexed by BNT-label triples,
+        independent of the length parameter;
+    \item a comparison theorem relating the BNT-label coefficients to the
+        chosen blocked bases of \(\mathcal A_n\);
+    \item a same-length operator-algebra product statement matching
+        \(O_L(M_\alpha)O_L(M_\beta)\), together with the comparison to the
+        blocked support-algebra product
+        \(\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}\);
+    \item the blocked-basis trace-power statement, with its source-length
+        exponent convention, as a derived corollary of the uniform BNT-label
+        theorem, rather than as the theorem itself.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
