@@ -1212,6 +1212,69 @@ the elementary trace-power identity for diagonal matrices.
     form''---is obtained by quantifying over $\chi$.
 \end{definition}
 
+\begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
+    \label{def:mpdo_blocked_structure_chi_family}
+    \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    A dependent diagonal matrix family indexed by the blocked multiplication
+    triples $(n,i,j,k)$, where $i$ and $j$ label basis elements of
+    $\mathcal{A}_n$ and $k$ labels a basis element of $\mathcal{A}_{2n}$.
+    This is a blocked-basis analogue of the uniform BNT-label family in
+    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}; the remaining uniformity
+    gap is recorded in
+    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+\end{definition}
+
+\begin{theorem}[Trace of a blocked $\chi$ power]%
+    \label{thm:mpdo_blocked_structure_chi_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily.trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_blocked_structure_chi_family}
+    For each blocked multiplication triple $(n,i,j,k)$ and every exponent
+    $L$, the trace of the $L$-th power of its diagonal matrix is the sum of the
+    $L$-th powers of the corresponding diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+    Diagonal matrices raise to powers entrywise and the trace of a diagonal
+    matrix is the sum of its entries.
+\end{proof}
+
+\begin{definition}[Trace-power form for blocked multiplication coefficients]%
+    \label{def:mpdo_has_blocked_structure_chi_trace_power_form}
+    \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients,
+        def:mpdo_blocked_structure_chi_family}
+    The blocked multiplication coefficients are in trace-power form when, for
+    every positive blocked size $n$ and every multiplication triple $(i,j,k)$,
+    the coefficient $c^{(n)}_{i,j,k}$ equals
+    \[
+        \sum_r \chi_{n,i,j,k,r}^{\,n}.
+    \]
+    Equivalently, by
+    Theorem~\ref{thm:mpdo_blocked_structure_chi_trace_matrix_pow}, it is the
+    trace of the $n$-th power of the corresponding diagonal matrix. The exponent
+    $n$ is the source blocking length of the two factors in $\mathcal{A}_n$; the
+    product is expanded in the basis of $\mathcal{A}_{2n}$.
+\end{definition}
+
+\begin{theorem}[Blocked coefficient as a trace power]%
+    \label{thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
+        thm:mpdo_blocked_structure_chi_trace_matrix_pow}
+    Under trace-power form for the blocked multiplication coefficients,
+    for every positive blocked size $n$, the coefficient $c^{(n)}_{i,j,k}$ is
+    the trace of the $n$-th power of the diagonal matrix attached to
+    $(n,i,j,k)$.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the defining trace-power identity with the trace formula for
+    powers of a diagonal matrix.
+\end{proof}
+
 \section{Commuting form and GSNNCH}
 
 \begin{definition}[Commuting-form data for an MPDO]
