@@ -217,8 +217,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{def:peps_localIncidentMatrixOp}
     \lean{TNLean.PEPS.localIncidentMatrixOp}
     \leanok
-    \uses{def:peps_localTensorMap, def:peps_incident_edge,
-        def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_incident_edge, def:peps_localVirtualConfigSplitAt}
     A matrix on one edge incident to $v$ acts on the coefficient space of local
     virtual configurations by applying the matrix to that edge coordinate and
     summing over the input edge index while keeping the residual virtual
@@ -658,12 +657,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSInsertionPhysicalRealization
     \end{center}
 
-    \emph{Scope restriction.} This is the local endpoint part of the
-    \(X\mapsto O_1,O_2\) step in Lemma~\(\mathrm{inj\_isomorph}\) of
-    \cite[Section~3]{Molnar2018NormalPEPS}. It does not yet identify the
-    resulting physical action with the full edge-inserted three-site
-    coefficient; that remaining coefficient-level statement is recorded in
-    \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
+    % Scope restriction: this formalized theorem is the local endpoint part of
+    % the X -> O_1,O_2 step in Lemma inj_isomorph of Molnar2018NormalPEPS,
+    % Section 3.  It does not yet identify the resulting physical action with
+    % the full edge-inserted three-site coefficient; that coefficient-level
+    % statement is recorded in
+    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
     Apply the one-edge realization theorem to the two endpoint incidences of
