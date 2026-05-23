@@ -149,15 +149,7 @@ def _assert_diagram_args_match_print_macros() -> None:
 
 
 def _assert_peps_macros_used_in_chapter() -> None:
-    intentionally_unused: set[str] = {
-        # Depicts the full three-site identification X -> O_1, O_2 of the
-        # injective edge-blocked MPS argument. The chapter currently only
-        # asserts the scope-restricted local-endpoint realization
-        # (thm:peps_virtualInsertionPhysicalRealization); the three-site
-        # identification is tracked in
-        # docs/paper-gaps/peps_injective_ft_section3_route.tex.
-        "TNPEPSInsertionPhysicalRealization",
-    }
+    intentionally_unused: set[str] = set()
     pattern = re.compile(r"\\newcommand\{\\(TNPEPS\w+)\}(?:\[\d+\])?")
     source = (_SRC_DIR / "macros/tn_print.tex").read_text(encoding="utf-8")
     peps_macros = sorted(set(pattern.findall(source)))
