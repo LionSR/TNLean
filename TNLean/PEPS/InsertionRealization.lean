@@ -31,8 +31,8 @@ edge of the corresponding endpoint tensor.
 
 **Scope restriction (endpoint realization):** This theorem proves the local
 endpoint realization, not yet the coefficient-level equality with
-`edgeInsertedCoeff` in the full edge-blocked three-site contraction. The
-remaining step is recorded in
+the edge-inserted three-site coefficient in the full edge-blocked three-site
+contraction. The remaining step is recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
 theorem edgeVirtualInsertionPhysicalRealization (A : Tensor G d)
     (hA : IsVertexInjective A) (e : Edge G)
