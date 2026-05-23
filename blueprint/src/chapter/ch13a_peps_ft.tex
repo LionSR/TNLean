@@ -230,10 +230,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:peps_localIncidentMatrixOp,
         def:peps_localVirtualConfigSplitAt}
-    If a coefficient function is supported on one local virtual configuration,
-    and the matrix acts on the distinguished incident edge, the result is the
-    sum over the new distinguished edge index with the residual local boundary
-    held fixed.
+    If the coefficient function is the unit basis function at one local virtual
+    configuration, and the matrix acts on the distinguished incident edge, the
+    result is the sum over the new distinguished edge index with the residual
+    local boundary held fixed.
 \end{theorem}
 \begin{proof}\leanok
     Evaluate both sides on a local virtual configuration and split into the
@@ -728,11 +728,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_edgeInsertedCoeff,
         def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig,
         thm:peps_localTensorMap_localIncidentMatrixOp_single}
-    Let $e=(u,v)$. If a physical operator on $v$ realizes the one-edge
-    virtual matrix action on the distinguished incident edge, then the
-    inserted-edge coefficient is obtained by leaving the left endpoint and
-    open middle contraction explicit and applying that physical operator to the
-    right endpoint tensor.
+    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
+    operator on $v$ realizes the one-edge virtual matrix action on the
+    distinguished incident edge, then the inserted-edge coefficient at
+    $\sigma$ is obtained by leaving the left endpoint and open middle
+    contraction explicit and applying that physical operator to the right
+    endpoint tensor.
 \end{theorem}
 \begin{proof}\leanok
     Expand the physical realization on a basis local configuration at the
@@ -747,11 +748,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_edgeInsertedCoeff,
         def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig,
         thm:peps_localTensorMap_localIncidentMatrixOp_single}
-    Let $e=(u,v)$. If a physical operator on $u$ realizes the one-edge
-    virtual action of $M^{\mathsf T}$ on the distinguished incident edge,
-    then the inserted-edge coefficient for $M$ is obtained by applying that
-    physical operator to the left endpoint tensor and leaving the open middle
-    contraction and the right endpoint explicit.
+    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
+    operator on $u$ realizes the one-edge virtual action of $M^{\mathsf T}$ on
+    the distinguished incident edge, then the inserted-edge coefficient for
+    $M$ at $\sigma$ is obtained by applying that physical operator to the left
+    endpoint tensor and leaving the open middle contraction and the right
+    endpoint explicit.
 \end{theorem}
 \begin{proof}\leanok
     Expand the physical realization on a basis local configuration at the left
@@ -767,10 +769,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{thm:peps_localIncidentMatrixOp_physicalRealization,
         thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
         thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
-    If the PEPS tensor is vertex-injective, then each inserted edge matrix is
-    realized by physical operators at the endpoint tensors: the left endpoint
-    realizes $M^{\mathsf T}$, the right endpoint realizes $M$, and both
-    realizations reproduce the same inserted-edge coefficient in the
+    If the PEPS tensor is vertex-injective, then for every physical
+    configuration $\sigma$, each inserted edge matrix is realized by physical
+    operators at the endpoint tensors: the left endpoint realizes
+    $M^{\mathsf T}$, the right endpoint realizes $M$, and both realizations
+    reproduce the same inserted-edge coefficient at $\sigma$ in the
     edge-centered three-site decomposition.
 \end{theorem}
 \begin{proof}\leanok
