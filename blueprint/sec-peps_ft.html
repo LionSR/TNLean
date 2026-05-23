@@ -1428,7 +1428,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  For an edge \(e = (u,w)\) with \(u {\lt} w\) and gauge \(X_e \in \mathrm{GL}(D_e)\), the gauge matrix applied at vertex \(v\) is \(X_e\) if \(v = u\) and \((X_e^{-1})^\top \) if \(v = w\). Diagrammatically, the ordered edge carries opposite endpoint actions: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-567b9fa22f58139e.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d9780cb9b8f0a243.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
 
   </div>
 </div>
@@ -1493,7 +1493,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The gauged tensor at vertex \(v\) is \(A^X_v\). For each incident edge \(ie\), write \(M_{ie}\) for the matrix specified by Definition&#160;<a href="sec-peps_ft.html#def:edgeGaugeAt">17.7</a>, applied at the vertex \(v\) to the gauge on the underlying edge of \(ie\). Then \(A^X_v(\eta , \sigma ) = \sum _{\eta '} (\prod _{ie} M_{ie}(\eta (ie), \eta '(ie))) A_v(\eta ', \sigma )\). In tensor-network notation, one inserts the appropriate gauge matrix on each incident virtual leg of the local tensor: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-93160fccfcdcd006.svg" alt="\TNPEPSGaugeVertexAction"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d8cf4086d21ec535.svg" alt="\TNPEPSGaugeVertexAction"></div>
 
   </div>
 </div>
@@ -1688,7 +1688,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Applying a gauge to a PEPS tensor preserves the state coefficients. Along each internal edge, the two endpoint insertions cancel: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-20f70618be7f554d.svg" alt="\TNPEPSGaugeCancellation"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-04d131a8ec32737c.svg" alt="\TNPEPSGaugeCancellation"></div>
 
   </div>
 </div>
@@ -4727,7 +4727,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) be vertex-injective and let \(e=(u,v)\) be an edge. For every matrix \(X\) on the bond space of \(e\), the one-leg virtual action induced by \(X\) on the local tensor at \(u\), and likewise at \(v\), is realized by a physical operator on that endpoint’s physical space. </p>
+  <p>   Let \(A\) be vertex-injective and let \(e=(u,v)\) be an edge. For every matrix \(M\) on the bond space of \(e\), the one-leg virtual action induced by \(M\) on the local tensor at \(u\), and likewise at \(v\), is realized by a physical operator on that endpoint’s physical space. </p>
 <div class="centered"> </div>
 
   </div>
@@ -5253,7 +5253,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the factorized local gauge hypothesis, the local gauge formula follows. What remains open is to upgrade equality of the edge-blocked coefficients to the blocked-middle formula using the corresponding three-site injective-chain argument. The physical-realization and physical-to-virtual steps in that argument are recorded separately as Theorems&#160;<a href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">17.55</a> and <a href="sec-peps_ft.html#thm:peps_physicalToVirtualInsertion">17.56</a>. After Theorem&#160;<a href="sec-peps_ft.html#thm:peps_postAbsorptionEdgeInsertionEquality">17.63</a> supplies the factorized local gauge hypothesis, injectivity on the star neighborhood provides a left inverse that isolates the local edge gauges: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-9f856bb95d94a6a1.svg" alt="\TNPEPSLocalGaugeExtraction"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-235d6865bd1e3a07.svg" alt="\TNPEPSLocalGaugeExtraction"></div>
 
   </div>
 </div>
@@ -5338,7 +5338,7 @@
 	, Section&#160;3
 	]
 </span>: for every edge and every matrix, inserting that matrix on the edge in the first PEPS gives the same state as inserting it on the same edge in the modified second PEPS. Applying the local extraction at each vertex then gives one edge gauge family whose endpoint actions transform the first tensor family into the second: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-9b89986d6372c7c1.svg" alt="\TNPEPSGlobalConsistency"></div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-a727130ecf4a8a1e.svg" alt="\TNPEPSGlobalConsistency"></div>
 
   </div>
 </div>
@@ -5714,7 +5714,7 @@
 	, Section&#160;3
 	]
 </span> blocks the network into four parts \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and \((A\cup B)^c\), and applies the two available left inverses in sequence: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-03bf93abf6311166.svg" alt="\TNPEPSInjectiveRegionUnion"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-b4d36802ab8af309.svg" alt="\TNPEPSInjectiveRegionUnion"> </div>
 
   </div>
 </div>
@@ -5738,9 +5738,9 @@
   </div>
   <div class="definition_thmcontent">
   <p> In the translationally invariant square-lattice proof, the source paper assumes that every \(2\times 3\) and \(3\times 2\) region is injective. Lemma&#160;<a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">17.72</a> then implies that the regions \(R\), \(S\), and \(T\) below are injective: </p>
-<div class="centered"><p> <img class="tn-svg" src="tn_svg/tn-047199feb4156938.svg" alt="\TNPEPSNormalRegionsRS"> </p>
+<div class="centered"><p> <img class="tn-svg" src="tn_svg/tn-399ea968ff108fe5.svg" alt="\TNPEPSNormalRegionsRS"> </p>
 
-<p><img class="tn-svg" src="tn_svg/tn-907474bf2db0358c.svg" alt="\TNPEPSNormalRegionT"> </p>
+<p><img class="tn-svg" src="tn_svg/tn-6c07eddfae7ab6f4.svg" alt="\TNPEPSNormalRegionT"> </p>
 </div>
 
   </div>
@@ -5795,7 +5795,7 @@
 	, Theorem&#160;3
 	]
 </span>, the tensor network may be blocked around each edge into three injective regions. Hence the same three-site injective-chain insertion argument used in the injective PEPS theorem applies to the blocked normal PEPS: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-b43b47ff324a702c.svg" alt="\TNPEPSNormalEdgeBlockingReduction"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-262e3e7019298758.svg" alt="\TNPEPSNormalEdgeBlockingReduction"> </div>
 
   </div>
 </div>
@@ -5847,7 +5847,7 @@
 	, Theorem&#160;3
 	]
 </span>: </p>
-<div class="centered"> <img class="tn-svg" src="tn_svg/tn-cb4eb1a2c6b425cc.svg" alt="\TNPEPSTINormalGaugeAbsorption"> </div>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-9426e9773d72bcfb.svg" alt="\TNPEPSTINormalGaugeAbsorption"> </div>
 
   </div>
 </div>
