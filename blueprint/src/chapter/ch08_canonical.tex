@@ -2,41 +2,31 @@
 \chapter{Canonical Form Reduction}\label{ch:canonical}
 
 This chapter records reductions of MPS tensors to block-diagonal canonical
-forms. We use the standard convention that the physical ring has positive
-length. With this convention the all-zero summand contributes no coefficient,
-and the translation-invariant canonical form of
-\cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix}
-is stated as an exact positive-length theorem, after the global scalar
-normalization made in the proof at
-\cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
-The complementary statement retaining the zero block records the
-length-zero bookkeeping but is not the primary theorem statement.
+forms, following~\cite{PerezGarcia2007Matrix}, \cite{Cirac2017MPDO_AnnPhys},
+\cite{Cirac2021Matrix}, and \cite[Chapter~6]{Wolf2012Quantum}. The unital
+orientation $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used by
+\cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}; the trace-preserving
+(left-canonical) orientation $\sum_i (A_k^i)^\dagger A_k^i=\Id$ is used by
+the reductions of Chapter~\ref{ch:canonical_after_blocking}. The two
+orientations exchange under the conjugate-transposed Kraus family
+$K_i:=(A^i)^\dagger$, whose transfer map is the Frobenius adjoint of $\E_A$.
 
-Two further reduction schemes are used later in the chapter. The
-block-injective reduction aims at injective TP-normalized blocks and the
-canonical form conditions of Chapter~\ref{ch:block_perm}. The normal-canonical
-reduction uses a weighted family of irreducible TP-normalized blocks with
-primitive transfer maps and pairwise distinct nonzero weight moduli, in the
-sense of~\cite{Cirac2017MPDO_AnnPhys}. These later reductions are conditional
-primitive-block results and should not be confused with the arbitrary-input
-PGVWC07 theorem below.
+The PGVWC07 source theorem is recorded as a single headline statement
+(Theorem~\ref{thm:pgvwc07_ti_canonical_form}). The canonical-form reduction
+that feeds the proof of the Fundamental Theorem in Chapter~\ref{ch:ft_proof}
+does not pass through PGVWC07; it goes through
+Theorem~\ref{thm:tp_gauge_arbitrary},
+Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}, and the
+after-blocking reductions of Chapter~\ref{ch:canonical_after_blocking}.
 
-The PGVWC07 blocks are written in the unital orientation
-$\sum_i A_k^i(A_k^i)^\dagger=\Id$ for
-$\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$
-\cite[Theorem~Th:TIcanonical, lines~754--758]{PerezGarcia2007Matrix},
-whereas some later reductions in this chapter use the trace-preserving, or
-left-canonical, orientation
-$\sum_i (A_k^i)^\dagger A_k^i=\Id$.
-Passing to the conjugate-transposed Kraus family $K_i := (A^i)^\dagger$
-exchanges the two orientations: the transfer map of $K$ is the Frobenius adjoint
-of $\E_A$.
-The Perron--Frobenius eigenvector existence and TP-gauge construction
-are in Chapter~\ref{ch:qpf}; this chapter uses them to produce
-left-canonical normalizations and decompositions satisfying the normal
-canonical form conditions.
-The reduction draws on~\cite{PerezGarcia2007Matrix}, \cite{Cirac2021Matrix},
-and~\cite[Chapter~6]{Wolf2012Quantum}.
+The reduction outputs of this chapter are:
+Theorem~\ref{thm:pgvwc07_ti_canonical_form} (the source-faithful PGVWC07
+translation-invariant canonical form);
+Theorem~\ref{thm:CFII_data} and
+Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} (block-injective and
+primitive-irreducible TP-gauge reductions); and
+Theorem~\ref{thm:exists_normal_canonical_form} (the normal canonical form
+obtained from primitive blocks).
 
 \begin{theorem}[Translation-invariant canonical form]%
     \label{thm:pgvwc07_ti_canonical_form}
@@ -78,11 +68,8 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     of the decomposition is at most $D$.
 
     This is the positive-length form of
-    \cite[Theorem~Th:TIcanonical, lines~742--763]{PerezGarcia2007Matrix},
-    with the global spectral-radius normalization of lines~765--766 made
-    explicit. The zero-block convention for the empty word is recorded
-    separately in
-    Theorem~\ref{thm:pgvwc07_exact_rescaled_form_with_zero_tail}.
+    \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}, with the global
+    spectral-radius normalization of lines~765--766 made explicit.
 \end{theorem}
 
 \begin{remark}[Source proof order]\label{rem:pgvwc07_ti_canonical_source_order}
@@ -105,99 +92,35 @@ and~\cite[Chapter~6]{Wolf2012Quantum}.
     obtained from the source argument.
 \end{remark}
 
-\begin{theorem}[Blocked CPSV canonical-form reduction]%
-    \label{thm:cpgsv_canonical_form_source}
-    \notready
-    % Source anchors:
-    % Papers/1606.00608/MPDO-22-12-17-2.tex:227--231 removes periodic
-    % peripheral components by blocking; lines 233--235 define normal tensors;
-    % lines 237--246 are the definition containing the display labelled
-    % eq:II_CF1 at line 240 and the subsequent weight normalization at
-    % line 246; lines 249--251 state
-    % that any tensor becomes canonical after blocking. The phase-class
-    % quotient used by the BNT supplier is prop:char-BNT, labelled at line 278
-    % with statement at line 279, in the definition/proposition passage
-    % lines 271--279. It is restated, proved, and followed by the same-CF BNT
-    % uniqueness note in Appendix A at lines 1135--1148. The two-layer
-    % expansion is eq:II_ABasicTensors/decBSV at lines 283--301.
+\begin{remark}[CPSV blocked canonical form (source statement)]%
+    \label{rem:cpgsv_canonical_form_source}
+    % Source anchors (maintainer notes):
+    % Papers/1606.00608/MPDO-22-12-17-2.tex:227--231 removes periodic peripheral
+    % components by blocking; lines 233--235 define normal tensors;
+    % lines 237--246 contain the canonical-form definition with display
+    % eq:II_CF1 (line 240) and the weight normalization at line 246;
+    % lines 249--251 state that any tensor becomes canonical after blocking.
+    % The phase-class quotient used by the BNT supplier is prop:char-BNT
+    % (line 278, statement at line 279, passage lines 271--279), restated
+    % and proved in Appendix A at lines 1135--1148. The two-layer expansion
+    % is eq:II_ABasicTensors/decBSV at lines 283--301.
     % Papers/2011.12127/TN-Review-main.tex:1793--1803 gives the invariant-
-    % subspace reduction; lines 1815--1820 give period removal; lines 1827--1839
-    % give def:4:normal-tensor-mps and eq:II_CF1; lines 1846--1859 give the
-    % BNT definition/characterization; lines 1864--1884 give the two-layer
-    % BNT/copy display.
-    This is the canonical-form reduction of
-    \cite[Section~II.C, lines~217--246]{Cirac2017MPDO_AnnPhys}; see also
-    \cite[Section~IV.A, lines~1815--1837]{Cirac2021Matrix}. Every
-    translation-invariant MPS tensor $A$ is, after blocking by a period
-    $p \ge 1$, replaced by a tensor $B$ generating the same MPV family and
-    whose nonzero part is in canonical form. Thus, for each physical index $i$,
-    \[
-        B^i
-        =
-        \mathbf{0}_{d^{[p]},D_0}
-        \oplus
-        \bigoplus_{k=1}^{r} \mu_k B_k^i,
-    \]
-    where $\mathbf{0}_{d^{[p]},D_0}$ is the all-zero summand of physical
-    dimension $d^{[p]}$ and bond dimension $D_0$, and the tensors $B_k$ are
-    normal tensors. If $r>0$, the weights $\mu_k$ may be normalized so that
-    $|\mu_k|\le 1$ for all $k$ and $|\mu_k|=1$ for at least one index $k$.
-
-    In the source, the canonical-form construction is recorded in
-    \cite[display labelled eq:II\_Aiplusk1, lines~216--218,
-    followed by the spectral-radius normalization at lines~219--225]
-        {Cirac2017MPDO_AnnPhys}
-    and in
-    \cite[canonical-form definition containing eq:II\_CF1 and
-    subsequent weight normalization,
-    lines~237--246]{Cirac2017MPDO_AnnPhys}.
-    The basis-of-normal-tensors refinement is
-    \cite[BNT definition and proposition labelled prop:char-BNT,
-    lines~271--279]{Cirac2017MPDO_AnnPhys},
-    with its appendix restatement and proof in
-    \cite[Appendix proof of prop:char-BNT and same-CF uniqueness note,
-    lines~1135--1148]
-        {Cirac2017MPDO_AnnPhys},
-    and the two-layer display is
-    \cite[displays labelled eq:II\_ABasicTensors and decBSV,
-    lines~283--301]{Cirac2017MPDO_AnnPhys}.
-    The review exposition records the same normal-tensor and canonical-form
-    definitions at lines~1827--1837, the basis-of-normal-tensors definition and
-    characterization at lines~1846--1859, and the two-layer decomposition at
-    lines~1864--1884 of~\cite{Cirac2021Matrix}.
-\end{theorem}
-
-Theorem~\ref{thm:pgvwc07_ti_canonical_form} is the checked positive-length
-form of the PGVWC07 translation-invariant canonical-form theorem.
-Theorem~\ref{thm:cpgsv_canonical_form_source} remains a source-level target for the
-blocked CPSV reduction and is not yet formalized as stated. This chapter also
-develops constituent steps of the density-operator canonical-form reductions:
-invariant-subspace decomposition
-(Theorem~\ref{thm:irred_decomp}), TP gauge
-(Section~\ref{sec:tp_gauge_arbitrary}), and period-removal cyclic sectors
-(Section~\ref{sec:cyclic_sectors}). All-zero-block separation and the
-structural after-blocking primitive-block decomposition are recorded in
-Chapter~\ref{ch:canonical_after_blocking}
-(Theorem~\ref{thm:zero_block_separation} and
-Theorem~\ref{thm:tp_primitive_blockdecomp}). These checked statements do not
-yet supply the CPSV source normalization $|\mu_k|\le 1$ with at least one
-unit-modulus weight, so they should not be cited as
-Theorem~\ref{thm:cpgsv_canonical_form_source}.
-
-For Theorem~\ref{thm:pgvwc07_ti_canonical_form}, the source-ordered
-construction is the exact positive-length formulation of
-Theorem~\ref{thm:pgvwc07_exact_rescaled_form_allow_empty}: after a positive
-global rescaling of the original tensor, the normalized weighted block tensor
-has the same MPV coefficients on every nonempty ring.  The theorem permits an
-empty nonzero-block family precisely when all positive-length coefficients
-vanish, and otherwise retains a unit-modulus normalized weight together with
-the unital block condition, the scalar fixed-point conclusion, the diagonal
-positive-definite dual fixed point, and the bond-dimension bound.
-Theorem~\ref{thm:pgvwc07_exact_rescaled_form_with_zero_tail} records the
-companion explicit zero-block convention, where the zero block supplies the
-length-zero contribution \(D_0+\sum_k D_k=D\).  The projective MPV formulation
-records the same normalization as a proportionality of finite-ring state
-vectors, but it is not used as the primary existence theorem.
+    % subspace reduction; lines 1815--1820 give period removal; lines
+    % 1827--1839 give def:4:normal-tensor-mps and eq:II_CF1; lines
+    % 1846--1859 give the BNT definition/characterization; lines 1864--1884
+    % give the two-layer BNT/copy display.
+    The blocked canonical-form reduction of
+    \cite[Section~II.C, lines~217--246]{Cirac2017MPDO_AnnPhys} and
+    \cite[Section~IV.A, lines~1815--1837]{Cirac2021Matrix} states that an
+    arbitrary translation-invariant MPS tensor becomes, after blocking by some
+    period $p\ge 1$, the direct sum of an all-zero summand and a weighted
+    family of normal tensors $\bigoplus_k \mu_k B_k$ with $|\mu_k|\le 1$ and
+    at least one $|\mu_k|=1$. The closest proved results in this chapter are
+    Theorem~\ref{thm:tp_primitive_blockdecomp} and
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking}; neither yet supplies
+    the source upper normalization $|\mu_k|\le 1$ with at least one
+    unit-modulus weight.
+\end{remark}
 
 \section{Normal tensors, canonical forms, and bases of normal tensors}\label{sec:cpsv_canonical_defs}
 
@@ -733,12 +656,12 @@ primitive, removing periodicity.
 \section{Steps toward canonical form existence}%
 \label{sec:canonical_construction_1606}
 
-This section combines the components of the canonical-form
-construction following~\cite[Section~2.3 and Appendix~A]{Cirac2017MPDO_AnnPhys}.
-The approach here requires blocking to remove non-trivial periodicity.
-A separate reduction for periodic blocks without blocking
-is developed in~\cite{DeLasCuevas2017Irreducible}; see
-Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
+The combination of Theorem~\ref{thm:CFII_data} with the Perron--Frobenius
+gauge of Chapter~\ref{ch:qpf} and the irreducible-block scalar-fixed-point
+statement Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} yields the
+source PGVWC07 unital orientation and diagonal positive-definite dual fixed
+point on each irreducible block; the combination into the full PGVWC07
+statement is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 
 \begin{theorem}[Left-canonical normalization for irreducible TP blocks]%
     \label{thm:CFII_data}
@@ -799,220 +722,6 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     the displayed equations for $B$.
 \end{proof}
 
-\begin{theorem}[Single irreducible-block PGVWC07 canonical-form theorem]%
-    \label{thm:pgvwc07_irreducible_unital_dual_package}
-    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
-    \leanok
-    \uses{def:irreducible_tensor}
-    Let $A$ be an irreducible nonzero MPS block with positive bond dimension.
-    Then the Perron--Frobenius eigenvector produces a positive scalar $r$ and a
-    positive definite matrix $\rho$ such that
-    \[
-        B^i := r^{-1/2}\rho^{-1/2} A^i\rho^{1/2}
-    \]
-    is unital.  In this unital gauge every fixed point of $\E_B$ is a scalar
-    multiple of the identity.  Moreover a unitary conjugate $C^i=U^\dagger
-    B^iU$ remains unital and has a diagonal positive definite dual fixed point
-    $\Lambda$:
-    \[
-        \sum_i C^i(C^i)^\dagger=\Id,
-        \qquad
-        \sum_i (C^i)^\dagger\Lambda C^i=\Lambda .
-    \]
-    The construction preserves the finite-ring coefficients up to the
-    spectral-radius weight carried by the rescaling from $A$ to $B$.
-
-    This composes the single-block canonical-form existence steps of
-    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
-        {PerezGarcia2007Matrix}.  It is not yet the full theorem, because the
-    recursive finite-ring block decomposition and the final bond-dimension
-    bound have not been threaded through this construction.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:unital_data_irreducible,
-        thm:irreducible_unital_scalar_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
-    Theorem~\ref{thm:unital_data_irreducible} gives the unital gauge.
-    Gauge equivalence preserves irreducibility of the bond-space action, so
-    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} gives the scalar
-    fixed-point endpoint for the unital representative.  Then
-    Theorem~\ref{thm:pgvwc07_dual_diag_unital} gives the unitary
-    diagonalization of the dual fixed point.
-\end{proof}
-
-\begin{theorem}[Blockwise PGVWC07 unital and dual-diagonal data]%
-    \label{thm:pgvwc07_blockwise_unital_dual_package}
-    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
-    \leanok
-    \uses{def:irreducible_tensor,
-        thm:pgvwc07_irreducible_unital_dual_package}
-    Let a tensor~$A$ be represented, in finite-ring MPV coefficients, by a
-    finite direct sum of nonzero irreducible blocks with unit weights.  Then
-    there is a weighted direct sum with the same MPV family such that every
-    block is in the unital orientation,
-    \[
-        \sum_i C_k^i(C_k^i)^\dagger=\Id ,
-    \]
-    every fixed point of the block transfer map is a scalar multiple of the
-    identity, and each block has a diagonal positive definite dual fixed point
-    \[
-        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
-    \]
-    The weights are the positive spectral-radius weights produced by applying
-    the single-block Perron--Frobenius gauge to each summand.
-
-    This is a blockwise assembly of
-    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
-        {PerezGarcia2007Matrix} after the recursive splitting has already
-    produced the nonzero irreducible summands.  It is not yet the full source
-    theorem, because it does not start from an arbitrary representation and
-    does not prove the final total bond-dimension bound.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_irreducible_unital_dual_package}
-    Apply Theorem~\ref{thm:pgvwc07_irreducible_unital_dual_package} to each
-    nonzero irreducible block.  Gauge equivalence and the final unitary
-    conjugation preserve the block MPV coefficients up to the displayed
-    spectral-radius weights, and unitary conjugation transports the scalar
-    fixed-point property of the unital transfer map.
-\end{proof}
-
-\begin{theorem}[Arbitrary-input PGVWC07 unital dual-diagonal form with zero block]%
-    \label{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
-    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail}
-    \leanok
-    \uses{thm:zero_block_separation,
-        thm:pgvwc07_blockwise_unital_dual_package}
-    Let \(A\) be an arbitrary translation-invariant MPS tensor.  Then there is
-    a zero block of bond dimension \(D_0\), a finite family of nonzero blocks
-    \(C_k\), and positive real weights \(\mu_k\), such that for every chain
-    length \(N\) and every word \(\sigma \in \{0,\ldots,d-1\}^N\),
-    \[
-        \operatorname{MPV}_A
-        =
-        \operatorname{MPV}_{0_{D_0}}
-        +
-        \operatorname{MPV}_{\oplus_k \mu_k C_k}.
-    \]
-    Each nonzero block is in the unital orientation,
-    \[
-        \sum_i C_k^i(C_k^i)^\dagger=\Id ,
-    \]
-    every fixed point of its transfer map is a scalar multiple of the identity,
-    and it has a diagonal positive definite dual fixed point
-    \[
-        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
-    \]
-\end{theorem}
-
-% This theorem composes the zero-block separation with the blockwise PGVWC07
-% theorem.  The final total bond-dimension bound is still recorded as a
-% remaining step in the paper-gap audit.
-
-\begin{proof}\leanok
-    \uses{thm:zero_block_separation,
-        thm:pgvwc07_blockwise_unital_dual_package}
-    First apply the zero-block separation theorem to \(A\), retaining the
-    all-zero summands as a single zero block and extracting the nonzero
-    irreducible summands.  Then apply the blockwise PGVWC07 unital and
-    dual-diagonal theorem to this nonzero family.  Chaining the two MPV
-    identities gives the displayed zero-block formula.
-\end{proof}
-
-\begin{theorem}[Bond-dimension bound for the zero-block PGVWC07 form]%
-    \label{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
-    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound}
-    \leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
-    In the decomposition of
-    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}, the
-    zero-block bond dimension and the nonzero block dimensions satisfy
-    \[
-        D_0+\sum_k D_k = D .
-    \]
-    In particular, the total bond dimension of the nonzero blocks is at most
-    the original bond dimension \(D\).
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package,
-        lem:mpv_zero_length}
-    Evaluate the MPV identity of
-    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
-    empty word.  The length-zero coefficient of a bond-\(D\) tensor is \(D\);
-    the zero block contributes \(D_0\), and the direct sum of the nonzero
-    blocks contributes \(\sum_k D_k\).  This gives the displayed identity, and
-    the inequality follows because \(D_0\geq 0\).
-\end{proof}
-
-\begin{theorem}[Positive-length PGVWC07 unital dual-diagonal form]%
-    \label{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound}
-    \leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
-    For any MPS tensor \(A\) of bond dimension \(D\), there are nonzero blocks
-    \(C_k\) and positive real weights \(\mu_k\) such that each block is in the
-    unital orientation,
-    \[
-        \sum_i C_k^i(C_k^i)^\dagger=\Id,
-    \]
-    has only scalar fixed points for its transfer map, and has a diagonal
-    positive-definite fixed point for the dual transfer map,
-    \[
-        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
-    \]
-    Moreover, for
-    every chain length \(N>0\) and word
-    \(\sigma\in\{0,\ldots,d-1\}^N\),
-    \[
-        \operatorname{MPV}_A(\sigma)
-        =
-        \operatorname{MPV}_{\bigoplus_k \mu_k C_k}(\sigma),
-    \]
-    and the nonzero block dimensions satisfy \(\sum_k D_k\leq D\).
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
-    Apply Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}.
-    The all-zero summand contributes zero to every positive-length coefficient,
-    so it may be omitted from the displayed MPV identity for \(N>0\).  The
-    bound \(\sum_k D_k\leq D\) is one of the conclusions of that theorem.
-\end{proof}
-
-\begin{definition}[Positive-length PGVWC07 canonical-form witness]%
-    \label{def:pgvwc07_positive_length_witness}
-    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
-    \leanok
-    A positive-length PGVWC07 canonical-form witness for an MPS tensor \(A\)
-    consists of a finite family of nonzero unital blocks, positive real
-    weights, diagonal positive-definite dual fixed points, scalar fixed-point
-    conclusions, positive block dimensions, positive-length MPV equality with
-    \(A\), and the total bond-dimension bound \(\sum_k D_k\leq D\).
-
-    This definition records the exact-MPV, nonempty-ring part of the PGVWC07
-    construction.  It still does not include the source theorem's upper
-    normalization \(1\geq\lambda_k\), which depends on the global
-    spectral-radius normalization convention of
-    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
-\end{definition}
-
-\begin{lemma}[Positive PGVWC07 witness weights are nonzero]%
-    \label{lem:pgvwc07_positive_length_witness_weight_ne_zero}
-    \lean{MPSTensor.PGVWC07PositiveLengthWitness.weight_ne_zero}
-    \leanok
-    \uses{def:pgvwc07_positive_length_witness}
-    In a positive-length PGVWC07 canonical-form witness, every block weight is
-    nonzero.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:pgvwc07_positive_length_witness}
-    Each weight is the complex embedding of a strictly positive real number.
-\end{proof}
-
 \begin{lemma}[Common scalar rescaling of block weights]%
     \label{lem:mpv_to_tensor_from_blocks_weight_mul_left}
     \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
@@ -1025,258 +734,6 @@ Chapter~\ref{ch:periodic_ft_apps} for that direct periodic extension.
     \uses{thm:mpv_decomposition}
     Expand the block-diagonal MPV coefficient as a finite sum over blocks and
     factor the common scalar power out of the sum.
-\end{proof}
-
-\begin{theorem}[Weight normalization for a nonempty PGVWC07 witness]%
-    \label{thm:pgvwc07_positive_length_witness_weight_normalization}
-    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
-    \leanok
-    \uses{def:pgvwc07_positive_length_witness}
-    Let a positive-length PGVWC07 canonical-form witness have at least one
-    nonzero block.  Then its positive real weights may be divided by their
-    largest value so that the new weights \(\nu_k\) are positive,
-    \(|\nu_k|\leq 1\) for all \(k\), and \(|\nu_{k_0}|=1\) for at least one
-    block \(k_0\).  If the original weights are \(\mu_k=s\nu_k\) with
-    \(s>0\), then for every chain length \(N>0\),
-    \[
-        \operatorname{MPV}_A(\sigma)
-        =
-        s^N
-        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
-    \]
-    This is the formal scalar normalization corresponding to
-    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix};
-    the displayed factor records the global length-dependent rescaling.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        lem:mpv_to_tensor_from_blocks_weight_mul_left}
-    Choose the largest positive real weight \(s\).  Dividing every weight by
-    \(s\) gives positive weights bounded above by \(1\), and a block attaining
-    the maximum has normalized weight \(1\).  The MPV identity follows from
-    Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left}.
-\end{proof}
-
-\begin{theorem}[Projective form of PGVWC07 weight normalization]%
-    \label{thm:pgvwc07_positive_length_witness_weight_normalization_projective}
-    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective}
-    \leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        def:nonzero_proportional_mpv,
-        thm:pgvwc07_positive_length_witness_weight_normalization}
-    Let a positive-length PGVWC07 canonical-form witness have at least one
-    block.  After dividing the positive real weights by their largest value,
-    the normalized weights $\nu_k$ are positive real numbers, satisfy
-    $|\nu_k|\leq 1$ for all $k$, and satisfy $|\nu_{k_0}|=1$ for some block
-    $k_0$.  Moreover the original tensor and the normalized
-    weighted block tensor generate nonzero proportional MPV families:
-    for every length $N$ there is a nonzero scalar $c_N$ such that
-    \[
-        \operatorname{MPV}_A(\sigma)
-        =
-        c_N\,
-        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_positive_length_witness_weight_normalization,
-        lem:mpv_zero_length}
-    For $N>0$, take $c_N=s^N$, which is nonzero because $s>0$.  For
-    $N=0$, use the length-zero MPV coefficient and the positive total
-    dimension of the nonzero blocks to choose the nonzero scalar relating the
-    two traces.
-\end{proof}
-
-\begin{lemma}[Nonzero positive-length coefficient gives a nonempty PGVWC07 witness]%
-    \label{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}
-    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
-    \leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:mpv_decomposition}
-    Let a positive-length PGVWC07 canonical-form witness for $A$ be given.
-    If some positive-length MPV coefficient of $A$ is nonzero, then the
-    witness has at least one block.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:mpv_decomposition}
-    If the block family were empty, the block-diagonal MPV expansion would be
-    an empty sum at every positive length.  The positive-length MPV equality in
-    the witness would then force all positive-length coefficients of $A$ to
-    vanish, contradicting the hypothesis.
-\end{proof}
-
-\begin{theorem}[Nonzero projective PGVWC07 normalized form]%
-    \label{thm:pgvwc07_nonzero_normalized_projective_form}
-    \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv}
-    \leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
-        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
-    Suppose that some positive-length MPV coefficient of an MPS tensor $A$ is
-    nonzero.  Then $A$ has a nonempty finite family of nonzero PGVWC07 blocks
-    $C_k$ with positive normalized weights $\nu_k$ satisfying
-    $|\nu_k|\leq 1$ for all $k$ and $|\nu_{k_0}|=1$ for some block $k_0$.
-    Each block is in the unital orientation, has only scalar fixed points for
-    its transfer map, and has a diagonal positive-definite fixed point
-    $\Lambda_k$ for the dual transfer map.  Moreover the original tensor and
-    the normalized weighted block tensor generate nonzero proportional MPV
-    families, and the block dimensions satisfy $\sum_k D_k\leq D$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
-        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
-    First use Theorem~\ref{thm:pgvwc07_positive_length_witness}.  The nonzero
-    positive-length coefficient makes the witness nonempty by
-    Lemma~\ref{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}.
-    Apply the projective weight-normalization theorem to this nonempty witness.
-\end{proof}
-
-\begin{theorem}[Exact normalized PGVWC07 form after global rescaling]%
-    \label{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
-    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
-    \leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
-        thm:pgvwc07_positive_length_witness_weight_normalization}
-    Suppose that some positive-length MPV coefficient of an MPS tensor \(A\) is
-    nonzero.  Then there is a positive scalar \(s\) and a nonempty finite family
-    of PGVWC07 blocks \(C_k\) with positive normalized weights \(\nu_k\)
-    satisfying \(|\nu_k|\leq 1\) for all \(k\) and
-    \(|\nu_{k_0}|=1\) for some block \(k_0\).  Each block is in the unital
-    orientation, has only scalar fixed points for its transfer map, and has a
-    diagonal positive-definite fixed point for the dual transfer map.  Each
-    block has positive bond dimension.  Moreover the globally rescaled tensor
-    \(s^{-1}A\) and the normalized weighted block tensor have the same
-    positive-length MPV coefficients, and the block dimensions satisfy
-    \(\sum_k D_k\leq D\).
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_positive_length_witness,
-        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
-        thm:pgvwc07_positive_length_witness_weight_normalization,
-        lem:mpv_smul}
-    Start from the positive-length witness and use the nonzero coefficient to
-    make the block family nonempty.  Divide the positive weights by their
-    maximum.  The exact coefficient identity for \(A\) contains the global
-    factor \(s^N\) at length \(N\); applying the scalar rescaling \(s^{-1}\) to
-    every matrix of \(A\) contributes the factor \(s^{-N}\), so the two factors
-    cancel at every positive length.
-\end{proof}
-
-\begin{theorem}[Zero/nonzero dichotomy for exact rescaled PGVWC07 form]%
-    \label{thm:pgvwc07_exact_rescaled_form_zero_nonzero_dichotomy}
-    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
-    \leanok
-    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
-    For every MPS tensor \(A\), either every positive-length MPV coefficient of
-    \(A\) is zero, or the exact rescaled normalized PGVWC07 form of
-    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form} exists.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
-    If some positive-length coefficient is nonzero, apply
-    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}.  Otherwise,
-    every positive-length coefficient is zero.
-\end{proof}
-
-\begin{theorem}[Exact PGVWC07 form with empty zero branch]%
-    \label{thm:pgvwc07_exact_rescaled_form_allow_empty}
-    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty}
-    \leanok
-    \uses{thm:pgvwc07_exact_rescaled_form_zero_nonzero_dichotomy}
-    For every MPS tensor \(A\), there is a positive scalar \(s\) and a finite
-    family of PGVWC07 blocks \(C_k\), possibly empty, with positive normalized
-    weights \(\nu_k\) satisfying \(|\nu_k|\leq 1\). If the family is nonempty,
-    then \(|\nu_{k_0}|=1\) for some block \(k_0\). Each block is in the unital
-    orientation, has only scalar fixed points for its transfer map, and has a
-    diagonal positive-definite fixed point for the dual transfer map. Moreover
-    the globally rescaled tensor \(s^{-1}A\) and the normalized weighted block
-    tensor have the same positive-length MPV coefficients, and the block
-    dimensions satisfy \(\sum_k D_k\leq D\).
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_exact_rescaled_form_zero_nonzero_dichotomy}
-    Apply the zero/nonzero dichotomy. In the nonzero branch, use the nonempty
-    normalized exact form. In the zero branch, take the empty nonzero-block
-    family; its block-diagonal MPV coefficient is the empty sum at every
-    positive length, which agrees with the zero positive-length coefficients of
-    \(A\). The unit-weight conclusion is stated conditionally on the family
-    being nonempty.
-\end{proof}
-
-\begin{theorem}[Exact PGVWC07 form with explicit zero block]%
-    \label{thm:pgvwc07_exact_rescaled_form_with_zero_tail}
-    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail}
-    \leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound,
-        thm:pgvwc07_positive_length_witness_weight_normalization}
-    For every MPS tensor \(A\), there is a positive scalar \(s\), a zero-block
-    dimension \(D_0\), and a finite family of PGVWC07 blocks \(C_k\), possibly
-    empty, with positive normalized weights \(\nu_k\) satisfying
-    \(|\nu_k|\leq 1\). If the family is nonempty, then
-    \(|\nu_{k_0}|=1\) for some block \(k_0\). Each nonzero block is in the
-    unital orientation, has only scalar fixed points for its transfer map, and
-    has a diagonal positive-definite fixed point for the dual transfer map.
-    For every block \(k\), the bond dimension \(D_k\) is positive. Moreover
-    the globally rescaled tensor \(s^{-1}A\) has exactly the MPV family given
-    by the zero block plus the normalized weighted block tensor at every ring
-    length. The bond dimensions satisfy \(D_0+\sum_k D_k=D\), and in particular
-    \(\sum_kD_k\leq D\).
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound,
-        thm:pgvwc07_positive_length_witness_weight_normalization}
-    Start from the arbitrary-input theorem with the zero block retained.  If
-    the nonzero-block family is empty, take \(s=1\).  Otherwise normalize the
-    positive weights by their maximum.  On nonempty rings the zero block has
-    zero coefficient, so the normalized positive-length identity applies; at
-    length zero the equality is exactly \(D_0+\sum_kD_k=D\).
-\end{proof}
-
-\begin{theorem}[Zero/nonzero dichotomy for projective PGVWC07 form]%
-    \label{thm:pgvwc07_projective_form_zero_nonzero_dichotomy}
-    \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero}
-    \leanok
-    \uses{thm:pgvwc07_nonzero_normalized_projective_form}
-    For every MPS tensor $A$, either every positive-length MPV coefficient of
-    $A$ is zero, or $A$ has the nonempty normalized projective PGVWC07 form of
-    Theorem~\ref{thm:pgvwc07_nonzero_normalized_projective_form}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:pgvwc07_nonzero_normalized_projective_form}
-    If some positive-length coefficient is nonzero, apply
-    Theorem~\ref{thm:pgvwc07_nonzero_normalized_projective_form}.  Otherwise,
-    every positive-length coefficient is zero.
-\end{proof}
-
-\begin{theorem}[Existence of the positive-length PGVWC07 witness]%
-    \label{thm:pgvwc07_positive_length_witness}
-    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
-    \leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    For every MPS tensor \(A\), the conclusions of
-    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    give a positive-length PGVWC07 canonical-form witness.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:pgvwc07_positive_length_witness,
-        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    Unpack
-    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    and use its conclusions as the fields of the witness.
 \end{proof}
 
 \begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
@@ -1425,7 +882,6 @@ itself comes from the peripheral spectrum of the adjoint transfer map~\cite[Theo
 \begin{theorem}[Period removal by blocking]%
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking}
-    \leanok
     \uses{def:blocked_tensor}
     Let $A$ be a left-canonical irreducible tensor of period $m$.
     Then the blocked tensor $A^{[m]}$ admits:
@@ -1446,7 +902,16 @@ itself comes from the peripheral spectrum of the adjoint transfer map~\cite[Theo
     (\cite[Theorem~6.6]{Wolf2012Quantum}).
 \end{theorem}
 
-\begin{proof}\leanok
+% Faithfulness note: the Lean theorem
+% MPSTensor.exists_cyclic_sector_decomp_after_blocking takes the
+% positive-definite adjoint fixed point, the primitive m-th root of unity
+% parametrizing the peripheral eigenvalues, and the map-level irreducibility
+% as explicit hypotheses, whereas the blueprint statement above quantifies
+% only over the period. The hypotheses are derivable from the period-m
+% hypothesis and left-canonical irreducibility via the upstream Wielandt and
+% quantum Perron-Frobenius statements; the consumed packaging is the next
+% theorem, thm:cyclic_sector_decomp_irr_tp, which carries the \leanok.
+\begin{proof}
     The cyclic decomposition of the adjoint transfer map gives projections
     $(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$. Iterating the cyclic relation $m$
     times shows $(\E_{A^\dagger})^m(P_k) = P_k$, and the blocked-transfer identity
@@ -2149,3 +1614,382 @@ Chapter~\ref{ch:periodic_ft_apps}.
     where $\sigma'$ is the image of $\sigma$ under the coordinate-grouping
     identification.
 \end{lemma}
+
+\section{Source-faithful PGVWC07 intermediate steps}\label{sec:pgvwc07_intermediates}
+
+The theorems below record the intermediate construction steps of the proof of
+\cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}. They follow the source
+proof order: single-block unital and dual-diagonal construction; blockwise
+composition; arbitrary-input form with the explicit zero summand; the
+length-zero dimension identity; the positive-length form; the bundled
+positive-length witness; weight normalization; the nonzero-coefficient
+existence theorem; and the dichotomy that yields the headline statement
+Theorem~\ref{thm:pgvwc07_ti_canonical_form}. They are not used by the
+canonical-form reduction in the proof of the Fundamental Theorem (which goes
+through Theorem~\ref{thm:tp_gauge_arbitrary} and the after-blocking statements
+of Chapter~\ref{ch:canonical_after_blocking}); they record the source
+structure for completeness.
+
+\begin{theorem}[Single irreducible-block PGVWC07 canonical-form theorem]%
+    \label{thm:pgvwc07_irreducible_unital_dual_package}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
+    \leanok
+    \uses{def:irreducible_tensor}
+    Let $A$ be an irreducible nonzero MPS block with positive bond dimension.
+    Then the Perron--Frobenius eigenvector produces a positive scalar $r$ and a
+    positive definite matrix $\rho$ such that
+    \[
+        B^i := r^{-1/2}\rho^{-1/2} A^i\rho^{1/2}
+    \]
+    is unital.  In this unital gauge every fixed point of $\E_B$ is a scalar
+    multiple of the identity.  Moreover a unitary conjugate $C^i=U^\dagger
+    B^iU$ remains unital and has a diagonal positive definite dual fixed point
+    $\Lambda$:
+    \[
+        \sum_i C^i(C^i)^\dagger=\Id,
+        \qquad
+        \sum_i (C^i)^\dagger\Lambda C^i=\Lambda .
+    \]
+    The construction preserves the finite-ring coefficients up to the
+    spectral-radius weight carried by the rescaling from $A$ to $B$.
+
+    This composes the single-block canonical-form existence steps of
+    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
+        {PerezGarcia2007Matrix}.  It is not yet the full theorem, because the
+    recursive finite-ring block decomposition and the final bond-dimension
+    bound have not been threaded through this construction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:unital_data_irreducible,
+        thm:irreducible_unital_scalar_fixed_point,
+        thm:pgvwc07_dual_diag_unital}
+    Theorem~\ref{thm:unital_data_irreducible} gives the unital gauge.
+    Gauge equivalence preserves irreducibility of the bond-space action, so
+    Theorem~\ref{thm:irreducible_unital_scalar_fixed_point} gives the scalar
+    fixed-point endpoint for the unital representative.  Then
+    Theorem~\ref{thm:pgvwc07_dual_diag_unital} gives the unitary
+    diagonalization of the dual fixed point.
+\end{proof}
+
+\begin{theorem}[Blockwise PGVWC07 unital and dual-diagonal block decomposition]%
+    \label{thm:pgvwc07_blockwise_unital_dual_package}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
+    \leanok
+    \uses{def:irreducible_tensor,
+        thm:pgvwc07_irreducible_unital_dual_package}
+    Let a tensor~$A$ be represented, in finite-ring MPV coefficients, by a
+    finite direct sum of nonzero irreducible blocks with unit weights.  Then
+    there is a weighted direct sum with the same MPV family such that every
+    block is in the unital orientation,
+    \[
+        \sum_i C_k^i(C_k^i)^\dagger=\Id ,
+    \]
+    every fixed point of the block transfer map is a scalar multiple of the
+    identity, and each block has a diagonal positive definite dual fixed point
+    \[
+        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
+    \]
+    The weights are the positive spectral-radius weights produced by applying
+    the single-block Perron--Frobenius gauge to each summand.
+
+    This is the blockwise composition of
+    \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
+        {PerezGarcia2007Matrix} after the recursive splitting has already
+    produced the nonzero irreducible summands.  It is not yet the full source
+    theorem, because it does not start from an arbitrary representation and
+    does not prove the final total bond-dimension bound.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_irreducible_unital_dual_package}
+    Apply Theorem~\ref{thm:pgvwc07_irreducible_unital_dual_package} to each
+    nonzero irreducible block.  Gauge equivalence and the final unitary
+    conjugation preserve the block MPV coefficients up to the displayed
+    spectral-radius weights, and unitary conjugation transports the scalar
+    fixed-point property of the unital transfer map.
+\end{proof}
+
+\begin{theorem}[Arbitrary-input PGVWC07 unital dual-diagonal form with zero block]%
+    \label{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail}
+    \leanok
+    \uses{thm:zero_block_separation,
+        thm:pgvwc07_blockwise_unital_dual_package}
+    Let \(A\) be an arbitrary translation-invariant MPS tensor.  Then there is
+    a zero block of bond dimension \(D_0\), a finite family of nonzero blocks
+    \(C_k\), and positive real weights \(\mu_k\), such that for every chain
+    length \(N\) and every word \(\sigma \in \{0,\ldots,d-1\}^N\),
+    \[
+        \operatorname{MPV}_A
+        =
+        \operatorname{MPV}_{0_{D_0}}
+        +
+        \operatorname{MPV}_{\oplus_k \mu_k C_k}.
+    \]
+    Each nonzero block is in the unital orientation,
+    \[
+        \sum_i C_k^i(C_k^i)^\dagger=\Id ,
+    \]
+    every fixed point of its transfer map is a scalar multiple of the identity,
+    and it has a diagonal positive definite dual fixed point
+    \[
+        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:zero_block_separation,
+        thm:pgvwc07_blockwise_unital_dual_package}
+    First apply the zero-block separation theorem to \(A\), retaining the
+    all-zero summands as a single zero block and extracting the nonzero
+    irreducible summands.  Then apply the blockwise PGVWC07 unital and
+    dual-diagonal theorem to this nonzero family.  Chaining the two MPV
+    identities gives the displayed zero-block formula.
+\end{proof}
+
+\begin{theorem}[Bond-dimension bound for the zero-block PGVWC07 form]%
+    \label{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound}
+    \leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    In the decomposition of
+    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}, the
+    zero-block bond dimension and the nonzero block dimensions satisfy
+    \[
+        D_0+\sum_k D_k = D .
+    \]
+    In particular, the total bond dimension of the nonzero blocks is at most
+    the original bond dimension \(D\).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package,
+        lem:mpv_zero_length}
+    Evaluate the MPV identity of
+    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
+    empty word.  The length-zero coefficient of a bond-\(D\) tensor is \(D\);
+    the zero block contributes \(D_0\), and the direct sum of the nonzero
+    blocks contributes \(\sum_k D_k\).  This gives the displayed identity, and
+    the inequality follows because \(D_0\geq 0\).
+\end{proof}
+
+\begin{theorem}[Positive-length PGVWC07 unital dual-diagonal form]%
+    \label{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound}
+    \leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    For any MPS tensor \(A\) of bond dimension \(D\), there are nonzero blocks
+    \(C_k\) and positive real weights \(\mu_k\) such that each block is in the
+    unital orientation,
+    \[
+        \sum_i C_k^i(C_k^i)^\dagger=\Id,
+    \]
+    has only scalar fixed points for its transfer map, and has a diagonal
+    positive-definite fixed point for the dual transfer map,
+    \[
+        \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
+    \]
+    Moreover, for
+    every chain length \(N>0\) and word
+    \(\sigma\in\{0,\ldots,d-1\}^N\),
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        \operatorname{MPV}_{\bigoplus_k \mu_k C_k}(\sigma),
+    \]
+    and the nonzero block dimensions satisfy \(\sum_k D_k\leq D\).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
+    Apply Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}.
+    The all-zero summand contributes zero to every positive-length coefficient,
+    so it may be omitted from the displayed MPV identity for \(N>0\).  The
+    bound \(\sum_k D_k\leq D\) is one of the conclusions of that theorem.
+\end{proof}
+
+\begin{definition}[Positive-length PGVWC07 canonical-form witness]%
+    \label{def:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness}
+    \leanok
+    A positive-length PGVWC07 canonical-form witness for an MPS tensor \(A\)
+    consists of a finite family of nonzero unital blocks, positive real
+    weights, diagonal positive-definite dual fixed points, scalar fixed-point
+    conclusions, positive block dimensions, positive-length MPV equality with
+    \(A\), and the total bond-dimension bound \(\sum_k D_k\leq D\).
+
+    This definition records the exact-MPV, nonempty-ring part of the PGVWC07
+    construction.  It still does not include the source theorem's upper
+    normalization \(1\geq\lambda_k\), which depends on the global
+    spectral-radius normalization convention of
+    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{theorem}[Weight normalization for a nonempty PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness_weight_normalization}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness}
+    Let a positive-length PGVWC07 canonical-form witness have at least one
+    nonzero block.  Then its positive real weights may be divided by their
+    largest value so that the new weights \(\nu_k\) are positive,
+    \(|\nu_k|\leq 1\) for all \(k\), and \(|\nu_{k_0}|=1\) for at least one
+    block \(k_0\).  If the original weights are \(\mu_k=s\nu_k\) with
+    \(s>0\), then for every chain length \(N>0\),
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        s^N
+        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
+    \]
+    This is the formal scalar normalization corresponding to
+    \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix};
+    the displayed factor records the global length-dependent rescaling.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        lem:mpv_to_tensor_from_blocks_weight_mul_left}
+    Choose the largest positive real weight \(s\).  Dividing every weight by
+    \(s\) gives positive weights bounded above by \(1\), and a block attaining
+    the maximum has normalized weight \(1\).  The MPV identity follows from
+    Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left}.
+\end{proof}
+
+\begin{theorem}[Projective form of PGVWC07 weight normalization]%
+    \label{thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.exists_weight_normalization_projective}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        def:nonzero_proportional_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Let a positive-length PGVWC07 canonical-form witness have at least one
+    block.  After dividing the positive real weights by their largest value,
+    the normalized weights $\nu_k$ are positive real numbers, satisfy
+    $|\nu_k|\leq 1$ for all $k$, and satisfy $|\nu_{k_0}|=1$ for some block
+    $k_0$.  Moreover the original tensor and the normalized
+    weighted block tensor generate nonzero proportional MPV families:
+    for every length $N$ there is a nonzero scalar $c_N$ such that
+    \[
+        \operatorname{MPV}_A(\sigma)
+        =
+        c_N\,
+        \operatorname{MPV}_{\bigoplus_k \nu_k C_k}(\sigma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness_weight_normalization,
+        lem:mpv_zero_length}
+    For $N>0$, take $c_N=s^N$, which is nonzero because $s>0$.  For
+    $N=0$, use the length-zero MPV coefficient and the positive total
+    dimension of the nonzero blocks to choose the nonzero scalar relating the
+    two traces.
+\end{proof}
+
+\begin{lemma}[Nonzero positive-length coefficient gives a nonempty PGVWC07 witness]%
+    \label{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}
+    \lean{MPSTensor.PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:mpv_decomposition}
+    Let a positive-length PGVWC07 canonical-form witness for $A$ be given.
+    If some positive-length MPV coefficient of $A$ is nonzero, then the
+    witness has at least one block.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:mpv_decomposition}
+    If the block family were empty, the block-diagonal MPV expansion would be
+    an empty sum at every positive length.  The positive-length MPV equality in
+    the witness would then force all positive-length coefficients of $A$ to
+    vanish, contradicting the hypothesis.
+\end{proof}
+
+\begin{theorem}[Nonzero projective PGVWC07 normalized form]%
+    \label{thm:pgvwc07_nonzero_normalized_projective_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_projective_form_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    Suppose that some positive-length MPV coefficient of an MPS tensor $A$ is
+    nonzero.  Then $A$ has a nonempty finite family of nonzero PGVWC07 blocks
+    $C_k$ with positive normalized weights $\nu_k$ satisfying
+    $|\nu_k|\leq 1$ for all $k$ and $|\nu_{k_0}|=1$ for some block $k_0$.
+    Each block is in the unital orientation, has only scalar fixed points for
+    its transfer map, and has a diagonal positive-definite fixed point
+    $\Lambda_k$ for the dual transfer map.  Moreover the original tensor and
+    the normalized weighted block tensor generate nonzero proportional MPV
+    families, and the block dimensions satisfy $\sum_k D_k\leq D$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization_projective}
+    First use Theorem~\ref{thm:pgvwc07_positive_length_witness}.  The nonzero
+    positive-length coefficient makes the witness nonempty by
+    Lemma~\ref{lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv}.
+    Apply the projective weight-normalization theorem to this nonempty witness.
+\end{proof}
+
+\begin{theorem}[Exact normalized PGVWC07 form after global rescaling]%
+    \label{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_mpv}
+    \leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization}
+    Suppose that some positive-length MPV coefficient of an MPS tensor \(A\) is
+    nonzero.  Then there is a positive scalar \(s\) and a nonempty finite family
+    of PGVWC07 blocks \(C_k\) with positive normalized weights \(\nu_k\)
+    satisfying \(|\nu_k|\leq 1\) for all \(k\) and
+    \(|\nu_{k_0}|=1\) for some block \(k_0\).  Each block is in the unital
+    orientation, has only scalar fixed points for its transfer map, and has a
+    diagonal positive-definite fixed point for the dual transfer map.  Each
+    block has positive bond dimension.  Moreover the globally rescaled tensor
+    \(s^{-1}A\) and the normalized weighted block tensor have the same
+    positive-length MPV coefficients, and the block dimensions satisfy
+    \(\sum_k D_k\leq D\).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_positive_length_witness,
+        lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
+        thm:pgvwc07_positive_length_witness_weight_normalization,
+        lem:mpv_smul}
+    Start from the positive-length witness and use the nonzero coefficient to
+    make the block family nonempty.  Divide the positive weights by their
+    maximum.  The exact coefficient identity for \(A\) contains the global
+    factor \(s^N\) at length \(N\); applying the scalar rescaling \(s^{-1}\) to
+    every matrix of \(A\) contributes the factor \(s^{-N}\), so the two factors
+    cancel at every positive length.
+\end{proof}
+
+\begin{theorem}[Zero/nonzero dichotomy for exact rescaled PGVWC07 form]%
+    \label{thm:pgvwc07_exact_rescaled_form_zero_nonzero_dichotomy}
+    \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
+    \leanok
+    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    For every MPS tensor \(A\), either every positive-length MPV coefficient of
+    \(A\) is zero, or the exact rescaled normalized PGVWC07 form of
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form} exists.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
+    If some positive-length coefficient is nonzero, apply
+    Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}.  Otherwise,
+    every positive-length coefficient is zero.
+\end{proof}
+
+\begin{theorem}[Existence of the positive-length PGVWC07 witness]%
+    \label{thm:pgvwc07_positive_length_witness}
+    \lean{MPSTensor.exists_pgvwc07_positiveLengthWitness}
+    \leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    For every MPS tensor \(A\), the conclusions of
+    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    give a positive-length PGVWC07 canonical-form witness.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:pgvwc07_positive_length_witness,
+        thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    Unpack
+    Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
+    and use its conclusions as the fields of the witness.
+\end{proof}
+
