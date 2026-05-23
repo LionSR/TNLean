@@ -420,15 +420,32 @@
 \newcommand{\TNPEPSInsertionPhysicalRealization}{%
   \begin{tikzpicture}[tn picture]
     \begin{scope}
-      \TN@boxedThreeSiteInsertion{realA}{A_1}{A_2}{A_3}{X}
+      \TN@tensordot{realLeftA}{(0,0)}
+      \TN@upleg{realLeftA}{0.50}
+      \draw[tn leg] (realLeftA.east) -- ++(0.70,0);
+      \draw[tn leg] (realLeftA.south) -- ++(0,-0.58);
+      \TN@opdotabove{realLeftM}{(-0.56,0)}{M}
+      \draw[tn leg, red] (realLeftM.west) -- ++(-0.42,0);
+      \draw[tn leg] (realLeftM.east) -- (realLeftA.west);
+      \node at ($(realLeftA.south)+(0,-0.30)$) {$A_u$};
+      \node at (-0.56,-0.35) {$e$};
+      \node at (0.72,-0.36) {$\eta_{\widehat e}$};
+      \node at ($(realLeftA.north)+(0,0.73)$) {$i$};
     \end{scope}
-    \node at (3.75,0) {$=$};
-    \begin{scope}[xshift=4.15cm]
-      \TN@boxedThreeSitePhysicalOne{realL}{A_1}{A_2}{A_3}{O_1}
-    \end{scope}
-    \node at (7.95,0) {$=$};
-    \begin{scope}[xshift=8.35cm]
-      \TN@boxedThreeSitePhysicalTwo{realR}{A_1}{A_2}{A_3}{O_2}
+    \node at (1.80,0) {$=$};
+    \begin{scope}[xshift=3.20cm]
+      \TN@tensordot{realRightA}{(0,0)}
+      \TN@upleg{realRightA}{0.30}
+      \TN@opdotleft{realRightO}{(0,0.62)}{O}
+      \draw[tn phys leg] (realRightA.north) -- (realRightO.south);
+      \draw[tn phys leg, red] (realRightO.north) -- ++(0,0.28);
+      \draw[tn leg] (realRightA.west) -- ++(-0.70,0);
+      \draw[tn leg] (realRightA.east) -- ++(0.70,0);
+      \draw[tn leg] (realRightA.south) -- ++(0,-0.58);
+      \node at ($(realRightA.south)+(0,-0.30)$) {$A_u$};
+      \node at (-0.72,-0.36) {$\eta_e$};
+      \node at (0.72,-0.36) {$\eta_{\widehat e}$};
+      \node at ($(realRightO.north)+(0,0.55)$) {$O(A_u(\eta_e,\eta_{\widehat e}))$};
     \end{scope}
   \end{tikzpicture}%
 }
