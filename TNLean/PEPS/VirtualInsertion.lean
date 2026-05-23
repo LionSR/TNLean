@@ -216,6 +216,86 @@ omit [Fintype V] in
             (x, (localVirtualConfigSplitAt (G := G) A ie η').2)) :=
   rfl
 
+/-- Acting on one distinguished-edge basis configuration only changes the
+distinguished index and keeps the residual local boundary fixed. -/
+theorem localIncidentMatrixOp_single (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (x : Fin (A.bondDim ie.1)) (r : ResidualLocalConfig (G := G) A ie) :
+    localIncidentMatrixOp A ie M
+      (Pi.single ((localVirtualConfigSplitAt (G := G) A ie).symm (x, r)) (1 : ℂ)) =
+      ∑ y : Fin (A.bondDim ie.1),
+        Pi.single ((localVirtualConfigSplitAt (G := G) A ie).symm (y, r)) (M x y) := by
+  classical
+  ext η
+  simp only [localIncidentMatrixOp_apply, Finset.sum_apply]
+  let φ := localVirtualConfigSplitAt (G := G) A ie
+  have hfst : (φ η).1 = η ie := by simp [φ]
+  by_cases hres : (φ η).2 = r
+  · have hη : φ.symm (η ie, r) = η := by
+      have hp : (η ie, r) = φ η := by
+        ext <;> simp [hfst, hres]
+      rw [hp]
+      exact Equiv.symm_apply_apply φ η
+    rw [Fintype.sum_eq_single x]
+    · rw [Fintype.sum_eq_single (η ie)]
+      · have hcfg : φ.symm (x, (φ η).2) = φ.symm (x, r) := by simp [hres]
+        rw [hcfg, Pi.single_eq_same, mul_one, hη, Pi.single_eq_same]
+      · intro y hy
+        have hcfg : φ.symm (y, r) ≠ η := by
+          intro h
+          apply hy
+          have hp := congrArg φ h
+          simpa [φ, hfst, hres] using congrArg Prod.fst hp
+        rw [Pi.single_eq_of_ne (Ne.symm hcfg)]
+    · intro y hy
+      have hcfg : φ.symm (y, (φ η).2) ≠ φ.symm (x, r) := by
+        intro h
+        apply hy
+        have hp := congrArg φ h
+        simpa using congrArg Prod.fst hp
+      rw [Pi.single_eq_of_ne hcfg, mul_zero]
+  · rw [Fintype.sum_eq_single x]
+    · rw [Fintype.sum_eq_single (η ie)]
+      · have hcfg₁ : φ.symm (x, (φ η).2) ≠ φ.symm (x, r) := by
+          intro h
+          apply hres
+          have hp := congrArg φ h
+          simpa using congrArg Prod.snd hp
+        have hcfg₂ : φ.symm (η ie, r) ≠ η := by
+          intro h
+          apply hres
+          have hp := congrArg φ h
+          simpa [φ, hfst] using (congrArg Prod.snd hp).symm
+        rw [Pi.single_eq_of_ne hcfg₁, mul_zero, Pi.single_eq_of_ne (Ne.symm hcfg₂)]
+      · intro y hy
+        have hcfg : φ.symm (y, r) ≠ η := by
+          intro h
+          apply hy
+          have hp := congrArg φ h
+          simpa [φ, hfst] using congrArg Prod.fst hp
+        rw [Pi.single_eq_of_ne (Ne.symm hcfg)]
+    · intro y hy
+      have hcfg : φ.symm (y, (φ η).2) ≠ φ.symm (x, r) := by
+        intro h
+        apply hy
+        have hp := congrArg φ h
+        simpa using congrArg Prod.fst hp
+      rw [Pi.single_eq_of_ne hcfg, mul_zero]
+
+/-- The local tensor map after a one-edge matrix action on a basis virtual
+configuration. -/
+theorem localTensorMap_localIncidentMatrixOp_single (A : Tensor G d) {v : V}
+    (ie : IncidentEdge G v)
+    (M : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ)
+    (x : Fin (A.bondDim ie.1)) (r : ResidualLocalConfig (G := G) A ie) :
+    localTensorMap A v (localIncidentMatrixOp A ie M
+      (Pi.single ((localVirtualConfigSplitAt (G := G) A ie).symm (x, r)) (1 : ℂ))) =
+      ∑ y : Fin (A.bondDim ie.1),
+        M x y • A.component v ((localVirtualConfigSplitAt (G := G) A ie).symm (y, r)) := by
+  rw [localIncidentMatrixOp_single]
+  simp [map_sum]
+
 /-- Physical realization of a local virtual endomorphism.
 
 Since the local tensor map is injective, a virtual operator on the coefficient

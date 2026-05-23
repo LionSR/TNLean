@@ -61,7 +61,11 @@ vertex is represented in \path{TNLean/PEPS/VirtualInsertion.lean}. The chosen
 left inverse of the local tensor map and the resulting physical realization of
 local virtual endomorphisms correspond to the same observation used in the
 three-site MPS proof: a virtual operation can be represented by a physical
-operation on a neighboring site.
+operation on a neighboring site. The basis computation
+\leanid{TNLean.PEPS.localIncidentMatrixOp_single} and its tensor-map form
+\leanid{TNLean.PEPS.localTensorMap_localIncidentMatrixOp_single} identify the
+one-edge matrix action on a single local virtual boundary with the expected
+sum over the new distinguished edge index.
 
 The edge-centered blocking data are represented in
 \path{TNLean/PEPS/Blocking.lean}. The existing declarations split local virtual
@@ -77,7 +81,9 @@ The next formal layer is the matrix-insertion comparison. The declarations
 \leanid{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig},
 \leanid{TNLean.PEPS.edgeOpenMiddleConfigToMiddleConfig},
 \leanid{TNLean.PEPS.edgeMiddleConfigEquivOpenMiddleConfig},
-\leanid{TNLean.PEPS.edgeOpenMiddleWeight}, and
+\leanid{TNLean.PEPS.edgeOpenMiddleWeight},
+\leanid{TNLean.PEPS.edgeBoundaryLeftIndexEquivInsertedBoundaryConfig},
+\leanid{TNLean.PEPS.edgeBoundaryRightIndexEquivInsertedBoundaryConfig}, and
 \leanid{TNLean.PEPS.edgeInsertedCoeff} represent the open edge contraction used
 when an arbitrary matrix is inserted on the distinguished edge. These
 definitions are the formal counterpart of the matrix insertion appearing before
@@ -124,10 +130,13 @@ Theorem can be proved in the manner of the paper.
   virtual-to-physical realization $X\mapsto O_1,O_2$ is formalized by
   \path{thm:peps_virtualInsertionPhysicalRealization}: vertex injectivity turns
   the one-leg virtual matrix action at either endpoint into a physical operator
-  on that endpoint. The coefficient-level statement remains open: one must still
-  prove that these physical endpoint actions reproduce the full
-  \path{TNLean.PEPS.edgeInsertedCoeff} contraction in the edge-blocked
-  three-site coefficient. The converse recovery $O_1,O_2\mapsto W$ is
+  on that endpoint. The endpoint coefficient-level direction is formalized by
+  \path{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}: after fixing
+  ordinary edge-boundary data, the left and right physical operators supply the
+  independent inserted-edge index at the corresponding endpoint. On the left
+  endpoint the formal statement uses the transpose of the inserted matrix,
+  because the ordinary boundary supplies the right bond index. The converse
+  recovery $O_1,O_2\mapsto W$ remains open as
   \path{thm:peps_physicalToVirtualInsertion}.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
@@ -178,7 +187,11 @@ It is meant to prevent the proof from drifting away from the source argument.
   \path{thm:peps_edgeInsertedCoeff_identity} is reduced to finite diagonal
   reindexing, tracked by issue~\#1372.
 \item Lemma \path{inj_isomorph}, $X\mapsto O_1,O_2$:
-  \path{thm:peps_virtualInsertionPhysicalRealization}, tracked by issue~\#1369.
+  \path{thm:peps_virtualInsertionPhysicalRealization} formalizes the endpoint
+  realization, and
+  \path{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization} formalizes the
+  endpoint coefficient expansion. These are tracked by issues~\#1369
+  and~\#1995.
 \item Lemma \path{inj_isomorph}, $O_1,O_2\mapsto W$:
   \path{thm:peps_physicalToVirtualInsertion}, tracked by issue~\#1370.
 \item Matrix-insertion algebra isomorphism:

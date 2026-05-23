@@ -224,6 +224,37 @@ injective and normal PEPS, following Theorems~2 and~3 of
     configuration fixed.
 \end{definition}
 
+\begin{theorem}[One-edge matrix action on a basis configuration]%
+    \label{thm:peps_localIncidentMatrixOp_single}
+    \lean{TNLean.PEPS.localIncidentMatrixOp_single}
+    \leanok
+    \uses{def:peps_localIncidentMatrixOp,
+        def:peps_localVirtualConfigSplitAt}
+    If a coefficient function is supported on one local virtual configuration,
+    and the matrix acts on the distinguished incident edge, the result is the
+    sum over the new distinguished edge index with the residual local boundary
+    held fixed.
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate both sides on a local virtual configuration and split into the
+    two cases according to whether the residual boundary agrees with the fixed
+    residual boundary.
+\end{proof}
+
+\begin{theorem}[Local tensor form of a one-edge basis action]%
+    \label{thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    \lean{TNLean.PEPS.localTensorMap_localIncidentMatrixOp_single}
+    \leanok
+    \uses{thm:peps_localIncidentMatrixOp_single, def:peps_localTensorMap}
+    Applying the local tensor map after a one-edge matrix action on a basis
+    virtual configuration gives the corresponding linear combination of local
+    tensor components.
+\end{theorem}
+\begin{proof}\leanok
+    Use the preceding coefficient identity and linearity of the local tensor
+    map.
+\end{proof}
+
 \begin{theorem}[Physical realization of one-edge virtual matrix action]%
     \label{thm:peps_localIncidentMatrixOp_physicalRealization}
     \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealization}
@@ -410,6 +441,28 @@ injective and normal PEPS, following Theorems~2 and~3 of
     by using the same bond index at both endpoints. This is the diagonal
     boundary datum selected by the identity matrix in the edge-insertion
     coefficient.
+\end{definition}
+
+\begin{definition}[Right-endpoint inserted-boundary reindexing]%
+    \label{def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    Ordinary edge-boundary data together with an independent right endpoint
+    bond index are equivalent to inserted-edge boundary data. The ordinary
+    boundary supplies the left bond index and the two residual endpoint
+    boundaries.
+\end{definition}
+
+\begin{definition}[Left-endpoint inserted-boundary reindexing]%
+    \label{def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
+    \lean{TNLean.PEPS.edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
+    \leanok
+    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    Ordinary edge-boundary data together with an independent left endpoint
+    bond index are equivalent to inserted-edge boundary data. The ordinary
+    boundary supplies the right bond index and the two residual endpoint
+    boundaries.
 \end{definition}
 
 \begin{definition}[Diagonal inserted-boundary configurations]%
@@ -658,16 +711,71 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSInsertionPhysicalRealization
     \end{center}
 
-    % Scope restriction: this formalized theorem is the local endpoint part of
-    % the X -> O_1,O_2 step in Lemma inj_isomorph of Molnar2018NormalPEPS,
-    % Section 3.  It does not yet identify the resulting physical action with
-    % the full edge-inserted three-site coefficient; that coefficient-level
-    % statement is recorded in
-    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
+    % This is the local endpoint part of the X -> O_1,O_2 step in
+    % Lemma inj_isomorph of Molnar2018NormalPEPS, Section 3.  The corresponding
+    % coefficient identity is
+    % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
 \end{theorem}
 \begin{proof}\leanok
     Apply the one-edge realization theorem to the two endpoint incidences of
     the distinguished edge.
+\end{proof}
+
+\begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff,
+        def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig,
+        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    Let $e=(u,v)$. If a physical operator on $v$ realizes the one-edge
+    virtual matrix action on the distinguished incident edge, then the
+    inserted-edge coefficient is obtained by leaving the left endpoint and
+    open middle contraction explicit and applying that physical operator to the
+    right endpoint tensor.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the physical realization on a basis local configuration at the
+    right endpoint. The resulting sum over the right bond index is then
+    reindexed together with the ordinary edge-boundary data.
+\end{proof}
+
+\begin{theorem}[Left-endpoint physical realization of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff,
+        def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig,
+        thm:peps_localTensorMap_localIncidentMatrixOp_single}
+    Let $e=(u,v)$. If a physical operator on $u$ realizes the one-edge
+    virtual action of $M^{\mathsf T}$ on the distinguished incident edge,
+    then the inserted-edge coefficient for $M$ is obtained by applying that
+    physical operator to the left endpoint tensor and leaving the open middle
+    contraction and the right endpoint explicit.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the physical realization on a basis local configuration at the left
+    endpoint. The transpose converts the ordinary right bond index and the new
+    left bond index into the coefficient $M_{ij}$; the resulting finite sum
+    is then reindexed with the ordinary edge-boundary data.
+\end{proof}
+
+\begin{theorem}[Endpoint physical realizations of the inserted coefficient]%
+    \label{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}
+    \lean{TNLean.PEPS.edgeInsertedCoeff_endpointPhysicalRealization}
+    \leanok
+    \uses{thm:peps_localIncidentMatrixOp_physicalRealization,
+        thm:peps_edgeInsertedCoeff_leftPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
+    If the PEPS tensor is vertex-injective, then each inserted edge matrix is
+    realized by physical operators at the endpoint tensors: the left endpoint
+    realizes $M^{\mathsf T}$, the right endpoint realizes $M$, and both
+    realizations reproduce the same inserted-edge coefficient in the
+    edge-centered three-site decomposition.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the local physical-realization theorem at the two endpoints and then
+    use the two coefficient identities above.
 \end{proof}
 
 \begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
@@ -689,6 +797,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{thm:peps_edgeBlockedThreeSiteInjective,
         thm:peps_virtualInsertionPhysicalRealization,
+        thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,
         thm:peps_physicalToVirtualInsertion,
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Applying the three-site injective-chain theorem to the edge-blocked MPS

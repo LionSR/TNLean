@@ -455,6 +455,62 @@ instance instFintypeEdgeInsertedBoundaryConfig (A : Tensor G d) (e : Edge G) :
       ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e))
     (edgeInsertedBoundaryConfigEquivProd (G := G) A e).symm
 
+/-- Inserted-edge boundary data are the same as ordinary edge-boundary data
+together with an independent left distinguished-edge index.
+
+The ordinary boundary supplies the right distinguished-edge index and both
+endpoint residual configurations; the extra index supplies the left endpoint
+distinguished-edge index. This is the finite reindexing used when a physical
+operator on the left endpoint realizes a virtual matrix insertion. -/
+def edgeBoundaryLeftIndexEquivInsertedBoundaryConfig (A : Tensor G d) (e : Edge G) :
+    (Σ _ : EdgeBoundaryConfig (G := G) A e, Fin (A.bondDim e)) ≃
+      EdgeInsertedBoundaryConfig (G := G) A e where
+  toFun x :=
+    { leftEdgeIndex := x.2
+      rightEdgeIndex := x.1.edgeIndex
+      leftResidual := x.1.leftResidual
+      rightResidual := x.1.rightResidual }
+  invFun β :=
+    ⟨{ edgeIndex := β.rightEdgeIndex
+       leftResidual := β.leftResidual
+       rightResidual := β.rightResidual },
+      β.leftEdgeIndex⟩
+  left_inv x := by
+    rcases x with ⟨β, leftEdgeIndex⟩
+    cases β
+    rfl
+  right_inv β := by
+    rcases β with ⟨leftEdgeIndex, rightEdgeIndex, leftResidual, rightResidual⟩
+    rfl
+
+/-- Inserted-edge boundary data are the same as ordinary edge-boundary data
+together with an independent right distinguished-edge index.
+
+The ordinary boundary supplies the left distinguished-edge index and both
+endpoint residual configurations; the extra index supplies the right endpoint
+distinguished-edge index. This is the finite reindexing used when a physical
+operator on the right endpoint realizes a virtual matrix insertion. -/
+def edgeBoundaryRightIndexEquivInsertedBoundaryConfig (A : Tensor G d) (e : Edge G) :
+    (Σ _ : EdgeBoundaryConfig (G := G) A e, Fin (A.bondDim e)) ≃
+      EdgeInsertedBoundaryConfig (G := G) A e where
+  toFun x :=
+    { leftEdgeIndex := x.1.edgeIndex
+      rightEdgeIndex := x.2
+      leftResidual := x.1.leftResidual
+      rightResidual := x.1.rightResidual }
+  invFun β :=
+    ⟨{ edgeIndex := β.leftEdgeIndex
+       leftResidual := β.leftResidual
+       rightResidual := β.rightResidual },
+      β.rightEdgeIndex⟩
+  left_inv x := by
+    rcases x with ⟨β, rightEdgeIndex⟩
+    cases β
+    rfl
+  right_inv β := by
+    rcases β with ⟨leftEdgeIndex, rightEdgeIndex, leftResidual, rightResidual⟩
+    rfl
+
 /-- The diagonal part of inserted-edge boundary data, where the two distinguished
 bond indices agree. This is the part selected by inserting the identity matrix
 on the edge. -/
@@ -544,6 +600,30 @@ omit [Fintype V] in
     edgeInsertedLeftLocalConfig (G := G) A e
         (edgeBoundaryToInsertedBoundaryConfig (G := G) A e β) =
       edgeLeftLocalConfig (G := G) A e β :=
+  rfl
+
+omit [Fintype V] in
+@[simp] theorem edgeInsertedLeftLocalConfig_edgeBoundary_rightIndex
+    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e)
+    (y : Fin (A.bondDim e)) :
+    edgeInsertedLeftLocalConfig (G := G) A e
+        { leftEdgeIndex := β.edgeIndex
+          rightEdgeIndex := y
+          leftResidual := β.leftResidual
+          rightResidual := β.rightResidual } =
+      edgeLeftLocalConfig (G := G) A e β :=
+  rfl
+
+omit [Fintype V] in
+@[simp] theorem edgeInsertedRightLocalConfig_edgeBoundary_leftIndex
+    (A : Tensor G d) (e : Edge G) (β : EdgeBoundaryConfig (G := G) A e)
+    (y : Fin (A.bondDim e)) :
+    edgeInsertedRightLocalConfig (G := G) A e
+        { leftEdgeIndex := y
+          rightEdgeIndex := β.edgeIndex
+          leftResidual := β.leftResidual
+          rightResidual := β.rightResidual } =
+      edgeRightLocalConfig (G := G) A e β :=
   rfl
 
 omit [Fintype V] in
