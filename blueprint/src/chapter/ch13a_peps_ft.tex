@@ -213,6 +213,32 @@ injective and normal PEPS, following Theorems~2 and~3 of
     This is immediate from $\Psi_v \circ \Phi_v = \Id$.
 \end{proof}
 
+\begin{definition}[Matrix action on one incident virtual edge]%
+    \label{def:peps_localIncidentMatrixOp}
+    \lean{TNLean.PEPS.localIncidentMatrixOp}
+    \leanok
+    \uses{def:peps_incident_edge, def:peps_localVirtualConfigSplitAt}
+    A matrix on one edge incident to $v$ acts on the coefficient space of local
+    virtual configurations by applying the matrix to that edge coordinate and
+    summing over the input edge index while keeping the residual virtual
+    configuration fixed.
+\end{definition}
+
+\begin{theorem}[Physical realization of one-edge virtual matrix action]%
+    \label{thm:peps_localIncidentMatrixOp_physicalRealization}
+    \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealization}
+    \leanok
+    \uses{def:peps_localIncidentMatrixOp,
+        def:peps_physRealizeLocalOp,
+        thm:peps_physRealizeLocalOp_spec}
+    If $A$ is vertex-injective, then a matrix acting on one edge incident to
+    $v$ is realized by a physical operator on the physical space at $v$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the physical realization of local virtual operations to the
+    one-edge matrix action.
+\end{proof}
+
 \begin{definition}[Split at one incident edge]%
     \label{def:peps_localVirtualConfigSplitAt}
     \lean{TNLean.PEPS.localVirtualConfigSplitAt}
@@ -618,20 +644,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
-\begin{theorem}[Virtual insertion realized physically on either endpoint]%
+\begin{theorem}[Local virtual insertion realized physically on either endpoint]%
     \label{thm:peps_virtualInsertionPhysicalRealization}
-    \notready
-    \uses{def:IsVertexInjective, def:peps_edgeInsertedCoeff}
-    In the edge-blocked three-site MPS, injectivity of the endpoint tensors lets
-    an arbitrary virtual matrix \(X\) on the chosen bond be realized by a
-    physical operation on either neighboring particle:
+    \lean{TNLean.PEPS.edgeVirtualInsertionPhysicalRealization}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_localIncidentMatrixOp,
+        thm:peps_localIncidentMatrixOp_physicalRealization}
+    Let \(A\) be vertex-injective and let \(e=(u,v)\) be an edge. For every
+    matrix \(X\) on the bond space of \(e\), the one-leg virtual action induced
+    by \(X\) on the local tensor at \(u\), and likewise at \(v\), is realized by
+    a physical operator on that endpoint's physical space.
     \begin{center}
         \TNPEPSInsertionPhysicalRealization
     \end{center}
-    This is the diagrammatic step \(X\mapsto O_1,O_2\) in the proof of
-    Lemma~\(\mathrm{inj\_isomorph}\) in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+
+    % Scope restriction: this formalized theorem is the local endpoint part of
+    % the X -> O_1,O_2 step in Lemma inj_isomorph of Molnar2018NormalPEPS,
+    % Section 3.  It does not yet identify the resulting physical action with
+    % the full edge-inserted three-site coefficient; that coefficient-level
+    % statement is recorded in
+    % docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge realization theorem to the two endpoint incidences of
+    the distinguished edge.
+\end{proof}
 
 \begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
     \label{thm:peps_physicalToVirtualInsertion}

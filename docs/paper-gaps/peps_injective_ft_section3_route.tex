@@ -120,10 +120,14 @@ Theorem can be proved in the manner of the paper.
   regrouped MPS is injective. In the blueprint this is the not-yet-formalized
   theorem \path{thm:peps_edgeBlockedThreeSiteInjective}.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
-  the edge-blocked three-site MPS. The virtual-to-physical realization
-  $X\mapsto O_1,O_2$ is
-  \path{thm:peps_virtualInsertionPhysicalRealization}; the converse recovery
-  $O_1,O_2\mapsto W$ is
+  the edge-blocked three-site MPS. The local endpoint part of the
+  virtual-to-physical realization $X\mapsto O_1,O_2$ is formalized by
+  \path{thm:peps_virtualInsertionPhysicalRealization}: vertex injectivity turns
+  the one-leg virtual matrix action at either endpoint into a physical operator
+  on that endpoint. The coefficient-level statement remains open: one must still
+  prove that these physical endpoint actions reproduce the full
+  \path{TNLean.PEPS.edgeInsertedCoeff} contraction in the edge-blocked
+  three-site coefficient. The converse recovery $O_1,O_2\mapsto W$ is
   \path{thm:peps_physicalToVirtualInsertion}.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
