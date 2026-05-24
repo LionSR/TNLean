@@ -354,7 +354,7 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 The arbitrary-input part of this file stops at the irreducible block decomposition and the
 zero-block bookkeeping below. The irreducible-to-TP-gauge, CFII normalization, and
 periodicity-removal theorems remain available for individual blocks satisfying their hypotheses,
-but this file does not package them as unconditional siblings of the block decomposition.
+but this file does not combine them into unconditional companions of the block decomposition.
 
 The normal-canonical-form file starts from a primitive weighted block family with positive bond
 dimensions and distinct nonzero weights. This file does **not** construct that input from an
