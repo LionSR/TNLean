@@ -1260,7 +1260,8 @@ the elementary trace-power identity for diagonal matrices.
     \label{def:mpdo_positive_bnt_label_chi_trace_power_form}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        def:mpdo_diagonal_chi_family}
     A positive BNT-label \(\chi\) witness consists of a length-independent
     diagonal \(\chi_{\alpha,\beta,\gamma}\)-family, positivity of every
     diagonal entry, and the positive-length trace-power identity for the
@@ -1280,7 +1281,8 @@ the elementary trace-power identity for diagonal matrices.
       =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})\).
 \end{theorem}
 \begin{proof}\leanok
-    Apply the trace reformulation of the trace-power field of the witness.
+    Apply the trace reformulation of the positive-length trace-power identity
+    from the witness.
 \end{proof}
 
 \begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
@@ -1373,7 +1375,7 @@ the elementary trace-power identity for diagonal matrices.
     \(c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})\).
 \end{theorem}
 \begin{proof}\leanok
-    Apply the trace reformulation of the trace-power field of the witness.
+    Apply the trace reformulation of the trace-power identity from the witness.
 \end{proof}
 
 \section{Commuting form and GSNNCH}
