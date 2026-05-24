@@ -7684,6 +7684,10 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle" class="lean_decl">TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.normalSquareRegionR" class="lean_decl">TNLean.PEPS.normalSquareRegionR</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.normalSquareRegionS" class="lean_decl">TNLean.PEPS.normalSquareRegionS</a></li>
+          
         </ul>
     
       </div>
@@ -7693,7 +7697,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>          The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively. Contiguous coordinate rectangles are products of contiguous coordinate intervals, and the contiguous \(2\times 3\) and \(3\times 2\) predicates name the rectangular blocks used in the normal square-lattice theorem. </p>
+  <p>            The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively. Contiguous coordinate rectangles are products of contiguous coordinate intervals, and the contiguous \(2\times 3\) and \(3\times 2\) predicates name the rectangular blocks used in the normal square-lattice theorem. The displayed region \(R\) is the union of a \(2\times 3\) contiguous rectangle with the \(3\times 2\) contiguous rectangle occupying its upper two rows and extending one column to the right. The displayed region \(S\) is the union of two \(2\times 3\) contiguous rectangles shifted by one horizontal coordinate, hence the full \(3\times 3\) square spanned by them. </p>
 
   </div>
 </div>
@@ -7755,6 +7759,10 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.mem_squareLatticeContiguousRectangle" class="lean_decl">TNLean.PEPS.mem_squareLatticeContiguousRectangle</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.mem_normalSquareRegionR" class="lean_decl">TNLean.PEPS.mem_normalSquareRegionR</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.mem_normalSquareRegionS" class="lean_decl">TNLean.PEPS.mem_normalSquareRegionS</a></li>
+          
           <li><a href="../docs/find/#doc/TNLean.PEPS.card_squareLatticeRectangle" class="lean_decl">TNLean.PEPS.card_squareLatticeRectangle</a></li>
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.squareLatticeFull_eq_univ" class="lean_decl">TNLean.PEPS.squareLatticeFull_eq_univ</a></li>
@@ -7768,7 +7776,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>       Membership in a coordinate rectangle is coordinatewise membership, the contiguous coordinate interval has the expected coordinate inequalities, membership in a contiguous coordinate rectangle is the conjunction of the four bounding inequalities, the cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
+  <p>         Membership in a coordinate rectangle is coordinatewise membership, the contiguous coordinate interval has the expected coordinate inequalities, membership in a contiguous coordinate rectangle is the conjunction of the four bounding inequalities, and membership in \(R\) is the disjunction of membership in the \(2\times 3\) lower-left piece or in the shifted \(3\times 2\) upper piece. Membership in \(S\) is the disjunction of membership in the left \(2\times 3\) piece or in the horizontally shifted \(2\times 3\) piece. The cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
 
   </div>
 </div>
