@@ -7296,6 +7296,8 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.regionOutsideUnion" class="lean_decl">TNLean.PEPS.regionOutsideUnion</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.regionUnionPart" class="lean_decl">TNLean.PEPS.regionUnionPart</a></li>
+          
         </ul>
     
       </div>
@@ -7305,7 +7307,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Let \(V\) be a finite vertex set. For two regions \(A,B\subseteq V\), define the four regions \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and \(V\setminus (A\cup B)\). These are the four regions used in the proof of Lemma&#160;<a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">17.95</a>. </p>
+  <p>    Let \(V\) be a finite vertex set. For two regions \(A,B\subseteq V\), define the four regions \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and \(V\setminus (A\cup B)\). These are the four regions used in the proof of Lemma&#160;<a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">17.95</a>. They also form an indexed family over \(\{ 0,1,2,3\} \) in the order \(A\setminus B\), \(A\cap B\), \(B\setminus A\), \(V\setminus (A\cup B)\). </p>
 
   </div>
 </div>
@@ -7371,6 +7373,8 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.regionFourPart_cases" class="lean_decl">TNLean.PEPS.regionFourPart_cases</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.regionUnionPart_biUnion" class="lean_decl">TNLean.PEPS.regionUnionPart_biUnion</a></li>
+          
         </ul>
     
       </div>
@@ -7380,7 +7384,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>      Let \(V\) be a finite vertex set and let \(A,B\subseteq V\). The left-only and overlap regions reconstruct \(A\), the overlap and right-only regions reconstruct \(B\), the three inside regions reconstruct \(A\cup B\), and all four regions reconstruct \(V\). Equivalently, each vertex lies in one of the four regions. </p>
+  <p>       Let \(V\) be a finite vertex set and let \(A,B\subseteq V\). The left-only and overlap regions reconstruct \(A\), the overlap and right-only regions reconstruct \(B\), the three inside regions reconstruct \(A\cup B\), and all four regions reconstruct \(V\). Equivalently, each vertex lies in one of the four regions, and the indexed four-region family has union \(V\). </p>
 
   </div>
 </div>
@@ -7464,6 +7468,8 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.regionInside_disjoint_outside" class="lean_decl">TNLean.PEPS.regionInside_disjoint_outside</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.regionUnionPart_pairwise_disjoint" class="lean_decl">TNLean.PEPS.regionUnionPart_pairwise_disjoint</a></li>
+          
         </ul>
     
       </div>
@@ -7473,7 +7479,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>         In the four-region decomposition, the left-only and right-only parts are disjoint from the overlap and from each other. Each inside part, and hence the union of the three inside regions, is disjoint from the outside region. </p>
+  <p>          In the four-region decomposition, the left-only and right-only parts are disjoint from the overlap and from each other. Each inside part, and hence the union of the three inside regions, is disjoint from the outside region. The indexed four-region family is pairwise disjoint. </p>
 
   </div>
 </div>
