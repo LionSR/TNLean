@@ -200,6 +200,54 @@ def normalSquareRegionS {width height : ℕ} (xStart yStart : ℕ) :
         yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
   simp [normalSquareRegionS]
 
+/-- The displayed region \(R\) is contained in the displayed region \(S\).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+and 1544--1546 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionR_subset_regionS {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareRegionR xStart yStart ⊆
+      (normalSquareRegionS xStart yStart :
+        Finset (SquareLatticeVertex width height)) := by
+  intro v hv
+  rw [mem_normalSquareRegionR] at hv
+  rw [mem_normalSquareRegionS]
+  rcases hv with hv | hv
+  · exact Or.inl hv
+  · rcases hv with ⟨hx0, hx3, hy1, hy3⟩
+    by_cases hx2 : v.1.1 < xStart + 2
+    · exact Or.inl ⟨hx0, hx2, by omega, hy3⟩
+    · exact Or.inr ⟨by omega, hx3, by omega, hy3⟩
+
+/-- The displayed regions \(R\) and \(S\) differ by the lower-right site of
+the \(3\times3\) square.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+and 1544--1546 of `Papers/1804.04964/paper_normal.tex`. -/
+@[simp] theorem mem_normalSquareRegionS_sdiff_regionR {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionS xStart yStart \ normalSquareRegionR xStart yStart ↔
+      v.1.1 = xStart + 2 ∧ v.2.1 = yStart := by
+  rw [Finset.mem_sdiff, mem_normalSquareRegionS, mem_normalSquareRegionR]
+  constructor
+  · rintro ⟨hvS, hvR⟩
+    rcases hvS with hvS | hvS
+    · exfalso
+      exact hvR (Or.inl hvS)
+    · rcases hvS with ⟨hx1, hx3, hy0, hy3⟩
+      by_contra h
+      push Not at h
+      apply hvR
+      by_cases hy1 : yStart + 1 ≤ v.2.1
+      · exact Or.inr ⟨by omega, hx3, hy1, hy3⟩
+      · exact Or.inl ⟨by omega, by omega, hy0, by omega⟩
+  · rintro ⟨hx, hy⟩
+    constructor
+    · exact Or.inr ⟨by omega, by omega, by omega, by omega⟩
+    · rintro (hvR | hvR)
+      · omega
+      · omega
+
 section EdgeBlocking
 
 variable [LinearOrder V]
