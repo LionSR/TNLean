@@ -7672,9 +7672,17 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.squareLatticeFull" class="lean_decl">TNLean.PEPS.squareLatticeFull</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.squareLatticeCoordinateInterval" class="lean_decl">TNLean.PEPS.squareLatticeCoordinateInterval</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.squareLatticeContiguousRectangle" class="lean_decl">TNLean.PEPS.squareLatticeContiguousRectangle</a></li>
+          
           <li><a href="../docs/find/#doc/TNLean.PEPS.IsTwoByThreeSquareLatticeProduct" class="lean_decl">TNLean.PEPS.IsTwoByThreeSquareLatticeProduct</a></li>
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.IsThreeByTwoSquareLatticeProduct" class="lean_decl">TNLean.PEPS.IsThreeByTwoSquareLatticeProduct</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsTwoByThreeContiguousSquareLatticeRectangle" class="lean_decl">TNLean.PEPS.IsTwoByThreeContiguousSquareLatticeRectangle</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle" class="lean_decl">TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle</a></li>
           
         </ul>
     
@@ -7685,7 +7693,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>      The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively; they do not yet assert that the coordinate sets are contiguous intervals. </p>
+  <p>          The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively. Contiguous coordinate rectangles are products of contiguous coordinate intervals, and the contiguous \(2\times 3\) and \(3\times 2\) predicates name the rectangular blocks used in the normal square-lattice theorem. </p>
 
   </div>
 </div>
@@ -7743,6 +7751,10 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.mem_squareLatticeRectangle" class="lean_decl">TNLean.PEPS.mem_squareLatticeRectangle</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.mem_squareLatticeCoordinateInterval" class="lean_decl">TNLean.PEPS.mem_squareLatticeCoordinateInterval</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.mem_squareLatticeContiguousRectangle" class="lean_decl">TNLean.PEPS.mem_squareLatticeContiguousRectangle</a></li>
+          
           <li><a href="../docs/find/#doc/TNLean.PEPS.card_squareLatticeRectangle" class="lean_decl">TNLean.PEPS.card_squareLatticeRectangle</a></li>
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.squareLatticeFull_eq_univ" class="lean_decl">TNLean.PEPS.squareLatticeFull_eq_univ</a></li>
@@ -7756,7 +7768,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>     Membership in a coordinate rectangle is coordinatewise membership, the cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
+  <p>       Membership in a coordinate rectangle is coordinatewise membership, the contiguous coordinate interval has the expected coordinate inequalities, membership in a contiguous coordinate rectangle is the conjunction of the four bounding inequalities, the cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
 
   </div>
 </div>
