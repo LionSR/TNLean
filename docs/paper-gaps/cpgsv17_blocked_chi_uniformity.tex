@@ -127,15 +127,22 @@ same-length BNT product predicate records the algebra identity
       = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma)
 \]
 for an abstract family of length-\(L\) BNT operators.\footnote{%
-\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}.}  A
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}.}  The
+idempotent condition
+\[
+    m_\gamma =
+      \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
+\]
+is also represented as an abstract predicate on BNT-labelled tensors.\footnote{%
+\leanid{MPOTensor.BNTLabelTensorFamily.HasIdempotentCoefficientForm}.}  A
 positive BNT-label \(\chi\)-witness consists of a length-independent diagonal
 family \(\chi_{\alpha,\beta,\gamma}\), positivity of every diagonal entry, and
 the positive-length trace-power identity.\footnote{%
 \leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}.}
 These declarations specify the BNT-label coefficient objects, but they do not
-yet construct the operators, coefficients, or \(\chi\)-matrices from an MPDO
-tensor, and they do not yet compare BNT-label coefficients with the chosen
-blocked bases.
+yet construct the operators, tensors, coefficients, or \(\chi\)-matrices from
+an MPDO tensor, and they do not yet compare BNT-label coefficients with the
+chosen blocked bases.
 
 To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
@@ -148,10 +155,10 @@ To eliminate the remaining gap, the formalization should introduce:
     \item construction of the positive BNT-label
         \(\chi_{\alpha,\beta,\gamma}\)-witness from the paper's Appendix C.3
         and C.4 hypotheses;
-    \item the idempotent condition
+    \item construction of the idempotent condition
         \(m_\gamma =
           \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
-          m_\alpha m_\beta\);
+          m_\alpha m_\beta\) from the MPDO tensor;
     \item the blocked-basis trace-power statement, with its source-length
         exponent convention, as a derived corollary of the uniform BNT-label
         theorem, rather than as the theorem itself.

@@ -53,8 +53,11 @@ statement shape of Theorem IV.13(ii): the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, the
 BNT-label coefficient system is represented as `BNTLabelCoefficientFamily`, and
 `BNTLabelOperatorFamily.HasSameLengthProductForm` records the same-length
-product identity.  The structure `PositiveBNTLabelChiTracePowerForm` records
-positivity together with the positive-length identity
+product identity.  The predicate
+`BNTLabelTensorFamily.HasIdempotentCoefficientForm` records the idempotent
+coefficient condition on the BNT-labelled tensors.  The structure
+`PositiveBNTLabelChiTracePowerForm` records positivity together with the
+positive-length identity
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.
 For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
@@ -722,6 +725,52 @@ theorem HasSameLengthProductForm.eq_sum [Fintype Λ]
   h L hL α β
 
 end BNTLabelOperatorFamily
+
+/-- BNT-labelled tensors \(m_\alpha\) appearing in the idempotent condition of
+Theorem IV.13(ii).
+
+Here `Λ` is the fixed BNT-label type, and `A` is the ambient algebra containing
+the tensors \(m_\alpha\).  This structure only records the label-indexed
+family; the coefficient identity itself is the predicate
+`BNTLabelTensorFamily.HasIdempotentCoefficientForm`.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelTensorFamily (Λ : Type*) (A : Type*) where
+  /-- The tensor \(m_\alpha\) with BNT label `α`. -/
+  tensor : Λ → A
+
+namespace BNTLabelTensorFamily
+
+variable {Λ A : Type*} (m : BNTLabelTensorFamily Λ A)
+
+/-- Idempotent coefficient condition from Theorem IV.13(ii).
+
+The length-one BNT coefficients reconstruct each labelled tensor as
+\[
+  m_\gamma =
+    \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma} m_\alpha m_\beta.
+\]
+This predicate records only that algebraic identity; constructing it from an
+MPDO tensor and comparing it with the blocked support-algebra coefficients are
+separate obligations.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def HasIdempotentCoefficientForm [Fintype Λ]
+    [AddCommMonoid A] [Module ℂ A] [Mul A]
+    (c : BNTLabelCoefficientFamily Λ) : Prop :=
+  ∀ γ : Λ, m.tensor γ =
+    ∑ α : Λ, ∑ β : Λ, c.coeff 1 α β γ • (m.tensor α * m.tensor β)
+
+/-- Restatement of the BNT idempotent coefficient condition as an equality. -/
+theorem HasIdempotentCoefficientForm.eq_sum [Fintype Λ]
+    [AddCommMonoid A] [Module ℂ A] [Mul A]
+    {c : BNTLabelCoefficientFamily Λ}
+    (h : m.HasIdempotentCoefficientForm c) (γ : Λ) :
+    m.tensor γ =
+      ∑ α : Λ, ∑ β : Λ, c.coeff 1 α β γ • (m.tensor α * m.tensor β) :=
+  h γ
+
+end BNTLabelTensorFamily
 
 /-- A positive BNT-label chi witness for Theorem IV.13(ii).
 
