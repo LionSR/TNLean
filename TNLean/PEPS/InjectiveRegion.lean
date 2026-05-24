@@ -33,6 +33,18 @@ variable {V : Type*} [DecidableEq V]
 
 /-! ### Four-region decomposition for two finite regions -/
 
+/-- An abstract predicate assigning injectivity to finite vertex regions.
+
+This is the region-level injectivity hypothesis used in the normal PEPS
+blocking argument of arXiv:1804.04964, Section 3.  It is distinct from
+one-vertex injectivity, since the source proof applies injectivity to blocked
+regions such as \(R\), \(S\), \(T\), and their complements.
+Source: arXiv:1804.04964, Section 3, lines 1407--1545 of
+`Papers/1804.04964/paper_normal.tex`. -/
+structure RegionInjectivityData (V : Type*) where
+  /-- The assertion that a finite vertex region is injective after blocking. -/
+  IsInjective : Finset V → Prop
+
 /-- The part of the left region outside the right region. -/
 def regionOnlyLeft (A B : Finset V) : Finset V :=
   A \ B
@@ -49,6 +61,10 @@ def regionOnlyRight (A B : Finset V) : Finset V :=
 def regionOutsideUnion [Fintype V] (A B : Finset V) : Finset V :=
   Finset.univ \ (A ∪ B)
 
+/-- The complement of a finite region in the ambient vertex set. -/
+def regionComplement [Fintype V] (R : Finset V) : Finset V :=
+  Finset.univ \ R
+
 @[simp] theorem mem_regionOnlyLeft (A B : Finset V) (v : V) :
     v ∈ regionOnlyLeft A B ↔ v ∈ A ∧ v ∉ B := by
   simp [regionOnlyLeft]
@@ -64,6 +80,10 @@ def regionOutsideUnion [Fintype V] (A B : Finset V) : Finset V :=
 @[simp] theorem mem_regionOutsideUnion [Fintype V] (A B : Finset V) (v : V) :
     v ∈ regionOutsideUnion A B ↔ v ∉ A ∧ v ∉ B := by
   simp [regionOutsideUnion, not_or]
+
+@[simp] theorem mem_regionComplement [Fintype V] (R : Finset V) (v : V) :
+    v ∈ regionComplement R ↔ v ∉ R := by
+  simp [regionComplement]
 
 /-- The left-only and overlap regions reconstruct the left region. -/
 theorem regionOnlyLeft_union_overlap (A B : Finset V) :
