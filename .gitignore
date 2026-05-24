@@ -79,3 +79,5 @@ External/**/lake-manifest.json
 MeetingNotes/
 .worktrees/
 scripts/__pycache__/
+
+Draft/
