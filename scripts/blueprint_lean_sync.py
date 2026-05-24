@@ -49,6 +49,16 @@ _LEAN_DECL_KEYWORD_ONLY_RE = re.compile(
 _TRACKED_REVERSE_DECL_KINDS = {"def", "theorem", "lemma"}
 _DIFF_HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
 
+# Match a `private` modifier appearing before the declaration keyword on a
+# single line.  Used to skip private helpers in the "missing blueprint entry"
+# check: by project convention, private helpers are internal proof-engineering
+# scaffolding and do not require a blueprint anchor.
+_LEAN_PRIVATE_RE = re.compile(
+    r"^\s*(?:@\[.*?\]\s*)?"
+    r"(?:(?:noncomputable|protected)\s+)*"
+    r"private\s+",
+)
+
 _NAMESPACE_OPEN_RE = re.compile(r"^\s*namespace\s+([\w.]+)", re.MULTILINE)
 _SECTION_OPEN_RE = re.compile(
     r"^\s*(?:(?:noncomputable|private|protected|local)\s+)*section\s+([\w.]+)",
@@ -107,6 +117,7 @@ class LeanDecl:
     kind: str
     short_name: str
     end_line: int
+    is_private: bool = False  # declaration carries the `private` modifier
 
 
 @dataclass
@@ -181,6 +192,8 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
             short_name = m.group(2)
             prefix = ".".join(ns_stack) + "." if ns_stack else ""
             fqn = prefix + short_name
+            decl_source = m.string[m.start():m.end(1) + 1]
+            is_private = bool(_LEAN_PRIVATE_RE.match(decl_source))
             decls.append(
                 LeanDecl(
                     file=rel,
@@ -189,6 +202,7 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
                     kind=kind,
                     short_name=short_name,
                     end_line=len(lines),
+                    is_private=is_private,
                 )
             )
 
@@ -451,6 +465,10 @@ def find_changed_decls_missing_from_blueprint(
 
         for decl in collect_file_lean_decls(abs_path, lean_root):
             if decl.kind not in _TRACKED_REVERSE_DECL_KINDS:
+                continue
+            if decl.is_private:
+                # By project convention, `private` helpers are internal
+                # proof scaffolding and do not require a blueprint anchor.
                 continue
             if not any(decl.line <= line <= decl.end_line for line in changed_lines):
                 continue
