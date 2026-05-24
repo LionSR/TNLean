@@ -272,6 +272,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     virtual operations agree.
 \end{proof}
 
+\begin{theorem}[Pullback of the canonical physical realization]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_physRealizeLocalOp}
+    \leanok
+    \uses{def:peps_physRealizeLocalOp,
+        thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
+    Pulling back the canonical physical realization of a virtual operation
+    recovers the original virtual operation.
+\end{theorem}
+\begin{proof}\leanok
+    The canonical physical realization agrees with the virtual operation on
+    the image of the local tensor map. Apply the preceding recovery theorem.
+\end{proof}
+
 \begin{definition}[Matrix action on one incident virtual edge]%
     \label{def:peps_localIncidentMatrixOp}
     \lean{TNLean.PEPS.localIncidentMatrixOp}
