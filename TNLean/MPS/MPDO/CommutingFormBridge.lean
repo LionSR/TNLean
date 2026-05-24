@@ -148,19 +148,23 @@ theorem isGSNNCH (data : EtaLocalStructureData M) : IsGSNNCH M := by
   intro N hN
   exact data.isGSNNCHAt N hN
 
+/-- The explicit `η`-local structure yields the global commuting-form property. -/
+theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M := by
+  intro N hN
+  exact ⟨data.formAt N hN, data.formAt_realizes N hN⟩
+
 end EtaLocalStructureData
 
 /-- Once the explicit neighboring operators `η_{k,h}` have been assembled into
 `EtaLocalStructureData`, the global commuting-form property follows
 immediately. -/
 theorem hasCommutingForm_of_etaLocalStructure {M : MPOTensor d D}
-    (hEta : EtaLocalStructureData M) : HasCommutingForm M := by
-  intro N hN
-  exact ⟨hEta.bondData.toCommutingFormData (N := N) hN, hEta.realizes_mpo N hN⟩
+    (hEta : EtaLocalStructureData M) : HasCommutingForm M :=
+  hEta.hasCommutingForm
 
 /-- The explicit local `η`-structure also yields the GSNNCH condition. -/
 theorem isGSNNCH_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : IsGSNNCH M :=
-  isGSNNCH_of_hasCommutingForm (hasCommutingForm_of_etaLocalStructure hEta)
+  hEta.isGSNNCH
 
 end MPOTensor

@@ -1675,17 +1675,58 @@ the elementary trace-power identity for diagonal matrices.
     on every periodic chain and realize the MPO at every finite length.
 \end{definition}
 
+\begin{theorem}[$\eta$-local structure carries commuting form]
+    \label{thm:mpdo_eta_local_structure_has_commuting_form}
+    \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    The $\eta$-local structure itself determines a commuting-form witness for every
+    chain length $N \ge 2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    At length $N$, apply the commuting two-site bond and realization identity
+    provided by the $\eta$-local structure.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure gives GSNNCH]
+    \label{thm:mpdo_eta_local_structure_is_gsnnch}
+    \lean{MPOTensor.EtaLocalStructureData.isGSNNCH}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_is_gsnnch}
+    The same $\eta$-local structure gives a GSNNCH witness on every finite
+    periodic chain.
+\end{theorem}
+
+\begin{proof}\leanok
+    Evaluate the local structure at each chain length $N \ge 2$.
+\end{proof}
+
 \begin{theorem}[$\eta$-local structure implies commuting form]
     \label{thm:mpdo_has_commuting_form_of_eta_local_structure}
     \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    \uses{thm:mpdo_eta_local_structure_has_commuting_form}
     Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
-    into the data above, the global commuting-form property follows.
+    into an $\eta$-local structure, the global commuting-form property follows.
 \end{theorem}
 
 \begin{proof}\leanok
-    For each $N \ge 2$, take the commuting-form datum given by these data.
+    This is the commuting-form consequence already carried by the
+    $\eta$-local structure.
+\end{proof}
+
+\begin{theorem}[$\eta$-local structure implies GSNNCH]
+    \label{thm:mpdo_is_gsnnch_of_eta_local_structure}
+    \lean{MPOTensor.isGSNNCH_of_etaLocalStructure}
+    \leanok
+    \uses{thm:mpdo_eta_local_structure_is_gsnnch}
+    Once the explicit neighboring operators $\eta_{k,h}$ have been assembled
+    into the $\eta$-local structure, the GSNNCH condition follows.
+\end{theorem}
+
+\begin{proof}\leanok
+    This is the GSNNCH witness already carried by the $\eta$-local structure.
 \end{proof}
 
 \begin{remark}[Entropy-side construction]
