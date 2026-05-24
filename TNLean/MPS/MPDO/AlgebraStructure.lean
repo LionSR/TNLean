@@ -626,9 +626,9 @@ Here `Λ` is the type of BNT labels.  The coefficient `coeff L α β γ` is the
 scalar multiplying the length-`L` BNT operator with label `γ` in the product of
 the length-`L` operators with labels `α` and `β`.
 
-This structure only stores the coefficient system, and its wrapper records that
-the indices are BNT labels from the paper rather than chosen blocked-basis
-indices.  It does not yet assert the same-length product formula
+This structure only stores the coefficient system.  Its role is to keep the
+BNT-label indices from the paper distinct from chosen blocked-basis indices.  It
+does not yet assert the same-length product formula
 \[
   O_L(M_\alpha)O_L(M_\beta)
     = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
@@ -637,8 +637,9 @@ nor does it compare these coefficients with the chosen blocked-basis
 coefficients of the support algebras.  Those two comparison steps are the
 remaining obligations recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
-lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.4, lines 1925--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelCoefficientFamily (Λ : Type*) where
   /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\). -/
   coeff : ℕ → Λ → Λ → Λ → ℂ
