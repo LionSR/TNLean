@@ -89,6 +89,21 @@ The present blueprint nodes are the following.
           theorem following Theorem \path{3}. It is part of \ghissue{1375}.
 \end{itemize}
 
+The formalization now also has a coordinate vocabulary for finite rectangular
+square lattices: vertices are pairs of horizontal and vertical coordinates, and
+coordinate rectangles are products of finite coordinate sets. The present
+$2\times 3$ and $3\times 2$ coordinate-product predicates assert only the two
+coordinate cardinalities. They do not yet express the stronger source-paper
+condition that the relevant square-lattice blocks are contiguous rectangles.
+This supplies ambient language for the later construction of the displayed
+regions $R$, $S$, and $T$; it does not yet prove their injectivity.
+
+Verdict: this is an open gap, not a source-faithful formalization of the
+square-lattice block hypothesis. The next step is to define contiguous
+coordinate intervals and the corresponding contiguous $2\times 3$ and
+$3\times 2$ rectangles, then state rectangular injectivity for those
+source-paper blocks.
+
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
 \ghissue{1252}.
@@ -105,9 +120,11 @@ alone. The following additional obligations remain.
           complements of such regions.
     \item Prove the union-of-injective-regions lemma. The proof must follow the
           source proof by applying the left inverses for $A$ and $B$ in sequence.
-    \item Package the square-lattice normal hypotheses: every $2\times 3$ and
-          $3\times 2$ region is injective, and the ambient size is large enough for
-          the required complements.
+    \item Package the square-lattice normal hypotheses: every contiguous
+          coordinate $2\times 3$ and $3\times 2$ rectangle is injective, and the
+          ambient size is large enough for the required complements. The present
+          coordinate-product predicates are only preliminary vocabulary for this
+          contiguous-rectangle statement.
     \item Prove that the paper's regions $R$, $S$, and $T$ are injective
           under those hypotheses. This is where the union lemma is used repeatedly.
     \item Prove that the edge-centered red, blue, and complementary regions form a

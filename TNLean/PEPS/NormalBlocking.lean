@@ -1,3 +1,5 @@
+import Mathlib.Data.Finset.Prod
+
 import TNLean.PEPS.Defs
 import TNLean.PEPS.InjectiveRegion
 
@@ -28,6 +30,76 @@ variable {V : Type*} [Fintype V] [DecidableEq V]
 variable {G : SimpleGraph V}
 
 variable (ι : RegionInjectivityData V)
+
+/-! ### Coordinate regions for the square-lattice normal theorem -/
+
+/-- The vertex type of a finite rectangular square lattice of size
+`width × height`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the normal theorem is specialized
+to finite square lattices. -/
+abbrev SquareLatticeVertex (width height : ℕ) :=
+  Fin width × Fin height
+
+/-- A coordinate rectangle in a finite square lattice, specified by its
+horizontal and vertical coordinate sets.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the regions \(R\), \(S\), and
+\(T\) are assembled from rectangular \(2\times3\) and \(3\times2\) blocks. -/
+def squareLatticeRectangle {width height : ℕ}
+    (xs : Finset (Fin width)) (ys : Finset (Fin height)) :
+    Finset (SquareLatticeVertex width height) :=
+  xs ×ˢ ys
+
+@[simp] theorem mem_squareLatticeRectangle {width height : ℕ}
+    (xs : Finset (Fin width)) (ys : Finset (Fin height))
+    (v : SquareLatticeVertex width height) :
+    v ∈ squareLatticeRectangle xs ys ↔ v.1 ∈ xs ∧ v.2 ∈ ys := by
+  simp [squareLatticeRectangle]
+
+@[simp] theorem card_squareLatticeRectangle {width height : ℕ}
+    (xs : Finset (Fin width)) (ys : Finset (Fin height)) :
+    (squareLatticeRectangle xs ys).card = xs.card * ys.card := by
+  simp [squareLatticeRectangle]
+
+/-- The full finite rectangular square lattice as a coordinate region.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the argument uses a finite
+rectangular square lattice as the ambient region. -/
+def squareLatticeFull (width height : ℕ) : Finset (SquareLatticeVertex width height) :=
+  squareLatticeRectangle Finset.univ Finset.univ
+
+@[simp] theorem squareLatticeFull_eq_univ (width height : ℕ) :
+    squareLatticeFull width height = Finset.univ := by
+  ext v
+  simp [squareLatticeFull]
+
+/-- Coordinate-product regions with two horizontal and three vertical
+coordinates.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`. This is preliminary coordinate
+vocabulary for the \(2\times3\) rectangles appearing there, not yet the
+source-paper contiguous-block notion. -/
+def IsTwoByThreeSquareLatticeProduct {width height : ℕ}
+    (R : Finset (SquareLatticeVertex width height)) : Prop :=
+  ∃ xs : Finset (Fin width), ∃ ys : Finset (Fin height),
+    xs.card = 2 ∧ ys.card = 3 ∧ R = squareLatticeRectangle xs ys
+
+/-- Coordinate-product regions with three horizontal and two vertical
+coordinates.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`. This is preliminary coordinate
+vocabulary for the \(3\times2\) rectangles appearing there, not yet the
+source-paper contiguous-block notion. -/
+def IsThreeByTwoSquareLatticeProduct {width height : ℕ}
+    (R : Finset (SquareLatticeVertex width height)) : Prop :=
+  ∃ xs : Finset (Fin width), ∃ ys : Finset (Fin height),
+    xs.card = 3 ∧ ys.card = 2 ∧ R = squareLatticeRectangle xs ys
 
 section EdgeBlocking
 
