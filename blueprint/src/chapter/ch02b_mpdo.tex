@@ -1265,22 +1265,22 @@ the elementary trace-power identity for diagonal matrices.
     This is exactly the defining equality of same-length product form.
 \end{proof}
 
-\begin{definition}[BNT-label tensor family]%
-    \label{def:mpdo_bnt_label_tensor_family}
-    \lean{MPOTensor.BNTLabelTensorFamily}
+\begin{definition}[BNT-label trace-scalar family]%
+    \label{def:mpdo_bnt_label_trace_scalar_family}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily}
     \leanok
-    A BNT-label tensor family records the tensors \(m_\alpha\) indexed by the
-    fixed BNT labels \(\alpha\).  The ambient algebra containing the tensors is
-    left abstract here.
+    A BNT-label trace-scalar family records the scalars
+    \(m_\alpha=\operatorname{tr}(\mu_\alpha)\) indexed by the fixed BNT labels
+    \(\alpha\), as in the idempotent condition of Theorem~IV.13(ii).
 \end{definition}
 
 \begin{definition}[BNT idempotent coefficient form]%
     \label{def:mpdo_bnt_label_idempotent_coefficient_form}
-    \lean{MPOTensor.BNTLabelTensorFamily.HasIdempotentCoefficientForm}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}
     \leanok
-    \uses{def:mpdo_bnt_label_tensor_family,
+    \uses{def:mpdo_bnt_label_trace_scalar_family,
         def:mpdo_bnt_label_coefficient_family}
-    A BNT-label tensor family and a BNT-label coefficient system have
+    A BNT-label trace-scalar family and a BNT-label coefficient system have
     idempotent coefficient form when, for every BNT label \(\gamma\),
     \[
         m_\gamma =
@@ -1293,7 +1293,8 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[BNT idempotent coefficient expansion]%
     \label{thm:mpdo_bnt_label_idempotent_coefficient_eq_sum}
-    \lean{MPOTensor.BNTLabelTensorFamily.HasIdempotentCoefficientForm.eq_sum}
+    \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.
+        eq_sum}
     \leanok
     \uses{def:mpdo_bnt_label_idempotent_coefficient_form}
     Under BNT idempotent coefficient form, each \(m_\gamma\) is the
