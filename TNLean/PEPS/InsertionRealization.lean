@@ -58,6 +58,42 @@ theorem edgeVirtualInsertionPhysicalRealization (A : Tensor G d)
   · exact localIncidentMatrixOp_physicalRealization
       (A := A) hA (edgeRightIncident (G := G) e) M
 
+/-- Projected recovery at the left endpoint of an edge.
+
+For the left endpoint, the matrix inserted on the edge is represented by
+\(M^{\mathsf T}\) on the distinguished incident edge. This is the endpoint
+specialization of the local \(O_1,O_2 \mapsto W\) recovery step in
+Lemma \(\mathrm{inj\_isomorph}\) of arXiv:1804.04964, Section 3. -/
+theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
+    (O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    localVirtualOpOfPhysicalOp A hA e.1.1 O₁ =
+        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ↔
+      (localProjector A hA e.1.1).comp (O₁.comp (localProjector A hA e.1.1)) =
+        physRealizeLocalOp A hA e.1.1
+          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose) :=
+  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.1 O₁
+    (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
+
+/-- Projected recovery at the right endpoint of an edge.
+
+For the right endpoint, the inserted matrix acts directly on the distinguished
+incident edge. This is the endpoint specialization of the local
+\(O_1,O_2 \mapsto W\) recovery step in Lemma \(\mathrm{inj\_isomorph}\) of
+arXiv:1804.04964, Section 3. -/
+theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
+    (O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
+    localVirtualOpOfPhysicalOp A hA e.1.2 O₂ =
+        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M ↔
+      (localProjector A hA e.1.2).comp (O₂.comp (localProjector A hA e.1.2)) =
+        physRealizeLocalOp A hA e.1.2
+          (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M) :=
+  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.2 O₂
+    (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+
 /-- The left-endpoint physical realization of a virtual matrix insertion
 reproduces the full inserted-edge coefficient.
 
