@@ -435,5 +435,17 @@ theorem localVirtualOpOfPhysicalOp_physRealizeLocalOp (A : Tensor G d)
     (physRealizeLocalOp A hA v T) T
     (physRealizeLocalOp_spec A hA v T)
 
+/-- The physical realization of the virtual pullback of \(O\) is
+\(P \circ O \circ P\), where \(P\) is the local projector onto the image of the
+local tensor map. -/
+theorem physRealizeLocalOp_localVirtualOpOfPhysicalOp (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) :
+    physRealizeLocalOp A hA v (localVirtualOpOfPhysicalOp A hA v O) =
+      (localProjector A hA v).comp (O.comp (localProjector A hA v)) := by
+  ext x
+  simp [physRealizeLocalOp, localVirtualOpOfPhysicalOp, localProjector,
+    LinearMap.comp_assoc]
+
 end PEPS
 end TNLean
