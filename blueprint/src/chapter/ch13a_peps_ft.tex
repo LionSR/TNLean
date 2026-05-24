@@ -1424,6 +1424,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
     These are the standard identities for the product of two finite sets.
 \end{proof}
 
+\begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
+    \label{lem:peps_normalSquareRegionR_regionS_difference}
+    \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
+    \lean{TNLean.PEPS.mem_normalSquareRegionS_sdiff_regionR}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    For the displayed regions \(R\) and \(S\) with the same lower-left corner,
+    \(R\) is contained in \(S\).  The difference \(S\setminus R\) is exactly
+    the lower-right site of the \(3\times3\) square: in coordinates, the site
+    one obtains by shifting two steps horizontally and zero steps vertically
+    from the lower-left corner.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the two displayed unions.  The only point of the second
+    \(2\times3\) piece of \(S\) which is not already in the union defining
+    \(R\) is its lower-right point.
+\end{proof}
+
 \begin{definition}[Normal rectangular injectivity hypotheses]%
     \label{def:peps_normalRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
