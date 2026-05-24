@@ -102,18 +102,22 @@ Bounded contiguous coordinate rectangles of sizes $2\times3$ and $3\times2$
 are now known to satisfy the corresponding source-rectangle predicates, which
 is the reusable local step needed before invoking rectangular injectivity.
 The displayed regions $R$ and $S$ are also present as explicit unions of such
-contiguous rectangles. Their coordinate definitions have been checked against
-the source statement that they differ in one site: $R$ is contained in $S$,
-and $S\setminus R$ is the lower-right site of the displayed $3\times3$
-square. The displayed region $T$ is now present as the complement, inside the
-source $5\times6$ local window, of the two edge blocks shown in the source
-picture. This does not yet prove injectivity of $R$, $S$, or $T$.
+contiguous rectangles, and their rectangular decompositions are formalized:
+$R$ is the union of one contiguous $2\times3$ rectangle and one contiguous
+$3\times2$ rectangle, while $S$ is the union of two contiguous $2\times3$
+rectangles. Their coordinate definitions have been checked against the source
+statement that they differ in one site: $R$ is contained in $S$, and
+$S\setminus R$ is the lower-right site of the displayed $3\times3$ square. The
+displayed region $T$ is now present as the complement, inside the source
+$5\times6$ local window, of the two edge blocks shown in the source picture.
+This does not yet prove injectivity of $R$, $S$, or $T$.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
-closed. The remaining open gap is the source-paper injectivity argument:
-prove the rectangular decompositions and then prove the injectivity of $R$,
-$S$, and $T$ from the union theorem.
+closed, and the rectangular decompositions of $R$ and $S$ are formalized. The
+remaining open gap is the source-paper injectivity argument: prove the
+corresponding decomposition for $T$ and then prove the injectivity of $R$, $S$,
+and $T$ from the union theorem.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -137,8 +141,9 @@ alone. The following additional obligations remain.
           be tied to the displayed regions and their required complements.
     \item Prove that the paper's regions $R$, $S$, and $T$ are injective
           under those hypotheses. The displayed regions $R$ and $S$ are now
-          defined as unions of contiguous rectangles, with the expected
-          one-site difference formalized. The displayed region $T$ is now
+          defined as unions of contiguous rectangles, with their rectangular
+          decompositions and the expected one-site difference formalized. The
+          displayed region $T$ is now
           defined as the complement of the two edge blocks in the source
           $5\times6$ local window. The union lemma is then used repeatedly.
     \item Prove that the edge-centered red, blue, and complementary regions form a

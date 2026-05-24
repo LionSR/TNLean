@@ -208,6 +208,40 @@ def normalSquareRegionS {width height : ℕ} (xStart yStart : ℕ) :
   squareLatticeContiguousRectangle xStart yStart 2 3 ∪
     squareLatticeContiguousRectangle (xStart + 1) yStart 2 3
 
+/-- The displayed region \(R\) is the union of one contiguous \(2\times3\)
+rectangle and one contiguous \(3\times2\) rectangle.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+of `Papers/1804.04964/paper_normal.tex`, where the source says that the
+displayed region \(R\) is a union of smaller injective rectangles. -/
+theorem normalSquareRegionR_rectangular_decomposition {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    ∃ R₂ R₃ : Finset (SquareLatticeVertex width height),
+      IsTwoByThreeContiguousSquareLatticeRectangle R₂ ∧
+        IsThreeByTwoContiguousSquareLatticeRectangle R₃ ∧
+          normalSquareRegionR xStart yStart = R₂ ∪ R₃ := by
+  refine ⟨squareLatticeContiguousRectangle xStart yStart 2 3,
+    squareLatticeContiguousRectangle xStart (yStart + 1) 3 2, ?_, ?_, rfl⟩
+  · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) hy
+  · exact isThreeByTwoContiguousSquareLatticeRectangle_of_bounds hx (by omega)
+
+/-- The displayed region \(S\) is the union of two contiguous \(2\times3\)
+rectangles.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+of `Papers/1804.04964/paper_normal.tex`, where the source says that the
+displayed region \(S\) is a union of smaller injective rectangles. -/
+theorem normalSquareRegionS_rectangular_decomposition {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    ∃ S₁ S₂ : Finset (SquareLatticeVertex width height),
+      IsTwoByThreeContiguousSquareLatticeRectangle S₁ ∧
+        IsTwoByThreeContiguousSquareLatticeRectangle S₂ ∧
+          normalSquareRegionS xStart yStart = S₁ ∪ S₂ := by
+  refine ⟨squareLatticeContiguousRectangle xStart yStart 2 3,
+    squareLatticeContiguousRectangle (xStart + 1) yStart 2 3, ?_, ?_, rfl⟩
+  · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) hy
+  · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) hy
+
 /-- The two edge blocks removed from the local window in the displayed region
 \(T\).
 

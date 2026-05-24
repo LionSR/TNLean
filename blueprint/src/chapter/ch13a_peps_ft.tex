@@ -1437,6 +1437,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
     These are the standard identities for the product of two finite sets.
 \end{proof}
 
+\begin{lemma}[The normal regions \(R\) and \(S\) are unions of contiguous
+    rectangles]%
+    \label{lem:peps_normalSquareRegionRS_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionR_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionS_rectangular_decomposition}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    If the displayed \(3\times3\) window containing \(R\) and \(S\) lies in
+    the finite square lattice, then \(R\) is the union of a contiguous
+    \(2\times3\) rectangle and a contiguous \(3\times2\) rectangle, while
+    \(S\) is the union of two contiguous \(2\times3\) rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining description of \(R\) and \(S\), together with the
+    coordinate bounds which make the displayed rectangles contiguous
+    \(2\times3\) and \(3\times2\) rectangles.
+\end{proof}
+
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
