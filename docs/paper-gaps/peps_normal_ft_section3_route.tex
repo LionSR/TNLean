@@ -98,14 +98,16 @@ coordinate cardinalities, while the contiguous-rectangle predicates express the
 source-paper contiguous square-lattice blocks. The square-lattice rectangular
 injectivity hypotheses are now packaged using precisely these two contiguous
 rectangle predicates, and map to the abstract rectangular injectivity bundle.
-This supplies ambient language for the later construction of the displayed
-regions $R$, $S$, and $T$; it does not yet prove their injectivity.
+The displayed regions $R$ and $S$ are also present as explicit unions of such
+contiguous rectangles. This supplies ambient language for the later
+construction of the displayed region $T$; it does not yet prove injectivity of
+$R$, $S$, or $T$.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
 closed. The remaining open gap is the source-paper injectivity argument:
-define the displayed regions $R$, $S$, and $T$, and prove their injectivity
-from the union theorem.
+define the displayed region $T$, and prove the injectivity of $R$, $S$, and
+$T$ from the union theorem.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -128,7 +130,9 @@ alone. The following additional obligations remain.
           $2\times 3$ and $3\times 2$ rectangles; the remaining size data must
           be tied to the displayed regions and their required complements.
     \item Prove that the paper's regions $R$, $S$, and $T$ are injective
-          under those hypotheses. This is where the union lemma is used repeatedly.
+          under those hypotheses. The displayed regions $R$ and $S$ are now
+          defined as unions of contiguous rectangles; the displayed region $T$
+          still has to be defined. The union lemma is then used repeatedly.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
