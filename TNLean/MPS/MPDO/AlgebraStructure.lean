@@ -554,6 +554,11 @@ namespace DiagonalChiFamily
 
 variable {I : Type*} (χ : DiagonalChiFamily I)
 
+/-- The diagonal chi family with empty diagonal matrices for every triple. -/
+def empty (I : Type*) : DiagonalChiFamily I where
+  dim _ _ _ := 0
+  entry _ _ _ k := Fin.elim0 k
+
 /-- Reindex a diagonal chi family along a map of labels. -/
 def comap {J : Type*} (f : J → I) : DiagonalChiFamily J where
   dim α β γ := χ.dim (f α) (f β) (f γ)
@@ -587,6 +592,11 @@ Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
   ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), 0 < χ.entry α β γ k
+
+/-- The empty diagonal chi family has positive entries vacuously. -/
+theorem PosEntries.empty (I : Type*) : (empty I).PosEntries := by
+  intro α β γ k
+  exact Fin.elim0 k
 
 /-- Reindexing preserves positivity of the diagonal entries. -/
 theorem PosEntries.comap {J : Type*} {χ : DiagonalChiFamily I}
