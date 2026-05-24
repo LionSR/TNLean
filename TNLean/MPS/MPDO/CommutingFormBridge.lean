@@ -17,17 +17,19 @@ The current repository already exposes the local entropy-side ingredients
 * `MPOTensor.sal_implies_eta_structure`, and
 * `MPOTensor.sal_zcl_implies_rank_one_T`,
 
-but the extraction of the explicit neighboring operators `η_{k,h}` from the
-Hayashi Markov decomposition is still open. We therefore introduce the exact
-local-to-global witness that the future extraction theorem should produce: a
-single translation-invariant positive two-site bond whose translated copies
-commute on all periodic chains and realize the MPO on every finite length.
+and `SimpleLocalStructure` now gives the sector-reduced neighboring operators
+`MPOTensor.ExplicitEtaOperators.ofHayashiMarkov`. The remaining Appendix C.2
+step is no longer merely to write down such sector-local operators; it is to
+assemble the simple-MPDO tensor coordinates into a single translation-invariant
+positive two-site bond whose translated copies commute on all periodic chains
+and realize the MPO on every finite length.
 
 This is the strongest unconditional forward step currently available.
-Once the explicit `η_{k,h}` operators are available, the intended future
-Proposition C.6 proof should first construct `EtaLocalStructureData M`; the
-existing theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the
-global commuting-form target.
+The intended future Proposition C.6 proof should construct
+`EtaLocalStructureData M` from the SAL and ZCL hypotheses, using the
+sector-reduced `η_{k,h}` operators and the inverse-map layer; the existing
+theorem `hasCommutingForm_of_etaLocalStructure` will then discharge the global
+commuting-form target.
 
 ## Main declarations
 
@@ -95,16 +97,17 @@ def toCommutingFormData (data : TranslationInvariantBondData d) {N : ℕ}
 
 end TranslationInvariantBondData
 
-/-- The explicit `η`-local structure needed for Appendix C.2 once the abstract
-Hayashi decomposition has been converted into concrete neighboring operators.
+/-- The explicit `η`-local structure needed for Appendix C.2 after the
+sector-local neighboring operators have been assembled in the original tensor
+coordinates.
 
 Concretely, this structure stores the single translation-invariant bond extracted
 from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate
-commuting-form witness at each length. The remaining extraction theorem should
-construct this data from `EtaStructure` and the rank-one factorization of the
-local transfer matrix. -/
+commuting-form witness at each length. The remaining assembly theorem should
+construct this data from the SAL and ZCL hypotheses, the sector-reduced
+`η_{k,h}` family, and the inverse-map realization layer. -/
 structure EtaLocalStructureData (M : MPOTensor d D) where
   /-- The chain-independent nearest-neighbor bond extracted from the local
   `η_{k,h}` operators. -/
