@@ -95,14 +95,17 @@ coordinate rectangles are products of finite coordinate sets; contiguous
 coordinate rectangles are products of finite coordinate intervals. The
 $2\times 3$ and $3\times 2$ coordinate-product predicates assert only the two
 coordinate cardinalities, while the contiguous-rectangle predicates express the
-source-paper contiguous square-lattice blocks. This supplies ambient language
-for the later construction of the displayed regions $R$, $S$, and $T$; it does
-not yet prove their injectivity.
+source-paper contiguous square-lattice blocks. The square-lattice rectangular
+injectivity hypotheses are now packaged using precisely these two contiguous
+rectangle predicates, and map to the abstract rectangular injectivity bundle.
+This supplies ambient language for the later construction of the displayed
+regions $R$, $S$, and $T$; it does not yet prove their injectivity.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
-The remaining open gap is the source-paper injectivity argument: package
-rectangular injectivity using the contiguous predicates, define the displayed
-regions $R$, $S$, and $T$, and prove their injectivity from the union theorem.
+The earlier packaging gap for coordinate rectangular injectivity is also
+closed. The remaining open gap is the source-paper injectivity argument:
+define the displayed regions $R$, $S$, and $T$, and prove their injectivity
+from the union theorem.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -120,9 +123,10 @@ alone. The following additional obligations remain.
           complements of such regions.
     \item Prove the union-of-injective-regions lemma. The proof must follow the
           source proof by applying the left inverses for $A$ and $B$ in sequence.
-    \item Package the square-lattice normal hypotheses: every contiguous
-          coordinate $2\times 3$ and $3\times 2$ rectangle is injective, and the
-          ambient size is large enough for the required complements.
+    \item Package the square-lattice normal hypotheses. The rectangular
+          injectivity part is now packaged for contiguous coordinate
+          $2\times 3$ and $3\times 2$ rectangles; the remaining size data must
+          be tied to the displayed regions and their required complements.
     \item Prove that the paper's regions $R$, $S$, and $T$ are injective
           under those hypotheses. This is where the union lemma is used repeatedly.
     \item Prove that the edge-centered red, blue, and complementary regions form a

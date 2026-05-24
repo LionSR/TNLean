@@ -1414,13 +1414,33 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Normal rectangular injectivity hypotheses]%
     \label{def:peps_normalRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses}
     \leanok
-    \uses{def:peps_regionInjectivityData}
+    \uses{def:peps_regionInjectivityData,
+        def:peps_squareLatticeCoordinateRegions}
     In the square-lattice normal theorem, every \(2\times 3\) and
     \(3\times 2\) rectangular region is assumed injective.  The corresponding
-    hypotheses specify which finite regions have these two shapes and assert
-    injectivity for all of them.
+    abstract hypotheses specify which finite regions have these two shapes and
+    assert injectivity for all of them.  In the coordinate square-lattice
+    specialization, these two families are the contiguous coordinate
+    \(2\times 3\) and \(3\times 2\) rectangles.
 \end{definition}
+
+\begin{lemma}[Coordinate rectangular injectivity gives abstract rectangular
+    injectivity]%
+    \label{lem:peps_squareLatticeRectangleInjectivity_toRectangular}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses}
+    The coordinate square-lattice rectangular injectivity hypotheses determine
+    abstract rectangular injectivity hypotheses, with the two abstract
+    rectangular families taken to be the contiguous coordinate \(2\times 3\)
+    and \(3\times 2\) rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    This is the direct specialization of the abstract rectangular families to
+    the two contiguous coordinate-rectangle predicates.
+\end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
     \label{def:peps_normalEdgeBlockingHypotheses}
