@@ -164,7 +164,8 @@ direct corollary.\footnote{%
 The same hypotheses also give a positive blocked-basis \(\chi\)-witness by
 pulling back the uniform BNT-label \(\chi\)-family along the
 comparison maps.\footnote{%
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.toPositiveBlockedStructureChiTracePowerForm}.}
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+toPositiveBlockedStructureChiTracePowerForm}.}
 Likewise, once the idempotent coefficient condition and the positive
 BNT-label \(\chi\)-witness are available, the length-one idempotent identity is
 formalized with the coefficients rewritten as traces of the corresponding
@@ -178,11 +179,13 @@ comparison.\footnote{\leanid{MPOTensor.BNTLabelTheoremData}.}  This record is
 not an additional mathematical assumption in the source theorem; it is the
 single formal object collecting the source data supplied by the Appendix
 C.3--C.4 construction from an MPDO tensor.  From such data, the same-length
-chi-trace product law, the chi-trace idempotent law, and the positive blocked
-\(\chi\)-witness are immediate
+chi-trace product law, the chi-trace idempotent law, the blocked-basis
+coefficient trace-power formula, and the positive blocked \(\chi\)-witness
+are immediate
 consequences.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace},
+\leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}.}
 
 To eliminate the remaining gap, the formalization should introduce:

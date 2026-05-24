@@ -467,6 +467,19 @@ theorem idempotent_eq_sum_chi_trace (γ : Λ) :
           (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
   H.idempotent.eq_sum_chi_trace H.positiveChi γ
 
+/-- The blocked-basis coefficients obtained from BNT-label theorem data are
+traces of powers of the pulled-back BNT-label chi matrices. -/
+theorem blocked_coeff_eq_trace_pow
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (H.positiveChi.chi.matrix
+        (H.blockedComparison.sourceLabel n hn i)
+        (H.blockedComparison.sourceLabel n hn j)
+        (H.blockedComparison.targetLabel n hn k) ^ n).trace :=
+  H.blockedComparison.blocked_coeff_eq_trace_pow H.positiveChi n hn i j k
+
 /-- The positive blocked chi witness obtained from the BNT-label theorem data
 and the blocked-basis comparison. -/
 def toPositiveBlockedStructureChiTracePowerForm :
