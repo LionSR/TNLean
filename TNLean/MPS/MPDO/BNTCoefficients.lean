@@ -23,7 +23,7 @@ comparison work.
   Theorem IV.13(ii) and Appendix C.3--C.4
 -/
 
-open scoped BigOperators ComplexOrder
+open scoped BigOperators
 
 namespace MPOTensor
 
@@ -267,4 +267,3 @@ theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
 end PositiveBNTLabelChiTracePowerForm
 
 end MPOTensor
-
