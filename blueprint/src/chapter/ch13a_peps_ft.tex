@@ -898,6 +898,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the distinguished edge.
 \end{proof}
 
+\begin{theorem}[Left-endpoint projected recovery]%
+    \label{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        def:peps_localIncidentMatrixOp}
+    Let \(e=(u,v)\). A physical operator at the left endpoint pulls back to
+    the one-edge virtual action of \(M^{\mathsf T}\) if and only if its
+    compressed physical action is the canonical realization of that
+    one-edge virtual action.
+\end{theorem}
+\begin{proof}\leanok
+    This is the projected local recovery equivalence applied to the left
+    incident edge of \(e\), with the transpose convention used by the
+    left-endpoint coefficient identity.
+\end{proof}
+
+\begin{theorem}[Right-endpoint projected recovery]%
+    \label{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        def:peps_localIncidentMatrixOp}
+    Let \(e=(u,v)\). A physical operator at the right endpoint pulls back to
+    the one-edge virtual action of \(M\) if and only if its compressed physical
+    action is the canonical realization of that one-edge virtual action.
+\end{theorem}
+\begin{proof}\leanok
+    This is the projected local recovery equivalence applied to the right
+    incident edge of \(e\).
+\end{proof}
+
 \begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
