@@ -1278,12 +1278,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOnlyLeft_union_overlap}
     \lean{TNLean.PEPS.regionOverlap_union_onlyRight}
     \lean{TNLean.PEPS.regionThreePart_union, TNLean.PEPS.regionFourPart_union}
+    \lean{TNLean.PEPS.regionFourPart_cases}
     \leanok
     \uses{def:peps_regionUnionDecomposition}
     Let $V$ be a finite vertex set and let $A,B\subseteq V$. The left-only
     and overlap regions reconstruct $A$, the overlap and right-only regions
     reconstruct $B$, the three inside regions reconstruct $A\cup B$, and
-    all four regions reconstruct $V$.
+    all four regions reconstruct $V$. Equivalently, each vertex lies in one
+    of the four regions.
 \end{lemma}
 \begin{proof}\leanok
     Check membership of an arbitrary vertex in $A$ and in $B$.
@@ -1294,13 +1296,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOnlyLeft_disjoint_overlap}
     \lean{TNLean.PEPS.regionOnlyRight_disjoint_overlap}
     \lean{TNLean.PEPS.regionOnlyLeft_disjoint_onlyRight}
+    \lean{TNLean.PEPS.regionOnlyLeft_disjoint_outside}
+    \lean{TNLean.PEPS.regionOverlap_disjoint_outside}
+    \lean{TNLean.PEPS.regionOnlyRight_disjoint_outside}
     \lean{TNLean.PEPS.regionInside_disjoint_outside}
     \leanok
     \uses{def:peps_regionUnionDecomposition,
         lem:peps_regionUnionDecomposition_identities}
     In the four-region decomposition, the left-only and right-only parts are
-    disjoint from the overlap and from each other. The union of the three
-    inside regions is disjoint from the outside region.
+    disjoint from the overlap and from each other. Each inside part, and hence
+    the union of the three inside regions, is disjoint from the outside region.
 \end{lemma}
 \begin{proof}\leanok
     Use the standard disjointness identities for set difference and
