@@ -1,4 +1,5 @@
 import TNLean.PEPS.Defs
+import TNLean.PEPS.InjectiveRegion
 
 /-!
 # Normal PEPS blocking hypotheses
@@ -26,27 +27,7 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [DecidableEq V]
 variable {G : SimpleGraph V}
 
-/-- An abstract predicate assigning injectivity to finite vertex regions.
-
-This is the region-level injectivity hypothesis used in the normal PEPS
-blocking argument of arXiv:1804.04964, Section 3.  It is distinct from
-one-vertex injectivity, since the source proof applies injectivity to blocked
-regions such as \(R\), \(S\), \(T\), and their complements.
-Source: arXiv:1804.04964, Section 3, lines 1407--1545 of
-`Papers/1804.04964/paper_normal.tex`. -/
-structure RegionInjectivityData (V : Type*) where
-  /-- The assertion that a finite vertex region is injective after blocking. -/
-  IsInjective : Finset V → Prop
-
 variable (ι : RegionInjectivityData V)
-
-/-- The complement of a finite region in the ambient vertex set. -/
-def regionComplement (R : Finset V) : Finset V :=
-  Finset.univ \ R
-
-@[simp] theorem mem_regionComplement (R : Finset V) (v : V) :
-    v ∈ regionComplement R ↔ v ∉ R := by
-  simp [regionComplement]
 
 section EdgeBlocking
 
