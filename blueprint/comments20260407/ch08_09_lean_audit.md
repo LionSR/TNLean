@@ -23,11 +23,11 @@ Quick status:
    - Lean states only `SameMPV₂ A (toTensorFromBlocks (fun _ => 1) blocks)` with irreducible blocks. See `TNLean/MPS/CanonicalForm/Reduction.lean:106`.
    - Suggested fix: drop "up to unitary equivalence" from the theorem statement.
 
-3. `ch08` `MPSTensor.exists_irreducible_blockDecomp_with_CFII` has an editorial glitch.
+3. `ch08` formerly had a CFII block-decomposition entry with an editorial glitch.
    - Blueprint: [blueprint/src/chapter/ch08_canonical.tex](/Users/siruilu/Library/Mobile%20Documents/com~apple~CloudDocs/Research/Agent-Physics/MPSLean/blueprint/src/chapter/ch08_canonical.tex):753 is a sentence fragment: "The conclusion is the left-canonical normalization; the remaining reduction to normal canonical form."
-   - Lean-side content is fine; this just reads unfinished.
+   - The entry has since been removed, so the old prose issue is obsolete.
 
-4. `ch08` seriously compresses `MPSTensor.exists_irreducible_blockDecomp_with_tpGauge` past what Lean actually says.
+4. `ch08` formerly compressed the TP-gauge block-decomposition sibling past what Lean said.
    - Blueprint: [blueprint/src/chapter/ch08_canonical.tex](/Users/siruilu/Library/Mobile%20Documents/com~apple~CloudDocs/Research/Agent-Physics/MPSLean/blueprint/src/chapter/ch08_canonical.tex):1457 says: "After removing a trivial block, one obtains a block decomposition into irreducible blocks with a trace-preserving gauge."
    - Lean theorem is more conditional: from an irreducible block decomposition, each block with a nonzero Kraus operator admits a TP-gauge representative; zero blocks cannot just be dropped because `SameMPV₂` remembers the `N = 0` sector. See `TNLean/MPS/CanonicalForm/Existence.lean:306`.
    - Suggested fix: mention the nonzero-Kraus side condition explicitly, or rewrite this as a continuation theorem rather than a global decomposition theorem.
