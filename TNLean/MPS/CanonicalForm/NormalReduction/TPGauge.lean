@@ -620,7 +620,9 @@ theorem exists_tp_gauge_blockwise
     gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
   have hIrr1 : ∀ k : Fin r0, IsIrreducibleTensor (blocks1 k) := by
     intro k
-    letI : NeZero (dim0 k) := ⟨Nat.pos_iff_ne_zero.mp (hDim1 k)⟩
+    letI : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
     have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
       exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
