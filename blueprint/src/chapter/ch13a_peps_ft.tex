@@ -374,6 +374,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
     virtual operations.
 \end{proof}
 
+\begin{theorem}[Projected local recovery equivalence]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp,
+        thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    The compressed physical action \(P_v O P_v\) is the canonical physical
+    realization of a virtual operation \(T\) if and only if the virtual
+    pullback of \(O\) is \(T\).
+\end{theorem}
+\begin{proof}\leanok
+    One implication follows by realizing both virtual operations physically and
+    using the formula for the physical realization of a pulled-back operator.
+    The converse is the preceding recovery theorem.
+\end{proof}
+
 \begin{definition}[Matrix action on one incident virtual edge]%
     \label{def:peps_localIncidentMatrixOp}
     \lean{TNLean.PEPS.localIncidentMatrixOp}

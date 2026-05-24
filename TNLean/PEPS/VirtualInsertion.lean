@@ -490,5 +490,18 @@ theorem localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
   apply physRealizeLocalOp_injective A hA v
   rw [physRealizeLocalOp_localVirtualOpOfPhysicalOp, hO]
 
+/-- The compressed physical action of \(O\) is the canonical physical
+realization of \(T\) exactly when the virtual pullback of \(O\) is \(T\). -/
+theorem localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) (T : LocalVirtualOp A v) :
+    localVirtualOpOfPhysicalOp A hA v O = T ↔
+      (localProjector A hA v).comp (O.comp (localProjector A hA v)) =
+        physRealizeLocalOp A hA v T := by
+  constructor
+  · intro h
+    rw [← h, physRealizeLocalOp_localVirtualOpOfPhysicalOp]
+  · exact localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq A hA v O T
+
 end PEPS
 end TNLean
