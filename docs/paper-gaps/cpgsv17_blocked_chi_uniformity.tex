@@ -41,7 +41,7 @@ blocked length \(n\) in the Lean development.
 
 \section{Formalized blocked-basis analogue}
 
-The current blocked coefficient layer in
+The current blocked coefficient construction in
 \path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
 algebras \(\mathcal A_n\). Its multiplication coefficients have indices
 \[
@@ -104,23 +104,36 @@ the same-length multiplication statement in Theorem~IV.13(ii).
 Consequently,
 \leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
 should not be cited as a formalization of Theorem~IV.13(ii). It is a local
-blocked-basis interface for the coefficient layer, useful only after the
+blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
-\section{Elimination plan}
+\section{Formalized coefficient statements and remaining elimination plan}
 
-To eliminate this gap, the formalization should introduce:
+The formalization now contains two coefficient statements:
+\begin{itemize}
+    \item \leanid{MPOTensor.BNTLabelCoefficientFamily}, the same-length
+        coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\) indexed by fixed
+        BNT labels;
+    \item \leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}, the positive
+        diagonal \(\chi_{\alpha,\beta,\gamma}\)-witness with the
+        positive-length trace-power identity.
+\end{itemize}
+
+These declarations state only the target coefficient objects.  They do not yet construct
+the coefficients or \(\chi\)-matrices from an MPDO tensor, and they do not yet
+compare BNT-label coefficients with the chosen blocked bases.
+
+To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
-    \item the BNT-label coefficient family used in Theorem~IV.13(ii);
-    \item the positive diagonal matrices
-        \(\chi_{\alpha,\beta,\gamma}\) indexed by BNT-label triples,
-        independent of the length parameter;
     \item a comparison theorem relating the BNT-label coefficients to the
         chosen blocked bases of \(\mathcal A_n\);
     \item a same-length operator-algebra product statement matching
         \(O_L(M_\alpha)O_L(M_\beta)\), together with the comparison to the
         blocked support-algebra product
         \(\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}\);
+    \item construction of the positive BNT-label
+        \(\chi_{\alpha,\beta,\gamma}\)-witness from the paper's Appendix C.3
+        and C.4 hypotheses;
     \item the blocked-basis trace-power statement, with its source-length
         exponent convention, as a derived corollary of the uniform BNT-label
         theorem, rather than as the theorem itself.

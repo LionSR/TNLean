@@ -1212,6 +1212,77 @@ the elementary trace-power identity for diagonal matrices.
     form''---is obtained by quantifying over $\chi$.
 \end{definition}
 
+\begin{definition}[BNT-label coefficient family]%
+    \label{def:mpdo_bnt_label_coefficient_family}
+    \lean{MPOTensor.BNTLabelCoefficientFamily}
+    \leanok
+    The same-length coefficient system
+    \(c^{(L)}_{\alpha,\beta,\gamma}\) from Theorem~IV.13(ii), indexed by
+    fixed BNT labels \(\alpha,\beta,\gamma\).  The coefficient is attached to
+    the length-\(L\) product
+    \(O_L(M_\alpha)O_L(M_\beta)\), not to the blocked-basis multiplication
+    \(\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}\).
+\end{definition}
+
+\begin{definition}[Positive-length BNT-label trace-power form]%
+    \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_diagonal_chi_family}
+    A BNT-label coefficient system and a diagonal \(\chi\)-family are
+    compatible when, for every positive length \(L\),
+    \[
+        c^{(L)}_{\alpha,\beta,\gamma}
+        = \operatorname{tr}\bigl(\chi_{\alpha,\beta,\gamma}^{L}\bigr).
+    \]
+    The same matrix \(\chi_{\alpha,\beta,\gamma}\) is used for all positive
+    \(L\).
+\end{definition}
+
+\begin{theorem}[BNT-label coefficient as a positive-length trace power]%
+    \label{thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.
+        eq_trace_matrix_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
+        thm:mpdo_trace_matrix_pow}
+    Under positive-length BNT-label trace-power form, for every \(L>0\),
+    \(c^{(L)}_{\alpha,\beta,\gamma}\) is the trace of
+    \(\chi_{\alpha,\beta,\gamma}^{L}\).
+\end{theorem}
+\begin{proof}\leanok
+    Combine the defining positive-length trace-power identity with the trace
+    formula for powers of a diagonal matrix.
+\end{proof}
+
+\begin{definition}[Positive BNT-label \(\chi\) trace-power witness]%
+    \label{def:mpdo_positive_bnt_label_chi_trace_power_form}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    A positive BNT-label \(\chi\) witness consists of a length-independent
+    diagonal \(\chi_{\alpha,\beta,\gamma}\)-family, positivity of every
+    diagonal entry, and the positive-length trace-power identity for the
+    BNT-label coefficients.  This is the coefficient statement of
+    Theorem~IV.13(ii); constructing the witness from an MPDO tensor and
+    comparing it to blocked bases remain separate obligations.
+\end{definition}
+
+\begin{theorem}[Positive BNT-label witness gives trace powers]%
+    \label{thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    A positive BNT-label \(\chi\) witness gives, for every \(L>0\), the formula
+    \(c^{(L)}_{\alpha,\beta,\gamma}
+      =\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the trace reformulation of the trace-power field of the witness.
+\end{proof}
+
 \begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
     \label{def:mpdo_blocked_structure_chi_family}
     \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
