@@ -278,6 +278,32 @@ theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
 
 end PositiveBNTLabelChiTracePowerForm
 
+namespace BNTLabelOperatorFamily
+
+variable {Λ : Type*} {O : ℕ → Type*} {c : BNTLabelCoefficientFamily Λ}
+  {op : BNTLabelOperatorFamily Λ O}
+
+/-- The same-length BNT product formula, after substituting the trace-power
+formula supplied by a positive BNT-label chi witness.
+
+This is the coefficient-level combination of the product identity in
+arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, with the trace-power
+formula for \(c^{(L)}_{\alpha,\beta,\gamma}\). -/
+theorem HasSameLengthProductForm.eq_sum_chi_trace_pow [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    (hop : op.HasSameLengthProductForm c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    op.operator L α * op.operator L β =
+      ∑ γ : Λ, (hχ.chi.matrix α β γ ^ L).trace • op.operator L γ := by
+  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β]
+  refine Finset.sum_congr rfl ?_
+  intro γ _hγ
+  rw [hχ.eq_trace_pow L hL α β γ]
+
+end BNTLabelOperatorFamily
+
 namespace BNTLabelTraceScalarFamily
 
 variable {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
