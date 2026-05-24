@@ -413,4 +413,66 @@ def toPositiveBlockedStructureChiTracePowerForm
 
 end BNTBlockedBasisCoefficientComparison
 
+/-- The BNT-label data asserted by the source theorem, together with its
+blocked-basis comparison.
+
+This record gathers the objects that the remaining Appendix C.3--C.4
+construction must produce from an MPDO tensor: the fixed BNT-label coefficient
+system, the same-length BNT operator family and product law, the trace scalars
+and idempotent condition, the positive length-independent chi witness, and the
+comparison with the chosen blocked bases.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelTheoremData (data : AlgebraStructureData d D)
+    (Λ : Type*) (O : ℕ → Type*) [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)] where
+  /-- The BNT-label coefficient system \(c^{(L)}_{\alpha,\beta,\gamma}\). -/
+  coeffs : BNTLabelCoefficientFamily Λ
+  /-- The BNT-label operator family \(O_L(M_\alpha)\). -/
+  operators : BNTLabelOperatorFamily Λ O
+  /-- The trace scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\). -/
+  traceScalars : BNTLabelTraceScalarFamily Λ
+  /-- The same-length BNT product law. -/
+  sameLengthProduct : operators.HasSameLengthProductForm coeffs
+  /-- The idempotent scalar condition. -/
+  idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
+  /-- The positive length-independent BNT-label chi witness. -/
+  positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
+  /-- Comparison of the chosen blocked-basis coefficients with the BNT labels. -/
+  blockedComparison : BNTBlockedBasisCoefficientComparison data coeffs
+
+namespace BNTLabelTheoremData
+
+variable {data : AlgebraStructureData d D} {Λ : Type*} {O : ℕ → Type*}
+  [Fintype Λ] [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+  [∀ L : ℕ, Mul (O L)] (H : BNTLabelTheoremData data Λ O)
+
+/-- The BNT product expansion with the coefficients written as traces of the
+length-independent chi matrices. -/
+theorem same_length_product_eq_sum_chi_trace_pow
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    H.operators.operator L α * H.operators.operator L β =
+      ∑ γ : Λ, (H.positiveChi.chi.matrix α β γ ^ L).trace •
+        H.operators.operator L γ :=
+  H.sameLengthProduct.eq_sum_chi_trace_pow H.positiveChi L hL α β
+
+/-- The idempotent scalar identity with length-one coefficients written as
+traces of the chi matrices. -/
+theorem idempotent_eq_sum_chi_trace (γ : Λ) :
+    H.traceScalars.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        (H.positiveChi.chi.matrix α β γ).trace *
+          (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
+  H.idempotent.eq_sum_chi_trace H.positiveChi γ
+
+/-- The positive blocked chi witness obtained from the BNT-label theorem data
+and the blocked-basis comparison. -/
+def toPositiveBlockedStructureChiTracePowerForm :
+    AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data :=
+  H.blockedComparison.toPositiveBlockedStructureChiTracePowerForm H.positiveChi
+
+end BNTLabelTheoremData
+
 end MPOTensor

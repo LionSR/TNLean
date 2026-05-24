@@ -1578,6 +1578,70 @@ the elementary trace-power identity for diagonal matrices.
     BNT-label trace-power formula.
 \end{proof}
 
+\begin{definition}[BNT-label theorem data]%
+    \label{def:mpdo_bnt_label_theorem_data}
+    \lean{MPOTensor.BNTLabelTheoremData}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_trace_scalar_family,
+        def:mpdo_bnt_label_same_length_product_form,
+        def:mpdo_bnt_label_idempotent_coefficient_form,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    The BNT-label theorem data consist of the fixed BNT-label coefficient
+    system, the same-length BNT operator family and product identity, the trace
+    scalars and idempotent condition, the positive length-independent
+    \(\chi\)-witness, and the comparison with the chosen blocked bases.
+    These data are the source-side hypotheses from which the blocked-basis
+    consequences below are derived.
+\end{definition}
+
+\begin{theorem}[BNT theorem data give the chi-trace product law]%
+    \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
+    BNT-label theorem data give the same-length product expansion with
+    coefficients written as traces of powers of the length-independent
+    \(\chi_{\alpha,\beta,\gamma}\)-matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the chi-trace product law to the product identity and the positive
+    BNT-label \(\chi\)-witness belonging to the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give the chi-trace idempotent law]%
+    \label{thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
+    BNT-label theorem data give the idempotent scalar identity with the
+    length-one coefficients written as traces of the corresponding
+    \(\chi\)-matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the chi-trace idempotent law to the idempotent condition and the
+    positive BNT-label \(\chi\)-witness belonging to the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give a positive blocked \(\chi\) witness]%
+    \label{thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
+    \lean{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
+    BNT-label theorem data give a positive blocked-basis \(\chi\) trace-power
+    witness by pulling the length-independent BNT-label \(\chi\)-family back
+    along the blocked-basis comparison maps.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the BNT-to-blocked witness construction to the comparison and the
+    positive BNT-label \(\chi\)-witness belonging to the theorem data.
+\end{proof}
+
 \begin{theorem}[Positive blocked $\chi$ witness gives trace powers]%
     \label{thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
