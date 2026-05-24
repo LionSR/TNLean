@@ -23,7 +23,7 @@ comparison work.
   Theorem IV.13(ii) and Appendix C.3--C.4
 -/
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
@@ -335,6 +335,15 @@ namespace BNTBlockedBasisCoefficientComparison
 
 variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
 
+/-- The label map on the disjoint union of source and target blocked basis
+indices at a positive blocked length. -/
+def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (n : ℕ) (hn : 0 < n) :
+    AlgebraStructureData.BlockedIndex data n ⊕
+      AlgebraStructureData.BlockedIndex data (2 * n) → Λ
+  | Sum.inl i => cmp.sourceLabel n hn i
+  | Sum.inr k => cmp.targetLabel n hn k
+
 /-- A blocked-basis/BNT-label coefficient comparison transports a positive
 BNT-label chi trace-power witness to each blocked-basis coefficient. -/
 theorem blocked_coeff_eq_trace_pow
@@ -349,6 +358,56 @@ theorem blocked_coeff_eq_trace_pow
   rw [cmp.blocked_coeff_eq n hn i j k]
   exact hχ.eq_trace_pow n hn
     (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
+
+/-- The blocked chi family obtained by pulling back a BNT-label chi witness
+along a blocked-basis comparison.
+
+The comparison maps are defined only for positive lengths.  The value at
+`n = 0` is therefore filled by an arbitrary BNT label; this component is not
+used by the positive-length blocked trace-power identity. -/
+def pulledBlockedChiFamily [Inhabited Λ]
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c) :
+    AlgebraStructureData.BlockedStructureChiFamily data where
+  toDiagonal n :=
+    if hn : 0 < n then
+      hχ.chi.comap (cmp.blockedLabel n hn)
+    else
+      hχ.chi.comap fun _ => default
+
+/-- A positive BNT-label chi witness and a blocked-basis comparison give a
+positive blocked chi trace-power witness.
+
+This is a derived blocked-basis statement.  It does not construct the BNT-label
+coefficient family or comparison maps from an MPDO tensor; it only transports an
+already given uniform BNT-label witness along an already given comparison.  The
+`Inhabited Λ` assumption supplies the unused zero-length component of the
+blocked chi family.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
+lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def toPositiveBlockedStructureChiTracePowerForm [Inhabited Λ]
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c) :
+    AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data where
+  chi := cmp.pulledBlockedChiFamily hχ
+  posEntries := by
+    intro n i j k r
+    by_cases hn : 0 < n
+    · have hpos : ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
+        simpa only [pulledBlockedChiFamily, dif_pos hn] using
+          hχ.posEntries.comap (cmp.blockedLabel n hn)
+      exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
+    · have hpos : ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
+        simpa only [pulledBlockedChiFamily, dif_neg hn] using
+          hχ.posEntries.comap fun _ => default
+      exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
+  tracePower := by
+    intro n hn i j k
+    rw [cmp.blocked_coeff_eq n hn i j k]
+    simpa only [AlgebraStructureData.BlockedStructureChiFamily.tracePowerCoeff,
+      pulledBlockedChiFamily, DiagonalChiFamily.comap, blockedLabel, dif_pos hn] using
+      hχ.tracePower n hn
+        (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
 
 end BNTBlockedBasisCoefficientComparison
 

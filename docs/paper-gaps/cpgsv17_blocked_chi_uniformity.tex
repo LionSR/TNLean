@@ -161,6 +161,10 @@ Once both the comparison predicate and a positive BNT-label \(\chi\)-witness are
 available, the coefficient-level blocked trace-power formula is formalized as a
 direct corollary.\footnote{%
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}.}
+The same hypotheses also give a positive blocked-basis \(\chi\)-witness by
+pulling back the uniform BNT-label \(\chi\)-family along the
+comparison maps.\footnote{%
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.toPositiveBlockedStructureChiTracePowerForm}.}
 Likewise, once the idempotent coefficient condition and the positive
 BNT-label \(\chi\)-witness are available, the length-one idempotent identity is
 formalized with the coefficients rewritten as traces of the corresponding
@@ -185,8 +189,9 @@ To eliminate the remaining gap, the formalization should introduce:
     \item the blocked-basis trace-power statement, with its source-length
         exponent convention, as a derived corollary of the uniform BNT-label
         theorem, rather than as the theorem itself.  The coefficient-level
-        corollary is now formalized; the remaining work is to construct the
-        source BNT-label data and comparison maps from an MPDO tensor.
+        corollary and the corresponding positive blocked \(\chi\)-witness are
+        now formalized; the remaining work is to construct the source BNT-label
+        data and comparison maps from an MPDO tensor.
 \end{enumerate}
 
 \bibliographystyle{alpha}
