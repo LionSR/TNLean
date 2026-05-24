@@ -1,6 +1,8 @@
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Finset.SDiff
+import Mathlib.Data.Finset.Union
 import Mathlib.Data.Fintype.Basic
+import Mathlib.Tactic.FinCases
 
 /-!
 # Region decompositions for PEPS injectivity arguments
@@ -130,6 +132,50 @@ theorem regionFourPart_cases [Fintype V] (A B : Finset V) (v : V) :
     · exact Or.inr <| Or.inr <| Or.inr <| by
         simp [regionOutsideUnion, hvA, hvB]
 
+/-- The four regions, indexed in the order
+\(A\setminus B\), \(A\cap B\), \(B\setminus A\), \((A\cup B)^c\). -/
+def regionUnionPart [Fintype V] (A B : Finset V) (i : Fin 4) : Finset V :=
+  if i = 0 then
+    regionOnlyLeft A B
+  else if i = 1 then
+    regionOverlap A B
+  else if i = 2 then
+    regionOnlyRight A B
+  else
+    regionOutsideUnion A B
+
+@[simp] theorem regionUnionPart_zero [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 0 = regionOnlyLeft A B := by
+  simp [regionUnionPart]
+
+@[simp] theorem regionUnionPart_one [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 1 = regionOverlap A B := by
+  simp [regionUnionPart]
+
+@[simp] theorem regionUnionPart_two [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 2 = regionOnlyRight A B := by
+  simp [regionUnionPart]
+
+@[simp] theorem regionUnionPart_three [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 3 = regionOutsideUnion A B := by
+  simp [regionUnionPart, show (3 : Fin 4) ≠ 0 by decide,
+    show (3 : Fin 4) ≠ 1 by decide, show (3 : Fin 4) ≠ 2 by decide]
+
+/-- The indexed four regions cover the whole finite vertex set. -/
+theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
+    Finset.univ.biUnion (regionUnionPart A B) = Finset.univ := by
+  classical
+  ext v
+  constructor
+  · intro _
+    simp
+  · intro _
+    rcases regionFourPart_cases A B v with hv | hv | hv | hv
+    · exact Finset.mem_biUnion.mpr ⟨0, by simp, by simpa using hv⟩
+    · exact Finset.mem_biUnion.mpr ⟨1, by simp, by simpa using hv⟩
+    · exact Finset.mem_biUnion.mpr ⟨2, by simp, by simpa using hv⟩
+    · exact Finset.mem_biUnion.mpr ⟨3, by simp, by simpa using hv⟩
+
 /-- The left-only region is disjoint from the overlap. -/
 theorem regionOnlyLeft_disjoint_overlap (A B : Finset V) :
     Disjoint (regionOnlyLeft A B) (regionOverlap A B) := by
@@ -179,6 +225,30 @@ theorem regionInside_disjoint_outside [Fintype V] (A B : Finset V) :
   simpa [regionOutsideUnion] using
     (disjoint_sdiff_self_right :
       Disjoint (A ∪ B) ((Finset.univ : Finset V) \ (A ∪ B)))
+
+/-- The indexed four regions are pairwise disjoint. -/
+theorem regionUnionPart_pairwise_disjoint [Fintype V] (A B : Finset V) :
+    Pairwise fun i j : Fin 4 =>
+      Disjoint (regionUnionPart A B i) (regionUnionPart A B j) := by
+  classical
+  intro i j hij
+  fin_cases i <;> fin_cases j
+  · exact (hij rfl).elim
+  · simpa using regionOnlyLeft_disjoint_overlap A B
+  · simpa using regionOnlyLeft_disjoint_onlyRight A B
+  · simpa using regionOnlyLeft_disjoint_outside A B
+  · simpa using (regionOnlyLeft_disjoint_overlap A B).symm
+  · exact (hij rfl).elim
+  · simpa using (regionOnlyRight_disjoint_overlap A B).symm
+  · simpa using regionOverlap_disjoint_outside A B
+  · simpa using (regionOnlyLeft_disjoint_onlyRight A B).symm
+  · simpa using regionOnlyRight_disjoint_overlap A B
+  · exact (hij rfl).elim
+  · simpa using regionOnlyRight_disjoint_outside A B
+  · simpa using (regionOnlyLeft_disjoint_outside A B).symm
+  · simpa using (regionOverlap_disjoint_outside A B).symm
+  · simpa using (regionOnlyRight_disjoint_outside A B).symm
+  · exact (hij rfl).elim
 
 end PEPS
 end TNLean
