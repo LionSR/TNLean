@@ -56,6 +56,8 @@ BNT-label coefficient system is represented as `BNTLabelCoefficientFamily`, and
 product identity.  The predicate
 `BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm` records the idempotent
 coefficient condition on the scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
+The structure `BNTBlockedBasisCoefficientComparison` records how chosen
+blocked-basis multiplication coefficients are read as BNT-label coefficients.
 The structure
 `PositiveBNTLabelChiTracePowerForm` records positivity together with the
 positive-length identity
@@ -772,6 +774,57 @@ theorem HasIdempotentCoefficientForm.eq_sum [Fintype Λ]
   h γ
 
 end BNTLabelTraceScalarFamily
+
+/-- Comparison between chosen blocked-basis multiplication coefficients and
+BNT-label coefficients.
+
+For each positive blocked length `n`, the maps `sourceLabel` and `targetLabel`
+read the chosen basis labels of \(\mathcal A_n\) and \(\mathcal A_{2n}\) as
+BNT labels.  The comparison equality says that the blocked-basis coefficient of
+the product of two chosen basis elements is the corresponding BNT-label
+coefficient:
+\[
+  c^{(n)}_{i,j,k}
+    =
+  c^{(n)}_{\alpha(i),\alpha(j),\alpha(k)}.
+\]
+This structure records the comparison statement only.  Constructing the label
+maps from the Appendix C.3 decomposition and relating this blocked product to
+the same-length BNT operator product remain separate obligations.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTBlockedBasisCoefficientComparison
+    (data : AlgebraStructureData d D) {Λ : Type*}
+    (c : BNTLabelCoefficientFamily Λ) where
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_n\). -/
+  sourceLabel :
+    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data n → Λ
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\). -/
+  targetLabel :
+    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
+  /-- The blocked-basis coefficient is the pullback of the BNT-label coefficient. -/
+  coeff_eq : ∀ (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)),
+    data.blockedStructureCoefficients n i j k =
+      c.coeff n (sourceLabel n hn i) (sourceLabel n hn j) (targetLabel n hn k)
+
+namespace BNTBlockedBasisCoefficientComparison
+
+variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
+  (cmp : BNTBlockedBasisCoefficientComparison data c)
+
+/-- Restatement of the blocked-basis/BNT-label coefficient comparison. -/
+theorem blocked_coeff_eq (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      c.coeff n (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j)
+        (cmp.targetLabel n hn k) :=
+  cmp.coeff_eq n hn i j k
+
+end BNTBlockedBasisCoefficientComparison
 
 /-- A positive BNT-label chi witness for Theorem IV.13(ii).
 
