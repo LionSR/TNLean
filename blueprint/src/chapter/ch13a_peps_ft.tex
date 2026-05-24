@@ -213,6 +213,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
     This is immediate from $\Psi_v \circ \Phi_v = \Id$.
 \end{proof}
 
+\begin{definition}[Local projector]%
+    \label{def:peps_localProjector}
+    \lean{TNLean.PEPS.localProjector}
+    \leanok
+    \uses{def:peps_physRealizeLocalOp}
+    The local projector is the physical realization of the identity virtual
+    operator:
+    \[
+        P_v = \Phi_v \circ \Psi_v .
+    \]
+\end{definition}
+
 \begin{definition}[Virtual pullback of a local physical operator]%
     \label{def:peps_localVirtualOpOfPhysicalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp}
@@ -234,7 +246,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_spec}
     \leanok
     \uses{def:peps_localVirtualOpOfPhysicalOp,
-        def:peps_physRealizeLocalOp}
+        def:peps_physRealizeLocalOp,
+        def:peps_localProjector}
     For every coefficient function \(c\), applying the local tensor map after
     the virtual pullback gives the projection of \(O(\Phi_v(c))\) onto the
     image of \(\Phi_v\).
@@ -284,6 +297,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     The canonical physical realization agrees with the virtual operation on
     the image of the local tensor map. Apply the preceding recovery theorem.
+\end{proof}
+
+\begin{theorem}[Physical realization of a pulled-back physical operator]%
+    \label{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    \lean{TNLean.PEPS.physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    \leanok
+    \uses{def:peps_physRealizeLocalOp,
+        def:peps_localVirtualOpOfPhysicalOp,
+        def:peps_localProjector}
+    Let \(P_v=\Phi_v\circ\Psi_v\) be the local projector, and let
+    \(T_O=\Psi_v\circ O\circ\Phi_v\) be the virtual pullback of a physical
+    operator \(O\). Then
+    \[
+        \Phi_v\circ T_O\circ\Psi_v
+            = P_v\circ O\circ P_v .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Expand the definitions of the physical realization, the virtual pullback,
+    and the local projector.
 \end{proof}
 
 \begin{definition}[Matrix action on one incident virtual edge]%
