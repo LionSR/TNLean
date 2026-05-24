@@ -285,6 +285,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
     virtual operations agree.
 \end{proof}
 
+\begin{theorem}[Extensionality of physical-to-virtual pullback]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_iff_projected_action_eq}
+    \leanok
+    \uses{def:IsVertexInjective,
+        thm:peps_localVirtualOpOfPhysicalOp_spec}
+    Two physical endpoint operations have the same virtual pullback exactly when
+    their projected actions agree on every vector in the image of the local
+    tensor map:
+    \[
+        T_O = T_{O'}
+        \quad\Longleftrightarrow\quad
+        P_v O \Phi_v(c)=P_v O'\Phi_v(c)
+        \quad\text{for all }c .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Apply the local tensor map to the two virtual pullbacks and use the
+    pullback specification. The converse follows from vertex injectivity; the
+    forward direction is obtained by rewriting the two virtual pullbacks.
+\end{proof}
+
 \begin{theorem}[Pullback of the canonical physical realization]%
     \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_physRealizeLocalOp}
