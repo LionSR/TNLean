@@ -171,6 +171,20 @@ formalized with the coefficients rewritten as traces of the corresponding
 \(\chi\)-matrices.\footnote{%
 \leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}.}
 
+The BNT-label objects above are now also gathered into one theorem-data record:
+fixed coefficients, same-length operators and product law, trace scalars and
+idempotent condition, positive BNT-label \(\chi\)-witness, and blocked-basis
+comparison.\footnote{\leanid{MPOTensor.BNTLabelTheoremData}.}  This record is
+not an additional mathematical assumption in the source theorem; it is the
+single formal object collecting the source data supplied by the Appendix
+C.3--C.4 construction from an MPDO tensor.  From such data, the same-length
+chi-trace product law, the chi-trace idempotent law, and the positive blocked
+\(\chi\)-witness are immediate
+consequences.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace},
+\leanid{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}.}
+
 To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
     \item construction of the comparison maps relating the BNT-label
@@ -186,12 +200,12 @@ To eliminate the remaining gap, the formalization should introduce:
         \(m_\gamma =
           \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
           m_\alpha m_\beta\) from the MPDO tensor;
-    \item the blocked-basis trace-power statement, with its source-length
-        exponent convention, as a derived corollary of the uniform BNT-label
-        theorem, rather than as the theorem itself.  The coefficient-level
-        corollary and the corresponding positive blocked \(\chi\)-witness are
-        now formalized; the remaining work is to construct the source BNT-label
-        data and comparison maps from an MPDO tensor.
+    \item construction of the single
+        \leanid{MPOTensor.BNTLabelTheoremData} record from these source
+        objects.  The blocked-basis trace-power statement, with its
+        source-length exponent convention, is then a derived corollary of the
+        uniform BNT-label theorem, rather than a separate replacement for the
+        theorem itself.
 \end{enumerate}
 
 \bibliographystyle{alpha}
