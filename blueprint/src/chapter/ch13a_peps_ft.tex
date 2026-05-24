@@ -1369,6 +1369,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(V\setminus R\).
 \end{definition}
 
+\begin{definition}[Square-lattice coordinate regions]%
+    \label{def:peps_squareLatticeCoordinateRegions}
+    \lean{TNLean.PEPS.SquareLatticeVertex}
+    \lean{TNLean.PEPS.squareLatticeRectangle}
+    \lean{TNLean.PEPS.squareLatticeFull}
+    \lean{TNLean.PEPS.IsTwoByThreeSquareLatticeProduct}
+    \lean{TNLean.PEPS.IsThreeByTwoSquareLatticeProduct}
+    \leanok
+    The finite $n\times m$ square lattice is represented by pairs of
+    coordinates.  A coordinate rectangle is a product of a horizontal
+    coordinate set and a vertical coordinate set.  The $2\times3$ and
+    $3\times2$ coordinate-product predicates assert only that these two
+    coordinate sets have cardinalities $2,3$ and $3,2$, respectively; they
+    do not yet assert that the coordinate sets are contiguous intervals.
+\end{definition}
+
+\begin{lemma}[Basic identities for square-lattice coordinate regions]%
+    \label{lem:peps_squareLatticeCoordinateRegion_identities}
+    \lean{TNLean.PEPS.mem_squareLatticeRectangle}
+    \lean{TNLean.PEPS.card_squareLatticeRectangle}
+    \lean{TNLean.PEPS.squareLatticeFull_eq_univ}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions}
+    Membership in a coordinate rectangle is coordinatewise membership, the
+    cardinality of a coordinate rectangle is the product of the two coordinate
+    cardinalities, and the full coordinate rectangle is the whole finite vertex
+    set.
+\end{lemma}
+\begin{proof}\leanok
+    These are the standard identities for the product of two finite sets.
+\end{proof}
+
 \begin{definition}[Normal rectangular injectivity hypotheses]%
     \label{def:peps_normalRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
