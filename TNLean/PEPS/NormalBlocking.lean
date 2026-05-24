@@ -303,6 +303,61 @@ structure NormalRectangleInjectivityHypotheses where
   /-- Every \(3\times 2\) rectangular region is injective. -/
   threeByTwo_injective : ∀ R : Finset V, IsThreeByTwoRegion R → ι.IsInjective R
 
+/-- Coordinate square-lattice form of the rectangular injectivity hypotheses.
+
+Theorem 3 of arXiv:1804.04964 assumes injectivity for every contiguous
+\(2\times 3\) and \(3\times 2\) rectangular block in the finite square
+lattice. This is the coordinate specialization of
+`NormalRectangleInjectivityHypotheses` to the vertex set
+`SquareLatticeVertex width height`.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3 and proof, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`. -/
+structure NormalSquareLatticeRectangleInjectivityHypotheses {width height : ℕ}
+    (κ : RegionInjectivityData (SquareLatticeVertex width height)) where
+  /-- Every contiguous \(2\times 3\) coordinate rectangle is injective. -/
+  twoByThree_injective :
+    ∀ R : Finset (SquareLatticeVertex width height),
+      IsTwoByThreeContiguousSquareLatticeRectangle R → κ.IsInjective R
+  /-- Every contiguous \(3\times 2\) coordinate rectangle is injective. -/
+  threeByTwo_injective :
+    ∀ R : Finset (SquareLatticeVertex width height),
+      IsThreeByTwoContiguousSquareLatticeRectangle R → κ.IsInjective R
+
+namespace NormalSquareLatticeRectangleInjectivityHypotheses
+
+variable {width height : ℕ}
+variable {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+
+/-- The coordinate square-lattice rectangular hypotheses as abstract
+rectangular injectivity hypotheses.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3 and proof, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`. -/
+def toRectangular
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ) :
+    NormalRectangleInjectivityHypotheses κ where
+  IsTwoByThreeRegion := IsTwoByThreeContiguousSquareLatticeRectangle
+  IsThreeByTwoRegion := IsThreeByTwoContiguousSquareLatticeRectangle
+  twoByThree_injective := h.twoByThree_injective
+  threeByTwo_injective := h.threeByTwo_injective
+
+@[simp] theorem toRectangular_twoByThreeRegion
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (R : Finset (SquareLatticeVertex width height)) :
+    h.toRectangular.IsTwoByThreeRegion R ↔
+      IsTwoByThreeContiguousSquareLatticeRectangle R :=
+  Iff.rfl
+
+@[simp] theorem toRectangular_threeByTwoRegion
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (R : Finset (SquareLatticeVertex width height)) :
+    h.toRectangular.IsThreeByTwoRegion R ↔
+      IsThreeByTwoContiguousSquareLatticeRectangle R :=
+  Iff.rfl
+
+end NormalSquareLatticeRectangleInjectivityHypotheses
+
 /-- Square-lattice normal PEPS blocking hypotheses for Theorem 3.
 
 This records the hypotheses used in the translationally invariant square-lattice
