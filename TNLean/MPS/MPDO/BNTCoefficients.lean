@@ -278,6 +278,33 @@ theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
 
 end PositiveBNTLabelChiTracePowerForm
 
+namespace BNTLabelTraceScalarFamily
+
+variable {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
+  {m : BNTLabelTraceScalarFamily Λ}
+
+/-- The BNT idempotent scalar identity, after substituting the length-one
+trace formula supplied by a positive BNT-label chi witness.
+
+This is the coefficient-level combination of the idempotent condition in
+arXiv:1606.00608, Theorem IV.13(ii), lines 981--985, with the trace-power
+formula for \(c^{(1)}_{\alpha,\beta,\gamma}\). -/
+theorem HasIdempotentCoefficientForm.eq_sum_chi_trace [Fintype Λ]
+    (hm : m.HasIdempotentCoefficientForm c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c) (γ : Λ) :
+    m.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        (hχ.chi.matrix α β γ).trace * (m.traceScalar α * m.traceScalar β) := by
+  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ]
+  refine Finset.sum_congr rfl ?_
+  intro α _hα
+  refine Finset.sum_congr rfl ?_
+  intro β _hβ
+  rw [hχ.eq_trace_pow 1 Nat.zero_lt_one α β γ]
+  simp
+
+end BNTLabelTraceScalarFamily
+
 namespace BNTBlockedBasisCoefficientComparison
 
 variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
