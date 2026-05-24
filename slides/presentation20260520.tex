@@ -1,0 +1,1292 @@
+% ══════════════════════════════════════════════════════════════════════
+%  Job talk - quantum information theorists, 2026
+%  Autoformalizing the fundamental theorem of matrix product states
+%  by multi-agent orchestration.
+%  Single self-contained file. Compile with latexmk from slides/.
+% ══════════════════════════════════════════════════════════════════════
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{metropolis}
+\metroset{sectionpage=none}
+\input{preamble}
+
+\usetikzlibrary{chains,decorations.pathreplacing,shadows,shapes.symbols,arrows.meta,fit,backgrounds,matrix}
+
+% --- Local macros (math) ---
+\newcommand{\Mat}{\mathrm{Mat}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\Tr}{\mathrm{Tr}}
+\newcommand{\wordSpan}{\mathrm{wordSpan}}
+
+% --- Compound colors used in TikZ cards ---
+\colorlet{amberlight}{amber!80!white}
+\colorlet{lglight}{leangreen!70!white}
+\colorlet{srlight}{softred!70}
+\colorlet{mgdark}{mintgreen!80!black}
+\colorlet{srstrong}{softred!80}
+\colorlet{lgfill}{leangreen!15!cardbg}
+\colorlet{lbfill}{leanblue!15!cardbg}
+\colorlet{amfill}{amber!15!cardbg}
+\colorlet{dbfill}{deepblue!15!cardbg}
+\colorlet{srfill}{softred!15!cardbg}
+\colorlet{dwfill}{dimwhite!15!cardbg}
+\colorlet{mgfill}{mintgreen!15!cardbg}
+\colorlet{lgbg}{leangreen!25!cardbg}
+\colorlet{ambg}{amber!20!cardbg}
+\colorlet{lgrow}{leangreen!20!cardbg}
+
+% --- Global TikZ styles (no #-params so they are safe inside frames) ---
+\tikzset{
+  nodebase/.style={rounded corners=4pt, thick, text=white, align=center,
+    font=\footnotesize\bfseries, minimum height=0.8cm, inner sep=5pt},
+  nodebox/.style={rounded corners=5pt, thick, text=white, align=center,
+    font=\small, minimum width=3cm, minimum height=1cm},
+  card/.style={rounded corners=5pt, thick, text=white, align=left,
+    inner sep=6pt, font=\scriptsize, minimum height=2.2cm, text width=3.6cm},
+  arrw/.style={-{Stealth}, thick, white},
+  arrg/.style={-{Stealth}, thick, leangreen},
+  arrlb/.style={-{Stealth}, thick, leanblue},
+  arram/.style={-{Stealth}, thick, amber, dashed},
+  arrdw/.style={-{Stealth}, thick, dimwhite, dashed},
+  stat/.style={rounded corners=5pt, fill=cardbg, draw=leangreen!50, text=white,
+    minimum width=2.7cm, minimum height=1.5cm, align=center, font=\small},
+  tn/.style={draw=leangreen, fill=cardbg, rounded corners=2pt,
+    minimum size=7mm, thick, text=white, font=\small},
+}
+
+% --- Title metadata ---
+\title{Autoformalizing the fundamental theorem of matrix product states}
+\subtitle{A multi-agent, blueprint-guided formalization in Lean~4}
+\author{Sirui Lu \\
+  {\small with Erickson Tjoa and J.~Ignacio Cirac}}
+\institute{Max-Planck-Institut f\"ur Quantenoptik \quad\&\quad MCQST}
+\date{2026}
+
+% Clean PDF metadata (strip the visual stats strip from subtitle out of pdftitle).
+\hypersetup{
+  pdftitle={Autoformalizing the fundamental theorem of matrix product states -- A multi-agent, blueprint-guided formalization in Lean 4},
+  pdfauthor={Sirui Lu, Erickson Tjoa, J. Ignacio Cirac},
+  pdfsubject={Job talk, MPQ \& MCQST, 2026}
+}
+
+\begin{document}
+
+%======================================================================
+% 1. Title frame (no footer)
+%======================================================================
+{%
+\setbeamertemplate{footline}{}
+\begin{frame}[plain,noframenumbering]
+    \vspace{-2em}
+    \maketitle
+    \vspace{-3em}
+\end{frame}
+}
+
+%======================================================================
+% 2. Roadmap
+%======================================================================
+\begin{frame}{Roadmap}
+    \vspace{-0.4em}
+    \tableofcontents
+\end{frame}
+
+%======================================================================
+\section{Why formalize research physics?}
+%======================================================================
+
+%---------- Frame 3: headline stats ----------
+\begin{frame}{The project at a glance}
+    \vspace{0.6em}
+    \begin{center}
+    \begin{tikzpicture}
+        % Row 1: three boxes
+        \node[stat, minimum width=3.0cm, minimum height=1.8cm] at (-3.6,0) {\textcolor{leangreen}{\Large\textbf{113K}}\\ lines of Lean};
+        \node[stat, minimum width=3.0cm, minimum height=1.8cm] at (0,0)    {\textcolor{leangreen}{\Large\textbf{2{,}847}}\\ declarations};
+        \node[stat, minimum width=3.0cm, minimum height=1.8cm] at (3.6,0)  {\textcolor{leangreen}{\Large\textbf{14}}\\ blueprint chapters};
+        % Row 2: two boxes (centered)
+        \node[stat, minimum width=3.0cm, minimum height=1.8cm] at (-1.8,-2.5)
+            {\textcolor{amber}{\Large\textbf{17}}\\ sorries (active build)\\[0.15em] {\scriptsize\textcolor{leangreen}{0 in core FT-MPS pipeline}}};
+        \node[stat, minimum width=3.0cm, minimum height=1.8cm] at (1.8,-2.5)
+            {\textcolor{leangreen}{\Large\textbf{2}}\\ months of active dev};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize Verified proof of the fundamental theorem of MPS plus the libraries needed to state it, with the proof following the review and research articles~\cite{Perez-Garcia2007Matrix,Cirac2017Annals,Cirac2021Matrix}.}
+\end{frame}
+
+%---------- Frame 4: Why formalize ----------
+\begin{frame}{Why formalize?}
+    \begin{itemize}
+        \item A proof assistant (\textbf{Lean~4}) checks every logical step against a tiny, trusted kernel.
+        \item Recent landmark formalisations:
+            \begin{itemize}
+                \item[$\circ$] \textbf{Kepler conjecture}~\cite{Hales2017Formal}
+                \item[$\circ$] \textbf{Liquid Tensor Experiment}~\cite{Commelin2023Liquid}
+                \item[$\circ$] \textbf{Strong Prime Number Theorem}~\cite{MathInc2025Strong}
+            \end{itemize}
+        \item For research physics: PhysLean and a Lean verification of generalised quantum Stein's lemma~\cite{Meiburg2025Formalization}.
+    \end{itemize}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize The kernel verifies \emph{logic}, not \emph{intent}. That gap is the punchline of this talk.}
+\end{frame}
+
+%---------- Frame 5: physics is harder ----------
+\begin{frame}{Why physics is harder than pure math, for now}
+    \textcolor{leangreen}{\textbf{Mathlib is built primarily for pure mathematics so far.}}
+    \vspace{0.6em}
+    \begin{itemize}
+        \item Mathlib lacks \textbf{quantum channel theory} as a bundled subject:
+            \begin{itemize}
+                \item[$\circ$] no irreducibility / primitivity predicates for CP maps;
+                \item[$\circ$] no Perron--Frobenius for completely positive maps;
+                \item[$\circ$] no Kadison--Schwarz / multiplicative-domain calculus.
+            \end{itemize}
+        \item Each of these must be built from scratch \emph{before} a literature step that takes one line can be formalised.
+    \end{itemize}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize Plus: implicit hypotheses in the paper that formalisation must lift into the statement.}
+\end{frame}
+
+%---------- Frame 6: Matrix product states (diagram-led) ----------
+\begin{frame}{Matrix product states}
+    \begin{center}
+    \begin{tikzpicture}[bond/.style={thick,white}, phys/.style={thick,leangreen!80!white}]
+        % Sites
+        \node[tn] (A1) at (0,0)   {$A$};
+        \node[tn] (A2) at (1.6,0) {$A$};
+        \node[tn] (A3) at (3.2,0) {$A$};
+        \node[tn] (A4) at (4.8,0) {$A$};
+        \node[tn] (A5) at (6.4,0) {$A$};
+        % Physical legs
+        \foreach \a in {A1,A2,A3,A4,A5}
+            \draw[phys] (\a.north) -- ++(0,0.55);
+        \node[font=\scriptsize,text=dimwhite] at (0,0.82)   {$i_1$};
+        \node[font=\scriptsize,text=dimwhite] at (1.6,0.82) {$i_2$};
+        \node[font=\scriptsize,text=dimwhite] at (3.2,0.82) {$i_3$};
+        \node[font=\scriptsize,text=dimwhite] at (4.8,0.82) {$\cdots$};
+        \node[font=\scriptsize,text=dimwhite] at (6.4,0.82) {$i_N$};
+        % Bond legs
+        \draw[bond] (A1.east) -- (A2.west);
+        \draw[bond] (A2.east) -- (A3.west);
+        \draw[bond,dashed] (A3.east) -- (A4.west);
+        \draw[bond] (A4.east) -- (A5.west);
+        % Clean rectangular wrap-around
+        \coordinate (rL) at ($(A5.east) + (0.5,0)$);
+        \coordinate (rB) at ($(rL) + (0,-0.95)$);
+        \coordinate (lL) at ($(A1.west) + (-0.5,0)$);
+        \coordinate (lB) at ($(lL) + (0,-0.95)$);
+        \draw[bond] (A5.east) -- (rL) -- (rB) -- (lB) -- (lL) -- (A1.west);
+        \node[font=\scriptsize,text=dimwhite] at (3.2,-1.20) {trace (PBC)};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textbf{Translation-invariant MPS~\cite{Cirac2017Annals}.} For $A = (A^i)_{i=0}^{d-1}$ with $A^i \in \MD$,
+    \[
+        \ket{\psi_A^{(N)}} \;=\; \sum_{i_1,\ldots,i_N=0}^{d-1}
+        \Tr\!\big(A^{i_1} A^{i_2} \cdots A^{i_N}\big)\, \ket{i_1\cdots i_N},
+        \qquad \text{$D$ = bond dim, \ $d$ = local dim.}
+    \]
+    Gauge: $A^i \mapsto X A^i X^{-1}$, $X \in \GL_D(\mathbb{C})$, leaves every $\ket{\psi_A^{(N)}}$ fixed.
+    \vspace{0.6em}
+    \begin{block}{The question}
+        \centering
+        \alert{When do two tensors $A, B$ give the same family $\{\ket{\psi_A^{(N)}}\}_{N \geq 1}$?}
+    \end{block}
+\end{frame}
+
+%======================================================================
+\section{The fundamental theorem of MPS}
+%======================================================================
+
+
+
+%---------- Frame 8: Transfer operator ----------
+\begin{frame}{The transfer operator $E_A$}
+    \begin{block}{Definition}
+        $E_A : \MD \to \MD$, \quad $E_A(X) \;=\; \sum_{i=0}^{d-1} A^i\, X\, (A^i)^\dagger$.
+        \\[2pt]
+        A CP map with Kraus operators $\{A^i\}$.
+    \end{block}
+    \vspace{0.5em}
+    \begin{itemize}
+        \item Long-distance correlations of $\{\ket{\psi_A^{(N)}}\}$ are controlled by the spectrum of $E_A$ --- spectral radius, peripheral eigenvalues, spectral gap.
+        \item \textbf{Injective} and \textbf{normal} are technical regularity conditions on $\{A^i\}$ that we will need later.
+    \end{itemize}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize Quantum Wielandt~\cite{Sanz2010Quantum}: every normal $A$ becomes injective after blocking $L \leq D^2 - d + 1$ sites.}
+\end{frame}
+
+%---------- Frame 9: FT statement (absorbs why-FT-MPS motivation) ----------
+\begin{frame}{The fundamental theorem (informal)}
+    Two MPS tensors can describe identical states for many reasons --- gauge, embedding, multiplicities, block redundancy. FT-MPS classifies all of them.
+    \vspace{0.4em}
+    \begin{block}{Theorem~\cite{Perez-Garcia2007Matrix,Cirac2017Annals,Cirac2017Irreducible}}
+        Let $A, B$ be MPS tensors with $\ket{\psi_A^{(N)}} = \ket{\psi_B^{(N)}}$ for all $N$. Then, after canonical-form reduction:
+        \begin{itemize}
+            \item the \textbf{block structure} of $A$ matches that of $B$ --- same number of blocks, same bond dimensions, same multiplicities;
+            \item each pair of corresponding blocks is \textbf{gauge-equivalent} via some $X_k \in \GL_{D_k}(\mathbb{C})$.
+        \end{itemize}
+    \end{block}
+    \vspace{0.3em}
+    \begin{itemize}
+        \item Special case (\textbf{injective} $A$): $B^i = X A^i X^{-1}$ for a single $X \in \GL_D(\mathbb{C})$.
+        \item Downstream: parent Hamiltonians~\cite{Fannes1992Finitely}, 1D SPT classification.
+    \end{itemize}
+\end{frame}
+
+%---------- Frame 10: First autonomous attempt ----------
+\begin{frame}{First autonomous attempt: Skolem--Noether}
+    \textbf{Test.} Ask the agent pool to prove FT-MPS with \emph{no} literature route specified.
+    \vspace{0.4em}
+    \begin{itemize}
+        \item First non-trivial result returned: the \textbf{injective case}.
+        \item Route chosen: \textbf{Skolem--Noether} --- not canonical forms.
+        \item \emph{Every algebra automorphism of $\MD$ is inner} $\Rightarrow$ $\exists\, X \in \GL_D(\mathbb{C})$ with $\varphi(M) = X M X^{-1}$, hence
+            \[ B^i \;=\; X A^i X^{-1}. \]
+    \end{itemize}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize \community{} A genuine surprise of autonomy: the system picked the proof route the \emph{library} prefers, not the one the \emph{paper} prefers.}
+\end{frame}
+
+%---------- Frame 11: Beyond injective (with blocking TikZ) ----------
+\begin{frame}{Beyond the injective case --- where autonomy stalled}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[
+        scale=0.92, transform shape,
+        bond/.style={thick,white},
+        phys/.style={thick,leangreen!80!white},
+        bigtn/.style={draw=amber, fill=amber!20!cardbg, rounded corners=2pt,
+            minimum width=2.3cm, minimum height=8mm, thick, text=white, font=\small}
+    ]
+        % Panel A: original chain
+        \begin{scope}[shift={(0,0)}]
+            \foreach \i in {0,1,2,3,4,5,6,7} {
+                \node[tn] (P\i) at (\i*0.85, 0) {\scriptsize $A$};
+            }
+            \foreach \i in {0,...,6} {
+                \pgfmathtruncatemacro{\j}{\i+1}
+                \draw[bond] (P\i.east) -- (P\j.west);
+            }
+            \foreach \i in {0,...,7} {
+                \draw[phys] (P\i.north) -- ++(0,0.3);
+            }
+            \node[font=\scriptsize, text=dimwhite] at (-1.0,0) {chain of $N$:};
+        \end{scope}
+        % Panel B: blocked chain
+        \begin{scope}[shift={(0,-1.8)}]
+            \node[bigtn] (B0) at (0.85, 0) {$A^{(L)}$};
+            \node[bigtn] (B1) at (3.40, 0) {$A^{(L)}$};
+            \node[bigtn] (B2) at (5.95, 0) {$A^{(L)}$};
+            \draw[bond] (B0.east) -- (B1.west);
+            \draw[bond] (B1.east) -- (B2.west);
+            \foreach \n in {B0,B1,B2}
+                \draw[phys] (\n.north) -- ++(0,0.3);
+            \node[font=\scriptsize, text=dimwhite] at (-1.0,0) {after blocking $L$:};
+        \end{scope}
+        % Dashed bracket linking panel A blocks to B0
+        \draw[dimwhite!60, dashed] (-0.30,0.35) -- (-0.30,-1.45);
+        \draw[dimwhite!60, dashed] (2.25,0.35) -- (2.25,-1.45);
+        \draw[dimwhite!60, dashed] (4.80,0.35) -- (4.80,-1.45);
+        \draw[dimwhite!60, dashed] (7.10,0.35) -- (7.10,-1.45);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \[
+        A^{(L)\,(i_1,\ldots,i_L)} \;=\; A^{i_1} A^{i_2} \cdots A^{i_L},
+        \qquad
+        E_{A^{(L)}} \;=\; (E_A)^L.
+    \]
+    The spectrum of $(E_A)^L$ concentrates onto dominant eigenvalues; at large $L$ the blocked tensor becomes block-diagonal, and each block eventually becomes injective.
+    \vspace{0.3em}
+    \\
+    \textcolor{dimwhite}{\footnotesize Without literature input the autonomous output lost multiplicities, imposed measure-zero gauges, and over-generalised peripheral claims. Handing the system~\cite{Perez-Garcia2007Matrix, Cirac2017Annals} re-grounded the strategy --- next frame is the literature route.}
+\end{frame}
+
+%---------- Frame 12: The 5-step pipeline ----------
+\begin{frame}{The literature route: a five-step pipeline}
+    \vspace{-0.4em}
+    \begin{center}
+    {\footnotesize\textcolor{dimwhite}{Blueprint chapters: \textbf{3} / \textbf{4--6} / \textbf{7} / \textbf{8} / \textbf{9--12}}}
+    \\[0.4em]
+    \begin{tikzpicture}[scale=0.82, transform shape]
+        \node[nodebox, draw=leangreen, fill=lgfill, minimum width=2.7cm, minimum height=1.2cm]
+            (i) at (0,0) {\textbf{(i) Single-block}\\{\tiny injective $\Rightarrow$ $B = X A X^{-1}$}};
+        \node[nodebox, draw=leanblue, fill=lbfill, minimum width=2.7cm, minimum height=1.2cm]
+            (ii) at (3.2,0) {\textbf{(ii) Spectral theory}\\{\tiny QPF, Kadison--Schwarz}};
+        \node[nodebox, draw=amber, fill=amfill, minimum width=2.7cm, minimum height=1.2cm]
+            (iii) at (6.4,0) {\textbf{(iii) Wielandt}\\{\tiny normal $\Rightarrow$ injective}};
+        \node[nodebox, draw=mintgreen, fill=mgfill, minimum width=2.7cm, minimum height=1.2cm]
+            (iv) at (9.6,0) {\textbf{(iv) Canonical form}\\{\tiny CFI $\to$ CFII via blocking}};
+        \node[nodebox, draw=deepblue, fill=dbfill, minimum width=2.7cm, minimum height=1.2cm]
+            (v) at (12.8,0) {\textbf{(v) Block separation}\\{\tiny spectral gap}};
+        \draw[arrw] (i) -- (ii);
+        \draw[arrw] (ii) -- (iii);
+        \draw[arrw] (iii) -- (iv);
+        \draw[arrw] (iv) -- (v);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.5em}
+    \begin{block}{Output}
+        Two general MPS tensors give the same family $\{\ket{\psi_A^{(N)}}\}$ iff their canonical forms have \emph{matching block data} (number, dimensions, multiplicities) \emph{and} corresponding blocks are gauge-equivalent.
+    \end{block}
+    \vspace{-0.2em}
+    \textcolor{dimwhite}{\footnotesize References:~\cite{Perez-Garcia2007Matrix,Cirac2017Annals,Cirac2021Matrix}.}
+\end{frame}
+
+%---------- Frame 15: Wielandt bound ----------
+\begin{frame}{The quantum Wielandt bound}
+    \begin{block}{Theorem (quantum Wielandt~\cite{Sanz2010Quantum})}
+        If $E_A$ is primitive, then for some $L = O(D^2)$
+        \[
+            T_L(A) \;=\; \spn\{A^{i_1} A^{i_2} \cdots A^{i_L}\} \;=\; \MD .
+        \]
+    \end{block}
+    \vspace{0.4em}
+    Wielandt is what makes the canonical-form pipeline \emph{finite}: every normal block becomes injective after $O(D^2)$ blocking steps.
+    \vspace{0.4em}
+    \\
+    \textcolor{dimwhite}{\footnotesize Code: \texttt{vecMulVec\_mem\_wordSpan\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector} (worked example assembled by scout-then-implement; see architecture section).}
+\end{frame}
+
+%---------- Frame 16: Canonical form reduction ----------
+\begin{frame}{Module (iv): canonical-form reduction, in pictures}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.92, transform shape,
+        cell/.style={draw=white!70, very thin, fill=cardbg, minimum size=0.40cm, inner sep=0pt},
+        blkA/.style={draw=leangreen, thick, fill=leangreen!25!cardbg, minimum size=0.40cm, inner sep=0pt},
+        blkB/.style={draw=leanblue, thick, fill=leanblue!25!cardbg, minimum size=0.40cm, inner sep=0pt},
+        zr/.style={draw=dimwhite!30, very thin, fill=cardbg, minimum size=0.40cm, inner sep=0pt},
+        off/.style={draw=softred!60, very thin, fill=softred!15!cardbg, minimum size=0.40cm, inner sep=0pt},
+    ]
+        % --- (a) General ---
+        \begin{scope}[shift={(0,0)}]
+            \foreach \r in {0,1,2,3}{\foreach \c in {0,1,2,3}{\node[cell] at (\c*0.40,-\r*0.40) {};}}
+            \node[font=\scriptsize, text=white] at (0.6,-2.0) {(a) general};
+        \end{scope}
+        % --- (b) Block-triangular ---
+        \begin{scope}[shift={(3.2,0)}]
+            \node[blkA] at (0,0) {}; \node[blkA] at (0.40,0) {};
+            \node[off] at (0.80,0) {}; \node[off] at (1.20,0) {};
+            \node[blkA] at (0,-0.40) {}; \node[blkA] at (0.40,-0.40) {};
+            \node[off] at (0.80,-0.40) {}; \node[off] at (1.20,-0.40) {};
+            \node[zr] at (0,-0.80) {}; \node[zr] at (0.40,-0.80) {};
+            \node[blkB] at (0.80,-0.80) {}; \node[blkB] at (1.20,-0.80) {};
+            \node[zr] at (0,-1.20) {}; \node[zr] at (0.40,-1.20) {};
+            \node[blkB] at (0.80,-1.20) {}; \node[blkB] at (1.20,-1.20) {};
+            \node[font=\scriptsize, text=white] at (0.6,-2.0) {(b) block-triangular};
+        \end{scope}
+        % --- (c) CFI ---
+        \begin{scope}[shift={(6.4,0)}]
+            \node[blkA] at (0,0) {}; \node[blkA] at (0.40,0) {};
+            \node[zr] at (0.80,0) {}; \node[zr] at (1.20,0) {};
+            \node[blkA] at (0,-0.40) {}; \node[blkA] at (0.40,-0.40) {};
+            \node[zr] at (0.80,-0.40) {}; \node[zr] at (1.20,-0.40) {};
+            \node[zr] at (0,-0.80) {}; \node[zr] at (0.40,-0.80) {};
+            \node[blkB] at (0.80,-0.80) {}; \node[blkB] at (1.20,-0.80) {};
+            \node[zr] at (0,-1.20) {}; \node[zr] at (0.40,-1.20) {};
+            \node[blkB] at (0.80,-1.20) {}; \node[blkB] at (1.20,-1.20) {};
+            \node[font=\scriptsize, text=white] at (0.6,-2.0) {(c) CFI};
+        \end{scope}
+        % --- (d) Normal CFI ---
+        \begin{scope}[shift={(9.6,0)}]
+            \node[blkA] at (0,0) {}; \node[blkA] at (0.40,0) {};
+            \node[zr] at (0.80,0) {}; \node[zr] at (1.20,0) {};
+            \node[blkA] at (0,-0.40) {}; \node[blkA] at (0.40,-0.40) {};
+            \node[zr] at (0.80,-0.40) {}; \node[zr] at (1.20,-0.40) {};
+            \node[zr] at (0,-0.80) {}; \node[zr] at (0.40,-0.80) {};
+            \node[blkB] at (0.80,-0.80) {}; \node[blkB] at (1.20,-0.80) {};
+            \node[zr] at (0,-1.20) {}; \node[zr] at (0.40,-1.20) {};
+            \node[blkB] at (0.80,-1.20) {}; \node[blkB] at (1.20,-1.20) {};
+            \node[font=\scriptsize, text=white] at (0.6,-2.0) {(d) normal CFI};
+        \end{scope}
+        % --- (e) CFII ---
+        \begin{scope}[shift={(12.8,0)}]
+            \node[blkA] at (0,0) {}; \node[blkA] at (0.40,0) {};
+            \node[zr] at (0.80,0) {}; \node[zr] at (1.20,0) {};
+            \node[blkA] at (0,-0.40) {}; \node[blkA] at (0.40,-0.40) {};
+            \node[zr] at (0.80,-0.40) {}; \node[zr] at (1.20,-0.40) {};
+            \node[zr] at (0,-0.80) {}; \node[zr] at (0.40,-0.80) {};
+            \node[blkB] at (0.80,-0.80) {}; \node[blkB] at (1.20,-0.80) {};
+            \node[zr] at (0,-1.20) {}; \node[zr] at (0.40,-1.20) {};
+            \node[blkB] at (0.80,-1.20) {}; \node[blkB] at (1.20,-1.20) {};
+            \draw[amber, thick, rounded corners=2pt] (-0.22,0.22) rectangle (0.62,-0.62);
+            \draw[amber, thick, rounded corners=2pt] (0.58,-0.58) rectangle (1.42,-1.42);
+            \node[font=\scriptsize, text=white] at (0.6,-2.0) {(e) CFII};
+        \end{scope}
+        % Arrows
+        \draw[arrw] (1.5,-0.60) -- node[above,font=\tiny,text=dimwhite]{spectral}     (2.45,-0.60);
+        \draw[arrw] (4.7,-0.60) -- node[above,font=\tiny,text=dimwhite]{trace kills offdiag} (5.65,-0.60);
+        \draw[arrw] (7.9,-0.60) -- node[above,font=\tiny,text=dimwhite]{block $p$}    (8.85,-0.60);
+        \draw[arrw] (11.1,-0.60) -- node[above,font=\tiny,text=dimwhite]{block $p\,k$, Wielandt} (12.05,-0.60);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize \textcolor{softred}{Red} off-diagonal entries drop out of the trace in Eq.~(1). Further blocking de-periodises each block (normal); Wielandt makes each normal block injective after $k \leq D^2 - d + 1$ sites.}
+\end{frame}
+
+%---------- Frame 18: Strongest multi-block theorem ----------
+\begin{frame}{The strongest multi-block statement we formalised}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.95, transform shape]
+        \node[card, draw=leanblue, fill=lbfill, text width=4.8cm, minimum height=2.6cm] (in) at (0,0)
+          {\textcolor{leanblue}{\textbf{Hypothesis}}\\[3pt]
+           Two \emph{independent} canonical forms\\
+           $A = \bigoplus_k (\mu_k A_k)^{\oplus m_k},\quad
+            B = \bigoplus_\ell (\nu_\ell B_\ell)^{\oplus n_\ell}$\\[3pt]
+           \quad with $\ket{\psi_A^{(N)}} = \ket{\psi_B^{(N)}}$ for all $N$.};
+        \node[card, draw=leangreen, fill=lgfill, text width=6.0cm, minimum height=2.6cm] (out) at (8,0)
+          {\textcolor{leangreen}{\textbf{Conclusion}}\\[3pt]
+           \begin{tabular}{@{}l@{\ }l@{}}
+             $\bullet$ & block bijection $\sigma : \{1,\dots,r\} \to \{1,\dots,r\}$ \\
+             $\bullet$ & bond dims match: $D_k = D'_{\sigma(k)}$ \\
+             $\bullet$ & multiplicities match: $m_k = n_{\sigma(k)}$ \\
+             $\bullet$ & global gauge $X \in \GL$ assembling per-block $X_k$
+           \end{tabular}};
+        \draw[arrg, line width=1.4pt] (in) -- node[above, font=\scriptsize, text=leangreen]{verified} (out);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \begin{itemize}
+        \item Matches the literature statement in both~\cite{Perez-Garcia2007Matrix} \emph{and} the strengthened multi-block formulation of~\cite{Cirac2017Annals,Cirac2017Irreducible} --- \emph{not} a pre-aligned weakening.
+        \item Companion lemma derives overlap convergence from per-block primitivity, so the user does not have to supply a convergence hypothesis.
+        \item \textcolor{leangreen}{\proved{Core FT-MPS pipeline: 0 sorries.}}
+    \end{itemize}
+    \vspace{0.1em}
+    \textcolor{dimwhite}{\footnotesize Code: \texttt{ft\_sector\_bnt\_equal\_global\_gauge} + literal-gauge wrapper \texttt{ft\_sector\_bnt\_equal\_mps\_gaugeEquiv\_literal}.}
+\end{frame}
+
+%======================================================================
+\section{Architecture}
+%======================================================================
+
+%---------- Frame 19: System architecture (now appears FIRST) ----------
+\begin{frame}{System architecture}
+    \vspace{-0.5em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.82, transform shape,
+        roleA/.style={nodebase, draw=leangreen, fill=lgfill, minimum width=1.7cm, minimum height=0.55cm, font=\tiny\bfseries\ttfamily},
+        roleB/.style={nodebase, draw=leangreen, fill=lgbg,   minimum width=1.7cm, minimum height=0.55cm, font=\tiny\bfseries\ttfamily}
+    ]
+        % --- Band 1: human supervisor (top centre) ---
+        \node[nodebase, draw=white, fill=ambg, minimum width=4.4cm, minimum height=0.8cm]
+            (sup) at (0,3.6) {\textbf{Human supervisor}};
+
+        % --- Band 2: three resource cards ---
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=3.4cm, minimum height=1.1cm]
+            (bp)   at (-5.0,1.8) {\textbf{Blueprint}\\{\tiny LaTeX + HTML}};
+        \node[nodebase, draw=amber,    fill=amfill, minimum width=3.4cm, minimum height=1.1cm]
+            (mem)  at ( 0.0,1.8) {\textbf{Persistent memory}\\{\tiny ($\sim$450 files)}};
+        \node[nodebase, draw=leanblue, fill=lbfill, minimum width=3.4cm, minimum height=1.1cm]
+            (lean) at ( 5.0,1.8) {\textbf{Lean 4 server + Mathlib}\\{\tiny LSP, Loogle, build}};
+
+        % --- Band 3: 2x4 grid of agent roles (orchestrator centre top of grid) ---
+        \node[roleB] (orch)  at (-5.25, -0.4) {leanOrch};
+        \node[roleA] (proof) at (-3.50, -0.4) {lean};
+        \node[roleA] (scout) at (-1.75, -0.4) {leanSearch};
+        \node[roleA] (simp)  at ( 0.00, -0.4) {leanSimp};
+        \node[roleA] (sync)  at (-5.25, -1.4) {leanBP};
+        \node[roleA] (rev)   at (-3.50, -1.4) {review};
+        \node[roleA] (pres)  at (-1.75, -1.4) {presenter};
+
+        % Frame around the agent pool
+        \node[draw=dimwhite!50, dashed, rounded corners=4pt, fit=(orch)(pres)(simp), inner sep=4pt,
+              label={[font=\tiny,text=dimwhite,xshift=2pt]left:agent pool}] (pool) {};
+
+        % --- Edges ---
+        \draw[arrw] (sup) -- node[left,font=\tiny,text=dimwhite,pos=0.5]{r/w} (bp);
+        \draw[{Stealth}-{Stealth}, thick, mintgreen] (bp) -- node[above,font=\tiny,text=mintgreen]{sync} (mem);
+        \draw[arram] (sup.south) -- (mem.north);
+        \foreach \a in {proof,scout,simp,sync,rev,pres}
+            \draw[arrg, thin] (orch) -- (\a);
+        \draw[arrlb] (pool.east) to[bend right=10] node[right,font=\tiny,text=leanblue]{typecheck} (lean.south);
+        \draw[{Stealth}-{Stealth}, thick, amber] (mem.south) -- (pool.north);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{-0.4em}
+    \textcolor{dimwhite}{\footnotesize Supervisor edits blueprint + memory; orchestrator dispatches to agents (green arrows); agents read/write memory and type-check via the Lean server.}
+\end{frame}
+
+%---------- Frame 20: Agent roles (now appears SECOND, codex removed) ----------
+\begin{frame}{Agent roles}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.25}
+    {\footnotesize
+    \begin{tabular}{@{}l c l@{}}
+        \toprule
+        \textbf{Role} & \textbf{Typical tier} & \textbf{Function} \\
+        \midrule
+        \texttt{lean}             & \textcolor{softred}{expensive (E)}     & proof writing, closing placeholders \\
+        \texttt{leanSearch}       & \textcolor{leangreen}{inexpensive (I)} & Mathlib scouting, feasibility \\
+        \texttt{leanSimplifier}   & \textcolor{leangreen}{I}               & style, proof simplification \\
+        \texttt{leanBlueprint}    & \textcolor{leangreen}{I}               & blueprint $\leftrightarrow$ Lean sync \\
+        \texttt{leanOrchestrator} & E\,/\,I                                & task decomposition, dispatch \\
+        \texttt{review}           & \textcolor{leangreen}{I}               & paper $\leftrightarrow$ Lean cross-check \\
+        \texttt{presenter}        & \textcolor{leangreen}{I}               & slide / doc preparation \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.5em}
+    \textcolor{dimwhite}{\footnotesize Each sub-agent's model is chosen \emph{at dispatch} by the orchestrator (\texttt{delegate\_agent} / \texttt{delegate\_workflow}); roles are \emph{role specifications}, not model bindings. The seven specialisations were introduced incrementally as bottlenecks appeared.}
+\end{frame}
+
+%---------- Frame 21: Delegation primitives (operational) ----------
+\begin{frame}[fragile]{Delegating a task: what the orchestrator actually does}
+    \vspace{-0.4em}
+    \begin{columns}[T]
+        \column{0.42\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.9, transform shape]
+            \node[nodebase, draw=amber, fill=ambg, minimum width=3.0cm, minimum height=0.8cm]
+                (orch) at (0,1.8) {\textbf{orchestrator}};
+            \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.6cm, font=\scriptsize]
+                (m) at (-2.6,0) {memory injection};
+            \node[nodebase, draw=leanblue, fill=lbfill, minimum width=2.6cm, font=\scriptsize]
+                (f) at (0,0) {file scoping};
+            \node[nodebase, draw=softred, fill=srfill, minimum width=2.6cm, font=\scriptsize]
+                (t) at (2.6,0) {model tier};
+            \draw[arrg] (orch) -- (m);
+            \draw[arrlb] (orch) -- (f);
+            \draw[-{Stealth}, thick, softred] (orch) -- (t);
+            \node[nodebase, draw=white, fill=cardbg, minimum width=3.6cm, font=\scriptsize, minimum height=0.7cm]
+                (sub) at (0,-1.7) {sub-agent dispatched};
+            \draw[arrw] (m.south) |- (sub.west);
+            \draw[arrw] (f) -- (sub);
+            \draw[arrw] (t.south) |- (sub.east);
+        \end{tikzpicture}
+        \end{center}
+
+        \column{0.56\textwidth}
+        \begin{block}{Pseudocode}
+\begin{lstlisting}[language={},basicstyle=\ttfamily\scriptsize\color{white},backgroundcolor=\color{cardbg},frame=single,rulecolor=\color{gray!50!black},showstringspaces=false]
+delegate_agent(
+  agent       = "leanSearch",
+  memories    = ["mathlib_scout.md"],
+  files       = ["TNLean/Wielandt/*.lean"],
+  model_tier  = "inexpensive",
+  instruction = "find lemmas matching ..."
+)
+\end{lstlisting}
+        \end{block}
+        \vspace{-0.2em}
+        \begin{itemize}
+            \footnotesize
+            \item \texttt{memories}: durable notes loaded into context.
+            \item \texttt{files}: read/write scope, enforced at dispatch.
+            \item \texttt{model\_tier}: chosen per task; output reclaimed on return.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+%---------- Frame 22: Lean integration tools (two layers) ----------
+\begin{frame}{Lean 4 integration: two layers}
+    \vspace{-0.2em}
+    \begin{center}
+    \textcolor{leangreen}{\textbf{Layer 1 --- per-edit tools (LSP, fast):}}
+    \\[0.4em]
+    \begin{tikzpicture}
+        \node[card, draw=leangreen, fill=lgfill, text width=2.7cm] (a) at (0,0)
+          {\textcolor{leangreen}{\textbf{Diagnostics}}\\Errors, warnings, hints.};
+        \node[card, draw=leanblue, fill=lbfill, text width=2.7cm] (b) at (3.1,0)
+          {\textcolor{leanblue}{\textbf{Inspect}}\\Hover, goal, term\_goal.};
+        \node[card, draw=amber, fill=amfill, text width=2.7cm] (c) at (6.2,0)
+          {\textcolor{amber}{\textbf{Loogle}}\\Search by name / type pattern.};
+        \node[card, draw=mintgreen, fill=mgfill, text width=2.7cm] (d) at (9.3,0)
+          {\textcolor{mintgreen}{\textbf{File restart}}\\Recover stale state.};
+    \end{tikzpicture}
+    \\[1.0em]
+    \textcolor{leanblue}{\textbf{Layer 2 --- project-level (heavier, less frequent):}}
+    \\[0.4em]
+    \begin{tikzpicture}
+        \node[card, draw=deepblue, fill=dbfill, text width=2.7cm] (e) at (0,0)
+          {\textcolor{deepblue}{\textbf{\texttt{lake build}}}\\Full project compile.};
+        \node[card, draw=deepblue, fill=dbfill, text width=2.7cm] (f) at (3.1,0)
+          {\textcolor{deepblue}{\textbf{Cache fetch}}\\Mathlib oleans.};
+        \node[card, draw=deepblue, fill=dbfill, text width=2.7cm] (g) at (6.2,0)
+          {\textcolor{deepblue}{\textbf{Toolchain}}\\Lean version, deps.};
+        \node[card, draw=deepblue, fill=dbfill, text width=2.7cm] (h) at (9.3,0)
+          {\textcolor{deepblue}{\textbf{Server restart}}\\Reset full state.};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Same interface a human Lean developer uses (LSP); agents call them programmatically.}
+\end{frame}
+
+%---------- Frame 23a: What is a blueprint? ----------
+\begin{frame}{What is a blueprint?}
+    A \textbf{blueprint} is a human-readable LaTeX document that mirrors the formal proof: every definition, lemma, and theorem appears, with explicit dependencies and a status tag (\emph{done} / \emph{in progress} / \emph{blocked}). It is the project plan, the table of contents, and the agents' to-do list.
+    \vspace{0.6em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.3}
+    {\footnotesize
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Layer} & \textbf{Format} & \textbf{Audience} \\
+        \midrule
+        Lean source    & \texttt{.lean}                          & type checker \\
+        Blueprint      & LaTeX $\to$ PDF + HTML dependency graph & humans (and agents) \\
+        Paper          & PRL / arXiv                             & the journal \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize Massot~\cite{Massot2021Leanblueprint} provides the toolchain; we extended the sync checker with per-chapter progress, stale-manifest detection, and a fail-on-mismatch mode.}
+\end{frame}
+
+%---------- Frame 23b: Blueprint synchronised document ----------
+\begin{frame}{The blueprint --- a synchronised mathematical document}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textbf{Per-node tags}
+        \begin{itemize}
+            \footnotesize
+            \item \texttt{\textbackslash lean} --- link to the Lean declaration.
+            \item \texttt{\textbackslash leanok} --- statement / proof done.
+            \item \texttt{\textbackslash notready} --- prerequisites missing.
+            \item \texttt{\textbackslash uses} --- DAG edges (dependencies).
+        \end{itemize}
+        \column{0.49\textwidth}
+        \begin{block}{Node colours = the frontier}
+            \footnotesize
+            \begin{itemize}
+                \item[\textcolor{leangreen}{$\blacksquare$}] proof done \& verified
+                \item[\textcolor{mintgreen}{$\blacksquare$}] statement done
+                \item[\textcolor{leanblue}{$\blacksquare$}] ready (\emph{actionable})
+                \item[\textcolor{amber}{$\blacksquare$}] prerequisites missing
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Compiles to PDF + HTML with interactive dependency graph; automated CI keeps blueprint and Lean in sync. Toolchain: Massot~\cite{Massot2021Leanblueprint}; Wolf lecture notes~\cite{Wolf2012Quantum} scaffold the operator-algebraic chapters.}
+\end{frame}
+
+%---------- Frame 24: Persistent memory ----------
+\begin{frame}{Persistent memory --- the shared lab notebook}
+    \textcolor{leangreen}{\textbf{$\sim$450 markdown files in 7 categories.}}
+    \vspace{0.3em}
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{@{}l r l@{}}
+        \toprule
+        Category & \# & Typical filename \\
+        \midrule
+        Progress / status        & $\sim$80 & \texttt{session\_*} \\
+        Design / scout           & $\sim$60 & \texttt{*\_plan*} \\
+        Cleanup / refactor       & $\sim$50 & \texttt{*\_cleanup*} \\
+        Audit / review           & $\sim$40 & \texttt{*\_audit*} \\
+        Blueprint sync           & $\sim$30 & \texttt{blueprint\_*} \\
+        Errata / counterexample  & $\sim$15 & \texttt{counterexample\_*} \\
+        \textbf{Durable refs} (style + technique) & $\sim$10 & always-loaded set \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.4em}
+    \begin{itemize}
+        \item Durable refs: style guides, technique compendia, gap analyses, counterexample registry.
+        \item Scout-then-implement re-uses memory across sessions; without it, every dead end gets re-investigated.
+    \end{itemize}
+\end{frame}
+
+%---------- Frame 25: Orchestration patterns (TikZ panels) ----------
+\begin{frame}{Three orchestration patterns}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.78, transform shape,
+        smnode/.style={nodebase, draw=white, fill=cardbg, minimum width=1.4cm, minimum height=0.55cm, font=\tiny\bfseries},
+        merg/.style={nodebase, draw=mintgreen, fill=mgfill, minimum width=1.4cm, minimum height=0.5cm, font=\tiny\bfseries}
+    ]
+        % --- Panel A: Parallel dispatch ---
+        \begin{scope}[shift={(0,0)}]
+            \node[smnode, draw=leangreen, fill=lgfill] (orchA) at (0,1.3) {orch};
+            \node[smnode] (a1) at (-1.4,0)  {A.lean};
+            \node[smnode] (a2) at ( 0.0,0)  {B.lean};
+            \node[smnode] (a3) at ( 1.4,0)  {C.lean};
+            \node[merg]   (mg) at ( 0.0,-1.2) {merge};
+            \foreach \n in {a1,a2,a3} \draw[arrg, very thin] (orchA) -- (\n);
+            \foreach \n in {a1,a2,a3} \draw[arrw, very thin] (\n) -- (mg);
+            \node[font=\scriptsize, text=leangreen] at (0,-1.9) {\textbf{Parallel dispatch}};
+            \node[font=\tiny, text=dimwhite] at (0,-2.25) {disjoint file scopes};
+        \end{scope}
+        % --- Panel B: Scout-then-implement ---
+        \begin{scope}[shift={(5.0,0)}]
+            \node[smnode, draw=leangreen, fill=lgfill] (sc) at (-1.2,0.6) {scout};
+            \node[smnode, draw=softred,  fill=srfill] (im) at ( 1.2,0.6) {implement};
+            \draw[-{Stealth}, thick, leanblue] (sc) -- node[above, font=\tiny, text=leanblue]{design memo} (im);
+            \node[font=\tiny,text=dimwhite] at (-1.2,0.0) {(cheap)};
+            \node[font=\tiny,text=dimwhite] at ( 1.2,0.0) {(expensive)};
+            \node[font=\scriptsize, text=leanblue] at (0,-1.9) {\textbf{Scout-then-implement}};
+            \node[font=\tiny, text=dimwhite] at (0,-2.25) {feasibility before commitment};
+        \end{scope}
+        % --- Panel C: Audit-fix cycle ---
+        \begin{scope}[shift={(10.0,0)}]
+            \node[smnode, draw=amber, fill=amfill] (aud) at (-1.2,0.3) {auditor};
+            \node[smnode, draw=amber, fill=amfill] (fix) at ( 1.2,0.3) {fixer};
+            \draw[-{Stealth}, thick, amber] (aud) to[bend left=25]
+              node[above, font=\tiny, text=amber]{issues} (fix);
+            \draw[-{Stealth}, thick, amber] (fix) to[bend left=25]
+              node[below, font=\tiny, text=amber]{patch} (aud);
+            \draw[-{Stealth}, thick, leangreen, dashed] (fix.east) -- ++(0.7,0)
+              node[right, font=\tiny, text=leangreen]{exit};
+            \node[font=\tiny,text=amber] at (0,-0.7) {$\leq 5$ iterations};
+            \node[font=\scriptsize, text=amber] at (0,-1.9) {\textbf{Audit--fix cycle}};
+            \node[font=\tiny, text=dimwhite] at (0,-2.25) {converges or hits cap};
+        \end{scope}
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+%======================================================================
+\section{Intent enforcement --- the real bottleneck}
+%======================================================================
+
+%---------- Frame 26: The thesis ----------
+\begin{frame}{The real bottleneck is not proof search}
+    Until a few years ago, \emph{writing Lean proofs at all} was the bottleneck --- every step a manual exercise in syntax, tactic search, and library archaeology. Modern language models close that gap: they read a goal state, suggest tactics, look up Mathlib lemmas, and iterate against the type checker.
+    \vspace{0.6em}
+    \\
+    What they do \emph{not} fix is the layer above syntax.
+    \vspace{0.4em}
+    \begin{block}{Thesis}
+        Lean checks logic, not intent. A formally correct proof of a weaker, unintended statement passes the kernel just the same.
+    \end{block}
+    \vspace{0.4em}
+    \community{Buzzard~\cite{Buzzard2025Formal}:} \emph{``Definitions are more dangerous than proofs.''}
+\end{frame}
+
+%---------- Frame 28: Normalisation parenthetical ----------
+\begin{frame}{Vignette 1: a parenthetical that turned out to be load-bearing}
+    \textbf{Setup.} Cirac et al.~\cite{Cirac2017Annals} normalise canonical-form weights as $|\mu_k| \leq 1$ with at least one $|\mu_1| = 1$. Inserted as a parenthetical \emph{``we will assume from now on''} on line 246 of the source. The formalisation silently dropped it.
+    \vspace{0.3em}
+    \begin{block}{The catch (paper--Lean cross-check)}
+        \footnotesize
+        Without the unit-dominant constraint, the proportional-FT power-sum identity
+        \[
+            \sum_q \mu_{j,q}^N \;=\; \sum_q (\nu_{j,q}\, e^{i\phi_j})^N
+        \]
+        does \emph{not} separate weights cleanly --- proportional-FT theorems stalled with no obvious local cause.
+    \end{block}
+    \vspace{0.2em}
+    \textbf{Resolution.} 5-PR sequence \#1716 $\to$ \#1725 $\to$ \#1745 $\to$ \#1752 $\to$ \#1758 strengthened \texttt{IsBNTCanonicalForm} with the line-246 normalisation, regenerated the dominant-match API, and lifted unit-block existence to a hypothesis.
+    \\
+    \textcolor{amber}{\footnotesize \textbf{Buzzard, made concrete:} every stalled sorry was downstream of a single dropped parenthetical.}
+\end{frame}
+
+%---------- Frame 29: Doubly stochastic ----------
+\begin{frame}{Vignette 2: the doubly-stochastic gauge}
+    \textbf{Setup.} The system imposed a simultaneous unital + trace-preserving gauge on $E_A$ and proved a correct spectral-gap theorem under it.
+    \vspace{0.3em}
+    \begin{block}{The catch (blueprint round 1)}
+        \[
+            E_A(\Id_D) = \Id_D \quad\text{AND}\quad E_A^*(\Id_D) = \Id_D \quad\text{--- generically impossible.}
+        \]
+    \end{block}
+    \vspace{0.2em}
+    \textbf{Analogy.} Asking a generic matrix to be \emph{both} upper-triangular \emph{and} symmetric: only diagonal matrices satisfy both. Imposing left- and right-canonical gauges simultaneously confines $A$ to a measure-zero subset of MPS in exactly that way.
+\end{frame}
+
+%---------- Frame 30: Lesson ----------
+\begin{frame}{Lesson: blueprint review is the load-bearing layer}
+    \vspace{-0.2em}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.25}
+    {\footnotesize
+    \begin{tabular}{@{}c l r l@{}}
+        \toprule
+        \textbf{Round} & \textbf{Focus} & \textbf{PRs} & \textbf{Sample issue} \\
+        \midrule
+        1 & terminology cleanup       & 17 & \#1334 ``non-periodic FT'' renaming; \#1429 retired strict-order BNT constructors \\
+        2 & proof gaps                & 9  & \#1499 identity-padded homogeneous pair-span ($\sim$200 bridge lemmas); \#1513 banned SE jargon \\
+        3 & source-faithful formulas  & 5  & \#1409 entropy formula corrections \\
+        4 & CPSV16 deep audit         & 1  & PR \#1639 wrong-direction retraction \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.5em}
+    \begin{itemize}
+        \item Blueprint-level errors cost roughly $1\!\times$; the same error caught after Lean implementation costs $10$--$100\times$ --- discarded files, re-derivations, re-aligned chapters.
+        \item All four episodes (two on these slides, two in the backup) follow the same pattern: an externally imposed analytical check caught a formally valid but unintended formalisation.
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+\section{Statistics \& evaluation}
+%======================================================================
+
+%---------- Frame 31: Codebase growth ----------
+\begin{frame}{Codebase growth}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    {\footnotesize
+    \begin{tabular}{@{}l r r r r@{}}
+        \toprule
+        \textbf{Snapshot}    & \textbf{Files} & \textbf{LOC}      & \textbf{Decls}   & \textbf{Open sorries} \\
+        \midrule
+        Week 1               & 39             & 5{,}811           & ---              & 0 \\
+        Week 5               & 123            & 38{,}612          & ---              & 0$^\dagger$ \\
+        Week 9               & 269            & 77{,}961          & 2{,}009          & 28$^\ddagger$ \\
+        \textbf{Most recent} & \textbf{418}   & \textbf{113{,}000} & \textbf{2{,}847} & \textbf{17} \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.4em}
+    \begin{itemize}
+        \item \textcolor{dimwhite}{$^\dagger$ Core FT-MPS canonical-form pipeline first reached zero sorries here.}
+        \item \textcolor{dimwhite}{$^\ddagger$ Expansion into new chapters, not regression --- remaining sorries are exposed rather than hidden behind weaker statements.}
+        \item Sorries counted on the main branch in active-build declarations.
+    \end{itemize}
+\end{frame}
+
+%---------- Frame 33: Mathlib gaps -> reusable TNLean libraries ----------
+\begin{frame}{Mathlib gaps $\to$ reusable TNLean libraries}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.3}
+    {\footnotesize
+    \begin{tabular}{@{}l l r@{}}
+        \toprule
+        \textbf{Missing in Mathlib} & \textbf{Built locally in TNLean} & \textbf{Size} \\
+        \midrule
+        Perron--Frobenius for CP maps     & \texttt{TNLean/QPF/}                & 906 lines \\
+        Kadison--Schwarz + mult.\ domain  & \texttt{TNLean/Channel/Schwarz/}    & 5{,}374 lines \\
+        Quantum Wielandt for primitive CP & \texttt{TNLean/Wielandt/}           & 12{,}942 lines \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.6em}
+    \begin{itemize}
+        \item Frame 5 listed \emph{what was missing}; this frame lists \emph{what we built that fills it}.
+        \item Each directory is a freestanding library --- collectively the TNLean core ($\sim$19{,}000 lines).
+        \item Plus quantum-channel calculus (CP/CPTP/CPU bundles, Kraus/Choi/Stinespring) built throughout.
+    \end{itemize}
+\end{frame}
+
+%---------- Frame 34: Paper-to-Lean expansion ----------
+\begin{frame}{One paper line $\to$ many Lean lines}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l r l@{}}
+        \toprule
+        \textbf{One-liner in the paper} & \textbf{Lean lines} & \textbf{What it actually requires} \\
+        \midrule
+        ``$X$ is invertible''             & 200+ & QPF fixed point, DS gauge, KS, mult.\ domain, kernel inv., $\det \neq 0$ \\
+        ``by Perron--Frobenius''          & 150+ & PSD eigenvector, irreducibility $\to$ PD, critical-scalar uniqueness \\
+        ``the blocks separate''           & 800+ & peeling lemma, exponential decay, gap, dichotomy, induction \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.4em}
+    \begin{itemize}
+        \footnotesize
+        \item \emph{Figures are \textbf{lower bounds}.} The actual span across the chain is several times larger --- e.g.\ block separation accounts for $\sim$12{,}000 lines across \texttt{SectorComparison/}, \texttt{SectorBNT/}, \texttt{Blocking/}, \texttt{Periodic\,FT/}.
+        \item Take-away: algebra-heavy proofs (e.g.\ the Skolem--Noether step) expand modestly in Lean; spectral-analytic proofs (e.g.\ block separation, the Perron--Frobenius chain) expand $5\times$--$10\times$ --- they dominate the codebase.
+    \end{itemize}
+\end{frame}
+
+%======================================================================
+\section{Outlook}
+%======================================================================
+
+%---------- Frame 35: TNLean library ----------
+\begin{frame}{TNLean --- the libraries we will release}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Verified, built on Mathlib v4.30.0-rc2:}
+        \begin{itemize}
+            \item[\proved{}] Quantum Perron--Frobenius for irreducible CP maps on $\MD$
+            \item[\proved{}] Quantum Wielandt bound
+            \item[\proved{}] Kadison--Schwarz + multiplicative domain
+            \item[\proved{}] CFI / CFII canonical-form theory
+            \item[\proved{}] Spectral-gap $\Rightarrow$ exponential overlap decay
+            \item[\proved{}] Quantum-channel calculus (CP/CPTP/CPU, Kraus/Choi/Stinespring)
+        \end{itemize}
+        \column{0.49\textwidth}
+        \textbf{In-progress companion chapters:}
+        \begin{itemize}
+            \item[\inprog{}] Matrix product density operators
+            \item[\inprog{}] Quantum entropy + relative entropy
+            \item[\inprog{}] PEPS fundamental theorems
+            \item[\inprog{}] Parent Hamiltonians
+            \item[\inprog{}] Exponential decay of correlations
+            \item[\inprog{}] Quantum dynamical semigroups
+        \end{itemize}
+        \vspace{0.4em}
+        \textcolor{dimwhite}{\footnotesize Open source release coincides with the paper preprint.}
+    \end{columns}
+\end{frame}
+
+%---------- Frame 36: Next targets ----------
+\begin{frame}{Where the same machinery goes next}
+    Two natural next targets, both with published informal proofs that have not been formalised.
+    \vspace{0.4em}
+    \begin{itemize}
+        \item \textbf{PEPS fundamental theorem.} Informal proof in~\cite{Cirac2021Matrix,Cirac2017Annals,Cirac2017Irreducible}; the 2D analog of FT-MPS.
+            \\\textcolor{leangreen}{\footnotesize Have:} 1D pipeline + \texttt{TNLean/PEPS/} skeleton ($\sim$2{,}300 lines: \texttt{FundamentalTheorem}, \texttt{Blocking}, \texttt{LocalGauge}, \texttt{VirtualInsertion}).
+            \quad\textcolor{amber}{\footnotesize Need:} 2D injectivity, boundary handling.
+        \item \textbf{Boundary-generalised Wielandt} (Florido-Llin\'as et al.~\cite{FloridoLlinas2025Uniform}). Informal proof published 2025; not yet formalised.
+            \\\textcolor{leangreen}{\footnotesize Have:} full \texttt{TNLean/Wielandt/} toolkit.
+            \quad\textcolor{amber}{\footnotesize Need:} boundary-conditioned spectral estimates.
+    \end{itemize}
+    \vspace{0.5em}
+    \textcolor{dimwhite}{\footnotesize The same orchestration + blueprint pattern transfers to any modular tensor-network result with a defined primary literature.}
+\end{frame}
+
+%---------- Frame 37: Open methodological questions ----------
+\begin{frame}{Two open methodological questions}
+    \begin{enumerate}
+        \item \textbf{Definitions, not proofs, are the bottleneck.}\\
+            LLM-driven \emph{proof search} is mature; LLM-driven \emph{definition selection} --- and the detection of ``the formal statement is correct but does not match the intended one'' --- is far less developed. Today blueprint review is human. Can a sufficiently capable second-model ``intent auditor'' close this gap?
+        \vspace{0.6em}
+        \item \textbf{Do scaling laws close the gap?}\\
+            Most current improvements came from \emph{better orchestration} (memory, scout-then-implement, parallel dispatch), not from larger models. Open whether bigger models alone suffice.
+    \end{enumerate}
+\end{frame}
+
+%---------- Frame 38: Take-aways ----------
+\begin{frame}{Three take-aways}
+    \begin{enumerate}
+        \item \textbf{Multi-agent + blueprint + persistent memory produces verified research-level mathematics in months, not years.}\\
+            \textcolor{dimwhite}{\footnotesize $\sim$113K Lean lines, $\sim$3{,}000 declarations, 14 chapters; 0 sorries on the core FT-MPS pipeline.}
+        \vspace{0.5em}
+        \item \textbf{The bottleneck is intent, not proof search.}\\
+            \textcolor{dimwhite}{\footnotesize Lean checks logic; the formalisation fails when a definition silently weakens what is being proved. Detecting that requires an external analytical layer --- today, human review.}
+        \vspace{0.5em}
+        \item \textbf{Formalising physics produces reusable mathematical infrastructure.}\\
+            \textcolor{dimwhite}{\footnotesize TNLean ships a verified quantum-channel calculus, quantum Perron--Frobenius, Wielandt, Kadison--Schwarz, and multiplicative-domain library --- usable in any QI project touching CP maps.}
+    \end{enumerate}
+\end{frame}
+
+%---------- Frame 39: Acknowledgments ----------
+\begin{frame}{Acknowledgments \& release}
+    \begin{itemize}
+        \item Discussions with the MPQ Theory Division and the leanprover-community.
+        \item \textbf{Primary references:}~\cite{Perez-Garcia2007Matrix,Cirac2017Annals,Cirac2021Matrix}; chapter structure follows Wolf's \emph{Quantum Channels and Operations} lecture notes~\cite{Wolf2012Quantum}.
+        \item \textbf{Infrastructure:} Lean 4 + Mathlib community; Massot's \texttt{leanblueprint}~\cite{Massot2021Leanblueprint}; Anthropic + OpenAI model APIs.
+    \end{itemize}
+    \vspace{0.6em}
+    \begin{block}{TNLean release}
+        \footnotesize
+        Lean 4 source (Mathlib v4.30.0-rc2), blueprint, memory archive, reproducible builds, sync checker. Open source release coincides with the paper preprint. Contact: \texttt{sirui.lu@mpq.mpg.de}.\\[0.2em]
+        Project page \& live blueprint: \texttt{\href{https://sirui-lu.com/TNLean}{sirui-lu.com/TNLean}}.
+    \end{block}
+\end{frame}
+
+%---------- Frame 40: Thanks ----------
+\begin{frame}{Thank you}
+    \begin{center}
+    \vspace{2.2em}
+    {\Huge\textcolor{leangreen}{Thank you --- questions?}}\\[2.0em]
+    {\large Job talk\ \ $\cdot$\ \ 2026\ \ $\cdot$\ \ Sirui Lu\ \ $\cdot$\ \ MPQ}\\[0.8em]
+    {\normalsize\texttt{\href{https://sirui-lu.com/TNLean}{sirui-lu.com/TNLean}}}\\[2.0em]
+    \texttt{sirui.lu@mpq.mpg.de}
+    \end{center}
+\end{frame}
+
+%---------- References frame ----------
+\begin{frame}[allowframebreaks]{References}
+    \scriptsize
+    \bibliography{references}
+\end{frame}
+
+%======================================================================
+%  BACKUP SLIDES  (numbered separately via appendixnumberbeamer)
+%======================================================================
+\appendix
+
+\begin{frame}[plain,noframenumbering]
+    \begin{center}
+    \vspace{2.0em}
+    {\Huge\textcolor{leangreen}{Backup slides}}\\[1.2em]
+    {\large Detail frames for Q\&A}
+    \end{center}
+\end{frame}
+
+%---------- B1: Skolem-Noether ----------
+\begin{frame}{B1. Skolem--Noether, the precise statement}
+    \begin{block}{Skolem--Noether theorem}
+        Let $A$ be a finite-dimensional \emph{central simple} algebra over a field $k$, and let $B$ be a simple $k$-subalgebra of $A$. Any two $k$-algebra homomorphisms $B \to A$ are conjugate by an inner automorphism of $A$.
+    \end{block}
+    \vspace{0.4em}
+    \textbf{Specialised to $\MD$.} Take $A = B = \MD$. Every $k$-algebra automorphism $\varphi : \MD \to \MD$ is inner: $\exists X \in \GL_D(\mathbb{C})$ with $\varphi(M) = X M X^{-1}$.
+    \vspace{0.4em}
+    \begin{itemize}
+        \item In our setting: $\varphi$ is the linear extension of $A^i \mapsto B^i$; algebra-hom is forced by cyclic-trace identities; invertibility of $X$ is a side lemma.
+        \item Mathlib homes: \texttt{Mathlib.RingTheory.SimpleModule}, \texttt{Mathlib.Algebra.Central.Defs}; our specialisation lives in \texttt{MPS/FundamentalTheorem/Basic.lean}.
+    \end{itemize}
+\end{frame}
+
+%---------- B2: Kadison-Schwarz + multiplicative domain ----------
+\begin{frame}{B2. Kadison--Schwarz and the multiplicative domain}
+    \begin{block}{Kadison--Schwarz inequality}
+        For a unital CP map $E : \MD \to \MD$ and every $X \in \MD$,
+        \[
+            E(X^\dagger X) \;\geq\; E(X)^\dagger E(X) \quad (\text{in PSD order}).
+        \]
+    \end{block}
+    \begin{block}{Multiplicative domain}
+        \[
+            \mathrm{MD}(E) \;=\; \big\{\, X \in \MD : E(X^\dagger Y) = E(X)^\dagger E(Y) \text{ and } E(YX) = E(Y)E(X)\ \forall Y\,\big\}.
+        \]
+    \end{block}
+    \textbf{Tightness $\Leftrightarrow$ membership.} For $X$ with $\|E(X)\| = \|X\|$ and the peripheral eigenvalue having $|\mu|=1$, KS becomes an equality $\Leftrightarrow$ $X \in \mathrm{MD}(E)$. This is the formal version of the side product mentioned in Vignette~2.
+\end{frame}
+
+%---------- B3: QPF full construction ----------
+\begin{frame}{B3. Quantum Perron--Frobenius --- full construction}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.95, transform shape]
+        \node[card, draw=leangreen, fill=lgfill, text width=3.2cm, minimum height=2.0cm] (a) at (0,0)
+          {\textcolor{leangreen}{\textbf{1. Ces\`aro mean}}\\[3pt]
+           $S_N(\rho) = \frac{1}{N}\sum_{k=0}^{N-1} E^k(\rho)$ on the density-matrix simplex.};
+        \node[card, draw=leanblue, fill=lbfill, text width=3.2cm, minimum height=2.0cm] (b) at (4.0,0)
+          {\textcolor{leanblue}{\textbf{2. Compactness}}\\[3pt]
+           Cluster point of $\{S_N(\rho)\}$ is a PSD fixed point of $E$ (Brouwer / sequential compactness).};
+        \node[card, draw=amber, fill=amfill, text width=3.2cm, minimum height=2.0cm] (c) at (8.0,0)
+          {\textcolor{amber}{\textbf{3. Irreducibility}}\\[3pt]
+           Promotes PSD $\to$ positive-definite.};
+        \node[card, draw=mintgreen, fill=mgfill, text width=3.2cm, minimum height=2.0cm] (d) at (12.0,0)
+          {\textcolor{mintgreen}{\textbf{4. Uniqueness}}\\[3pt]
+           Critical scalar $\lambda^* = \sup\{\lambda : E(\rho) \geq \lambda \rho\}$; dual trace closes it.};
+        \draw[arrw] (a) -- (b); \draw[arrw] (b) -- (c); \draw[arrw] (c) -- (d);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Replaces a Mathlib gap and is reused wherever the literature writes ``by Perron--Frobenius''. $\geq 150$ Lean lines per invocation.}
+\end{frame}
+
+%---------- B4: CFI vs CFII ----------
+\begin{frame}{B4. CFI vs CFII --- the two canonical forms}
+    \begin{itemize}
+        \item \textbf{Canonical Form I (CFI):} block-diagonal modulo a periodic structure on each block. Reached by spectral decomposition + dropping off-diagonal contributions to the trace.
+        \item \textbf{Normal CFI:} block $p$ further sites $\Rightarrow$ each block has a \emph{unique} peripheral eigenvalue (normal tensor).
+        \item \textbf{Canonical Form II (CFII):} block $p\!\cdot\!k$ further sites with $k \leq D^2 - d + 1$ (quantum Wielandt) $\Rightarrow$ each block is injective.
+    \end{itemize}
+    \vspace{0.6em}
+    \begin{block}{Total blocking factor}
+        \[
+            L \;=\; p \cdot k, \qquad p = \text{block period}, \qquad k \leq D^2 - d + 1.
+        \]
+    \end{block}
+    \textcolor{dimwhite}{\footnotesize Downstream uses the looser $k \leq D^2$ since the sharp constant is off the FT-MPS critical path.}
+\end{frame}
+
+%---------- B5: CPSV16 detailed timeline ----------
+\begin{frame}{B5. CPSV16 wrong-direction retraction --- detailed timeline}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    {\footnotesize
+    \begin{tabular}{@{}l l l@{}}
+        \toprule
+        \textbf{When} & \textbf{Event} & \textbf{Artefact} \\
+        \midrule
+        $t = 0$            & combined-family LI hypothesis introduced            & PR \#1598 \\
+        $t \approx 12$h    & scaffolding lemmas, $\sim$700 LOC                  & PRs \#1605--\#1612 \\
+        $t \approx 24$h    & more lemmas, $\sim$1400 LOC, CI green               & PRs \#1615--\#1628 \\
+        $t \approx 30$h    & remaining structure built, $\sim$2200 LOC          & PR \#1633 \\
+        $t \approx 30$h    & external analytical memo flags vacuity              & \texttt{cpsv16\_fundamental\_theorem\_analysis.md} \\
+        $t \approx 36$h    & whole route retracted                               & PR \#1639 \\
+        +days              & 8-phase clean-slate replacement; CPSV16 Step~1 closed without LI & \texttt{cpsv16-ft-paper-faithful-clean-slate-plan.md} \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Kernel + automated review approved every individual PR. Only the externally written memo caught the global vacuity.}
+\end{frame}
+
+%---------- B6: mu_strict_anti ----------
+\begin{frame}{B6. The \texttt{mu\_strict\_anti} definitional gap}
+    \begin{columns}[T]
+        \column{0.50\textwidth}
+        \textcolor{softred}{\textbf{What the bad definition forced}}
+        \[
+            \mathrm{IsCanonicalFormBNT}: \quad \mu_1 > \mu_2 > \cdots > \mu_r
+        \]
+        \emph{strict} $\Rightarrow$ at most one copy per BNT sector. Multiplicities $r_j$ collapse to 1.
+        \vspace{0.4em}
+        \\
+        \textcolor{softred}{Symptom:} every proportional-FT obligation became a sorry under the wrong definition.
+        \column{0.49\textwidth}
+        \textcolor{leangreen}{\textbf{What the paper actually requires}}
+        \[
+            \mathrm{IsBNTCanonicalForm}: \quad r_j \geq 1 \text{ copies}, \ |\mu_{j,k}| = \text{const per }j
+        \]
+        Per-copy unit-modulus weights inside each sector.
+        \vspace{0.4em}
+        \\
+        \textcolor{leangreen}{Outcome:} the per-block projection of CPSV16 Step~1 went through \emph{without} any combined-family LI hypothesis.
+    \end{columns}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize \community{} ``Definitions are more dangerous than proofs'': a single misnamed field induced $\sim$2{,}200 LOC of dead-end work.}
+\end{frame}
+
+%---------- B7: heartbeat ----------
+\begin{frame}{B7. Heartbeat-budget remediation}
+    Lean aborts a single elaboration that exceeds the default budget --- 200{,}000 \emph{heartbeats} per declaration --- to prevent runaway compilation. Hitting the cap is a recurring failure mode of agent-written proofs.
+    \vspace{0.6em}
+    \begin{block}{Concrete refactor: \texttt{TNLean/Channel/KrausFreedom.lean}}
+        \footnotesize
+        Heartbeats reduced \textbf{\textcolor{softred}{6{,}400{,}000}} $\to$ \textbf{\textcolor{leangreen}{1{,}600{,}000}} ($\mathbf{4\times}$).
+        \\[3pt]
+        Refactor: introduced explicit type aliases (\texttt{KrausCoeffSpace}, \texttt{KrausEntrySpace}) and the helper lemma \texttt{toEuclideanLin\_conjTranspose\_mul\_apply}; rebound large terms via \texttt{have} so each elaboration step sees a smaller goal.
+        \\[3pt]
+        Commits: \texttt{56ff9e41}, \texttt{5a21aba5}.
+    \end{block}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize The orchestrator treats heartbeat overruns as a first-class failure mode and routes them to a refactor sub-agent.}
+\end{frame}
+
+%---------- B8: parallel dispatch in practice ----------
+\begin{frame}{B8. Parallel dispatch in practice}
+    \vspace{-0.2em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.86, transform shape]
+        \node[nodebase, draw=amber, fill=ambg, minimum width=4cm] (cls) at (0,3) {\textbf{Classify work}};
+        \node[nodebase, draw=leanblue, fill=lbfill, minimum width=4cm] (part) at (0,1.6) {\textbf{Partition into disjoint file sets}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.0cm, font=\footnotesize] (s1) at (-5,0)   {\textbf{sub-agent 1}\\{\tiny memo + files}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.0cm, font=\footnotesize] (s2) at (-2.5,0) {\textbf{sub-agent 2}\\{\tiny memo + files}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.0cm, font=\footnotesize] (s3) at (0,0)    {\textbf{sub-agent 3}\\{\tiny memo + files}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.0cm, font=\footnotesize] (s4) at (2.5,0)  {\textbf{sub-agent 4}\\{\tiny memo + files}};
+        \node[nodebase, draw=leangreen, fill=lgfill, minimum width=2.0cm, font=\footnotesize] (s5) at (5,0)    {\textbf{sub-agent 5}\\{\tiny memo + files}};
+        \node[nodebase, draw=mintgreen, fill=mgfill, minimum width=4cm] (merge) at (0,-1.6) {\textbf{Merge \& full build}};
+        \draw[arrw] (cls) -- (part);
+        \foreach \s in {s1,s2,s3,s4,s5} {\draw[arrg] (part) -- (\s); \draw[arrw] (\s) -- (merge);}
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Disjoint-file-set constraint enforced at dispatch. Violations $\Rightarrow$ merge conflicts that cost more than the parallelism saves.}
+\end{frame}
+
+%---------- B9: creator distribution ----------
+\begin{frame}{B9. Persistent memory --- full creator distribution}
+    \begin{center}
+    {\footnotesize
+    \begin{tabular}{@{}l r l@{}}
+        \toprule
+        Creator family & Files & Role \\
+        \midrule
+        \texttt{lean}             & 163 & proof writer \\
+        \texttt{leanOrchestrator} & 93  & task decomposition / dispatch \\
+        \texttt{leanSearch}       & 56  & Mathlib scout \\
+        \texttt{leanSimplifier}   & 44  & style / refactor \\
+        (untagged, bootstrap)     & 42  & legacy, no creator metadata \\
+        \texttt{leanBlueprint}    & 32  & blueprint $\leftrightarrow$ Lean sync \\
+        \texttt{chat}             & 17  & interactive supervisor dialogue \\
+        \texttt{presenter}        & 3   & slide / doc preparation \\
+        \texttt{review}           & 2   & cross-checking \\
+        \texttt{user}             & 1   & directly authored by supervisor \\
+        \bottomrule
+    \end{tabular}}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize Counts span \texttt{/memories/}, \texttt{docs/}, and \texttt{audits/}. Review-round outputs were typically filed under \texttt{leanBlueprint} or \texttt{chat}, which is why \texttt{review} is small.}
+\end{frame}
+
+%---------- B10: outlook in detail ----------
+\begin{frame}{B10. Outlook in detail}
+    \begin{columns}[T]
+        \column{0.49\textwidth}
+        \textcolor{leangreen}{\textbf{Ready now}\ \ (existing TNLean machinery)}
+        \begin{itemize}
+            \footnotesize
+            \item \textbf{Parent Hamiltonians} --- CFII + spectral gap already there.
+            \item \textbf{Boundary MPS} \& generalised Wielandt [Florido-Llin\'as 2025] --- direct continuation.
+            \item \textbf{MPDO / matrix product operators} --- partial chapters in TNLean already.
+        \end{itemize}
+        \column{0.49\textwidth}
+        \textcolor{amber}{\textbf{Needs new infrastructure}}
+        \begin{itemize}
+            \footnotesize
+            \item \textbf{SPT classification 1D} [Pollmann/Chen/Schuch] --- needs cohomology over groups.
+            \item \textbf{Lieb--Robinson bounds} --- needs $C^*$-algebra norm estimates.
+            \item \textbf{1D area law} [Hastings 2007] --- depends on Lieb--Robinson.
+            \item \textbf{Frustration-free spectral gaps} [Knabe / Nachtergaele / Anshu].
+        \end{itemize}
+    \end{columns}
+    \vspace{0.6em}
+    \textcolor{dimwhite}{\footnotesize Pattern: any result with a well-defined primary reference + modular proof is accessible to the same orchestration / blueprint / memory stack.}
+\end{frame}
+
+%---------- B11: Project phases ----------
+\begin{frame}{B11. Project phases}
+    \vspace{-0.4em}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.80, transform shape]
+        \node[card, draw=leangreen, fill=lgfill, minimum height=1.3cm, text width=3.0cm]
+          (p1) at (0,0) {\textbf{1. Foundation \& spectral}\\Skolem--Noether, KS, QPF existence};
+        \node[card, draw=amber, fill=amfill, minimum height=1.3cm, text width=3.0cm]
+          (p2) at (3.6,0) {\textbf{2. Wielandt}\\sharp bound + Burnside bridge};
+        \node[card, draw=mintgreen, fill=mgfill, minimum height=1.3cm, text width=3.0cm]
+          (p3) at (7.2,0) {\textbf{3. Normal CF}\\zero sorries, first time};
+        \node[card, draw=deepblue, fill=dbfill, minimum height=1.3cm, text width=3.0cm]
+          (p4) at (10.8,0) {\textbf{4. Paper-facing}\\literature wrappers};
+
+        \node[card, draw=leangreen, fill=lgfill, minimum height=1.3cm, text width=3.0cm]
+          (p5) at (0,-2.0) {\textbf{5. FT-MPS done}\\full pipeline closed};
+        \node[card, draw=leanblue, fill=lbfill, minimum height=1.3cm, text width=3.0cm]
+          (p6) at (3.6,-2.0) {\textbf{6. Frontier \& review}\\SPT, Stinespring, Lean 4.30.0-rc2};
+
+        \draw[arrw] (p1) -- (p2);
+        \draw[arrw] (p2) -- (p3);
+        \draw[arrw] (p3) -- (p4);
+        \draw[arrw] (p4.south) -- ++(0,-0.5) -| (p5.north);
+        \draw[arrw] (p5) -- (p6);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.4em}
+    \textcolor{dimwhite}{\footnotesize $\sim$1{,}800 commits over the active development window.}
+\end{frame}
+
+%---------- B12: Block-separation counterexample ----------
+\begin{frame}{B12. Block-separation counterexample}
+    \textbf{Tempting false statement.} ``Same MPV $\Rightarrow$ per-block trace equality.''
+    \vspace{0.4em}
+    \begin{block}{Supervisor's explicit counterexample}
+        \footnotesize
+        $r = 2$ blocks, $\mu = (1,2)$, $d=1$, bond dims $(1,1)$:
+        \[
+            A_0 = 1,\ A_1 = \tfrac{3}{2}; \qquad B_0 = 3,\ B_1 = \tfrac{1}{2}
+            \quad\Longrightarrow\quad
+            \sum_{k} \mu_k^N A_k^N \;=\; 1 + 3^N \;=\; \sum_{k} \mu_k^N B_k^N \quad \forall N,
+        \]
+        but $\Tr(A_0) = 1 \neq 3 = \Tr(B_0)$. Eigenvalues are permuted across blocks; the kernel cannot see the permutation.
+    \end{block}
+    \vspace{0.2em}
+    \textcolor{dimwhite}{\footnotesize Stored as \texttt{counterexample\_block\_powsum\_separation} (TNLean archive); a snippet enters the orchestrator's standard context so subsequent agents do not re-propose the false route.}
+\end{frame}
+
+%---------- B13: Block separation ----------
+\begin{frame}{B13. Block separation}
+    \begin{block}{Statement}
+        Two CFII tensors $\{A_k\}$, $\{B_\ell\}$ generate the same MPS family iff a bijection $\sigma$ aligns them block-by-block; the spectral gap does the separation.
+    \end{block}
+    \vspace{0.5em}
+    \begin{itemize}
+        \item \textbf{Mechanism.} Blocks separate because each block's transfer operator has a different spectral radius --- or, at equal spectral radius, distinct peripheral structure.
+        \item \textbf{Quantitative form.} Peeling lemma + exponential decay of inter-block overlap + induction on block count.
+        \item One paper line $\to$ $\sim$\textbf{800} Lean lines.
+    \end{itemize}
+\end{frame}
+
+%---------- B14: Peripheral eigenvalues ----------
+\begin{frame}{B14. Peripheral eigenvalues: a false generalisation}
+    \textbf{Claim (wrong).} Peripheral eigenvalues of \emph{any} CP map are roots of unity --- true for irreducible channels (Evans--H{\o}egh-Krohn; cf.~\cite{Wolf2012Quantum}), false in general.
+    \vspace{0.4em}
+    \begin{block}{Direct counterexample}
+        \footnotesize
+        Take $E = E_1 \oplus E_2$ with peripheral spectra $\{e^{i\alpha}\}$, $\{e^{i\beta}\}$ for $\alpha/\beta \notin \mathbb{Q}$. The peripheral set is $\{e^{i\alpha}, e^{i\beta}\}$ --- not a finite group, hence not all roots of unity.
+    \end{block}
+    \vspace{0.3em}
+    \textbf{Separate point --- peripheral eigenvalues can \emph{interact}:}
+    \[
+        a_N \;=\; 1 + (-1)^N \;\;\text{(constant-modulus summands, no limit).}
+    \]
+    This is what breaks naive Ces\`aro-type arguments even when each individual peripheral eigenvalue is harmless.
+    \vspace{0.3em}
+    \\
+    \textbf{Resolution.} Caught by a review agent in blueprint round 2, before any Lean attempt.
+\end{frame}
+
+\end{document}
