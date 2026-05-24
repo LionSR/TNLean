@@ -52,11 +52,13 @@ shape of Theorem IV.13(ii): the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, and the
 identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
 is encoded as the `HasChiTracePowerForm` predicate. For the blocked support
-tower, `AlgebraStructureData.BlockedStructureChiFamily` and
-`AlgebraStructureData.HasBlockedStructureChiTracePowerForm` record the
+tower, `AlgebraStructureData.BlockedStructureChiFamily`,
+`AlgebraStructureData.HasBlockedStructureChiTracePowerForm`, and
+`AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm` record the
 length-dependent blocked-basis analogue for
-`AlgebraStructureData.blockedStructureCoefficients`. This is not yet the
-paper's uniform BNT-label chi family; the deviation is recorded in
+`AlgebraStructureData.blockedStructureCoefficients`, including positivity of
+the diagonal entries. This is not yet the paper's uniform BNT-label chi family;
+the deviation is recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
 directly from `Matrix.diagonal_pow` and `Matrix.trace_diagonal`.
@@ -721,6 +723,41 @@ theorem HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow
     data.blockedStructureCoefficients n i j k =
       (χ.matrix n i j k ^ n).trace := by
   rw [h n hn i j k, χ.trace_matrix_pow]
+
+/-- A positive blocked chi witness for the blocked multiplication coefficients.
+
+This packages the data corresponding to the positive diagonal matrices in
+[Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] together
+with the blocked-basis trace-power identity. It is a data-carrying version of
+`HasBlockedStructureChiTracePowerForm`, with positivity included as a field.
+
+**Scope restriction (blocked bases):** As for
+`BlockedStructureChiFamily`, this is the length-dependent blocked-basis analogue
+of the paper's uniform BNT-label chi family. The deviation and elimination plan
+are documented in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
+structure PositiveBlockedStructureChiTracePowerForm
+    (data : AlgebraStructureData d D) where
+  /-- The length-dependent blocked chi family. -/
+  chi : BlockedStructureChiFamily data
+  /-- Positivity of every diagonal entry in the blocked chi family. -/
+  posEntries : chi.PosEntries
+  /-- Trace-power form for the blocked multiplication coefficients. -/
+  tracePower : data.HasBlockedStructureChiTracePowerForm chi
+
+namespace PositiveBlockedStructureChiTracePowerForm
+
+variable {data : AlgebraStructureData d D}
+
+/-- The positive blocked chi witness gives the trace formula for every positive
+blocked multiplication coefficient. -/
+theorem eq_trace_pow (h : PositiveBlockedStructureChiTracePowerForm data)
+    (n : ℕ) (hn : 0 < n)
+    (i j : BlockedIndex data n) (k : BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (h.chi.matrix n i j k ^ n).trace :=
+  h.tracePower.eq_trace_matrix_pow n hn i j k
+
+end PositiveBlockedStructureChiTracePowerForm
 
 end AlgebraStructureData
 

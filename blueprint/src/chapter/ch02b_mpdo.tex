@@ -1275,6 +1275,36 @@ the elementary trace-power identity for diagonal matrices.
     powers of a diagonal matrix.
 \end{proof}
 
+\begin{definition}[Positive blocked $\chi$ trace-power witness]%
+    \label{def:mpdo_positive_blocked_structure_chi_trace_power_form}
+    \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,
+        def:mpdo_blocked_structure_chi_family}
+    A positive blocked $\chi$ trace-power witness consists of a blocked
+    $\chi$ family, positivity of all its diagonal entries, and the
+    positive-length trace-power identity for the blocked multiplication
+    coefficients. This packages the blocked-basis analogue of the positive
+    diagonal matrices in
+    \cite[Theorem~IV.13(ii)]{Cirac2017MPDO_AnnPhys}; the uniform BNT-label gap
+    is recorded in
+    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+\end{definition}
+
+\begin{theorem}[Positive blocked $\chi$ witness gives trace powers]%
+    \label{thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
+    \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_positive_blocked_structure_chi_trace_power_form,
+        thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow}
+    A positive blocked $\chi$ trace-power witness gives, for every positive
+    blocked size $n$, the formula
+    \(c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the trace reformulation of the trace-power field of the witness.
+\end{proof}
+
 \section{Commuting form and GSNNCH}
 
 \begin{definition}[Commuting-form data for an MPDO]
