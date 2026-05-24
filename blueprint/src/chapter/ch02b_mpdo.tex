@@ -1627,6 +1627,22 @@ the elementary trace-power identity for diagonal matrices.
     positive BNT-label \(\chi\)-witness belonging to the theorem data.
 \end{proof}
 
+\begin{theorem}[BNT theorem data give blocked coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
+    BNT-label theorem data give the blocked-basis coefficient trace-power
+    formula obtained by pulling the BNT-label
+    \(\chi_{\alpha,\beta,\gamma}\)-matrices back along the blocked-basis
+    comparison maps.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the blocked-basis coefficient trace-power theorem to the comparison
+    and the positive BNT-label \(\chi\)-witness belonging to the theorem data.
+\end{proof}
+
 \begin{theorem}[BNT theorem data give a positive blocked \(\chi\) witness]%
     \label{thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}
