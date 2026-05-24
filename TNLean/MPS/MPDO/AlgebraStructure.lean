@@ -554,6 +554,11 @@ namespace DiagonalChiFamily
 
 variable {I : Type*} (χ : DiagonalChiFamily I)
 
+/-- Reindex a diagonal chi family along a map of labels. -/
+def comap {J : Type*} (f : J → I) : DiagonalChiFamily J where
+  dim α β γ := χ.dim (f α) (f β) (f γ)
+  entry α β γ k := χ.entry (f α) (f β) (f γ) k
+
 /-- The underlying diagonal matrix `χ_{α,β,γ}` on the index set `Fin (dim α β γ)`. -/
 noncomputable def matrix (α β γ : I) :
     Matrix (Fin (χ.dim α β γ)) (Fin (χ.dim α β γ)) ℂ :=
@@ -582,6 +587,13 @@ Under the scoped `ComplexOrder` instance (opened at the top of the file), a
 strict inequality `0 < z` on `ℂ` is equivalent to `0 < z.re ∧ z.im = 0`. -/
 def PosEntries : Prop :=
   ∀ α β γ : I, ∀ k : Fin (χ.dim α β γ), 0 < χ.entry α β γ k
+
+/-- Reindexing preserves positivity of the diagonal entries. -/
+theorem PosEntries.comap {J : Type*} {χ : DiagonalChiFamily I}
+    (hχ : χ.PosEntries) (f : J → I) :
+    (χ.comap f).PosEntries := by
+  intro α β γ k
+  exact hχ (f α) (f β) (f γ) k
 
 end DiagonalChiFamily
 
