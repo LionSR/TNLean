@@ -1456,6 +1456,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(2\times3\) and \(3\times2\) rectangles.
 \end{proof}
 
+\begin{lemma}[The edge blocks removed from \(T\) are contiguous rectangles]%
+    \label{lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionTHole_rectangular_decomposition}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    If the two edge blocks cut out of the displayed \(T\)-region lie in the
+    finite square lattice, then they are respectively a contiguous
+    \(2\times3\) rectangle and a contiguous \(3\times2\) rectangle.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining description of the two removed edge blocks, together
+    with the coordinate bounds which make them valid contiguous rectangles.
+\end{proof}
+
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}

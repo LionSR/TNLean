@@ -255,6 +255,23 @@ def normalSquareRegionTHole {width height : ℕ} (xStart yStart : ℕ) :
   squareLatticeContiguousRectangle xStart (yStart + 2) 2 3 ∪
     squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2
 
+/-- The two edge blocks removed in the displayed region \(T\) are one
+contiguous \(2\times3\) rectangle and one contiguous \(3\times2\) rectangle.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`, where the source depicts \(T\) as
+the complement of the two shown edge blocks. -/
+theorem normalSquareRegionTHole_rectangular_decomposition {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    ∃ T₂ T₃ : Finset (SquareLatticeVertex width height),
+      IsTwoByThreeContiguousSquareLatticeRectangle T₂ ∧
+        IsThreeByTwoContiguousSquareLatticeRectangle T₃ ∧
+          normalSquareRegionTHole xStart yStart = T₂ ∪ T₃ := by
+  refine ⟨squareLatticeContiguousRectangle xStart (yStart + 2) 2 3,
+    squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2, ?_, ?_, rfl⟩
+  · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
+  · exact isThreeByTwoContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
+
 /-- The displayed region \(T\) in the normal square-lattice proof.
 
 The source picture describes \(T\) as the complement, inside a local
