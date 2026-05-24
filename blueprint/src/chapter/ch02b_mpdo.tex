@@ -1401,6 +1401,29 @@ the elementary trace-power identity for diagonal matrices.
     from the witness.
 \end{proof}
 
+\begin{theorem}[Same-length BNT product with chi-trace coefficients]%
+    \label{thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.
+        eq_sum_chi_trace_pow}
+    \leanok
+    \uses{thm:mpdo_bnt_label_same_length_product_eq_sum,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    If the same-length BNT product identity holds and the BNT-label
+    coefficients come from a positive length-independent \(\chi\)-witness, then
+    for every \(L>0\),
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+          = \sum_\gamma
+            \operatorname{tr}\bigl(
+              \chi_{\alpha,\beta,\gamma}^{\,L}
+            \bigr) O_L(M_\gamma).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Substitute the positive-length trace-power formula into the same-length BNT
+    product expansion.
+\end{proof}
+
 \begin{theorem}[BNT idempotent coefficients as chi traces]%
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.
