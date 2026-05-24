@@ -278,4 +278,25 @@ theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
 
 end PositiveBNTLabelChiTracePowerForm
 
+namespace BNTBlockedBasisCoefficientComparison
+
+variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
+
+/-- A blocked-basis/BNT-label coefficient comparison transports a positive
+BNT-label chi trace-power witness to each blocked-basis coefficient. -/
+theorem blocked_coeff_eq_trace_pow
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (hχ.chi.matrix (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j)
+        (cmp.targetLabel n hn k) ^ n).trace := by
+  rw [cmp.blocked_coeff_eq n hn i j k]
+  exact hχ.eq_trace_pow n hn
+    (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
+
+end BNTBlockedBasisCoefficientComparison
+
 end MPOTensor
