@@ -626,8 +626,9 @@ Here `Λ` is the type of BNT labels.  The coefficient `coeff L α β γ` is the
 scalar multiplying the length-`L` BNT operator with label `γ` in the product of
 the length-`L` operators with labels `α` and `β`.
 
-This structure only stores the coefficient system.  It does not yet assert the
-same-length product formula
+This structure only stores the coefficient system, and its wrapper records that
+the indices are BNT labels from the paper rather than chosen blocked-basis
+indices.  It does not yet assert the same-length product formula
 \[
   O_L(M_\alpha)O_L(M_\beta)
     = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
@@ -636,8 +637,8 @@ nor does it compare these coefficients with the chosen blocked-basis
 coefficients of the support algebras.  Those two comparison steps are the
 remaining obligations recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 928--960, and Appendix C.3,
-lines 1830--1922 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelCoefficientFamily (Λ : Type*) where
   /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\). -/
   coeff : ℕ → Λ → Λ → Λ → ℂ
@@ -652,7 +653,9 @@ This is the faithful quantifier shape of arXiv:1606.00608, Theorem IV.13(ii):
 for every positive chain length `L`, the coefficient
 `c^{(L)}_{\alpha,\beta,\gamma}` is the trace of the `L`-th power of the same
 diagonal matrix `χ_{\alpha,\beta,\gamma}`.  The matrix family is independent of
-`L`; only the exponent changes. -/
+`L`; only the exponent changes.  Unlike the unrestricted function-level
+predicate `HasChiTracePowerForm`, this predicate has exactly the positive-length
+quantifier used for Theorem IV.13(ii). -/
 def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
   ∀ L : ℕ, 0 < L → ∀ α β γ : Λ,
     c.coeff L α β γ = χ.tracePowerCoeff α β γ L
@@ -678,8 +681,8 @@ paper-faithful coefficient statement to be constructed.  The construction of
 this witness, the same-length product formula, and the comparison to blocked
 bases remain the obligations described in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 928--960, and Appendix C.3,
-lines 1830--1922 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure PositiveBNTLabelChiTracePowerForm
     {Λ : Type*} (c : BNTLabelCoefficientFamily Λ) where
   /-- The length-independent BNT-label chi family. -/
