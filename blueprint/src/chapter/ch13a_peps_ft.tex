@@ -213,6 +213,65 @@ injective and normal PEPS, following Theorems~2 and~3 of
     This is immediate from $\Psi_v \circ \Phi_v = \Id$.
 \end{proof}
 
+\begin{definition}[Virtual pullback of a local physical operator]%
+    \label{def:peps_localVirtualOpOfPhysicalOp}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp}
+    \leanok
+    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    For a physical operator \(O\) on the local physical space at \(v\), define
+    its virtual pullback by
+    \[
+        \Psi_v \circ O \circ \Phi_v .
+    \]
+    This is the local injectivity step used in the
+    \(O_1,O_2\mapsto W\) direction of
+    Lemma~\(\mathrm{inj\_isomorph}\) in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Virtual pullback realizes the projected physical action]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_spec}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_spec}
+    \leanok
+    \uses{def:peps_localVirtualOpOfPhysicalOp,
+        def:peps_physRealizeLocalOp}
+    For every coefficient function \(c\), applying the local tensor map after
+    the virtual pullback gives the projection of \(O(\Phi_v(c))\) onto the
+    image of \(\Phi_v\).
+\end{theorem}
+\begin{proof}\leanok
+    Expand the definitions. The chosen left inverse gives
+    \(\Psi_v\Phi_v=\Id\), and the remaining map is the local projector.
+\end{proof}
+
+\begin{theorem}[Virtual pullback for image-preserving physical actions]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_realizes_of_projector}
+    \leanok
+    \uses{thm:peps_localVirtualOpOfPhysicalOp_spec}
+    If \(O\) sends every vector in the image of \(\Phi_v\) back into that image,
+    then its virtual pullback realizes exactly the action of \(O\) on
+    \(\Phi_v(c)\).
+\end{theorem}
+\begin{proof}\leanok
+    Use the preceding theorem and the image-preservation hypothesis.
+\end{proof}
+
+\begin{theorem}[Recovery of a virtual operation from a physical realization]%
+    \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
+    \lean{TNLean.PEPS.localVirtualOpOfPhysicalOp_eq_of_realizes}
+    \leanok
+    \uses{def:IsVertexInjective,
+        thm:peps_localVirtualOpOfPhysicalOp_spec}
+    If a physical operator \(O\) realizes a virtual operation \(T\) on every
+    vector in the image of \(\Phi_v\), then pulling back \(O\) recovers \(T\).
+\end{theorem}
+\begin{proof}\leanok
+    After applying the local tensor map, both virtual operations have the same
+    image. Vertex injectivity makes the local tensor map injective, so the
+    virtual operations agree.
+\end{proof}
+
 \begin{definition}[Matrix action on one incident virtual edge]%
     \label{def:peps_localIncidentMatrixOp}
     \lean{TNLean.PEPS.localIncidentMatrixOp}
