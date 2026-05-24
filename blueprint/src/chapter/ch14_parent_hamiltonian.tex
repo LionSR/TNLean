@@ -619,8 +619,8 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 
 \begin{lemma}[Ground-space suffix restriction]\label{lem:ground_space_in_tail_ground}
     \lean{MPSTensor.restrictLast_groundSpaceMap,
-          MPSTensor.tailRestrictₗ_groundSpaceMap,
-          MPSTensor.groundSpace_inTailGround}
+        MPSTensor.tailRestrictₗ_groundSpaceMap,
+        MPSTensor.groundSpace_inTailGround}
     \leanok
     \uses{def:in_tail_ground, def:ground_space_parent}
     If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
@@ -745,7 +745,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
 \begin{lemma}[Cyclic-window range antitonicity]%
     \label{lem:cyclic_window_range_antitonicity}
     \lean{MPSTensor.chainGroundSpace_le_chainGroundSpace_succ,
-          MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le}
+        MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le}
     \leanok
     \uses{rem:cyclic_window_operators}
     On a nonempty periodic chain, longer cyclic-window constraints imply all
@@ -1645,7 +1645,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \uses{def:has_commuting_parent_ham}
     By commutativity,
     $P_{XB} \circ P_K = P_{XB} \circ P_{AX} \circ P_{XB}
-    = P_{AX} \circ P_{XB} \circ P_{XB}$, and idempotence of $P_{XB}$
+        = P_{AX} \circ P_{XB} \circ P_{XB}$, and idempotence of $P_{XB}$
     yields $P_{XB} \circ P_K = P_K$.
 \end{proof}
 
@@ -1666,7 +1666,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \uses{def:has_commuting_parent_ham}
     By commutativity,
     $P_K \circ P_{AX} = P_{AX} \circ P_{XB} \circ P_{AX}
-    = P_{AX} \circ P_{AX} \circ P_{XB}$, and idempotence of $P_{AX}$
+        = P_{AX} \circ P_{AX} \circ P_{XB}$, and idempotence of $P_{AX}$
     yields $P_K \circ P_{AX} = P_K$.
 \end{proof}
 
@@ -1709,7 +1709,7 @@ decorrelation and its connection to commuting parent Hamiltonians, following
     \leanok
     \uses{def:has_commuting_parent_ham}
     Expanding both products and using $P_{AX} \circ P_{XB}
-    = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
+        = P_{XB} \circ P_{AX}$ shows that the complementary projectors commute.
 \end{proof}
 
 \begin{theorem}[Commuting parent Hamiltonian implies decorrelation]%
@@ -2036,12 +2036,12 @@ Lucia~\cite{Kastoryano2018Martingale}.
     for every vector $v$,
     \[
         h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)
-            = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
+        = h_{j,\mathrm{ES}}(h_{i,\mathrm{ES}}v),
     \]
     and their ordered cross term is nonnegative:
     \[
         0\le \operatorname{Re}\langle h_{i,\mathrm{ES}}v,
-            h_{j,\mathrm{ES}}v\rangle .
+        h_{j,\mathrm{ES}}v\rangle .
     \]
 \end{lemma}
 
@@ -2088,7 +2088,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     $v = \sum_k c_k \psi_k$ and projecting onto $(\ker H)^{\perp}$
     keeps only terms with $\lambda_k \ge \gamma$, so
     $\|H v\|^2 = \sum_k |c_k|^2 \lambda_k^2
-    \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
+        \ge \gamma^2 \sum_k |c_k|^2 = \gamma^2 \|v\|^2$.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
@@ -2104,7 +2104,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         \gamma\,\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v, v\rangle
         \le
         \operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}(A)v,
-            H_{N,L}^{\mathrm{ES}}(A)v\rangle
+        H_{N,L}^{\mathrm{ES}}(A)v\rangle
     \]
     for every $N \ge 2L$ and every vector $v$, then
     \[
@@ -2226,7 +2226,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     Cauchy--Schwarz and symmetric idempotence turn the norm-compression estimate
     into
     $\operatorname{Re}\langle P_i v,P_jv\rangle
-    \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
+        \ge -(1-\gamma)m^{-1}\operatorname{Re}\langle P_iv,v\rangle$.
     If a separate coefficient $\eta$ is used, the assumption
     $\eta\le(1-\gamma)/m$ first weakens that estimate to the displayed one. The
     finite-overlap row-sum reduction then applies.
@@ -2251,7 +2251,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
         \gamma\operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}v,v\rangle
         \le
         \operatorname{Re}\langle H_{N,L}^{\mathrm{ES}}v,
-            H_{N,L}^{\mathrm{ES}}v\rangle
+        H_{N,L}^{\mathrm{ES}}v\rangle
     \]
     for every vector $v$.
 \end{lemma}
@@ -2306,11 +2306,11 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\gamma)\frac{1}{m}
-              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle,
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle,
     \]
     and the transported local terms are symmetric projections, then the
     transported Hamiltonian satisfies $H_{N,L}^{\mathrm{ES}}{}^2\ge
-    \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
+        \gamma H_{N,L}^{\mathrm{ES}}$ as a quadratic form.
 \end{lemma}
 
 \begin{proof}
@@ -2401,7 +2401,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     transported local ES terms have nonnegative ordered cross term:
     \[
         0\le\operatorname{Re}\langle h_{i,\mathrm{ES}}v,
-             h_{j,\mathrm{ES}}v\rangle .
+        h_{j,\mathrm{ES}}v\rangle .
     \]
 \end{lemma}
 
@@ -2468,7 +2468,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
-              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
     \]
     Then $1/(4L)>0$, and the explicit norm lower bound with constant $1/(4L)$
     follows for vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
@@ -2501,7 +2501,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \operatorname{Re}\langle h_{i,\mathrm{ES}}v,h_{j,\mathrm{ES}}v\rangle
         \ge -(1-\tfrac{1}{4L})\frac{1}{2(L-1)}
-              \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
+        \operatorname{Re}\langle h_{i,\mathrm{ES}}v,v\rangle.
     \]
     Then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
@@ -2527,7 +2527,7 @@ Lucia~\cite{Kastoryano2018Martingale}.
     \[
         \|h_{i,\mathrm{ES}}(h_{j,\mathrm{ES}}v)\|
         \le (1-\tfrac{1}{4L})\frac{1}{2(L-1)}
-             \|h_{i,\mathrm{ES}}v\|.
+        \|h_{i,\mathrm{ES}}v\|.
     \]
     Then the explicit norm lower bound with constant $1/(4L)$ follows for
     vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
@@ -2895,7 +2895,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     $A_{j}$ embeds into the chain ground space of the assembled tensor:
     \[
         \operatorname{ChainGround}_{N,L}(A_{j})
-            \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)).
+        \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)).
     \]
 \end{lemma}
 
@@ -2917,7 +2917,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     ground space:
     \[
         \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
-            \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)),
+        \subseteq \operatorname{ChainGround}_{N,L}(\operatorname{Assemble}(\mu, A)),
     \]
     where $j$ ranges over all block indices.
 \end{lemma}
@@ -2937,7 +2937,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     ground spaces is contained in the assembled parent ground space:
     \[
         \bigsqcup_{j} \operatorname{ChainGround}_{N,L}(A_{j})
-            \subseteq \operatorname{ParentGround}_{N,L}(A).
+        \subseteq \operatorname{ParentGround}_{N,L}(A).
     \]
 \end{lemma}
 
