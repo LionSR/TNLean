@@ -157,6 +157,49 @@ def IsThreeByTwoContiguousSquareLatticeRectangle {width height : ℕ}
     xStart + 3 ≤ width ∧ yStart + 2 ≤ height ∧
       R = squareLatticeContiguousRectangle xStart yStart 3 2
 
+/-- The displayed region \(R\) in the normal square-lattice proof.
+
+It is the union of a contiguous \(2\times3\) rectangle and the overlapping
+contiguous \(3\times2\) rectangle covering the upper two rows of the
+\(2\times3\) block and extending one column to the right.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareRegionR {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart yStart 2 3 ∪
+    squareLatticeContiguousRectangle xStart (yStart + 1) 3 2
+
+/-- The displayed region \(S\) in the normal square-lattice proof.
+
+It is the union of two overlapping contiguous \(2\times3\) rectangles, shifted
+by one horizontal coordinate.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareRegionS {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart yStart 2 3 ∪
+    squareLatticeContiguousRectangle (xStart + 1) yStart 2 3
+
+@[simp] theorem mem_normalSquareRegionR {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionR xStart yStart ↔
+      (xStart ≤ v.1.1 ∧ v.1.1 < xStart + 2 ∧
+        yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) ∨
+      (xStart ≤ v.1.1 ∧ v.1.1 < xStart + 3 ∧
+        yStart + 1 ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
+  simp [normalSquareRegionR]
+
+@[simp] theorem mem_normalSquareRegionS {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionS xStart yStart ↔
+      (xStart ≤ v.1.1 ∧ v.1.1 < xStart + 2 ∧
+        yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) ∨
+      (xStart + 1 ≤ v.1.1 ∧ v.1.1 < xStart + 3 ∧
+        yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
+  simp [normalSquareRegionS]
+
 section EdgeBlocking
 
 variable [LinearOrder V]

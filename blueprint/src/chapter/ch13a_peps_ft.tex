@@ -1380,6 +1380,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsThreeByTwoSquareLatticeProduct}
     \lean{TNLean.PEPS.IsTwoByThreeContiguousSquareLatticeRectangle}
     \lean{TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle}
+    \lean{TNLean.PEPS.normalSquareRegionR}
+    \lean{TNLean.PEPS.normalSquareRegionS}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
     coordinates.  A coordinate rectangle is a product of a horizontal
@@ -1388,7 +1390,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coordinate sets have cardinalities $2,3$ and $3,2$, respectively.
     Contiguous coordinate rectangles are products of contiguous coordinate
     intervals, and the contiguous $2\times3$ and $3\times2$ predicates name the
-    rectangular blocks used in the normal square-lattice theorem.
+    rectangular blocks used in the normal square-lattice theorem.  The
+    displayed region \(R\) is the union of a \(2\times3\) contiguous rectangle
+    with the \(3\times2\) contiguous rectangle occupying its upper two rows and
+    extending one column to the right.  The displayed region \(S\) is the union
+    of two \(2\times3\) contiguous rectangles shifted by one horizontal
+    coordinate, hence the full \(3\times3\) square spanned by them.
 \end{definition}
 
 \begin{lemma}[Basic identities for square-lattice coordinate regions]%
@@ -1396,6 +1403,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.mem_squareLatticeRectangle}
     \lean{TNLean.PEPS.mem_squareLatticeCoordinateInterval}
     \lean{TNLean.PEPS.mem_squareLatticeContiguousRectangle}
+    \lean{TNLean.PEPS.mem_normalSquareRegionR}
+    \lean{TNLean.PEPS.mem_normalSquareRegionS}
     \lean{TNLean.PEPS.card_squareLatticeRectangle}
     \lean{TNLean.PEPS.squareLatticeFull_eq_univ}
     \leanok
@@ -1403,8 +1412,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Membership in a coordinate rectangle is coordinatewise membership, the
     contiguous coordinate interval has the expected coordinate inequalities,
     membership in a contiguous coordinate rectangle is the conjunction of the
-    four bounding inequalities, the cardinality of a coordinate rectangle is
-    the product of the two coordinate cardinalities, and the full coordinate
+    four bounding inequalities, and membership in \(R\) is the disjunction of
+    membership in the \(2\times3\) lower-left piece or in the shifted
+    \(3\times2\) upper piece.  Membership in \(S\) is the disjunction of
+    membership in the left \(2\times3\) piece or in the horizontally shifted
+    \(2\times3\) piece.  The cardinality of a coordinate rectangle is the
+    product of the two coordinate cardinalities, and the full coordinate
     rectangle is the whole finite vertex set.
 \end{lemma}
 \begin{proof}\leanok
