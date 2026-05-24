@@ -7815,6 +7815,8 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.96</a></li>
           
+          <li><a href="sec-peps_ft.html#def:peps_squareLatticeCoordinateRegions">Definition 17.98</a></li>
+          
         </ul>
     
       </div>
@@ -7835,6 +7837,8 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.NormalRectangleInjectivityHypotheses" class="lean_decl">TNLean.PEPS.NormalRectangleInjectivityHypotheses</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses</a></li>
+          
         </ul>
     
       </div>
@@ -7844,7 +7848,86 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   In the square-lattice normal theorem, every \(2\times 3\) and \(3\times 2\) rectangular region is assumed injective. The corresponding hypotheses specify which finite regions have these two shapes and assert injectivity for all of them. </p>
+  <p>    In the square-lattice normal theorem, every \(2\times 3\) and \(3\times 2\) rectangular region is assumed injective. The corresponding abstract hypotheses specify which finite regions have these two shapes and assert injectivity for all of them. In the coordinate square-lattice specialization, these two families are the contiguous coordinate \(2\times 3\) and \(3\times 2\) rectangles. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:peps_squareLatticeRectangleInjectivity_toRectangular">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">17.101</span>
+    <span class="lemma_thmtitle">Coordinate rectangular injectivity gives abstract rectangular injectivity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_toRectangular">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001155"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.100</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   The coordinate square-lattice rectangular injectivity hypotheses determine abstract rectangular injectivity hypotheses, with the two abstract rectangular families taken to be the contiguous coordinate \(2\times 3\) and \(3\times 2\) rectangles. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001155">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>This is the direct specialization of the abstract rectangular families to the two contiguous coordinate-rectangle predicates. </p>
 
   </div>
 </div>
@@ -7853,7 +7936,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.101</span>
+    <span class="definition_thmlabel">17.102</span>
     <span class="definition_thmtitle">Normal edge-blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -7919,7 +8002,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.102</span>
+    <span class="theorem_thmlabel">17.103</span>
     <span class="theorem_thmtitle">Injectivity supplied by normal edge blocking</span>
     <div class="thm_header_extras">
 
@@ -7930,7 +8013,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001155"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001156"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7946,7 +8029,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.101</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.102</a></li>
           
         </ul>
     
@@ -7981,7 +8064,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001155">
+<div class="proof_wrapper" id="a0000001156">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7998,7 +8081,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.103</span>
+    <span class="definition_thmlabel">17.104</span>
     <span class="definition_thmtitle">Normal one-site separation hypotheses</span>
     <div class="thm_header_extras">
 
@@ -8064,7 +8147,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.104</span>
+    <span class="theorem_thmlabel">17.105</span>
     <span class="theorem_thmtitle">Membership in a one-site separated region</span>
     <div class="thm_header_extras">
 
@@ -8075,7 +8158,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalOneSiteSeparation_mem_withSite_iff">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001156"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001157"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8091,7 +8174,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.103</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.104</a></li>
           
         </ul>
     
@@ -8126,7 +8209,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001156">
+<div class="proof_wrapper" id="a0000001157">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8143,7 +8226,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.105</span>
+    <span class="definition_thmlabel">17.106</span>
     <span class="definition_thmtitle">Normal square-lattice blocking regions</span>
     <div class="thm_header_extras">
 
@@ -8213,7 +8296,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.106</span>
+    <span class="theorem_thmlabel">17.107</span>
     <span class="theorem_thmtitle">Normal edge blocking to a three-site injective chain</span>
     <div class="thm_header_extras">
 
@@ -8237,11 +8320,11 @@
           
           <li><a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">Lemma 17.95</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.105</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.106</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.101</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.102</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.102</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.103</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.77</a></li>
           
@@ -8271,7 +8354,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.107</span>
+    <span class="theorem_thmlabel">17.108</span>
     <span class="theorem_thmtitle">Translationally invariant normal gauge absorption</span>
     <div class="thm_header_extras">
 
@@ -8293,7 +8376,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.106</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.107</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.82</a></li>
           
@@ -8323,7 +8406,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.108</span>
+    <span class="theorem_thmlabel">17.109</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal square-lattice PEPS</span>
     <div class="thm_header_extras">
 
@@ -8345,7 +8428,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.107</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.108</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.89</a></li>
           
@@ -8376,7 +8459,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.109</span>
+    <span class="definition_thmlabel">17.110</span>
     <span class="definition_thmtitle">Normal PEPS blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -8400,9 +8483,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.101</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.102</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.103</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.104</a></li>
           
         </ul>
     
@@ -8442,7 +8525,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.110</span>
+    <span class="theorem_thmlabel">17.111</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal PEPS</span>
     <div class="thm_header_extras">
 
@@ -8464,9 +8547,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.102</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.103</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 17.109</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 17.110</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.89</a></li>
           
@@ -8497,7 +8580,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.111</span>
+    <span class="definition_thmlabel">17.112</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -8561,7 +8644,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.112</span>
+    <span class="theorem_thmlabel">17.113</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -8572,7 +8655,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001161"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001162"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8588,11 +8671,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.111</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.112</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.111</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.112</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -8629,7 +8712,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001161">
+<div class="proof_wrapper" id="a0000001162">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8646,7 +8729,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.113</span>
+    <span class="theorem_thmlabel">17.114</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -8668,7 +8751,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.111</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.112</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
@@ -8705,18 +8788,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001162">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001163">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.114</span>
+    <span class="remark_thmlabel">17.115</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001162">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001163">#</a>
     
     
     
