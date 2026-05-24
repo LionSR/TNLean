@@ -157,6 +157,32 @@ def IsThreeByTwoContiguousSquareLatticeRectangle {width height : ℕ}
     xStart + 3 ≤ width ∧ yStart + 2 ≤ height ∧
       R = squareLatticeContiguousRectangle xStart yStart 3 2
 
+/-- A bounded contiguous coordinate rectangle of width two and height three has
+the \(2\times3\) source shape.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`, where the proof assumes injectivity
+for all \(2\times3\) rectangular blocks. -/
+theorem isTwoByThreeContiguousSquareLatticeRectangle_of_bounds {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 2 ≤ width) (hy : yStart + 3 ≤ height) :
+    IsTwoByThreeContiguousSquareLatticeRectangle
+      (squareLatticeContiguousRectangle xStart yStart 2 3 :
+        Finset (SquareLatticeVertex width height)) :=
+  ⟨xStart, yStart, hx, hy, rfl⟩
+
+/-- A bounded contiguous coordinate rectangle of width three and height two has
+the \(3\times2\) source shape.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`, where the proof assumes injectivity
+for all \(3\times2\) rectangular blocks. -/
+theorem isThreeByTwoContiguousSquareLatticeRectangle_of_bounds {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 2 ≤ height) :
+    IsThreeByTwoContiguousSquareLatticeRectangle
+      (squareLatticeContiguousRectangle xStart yStart 3 2 :
+        Finset (SquareLatticeVertex width height)) :=
+  ⟨xStart, yStart, hx, hy, rfl⟩
+
 /-- The displayed region \(R\) in the normal square-lattice proof.
 
 It is the union of a contiguous \(2\times3\) rectangle and the overlapping
