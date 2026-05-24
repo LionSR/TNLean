@@ -672,7 +672,7 @@ end BNTLabelCoefficientFamily
 
 /-- A positive BNT-label chi witness for Theorem IV.13(ii).
 
-This packages the paper's positive diagonal matrices
+The witness consists of the paper's positive diagonal matrices
 \(\chi_{\alpha,\beta,\gamma}\), indexed by fixed BNT labels and independent of
 the chain length, together with the positive-length trace-power identity for
 the BNT-label coefficient system.
@@ -819,10 +819,10 @@ theorem HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow
 
 /-- A positive blocked chi witness for the blocked multiplication coefficients.
 
-This packages the data corresponding to the positive diagonal matrices in
+The witness consists of the positive diagonal matrices in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] together
-with the blocked-basis trace-power identity. It is a data-carrying version of
-`HasBlockedStructureChiTracePowerForm`, with positivity included as a field.
+with the blocked-basis trace-power identity. It records
+`HasBlockedStructureChiTracePowerForm` together with positivity.
 
 **Scope restriction (blocked bases):** As for
 `BlockedStructureChiFamily`, this is the length-dependent blocked-basis analogue
