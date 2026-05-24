@@ -355,6 +355,18 @@ noncomputable def localProjector (A : Tensor G d) (hA : IsVertexInjective A)
     (v : V) : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ) :=
   physRealizeLocalOp A hA v LinearMap.id
 
+/-- Pull a local physical operator back to the virtual coefficient space.
+
+This is the local injectivity step used in the \(O_1,O_2 \mapsto W\) part of
+arXiv:1804.04964, Section 3: the chosen left inverse identifies the action of a
+physical operator on the image of the local tensor map with a virtual operation
+on local boundary coefficients. -/
+noncomputable def localVirtualOpOfPhysicalOp (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) :
+    LocalVirtualOp A v :=
+  (localLeftInverse A hA v).comp (O.comp (localTensorMap A v))
+
 @[simp] theorem localProjector_apply_localTensorMap (A : Tensor G d)
     (hA : IsVertexInjective A) (v : V) (c : LocalVirtualConfig A v → ℂ) :
     localProjector A hA v (localTensorMap A v c) = localTensorMap A v c := by
@@ -373,6 +385,46 @@ theorem localProjector_idempotent (A : Tensor G d) (hA : IsVertexInjective A)
       localProjector A hA v := by
   simpa [localProjector] using
     (physRealizeLocalOp_comp A hA v LinearMap.id LinearMap.id).symm
+
+/-- The virtual pullback realizes the projected physical action on the image of
+the local tensor map. -/
+theorem localVirtualOpOfPhysicalOp_spec (A : Tensor G d) (hA : IsVertexInjective A)
+    (v : V) (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (c : LocalVirtualConfig A v → ℂ) :
+    localTensorMap A v (localVirtualOpOfPhysicalOp A hA v O c) =
+      localProjector A hA v (O (localTensorMap A v c)) := by
+  simp [localVirtualOpOfPhysicalOp, localProjector, physRealizeLocalOp]
+
+/-- If a local physical operator preserves the image of the local tensor map,
+then its virtual pullback gives exactly the same action on that image. -/
+theorem localVirtualOpOfPhysicalOp_realizes_of_projector (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hO : ∀ c : LocalVirtualConfig A v → ℂ,
+      localProjector A hA v (O (localTensorMap A v c)) = O (localTensorMap A v c))
+    (c : LocalVirtualConfig A v → ℂ) :
+    localTensorMap A v (localVirtualOpOfPhysicalOp A hA v O c) =
+      O (localTensorMap A v c) := by
+  rw [localVirtualOpOfPhysicalOp_spec, hO]
+
+/-- A virtual operator is recovered by pulling back any physical operator that
+realizes it on the image of the local tensor map. -/
+theorem localVirtualOpOfPhysicalOp_eq_of_realizes (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) (T : LocalVirtualOp A v)
+    (hO : ∀ c : LocalVirtualConfig A v → ℂ,
+      O (localTensorMap A v c) = localTensorMap A v (T c)) :
+    localVirtualOpOfPhysicalOp A hA v O = T := by
+  apply LinearMap.ext
+  intro c
+  apply hA.localTensorMap_injective v
+  calc
+    localTensorMap A v (localVirtualOpOfPhysicalOp A hA v O c) =
+        localProjector A hA v (O (localTensorMap A v c)) := by
+      rw [localVirtualOpOfPhysicalOp_spec]
+    _ = localTensorMap A v (T c) := by
+      rw [hO c]
+      simp
 
 end PEPS
 end TNLean
