@@ -1305,6 +1305,41 @@ the elementary trace-power identity for diagonal matrices.
     This is exactly the defining equality of BNT idempotent coefficient form.
 \end{proof}
 
+\begin{definition}[BNT comparison with blocked coefficients]%
+    \label{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_blocked_structure_coefficients}
+    A comparison between the BNT-label coefficients and the chosen
+    blocked-basis coefficients consists, for every positive blocked length
+    \(n\), of a source label map \(\sigma_n\) from the chosen basis of
+    \(\mathcal A_n\) and a target label map \(\tau_n\) from the chosen basis
+    of \(\mathcal A_{2n}\) to the fixed BNT labels, together with the equality
+    \[
+        c^{(n)}_{i,j,k}
+          =
+        c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+    \]
+    This is a blocked-basis comparison: the left hand side is expanded in the
+    chosen basis of \(\mathcal A_{2n}\), so the statement is not itself the
+    same-length BNT product law.
+    This records the coefficient-comparison statement separately from the
+    construction of the label maps from the MPDO tensor.
+\end{definition}
+
+\begin{theorem}[Blocked coefficients are pulled back from BNT labels]%
+    \label{thm:mpdo_bnt_blocked_basis_coefficient_eq}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    Under a BNT comparison with blocked coefficients, each chosen blocked-basis
+    multiplication coefficient is the corresponding BNT-label coefficient.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the defining equality of the comparison.
+\end{proof}
+
 \begin{definition}[Positive-length BNT-label trace-power form]%
     \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
