@@ -192,6 +192,8 @@ coefficient:
     =
   c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
 \]
+Here \(\sigma_n\) denotes the source label map, and \(\tau_n\) denotes the target
+label map.
 **Scope restriction (blocked product length):** The source product law is a
 same-length identity for the BNT operators.  This predicate still compares the
 blocked support-algebra product
