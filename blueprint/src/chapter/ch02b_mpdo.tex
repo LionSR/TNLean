@@ -1551,6 +1551,33 @@ the elementary trace-power identity for diagonal matrices.
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
 \end{definition}
 
+\begin{theorem}[BNT witnesses give blocked \(\chi\) witnesses]%
+    \label{thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.
+        toPositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        def:mpdo_positive_blocked_structure_chi_trace_power_form,
+        thm:mpdo_bnt_blocked_basis_coefficient_eq}
+    Suppose that the chosen blocked-basis coefficients are compared with a
+    fixed BNT-label coefficient system, and that this BNT-label system has a
+    positive length-independent \(\chi\)-witness.  Assume also that the
+    BNT-label type is nonempty.  Then the chosen blocked bases carry a
+    positive blocked \(\chi\) trace-power witness.
+    The construction is obtained by pulling back the BNT-label
+    \(\chi_{\alpha,\beta,\gamma}\)-matrices along the source and target label
+    maps.  The auxiliary choice of a BNT label is used only to fill the
+    zero-length component, which is absent from the positive-length trace-power
+    statement.
+\end{theorem}
+\begin{proof}\leanok
+    Reindex the positive BNT-label \(\chi\)-family along the blocked-basis
+    label map.  Positivity is preserved by reindexing, and the trace-power
+    identity follows by substituting the blocked-basis comparison into the
+    BNT-label trace-power formula.
+\end{proof}
+
 \begin{theorem}[Positive blocked $\chi$ witness gives trace powers]%
     \label{thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
