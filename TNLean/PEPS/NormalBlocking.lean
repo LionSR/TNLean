@@ -182,6 +182,33 @@ def normalSquareRegionS {width height : ℕ} (xStart yStart : ℕ) :
   squareLatticeContiguousRectangle xStart yStart 2 3 ∪
     squareLatticeContiguousRectangle (xStart + 1) yStart 2 3
 
+/-- The two edge blocks removed from the local window in the displayed region
+\(T\).
+
+The first block is the \(2\times3\) vertical block and the second block is the
+shifted \(3\times2\) horizontal block shown in the source picture.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareRegionTHole {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart (yStart + 2) 2 3 ∪
+    squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2
+
+/-- The displayed region \(T\) in the normal square-lattice proof.
+
+The source picture describes \(T\) as the complement, inside a local
+\(5\times6\) coordinate window, of the two edge blocks recorded in
+`normalSquareRegionTHole`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`, where the text states that \(T\) is
+injective once the PEPS size is at least \(5\times6\). -/
+def normalSquareRegionT {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart yStart 5 6 \
+    normalSquareRegionTHole xStart yStart
+
 @[simp] theorem mem_normalSquareRegionR {width height : ℕ}
     (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
     v ∈ normalSquareRegionR xStart yStart ↔
@@ -199,6 +226,23 @@ def normalSquareRegionS {width height : ℕ} (xStart yStart : ℕ) :
       (xStart + 1 ≤ v.1.1 ∧ v.1.1 < xStart + 3 ∧
         yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
   simp [normalSquareRegionS]
+
+@[simp] theorem mem_normalSquareRegionTHole {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionTHole xStart yStart ↔
+      (xStart ≤ v.1.1 ∧ v.1.1 < xStart + 2 ∧
+        yStart + 2 ≤ v.2.1 ∧ v.2.1 < yStart + 5) ∨
+      (xStart + 2 ≤ v.1.1 ∧ v.1.1 < xStart + 5 ∧
+        yStart + 1 ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
+  simp [normalSquareRegionTHole]
+
+@[simp] theorem mem_normalSquareRegionT {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionT xStart yStart ↔
+      xStart ≤ v.1.1 ∧ v.1.1 < xStart + 5 ∧
+        yStart ≤ v.2.1 ∧ v.2.1 < yStart + 6 ∧
+          v ∉ normalSquareRegionTHole xStart yStart := by
+  simp [normalSquareRegionT, and_assoc]
 
 /-- The displayed region \(R\) is contained in the displayed region \(S\).
 
