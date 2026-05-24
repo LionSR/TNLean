@@ -426,5 +426,14 @@ theorem localVirtualOpOfPhysicalOp_eq_of_realizes (A : Tensor G d)
       rw [hO c]
       simp
 
+/-- Pulling back the canonical physical realization of a virtual operation
+recovers the original virtual operation. -/
+theorem localVirtualOpOfPhysicalOp_physRealizeLocalOp (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V) (T : LocalVirtualOp A v) :
+    localVirtualOpOfPhysicalOp A hA v (physRealizeLocalOp A hA v T) = T :=
+  localVirtualOpOfPhysicalOp_eq_of_realizes A hA v
+    (physRealizeLocalOp A hA v T) T
+    (physRealizeLocalOp_spec A hA v T)
+
 end PEPS
 end TNLean
