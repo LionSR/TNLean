@@ -1224,6 +1224,47 @@ the elementary trace-power identity for diagonal matrices.
     \(\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}\).
 \end{definition}
 
+\begin{definition}[BNT-label operator family]%
+    \label{def:mpdo_bnt_label_operator_family}
+    \lean{MPOTensor.BNTLabelOperatorFamily}
+    \leanok
+    A BNT-label operator family records, for each chain length \(L\), the
+    operators \(O_L(M_\alpha)\) indexed by the fixed BNT labels \(\alpha\).
+    The ambient algebra at length \(L\) is left abstract here; the later
+    comparison step must relate it to the chosen blocked support algebras.
+\end{definition}
+
+\begin{definition}[Same-length BNT product form]%
+    \label{def:mpdo_bnt_label_same_length_product_form}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_operator_family,
+        def:mpdo_bnt_label_coefficient_family}
+    A BNT-label operator family and a BNT-label coefficient system have
+    same-length product form when, for every positive length \(L\),
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+          = \sum_\gamma
+              c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
+    \]
+    This is the product identity appearing in Theorem~IV.13(ii), stated
+    independently of the blocked-basis multiplication
+    \(\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}\).
+\end{definition}
+
+\begin{theorem}[Same-length BNT product expansion]%
+    \label{thm:mpdo_bnt_label_same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_same_length_product_form}
+    Under same-length BNT product form, the product of two length-\(L\)
+    BNT-label operators is the corresponding finite linear combination of
+    length-\(L\) BNT-label operators.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the defining equality of same-length product form.
+\end{proof}
+
 \begin{definition}[Positive-length BNT-label trace-power form]%
     \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
