@@ -190,8 +190,17 @@ coefficient:
 \[
   c^{(n)}_{i,j,k}
     =
-  c^{(n)}_{\alpha(i),\alpha(j),\alpha(k)}.
+  c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
 \]
+**Scope restriction (blocked product length):** The source product law is a
+same-length identity for the BNT operators.  This predicate still compares the
+blocked support-algebra product
+\(\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}\), so the target label
+map is defined on the chosen basis of \(\mathcal A_{2n}\).  It is a
+blocked-basis comparison statement, not the same-length product law itself.
+The restriction is documented in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+
 This structure records the comparison statement only.  Constructing the label
 maps from the Appendix C.3 decomposition and relating this blocked product to
 the same-length BNT operator product remain separate obligations.
@@ -207,7 +216,8 @@ structure BNTBlockedBasisCoefficientComparison
   /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\). -/
   targetLabel :
     ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
-  /-- The blocked-basis coefficient is the pullback of the BNT-label coefficient. -/
+  /-- The blocked-basis coefficient is pulled back from the source-length
+  BNT-label coefficient. -/
   coeff_eq : ∀ (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)),
