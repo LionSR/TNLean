@@ -1266,11 +1266,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{def:peps_regionUnionDecomposition}
     \lean{TNLean.PEPS.regionOnlyLeft, TNLean.PEPS.regionOverlap}
     \lean{TNLean.PEPS.regionOnlyRight, TNLean.PEPS.regionOutsideUnion}
+    \lean{TNLean.PEPS.regionUnionPart}
     \leanok
     Let $V$ be a finite vertex set. For two regions $A,B\subseteq V$,
     define the four regions $A\setminus B$, $A\cap B$,
     $B\setminus A$, and $V\setminus(A\cup B)$. These are the four
     regions used in the proof of Lemma~\ref{lem:peps_injectiveRegion_union}.
+    They also form an indexed family over $\{0,1,2,3\}$ in the order
+    $A\setminus B$, $A\cap B$, $B\setminus A$, $V\setminus(A\cup B)$.
 \end{definition}
 
 \begin{lemma}[Identities for the four-region decomposition]%
@@ -1279,13 +1282,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOverlap_union_onlyRight}
     \lean{TNLean.PEPS.regionThreePart_union, TNLean.PEPS.regionFourPart_union}
     \lean{TNLean.PEPS.regionFourPart_cases}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion}
     \leanok
     \uses{def:peps_regionUnionDecomposition}
     Let $V$ be a finite vertex set and let $A,B\subseteq V$. The left-only
     and overlap regions reconstruct $A$, the overlap and right-only regions
     reconstruct $B$, the three inside regions reconstruct $A\cup B$, and
     all four regions reconstruct $V$. Equivalently, each vertex lies in one
-    of the four regions.
+    of the four regions, and the indexed four-region family has union $V$.
 \end{lemma}
 \begin{proof}\leanok
     Check membership of an arbitrary vertex in $A$ and in $B$.
@@ -1300,12 +1304,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOverlap_disjoint_outside}
     \lean{TNLean.PEPS.regionOnlyRight_disjoint_outside}
     \lean{TNLean.PEPS.regionInside_disjoint_outside}
+    \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
     \leanok
     \uses{def:peps_regionUnionDecomposition,
         lem:peps_regionUnionDecomposition_identities}
     In the four-region decomposition, the left-only and right-only parts are
     disjoint from the overlap and from each other. Each inside part, and hence
     the union of the three inside regions, is disjoint from the outside region.
+    The indexed four-region family is pairwise disjoint.
 \end{lemma}
 \begin{proof}\leanok
     Use the standard disjointness identities for set difference and
