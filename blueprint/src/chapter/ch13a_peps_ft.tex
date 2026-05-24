@@ -1382,6 +1382,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle}
     \lean{TNLean.PEPS.normalSquareRegionR}
     \lean{TNLean.PEPS.normalSquareRegionS}
+    \lean{TNLean.PEPS.normalSquareRegionTHole}
+    \lean{TNLean.PEPS.normalSquareRegionT}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
     coordinates.  A coordinate rectangle is a product of a horizontal
@@ -1395,7 +1397,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     with the \(3\times2\) contiguous rectangle occupying its upper two rows and
     extending one column to the right.  The displayed region \(S\) is the union
     of two \(2\times3\) contiguous rectangles shifted by one horizontal
-    coordinate, hence the full \(3\times3\) square spanned by them.
+    coordinate, hence the full \(3\times3\) square spanned by them.  The
+    displayed region \(T\) is the complement, inside a local \(5\times6\)
+    coordinate window, of the two edge blocks shown in the source picture.
 \end{definition}
 
 \begin{lemma}[Basic identities for square-lattice coordinate regions]%
@@ -1405,6 +1409,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.mem_squareLatticeContiguousRectangle}
     \lean{TNLean.PEPS.mem_normalSquareRegionR}
     \lean{TNLean.PEPS.mem_normalSquareRegionS}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTHole}
+    \lean{TNLean.PEPS.mem_normalSquareRegionT}
     \lean{TNLean.PEPS.card_squareLatticeRectangle}
     \lean{TNLean.PEPS.squareLatticeFull_eq_univ}
     \leanok
@@ -1416,7 +1422,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     membership in the \(2\times3\) lower-left piece or in the shifted
     \(3\times2\) upper piece.  Membership in \(S\) is the disjunction of
     membership in the left \(2\times3\) piece or in the horizontally shifted
-    \(2\times3\) piece.  The cardinality of a coordinate rectangle is the
+    \(2\times3\) piece.  Membership in \(T\) is membership in the local
+    \(5\times6\) window together with nonmembership in the union of the two
+    displayed edge blocks.  The cardinality of a coordinate rectangle is the
     product of the two coordinate cardinalities, and the full coordinate
     rectangle is the whole finite vertex set.
 \end{lemma}
