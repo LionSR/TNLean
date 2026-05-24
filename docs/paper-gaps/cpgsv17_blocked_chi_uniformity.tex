@@ -41,7 +41,7 @@ blocked length \(n\) in the Lean development.
 
 \section{Formalized blocked-basis analogue}
 
-The current blocked coefficient layer in
+The current blocked coefficient construction in
 \path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
 algebras \(\mathcal A_n\). Its multiplication coefficients have indices
 \[
@@ -101,26 +101,49 @@ is therefore the source length of the two factors, not the codomain length.
 This convention is only a blocked-basis analogue; it is not a replacement for
 the same-length multiplication statement in Theorem~IV.13(ii).
 
+This note isolates the chi-uniformity and same-length coefficient comparison
+part of Theorem~IV.13(ii).  The idempotent condition
+\[
+    m_\gamma =
+      \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma} m_\alpha m_\beta
+\]
+from paper lines 981--985 is a separate condition in the same theorem; it is
+not represented by the blocked-basis trace-power predicate.
+
 Consequently,
 \leanid{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
 should not be cited as a formalization of Theorem~IV.13(ii). It is a local
-blocked-basis interface for the coefficient layer, useful only after the
+blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
-\section{Elimination plan}
+\section{BNT-label coefficient objects and remaining elimination plan}
 
-To eliminate this gap, the formalization should introduce:
+The same-length coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\), indexed
+by fixed BNT labels, is represented separately from the blocked-basis
+coefficients.\footnote{\leanid{MPOTensor.BNTLabelCoefficientFamily}.}  A
+positive BNT-label \(\chi\)-witness consists of a length-independent diagonal
+family \(\chi_{\alpha,\beta,\gamma}\), positivity of every diagonal entry, and
+the positive-length trace-power identity.\footnote{%
+\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}.}
+These declarations specify the BNT-label coefficient objects, but they do not
+yet construct the coefficients or \(\chi\)-matrices from an MPDO tensor, and
+they do not yet compare BNT-label coefficients with the chosen blocked bases.
+
+To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
-    \item the BNT-label coefficient family used in Theorem~IV.13(ii);
-    \item the positive diagonal matrices
-        \(\chi_{\alpha,\beta,\gamma}\) indexed by BNT-label triples,
-        independent of the length parameter;
     \item a comparison theorem relating the BNT-label coefficients to the
         chosen blocked bases of \(\mathcal A_n\);
     \item a same-length operator-algebra product statement matching
         \(O_L(M_\alpha)O_L(M_\beta)\), together with the comparison to the
         blocked support-algebra product
         \(\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}\);
+    \item construction of the positive BNT-label
+        \(\chi_{\alpha,\beta,\gamma}\)-witness from the paper's Appendix C.3
+        and C.4 hypotheses;
+    \item the idempotent condition
+        \(m_\gamma =
+          \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
+          m_\alpha m_\beta\);
     \item the blocked-basis trace-power statement, with its source-length
         exponent convention, as a derived corollary of the uniform BNT-label
         theorem, rather than as the theorem itself.

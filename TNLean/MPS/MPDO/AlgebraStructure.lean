@@ -20,10 +20,11 @@ arXiv:1606.00608, Section 4.5.
 The paper's full statement uses coefficient systems
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
-and BNT data. That full coefficient layer is not yet formalized here. What we do
-formalize is the stationary C$^*$-algebra structure naturally attached to an MPO
-whose blocked transfer maps are idempotent, together with a first explicit
-coordinate layer obtained by choosing bases of the blocked support algebras.
+and BNT data. This file records the BNT-label coefficient statement separately
+from the currently available blocked-basis coordinate construction. It also
+formalizes the stationary C$^*$-algebra structure naturally attached to an MPO
+whose blocked transfer maps are idempotent, together with explicit coordinates
+obtained by choosing bases of the blocked support algebras.
 
 More precisely, `AlgebraStructureData` now contains a genuine tower of support
 `StarSubalgebra`s together with multiplication and inclusion maps realized by the
@@ -47,18 +48,21 @@ with the blocking length.
 
 ## Diagonal $\chi$-matrices and the trace-power formula
 
-On top of the blocked-coefficient layer, this file now formalizes the target
-shape of Theorem IV.13(ii): the special diagonal matrices
-$\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, and the
-identity $c_{\alpha,\beta,\gamma}^{(L)} = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
-is encoded as the `HasChiTracePowerForm` predicate. For the blocked support
-tower, `AlgebraStructureData.BlockedStructureChiFamily`,
+In addition to the blocked coefficients, this file now formalizes the
+statement shape of Theorem IV.13(ii): the special diagonal matrices
+$\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, the
+BNT-label coefficient system is represented as `BNTLabelCoefficientFamily`, and
+`PositiveBNTLabelChiTracePowerForm` records positivity together with the
+positive-length identity
+$c_{\alpha,\beta,\gamma}^{(L)} =
+  \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.
+For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
 `AlgebraStructureData.HasBlockedStructureChiTracePowerForm`, and
 `AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm` record the
 length-dependent blocked-basis analogue for
 `AlgebraStructureData.blockedStructureCoefficients`, including positivity of
-the diagonal entries. This is not yet the paper's uniform BNT-label chi family;
-the deviation is recorded in
+the diagonal entries. The remaining gap between the BNT-label system and the
+blocked-basis system is recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
 directly from `Matrix.diagonal_pow` and `Matrix.trace_diagonal`.
@@ -614,6 +618,95 @@ theorem HasChiTracePowerForm.eq_trace_matrix_pow {I : Type*}
     c L α β γ = (χ.matrix α β γ ^ L).trace := by
   rw [h L α β γ, χ.trace_matrix_pow]
 
+/-- The BNT-label structure coefficients \(c_{\alpha,\beta,\gamma}^{(L)}\)
+appearing in the same-length operator algebra of
+arXiv:1606.00608, Theorem IV.13(ii).
+
+Here `Λ` is the type of BNT labels.  The coefficient `coeff L α β γ` is the
+scalar multiplying the length-`L` BNT operator with label `γ` in the product of
+the length-`L` operators with labels `α` and `β`.
+
+This structure only stores the coefficient system.  Its role is to keep the
+BNT-label indices from the paper distinct from chosen blocked-basis indices.  It
+does not yet assert the same-length product formula
+\[
+  O_L(M_\alpha)O_L(M_\beta)
+    = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
+\]
+nor does it compare these coefficients with the chosen blocked-basis
+coefficients of the support algebras.  Those two comparison steps are the
+remaining obligations recorded in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.4, lines 1925--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelCoefficientFamily (Λ : Type*) where
+  /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\). -/
+  coeff : ℕ → Λ → Λ → Λ → ℂ
+
+namespace BNTLabelCoefficientFamily
+
+variable {Λ : Type*} (c : BNTLabelCoefficientFamily Λ)
+
+/-- Positive-length trace-power compatibility for BNT-label coefficients.
+
+This is the faithful quantifier shape of arXiv:1606.00608, Theorem IV.13(ii):
+for every positive chain length `L`, the coefficient
+`c^{(L)}_{\alpha,\beta,\gamma}` is the trace of the `L`-th power of the same
+diagonal matrix `χ_{\alpha,\beta,\gamma}`.  The matrix family is independent of
+`L`; only the exponent changes.  Unlike the unrestricted function-level
+predicate `HasChiTracePowerForm`, this predicate has exactly the positive-length
+quantifier used for Theorem IV.13(ii). -/
+def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
+  ∀ L : ℕ, 0 < L → ∀ α β γ : Λ,
+    c.coeff L α β γ = χ.tracePowerCoeff α β γ L
+
+/-- Trace reformulation of positive-length BNT-label trace-power form. -/
+theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
+    {χ : DiagonalChiFamily Λ} (h : c.HasPositiveLengthChiTracePowerForm χ)
+    (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
+    c.coeff L α β γ = (χ.matrix α β γ ^ L).trace := by
+  rw [h L hL α β γ, χ.trace_matrix_pow]
+
+end BNTLabelCoefficientFamily
+
+/-- A positive BNT-label chi witness for Theorem IV.13(ii).
+
+The witness consists of the paper's positive diagonal matrices
+\(\chi_{\alpha,\beta,\gamma}\), indexed by fixed BNT labels and independent of
+the chain length, together with the positive-length trace-power identity for
+the BNT-label coefficient system.
+
+This is not yet a proof of Theorem IV.13(ii) from an MPDO tensor: it is the
+paper-faithful coefficient statement to be constructed.  The construction of
+this witness, the same-length product formula, and the comparison to blocked
+bases remain the obligations described in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure PositiveBNTLabelChiTracePowerForm
+    {Λ : Type*} (c : BNTLabelCoefficientFamily Λ) where
+  /-- The length-independent BNT-label chi family. -/
+  chi : DiagonalChiFamily Λ
+  /-- Positivity of every diagonal entry. -/
+  posEntries : chi.PosEntries
+  /-- Positive-length trace-power form for the BNT-label coefficients. -/
+  tracePower : c.HasPositiveLengthChiTracePowerForm chi
+
+namespace PositiveBNTLabelChiTracePowerForm
+
+variable {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
+
+/-- A positive BNT-label chi witness gives the trace formula at every positive
+length. -/
+theorem eq_trace_pow (h : PositiveBNTLabelChiTracePowerForm c)
+    (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
+    c.coeff L α β γ = (h.chi.matrix α β γ ^ L).trace :=
+  BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
+    (c := c) h.tracePower L hL α β γ
+
+end PositiveBNTLabelChiTracePowerForm
+
 namespace AlgebraStructureData
 
 /-- A diagonal chi family indexed by the multiplication coefficients of a
@@ -631,7 +724,7 @@ fixed BNT labels and are uniform in the length parameter. This structure is
 instead indexed by the chosen blocked bases, so its data may depend on `n`.
 This deviation is documented in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. Elimination: introduce
-the BNT-label coefficient layer and a comparison map from blocked bases to those
+the BNT-label coefficients and a comparison map from blocked bases to those
 labels, then recover the uniform chi family from the paper's Appendix C.3. -/
 structure BlockedStructureChiFamily (data : AlgebraStructureData d D) where
   /-- For each blocked length `n`, a diagonal family on the disjoint union of
@@ -726,10 +819,10 @@ theorem HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow
 
 /-- A positive blocked chi witness for the blocked multiplication coefficients.
 
-This packages the data corresponding to the positive diagonal matrices in
+The witness consists of the positive diagonal matrices in
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] together
-with the blocked-basis trace-power identity. It is a data-carrying version of
-`HasBlockedStructureChiTracePowerForm`, with positivity included as a field.
+with the blocked-basis trace-power identity. It records
+`HasBlockedStructureChiTracePowerForm` together with positivity.
 
 **Scope restriction (blocked bases):** As for
 `BlockedStructureChiFamily`, this is the length-dependent blocked-basis analogue
