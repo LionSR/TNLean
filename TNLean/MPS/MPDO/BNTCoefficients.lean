@@ -363,9 +363,9 @@ theorem blocked_coeff_eq_trace_pow
 along a blocked-basis comparison.
 
 The comparison maps are defined only for positive lengths.  The value at
-`n = 0` is therefore filled by an arbitrary BNT label; this component is not
-used by the positive-length blocked trace-power identity. -/
-def pulledBlockedChiFamily [Inhabited Λ]
+`n = 0` is therefore the empty diagonal family; this component is not used by
+the positive-length blocked trace-power identity. -/
+def pulledBlockedChiFamily
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c) :
     AlgebraStructureData.BlockedStructureChiFamily data where
@@ -373,7 +373,7 @@ def pulledBlockedChiFamily [Inhabited Λ]
     if hn : 0 < n then
       hχ.chi.comap (cmp.blockedLabel n hn)
     else
-      hχ.chi.comap fun _ => default
+      DiagonalChiFamily.empty _
 
 /-- A positive BNT-label chi witness and a blocked-basis comparison give a
 positive blocked chi trace-power witness.
@@ -381,11 +381,11 @@ positive blocked chi trace-power witness.
 This is a derived blocked-basis statement.  It does not construct the BNT-label
 coefficient family or comparison maps from an MPDO tensor; it only transports an
 already given uniform BNT-label witness along an already given comparison.  The
-`Inhabited Λ` assumption supplies the unused zero-length component of the
-blocked chi family.
+unused zero-length component of the blocked chi family is filled by empty
+diagonal matrices.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
 lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-def toPositiveBlockedStructureChiTracePowerForm [Inhabited Λ]
+def toPositiveBlockedStructureChiTracePowerForm
     (cmp : BNTBlockedBasisCoefficientComparison data c)
     (hχ : PositiveBNTLabelChiTracePowerForm c) :
     AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data where
@@ -399,7 +399,9 @@ def toPositiveBlockedStructureChiTracePowerForm [Inhabited Λ]
       exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
     · have hpos : ((cmp.pulledBlockedChiFamily hχ).toDiagonal n).PosEntries := by
         simpa only [pulledBlockedChiFamily, dif_neg hn] using
-          hχ.posEntries.comap fun _ => default
+          DiagonalChiFamily.PosEntries.empty
+            (AlgebraStructureData.BlockedIndex data n ⊕
+              AlgebraStructureData.BlockedIndex data (2 * n))
       exact hpos (Sum.inl i) (Sum.inl j) (Sum.inr k) r
   tracePower := by
     intro n hn i j k
