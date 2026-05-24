@@ -117,6 +117,19 @@ theorem regionFourPart_union [Fintype V] (A B : Finset V) :
     _ = Finset.univ :=
       Finset.union_sdiff_of_subset (Finset.subset_univ (A ∪ B))
 
+/-- Every vertex belongs to one of the four regions in the decomposition. -/
+theorem regionFourPart_cases [Fintype V] (A B : Finset V) (v : V) :
+    v ∈ regionOnlyLeft A B ∨ v ∈ regionOverlap A B ∨
+      v ∈ regionOnlyRight A B ∨ v ∈ regionOutsideUnion A B := by
+  by_cases hvA : v ∈ A
+  · by_cases hvB : v ∈ B
+    · exact Or.inr <| Or.inl <| by simp [regionOverlap, hvA, hvB]
+    · exact Or.inl <| by simp [regionOnlyLeft, hvA, hvB]
+  · by_cases hvB : v ∈ B
+    · exact Or.inr <| Or.inr <| Or.inl <| by simp [regionOnlyRight, hvA, hvB]
+    · exact Or.inr <| Or.inr <| Or.inr <| by
+        simp [regionOutsideUnion, hvA, hvB]
+
 /-- The left-only region is disjoint from the overlap. -/
 theorem regionOnlyLeft_disjoint_overlap (A B : Finset V) :
     Disjoint (regionOnlyLeft A B) (regionOverlap A B) := by
@@ -133,6 +146,30 @@ theorem regionOnlyLeft_disjoint_onlyRight (A B : Finset V) :
     Disjoint (regionOnlyLeft A B) (regionOnlyRight A B) := by
   simpa [regionOnlyLeft, regionOnlyRight] using
     (disjoint_sdiff_sdiff : Disjoint (A \ B) (B \ A))
+
+/-- The left-only region is disjoint from the outside region. -/
+theorem regionOnlyLeft_disjoint_outside [Fintype V] (A B : Finset V) :
+    Disjoint (regionOnlyLeft A B) (regionOutsideUnion A B) := by
+  rw [Finset.disjoint_left]
+  intro v hvLeft hvOutside
+  exact (mem_regionOutsideUnion A B v).mp hvOutside |>.1 <|
+    (mem_regionOnlyLeft A B v).mp hvLeft |>.1
+
+/-- The overlap is disjoint from the outside region. -/
+theorem regionOverlap_disjoint_outside [Fintype V] (A B : Finset V) :
+    Disjoint (regionOverlap A B) (regionOutsideUnion A B) := by
+  rw [Finset.disjoint_left]
+  intro v hvOverlap hvOutside
+  exact (mem_regionOutsideUnion A B v).mp hvOutside |>.1 <|
+    (mem_regionOverlap A B v).mp hvOverlap |>.1
+
+/-- The right-only region is disjoint from the outside region. -/
+theorem regionOnlyRight_disjoint_outside [Fintype V] (A B : Finset V) :
+    Disjoint (regionOnlyRight A B) (regionOutsideUnion A B) := by
+  rw [Finset.disjoint_left]
+  intro v hvRight hvOutside
+  exact (mem_regionOutsideUnion A B v).mp hvOutside |>.2 <|
+    (mem_regionOnlyRight A B v).mp hvRight |>.1
 
 /-- The outside region is disjoint from the union of the three inside regions. -/
 theorem regionInside_disjoint_outside [Fintype V] (A B : Finset V) :
