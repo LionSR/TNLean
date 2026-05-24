@@ -337,6 +337,106 @@ private theorem scalar_fixedPoints_unitaryConj
     _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
           simp [hVV]
 
+private theorem bond_dim_ne_zero_of_exists_nonzero
+    {D : ℕ} (A : MPSTensor d D) (hA : ∃ i, A i ≠ 0) :
+    D ≠ 0 := by
+  intro hD
+  rcases hA with ⟨i, hi⟩
+  have hzero : A i = 0 := by
+    ext a b
+    exfalso
+    have ha : (a : ℕ) < 0 := by
+      simpa [hD] using a.2
+    omega
+  exact hi hzero
+
+private theorem gauge_blockwise_shared
+    (A : MPSTensor d D)
+    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
+    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (hSame0 :
+      SameMPV₂ A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0)
+    (blocks1 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (r1 : Fin r0 → ℝ)
+    (hr1_pos : ∀ k, 0 < r1 k)
+    (hSameGauge :
+      ∀ k,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k)) :
+    SameMPV₂ A
+        (toTensorFromBlocks
+          (d := d) (μ := fun k : Fin r0 => (↑(Real.sqrt (r1 k)) : ℂ)) blocks1) ∧
+      (∀ k : Fin r0, (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0) ∧
+      (∀ k, 0 < dim0 k) := by
+  classical
+  let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
+    intro k
+    exact bond_dim_ne_zero_of_exists_nonzero
+      (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)
+  have hSameBlocks :
+      SameMPV₂
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
+        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
+          = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
+              simpa [smul_eq_mul] using
+                (mpv_toTensorFromBlocks_eq_sum
+                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
+      _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
+            refine Finset.sum_congr rfl ?_
+            intro k _
+            let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+            have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocks1 k) := by
+              simpa [c] using hSameGauge k
+            have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
+              calc
+                mpv (blocks1 k) σ = mpv (fun i => c • blocks0 k i) σ :=
+                  (hGaugeSame N σ).symm
+                _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
+            have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
+              exact_mod_cast (Real.sqrt_ne_zero'.mpr (hr1_pos k))
+            have hμc : μ1 k * c = 1 := by
+              dsimp [μ1, c]
+              simp [hroot_ne]
+            have hmulpow : (μ1 k) ^ N * c ^ N = 1 := by
+              rw [← mul_pow, hμc, one_pow]
+            have hmulpow_apply :
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) = mpv (blocks0 k) σ := by
+              calc
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ)
+                    = ((μ1 k) ^ N * c ^ N) * mpv (blocks0 k) σ := by ring
+                _ = mpv (blocks0 k) σ := by simp [hmulpow]
+            calc
+              (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
+              _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
+              _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
+            symm
+            simpa [smul_eq_mul] using
+              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
+  have hSame1 :
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv A σ
+          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
+              hSame0 N σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
+  have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
+    intro k
+    dsimp [μ1]
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr (hr1_pos k))
+  have hDim1 : ∀ k : Fin r0, 0 < dim0 k := by
+    intro k
+    exact Nat.pos_of_ne_zero (hdim0_ne k)
+  exact ⟨hSame1, hμne1, hDim1⟩
+
 /-- **Blockwise PGVWC07 unital and dual-diagonal theorem.**
 
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
@@ -378,16 +478,6 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
         (∀ k, μ1 k ≠ 0) ∧
         (∀ k, 0 < dim1 k) := by
   classical
-  have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
-    intro k hk0
-    rcases hNonzero0 k with ⟨i, hi⟩
-    have hzero : blocks0 k i = 0 := by
-      ext a b
-      exfalso
-      have ha : (a : ℕ) < 0 := by
-        simpa [hk0] using a.2
-      omega
-    exact hi hzero
   have hcanon :
       ∀ k : Fin r0,
         ∃ (B C : MPSTensor d (dim0 k))
@@ -417,64 +507,32 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
               (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
               transferMap (d := d) (D := dim0 k) (fun i => (C i)ᴴ) Λ = Λ) := by
     intro k
-    letI : NeZero (dim0 k) := ⟨hdim0_ne k⟩
+    letI : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact exists_pgvwc07_unital_dualDiag_data_of_irreducible
       (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
   choose blocksB blocks1 r1 ρ1 Λ1 U1 hρpd1 hrpos1 hform1 hGauge1 hUnitalB1
     hScalarB1 hFinal1 using hcanon
+  have hSameGauge :
+      ∀ k : Fin r0,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k) := by
+    intro k
+    let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+    have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocksB k) :=
+      GaugeEquiv.sameMPV (hGauge1 k)
+    have hSameBC : SameMPV₂ (blocksB k) (blocks1 k) := (hFinal1 k).2.1
+    intro N σ
+    calc
+      mpv (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i) σ
+          = mpv (blocksB k) σ := by
+              simpa [c] using hGaugeSame N σ
+      _ = mpv (blocks1 k) σ := hSameBC N σ
   let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
-  have hSameBlocks :
-      SameMPV₂
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
-    intro N σ
-    calc
-      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
-          = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
-              simpa [smul_eq_mul] using
-                (mpv_toTensorFromBlocks_eq_sum
-                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
-      _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
-            refine Finset.sum_congr rfl ?_
-            intro k _
-            let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
-            have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocksB k) :=
-              GaugeEquiv.sameMPV (hGauge1 k)
-            have hSameBC : SameMPV₂ (blocksB k) (blocks1 k) := (hFinal1 k).2.1
-            have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
-              calc
-                mpv (blocks1 k) σ = mpv (blocksB k) σ := (hSameBC N σ).symm
-                _ = mpv (fun i => c • blocks0 k i) σ := (hGaugeSame N σ).symm
-                _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
-            have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
-              exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
-            have hμc : μ1 k * c = 1 := by
-              dsimp [μ1, c]
-              simp [hroot_ne]
-            have hmulpow : (μ1 k) ^ N * c ^ N = 1 := by
-              rw [← mul_pow, hμc, one_pow]
-            have hmulpow_apply :
-                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) = mpv (blocks0 k) σ := by
-              calc
-                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ)
-                    = ((μ1 k) ^ N * c ^ N) * mpv (blocks0 k) σ := by ring
-                _ = mpv (blocks0 k) σ := by simp [hmulpow]
-            calc
-              (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
-              _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
-              _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
-            symm
-            simpa [smul_eq_mul] using
-              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
-  have hSame1 :
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
-    intro N σ
-    calc
-      mpv A σ
-          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
-              hSame0 N σ
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
+  obtain ⟨hSame1, hμne1, hDim1⟩ :=
+    gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
   have hΛData :
       ∀ k : Fin r0,
         ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
@@ -498,13 +556,6 @@ theorem exists_pgvwc07_unital_dualDiag_blockwise
   have hμpos1 : ∀ k : Fin r0, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ) := by
     intro k
     exact ⟨Real.sqrt (r1 k), Real.sqrt_pos.2 (hrpos1 k), rfl⟩
-  have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
-    intro k
-    dsimp [μ1]
-    exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
-  have hDim1 : ∀ k : Fin r0, 0 < dim0 k := by
-    intro k
-    exact Nat.pos_of_ne_zero (hdim0_ne k)
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hΛData, hScalarC, hμpos1, hμne1, hDim1⟩
 
 /-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
@@ -539,16 +590,6 @@ theorem exists_tp_gauge_blockwise
         (∀ k, μ1 k ≠ 0) ∧
         (∀ k, 0 < dim1 k) := by
   classical
-  have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
-    intro k hk0
-    rcases hNonzero0 k with ⟨i, hi⟩
-    have hzero : blocks0 k i = 0 := by
-      ext a b
-      exfalso
-      have ha : (a : ℕ) < 0 := by
-        simpa [hk0] using a.2
-      omega
-    exact hi hzero
   have htp :
       ∀ k : Fin r0,
         ∃ (B : MPSTensor d (dim0 k)) (r : ℝ) (σ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ),
@@ -560,15 +601,26 @@ theorem exists_tp_gauge_blockwise
           GaugeEquiv (d := d) (D := dim0 k)
             (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B := by
     intro k
-    letI : NeZero (dim0 k) := ⟨hdim0_ne k⟩
+    letI : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
     exact
       exists_tp_data_of_irreducible
         (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
   choose blocks1 r1 σ1 hσpd1 hrpos1 hform1 hLeft1 hGauge1 using htp
+  have hSameGauge :
+      ∀ k : Fin r0,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k) := by
+    intro k
+    exact GaugeEquiv.sameMPV (hGauge1 k)
   let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  obtain ⟨hSame1, hμne1, hDim1⟩ :=
+    gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
   have hIrr1 : ∀ k : Fin r0, IsIrreducibleTensor (blocks1 k) := by
     intro k
-    letI : NeZero (dim0 k) := ⟨hdim0_ne k⟩
+    letI : NeZero (dim0 k) := ⟨Nat.pos_iff_ne_zero.mp (hDim1 k)⟩
     let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
     have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
       exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
@@ -589,64 +641,6 @@ theorem exists_tp_gauge_blockwise
       funext i
       simpa [tpGauge, c] using hform1 k i
     simpa [hEq] using hIrr_gauge
-  have hSameBlocks :
-      SameMPV₂
-        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
-        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
-    intro N σ
-    calc
-      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
-          = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
-              simpa [smul_eq_mul] using
-                (mpv_toTensorFromBlocks_eq_sum
-                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
-      _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
-            refine Finset.sum_congr rfl ?_
-            intro k _
-            let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
-            have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocks1 k) :=
-              GaugeEquiv.sameMPV (hGauge1 k)
-            have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
-              calc
-                mpv (blocks1 k) σ = mpv (fun i => c • blocks0 k i) σ :=
-                  (hGaugeSame N σ).symm
-                _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
-            have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
-              exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
-            have hμc : μ1 k * c = 1 := by
-              dsimp [μ1, c]
-              simp [hroot_ne]
-            have hmulpow : (μ1 k) ^ N * c ^ N = 1 := by
-              rw [← mul_pow, hμc, one_pow]
-            have hmulpow_apply :
-                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) = mpv (blocks0 k) σ := by
-              calc
-                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ)
-                    = ((μ1 k) ^ N * c ^ N) * mpv (blocks0 k) σ := by ring
-                _ = mpv (blocks0 k) σ := by simp [hmulpow]
-            calc
-              (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
-              _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
-              _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
-            symm
-            simpa [smul_eq_mul] using
-              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
-  have hSame1 :
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
-    intro N σ
-    calc
-      mpv A σ
-          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
-              hSame0 N σ
-      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
-  have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
-    intro k
-    dsimp [μ1]
-    exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
-  have hDim1 : ∀ k : Fin r0, 0 < dim0 k := by
-    intro k
-    exact Nat.pos_of_ne_zero (hdim0_ne k)
   exact ⟨r0, dim0, μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
 
 /-!
@@ -669,6 +663,27 @@ The PGVWC07 unital statement below is the strongest unconditional arbitrary-inpu
 step available here before the final total bond-dimension bound is threaded
 through the construction.
 -/
+
+private theorem mpv_zero_tail_chain_of_sameMPV₂
+    {Dnz r : ℕ} {zeroTailDim : ℕ}
+    {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+    {blocks : (k : Fin r) → MPSTensor d (dim k)}
+    (A : MPSTensor d D)
+    (A_nonzero : MPSTensor d Dnz)
+    (hMPV₀ :
+      ∀ (N : ℕ) (σ : Fin N → Fin d),
+        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ)
+    (hSame₁ : SameMPV₂ A_nonzero (toTensorFromBlocks (d := d) (μ := μ) blocks)) :
+    ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
+        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+  intro N σ
+  calc
+    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
+    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
+          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
+        congr 1
+        exact hSame₁ N σ
 
 /-- **Arbitrary-input PGVWC07 unital dual-diagonal form with zero blocks.**
 
@@ -722,15 +737,10 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
     hDim₁⟩ :=
     exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
       hNonzero₀
-  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hΛData₁, hScalar₁, hμPos₁, hμNe₁,
-    hDim₁, ?_⟩
-  intro N σ
-  calc
-    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
-    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁) σ := by
-        congr 1
-        exact hSame₁ N σ
+  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hΛData₁, hScalar₁,
+    hμPos₁, hμNe₁, hDim₁, ?_⟩
+  exact mpv_zero_tail_chain_of_sameMPV₂
+    (d := d) (D := D) (zeroTailDim := zeroTailDim) A A_nonzero hMPV₀ hSame₁
 
 /-- **Bond-dimension identity for the arbitrary-input PGVWC07 zero-block form.**
 
@@ -922,14 +932,8 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
     exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
   -- Step 3: Assemble the result.
   refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_⟩
-  -- The MPV relationship chains through the zero-block separation and TP gauge.
-  intro N σ
-  calc mpv A σ
-      = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
-    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁) σ := by
-        congr 1
-        exact hSame₁ N σ
+  exact mpv_zero_tail_chain_of_sameMPV₂
+    (d := d) (D := D) (zeroTailDim := zeroTailDim) A A_nonzero hMPV₀ hSame₁
 
 
 end MPSTensor
