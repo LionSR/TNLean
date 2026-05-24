@@ -1131,13 +1131,98 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \end{center}
 \end{lemma}
 
+\begin{definition}[Injectivity predicate for blocked regions]%
+    \label{def:peps_regionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityData}
+    \leanok
+    A region-injectivity hypothesis assigns to each finite vertex region the
+    assertion that the tensor obtained by blocking that region is injective.
+    This predicate is used for regions such as \(R\), \(S\), \(T\), and their
+    complements in the normal PEPS proof.
+\end{definition}
+
+\begin{definition}[Complement of a finite region]%
+    \label{def:peps_regionComplement}
+    \lean{TNLean.PEPS.regionComplement}
+    \leanok
+    For a finite vertex region \(R\subseteq V\), its complement is
+    \(V\setminus R\).
+\end{definition}
+
+\begin{definition}[Normal rectangular injectivity hypotheses]%
+    \label{def:peps_normalRectangleInjectivityHypotheses}
+    \lean{TNLean.PEPS.NormalRectangleInjectivityHypotheses}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    In the square-lattice normal theorem, every \(2\times 3\) and
+    \(3\times 2\) rectangular region is assumed injective.  The corresponding
+    hypotheses specify which finite regions have these two shapes and assert
+    injectivity for all of them.
+\end{definition}
+
+\begin{definition}[Normal edge-blocking hypotheses]%
+    \label{def:peps_normalEdgeBlockingHypotheses}
+    \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses}
+    \leanok
+    \uses{def:peps_edge, def:peps_regionInjectivityData}
+    Around each edge, the normal proof assumes a blocking into three injective
+    regions: a red region containing one endpoint, a blue region containing the
+    other endpoint, and an injective complementary region.  The three regions
+    are pairwise disjoint and cover the whole vertex set.
+\end{definition}
+
+\begin{theorem}[Injectivity supplied by normal edge blocking]%
+    \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
+    \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.injective_chain_at_edge}
+    \leanok
+    \uses{def:peps_normalEdgeBlockingHypotheses}
+    For every edge, the normal edge-blocking hypotheses supply three injective
+    regions: the red region, the blue region, and the complementary region.
+\end{theorem}
+\begin{proof}\leanok
+    This is exactly the injectivity part of the edge-blocking hypotheses.
+\end{proof}
+
+\begin{definition}[Normal one-site separation hypotheses]%
+    \label{def:peps_normalOneSiteSeparationHypotheses}
+    \lean{TNLean.PEPS.NormalOneSiteSeparationHypotheses}
+    \leanok
+    \uses{def:peps_regionInjectivityData, def:peps_regionComplement}
+    For each site, the normal theorem assumes two injective regions with
+    injective complements that differ exactly at that site.  This is the
+    one-site comparison used after the edge gauges have been obtained.
+\end{definition}
+
+\begin{theorem}[Membership in a one-site separated region]%
+    \label{thm:peps_normalOneSiteSeparation_mem_withSite_iff}
+    \lean{TNLean.PEPS.NormalOneSiteSeparationHypotheses.mem_withSite_iff}
+    \leanok
+    \uses{def:peps_normalOneSiteSeparationHypotheses}
+    For the two regions associated to a site \(v\), a vertex \(w\) belongs to
+    the region containing \(v\) if and only if either \(w=v\), or \(w\)
+    belongs to the comparison region omitting \(v\).
+\end{theorem}
+\begin{proof}\leanok
+    If \(w=v\), use the distinguished-site membership and nonmembership
+    assumptions.  If \(w\neq v\), use the equality of the two regions away
+    from the distinguished site.
+\end{proof}
+
 \begin{definition}[Normal square-lattice blocking regions]%
     \label{def:peps_normalSquareBlockingRegions}
-    \notready
+    \lean{TNLean.PEPS.NormalSquareBlockingRegions}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        def:peps_regionInjectivityData}
     In the translationally invariant square-lattice proof, the source paper
     assumes that every \(2\times 3\) and \(3\times 2\) region is injective.
-    Lemma~\ref{lem:peps_injectiveRegion_union} then implies that the regions
-    \(R\), \(S\), and \(T\) below are injective:
+    The formal statement here is the corresponding abstract, scope-restricted
+    hypothesis bundle: it records the rectangular injectivity assumptions, the
+    size bound \(n,m\geq 7\) with \(|V|=nm\), and three finite regions
+    \(R\), \(S\), and \(T\) whose injectivity is assumed directly.  It does
+    not yet assert that these regions are the displayed square-lattice unions,
+    nor that their translated variants give the edge-centred blocking around
+    every edge.  The source regions are:
     \begin{center}
         \TNTikZDiagram{TNPEPSNormalRegionsRS}{%
             \begin{tikzpicture}[tn picture, scale=0.90]
@@ -1172,12 +1257,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{lem:peps_injectiveRegion_union,
         def:peps_normalSquareBlockingRegions,
+        def:peps_normalEdgeBlockingHypotheses,
+        thm:peps_normalEdgeBlockingHypotheses_injectiveChain,
         thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     Under the square-lattice normality hypotheses of
-    \cite[Theorem~3]{Molnar2018NormalPEPS}, the tensor network may be blocked
-    around each edge into three injective regions. Hence the same three-site
-    injective-chain insertion argument used in the injective PEPS theorem
-    applies to the blocked normal PEPS:
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, the regions \(R\), \(S\), and
+    \(T\), together with their translated variants, give an edge-centred
+    blocking into red, blue, and complementary injective regions.  These are
+    the regions on which the three-site injective-chain insertion argument is
+    applied:
     \begin{center}
         \TNTikZDiagram{TNPEPSNormalEdgeBlockingReduction}{%
             \begin{tikzpicture}[tn picture, scale=0.90]
@@ -1255,10 +1343,23 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
+\begin{definition}[Normal PEPS blocking hypotheses]%
+    \label{def:peps_normalPEPSBlockingHypotheses}
+    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses}
+    \leanok
+    \uses{def:peps_normalEdgeBlockingHypotheses,
+        def:peps_normalOneSiteSeparationHypotheses}
+    The general normal theorem assumes both the edge-centred blockings into
+    three injective regions and the one-site comparison regions with injective
+    complements.  These two assumptions are collected as the normal PEPS
+    blocking hypotheses.
+\end{definition}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
     \label{thm:fundamentalTheorem_normalPEPS}
     \notready
-    \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
+    \uses{thm:peps_normalEdgeBlockingHypotheses_injectiveChain,
+        def:peps_normalPEPSBlockingHypotheses,
         thm:peps_oneVertexComplementComparison,
         def:GaugeEquivPEPS}
     Suppose two normal PEPS generate the same state, can be blocked into
