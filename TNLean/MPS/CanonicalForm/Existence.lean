@@ -351,11 +351,10 @@ theorem isIrreducibleTensor_allZero_dim_le_one
 /-!
 ## Conditional reductions from arbitrary input
 
-The strongest arbitrary-input statement proved here is the blockwise PF / TP-gauge reduction below:
-after decomposing `A` into irreducible blocks, one may apply the theorem to each block once one
-separately knows that the block has a nonzero Kraus operator. This explicit side condition records
-the length-zero sector: an all-zero block contributes its bond dimension at length zero, even though
-it contributes nothing at every positive length.
+The arbitrary-input part of this file stops at the irreducible block decomposition and the
+zero-block bookkeeping below. The irreducible-to-TP-gauge, CFII normalization, and
+periodicity-removal theorems remain available for individual blocks satisfying their hypotheses,
+but this file does not package them as unconditional siblings of the block decomposition.
 
 The normal-canonical-form file starts from a primitive weighted block family with positive bond
 dimensions and distinct nonzero weights. This file does **not** construct that input from an
@@ -370,90 +369,6 @@ Remaining gap for a complete canonical-form existence theorem:
 * Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
   the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
 -/
-
-/-- **Unconditional trace-preserving gauge reduction for the 1606 theorem.**
-
-From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
-resulting block, if one separately knows that the block has some nonzero Kraus operator, then the
-Perron--Frobenius / TP-gauge step can be applied to that block.
-
-This is the unconditional reduction from arbitrary input proved here. The nonzero side condition is
-explicit because the length-zero sector records the bond dimension of an all-zero scalar block. -/
-theorem exists_irreducible_blockDecomp_with_tpGauge
-    (A : MPSTensor d D) :
-    ∃ r : ℕ, ∃ dim : Fin r → ℕ,
-    ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
-      (∀ k,
-        (∃ i, blocks k i ≠ 0) →
-        ∃ (B : MPSTensor d (dim k)) (r : ℝ) (σ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-          σ.PosDef ∧ 0 < r ∧
-          (∀ i : Fin d,
-            B i = CFC.sqrt σ *
-              ((↑((Real.sqrt r)⁻¹) : ℂ) • blocks k i) * (CFC.sqrt σ)⁻¹) ∧
-          (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
-          GaugeEquiv (d := d) (D := dim k)
-            (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks k i) B) := by
-  classical
-  obtain ⟨r, dim, blocks, hIrr, hSame⟩ :=
-    exists_irreducible_blockDecomp (d := d) (D := D) A
-  refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
-  intro k hNonzero
-  have hdim_ne : dim k ≠ 0 := by
-    intro hk0
-    rcases hNonzero with ⟨i, hi⟩
-    have hEmpty : IsEmpty (Fin (dim k)) := by
-      rw [hk0]
-      infer_instance
-    have hzero : blocks k i = 0 := by
-      ext a b
-      exact (hEmpty.false a).elim
-    exact hi hzero
-  letI : NeZero (dim k) := ⟨hdim_ne⟩
-  simpa using
-    (exists_tp_data_of_irreducible (d := d) (D := dim k)
-      (A := blocks k) (hIrr := hIrr k) (hA := hNonzero))
-
-/-- **CFII fixed-point data for the 1606 reduction.**
-
-From an arbitrary tensor `A` we produce an irreducible block decomposition. For each
-block, assuming one has already supplied (i) a TP representative and (ii) positive bond dimension,
-we can produce CFII fixed-point data (unitary conjugation + diagonal PD fixed point).
-
-This is the CFII fixed-point part of the source proof, not a complete existence theorem:
-it does not carry the Perron-Frobenius
-/ TP-gauge or periodicity-removal arguments through the block decomposition. The normal canonical
-form, for primitive weighted blocks already in hand, is treated in the normal-canonical-form
-file. -/
-theorem exists_irreducible_blockDecomp_with_CFII
-    (A : MPSTensor d D) :
-    ∃ r : ℕ, ∃ dim : Fin r → ℕ,
-    ∃ blocks : (k : Fin r) → MPSTensor d (dim k),
-      (∀ k, IsIrreducibleTensor (blocks k)) ∧
-      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
-      (∀ k,
-        (∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) →
-        0 < dim k →
-        ∃ (U : Matrix.unitaryGroup (Fin (dim k)) ℂ)
-          (Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-            let B : MPSTensor d (dim k) :=
-              fun i => (↑U : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)ᴴ *
-                blocks k i *
-                (↑U : Matrix (Fin (dim k)) (Fin (dim k)) ℂ);
-            SameMPV₂ (blocks k) B ∧
-            Λ.PosDef ∧ Λ.IsDiag ∧
-            (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
-            transferMap (d := d) (D := dim k) B Λ = Λ) := by
-  classical
-  obtain ⟨r, dim, blocks, hIrr, hSame⟩ :=
-    exists_irreducible_blockDecomp (d := d) (D := D) A
-  refine ⟨r, dim, blocks, hIrr, hSame, ?_⟩
-  intro k hTPk hDk
-  -- Apply the collected CFII lemma to the k-th block.
-  simpa using
-    (exists_CFII_data_of_TP_of_isIrreducibleTensor (d := d) (D := dim k)
-      (A := blocks k) (hTP := hTPk) (hIrr := hIrr k) (hD := hDk))
 
 /-!
 ## Zero-block separation
