@@ -52,8 +52,9 @@ In addition to the blocked coefficients, this file now formalizes the
 statement shape of Theorem IV.13(ii): the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, the
 BNT-label coefficient system is represented as `BNTLabelCoefficientFamily`, and
-`PositiveBNTLabelChiTracePowerForm` records positivity together with the
-positive-length identity
+`BNTLabelOperatorFamily.HasSameLengthProductForm` records the same-length
+product identity.  The structure `PositiveBNTLabelChiTracePowerForm` records
+positivity together with the positive-length identity
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.
 For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
@@ -627,14 +628,15 @@ scalar multiplying the length-`L` BNT operator with label `γ` in the product of
 the length-`L` operators with labels `α` and `β`.
 
 This structure only stores the coefficient system.  Its role is to keep the
-BNT-label indices from the paper distinct from chosen blocked-basis indices.  It
-does not yet assert the same-length product formula
+BNT-label indices from the paper distinct from chosen blocked-basis indices.
+The same-length product formula is recorded separately by
+`BNTLabelOperatorFamily.HasSameLengthProductForm`:
 \[
   O_L(M_\alpha)O_L(M_\beta)
     = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
 \]
-nor does it compare these coefficients with the chosen blocked-basis
-coefficients of the support algebras.  Those two comparison steps are the
+It also does not yet compare these coefficients with the chosen blocked-basis
+coefficients of the support algebras.  That comparison step is one of the
 remaining obligations recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
@@ -670,6 +672,57 @@ theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
 
 end BNTLabelCoefficientFamily
 
+/-- BNT-label operators \(O_L(M_\alpha)\) at each positive chain length.
+
+Here `Λ` is the fixed BNT-label type, and `O L` is the ambient algebra of
+length-`L` operators.  This structure records only the family
+\(\alpha \mapsto O_L(M_\alpha)\) for each length; the product law is the
+separate predicate `BNTLabelOperatorFamily.HasSameLengthProductForm`.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelOperatorFamily (Λ : Type*) (O : ℕ → Type*) where
+  /-- The length-`L` operator \(O_L(M_\alpha)\). -/
+  operator : ∀ L : ℕ, Λ → O L
+
+namespace BNTLabelOperatorFamily
+
+variable {Λ : Type*} {O : ℕ → Type*} (op : BNTLabelOperatorFamily Λ O)
+
+/-- Same-length BNT product formula from Theorem IV.13(ii).
+
+For every positive length `L`, the product of the two length-`L` BNT operators
+with labels `α` and `β` expands again in the length-`L` BNT operators, with
+coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\):
+\[
+  O_L(M_\alpha)O_L(M_\beta)
+    = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma).
+\]
+The predicate is abstract in the ambient length-`L` algebra.  Later comparison
+theorems must relate this same-length algebra to the chosen blocked support
+algebras.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def HasSameLengthProductForm [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    (c : BNTLabelCoefficientFamily Λ) : Prop :=
+  ∀ L : ℕ, 0 < L → ∀ α β : Λ,
+    op.operator L α * op.operator L β =
+      ∑ γ : Λ, c.coeff L α β γ • op.operator L γ
+
+/-- Restatement of the same-length BNT product formula as an equality. -/
+theorem HasSameLengthProductForm.eq_sum [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    {c : BNTLabelCoefficientFamily Λ}
+    (h : op.HasSameLengthProductForm c)
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    op.operator L α * op.operator L β =
+      ∑ γ : Λ, c.coeff L α β γ • op.operator L γ :=
+  h L hL α β
+
+end BNTLabelOperatorFamily
+
 /-- A positive BNT-label chi witness for Theorem IV.13(ii).
 
 The witness consists of the paper's positive diagonal matrices
@@ -679,8 +732,8 @@ the BNT-label coefficient system.
 
 This is not yet a proof of Theorem IV.13(ii) from an MPDO tensor: it is the
 paper-faithful coefficient statement to be constructed.  The construction of
-this witness, the same-length product formula, and the comparison to blocked
-bases remain the obligations described in
+this witness and the comparison to blocked bases remain the obligations
+described in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
