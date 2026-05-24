@@ -84,12 +84,10 @@ a single tensor $\mathbf{0}_{d,D_0}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:irred_decomp, thm:mpv_zero_tensor, lem:irreducible_allZero_dim_le_one}
+    \uses{thm:irred_decomp, thm:mpv_zero_tensor}
     Apply the irreducible block decomposition
     (Theorem~\ref{thm:irred_decomp}) and partition the blocks
-    by whether each has a nonzero Kraus operator.
-    The all-zero blocks satisfy
-    Lemma~\ref{lem:irreducible_allZero_dim_le_one}, so their total bond
+    by whether each has a nonzero Kraus operator.  Their total bond
     dimension $D_0$ accumulates the bond dimensions of the all-zero blocks.
     The MPV identity follows from the block structure and
     Theorem~\ref{thm:mpv_zero_tensor}.
