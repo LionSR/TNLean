@@ -77,6 +77,40 @@ def squareLatticeFull (width height : ℕ) : Finset (SquareLatticeVertex width h
   ext v
   simp [squareLatticeFull]
 
+/-- A contiguous interval of coordinates in one axis of a finite square lattice.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the normal square-lattice theorem
+uses contiguous \(2\times3\) and \(3\times2\) rectangular blocks. -/
+def squareLatticeCoordinateInterval {size : ℕ} (start length : ℕ) : Finset (Fin size) :=
+  Finset.univ.filter fun i ↦ start ≤ i.1 ∧ i.1 < start + length
+
+@[simp] theorem mem_squareLatticeCoordinateInterval {size : ℕ}
+    (start length : ℕ) (i : Fin size) :
+    i ∈ squareLatticeCoordinateInterval start length ↔
+      start ≤ i.1 ∧ i.1 < start + length := by
+  simp [squareLatticeCoordinateInterval]
+
+/-- A contiguous coordinate rectangle in a finite square lattice.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the regions \(R\), \(S\), and
+\(T\) are assembled from contiguous \(2\times3\) and \(3\times2\) rectangles. -/
+def squareLatticeContiguousRectangle {width height : ℕ}
+    (xStart yStart xLength yLength : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeRectangle
+    (squareLatticeCoordinateInterval xStart xLength)
+    (squareLatticeCoordinateInterval yStart yLength)
+
+@[simp] theorem mem_squareLatticeContiguousRectangle {width height : ℕ}
+    (xStart yStart xLength yLength : ℕ)
+    (v : SquareLatticeVertex width height) :
+    v ∈ squareLatticeContiguousRectangle xStart yStart xLength yLength ↔
+      xStart ≤ v.1.1 ∧ v.1.1 < xStart + xLength ∧
+        yStart ≤ v.2.1 ∧ v.2.1 < yStart + yLength := by
+  simp [squareLatticeContiguousRectangle, and_assoc]
+
 /-- Coordinate-product regions with two horizontal and three vertical
 coordinates.
 
@@ -100,6 +134,28 @@ def IsThreeByTwoSquareLatticeProduct {width height : ℕ}
     (R : Finset (SquareLatticeVertex width height)) : Prop :=
   ∃ xs : Finset (Fin width), ∃ ys : Finset (Fin height),
     xs.card = 3 ∧ ys.card = 2 ∧ R = squareLatticeRectangle xs ys
+
+/-- Contiguous coordinate rectangles of width two and height three.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the normal square-lattice theorem
+assumes injectivity for contiguous \(2\times3\) rectangular blocks. -/
+def IsTwoByThreeContiguousSquareLatticeRectangle {width height : ℕ}
+    (R : Finset (SquareLatticeVertex width height)) : Prop :=
+  ∃ xStart yStart : ℕ,
+    xStart + 2 ≤ width ∧ yStart + 3 ≤ height ∧
+      R = squareLatticeContiguousRectangle xStart yStart 2 3
+
+/-- Contiguous coordinate rectangles of width three and height two.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
+`Papers/1804.04964/paper_normal.tex`, where the normal square-lattice theorem
+assumes injectivity for contiguous \(3\times2\) rectangular blocks. -/
+def IsThreeByTwoContiguousSquareLatticeRectangle {width height : ℕ}
+    (R : Finset (SquareLatticeVertex width height)) : Prop :=
+  ∃ xStart yStart : ℕ,
+    xStart + 3 ≤ width ∧ yStart + 2 ≤ height ∧
+      R = squareLatticeContiguousRectangle xStart yStart 3 2
 
 section EdgeBlocking
 
