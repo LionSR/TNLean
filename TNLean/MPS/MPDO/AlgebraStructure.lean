@@ -53,8 +53,12 @@ statement shape of Theorem IV.13(ii): the special diagonal matrices
 $\chi_{\alpha,\beta,\gamma}$ are represented as a `DiagonalChiFamily`, the
 BNT-label coefficient system is represented as `BNTLabelCoefficientFamily`, and
 `BNTLabelOperatorFamily.HasSameLengthProductForm` records the same-length
-product identity.  The structure `PositiveBNTLabelChiTracePowerForm` records
-positivity together with the positive-length identity
+product identity.  The predicate
+`BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm` records the idempotent
+coefficient condition on the scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
+The structure
+`PositiveBNTLabelChiTracePowerForm` records positivity together with the
+positive-length identity
 $c_{\alpha,\beta,\gamma}^{(L)} =
   \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.
 For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
@@ -722,6 +726,52 @@ theorem HasSameLengthProductForm.eq_sum [Fintype Λ]
   h L hL α β
 
 end BNTLabelOperatorFamily
+
+/-- The trace scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\) appearing in
+the idempotent condition of Theorem IV.13(ii).
+
+Here `Λ` is the fixed BNT-label type, and `traceScalar α` is the scalar
+\(m_\alpha\) attached to the positive diagonal matrix \(\mu_\alpha\) in the
+source proof.  The coefficient identity itself is the predicate
+`BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm`.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelTraceScalarFamily (Λ : Type*) where
+  /-- The scalar \(m_\alpha=\operatorname{tr}(\mu_\alpha)\). -/
+  traceScalar : Λ → ℂ
+
+namespace BNTLabelTraceScalarFamily
+
+variable {Λ : Type*} (m : BNTLabelTraceScalarFamily Λ)
+
+/-- Idempotent coefficient condition from Theorem IV.13(ii).
+
+The length-one BNT coefficients reconstruct each trace scalar as
+\[
+  m_\gamma =
+    \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma} m_\alpha m_\beta.
+\]
+This predicate records only that scalar identity; constructing the scalars from
+an MPDO tensor and comparing the coefficients with the blocked support-algebra
+coefficients are separate obligations.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def HasIdempotentCoefficientForm [Fintype Λ]
+    (c : BNTLabelCoefficientFamily Λ) : Prop :=
+  ∀ γ : Λ, m.traceScalar γ =
+    ∑ α : Λ, ∑ β : Λ,
+      c.coeff 1 α β γ * (m.traceScalar α * m.traceScalar β)
+
+/-- Restatement of the BNT idempotent coefficient condition as an equality. -/
+theorem HasIdempotentCoefficientForm.eq_sum [Fintype Λ]
+    {c : BNTLabelCoefficientFamily Λ}
+    (h : m.HasIdempotentCoefficientForm c) (γ : Λ) :
+    m.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        c.coeff 1 α β γ * (m.traceScalar α * m.traceScalar β) :=
+  h γ
+
+end BNTLabelTraceScalarFamily
 
 /-- A positive BNT-label chi witness for Theorem IV.13(ii).
 
