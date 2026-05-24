@@ -478,5 +478,17 @@ theorem physRealizeLocalOp_localVirtualOpOfPhysicalOp (A : Tensor G d)
   simp [physRealizeLocalOp, localVirtualOpOfPhysicalOp, localProjector,
     LinearMap.comp_assoc]
 
+/-- If the projected physical action of \(O\) is the canonical physical
+realization of a virtual operation \(T\), then pulling back \(O\) recovers
+\(T\). -/
+theorem localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (v : V)
+    (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) (T : LocalVirtualOp A v)
+    (hO : (localProjector A hA v).comp (O.comp (localProjector A hA v)) =
+      physRealizeLocalOp A hA v T) :
+    localVirtualOpOfPhysicalOp A hA v O = T := by
+  apply physRealizeLocalOp_injective A hA v
+  rw [physRealizeLocalOp_localVirtualOpOfPhysicalOp, hO]
+
 end PEPS
 end TNLean
