@@ -1401,6 +1401,32 @@ the elementary trace-power identity for diagonal matrices.
     from the witness.
 \end{proof}
 
+\begin{theorem}[Blocked coefficients inherit BNT trace powers]%
+    \label{thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
+        def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    If the chosen blocked-basis coefficients are compared with the fixed
+    BNT-label coefficient system, and that BNT-label system has a positive
+    length-independent \(\chi\)-witness, then each positive-length blocked
+    coefficient is the trace power of the corresponding BNT-label
+    \(\chi\)-matrix:
+    \[
+        c^{(n)}_{i,j,k}
+          = \operatorname{tr}
+              \bigl(
+                \chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}^{\,n}
+              \bigr).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    Use the comparison equality to replace the blocked-basis coefficient by the
+    corresponding BNT-label coefficient, and then apply the BNT-label
+    trace-power formula.
+\end{proof}
+
 \begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
     \label{def:mpdo_blocked_structure_chi_family}
     \lean{MPOTensor.AlgebraStructureData.BlockedStructureChiFamily}
