@@ -426,6 +426,37 @@ theorem localVirtualOpOfPhysicalOp_eq_of_realizes (A : Tensor G d)
       rw [hO c]
       simp
 
+/-- Two physical endpoint operations have the same virtual pullback if their
+projected actions agree on the image of the local tensor map. -/
+theorem localVirtualOpOfPhysicalOp_eq_of_projected_action_eq (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O O' : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hOO' : ∀ c : LocalVirtualConfig A v → ℂ,
+      localProjector A hA v (O (localTensorMap A v c)) =
+        localProjector A hA v (O' (localTensorMap A v c))) :
+    localVirtualOpOfPhysicalOp A hA v O =
+      localVirtualOpOfPhysicalOp A hA v O' := by
+  apply LinearMap.ext
+  intro c
+  apply hA.localTensorMap_injective v
+  rw [localVirtualOpOfPhysicalOp_spec, localVirtualOpOfPhysicalOp_spec, hOO']
+
+/-- Equality of virtual pullbacks is equivalent to equality of the projected
+physical actions on the image of the local tensor map. -/
+theorem localVirtualOpOfPhysicalOp_eq_iff_projected_action_eq (A : Tensor G d)
+    (hA : IsVertexInjective A) (v : V)
+    (O O' : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ)) :
+    localVirtualOpOfPhysicalOp A hA v O =
+        localVirtualOpOfPhysicalOp A hA v O' ↔
+      ∀ c : LocalVirtualConfig A v → ℂ,
+        localProjector A hA v (O (localTensorMap A v c)) =
+          localProjector A hA v (O' (localTensorMap A v c)) := by
+  constructor
+  · intro h c
+    rw [← localVirtualOpOfPhysicalOp_spec A hA v O c,
+      ← localVirtualOpOfPhysicalOp_spec A hA v O' c, h]
+  · exact localVirtualOpOfPhysicalOp_eq_of_projected_action_eq A hA v O O'
+
 /-- Pulling back the canonical physical realization of a virtual operation
 recovers the original virtual operation. -/
 theorem localVirtualOpOfPhysicalOp_physRealizeLocalOp (A : Tensor G d)
