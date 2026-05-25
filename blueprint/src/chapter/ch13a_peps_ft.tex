@@ -1459,11 +1459,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
     \lean{TNLean.PEPS.RegionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure}
     \leanok
     A region-injectivity hypothesis assigns to each finite vertex region the
     assertion that the tensor obtained by blocking that region is injective.
     This predicate is used for regions such as \(R\), \(S\), \(T\), and their
-    complements in the normal PEPS proof.
+    complements in the normal PEPS proof.  The union-closure hypothesis records
+    the conclusion supplied by the source union-of-injective-regions lemma:
+    the union of two injective regions is injective.
 \end{definition}
 
 \begin{definition}[Complement of a finite region]%
@@ -1659,6 +1662,40 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     This is the direct specialization of the abstract rectangular families to
     the two contiguous coordinate-rectangle predicates.
+\end{proof}
+
+\begin{lemma}[Coordinate rectangular injectivity gives injective rectangles]%
+    \label{lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect23_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rect32_injective}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    Under the coordinate square-lattice rectangular injectivity hypotheses,
+    every bounded contiguous \(2\times3\) rectangle and every bounded
+    contiguous \(3\times2\) rectangle is injective.
+\end{lemma}
+\begin{proof}\leanok
+    This is the defining rectangular injectivity hypothesis applied to the
+    coordinate witnesses for the two rectangle shapes.
+\end{proof}
+
+\begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
+    \label{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionS_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles,
+        lem:peps_normalSquareRegionRS_rectangular_decomposition}
+    If region injectivity is closed under unions, then the coordinate
+    square-lattice rectangular injectivity hypotheses imply that the displayed
+    regions \(R\) and \(S\) are injective.
+\end{lemma}
+\begin{proof}\leanok
+    Region \(R\) is the union of one injective \(2\times3\) rectangle and one
+    injective \(3\times2\) rectangle.  Region \(S\) is the union of two
+    injective \(2\times3\) rectangles.  Apply union closure in each case.
 \end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
