@@ -141,5 +141,62 @@ theorem edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn (A : Tensor G d) (e : Edge 
         simpa [φ, edgeComplementValue, edgeMiddleConfigEquivOpenMiddleConfig] using
           edgeOpenMiddleConfigToMiddleConfig_apply_ne (G := G) A e β ζ ⟨ie.1, hne⟩
 
+/-- The middle tensor in the edge-blocked three-site chain, indexed by the two
+residual boundary configurations adjacent to the endpoints.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+noncomputable def edgeMiddleTensorFamily (A : Tensor G d) (e : Edge G) :
+    ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) ×
+        ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e) →
+      EdgeMiddlePhysicalConfig (G := G) (d := d) e → ℂ :=
+  fun ρ τ => edgeOpenMiddleWeightOn (G := G) A e τ ρ.1 ρ.2
+
+/-- Injectivity of the middle tensor in the edge-blocked three-site chain.
+
+This is the middle-block part of the paper's assertion that the tensor network
+obtained after `eq:block_to_mps` is an injective three-site MPS.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+def EdgeMiddleTensorInjective (A : Tensor G d) (e : Edge G) : Prop :=
+  LinearIndependent ℂ (edgeMiddleTensorFamily (G := G) A e)
+
+/-- Injectivity of the three-site chain obtained by blocking around a
+chosen edge \(e=(u,v)\).
+
+The first and last assertions are the injectivity of the endpoint tensors. The
+middle assertion is the injectivity of the tensor obtained by blocking all
+vertices except the two endpoints. This is the formal statement targeted by the
+assertion after `eq:block_to_mps` in arXiv:1804.04964, Section 3,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+structure EdgeBlockedThreeSiteInjective (A : Tensor G d) (e : Edge G) : Prop where
+  left_injective : Function.Injective (localTensorMap A e.1.1)
+  middle_injective : EdgeMiddleTensorInjective (G := G) A e
+  right_injective : Function.Injective (localTensorMap A e.1.2)
+
+/-- Vertex injectivity supplies the two endpoint injectivity assertions in the
+edge-blocked three-site chain.
+
+The unformalized content is middle-block injectivity: linear independence of the
+middle tensor family over the residual boundary configurations. -/
+theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G d}
+    (hA : IsVertexInjective A) (e : Edge G) :
+    Function.Injective (localTensorMap A e.1.1) ∧
+      Function.Injective (localTensorMap A e.1.2) :=
+  ⟨hA.localTensorMap_injective e.1.1, hA.localTensorMap_injective e.1.2⟩
+
+/-- Once the middle block is injective, vertex injectivity gives the full
+edge-blocked three-site injectivity statement.
+
+This isolates the remaining proof obligation in the source argument: injectivity
+is preserved when the vertices away from the chosen edge are blocked into the
+middle tensor. -/
+theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle {A : Tensor G d}
+    (hA : IsVertexInjective A) (e : Edge G)
+    (hMiddle : EdgeMiddleTensorInjective (G := G) A e) :
+    EdgeBlockedThreeSiteInjective (G := G) A e :=
+  ⟨hA.localTensorMap_injective e.1.1, hMiddle, hA.localTensorMap_injective e.1.2⟩
+
 end PEPS
 end TNLean
