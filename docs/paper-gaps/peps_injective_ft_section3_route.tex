@@ -128,7 +128,13 @@ Theorem can be proved in the manner of the paper.
   \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}, and the middle contractions
   have the middle-indexed forms \leanid{TNLean.PEPS.edgeMiddleWeightOn} and
   \leanid{TNLean.PEPS.edgeOpenMiddleWeightOn}. In the blueprint the
-  injectivity transfer itself remains the not-yet-formalized theorem
+  injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}.
+  Vertex injectivity supplies the two endpoint assertions by
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
+  and
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
+  reduces the remaining work to the middle-block injectivity statement. The
+  full transfer remains the not-yet-formalized theorem
   \path{thm:peps_edgeBlockedThreeSiteInjective}.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
   the edge-blocked three-site MPS. The local endpoint part of the
@@ -188,7 +194,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
   bridge is \path{thm:peps_edgeBlockedThreeSiteInjective}, tracked by
   issue~\#1366. The middle physical index of this three-site object is
-  formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}.
+  formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
+  injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
+  and the endpoint assertions are proved from vertex injectivity.
 \item Identity insertion on the chosen bond:
   \path{thm:peps_edgeInsertedCoeff_identity} is reduced to finite diagonal
   reindexing, tracked by issue~\#1372.
