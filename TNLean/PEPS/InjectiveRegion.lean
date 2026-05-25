@@ -60,6 +60,28 @@ structure RegionInjectivityUnionClosure (κ : RegionInjectivityData V) : Prop wh
   union_injective :
     ∀ {A B : Finset V}, κ.IsInjective A → κ.IsInjective B → κ.IsInjective (A ∪ B)
 
+/-- A nonempty finite union of injective regions is injective under union closure.
+
+This is the finite iteration of the source lemma used when the displayed
+regions \(R\), \(S\), and \(T\) are described as unions of smaller injective
+rectangles.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and the
+examples following it, lines 1322--1430 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem RegionInjectivityUnionClosure.biUnion_injective
+    {ι : Type*} {κ : RegionInjectivityData V} (hUnion : RegionInjectivityUnionClosure κ)
+    {s : Finset ι} (hs : s.Nonempty) (R : ι → Finset V)
+    (hR : ∀ i ∈ s, κ.IsInjective (R i)) :
+    κ.IsInjective (s.biUnion R) := by
+  classical
+  induction hs using Finset.Nonempty.cons_induction with
+  | singleton i =>
+      simpa using hR i (by simp)
+  | cons i s hi _ ih =>
+      rw [Finset.cons_eq_insert, Finset.biUnion_insert]
+      exact hUnion.union_injective (hR i (by simp)) (ih fun j hj => hR j (by simp [hj]))
+
 /-- The part of the left region outside the right region. -/
 def regionOnlyLeft (A B : Finset V) : Finset V :=
   A \ B

@@ -1469,6 +1469,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the union of two injective regions is injective.
 \end{definition}
 
+\begin{lemma}[Finite unions of injective regions]%
+    \label{lem:peps_regionInjectivityUnionClosure_finite}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.biUnion_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    Under the union-closure hypothesis for region injectivity, any nonempty
+    finite union of injective finite regions is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the nonempty finite indexing set.  The singleton case is the
+    given injectivity hypothesis, and the induction step is one application of
+    binary union closure.
+\end{proof}
+
 \begin{definition}[Complement of a finite region]%
     \label{def:peps_regionComplement}
     \lean{TNLean.PEPS.regionComplement}
