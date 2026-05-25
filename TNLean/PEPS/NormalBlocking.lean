@@ -321,6 +321,64 @@ def normalSquareRegionT {width height : ℕ} (xStart yStart : ℕ) :
           v ∉ normalSquareRegionTHole xStart yStart := by
   simp [normalSquareRegionT, and_assoc]
 
+/-- The two edge blocks removed from the displayed \(T\)-region lie inside the
+local \(5\times6\) coordinate window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`, where \(T\) is drawn as the
+complement of the two shown edge blocks inside the displayed window. -/
+theorem normalSquareRegionTHole_subset_window {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareRegionTHole xStart yStart ⊆
+      (squareLatticeContiguousRectangle xStart yStart 5 6 :
+        Finset (SquareLatticeVertex width height)) := by
+  intro v hv
+  rw [mem_normalSquareRegionTHole] at hv
+  rw [mem_squareLatticeContiguousRectangle]
+  rcases hv with hv | hv <;> omega
+
+/-- The displayed \(T\)-region is disjoint from the two edge blocks removed
+from the local \(5\times6\) window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_disjoint_THole {width height : ℕ}
+    (xStart yStart : ℕ) :
+    Disjoint
+      (normalSquareRegionT xStart yStart :
+        Finset (SquareLatticeVertex width height))
+      (normalSquareRegionTHole xStart yStart) := by
+  rw [Finset.disjoint_left]
+  intro v hvT hvHole
+  exact (mem_normalSquareRegionT xStart yStart v).mp hvT |>.2.2.2.2 hvHole
+
+/-- The displayed \(T\)-region and the two removed edge blocks reconstruct the
+local \(5\times6\) coordinate window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_union_THole {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareRegionT xStart yStart ∪ normalSquareRegionTHole xStart yStart =
+      (squareLatticeContiguousRectangle xStart yStart 5 6 :
+        Finset (SquareLatticeVertex width height)) := by
+  ext v
+  constructor
+  · intro hv
+    rcases (Finset.mem_union.mp hv) with hvT | hvHole
+    · have hT := (mem_normalSquareRegionT xStart yStart v).mp hvT
+      rw [mem_squareLatticeContiguousRectangle]
+      exact ⟨hT.1, hT.2.1, hT.2.2.1, hT.2.2.2.1⟩
+    · exact normalSquareRegionTHole_subset_window xStart yStart hvHole
+  · intro hvWindow
+    rw [mem_squareLatticeContiguousRectangle] at hvWindow
+    by_cases hvHole : v ∈ normalSquareRegionTHole xStart yStart
+    · exact Finset.mem_union.mpr (Or.inr hvHole)
+    · exact Finset.mem_union.mpr (Or.inl (by
+        rw [mem_normalSquareRegionT]
+        exact
+          ⟨hvWindow.1, hvWindow.2.1, hvWindow.2.2.1, hvWindow.2.2.2, hvHole⟩))
+
 /-- The displayed region \(R\) is contained in the displayed region \(S\).
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1430
