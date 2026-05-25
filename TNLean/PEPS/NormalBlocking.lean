@@ -334,6 +334,19 @@ def normalSquareRegionT {width height : ℕ} (xStart yStart : ℕ) :
   squareLatticeContiguousRectangle xStart yStart 5 6 \
     normalSquareRegionTHole xStart yStart
 
+/-- The finite-lattice complementary block around the edge in the normal
+square-lattice proof.
+
+This is the full finite square lattice with the two displayed edge blocks
+removed.  In the proof of Theorem 3 it is the region denoted \(A_3\), the
+third block after the red and blue edge blocks.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareEdgeComplementRegion {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  regionComplement (normalSquareRegionTHole xStart yStart)
+
 @[simp] theorem mem_normalSquareRegionR {width height : ℕ}
     (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
     v ∈ normalSquareRegionR xStart yStart ↔
@@ -382,6 +395,12 @@ def normalSquareRegionT {width height : ℕ} (xStart yStart : ℕ) :
         yStart ≤ v.2.1 ∧ v.2.1 < yStart + 6 ∧
           v ∉ normalSquareRegionTHole xStart yStart := by
   simp [normalSquareRegionT, and_assoc]
+
+@[simp] theorem mem_normalSquareEdgeComplementRegion {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareEdgeComplementRegion xStart yStart ↔
+      v ∉ normalSquareRegionTHole xStart yStart := by
+  simp [normalSquareEdgeComplementRegion]
 
 /-- The two edge blocks removed from the displayed \(T\)-region lie inside the
 local \(5\times6\) coordinate window.
@@ -487,6 +506,62 @@ theorem normalSquareRegionT_union_verticalBlock_union_horizontalBlock {width hei
         Finset (SquareLatticeVertex width height)) := by
   rw [Finset.union_assoc]
   simpa [normalSquareRegionTHole] using normalSquareRegionT_union_THole xStart yStart
+
+/-- The local-window \(T\)-region is contained in the finite-lattice
+complementary block around the edge.
+
+Source: arXiv:1804.04964, Section 3, lines 1430--1499 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_subset_edgeComplementRegion {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareRegionT xStart yStart ⊆
+      (normalSquareEdgeComplementRegion xStart yStart :
+        Finset (SquareLatticeVertex width height)) := by
+  intro v hv
+  rw [mem_normalSquareRegionT] at hv
+  rw [mem_normalSquareEdgeComplementRegion]
+  exact hv.2.2.2.2
+
+/-- The finite-lattice complementary block is disjoint from the two edge blocks
+removed around the edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeComplementRegion_disjoint_THole {width height : ℕ}
+    (xStart yStart : ℕ) :
+    Disjoint
+      (normalSquareEdgeComplementRegion xStart yStart :
+        Finset (SquareLatticeVertex width height))
+      (normalSquareRegionTHole xStart yStart) := by
+  unfold normalSquareEdgeComplementRegion regionComplement
+  exact disjoint_sdiff_self_left
+
+/-- The finite-lattice complementary block and the two edge blocks reconstruct
+the full square lattice.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeComplementRegion_union_THole {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareEdgeComplementRegion xStart yStart ∪ normalSquareRegionTHole xStart yStart =
+      (Finset.univ : Finset (SquareLatticeVertex width height)) := by
+  unfold normalSquareEdgeComplementRegion regionComplement
+  exact Finset.sdiff_union_of_subset (Finset.subset_univ _)
+
+/-- The finite-lattice complementary block together with the vertical and
+horizontal edge blocks reconstructs the full square lattice.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock
+    {width height : ℕ} (xStart yStart : ℕ) :
+    normalSquareEdgeComplementRegion xStart yStart ∪
+        normalSquareRegionTVerticalBlock xStart yStart ∪
+          normalSquareRegionTHorizontalBlock xStart yStart =
+      (Finset.univ : Finset (SquareLatticeVertex width height)) := by
+  rw [Finset.union_assoc]
+  simpa [normalSquareRegionTHole] using
+    normalSquareEdgeComplementRegion_union_THole xStart yStart
 
 /-- The displayed region \(R\) is contained in the displayed region \(S\).
 

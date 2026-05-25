@@ -128,19 +128,23 @@ injective. They are disjoint from each other, and the three-part cover by the
 local-window $T$ region and the two removed blocks reconstructs the local
 window. This local-window region should not be confused with the
 finite-lattice complementary block used later in the proof of
-Theorem~\path{3}. The latter still has to be defined and proved injective from
-rectangular injectivity and the union theorem.
+Theorem~\path{3}. The finite-lattice complementary block is now named as the
+complement of the two edge blocks in the full square lattice, and its
+elementary disjointness and cover identities are formalized. Its injectivity
+from rectangular injectivity and the union theorem remains open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
 closed, and the rectangular decompositions of $R$ and $S$ are formalized. The
 conditional derivations of injectivity for $R$ and $S$ from union closure are
 also formalized, and the two edge blocks removed from the displayed $T$-window
-are injective under the coordinate rectangular hypotheses. The remaining open
-gap is the source-paper injectivity argument: prove the tensor-level union
-theorem, prove the appropriate coordinate covering argument for $T$ that
-supports repeated use of that theorem, and then prove the unconditional
-injectivity of $R$, $S$, and $T$.
+are injective under the coordinate rectangular hypotheses. The finite-lattice
+complementary block around the chosen edge is now defined set-theoretically.
+The remaining open gap is the source-paper injectivity argument: prove the
+tensor-level union theorem, prove the appropriate coordinate covering argument
+for this finite-lattice complement that supports repeated use of that theorem,
+and then prove the unconditional injectivity of $R$, $S$, and the
+edge-complementary block.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -176,9 +180,10 @@ alone. The following additional obligations remain.
           nonempty finite iteration of union closure is now formalized. The
           two edge blocks removed from the $T$-window are now injective under
           rectangular injectivity, and their union is injective under the
-          source union-closure hypothesis. The remaining coordinate step is to
-          construct the finite-lattice complementary region around an edge and
-          prove its source-faithful injectivity.
+          source union-closure hypothesis. The finite-lattice complementary
+          region around an edge is now defined, and its elementary complement
+          identities are formalized. The remaining coordinate step is to prove
+          its source-faithful injectivity.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -206,6 +211,8 @@ alone. The following additional obligations remain.
           $T$-window, and of their union under union closure: blueprint
           \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue
           \#2004.
+    \item Finite-lattice complementary block around an edge: blueprint
+          \path{lem:peps_normalSquareEdgeComplementRegion}, issue \#2004.
     \item Edge blocking into red, blue, and complementary injective regions:
           blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
     \item Application of Lemma \path{inj_isomorph} after normal blocking:
