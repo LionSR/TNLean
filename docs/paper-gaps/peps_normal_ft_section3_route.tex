@@ -119,19 +119,22 @@ repeated unions of smaller injective rectangles after Lemma
 complement, inside the source $5\times6$ local window, of the two edge blocks
 shown in the source picture; the two removed edge blocks are now formalized
 separately as one contiguous $2\times3$ rectangle and one contiguous
-$3\times2$ rectangle. They are disjoint from each other, and the three-part
-cover by $T$ and the two removed blocks reconstructs the local window. This
-does not yet prove unconditional injectivity of $R$, $S$, or injectivity of
-$T$.
+$3\times2$ rectangle. Under the coordinate square-lattice rectangular
+injectivity hypotheses, these two edge blocks are now known to be injective.
+They are disjoint from each other, and the three-part cover by $T$ and the two
+removed blocks reconstructs the local window. This does not yet prove
+unconditional injectivity of $R$, $S$, or injectivity of $T$.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
 closed, and the rectangular decompositions of $R$ and $S$ are formalized. The
 conditional derivations of injectivity for $R$ and $S$ from union closure are
-also formalized. The remaining open gap is the source-paper injectivity
-argument: prove the tensor-level union theorem, prove the appropriate
-coordinate covering argument for $T$ that supports repeated use of that theorem,
-and then prove the unconditional injectivity of $R$, $S$, and $T$.
+also formalized, and the two edge blocks removed from the displayed $T$-window
+are injective under the coordinate rectangular hypotheses. The remaining open
+gap is the source-paper injectivity argument: prove the tensor-level union
+theorem, prove the appropriate coordinate covering argument for $T$ that
+supports repeated use of that theorem, and then prove the unconditional
+injectivity of $R$, $S$, and $T$.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -165,8 +168,9 @@ alone. The following additional obligations remain.
           two removed blocks. The conditional derivations of injectivity for
           $R$ and $S$ from a union-closure hypothesis are formalized. The
           nonempty finite iteration of union closure is now formalized. The
-          remaining coordinate step is the corresponding source-faithful
-          derivation for $T$.
+          two edge blocks removed from the $T$-window are now injective under
+          rectangular injectivity. The remaining coordinate step is the
+          corresponding source-faithful derivation for $T$.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -190,6 +194,10 @@ alone. The following additional obligations remain.
           \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
           \path{def:peps_normalSquareBlockingRegions}, issue \#1375.
+    \item Injectivity of the two edge blocks removed from the displayed
+          $T$-window: blueprint
+          \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue
+          \#2004.
     \item Edge blocking into red, blue, and complementary injective regions:
           blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
     \item Application of Lemma \path{inj_isomorph} after normal blocking:

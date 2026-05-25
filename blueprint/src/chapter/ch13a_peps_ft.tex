@@ -1694,6 +1694,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coordinate witnesses for the two rectangle shapes.
 \end{proof}
 
+\begin{lemma}[Rectangular injectivity gives injective \(T\)-edge blocks]%
+    \label{lem:peps_normalSquareRegionT_edgeBlocks_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tVerticalBlock_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    Under the coordinate square-lattice rectangular injectivity hypotheses, the
+    vertical \(2\times3\) block and horizontal \(3\times2\) block removed from
+    the displayed \(T\)-window are injective.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the rectangular injectivity hypotheses to the already identified
+    contiguous rectangle shapes of the two edge blocks.
+\end{proof}
+
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
     \label{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}
