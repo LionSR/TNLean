@@ -523,10 +523,10 @@ end BNTLabelTheoremData
 
 /-- Existential BNT-label theorem witness for the source statement.
 
-Theorem-data records are parameterized by a chosen BNT-label type and by the
-same-length operator spaces.  This witness packages those choices together with
-the corresponding theorem data.  It is the formal target for the remaining
-construction from an MPDO tensor.
+The BNT-label theorem data depend on a choice of BNT-label type and
+same-length operator spaces.  This structure collects those choices together
+with the corresponding theorem data.  The construction of such a witness from
+an MPDO tensor is the outstanding step toward Theorem IV.13(ii).
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
 lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -551,8 +551,9 @@ namespace BNTLabelTheoremWitness
 
 variable {data : AlgebraStructureData d D} (W : BNTLabelTheoremWitness data)
 
-/-- The theorem data carried by an existential witness, with its instances
-available. -/
+/-- The BNT-label theorem data carried by an existential witness, with the
+algebraic structures on the label type and operator spaces supplied by the
+witness. -/
 def toTheoremData :
     @BNTLabelTheoremData d D data W.Label W.OperatorSpace
       W.labelFintype W.operatorAddCommMonoid W.operatorModule W.operatorMul :=
