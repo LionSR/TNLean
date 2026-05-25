@@ -251,6 +251,62 @@ theorem normalSquareEdgeComplementRegion_eq_T_union_topCollar :
     mem_normalSquareRegionTHole, mem_squareLatticeContiguousRectangle]
   omega
 
+/-- A rectangular cover of the local \(T\)-region extends to a rectangular
+cover of the normalized horizontal-edge \(5\times7\) complementary block by
+adding the two top-collar \(3\times2\) rectangles.
+
+**Scope restriction (T-cover):** This construction is conditional on a
+rectangular cover of the displayed local \(T\)-region. Under the present
+exact-cover criterion, `not_normalSquareRegionT_rectangleCover_at_origin`
+rules out such a cover for \(5 \leq\) `width` and \(6 \leq\) `height`, hence
+also for this \(5\times7\) frame. The source-faithful finite PEPS geometry is
+recorded as an open obligation in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def normalSquareEdgeComplementRectangleCoverOfT
+    (cover : NormalSquareRegionTRectangleCover (width := 5) (height := 7) 0 0) :
+    NormalSquareEdgeComplementRectangleCover (width := 5) (height := 7) 0 0 where
+  Index := Sum {i // i ∈ cover.regions} (Fin 2)
+  regions := Finset.univ
+  nonempty := Finset.univ_nonempty
+  region
+    | Sum.inl i => cover.region i.1
+    | Sum.inr 0 => squareLatticeContiguousRectangle 0 5 3 2
+    | Sum.inr 1 => squareLatticeContiguousRectangle 2 5 3 2
+  rectangular := by
+    intro i _
+    rcases i with i | j
+    · exact cover.rectangular i.1 i.2
+    · fin_cases j
+      · exact Or.inr ⟨0, 5, by omega, by omega, rfl⟩
+      · exact Or.inr ⟨2, 5, by omega, by omega, rfl⟩
+  cover := by
+    rw [normalSquareEdgeComplementRegion_eq_T_union_topCollar]
+    ext v
+    have hT :
+        (∃ a ∈ cover.regions, v ∈ cover.region a) ↔
+          v ∈ (normalSquareRegionT (width := 5) (height := 7) 0 0) := by
+      have hEq :
+          (∃ a ∈ cover.regions, v ∈ cover.region a) =
+            (v ∈ (normalSquareRegionT (width := 5) (height := 7) 0 0)) := by
+        simpa only [Finset.mem_biUnion] using
+          congrArg (fun s => v ∈ s) cover.cover
+      exact hEq.to_iff
+    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_union]
+    constructor
+    · rintro ⟨i | j, hv⟩
+      · exact Or.inl (Or.inl (hT.mp ⟨i.1, i.2, hv⟩))
+      · fin_cases j
+        · exact Or.inl (Or.inr hv)
+        · exact Or.inr hv
+    · rintro ((hvT | hvTopLeft) | hvTopRight)
+      · rcases hT.mpr hvT with ⟨i, hi, hvi⟩
+        exact ⟨Sum.inl ⟨i, hi⟩, hvi⟩
+      · exact ⟨Sum.inr 0, hvTopLeft⟩
+      · exact ⟨Sum.inr 1, hvTopRight⟩
+
 /-- In the normalized vertical-edge \(7\times5\) frame, the finite-lattice
 edge-complementary block is the local \(T\)-region together with two right-collar
 contiguous \(2\times3\) rectangles.
@@ -463,7 +519,6 @@ theorem normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar :
     mem_normalSquareVerticalRegionT, mem_normalSquareVerticalRegionTHole,
     mem_squareLatticeContiguousRectangle]
   omega
-
 namespace NormalSquareLatticeRectangleInjectivityHypotheses
 
 variable {width height : ℕ}
@@ -546,6 +601,23 @@ theorem edgeComplement_injective
       xStart yStart) :
     κ.IsInjective (normalSquareEdgeComplementRegion xStart yStart) :=
   h.injective_of_rectangleCover hUnion cover
+
+/-- In the normalized horizontal-edge \(5\times7\) frame, a rectangular cover
+of the local \(T\)-region proves injectivity of the edge-complementary block.
+
+This applies the cover extension
+`normalSquareEdgeComplementRectangleCoverOfT` and the general rectangular-cover
+criterion.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem edgeComplement_injective_of_T_cover
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareRegionTRectangleCover (width := 5) (height := 7) 0 0) :
+    κ.IsInjective (normalSquareEdgeComplementRegion (width := 5) (height := 7) 0 0) :=
+  h.edgeComplement_injective hUnion (normalSquareEdgeComplementRectangleCoverOfT cover)
 
 /-- In the normalized horizontal-edge \(5\times7\) frame, the edge-complementary
 block is injective if the local \(T\)-region is injective.
