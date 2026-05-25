@@ -192,6 +192,16 @@ consequences.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}.}
 
+The same data can be packaged in the existential form closest to the paper:
+one object records the BNT-label type, the same-length operator spaces, their
+algebraic structure, and the corresponding theorem-data record.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness}.}  Such a witness immediately gives
+the positive blocked-basis \(\chi\)-witness for the chosen algebra-structure
+data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+toPositiveBlockedStructureChiTracePowerForm}.}  The remaining task is still the
+construction of this existential witness from the MPDO tensor.
+
 To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
     \item construction of the comparison maps relating the BNT-label
@@ -208,8 +218,10 @@ To eliminate the remaining gap, the formalization should introduce:
           \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
           m_\alpha m_\beta\) from the MPDO tensor;
     \item construction of the single
-        \leanid{MPOTensor.BNTLabelTheoremData} record from these source
-        objects.  The blocked-basis trace-power statement, with its
+        \leanid{MPOTensor.BNTLabelTheoremWitness} from these source
+        objects, and hence of the underlying
+        \leanid{MPOTensor.BNTLabelTheoremData} record.  The blocked-basis
+        trace-power statement, with its
         source-length exponent convention, is then a derived corollary of the
         uniform BNT-label theorem, rather than a separate replacement for the
         theorem itself.

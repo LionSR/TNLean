@@ -521,4 +521,53 @@ def toPositiveBlockedStructureChiTracePowerForm :
 
 end BNTLabelTheoremData
 
+/-- Existential BNT-label theorem witness for the source statement.
+
+Theorem-data records are parameterized by a chosen BNT-label type and by the
+same-length operator spaces.  This witness packages those choices together with
+the corresponding theorem data.  It is the formal target for the remaining
+construction from an MPDO tensor.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
+lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
+  /-- The finite type of BNT labels. -/
+  Label : Type
+  /-- The ambient type of length-`L` BNT operators. -/
+  OperatorSpace : ℕ → Type
+  /-- The BNT-label type is finite. -/
+  labelFintype : Fintype Label
+  /-- Each length-`L` operator space is an additive commutative monoid. -/
+  operatorAddCommMonoid : ∀ L : ℕ, AddCommMonoid (OperatorSpace L)
+  /-- Each length-`L` operator space is a complex module. -/
+  operatorModule : ∀ L : ℕ, Module ℂ (OperatorSpace L)
+  /-- Each length-`L` operator space has the product used in the source algebra. -/
+  operatorMul : ∀ L : ℕ, Mul (OperatorSpace L)
+  /-- The BNT-label theorem data for these choices. -/
+  theoremData : @BNTLabelTheoremData d D data Label OperatorSpace
+    labelFintype operatorAddCommMonoid operatorModule operatorMul
+
+namespace BNTLabelTheoremWitness
+
+variable {data : AlgebraStructureData d D} (W : BNTLabelTheoremWitness data)
+
+/-- The theorem data carried by an existential witness, with its instances
+available. -/
+def toTheoremData :
+    @BNTLabelTheoremData d D data W.Label W.OperatorSpace
+      W.labelFintype W.operatorAddCommMonoid W.operatorModule W.operatorMul :=
+  W.theoremData
+
+/-- An existential BNT-label theorem witness gives a positive blocked
+trace-power witness for the chosen algebra-structure data. -/
+def toPositiveBlockedStructureChiTracePowerForm :
+    AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.toPositiveBlockedStructureChiTracePowerForm
+
+end BNTLabelTheoremWitness
+
 end MPOTensor

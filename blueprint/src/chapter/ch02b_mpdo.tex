@@ -1709,6 +1709,30 @@ the elementary trace-power identity for diagonal matrices.
     positive BNT-label \(\chi\)-witness belonging to the theorem data.
 \end{proof}
 
+\begin{definition}[Existential BNT-label theorem witness]%
+    \label{def:mpdo_bnt_label_theorem_witness}
+    \lean{MPOTensor.BNTLabelTheoremWitness}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data}
+    An existential BNT-label theorem witness packages the finite BNT-label
+    type, the same-length operator spaces, their algebraic structure, and the
+    corresponding BNT-label theorem data.  This is the source-shaped target
+    for constructing the data of Theorem~IV.13(ii) from an MPDO tensor.
+\end{definition}
+
+\begin{theorem}[BNT theorem witnesses give positive blocked \(\chi\) witnesses]%
+    \label{thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.toPositiveBlockedStructureChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
+    An existential BNT-label theorem witness gives a positive blocked-basis
+    \(\chi\) trace-power witness for the chosen algebra-structure data.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data consequence carried by the witness.
+\end{proof}
+
 \begin{theorem}[Positive blocked $\chi$ witness gives trace powers]%
     \label{thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
