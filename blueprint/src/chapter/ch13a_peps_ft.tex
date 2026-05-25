@@ -939,6 +939,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the right endpoint tensor map are all injective.
 \end{definition}
 
+\begin{definition}[Region injectivity supplies the edge-middle tensor]%
+    \label{def:peps_edgeMiddleRegionInjectivityComparison}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        def:peps_edgeMiddleTensorFamily}
+    A comparison from finite-region injectivity to the edge-middle tensor
+    records the following assertion: if the middle vertex region
+    \(V\setminus\{u,v\}\) is injective after blocking, then the middle tensor
+    in the edge-blocked three-site chain is injective. This isolates the
+    finite-region contraction claim in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
 \begin{theorem}[Endpoint injectivity in the edge-blocked chain]%
     \label{thm:peps_edgeBlockedEndpointTensorMaps_injective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
@@ -966,11 +980,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
     assertion is the assumed injectivity of the blocked middle tensor.
 \end{proof}
 
+\begin{theorem}[Region injectivity gives edge-blocked injectivity]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_of_region}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
+        def:peps_edgeMiddleRegionInjectivityComparison,
+        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    Suppose the middle region \(V\setminus\{u,v\}\) is injective after
+    blocking, and suppose this region-injectivity assertion has been identified
+    with injectivity of the corresponding edge-middle tensor family. Then a
+    vertex-injective PEPS tensor gives an injective edge-blocked three-site
+    chain at the edge \(e=(u,v)\).
+\end{theorem}
+\begin{proof}\leanok
+    The comparison gives injectivity of the middle tensor. The previous reduction
+    combines this with vertex injectivity at the two endpoints.
+\end{proof}
+
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \notready
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+        thm:peps_edgeBlockedThreeSiteInjective_of_region}
     If \(A\) is vertex-injective, then for every edge \(e=(u,v)\), the two
     endpoint tensors together with the tensor obtained by blocking all vertices
     outside \(u\) and \(v\) form an injective three-site MPS. This is the
