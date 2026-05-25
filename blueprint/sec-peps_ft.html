@@ -9093,6 +9093,8 @@
         
         <ul class="uses">
           
+          <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.104</a></li>
+          
           <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.113</a></li>
           
           <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">Lemma 17.110</a></li>
@@ -9119,6 +9121,8 @@
           
           <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective</a></li>
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHole_injective_of_union" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHole_injective_of_union</a></li>
+          
         </ul>
     
       </div>
@@ -9128,7 +9132,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>    For the displayed \(T\)-region inside its local \(5\times 6\) coordinate window, if the smaller edge-block bounds \(x_0 + 5 \leq n\) and \(y_0 + 5 \leq m\) hold in the finite \(n\times m\) square lattice, then the coordinate square-lattice rectangular injectivity hypotheses imply that the vertical \(2\times 3\) block and horizontal \(3\times 2\) block removed from the window are injective. </p>
+  <p>     For the displayed \(T\)-region inside its local \(5\times 6\) coordinate window, if the smaller edge-block bounds \(x_0 + 5 \leq n\) and \(y_0 + 5 \leq m\) hold in the finite \(n\times m\) square lattice, then the coordinate square-lattice rectangular injectivity hypotheses imply that the vertical \(2\times 3\) block and horizontal \(3\times 2\) block removed from the window are injective. If, in addition, region injectivity is closed under unions, then the union of these two removed edge blocks is injective. </p>
 
   </div>
 </div>
@@ -9140,7 +9144,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the rectangular injectivity hypotheses to the already identified contiguous rectangle shapes of the two edge blocks. </p>
+  <p>Apply the rectangular injectivity hypotheses to the already identified contiguous rectangle shapes of the two edge blocks. The final assertion is one application of union closure to these two injective blocks. </p>
 
   </div>
 </div>
