@@ -675,6 +675,46 @@ injective and normal PEPS, following Theorems~2 and~3 of
     data.
 \end{definition}
 
+\begin{definition}[Middle physical configurations at an edge]%
+    \label{def:peps_edgeMiddlePhysicalConfig}
+    \lean{TNLean.PEPS.EdgeMiddlePhysicalConfig}
+    \lean{TNLean.PEPS.edgeMiddlePhysicalConfigOf}
+    \leanok
+    \uses{def:peps_edgeMiddleVertices}
+    For an edge \(e=(u,v)\), the middle physical configurations are the
+    physical indices on the vertices in \(V\setminus\{u,v\}\). A global
+    physical configuration restricts to such a middle configuration.
+\end{definition}
+
+\begin{definition}[Middle tensor with middle physical index]%
+    \label{def:peps_edgeMiddleWeightOn}
+    \lean{TNLean.PEPS.edgeMiddleWeightOn}
+    \lean{TNLean.PEPS.edgeOpenMiddleWeightOn}
+    \leanok
+    \uses{def:peps_edgeMiddlePhysicalConfig,
+        def:peps_edgeMiddleConfig, def:peps_edgeOpenMiddleWeight}
+    The ordinary and open middle contractions may be written using only the
+    middle physical configuration, rather than a physical configuration on all
+    vertices. This is the middle tensor in the three-site chain obtained after
+    the edge blocking in arXiv:1804.04964, Section~3.
+\end{definition}
+
+\begin{theorem}[Middle restriction of the blocked tensor]%
+    \label{thm:peps_edgeMiddleWeight_eq_on}
+    \lean{TNLean.PEPS.edgeMiddleWeight_eq_on}
+    \lean{TNLean.PEPS.edgeOpenMiddleWeight_eq_on}
+    \leanok
+    \uses{def:peps_edgeMiddleWeightOn,
+        def:peps_edgeMiddlePhysicalConfig}
+    The middle contractions written with a global physical configuration are
+    the corresponding middle-indexed contractions evaluated on the restricted
+    middle physical configuration.
+\end{theorem}
+\begin{proof}\leanok
+    Rewrite the product over \(V\setminus\{u,v\}\) as the product over the
+    corresponding finite set of middle vertices.
+\end{proof}
+
 \begin{definition}[Restricting middle configurations away from the edge]%
     \label{def:peps_edgeMiddleConfigToOpenMiddleConfig}
     \lean{TNLean.PEPS.edgeMiddleConfigToOpenMiddleConfig}
@@ -707,6 +747,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
     to compatible open-middle configurations. This is the finite reindexing
     used when the inserted matrix is the identity.
 \end{definition}
+
+\begin{theorem}[Middle-indexed open tensor reindexing]%
+    \label{thm:peps_edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
+    \lean{TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
+    \leanok
+    \uses{def:peps_edgeMiddleWeightOn,
+        def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
+    The ordinary middle tensor and the open middle tensor agree after restoring
+    the fixed distinguished-edge index and reindexing the finite sum, with the
+    physical index already restricted to the middle block.
+\end{theorem}
+\begin{proof}\leanok
+    Reindex the ordinary middle configurations by the equivalence with
+    compatible open-middle configurations, then compare each local tensor entry.
+\end{proof}
 
 \begin{definition}[Edge insertion coefficient]%
     \label{def:peps_edgeInsertedCoeff}
