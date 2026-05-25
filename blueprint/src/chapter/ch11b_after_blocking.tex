@@ -45,6 +45,22 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     For $N \ge 1$, every word product of a zero tensor is zero.
 \end{proof}
 
+\begin{lemma}[All-zero irreducible blocks have bond dimension at most one]%
+    \label{lem:irreducible_allZero_dim_le_one}
+    \lean{MPSTensor.isIrreducibleTensor_allZero_dim_le_one}
+    \leanok
+    \uses{def:irreducible_tensor}
+    If $A$ is an irreducible MPS tensor with every Kraus operator $A^i = 0$,
+    then $D \le 1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $D \ge 2$, irreducibility forces some Kraus operator to be nonzero
+    (otherwise the bond space splits as the direct sum of any two complementary
+    subspaces, contradicting irreducibility). The hypothesis $A^i = 0$ for every
+    $i$ therefore implies $D \le 1$.
+\end{proof}
+
 \begin{theorem}[Zero-block separation]%
     \label{thm:zero_block_separation}
     \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
@@ -71,9 +87,8 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \uses{thm:irred_decomp, thm:mpv_zero_tensor}
     Apply the irreducible block decomposition
     (Theorem~\ref{thm:irred_decomp}) and partition the blocks
-    by whether each has a nonzero Kraus operator.
-    The all-zero blocks satisfy a dimension bound via
-    irreducibility; their total bond dimension is $D_0$.
+    by whether each has a nonzero Kraus operator.  Their total bond
+    dimension $D_0$ accumulates the bond dimensions of the all-zero blocks.
     The MPV identity follows from the block structure and
     Theorem~\ref{thm:mpv_zero_tensor}.
 \end{proof}

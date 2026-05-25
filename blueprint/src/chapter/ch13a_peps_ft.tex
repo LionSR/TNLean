@@ -349,7 +349,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     operator \(O\). Then
     \[
         \Phi_v\circ T_O\circ\Psi_v
-            = P_v\circ O\circ P_v .
+        = P_v\circ O\circ P_v .
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1440,16 +1440,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
                 \node[tn tensor dot] (unionBA) at (2.00,0) {};
                 \node[tn tensor dot] (unionC) at (1.30,-0.70) {};
                 \foreach \n in {unionAB,unionI,unionBA,unionC} {
-                    \draw[tn phys leg] (\n.north) -- ++(0,0.42);
-                }
+                        \draw[tn phys leg] (\n.north) -- ++(0,0.42);
+                    }
                 \draw[tn leg] (unionAB) -- (unionI) -- (unionBA) -- (unionC) --
-                    (unionAB) -- (unionBA);
+                (unionAB) -- (unionBA);
                 \draw[tn leg] (unionI) -- (unionC);
                 \node[anchor=east] at ($(unionAB)+(-0.12,-0.20)$)
-                    {$A\setminus B$};
+                {$A\setminus B$};
                 \node[anchor=west] at ($(unionI)+(0.12,0.02)$) {$A\cap B$};
                 \node[anchor=west] at ($(unionBA)+(0.12,-0.20)$)
-                    {$B\setminus A$};
+                {$B\setminus A$};
                 \node at ($(unionC)+(0,-0.38)$) {$(A\cup B)^c$};
             \end{tikzpicture}%
         }
@@ -1646,7 +1646,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{definition}
 
 \begin{lemma}[Coordinate rectangular injectivity gives abstract rectangular
-    injectivity]%
+        injectivity]%
     \label{lem:peps_squareLatticeRectangleInjectivity_toRectangular}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular}
     \leanok
@@ -1809,10 +1809,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
                     \node[tn tensor dot] (tiA) at (0,0) {};
                     \node[tn operator dot, label=left:$X$] (tiXL) at (-0.76,0) {};
                     \node[tn operator dot, label=right:$X^{-1}$] (tiXR)
-                        at (0.76,0) {};
+                    at (0.76,0) {};
                     \node[tn operator dot, label=below:$Y$] (tiYD) at (0,-0.76) {};
                     \node[tn operator dot, label=above:$Y^{-1}$] (tiYU)
-                        at (0,0.76) {};
+                    at (0,0.76) {};
                     \draw[tn phys leg] (tiA.north) -- ++(0,0.46);
                     \draw[tn leg] (tiXL.west) -- ++(-0.24,0);
                     \draw[tn leg] (tiXL.east) -- (tiA.west);
