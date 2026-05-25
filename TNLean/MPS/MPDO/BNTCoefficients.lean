@@ -459,6 +459,15 @@ theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
       (H.positiveChi.chi.matrix α β γ ^ L).trace :=
   H.positiveChi.eq_trace_pow L hL α β γ
 
+/-- The diagonal entries of the chi matrices in theorem data are positive.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem chi_entry_pos (α β γ : Λ)
+    (k : Fin (H.positiveChi.chi.dim α β γ)) :
+    0 < H.positiveChi.chi.entry α β γ k :=
+  H.positiveChi.posEntries α β γ k
+
 /-- The same-length BNT product equation carried by theorem data.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
@@ -612,6 +621,16 @@ theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
   letI := W.operatorModule
   letI := W.operatorMul
   exact W.toTheoremData.coeff_eq_trace_pow L hL α β γ
+
+/-- The diagonal entries of the chi matrices in an existential witness are
+positive.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem chi_entry_pos (α β γ : W.Label)
+    (k : Fin (W.positiveChi.chi.dim α β γ)) :
+    0 < W.positiveChi.chi.entry α β γ k :=
+  W.positiveChi.posEntries α β γ k
 
 /-- The same-length BNT product equation carried by an existential witness.
 
