@@ -591,6 +591,14 @@ def positiveChi : PositiveBNTLabelChiTracePowerForm W.coeffs := by
   letI := W.operatorMul
   exact W.theoremData.positiveChi
 
+/-- The blocked-basis comparison carried by an existential witness. -/
+def blockedComparison : BNTBlockedBasisCoefficientComparison data W.coeffs := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.blockedComparison
+
 /-- The BNT-label coefficients carried by an existential witness are traces of
 powers of the length-independent chi matrices.
 
@@ -676,6 +684,27 @@ theorem idempotent_eq_sum_chi_trace (γ : W.Label) :
   letI := W.operatorModule
   letI := W.operatorMul
   exact W.toTheoremData.idempotent_eq_sum_chi_trace γ
+
+/-- The blocked-basis coefficients pulled back by an existential witness are
+traces of powers of the BNT-label chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_trace_pow
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (W.positiveChi.chi.matrix
+        (W.blockedComparison.sourceLabel n hn i)
+        (W.blockedComparison.sourceLabel n hn j)
+        (W.blockedComparison.targetLabel n hn k) ^ n).trace := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.blocked_coeff_eq_trace_pow n hn i j k
 
 /-- An existential BNT-label theorem witness gives a positive blocked
 trace-power witness for the chosen algebra-structure data. -/
