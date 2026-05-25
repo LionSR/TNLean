@@ -37,9 +37,12 @@ the remaining $A\cap B$ and $B\setminus A$ part.
 Second, for the translationally invariant square-lattice theorem, the paper
 assumes that every $2\times 3$ and $3\times 2$ region is injective. By
 repeatedly applying the union lemma, the regions denoted $R$, $S$, and $T$
-in the paper are injective. The regions $R$ and $S$ differ by one site,
-and their complements are injective when the system is large enough. These are
-the regions used in the last comparison step.
+in the paper are injective. The finite-lattice block denoted $A_3$ in the proof
+of Theorem~\path{3} has the same complementary shape as $T$ but lives in the
+full finite lattice around the chosen edge; the present coordinate definition
+records only the displayed local-window complement. The regions $R$ and $S$
+differ by one site, and their complements are injective when the system is
+large enough. These are the regions used in the last comparison step.
 \footnote{The regions $R$, $S$, and $T$ are drawn at
     \path{Papers/1804.04964/paper_normal.tex:1407--1443}.}
 
@@ -115,15 +118,18 @@ injective regions, these rectangular decompositions now give conditional
 injectivity proofs for $R$ and $S$. The finite nonempty iteration of this
 union-closure assertion is also formalized, matching the paper's use of
 repeated unions of smaller injective rectangles after Lemma
-\path{injective_union}. The displayed region $T$ is now present as the
-complement, inside the source $5\times6$ local window, of the two edge blocks
-shown in the source picture; the two removed edge blocks are now formalized
-separately as one contiguous $2\times3$ rectangle and one contiguous
-$3\times2$ rectangle. Under the coordinate square-lattice rectangular
-injectivity hypotheses, these two edge blocks are now known to be injective.
-They are disjoint from each other, and the three-part cover by $T$ and the two
-removed blocks reconstructs the local window. This does not yet prove
-unconditional injectivity of $R$, $S$, or injectivity of $T$.
+\path{injective_union}. The displayed local-window model for $T$ is now
+present as the complement, inside the source $5\times6$ local window, of the
+two edge blocks shown in the source picture; the two removed edge blocks are
+now formalized separately as one contiguous $2\times3$ rectangle and one
+contiguous $3\times2$ rectangle. Under the coordinate square-lattice
+rectangular injectivity hypotheses, these two edge blocks are now known to be
+injective. They are disjoint from each other, and the three-part cover by the
+local-window $T$ region and the two removed blocks reconstructs the local
+window. This local-window region should not be confused with the
+finite-lattice complementary block used later in the proof of
+Theorem~\path{3}. The latter still has to be defined and proved injective from
+rectangular injectivity and the union theorem.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -160,18 +166,19 @@ alone. The following additional obligations remain.
           under those hypotheses. The displayed regions $R$ and $S$ are now
           defined as unions of contiguous rectangles, with their rectangular
           decompositions and the expected one-site difference formalized. The
-          displayed region $T$ is now
-          defined as the complement of the two edge blocks in the source
-          $5\times6$ local window, and the two removed edge blocks have the
-          displayed rectangular shapes. The local-window complement identity for
-          $T$ is also formalized, including the three-part cover by $T$ and the
-          two removed blocks. The conditional derivations of injectivity for
-          $R$ and $S$ from a union-closure hypothesis are formalized. The
+          displayed local-window model for $T$ is now defined as the complement
+          of the two edge blocks in the source $5\times6$ local window, and
+          the two removed edge blocks have the displayed rectangular shapes.
+          The local-window complement identity for this $T$ region is also
+          formalized, including the three-part cover by $T$ and the two removed
+          blocks. The conditional derivations of injectivity for $R$ and $S$
+          from a union-closure hypothesis are formalized. The
           nonempty finite iteration of union closure is now formalized. The
           two edge blocks removed from the $T$-window are now injective under
           rectangular injectivity, and their union is injective under the
-          source union-closure hypothesis. The remaining coordinate step is
-          the corresponding source-faithful derivation for $T$.
+          source union-closure hypothesis. The remaining coordinate step is to
+          construct the finite-lattice complementary region around an edge and
+          prove its source-faithful injectivity.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.

@@ -1522,9 +1522,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     extending one column to the right.  The displayed region \(S\) is the union
     of two \(2\times3\) contiguous rectangles shifted by one horizontal
     coordinate, hence the full \(3\times3\) square spanned by them.  The
-    displayed region \(T\) is the complement, inside a local \(5\times6\)
-    coordinate window, of the vertical \(2\times3\) edge block and the
-    horizontal \(3\times2\) edge block shown in the source picture.
+    displayed local-window model for \(T\) is the complement, inside a local
+    \(5\times6\) coordinate window, of the vertical \(2\times3\) edge block
+    and the horizontal \(3\times2\) edge block shown in the source picture.
+    % Maintainer note: the finite-lattice complementary block around the edge,
+    % which serves as the third injective region in
+    % \cite[Theorem~3]{Molnar2018NormalPEPS}, is not yet defined; this
+    % definition records only the local-window complement.
 \end{definition}
 
 \begin{lemma}[Basic identities for square-lattice coordinate regions]%
@@ -1551,10 +1555,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     membership in the \(2\times3\) lower-left piece or in the shifted
     \(3\times2\) upper piece.  Membership in \(S\) is the disjunction of
     membership in the left \(2\times3\) piece or in the horizontally shifted
-    \(2\times3\) piece.  Membership in \(T\) is membership in the local
-    \(5\times6\) window together with nonmembership in the union of the two
-    displayed edge blocks.  Bounded contiguous coordinate rectangles of sizes
-    \(2\times3\) and \(3\times2\) satisfy, respectively, the predicates for
+    \(2\times3\) piece.  Membership in the local-window \(T\) region is
+    membership in the local \(5\times6\) window together with nonmembership in
+    the union of the two displayed edge blocks.  Bounded contiguous coordinate
+    rectangles of sizes \(2\times3\) and \(3\times2\) satisfy, respectively,
+    the predicates for
     contiguous \(2\times3\) and contiguous \(3\times2\) square-lattice
     rectangles.  The cardinality of a coordinate rectangle is the
     product of the two coordinate cardinalities, and the full coordinate
@@ -1607,7 +1612,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     with the coordinate bounds which make them valid contiguous rectangles.
 \end{proof}
 
-\begin{lemma}[The $T$-region and its removed edge blocks fill the local window]%
+\begin{lemma}[The local $T$-region and its removed edge blocks fill the window]%
     \label{lem:peps_normalSquareRegionT_window_complement}
     \lean{TNLean.PEPS.normalSquareRegionTHole_subset_window}
     \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock_disjoint_horizontalBlock}
@@ -1619,9 +1624,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_squareLatticeCoordinateRegion_identities}
-    The two edge blocks removed from the displayed $T$-region lie inside the
-    local $5\times6$ coordinate window.  They are disjoint from each other and
-    from $T$, and their union with $T$ is exactly that local window.
+    The two edge blocks removed from the displayed local $T$-region lie inside
+    the local $5\times6$ coordinate window.  They are disjoint from each other
+    and from this local $T$ region, and their union with it is exactly that
+    local window.
 \end{lemma}
 \begin{proof}\leanok
     This follows by unfolding the definition of $T$ as the set-theoretic
@@ -1703,7 +1709,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_regionInjectivityData,
         def:peps_normalRectangleInjectivityHypotheses,
         lem:peps_normalSquareRegionTHole_rectangular_decomposition}
-    For the displayed $T$-region inside its local $5\times6$ coordinate window,
+    For the displayed local $T$-region inside its $5\times6$ coordinate window,
     if the smaller edge-block bounds
     $x_0 + 5 \leq n$ and $y_0 + 5 \leq m$ hold in the finite $n\times m$
     square lattice, then the coordinate square-lattice rectangular injectivity
@@ -1712,6 +1718,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     region injectivity is closed under unions, then the union of these two
     removed edge blocks is injective.
 \end{lemma}
+% Maintainer note: this does not prove injectivity of the finite-lattice
+% complementary block used as the third region in
+% \cite[Theorem~3]{Molnar2018NormalPEPS}; that region is not yet defined.
 \begin{proof}\leanok
     Apply the rectangular injectivity hypotheses to the already identified
     contiguous rectangle shapes of the two edge blocks.  The final assertion is
