@@ -1508,6 +1508,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock}
     \lean{TNLean.PEPS.normalSquareRegionTHole}
     \lean{TNLean.PEPS.normalSquareRegionT}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
     coordinates.  A coordinate rectangle is a product of a horizontal
@@ -1525,10 +1526,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     displayed local-window model for \(T\) is the complement, inside a local
     \(5\times6\) coordinate window, of the vertical \(2\times3\) edge block
     and the horizontal \(3\times2\) edge block shown in the source picture.
-    % Maintainer note: the finite-lattice complementary block around the edge,
-    % which serves as the third injective region in
-    % \cite[Theorem~3]{Molnar2018NormalPEPS}, is not yet defined; this
-    % definition records only the local-window complement.
+    The finite-lattice complementary block is the whole finite square lattice
+    with those two edge blocks removed; this is the block denoted \(A_3\) in
+    the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}.
+    % Maintainer note: injectivity of this finite-lattice complementary block
+    % is not yet proved; this definition only names the region.
 \end{definition}
 
 \begin{lemma}[Basic identities for square-lattice coordinate regions]%
@@ -1542,6 +1544,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.mem_normalSquareRegionTHorizontalBlock}
     \lean{TNLean.PEPS.mem_normalSquareRegionTHole}
     \lean{TNLean.PEPS.mem_normalSquareRegionT}
+    \lean{TNLean.PEPS.mem_normalSquareEdgeComplementRegion}
     \lean{TNLean.PEPS.isTwoByThreeContiguousSquareLatticeRectangle_of_bounds}
     \lean{TNLean.PEPS.isThreeByTwoContiguousSquareLatticeRectangle_of_bounds}
     \lean{TNLean.PEPS.card_squareLatticeRectangle}
@@ -1634,6 +1637,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     complement of the two displayed edge blocks inside the local window.
 \end{proof}
 
+\begin{lemma}[The edge-complementary block fills the finite lattice]%
+    \label{lem:peps_normalSquareEdgeComplementRegion}
+    \lean{TNLean.PEPS.normalSquareRegionT_subset_edgeComplementRegion}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_disjoint_THole}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_THole}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    The finite-lattice complementary block around the edge is disjoint from
+    the two displayed edge blocks, and its union with them is the full finite
+    square lattice.  The local-window \(T\) region is contained in this
+    finite-lattice complementary block.
+\end{lemma}
+\begin{proof}\leanok
+    This is the set-theoretic complement of the two displayed edge blocks in
+    the full finite square lattice.  The containment of the local-window
+    \(T\) region follows because its points also avoid the two removed edge
+    blocks.
+\end{proof}
+
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
@@ -1720,7 +1744,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{lemma}
 % Maintainer note: this does not prove injectivity of the finite-lattice
 % complementary block used as the third region in
-% \cite[Theorem~3]{Molnar2018NormalPEPS}; that region is not yet defined.
+% \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \begin{proof}\leanok
     Apply the rectangular injectivity hypotheses to the already identified
     contiguous rectangle shapes of the two edge blocks.  The final assertion is
