@@ -1775,9 +1775,11 @@ the elementary trace-power identity for diagonal matrices.
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
-    An existential BNT-label theorem witness gives the same-length product
-    identity with the coefficients written as traces of powers of the
-    $\chi$-matrices, for every positive length $L$.
+    An existential BNT-label theorem witness gives, for every positive length
+    $L$, the identity
+    $O_L(M_\alpha)O_L(M_\beta)
+      = \sum_\gamma
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L}) O_L(M_\gamma)$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
@@ -1790,8 +1792,10 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace}
     An existential BNT-label theorem witness gives the idempotent scalar
-    identity with the length-one coefficients written as traces of the
-    $\chi$-matrices.
+    identity
+    $m_\gamma =
+      \sum_{\alpha,\beta}
+        \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
