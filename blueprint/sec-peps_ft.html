@@ -8845,13 +8845,13 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:peps_normalSquareEdgeComplementRectangleCover">
+<div class="definition_thmwrapper theorem-style-definition" id="def:peps_normalSquareRectangleCover">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">17.113</span>
-    <span class="definition_thmtitle">Rectangular covers of the edge-complementary block</span>
+    <span class="definition_thmtitle">Rectangular covers of square-lattice regions</span>
     <div class="thm_header_extras">
 
     
@@ -8859,7 +8859,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#def:peps_normalSquareEdgeComplementRectangleCover">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -8896,6 +8896,10 @@
         
         <ul class="uses">
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.SquareLatticeRectangleCover" class="lean_decl">TNLean.PEPS.SquareLatticeRectangleCover</a></li>
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareRegionTRectangleCover" class="lean_decl">TNLean.PEPS.NormalSquareRegionTRectangleCover</a></li>
+          
           <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareEdgeComplementRectangleCover" class="lean_decl">TNLean.PEPS.NormalSquareEdgeComplementRectangleCover</a></li>
           
         </ul>
@@ -8907,7 +8911,90 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A rectangular cover of the finite-lattice complementary block \(A_3\) is a nonempty finite family of regions whose union is exactly \(A_3\), and each member of the family is a contiguous \(2\times 3\) or \(3\times 2\) rectangle. </p>
+  <p>     A rectangular cover of a square-lattice region is a nonempty finite family of regions whose union is exactly the given region, and each member of the family is a contiguous \(2\times 3\) or \(3\times 2\) rectangle. The two cases used in the proof are the cover of the local displayed \(T\)-region and the cover of the finite-lattice complementary block \(A_3\). </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:peps_normalSquareRectangleCover_injective">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">17.114</span>
+    <span class="lemma_thmtitle">Injectivity from a rectangular cover</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001164"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 17.113</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
+          
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 17.105</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If a square-lattice region has a nonempty finite cover by contiguous \(2\times 3\) and \(3\times 2\) rectangles, then rectangular injectivity and finite union closure imply that the region is injective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001164">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply rectangular injectivity to every rectangle in the cover, then apply finite union closure to the nonempty family. </p>
 
   </div>
 </div>
@@ -8916,7 +9003,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.114</span>
+    <span class="lemma_thmlabel">17.115</span>
     <span class="lemma_thmtitle">The normal regions \(R\) and \(S\) differ in one site</span>
     <div class="thm_header_extras">
 
@@ -8927,7 +9014,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionR_regionS_difference">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001164"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001165"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8982,7 +9069,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001164">
+<div class="proof_wrapper" id="a0000001165">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8999,7 +9086,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.115</span>
+    <span class="definition_thmlabel">17.116</span>
     <span class="definition_thmtitle">Normal rectangular injectivity hypotheses</span>
     <div class="thm_header_extras">
 
@@ -9067,7 +9154,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.116</span>
+    <span class="lemma_thmlabel">17.117</span>
     <span class="lemma_thmtitle">Coordinate rectangular injectivity gives abstract rectangular injectivity</span>
     <div class="thm_header_extras">
 
@@ -9078,7 +9165,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_toRectangular">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001165"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001166"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9094,7 +9181,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
           
         </ul>
     
@@ -9129,7 +9216,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001165">
+<div class="proof_wrapper" id="a0000001166">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9146,7 +9233,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.117</span>
+    <span class="lemma_thmlabel">17.118</span>
     <span class="lemma_thmtitle">Coordinate rectangular injectivity gives injective rectangles</span>
     <div class="thm_header_extras">
 
@@ -9157,7 +9244,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001166"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001167"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9173,7 +9260,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
           
           <li><a href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">Lemma 17.108</a></li>
           
@@ -9212,7 +9299,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001166">
+<div class="proof_wrapper" id="a0000001167">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9229,7 +9316,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.118</span>
+    <span class="lemma_thmlabel">17.119</span>
     <span class="lemma_thmtitle">Rectangular injectivity gives injective \(T\)-edge blocks</span>
     <div class="thm_header_extras">
 
@@ -9240,7 +9327,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001167"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001168"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9258,7 +9345,7 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.104</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
           
           <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">Lemma 17.110</a></li>
           
@@ -9299,7 +9386,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001167">
+<div class="proof_wrapper" id="a0000001168">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9311,13 +9398,13 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:peps_normalSquareRegionT_injective_of_cover">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.119</span>
-    <span class="lemma_thmtitle">Injectivity from a rectangular cover of the edge complement</span>
+    <span class="lemma_thmlabel">17.120</span>
+    <span class="lemma_thmtitle">Injectivity from a rectangular cover of the local \(T\)-region</span>
     <div class="thm_header_extras">
 
     
@@ -9325,9 +9412,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001168"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001169"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9343,9 +9430,96 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareEdgeComplementRectangleCover">Definition 17.113</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 17.113</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
+          
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 17.114</a></li>
+          
+          <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 17.105</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionT_injective_of_cover" class="lean_decl">TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionT_injective_of_cover</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   If the displayed local \(T\)-region has a nonempty finite cover by contiguous \(2\times 3\) and \(3\times 2\) rectangles, then rectangular injectivity and finite union closure imply that \(T\) is injective. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001169">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply rectangular injectivity to every rectangle in the cover, then apply finite union closure to the nonempty family. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">17.121</span>
+    <span class="lemma_thmtitle">Injectivity from a rectangular cover of the edge complement</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001170"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareRectangleCover">Definition 17.113</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
+          
+          <li><a href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">Lemma 17.114</a></li>
           
           <li><a href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">Lemma 17.105</a></li>
           
@@ -9382,7 +9556,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001168">
+<div class="proof_wrapper" id="a0000001170">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9399,7 +9573,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.120</span>
+    <span class="lemma_thmlabel">17.122</span>
     <span class="lemma_thmtitle">The normalized \(5\times 7\) edge complement has a top collar</span>
     <div class="thm_header_extras">
 
@@ -9410,7 +9584,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001169"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001171"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9432,7 +9606,7 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.104</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">Lemma 17.117</a></li>
+          <li><a href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">Lemma 17.118</a></li>
           
         </ul>
     
@@ -9469,7 +9643,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001169">
+<div class="proof_wrapper" id="a0000001171">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9486,7 +9660,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">17.121</span>
+    <span class="lemma_thmlabel">17.123</span>
     <span class="lemma_thmtitle">Conditional injectivity of the normal \(R\) and \(S\) regions</span>
     <div class="thm_header_extras">
 
@@ -9497,7 +9671,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001170"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001172"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9515,7 +9689,7 @@
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.104</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
           
           <li><a href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">Lemma 17.109</a></li>
           
@@ -9554,7 +9728,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001170">
+<div class="proof_wrapper" id="a0000001172">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9571,7 +9745,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.122</span>
+    <span class="definition_thmlabel">17.124</span>
     <span class="definition_thmtitle">Normal edge-blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -9637,7 +9811,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.123</span>
+    <span class="theorem_thmlabel">17.125</span>
     <span class="theorem_thmtitle">Injectivity supplied by normal edge blocking</span>
     <div class="thm_header_extras">
 
@@ -9648,7 +9822,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001171"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001173"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9664,7 +9838,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.122</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.124</a></li>
           
         </ul>
     
@@ -9699,7 +9873,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001171">
+<div class="proof_wrapper" id="a0000001173">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9716,7 +9890,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.124</span>
+    <span class="definition_thmlabel">17.126</span>
     <span class="definition_thmtitle">Normal one-site separation hypotheses</span>
     <div class="thm_header_extras">
 
@@ -9782,7 +9956,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.125</span>
+    <span class="theorem_thmlabel">17.127</span>
     <span class="theorem_thmtitle">Membership in a one-site separated region</span>
     <div class="thm_header_extras">
 
@@ -9793,7 +9967,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalOneSiteSeparation_mem_withSite_iff">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001172"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001174"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9809,7 +9983,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.124</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.126</a></li>
           
         </ul>
     
@@ -9844,7 +10018,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001172">
+<div class="proof_wrapper" id="a0000001174">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9861,7 +10035,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.126</span>
+    <span class="definition_thmlabel">17.128</span>
     <span class="definition_thmtitle">Normal square-lattice blocking regions</span>
     <div class="thm_header_extras">
 
@@ -9885,7 +10059,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.115</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalRectangleInjectivityHypotheses">Definition 17.116</a></li>
           
           <li><a href="sec-peps_ft.html#def:peps_regionInjectivityData">Definition 17.104</a></li>
           
@@ -9931,7 +10105,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.127</span>
+    <span class="theorem_thmlabel">17.129</span>
     <span class="theorem_thmtitle">Normal edge blocking to a three-site injective chain</span>
     <div class="thm_header_extras">
 
@@ -9955,11 +10129,11 @@
           
           <li><a href="sec-peps_ft.html#lem:peps_injectiveRegion_union">Lemma 17.103</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.126</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalSquareBlockingRegions">Definition 17.128</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.122</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.124</a></li>
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.123</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.125</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeBlockedInsertionAlgebraIsomorphism">Theorem 17.85</a></li>
           
@@ -9989,7 +10163,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.128</span>
+    <span class="theorem_thmlabel">17.130</span>
     <span class="theorem_thmtitle">Translationally invariant normal gauge absorption</span>
     <div class="thm_header_extras">
 
@@ -10011,7 +10185,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.127</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingToInjectiveChain">Theorem 17.129</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeGaugeAbsorption">Theorem 17.90</a></li>
           
@@ -10041,7 +10215,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.129</span>
+    <span class="theorem_thmlabel">17.131</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal square-lattice PEPS</span>
     <div class="thm_header_extras">
 
@@ -10063,7 +10237,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.128</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_tiNormalGaugeAbsorption">Theorem 17.130</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.97</a></li>
           
@@ -10094,7 +10268,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.130</span>
+    <span class="definition_thmlabel">17.132</span>
     <span class="definition_thmtitle">Normal PEPS blocking hypotheses</span>
     <div class="thm_header_extras">
 
@@ -10118,9 +10292,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.122</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalEdgeBlockingHypotheses">Definition 17.124</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.124</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalOneSiteSeparationHypotheses">Definition 17.126</a></li>
           
         </ul>
     
@@ -10160,7 +10334,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.131</span>
+    <span class="theorem_thmlabel">17.133</span>
     <span class="theorem_thmtitle">Fundamental Theorem for normal PEPS</span>
     <div class="thm_header_extras">
 
@@ -10182,9 +10356,9 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.123</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">Theorem 17.125</a></li>
           
-          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 17.130</a></li>
+          <li><a href="sec-peps_ft.html#def:peps_normalPEPSBlockingHypotheses">Definition 17.132</a></li>
           
           <li><a href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">Theorem 17.97</a></li>
           
@@ -10215,7 +10389,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">17.132</span>
+    <span class="definition_thmlabel">17.134</span>
     <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -10279,7 +10453,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.133</span>
+    <span class="theorem_thmlabel">17.135</span>
     <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
     <div class="thm_header_extras">
 
@@ -10290,7 +10464,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001177"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001179"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10306,11 +10480,11 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.132</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.134</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.132</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.134</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -10347,7 +10521,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001177">
+<div class="proof_wrapper" id="a0000001179">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10364,7 +10538,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.134</span>
+    <span class="theorem_thmlabel">17.136</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -10386,7 +10560,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.132</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.134</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
@@ -10423,18 +10597,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001178">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001180">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.135</span>
+    <span class="remark_thmlabel">17.137</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001178">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001180">#</a>
     
     
     
