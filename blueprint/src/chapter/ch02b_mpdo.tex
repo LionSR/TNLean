@@ -1754,13 +1754,13 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremWitness.chi_entry_pos}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
-        thm:mpdo_bnt_label_theorem_data_chi_entry_pos}
+        def:mpdo_positive_bnt_label_chi_trace_power_form}
     An existential BNT-label theorem witness gives positivity of every
     diagonal entry of \(\chi_{\alpha,\beta,\gamma}\).
 \end{theorem}
 \begin{proof}\leanok
-    Apply the corresponding theorem-data positivity statement carried by the
-    witness.
+    This follows from the positivity condition in the positive BNT-label
+    \(\chi\)-witness.
 \end{proof}
 
 \begin{theorem}[BNT theorem witnesses give the same-length product law]%
