@@ -1597,6 +1597,22 @@ the elementary trace-power identity for diagonal matrices.
     consequences below are derived.
 \end{definition}
 
+\begin{theorem}[BNT theorem data give coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    BNT-label theorem data give the coefficient identity
+    $c^{(L)}_{\alpha,\beta,\gamma}
+      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
+    for every positive length $L$.
+\end{theorem}
+\begin{proof}\leanok
+    This is the positive-length $\chi$-trace identity belonging to the
+    positive BNT-label $\chi$-witness in the theorem data.
+\end{proof}
+
 \begin{theorem}[BNT theorem data give the chi-trace product law]%
     \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
