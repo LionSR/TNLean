@@ -733,6 +733,68 @@ def toRectangular
       IsThreeByTwoContiguousSquareLatticeRectangle R :=
   Iff.rfl
 
+/-- A bounded contiguous \(2\times3\) coordinate rectangle is injective under
+the square-lattice rectangular injectivity hypotheses.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3 and proof, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem rect23_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    {xStart yStart : ℕ} (hx : xStart + 2 ≤ width) (hy : yStart + 3 ≤ height) :
+    κ.IsInjective
+      (squareLatticeContiguousRectangle xStart yStart 2 3 :
+        Finset (SquareLatticeVertex width height)) :=
+  h.twoByThree_injective _
+    (isTwoByThreeContiguousSquareLatticeRectangle_of_bounds hx hy)
+
+/-- A bounded contiguous \(3\times2\) coordinate rectangle is injective under
+the square-lattice rectangular injectivity hypotheses.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3 and proof, lines 1407--1452
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem rect32_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 2 ≤ height) :
+    κ.IsInjective
+      (squareLatticeContiguousRectangle xStart yStart 3 2 :
+        Finset (SquareLatticeVertex width height)) :=
+  h.threeByTwo_injective _
+    (isThreeByTwoContiguousSquareLatticeRectangle_of_bounds hx hy)
+
+/-- Region \(R\) is injective once rectangular injectivity is combined with
+the union-closure assertion from the source injective-union lemma.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionR_injective_of_union
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    κ.IsInjective (normalSquareRegionR xStart yStart) := by
+  rcases normalSquareRegionR_rectangular_decomposition hx hy with
+    ⟨R₂, R₃, hR₂, hR₃, hR⟩
+  rw [hR]
+  exact hUnion.union_injective
+    (h.twoByThree_injective R₂ hR₂)
+    (h.threeByTwo_injective R₃ hR₃)
+
+/-- Region \(S\) is injective once rectangular injectivity is combined with
+the union-closure assertion from the source injective-union lemma.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionS_injective_of_union
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    κ.IsInjective (normalSquareRegionS xStart yStart) := by
+  rcases normalSquareRegionS_rectangular_decomposition hx hy with
+    ⟨S₁, S₂, hS₁, hS₂, hS⟩
+  rw [hS]
+  exact hUnion.union_injective
+    (h.twoByThree_injective S₁ hS₁)
+    (h.twoByThree_injective S₂ hS₂)
+
 end NormalSquareLatticeRectangleInjectivityHypotheses
 
 /-- Square-lattice normal PEPS blocking hypotheses for Theorem 3.
@@ -747,16 +809,16 @@ to the tensor-level region-injectivity theorem.
 **Scope restriction (R/S/T injectivity):** The injectivity assertions for
 \(R\), \(S\), and \(T\) are assumed directly, whereas arXiv:1804.04964,
 Section 3, derives them from the \(2\times 3\) and \(3\times 2\) rectangular
-injectivity assumptions using the union-of-injective-regions lemma. The regions
-\(R\), \(S\), and \(T\) are also not yet tied to the displayed square-lattice
-geometry, to the two rectangular-region predicates, or to a square-lattice
-coordinate and adjacency model; the size fields only record \(|V|=width\cdot
-height\). This structure therefore does not yet supply the translated per-edge
+injectivity assumptions using the union-of-injective-regions lemma. The
+coordinate regions \(R\), \(S\), and \(T\) are now recorded separately, and
+\(R\) and \(S\) have conditional injectivity lemmas assuming union closure, but
+this abstract structure still assumes its three region fields directly. It does
+not yet identify them with translated coordinate regions or supply the per-edge
 red, blue, and complementary regions used in the proof of Theorem 3. Documented
 in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
-obligations 1--5. Elimination: introduce the coordinate-aware square-lattice
-regions and derive these three assertions from rectangular injectivity after the
-tensor-level union theorem is formalized.
+obligations 1--5. Elimination: derive these assertions from rectangular
+injectivity after the tensor-level union theorem is formalized, then construct
+the translated edge blockings.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3 and its proof, lines
 1407--1504 of `Papers/1804.04964/paper_normal.tex`. -/
