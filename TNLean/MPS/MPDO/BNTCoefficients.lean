@@ -559,6 +559,124 @@ def toTheoremData :
       W.labelFintype W.operatorAddCommMonoid W.operatorModule W.operatorMul :=
   W.theoremData
 
+/-- The BNT-label coefficient system carried by an existential witness. -/
+def coeffs : BNTLabelCoefficientFamily W.Label := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.coeffs
+
+/-- The same-length BNT operator family carried by an existential witness. -/
+def operators : BNTLabelOperatorFamily W.Label W.OperatorSpace := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.operators
+
+/-- The BNT-label trace scalars carried by an existential witness. -/
+def traceScalars : BNTLabelTraceScalarFamily W.Label := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.traceScalars
+
+/-- The positive BNT-label chi witness carried by an existential witness. -/
+def positiveChi : PositiveBNTLabelChiTracePowerForm W.coeffs := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.theoremData.positiveChi
+
+/-- The BNT-label coefficients carried by an existential witness are traces of
+powers of the length-independent chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
+    W.coeffs.coeff L α β γ =
+      (W.positiveChi.chi.matrix α β γ ^ L).trace := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.coeff_eq_trace_pow L hL α β γ
+
+/-- The same-length BNT product equation carried by an existential witness.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem same_length_product_eq_sum (L : ℕ) (hL : 0 < L) (α β : W.Label) :
+    letI := W.labelFintype
+    letI := W.operatorAddCommMonoid L
+    letI := W.operatorModule L
+    letI := W.operatorMul L
+    W.operators.operator L α * W.operators.operator L β =
+      ∑ γ : W.Label, W.coeffs.coeff L α β γ • W.operators.operator L γ := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.same_length_product_eq_sum L hL α β
+
+/-- The idempotent scalar equation carried by an existential witness.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem idempotent_eq_sum (γ : W.Label) :
+    W.traceScalars.traceScalar γ =
+      (@Finset.univ W.Label W.labelFintype).sum fun α ↦
+        (@Finset.univ W.Label W.labelFintype).sum fun β ↦
+          W.coeffs.coeff 1 α β γ *
+            (W.traceScalars.traceScalar α *
+              W.traceScalars.traceScalar β) := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.idempotent_eq_sum γ
+
+/-- The BNT product expansion carried by an existential witness, with
+coefficients written as traces of the length-independent chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem same_length_product_eq_sum_chi_trace_pow
+    (L : ℕ) (hL : 0 < L) (α β : W.Label) :
+    letI := W.labelFintype
+    letI := W.operatorAddCommMonoid L
+    letI := W.operatorModule L
+    letI := W.operatorMul L
+    W.operators.operator L α * W.operators.operator L β =
+      ∑ γ : W.Label, (W.positiveChi.chi.matrix α β γ ^ L).trace •
+        W.operators.operator L γ := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.same_length_product_eq_sum_chi_trace_pow L hL α β
+
+/-- The idempotent scalar identity carried by an existential witness, with
+length-one coefficients written as traces of the chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem idempotent_eq_sum_chi_trace (γ : W.Label) :
+    W.traceScalars.traceScalar γ =
+      (@Finset.univ W.Label W.labelFintype).sum fun α ↦
+        (@Finset.univ W.Label W.labelFintype).sum fun β ↦
+          (W.positiveChi.chi.matrix α β γ).trace *
+            (W.traceScalars.traceScalar α *
+              W.traceScalars.traceScalar β) := by
+  letI := W.labelFintype
+  letI := W.operatorAddCommMonoid
+  letI := W.operatorModule
+  letI := W.operatorMul
+  exact W.toTheoremData.idempotent_eq_sum_chi_trace γ
+
 /-- An existential BNT-label theorem witness gives a positive blocked
 trace-power witness for the chosen algebra-structure data. -/
 def toPositiveBlockedStructureChiTracePowerForm :

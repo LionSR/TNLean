@@ -1712,6 +1712,10 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[Existential BNT-label theorem witness]%
     \label{def:mpdo_bnt_label_theorem_witness}
     \lean{MPOTensor.BNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeffs}
+    \lean{MPOTensor.BNTLabelTheoremWitness.operators}
+    \lean{MPOTensor.BNTLabelTheoremWitness.traceScalars}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveChi}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data}
     An existential BNT-label theorem witness consists of the finite BNT-label
@@ -1719,6 +1723,79 @@ the elementary trace-power identity for diagonal matrices.
     corresponding BNT-label theorem data.  The construction of such a witness
     from an MPDO tensor is the outstanding step toward Theorem~IV.13(ii).
 \end{definition}
+
+\begin{theorem}[BNT theorem witnesses give coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
+    An existential BNT-label theorem witness gives the formula
+    \(c_{\alpha,\beta,\gamma}^{(L)}
+      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})\)
+    for every positive length \(L\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the same-length product law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum}
+    An existential BNT-label theorem witness gives the product identity
+    \(O_L(M_\alpha)O_L(M_\beta)
+      = \sum_\gamma c_{\alpha,\beta,\gamma}^{(L)} O_L(M_\gamma)\)
+    for every positive length \(L\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the idempotent scalar law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum}
+    An existential BNT-label theorem witness gives the idempotent scalar
+    identity
+    \(m_\gamma =
+      \sum_{\alpha,\beta} c_{\alpha,\beta,\gamma}^{(1)}m_\alpha m_\beta\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the chi-trace product law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum_chi_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
+    An existential BNT-label theorem witness gives the same-length product
+    identity with the coefficients written as traces of powers of the
+    \(\chi\)-matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give the chi-trace idempotent law]%
+    \label{thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum_chi_trace}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace}
+    An existential BNT-label theorem witness gives the idempotent scalar
+    identity with the length-one coefficients written as traces of the
+    \(\chi\)-matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
 
 \begin{theorem}[BNT theorem witnesses give positive blocked \(\chi\) witnesses]%
     \label{thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
