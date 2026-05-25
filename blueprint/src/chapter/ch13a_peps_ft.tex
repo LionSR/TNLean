@@ -1658,19 +1658,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     blocks.
 \end{proof}
 
-\begin{definition}[Rectangular covers of the edge-complementary block]%
-    \label{def:peps_normalSquareEdgeComplementRectangleCover}
+\begin{definition}[Rectangular covers of square-lattice regions]%
+    \label{def:peps_normalSquareRectangleCover}
+    \lean{TNLean.PEPS.SquareLatticeRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareRegionTRectangleCover}
     \lean{TNLean.PEPS.NormalSquareEdgeComplementRectangleCover}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion}
-    A rectangular cover of the finite-lattice complementary block \(A_3\) is a
-    nonempty finite family of regions whose union is exactly \(A_3\), and each
-    member of the family is a contiguous \(2\times3\) or \(3\times2\)
-    rectangle.
+    A rectangular cover of a square-lattice region is a nonempty finite family
+    of regions whose union is exactly the given region, and each member of the
+    family is a contiguous \(2\times3\) or \(3\times2\) rectangle.  The two
+    cases used in the proof are the cover of the local displayed \(T\)-region
+    and the cover of the finite-lattice complementary block \(A_3\).
 \end{definition}
-% Maintainer note: this definition records a sufficient coordinate criterion.
-% The source proof may instead pass through the local T-region.
+% Maintainer note: this definition records sufficient coordinate criteria.
+% The concrete local T cover remains to be constructed.
+
+\begin{lemma}[Injectivity from a rectangular cover]%
+    \label{lem:peps_normalSquareRectangleCover_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    If a square-lattice region has a nonempty finite cover by contiguous
+    \(2\times3\) and \(3\times2\) rectangles, then rectangular injectivity and
+    finite union closure imply that the region is injective.
+\end{lemma}
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family.
+\end{proof}
 
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
@@ -1765,12 +1784,32 @@ injective and normal PEPS, following Theorems~2 and~3 of
     one application of union closure to these two injective blocks.
 \end{proof}
 
+\begin{lemma}[Injectivity from a rectangular cover of the local \(T\)-region]%
+    \label{lem:peps_normalSquareRegionT_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionT_injective_of_cover}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRectangleCover_injective,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    If the displayed local \(T\)-region has a nonempty finite cover by
+    contiguous \(2\times3\) and \(3\times2\) rectangles, then rectangular
+    injectivity and finite union closure imply that \(T\) is injective.
+\end{lemma}
+% Maintainer note: this is still conditional; the concrete source cover is not
+% yet constructed.
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family.
+\end{proof}
+
 \begin{lemma}[Injectivity from a rectangular cover of the edge complement]%
     \label{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.edgeComplement_injective}
     \leanok
-    \uses{def:peps_normalSquareEdgeComplementRectangleCover,
+    \uses{def:peps_normalSquareRectangleCover,
         def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_normalSquareRectangleCover_injective,
         lem:peps_regionInjectivityUnionClosure_finite}
     If the finite-lattice complementary block \(A_3\) has a nonempty finite
     cover by contiguous \(2\times3\) and \(3\times2\) rectangles, then
