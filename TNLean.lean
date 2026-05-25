@@ -363,6 +363,7 @@ import TNLean.PEPS.Defs
 import TNLean.PEPS.InjectiveRegion
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
