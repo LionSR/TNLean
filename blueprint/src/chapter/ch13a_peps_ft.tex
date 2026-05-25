@@ -1675,6 +1675,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
 % Maintainer note: this definition records sufficient coordinate criteria.
 % The concrete local T cover remains to be constructed.
 
+\begin{lemma}[The present \(5\times6\) local \(T\)-window has no rectangular cover]%
+    \label{lem:peps_normalSquareRegionT_no_five_by_six_cover}
+    \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_five_by_six}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        lem:peps_normalSquareRegionT_window_complement}
+    The present normalized \(5\times6\) local-window model for the displayed
+    \(T\)-region admits no nonempty finite cover by contained contiguous
+    \(2\times3\) and \(3\times2\) rectangles.
+\end{lemma}
+% Maintainer note: this is a local-model obstruction, not a statement of the
+% source theorem.  It records that the current coordinate model is not yet the
+% source cover needed for the \(T\)-injectivity sentence.
+\begin{proof}\leanok
+    The lower-left point of the local window belongs to the present \(T\)
+    model.  Any contiguous \(2\times3\) rectangle containing it also contains
+    a point of the removed vertical edge block, while any contiguous
+    \(3\times2\) rectangle containing it also contains a point of the removed
+    horizontal edge block.
+\end{proof}
+
 \begin{lemma}[Injectivity from a rectangular cover]%
     \label{lem:peps_normalSquareRectangleCover_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.injective_of_rectangleCover}
