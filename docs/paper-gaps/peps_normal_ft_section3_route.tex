@@ -110,11 +110,11 @@ statement that they differ in one site: $R$ is contained in $S$, and
 $S\setminus R$ is the lower-right site of the displayed $3\times3$ square. The
 displayed region $T$ is now present as the complement, inside the source
 $5\times6$ local window, of the two edge blocks shown in the source picture;
-the two removed edge blocks are now formalized as one contiguous $2\times3$
-rectangle and one contiguous $3\times2$ rectangle. The complement relation is
-also formalized: the removed edge blocks lie inside the local window, are
-disjoint from $T$, and together with $T$ reconstruct that window. This does not
-yet prove injectivity of $R$, $S$, or $T$.
+the two removed edge blocks are now formalized separately as one contiguous
+$2\times3$ rectangle and one contiguous $3\times2$ rectangle. They are
+disjoint from each other, and the three-part cover by $T$ and the two removed
+blocks reconstructs the local window. This does not yet prove injectivity of
+$R$, $S$, or $T$.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -150,9 +150,10 @@ alone. The following additional obligations remain.
           decompositions and the expected one-site difference formalized. The
           displayed region $T$ is now
           defined as the complement of the two edge blocks in the source
-          $5\times6$ local window, and the removed edge blocks have the
+          $5\times6$ local window, and the two removed edge blocks have the
           displayed rectangular shapes. The local-window complement identity for
-          $T$ is also formalized. The union lemma is then used repeatedly.
+          $T$ is also formalized, including the three-part cover by $T$ and the
+          two removed blocks. The union lemma is then used repeatedly.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
