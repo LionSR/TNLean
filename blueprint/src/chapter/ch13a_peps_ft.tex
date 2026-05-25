@@ -1669,8 +1669,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     member of the family is a contiguous \(2\times3\) or \(3\times2\)
     rectangle.
 \end{definition}
-% Maintainer note: this definition records the coordinate assertion still
-% needed for the source proof.  It does not construct such a cover.
+% Maintainer note: this definition records a sufficient coordinate criterion.
+% The source proof may instead pass through the local T-region.
 
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
@@ -1782,6 +1782,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     Apply rectangular injectivity to every rectangle in the cover, then apply
     finite union closure to the nonempty family.
+\end{proof}
+
+\begin{lemma}[The normalized \(5\times7\) edge complement has a top collar]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_topCollar}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.topCollar_injective}
+    \leanok
+    \uses{lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareRegionT_window_complement,
+        lem:peps_squareLatticeRectangleInjectivity_rectangles}
+    In the normalized horizontal-edge \(5\times7\) frame, the finite-lattice
+    complementary block \(A_3\) is the local-window \(T\)-region together with
+    two top-collar contiguous \(3\times2\) rectangles.  Consequently, if the
+    local \(T\)-region is injective, then rectangular injectivity and union
+    closure imply that \(A_3\) is injective.
+\end{lemma}
+% Maintainer note: this still leaves local T-injectivity and the translated
+% every-edge construction open.
+\begin{proof}\leanok
+    The set identity follows by expanding the coordinate inequalities.  The
+    injectivity statement applies union closure first to the local
+    \(T\)-region and the first collar rectangle, and then to the second collar
+    rectangle.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
