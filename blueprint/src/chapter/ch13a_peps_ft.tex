@@ -1434,7 +1434,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     rectangle is the whole finite vertex set.
 \end{lemma}
 \begin{proof}\leanok
-    These are the standard identities for the product of two finite sets.
+    The coordinate-rectangle statements follow from membership and cardinality
+    identities for Cartesian products of finite coordinate sets.  The
+    contiguous-rectangle statement then unfolds the two coordinate intervals.
+    The membership statements for \(R\), \(S\), and the two edge blocks removed
+    from \(T\) additionally unfold membership in a union of two such
+    rectangles, while membership in \(T\) also unfolds the set difference from
+    the local \(5\times6\) window.  The shape predicates follow by using the
+    displayed lower-left corners as witnesses.
 \end{proof}
 
 \begin{lemma}[The normal regions \(R\) and \(S\) are unions of contiguous
