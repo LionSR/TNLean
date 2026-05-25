@@ -120,7 +120,20 @@ uniform BNT-label statement has been separated from the chosen blocked bases.
 
 The same-length coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\), indexed
 by fixed BNT labels, is represented separately from the blocked-basis
-coefficients.\footnote{\leanid{MPOTensor.BNTLabelCoefficientFamily}.}  A
+coefficients.\footnote{\leanid{MPOTensor.BNTLabelCoefficientFamily}.}  When the
+Appendix C.4 construction has already produced a diagonal
+\(\chi_{\alpha,\beta,\gamma}\)-family, there is also a canonical coefficient
+family
+\[
+    c^{(L)}_{\alpha,\beta,\gamma}
+      = \sum_r \chi_{\alpha,\beta,\gamma,r}^{\,L}.
+\]
+This is recorded separately so that the \(\chi\)-family can serve as the single
+source of those coefficients in the source-side special case.\footnote{%
+\leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi},
+\leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff},
+\leanid{MPOTensor.BNTLabelCoefficientFamily.%
+ofChi_hasPositiveLengthChiTracePowerForm}.}  A
 same-length BNT product predicate records the algebra identity
 \[
     O_L(M_\alpha)O_L(M_\beta)
@@ -140,6 +153,9 @@ positive BNT-label \(\chi\)-witness consists of a length-independent diagonal
 family \(\chi_{\alpha,\beta,\gamma}\), positivity of every diagonal entry, and
 the positive-length trace-power identity.\footnote{%
 \leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm}.}
+If the coefficients are chosen canonically from the same \(\chi\)-family, then
+positivity of the diagonal entries alone gives such a witness.\footnote{%
+\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}.}
 A blocked-basis comparison predicate records that the chosen blocked
 multiplication coefficients are the pullback of the source-length BNT-label
 coefficients along a source label map from \(\mathcal A_n\) and a target label
@@ -147,8 +163,10 @@ map from \(\mathcal A_{2n}\).\footnote{%
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison}.}  This predicate
 inherits the second scope restriction above: its left hand side is expanded in a
 basis of \(\mathcal A_{2n}\), while the source theorem's BNT product law is
-same-length. It therefore records a blocked-basis comparison to be constructed;
-it is not itself the same-length product statement of Theorem~IV.13(ii).
+same-length. It therefore records the formal blocked-basis comparison
+predicate; constructing the source label maps from an MPDO tensor is still part
+of the Appendix C.3--C.4 witness construction. The predicate is not itself the
+same-length product statement of Theorem~IV.13(ii).
 These declarations specify the BNT-label coefficient objects and the comparison
 statement, but they do not yet construct the operators, trace scalars,
 coefficients, comparison maps, or \(\chi\)-matrices from an MPDO tensor.
@@ -160,10 +178,20 @@ is formalized as a direct corollary.\footnote{%
 Once both the comparison predicate and a positive BNT-label \(\chi\)-witness are
 available, the coefficient-level blocked trace-power formula is formalized as a
 direct corollary.\footnote{%
-\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}.}
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+blocked_coeff_eq_pulledBlockedChi_trace_pow}.}
 The same hypotheses also give a positive blocked-basis \(\chi\)-witness by
 pulling back the uniform BNT-label \(\chi\)-family along the
 comparison maps.\footnote{%
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+pulledBlockedChiFamily_toDiagonal_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+pulledBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+pulledBlockedChi_dim_of_pos},
+\leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+pulledBlockedChi_trace_matrix_pow_of_pos},
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
 toPositiveBlockedStructureChiTracePowerForm}.}
 Likewise, once the idempotent coefficient condition and the positive
@@ -178,22 +206,56 @@ idempotent condition, positive BNT-label \(\chi\)-witness, and blocked-basis
 comparison.\footnote{\leanid{MPOTensor.BNTLabelTheoremData}.}  This record is
 not an additional mathematical assumption in the source theorem; it is the
 single formal object collecting the source data supplied by the Appendix
-C.3--C.4 construction from an MPDO tensor.  From such data, the same-length
-product law, the idempotent scalar law, the coefficient trace-power formula,
-positivity of the diagonal \(\chi\)-entries, the same-length chi-trace product
-law, the chi-trace idempotent law, the blocked-basis coefficient trace-power
-formula, the positive blocked \(\chi\)-witness, and the pulled-back
-blocked-basis \(\chi\)-family with positive entries and trace-power formula
-are immediate consequences.\footnote{%
+C.3--C.4 construction from an MPDO tensor.  There is also a construction for the
+source-side special case in which the coefficient family is the one canonically
+determined by the same \(\chi\)-family; it takes the product law, idempotent
+law, and blocked-basis comparison for those canonical coefficients.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_coeffs},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_operators},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_traceScalars},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_positiveChi_chi},
+\leanid{MPOTensor.BNTLabelTheoremData.%
+ofChi_same_length_product_form},
+\leanid{MPOTensor.BNTLabelTheoremData.%
+ofChi_idempotent_coefficient_form},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_blockedComparison},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_sourceLabel},
+\leanid{MPOTensor.BNTLabelTheoremData.ofChi_targetLabel}.}  From such
+data, the source
+predicates themselves and the corresponding equation-level consequences are
+available: the same-length product law, the idempotent scalar law, the BNT-label
+\(\chi\)-positivity and trace-power predicates, the coefficient trace-power
+formula, positivity of the diagonal \(\chi\)-entries, the same-length chi-trace
+product law, the chi-trace idempotent law, the blocked-basis coefficient
+trace-power formula, the raw blocked-basis coefficient comparison, the positive
+blocked \(\chi\)-witness, the pulled-back blocked trace-power predicate, and the
+pulled-back blocked-basis \(\chi\)-family with positive entries and trace-power
+formula are immediate consequences.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremData.same_length_product_form},
+\leanid{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form},
+\leanid{MPOTensor.BNTLabelTheoremData.positive_chi_pos_entries},
+\leanid{MPOTensor.BNTLabelTheoremData.positive_chi_trace_power},
+\leanid{MPOTensor.BNTLabelTheoremData.sourceLabel},
+\leanid{MPOTensor.BNTLabelTheoremData.targetLabel},
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.chi_entry_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq},
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_chi_trace},
 \leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_toDiagonal_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.%
+positiveBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_dim_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.%
+positiveBlockedChi_trace_matrix_pow_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePower},
+\leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries},
 \leanid{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_entry_pos},
 \leanid{MPOTensor.BNTLabelTheoremData.%
 blocked_coeff_eq_positiveBlockedChi_trace_pow}.}
@@ -202,27 +264,89 @@ The same data can be stated in the existential form closest to the paper: one
 object records the BNT-label type, the same-length operator spaces, their
 algebraic structure, and the corresponding theorem data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness},
+\leanid{MPOTensor.BNTLabelTheoremWitness.toTheoremData},
 \leanid{MPOTensor.BNTLabelTheoremWitness.coeffs},
 \leanid{MPOTensor.BNTLabelTheoremWitness.operators},
 \leanid{MPOTensor.BNTLabelTheoremWitness.traceScalars},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveChi},
 \leanid{MPOTensor.BNTLabelTheoremWitness.blockedComparison},
-\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}  Such a witness
-immediately gives the coefficient trace-power formula, the same-length product
-law, the idempotent scalar law, positivity of the diagonal \(\chi\)-entries,
-the same-length chi-trace product law, the chi-trace idempotent law, the
-blocked-basis coefficient trace-power formula, the positive blocked-basis
-\(\chi\)-witness, and the pulled-back blocked-basis \(\chi\)-family for the chosen
-algebra-structure data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power},
+\leanid{MPOTensor.BNTLabelTheoremWitness.sourceLabel},
+\leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}  The existential
+nonempty statement can also be unpacked directly into a concrete witness
+carrying the source predicates, the corresponding same-length and idempotent
+equations written with \(c^{(L)}_{\alpha,\beta,\gamma}\), and the same two
+equations with coefficients written as \(\chi\)-traces; the blocked-basis
+\(\chi\)-family is also identified as the pullback of the BNT-label
+\(\chi\)-family along the comparison maps.\footnote{%
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_pullback},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_source_coefficient_equations},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_source_chi_trace_equations}.}
+The existential
+statement has the analogous canonical construction from a positive
+\(\chi\)-family, again leaving the product, idempotent, and blocked-comparison
+statements as inputs rather than reconstructing them from an MPDO tensor.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi},
+\leanid{MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+ofChi_hasBNTLabelTheoremWitness},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_coeffs},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_operators},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_traceScalars},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_positiveChi_chi},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+ofChi_same_length_product_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+ofChi_idempotent_coefficient_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_blockedComparison},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_sourceLabel},
+\leanid{MPOTensor.BNTLabelTheoremWitness.ofChi_targetLabel}.}  Such a witness
+immediately gives the source predicates and their consequences: the coefficient
+trace-power formula, the same-length product law, the idempotent scalar law,
+positivity of the diagonal \(\chi\)-entries, the raw blocked-basis coefficient
+comparison, the same-length chi-trace product law, the chi-trace idempotent law,
+the blocked-basis coefficient trace-power formula, the positive blocked-basis
+\(\chi\)-witness, and the pulled-back blocked trace-power predicate and
+\(\chi\)-family for the chosen algebra-structure data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power},
+\leanid{MPOTensor.BNTLabelTheoremWitness.sourceLabel},
+\leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel},
 \leanid{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremWitness.chi_entry_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq},
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace},
 \leanid{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow},
 \leanid{MPOTensor.BNTLabelTheoremWitness.%
 toPositiveBlockedStructureChiTracePowerForm},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+positiveBlockedChi_toDiagonal_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+positiveBlockedChi_tracePowerCoeff_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_dim_of_pos},
+\leanid{MPOTensor.BNTLabelTheoremWitness.%
+positiveBlockedChi_trace_matrix_pow_of_pos},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+positive_blocked_chi_witness},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_blocked_chi_trace_power_form},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_blocked_coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePower},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_posEntries},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_entry_pos},
 \leanid{MPOTensor.BNTLabelTheoremWitness.%
 blocked_coeff_eq_positiveBlockedChi_trace_pow}.}  The remaining step is still the
