@@ -195,9 +195,20 @@ consequences.\footnote{%
 The same data can be stated in the existential form closest to the paper: one
 object records the BNT-label type, the same-length operator spaces, their
 algebraic structure, and the corresponding theorem data.\footnote{%
-\leanid{MPOTensor.BNTLabelTheoremWitness}.}  Such a witness immediately gives
-the positive blocked-basis \(\chi\)-witness for the chosen algebra-structure
-data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness},
+\leanid{MPOTensor.BNTLabelTheoremWitness.coeffs},
+\leanid{MPOTensor.BNTLabelTheoremWitness.operators},
+\leanid{MPOTensor.BNTLabelTheoremWitness.traceScalars},
+\leanid{MPOTensor.BNTLabelTheoremWitness.positiveChi}.}  Such a witness
+immediately gives the coefficient trace-power formula, the same-length product
+law, the idempotent scalar law, the same-length chi-trace product law, the
+chi-trace idempotent law, and the positive blocked-basis \(\chi\)-witness for
+the chosen algebra-structure data.\footnote{%
+\leanid{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum},
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_chi_trace},
 \leanid{MPOTensor.BNTLabelTheoremWitness.%
 toPositiveBlockedStructureChiTracePowerForm}.}  The remaining step is still the
 construction of this existential witness from the MPDO tensor.
