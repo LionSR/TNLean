@@ -785,6 +785,22 @@ theorem tHorizontalBlock_injective
   h.threeByTwo_injective _
     (normalSquareRegionTHorizontalBlock_rectangular hx hy)
 
+/-- The union of the two edge blocks removed from the displayed \(T\)-region is
+injective once rectangular injectivity is combined with the union-closure
+assertion from the source injective-union lemma.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1444 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem tHole_injective_of_union
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    κ.IsInjective (normalSquareRegionTHole xStart yStart) := by
+  unfold normalSquareRegionTHole
+  exact hUnion.union_injective
+    (h.tVerticalBlock_injective hx hy)
+    (h.tHorizontalBlock_injective hx hy)
+
 /-- Region \(R\) is injective once rectangular injectivity is combined with
 the union-closure assertion from the source injective-union lemma.
 

@@ -169,8 +169,9 @@ alone. The following additional obligations remain.
           $R$ and $S$ from a union-closure hypothesis are formalized. The
           nonempty finite iteration of union closure is now formalized. The
           two edge blocks removed from the $T$-window are now injective under
-          rectangular injectivity. The remaining coordinate step is the
-          corresponding source-faithful derivation for $T$.
+          rectangular injectivity, and their union is injective under the
+          source union-closure hypothesis. The remaining coordinate step is
+          the corresponding source-faithful derivation for $T$.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -195,7 +196,7 @@ alone. The following additional obligations remain.
     \item Regions $R$, $S$, and $T$: blueprint
           \path{def:peps_normalSquareBlockingRegions}, issue \#1375.
     \item Injectivity of the two edge blocks removed from the displayed
-          $T$-window: blueprint
+          $T$-window, and of their union under union closure: blueprint
           \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue
           \#2004.
     \item Edge blocking into red, blue, and complementary injective regions:
