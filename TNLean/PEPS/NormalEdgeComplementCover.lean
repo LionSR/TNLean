@@ -257,11 +257,15 @@ adding the two top-collar \(3\times2\) rectangles.
 
 **Scope restriction (T-cover):** This construction is conditional on a
 rectangular cover of the displayed local \(T\)-region. Under the present
-exact-cover criterion, `not_normalSquareRegionT_rectangleCover_at_origin`
-rules out such a cover for \(5 \leq\) `width` and \(6 \leq\) `height`, hence
-also for this \(5\times7\) frame. The source-faithful finite PEPS geometry is
-recorded as an open obligation in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+exact-cover criterion, the origin local \(T\)-region has no such cover for
+\(5 \leq\) `width` and \(6 \leq\) `height`, hence also for this \(5\times7\)
+frame. The source-faithful finite PEPS geometry is recorded as an open
+obligation in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+This is the rectangular-cover form of the top-collar decomposition of the
+edge-complementary block. It separates this finite-lattice collar step from
+the remaining task of constructing a rectangular cover of the local
+\(T\)-region.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1499
 of `Papers/1804.04964/paper_normal.tex`. -/
@@ -605,9 +609,8 @@ theorem edgeComplement_injective
 /-- In the normalized horizontal-edge \(5\times7\) frame, a rectangular cover
 of the local \(T\)-region proves injectivity of the edge-complementary block.
 
-This applies the cover extension
-`normalSquareEdgeComplementRectangleCoverOfT` and the general rectangular-cover
-criterion.
+The proof first adjoins the two top-collar rectangles to the \(T\)-cover, then
+applies the general rectangular-cover criterion.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
