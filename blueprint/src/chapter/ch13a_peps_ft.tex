@@ -1658,6 +1658,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     blocks.
 \end{proof}
 
+\begin{definition}[Rectangular covers of the edge-complementary block]%
+    \label{def:peps_normalSquareEdgeComplementRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareEdgeComplementRectangleCover}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion}
+    A rectangular cover of the finite-lattice complementary block \(A_3\) is a
+    nonempty finite family of regions whose union is exactly \(A_3\), and each
+    member of the family is a contiguous \(2\times3\) or \(3\times2\)
+    rectangle.
+\end{definition}
+% Maintainer note: this definition records the coordinate assertion still
+% needed for the source proof.  It does not construct such a cover.
+
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
@@ -1749,6 +1763,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Apply the rectangular injectivity hypotheses to the already identified
     contiguous rectangle shapes of the two edge blocks.  The final assertion is
     one application of union closure to these two injective blocks.
+\end{proof}
+
+\begin{lemma}[Injectivity from a rectangular cover of the edge complement]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.edgeComplement_injective}
+    \leanok
+    \uses{def:peps_normalSquareEdgeComplementRectangleCover,
+        def:peps_normalRectangleInjectivityHypotheses,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    If the finite-lattice complementary block \(A_3\) has a nonempty finite
+    cover by contiguous \(2\times3\) and \(3\times2\) rectangles, then
+    rectangular injectivity and finite union closure imply that \(A_3\) is
+    injective.
+\end{lemma}
+% Maintainer note: the concrete cover required by
+% \cite[Theorem~3]{Molnar2018NormalPEPS} remains to be constructed.
+\begin{proof}\leanok
+    Apply rectangular injectivity to every rectangle in the cover, then apply
+    finite union closure to the nonempty family.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
