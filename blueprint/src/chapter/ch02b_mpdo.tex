@@ -1597,6 +1597,41 @@ the elementary trace-power identity for diagonal matrices.
     consequences below are derived.
 \end{definition}
 
+\begin{theorem}[BNT theorem data give the same-length product law]%
+    \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_same_length_product_eq_sum}
+    BNT-label theorem data give the same-length product equation
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+          = \sum_\gamma
+              c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma)
+    \]
+    for every positive length $L$.
+\end{theorem}
+\begin{proof}\leanok
+    This is the same-length product law carried by the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give the idempotent scalar law]%
+    \label{thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_idempotent_coefficient_eq_sum}
+    BNT-label theorem data give the idempotent scalar equation
+    \[
+        m_\gamma =
+          \sum_{\alpha,\beta}
+            c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta .
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    This is the idempotent coefficient law carried by the theorem data.
+\end{proof}
+
 \begin{theorem}[BNT theorem data give coefficient trace powers]%
     \label{thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
