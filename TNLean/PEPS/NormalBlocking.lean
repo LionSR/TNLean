@@ -765,8 +765,8 @@ theorem rect32_injective
 the union-closure assertion from the source injective-union lemma.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
-Theorem 3, lines 1324--1430 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionR_injective
+Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionR_injective_of_union
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
@@ -782,8 +782,8 @@ theorem regionR_injective
 the union-closure assertion from the source injective-union lemma.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
-Theorem 3, lines 1324--1430 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionS_injective
+Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem regionS_injective_of_union
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :

@@ -54,7 +54,7 @@ union-of-injective-regions lemma.  It is recorded separately so later
 coordinate arguments may use the source lemma without repeating its proof.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
-1324--1400 of `Papers/1804.04964/paper_normal.tex`. -/
+1322--1404 of `Papers/1804.04964/paper_normal.tex`. -/
 structure RegionInjectivityUnionClosure (κ : RegionInjectivityData V) : Prop where
   /-- The union of two injective finite vertex regions is injective. -/
   union_injective :
