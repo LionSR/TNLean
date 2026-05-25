@@ -1487,6 +1487,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsThreeByTwoContiguousSquareLatticeRectangle}
     \lean{TNLean.PEPS.normalSquareRegionR}
     \lean{TNLean.PEPS.normalSquareRegionS}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock}
     \lean{TNLean.PEPS.normalSquareRegionTHole}
     \lean{TNLean.PEPS.normalSquareRegionT}
     \leanok
@@ -1504,7 +1506,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     of two \(2\times3\) contiguous rectangles shifted by one horizontal
     coordinate, hence the full \(3\times3\) square spanned by them.  The
     displayed region \(T\) is the complement, inside a local \(5\times6\)
-    coordinate window, of the two edge blocks shown in the source picture.
+    coordinate window, of the vertical \(2\times3\) edge block and the
+    horizontal \(3\times2\) edge block shown in the source picture.
 \end{definition}
 
 \begin{lemma}[Basic identities for square-lattice coordinate regions]%
@@ -1514,6 +1517,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.mem_squareLatticeContiguousRectangle}
     \lean{TNLean.PEPS.mem_normalSquareRegionR}
     \lean{TNLean.PEPS.mem_normalSquareRegionS}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTVerticalBlock}
+    \lean{TNLean.PEPS.mem_normalSquareRegionTHorizontalBlock}
     \lean{TNLean.PEPS.mem_normalSquareRegionTHole}
     \lean{TNLean.PEPS.mem_normalSquareRegionT}
     \lean{TNLean.PEPS.isTwoByThreeContiguousSquareLatticeRectangle_of_bounds}
@@ -1570,6 +1575,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{lemma}[The edge blocks removed from \(T\) are contiguous rectangles]%
     \label{lem:peps_normalSquareRegionTHole_rectangular_decomposition}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock_rectangular}
+    \lean{TNLean.PEPS.normalSquareRegionTHorizontalBlock_rectangular}
     \lean{TNLean.PEPS.normalSquareRegionTHole_rectangular_decomposition}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
@@ -1586,14 +1593,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[The $T$-region and its removed edge blocks fill the local window]%
     \label{lem:peps_normalSquareRegionT_window_complement}
     \lean{TNLean.PEPS.normalSquareRegionTHole_subset_window}
+    \lean{TNLean.PEPS.normalSquareRegionTVerticalBlock_disjoint_horizontalBlock}
     \lean{TNLean.PEPS.normalSquareRegionT_disjoint_THole}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_verticalBlock}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_horizontalBlock}
     \lean{TNLean.PEPS.normalSquareRegionT_union_THole}
+    \lean{TNLean.PEPS.normalSquareRegionT_union_verticalBlock_union_horizontalBlock}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_squareLatticeCoordinateRegion_identities}
     The two edge blocks removed from the displayed $T$-region lie inside the
-    local $5\times6$ coordinate window.  They are disjoint from $T$, and their
-    union with $T$ is exactly that local window.
+    local $5\times6$ coordinate window.  They are disjoint from each other and
+    from $T$, and their union with $T$ is exactly that local window.
 \end{lemma}
 \begin{proof}\leanok
     This follows by unfolding the definition of $T$ as the set-theoretic
