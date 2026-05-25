@@ -1215,6 +1215,8 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[BNT-label coefficient family]%
     \label{def:mpdo_bnt_label_coefficient_family}
     \lean{MPOTensor.BNTLabelCoefficientFamily}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff}
     \leanok
     The same-length coefficient system
     \(c^{(L)}_{\alpha,\beta,\gamma}\) from Theorem~IV.13(ii), indexed by
@@ -1222,6 +1224,10 @@ the elementary trace-power identity for diagonal matrices.
     the length-\(L\) product
     \(O_L(M_\alpha)O_L(M_\beta)\), not to the blocked-basis multiplication
     \(\mathcal A_n\times\mathcal A_n\to\mathcal A_{2n}\).
+    When a diagonal \(\chi\)-family has already been constructed, it also
+    canonically determines the coefficient family
+    \(c^{(L)}_{\alpha,\beta,\gamma}
+    = \sum_r\chi_{\alpha,\beta,\gamma,r}^{\,L}\), as in Appendix~C.4.
 \end{definition}
 
 \begin{definition}[BNT-label operator family]%
@@ -1370,18 +1376,37 @@ the elementary trace-power identity for diagonal matrices.
     formula for powers of a diagonal matrix.
 \end{proof}
 
+\begin{theorem}[Canonical BNT coefficients from a \(\chi\)-family]%
+    \label{thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
+\lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    The coefficient family canonically determined by a diagonal
+    \(\chi\)-family satisfies the positive-length trace-power condition with
+    respect to the same \(\chi\)-family.
+\end{theorem}
+\begin{proof}\leanok
+    This is immediate from the definition of the canonical coefficient family.
+\end{proof}
+
 \begin{definition}[Positive BNT-label \(\chi\) trace-power witness]%
     \label{def:mpdo_positive_bnt_label_chi_trace_power_form}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
+    \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}
     \leanok
     \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,
-        def:mpdo_diagonal_chi_family}
+        def:mpdo_diagonal_chi_family,
+        thm:mpdo_bnt_label_of_chi_positive_length_trace_power}
     A positive BNT-label \(\chi\) witness consists of a length-independent
     diagonal \(\chi_{\alpha,\beta,\gamma}\)-family, positivity of every
     diagonal entry, and the positive-length trace-power identity for the
     BNT-label coefficients.  This is the coefficient statement of
     Theorem~IV.13(ii); constructing the witness from an MPDO tensor and
     comparing it to blocked bases remain separate obligations.
+    If the coefficient family is chosen canonically from the same
+    \(\chi\)-family, positivity of the diagonal entries alone gives such a
+    witness.
 \end{definition}
 
 \begin{theorem}[Positive BNT-label witness gives trace powers]%
@@ -1445,6 +1470,8 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[Blocked coefficients inherit BNT trace powers]%
     \label{thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        blocked_coeff_eq_pulledBlockedChi_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
         def:mpdo_positive_bnt_label_chi_trace_power_form,
@@ -1549,7 +1576,13 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[BNT witnesses give blocked \(\chi\) witnesses]%
     \label{thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
-\lean{MPOTensor.BNTBlockedBasisCoefficientComparison.toPositiveBlockedStructureChiTracePowerForm}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChiFamily}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChiFamily_toDiagonal_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_tracePowerCoeff_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_dim_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.pulledBlockedChi_trace_matrix_pow_of_pos}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        toPositiveBlockedStructureChiTracePowerForm}
     \leanok
     \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
         def:mpdo_positive_bnt_label_chi_trace_power_form,
@@ -1576,7 +1609,23 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[BNT-label theorem data]%
     \label{def:mpdo_bnt_label_theorem_data}
     \lean{MPOTensor.BNTLabelTheoremData}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_form}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTheoremData.positive_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremData.positive_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremData.sourceLabel}
+    \lean{MPOTensor.BNTLabelTheoremData.targetLabel}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_coeffs}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_operators}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_traceScalars}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_positiveChi_chi}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_same_length_product_form}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_blockedComparison}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_sourceLabel}
+    \lean{MPOTensor.BNTLabelTheoremData.ofChi_targetLabel}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_operator_family,
@@ -1592,6 +1641,10 @@ the elementary trace-power identity for diagonal matrices.
     They also determine the pulled-back blocked-basis \(\chi\)-family.  These
     data are the source-side hypotheses from which the blocked-basis
     consequences below are derived.
+    In the source-side special case where the coefficient family is
+    canonically determined by the same \(\chi\)-family, theorem data are built
+    from that \(\chi\)-family, its positivity, and the product, idempotent, and
+    blocked-comparison statements for the resulting canonical coefficients.
 \end{definition}
 
 \begin{theorem}[BNT theorem data give the same-length product law]%
@@ -1627,6 +1680,21 @@ the elementary trace-power identity for diagonal matrices.
 \end{theorem}
 \begin{proof}\leanok
     This is the idempotent coefficient law carried by the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give the blocked coefficient comparison]%
+    \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_blocked_basis_coefficient_eq}
+    BNT-label theorem data give the comparison between the blocked-basis
+    coefficients and the BNT-label coefficients through the source and target
+    label maps.
+\end{theorem}
+\begin{proof}\leanok
+    This is the blocked-basis coefficient comparison carried by the theorem
+    data.
 \end{proof}
 
 \begin{theorem}[BNT theorem data give coefficient trace powers]%
@@ -1708,6 +1776,10 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem data give a positive blocked \(\chi\) witness]%
     \label{thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_toDiagonal_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePowerCoeff_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_dim_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_trace_matrix_pow_of_pos}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form}
@@ -1718,6 +1790,34 @@ the elementary trace-power identity for diagonal matrices.
 \begin{proof}\leanok
     Apply the BNT-to-blocked witness construction to the comparison and the
     positive BNT-label \(\chi\)-witness belonging to the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give blocked trace-power form]%
+    \label{thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_tracePower}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis \(\chi\)-family obtained from BNT-label
+    theorem data satisfies the blocked trace-power predicate.
+\end{theorem}
+\begin{proof}\leanok
+    This is the trace-power part of the positive blocked-basis
+    \(\chi\)-witness obtained from the theorem data.
+\end{proof}
+
+\begin{theorem}[BNT theorem data give positive blocked chi families]%
+    \label{thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_posEntries}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis \(\chi\)-family obtained from BNT-label
+    theorem data has positive diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+    This is the positivity part of the positive blocked-basis
+    \(\chi\)-witness obtained from the theorem data.
 \end{proof}
 
 \begin{theorem}[BNT theorem data give positive pulled-back blocked entries]%
@@ -1753,12 +1853,32 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[Existential BNT-label theorem witness]%
     \label{def:mpdo_bnt_label_theorem_witness}
     \lean{MPOTensor.BNTLabelTheoremWitness}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.toTheoremData}
     \lean{MPOTensor.BNTLabelTheoremWitness.coeffs}
     \lean{MPOTensor.BNTLabelTheoremWitness.operators}
     \lean{MPOTensor.BNTLabelTheoremWitness.traceScalars}
     \lean{MPOTensor.BNTLabelTheoremWitness.positiveChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremWitness.sourceLabel}
+    \lean{MPOTensor.BNTLabelTheoremWitness.targetLabel}
     \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_hasBNTLabelTheoremWitness}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_coeffs}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_operators}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_traceScalars}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_positiveChi_chi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_same_length_product_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_idempotent_coefficient_form}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_blockedComparison}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_sourceLabel}
+    \lean{MPOTensor.BNTLabelTheoremWitness.ofChi_targetLabel}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data}
     An existential BNT-label theorem witness consists of the finite BNT-label
@@ -1766,7 +1886,34 @@ the elementary trace-power identity for diagonal matrices.
     corresponding BNT-label theorem data, including the pulled-back
     blocked-basis \(\chi\)-family.  The construction of such a witness from an
     MPDO tensor is the outstanding step toward Theorem~IV.13(ii).
+    The proposition-level form is the nonemptiness of this witness type.
+    In the source-side special case where the coefficients are canonically
+    determined by a \(\chi\)-family, the witness is obtained from
+    that same \(\chi\)-family together with the remaining product, idempotent,
+    and blocked-comparison statements.
 \end{definition}
+
+\begin{theorem}[BNT theorem witnesses give source equations]%
+    \label{thm:mpdo_has_bnt_label_theorem_witness_source_equations}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness}
+    A proposition-level BNT-label theorem witness contains the source-side
+    same-length product law, the idempotent scalar law, the positive-length
+    trace-power law, and positivity of the diagonal
+    \(\chi_{\alpha,\beta,\gamma}\)-entries.  After unpacking the witness, the
+    same-length product and idempotent equations can first be written with the
+    BNT-label coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\), and then with
+    the coefficients expressed as
+    \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})\) and
+    \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma})\), respectively.
+\end{theorem}
+\begin{proof}\leanok
+    Unpack the existential witness and apply the corresponding witness-level
+    equations.
+\end{proof}
 
 \begin{theorem}[BNT theorem witnesses give coefficient trace powers]%
     \label{thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow}
@@ -1827,6 +1974,20 @@ the elementary trace-power identity for diagonal matrices.
     Apply the corresponding theorem-data identity carried by the witness.
 \end{proof}
 
+\begin{theorem}[BNT theorem witnesses give the blocked coefficient comparison]%
+    \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
+    An existential BNT-label theorem witness gives the comparison between the
+    blocked-basis coefficients and the BNT-label coefficients through the
+    source and target label maps.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data comparison carried by the witness.
+\end{proof}
+
 \begin{theorem}[BNT theorem witnesses give the chi-trace product law]%
     \label{thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_chi_trace_pow}
@@ -1876,14 +2037,55 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem witnesses give positive blocked \(\chi\) witnesses]%
     \label{thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelTheoremWitness.toPositiveBlockedStructureChiTracePowerForm}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_toDiagonal_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePowerCoeff_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_dim_of_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_trace_matrix_pow_of_pos}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.positive_blocked_chi_witness}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_trace_power_form}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_pullback}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coeff_eq_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     An existential BNT-label theorem witness gives a positive blocked-basis
-    \(\chi\) trace-power witness for the chosen algebra-structure data.
+    \(\chi\) trace-power witness for the chosen algebra-structure data.  The
+    blocked-basis \(\chi\)-family is the pullback of the BNT-label
+    \(\chi\)-family along the source and target comparison maps.  The
+    proposition-level nonempty form of the witness gives the corresponding
+    existential blocked-basis trace-power family, both in coefficient form and
+    in matrix-trace form.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data consequence carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give blocked trace-power form]%
+    \label{thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_tracePower}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis \(\chi\)-family obtained from an existential
+    BNT-label theorem witness satisfies the blocked trace-power predicate.
+\end{theorem}
+\begin{proof}\leanok
+    This is the trace-power part of the positive blocked-basis
+    \(\chi\)-witness obtained from the existential witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive blocked chi families]%
+    \label{thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_pos_entries}
+    \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi_posEntries}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form}
+    The pulled-back blocked-basis \(\chi\)-family obtained from an existential
+    BNT-label theorem witness has positive diagonal entries.
+\end{theorem}
+\begin{proof}\leanok
+    This is the positivity part of the positive blocked-basis
+    \(\chi\)-witness obtained from the existential witness.
 \end{proof}
 
 \begin{theorem}[BNT theorem witnesses give positive pulled-back blocked entries]%

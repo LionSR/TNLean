@@ -59,8 +59,9 @@ For the blocked support tower, `AlgebraStructureData.BlockedStructureChiFamily`,
 `AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm` record the
 length-dependent blocked-basis analogue for
 `AlgebraStructureData.blockedStructureCoefficients`, including positivity of
-the diagonal entries. The remaining gap between the BNT-label system and the
-blocked-basis system is recorded in
+the diagonal entries. The BNT-label coefficient and comparison predicates are
+recorded in `TNLean.MPS.MPDO.BNTCoefficients`; the remaining gap is the
+construction of that BNT-label theorem data from an MPDO tensor, as recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. The basic trace-power
 identity `tr(χ_{α,β,γ}^L) = \sum_k \chi_{\alpha,\beta,\gamma,k}^L` is proved
 directly from `Matrix.diagonal_pow` and `Matrix.trace_diagonal`.
