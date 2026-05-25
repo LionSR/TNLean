@@ -1716,6 +1716,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremWitness.operators}
     \lean{MPOTensor.BNTLabelTheoremWitness.traceScalars}
     \lean{MPOTensor.BNTLabelTheoremWitness.positiveChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data}
     An existential BNT-label theorem witness consists of the finite BNT-label
@@ -1796,6 +1797,20 @@ the elementary trace-power identity for diagonal matrices.
     $m_\gamma =
       \sum_{\alpha,\beta}
         \operatorname{tr}(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give blocked coefficient trace powers]%
+    \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_trace_pow}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow}
+    An existential BNT-label theorem witness gives the blocked-basis
+    coefficient trace-power formula obtained by pulling the BNT-label
+    \(\chi\)-matrices back along the blocked-basis comparison maps.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
