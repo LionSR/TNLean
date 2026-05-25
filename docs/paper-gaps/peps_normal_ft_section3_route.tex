@@ -130,16 +130,18 @@ window. This local-window region should not be confused with the
 finite-lattice complementary block used later in the proof of
 Theorem~\path{3}. The finite-lattice complementary block is now named as the
 complement of the two edge blocks in the full square lattice, and its
-elementary disjointness and cover identities are formalized. A rectangular
-cover witness for this complementary block is also present: if such a cover by
-contiguous $2\times3$ and $3\times2$ rectangles is supplied, then rectangular
-injectivity and finite union closure imply injectivity of the complementary
-block. This is only a sufficient criterion, not the only source route. The
-normalized $5\times7$ horizontal-edge geometry is now also formalized:
-$A_3$ is the local-window $T$-region together with two top-collar contiguous
-$3\times2$ rectangles, so injectivity of local $T$ implies injectivity of
-$A_3$ by union closure and rectangular injectivity. Local $T$-injectivity and
-the translated every-edge construction remain open.
+elementary disjointness and cover identities are formalized. The rectangular
+cover witness is now target-parametric: if a square-lattice region has a
+nonempty cover by contiguous $2\times3$ and $3\times2$ rectangles, then
+rectangular injectivity and finite union closure imply injectivity of that
+region. The formalized special cases are the local-window $T$-region and the
+finite-lattice complementary block. This is only a sufficient criterion, not
+the only source route. The normalized $5\times7$ horizontal-edge geometry is
+now also formalized: $A_3$ is the local-window $T$-region together with two
+top-collar contiguous $3\times2$ rectangles, so injectivity of local $T$
+implies injectivity of $A_3$ by union closure and rectangular injectivity.
+The concrete local $T$ cover and the translated every-edge construction remain
+open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -190,13 +192,14 @@ alone. The following additional obligations remain.
           rectangular injectivity, and their union is injective under the
           source union-closure hypothesis. The finite-lattice complementary
           region around an edge is now defined, and its elementary complement
-          identities are formalized. A direct rectangular-cover witness gives
-          one sufficient criterion for its injectivity. In the normalized
-          horizontal-edge $5\times7$ frame, the complementary block is also
-          formalized as the union of local $T$ and two contiguous $3\times2$
-          collar rectangles, so local $T$-injectivity implies injectivity of
-          this block. The remaining coordinate work is to prove local
-          $T$-injectivity and translate this decomposition around every edge.
+          identities are formalized. Rectangular-cover witnesses give sufficient
+          criteria for injectivity of both the local displayed $T$-region and
+          the finite-lattice complementary block. In the normalized horizontal
+          edge $5\times7$ frame, the complementary block is also formalized as
+          the union of local $T$ and two contiguous $3\times2$ collar
+          rectangles, so local $T$-injectivity implies injectivity of this
+          block. The remaining coordinate work is to construct the concrete
+          local $T$ cover and translate this decomposition around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -224,11 +227,19 @@ alone. The following additional obligations remain.
           $T$-window, and of their union under union closure: blueprint
           \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue
           \#2004.
+    \item General rectangular-cover criterion for square-lattice regions:
+          blueprint \path{lem:peps_normalSquareRectangleCover_injective}, issue
+          \#2004.
+    \item Rectangular-cover criterion for injectivity of the displayed
+          $T$-region: blueprint
+          \path{lem:peps_normalSquareRegionT_injective_of_cover}, issue
+          \#2004.
     \item Finite-lattice complementary block around an edge: blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion}, issue \#2004.
     \item Rectangular-cover criterion for injectivity of that block: blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover},
-          issue \#2004.
+          using the cover definition
+          \path{def:peps_normalSquareRectangleCover}, issue \#2004.
     \item Normalized $5\times7$ top-collar decomposition of that block:
           blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_topCollar}, issue
