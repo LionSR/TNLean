@@ -155,7 +155,10 @@ noncomputable def edgeMiddleTensorFamily (A : Tensor G d) (e : Edge G) :
 /-- Injectivity of the middle tensor in the edge-blocked three-site chain.
 
 This is the middle-block part of the paper's assertion that the tensor network
-obtained after `eq:block_to_mps` is an injective three-site MPS. -/
+obtained after `eq:block_to_mps` is an injective three-site MPS.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 def EdgeMiddleTensorInjective (A : Tensor G d) (e : Edge G) : Prop :=
   LinearIndependent ℂ (edgeMiddleTensorFamily (G := G) A e)
 
@@ -175,8 +178,8 @@ structure EdgeBlockedThreeSiteInjective (A : Tensor G d) (e : Edge G) : Prop whe
 /-- Vertex injectivity supplies the two endpoint injectivity assertions in the
 edge-blocked three-site chain.
 
-The remaining content of `thm:peps_edgeBlockedThreeSiteInjective` is the
-middle-block injectivity assertion. -/
+The unformalized content is middle-block injectivity: linear independence of the
+middle tensor family over the residual boundary configurations. -/
 theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G d}
     (hA : IsVertexInjective A) (e : Edge G) :
     Function.Injective (localTensorMap A e.1.1) ∧
