@@ -761,6 +761,30 @@ theorem rect32_injective
   h.threeByTwo_injective _
     (isThreeByTwoContiguousSquareLatticeRectangle_of_bounds hx hy)
 
+/-- The vertical edge block removed from the displayed \(T\)-region is injective
+under the square-lattice rectangular injectivity hypotheses.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1405--1444
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem tVerticalBlock_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    κ.IsInjective (normalSquareRegionTVerticalBlock xStart yStart) :=
+  h.twoByThree_injective _
+    (normalSquareRegionTVerticalBlock_rectangular hx hy)
+
+/-- The horizontal edge block removed from the displayed \(T\)-region is
+injective under the square-lattice rectangular injectivity hypotheses.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1405--1444
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem tHorizontalBlock_injective
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    κ.IsInjective (normalSquareRegionTHorizontalBlock xStart yStart) :=
+  h.threeByTwo_injective _
+    (normalSquareRegionTHorizontalBlock_rectangular hx hy)
+
 /-- Region \(R\) is injective once rectangular injectivity is combined with
 the union-closure assertion from the source injective-union lemma.
 
