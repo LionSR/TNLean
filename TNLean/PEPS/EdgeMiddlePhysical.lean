@@ -1,4 +1,5 @@
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.InjectiveRegion
 
 /-!
 # Middle physical indices for edge-blocked PEPS
@@ -175,6 +176,24 @@ structure EdgeBlockedThreeSiteInjective (A : Tensor G d) (e : Edge G) : Prop whe
   middle_injective : EdgeMiddleTensorInjective (G := G) A e
   right_injective : Function.Injective (localTensorMap A e.1.2)
 
+/-- A comparison from finite-region injectivity to the middle tensor in the
+edge-blocked three-site chain.
+
+The source proof uses that contracting injective tensors over a finite region
+gives an injective blocked tensor. This proposition records the part of that
+claim needed for the middle region \(V\setminus\{u,v\}\) attached to an edge
+\(e=(u,v)\), without asserting the full contraction theorem.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+structure EdgeMiddleRegionInjectivityComparison
+    (κ : RegionInjectivityData V) (A : Tensor G d) : Prop where
+  /-- Region injectivity of \(V\setminus\{u,v\}\) gives injectivity of the
+  corresponding edge-middle tensor family. -/
+  middle_tensor_injective :
+    ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e) →
+      EdgeMiddleTensorInjective (G := G) A e
+
 /-- Vertex injectivity supplies the two endpoint injectivity assertions in the
 edge-blocked three-site chain.
 
@@ -197,6 +216,25 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle {A : Tensor G 
     (hMiddle : EdgeMiddleTensorInjective (G := G) A e) :
     EdgeBlockedThreeSiteInjective (G := G) A e :=
   ⟨hA.localTensorMap_injective e.1.1, hMiddle, hA.localTensorMap_injective e.1.2⟩
+
+/-- Region injectivity of the edge-middle block, together with the comparison to
+the edge-middle tensor family, gives the edge-blocked three-site injectivity
+statement.
+
+This is a conditional form of the assertion after `eq:block_to_mps`; the
+unconditional paper statement still requires a proof of the finite-region
+contraction theorem.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A) (e : Edge G)
+    (hMiddleRegion : κ.IsInjective (edgeMiddleVertices e)) :
+    EdgeBlockedThreeSiteInjective (G := G) A e :=
+  hA.edgeBlockedThreeSiteInjective_of_middle e
+    (hComparison.middle_tensor_injective e hMiddleRegion)
 
 end PEPS
 end TNLean

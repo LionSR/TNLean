@@ -134,7 +134,14 @@ Theorem can be proved in the manner of the paper.
   and
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
   reduces the remaining work to the middle-block injectivity statement. The
-  full transfer remains the not-yet-formalized theorem
+  comparison
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
+  records the conditional passage from finite-region injectivity of
+  \(V\setminus\{u,v\}\) to the edge-middle tensor family. The missing
+  mathematical step is still the contraction theorem used in the paper:
+  contracting vertex-injective tensors over that finite middle region gives an
+  injective blocked tensor. The full transfer remains the not-yet-formalized
+  theorem
   \path{thm:peps_edgeBlockedThreeSiteInjective}.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
   the edge-blocked three-site MPS. The local endpoint part of the
