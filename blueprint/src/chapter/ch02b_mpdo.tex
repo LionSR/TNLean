@@ -1643,6 +1643,20 @@ the elementary trace-power identity for diagonal matrices.
     positive BNT-label $\chi$-witness in the theorem data.
 \end{proof}
 
+\begin{theorem}[BNT theorem data give positive chi entries]%
+    \label{thm:mpdo_bnt_label_theorem_data_chi_entry_pos}
+    \lean{MPOTensor.BNTLabelTheoremData.chi_entry_pos}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_data,
+        def:mpdo_positive_bnt_label_chi_trace_power_form}
+    BNT-label theorem data give positivity of every diagonal entry of
+    \(\chi_{\alpha,\beta,\gamma}\).
+\end{theorem}
+\begin{proof}\leanok
+    This is the positivity condition carried by the positive BNT-label
+    \(\chi\)-witness in the theorem data.
+\end{proof}
+
 \begin{theorem}[BNT theorem data give the chi-trace product law]%
     \label{thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow}
@@ -1733,6 +1747,20 @@ the elementary trace-power identity for diagonal matrices.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
+\end{proof}
+
+\begin{theorem}[BNT theorem witnesses give positive chi entries]%
+    \label{thm:mpdo_bnt_label_theorem_witness_chi_entry_pos}
+    \lean{MPOTensor.BNTLabelTheoremWitness.chi_entry_pos}
+    \leanok
+    \uses{def:mpdo_bnt_label_theorem_witness,
+        thm:mpdo_bnt_label_theorem_data_chi_entry_pos}
+    An existential BNT-label theorem witness gives positivity of every
+    diagonal entry of \(\chi_{\alpha,\beta,\gamma}\).
+\end{theorem}
+\begin{proof}\leanok
+    Apply the corresponding theorem-data positivity statement carried by the
+    witness.
 \end{proof}
 
 \begin{theorem}[BNT theorem witnesses give the same-length product law]%
