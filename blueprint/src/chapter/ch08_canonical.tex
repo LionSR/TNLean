@@ -438,7 +438,7 @@ definitions stated below.
 
     This is the spectral-radius normalization and full-rank fixed-point gauge
     used in \cite[Theorem~Th:TIcanonical, lines~765--769]
-        {PerezGarcia2007Matrix}.
+    {PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -734,27 +734,6 @@ statement is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \uses{thm:mpv_decomposition}
     Expand the block-diagonal MPV coefficient as a finite sum over blocks and
     factor the common scalar power out of the sum.
-\end{proof}
-
-\begin{theorem}[Irreducible block decomposition with left-canonical normalization]%
-    \label{thm:irreducible_block_decomp_with_cfii}
-    \lean{MPSTensor.exists_irreducible_blockDecomp_with_CFII}
-    \leanok
-    \uses{def:irreducible_tensor}
-    For any MPS tensor~$A$, there exist irreducible blocks
-    $(A_k)_{k=1}^r$ that generate the same MPV family as~$A$.
-    Moreover, for each block~$k$,
-    if that block has already been placed in TP gauge and $D_k > 0$,
-    one obtains a left-canonical normalization (unitary, diagonal PD fixed point,
-    MPV preservation).
-    This yields the left-canonical normalization; the further reduction to
-    normal canonical form is carried out in the subsequent spectral analysis.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:irred_decomp, thm:CFII_data}
-    Combine Theorems~\ref{thm:irred_decomp}
-    and~\ref{thm:CFII_data}.
 \end{proof}
 
 \begin{theorem}[Normal canonical form from a primitive block decomposition]%
@@ -1643,7 +1622,7 @@ structure for completeness.
     \]
     is unital.  In this unital gauge every fixed point of $\E_B$ is a scalar
     multiple of the identity.  Moreover a unitary conjugate $C^i=U^\dagger
-    B^iU$ remains unital and has a diagonal positive definite dual fixed point
+        B^iU$ remains unital and has a diagonal positive definite dual fixed point
     $\Lambda$:
     \[
         \sum_i C^i(C^i)^\dagger=\Id,
@@ -1655,7 +1634,7 @@ structure for completeness.
 
     This composes the single-block canonical-form existence steps of
     \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
-        {PerezGarcia2007Matrix}.  It is not yet the full theorem, because the
+    {PerezGarcia2007Matrix}.  It is not yet the full theorem, because the
     recursive finite-ring block decomposition and the final bond-dimension
     bound have not been threaded through this construction.
 \end{theorem}
@@ -1694,7 +1673,7 @@ structure for completeness.
 
     This is the blockwise composition of
     \cite[Theorem~Th:TIcanonical, lines~765--770 and 816--832]
-        {PerezGarcia2007Matrix} after the recursive splitting has already
+    {PerezGarcia2007Matrix} after the recursive splitting has already
     produced the nonzero irreducible summands.  It is not yet the full source
     theorem, because it does not start from an arbitrary representation and
     does not prove the final total bond-dimension bound.
