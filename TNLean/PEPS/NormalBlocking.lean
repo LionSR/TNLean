@@ -348,9 +348,8 @@ theorem normalSquareRegionT_disjoint_THole {width height : ℕ}
       (normalSquareRegionT xStart yStart :
         Finset (SquareLatticeVertex width height))
       (normalSquareRegionTHole xStart yStart) := by
-  rw [Finset.disjoint_left]
-  intro v hvT hvHole
-  exact (mem_normalSquareRegionT xStart yStart v).mp hvT |>.2.2.2.2 hvHole
+  unfold normalSquareRegionT
+  exact disjoint_sdiff_self_left
 
 /-- The displayed \(T\)-region and the two removed edge blocks reconstruct the
 local \(5\times6\) coordinate window.
@@ -362,22 +361,8 @@ theorem normalSquareRegionT_union_THole {width height : ℕ}
     normalSquareRegionT xStart yStart ∪ normalSquareRegionTHole xStart yStart =
       (squareLatticeContiguousRectangle xStart yStart 5 6 :
         Finset (SquareLatticeVertex width height)) := by
-  ext v
-  constructor
-  · intro hv
-    rcases (Finset.mem_union.mp hv) with hvT | hvHole
-    · have hT := (mem_normalSquareRegionT xStart yStart v).mp hvT
-      rw [mem_squareLatticeContiguousRectangle]
-      exact ⟨hT.1, hT.2.1, hT.2.2.1, hT.2.2.2.1⟩
-    · exact normalSquareRegionTHole_subset_window xStart yStart hvHole
-  · intro hvWindow
-    rw [mem_squareLatticeContiguousRectangle] at hvWindow
-    by_cases hvHole : v ∈ normalSquareRegionTHole xStart yStart
-    · exact Finset.mem_union.mpr (Or.inr hvHole)
-    · exact Finset.mem_union.mpr (Or.inl (by
-        rw [mem_normalSquareRegionT]
-        exact
-          ⟨hvWindow.1, hvWindow.2.1, hvWindow.2.2.1, hvWindow.2.2.2, hvHole⟩))
+  unfold normalSquareRegionT
+  exact Finset.sdiff_union_of_subset (normalSquareRegionTHole_subset_window xStart yStart)
 
 /-- The displayed region \(R\) is contained in the displayed region \(S\).
 
