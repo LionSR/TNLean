@@ -8380,7 +8380,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>                The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively. Contiguous coordinate rectangles are products of contiguous coordinate intervals, and the contiguous \(2\times 3\) and \(3\times 2\) predicates name the rectangular blocks used in the normal square-lattice theorem. The displayed region \(R\) is the union of a \(2\times 3\) contiguous rectangle with the \(3\times 2\) contiguous rectangle occupying its upper two rows and extending one column to the right. The displayed region \(S\) is the union of two \(2\times 3\) contiguous rectangles shifted by one horizontal coordinate, hence the full \(3\times 3\) square spanned by them. The displayed region \(T\) is the complement, inside a local \(5\times 6\) coordinate window, of the vertical \(2\times 3\) edge block and the horizontal \(3\times 2\) edge block shown in the source picture. </p>
+  <p>                The finite \(n\times m\) square lattice is represented by pairs of coordinates. A coordinate rectangle is a product of a horizontal coordinate set and a vertical coordinate set. The \(2\times 3\) and \(3\times 2\) coordinate-product predicates assert only that these two coordinate sets have cardinalities \(2,3\) and \(3,2\), respectively. Contiguous coordinate rectangles are products of contiguous coordinate intervals, and the contiguous \(2\times 3\) and \(3\times 2\) predicates name the rectangular blocks used in the normal square-lattice theorem. The displayed region \(R\) is the union of a \(2\times 3\) contiguous rectangle with the \(3\times 2\) contiguous rectangle occupying its upper two rows and extending one column to the right. The displayed region \(S\) is the union of two \(2\times 3\) contiguous rectangles shifted by one horizontal coordinate, hence the full \(3\times 3\) square spanned by them. The displayed local-window model for \(T\) is the complement, inside a local \(5\times 6\) coordinate window, of the vertical \(2\times 3\) edge block and the horizontal \(3\times 2\) edge block shown in the source picture. </p>
 
   </div>
 </div>
@@ -8471,7 +8471,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>               Membership in a coordinate rectangle is coordinatewise membership, the contiguous coordinate interval has the expected coordinate inequalities, membership in a contiguous coordinate rectangle is the conjunction of the four bounding inequalities, and membership in \(R\) is the disjunction of membership in the \(2\times 3\) lower-left piece or in the shifted \(3\times 2\) upper piece. Membership in \(S\) is the disjunction of membership in the left \(2\times 3\) piece or in the horizontally shifted \(2\times 3\) piece. Membership in \(T\) is membership in the local \(5\times 6\) window together with nonmembership in the union of the two displayed edge blocks. Bounded contiguous coordinate rectangles of sizes \(2\times 3\) and \(3\times 2\) satisfy, respectively, the predicates for contiguous \(2\times 3\) and contiguous \(3\times 2\) square-lattice rectangles. The cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
+  <p>               Membership in a coordinate rectangle is coordinatewise membership, the contiguous coordinate interval has the expected coordinate inequalities, membership in a contiguous coordinate rectangle is the conjunction of the four bounding inequalities, and membership in \(R\) is the disjunction of membership in the \(2\times 3\) lower-left piece or in the shifted \(3\times 2\) upper piece. Membership in \(S\) is the disjunction of membership in the left \(2\times 3\) piece or in the horizontally shifted \(2\times 3\) piece. Membership in the local-window \(T\) region is membership in the local \(5\times 6\) window together with nonmembership in the union of the two displayed edge blocks. Bounded contiguous coordinate rectangles of sizes \(2\times 3\) and \(3\times 2\) satisfy, respectively, the predicates for contiguous \(2\times 3\) and contiguous \(3\times 2\) square-lattice rectangles. The cardinality of a coordinate rectangle is the product of the two coordinate cardinalities, and the full coordinate rectangle is the whole finite vertex set. </p>
 
   </div>
 </div>
@@ -8661,7 +8661,7 @@
     Lemma
     </span>
     <span class="lemma_thmlabel">17.111</span>
-    <span class="lemma_thmtitle">The \(T\)-region and its removed edge blocks fill the local window</span>
+    <span class="lemma_thmtitle">The local \(T\)-region and its removed edge blocks fill the window</span>
     <div class="thm_header_extras">
 
     
@@ -8732,7 +8732,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>         The two edge blocks removed from the displayed \(T\)-region lie inside the local \(5\times 6\) coordinate window. They are disjoint from each other and from \(T\), and their union with \(T\) is exactly that local window. </p>
+  <p>         The two edge blocks removed from the displayed local \(T\)-region lie inside the local \(5\times 6\) coordinate window. They are disjoint from each other and from this local \(T\) region, and their union with it is exactly that local window. </p>
 
   </div>
 </div>
@@ -9132,7 +9132,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>     For the displayed \(T\)-region inside its local \(5\times 6\) coordinate window, if the smaller edge-block bounds \(x_0 + 5 \leq n\) and \(y_0 + 5 \leq m\) hold in the finite \(n\times m\) square lattice, then the coordinate square-lattice rectangular injectivity hypotheses imply that the vertical \(2\times 3\) block and horizontal \(3\times 2\) block removed from the window are injective. If, in addition, region injectivity is closed under unions, then the union of these two removed edge blocks is injective. </p>
+  <p>     For the displayed local \(T\)-region inside its \(5\times 6\) coordinate window, if the smaller edge-block bounds \(x_0 + 5 \leq n\) and \(y_0 + 5 \leq m\) hold in the finite \(n\times m\) square lattice, then the coordinate square-lattice rectangular injectivity hypotheses imply that the vertical \(2\times 3\) block and horizontal \(3\times 2\) block removed from the window are injective. If, in addition, region injectivity is closed under unions, then the union of these two removed edge blocks is injective. </p>
 
   </div>
 </div>
