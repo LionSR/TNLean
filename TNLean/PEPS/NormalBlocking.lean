@@ -242,6 +242,28 @@ theorem normalSquareRegionS_rectangular_decomposition {width height : ℕ}
   · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) hy
   · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) hy
 
+/-- The vertical edge block removed from the local window in the displayed
+region \(T\).
+
+This is the \(2\times3\) block shown in the source picture.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareRegionTVerticalBlock {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart (yStart + 2) 2 3
+
+/-- The horizontal edge block removed from the local window in the displayed
+region \(T\).
+
+This is the shifted \(3\times2\) block shown in the source picture.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareRegionTHorizontalBlock {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2
+
 /-- The two edge blocks removed from the local window in the displayed region
 \(T\).
 
@@ -252,8 +274,32 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
 of `Papers/1804.04964/paper_normal.tex`. -/
 def normalSquareRegionTHole {width height : ℕ} (xStart yStart : ℕ) :
     Finset (SquareLatticeVertex width height) :=
-  squareLatticeContiguousRectangle xStart (yStart + 2) 2 3 ∪
-    squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2
+  normalSquareRegionTVerticalBlock xStart yStart ∪
+    normalSquareRegionTHorizontalBlock xStart yStart
+
+/-- The vertical edge block removed from the displayed \(T\)-region is a
+contiguous \(2\times3\) rectangle.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionTVerticalBlock_rectangular {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    IsTwoByThreeContiguousSquareLatticeRectangle
+      (normalSquareRegionTVerticalBlock xStart yStart :
+        Finset (SquareLatticeVertex width height)) := by
+  exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
+
+/-- The horizontal edge block removed from the displayed \(T\)-region is a
+contiguous \(3\times2\) rectangle.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionTHorizontalBlock_rectangular {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height) :
+    IsThreeByTwoContiguousSquareLatticeRectangle
+      (normalSquareRegionTHorizontalBlock xStart yStart :
+        Finset (SquareLatticeVertex width height)) := by
+  exact isThreeByTwoContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
 
 /-- The two edge blocks removed in the displayed region \(T\) are one
 contiguous \(2\times3\) rectangle and one contiguous \(3\times2\) rectangle.
@@ -267,10 +313,10 @@ theorem normalSquareRegionTHole_rectangular_decomposition {width height : ℕ}
       IsTwoByThreeContiguousSquareLatticeRectangle T₂ ∧
         IsThreeByTwoContiguousSquareLatticeRectangle T₃ ∧
           normalSquareRegionTHole xStart yStart = T₂ ∪ T₃ := by
-  refine ⟨squareLatticeContiguousRectangle xStart (yStart + 2) 2 3,
-    squareLatticeContiguousRectangle (xStart + 2) (yStart + 1) 3 2, ?_, ?_, rfl⟩
-  · exact isTwoByThreeContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
-  · exact isThreeByTwoContiguousSquareLatticeRectangle_of_bounds (by omega) (by omega)
+  refine ⟨normalSquareRegionTVerticalBlock xStart yStart,
+    normalSquareRegionTHorizontalBlock xStart yStart, ?_, ?_, rfl⟩
+  · exact normalSquareRegionTVerticalBlock_rectangular hx hy
+  · exact normalSquareRegionTHorizontalBlock_rectangular hx hy
 
 /-- The displayed region \(T\) in the normal square-lattice proof.
 
@@ -303,6 +349,20 @@ def normalSquareRegionT {width height : ℕ} (xStart yStart : ℕ) :
       (xStart + 1 ≤ v.1.1 ∧ v.1.1 < xStart + 3 ∧
         yStart ≤ v.2.1 ∧ v.2.1 < yStart + 3) := by
   simp [normalSquareRegionS]
+
+@[simp] theorem mem_normalSquareRegionTVerticalBlock {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionTVerticalBlock xStart yStart ↔
+      xStart ≤ v.1.1 ∧ v.1.1 < xStart + 2 ∧
+        yStart + 2 ≤ v.2.1 ∧ v.2.1 < yStart + 5 := by
+  simp [normalSquareRegionTVerticalBlock]
+
+@[simp] theorem mem_normalSquareRegionTHorizontalBlock {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareRegionTHorizontalBlock xStart yStart ↔
+      xStart + 2 ≤ v.1.1 ∧ v.1.1 < xStart + 5 ∧
+        yStart + 1 ≤ v.2.1 ∧ v.2.1 < yStart + 3 := by
+  simp [normalSquareRegionTHorizontalBlock]
 
 @[simp] theorem mem_normalSquareRegionTHole {width height : ℕ}
     (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
@@ -337,6 +397,22 @@ theorem normalSquareRegionTHole_subset_window {width height : ℕ}
   rw [mem_squareLatticeContiguousRectangle]
   rcases hv with hv | hv <;> omega
 
+/-- The two edge blocks removed from the displayed \(T\)-region are disjoint.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionTVerticalBlock_disjoint_horizontalBlock {width height : ℕ}
+    (xStart yStart : ℕ) :
+    Disjoint
+      (normalSquareRegionTVerticalBlock xStart yStart :
+        Finset (SquareLatticeVertex width height))
+      (normalSquareRegionTHorizontalBlock xStart yStart) := by
+  rw [Finset.disjoint_left]
+  intro v hvVertical hvHorizontal
+  rw [mem_normalSquareRegionTVerticalBlock] at hvVertical
+  rw [mem_normalSquareRegionTHorizontalBlock] at hvHorizontal
+  omega
+
 /-- The displayed \(T\)-region is disjoint from the two edge blocks removed
 from the local \(5\times6\) window.
 
@@ -351,6 +427,38 @@ theorem normalSquareRegionT_disjoint_THole {width height : ℕ}
   unfold normalSquareRegionT
   exact disjoint_sdiff_self_left
 
+/-- The displayed \(T\)-region is disjoint from the vertical edge block removed
+from the local \(5\times6\) window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_disjoint_verticalBlock {width height : ℕ}
+    (xStart yStart : ℕ) :
+    Disjoint
+      (normalSquareRegionT xStart yStart :
+        Finset (SquareLatticeVertex width height))
+      (normalSquareRegionTVerticalBlock xStart yStart) := by
+  rw [Finset.disjoint_left]
+  intro v hvT hvVertical
+  rw [mem_normalSquareRegionT] at hvT
+  exact hvT.2.2.2.2 (by simp [normalSquareRegionTHole, hvVertical])
+
+/-- The displayed \(T\)-region is disjoint from the horizontal edge block
+removed from the local \(5\times6\) window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_disjoint_horizontalBlock {width height : ℕ}
+    (xStart yStart : ℕ) :
+    Disjoint
+      (normalSquareRegionT xStart yStart :
+        Finset (SquareLatticeVertex width height))
+      (normalSquareRegionTHorizontalBlock xStart yStart) := by
+  rw [Finset.disjoint_left]
+  intro v hvT hvHorizontal
+  rw [mem_normalSquareRegionT] at hvT
+  exact hvT.2.2.2.2 (by simp [normalSquareRegionTHole, hvHorizontal])
+
 /-- The displayed \(T\)-region and the two removed edge blocks reconstruct the
 local \(5\times6\) coordinate window.
 
@@ -363,6 +471,20 @@ theorem normalSquareRegionT_union_THole {width height : ℕ}
         Finset (SquareLatticeVertex width height)) := by
   unfold normalSquareRegionT
   exact Finset.sdiff_union_of_subset (normalSquareRegionTHole_subset_window xStart yStart)
+
+/-- The displayed \(T\)-region, the vertical removed block, and the horizontal
+removed block reconstruct the local \(5\times6\) coordinate window.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareRegionT_union_verticalBlock_union_horizontalBlock {width height : ℕ}
+    (xStart yStart : ℕ) :
+    normalSquareRegionT xStart yStart ∪ normalSquareRegionTVerticalBlock xStart yStart ∪
+        normalSquareRegionTHorizontalBlock xStart yStart =
+      (squareLatticeContiguousRectangle xStart yStart 5 6 :
+        Finset (SquareLatticeVertex width height)) := by
+  rw [Finset.union_assoc]
+  simpa [normalSquareRegionTHole] using normalSquareRegionT_union_THole xStart yStart
 
 /-- The displayed region \(R\) is contained in the displayed region \(S\).
 
