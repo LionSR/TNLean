@@ -627,12 +627,12 @@ theorem same_length_product_eq_sum (L : ℕ) (hL : 0 < L) (α β : W.Label) :
 Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_eq_sum (γ : W.Label) :
+    letI := W.labelFintype
     W.traceScalars.traceScalar γ =
-      (@Finset.univ W.Label W.labelFintype).sum fun α ↦
-        (@Finset.univ W.Label W.labelFintype).sum fun β ↦
-          W.coeffs.coeff 1 α β γ *
-            (W.traceScalars.traceScalar α *
-              W.traceScalars.traceScalar β) := by
+      ∑ α : W.Label, ∑ β : W.Label,
+        W.coeffs.coeff 1 α β γ *
+          (W.traceScalars.traceScalar α *
+            W.traceScalars.traceScalar β) := by
   letI := W.labelFintype
   letI := W.operatorAddCommMonoid
   letI := W.operatorModule
@@ -665,12 +665,12 @@ length-one coefficients written as traces of the chi matrices.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_eq_sum_chi_trace (γ : W.Label) :
+    letI := W.labelFintype
     W.traceScalars.traceScalar γ =
-      (@Finset.univ W.Label W.labelFintype).sum fun α ↦
-        (@Finset.univ W.Label W.labelFintype).sum fun β ↦
-          (W.positiveChi.chi.matrix α β γ).trace *
-            (W.traceScalars.traceScalar α *
-              W.traceScalars.traceScalar β) := by
+      ∑ α : W.Label, ∑ β : W.Label,
+        (W.positiveChi.chi.matrix α β γ).trace *
+          (W.traceScalars.traceScalar α *
+            W.traceScalars.traceScalar β) := by
   letI := W.labelFintype
   letI := W.operatorAddCommMonoid
   letI := W.operatorModule
