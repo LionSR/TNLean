@@ -449,6 +449,16 @@ variable {data : AlgebraStructureData d D} {Λ : Type*} {O : ℕ → Type*}
   [Fintype Λ] [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
   [∀ L : ℕ, Mul (O L)] (H : BNTLabelTheoremData data Λ O)
 
+/-- The BNT-label coefficients in theorem data are traces of powers of the
+length-independent chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
+    H.coeffs.coeff L α β γ =
+      (H.positiveChi.chi.matrix α β γ ^ L).trace :=
+  H.positiveChi.eq_trace_pow L hL α β γ
+
 /-- The BNT product expansion with the coefficients written as traces of the
 length-independent chi matrices. -/
 theorem same_length_product_eq_sum_chi_trace_pow
