@@ -1478,6 +1478,23 @@ injective and normal PEPS, following Theorems~2 and~3 of
     with the coordinate bounds which make them valid contiguous rectangles.
 \end{proof}
 
+\begin{lemma}[The $T$-region and its removed edge blocks fill the local window]%
+    \label{lem:peps_normalSquareRegionT_window_complement}
+    \lean{TNLean.PEPS.normalSquareRegionTHole_subset_window}
+    \lean{TNLean.PEPS.normalSquareRegionT_disjoint_THole}
+    \lean{TNLean.PEPS.normalSquareRegionT_union_THole}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_squareLatticeCoordinateRegion_identities}
+    The two edge blocks removed from the displayed $T$-region lie inside the
+    local $5\times6$ coordinate window.  They are disjoint from $T$, and their
+    union with $T$ is exactly that local window.
+\end{lemma}
+\begin{proof}\leanok
+    This follows by unfolding the definition of $T$ as the set-theoretic
+    complement of the two displayed edge blocks inside the local window.
+\end{proof}
+
 \begin{lemma}[The normal regions \(R\) and \(S\) differ in one site]%
     \label{lem:peps_normalSquareRegionR_regionS_difference}
     \lean{TNLean.PEPS.normalSquareRegionR_subset_regionS}
