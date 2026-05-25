@@ -3,7 +3,7 @@ r"""plasTeX renderers for TNLean tensor-network diagrams.
 The PDF blueprint renders the chapter-facing ``\TN...`` macros with TikZ from
 ``macros/tn_print.tex``.  Its private drawing kernel lives in
 ``macros/tn_core.tex``.  The web blueprint uses the same macro calls and asks
-this package for a cached SVG.  Thus TikZ remains the single source of truth.
+this module for a cached SVG.  Thus TikZ remains the single source of truth.
 """
 
 from __future__ import annotations
@@ -35,6 +35,7 @@ _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/tn_core.tex",
     _SRC_DIR / "macros/tn_print.tex",
 )
+_TEMPLATE_FILE = _SRC_DIR / "plastex_templates/TensorNetworkDiagrams.jinja2s"
 
 
 _DIAGRAM_ARGS: dict[str, str] = {
@@ -72,9 +73,17 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSTwoInjectiveGaugeScalarReduction": "",
     "TNPEPSOneVertexComplementComparison": "",
     "TNPEPSInjectiveRegionUnion": "",
+    "TNPEPSInjectiveRegionUnionProof": "",
     "TNPEPSNormalRegionsRS": "",
+    "TNPEPSCoordinateNormalRegionsRS": "",
     "TNPEPSNormalRegionT": "",
+    "TNPEPSCoordinateNormalRegionT": "",
+    "TNPEPSNormalRectangleCover": "",
+    "TNPEPSNormalEdgeComplementTopCollar": "",
+    "TNPEPSNormalOneSiteSeparation": "",
     "TNPEPSNormalEdgeBlockingReduction": "",
+    "TNPEPSNormalEdgeBlockingHypotheses": "",
+    "TNPEPSNormalBlockingHypotheses": "",
     "TNPEPSTINormalGaugeAbsorption": "",
     "TNPEPSEdgeGaugeOrientation": "",
     "TNPEPSGaugeVertexAction": "",
@@ -145,6 +154,24 @@ def _assert_diagram_args_match_print_macros() -> None:
         raise RuntimeError(
             "Tensor-network diagram arities are out of sync with macros/tn_print.tex "
             f"(missing={missing}, stale={stale}, mismatched={mismatched})."
+        )
+
+
+def _assert_diagram_templates_cover_registered_macros() -> None:
+    pattern = re.compile(r"^name:\s+(.+)$", re.MULTILINE)
+    template = _TEMPLATE_FILE.read_text(encoding="utf-8")
+    rendered_names = {
+        name
+        for line in pattern.findall(template)
+        for name in line.split()
+    }
+    registered_names = set(_DIAGRAM_ARGS)
+    missing = sorted(registered_names - rendered_names)
+    stale = sorted(rendered_names - registered_names)
+    if missing or stale:
+        raise RuntimeError(
+            "Tensor-network diagram HTML templates are out of sync with "
+            f"registered macros (missing={missing}, stale={stale})."
         )
 
 
@@ -476,7 +503,8 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.check:
         _assert_diagram_args_match_print_macros()
-        print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram arities")
+        _assert_diagram_templates_cover_registered_macros()
+        print(f"checked {len(_DIAGRAM_ARGS)} tensor-network diagram registrations")
 
     if args.check_peps_usage:
         _assert_peps_macros_used_in_chapter()

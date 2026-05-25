@@ -24,3 +24,39 @@ name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
 
 name: TNPEPSGaugeCancellation TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
 {{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeBlockingReduction TNPEPSEdgeInsertedCoeff
+{{ obj.tn_svg_html }}
+
+name: TNPEPSThreeSiteInsertionComparison TNPEPSInsertionPhysicalRealization
+{{ obj.tn_svg_html }}
+
+name: TNPEPSPhysicalToVirtualInsertion TNPEPSEdgeInsertionEquality
+{{ obj.tn_svg_html }}
+
+name: TNPEPSEdgeGaugeAbsorption TNPEPSTwoInjectiveTensorInsertionComparison
+{{ obj.tn_svg_html }}
+
+name: TNPEPSTwoInjectiveGaugeScalarReduction TNPEPSOneVertexComplementComparison
+{{ obj.tn_svg_html }}
+
+name: TNPEPSInjectiveRegionUnion TNPEPSInjectiveRegionUnionProof
+{{ obj.tn_svg_html }}
+
+name: TNPEPSCoordinateNormalRegionsRS
+{{ obj.tn_svg_html }}
+
+name: TNPEPSCoordinateNormalRegionT TNPEPSNormalEdgeBlockingHypotheses
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalRectangleCover TNPEPSNormalEdgeComplementTopCollar
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalOneSiteSeparation TNPEPSNormalRegionsRS
+{{ obj.tn_svg_html }}
+
+name: TNPEPSNormalRegionT TNPEPSNormalEdgeBlockingReduction
+{{ obj.tn_svg_html }}
+
+name: TNPEPSTINormalGaugeAbsorption TNPEPSNormalBlockingHypotheses
+{{ obj.tn_svg_html }}

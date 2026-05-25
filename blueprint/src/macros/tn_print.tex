@@ -631,6 +631,12 @@
   \node at (2.0,2.3) {$T$};%
 }
 
+\newcommand{\pepsNormalSingleSiteDifference}{%
+  \filldraw[yellow!75!white, draw=black!65, thick]
+    (1.5,1.5) circle (0.16cm);
+  \node[black] at (1.5,1.5) {\scriptsize \(v\)};%
+}
+
 \newcommand{\pepsNormalDistinguishedEdge}{%
   \draw[line width=0.6mm, green!65!black] (1,1.5) -- (1.5,1.5);%
 }
@@ -641,6 +647,15 @@
 
 \newcommand{\pepsNormalBlueBlock}{%
   \draw[blue, thick, rounded corners=1mm] (1.3,1.7) rectangle (2.7,0.8);%
+}
+
+\newcommand{\pepsNormalComplementBlock}{%
+  \filldraw[draw=black!55, fill=black!8, dashed, thick, rounded corners=1mm,
+    even odd rule]
+    (-0.15,-0.15) rectangle (3.15,3.15)
+    (0.3,1.3) rectangle (1.2,2.7)
+    (1.3,0.8) rectangle (2.7,1.7);
+  \node[black!65] at (2.38,2.45) {$A_3$};%
 }
 
 \newcommand{\pepsBlockedNormalChain}{%
@@ -681,6 +696,71 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNPEPSInjectiveRegionUnionProof}{%
+  \begin{tikzpicture}[tn picture, scale=0.82]
+    \begin{scope}
+      \node[tn tensor dot] (proofAB) at (0,0) {};
+      \node[tn tensor dot] (proofI) at (0.70,0.70) {};
+      \node[tn tensor dot] (proofBA) at (2.00,0) {};
+      \node[tn tensor dot] (proofX) at (1.30,-0.70) {};
+      \foreach \n in {proofAB,proofI,proofBA} {
+        \draw[tn phys leg] (\n.north) -- ++(0,0.36);
+      }
+      \draw[tn leg] (proofAB) -- (proofI) -- (proofBA) -- (proofX) --
+        (proofAB) -- (proofBA);
+      \draw[tn leg] (proofI) -- (proofX);
+      \node at ($(proofX)+(0,-0.34)$) {$X$};
+      \node at (1.00,-1.18) {$=0$};
+    \end{scope}
+    \draw[->, thick] (2.60,0.00) -- (3.20,0.00)
+      node[midway, above] {$A^{-1}$};
+    \begin{scope}[xshift=3.80cm]
+      \coordinate (proofAone) at (0,0);
+      \coordinate (proofItwo) at (0.70,0.70);
+      \node[tn tensor dot] (proofBAone) at (2.00,0) {};
+      \node[tn tensor dot] (proofXone) at (1.30,-0.70) {};
+      \draw[tn phys leg] (proofBAone.north) -- ++(0,0.36);
+      \draw[tn leg] (proofBAone) -- (proofXone);
+      \draw[tn leg] (proofXone) -- ($(proofXone)!0.34!(proofAone)$);
+      \draw[tn leg] (proofXone) -- ($(proofXone)!0.34!(proofItwo)$);
+      \draw[tn leg] (proofBAone) -- ($(proofBAone)!0.34!(proofAone)$);
+      \draw[tn leg] (proofBAone) -- ($(proofBAone)!0.34!(proofItwo)$);
+      \node at ($(proofXone)+(0,-0.34)$) {$X$};
+      \node at (1.00,-1.18) {$=0$};
+    \end{scope}
+    \draw[->, thick] (6.45,0.00) -- (7.05,0.00)
+      node[midway, above] {$A\cap B$};
+    \begin{scope}[xshift=7.70cm]
+      \coordinate (proofAtwo) at (0,0);
+      \node[tn tensor dot] (proofItwoNode) at (0.70,0.70) {};
+      \node[tn tensor dot] (proofBAtwo) at (2.00,0) {};
+      \node[tn tensor dot] (proofXtwo) at (1.30,-0.70) {};
+      \foreach \n in {proofItwoNode,proofBAtwo} {
+        \draw[tn phys leg] (\n.north) -- ++(0,0.36);
+      }
+      \draw[tn leg] (proofBAtwo) -- (proofXtwo) -- (proofItwoNode) --
+        (proofBAtwo);
+      \draw[tn leg] (proofXtwo) -- ($(proofXtwo)!0.34!(proofAtwo)$);
+      \draw[tn leg] (proofBAtwo) -- ($(proofBAtwo)!0.34!(proofAtwo)$);
+      \draw[tn leg] (proofItwoNode) -- ($(proofItwoNode)!0.34!(proofAtwo)$);
+      \node at ($(proofXtwo)+(0,-0.34)$) {$X$};
+      \node at (1.00,-1.18) {$=0$};
+    \end{scope}
+    \draw[->, thick] (10.35,0.00) -- (10.95,0.00)
+      node[midway, above] {$B^{-1}$};
+    \begin{scope}[xshift=11.55cm]
+      \coordinate (proofAthree) at (0,0);
+      \coordinate (proofIthree) at (0.70,0.70);
+      \coordinate (proofBAthree) at (2.00,0);
+      \node[tn tensor dot] (proofXthree) at (1.30,-0.70) {};
+      \draw[tn leg] (proofXthree) -- ($(proofXthree)!0.34!(proofAthree)$);
+      \draw[tn leg] (proofXthree) -- ($(proofXthree)!0.34!(proofIthree)$);
+      \draw[tn leg] (proofXthree) -- ($(proofXthree)!0.34!(proofBAthree)$);
+      \node at ($(proofXthree)+(0,-0.34)$) {$X=0$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNPEPSNormalRegionsRS}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
@@ -697,6 +777,10 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNPEPSCoordinateNormalRegionsRS}{%
+  \TNPEPSNormalRegionsRS%
+}
+
 \newcommand{\TNPEPSNormalRegionT}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \clip (-0.25,0.25) rectangle (3.25,3.25);
@@ -705,10 +789,82 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNPEPSCoordinateNormalRegionT}{%
+  \TNPEPSNormalRegionT%
+}
+
+\newcommand{\TNPEPSNormalRectangleCover}{%
+  \begin{tikzpicture}[tn picture, scale=0.78]
+    \draw[step=0.5, tn leg, black!30] (-0.25,-0.25) grid (2.35,2.35);
+    \draw[red!75!black, fill=red!28, thick, rounded corners=1mm]
+      (0.3,0.3) rectangle (1.2,1.7);
+    \draw[blue!75!black, fill=blue!24, thick, rounded corners=1mm]
+      (0.3,0.8) rectangle (1.7,1.7);
+    \draw[black!70, dashed, thick, rounded corners=1mm]
+      (0.3,0.3) -- (1.2,0.3) -- (1.2,0.8) -- (1.7,0.8) --
+      (1.7,1.7) -- (0.3,1.7) -- cycle;
+    \foreach \x in {0,0.5,1,1.5,2} {
+      \foreach \y in {0,0.5,1,1.5,2} {
+        \node[tn tensor dot] at (\x,\y) {};
+      }
+    }
+    \node[black!70] at (1.48,1.35) {$U$};
+    \node[red!75!black] at (0.75,0.55) {$2\times3$};
+    \node[blue!75!black] at (1.20,1.25) {$3\times2$};
+    \node at (0.98,-0.55)
+      {$U=\bigcup_j C_j,\quad C_j\cong 2\times3\ \mathrm{or}\ 3\times2$};
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalEdgeComplementTopCollar}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{scope}
+      \clip (-0.25,-0.25) rectangle (3.25,3.25);
+      \pepsNormalSquareLatticeLines
+      \pepsNormalRegionT
+      \draw[purple!70!black, fill=purple!18, thick, rounded corners=1mm]
+        (0.3,2.55) rectangle (1.7,3.18);
+      \draw[purple!70!black, fill=purple!18, thick, rounded corners=1mm]
+        (1.3,2.55) rectangle (2.7,3.18);
+      \pepsNormalSquareLatticeDots
+      \node[red!75!black] at (2.05,1.45) {$T$};
+      \node[purple!70!black] at (1.50,2.88) {top collar};
+    \end{scope}
+    \node at (3.72,1.48) {$=$};
+    \begin{scope}[xshift=4.35cm]
+      \clip (-0.25,-0.25) rectangle (3.25,3.25);
+      \pepsNormalComplementBlock
+      \pepsNormalSquareLatticeLines
+      \pepsNormalSquareLatticeDots
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalOneSiteSeparation}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \begin{scope}
+      \clip (-0.25,0.75) rectangle (2.25,3.25);
+      \pepsNormalSquareLattice
+      \pepsNormalRegionR
+      \pepsNormalSingleSiteDifference
+      \node at (1.00,0.98) {$R$};
+    \end{scope}
+    \node at (2.85,2.00) {$\subset$};
+    \begin{scope}[xshift=3.55cm]
+      \clip (-0.25,0.75) rectangle (2.25,3.25);
+      \pepsNormalSquareLattice
+      \pepsNormalRegionS
+      \pepsNormalSingleSiteDifference
+      \node at (1.00,0.98) {$S=R\cup\{v\}$};
+    \end{scope}
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNPEPSNormalEdgeBlockingReduction}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \begin{scope}
       \clip (-0.25,-0.25) rectangle (3.25,3.25);
+      \pepsNormalComplementBlock
       \pepsNormalSquareLatticeLines
       \pepsNormalDistinguishedEdge
       \pepsNormalSquareLatticeDots
@@ -718,6 +874,52 @@
     \node at (3.75,1.45) {$\Rightarrow$};
     \begin{scope}[xshift=4.45cm,yshift=1.50cm]
       \pepsBlockedNormalChain
+    \end{scope}
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalEdgeBlockingHypotheses}{%
+  \begin{tikzpicture}[tn picture, scale=0.90]
+    \clip (-0.25,-0.25) rectangle (3.25,3.25);
+    \pepsNormalComplementBlock
+    \pepsNormalSquareLatticeLines
+    \pepsNormalDistinguishedEdge
+    \pepsNormalSquareLatticeDots
+    \pepsNormalRedBlock
+    \pepsNormalBlueBlock
+  \end{tikzpicture}%
+}
+
+\newcommand{\TNPEPSNormalBlockingHypotheses}{%
+  \begin{tikzpicture}[tn picture, scale=0.72]
+    \begin{scope}
+      \clip (-0.25,-0.25) rectangle (3.25,3.25);
+      \pepsNormalComplementBlock
+      \pepsNormalSquareLatticeLines
+      \pepsNormalDistinguishedEdge
+      \pepsNormalSquareLatticeDots
+      \pepsNormalRedBlock
+      \pepsNormalBlueBlock
+      \node at (1.50,-0.58) {edge blocking};
+    \end{scope}
+    \node at (3.75,1.45) {and};
+    \begin{scope}[xshift=4.60cm,yshift=-0.20cm]
+      \begin{scope}
+        \clip (-0.25,0.75) rectangle (2.25,3.25);
+        \pepsNormalSquareLattice
+        \pepsNormalRegionR
+        \pepsNormalSingleSiteDifference
+        \node at (1.00,0.98) {$R$};
+      \end{scope}
+      \node at (2.85,2.00) {$\subset$};
+      \begin{scope}[xshift=3.55cm]
+        \clip (-0.25,0.75) rectangle (2.25,3.25);
+        \pepsNormalSquareLattice
+        \pepsNormalRegionS
+        \pepsNormalSingleSiteDifference
+        \node at (1.00,0.98) {$S=R\cup\{v\}$};
+      \end{scope}
+      \node at (2.85,0.98) {one-site comparison};
     \end{scope}
   \end{tikzpicture}%
 }
