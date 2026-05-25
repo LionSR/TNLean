@@ -459,6 +459,29 @@ theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
       (H.positiveChi.chi.matrix α β γ ^ L).trace :=
   H.positiveChi.eq_trace_pow L hL α β γ
 
+/-- The same-length BNT product equation carried by theorem data.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem same_length_product_eq_sum
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    H.operators.operator L α * H.operators.operator L β =
+      ∑ γ : Λ, H.coeffs.coeff L α β γ • H.operators.operator L γ :=
+  BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
+    (op := H.operators) H.sameLengthProduct L hL α β
+
+/-- The idempotent scalar equation carried by theorem data.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem idempotent_eq_sum (γ : Λ) :
+    H.traceScalars.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        H.coeffs.coeff 1 α β γ *
+          (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
+  BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
+    (m := H.traceScalars) H.idempotent γ
+
 /-- The BNT product expansion with the coefficients written as traces of the
 length-independent chi matrices. -/
 theorem same_length_product_eq_sum_chi_trace_pow
