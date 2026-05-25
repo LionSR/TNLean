@@ -528,6 +528,42 @@ def toPositiveBlockedStructureChiTracePowerForm :
     AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data :=
   H.blockedComparison.toPositiveBlockedStructureChiTracePowerForm H.positiveChi
 
+/-- The blocked-basis chi family obtained by pulling back the uniform
+BNT-label chi family in theorem data along the blocked-basis comparison maps.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def positiveBlockedChi : AlgebraStructureData.BlockedStructureChiFamily data :=
+  H.toPositiveBlockedStructureChiTracePowerForm.chi
+
+/-- The pulled-back blocked-basis chi entries obtained from BNT-label theorem
+data are positive.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem positiveBlockedChi_entry_pos
+    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n))
+    (r : Fin (H.positiveBlockedChi.dim n i j k)) :
+    0 < H.positiveBlockedChi.entry n i j k r :=
+  H.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
+
+/-- The blocked-basis coefficients obtained from BNT-label theorem data are
+traces of powers of the pulled-back blocked-basis chi matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (H.positiveBlockedChi.matrix n i j k ^ n).trace :=
+  H.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
+
 end BNTLabelTheoremData
 
 /-- Existential BNT-label theorem witness for the source statement.
@@ -537,8 +573,9 @@ same-length operator spaces.  This structure collects those choices together
 with the corresponding theorem data.  The construction of such a witness from
 an MPDO tensor is the outstanding step toward Theorem IV.13(ii).
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.3--C.4,
-lines 1830--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
   /-- The finite type of BNT labels. -/
   Label : Type
@@ -734,6 +771,44 @@ def toPositiveBlockedStructureChiTracePowerForm :
   letI := W.operatorModule
   letI := W.operatorMul
   exact W.theoremData.toPositiveBlockedStructureChiTracePowerForm
+
+/-- The blocked-basis chi family obtained by pulling back the uniform
+BNT-label chi family in an existential witness along the blocked-basis
+comparison maps.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def positiveBlockedChi : AlgebraStructureData.BlockedStructureChiFamily data :=
+  W.toPositiveBlockedStructureChiTracePowerForm.chi
+
+/-- The pulled-back blocked-basis chi entries obtained from an existential
+BNT-label theorem witness are positive.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem positiveBlockedChi_entry_pos
+    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n))
+    (r : Fin (W.positiveBlockedChi.dim n i j k)) :
+    0 < W.positiveBlockedChi.entry n i j k r :=
+  W.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
+
+/-- The blocked-basis coefficients obtained from an existential BNT-label
+theorem witness are traces of powers of the pulled-back blocked-basis chi
+matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (W.positiveBlockedChi.matrix n i j k ^ n).trace :=
+  W.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
 
 end BNTLabelTheoremWitness
 
