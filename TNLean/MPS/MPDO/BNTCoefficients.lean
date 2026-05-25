@@ -472,7 +472,7 @@ theorem same_length_product_eq_sum
 
 /-- The idempotent scalar equation carried by theorem data.
 
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:idempotent, lines 981--985 of
+Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem idempotent_eq_sum (γ : Λ) :
     H.traceScalars.traceScalar γ =
