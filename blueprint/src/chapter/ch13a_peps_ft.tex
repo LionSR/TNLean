@@ -1698,19 +1698,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{lem:peps_normalSquareRegionT_edgeBlocks_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tVerticalBlock_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHorizontalBlock_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.tHole_injective_of_union}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses,
+    \uses{def:peps_regionInjectivityData,
+        def:peps_normalRectangleInjectivityHypotheses,
         lem:peps_normalSquareRegionTHole_rectangular_decomposition}
     For the displayed $T$-region inside its local $5\times6$ coordinate window,
     if the smaller edge-block bounds
     $x_0 + 5 \leq n$ and $y_0 + 5 \leq m$ hold in the finite $n\times m$
     square lattice, then the coordinate square-lattice rectangular injectivity
     hypotheses imply that the vertical $2\times3$ block and horizontal
-    $3\times2$ block removed from the window are injective.
+    $3\times2$ block removed from the window are injective.  If, in addition,
+    region injectivity is closed under unions, then the union of these two
+    removed edge blocks is injective.
 \end{lemma}
 \begin{proof}\leanok
     Apply the rectangular injectivity hypotheses to the already identified
-    contiguous rectangle shapes of the two edge blocks.
+    contiguous rectangle shapes of the two edge blocks.  The final assertion is
+    one application of union closure to these two injective blocks.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
