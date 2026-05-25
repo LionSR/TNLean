@@ -320,9 +320,11 @@ theorem normalSquareRegionTHole_rectangular_decomposition {width height : ℕ}
 
 /-- The displayed region \(T\) in the normal square-lattice proof.
 
-The source picture describes \(T\) as the complement, inside a local
-\(5\times6\) coordinate window, of the two edge blocks recorded in
-`normalSquareRegionTHole`.
+This local coordinate model records the part of the source picture lying inside
+the displayed \(5\times6\) window: the window with the two edge blocks recorded
+in `normalSquareRegionTHole` removed.  The injective complementary block used
+later in the proof of Theorem 3 is a finite-lattice complement around an edge,
+not yet this local-window region by itself.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1443
 of `Papers/1804.04964/paper_normal.tex`, where the text states that \(T\) is
@@ -852,13 +854,17 @@ Section 3, derives them from the \(2\times 3\) and \(3\times 2\) rectangular
 injectivity assumptions using the union-of-injective-regions lemma. The
 coordinate regions \(R\), \(S\), and \(T\) are now recorded separately, and
 \(R\) and \(S\) have conditional injectivity lemmas assuming union closure, but
-this abstract structure still assumes its three region fields directly. It does
-not yet identify them with translated coordinate regions or supply the per-edge
-red, blue, and complementary regions used in the proof of Theorem 3. Documented
-in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
+the local-window \(T\) region still has no source-faithful injectivity
+derivation. In particular, the complementary region used as the third block in
+Theorem 3 is a finite-lattice complement around an edge, and this abstract
+structure still assumes its three region fields directly. It does not yet
+identify them with translated coordinate regions or supply the per-edge red,
+blue, and complementary regions used in the proof of Theorem 3. Documented in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
 obligations 1--5. Elimination: derive these assertions from rectangular
-injectivity after the tensor-level union theorem is formalized, then construct
-the translated edge blockings.
+injectivity after the tensor-level union theorem and the finite-lattice
+complement construction are formalized, then construct the translated edge
+blockings.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3 and its proof, lines
 1407--1504 of `Papers/1804.04964/paper_normal.tex`. -/
