@@ -75,6 +75,8 @@ The present blueprint nodes are the following.
 \begin{itemize}
     \item \path{lem:peps_injectiveRegion_union} states the union-of-injective
           regions lemma. It is tracked by \ghissue{1374}.
+    \item \path{lem:peps_regionInjectivityUnionClosure_finite} records the
+          finite nonempty iteration of the binary union-closure assertion.
     \item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
           regions $R$, $S$, and $T$. It is part of \ghissue{1375}.
     \item \path{thm:peps_normalEdgeBlockingToInjectiveChain} states that the
@@ -110,10 +112,13 @@ statement that they differ in one site: $R$ is contained in $S$, and
 $S\setminus R$ is the lower-right site of the displayed $3\times3$ square.
 Assuming the union-closure assertion supplied by the source lemma on unions of
 injective regions, these rectangular decompositions now give conditional
-injectivity proofs for $R$ and $S$. The displayed region $T$ is now present as
-the complement, inside the source $5\times6$ local window, of the two edge
-blocks shown in the source picture; the two removed edge blocks are now
-formalized separately as one contiguous $2\times3$ rectangle and one contiguous
+injectivity proofs for $R$ and $S$. The finite nonempty iteration of this
+union-closure assertion is also formalized, matching the paper's use of
+repeated unions of smaller injective rectangles after Lemma
+\path{injective_union}. The displayed region $T$ is now present as the
+complement, inside the source $5\times6$ local window, of the two edge blocks
+shown in the source picture; the two removed edge blocks are now formalized
+separately as one contiguous $2\times3$ rectangle and one contiguous
 $3\times2$ rectangle. They are disjoint from each other, and the three-part
 cover by $T$ and the two removed blocks reconstructs the local window. This
 does not yet prove unconditional injectivity of $R$, $S$, or injectivity of
@@ -158,9 +163,10 @@ alone. The following additional obligations remain.
           displayed rectangular shapes. The local-window complement identity for
           $T$ is also formalized, including the three-part cover by $T$ and the
           two removed blocks. The conditional derivations of injectivity for
-          $R$ and $S$ from a union-closure hypothesis are formalized. The union
-          lemma is then used repeatedly, and the remaining coordinate step is
-          the corresponding source-faithful derivation for $T$.
+          $R$ and $S$ from a union-closure hypothesis are formalized. The
+          nonempty finite iteration of union closure is now formalized. The
+          remaining coordinate step is the corresponding source-faithful
+          derivation for $T$.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -180,6 +186,8 @@ alone. The following additional obligations remain.
 \begin{itemize}
     \item Lemma \path{injective_union}: blueprint
           \path{lem:peps_injectiveRegion_union}, issue \#1374.
+    \item Finite iteration of Lemma \path{injective_union}: blueprint
+          \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
           \path{def:peps_normalSquareBlockingRegions}, issue \#1375.
     \item Edge blocking into red, blue, and complementary injective regions:
