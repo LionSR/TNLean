@@ -136,12 +136,16 @@ nonempty cover by contiguous $2\times3$ and $3\times2$ rectangles, then
 rectangular injectivity and finite union closure imply injectivity of that
 region. The formalized special cases are the local-window $T$-region and the
 finite-lattice complementary block. This is only a sufficient criterion, not
-the only source route. The normalized $5\times7$ horizontal-edge geometry is
-now also formalized: $A_3$ is the local-window $T$-region together with two
-top-collar contiguous $3\times2$ rectangles, so injectivity of local $T$
-implies injectivity of $A_3$ by union closure and rectangular injectivity.
-The concrete local $T$ cover and the translated every-edge construction remain
-open.
+the only source route. The present normalized $5\times6$ local-window model for
+$T$ is now also known not to admit such a rectangular cover. This local
+obstruction does not contradict the paper's statement; it shows that the
+source cover still has to be realigned with the finite PEPS geometry rather
+than read directly from the current local-window complement. The normalized
+$5\times7$ horizontal-edge geometry is also formalized: $A_3$ is the
+local-window $T$-region together with two top-collar contiguous $3\times2$
+rectangles, so injectivity of local $T$ implies injectivity of $A_3$ by union
+closure and rectangular injectivity. The realigned local $T$ cover and the
+translated every-edge construction remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -151,10 +155,10 @@ also formalized, and the two edge blocks removed from the displayed $T$-window
 are injective under the coordinate rectangular hypotheses. The finite-lattice
 complementary block around the chosen edge is now defined set-theoretically.
 The remaining open gap is the source-paper injectivity argument: prove the
-tensor-level union theorem, prove local $T$-injectivity from the source
-rectangular hypotheses, translate the $5\times7$ collar decomposition around
-each edge, and then prove the unconditional injectivity of $R$, $S$, and the
-edge-complementary block.
+tensor-level union theorem, realign the local $T$-injectivity argument with the
+source finite PEPS geometry, translate the $5\times7$ collar decomposition
+around each edge, and then prove the unconditional injectivity of $R$, $S$, and
+the edge-complementary block.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -198,8 +202,11 @@ alone. The following additional obligations remain.
           edge $5\times7$ frame, the complementary block is also formalized as
           the union of local $T$ and two contiguous $3\times2$ collar
           rectangles, so local $T$-injectivity implies injectivity of this
-          block. The remaining coordinate work is to construct the concrete
-          local $T$ cover and translate this decomposition around every edge.
+          block. The present normalized $5\times6$ local-window $T$ model is
+          now known not to admit a rectangular-cover witness of the above
+          form. The remaining coordinate work is to realign the source
+          local $T$ cover with the finite PEPS geometry and translate this
+          decomposition around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -233,6 +240,10 @@ alone. The following additional obligations remain.
     \item Rectangular-cover criterion for injectivity of the displayed
           $T$-region: blueprint
           \path{lem:peps_normalSquareRegionT_injective_of_cover}, issue
+          \#2004.
+    \item Obstruction to applying that criterion directly to the present
+          normalized $5\times6$ local-window $T$ model: blueprint
+          \path{lem:peps_normalSquareRegionT_no_five_by_six_cover}, issue
           \#2004.
     \item Finite-lattice complementary block around an edge: blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion}, issue \#2004.
