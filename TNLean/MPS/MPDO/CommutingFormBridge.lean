@@ -160,6 +160,23 @@ theorem exists_positive_scalar_mpo_eq_product
     ∃ c : ℝ, 0 < c ∧ mpo M N = (c : ℂ) • (data.formAt N hN).product :=
   data.formAt_realizes N hN
 
+/-- At a fixed chain length, the `η`-local structure gives precisely the
+positive commuting nearest-neighbor product form appearing in Proposition
+`3to4`.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+the MPDO has the form \(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\),
+where the nearest-neighbor factors are positive and commute. -/
+theorem positive_commuting_product_form
+    (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
+    (data.formAt N hN).bond.PosSemidef ∧
+      (∀ i j : Fin N,
+        (data.formAt N hN).bondAt i * (data.formAt N hN).bondAt j =
+          (data.formAt N hN).bondAt j * (data.formAt N hN).bondAt i) ∧
+      ∃ c : ℝ, 0 < c ∧ mpo M N = (c : ℂ) • (data.formAt N hN).product :=
+  ⟨(data.formAt N hN).bond_pos, data.formAt_bondAt_comm N hN,
+    data.exists_positive_scalar_mpo_eq_product N hN⟩
+
 /-- The chain-level GSNNCH witness induced by the local `η`-structure at a fixed
 chain length. -/
 theorem isGSNNCHAt (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
