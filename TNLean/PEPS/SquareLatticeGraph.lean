@@ -1,3 +1,5 @@
+import Mathlib.Data.Prod.Lex
+
 import TNLean.PEPS.NormalBlocking
 
 /-!
@@ -15,6 +17,16 @@ coordinate lattice used in the normal PEPS proof.
 
 namespace TNLean
 namespace PEPS
+
+/-- The coordinate vertex set is ordered lexicographically.  The project-level
+`Edge` type uses an ambient linear order to orient undirected graph edges, so
+this instance lets the square-lattice graph use the same edge type as the
+general PEPS development. -/
+instance instLinearOrderSquareLatticeVertex (width height : ℕ) :
+    LinearOrder (SquareLatticeVertex width height) :=
+  LinearOrder.lift' (fun v : SquareLatticeVertex width height => toLex v) (by
+    intro v w h
+    simpa using congrArg ofLex h)
 
 /-- Horizontal nearest-neighbor relation in a finite rectangular square
 lattice.
@@ -85,6 +97,44 @@ theorem squareLatticeGraph_adj_up {width height : ℕ}
     (x : Fin width) (y : Fin height) (hy : y.1 + 1 < height) :
     (squareLatticeGraph width height).Adj (x, y) (x, ⟨y.1 + 1, hy⟩) := by
   exact Or.inr ⟨rfl, Or.inl rfl⟩
+
+/-- An edge of the finite square-lattice graph is horizontal when its endpoints
+are horizontal nearest neighbors.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where horizontal and vertical edge blockings are treated separately. -/
+def IsHorizontalSquareLatticeEdge {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) : Prop :=
+  squareLatticeHorizontalNeighbor e.1.1 e.1.2
+
+/-- An edge of the finite square-lattice graph is vertical when its endpoints
+are vertical nearest neighbors.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where horizontal and vertical edge blockings are treated separately. -/
+def IsVerticalSquareLatticeEdge {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) : Prop :=
+  squareLatticeVerticalNeighbor e.1.1 e.1.2
+
+/-- Every edge of the finite square-lattice graph is horizontal or vertical.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem squareLatticeEdge_horizontal_or_vertical {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) :
+    IsHorizontalSquareLatticeEdge e ∨ IsVerticalSquareLatticeEdge e := by
+  exact e.2.2
+
+/-- No edge of the finite square-lattice graph is both horizontal and vertical.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem squareLatticeEdge_not_horizontal_and_vertical {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) :
+    ¬ (IsHorizontalSquareLatticeEdge e ∧ IsVerticalSquareLatticeEdge e) := by
+  rintro ⟨hHorizontal, hVertical⟩
+  have hx :
+      e.1.1.1.1 = e.1.2.1.1 := by
+    exact congrArg Fin.val hVertical.1
+  rcases hHorizontal.2 with hStep | hStep <;> omega
 
 end PEPS
 end TNLean
