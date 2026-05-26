@@ -93,6 +93,21 @@ theorem ofChi_coeff (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
     (ofChi χ).coeff L α β γ = χ.tracePowerCoeff α β γ L :=
   rfl
 
+/-- Coefficients of the canonical BNT-label coefficient family are traces of
+powers of the corresponding diagonal \(\chi\)-matrices.
+
+The source theorem uses this expression for positive chain lengths in the
+same-length product formula; the canonical coefficient family is indexed by
+all natural lengths, and this lemma unfolds that definition through the
+diagonal trace identity.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem ofChi_coeff_eq_trace_matrix_pow
+    (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
+    (ofChi χ).coeff L α β γ = (χ.matrix α β γ ^ L).trace := by
+  rw [ofChi_coeff, χ.trace_matrix_pow]
+
 /-- Positive-length trace-power compatibility for BNT-label coefficients.
 
 This is the faithful quantifier shape of arXiv:1606.00608, Theorem IV.13(ii):
