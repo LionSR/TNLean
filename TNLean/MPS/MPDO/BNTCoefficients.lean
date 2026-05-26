@@ -516,6 +516,29 @@ theorem blocked_coeff_eq_trace_pow
   exact hχ.eq_trace_pow n hn
     (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
 
+/-- A blocked-basis/BNT-label coefficient comparison against the canonical
+coefficient family associated to a \(\chi\)-family rewrites each
+positive-length blocked coefficient as the corresponding trace power.
+
+This is the canonical-coefficient version of the blocked-basis comparison
+corollary.  It does not construct the comparison maps or the \(\chi\)-family
+from an MPDO tensor.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_ofChi_trace_pow
+    {χ : DiagonalChiFamily Λ}
+    (cmp :
+      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ))
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (χ.matrix (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j)
+        (cmp.targetLabel n hn k) ^ n).trace := by
+  rw [cmp.blocked_coeff_eq n hn i j k]
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+
 /-- The blocked chi family obtained by pulling back a BNT-label chi witness
 along a blocked-basis comparison.
 
