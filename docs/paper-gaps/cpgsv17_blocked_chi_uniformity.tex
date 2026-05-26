@@ -133,6 +133,8 @@ source of those coefficients in the source-side special case.\footnote{%
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi},
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff},
 \leanid{MPOTensor.BNTLabelCoefficientFamily.%
+ofChi_coeff_eq_trace_matrix_pow},
+\leanid{MPOTensor.BNTLabelCoefficientFamily.%
 ofChi_hasPositiveLengthChiTracePowerForm}.}  A
 same-length BNT product predicate records the algebra identity
 \[
@@ -174,7 +176,10 @@ Once both the same-length BNT product form and a positive BNT-label
 \(\chi\)-witness are available, the same-length product expansion with
 coefficients written as \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)\)
 is formalized as a direct corollary.\footnote{%
-\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_chi_trace_pow}.}
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+eq_sum_chi_trace_pow},
+\leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
+eq_sum_ofChi_trace_pow}.}
 Once both the comparison predicate and a positive BNT-label \(\chi\)-witness are
 available, the coefficient-level blocked trace-power formula is formalized as a
 direct corollary.\footnote{%
@@ -198,7 +203,10 @@ Likewise, once the idempotent coefficient condition and the positive
 BNT-label \(\chi\)-witness are available, the length-one idempotent identity is
 formalized with the coefficients rewritten as traces of the corresponding
 \(\chi\)-matrices.\footnote{%
-\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}.}
+\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
+eq_sum_chi_trace},
+\leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
+eq_sum_ofChi_trace}.}
 
 The BNT-label objects above are now also gathered into one theorem-data record:
 fixed coefficients, same-length operators and product law, trace scalars and
@@ -241,6 +249,11 @@ formula are immediate consequences.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff},
+\leanid{MPOTensor.BNTLabelTheoremData.same_length_product_form_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_ofChi},
 \leanid{MPOTensor.BNTLabelTheoremData.chi_entry_pos},
 \leanid{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq},
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_chi_trace_pow},
@@ -285,7 +298,13 @@ equations with coefficients written as \(\chi\)-traces; the blocked-basis
 \(\chi\)-family is also identified as the pullback of the BNT-label
 \(\chi\)-family along the comparison maps.\footnote{%
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_positive_length_coeff_eq_ofChi},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_predicates},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_equations},
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_chi_pullback},
+\leanid{MPOTensor.HasBNTLabelTheoremWitness.%
+exists_blocked_coefficient_comparison},
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.%
 exists_source_coefficient_equations},
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.%
@@ -323,6 +342,11 @@ the blocked-basis coefficient trace-power formula, the positive blocked-basis
 \leanid{MPOTensor.BNTLabelTheoremWitness.sourceLabel},
 \leanid{MPOTensor.BNTLabelTheoremWitness.targetLabel},
 \leanid{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow},
+\leanid{MPOTensor.BNTLabelTheoremWitness.coeff_eq_ofChi_coeff},
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_form_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_ofChi},
+\leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_ofChi},
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum},
 \leanid{MPOTensor.BNTLabelTheoremWitness.chi_entry_pos},
