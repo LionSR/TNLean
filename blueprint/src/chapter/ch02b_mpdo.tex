@@ -1977,12 +1977,14 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem witnesses give the blocked coefficient comparison]%
     \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq}
     \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coefficient_comparison}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
     An existential BNT-label theorem witness gives the comparison between the
     blocked-basis coefficients and the BNT-label coefficients through the
-    source and target label maps.
+    source and target label maps.  The proposition-level nonempty form of the
+    witness gives the same comparison after choosing a witness.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data comparison carried by the witness.
