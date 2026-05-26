@@ -150,7 +150,9 @@ $5\times7$ horizontal-edge geometry is also formalized: $A_3$ is the
 local-window $T$-region together with two top-collar contiguous $3\times2$
 rectangles, so injectivity of local $T$ implies injectivity of $A_3$ by union
 closure and rectangular injectivity. A $7\times5$ collar identity is also
-available for the analogous rectangular frame. The normalized horizontal and
+available for the analogous rectangular frame, and the rotated vertical
+edge-complement is now formalized as the union of a rotated local $T$-region
+with two right-collar contiguous $2\times3$ rectangles. The normalized horizontal and
 vertical edge blockings are now both packaged as one-edge blocking data with
 their red, blue, and complementary regions: the edge endpoints lie in the red
 and blue regions, respectively, and the three regions are disjoint and cover
@@ -160,10 +162,9 @@ assembles into those every-edge hypotheses. The one-edge datum itself now
 supplies the three injective regions used in the associated chain, and the
 normalized horizontal and vertical edge instances now expose this as direct
 injective-chain consequences. For the horizontal edge, local $T$-injectivity
-implies injectivity of all three blocks. For the vertical edge, injectivity of
-the complementary block is still an explicit hypothesis; the missing step is
-the source-faithful finite-geometry proof that discharges this hypothesis from
-the rectangular assumptions and union closure. The realigned local $T$ cover
+implies injectivity of all three blocks. For the vertical edge, rotated local
+$T$-injectivity now implies injectivity of the complementary block by union
+closure and rectangular injectivity. The realigned local and rotated $T$ covers
 and the translated every-edge construction remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
@@ -222,13 +223,13 @@ alone. The following additional obligations remain.
           the union of local $T$ and two contiguous $3\times2$ collar
           rectangles, so local $T$-injectivity implies injectivity of this
           block. The vertical $7\times5$ edge-blocking regions are now
-          recorded set-theoretically, but injectivity of the vertical
-          complementary block remains an explicit hypothesis. The present
+          recorded set-theoretically, and the vertical complementary block is
+          injective once the rotated local $T$-region is injective. The present
           normalized $5\times6$ local-window $T$ model is now known not to
           admit a rectangular-cover witness of the above form. The remaining
-          coordinate work is to realign the source local $T$ cover with the
-          finite PEPS geometry, discharge the vertical complementary-block
-          hypothesis, and translate this decomposition around every edge.
+          coordinate work is to realign the source local and rotated $T$ covers
+          with the finite PEPS geometry and translate these decompositions
+          around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -277,13 +278,15 @@ alone. The following additional obligations remain.
           blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_topCollar}, issue
           \#2004. This node now also contains a normalized $7\times5$
-          collar identity for the analogous rectangular frame.
+          collar identity for the analogous rectangular frame and the rotated
+          vertical edge-complement collar identity.
     \item Normalized horizontal and vertical red/blue/complement blocking data:
           blueprint
           \path{lem:peps_normalSquareHorizontalEdge_blockingData}, issue
           \#2004. These now use the common one-edge blocking-data structure.
           They also expose the corresponding injective-chain conclusions. The
-          vertical complement injectivity is still conditional.
+          vertical complement injectivity is reduced to rotated
+          $T$-injectivity.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

@@ -177,6 +177,61 @@ theorem normalSquareEdgeComplementRegion_eq_T_union_rightCollar :
     mem_normalSquareRegionTHole, mem_squareLatticeContiguousRectangle]
   omega
 
+/-- The removed blocks in the rotated local \(T\)-region for a vertical edge.
+
+This is the \(7\times5\) counterpart of the red and blue blocks in the source
+edge-blocking picture.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalRegionTHole {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle (xStart + 2) yStart 3 2 ∪
+    squareLatticeContiguousRectangle (xStart + 1) (yStart + 2) 2 3
+
+/-- The rotated local \(T\)-region used for the normalized vertical edge.
+
+It is the complement, inside a \(6\times5\) local window, of the two blocks
+adjacent to the vertical edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalRegionT {width height : ℕ} (xStart yStart : ℕ) :
+    Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle xStart yStart 6 5 \
+    normalSquareVerticalRegionTHole xStart yStart
+
+@[simp] theorem mem_normalSquareVerticalRegionTHole {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareVerticalRegionTHole xStart yStart ↔
+      v ∈ squareLatticeContiguousRectangle (xStart + 2) yStart 3 2 ∨
+        v ∈ squareLatticeContiguousRectangle (xStart + 1) (yStart + 2) 2 3 := by
+  simp [normalSquareVerticalRegionTHole]
+
+@[simp] theorem mem_normalSquareVerticalRegionT {width height : ℕ}
+    (xStart yStart : ℕ) (v : SquareLatticeVertex width height) :
+    v ∈ normalSquareVerticalRegionT xStart yStart ↔
+      v ∈ squareLatticeContiguousRectangle xStart yStart 6 5 ∧
+        v ∉ normalSquareVerticalRegionTHole xStart yStart := by
+  simp [normalSquareVerticalRegionT]
+
+/-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
+rotated red and blue edge blocks is the rotated local \(T\)-region together
+with two right-collar contiguous \(2\times3\) rectangles.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar :
+    (regionComplement
+        (squareLatticeContiguousRectangle 2 0 3 2 ∪
+          (squareLatticeContiguousRectangle 1 2 2 3 :
+            Finset (SquareLatticeVertex 7 5)))) =
+      (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0) ∪
+        squareLatticeContiguousRectangle 5 0 2 3 ∪
+          (squareLatticeContiguousRectangle 5 2 2 3 :
+            Finset (SquareLatticeVertex 7 5)) := by
+  ext v
+  simp only [Finset.mem_union, mem_regionComplement, mem_normalSquareVerticalRegionT,
+    mem_normalSquareVerticalRegionTHole, mem_squareLatticeContiguousRectangle]
+  omega
+
 namespace NormalSquareLatticeRectangleInjectivityHypotheses
 
 variable {width height : ℕ}
@@ -278,6 +333,30 @@ theorem rightCollar_injective
     (hT : κ.IsInjective (normalSquareRegionT (width := 7) (height := 5) 0 0)) :
     κ.IsInjective (normalSquareEdgeComplementRegion (width := 7) (height := 5) 0 0) := by
   rw [normalSquareEdgeComplementRegion_eq_T_union_rightCollar]
+  exact hUnion.union_injective
+    (hUnion.union_injective hT (h.rect23_injective (by omega) (by omega)))
+    (h.rect23_injective (by omega) (by omega))
+
+/-- In the normalized vertical-edge \(7\times5\) frame, the actual complement
+of the rotated red and blue edge blocks is injective if the rotated local
+\(T\)-region is injective.
+
+The two additional right-collar regions are contiguous \(2\times3\)
+rectangles.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem verticalComp_injective
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hT : κ.IsInjective (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0)) :
+    κ.IsInjective
+      (regionComplement
+        (squareLatticeContiguousRectangle 2 0 3 2 ∪
+          (squareLatticeContiguousRectangle 1 2 2 3 :
+            Finset (SquareLatticeVertex 7 5)))) := by
+  rw [normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar]
   exact hUnion.union_injective
     (hUnion.union_injective hT (h.rect23_injective (by omega) (by omega)))
     (h.rect23_injective (by omega) (by omega))
