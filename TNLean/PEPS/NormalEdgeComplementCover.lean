@@ -45,6 +45,63 @@ structure SquareLatticeRectangleCover {width height : ℕ}
   /-- The rectangular pieces cover exactly the target region. -/
   cover : regions.biUnion region = target
 
+/-- A point-forcing obstruction to an exact rectangular cover.
+
+If a point \(p\) belongs to the target, every source-paper \(2\times3\)
+rectangle containing \(p\) also contains a point \(q_{23}\) outside the target,
+and every source-paper \(3\times2\) rectangle containing \(p\) also contains a
+point \(q_{32}\) outside the target, then no exact rectangular cover of the
+target exists.
+
+Source context: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and
+proof of Theorem 3, lines 1322--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem not_squareLatticeRectangleCover_of_forced_points {width height : ℕ}
+    {target : Finset (SquareLatticeVertex width height)}
+    {p q23 q32 : SquareLatticeVertex width height}
+    (hp : p ∈ target)
+    (h23 :
+      ∀ xStart yStart : ℕ,
+        p ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
+          Finset (SquareLatticeVertex width height)) →
+        q23 ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
+          Finset (SquareLatticeVertex width height)))
+    (hq23 : q23 ∉ target)
+    (h32 :
+      ∀ xStart yStart : ℕ,
+        p ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
+          Finset (SquareLatticeVertex width height)) →
+        q32 ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
+          Finset (SquareLatticeVertex width height)))
+    (hq32 : q32 ∉ target) :
+    ¬ Nonempty (SquareLatticeRectangleCover target) := by
+  rintro ⟨cover⟩
+  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
+    rw [cover.cover]
+    exact hp
+  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
+  rcases cover.rectangular i hi with hRect | hRect
+  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
+      simpa [hRegion] using hpi
+    have hqRegion : q23 ∈ cover.region i := by
+      simpa [hRegion] using h23 xStart yStart hpRect
+    have hqUnion : q23 ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    exact hq23 (by rwa [cover.cover] at hqUnion)
+  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
+      simpa [hRegion] using hpi
+    have hqRegion : q32 ∈ cover.region i := by
+      simpa [hRegion] using h32 xStart yStart hpRect
+    have hqUnion : q32 ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    exact hq32 (by rwa [cover.cover] at hqUnion)
+
 /-- A finite rectangular cover of the displayed local \(T\)-region.
 
 Each member of the cover is required to be one of the source-paper contiguous
@@ -87,63 +144,27 @@ theorem not_normalSquareRegionT_rectangleCover_at_origin {width height : ℕ}
     ¬ Nonempty
       (NormalSquareRegionTRectangleCover (width := width) (height := height)
         0 0) := by
-  rintro ⟨cover⟩
   let p : SquareLatticeVertex width height :=
     (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpT : p ∈ normalSquareRegionT (width := width) (height := height)
-      0 0 := by
-    simp [p]
-  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
-    rw [cover.cover]
-    exact hpT
-  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
-  rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨0, by omega⟩, ⟨2, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
+  let q23 : SquareLatticeVertex width height :=
+    (⟨0, by omega⟩, ⟨2, by omega⟩)
+  let q32 : SquareLatticeVertex width height :=
+    (⟨2, by omega⟩, ⟨1, by omega⟩)
+  exact not_squareLatticeRectangleCover_of_forced_points (p := p)
+    (q23 := q23) (q32 := q32)
+    (by simp [p])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareRegionT (width := width) (height := height) 0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotT :
-        q ∉ normalSquareRegionT (width := width) (height := height) 0 0 := by
-      simp [q]
-    exact hqNotT hqT
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨2, by omega⟩, ⟨1, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
+      simp [p, q23] at hpRect ⊢
+      omega)
+    (by simp [q23])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareRegionT (width := width) (height := height) 0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotT :
-        q ∉ normalSquareRegionT (width := width) (height := height) 0 0 := by
-      simp [q]
-    exact hqNotT hqT
+      simp [p, q32] at hpRect ⊢
+      omega)
+    (by simp [q32])
 
 /-- The current normalized \(5\times6\) local-window model for \(T\) has no
 rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
@@ -174,65 +195,27 @@ theorem not_normalSquareEdgeComplementRectangleCover_at_origin {width height : �
     ¬ Nonempty
       (NormalSquareEdgeComplementRectangleCover (width := width) (height := height)
         0 0) := by
-  rintro ⟨cover⟩
   let p : SquareLatticeVertex width height :=
     (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpTarget :
-      p ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
-    simp [p]
-  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
-    rw [cover.cover]
-    exact hpTarget
-  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
-  rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨0, by omega⟩, ⟨2, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
+  let q23 : SquareLatticeVertex width height :=
+    (⟨0, by omega⟩, ⟨2, by omega⟩)
+  let q32 : SquareLatticeVertex width height :=
+    (⟨2, by omega⟩, ⟨1, by omega⟩)
+  exact not_squareLatticeRectangleCover_of_forced_points (p := p)
+    (q23 := q23) (q32 := q32)
+    (by simp [p])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqTarget :
-        q ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotTarget :
-        q ∉ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
-      simp [q]
-    exact hqNotTarget hqTarget
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨2, by omega⟩, ⟨1, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
+      simp [p, q23] at hpRect ⊢
+      omega)
+    (by simp [q23])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqTarget :
-        q ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotTarget :
-        q ∉ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
-      simp [q]
-    exact hqNotTarget hqTarget
+      simp [p, q32] at hpRect ⊢
+      omega)
+    (by simp [q32])
 
 /-- The current normalized \(5\times7\) horizontal edge-complement model has
 no rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
@@ -368,67 +351,27 @@ theorem not_normalSquareVerticalRegionT_rectangleCover_at_origin {width height :
     ¬ Nonempty
       (NormalSquareVerticalRegionTRectangleCover (width := width) (height := height)
         0 0) := by
-  rintro ⟨cover⟩
   let p : SquareLatticeVertex width height :=
     (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpT : p ∈ normalSquareVerticalRegionT (width := width) (height := height)
-      0 0 := by
-    simp [p]
-  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
-    rw [cover.cover]
-    exact hpT
-  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
-  rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨1, by omega⟩, ⟨2, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex width height)) := by
+  let q23 : SquareLatticeVertex width height :=
+    (⟨1, by omega⟩, ⟨2, by omega⟩)
+  let q32 : SquareLatticeVertex width height :=
+    (⟨2, by omega⟩, ⟨1, by omega⟩)
+  exact not_squareLatticeRectangleCover_of_forced_points (p := p)
+    (q23 := q23) (q32 := q32)
+    (by simp [p])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareVerticalRegionT (width := width) (height := height)
-        0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotT :
-        q ∉ normalSquareVerticalRegionT (width := width) (height := height)
-          0 0 := by
-      simp [q]
-    exact hqNotT hqT
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex width height :=
-      (⟨2, by omega⟩, ⟨1, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex width height)) := by
+      simp [p, q23] at hpRect ⊢
+      omega)
+    (by simp [q23])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareVerticalRegionT (width := width) (height := height)
-        0 0 := by
-      rwa [cover.cover] at hqUnion
-    have hqNotT :
-        q ∉ normalSquareVerticalRegionT (width := width) (height := height)
-          0 0 := by
-      simp [q]
-    exact hqNotT hqT
+      simp [p, q32] at hpRect ⊢
+      omega)
+    (by simp [q32])
 
 /-- The current normalized \(6\times5\) rotated local-window model for \(T\)
 has no rectangular cover by contained source-paper \(2\times3\) and
@@ -457,77 +400,24 @@ lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five :
     ¬ Nonempty
       (NormalSquareVerticalEdgeComplementRectangleCover (width := 7) (height := 5)) := by
-  rintro ⟨cover⟩
   let p : SquareLatticeVertex 7 5 := (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpTarget :
-      p ∈ regionComplement
-        (squareLatticeContiguousRectangle 2 0 3 2 ∪
-          (squareLatticeContiguousRectangle 1 2 2 3 :
-            Finset (SquareLatticeVertex 7 5))) := by
-    simp [p]
-  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
-    rw [cover.cover]
-    exact hpTarget
-  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
-  rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 7 5 := (⟨1, by omega⟩, ⟨2, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex 7 5)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
-          Finset (SquareLatticeVertex 7 5)) := by
+  let q23 : SquareLatticeVertex 7 5 := (⟨1, by omega⟩, ⟨2, by omega⟩)
+  let q32 : SquareLatticeVertex 7 5 := (⟨2, by omega⟩, ⟨1, by omega⟩)
+  exact not_squareLatticeRectangleCover_of_forced_points (p := p)
+    (q23 := q23) (q32 := q32)
+    (by simp [p])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqTarget :
-        q ∈ regionComplement
-          (squareLatticeContiguousRectangle 2 0 3 2 ∪
-            (squareLatticeContiguousRectangle 1 2 2 3 :
-              Finset (SquareLatticeVertex 7 5))) := by
-      rwa [cover.cover] at hqUnion
-    have hqNotTarget :
-        q ∉ regionComplement
-          (squareLatticeContiguousRectangle 2 0 3 2 ∪
-            (squareLatticeContiguousRectangle 1 2 2 3 :
-              Finset (SquareLatticeVertex 7 5))) := by
-      simp [q]
-    exact hqNotTarget hqTarget
-  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 7 5 := (⟨2, by omega⟩, ⟨1, by omega⟩)
-    have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex 7 5)) := by
-      simpa [hRegion] using hpi
-    have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
-          Finset (SquareLatticeVertex 7 5)) := by
+      simp [p, q23] at hpRect ⊢
+      omega)
+    (by simp [q23])
+    (by
+      intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
-      simp [p, q] at hpRect ⊢
-      omega
-    have hqRegion : q ∈ cover.region i := by
-      simpa [hRegion] using hqRect
-    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
-      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqTarget :
-        q ∈ regionComplement
-          (squareLatticeContiguousRectangle 2 0 3 2 ∪
-            (squareLatticeContiguousRectangle 1 2 2 3 :
-              Finset (SquareLatticeVertex 7 5))) := by
-      rwa [cover.cover] at hqUnion
-    have hqNotTarget :
-        q ∉ regionComplement
-          (squareLatticeContiguousRectangle 2 0 3 2 ∪
-            (squareLatticeContiguousRectangle 1 2 2 3 :
-              Finset (SquareLatticeVertex 7 5))) := by
-      simp [q]
-    exact hqNotTarget hqTarget
+      simp [p, q32] at hpRect ⊢
+      omega)
+    (by simp [q32])
 
 /-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
 rotated red and blue edge blocks is the rotated local \(T\)-region together

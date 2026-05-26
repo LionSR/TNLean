@@ -1740,6 +1740,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{lemma}[The present local \(T\)-window and \(A_3\) cover obstructions]%
     \label{lem:peps_normalSquareRegionT_no_five_by_six_cover}
+    \lean{TNLean.PEPS.not_squareLatticeRectangleCover_of_forced_points}
     \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_at_origin}
     \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_five_by_six}
     \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_at_origin}
@@ -1774,7 +1775,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     horizontal edge block.  The rotated statement is the same coordinate
     argument with the two shapes interchanged.  The horizontal
     edge-complement statement uses the same lower-left point, and so does the
-    normalized vertical edge-complement statement.
+    normalized vertical edge-complement statement.  These cases are all
+    instances of the same point-forcing obstruction to an exact rectangular
+    cover.
 \end{proof}
 
 \begin{lemma}[Injectivity from a rectangular cover]%
