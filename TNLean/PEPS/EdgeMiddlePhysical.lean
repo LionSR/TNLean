@@ -205,6 +205,18 @@ theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G 
       Function.Injective (localTensorMap A e.1.2) :=
   ⟨hA.localTensorMap_injective e.1.1, hA.localTensorMap_injective e.1.2⟩
 
+/-- Vertex injectivity supplies the two endpoint injectivity assertions for
+the edge-blocked three-site chain at every edge.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all {A : Tensor G d}
+    (hA : IsVertexInjective A) :
+    ∀ e : Edge G,
+      Function.Injective (localTensorMap A e.1.1) ∧
+        Function.Injective (localTensorMap A e.1.2) :=
+  fun e => hA.edgeBlockedEndpointTensorMaps_injective e
+
 /-- Once the middle block is injective, vertex injectivity gives the full
 edge-blocked three-site injectivity statement.
 
@@ -216,6 +228,21 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle {A : Tensor G 
     (hMiddle : EdgeMiddleTensorInjective (G := G) A e) :
     EdgeBlockedThreeSiteInjective (G := G) A e :=
   ⟨hA.localTensorMap_injective e.1.1, hMiddle, hA.localTensorMap_injective e.1.2⟩
+
+/-- If every edge-middle tensor is injective, then vertex injectivity gives an
+injective edge-blocked three-site chain at every edge.
+
+This is the middle-tensor version of the assertion following `eq:block_to_mps`.
+The separate comparison theorem below supplies the middle-tensor hypotheses
+from finite-region injectivity.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle {A : Tensor G d}
+    (hA : IsVertexInjective A)
+    (hMiddle : ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e) :
+    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
+  fun e => hA.edgeBlockedThreeSiteInjective_of_middle e (hMiddle e)
 
 /-- Region injectivity of the edge-middle block, together with the comparison to
 the edge-middle tensor family, gives the edge-blocked three-site injectivity
@@ -253,7 +280,8 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all
     (hA : IsVertexInjective A)
     (hMiddleRegions : ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e)) :
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
-  fun e => hComparison.edgeBlockedThreeSiteInjective hA e (hMiddleRegions e)
+  hA.edgeBlockedThreeSiteInjective_all_of_middle fun e =>
+    hComparison.middle_tensor_injective e (hMiddleRegions e)
 
 end PEPS
 end TNLean

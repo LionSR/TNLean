@@ -965,6 +965,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Apply vertex injectivity at the two endpoints of the chosen edge.
 \end{proof}
 
+\begin{theorem}[Endpoint injectivity at all edges]%
+    \label{thm:peps_edgeBlockedEndpointTensorMaps_injective_all}
+    \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all}
+    \leanok
+    \uses{def:IsVertexInjective,
+        thm:peps_edgeBlockedEndpointTensorMaps_injective}
+    If the original PEPS tensor is vertex-injective, then the two endpoint
+    tensor maps in the edge-blocked three-site chain are injective at every
+    edge.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge endpoint theorem to each edge.
+\end{proof}
+
 \begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
@@ -978,6 +992,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     The endpoint assertions are supplied by vertex injectivity. The middle
     assertion is the assumed injectivity of the blocked middle tensor.
+\end{proof}
+
+\begin{theorem}[All edge-blocked chains from middle-tensor injectivity]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}
+    \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
+        def:peps_edgeMiddleTensorFamily,
+        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    If every edge-middle tensor is injective, then a vertex-injective PEPS
+    tensor gives an injective edge-blocked three-site chain at every edge.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge reduction to each edge.
 \end{proof}
 
 \begin{theorem}[Region injectivity gives edge-blocked injectivity]%
@@ -1004,7 +1032,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
         def:peps_edgeMiddleRegionInjectivityComparison,
-        thm:peps_edgeBlockedThreeSiteInjective_of_region}
+        thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}
     Suppose every edge-middle region \(V\setminus\{u,v\}\) is injective after
     blocking, and suppose finite-region injectivity has been identified with
     injectivity of the corresponding edge-middle tensor family. Then a

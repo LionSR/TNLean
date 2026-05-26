@@ -131,9 +131,14 @@ Theorem can be proved in the manner of the paper.
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective}.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
+  and, for all edges at once, by
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all},
   and
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
-  reduces the remaining work to the middle-block injectivity statement. The
+  reduces the remaining work to the middle-block injectivity statement. Its
+  all-edge form is
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle}.
+  The
   comparison
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}
   records the conditional passage from finite-region injectivity of
@@ -208,7 +213,8 @@ It is meant to prevent the proof from drifting away from the source argument.
   issue~\#1366. The middle physical index of this three-site object is
   formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
-  and the endpoint assertions are proved from vertex injectivity. The all-edge
+  and the endpoint assertions are proved from vertex injectivity, both for a
+  single chosen edge and uniformly over all edges. The all-edge
   conditional bridge from middle-region injectivity is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
