@@ -1942,6 +1942,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum_of_TCover}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain_of_TCover}
     \lean{TNLean.PEPS.normalSquareVerticalEdge}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
@@ -1965,24 +1967,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     block, the right endpoint lies in the blue block, the three regions are
     pairwise disjoint, and their union is the whole finite square lattice.
     If the local \(T\)-region is injective, rectangular injectivity and union
-    closure give injectivity of all three blocks.  The normalized \(7\times5\)
-    vertical-edge frame has the analogous red and blue rectangular blocks and
-    the same set-theoretic blocking data; at this stage its complementary-block
+    closure give injectivity of all three blocks; in particular a rectangular
+    cover of \(T\) suffices.  The normalized \(7\times5\) vertical-edge frame
+    has the analogous red and blue rectangular blocks and the same
+    set-theoretic blocking data; at this stage its complementary-block
     injectivity is either kept as an explicit hypothesis or obtained from
     rotated \(T\)-injectivity, and therefore from a rectangular cover of
     rotated \(T\), by the vertical collar lemma.  In both cases the named
     blocking datum supplies the corresponding three injective regions for the
     edge-blocked chain.
 \end{lemma}
-% Maintainer note: vertical-edge complement injectivity is now reduced to a
-% rotated T-cover.  The translated every-edge construction remains a separate
-% step.
+% Maintainer note: horizontal and vertical complement injectivity are reduced
+% to local and rotated T-covers, respectively.  The translated every-edge
+% construction remains a separate step.
 \begin{proof}\leanok
     The endpoint memberships are coordinate checks.  Rectangular injectivity
     gives the rectangular red and blue blocks.  For the horizontal edge, the
-    collar lemma gives the complement; for the vertical edge, complement
-    injectivity is an explicit input.  The disjointness and cover statements
-    are finite-set complement identities.
+    collar lemma gives the complement, and the rectangular cover criterion
+    removes the direct \(T\)-injectivity input when such a cover is supplied.
+    For the vertical edge, complement injectivity is an explicit input or is
+    obtained from the rotated \(T\)-cover.  The disjointness and cover
+    statements are finite-set complement identities.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%

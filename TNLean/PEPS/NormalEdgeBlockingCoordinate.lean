@@ -138,6 +138,33 @@ theorem normalSquareHorizontalEdge_injective_chain
       κ.IsInjective normalSquareHorizontalEdgeComplement :=
   (normalSquareHorizontalEdge_blockingDatum h hUnion hT).injective_chain
 
+/-- The normalized horizontal edge has red/blue/complement blocking data once
+the local \(T\)-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+def normalSquareHorizontalEdge_blockingDatum_of_TCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareRegionTRectangleCover (width := 5) (height := 7) 0 0) :
+    NormalEdgeBlockingData κ (squareLatticeGraph 5 7) normalSquareHorizontalEdge :=
+  normalSquareHorizontalEdge_blockingDatum h hUnion
+    (h.regionT_injective_of_cover hUnion cover)
+
+/-- The normalized horizontal edge supplies the three injective regions once
+the local \(T\)-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+theorem normalSquareHorizontalEdge_injective_chain_of_TCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareRegionTRectangleCover (width := 5) (height := 7) 0 0) :
+    κ.IsInjective normalSquareHorizontalEdgeRed ∧
+      κ.IsInjective normalSquareHorizontalEdgeBlue ∧
+      κ.IsInjective normalSquareHorizontalEdgeComplement :=
+  (normalSquareHorizontalEdge_blockingDatum_of_TCover h hUnion cover).injective_chain
+
 /-- The distinguished vertical edge in the normalized \(7\times5\) frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
