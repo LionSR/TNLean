@@ -412,6 +412,27 @@ theorem HasSameLengthProductForm.eq_sum_chi_trace_pow [Fintype Λ]
   intro γ _hγ
   rw [hχ.eq_trace_pow L hL α β γ]
 
+/-- The same-length BNT product formula for the canonical coefficient family
+associated to a \(\chi\)-family, written directly with trace-power
+coefficients.
+
+This is the coefficient-level form of arXiv:1606.00608,
+Theorem IV.13(ii), eq:algebra, lines 972--985, after choosing the canonical
+coefficient family described in Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem HasSameLengthProductForm.eq_sum_ofChi_trace_pow [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    {χ : DiagonalChiFamily Λ}
+    (hop : op.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    op.operator L α * op.operator L β =
+      ∑ γ : Λ, (χ.matrix α β γ ^ L).trace • op.operator L γ := by
+  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β]
+  refine Finset.sum_congr rfl ?_
+  intro γ _hγ
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+
 end BNTLabelOperatorFamily
 
 namespace BNTLabelTraceScalarFamily
@@ -439,6 +460,28 @@ theorem HasIdempotentCoefficientForm.eq_sum_chi_trace [Fintype Λ]
   rw [hχ.eq_trace_pow 1 Nat.zero_lt_one α β γ]
   simp
 
+/-- The BNT idempotent scalar identity for the canonical coefficient family
+associated to a \(\chi\)-family, written directly with length-one traces.
+
+This is the coefficient-level form of arXiv:1606.00608,
+Theorem IV.13(ii), idempotent equation, lines 981--985, after choosing the
+canonical coefficient family described in Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem HasIdempotentCoefficientForm.eq_sum_ofChi_trace [Fintype Λ]
+    {χ : DiagonalChiFamily Λ}
+    (hm : m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
+    (γ : Λ) :
+    m.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        (χ.matrix α β γ).trace * (m.traceScalar α * m.traceScalar β) := by
+  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ]
+  refine Finset.sum_congr rfl ?_
+  intro α _hα
+  refine Finset.sum_congr rfl ?_
+  intro β _hβ
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+  simp
+
 end BNTLabelTraceScalarFamily
 
 namespace BNTBlockedBasisCoefficientComparison
@@ -446,7 +489,11 @@ namespace BNTBlockedBasisCoefficientComparison
 variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
 
 /-- The label map on the disjoint union of source and target blocked basis
-indices at a positive blocked length. -/
+indices at a positive blocked length.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922, and Theorem
+IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
     (n : ℕ) (hn : 0 < n) :
     AlgebraStructureData.BlockedIndex data n ⊕
