@@ -523,15 +523,31 @@ def normalSquareVerticalTranslatedEdgeWindow
 edge-blocking frame around a coordinate right edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
-def HasNormalSquareHorizontalEdgeMargins (width height x y : ℕ) : Prop :=
+def IsNormalSquareHorizontalEdgeMargins (width height x y : ℕ) : Prop :=
   1 ≤ x ∧ x + 4 ≤ width ∧ 2 ≤ y ∧ y + 3 ≤ height
 
 /-- The coordinate inequalities needed to place the translated vertical
 edge-blocking frame around a coordinate upward edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
-def HasNormalSquareVerticalEdgeMargins (width height x y : ℕ) : Prop :=
+def IsNormalSquareVerticalEdgeMargins (width height x y : ℕ) : Prop :=
   2 ≤ x ∧ x + 3 ≤ width ∧ 1 ≤ y ∧ y + 4 ≤ height
+
+/-- A coordinate right edge with the required margins is the translated
+horizontal edge whose frame starts at \((x-1,y-2)\).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalTranslatedEdge_sub_eq_rightEdge
+    {width height : ℕ} {x y : ℕ}
+    (hxLeft : 1 ≤ x) (hxRight : x + 4 ≤ width)
+    (hyBottom : 2 ≤ y) (hyTop : y + 3 ≤ height) :
+    normalSquareHorizontalTranslatedEdge
+        (width := width) (height := height) (x - 1) (y - 2)
+        (by omega) (by omega) =
+      squareLatticeRightEdge (width := width) (height := height)
+        x y (by omega) (by omega) := by
+  ext <;> simp [normalSquareHorizontalTranslatedEdge, squareLatticeRightEdge]
+  all_goals omega
 
 /-- A coordinate right edge admits the translated horizontal window when the
 edge has enough room to place the normalized \(5\times7\) blocking frame around
@@ -546,11 +562,12 @@ def squareLatticeRightEdgeWindow
       (width := width) (height := height) (x - 1) (y - 2)) :
     NormalSquareTranslatedEdgeWindow
       (squareLatticeRightEdge (width := width) (height := height)
-        x y (by omega) (by omega)) := by
-  convert normalSquareHorizontalTranslatedEdgeWindow (x - 1) (y - 2)
-    (by omega) (by omega) cover using 1
-  ext <;> simp [squareLatticeRightEdge]
-  all_goals omega
+        x y (by omega) (by omega)) :=
+  NormalSquareTranslatedEdgeWindow.horizontal (x - 1) (y - 2)
+    (by omega) (by omega)
+    (normalSquareHorizontalTranslatedEdge_sub_eq_rightEdge
+      hxLeft hxRight hyBottom hyTop)
+    cover
 
 /-- A coordinate right edge admits the translated horizontal window from the
 named horizontal margin predicate.
@@ -558,7 +575,7 @@ named horizontal margin predicate.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def squareLatticeRightEdgeWindow_of_margins
     {width height : ℕ} (x y : ℕ)
-    (hMargins : HasNormalSquareHorizontalEdgeMargins width height x y)
+    (hMargins : IsNormalSquareHorizontalEdgeMargins width height x y)
     (cover : NormalSquareEdgeComplementRectangleCover
       (width := width) (height := height) (x - 1) (y - 2)) :
     NormalSquareTranslatedEdgeWindow
@@ -573,6 +590,22 @@ def squareLatticeRightEdgeWindow_of_margins
   squareLatticeRightEdgeWindow x y
     hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
 
+/-- A coordinate upward edge with the required margins is the translated
+vertical edge whose frame starts at \((x-2,y-1)\).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalTranslatedEdge_sub_eq_upEdge
+    {width height : ℕ} {x y : ℕ}
+    (hxLeft : 2 ≤ x) (hxRight : x + 3 ≤ width)
+    (hyBottom : 1 ≤ y) (hyTop : y + 4 ≤ height) :
+    normalSquareVerticalTranslatedEdge
+        (width := width) (height := height) (x - 2) (y - 1)
+        (by omega) (by omega) =
+      squareLatticeUpEdge (width := width) (height := height)
+        x y (by omega) (by omega) := by
+  ext <;> simp [normalSquareVerticalTranslatedEdge, squareLatticeUpEdge]
+  all_goals omega
+
 /-- A coordinate upward edge admits the translated vertical window when the
 edge has enough room to place the normalized \(7\times5\) blocking frame around
 it.
@@ -586,11 +619,12 @@ def squareLatticeUpEdgeWindow
       (width := width) (height := height) (x - 2) (y - 1)) :
     NormalSquareTranslatedEdgeWindow
       (squareLatticeUpEdge (width := width) (height := height)
-        x y (by omega) (by omega)) := by
-  convert normalSquareVerticalTranslatedEdgeWindow (x - 2) (y - 1)
-    (by omega) (by omega) cover using 1
-  ext <;> simp [squareLatticeUpEdge]
-  all_goals omega
+        x y (by omega) (by omega)) :=
+  NormalSquareTranslatedEdgeWindow.vertical (x - 2) (y - 1)
+    (by omega) (by omega)
+    (normalSquareVerticalTranslatedEdge_sub_eq_upEdge
+      hxLeft hxRight hyBottom hyTop)
+    cover
 
 /-- A coordinate upward edge admits the translated vertical window from the
 named vertical margin predicate.
@@ -598,7 +632,7 @@ named vertical margin predicate.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def squareLatticeUpEdgeWindow_of_margins
     {width height : ℕ} (x y : ℕ)
-    (hMargins : HasNormalSquareVerticalEdgeMargins width height x y)
+    (hMargins : IsNormalSquareVerticalEdgeMargins width height x y)
     (cover : NormalSquareVerticalEdgeComplementRectangleCover
       (width := width) (height := height) (x - 2) (y - 1)) :
     NormalSquareTranslatedEdgeWindow
@@ -637,7 +671,7 @@ def horizontalSquareLatticeEdgeWindow_of_margins
     {width height : ℕ} (e : Edge (squareLatticeGraph width height))
     (hEdge : IsHorizontalSquareLatticeEdge e)
     (hMargins :
-      HasNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+      IsNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
     (cover : NormalSquareEdgeComplementRectangleCover
       (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)) :
     NormalSquareTranslatedEdgeWindow e :=
@@ -668,7 +702,7 @@ def verticalSquareLatticeEdgeWindow_of_margins
     {width height : ℕ} (e : Edge (squareLatticeGraph width height))
     (hEdge : IsVerticalSquareLatticeEdge e)
     (hMargins :
-      HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+      IsNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
     (cover : NormalSquareVerticalEdgeComplementRectangleCover
       (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)) :
     NormalSquareTranslatedEdgeWindow e :=
@@ -689,13 +723,13 @@ inductive NormalSquareEdgeMarginCover {width height : ℕ}
   | horizontal
       (hEdge : IsHorizontalSquareLatticeEdge e)
       (hMargins :
-        HasNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+        IsNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
       (cover : NormalSquareEdgeComplementRectangleCover.{edgeCoverUniverse}
         (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2))
   | vertical
       (hEdge : IsVerticalSquareLatticeEdge e)
       (hMargins :
-        HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+        IsNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
       (cover : NormalSquareVerticalEdgeComplementRectangleCover.{edgeCoverUniverse}
         (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))
 

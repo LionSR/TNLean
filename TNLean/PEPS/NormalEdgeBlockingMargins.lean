@@ -28,7 +28,7 @@ theorem normalSquareTranslatedEdgeWindow_rightEdge_margins
     {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
     (w : NormalSquareTranslatedEdgeWindow
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareHorizontalEdgeMargins width height x y := by
+    IsNormalSquareHorizontalEdgeMargins width height x y := by
   cases w with
   | horizontal xStart yStart hxw hyw edge_eq _cover =>
       have hxcoord : xStart + 1 = x := by
@@ -43,7 +43,7 @@ theorem normalSquareTranslatedEdgeWindow_rightEdge_margins
             (fun e : Edge (squareLatticeGraph width height) => e.1.1.2.1)
             edge_eq
         simpa [normalSquareHorizontalTranslatedEdge, squareLatticeRightEdge] using h
-      unfold HasNormalSquareHorizontalEdgeMargins
+      unfold IsNormalSquareHorizontalEdgeMargins
       omega
   | vertical xStart yStart _hxw _hyw edge_eq _cover =>
       have hVertical :
@@ -69,7 +69,7 @@ theorem normalSquareTranslatedEdgeWindow_upEdge_margins
     {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
     (w : NormalSquareTranslatedEdgeWindow
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareVerticalEdgeMargins width height x y := by
+    IsNormalSquareVerticalEdgeMargins width height x y := by
   cases w with
   | horizontal xStart yStart _hxw _hyw edge_eq _cover =>
       have hHorizontal :
@@ -98,7 +98,7 @@ theorem normalSquareTranslatedEdgeWindow_upEdge_margins
             (fun e : Edge (squareLatticeGraph width height) => e.1.1.2.1)
             edge_eq
         simpa [normalSquareVerticalTranslatedEdge, squareLatticeUpEdge] using h
-      unfold HasNormalSquareVerticalEdgeMargins
+      unfold IsNormalSquareVerticalEdgeMargins
       omega
 
 /-- In the current open rectangular coordinate graph, a left-boundary right
@@ -274,10 +274,10 @@ theorem normalSquareEdgeMarginCover_rightEdge_bounds
     {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
     (d : NormalSquareEdgeMarginCover
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareHorizontalEdgeMargins width height x y := by
+    IsNormalSquareHorizontalEdgeMargins width height x y := by
   cases d with
   | horizontal _hEdge hMargins _cover =>
-      simpa [HasNormalSquareHorizontalEdgeMargins, squareLatticeRightEdge] using hMargins
+      simpa [IsNormalSquareHorizontalEdgeMargins, squareLatticeRightEdge] using hMargins
   | vertical hEdge _hMargins _cover =>
       have hHorizontal :
           IsHorizontalSquareLatticeEdge
@@ -298,7 +298,7 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
     {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
     (d : NormalSquareEdgeMarginCover
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareVerticalEdgeMargins width height x y := by
+    IsNormalSquareVerticalEdgeMargins width height x y := by
   cases d with
   | horizontal hEdge _hMargins _cover =>
       have hVertical :
@@ -311,7 +311,7 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
             (squareLatticeUpEdge (width := width) (height := height) x y hx hy)
             ⟨hEdge, hVertical⟩))
   | vertical _hEdge hMargins _cover =>
-      simpa [HasNormalSquareVerticalEdgeMargins, squareLatticeUpEdge] using hMargins
+      simpa [IsNormalSquareVerticalEdgeMargins, squareLatticeUpEdge] using hMargins
 
 /-- In the current open rectangular coordinate graph, a left-boundary right
 edge does not satisfy the translated horizontal margin package.

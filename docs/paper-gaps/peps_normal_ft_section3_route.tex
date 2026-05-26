@@ -68,7 +68,7 @@ injective complements that differ exactly in that site.
 
 The injective PEPS objects used by the normal theorem are represented in
 \path{TNLean/PEPS/Defs.lean}, \path{TNLean/PEPS/VirtualInsertion.lean}, and
-\path{TNLean/PEPS/Blocking.lean}. Chapter 13a of the blueprint now has a
+\path{TNLean/PEPS/Blocking.lean}. Chapter 13a of the blueprint has a
 separate normal-PEPS section after the injective theorem. This separation is
 important: the normal theorem needs extra blocking hypotheses before the
 injective proof route can be invoked.
@@ -83,7 +83,7 @@ The present blueprint nodes are the following.
     \item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
           regions $R$, $S$, and $T$. It is part of \ghissue{1375}. The
           coordinate rectangular hypotheses, union closure, and a supplied
-          rectangular cover of the displayed $T$-region now imply this
+          rectangular cover of the displayed $T$-region imply this
           abstract package.
     \item \path{thm:peps_normalEdgeBlockingToInjectiveChain} states that the
           normal square-lattice hypotheses allow a blocking around every edge into
@@ -97,138 +97,110 @@ The present blueprint nodes are the following.
           theorem following Theorem \path{3}. It is part of \ghissue{1375}.
 \end{itemize}
 
-The formalization now also has a coordinate vocabulary for finite rectangular
-square lattices. Vertices are pairs of horizontal and vertical coordinates, and
-the finite rectangular square-lattice graph now records horizontal and vertical
-nearest-neighbor edges, with elementary right-neighbor and upper-neighbor
-adjacency lemmas and named coordinate right/up edges available for the later
-translated edge blockings. The graph edge vocabulary also distinguishes
-horizontal and vertical square-lattice edges, and proves that every edge has
-exactly one of these two orientations. The ordered endpoints are now also
-identified: horizontal edges go from left to right and are the coordinate right
-edges from their left endpoints; vertical edges go from bottom to top and are
-the coordinate upward edges from their lower endpoints. The coordinate rectangles are
-products of finite coordinate sets; contiguous coordinate rectangles are
-products of finite coordinate intervals. The
-$2\times 3$ and $3\times 2$ coordinate-product predicates assert only the two
-coordinate cardinalities, while the contiguous-rectangle predicates express the
-source-paper contiguous square-lattice blocks. The square-lattice rectangular
-injectivity hypotheses are now packaged using precisely these two contiguous
-rectangle predicates, and map to the abstract rectangular injectivity bundle.
-Bounded contiguous coordinate rectangles of sizes $2\times3$ and $3\times2$
-are now known to satisfy the corresponding source-rectangle predicates, which
-is the reusable local step needed before invoking rectangular injectivity.
-The displayed regions $R$ and $S$ are also present as explicit unions of such
-contiguous rectangles, and their rectangular decompositions are formalized:
-$R$ is the union of one contiguous $2\times3$ rectangle and one contiguous
-$3\times2$ rectangle, while $S$ is the union of two contiguous $2\times3$
-rectangles. Their coordinate definitions have been checked against the source
-statement that they differ in one site: $R$ is contained in $S$, and
-$S\setminus R$ is the lower-right site of the displayed $3\times3$ square.
-Assuming the union-closure assertion supplied by the source lemma on unions of
-injective regions, these rectangular decompositions now give conditional
-injectivity proofs for $R$ and $S$. The finite nonempty iteration of this
-union-closure assertion is also formalized, matching the paper's use of
-repeated unions of smaller injective rectangles after Lemma
-\path{injective_union}. The displayed local-window model for $T$ is now
-present as the complement, inside the source $5\times6$ local window, of the
-two edge blocks shown in the source picture; the two removed edge blocks are
-now formalized separately as one contiguous $2\times3$ rectangle and one
-contiguous $3\times2$ rectangle. Under the coordinate square-lattice
-rectangular injectivity hypotheses, these two edge blocks are now known to be
-injective. They are disjoint from each other, and the three-part cover by the
-local-window $T$ region and the two removed blocks reconstructs the local
-window. This local-window region should not be confused with the
-finite-lattice complementary block used later in the proof of
-Theorem~\path{3}. The finite-lattice complementary block is now named as the
-complement of the two edge blocks in the full square lattice, and its
-elementary disjointness and cover identities are formalized. The rectangular
-cover witness is now target-parametric: if a square-lattice region has a
-nonempty cover by contiguous $2\times3$ and $3\times2$ rectangles, then
-rectangular injectivity and finite union closure imply injectivity of that
-region. The formalized special cases are the local-window $T$-region and the
-finite-lattice complementary block. This is only a sufficient criterion, not
-the only source route. The present origin-based local-window model for $T$,
-and the origin-based rotated local-window model used for vertical edges, are
-now also known not to admit such rectangular covers whenever the ambient
-lattice contains the corresponding $5\times6$ or $6\times5$ window. This local
-obstruction does not contradict the paper's statement; it shows that the
-source cover still has to be realigned with the finite PEPS geometry rather
-than read directly from the current local-window complement. The present
-origin-based horizontal edge-complement model is also known not to admit such
-a rectangular cover whenever the ambient lattice contains the $5\times7$
-frame. The origin-based vertical edge-complement model has the corresponding
-obstruction whenever the ambient lattice contains the $7\times5$ frame. The
-normalized $5\times7$ horizontal-edge geometry is formalized:
-$A_3$ is the
-local-window $T$-region together with two top-collar contiguous $3\times2$
-rectangles, so injectivity of local $T$ implies injectivity of $A_3$ by union
-closure and rectangular injectivity. A $7\times5$ collar identity is also
-available for the analogous rectangular frame, and the rotated vertical
-edge-complement is now formalized as the union of a rotated local $T$-region
-with two right-collar contiguous $2\times3$ rectangles. A rectangular cover of
-the rotated local $T$-region now directly implies injectivity of this vertical
-edge-complementary block. The normalized horizontal and vertical edge blockings
-are now both packaged as one-edge blocking data with
-their red, blue, and complementary regions: the distinguished edges have the
-expected horizontal and vertical orientations, the edge endpoints lie in the
-red and blue regions, respectively, and the three regions are disjoint and
-cover the full finite square lattice. This one-edge datum is the local form of
-the later every-edge blocking hypotheses, and a family of one-edge data now
-assembles into those every-edge hypotheses. The one-edge datum itself now
-supplies the three injective regions used in the associated chain, and the
-normalized horizontal and vertical edge instances now expose this as direct
-injective-chain consequences. For the horizontal edge, local $T$-injectivity,
-and therefore a rectangular cover of local $T$, implies injectivity of all
-three blocks. For the vertical edge, a rectangular cover of rotated local $T$
-now implies injectivity of all three blocks by union closure and rectangular
-injectivity. The horizontal edge-blocking picture is also available with a
-general coordinate origin: whenever the translated window fits in the finite
-square lattice, the translated horizontal edge has red, blue, and complementary
-regions, and a rectangular cover of the complementary region supplies the
-one-edge blocking datum. This translated datum now also exposes the three
-injective regions used in the associated edge-blocked chain, and the
-translated horizontal edge is identified with the corresponding coordinate
-right edge. The vertical edge-blocking picture is now available in the same
-coordinate-origin-parametric form, with its complementary region again
-discharged by a rectangular cover, with the analogous injective-chain
-consequence, and with the translated vertical edge identified as the
-corresponding coordinate upward edge. The normalized horizontal and vertical
-pictures are now recorded as the coordinate-origin specializations of these
-translated pictures. The
-normalized edge data and the translated edge data are kept in separate Lean
-modules, so the normalized source picture remains available independently from
-the coordinate-origin-parametric layer. A translated edge-window package now
-records the conditional every-edge assembly step: if every edge is supplied
-with a translated horizontal or vertical window and a rectangular cover of its
-complement, then the normal edge-blocking hypotheses follow. Coordinate right
-and upward edges now obtain such windows directly from the corresponding
-translated picture, and the corresponding margin hypotheses for an actual
-coordinate right or upward edge are recorded. These margin-window criteria also
-apply to arbitrary horizontal or vertical edges after identifying them with
-their coordinate right or upward representatives. The remaining per-edge
-finite-geometry input is now packaged as oriented margin-and-cover data, and a
-single such datum directly supplies the one-edge blocking datum and the three
-injective regions used in the associated chain. A family of such data assembles
-into the normal edge-blocking hypotheses, and the assembled hypotheses recover
-the supplied one-edge datum and its three injective regions at each edge. In
-the current open rectangular coordinate model, the horizontal and vertical
-margin predicates now name the coordinate inequalities needed to place the
-translated frames, and the coordinate right/up and oriented-edge window
-constructors now accept these named predicates directly. Such data on
-coordinate right and upward edges now force the corresponding named margin
-predicates. Hence the present translated-window package itself does not supply
-a family of windows over all edges of the open $7\times7$ graph; explicit
-boundary examples are recorded on all four sides. The margin-cover data store
-the same named margin predicates. Consequently this margin package does not
-apply to horizontal edges without enough left or right margin, nor to vertical
-edges without enough bottom or top margin; the corresponding $7\times7$
-examples are recorded explicitly, including a single four-sided boundary
-obstruction. Thus the remaining every-edge construction must include the
-boundary geometry rather than only translating the interior margin package; in
-particular, no family of this margin-cover data exists over all edges of the
-present open $7\times7$ graph. The realigned local and rotated $T$ covers and
-the construction of the appropriate data for every edge remain open.
+The finite rectangular square lattice is represented by pairs of horizontal
+and vertical coordinates. Its graph has horizontal and vertical
+nearest-neighbor edges, named coordinate right/up edges, and orientation
+predicates distinguishing the two possible directions. Every edge has exactly
+one of these orientations. With the ordered endpoints convention for edges,
+horizontal edges are coordinate right edges from their left endpoints, and
+vertical edges are coordinate upward edges from their lower endpoints.
+
+The rectangular vocabulary separates coordinate products from source-paper
+contiguous blocks. Coordinate rectangles are products of finite coordinate
+sets, whereas contiguous coordinate rectangles are products of coordinate
+intervals. The $2\times3$ and $3\times2$ coordinate-product predicates assert
+only the two cardinalities; the contiguous-rectangle predicates express the
+source-paper blocks. The square-lattice rectangular injectivity hypotheses use
+these two contiguous predicates and map to the abstract rectangular-injectivity
+bundle. Bounded contiguous rectangles of sizes $2\times3$ and $3\times2$
+satisfy the corresponding source-rectangle predicates.
+
+The displayed regions $R$ and $S$ are explicit unions of contiguous
+rectangles. Region $R$ is the union of one contiguous $2\times3$ rectangle and
+one contiguous $3\times2$ rectangle. Region $S$ is the union of two contiguous
+$2\times3$ rectangles. Their coordinate definitions agree with the source
+claim that they differ in one site: $R\subseteq S$, and $S\setminus R$ is the
+lower-right site of the displayed $3\times3$ square. Assuming the
+union-closure assertion supplied by the source lemma on unions of injective
+regions, these decompositions imply injectivity of $R$ and $S$. The formal
+development also contains the finite nonempty iteration of this union-closure
+assertion, matching the repeated unions used after Lemma
+\path{injective_union}.
+
+The displayed local model for $T$ is the complement, inside the source
+$5\times6$ window, of the two edge blocks in the source picture. These removed
+blocks are one contiguous $2\times3$ rectangle and one contiguous $3\times2$
+rectangle, hence they are injective under the coordinate rectangular
+hypotheses. They are disjoint, and together with the local-window $T$ region
+they reconstruct the $5\times6$ window. This local-window region is distinct
+from the finite-lattice complementary block $A_3$ used later in the proof of
+Theorem~\path{3}. The finite-lattice block is the complement of the two edge
+blocks in the full square lattice; its elementary disjointness and covering
+identities are formalized separately.
+
+A target-parametric rectangular-cover criterion supplies a sufficient
+injectivity route: if a square-lattice region has a nonempty cover by
+contiguous $2\times3$ and $3\times2$ rectangles, then rectangular injectivity
+and finite union closure imply injectivity of that region. The formal special
+cases are the local-window $T$ region and the finite-lattice complementary
+block. This criterion is only a sufficient local model, not the source
+argument itself.
+
+The origin-based local-window model for $T$ has no such rectangular cover
+whenever the ambient lattice contains the corresponding $5\times6$ window.
+The rotated local-window model for vertical edges has the analogous
+obstruction in a $6\times5$ window. The origin-based horizontal
+edge-complement model has the same obstruction in the $5\times7$ frame, and
+the origin-based vertical edge-complement model has the corresponding
+obstruction in the $7\times5$ frame. These no-cover results do not contradict
+the paper. They show that the source's injectivity argument for $T$ and $A_3$
+must be aligned with the finite PEPS geometry, rather than read directly from
+the present exact-cover criterion.
+
+The normalized horizontal edge frame has a collar identity: in the
+$5\times7$ frame, $A_3$ is the local-window $T$ region together with two
+top-collar contiguous $3\times2$ rectangles. Thus local $T$-injectivity implies
+injectivity of $A_3$ by union closure and rectangular injectivity. The
+vertical counterpart is a $7\times5$ frame in which the edge complement is the
+rotated local $T$ region together with two right-collar contiguous
+$2\times3$ rectangles. A rectangular cover of the rotated local $T$ region
+therefore implies injectivity of the vertical complementary block.
+
+The normalized horizontal and vertical edge blockings give one-edge data with
+red, blue, and complementary regions. The distinguished edges have the
+expected orientations; their endpoints lie in the red and blue regions; the
+three regions are pairwise disjoint and cover the finite lattice. This one-edge
+datum is the local form of the later every-edge blocking hypotheses. A family
+of such one-edge data assembles into those hypotheses, and each datum supplies
+the three injective regions used in the associated edge-blocked chain.
+
+The translated horizontal and vertical pictures carry the same data at an
+arbitrary coordinate origin. When the translated frame fits in the finite
+lattice, the translated edge is identified with the corresponding coordinate
+right or upward edge. A rectangular cover of the translated complementary
+region supplies the one-edge blocking datum and hence the three injective
+regions. The normalized pictures are the origin specializations of these
+translated pictures, while the normalized and translated data remain in
+separate Lean modules.
+
+The conditional every-edge construction has two equivalent forms. A translated
+edge-window assignment gives, for every edge, a horizontal or vertical window
+and a rectangular cover of its complement. Such an assignment implies the
+normal edge-blocking hypotheses. An oriented margin-and-cover datum records the
+same input directly on each square-lattice edge: the edge orientation, the
+coordinate inequalities placing the translated frame, and the complementary
+cover. A family of these data also assembles into the normal edge-blocking
+hypotheses, and the assembled hypotheses recover the supplied one-edge datum
+at each edge.
+
+For the present open rectangular coordinate graph, the margin predicates
+describe only interior translated frames. A coordinate right edge must have
+enough left and right margin; a coordinate upward edge must have enough bottom
+and top margin. Hence neither the translated-window criterion nor the
+oriented margin-and-cover criterion supplies data on all edges of the open
+$7\times7$ graph. Explicit boundary obstructions are recorded on all four
+sides. The remaining every-edge construction must therefore include the
+boundary geometry and the source-faithful local and rotated $T$ covers.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -236,7 +208,7 @@ closed, and the rectangular decompositions of $R$ and $S$ are formalized. The
 conditional derivations of injectivity for $R$ and $S$ from union closure are
 also formalized, and the two edge blocks removed from the displayed $T$-window
 are injective under the coordinate rectangular hypotheses. The finite-lattice
-complementary block around the chosen edge is now defined set-theoretically.
+complementary block around the chosen edge has a set-theoretic definition.
 The remaining open gap is the source-paper injectivity argument: prove the
 tensor-level union theorem, realign the local $T$-injectivity argument with the
 source finite PEPS geometry, translate the $5\times7$ collar decomposition
@@ -260,51 +232,32 @@ alone. The following additional obligations remain.
     \item Prove the union-of-injective-regions lemma. The proof must follow the
           source proof by applying the left inverses for $A$ and $B$ in sequence.
     \item Package the square-lattice normal hypotheses. The rectangular
-          injectivity part is now packaged for contiguous coordinate
+          injectivity part is expressed for contiguous coordinate
           $2\times 3$ and $3\times 2$ rectangles; the remaining size data must
           be tied to the displayed regions and their required complements.
     \item Prove that the paper's regions $R$, $S$, and $T$ are injective
-          under those hypotheses. The displayed regions $R$ and $S$ are now
-          defined as unions of contiguous rectangles, with their rectangular
-          decompositions and the expected one-site difference formalized. The
-          displayed local-window model for $T$ is now defined as the complement
-          of the two edge blocks in the source $5\times6$ local window, and
-          the two removed edge blocks have the displayed rectangular shapes.
-          The local-window complement identity for this $T$ region is also
-          formalized, including the three-part cover by $T$ and the two removed
-          blocks. The conditional derivations of injectivity for $R$ and $S$
-          from a union-closure hypothesis are formalized. The
-          nonempty finite iteration of union closure is now formalized. The
-          two edge blocks removed from the $T$-window are now injective under
-          rectangular injectivity, and their union is injective under the
-          source union-closure hypothesis. The finite-lattice complementary
-          region around an edge is now defined, and its elementary complement
-          identities are formalized. Rectangular-cover witnesses give sufficient
-          criteria for injectivity of the local displayed $T$-region, the
-          rotated vertical local $T$-region, and the finite-lattice
-          complementary block. In the normalized horizontal
-          edge $5\times7$ frame, the complementary block is also formalized as
-          the union of local $T$ and two contiguous $3\times2$ collar
-          rectangles, so local $T$-injectivity implies injectivity of this
-          block. The vertical $7\times5$ edge-blocking regions are now
-          recorded set-theoretically, and the vertical complementary block is
-          injective once the rotated local $T$-region has a rectangular cover.
-          The present origin-based local-window $T$ model and its rotated
-          counterpart are now known not to admit rectangular-cover witnesses
-          of the above form whenever the ambient lattice contains the
-          corresponding $5\times6$ or $6\times5$ window. The present
-          origin-based horizontal edge-complement model has the same
-          obstruction whenever the ambient lattice contains the $5\times7$
-          frame, and the origin-based vertical edge-complement model has the
-          corresponding obstruction whenever the ambient lattice contains the
-          $7\times5$ frame. These no-cover diagnostics now use a common
-          point-forcing obstruction lemma for exact rectangular covers. The
-          remaining coordinate work is to realign the source local and rotated
+          under those hypotheses. Regions $R$ and $S$ are explicit unions of
+          contiguous rectangles, with the displayed rectangular decompositions
+          and the expected one-site difference. Union closure therefore gives
+          their injectivity conditionally on the source union lemma. The local
+          model for $T$ is the complement of the two displayed edge blocks in
+          the source $5\times6$ window; those two blocks have the required
+          rectangular shapes and are injective under rectangular injectivity.
+          Rectangular-cover data give sufficient injectivity criteria for the
+          local $T$ region, the rotated vertical local $T$ region, and the
+          finite-lattice complementary block. The normalized horizontal
+          $5\times7$ and vertical $7\times5$ collar identities show how local
+          or rotated $T$ injectivity implies injectivity of the corresponding
+          edge-complementary block. The same exact-cover criterion has
+          point-forcing obstructions for the present origin-based local $T$
+          models and origin-based edge-complement models in the
+          $5\times6$, $6\times5$, $5\times7$, and $7\times5$ frames. Thus the
+          remaining coordinate work is to align the source local and rotated
           $T$ covers with the finite PEPS geometry and translate these
           decompositions around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. The normalized and
-          translated one-edge data now supply these chain hypotheses locally,
+          translated one-edge data supply these chain hypotheses locally,
           and translated edge windows assemble into the uniform hypotheses
           once such a window is available for every edge. The remaining work is
           the finite-geometry construction of those windows. This is the normal
@@ -330,7 +283,7 @@ alone. The following additional obligations remain.
           \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
           \path{def:peps_normalSquareBlockingRegions}, issue \#1375. This
-          node now also records the conditional implication from coordinate
+          node also records the conditional implication from coordinate
           rectangular injectivity, union closure, and a rectangular cover of
           the displayed $T$-region to the abstract $R,S,T$ blocking-region
           package.
@@ -344,7 +297,7 @@ alone. The following additional obligations remain.
     \item Rectangular-cover criterion for injectivity of the displayed
           $T$-region: blueprint
           \path{lem:peps_normalSquareRegionT_injective_of_cover}, issue
-          \#2004. This node now also contains the rotated vertical local
+          \#2004. This node also contains the rotated vertical local
           $T$-region cover criterion.
     \item Obstruction to applying that criterion directly to the present
           origin-based local-window $T$ models and edge-complement models:
@@ -360,13 +313,13 @@ alone. The following additional obligations remain.
     \item Normalized $5\times7$ top-collar decomposition of that block:
           blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_topCollar}, issue
-          \#2004. This node now also contains a normalized $7\times5$
+          \#2004. This node also contains a normalized $7\times5$
           collar identity for the analogous rectangular frame and the rotated
           vertical edge-complement collar identity.
     \item Normalized horizontal and vertical red/blue/complement blocking data:
           blueprint
           \path{lem:peps_normalSquareHorizontalEdge_blockingData}, issue
-          \#2004. These now use the common one-edge blocking-data structure.
+          \#2004. These use the common one-edge blocking-data structure.
           They also expose the corresponding injective-chain conclusions. The
           horizontal complement injectivity is reduced to a local $T$-cover,
           and the vertical complement injectivity is reduced to a rotated
@@ -388,7 +341,7 @@ alone. The following additional obligations remain.
           \path{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows},
           issue \#2004. This records the formal boundary before proving that
           every edge in the finite square lattice admits such a translated
-          window. Coordinate right and upward edges are now tied to the
+          window. Coordinate right and upward edges are tied to the
           corresponding translated windows, and the margin hypotheses for
           actual coordinate right/up edges are explicit. Arbitrary horizontal
           and vertical edges inherit these criteria from their coordinate
@@ -396,13 +349,13 @@ alone. The following additional obligations remain.
           the remaining per-edge input in the open rectangular coordinate
           model. One such datum directly supplies one-edge blocking data and
           the corresponding injective-chain conclusion, and a family of such
-          data now assembles into the normal edge-blocking hypotheses. The
+          data assembles into the normal edge-blocking hypotheses. The
           assembled hypotheses recover the supplied datum and its three
           injective regions at each edge. The horizontal and vertical margin
-          predicates are now named, the coordinate right/up and oriented-edge
+          predicates are named, the coordinate right/up and oriented-edge
           window constructors accept those predicates directly, translated
           windows on coordinate right/up edges force those predicates, and the
-          open $7\times7$ graph is now known not to admit a family of these
+          open $7\times7$ graph does not admit a family of these
           translated windows over all edges; four explicit boundary examples
           are recorded as a single conjunction. The per-edge margin-cover package
           stores the same predicates, and the resulting open-boundary obstruction for
@@ -461,7 +414,7 @@ same mathematical diagrams rather than a separate hand-written fallback.
 
 \section{Conclusion}
 
-The normal PEPS route is now separated from the injective PEPS route in the
+The normal PEPS route is separated from the injective PEPS route in the
 blueprint and in the GitHub issue tree. The formal proof still remains open:
 the next genuine mathematical step is to introduce blocked-region injectivity
 and prove Lemma \path{injective_union}. Once that lemma and the normal

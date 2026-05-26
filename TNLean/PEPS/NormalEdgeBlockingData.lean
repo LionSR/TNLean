@@ -27,17 +27,29 @@ normalized edge construction is translated around the full lattice.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 structure NormalEdgeBlockingData (G : SimpleGraph V) (e : Edge G) where
+  /-- The first injective block around the edge. -/
   red : Finset V
+  /-- The second injective block around the edge. -/
   blue : Finset V
+  /-- The complementary injective block around the edge. -/
   complement : Finset V
+  /-- The left endpoint of the edge lies in the red block. -/
   left_mem_red : e.1.1 ∈ red
+  /-- The right endpoint of the edge lies in the blue block. -/
   right_mem_blue : e.1.2 ∈ blue
+  /-- The red block is injective. -/
   red_injective : ι.IsInjective red
+  /-- The blue block is injective. -/
   blue_injective : ι.IsInjective blue
+  /-- The complementary block is injective. -/
   complement_injective : ι.IsInjective complement
+  /-- The red and blue blocks are disjoint. -/
   red_disjoint_blue : Disjoint red blue
+  /-- The red and complementary blocks are disjoint. -/
   red_disjoint_complement : Disjoint red complement
+  /-- The blue and complementary blocks are disjoint. -/
   blue_disjoint_complement : Disjoint blue complement
+  /-- The three edge-centred blocks cover the vertex set. -/
   cover_univ : red ∪ blue ∪ complement = Finset.univ
 
 namespace NormalEdgeBlockingData
