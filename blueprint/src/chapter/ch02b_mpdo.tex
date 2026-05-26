@@ -1613,6 +1613,8 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form}
     \lean{MPOTensor.BNTLabelTheoremData.same_length_product_form_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.same_length_product_eq_sum_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.positive_chi_pos_entries}
     \lean{MPOTensor.BNTLabelTheoremData.positive_chi_trace_power}
     \lean{MPOTensor.BNTLabelTheoremData.sourceLabel}
@@ -1649,7 +1651,7 @@ the elementary trace-power identity for diagonal matrices.
     blocked-comparison statements for the resulting canonical coefficients.
     The same product and idempotent predicates may also be rephrased using the
     canonical coefficient family determined by the \(\chi\)-matrices carried by
-    the data.
+    the data, with the corresponding displayed equations.
 \end{definition}
 
 \begin{theorem}[BNT theorem data give the same-length product law]%
@@ -1872,6 +1874,8 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form}
     \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_form_ofChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.same_length_product_eq_sum_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_ofChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries}
     \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power}
     \lean{MPOTensor.BNTLabelTheoremWitness.sourceLabel}
@@ -1903,7 +1907,7 @@ the elementary trace-power identity for diagonal matrices.
     and blocked-comparison statements.
     For any such witness, the product and idempotent predicates can be
     rephrased with the canonical coefficient family determined by its
-    \(\chi\)-matrices.
+    \(\chi\)-matrices, with the corresponding displayed equations.
 \end{definition}
 
 \begin{theorem}[BNT theorem witnesses give source equations]%
@@ -1911,6 +1915,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_positive_length_coeff_eq_ofChi}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_predicates}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_ofChi_equations}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations}
     \leanok
@@ -1927,7 +1932,8 @@ the elementary trace-power identity for diagonal matrices.
     every positive length, the BNT-label coefficient family also agrees with
     the canonical coefficient family determined by these \(\chi\)-matrices.
     Consequently, the product and idempotent predicates may be stated directly
-    using that canonical coefficient family.
+    using that canonical coefficient family, and the same displayed source
+    equations hold with those canonical coefficients.
 \end{theorem}
 \begin{proof}\leanok
     Unpack the existential witness and apply the corresponding witness-level

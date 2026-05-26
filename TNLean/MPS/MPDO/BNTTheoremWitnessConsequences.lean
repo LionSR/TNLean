@@ -89,6 +89,35 @@ theorem exists_source_ofChi_predicates {data : AlgebraStructureData d D}
   rcases h with ⟨W⟩
   exact ⟨W, W.same_length_product_form_ofChi, W.idempotent_coefficient_form_ofChi⟩
 
+/-- Existence of the source BNT-label witness gives the two source equations
+written with the canonical coefficient family determined by its
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+This only rephrases the positive-length coefficient identity carried by the
+witness; it does not construct the witness from an MPDO tensor.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_source_ofChi_equations {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      (∀ L : ℕ, 0 < L → ∀ α β : W.Label,
+        W.operators.operator L α * W.operators.operator L β =
+          ∑ γ : W.Label,
+            (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff L α β γ •
+              W.operators.operator L γ) ∧
+      (∀ γ : W.Label,
+        W.traceScalars.traceScalar γ =
+          ∑ α : W.Label, ∑ β : W.Label,
+            (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff 1 α β γ *
+              (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β)) := by
+  rcases h with ⟨W⟩
+  refine ⟨W, ?_, ?_⟩
+  · intro L hL α β
+    exact W.same_length_product_eq_sum_ofChi L hL α β
+  · intro γ
+    exact W.idempotent_eq_sum_ofChi γ
+
 /-- Existence of the source BNT-label witness gives a concrete witness whose
 blocked-basis \(\chi\)-family is the pullback of the BNT-label
 \(\chi_{\alpha,\beta,\gamma}\)-family along the blocked-basis comparison maps.

@@ -590,6 +590,21 @@ theorem same_length_product_form_ofChi :
       (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi) :=
   W.toTheoremData.same_length_product_form_ofChi
 
+/-- The same-length product equation carried by an existential witness, written
+with the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem same_length_product_eq_sum_ofChi
+    (L : ℕ) (hL : 0 < L) (α β : W.Label) :
+    W.operators.operator L α * W.operators.operator L β =
+      ∑ γ : W.Label,
+        (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff L α β γ •
+          W.operators.operator L γ :=
+  W.toTheoremData.same_length_product_eq_sum_ofChi L hL α β
+
 /-- The idempotent scalar law carried by an existential witness may be written
 using the canonical coefficient family determined by the same
 \(\chi_{\alpha,\beta,\gamma}\)-matrices.
@@ -601,6 +616,20 @@ theorem idempotent_coefficient_form_ofChi :
     W.traceScalars.HasIdempotentCoefficientForm
       (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi) :=
   W.toTheoremData.idempotent_coefficient_form_ofChi
+
+/-- The idempotent scalar equation carried by an existential witness, written
+with the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem idempotent_eq_sum_ofChi (γ : W.Label) :
+    W.traceScalars.traceScalar γ =
+      ∑ α : W.Label, ∑ β : W.Label,
+        (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff 1 α β γ *
+          (W.traceScalars.traceScalar α * W.traceScalars.traceScalar β) :=
+  W.toTheoremData.idempotent_eq_sum_ofChi γ
 
 /-- The diagonal entries of the chi matrices in an existential witness are
 positive.
