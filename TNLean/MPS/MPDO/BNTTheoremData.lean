@@ -378,6 +378,42 @@ theorem coeff_eq_ofChi_coeff (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
   simpa [BNTLabelCoefficientFamily.ofChi] using
     H.positive_chi_trace_power L hL α β γ
 
+/-- The same-length product law carried by theorem data may be written using
+the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem same_length_product_form_ofChi :
+    H.operators.HasSameLengthProductForm
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
+  intro L hL α β
+  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
+    (op := H.operators) H.sameLengthProduct L hL α β]
+  refine Finset.sum_congr rfl ?_
+  intro γ _hγ
+  rw [H.coeff_eq_ofChi_coeff L hL α β γ]
+
+/-- The idempotent scalar law carried by theorem data may be written using the
+canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem idempotent_coefficient_form_ofChi :
+    H.traceScalars.HasIdempotentCoefficientForm
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) := by
+  intro γ
+  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
+    (m := H.traceScalars) H.idempotent γ]
+  refine Finset.sum_congr rfl ?_
+  intro α _hα
+  refine Finset.sum_congr rfl ?_
+  intro β _hβ
+  rw [H.coeff_eq_ofChi_coeff 1 Nat.zero_lt_one α β γ]
+
 /-- The diagonal entries of the chi matrices in theorem data are positive.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
