@@ -364,8 +364,13 @@ import TNLean.PEPS.InjectiveRegion
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.EdgeMiddlePhysical
+import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalBlocking
+import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.NormalEdgeComplementCover
+import TNLean.PEPS.NormalEdgeBlockingCoordinate
+import TNLean.PEPS.NormalEdgeBlockingTranslated
+import TNLean.PEPS.NormalEdgeBlockingMargins
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
 import TNLean.PEPS.LocalGauge

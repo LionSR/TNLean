@@ -1,7 +1,6 @@
 import Mathlib.Data.Finset.Prod
 
-import TNLean.PEPS.Defs
-import TNLean.PEPS.InjectiveRegion
+import TNLean.PEPS.NormalEdgeBlockingData
 
 /-!
 # Normal PEPS blocking hypotheses
@@ -611,61 +610,6 @@ and 1544--1546 of `Papers/1804.04964/paper_normal.tex`. -/
       · omega
       · omega
 
-section EdgeBlocking
-
-variable [LinearOrder V]
-
-/-- Edge-centred blocking into three injective regions.
-
-For every edge, the normal PEPS proof blocks the network into a red region, a
-blue region, and the complementary region.  The edge endpoints lie in the red
-and blue regions respectively, the three regions are pairwise disjoint, their
-union is the whole vertex set, and each region is injective.  This records the
-hypotheses needed before applying the three-site injective-chain step.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500
-of `Papers/1804.04964/paper_normal.tex`. -/
-structure NormalEdgeBlockingHypotheses (G : SimpleGraph V) where
-  /-- The first injective block around each edge. -/
-  red : Edge G → Finset V
-  /-- The second injective block around each edge. -/
-  blue : Edge G → Finset V
-  /-- The complementary injective block around each edge. -/
-  complement : Edge G → Finset V
-  /-- The left endpoint of the edge lies in the red block. -/
-  left_mem_red : ∀ e : Edge G, e.1.1 ∈ red e
-  /-- The right endpoint of the edge lies in the blue block. -/
-  right_mem_blue : ∀ e : Edge G, e.1.2 ∈ blue e
-  /-- The red block is injective. -/
-  red_injective : ∀ e : Edge G, ι.IsInjective (red e)
-  /-- The blue block is injective. -/
-  blue_injective : ∀ e : Edge G, ι.IsInjective (blue e)
-  /-- The complementary block is injective. -/
-  complement_injective : ∀ e : Edge G, ι.IsInjective (complement e)
-  /-- The red and blue blocks are disjoint. -/
-  red_disjoint_blue : ∀ e : Edge G, Disjoint (red e) (blue e)
-  /-- The red and complementary blocks are disjoint. -/
-  red_disjoint_complement : ∀ e : Edge G, Disjoint (red e) (complement e)
-  /-- The blue and complementary blocks are disjoint. -/
-  blue_disjoint_complement : ∀ e : Edge G, Disjoint (blue e) (complement e)
-  /-- The three edge-centred blocks cover the vertex set. -/
-  cover_univ : ∀ e : Edge G, red e ∪ blue e ∪ complement e = Finset.univ
-
-namespace NormalEdgeBlockingHypotheses
-
-variable {ι}
-
-/-- The edge-centred blocking supplies a three-region injective chain at every
-edge. -/
-theorem injective_chain_at_edge (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
-    ι.IsInjective (h.red e) ∧ ι.IsInjective (h.blue e) ∧
-      ι.IsInjective (h.complement e) :=
-  ⟨h.red_injective e, h.blue_injective e, h.complement_injective e⟩
-
-end NormalEdgeBlockingHypotheses
-
-end EdgeBlocking
-
 /-- One-site-different injective regions with injective complements.
 
 The general normal PEPS theorem after Theorem 3 assumes that, for every site,
@@ -932,14 +876,15 @@ coordinate regions \(R\), \(S\), and \(T\) are now recorded separately, and
 the local-window \(T\) region still has no source-faithful injectivity
 derivation. In particular, the complementary region used as the third block in
 Theorem 3 is a finite-lattice complement around an edge, and this abstract
-structure still assumes its three region fields directly. It does not yet
-identify them with translated coordinate regions or supply the per-edge red,
-blue, and complementary regions used in the proof of Theorem 3. Documented in
+structure still assumes its three region fields directly. The translated
+horizontal and vertical edge pictures and their conditional per-edge
+margin-and-cover construction are formalized separately, but this structure is
+not yet derived from that coordinate layer. Documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
 obligations 1--5. Elimination: derive these assertions from rectangular
 injectivity after the tensor-level union theorem and the finite-lattice
 complement construction are formalized, then construct the translated edge
-blockings.
+blockings for every edge.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3 and its proof, lines
 1407--1504 of `Papers/1804.04964/paper_normal.tex`. -/
