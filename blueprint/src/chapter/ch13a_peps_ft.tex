@@ -1429,12 +1429,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionUnionPart_biUnion_one_two}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_one_two}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_three}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two}
     \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_inside}
     \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_left_inter_right}
     \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_left}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_two_three_eq_regionComplement_left}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_two_three_eq_regionComplement_zero_one}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_right}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_three_eq_regionComplement_right}
+    \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_three_eq_regionComplement_one_two}
     \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_zero_union_one}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_one_union_two}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_eq_regionComplement_two_union_three}
@@ -1453,11 +1457,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     These same reconstructions are available as finite unions over the
     corresponding subfamilies of the indexed four-region family.
     Piece $3$ is the complement of \(A\cup B\), equivalently the complement of
-    the three inside indexed pieces, and also \(A^c\cap B^c\); pieces \(2,3\)
+    the three inside indexed pieces, and also \(A^c\cap B^c\). The singleton
+    subfamily \(\{3\}\) gives the outside block. Pieces \(2,3\)
     reconstruct \(A^c\), equivalently the complement of pieces \(0,1\), and
-    pieces \(0,3\) reconstruct \(B^c\), again both as explicit unions and as
-    finite unions over the indexed subfamilies.  Equivalently, pieces \(0,3\)
-    are the complement of pieces \(1,2\). Conversely, pieces \(0,1\) are the
+    pieces \(0,3\) reconstruct \(B^c\), equivalently the complement of pieces
+    \(1,2\), again both as explicit unions and as finite unions over the
+    indexed subfamilies. Conversely, pieces \(0,1\) are the
     complement of pieces \(2,3\),
     pieces \(1,2\) are the complement of pieces \(0,3\), and adding all four
     pieces reconstructs $V$.

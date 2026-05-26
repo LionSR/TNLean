@@ -275,6 +275,29 @@ theorem regionUnionPart_biUnion_zero_one_two [Fintype V] (A B : Finset V) :
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
+/-- The selected subfamily `3` is the outside indexed region.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the tensor called `X` is carried by the fourth blocked region. -/
+theorem regionUnionPart_biUnion_three [Fintype V] (A B : Finset V) :
+    ({3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionUnionPart A B 3 := by
+  ext v
+  simp
+
+/-- The selected subfamily `3` is the complement of the selected inside
+subfamily `0,1,2`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the proof starts with the three inside indexed blocks and a
+boundary tensor on their complement. -/
+theorem regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two [Fintype V]
+    (A B : Finset V) :
+    ({3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionComplement (({0, 1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_three, regionUnionPart_biUnion_zero_one_two,
+    regionUnionPart_three_eq_regionComplement_union]
+
 /-- The fourth indexed region is the complement of the three inside indexed
 regions.
 
@@ -325,6 +348,19 @@ theorem regionUnionPart_biUnion_two_three_eq_regionComplement_left [Fintype V]
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
+/-- The selected subfamily `2,3` is the complement of the selected subfamily
+`0,1`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after applying injectivity of \(A\), the remaining indexed blocks
+are precisely the complement of the two blocks forming \(A\). -/
+theorem regionUnionPart_biUnion_two_three_eq_regionComplement_zero_one [Fintype V]
+    (A B : Finset V) :
+    ({2, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionComplement (({0, 1} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_two_three_eq_regionComplement_left,
+    regionUnionPart_biUnion_zero_one]
+
 /-- The left-only indexed region together with the outside region reconstructs
 the complement of `B`.
 
@@ -348,6 +384,20 @@ theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_right [Fintype V]
       regionComplement B := by
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
+/-- The selected subfamily `0,3` is the complement of the selected subfamily
+`1,2`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after reinserting the overlap and applying injectivity of \(B\),
+the remaining indexed blocks are precisely the complement of the two blocks
+forming \(B\). -/
+theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_one_two [Fintype V]
+    (A B : Finset V) :
+    ({0, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionComplement (({1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_zero_three_eq_regionComplement_right,
+    regionUnionPart_biUnion_one_two]
 
 /-- The right-only and outside indexed regions form the complement of the
 first two indexed regions.
