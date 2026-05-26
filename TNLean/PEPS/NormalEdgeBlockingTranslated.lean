@@ -404,5 +404,91 @@ theorem verticalTranslatedComp_zero :
       normalSquareVerticalEdgeComplement := by
   rfl
 
+/-! ### Edge windows for the every-edge construction -/
+
+universe edgeCoverUniverse
+
+/-- A proof that an edge is realized by one of the translated normal
+edge-blocking windows.
+
+The constructors deliberately record the rectangular cover of the complementary
+region. The remaining finite-geometry step in the source proof is to provide
+such a window for every edge of the \(7\times7\) square-lattice PEPS.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+inductive NormalSquareTranslatedEdgeWindow {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) : Type (edgeCoverUniverse + 1)
+  | horizontal (xStart yStart : ℕ)
+      (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+      (edge_eq :
+        normalSquareHorizontalTranslatedEdge xStart yStart (by omega) (by omega) = e)
+      (cover : NormalSquareEdgeComplementRectangleCover.{edgeCoverUniverse}
+        (width := width) (height := height) xStart yStart)
+  | vertical (xStart yStart : ℕ)
+      (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+      (edge_eq :
+        normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega) = e)
+      (cover : SquareLatticeRectangleCover.{edgeCoverUniverse}
+        (normalSquareVerticalTranslatedEdgeComplement
+          (width := width) (height := height) xStart yStart))
+
+namespace NormalSquareTranslatedEdgeWindow
+
+/-- A translated edge window gives the one-edge blocking datum for its edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def blockingDatum
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (w : NormalSquareTranslatedEdgeWindow e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height) e :=
+  match w with
+  | horizontal _xStart _yStart hx hy edge_eq cover =>
+      edge_eq ▸
+        normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover
+          h hUnion hx hy cover
+  | vertical _xStart _yStart hx hy edge_eq cover =>
+      edge_eq ▸
+        normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover
+          h hUnion hx hy cover
+
+/-- A translated edge window supplies the three injective regions for its
+edge-blocked chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem injective_chain
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (w : NormalSquareTranslatedEdgeWindow e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    κ.IsInjective ((w.blockingDatum h hUnion).red) ∧
+      κ.IsInjective ((w.blockingDatum h hUnion).blue) ∧
+      κ.IsInjective ((w.blockingDatum h hUnion).complement) :=
+  (w.blockingDatum h hUnion).injective_chain
+
+end NormalSquareTranslatedEdgeWindow
+
+/-- A choice of translated edge window for every edge assembles into the normal
+edge-blocking hypotheses.
+
+This is the conditional assembly step preceding the finite \(7\times7\)
+geometry argument: it assumes the translated window for each edge rather than
+constructing those windows.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (windows :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareTranslatedEdgeWindow.{edgeCoverUniverse} e) :
+    NormalEdgeBlockingHypotheses κ (squareLatticeGraph width height) :=
+  NormalEdgeBlockingHypotheses.ofBlockingData fun e =>
+    (windows e).blockingDatum h hUnion
+
 end PEPS
 end TNLean

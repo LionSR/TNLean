@@ -183,8 +183,12 @@ consequence. The normalized horizontal and vertical pictures are now recorded
 as the coordinate-origin specializations of these translated pictures. The
 normalized edge data and the translated edge data are kept in separate Lean
 modules, so the normalized source picture remains available independently from
-the coordinate-origin-parametric layer. The realigned local and rotated $T$
-covers and the full translated every-edge construction remain open.
+the coordinate-origin-parametric layer. A translated edge-window package now
+records the conditional every-edge assembly step: if every edge is supplied
+with a translated horizontal or vertical window and a rectangular cover of its
+complement, then the normal edge-blocking hypotheses follow. The realigned
+local and rotated $T$ covers and the construction of these windows for every
+edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -252,9 +256,11 @@ alone. The following additional obligations remain.
           around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. The normalized and
-          translated one-edge data now supply these chain hypotheses locally;
-          the remaining work is the uniform every-edge construction. This is
-          the normal analog of the injective edge-blocking bridge tracked by
+          translated one-edge data now supply these chain hypotheses locally,
+          and translated edge windows assemble into the uniform hypotheses
+          once such a window is available for every edge. The remaining work is
+          the finite-geometry construction of those windows. This is the normal
+          analog of the injective edge-blocking bridge tracked by
           \ghissue{1366}.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
@@ -324,6 +330,12 @@ alone. The following additional obligations remain.
           issue \#2004. This is the coordinate-origin-parametric vertical
           step toward the every-edge construction. Its coordinate origin
           specializes to the normalized vertical picture.
+    \item Conditional assembly from translated edge windows:
+          blueprint
+          \path{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows},
+          issue \#2004. This records the formal boundary before proving that
+          every edge in the finite square lattice admits such a translated
+          window.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

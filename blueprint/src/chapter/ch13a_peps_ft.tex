@@ -2077,6 +2077,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     formulas.
 \end{proof}
 
+\begin{definition}[Translated edge windows]%
+    \label{def:peps_normalSquareTranslatedEdgeWindow}
+    \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow}
+    \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.blockingDatum}
+    \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.injective_chain}
+    \leanok
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
+        lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    A translated edge window records that a chosen edge is one of the
+    translated horizontal or vertical edge pictures, together with a
+    rectangular cover of the complementary block.  Such a window gives the
+    one-edge blocking datum for that edge, hence the three injective regions
+    used in the edge-blocked chain.
+\end{definition}
+
+\begin{theorem}[Assembly from translated edge windows]%
+    \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    \leanok
+    \uses{def:peps_normalSquareTranslatedEdgeWindow,
+        def:peps_normalEdgeBlockingHypotheses}
+    If every edge of the finite square lattice is supplied with a translated
+    edge window, then the corresponding one-edge blockings assemble into the
+    normal edge-blocking hypotheses.  This is the conditional assembly step;
+    constructing such windows for all edges of the \(7\times7\) lattice remains
+    separate.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the general assembly map for one-edge blocking data to the datum
+    supplied by the chosen translated window at each edge.
+\end{proof}
+
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
     \label{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}
