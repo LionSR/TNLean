@@ -553,6 +553,27 @@ def squareLatticeRightEdgeWindow
   ext <;> simp [squareLatticeRightEdge]
   all_goals omega
 
+/-- A coordinate right edge admits the translated horizontal window from the
+named horizontal margin predicate.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def squareLatticeRightEdgeWindow_of_margins
+    {width height : ℕ} (x y : ℕ)
+    (hMargins : HasNormalSquareHorizontalEdgeMargins width height x y)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) (x - 1) (y - 2)) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height)
+        x y
+        (by
+          rcases hMargins with ⟨_hxLeft, hxRight, _hyBottom, _hyTop⟩
+          omega)
+        (by
+          rcases hMargins with ⟨_hxLeft, _hxRight, _hyBottom, hyTop⟩
+          omega)) :=
+  squareLatticeRightEdgeWindow x y
+    hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
+
 /-- A coordinate upward edge admits the translated vertical window when the
 edge has enough room to place the normalized \(7\times5\) blocking frame around
 it.
@@ -572,6 +593,28 @@ def squareLatticeUpEdgeWindow
     (by omega) (by omega) cover using 1
   ext <;> simp [squareLatticeUpEdge]
   all_goals omega
+
+/-- A coordinate upward edge admits the translated vertical window from the
+named vertical margin predicate.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def squareLatticeUpEdgeWindow_of_margins
+    {width height : ℕ} (x y : ℕ)
+    (hMargins : HasNormalSquareVerticalEdgeMargins width height x y)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) (x - 2) (y - 1))) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height)
+        x y
+        (by
+          rcases hMargins with ⟨_hxLeft, hxRight, _hyBottom, _hyTop⟩
+          omega)
+        (by
+          rcases hMargins with ⟨_hxLeft, _hxRight, _hyBottom, hyTop⟩
+          omega)) :=
+  squareLatticeUpEdgeWindow x y
+    hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
 
 /-- A horizontal square-lattice edge admits a translated horizontal window when
 its ordered left endpoint has the required margins.
@@ -747,235 +790,6 @@ theorem normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers
       κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_marginCovers
         h hUnion data).complement e) :=
   (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).injective_chain_at_edge e
-
-/-! ### Boundary obstructions for the present open-rectangle model -/
-
-/-- A translated margin-cover datum on a coordinate right edge forces exactly
-the horizontal margin inequalities used by the current interior package.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem normalSquareEdgeMarginCover_rightEdge_bounds
-    {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
-    (d : NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareHorizontalEdgeMargins width height x y := by
-  unfold HasNormalSquareHorizontalEdgeMargins
-  cases d with
-  | horizontal _hEdge hxLeft hxRight hyBottom hyTop _cover =>
-      constructor
-      · simpa [squareLatticeRightEdge] using hxLeft
-      constructor
-      · simpa [squareLatticeRightEdge] using hxRight
-      constructor
-      · simpa [squareLatticeRightEdge] using hyBottom
-      · simpa [squareLatticeRightEdge] using hyTop
-  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hHorizontal :
-          IsHorizontalSquareLatticeEdge
-            (squareLatticeRightEdge (width := width) (height := height) x y hx hy) :=
-        squareLatticeRightEdge_isHorizontal hx hy
-      exact
-        False.elim
-          ((squareLatticeEdge_not_horizontal_and_vertical
-            (squareLatticeRightEdge (width := width) (height := height) x y hx hy)
-            ⟨hHorizontal, hEdge⟩))
-
-/-- A translated margin-cover datum on a coordinate upward edge forces exactly
-the vertical margin inequalities used by the current interior package.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem normalSquareEdgeMarginCover_upEdge_bounds
-    {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
-    (d : NormalSquareEdgeMarginCover
-      (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
-    HasNormalSquareVerticalEdgeMargins width height x y := by
-  unfold HasNormalSquareVerticalEdgeMargins
-  cases d with
-  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hVertical :
-          IsVerticalSquareLatticeEdge
-            (squareLatticeUpEdge (width := width) (height := height) x y hx hy) :=
-        squareLatticeUpEdge_isVertical hx hy
-      exact
-        False.elim
-          ((squareLatticeEdge_not_horizontal_and_vertical
-            (squareLatticeUpEdge (width := width) (height := height) x y hx hy)
-            ⟨hEdge, hVertical⟩))
-  | vertical _hEdge hxLeft hxRight hyBottom hyTop _cover =>
-      constructor
-      · simpa [squareLatticeUpEdge] using hxLeft
-      constructor
-      · simpa [squareLatticeUpEdge] using hxRight
-      constructor
-      · simpa [squareLatticeUpEdge] using hyBottom
-      · simpa [squareLatticeUpEdge] using hyTop
-
-/-- In the current open rectangular coordinate graph, a left-boundary right
-edge does not satisfy the translated horizontal margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_leftBoundaryRightEdge_marginCover {width height y : ℕ}
-    (hx : 0 + 1 < width) (hy : y < height) :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := width) (height := height) 0 y hx hy)) := by
-  rintro ⟨d⟩
-  exact Nat.not_succ_le_zero 0 (normalSquareEdgeMarginCover_rightEdge_bounds d).1
-
-/-- In the current open \(7\times7\) rectangular coordinate graph, the left
-boundary right edge at height \(2\) does not satisfy the translated horizontal
-margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_leftBoundaryRightEdge_marginCover_seven :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
-        (by decide) (by decide))) := by
-  exact not_leftBoundaryRightEdge_marginCover (by decide) (by decide)
-
-/-- In the current open rectangular coordinate graph, a right edge too close
-to the right side does not satisfy the translated horizontal margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_rightMarginRightEdge_marginCover {width height x y : ℕ}
-    (hx : x + 1 < width) (hy : y < height) (hRight : ¬ x + 4 ≤ width) :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) := by
-  rintro ⟨d⟩
-  exact hRight (normalSquareEdgeMarginCover_rightEdge_bounds d).2.1
-
-/-- In the current open \(7\times7\) rectangular coordinate graph, the right
-edge at horizontal coordinate \(5\) and height \(2\) does not satisfy the
-translated horizontal margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_rightMarginRightEdge_marginCover_seven :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := 7) (height := 7) 5 2
-        (by decide) (by decide))) := by
-  exact not_rightMarginRightEdge_marginCover (by decide) (by decide) (by decide)
-
-/-- In the current open rectangular coordinate graph, a bottom-boundary upward
-edge does not satisfy the translated vertical margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_bottomBoundaryUpEdge_marginCover {width height x : ℕ}
-    (hx : x < width) (hy : 0 + 1 < height) :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeUpEdge (width := width) (height := height) x 0 hx hy)) := by
-  rintro ⟨d⟩
-  exact Nat.not_succ_le_zero 0 (normalSquareEdgeMarginCover_upEdge_bounds d).2.2.1
-
-/-- In the current open \(7\times7\) rectangular coordinate graph, the bottom
-boundary upward edge at horizontal coordinate \(2\) does not satisfy the
-translated vertical margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_bottomBoundaryUpEdge_marginCover_seven :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeUpEdge (width := 7) (height := 7) 2 0
-        (by decide) (by decide))) := by
-  exact not_bottomBoundaryUpEdge_marginCover (by decide) (by decide)
-
-/-- In the current open rectangular coordinate graph, an upward edge too close
-to the top side does not satisfy the translated vertical margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_topMarginUpEdge_marginCover {width height x y : ℕ}
-    (hx : x < width) (hy : y + 1 < height) (hTop : ¬ y + 4 ≤ height) :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) := by
-  rintro ⟨d⟩
-  exact hTop (normalSquareEdgeMarginCover_upEdge_bounds d).2.2.2
-
-/-- In the current open \(7\times7\) rectangular coordinate graph, the upward
-edge at horizontal coordinate \(2\) and height \(5\) does not satisfy the
-translated vertical margin package.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_topMarginUpEdge_marginCover_seven :
-    ¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeUpEdge (width := 7) (height := 7) 2 5
-        (by decide) (by decide))) := by
-  exact not_topMarginUpEdge_marginCover (by decide) (by decide) (by decide)
-
-/-- The current open \(7\times7\) rectangular coordinate graph has explicit
-horizontal and vertical boundary edges on all four sides that do not satisfy
-the translated margin-cover package.
-
-This records a four-sided obstruction to reading the present margin package as
-the source theorem's every-edge construction.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_fourSidedBoundaryMarginCover_seven :
-    (¬ Nonempty (NormalSquareEdgeMarginCover
-      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
-        (by decide) (by decide)))) ∧
-      (¬ Nonempty (NormalSquareEdgeMarginCover
-        (squareLatticeRightEdge (width := 7) (height := 7) 5 2
-          (by decide) (by decide)))) ∧
-      (¬ Nonempty (NormalSquareEdgeMarginCover
-        (squareLatticeUpEdge (width := 7) (height := 7) 2 0
-          (by decide) (by decide)))) ∧
-      (¬ Nonempty (NormalSquareEdgeMarginCover
-        (squareLatticeUpEdge (width := 7) (height := 7) 2 5
-          (by decide) (by decide)))) := by
-  exact
-    ⟨not_leftBoundaryRightEdge_marginCover_seven,
-      not_rightMarginRightEdge_marginCover_seven,
-      not_bottomBoundaryUpEdge_marginCover_seven,
-      not_topMarginUpEdge_marginCover_seven⟩
-
-/-- The current open \(7\times7\) rectangular coordinate graph does not admit
-a family of translated margin-cover data over all edges.
-
-This records that the present margin package is only an interior sufficient
-criterion for the source proof's edge-blocking step; the boundary geometry
-still has to be supplied separately.
-
-Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
-lines 1475--1500. -/
-theorem not_forall_normalSquareEdgeMarginCover_seven :
-    ¬ Nonempty (∀ e : Edge (squareLatticeGraph 7 7),
-      NormalSquareEdgeMarginCover e) := by
-  rintro ⟨data⟩
-  exact not_leftBoundaryRightEdge_marginCover_seven
-    ⟨data (squareLatticeRightEdge (width := 7) (height := 7) 0 2
-      (by decide) (by decide))⟩
 
 end PEPS
 end TNLean
