@@ -149,16 +149,17 @@ than read directly from the current local-window complement. The normalized
 $5\times7$ horizontal-edge geometry is also formalized: $A_3$ is the
 local-window $T$-region together with two top-collar contiguous $3\times2$
 rectangles, so injectivity of local $T$ implies injectivity of $A_3$ by union
-closure and rectangular injectivity. The vertical-edge $7\times5$ counterpart
-is now formalized as well: the corresponding complement is the local-window
-$T$-region together with two right-collar contiguous $2\times3$ rectangles, and
-the same conditional injectivity consequence follows from union closure. The
-normalized $5\times7$ horizontal edge is now packaged with its red, blue, and
+closure and rectangular injectivity. A $7\times5$ collar identity is also
+available for the analogous rectangular frame. The normalized horizontal and
+vertical edge blockings are now both packaged with their red, blue, and
 complementary regions: the edge endpoints lie in the red and blue regions,
-respectively, the three regions are disjoint and cover the full finite square
-lattice, and local $T$-injectivity implies injectivity of all three blocks. The
-realigned local $T$ cover, the vertical-edge blocking data, and the translated
-every-edge construction remain open.
+respectively, and the three regions are disjoint and cover the full finite
+square lattice. For the horizontal edge, local $T$-injectivity implies
+injectivity of all three blocks. For the vertical edge, injectivity of the
+complementary block is still an explicit hypothesis; the missing step is the
+source-faithful finite-geometry proof that discharges this hypothesis from the
+rectangular assumptions and union closure. The realigned local $T$ cover and
+the translated every-edge construction remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -215,11 +216,14 @@ alone. The following additional obligations remain.
           edge $5\times7$ frame, the complementary block is also formalized as
           the union of local $T$ and two contiguous $3\times2$ collar
           rectangles, so local $T$-injectivity implies injectivity of this
-          block. The present normalized $5\times6$ local-window $T$ model is
-          now known not to admit a rectangular-cover witness of the above
-          form. The remaining coordinate work is to realign the source
-          local $T$ cover with the finite PEPS geometry and translate this
-          decomposition around every edge.
+          block. The vertical $7\times5$ edge-blocking regions are now
+          recorded set-theoretically, but injectivity of the vertical
+          complementary block remains an explicit hypothesis. The present
+          normalized $5\times6$ local-window $T$ model is now known not to
+          admit a rectangular-cover witness of the above form. The remaining
+          coordinate work is to realign the source local $T$ cover with the
+          finite PEPS geometry, discharge the vertical complementary-block
+          hypothesis, and translate this decomposition around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. This is the normal analog of
           the injective edge-blocking bridge tracked by \ghissue{1366}.
@@ -267,12 +271,12 @@ alone. The following additional obligations remain.
     \item Normalized $5\times7$ top-collar decomposition of that block:
           blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_topCollar}, issue
-          \#2004. This node now also contains the normalized $7\times5$
-          right-collar counterpart for vertical edges.
-    \item Normalized horizontal-edge red/blue/complement blocking data:
+          \#2004. This node now also contains a normalized $7\times5$
+          collar identity for the analogous rectangular frame.
+    \item Normalized horizontal and vertical red/blue/complement blocking data:
           blueprint
           \path{lem:peps_normalSquareHorizontalEdge_blockingData}, issue
-          \#2004.
+          \#2004. The vertical complement injectivity is still conditional.
     \item Edge blocking into red, blue, and complementary injective regions:
           blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
     \item Application of Lemma \path{inj_isomorph} after normal blocking:

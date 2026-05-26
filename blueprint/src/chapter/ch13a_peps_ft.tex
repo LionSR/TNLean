@@ -1918,13 +1918,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
     rectangle.
 \end{proof}
 
-\begin{lemma}[Normalized horizontal-edge blocking data]%
+\begin{lemma}[Normalized edge-blocking data]%
     \label{lem:peps_normalSquareHorizontalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeRed}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion,
@@ -1937,16 +1942,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
     block, the right endpoint lies in the blue block, the three regions are
     pairwise disjoint, and their union is the whole finite square lattice.
     If the local \(T\)-region is injective, rectangular injectivity and union
-    closure give injectivity of all three blocks.
+    closure give injectivity of all three blocks.  The normalized \(7\times5\)
+    vertical-edge frame has the analogous red and blue rectangular blocks and
+    the same set-theoretic blocking data; at this stage its complementary-block
+    injectivity is kept as an explicit hypothesis.
 \end{lemma}
-% Maintainer note: this is the normalized horizontal-edge instance.  The
-% translated every-edge construction and the vertical-edge instance remain
-% separate steps.
+% Maintainer note: the vertical-edge complement injectivity is still
+% conditional.  The translated every-edge construction remains a separate step.
 \begin{proof}\leanok
     The endpoint memberships are coordinate checks.  Rectangular injectivity
-    gives the two edge blocks, the collar lemma gives the complement, and the
-    disjointness and cover statements are the finite-lattice complement
-    identities for the two removed edge blocks.
+    gives the rectangular red and blue blocks.  For the horizontal edge, the
+    collar lemma gives the complement; for the vertical edge, complement
+    injectivity is an explicit input.  The disjointness and cover statements
+    are finite-set complement identities.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%

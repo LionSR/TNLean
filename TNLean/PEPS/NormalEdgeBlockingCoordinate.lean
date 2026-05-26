@@ -98,5 +98,83 @@ theorem normalSquareHorizontalEdge_blockingData
       normalSquareHorizontalEdgeComplement, Finset.union_assoc, Finset.union_left_comm,
       Finset.union_comm] using hCover
 
+/-- The distinguished vertical edge in the normalized \(7\times5\) frame.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the proof says that vertical edges use the \(7\times5\) counterpart of
+the horizontal-edge blocking. -/
+def normalSquareVerticalEdge : Edge (squareLatticeGraph 7 5) where
+  val :=
+    (((⟨2, by decide⟩ : Fin 7), (⟨1, by decide⟩ : Fin 5)),
+      ((⟨2, by decide⟩ : Fin 7), (⟨2, by decide⟩ : Fin 5)))
+  property := by
+    constructor
+    · change toLex
+        (((⟨2, by decide⟩ : Fin 7), (⟨1, by decide⟩ : Fin 5)) :
+          SquareLatticeVertex 7 5) <
+        toLex (((⟨2, by decide⟩ : Fin 7), (⟨2, by decide⟩ : Fin 5)) :
+          SquareLatticeVertex 7 5)
+      rw [Prod.Lex.toLex_lt_toLex]
+      exact Or.inr ⟨rfl, by decide⟩
+    · exact squareLatticeGraph_adj_up (⟨2, by decide⟩ : Fin 7)
+        (⟨1, by decide⟩ : Fin 5) (by decide)
+
+/-- The red block around the normalized vertical edge. -/
+abbrev normalSquareVerticalEdgeRed : Finset (SquareLatticeVertex 7 5) :=
+  squareLatticeContiguousRectangle 2 0 3 2
+
+/-- The blue block around the normalized vertical edge. -/
+abbrev normalSquareVerticalEdgeBlue : Finset (SquareLatticeVertex 7 5) :=
+  squareLatticeContiguousRectangle 1 2 2 3
+
+/-- The complementary block around the normalized vertical edge. -/
+abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
+  regionComplement (normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue)
+
+/-- The normalized vertical edge has the red/blue/complement blocking geometry
+used in the proof of the normal square-lattice theorem.
+
+This theorem records the set-theoretic data for the vertical-edge blocking.
+Injectivity of the complementary block is kept as an explicit hypothesis here;
+deriving it from the source rectangular hypotheses is the remaining
+finite-geometry step before this can be promoted to an every-edge
+`NormalEdgeBlockingHypotheses` construction.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalEdge_blockingData
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hComplement : κ.IsInjective normalSquareVerticalEdgeComplement) :
+    normalSquareVerticalEdge.1.1 ∈ normalSquareVerticalEdgeRed ∧
+      normalSquareVerticalEdge.1.2 ∈ normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeRed ∧
+      κ.IsInjective normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeBlue ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeBlue normalSquareVerticalEdgeComplement ∧
+      normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue ∪
+          normalSquareVerticalEdgeComplement =
+        (Finset.univ : Finset (SquareLatticeVertex 7 5)) := by
+  refine ⟨?_, ?_, ?_, ?_, hComplement, ?_, ?_, ?_, ?_⟩
+  · simp [normalSquareVerticalEdge, normalSquareVerticalEdgeRed]
+  · simp [normalSquareVerticalEdge, normalSquareVerticalEdgeBlue]
+  · exact h.rect32_injective (by omega) (by omega)
+  · exact h.rect23_injective (by omega) (by omega)
+  · rw [Finset.disjoint_left]
+    intro v hvRed hvBlue
+    rw [mem_squareLatticeContiguousRectangle] at hvRed hvBlue
+    omega
+  · rw [Finset.disjoint_left]
+    intro v hvRed hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
+  · rw [Finset.disjoint_left]
+    intro v hvBlue hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
+  · ext v
+    simp [normalSquareVerticalEdgeComplement, regionComplement]
+
 end PEPS
 end TNLean
