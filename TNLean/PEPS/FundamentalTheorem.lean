@@ -632,6 +632,19 @@ def GaugeEquivModEdgeScalars (A : Tensor G d)
         edgeGaugeAt A X v ie =
           edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie
 
+/-- Gauge equivalence modulo balanced edge scalars is reflexive.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the identity edge-scalar
+family is vertex-balanced and leaves every oriented endpoint action unchanged. -/
+theorem GaugeEquivModEdgeScalars.refl (A : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) :
+    GaugeEquivModEdgeScalars (G := G) A X X := by
+  refine ⟨fun _ => 1, ?_, ?_⟩
+  · intro v
+    simp [edgeScalarAt]
+  · intro v ie
+    simp [edgeScalarAt]
+
 /-- Balanced edge-scalar reweightings do not change the gauged tensor at a
 vertex. -/
 theorem GaugeEquivModEdgeScalars.gaugeVertex_eq

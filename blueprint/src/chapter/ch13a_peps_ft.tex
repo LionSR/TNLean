@@ -2725,6 +2725,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     endpoint scalars is $1$ at every vertex.
 \end{definition}
 
+\begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
+    \label{thm:GaugeEquivModEdgeScalars_refl}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.refl}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars}
+    Every edge-gauge family is equivalent to itself modulo balanced edge
+    scalars. The witnessing scalar family is identically $1$, whose oriented
+    product at every vertex is $1$.
+    Diagrammatically, the extra endpoint scalars on the oriented edge are
+    invisible factors multiplying the two endpoint actions:
+    \begin{center}
+        \TNPEPSEdgeGaugeOrientation
+    \end{center}
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the constant edge-scalar family $c_e=1$. Both endpoint actions are
+    unchanged, and the product of the incident endpoint scalars at every vertex
+    is $1$.
+\end{proof}
+
 \begin{theorem}[Balanced edge scalars preserve the local gauge action]%
     \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq}
