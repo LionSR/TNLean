@@ -2178,7 +2178,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(5\times7\) or \(7\times5\) frame and the complementary cover is supplied.
     The same criterion applies to an arbitrary horizontal or vertical
     square-lattice edge after identifying it with its coordinate right or
-    upward representative.  The oriented margin-and-cover data package is the
+    upward representative.  The oriented margin-and-cover datum is the
     corresponding per-edge form of this remaining finite-geometry input; it
     directly supplies the one-edge blocking datum and its three injective
     regions.  The horizontal and vertical margin predicates name the coordinate
@@ -2188,9 +2188,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     translated windows force the corresponding margin predicates.  The current
     open \(7\times7\) model therefore does not admit translated windows for
     every edge; explicit boundary examples are recorded on all four sides.  The
-    margin-cover package stores these named predicates, so such data force the
+    margin-cover datum stores these named predicates, so such data force the
     corresponding horizontal and vertical margin inequalities.  In the present
-    open rectangular coordinate model, this margin package does not apply to
+    open rectangular coordinate model, this margin criterion does not apply to
     horizontal edges without enough left or right margin, nor to vertical edges
     without enough bottom or top margin; the corresponding \(7\times7\)
     examples are recorded explicitly, including a single four-sided boundary
@@ -2198,7 +2198,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     route; it is not a contradiction of the source theorem.
 \end{definition}
 
-\begin{theorem}[Assembly from translated edge windows]%
+\begin{theorem}[Construction from translated edge windows]%
     \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_marginCovers}
@@ -2210,9 +2210,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:peps_normalEdgeBlockingHypotheses}
     If every edge of the finite square lattice is supplied with a translated
     edge window, then the corresponding one-edge blockings assemble into the
-    normal edge-blocking hypotheses.  This is the conditional assembly step;
+    normal edge-blocking hypotheses.  This is the conditional construction;
     constructing such windows for all edges of the \(7\times7\) lattice remains
-    separate; the current open rectangular translated-window package does not
+    separate; the current open rectangular translated-window criterion does not
     by itself supply such a family.  Equivalently, it is enough to supply the oriented
     margin-and-cover data at every edge.  The one-edge datum recovered from the
     assembled hypotheses is the datum supplied by the corresponding
@@ -2222,7 +2222,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the boundary edges above fail this interior criterion.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the general assembly map for one-edge blocking data to the datum
+    Apply the general construction for one-edge blocking data to the datum
     supplied by the chosen translated window at each edge.
 \end{proof}
 
@@ -2265,14 +2265,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.injective_chain_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
-    A family of one-edge blocking data assembles into the normal edge-blocking
+    A family of one-edge blocking data determines the normal edge-blocking
     hypotheses.  Conversely, for every edge, the normal edge-blocking
     hypotheses supply the corresponding one-edge datum and hence three
     injective regions: the red region, the blue region, and the complementary
     region.
 \end{theorem}
 \begin{proof}\leanok
-    The assembly maps each field of the one-edge datum to the corresponding
+    The construction maps each field of the one-edge datum to the corresponding
     field of the uniform hypotheses.  The injectivity statement is exactly the
     injectivity part of those hypotheses.
 \end{proof}
@@ -2321,7 +2321,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     unions, nor that their translated variants give the edge-centred blocking
     around every edge.  Conversely, for the coordinate square lattice, the
     rectangular hypotheses, union closure, and a rectangular cover of the
-    displayed \(T\)-region give this abstract \(R,S,T\) package, with \(R\)
+    displayed \(T\)-region, together with \(n,m\geq7\), give this abstract
+    \(R,S,T\) structure, with \(R\)
     and \(S\) obtained from their rectangular decompositions and \(T\) obtained
     from the supplied cover.  The source regions are:
     \begin{center}

@@ -878,7 +878,7 @@ derivation. In particular, the complementary region used as the third block in
 Theorem 3 is a finite-lattice complement around an edge, and this abstract
 structure still assumes its three region fields directly. The translated
 horizontal and vertical edge pictures and their conditional per-edge
-margin-and-cover assembly are now formalized separately, but this structure is
+margin-and-cover construction are formalized separately, but this structure is
 not yet derived from that coordinate layer. Documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
 obligations 1--5. Elimination: derive these assertions from rectangular

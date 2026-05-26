@@ -4,7 +4,7 @@ import TNLean.PEPS.NormalEdgeBlockingTranslated
 # Margin constraints for translated normal edge blockings
 
 This file records the coordinate margin consequences of the translated
-edge-blocking package and the resulting open-boundary obstruction for the
+edge-blocking criterion and the resulting open-boundary obstruction for the
 present open rectangular square-lattice model.
 
 ## References
@@ -20,7 +20,7 @@ namespace PEPS
 /-! ### Boundary obstructions for the present open-rectangle model -/
 
 /-- A translated window on a coordinate right edge forces exactly the
-horizontal margin inequalities used by the current interior window package.
+horizontal margin inequalities used by the current interior window criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -61,7 +61,7 @@ theorem normalSquareTranslatedEdgeWindow_rightEdge_margins
             ⟨hHorizontal, hVertical⟩))
 
 /-- A translated window on a coordinate upward edge forces exactly the vertical
-margin inequalities used by the current interior window package.
+margin inequalities used by the current interior window criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -225,7 +225,7 @@ horizontal and vertical boundary edges on all four sides that do not admit
 translated edge windows.
 
 This records a four-sided obstruction to reading the present translated-window
-package as the source theorem's every-edge construction.
+criterion as the source theorem's every-edge construction.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -251,7 +251,7 @@ theorem not_fourSidedBoundaryWindow_seven :
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated edge windows over all edges.
 
-This records that the present translated-window package is only an interior
+This records that the present translated-window criterion is only an interior
 sufficient criterion for the source proof's edge-blocking step; the boundary
 geometry still has to be supplied separately.
 
@@ -266,7 +266,7 @@ theorem not_forall_normalSquareTranslatedEdgeWindow_seven :
       (by decide) (by decide))⟩
 
 /-- A translated margin-cover datum on a coordinate right edge forces exactly
-the horizontal margin inequalities used by the current interior package.
+the horizontal margin inequalities used by the current interior criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -290,7 +290,7 @@ theorem normalSquareEdgeMarginCover_rightEdge_bounds
             ⟨hHorizontal, hEdge⟩))
 
 /-- A translated margin-cover datum on a coordinate upward edge forces exactly
-the vertical margin inequalities used by the current interior package.
+the vertical margin inequalities used by the current interior criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -314,7 +314,7 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
       simpa [IsNormalSquareVerticalEdgeMargins, squareLatticeUpEdge] using hMargins
 
 /-- In the current open rectangular coordinate graph, a left-boundary right
-edge does not satisfy the translated horizontal margin package.
+edge does not satisfy the translated horizontal margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -330,7 +330,7 @@ theorem not_leftBoundaryRightEdge_marginCover {width height y : ℕ}
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the left
 boundary right edge at height \(2\) does not satisfy the translated horizontal
-margin package.
+margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -344,7 +344,7 @@ theorem not_leftBoundaryRightEdge_marginCover_seven :
   exact not_leftBoundaryRightEdge_marginCover (by decide) (by decide)
 
 /-- In the current open rectangular coordinate graph, a right edge too close
-to the right side does not satisfy the translated horizontal margin package.
+to the right side does not satisfy the translated horizontal margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -360,7 +360,7 @@ theorem not_rightMarginRightEdge_marginCover {width height x y : ℕ}
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the right
 edge at horizontal coordinate \(5\) and height \(2\) does not satisfy the
-translated horizontal margin package.
+translated horizontal margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -374,7 +374,7 @@ theorem not_rightMarginRightEdge_marginCover_seven :
   exact not_rightMarginRightEdge_marginCover (by decide) (by decide) (by decide)
 
 /-- In the current open rectangular coordinate graph, a bottom-boundary upward
-edge does not satisfy the translated vertical margin package.
+edge does not satisfy the translated vertical margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -390,7 +390,7 @@ theorem not_bottomBoundaryUpEdge_marginCover {width height x : ℕ}
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the bottom
 boundary upward edge at horizontal coordinate \(2\) does not satisfy the
-translated vertical margin package.
+translated vertical margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -404,7 +404,7 @@ theorem not_bottomBoundaryUpEdge_marginCover_seven :
   exact not_bottomBoundaryUpEdge_marginCover (by decide) (by decide)
 
 /-- In the current open rectangular coordinate graph, an upward edge too close
-to the top side does not satisfy the translated vertical margin package.
+to the top side does not satisfy the translated vertical margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -420,7 +420,7 @@ theorem not_topMarginUpEdge_marginCover {width height x y : ℕ}
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the upward
 edge at horizontal coordinate \(2\) and height \(5\) does not satisfy the
-translated vertical margin package.
+translated vertical margin criterion.
 
 This is a statement about the present open-rectangle model, not a contradiction
 of the source theorem's every-edge blocking sentence.
@@ -435,9 +435,9 @@ theorem not_topMarginUpEdge_marginCover_seven :
 
 /-- The current open \(7\times7\) rectangular coordinate graph has explicit
 horizontal and vertical boundary edges on all four sides that do not satisfy
-the translated margin-cover package.
+the translated margin-cover criterion.
 
-This records a four-sided obstruction to reading the present margin package as
+This records a four-sided obstruction to reading the present margin criterion as
 the source theorem's every-edge construction.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
@@ -464,7 +464,7 @@ theorem not_fourSidedBoundaryMarginCover_seven :
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated margin-cover data over all edges.
 
-This records that the present margin package is only an interior sufficient
+This records that the present margin criterion is only an interior sufficient
 criterion for the source proof's edge-blocking step; the boundary geometry
 still has to be supplied separately.
 

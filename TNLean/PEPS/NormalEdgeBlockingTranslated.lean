@@ -712,7 +712,7 @@ def verticalSquareLatticeEdgeWindow_of_margins
 /-- Per-edge data sufficient to realize a square-lattice edge by a translated
 normal edge-blocking window.
 
-This packages the remaining finite-geometry input in the current open
+This records the remaining finite-geometry input in the current open
 rectangular coordinate model: an edge must be horizontal or vertical, have the
 corresponding named margins, and have a rectangular cover for its complementary
 block.
@@ -779,7 +779,7 @@ end NormalSquareEdgeMarginCover
 /-- A choice of translated edge window for every edge assembles into the normal
 edge-blocking hypotheses.
 
-This is the conditional assembly step preceding the finite \(7\times7\)
+This is the conditional construction preceding the finite \(7\times7\)
 geometry argument: it assumes the translated window for each edge rather than
 constructing those windows.
 
@@ -798,7 +798,7 @@ def normalSquareTranslatedEdgeBlockingHypotheses_of_windows
 /-- A choice of oriented margin-and-cover data for every edge assembles into
 the normal edge-blocking hypotheses.
 
-This is the same conditional assembly as
+This is the same conditional construction as
 `normalSquareTranslatedEdgeBlockingHypotheses_of_windows`, with the remaining
 finite-geometry input expressed directly on each square-lattice edge.
 

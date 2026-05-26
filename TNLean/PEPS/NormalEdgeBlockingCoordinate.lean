@@ -4,7 +4,7 @@ import TNLean.PEPS.SquareLatticeGraph
 /-!
 # Coordinate edge blockings in the normal PEPS proof
 
-This file packages the normalized coordinate edge blocking used in the proof of
+This file records the normalized coordinate edge blocking used in the proof of
 the normal square-lattice PEPS theorem.
 
 ## References
