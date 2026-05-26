@@ -116,6 +116,42 @@ should not be cited as a formalization of Theorem~IV.13(ii). It is a local
 blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
+\section{Relation to the algebra-to-fusion converse}
+
+The converse direction \((\mathrm{ii})\Rightarrow(\mathrm{i})\) in the proof of
+Theorem~IV.13 uses the uniform BNT-label coefficients in an essential way.  In
+Appendix~C.4, lines~2046--2085, the authors compare the two BNT expansions
+coming from the one-site and two-site decompositions.  The source identity
+\texttt{eq:algebra-appendix}, positivity of the coefficients, and
+Lemma~\texttt{Lem:app\_simple} imply that, after relabelling,
+\[
+    A_\gamma = U_\gamma M_\gamma U_\gamma^{-1}
+\]
+with \(U_\gamma\) unitary, and that
+\[
+    \operatorname{tr}(\nu_\gamma)
+      = \sum_{\alpha,\beta}m_\alpha m_\beta
+          c^{(1)}_{\alpha,\beta,\gamma}
+      = m_\gamma .
+\]
+Only after this trace equality is obtained do the maps
+\[
+    T=\widetilde R_2\widetilde T R_1,
+    \qquad
+    S=\widetilde R_1\widetilde S R_2
+\]
+have the normalizing factors required in lines~2065--2085.
+
+The present algebra predicate
+\leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
+coefficients, the positive \(\chi_{\alpha,\beta,\gamma}\), or the
+length-one idempotent trace identity.  It can prove equality of adjoint
+fixed-point spaces across positive blocking lengths, but this is weaker than
+the coefficient comparison used above.  Thus the source-faithful route to the
+fusion formulation must first construct the BNT-label theorem witness and the
+idempotent trace-scalar identity, and then use the one-site retract criterion
+\leanid{MPOTensor.fusionIsometryData_one_iff_isRFP}.
+
 \section{BNT-label coefficient objects and remaining elimination plan}
 
 The same-length coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\), indexed
