@@ -170,8 +170,12 @@ injective-chain consequences. For the horizontal edge, local $T$-injectivity,
 and therefore a rectangular cover of local $T$, implies injectivity of all
 three blocks. For the vertical edge, a rectangular cover of rotated local $T$
 now implies injectivity of all three blocks by union closure and rectangular
-injectivity. The realigned local and rotated $T$ covers and the translated
-every-edge construction remain open.
+injectivity. The horizontal edge-blocking picture is also available with a
+general coordinate origin: whenever the translated window fits in the finite
+square lattice, the translated horizontal edge has red, blue, and complementary
+regions, and a rectangular cover of the complementary region supplies the
+one-edge blocking datum. The realigned local and rotated $T$ covers and the
+full translated every-edge construction remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -296,6 +300,11 @@ alone. The following additional obligations remain.
           horizontal complement injectivity is reduced to a local $T$-cover,
           and the vertical complement injectivity is reduced to a rotated
           local $T$-cover.
+    \item Translated horizontal red/blue/complement blocking data:
+          blueprint
+          \path{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData},
+          issue \#2004. This is the coordinate-origin-parametric horizontal
+          step toward the every-edge construction.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

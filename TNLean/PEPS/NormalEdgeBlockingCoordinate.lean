@@ -177,6 +177,125 @@ theorem normalSquareHorizontalEdge_injective_chain_of_TCover
       κ.IsInjective normalSquareHorizontalEdgeComplement :=
   (normalSquareHorizontalEdge_blockingDatum_of_TCover h hUnion cover).injective_chain
 
+/-- A translated horizontal edge in the coordinate frame of the normal
+edge-blocking picture.
+
+For `xStart = 0` and `yStart = 0`, this has the same endpoint coordinates as
+`normalSquareHorizontalEdge`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the horizontal edge-blocking picture is translated around the finite
+square lattice. -/
+def normalSquareHorizontalTranslatedEdge {width height : ℕ} (xStart yStart : ℕ)
+    (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    Edge (squareLatticeGraph width height) where
+  val :=
+    (((⟨xStart + 1, by omega⟩ : Fin width), (⟨yStart + 2, by omega⟩ : Fin height)),
+      ((⟨xStart + 2, by omega⟩ : Fin width), (⟨yStart + 2, by omega⟩ : Fin height)))
+  property := by
+    constructor
+    · change toLex
+        (((⟨xStart + 1, by omega⟩ : Fin width),
+          (⟨yStart + 2, by omega⟩ : Fin height)) :
+            SquareLatticeVertex width height) <
+        toLex (((⟨xStart + 2, by omega⟩ : Fin width),
+          (⟨yStart + 2, by omega⟩ : Fin height)) :
+            SquareLatticeVertex width height)
+      rw [Prod.Lex.toLex_lt_toLex]
+      simp
+    · exact Or.inl ⟨rfl, Or.inl (by simp)⟩
+
+/-- The red block around a translated horizontal edge. -/
+abbrev normalSquareHorizontalTranslatedEdgeRed {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  normalSquareRegionTVerticalBlock xStart yStart
+
+/-- The blue block around a translated horizontal edge. -/
+abbrev normalSquareHorizontalTranslatedEdgeBlue {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  normalSquareRegionTHorizontalBlock xStart yStart
+
+/-- The complementary block around a translated horizontal edge. -/
+abbrev normalSquareHorizontalTranslatedEdgeComplement {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  normalSquareEdgeComplementRegion xStart yStart
+
+/-- A translated horizontal edge is horizontal in the square-lattice graph.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalTranslatedEdge_isHorizontal {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    IsHorizontalSquareLatticeEdge
+      (normalSquareHorizontalTranslatedEdge xStart yStart hx hy) := by
+  change squareLatticeHorizontalNeighbor
+    (normalSquareHorizontalTranslatedEdge xStart yStart hx hy).1.1
+    (normalSquareHorizontalTranslatedEdge xStart yStart hx hy).1.2
+  simp [normalSquareHorizontalTranslatedEdge, squareLatticeHorizontalNeighbor]
+
+/-- A translated horizontal edge has red/blue/complement blocking data once
+the translated complementary block is known to be injective.
+
+This is the coordinate-local form of the horizontal edge blocking before a
+global choice of translated windows around every edge is made.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareHorizontalTranslatedEdge_blockingDatum
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (hComplement :
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeComplement xStart yStart)) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height)
+      (normalSquareHorizontalTranslatedEdge xStart yStart (by omega) (by omega)) where
+  red := normalSquareHorizontalTranslatedEdgeRed xStart yStart
+  blue := normalSquareHorizontalTranslatedEdgeBlue xStart yStart
+  complement := normalSquareHorizontalTranslatedEdgeComplement xStart yStart
+  left_mem_red := by
+    simp [normalSquareHorizontalTranslatedEdge, normalSquareHorizontalTranslatedEdgeRed,
+      normalSquareRegionTVerticalBlock]
+  right_mem_blue := by
+    simp [normalSquareHorizontalTranslatedEdge, normalSquareHorizontalTranslatedEdgeBlue,
+      normalSquareRegionTHorizontalBlock]
+  red_injective := h.tVerticalBlock_injective hx hy
+  blue_injective := h.tHorizontalBlock_injective hx hy
+  complement_injective := hComplement
+  red_disjoint_blue := normalSquareRegionTVerticalBlock_disjoint_horizontalBlock xStart yStart
+  red_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvComplement
+    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
+    exact hvComplement (by simp [normalSquareRegionTHole, hvRed])
+  blue_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvBlue hvComplement
+    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
+    exact hvComplement (by simp [normalSquareRegionTHole, hvBlue])
+  cover_univ := by
+    have hCover :=
+      normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock
+        (width := width) (height := height) xStart yStart
+    simpa [normalSquareHorizontalTranslatedEdgeRed, normalSquareHorizontalTranslatedEdgeBlue,
+      normalSquareHorizontalTranslatedEdgeComplement, Finset.union_assoc,
+      Finset.union_left_comm, Finset.union_comm] using hCover
+
+/-- A translated horizontal edge has red/blue/complement blocking data once
+the translated complementary block has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height)
+      (normalSquareHorizontalTranslatedEdge xStart yStart (by omega) (by omega)) :=
+  normalSquareHorizontalTranslatedEdge_blockingDatum h hx hy
+    (h.edgeComplement_injective hUnion cover)
+
 /-- The distinguished vertical edge in the normalized \(7\times5\) frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
