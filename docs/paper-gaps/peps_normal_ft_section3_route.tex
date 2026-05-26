@@ -102,8 +102,9 @@ adjacency lemmas and named coordinate right/up edges available for the later
 translated edge blockings. The graph edge vocabulary also distinguishes
 horizontal and vertical square-lattice edges, and proves that every edge has
 exactly one of these two orientations. The ordered endpoints are now also
-identified: horizontal edges go from left to right and vertical edges go from
-bottom to top. The coordinate rectangles are
+identified: horizontal edges go from left to right and are the coordinate right
+edges from their left endpoints; vertical edges go from bottom to top and are
+the coordinate upward edges from their lower endpoints. The coordinate rectangles are
 products of finite coordinate sets; contiguous coordinate rectangles are
 products of finite coordinate intervals. The
 $2\times 3$ and $3\times 2$ coordinate-product predicates assert only the two
@@ -193,8 +194,11 @@ with a translated horizontal or vertical window and a rectangular cover of its
 complement, then the normal edge-blocking hypotheses follow. Coordinate right
 and upward edges now obtain such windows directly from the corresponding
 translated picture, and the corresponding margin hypotheses for an actual
-coordinate right or upward edge are recorded. The realigned local and rotated
-$T$ covers and the construction of these windows for every edge remain open.
+coordinate right or upward edge are recorded. These margin-window criteria also
+apply to arbitrary horizontal or vertical edges after identifying them with
+their coordinate right or upward representatives. The realigned local and
+rotated $T$ covers and the construction of these windows for every edge remain
+open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -343,7 +347,9 @@ alone. The following additional obligations remain.
           every edge in the finite square lattice admits such a translated
           window. Coordinate right and upward edges are now tied to the
           corresponding translated windows, and the margin hypotheses for
-          actual coordinate right/up edges are explicit.
+          actual coordinate right/up edges are explicit. Arbitrary horizontal
+          and vertical edges inherit these criteria from their coordinate
+          representatives.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

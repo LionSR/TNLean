@@ -200,6 +200,22 @@ theorem horizontalSquareLatticeEdge_coords {width height : ℕ}
       rw [hy] at hylt
       exact (lt_irrefl e.1.2.2 hylt).elim
 
+/-- A horizontal square-lattice edge is the coordinate right edge from its
+ordered left endpoint.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem horizontalSquareLatticeEdge_eq_rightEdge {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height))
+    (h : IsHorizontalSquareLatticeEdge e) :
+    e = squareLatticeRightEdge e.1.1.1.1 e.1.1.2.1 (by
+      have hc := horizontalSquareLatticeEdge_coords e h
+      have _hright := e.1.2.1.2
+      omega) e.1.1.2.2 := by
+  have hc := horizontalSquareLatticeEdge_coords e h
+  ext <;> simp only [squareLatticeRightEdge]
+  · exact hc.2.symm
+  · exact congrArg Fin.val hc.1.symm
+
 /-- The ordered endpoints of a vertical square-lattice edge go from bottom to
 top.
 
@@ -221,6 +237,22 @@ theorem verticalSquareLatticeEdge_coords {width height : ℕ}
       exact (lt_irrefl e.1.2.1 hxlt).elim
     · rcases hxy with ⟨_hxEq, _hylt⟩
       omega
+
+/-- A vertical square-lattice edge is the coordinate upward edge from its
+ordered lower endpoint.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem verticalSquareLatticeEdge_eq_upEdge {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height))
+    (h : IsVerticalSquareLatticeEdge e) :
+    e = squareLatticeUpEdge e.1.1.1.1 e.1.1.2.1 e.1.1.1.2 (by
+      have hc := verticalSquareLatticeEdge_coords e h
+      have _htop := e.1.2.2.2
+      omega) := by
+  have hc := verticalSquareLatticeEdge_coords e h
+  ext <;> simp only [squareLatticeUpEdge]
+  · exact congrArg Fin.val hc.1.symm
+  · exact hc.2.symm
 
 end PEPS
 end TNLean

@@ -1554,7 +1554,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.squareLatticeEdge_horizontal_or_vertical}
     \lean{TNLean.PEPS.squareLatticeEdge_not_horizontal_and_vertical}
     \lean{TNLean.PEPS.horizontalSquareLatticeEdge_coords}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdge_eq_rightEdge}
     \lean{TNLean.PEPS.verticalSquareLatticeEdge_coords}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdge_eq_upEdge}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
     coordinates.  The corresponding square-lattice graph has horizontal and
@@ -1564,7 +1566,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     nearest-neighbor edges as elements of the edge set.  Every edge of this
     graph is horizontal or vertical, but not both.  Since edges are represented
     by ordered endpoint pairs, a horizontal edge is oriented from left to right
-    and a vertical edge from bottom to top.
+    and is exactly the coordinate right edge from its left endpoint; similarly,
+    a vertical edge is oriented from bottom to top and is exactly the
+    coordinate upward edge from its lower endpoint.
     A coordinate rectangle is a product of a horizontal coordinate set and a
     vertical coordinate set.  The $2\times3$ and
     $3\times2$ coordinate-product predicates assert only that these two
@@ -2094,6 +2098,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeWindow}
     \lean{TNLean.PEPS.squareLatticeRightEdgeWindow}
     \lean{TNLean.PEPS.squareLatticeUpEdgeWindow}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdgeWindow}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdgeWindow}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2106,6 +2112,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Equivalently, an actual coordinate right or upward edge obtains such a
     window when it has the necessary room around it for the translated
     \(5\times7\) or \(7\times5\) frame and the complementary cover is supplied.
+    The same criterion applies to an arbitrary horizontal or vertical
+    square-lattice edge after identifying it with its coordinate right or
+    upward representative.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%

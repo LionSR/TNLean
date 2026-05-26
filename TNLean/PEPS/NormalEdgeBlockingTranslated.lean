@@ -559,6 +559,39 @@ def squareLatticeUpEdgeWindow
   ext <;> simp [squareLatticeUpEdge]
   all_goals omega
 
+/-- A horizontal square-lattice edge admits a translated horizontal window when
+its ordered left endpoint has the required margins.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def horizontalSquareLatticeEdgeWindow
+    {width height : ℕ} (e : Edge (squareLatticeGraph width height))
+    (hEdge : IsHorizontalSquareLatticeEdge e)
+    (hxLeft : 1 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 4 ≤ width)
+    (hyBottom : 2 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 3 ≤ height)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)) :
+    NormalSquareTranslatedEdgeWindow e := by
+  rw [horizontalSquareLatticeEdge_eq_rightEdge e hEdge]
+  exact squareLatticeRightEdgeWindow e.1.1.1.1 e.1.1.2.1
+    hxLeft hxRight hyBottom hyTop cover
+
+/-- A vertical square-lattice edge admits a translated vertical window when its
+ordered lower endpoint has the required margins.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def verticalSquareLatticeEdgeWindow
+    {width height : ℕ} (e : Edge (squareLatticeGraph width height))
+    (hEdge : IsVerticalSquareLatticeEdge e)
+    (hxLeft : 2 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 3 ≤ width)
+    (hyBottom : 1 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 4 ≤ height)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))) :
+    NormalSquareTranslatedEdgeWindow e := by
+  rw [verticalSquareLatticeEdge_eq_upEdge e hEdge]
+  exact squareLatticeUpEdgeWindow e.1.1.1.1 e.1.1.2.1
+    hxLeft hxRight hyBottom hyTop cover
+
 /-- A choice of translated edge window for every edge assembles into the normal
 edge-blocking hypotheses.
 
