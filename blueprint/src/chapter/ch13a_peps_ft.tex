@@ -290,9 +290,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         \Psi_v \circ O \circ \Phi_v .
     \]
-    This is the local injectivity step used in the
-    $O_1,O_2\mapsto W$ direction of
-    Lemma~$\mathrm{inj\_isomorph}$ in
+    This is the local injectivity step used in the physical-to-virtual
+    direction of the insertion-algebra argument in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
@@ -1133,8 +1132,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSInsertionPhysicalRealization
     \end{center}
 
-    % This is the local endpoint part of the X -> O_1,O_2 step in
-    % Lemma inj_isomorph of Molnar2018NormalPEPS, Section 3.  The corresponding
+    % This is the local endpoint part of Molnar2018NormalPEPS, Section 3. The corresponding
     % coefficient identity is
     % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
 \end{theorem}
@@ -1270,8 +1268,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSPhysicalToVirtualInsertion
     \end{center}
-    This is the $O_1,O_2\mapsto W$ step in the proof of
-    Lemma~$\mathrm{inj\_isomorph}$.
+    This is the $O_1,O_2\mapsto W$ step in the insertion-algebra argument of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{theorem}[Edge-blocked insertion algebra isomorphism]%
@@ -1295,16 +1293,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
     \label{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
-    \notready
-    \uses{thm:peps_edgeBlockedInsertionAlgebraIsomorphism, def:gaugeVertex}
-    The insertion correspondence obtained from the three-site injective-chain
-    theorem is an isomorphism between full matrix algebras on the chosen bond.
-    Hence the two bond dimensions on that edge are equal, and the isomorphism is
-    realized by conjugation with an invertible edge matrix $Z_e$:
-    $Y=Z_e X Z_e^{-1}$. The matrix $Z_e$ is unique up to multiplication by
-    a nonzero scalar. This is the finite-dimensional matrix-algebra step used in
-    \cite[Section~3]{Molnar2018NormalPEPS} after Lemma~$\mathrm{inj\_isomorph}$.
+    \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{thm:matrixAlgEquiv_inner_of_fin}
+    Suppose the edge insertion correspondence is a $\C$-algebra isomorphism
+    between the two full matrix algebras on the chosen bond. Then the two bond
+    dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this equality,
+    then the isomorphism is realized by conjugation with an invertible edge
+    matrix $Z_e$ after the canonical index identification:
+    $Y=Z_e\,(\operatorname{reindex}_{h_e} X)\,Z_e^{-1}$.
+    \begin{center}
+        \TNGaugeConjugation{Z_e}{\operatorname{reindex}_{h_e}(X)}{Z_e^{-1}}
+    \end{center}
+    This is the finite-dimensional matrix-algebra step in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the full matrix
+    algebras determined by the two edge bond spaces.
+\end{proof}
 
 \begin{definition}[Factorized local gauge datum]%
     \label{def:peps_hasFactorizedLocalGauge}
@@ -1446,9 +1454,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge gauges have been absorbed into $\tilde{B}$. The global-consistency
     diagram summarizes repeating the edge blocking over all edges, so the two
     endpoint actions on a shared edge are one edge gauge. The
-    two-injective-tensor diagram records Lemma~$\mathrm{inj\_equal\_tensors\_2}$
-    from the paper, and the final one-vertex-complement diagram records its
-    application to one vertex and its complement. These pictures use the
+    two-injective-tensor diagram records the two-block comparison from
+    \cite[Section~3]{Molnar2018NormalPEPS}, and the final
+    one-vertex-complement diagram records its application to one vertex and its
+    complement. These pictures use the
     blueprint tensor-dot convention, but each one is attached to the same
     contraction, insertion, or blocking step as the corresponding argument in
     the paper.
@@ -1543,7 +1552,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \end{center}
     Then there is a nonzero scalar $\lambda$ such that
     $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$. This is the blueprint
-    form of Lemma~$\mathrm{inj\_equal\_tensors\_2}$ in
+    form of the two-injective tensor comparison in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
