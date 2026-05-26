@@ -387,7 +387,7 @@ theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
       (NormalSquareVerticalRegionTRectangleCover (width := 6) (height := 5) 0 0) := by
   exact not_normalSquareVerticalRegionT_rectangleCover_at_origin (by decide) (by decide)
 
-/-- The current normalized vertical edge-complement model has no rectangular
+/-- The current origin-based vertical edge-complement model has no rectangular
 cover by contained source-paper \(2\times3\) and \(3\times2\) rectangles.
 
 This is a diagnostic statement about the present
@@ -397,12 +397,14 @@ of \(A_3\).
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five :
+theorem not_normalSquareVerticalEdgeComplementRectangleCover_at_origin {width height : ℕ}
+    (hx : 7 ≤ width) (hy : 5 ≤ height) :
     ¬ Nonempty
-      (NormalSquareVerticalEdgeComplementRectangleCover (width := 7) (height := 5)) := by
-  let p : SquareLatticeVertex 7 5 := (⟨0, by omega⟩, ⟨0, by omega⟩)
-  let q23 : SquareLatticeVertex 7 5 := (⟨1, by omega⟩, ⟨2, by omega⟩)
-  let q32 : SquareLatticeVertex 7 5 := (⟨2, by omega⟩, ⟨1, by omega⟩)
+      (NormalSquareVerticalEdgeComplementRectangleCover
+        (width := width) (height := height)) := by
+  let p : SquareLatticeVertex width height := (⟨0, by omega⟩, ⟨0, by omega⟩)
+  let q23 : SquareLatticeVertex width height := (⟨1, by omega⟩, ⟨2, by omega⟩)
+  let q32 : SquareLatticeVertex width height := (⟨2, by omega⟩, ⟨1, by omega⟩)
   exact not_squareLatticeRectangleCover_of_forced_points (p := p)
     (q23 := q23) (q32 := q32)
     (by simp [p])
@@ -418,6 +420,19 @@ theorem not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five :
       simp [p, q32] at hpRect ⊢
       omega)
     (by simp [q32])
+
+/-- The current normalized vertical edge-complement model has no rectangular
+cover by contained source-paper \(2\times3\) and \(3\times2\) rectangles.
+
+This is the normalized form of
+`not_normalSquareVerticalEdgeComplementRectangleCover_at_origin`.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five :
+    ¬ Nonempty
+      (NormalSquareVerticalEdgeComplementRectangleCover (width := 7) (height := 5)) := by
+  exact not_normalSquareVerticalEdgeComplementRectangleCover_at_origin (by decide) (by decide)
 
 /-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
 rotated red and blue edge blocks is the rotated local \(T\)-region together
