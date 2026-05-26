@@ -259,6 +259,18 @@ theorem regionUnionPart_three_eq_regionComplement_inside [Fintype V]
   rw [regionUnionPart_zero_union_one_union_two,
     regionUnionPart_three_eq_regionComplement_union]
 
+/-- The fourth indexed region is the intersection of the complements of `A`
+and `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after injectivity of `A` and then `B` are applied, the remaining
+tensor is supported on the outside region \((A \cup B)^c=A^c\cap B^c\). -/
+theorem regionUnionPart_three_eq_regionComplement_left_inter_right [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 3 = regionComplement A ∩ regionComplement B := by
+  ext v
+  simp [regionComplement]
+
 /-- The right-only indexed region together with the outside region reconstructs
 the complement of `A`.
 
