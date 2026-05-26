@@ -292,12 +292,15 @@ noncomputable def normalSquareEdgeComplementRectangleCoverOfT
     have hT :
         (∃ a ∈ cover.regions, v ∈ cover.region a) ↔
           v ∈ (normalSquareRegionT (width := 5) (height := 7) 0 0) := by
-      have hEq :
-          (∃ a ∈ cover.regions, v ∈ cover.region a) =
-            (v ∈ (normalSquareRegionT (width := 5) (height := 7) 0 0)) := by
-        simpa only [Finset.mem_biUnion] using
-          congrArg (fun s => v ∈ s) cover.cover
-      exact hEq.to_iff
+      constructor
+      · intro hv
+        rw [← cover.cover]
+        exact Finset.mem_biUnion.mpr hv
+      · intro hv
+        have hvCover : v ∈ cover.regions.biUnion cover.region := by
+          rw [cover.cover]
+          exact hv
+        exact Finset.mem_biUnion.mp hvCover
     simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_union]
     constructor
     · rintro ⟨i | j, hv⟩
