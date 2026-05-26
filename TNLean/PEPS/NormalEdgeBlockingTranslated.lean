@@ -632,6 +632,21 @@ def horizontalSquareLatticeEdgeWindow
   exact squareLatticeRightEdgeWindow e.1.1.1.1 e.1.1.2.1
     hxLeft hxRight hyBottom hyTop cover
 
+/-- A horizontal square-lattice edge admits a translated horizontal window from
+the named horizontal margin predicate.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def horizontalSquareLatticeEdgeWindow_of_margins
+    {width height : ℕ} (e : Edge (squareLatticeGraph width height))
+    (hEdge : IsHorizontalSquareLatticeEdge e)
+    (hMargins :
+      HasNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2)) :
+    NormalSquareTranslatedEdgeWindow e :=
+  horizontalSquareLatticeEdgeWindow e hEdge
+    hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
+
 /-- A vertical square-lattice edge admits a translated vertical window when its
 ordered lower endpoint has the required margins.
 
@@ -648,6 +663,22 @@ def verticalSquareLatticeEdgeWindow
   rw [verticalSquareLatticeEdge_eq_upEdge e hEdge]
   exact squareLatticeUpEdgeWindow e.1.1.1.1 e.1.1.2.1
     hxLeft hxRight hyBottom hyTop cover
+
+/-- A vertical square-lattice edge admits a translated vertical window from
+the named vertical margin predicate.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def verticalSquareLatticeEdgeWindow_of_margins
+    {width height : ℕ} (e : Edge (squareLatticeGraph width height))
+    (hEdge : IsVerticalSquareLatticeEdge e)
+    (hMargins :
+      HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))) :
+    NormalSquareTranslatedEdgeWindow e :=
+  verticalSquareLatticeEdgeWindow e hEdge
+    hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
 
 /-- Per-edge data sufficient to realize a square-lattice edge by a translated
 normal edge-blocking window.
@@ -684,11 +715,9 @@ def window {width height : ℕ} {e : Edge (squareLatticeGraph width height)}
     NormalSquareTranslatedEdgeWindow e :=
   match d with
   | horizontal hEdge hMargins cover =>
-      horizontalSquareLatticeEdgeWindow e hEdge
-        hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
+      horizontalSquareLatticeEdgeWindow_of_margins e hEdge hMargins cover
   | vertical hEdge hMargins cover =>
-      verticalSquareLatticeEdgeWindow e hEdge
-        hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
+      verticalSquareLatticeEdgeWindow_of_margins e hEdge hMargins cover
 
 /-- The one-edge blocking datum obtained from oriented margin-and-cover data.
 

@@ -2105,7 +2105,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.squareLatticeRightEdgeWindow_of_margins}
     \lean{TNLean.PEPS.squareLatticeUpEdgeWindow_of_margins}
     \lean{TNLean.PEPS.horizontalSquareLatticeEdgeWindow}
+    \lean{TNLean.PEPS.horizontalSquareLatticeEdgeWindow_of_margins}
     \lean{TNLean.PEPS.verticalSquareLatticeEdgeWindow}
+    \lean{TNLean.PEPS.verticalSquareLatticeEdgeWindow_of_margins}
     \lean{TNLean.PEPS.HasNormalSquareHorizontalEdgeMargins}
     \lean{TNLean.PEPS.HasNormalSquareVerticalEdgeMargins}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover}
@@ -2142,8 +2144,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     directly supplies the one-edge blocking datum and its three injective
     regions.  The horizontal and vertical margin predicates name the coordinate
     inequalities needed to place these two translated frames, and there are
-    corresponding window constructors that take these predicates directly.  On
-    coordinate right and upward edges, the margin-cover package stores these
+    corresponding coordinate and oriented-edge window constructors that take
+    these predicates directly.  On coordinate right and upward edges, the
+    margin-cover package stores these
     named predicates, so such data force the corresponding horizontal and
     vertical margin inequalities.  In the present open rectangular coordinate
     model, this margin package does not apply to

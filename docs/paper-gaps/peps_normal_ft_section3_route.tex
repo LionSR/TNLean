@@ -204,17 +204,18 @@ into the normal edge-blocking hypotheses, and the assembled hypotheses recover
 the supplied one-edge datum and its three injective regions at each edge. In
 the current open rectangular coordinate model, the horizontal and vertical
 margin predicates now name the coordinate inequalities needed to place the
-translated frames, and the coordinate right/up window constructors now accept
-these named predicates directly. Such data on coordinate right and upward edges
-now store the corresponding named margin predicates. Consequently this margin
-package does not apply to horizontal edges without enough left or right margin,
-nor to vertical edges without enough bottom or top margin; the corresponding
-$7\times7$ examples are recorded explicitly, including a single four-sided
-boundary obstruction. Thus the remaining every-edge construction must include
-the boundary geometry rather than only translating the interior margin package;
-in particular, no family of this margin-cover data exists over all edges of the
-present open $7\times7$ graph. The realigned local and rotated $T$ covers and
-the construction of the appropriate data for every edge remain open.
+translated frames, and the coordinate right/up and oriented-edge window
+constructors now accept these named predicates directly. Such data on
+coordinate right and upward edges now store the corresponding named margin
+predicates. Consequently this margin package does not apply to horizontal edges
+without enough left or right margin, nor to vertical edges without enough bottom
+or top margin; the corresponding $7\times7$ examples are recorded explicitly,
+including a single four-sided boundary obstruction. Thus the remaining
+every-edge construction must include the boundary geometry rather than only
+translating the interior margin package; in particular, no family of this
+margin-cover data exists over all edges of the present open $7\times7$ graph.
+The realigned local and rotated $T$ covers and the construction of the
+appropriate data for every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -372,9 +373,10 @@ alone. The following additional obligations remain.
           data now assembles into the normal edge-blocking hypotheses. The
           assembled hypotheses recover the supplied datum and its three
           injective regions at each edge. The horizontal and vertical margin
-          predicates are now named, the coordinate right/up window constructors
-          accept those predicates directly, the per-edge margin-cover package
-          stores those predicates, and the resulting open-boundary obstruction for
+          predicates are now named, the coordinate right/up and oriented-edge
+          window constructors accept those predicates directly, the per-edge
+          margin-cover package stores those predicates, and the resulting
+          open-boundary obstruction for
           horizontal edges without enough left or right margin and vertical
           edges without enough bottom or top margin is also formalized,
           including explicit $7\times7$ examples and their four-sided
