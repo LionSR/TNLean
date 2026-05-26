@@ -263,6 +263,21 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective
   hA.edgeBlockedThreeSiteInjective_of_middle e
     (hComparison.middle_tensor_injective e hMiddleRegion)
 
+/-- If every edge-middle region is injective after blocking, then every
+edge-middle tensor family is injective.
+
+This is the all-edge form of the finite-region comparison isolated from the
+assertion following `eq:block_to_mps`.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hMiddleRegions : ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e)) :
+    ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e :=
+  fun e => hComparison.middle_tensor_injective e (hMiddleRegions e)
+
 /-- All edge-blocked three-site chains are injective once every edge-middle
 region is injective and region injectivity has been compared with the
 edge-middle tensor family.
@@ -280,8 +295,8 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all
     (hA : IsVertexInjective A)
     (hMiddleRegions : ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e)) :
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
-  hA.edgeBlockedThreeSiteInjective_all_of_middle fun e =>
-    hComparison.middle_tensor_injective e (hMiddleRegions e)
+  hA.edgeBlockedThreeSiteInjective_all_of_middle
+    (hComparison.edgeMiddleTensorInjective_all hMiddleRegions)
 
 end PEPS
 end TNLean

@@ -976,7 +976,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the one-edge endpoint theorem to each edge.
+    For each edge $e$, Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective}
+    gives injectivity of the two endpoint tensor maps at $e$.
 \end{proof}
 
 \begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
@@ -1005,7 +1006,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     tensor gives an injective edge-blocked three-site chain at every edge.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the one-edge reduction to each edge.
+    For each edge $e$, the one-edge reduction turns injectivity of the
+    edge-middle tensor family at $e$ into injectivity of the corresponding
+    three-site chain.
 \end{proof}
 
 \begin{theorem}[Region injectivity gives edge-blocked injectivity]%
@@ -1026,21 +1029,41 @@ injective and normal PEPS, following Theorems~2 and~3 of
     combines this with vertex injectivity at the two endpoints.
 \end{proof}
 
+\begin{theorem}[Middle tensors from all middle regions]%
+    \label{thm:peps_edgeMiddleTensorInjective_all_of_region}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all}
+    \leanok
+    \uses{def:peps_edgeMiddleRegionInjectivityComparison,
+        def:peps_edgeMiddleTensorFamily}
+    Suppose every edge-middle region $V\setminus\{u,v\}$ is injective after
+    blocking, and suppose finite-region injectivity has been identified with
+    injectivity of the corresponding edge-middle tensor family. Then every
+    edge-middle tensor family is injective.
+\end{theorem}
+\begin{proof}\leanok
+    For each edge $e=(u,v)$, the hypotheses give
+    injectivity of the middle region $V\setminus\{u,v\}$ after blocking; the
+    comparison sends this to injectivity of the corresponding middle tensor
+    family.
+\end{proof}
+
 \begin{theorem}[All edge-blocked chains from middle-region injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
         def:peps_edgeMiddleRegionInjectivityComparison,
-        thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}
-    Suppose every edge-middle region \(V\setminus\{u,v\}\) is injective after
+        thm:peps_edgeBlockedThreeSiteInjective_all_of_middle,
+        thm:peps_edgeMiddleTensorInjective_all_of_region}
+    Suppose every edge-middle region $V\setminus\{u,v\}$ is injective after
     blocking, and suppose finite-region injectivity has been identified with
     injectivity of the corresponding edge-middle tensor family. Then a
     vertex-injective PEPS tensor gives an injective edge-blocked three-site
     chain at every edge.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the one-edge conditional theorem to each edge.
+    The comparison gives middle-tensor injectivity for every edge. The all-edge
+    middle-tensor theorem then gives three-site injectivity for every edge.
 \end{proof}
 
 \begin{theorem}[Edge blocking preserves injectivity]%

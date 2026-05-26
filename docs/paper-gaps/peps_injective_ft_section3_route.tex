@@ -142,10 +142,13 @@ Theorem can be proved in the manner of the paper.
   comparison
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}
   records the conditional passage from finite-region injectivity of
-  \(V\setminus\{u,v\}\) to the edge-middle tensor family. Its theorem
+  $V\setminus\{u,v\}$ to the edge-middle tensor family. Its theorem
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
   then combines this comparison with vertex injectivity to obtain the
-  edge-blocked three-site assertion at one edge. The all-edge conditional form
+  edge-blocked three-site assertion at one edge. The all-edge middle-tensor
+  comparison is
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all}.
+  The all-edge conditional form
   is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
   The missing mathematical step is still the
@@ -214,7 +217,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
   and the endpoint assertions are proved from vertex injectivity, both for a
-  single chosen edge and uniformly over all edges. The all-edge
+  single chosen edge and uniformly over all edges. The comparison from
+  edge-middle region injectivity to edge-middle tensor injectivity is also
+  available uniformly over all edges. The all-edge
   conditional bridge from middle-region injectivity is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
