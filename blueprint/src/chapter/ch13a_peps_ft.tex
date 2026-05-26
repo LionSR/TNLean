@@ -1854,6 +1854,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[Injectivity from a rectangular cover of the local \(T\)-region]%
     \label{lem:peps_normalSquareRegionT_injective_of_cover}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionT_injective_of_cover}
+    \lean{TNLean.PEPS.NormalSquareVerticalRegionTRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalT_inj_of_cover}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
         def:peps_normalRectangleInjectivityHypotheses,
@@ -1861,7 +1863,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
         lem:peps_regionInjectivityUnionClosure_finite}
     If the displayed local \(T\)-region has a nonempty finite cover by
     contiguous \(2\times3\) and \(3\times2\) rectangles, then rectangular
-    injectivity and finite union closure imply that \(T\) is injective.
+    injectivity and finite union closure imply that \(T\) is injective.  The
+    rotated vertical local \(T\)-region has the same conditional injectivity
+    criterion.
 \end{lemma}
 % Maintainer note: this is still conditional; the concrete source cover is not
 % yet constructed.
@@ -1896,6 +1900,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_rightCollar}
     \lean{TNLean.PEPS.normalSquareVerticalRegionTHole}
     \lean{TNLean.PEPS.normalSquareVerticalRegionT}
+    \lean{TNLean.PEPS.mem_normalSquareVerticalRegionTHole}
+    \lean{TNLean.PEPS.mem_normalSquareVerticalRegionT}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.topCollar_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rightCollar_injective}

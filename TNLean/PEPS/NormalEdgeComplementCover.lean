@@ -213,6 +213,18 @@ def normalSquareVerticalRegionT {width height : ℕ} (xStart yStart : ℕ) :
         v ∉ normalSquareVerticalRegionTHole xStart yStart := by
   simp [normalSquareVerticalRegionT]
 
+/-- A finite rectangular cover of the rotated vertical local \(T\)-region.
+
+This is the \(7\times5\) counterpart of `NormalSquareRegionTRectangleCover`
+used for the normalized vertical-edge construction.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500
+of `Papers/1804.04964/paper_normal.tex`. -/
+abbrev NormalSquareVerticalRegionTRectangleCover {width height : ℕ}
+    (xStart yStart : ℕ) :=
+  SquareLatticeRectangleCover
+    (normalSquareVerticalRegionT (width := width) (height := height) xStart yStart)
+
 /-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
 rotated red and blue edge blocks is the rotated local \(T\)-region together
 with two right-collar contiguous \(2\times3\) rectangles.
@@ -276,6 +288,24 @@ theorem regionT_injective_of_cover
     (cover : NormalSquareRegionTRectangleCover (width := width) (height := height)
       xStart yStart) :
     κ.IsInjective (normalSquareRegionT xStart yStart) :=
+  h.injective_of_rectangleCover hUnion cover
+
+/-- The rotated vertical local \(T\)-region is injective once it is covered by
+source-paper \(2\times3\) and \(3\times2\) rectangles.
+
+This is the vertical counterpart of `regionT_injective_of_cover`. It does not
+construct the cover; it records the conditional passage from a source-sized
+rectangular cover to injectivity.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem verticalT_inj_of_cover
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    {xStart yStart : ℕ}
+    (cover : NormalSquareVerticalRegionTRectangleCover
+      (width := width) (height := height) xStart yStart) :
+    κ.IsInjective (normalSquareVerticalRegionT xStart yStart) :=
   h.injective_of_rectangleCover hUnion cover
 
 /-- The finite-lattice edge-complementary block is injective once it is covered
