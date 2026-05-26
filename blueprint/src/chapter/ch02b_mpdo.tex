@@ -1516,6 +1516,8 @@ the elementary trace-power identity for diagonal matrices.
     \label{thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
+        blocked_coeff_eq_ofChi_trace_pow}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
         blocked_coeff_eq_pulledBlockedChi_trace_pow}
     \leanok
     \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,
@@ -1538,6 +1540,9 @@ the elementary trace-power identity for diagonal matrices.
     Use the comparison equality to replace the blocked-basis coefficient by the
     corresponding BNT-label coefficient, and then apply the BNT-label
     trace-power formula.
+    In the special case where the compared BNT-label coefficient family is
+    already the canonical family determined by \(\chi\), the same conclusion
+    follows directly from the canonical trace formula.
 \end{proof}
 
 \begin{definition}[Blocked $\chi$ family for multiplication coefficients]%
