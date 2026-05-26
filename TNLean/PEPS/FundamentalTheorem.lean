@@ -1,5 +1,6 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.LocalGauge
+import TNLean.PEPS.TwoInjectiveComparison
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
