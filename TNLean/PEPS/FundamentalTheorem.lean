@@ -779,6 +779,29 @@ theorem GaugeEquivModEdgeScalars.trans {A : Tensor G d}
           edgeGaugeAt A Z v ie := by
           rw [edgeScalarAt_mul]
 
+/-- Gauge equivalence modulo balanced edge scalars is an equivalence relation.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the corrected quotient
+is the quotient of edge gauges by the vertex-balanced scalar action. -/
+theorem GaugeEquivModEdgeScalars.equivalence (A : Tensor G d) :
+    Equivalence (GaugeEquivModEdgeScalars (G := G) A) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro X
+    exact GaugeEquivModEdgeScalars.refl (G := G) A X
+  · intro X Y hXY
+    exact GaugeEquivModEdgeScalars.symm (G := G) hXY
+  · intro X Y Z hXY hYZ
+    exact GaugeEquivModEdgeScalars.trans (G := G) hXY hYZ
+
+/-- The quotient relation on gauge families modulo balanced edge scalars.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; this packages the
+corrected balanced edge-scalar quotient as a formal equivalence relation. -/
+def GaugeEquivModEdgeScalars.setoid (A : Tensor G d) :
+    Setoid ((e : Edge G) → GL (Fin (A.bondDim e)) ℂ) where
+  r := GaugeEquivModEdgeScalars (G := G) A
+  iseqv := GaugeEquivModEdgeScalars.equivalence (G := G) A
+
 /-- Balanced edge-scalar reweightings do not change the gauged tensor at a
 vertex. -/
 theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
@@ -821,7 +844,9 @@ theorem GaugeEquivModEdgeScalars.applyGauge_eq
     {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
     (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
     applyGauge A X = applyGauge A Y := by
-  simp [applyGauge]
+  change Tensor.mk A.bondDim (fun v => gaugeVertex A X v) =
+    Tensor.mk A.bondDim (fun v => gaugeVertex A Y v)
+  congr
   funext v η σ
   exact GaugeEquivModEdgeScalars.gaugeVertex_eq (G := G) hXY v η σ
 

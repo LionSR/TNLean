@@ -2714,34 +2714,43 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
+\begin{definition}[Oriented endpoint scalar]%
+    \label{def:edgeScalarAt}
+    \lean{TNLean.PEPS.edgeScalarAt}
+    \leanok
+    \uses{def:edgeGaugeAt}
+    An edge-scalar family $c=(c_e)_{e\in E}$ determines the endpoint scalar
+    $c_{v,e}$ by $c_{v,e}=c_e$ at the lower endpoint of $e$ and
+    $c_{v,e}=c_e^{-1}$ at the upper endpoint.
+\end{definition}
+
 \begin{definition}[Vertex-balanced edge scalars]%
     \label{def:IsVertexBalanced}
     \lean{TNLean.PEPS.IsVertexBalanced}
     \leanok
-    \uses{def:edgeGaugeAt}
-    An edge-scalar family is vertex-balanced when the product of its oriented
-    endpoint scalars is $1$ at every vertex.
+    \uses{def:edgeScalarAt}
+    An edge-scalar family is vertex-balanced when
+    $\prod_{e\ni v} c_{v,e}=1$ for every vertex $v$.
 \end{definition}
 
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
     \label{def:GaugeEquivModEdgeScalars}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
     \leanok
-    \uses{def:edgeGaugeAt, def:IsVertexBalanced}
+    \uses{def:edgeGaugeAt, def:edgeScalarAt, def:IsVertexBalanced}
     Two gauge families are equivalent modulo balanced edge scalars if there is
     a nonzero scalar $c_e$ on each edge such that the corresponding endpoint
-    actions rescale the oriented edge gauges, and the oriented product of those
-    endpoint scalars is $1$ at every vertex.
+    actions satisfy $X_{v,e}=c_{v,e}Y_{v,e}$, and
+    $\prod_{e\ni v}c_{v,e}=1$ for every vertex $v$.
 \end{definition}
 
 \begin{theorem}[Multiplication of oriented edge scalars]%
     \label{thm:edgeScalarAt_mul}
     \lean{TNLean.PEPS.edgeScalarAt_mul}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars}
-    If two edge-scalar families are multiplied pointwise, then their endpoint
-    scalar on each oriented half-edge is the product of the two endpoint
-    scalars.
+    \uses{def:edgeScalarAt}
+    If two edge-scalar families are multiplied, then their endpoint scalars
+    satisfy $(cd)_{v,e}=c_{v,e}d_{v,e}$ on every oriented half-edge.
     \begin{center}
         \TNPEPSEdgeGaugeOrientation
     \end{center}
@@ -2749,31 +2758,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{proof}\leanok
     At the lower endpoint this is ordinary multiplication of the edge scalars.
-    At the upper endpoint it is multiplication of their inverses, which agrees
-    because the scalars lie in a commutative field.
+    At the upper endpoint, $(c_ed_e)^{-1}=c_e^{-1}d_e^{-1}$ because the
+    edge scalars lie in $\mathbb C^\times$.
 \end{proof}
 
 \begin{theorem}[Inversion of oriented edge scalars]%
     \label{thm:edgeScalarAt_inv}
     \lean{TNLean.PEPS.edgeScalarAt_inv}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars}
-    Inverting an edge-scalar family inverts the scalar appearing on every
-    oriented endpoint.
+    \uses{def:edgeScalarAt}
+    Inverting an edge-scalar family gives
+    $(c^{-1})_{v,e}=c_{v,e}^{-1}$ on every oriented endpoint.
 \end{theorem}
 
 \begin{proof}\leanok
-    Check the two endpoint cases. At the upper endpoint the definition already
-    uses the inverse scalar, so inverting the edge family removes that inverse.
+    At the lower endpoint, $(c^{-1})_{v,e}=c_e^{-1}=c_{v,e}^{-1}$.
+    At the upper endpoint,
+    $(c^{-1})_{v,e}=(c_e^{-1})^{-1}=c_{v,e}^{-1}$.
 \end{proof}
 
 \begin{theorem}[Nonzero oriented edge scalars]%
     \label{thm:edgeScalarAt_ne_zero}
     \lean{TNLean.PEPS.edgeScalarAt_ne_zero}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars}
-    Every oriented endpoint scalar attached to an edge-scalar family is
-    nonzero.
+    \uses{def:edgeScalarAt}
+    Every oriented endpoint scalar satisfies $c_{v,e}\ne 0$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2784,29 +2793,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:IsVertexBalanced_mul}
     \lean{TNLean.PEPS.IsVertexBalanced.mul}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:edgeScalarAt_mul}
+    \uses{def:IsVertexBalanced, thm:edgeScalarAt_mul}
     The pointwise product of two vertex-balanced edge-scalar families is again
     vertex-balanced.
 \end{theorem}
 
 \begin{proof}\leanok
-    At each vertex, multiply the two oriented endpoint products. Both products
-    are $1$, so the product family is also balanced.
+    For every vertex $v$,
+    $\prod_{e\ni v}(cd)_{v,e}=
+    (\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})=1\cdot 1=1$.
 \end{proof}
 
 \begin{theorem}[Inverse of balanced edge scalars]%
     \label{thm:IsVertexBalanced_inv}
     \lean{TNLean.PEPS.IsVertexBalanced.inv}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:edgeScalarAt_inv}
+    \uses{def:IsVertexBalanced, thm:edgeScalarAt_inv}
     The pointwise inverse of a vertex-balanced edge-scalar family is again
     vertex-balanced.
 \end{theorem}
 
 \begin{proof}\leanok
-    At each vertex, the oriented product for the inverse family is the inverse
-    of the original oriented product. Since the original product is $1$, its
-    inverse is also $1$.
+    For every vertex $v$,
+    $\prod_{e\ni v}(c^{-1})_{v,e}=
+    (\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
 \end{proof}
 
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
@@ -2815,19 +2825,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:GaugeEquivModEdgeScalars}
     Every edge-gauge family is equivalent to itself modulo balanced edge
-    scalars. The witnessing scalar family is identically $1$, whose oriented
-    product at every vertex is $1$.
-    Diagrammatically, the extra endpoint scalars on the oriented edge are
-    invisible factors multiplying the two endpoint actions:
+    scalars, witnessed by $c_e=1$ for every edge $e$.
     \begin{center}
         \TNPEPSEdgeGaugeOrientation
     \end{center}
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the constant edge-scalar family $c_e=1$. Both endpoint actions are
-    unchanged, and the product of the incident endpoint scalars at every vertex
-    is $1$.
+    If $c_e=1$, then $c_{v,e}=1$, $X_{v,e}=c_{v,e}X_{v,e}$, and
+    $\prod_{e\ni v}c_{v,e}=1$.
 \end{proof}
 
 \begin{theorem}[Symmetry of balanced edge-scalar equivalence]%
@@ -2844,15 +2850,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the inverse edge-scalar family. The endpoint scalar is nonzero, so the
-    endpoint equality may be multiplied by its inverse.
+    If $X_{v,e}=c_{v,e}Y_{v,e}$ with $c_{v,e}\ne 0$, then
+    $Y_{v,e}=c_{v,e}^{-1}X_{v,e}$. The inverse scalar family is balanced by
+    Theorem~\ref{thm:IsVertexBalanced_inv}.
 \end{proof}
 
 \begin{theorem}[Transitivity of balanced edge-scalar equivalence]%
     \label{thm:GaugeEquivModEdgeScalars_trans}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul}
+    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul,
+        thm:edgeScalarAt_mul}
     If one gauge family differs from a second by balanced edge scalars, and the
     second differs from a third by balanced edge scalars, then the first differs
     from the third by the pointwise product of the two scalar families.
@@ -2862,10 +2870,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok
-    Compose the two endpoint rescalings. The endpoint scalar is the product of
-    the two endpoint scalars, and the product family is balanced by
-    Theorem~\ref{thm:IsVertexBalanced_mul}.
+    From $X_{v,e}=c_{v,e}Y_{v,e}$ and $Y_{v,e}=d_{v,e}Z_{v,e}$ one obtains
+    $X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}$. The product scalar family is balanced
+    by Theorem~\ref{thm:IsVertexBalanced_mul}.
 \end{proof}
+
+\begin{theorem}[The balanced edge-scalar quotient is an equivalence relation]%
+    \label{thm:GaugeEquivModEdgeScalars_equivalence}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence}
+    \leanok
+    \uses{thm:GaugeEquivModEdgeScalars_refl,
+        thm:GaugeEquivModEdgeScalars_symm,
+        thm:GaugeEquivModEdgeScalars_trans}
+    Gauge equivalence modulo balanced edge scalars is reflexive, symmetric,
+    and transitive.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reflexivity is witnessed by $1$, symmetry by $c^{-1}$, and transitivity
+    by $cd$.
+\end{proof}
+
+\begin{definition}[The balanced edge-scalar quotient relation]%
+    \label{def:GaugeEquivModEdgeScalars_setoid}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.setoid}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars,
+        thm:GaugeEquivModEdgeScalars_equivalence}
+    The preceding equivalence relation is the quotient relation on edge-gauge
+    families modulo vertex-balanced edge scalars.
+\end{definition}
 
 \begin{theorem}[Balanced edge scalars preserve the local gauge action]%
     \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
@@ -2877,10 +2911,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
-    In the defining sum for the gauged tensor, each incident edge contributes
-    its endpoint scalar factor in addition to the original gauge entry.
-    The product of these endpoint scalars is $1$ by the balancing condition,
-    so every summand is unchanged.
+    In each summand of the gauged tensor at $v$, the edge scalars contribute
+    the factor $\prod_{e\ni v}c_{v,e}=1$. Hence the summand, and therefore
+    the whole local tensor, is unchanged.
 \end{proof}
 
 \begin{theorem}[Balanced edge scalars preserve the gauged tensor]%
@@ -2896,9 +2929,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 
 \begin{proof}\leanok
-    Compare the gauged tensor component at each vertex, virtual index, and
-    physical index. The preceding vertex-level theorem gives each component
-    equality.
+    For every vertex $v$, virtual index $\eta$, and physical index $\sigma$,
+    $(A^X)_v(\eta,\sigma)=(A^Y)_v(\eta,\sigma)$ for the two gauged tensors by
+    Theorem~\ref{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}. Hence the
+    two gauged tensors are equal.
 \end{proof}
 
 \begin{theorem}[Balanced edge scalars preserve the gauged state]%
