@@ -698,5 +698,21 @@ def normalSquareEdgeBlockingHypotheses_of_marginCovers
   normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion fun e =>
     (data e).window
 
+/-- The edge datum recovered from the assembled hypotheses is the datum supplied
+by the corresponding oriented margin-and-cover input.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareEdgeBlockingHypotheses_blockingData_of_marginCovers
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareEdgeMarginCover.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).blockingData e =
+      (data e).blockingDatum h hUnion := by
+  rfl
+
 end PEPS
 end TNLean

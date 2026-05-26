@@ -876,14 +876,15 @@ coordinate regions \(R\), \(S\), and \(T\) are now recorded separately, and
 the local-window \(T\) region still has no source-faithful injectivity
 derivation. In particular, the complementary region used as the third block in
 Theorem 3 is a finite-lattice complement around an edge, and this abstract
-structure still assumes its three region fields directly. It does not yet
-identify them with translated coordinate regions or supply the per-edge red,
-blue, and complementary regions used in the proof of Theorem 3. Documented in
+structure still assumes its three region fields directly. The translated
+horizontal and vertical edge pictures and their conditional per-edge
+margin-and-cover assembly are now formalized separately, but this structure is
+not yet derived from that coordinate layer. Documented in
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
 obligations 1--5. Elimination: derive these assertions from rectangular
 injectivity after the tensor-level union theorem and the finite-lattice
 complement construction are formalized, then construct the translated edge
-blockings.
+blockings for every edge.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3 and its proof, lines
 1407--1504 of `Papers/1804.04964/paper_normal.tex`. -/

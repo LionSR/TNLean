@@ -2128,6 +2128,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_blockingData_of_marginCovers}
     \leanok
     \uses{def:peps_normalSquareTranslatedEdgeWindow,
         def:peps_normalEdgeBlockingHypotheses}
@@ -2136,7 +2137,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     normal edge-blocking hypotheses.  This is the conditional assembly step;
     constructing such windows for all edges of the \(7\times7\) lattice remains
     separate.  Equivalently, it is enough to supply the oriented
-    margin-and-cover data at every edge.
+    margin-and-cover data at every edge.  The one-edge datum recovered from the
+    assembled hypotheses is the datum supplied by the corresponding
+    margin-and-cover input.
 \end{theorem}
 \begin{proof}\leanok
     Apply the general assembly map for one-edge blocking data to the datum
