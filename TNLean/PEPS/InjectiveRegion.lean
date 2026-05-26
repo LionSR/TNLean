@@ -122,6 +122,17 @@ def regionComplement [Fintype V] (R : Finset V) : Finset V :=
     v ∈ regionComplement R ↔ v ∉ R := by
   simp [regionComplement]
 
+/-- The outside block in the four-region decomposition is the complement of
+`A ∪ B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the fourth region in the blocked proof is written as
+`(A ∪ B)ᶜ`. -/
+theorem regionOutsideUnion_eq_regionComplement_union [Fintype V]
+    (A B : Finset V) :
+    regionOutsideUnion A B = regionComplement (A ∪ B) := by
+  rfl
+
 /-- The left-only and overlap regions reconstruct the left region. -/
 theorem regionOnlyLeft_union_overlap (A B : Finset V) :
     regionOnlyLeft A B ∪ regionOverlap A B = A := by
@@ -195,6 +206,16 @@ def regionUnionPart [Fintype V] (A B : Finset V) (i : Fin 4) : Finset V :=
     regionUnionPart A B 3 = regionOutsideUnion A B := by
   simp [regionUnionPart, show (3 : Fin 4) ≠ 0 by decide,
     show (3 : Fin 4) ≠ 1 by decide, show (3 : Fin 4) ≠ 2 by decide]
+
+/-- The fourth indexed region is the complement of `A ∪ B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the tensor called `X` is attached to `(A ∪ B)ᶜ`, the fourth
+piece of the blocked four-region picture. -/
+theorem regionUnionPart_three_eq_regionComplement_union [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 3 = regionComplement (A ∪ B) := by
+  rw [regionUnionPart_three, regionOutsideUnion_eq_regionComplement_union]
 
 /-- The first two indexed regions reconstruct `A`.
 
