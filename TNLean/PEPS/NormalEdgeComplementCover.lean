@@ -319,6 +319,20 @@ abbrev NormalSquareVerticalRegionTRectangleCover {width height : ℕ}
   SquareLatticeRectangleCover
     (normalSquareVerticalRegionT (width := width) (height := height) xStart yStart)
 
+/-- The actual normalized vertical edge-complementary block.
+
+This is the \(7\times5\) counterpart of
+`normalSquareEdgeComplementRegion` for the rotated vertical edge blocking.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareVerticalEdgeComplementRegion {width height : ℕ} :
+    Finset (SquareLatticeVertex width height) :=
+  regionComplement
+    (squareLatticeContiguousRectangle 2 0 3 2 ∪
+      (squareLatticeContiguousRectangle 1 2 2 3 :
+        Finset (SquareLatticeVertex width height)))
+
 /-- A finite rectangular cover of the actual normalized vertical
 edge-complementary block.
 
@@ -330,10 +344,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500
 of `Papers/1804.04964/paper_normal.tex`. -/
 abbrev NormalSquareVerticalEdgeComplementRectangleCover {width height : ℕ} :=
   SquareLatticeRectangleCover
-    (regionComplement
-      (squareLatticeContiguousRectangle 2 0 3 2 ∪
-        (squareLatticeContiguousRectangle 1 2 2 3 :
-          Finset (SquareLatticeVertex width height))))
+    (normalSquareVerticalEdgeComplementRegion (width := width) (height := height))
 
 /-- The current origin-based rotated local-window model for \(T\) has no
 rectangular cover by contained source-paper \(2\times3\) and
@@ -407,19 +418,19 @@ theorem not_normalSquareVerticalEdgeComplementRectangleCover_at_origin {width he
   let q32 : SquareLatticeVertex width height := (⟨2, by omega⟩, ⟨1, by omega⟩)
   exact not_squareLatticeRectangleCover_of_forced_points (p := p)
     (q23 := q23) (q32 := q32)
-    (by simp [p])
+    (by simp [p, normalSquareVerticalEdgeComplementRegion])
     (by
       intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q23] at hpRect ⊢
       omega)
-    (by simp [q23])
+    (by simp [q23, normalSquareVerticalEdgeComplementRegion])
     (by
       intro xRect yRect hpRect
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q32] at hpRect ⊢
       omega)
-    (by simp [q32])
+    (by simp [q32, normalSquareVerticalEdgeComplementRegion])
 
 /-- The current normalized vertical edge-complement model has no rectangular
 cover by contained source-paper \(2\times3\) and \(3\times2\) rectangles.
@@ -440,17 +451,15 @@ with two right-collar contiguous \(2\times3\) rectangles.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar :
-    (regionComplement
-        (squareLatticeContiguousRectangle 2 0 3 2 ∪
-          (squareLatticeContiguousRectangle 1 2 2 3 :
-            Finset (SquareLatticeVertex 7 5)))) =
+    (normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5)) =
       (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0) ∪
         squareLatticeContiguousRectangle 5 0 2 3 ∪
           (squareLatticeContiguousRectangle 5 2 2 3 :
             Finset (SquareLatticeVertex 7 5)) := by
   ext v
-  simp only [Finset.mem_union, mem_regionComplement, mem_normalSquareVerticalRegionT,
-    mem_normalSquareVerticalRegionTHole, mem_squareLatticeContiguousRectangle]
+  simp only [normalSquareVerticalEdgeComplementRegion, Finset.mem_union, mem_regionComplement,
+    mem_normalSquareVerticalRegionT, mem_normalSquareVerticalRegionTHole,
+    mem_squareLatticeContiguousRectangle]
   omega
 
 namespace NormalSquareLatticeRectangleInjectivityHypotheses
@@ -591,10 +600,7 @@ theorem verticalComp_injective
     (hUnion : RegionInjectivityUnionClosure κ)
     (hT : κ.IsInjective (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0)) :
     κ.IsInjective
-      (regionComplement
-        (squareLatticeContiguousRectangle 2 0 3 2 ∪
-          (squareLatticeContiguousRectangle 1 2 2 3 :
-            Finset (SquareLatticeVertex 7 5)))) := by
+      (normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5)) := by
   rw [normalSquareVerticalEdgeComplement_eq_verticalT_union_rightCollar]
   exact hUnion.union_injective
     (hUnion.union_injective hT (h.rect23_injective (by omega) (by omega)))
@@ -613,10 +619,7 @@ theorem verticalComp_inj_of_cover
     (cover : NormalSquareVerticalRegionTRectangleCover
       (width := 7) (height := 5) 0 0) :
     κ.IsInjective
-      (regionComplement
-        (squareLatticeContiguousRectangle 2 0 3 2 ∪
-          (squareLatticeContiguousRectangle 1 2 2 3 :
-            Finset (SquareLatticeVertex 7 5)))) :=
+      (normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5)) :=
   h.verticalComp_injective hUnion (h.verticalT_inj_of_cover hUnion cover)
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
