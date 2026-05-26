@@ -1,4 +1,5 @@
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
@@ -553,10 +554,7 @@ edge insertion in the absorbed tensor family. The remaining proof is #1364. -/
 theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
     (hDim : A.bondDim = B.bondDim) :
-    ∃ Z, ∀ e X σ,
-      edgeInsertedCoeff (G := G) A e σ X =
-        edgeInsertedCoeff (G := G) (absorbEdgeGauges B Z) e σ
-          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) X) := by
+    ∃ Z, PostAbsorptionEdgeInsertionEquality A (absorbEdgeGauges B Z) := by
   sorry
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
