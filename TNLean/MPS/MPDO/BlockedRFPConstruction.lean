@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.SimpleLocalStructure
 
@@ -18,6 +18,8 @@ side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
   consequences of Lemmas C.3--C.4.
+* `CommutingFormBridge.lean` isolates the post-extraction `η`-local structure
+  that carries the commuting-form witness of Proposition C.6.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
   Proposition C.6 and Theorem 4.9(iii).
 
@@ -41,7 +43,9 @@ once the remaining local-to-global implication has been formalized.
 
 * `MPOTensor.SimpleMPDOLocalStructureData`
 * `MPOTensor.SimpleMPDOBlockedRFPData`
+* `MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure`
 * `MPOTensor.structural_implies_rfp_blocked`
+* `MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure`
 * `MPOTensor.simple_mpdo_rfp_chain`
 
 ## References
@@ -161,6 +165,22 @@ def ofSALZCLAndCommutingForm
   commutingForm := hCommuting
   zcl := hZCL
 
+/-- Construct the blocked-RFP data from the post-extraction `η`-local structure.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+once the local neighboring operators `η_{k,h}` have been assembled into a
+positive nearest-neighbor bond product, the translated bond operators commute
+and realize the finite-chain MPDO. In Lean this post-extraction datum is
+`EtaLocalStructureData K`; its commuting-form consequence supplies the
+`commutingForm` field. -/
+def ofEtaLocalStructure
+    (localData : SimpleMPDOLocalStructureData)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    SimpleMPDOBlockedRFPData K where
+  localData := localData
+  commutingForm := hEta.hasCommutingForm
+  zcl := hZCL
+
 /-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL branch of
 Theorem 4.9. -/
 theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
@@ -213,6 +233,21 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
       IsRFP_MPDO_via_fusion K := by
   refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
     data.isRFPViaFusion⟩
+
+/-- Direct form of the simple-MPDO assembly once the post-extraction `η`-local
+structure has been constructed.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
+whose product realizes the MPDO. The Lean hypothesis `EtaLocalStructureData K`
+is precisely this assembled positive commuting-bond datum. -/
+theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K := by
+  refine ⟨?_, structural_implies_rfp_blocked (K := K) hZCL, ?_⟩
+  · exact hEta.isGSNNCHWithZCL hZCL
+  · exact isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
 
 /-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
 current theorem. -/
