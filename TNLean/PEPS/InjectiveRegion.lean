@@ -224,6 +224,17 @@ theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
       A ∪ B := by
   simpa using regionThreePart_union A B
 
+/-- The three inside indexed regions and the outside region reconstruct `V`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after the three inside blocks form `A ∪ B`, the fourth block is
+the complementary tensor attached to `(A ∪ B)ᶜ`. -/
+theorem regionUnionPart_zero_union_one_union_two_union_three [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2 ∪
+      regionUnionPart A B 3 = Finset.univ := by
+  simpa using regionFourPart_union A B
+
 /-- The indexed four regions cover the whole finite vertex set. -/
 theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
     Finset.univ.biUnion (regionUnionPart A B) = Finset.univ := by
@@ -288,6 +299,17 @@ theorem regionInside_disjoint_outside [Fintype V] (A B : Finset V) :
   simpa [regionOutsideUnion] using
     (disjoint_sdiff_self_right :
       Disjoint (A ∪ B) ((Finset.univ : Finset V) \ (A ∪ B)))
+
+/-- The union of the three inside indexed regions is disjoint from the outside
+indexed region.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the tensor called `X` in the proof is attached to the outside
+block, separated from the three blocks inside `A ∪ B`. -/
+theorem regionUnionPart_inside_disjoint_three [Fintype V] (A B : Finset V) :
+    Disjoint (regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2)
+      (regionUnionPart A B 3) := by
+  simpa using regionInside_disjoint_outside A B
 
 /-- The indexed four regions are pairwise disjoint. -/
 theorem regionUnionPart_pairwise_disjoint [Fintype V] (A B : Finset V) :

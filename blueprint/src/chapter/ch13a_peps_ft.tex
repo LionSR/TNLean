@@ -1419,9 +1419,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOverlap_union_onlyRight}
     \lean{TNLean.PEPS.regionThreePart_union, TNLean.PEPS.regionFourPart_union}
     \lean{TNLean.PEPS.regionFourPart_cases}
+    \lean{TNLean.PEPS.regionUnionPart_zero, TNLean.PEPS.regionUnionPart_one}
+    \lean{TNLean.PEPS.regionUnionPart_two, TNLean.PEPS.regionUnionPart_three}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one}
     \lean{TNLean.PEPS.regionUnionPart_one_union_two}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two_union_three}
     \lean{TNLean.PEPS.regionUnionPart_biUnion}
     \leanok
     \uses{def:peps_regionUnionDecomposition}
@@ -1431,8 +1434,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     all four regions reconstruct $V$. The same identities also hold in the
     indexed four-region family: pieces $0$ and $1$ reconstruct $A$, pieces
     $1$ and $2$ reconstruct $B$, and pieces $0,1,2$ reconstruct $A\cup B$.
-    Equivalently, each vertex lies in one of the four regions, and the indexed
-    four-region family has union $V$.
+    Adding piece $3$ reconstructs $V$. Equivalently, each vertex lies in one
+    of the four regions, and the indexed four-region family has union $V$.
 \end{lemma}
 \begin{proof}\leanok
     Check membership of an arbitrary vertex in $A$ and in $B$.
@@ -1447,6 +1450,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOverlap_disjoint_outside}
     \lean{TNLean.PEPS.regionOnlyRight_disjoint_outside}
     \lean{TNLean.PEPS.regionInside_disjoint_outside}
+    \lean{TNLean.PEPS.regionUnionPart_inside_disjoint_three}
     \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
     \leanok
     \uses{def:peps_regionUnionDecomposition,
