@@ -201,9 +201,13 @@ finite-geometry input is now packaged as oriented margin-and-cover data, and a
 single such datum directly supplies the one-edge blocking datum and the three
 injective regions used in the associated chain. A family of such data assembles
 into the normal edge-blocking hypotheses, and the assembled hypotheses recover
-the supplied one-edge datum and its three injective regions at each edge. The
-realigned local and rotated $T$ covers and the construction of this data for
-every edge remain open.
+the supplied one-edge datum and its three injective regions at each edge. In
+the current open rectangular coordinate model, this margin package is now also
+known not to apply to a left-boundary horizontal edge or to a bottom-boundary
+vertical edge of the $7\times7$ lattice. Thus the remaining every-edge
+construction must include the boundary geometry rather than only translating
+the interior margin package. The realigned local and rotated $T$ covers and
+the construction of the appropriate data for every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -360,7 +364,11 @@ alone. The following additional obligations remain.
           the corresponding injective-chain conclusion, and a family of such
           data now assembles into the normal edge-blocking hypotheses. The
           assembled hypotheses recover the supplied datum and its three
-          injective regions at each edge.
+          injective regions at each edge. The open-boundary obstruction for a
+          left-boundary horizontal edge and a bottom-boundary vertical edge of
+          the $7\times7$ lattice is now formalized, so the present margin
+          package is explicitly a sufficient interior criterion rather than the
+          final every-edge construction.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

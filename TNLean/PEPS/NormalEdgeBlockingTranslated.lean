@@ -734,5 +734,65 @@ theorem normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers
         h hUnion data).complement e) :=
   (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).injective_chain_at_edge e
 
+/-! ### Boundary obstructions for the present open-rectangle model -/
+
+/-- In the current open \(7\times7\) rectangular coordinate graph, the left
+boundary right edge at height \(2\) does not satisfy the translated horizontal
+margin package.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_leftBoundaryRightEdge_marginCover_seven :
+    ¬ Nonempty (NormalSquareEdgeMarginCover
+      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+        (by decide) (by decide))) := by
+  rintro ⟨d⟩
+  cases d with
+  | horizontal _hEdge hxLeft _hxRight _hyBottom _hyTop _cover =>
+      simp [squareLatticeRightEdge] at hxLeft
+  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+      have hHorizontal :
+          IsHorizontalSquareLatticeEdge
+            (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+              (by decide) (by decide)) :=
+        squareLatticeRightEdge_isHorizontal (by decide) (by decide)
+      exact
+        (squareLatticeEdge_not_horizontal_and_vertical
+          (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+            (by decide) (by decide))
+          ⟨hHorizontal, hEdge⟩).elim
+
+/-- In the current open \(7\times7\) rectangular coordinate graph, the bottom
+boundary upward edge at horizontal coordinate \(2\) does not satisfy the
+translated vertical margin package.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_bottomBoundaryUpEdge_marginCover_seven :
+    ¬ Nonempty (NormalSquareEdgeMarginCover
+      (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+        (by decide) (by decide))) := by
+  rintro ⟨d⟩
+  cases d with
+  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+      have hVertical :
+          IsVerticalSquareLatticeEdge
+            (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+              (by decide) (by decide)) :=
+        squareLatticeUpEdge_isVertical (by decide) (by decide)
+      exact
+        (squareLatticeEdge_not_horizontal_and_vertical
+          (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+            (by decide) (by decide))
+          ⟨hEdge, hVertical⟩).elim
+  | vertical _hEdge _hxLeft _hxRight hyBottom _hyTop _cover =>
+      simp [squareLatticeUpEdge] at hyBottom
+
 end PEPS
 end TNLean

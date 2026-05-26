@@ -1551,6 +1551,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.squareLatticeGraph_adj_up}
     \lean{TNLean.PEPS.squareLatticeRightEdge}
     \lean{TNLean.PEPS.squareLatticeUpEdge}
+    \lean{TNLean.PEPS.squareLatticeRightEdge_isHorizontal}
+    \lean{TNLean.PEPS.squareLatticeUpEdge_isVertical}
     \lean{TNLean.PEPS.squareLatticeEdge_horizontal_or_vertical}
     \lean{TNLean.PEPS.squareLatticeEdge_not_horizontal_and_vertical}
     \lean{TNLean.PEPS.horizontalSquareLatticeEdge_coords}
@@ -1563,7 +1565,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     vertical nearest-neighbor edges; the two elementary adjacency lemmas record
     the right-neighbor and upper-neighbor cases used for translated edge
     blockings, and the corresponding coordinate edges name those two
-    nearest-neighbor edges as elements of the edge set.  Every edge of this
+    nearest-neighbor edges as elements of the edge set.  These named right and
+    upward edges have the expected horizontal and vertical orientations.
+    Every edge of this
     graph is horizontal or vertical, but not both.  Since edges are represented
     by ordered endpoint pairs, a horizontal edge is oriented from left to right
     and is exactly the coordinate right edge from its left endpoint; similarly,
@@ -2104,6 +2108,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.window}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.blockingDatum}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.injective_chain}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_marginCover_seven}
+    \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_marginCover_seven}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2121,7 +2127,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     upward representative.  The oriented margin-and-cover data package is the
     corresponding per-edge form of this remaining finite-geometry input; it
     directly supplies the one-edge blocking datum and its three injective
-    regions.
+    regions.  In the present open rectangular coordinate model, this margin
+    package does not apply to a left-boundary horizontal edge or a
+    bottom-boundary vertical edge of the \(7\times7\) lattice.  This records
+    the remaining boundary geometry in the formal route; it is not a
+    contradiction of the source theorem.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%

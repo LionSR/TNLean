@@ -158,6 +158,28 @@ def IsVerticalSquareLatticeEdge {width height : ℕ}
     (e : Edge (squareLatticeGraph width height)) : Prop :=
   squareLatticeVerticalNeighbor e.1.1 e.1.2
 
+/-- A coordinate right edge is horizontal.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem squareLatticeRightEdge_isHorizontal {width height : ℕ} {x y : ℕ}
+    (hx : x + 1 < width) (hy : y < height) :
+    IsHorizontalSquareLatticeEdge (squareLatticeRightEdge x y hx hy) := by
+  change squareLatticeHorizontalNeighbor
+    (squareLatticeRightEdge x y hx hy).1.1
+    (squareLatticeRightEdge x y hx hy).1.2
+  simp [squareLatticeRightEdge, squareLatticeHorizontalNeighbor]
+
+/-- A coordinate upward edge is vertical.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem squareLatticeUpEdge_isVertical {width height : ℕ} {x y : ℕ}
+    (hx : x < width) (hy : y + 1 < height) :
+    IsVerticalSquareLatticeEdge (squareLatticeUpEdge x y hx hy) := by
+  change squareLatticeVerticalNeighbor
+    (squareLatticeUpEdge x y hx hy).1.1
+    (squareLatticeUpEdge x y hx hy).1.2
+  simp [squareLatticeUpEdge, squareLatticeVerticalNeighbor]
+
 /-- Every edge of the finite square-lattice graph is horizontal or vertical.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
