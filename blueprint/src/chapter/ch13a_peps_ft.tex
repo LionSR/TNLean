@@ -2108,7 +2108,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.window}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.blockingDatum}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.injective_chain}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_marginCover}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_marginCover_seven}
+    \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_marginCover}
     \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_marginCover_seven}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
@@ -2128,10 +2130,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     corresponding per-edge form of this remaining finite-geometry input; it
     directly supplies the one-edge blocking datum and its three injective
     regions.  In the present open rectangular coordinate model, this margin
-    package does not apply to a left-boundary horizontal edge or a
-    bottom-boundary vertical edge of the \(7\times7\) lattice.  This records
-    the remaining boundary geometry in the formal route; it is not a
-    contradiction of the source theorem.
+    package does not apply to left-boundary horizontal edges or bottom-boundary
+    vertical edges; the corresponding \(7\times7\) examples are recorded
+    explicitly.  This records the remaining boundary geometry in the formal
+    route; it is not a contradiction of the source theorem.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%
