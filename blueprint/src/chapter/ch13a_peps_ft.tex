@@ -1957,11 +1957,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     complementary block \(A_3\) is the local-window \(T\)-region together with
     two top-collar contiguous \(3\times2\) rectangles.  Consequently, if the
     local \(T\)-region is injective, then rectangular injectivity and union
-    closure imply that \(A_3\) is injective.  The vertical-edge \(7\times5\)
-    frame has the analogous right-collar decomposition, now using two
-    contiguous \(2\times3\) rectangles.  For the rotated vertical edge-blocking
-    regions, the corresponding complement is the rotated local \(T\)-region
-    together with the same two right-collar rectangles; hence rotated
+    closure imply that \(A_3\) is injective.  There is also a transposed
+    \(7\times5\) horizontal-frame collar identity, now using two contiguous
+    \(2\times3\) right-collar rectangles.  For the rotated vertical
+    edge-blocking regions, the corresponding complement is the rotated local
+    \(T\)-region together with the same two right-collar rectangles; hence rotated
     \(T\)-injectivity, and hence a rectangular cover of rotated \(T\), implies
     injectivity of the vertical complementary block.
 \end{lemma}
@@ -2320,12 +2320,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(R\), \(S\), and \(T\) whose injectivity is assumed directly.  It does
     not by itself assert that these regions are the displayed square-lattice
     unions, nor that their translated variants give the edge-centred blocking
-    around every edge.  Conversely, for the coordinate square lattice, the
-    rectangular hypotheses, union closure, and a rectangular cover of the
-    displayed \(T\)-region, together with \(n,m\geq7\), give this abstract
-    \(R,S,T\) structure, with \(R\)
-    and \(S\) obtained from their rectangular decompositions and \(T\) obtained
-    from the supplied cover.  The source regions are:
+    around every edge.  Conversely, for the coordinate square lattice with
+    \(n,m\geq7\), the rectangular hypotheses, union closure, and a rectangular
+    cover of the displayed \(T\)-region yield this abstract \(R,S,T\)
+    structure, with \(R\) and \(S\) obtained from their rectangular
+    decompositions and \(T\) obtained from the supplied cover.  Under the
+    present exact-cover criterion this converse is vacuous at the origin:
+    the no-cover lemma for the displayed \(T\)-region rules out such a cover.
+    The source regions are:
     \begin{center}
         \TNTikZDiagram{TNPEPSNormalRegionsRS}{%
             \begin{tikzpicture}[tn picture, scale=0.90]

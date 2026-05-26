@@ -567,8 +567,9 @@ theorem topCollar_injective
     (hUnion.union_injective hT (h.rect32_injective (by omega) (by omega)))
     (h.rect32_injective (by omega) (by omega))
 
-/-- In the normalized vertical-edge \(7\times5\) frame, the edge-complementary
-block is injective if the local \(T\)-region is injective.
+/-- In a \(7\times5\) ambient rectangle, the horizontal-frame
+edge-complementary block is injective if the horizontal local \(T\)-region is
+injective.
 
 The two additional right-collar regions are contiguous \(2\times3\) rectangles,
 so rectangular injectivity and the union-of-injective-regions lemma add them to
@@ -634,11 +635,11 @@ structure.
 rectangular cover of the displayed \(T\)-region at the origin. Under the
 present exact-cover criterion, no such cover exists:
 `not_normalSquareRegionT_rectangleCover_at_origin` rules it out for
-\(5 \leq\) `width` and \(6 \leq\) `height`, and hence a fortiori for the
-\(7\times7\) size bounds assumed here. Thus this conditional theorem has no
-applicable instance in the current coordinate model. A source-faithful cover
-construction tied to the finite PEPS geometry is recorded as an open obligation
-in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+\(5 \leq\) `width` and \(6 \leq\) `height`, and hence a fortiori under the
+`7 ≤ width` and `7 ≤ height` bounds assumed here. The conditional theorem is
+therefore currently vacuous at the origin in the current coordinate model. A
+source-faithful cover construction tied to the finite PEPS geometry is recorded
+as an open obligation in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500
 of `Papers/1804.04964/paper_normal.tex`. -/
