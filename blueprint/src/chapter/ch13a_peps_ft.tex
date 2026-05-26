@@ -2029,6 +2029,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
     finite-set complement formulas.
 \end{proof}
 
+\begin{lemma}[Translated vertical edge-blocking data]%
+    \label{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeRed}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_isVertical}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
+    For any coordinate origin whose vertical blocking window lies in the
+    finite square lattice, there is a distinguished vertical edge with the same
+    relative position as in the normalized vertical picture.  The translated
+    red region is the \(3\times2\) block, the translated blue region is the
+    \(2\times3\) block, and the complementary region is the finite-lattice
+    complement of their union.  If this complementary region is injective,
+    these three regions form the one-edge blocking datum; if it has a
+    rectangular cover, rectangular injectivity and union closure supply that
+    complementary injectivity.
+\end{lemma}
+\begin{proof}\leanok
+    The endpoint memberships and vertical orientation are coordinate checks.
+    Rectangular injectivity gives the red and blue blocks.  The complementary
+    block is supplied either as an input or from a rectangular cover, and the
+    disjointness and covering identities follow from the finite-set complement
+    formulas.
+\end{proof}
+
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
     \label{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}

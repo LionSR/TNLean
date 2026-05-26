@@ -329,6 +329,126 @@ theorem normalSquareVerticalEdge_isVertical :
     normalSquareVerticalEdge.1.2
   simp [normalSquareVerticalEdge, squareLatticeVerticalNeighbor]
 
+/-- A translated vertical edge in the coordinate frame of the normal
+edge-blocking picture.
+
+For `xStart = 0` and `yStart = 0`, this has the same endpoint coordinates as
+`normalSquareVerticalEdge`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the vertical edge-blocking picture is translated around the finite
+square lattice. -/
+def normalSquareVerticalTranslatedEdge {width height : ℕ} (xStart yStart : ℕ)
+    (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    Edge (squareLatticeGraph width height) where
+  val :=
+    (((⟨xStart + 2, by omega⟩ : Fin width), (⟨yStart + 1, by omega⟩ : Fin height)),
+      ((⟨xStart + 2, by omega⟩ : Fin width), (⟨yStart + 2, by omega⟩ : Fin height)))
+  property := by
+    constructor
+    · change toLex
+        (((⟨xStart + 2, by omega⟩ : Fin width),
+          (⟨yStart + 1, by omega⟩ : Fin height)) :
+            SquareLatticeVertex width height) <
+        toLex (((⟨xStart + 2, by omega⟩ : Fin width),
+          (⟨yStart + 2, by omega⟩ : Fin height)) :
+            SquareLatticeVertex width height)
+      rw [Prod.Lex.toLex_lt_toLex]
+      exact Or.inr ⟨rfl, by simp⟩
+    · exact Or.inr ⟨rfl, Or.inl (by simp)⟩
+
+/-- The red block around a translated vertical edge. -/
+abbrev normalSquareVerticalTranslatedEdgeRed {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle (xStart + 2) yStart 3 2
+
+/-- The blue block around a translated vertical edge. -/
+abbrev normalSquareVerticalTranslatedEdgeBlue {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  squareLatticeContiguousRectangle (xStart + 1) (yStart + 2) 2 3
+
+/-- The complementary block around a translated vertical edge. -/
+abbrev normalSquareVerticalTranslatedEdgeComplement {width height : ℕ}
+    (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
+  regionComplement
+    (normalSquareVerticalTranslatedEdgeRed xStart yStart ∪
+      normalSquareVerticalTranslatedEdgeBlue xStart yStart)
+
+/-- A translated vertical edge is vertical in the square-lattice graph.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalTranslatedEdge_isVertical {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    IsVerticalSquareLatticeEdge
+      (normalSquareVerticalTranslatedEdge xStart yStart hx hy) := by
+  change squareLatticeVerticalNeighbor
+    (normalSquareVerticalTranslatedEdge xStart yStart hx hy).1.1
+    (normalSquareVerticalTranslatedEdge xStart yStart hx hy).1.2
+  simp [normalSquareVerticalTranslatedEdge, squareLatticeVerticalNeighbor]
+
+/-- A translated vertical edge has red/blue/complement blocking data once the
+translated complementary block is known to be injective.
+
+This is the coordinate-local vertical counterpart of
+`normalSquareHorizontalTranslatedEdge_blockingDatum`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalTranslatedEdge_blockingDatum
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (hComplement :
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeComplement xStart yStart)) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height)
+      (normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega)) where
+  red := normalSquareVerticalTranslatedEdgeRed xStart yStart
+  blue := normalSquareVerticalTranslatedEdgeBlue xStart yStart
+  complement := normalSquareVerticalTranslatedEdgeComplement xStart yStart
+  left_mem_red := by
+    simp [normalSquareVerticalTranslatedEdge, normalSquareVerticalTranslatedEdgeRed]
+  right_mem_blue := by
+    simp [normalSquareVerticalTranslatedEdge, normalSquareVerticalTranslatedEdgeBlue]
+  red_injective := h.rect32_injective (by omega) (by omega)
+  blue_injective := h.rect23_injective (by omega) (by omega)
+  complement_injective := hComplement
+  red_disjoint_blue := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvBlue
+    rw [mem_squareLatticeContiguousRectangle] at hvRed hvBlue
+    omega
+  red_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
+  blue_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvBlue hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
+  cover_univ := by
+    ext v
+    simp [normalSquareVerticalTranslatedEdgeComplement, regionComplement]
+
+/-- A translated vertical edge has red/blue/complement blocking data once the
+translated complementary block has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) xStart yStart)) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height)
+      (normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega)) :=
+  normalSquareVerticalTranslatedEdge_blockingDatum h hx hy
+    (h.injective_of_rectangleCover hUnion cover)
+
 /-- The red block around the normalized vertical edge. -/
 abbrev normalSquareVerticalEdgeRed : Finset (SquareLatticeVertex 7 5) :=
   squareLatticeContiguousRectangle 2 0 3 2
