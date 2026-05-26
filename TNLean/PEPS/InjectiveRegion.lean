@@ -271,6 +271,30 @@ theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
     · exact Finset.mem_biUnion.mpr ⟨2, by simp, by simpa using hv⟩
     · exact Finset.mem_biUnion.mpr ⟨3, by simp, by simpa using hv⟩
 
+/-- Each vertex belongs to exactly one indexed part of the four-region
+decomposition.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the proof blocks the tensor network into the four disjoint
+regions `A \ B`, `A ∩ B`, `B \ A`, and `(A ∪ B)ᶜ`. -/
+theorem regionUnionPart_exists_unique [Fintype V] (A B : Finset V) (v : V) :
+    ∃! i : Fin 4, v ∈ regionUnionPart A B i := by
+  by_cases hvA : v ∈ A
+  · by_cases hvB : v ∈ B
+    · refine ⟨1, by simp [hvA, hvB], ?_⟩
+      intro j hj
+      fin_cases j <;> simp [hvA, hvB] at hj ⊢
+    · refine ⟨0, by simp [hvA, hvB], ?_⟩
+      intro j hj
+      fin_cases j <;> simp [hvA, hvB] at hj ⊢
+  · by_cases hvB : v ∈ B
+    · refine ⟨2, by simp [hvA, hvB], ?_⟩
+      intro j hj
+      fin_cases j <;> simp [hvA, hvB] at hj ⊢
+    · refine ⟨3, by simp [hvA, hvB], ?_⟩
+      intro j hj
+      fin_cases j <;> simp [hvA, hvB] at hj ⊢
+
 /-- The left-only region is disjoint from the overlap. -/
 theorem regionOnlyLeft_disjoint_overlap (A B : Finset V) :
     Disjoint (regionOnlyLeft A B) (regionOverlap A B) := by

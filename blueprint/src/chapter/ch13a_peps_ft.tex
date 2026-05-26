@@ -1428,6 +1428,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two_union_three}
     \lean{TNLean.PEPS.regionUnionPart_biUnion}
+    \lean{TNLean.PEPS.regionUnionPart_exists_unique}
     \leanok
     \uses{def:peps_regionUnionDecomposition}
     Let $V$ be a finite vertex set and let $A,B\subseteq V$. The left-only
@@ -1438,7 +1439,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $1$ and $2$ reconstruct $B$, and pieces $0,1,2$ reconstruct $A\cup B$.
     Piece $3$ is the complement of $A\cup B$; adding it reconstructs $V$.
     Equivalently, each vertex lies in one of the four regions, and the indexed
-    four-region family has union $V$.
+    four-region family has union $V$. In fact, every vertex belongs to exactly
+    one indexed piece.
 \end{lemma}
 \begin{proof}\leanok
     Check membership of an arbitrary vertex in $A$ and in $B$.
@@ -1531,9 +1533,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Complement of a finite region]%
     \label{def:peps_regionComplement}
     \lean{TNLean.PEPS.regionComplement}
+    \lean{TNLean.PEPS.mem_regionComplement}
     \leanok
     For a finite vertex region \(R\subseteq V\), its complement is
-    \(V\setminus R\).
+    \(V\setminus R\). Equivalently, a vertex lies in the complement exactly
+    when it does not lie in \(R\).
 \end{definition}
 
 \begin{definition}[Square-lattice coordinate regions]%
