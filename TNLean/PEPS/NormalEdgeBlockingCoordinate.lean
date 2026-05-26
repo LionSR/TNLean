@@ -220,7 +220,7 @@ abbrev normalSquareVerticalEdgeBlue : Finset (SquareLatticeVertex 7 5) :=
 
 /-- The complementary block around the normalized vertical edge. -/
 abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
-  normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5)
+  normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5) 0 0
 
 /-- The normalized vertical edge has the red/blue/complement blocking datum
 used in the proof of the normal square-lattice theorem.

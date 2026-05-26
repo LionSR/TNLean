@@ -262,9 +262,7 @@ abbrev normalSquareVerticalTranslatedEdgeBlue {width height : ℕ}
 /-- The complementary block around a translated vertical edge. -/
 abbrev normalSquareVerticalTranslatedEdgeComplement {width height : ℕ}
     (xStart yStart : ℕ) : Finset (SquareLatticeVertex width height) :=
-  regionComplement
-    (normalSquareVerticalTranslatedEdgeRed xStart yStart ∪
-      normalSquareVerticalTranslatedEdgeBlue xStart yStart)
+  normalSquareVerticalEdgeComplementRegion xStart yStart
 
 /-- A translated vertical edge is vertical in the square-lattice graph.
 
@@ -322,16 +320,20 @@ def normalSquareVerticalTranslatedEdge_blockingDatum
   red_disjoint_complement := by
     rw [Finset.disjoint_left]
     intro v hvRed hvComplement
-    rw [mem_regionComplement] at hvComplement
+    rw [normalSquareVerticalTranslatedEdgeComplement,
+      normalSquareVerticalEdgeComplementRegion, mem_regionComplement] at hvComplement
     exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
   blue_disjoint_complement := by
     rw [Finset.disjoint_left]
     intro v hvBlue hvComplement
-    rw [mem_regionComplement] at hvComplement
+    rw [normalSquareVerticalTranslatedEdgeComplement,
+      normalSquareVerticalEdgeComplementRegion, mem_regionComplement] at hvComplement
     exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
   cover_univ := by
     ext v
-    simp [normalSquareVerticalTranslatedEdgeComplement, regionComplement]
+    simp [normalSquareVerticalTranslatedEdgeComplement, normalSquareVerticalEdgeComplementRegion,
+      normalSquareVerticalTranslatedEdgeRed, normalSquareVerticalTranslatedEdgeBlue,
+      regionComplement]
 
 /-- A translated vertical edge supplies the three injective regions used in the
 edge-blocked three-site chain.
@@ -422,7 +424,8 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem verticalTranslatedComp_zero :
     (normalSquareVerticalTranslatedEdgeComplement (width := 7) (height := 5) 0 0) =
       normalSquareVerticalEdgeComplement := by
-  rfl
+  simp [normalSquareVerticalTranslatedEdgeComplement, normalSquareVerticalEdgeComplement,
+    normalSquareVerticalEdgeComplementRegion]
 
 /-! ### Edge windows for the every-edge construction -/
 
