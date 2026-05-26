@@ -136,5 +136,49 @@ theorem squareLatticeEdge_not_horizontal_and_vertical {width height : ℕ}
     exact congrArg Fin.val hVertical.1
   rcases hHorizontal.2 with hStep | hStep <;> omega
 
+/-- The ordered endpoints of a horizontal square-lattice edge go from left to
+right.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the normalized horizontal edge blocking is translated to horizontal
+lattice edges. -/
+theorem horizontalSquareLatticeEdge_coords {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height))
+    (h : IsHorizontalSquareLatticeEdge e) :
+    e.1.1.2 = e.1.2.2 ∧ e.1.1.1.1 + 1 = e.1.2.1.1 := by
+  rcases h with ⟨hy, hstep | hstep⟩
+  · exact ⟨hy, hstep⟩
+  · exfalso
+    have hlt := e.2.1
+    change toLex e.1.1 < toLex e.1.2 at hlt
+    rw [Prod.Lex.toLex_lt_toLex] at hlt
+    rcases hlt with hx | hxy
+    · omega
+    · rcases hxy with ⟨_hxEq, hylt⟩
+      rw [hy] at hylt
+      exact (lt_irrefl e.1.2.2 hylt).elim
+
+/-- The ordered endpoints of a vertical square-lattice edge go from bottom to
+top.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the normalized vertical edge blocking is translated to vertical lattice
+edges. -/
+theorem verticalSquareLatticeEdge_coords {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height))
+    (h : IsVerticalSquareLatticeEdge e) :
+    e.1.1.1 = e.1.2.1 ∧ e.1.1.2.1 + 1 = e.1.2.2.1 := by
+  rcases h with ⟨hx, hstep | hstep⟩
+  · exact ⟨hx, hstep⟩
+  · exfalso
+    have hlt := e.2.1
+    change toLex e.1.1 < toLex e.1.2 at hlt
+    rw [Prod.Lex.toLex_lt_toLex] at hlt
+    rcases hlt with hxlt | hxy
+    · rw [hx] at hxlt
+      exact (lt_irrefl e.1.2.1 hxlt).elim
+    · rcases hxy with ⟨_hxEq, _hylt⟩
+      omega
+
 end PEPS
 end TNLean
