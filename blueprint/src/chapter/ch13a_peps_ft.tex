@@ -998,11 +998,28 @@ injective and normal PEPS, following Theorems~2 and~3 of
     combines this with vertex injectivity at the two endpoints.
 \end{proof}
 
+\begin{theorem}[All edge-blocked chains from middle-region injectivity]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
+        def:peps_edgeMiddleRegionInjectivityComparison,
+        thm:peps_edgeBlockedThreeSiteInjective_of_region}
+    Suppose every edge-middle region \(V\setminus\{u,v\}\) is injective after
+    blocking, and suppose finite-region injectivity has been identified with
+    injectivity of the corresponding edge-middle tensor family. Then a
+    vertex-injective PEPS tensor gives an injective edge-blocked three-site
+    chain at every edge.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge conditional theorem to each edge.
+\end{proof}
+
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \notready
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeBlockedThreeSiteInjective_of_region}
+        thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
     If $A$ is vertex-injective, then for every edge $e=(u,v)$, the two
     endpoint tensors together with the tensor obtained by blocking all vertices
     outside $u$ and $v$ form an injective three-site MPS. This is the

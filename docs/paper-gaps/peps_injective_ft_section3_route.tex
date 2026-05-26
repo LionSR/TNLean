@@ -140,7 +140,10 @@ Theorem can be proved in the manner of the paper.
   \(V\setminus\{u,v\}\) to the edge-middle tensor family. Its theorem
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
   then combines this comparison with vertex injectivity to obtain the
-  edge-blocked three-site assertion. The missing mathematical step is still the
+  edge-blocked three-site assertion at one edge. The all-edge conditional form
+  is
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
+  The missing mathematical step is still the
   contraction theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The full
   transfer remains the not-yet-formalized theorem
@@ -205,7 +208,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   issue~\#1366. The middle physical index of this three-site object is
   formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
-  and the endpoint assertions are proved from vertex injectivity.
+  and the endpoint assertions are proved from vertex injectivity. The all-edge
+  conditional bridge from middle-region injectivity is
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
   \path{thm:peps_edgeInsertedCoeff_identity} is reduced to finite diagonal
   reindexing, tracked by issue~\#1372.
