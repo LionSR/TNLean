@@ -296,6 +296,44 @@ def normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover
   normalSquareHorizontalTranslatedEdge_blockingDatum h hx hy
     (h.edgeComplement_injective hUnion cover)
 
+/-- The origin of the translated horizontal picture is the normalized
+horizontal edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the normalized horizontal edge-blocking picture is translated around
+the finite square lattice. -/
+theorem horizontalTranslatedEdge_zero :
+    normalSquareHorizontalTranslatedEdge (width := 5) (height := 7) 0 0
+      (by decide) (by decide) = normalSquareHorizontalEdge := by
+  ext <;> simp [normalSquareHorizontalTranslatedEdge, normalSquareHorizontalEdge]
+
+/-- The origin of the translated horizontal red block is the normalized red
+block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem horizontalTranslatedRed_zero :
+    (normalSquareHorizontalTranslatedEdgeRed (width := 5) (height := 7) 0 0) =
+      normalSquareHorizontalEdgeRed := by
+  rfl
+
+/-- The origin of the translated horizontal blue block is the normalized blue
+block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem horizontalTranslatedBlue_zero :
+    (normalSquareHorizontalTranslatedEdgeBlue (width := 5) (height := 7) 0 0) =
+      normalSquareHorizontalEdgeBlue := by
+  rfl
+
+/-- The origin of the translated horizontal complementary block is the
+normalized complementary block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem horizontalTranslatedComp_zero :
+    (normalSquareHorizontalTranslatedEdgeComplement (width := 5) (height := 7) 0 0) =
+      normalSquareHorizontalEdgeComplement := by
+  rfl
+
 /-- The distinguished vertical edge in the normalized \(7\times5\) frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
@@ -460,6 +498,44 @@ abbrev normalSquareVerticalEdgeBlue : Finset (SquareLatticeVertex 7 5) :=
 /-- The complementary block around the normalized vertical edge. -/
 abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
   regionComplement (normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue)
+
+/-- The origin of the translated vertical picture is the normalized vertical
+edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the normalized vertical edge-blocking picture is translated around the
+finite square lattice. -/
+theorem verticalTranslatedEdge_zero :
+    normalSquareVerticalTranslatedEdge (width := 7) (height := 5) 0 0
+      (by decide) (by decide) = normalSquareVerticalEdge := by
+  ext <;> simp [normalSquareVerticalTranslatedEdge, normalSquareVerticalEdge]
+
+/-- The origin of the translated vertical red block is the normalized red
+block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem verticalTranslatedRed_zero :
+    (normalSquareVerticalTranslatedEdgeRed (width := 7) (height := 5) 0 0) =
+      normalSquareVerticalEdgeRed := by
+  rfl
+
+/-- The origin of the translated vertical blue block is the normalized blue
+block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem verticalTranslatedBlue_zero :
+    (normalSquareVerticalTranslatedEdgeBlue (width := 7) (height := 5) 0 0) =
+      normalSquareVerticalEdgeBlue := by
+  rfl
+
+/-- The origin of the translated vertical complementary block is the normalized
+complementary block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem verticalTranslatedComp_zero :
+    (normalSquareVerticalTranslatedEdgeComplement (width := 7) (height := 5) 0 0) =
+      normalSquareVerticalEdgeComplement := by
+  rfl
 
 /-- The normalized vertical edge has the red/blue/complement blocking datum
 used in the proof of the normal square-lattice theorem.

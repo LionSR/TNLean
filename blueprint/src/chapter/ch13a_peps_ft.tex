@@ -2007,6 +2007,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_isHorizontal}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover}
+    \lean{TNLean.PEPS.horizontalTranslatedEdge_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedRed_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedBlue_zero}
+    \lean{TNLean.PEPS.horizontalTranslatedComp_zero}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion,
@@ -2019,7 +2023,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     complement of their union.  If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity.
+    complementary injectivity.  At coordinate origin \(0,0\), the translated
+    edge and the three translated regions specialize to the normalized
+    horizontal picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and horizontal orientation are coordinate
@@ -2038,6 +2044,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_isVertical}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover}
+    \lean{TNLean.PEPS.verticalTranslatedEdge_zero}
+    \lean{TNLean.PEPS.verticalTranslatedRed_zero}
+    \lean{TNLean.PEPS.verticalTranslatedBlue_zero}
+    \lean{TNLean.PEPS.verticalTranslatedComp_zero}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
@@ -2049,7 +2059,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     complement of their union.  If this complementary region is injective,
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
-    complementary injectivity.
+    complementary injectivity.  At coordinate origin \(0,0\), the translated
+    edge and the three translated regions specialize to the normalized vertical
+    picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and vertical orientation are coordinate checks.
