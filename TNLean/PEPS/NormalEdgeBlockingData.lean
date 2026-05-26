@@ -40,6 +40,21 @@ structure NormalEdgeBlockingData (G : SimpleGraph V) (e : Edge G) where
   blue_disjoint_complement : Disjoint blue complement
   cover_univ : red ∪ blue ∪ complement = Finset.univ
 
+namespace NormalEdgeBlockingData
+
+variable {ι}
+
+/-- The one-edge blocking datum supplies the three injective regions used in
+the associated three-site chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem injective_chain {G : SimpleGraph V} {e : Edge G}
+    (d : NormalEdgeBlockingData ι G e) :
+    ι.IsInjective d.red ∧ ι.IsInjective d.blue ∧ ι.IsInjective d.complement :=
+  ⟨d.red_injective, d.blue_injective, d.complement_injective⟩
+
+end NormalEdgeBlockingData
+
 /-- Edge-centred blocking into three injective regions.
 
 For every edge, the normal PEPS proof blocks the network into a red region, a
@@ -120,7 +135,7 @@ edge. -/
 theorem injective_chain_at_edge (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
     ι.IsInjective (h.red e) ∧ ι.IsInjective (h.blue e) ∧
       ι.IsInjective (h.complement e) :=
-  ⟨h.red_injective e, h.blue_injective e, h.complement_injective e⟩
+  (h.blockingData e).injective_chain
 
 end NormalEdgeBlockingHypotheses
 
