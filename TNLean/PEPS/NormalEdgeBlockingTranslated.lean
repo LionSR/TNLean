@@ -736,6 +736,66 @@ theorem normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers
 
 /-! ### Boundary obstructions for the present open-rectangle model -/
 
+/-- A translated margin-cover datum on a coordinate right edge forces exactly
+the horizontal margin inequalities used by the current interior package.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem normalSquareEdgeMarginCover_rightEdge_bounds
+    {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
+    (d : NormalSquareEdgeMarginCover
+      (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
+    1 ≤ x ∧ x + 4 ≤ width ∧ 2 ≤ y ∧ y + 3 ≤ height := by
+  cases d with
+  | horizontal _hEdge hxLeft hxRight hyBottom hyTop _cover =>
+      constructor
+      · simpa [squareLatticeRightEdge] using hxLeft
+      constructor
+      · simpa [squareLatticeRightEdge] using hxRight
+      constructor
+      · simpa [squareLatticeRightEdge] using hyBottom
+      · simpa [squareLatticeRightEdge] using hyTop
+  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+      have hHorizontal :
+          IsHorizontalSquareLatticeEdge
+            (squareLatticeRightEdge (width := width) (height := height) x y hx hy) :=
+        squareLatticeRightEdge_isHorizontal hx hy
+      exact
+        False.elim
+          ((squareLatticeEdge_not_horizontal_and_vertical
+            (squareLatticeRightEdge (width := width) (height := height) x y hx hy)
+            ⟨hHorizontal, hEdge⟩))
+
+/-- A translated margin-cover datum on a coordinate upward edge forces exactly
+the vertical margin inequalities used by the current interior package.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem normalSquareEdgeMarginCover_upEdge_bounds
+    {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
+    (d : NormalSquareEdgeMarginCover
+      (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
+    2 ≤ x ∧ x + 3 ≤ width ∧ 1 ≤ y ∧ y + 4 ≤ height := by
+  cases d with
+  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+      have hVertical :
+          IsVerticalSquareLatticeEdge
+            (squareLatticeUpEdge (width := width) (height := height) x y hx hy) :=
+        squareLatticeUpEdge_isVertical hx hy
+      exact
+        False.elim
+          ((squareLatticeEdge_not_horizontal_and_vertical
+            (squareLatticeUpEdge (width := width) (height := height) x y hx hy)
+            ⟨hEdge, hVertical⟩))
+  | vertical _hEdge hxLeft hxRight hyBottom hyTop _cover =>
+      constructor
+      · simpa [squareLatticeUpEdge] using hxLeft
+      constructor
+      · simpa [squareLatticeUpEdge] using hxRight
+      constructor
+      · simpa [squareLatticeUpEdge] using hyBottom
+      · simpa [squareLatticeUpEdge] using hyTop
+
 /-- In the current open rectangular coordinate graph, a left-boundary right
 edge does not satisfy the translated horizontal margin package.
 
@@ -749,18 +809,7 @@ theorem not_leftBoundaryRightEdge_marginCover {width height y : ℕ}
     ¬ Nonempty (NormalSquareEdgeMarginCover
       (squareLatticeRightEdge (width := width) (height := height) 0 y hx hy)) := by
   rintro ⟨d⟩
-  cases d with
-  | horizontal _hEdge hxLeft _hxRight _hyBottom _hyTop _cover =>
-      simp [squareLatticeRightEdge] at hxLeft
-  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hHorizontal :
-          IsHorizontalSquareLatticeEdge
-            (squareLatticeRightEdge (width := width) (height := height) 0 y hx hy) :=
-        squareLatticeRightEdge_isHorizontal hx hy
-      exact
-        (squareLatticeEdge_not_horizontal_and_vertical
-          (squareLatticeRightEdge (width := width) (height := height) 0 y hx hy)
-          ⟨hHorizontal, hEdge⟩).elim
+  exact Nat.not_succ_le_zero 0 (normalSquareEdgeMarginCover_rightEdge_bounds d).1
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the left
 boundary right edge at height \(2\) does not satisfy the translated horizontal
@@ -790,18 +839,7 @@ theorem not_rightMarginRightEdge_marginCover {width height x y : ℕ}
     ¬ Nonempty (NormalSquareEdgeMarginCover
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) := by
   rintro ⟨d⟩
-  cases d with
-  | horizontal _hEdge _hxLeft hxRight _hyBottom _hyTop _cover =>
-      exact hRight hxRight
-  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hHorizontal :
-          IsHorizontalSquareLatticeEdge
-            (squareLatticeRightEdge (width := width) (height := height) x y hx hy) :=
-        squareLatticeRightEdge_isHorizontal hx hy
-      exact
-        (squareLatticeEdge_not_horizontal_and_vertical
-          (squareLatticeRightEdge (width := width) (height := height) x y hx hy)
-          ⟨hHorizontal, hEdge⟩).elim
+  exact hRight (normalSquareEdgeMarginCover_rightEdge_bounds d).2.1
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the right
 edge at horizontal coordinate \(5\) and height \(2\) does not satisfy the
@@ -831,18 +869,7 @@ theorem not_bottomBoundaryUpEdge_marginCover {width height x : ℕ}
     ¬ Nonempty (NormalSquareEdgeMarginCover
       (squareLatticeUpEdge (width := width) (height := height) x 0 hx hy)) := by
   rintro ⟨d⟩
-  cases d with
-  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hVertical :
-          IsVerticalSquareLatticeEdge
-            (squareLatticeUpEdge (width := width) (height := height) x 0 hx hy) :=
-        squareLatticeUpEdge_isVertical hx hy
-      exact
-        (squareLatticeEdge_not_horizontal_and_vertical
-          (squareLatticeUpEdge (width := width) (height := height) x 0 hx hy)
-          ⟨hEdge, hVertical⟩).elim
-  | vertical _hEdge _hxLeft _hxRight hyBottom _hyTop _cover =>
-      simp [squareLatticeUpEdge] at hyBottom
+  exact Nat.not_succ_le_zero 0 (normalSquareEdgeMarginCover_upEdge_bounds d).2.2.1
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the bottom
 boundary upward edge at horizontal coordinate \(2\) does not satisfy the
@@ -872,18 +899,7 @@ theorem not_topMarginUpEdge_marginCover {width height x y : ℕ}
     ¬ Nonempty (NormalSquareEdgeMarginCover
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) := by
   rintro ⟨d⟩
-  cases d with
-  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
-      have hVertical :
-          IsVerticalSquareLatticeEdge
-            (squareLatticeUpEdge (width := width) (height := height) x y hx hy) :=
-        squareLatticeUpEdge_isVertical hx hy
-      exact
-        (squareLatticeEdge_not_horizontal_and_vertical
-          (squareLatticeUpEdge (width := width) (height := height) x y hx hy)
-          ⟨hEdge, hVertical⟩).elim
-  | vertical _hEdge _hxLeft _hxRight _hyBottom hyTop _cover =>
-      exact hTop hyTop
+  exact hTop (normalSquareEdgeMarginCover_upEdge_bounds d).2.2.2
 
 /-- In the current open \(7\times7\) rectangular coordinate graph, the upward
 edge at horizontal coordinate \(2\) and height \(5\) does not satisfy the

@@ -2108,6 +2108,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.window}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.blockingDatum}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.injective_chain}
+    \lean{TNLean.PEPS.normalSquareEdgeMarginCover_rightEdge_bounds}
+    \lean{TNLean.PEPS.normalSquareEdgeMarginCover_upEdge_bounds}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_marginCover}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_marginCover_seven}
     \lean{TNLean.PEPS.not_rightMarginRightEdge_marginCover}
@@ -2134,13 +2136,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     upward representative.  The oriented margin-and-cover data package is the
     corresponding per-edge form of this remaining finite-geometry input; it
     directly supplies the one-edge blocking datum and its three injective
-    regions.  In the present open rectangular coordinate model, this margin
-    package does not apply to horizontal edges without enough left or right
-    margin, nor to vertical edges without enough bottom or top margin; the
-    corresponding \(7\times7\) examples are recorded explicitly, including a
-    single four-sided boundary obstruction.  This records the remaining
-    boundary geometry in the formal route; it is not a contradiction of the
-    source theorem.
+    regions.  On coordinate right and upward edges, such data force the
+    corresponding horizontal and vertical margin inequalities.  In the present
+    open rectangular coordinate model, this margin package does not apply to
+    horizontal edges without enough left or right margin, nor to vertical edges
+    without enough bottom or top margin; the corresponding \(7\times7\)
+    examples are recorded explicitly, including a single four-sided boundary
+    obstruction.  This records the remaining boundary geometry in the formal
+    route; it is not a contradiction of the source theorem.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%
