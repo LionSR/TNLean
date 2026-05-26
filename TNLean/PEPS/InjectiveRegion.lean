@@ -259,6 +259,30 @@ theorem regionUnionPart_three_eq_regionComplement_inside [Fintype V]
   rw [regionUnionPart_zero_union_one_union_two,
     regionUnionPart_three_eq_regionComplement_union]
 
+/-- The right-only indexed region together with the outside region reconstructs
+the complement of `A`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after applying injectivity of `A`, the remaining diagram contains
+the `B \ A` block and the outside block. -/
+theorem regionUnionPart_two_union_three_eq_regionComplement_left [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 2 ∪ regionUnionPart A B 3 = regionComplement A := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
+/-- The left-only indexed region together with the outside region reconstructs
+the complement of `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after the overlap is reinserted and injectivity of `B` is applied,
+the remaining outside tensor is attached to the complement of `B`. -/
+theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 3 = regionComplement B := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
 /-- The three inside indexed regions and the outside region reconstruct `V`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
