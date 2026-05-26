@@ -169,6 +169,10 @@ Theorem can be proved in the manner of the paper.
   because the ordinary boundary supplies the right bond index. The converse
   recovery $O_1,O_2\mapsto W$ remains open as
   \path{thm:peps_physicalToVirtualInsertion}.
+  Its local endpoint recovery component is now formalized by
+  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
+  once the compressed endpoint actions are known to realize the same bond
+  matrix, the local virtual pullbacks recover that matrix on the shared bond.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
   the matrix-algebra isomorphism on the chosen bond. In the blueprint this is
@@ -233,6 +237,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   and~\#1995.
 \item Lemma \path{inj_isomorph}, $O_1,O_2\mapsto W$:
   \path{thm:peps_physicalToVirtualInsertion}, tracked by issue~\#1370.
+  The endpoint projected-recovery component for a common bond matrix is
+  formalized by
+  \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
 \item Matrix-insertion algebra isomorphism:
   \path{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, tracked by
   issue~\#1367.
