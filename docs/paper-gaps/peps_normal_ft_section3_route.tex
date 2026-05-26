@@ -174,15 +174,17 @@ injectivity. The horizontal edge-blocking picture is also available with a
 general coordinate origin: whenever the translated window fits in the finite
 square lattice, the translated horizontal edge has red, blue, and complementary
 regions, and a rectangular cover of the complementary region supplies the
-one-edge blocking datum. The vertical edge-blocking picture is now available in
-the same coordinate-origin-parametric form, with its complementary region again
-discharged by a rectangular cover. The normalized horizontal and vertical
-pictures are now recorded as the coordinate-origin specializations of these
-translated pictures. The normalized edge data and the translated edge data are
-kept in separate Lean modules, so the normalized source picture remains
-available independently from the coordinate-origin-parametric layer. The
-realigned local and rotated $T$ covers and the full translated every-edge
-construction remain open.
+one-edge blocking datum. This translated datum now also exposes the three
+injective regions used in the associated edge-blocked chain. The vertical
+edge-blocking picture is now available in the same
+coordinate-origin-parametric form, with its complementary region again
+discharged by a rectangular cover, and with the analogous injective-chain
+consequence. The normalized horizontal and vertical pictures are now recorded
+as the coordinate-origin specializations of these translated pictures. The
+normalized edge data and the translated edge data are kept in separate Lean
+modules, so the normalized source picture remains available independently from
+the coordinate-origin-parametric layer. The realigned local and rotated $T$
+covers and the full translated every-edge construction remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -249,8 +251,11 @@ alone. The following additional obligations remain.
           with the finite PEPS geometry and translate these decompositions
           around every edge.
     \item Prove that the edge-centered red, blue, and complementary regions form a
-          three-site injective chain around every edge. This is the normal analog of
-          the injective edge-blocking bridge tracked by \ghissue{1366}.
+          three-site injective chain around every edge. The normalized and
+          translated one-edge data now supply these chain hypotheses locally;
+          the remaining work is the uniform every-edge construction. This is
+          the normal analog of the injective edge-blocking bridge tracked by
+          \ghissue{1366}.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
           \ghissue{1361}, and \ghissue{1360}.

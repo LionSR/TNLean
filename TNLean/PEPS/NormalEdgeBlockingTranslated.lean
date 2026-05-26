@@ -120,6 +120,22 @@ def normalSquareHorizontalTranslatedEdge_blockingDatum
       normalSquareHorizontalTranslatedEdgeComplement, Finset.union_assoc,
       Finset.union_left_comm, Finset.union_comm] using hCover
 
+/-- A translated horizontal edge supplies the three injective regions used in
+the edge-blocked three-site chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalTranslatedEdge_injective_chain
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (hComplement :
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeComplement xStart yStart)) :
+    κ.IsInjective (normalSquareHorizontalTranslatedEdgeRed xStart yStart) ∧
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeBlue xStart yStart) ∧
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeComplement xStart yStart) :=
+  (normalSquareHorizontalTranslatedEdge_blockingDatum h hx hy hComplement).injective_chain
+
 /-- A translated horizontal edge has red/blue/complement blocking data once
 the translated complementary block has a rectangular cover.
 
@@ -136,6 +152,24 @@ def normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover
       (normalSquareHorizontalTranslatedEdge xStart yStart (by omega) (by omega)) :=
   normalSquareHorizontalTranslatedEdge_blockingDatum h hx hy
     (h.edgeComplement_injective hUnion cover)
+
+/-- A translated horizontal edge supplies the three injective regions once the
+translated complementary block has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalTranslatedEdge_injective_chain_of_complementCover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
+    κ.IsInjective (normalSquareHorizontalTranslatedEdgeRed xStart yStart) ∧
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeBlue xStart yStart) ∧
+      κ.IsInjective (normalSquareHorizontalTranslatedEdgeComplement xStart yStart) :=
+  (normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover
+    h hUnion hx hy cover).injective_chain
 
 /-- The origin of the translated horizontal picture is the normalized
 horizontal edge.
@@ -279,6 +313,22 @@ def normalSquareVerticalTranslatedEdge_blockingDatum
     ext v
     simp [normalSquareVerticalTranslatedEdgeComplement, regionComplement]
 
+/-- A translated vertical edge supplies the three injective regions used in the
+edge-blocked three-site chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalTranslatedEdge_injective_chain
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (hComplement :
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeComplement xStart yStart)) :
+    κ.IsInjective (normalSquareVerticalTranslatedEdgeRed xStart yStart) ∧
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeBlue xStart yStart) ∧
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeComplement xStart yStart) :=
+  (normalSquareVerticalTranslatedEdge_blockingDatum h hx hy hComplement).injective_chain
+
 /-- A translated vertical edge has red/blue/complement blocking data once the
 translated complementary block has a rectangular cover.
 
@@ -296,6 +346,25 @@ def normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover
       (normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega)) :=
   normalSquareVerticalTranslatedEdge_blockingDatum h hx hy
     (h.injective_of_rectangleCover hUnion cover)
+
+/-- A translated vertical edge supplies the three injective regions once the
+translated complementary block has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalTranslatedEdge_injective_chain_of_complementCover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {xStart yStart : ℕ}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) xStart yStart)) :
+    κ.IsInjective (normalSquareVerticalTranslatedEdgeRed xStart yStart) ∧
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeBlue xStart yStart) ∧
+      κ.IsInjective (normalSquareVerticalTranslatedEdgeComplement xStart yStart) :=
+  (normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover
+    h hUnion hx hy cover).injective_chain
 
 /-- The origin of the translated vertical picture is the normalized vertical
 edge.
