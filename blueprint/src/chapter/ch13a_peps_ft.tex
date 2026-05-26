@@ -2101,9 +2101,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeWindow_rightEdge_margins}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeWindow_upEdge_margins}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_window}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_window_seven}
     \lean{TNLean.PEPS.not_rightMarginRightEdge_window}
+    \lean{TNLean.PEPS.not_rightMarginRightEdge_window_seven}
     \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_window}
+    \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_window_seven}
     \lean{TNLean.PEPS.not_topMarginUpEdge_window}
+    \lean{TNLean.PEPS.not_topMarginUpEdge_window_seven}
+    \lean{TNLean.PEPS.not_fourSidedBoundaryWindow_seven}
     \lean{TNLean.PEPS.not_forall_normalSquareTranslatedEdgeWindow_seven}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeWindow}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeWindow}
@@ -2155,10 +2160,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     these predicates directly.  On coordinate right and upward edges,
     translated windows force the corresponding margin predicates.  The current
     open \(7\times7\) model therefore does not admit translated windows for
-    every edge.  The margin-cover package stores these named predicates, so
-    such data force the corresponding horizontal and vertical margin
-    inequalities.  In the present open rectangular coordinate model, this
-    margin package does not apply to
+    every edge; explicit boundary examples are recorded on all four sides.  The
+    margin-cover package stores these named predicates, so such data force the
+    corresponding horizontal and vertical margin inequalities.  In the present
+    open rectangular coordinate model, this margin package does not apply to
     horizontal edges without enough left or right margin, nor to vertical edges
     without enough bottom or top margin; the corresponding \(7\times7\)
     examples are recorded explicitly, including a single four-sided boundary

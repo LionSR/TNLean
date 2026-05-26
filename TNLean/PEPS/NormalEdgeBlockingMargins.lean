@@ -116,6 +116,20 @@ theorem not_leftBoundaryRightEdge_window {width height y : ℕ}
   rintro ⟨w⟩
   exact Nat.not_succ_le_zero 0 (normalSquareTranslatedEdgeWindow_rightEdge_margins w).1
 
+/-- In the current open \(7\times7\) rectangular coordinate graph, the left
+boundary right edge at height \(2\) does not admit a translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_leftBoundaryRightEdge_window_seven :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+        (by decide) (by decide))) := by
+  exact not_leftBoundaryRightEdge_window (by decide) (by decide)
+
 /-- In the current open rectangular coordinate graph, a right edge too close
 to the right side does not admit a translated edge window.
 
@@ -130,6 +144,21 @@ theorem not_rightMarginRightEdge_window {width height x y : ℕ}
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) := by
   rintro ⟨w⟩
   exact hRight (normalSquareTranslatedEdgeWindow_rightEdge_margins w).2.1
+
+/-- In the current open \(7\times7\) rectangular coordinate graph, the right
+edge at horizontal coordinate \(5\) and height \(2\) does not admit a
+translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_rightMarginRightEdge_window_seven :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := 7) (height := 7) 5 2
+        (by decide) (by decide))) := by
+  exact not_rightMarginRightEdge_window (by decide) (by decide) (by decide)
 
 /-- In the current open rectangular coordinate graph, a bottom-boundary upward
 edge does not admit a translated edge window.
@@ -146,6 +175,21 @@ theorem not_bottomBoundaryUpEdge_window {width height x : ℕ}
   rintro ⟨w⟩
   exact Nat.not_succ_le_zero 0 (normalSquareTranslatedEdgeWindow_upEdge_margins w).2.2.1
 
+/-- In the current open \(7\times7\) rectangular coordinate graph, the bottom
+boundary upward edge at horizontal coordinate \(2\) does not admit a translated
+edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_bottomBoundaryUpEdge_window_seven :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+        (by decide) (by decide))) := by
+  exact not_bottomBoundaryUpEdge_window (by decide) (by decide)
+
 /-- In the current open rectangular coordinate graph, an upward edge too close
 to the top side does not admit a translated edge window.
 
@@ -160,6 +204,49 @@ theorem not_topMarginUpEdge_window {width height x y : ℕ}
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) := by
   rintro ⟨w⟩
   exact hTop (normalSquareTranslatedEdgeWindow_upEdge_margins w).2.2.2
+
+/-- In the current open \(7\times7\) rectangular coordinate graph, the upward
+edge at horizontal coordinate \(2\) and height \(5\) does not admit a
+translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_topMarginUpEdge_window_seven :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := 7) (height := 7) 2 5
+        (by decide) (by decide))) := by
+  exact not_topMarginUpEdge_window (by decide) (by decide) (by decide)
+
+/-- The current open \(7\times7\) rectangular coordinate graph has explicit
+horizontal and vertical boundary edges on all four sides that do not admit
+translated edge windows.
+
+This records a four-sided obstruction to reading the present translated-window
+package as the source theorem's every-edge construction.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_fourSidedBoundaryWindow_seven :
+    (¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+        (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareTranslatedEdgeWindow
+        (squareLatticeRightEdge (width := 7) (height := 7) 5 2
+          (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareTranslatedEdgeWindow
+        (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+          (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareTranslatedEdgeWindow
+        (squareLatticeUpEdge (width := 7) (height := 7) 2 5
+          (by decide) (by decide)))) := by
+  exact
+    ⟨not_leftBoundaryRightEdge_window_seven,
+      not_rightMarginRightEdge_window_seven,
+      not_bottomBoundaryUpEdge_window_seven,
+      not_topMarginUpEdge_window_seven⟩
 
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated edge windows over all edges.

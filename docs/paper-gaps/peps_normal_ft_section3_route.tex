@@ -208,17 +208,17 @@ translated frames, and the coordinate right/up and oriented-edge window
 constructors now accept these named predicates directly. Such data on
 coordinate right and upward edges now force the corresponding named margin
 predicates. Hence the present translated-window package itself does not supply
-a family of windows over all edges of the open $7\times7$ graph. The
-margin-cover data store the same named margin predicates. Consequently this
-margin package does not apply to horizontal edges without enough left or right
-margin, nor to vertical edges without enough bottom or top margin; the
-corresponding $7\times7$ examples are recorded explicitly, including a single
-four-sided boundary obstruction. Thus the remaining every-edge construction
-must include the boundary geometry rather than only translating the interior
-margin package; in particular, no family of this margin-cover data exists over
-all edges of the present open $7\times7$ graph. The realigned local and rotated
-$T$ covers and the construction of the appropriate data for every edge remain
-open.
+a family of windows over all edges of the open $7\times7$ graph; explicit
+boundary examples are recorded on all four sides. The margin-cover data store
+the same named margin predicates. Consequently this margin package does not
+apply to horizontal edges without enough left or right margin, nor to vertical
+edges without enough bottom or top margin; the corresponding $7\times7$
+examples are recorded explicitly, including a single four-sided boundary
+obstruction. Thus the remaining every-edge construction must include the
+boundary geometry rather than only translating the interior margin package; in
+particular, no family of this margin-cover data exists over all edges of the
+present open $7\times7$ graph. The realigned local and rotated $T$ covers and
+the construction of the appropriate data for every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -380,7 +380,8 @@ alone. The following additional obligations remain.
           window constructors accept those predicates directly, translated
           windows on coordinate right/up edges force those predicates, and the
           open $7\times7$ graph is now known not to admit a family of these
-          translated windows over all edges. The per-edge margin-cover package
+          translated windows over all edges; four explicit boundary examples
+          are recorded as a single conjunction. The per-edge margin-cover package
           stores the same predicates, and the resulting open-boundary obstruction for
           horizontal edges without enough left or right margin and vertical
           edges without enough bottom or top margin is also formalized,
