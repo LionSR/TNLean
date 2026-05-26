@@ -226,6 +226,16 @@ theorem regionUnionPart_zero_union_one [Fintype V] (A B : Finset V) :
     regionUnionPart A B 0 ∪ regionUnionPart A B 1 = A := by
   simpa using regionOnlyLeft_union_overlap A B
 
+/-- The subfamily of indexed regions `0,1` reconstructs `A`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the first inverse is applied to
+\(A=(A\setminus B)\cup(A\cap B)\). -/
+theorem regionUnionPart_biUnion_zero_one [Fintype V] (A B : Finset V) :
+    ({0, 1} : Finset (Fin 4)).biUnion (regionUnionPart A B) = A := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
 /-- The middle two indexed regions reconstruct `B`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
@@ -234,6 +244,16 @@ Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
 theorem regionUnionPart_one_union_two [Fintype V] (A B : Finset V) :
     regionUnionPart A B 1 ∪ regionUnionPart A B 2 = B := by
   simpa using regionOverlap_union_onlyRight A B
+
+/-- The subfamily of indexed regions `1,2` reconstructs `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after reinserting the overlap tensor, the second inverse is
+applied to \(B=(A\cap B)\cup(B\setminus A)\). -/
+theorem regionUnionPart_biUnion_one_two [Fintype V] (A B : Finset V) :
+    ({1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B) = B := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
 /-- The first three indexed regions reconstruct `A ∪ B`.
 
@@ -244,6 +264,16 @@ theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
     regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2 =
       A ∪ B := by
   simpa using regionThreePart_union A B
+
+/-- The subfamily of indexed regions `0,1,2` reconstructs `A ∪ B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the injectivity conclusion is for the union of the three inside
+indexed regions. -/
+theorem regionUnionPart_biUnion_zero_one_two [Fintype V] (A B : Finset V) :
+    ({0, 1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B) = A ∪ B := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
 /-- The fourth indexed region is the complement of the three inside indexed
 regions.
@@ -283,6 +313,18 @@ theorem regionUnionPart_two_union_three_eq_regionComplement_left [Fintype V]
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
+/-- The indexed subfamily `2,3` reconstructs the complement of `A`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after injectivity of `A` is applied, the remaining diagram is
+carried by `B \ A` and the outside block. -/
+theorem regionUnionPart_biUnion_two_three_eq_regionComplement_left [Fintype V]
+    (A B : Finset V) :
+    ({2, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionComplement A := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
 /-- The left-only indexed region together with the outside region reconstructs
 the complement of `B`.
 
@@ -292,6 +334,18 @@ the remaining outside tensor is attached to the complement of `B`. -/
 theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
     (A B : Finset V) :
     regionUnionPart A B 0 ∪ regionUnionPart A B 3 = regionComplement B := by
+  ext v
+  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+
+/-- The indexed subfamily `0,3` reconstructs the complement of `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after reinserting the overlap and applying injectivity of `B`, the
+remaining diagram is carried by `A \ B` and the outside block. -/
+theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_right [Fintype V]
+    (A B : Finset V) :
+    ({0, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
+      regionComplement B := by
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
