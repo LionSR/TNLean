@@ -827,6 +827,37 @@ theorem exists_blocked_chi_pullback {data : AlgebraStructureData d D}
   intro n hn
   exact W.positiveBlockedChi_toDiagonal_of_pos n hn
 
+/-- Existence of the source BNT-label witness gives the blocked-basis
+comparison equation before the \(\chi\)-trace formula is substituted.
+
+This is the proposition-level form of the comparison between the chosen
+blocked-basis multiplication coefficients and the BNT-label coefficients:
+\[
+  c^{(n)}_{i,j,k}
+    =
+  c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
+\]
+It only unpacks the existential witness; constructing such a witness from an
+MPDO tensor remains the Appendix C.3--C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      ∀ (n : ℕ) (hn : 0 < n)
+        (i j : AlgebraStructureData.BlockedIndex data n)
+        (k : AlgebraStructureData.BlockedIndex data (2 * n)),
+        data.blockedStructureCoefficients n i j k =
+          W.coeffs.coeff n
+            (W.sourceLabel n hn i)
+            (W.sourceLabel n hn j)
+            (W.targetLabel n hn k) := by
+  rcases h with ⟨W⟩
+  refine ⟨W, ?_⟩
+  intro n hn i j k
+  exact W.blocked_coeff_eq n hn i j k
+
 /-- Existence of the source BNT-label witness gives the two source equations
 written with the BNT-label coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\).
 
