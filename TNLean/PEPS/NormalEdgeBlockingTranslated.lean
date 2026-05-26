@@ -900,6 +900,34 @@ theorem not_topMarginUpEdge_marginCover_seven :
         (by decide) (by decide))) := by
   exact not_topMarginUpEdge_marginCover (by decide) (by decide) (by decide)
 
+/-- The current open \(7\times7\) rectangular coordinate graph has explicit
+horizontal and vertical boundary edges on all four sides that do not satisfy
+the translated margin-cover package.
+
+This records a four-sided obstruction to reading the present margin package as
+the source theorem's every-edge construction.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_fourSidedBoundaryMarginCover_seven :
+    (¬ Nonempty (NormalSquareEdgeMarginCover
+      (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+        (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareEdgeMarginCover
+        (squareLatticeRightEdge (width := 7) (height := 7) 5 2
+          (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareEdgeMarginCover
+        (squareLatticeUpEdge (width := 7) (height := 7) 2 0
+          (by decide) (by decide)))) ∧
+      (¬ Nonempty (NormalSquareEdgeMarginCover
+        (squareLatticeUpEdge (width := 7) (height := 7) 2 5
+          (by decide) (by decide)))) := by
+  exact
+    ⟨not_leftBoundaryRightEdge_marginCover_seven,
+      not_rightMarginRightEdge_marginCover_seven,
+      not_bottomBoundaryUpEdge_marginCover_seven,
+      not_topMarginUpEdge_marginCover_seven⟩
+
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated margin-cover data over all edges.
 
