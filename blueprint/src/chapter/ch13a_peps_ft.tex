@@ -1553,12 +1553,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Generalized two-injective-tensor comparison]%
     \label{thm:peps_twoInjectiveTensorInsertionComparison}
     \lean{TNLean.PEPS.twoInjectiveTensorInsertionComparison}
+    \lean{TNLean.PEPS.SameAwayFromBond, TNLean.PEPS.twoBlockInsertedCoeff}
+    \lean{TNLean.PEPS.IsTwoBlockInjective, TNLean.PEPS.SameTwoBlockInsertions}
+    \lean{TNLean.PEPS.TwoBlockScalarProportional}
+    \lean{TNLean.PEPS.TwoBlockReciprocalScalarProportional}
     \notready
-    \uses{def:IsVertexInjective, thm:peps_twoInjectiveGaugeScalarReduction}
-    Let $A_1,A_2,B_1,B_2$ be injective tensors with the same virtual boundary
-    spaces. Suppose that inserting an arbitrary matrix $X$ on any shared
-    virtual bond gives the same two-tensor state for the $A$-pair and the
-    $B$-pair:
+    \uses{thm:peps_twoInjectiveGaugeScalarReduction}
+    Let $A_1,A_2,B_1,B_2$ be injective tensors with the same shared virtual
+    bonds. For a shared bond $b$ and a matrix $X\in\operatorname{Mat}_{D_b}$,
+    write $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for the
+    two-tensor coefficient with $X$ inserted on $b$ and the identity inserted
+    on every other shared bond. Assume
+    $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
+    =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for every
+    $b,X,\eta_1,\eta_2,\sigma_1,\sigma_2$:
     \begin{center}
         \TNPEPSTwoInjectiveTensorInsertionComparison
     \end{center}
