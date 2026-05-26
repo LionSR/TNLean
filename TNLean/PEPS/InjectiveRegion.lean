@@ -283,6 +283,36 @@ theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
+/-- The first two indexed regions are the complement of the right-only and
+outside regions.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the first inversion step uses injectivity of the region
+`A = (A \ B) ∪ (A ∩ B)`, whose complement is the remaining two indexed
+pieces. -/
+theorem regionUnionPart_zero_union_one_eq_regionComplement_two_union_three [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 1 =
+      regionComplement (regionUnionPart A B 2 ∪ regionUnionPart A B 3) := by
+  rw [regionUnionPart_zero_union_one, regionUnionPart_two_union_three_eq_regionComplement_left]
+  ext v
+  simp [regionComplement]
+
+/-- The middle two indexed regions are the complement of the left-only and
+outside regions.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the second inversion step uses injectivity of the region
+`B = (A ∩ B) ∪ (B \ A)`, whose complement is the remaining two indexed
+pieces. -/
+theorem regionUnionPart_one_union_two_eq_regionComplement_zero_union_three [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 1 ∪ regionUnionPart A B 2 =
+      regionComplement (regionUnionPart A B 0 ∪ regionUnionPart A B 3) := by
+  rw [regionUnionPart_one_union_two, regionUnionPart_zero_union_three_eq_regionComplement_right]
+  ext v
+  simp [regionComplement]
+
 /-- The three inside indexed regions and the outside region reconstruct `V`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
