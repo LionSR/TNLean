@@ -899,6 +899,20 @@ retract.
     condition.
 \end{proof}
 
+\begin{theorem}[One-site fusion retract criterion]%
+    \label{thm:mpdo_one_site_fusion_iff_rfp}
+    \lean{MPOTensor.fusionIsometryData_one_iff_isRFP}
+    \leanok
+    \uses{def:mpdo_fusion_isometry}
+    A one-site transfer-map fusion-isometry datum exists if and only if the MPO
+    transfer map is idempotent.
+\end{theorem}
+\begin{proof}\leanok
+    The forward implication is the retract calculation
+    $E_1^2 = S_1T_1S_1T_1 = S_1T_1$. Conversely, if $E_1$ is idempotent, then
+    it factors through its range, giving the required one-site datum.
+\end{proof}
+
 \begin{theorem}[Transfer-map fusion criterion for MPDO RFP]%
     \label{thm:mpdo_rfp_via_fusion_iff}
     \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP}
@@ -924,6 +938,21 @@ retract.
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
     recovery theorem for the MPO predicate.
+\end{proof}
+
+\begin{theorem}[All-blocked fusion reduces to one-site fusion]%
+    \label{thm:mpdo_fusion_iff_one_site_fusion}
+    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_fusionIsometryData_one}
+    \leanok
+    \uses{def:mpdo_rfp_via_fusion, thm:mpdo_one_site_fusion_iff_rfp,
+        thm:mpdo_rfp_via_fusion_iff}
+    The fusion-isometry formulation for all positive blocked sizes is
+    equivalent to the existence of a one-site transfer-map fusion-isometry
+    datum.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the one-site criterion with the equivalence between the all-blocked
+    fusion formulation and transfer-map idempotence.
 \end{proof}
 
 \section{Algebra structure}
