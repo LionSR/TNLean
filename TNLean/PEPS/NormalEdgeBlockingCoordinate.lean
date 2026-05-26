@@ -257,6 +257,19 @@ def normalSquareVerticalEdge_blockingDatum_of_verticalT
     NormalEdgeBlockingData κ (squareLatticeGraph 7 5) normalSquareVerticalEdge :=
   normalSquareVerticalEdge_blockingDatum h (h.verticalComp_injective hUnion hT)
 
+/-- The normalized vertical edge has red/blue/complement blocking data once the
+rotated local \(T\)-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+def normalSquareVerticalEdge_blockingDatum_of_verticalTCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareVerticalRegionTRectangleCover
+      (width := 7) (height := 5) 0 0) :
+    NormalEdgeBlockingData κ (squareLatticeGraph 7 5) normalSquareVerticalEdge :=
+  normalSquareVerticalEdge_blockingDatum h (h.verticalComp_inj_of_cover hUnion cover)
+
 /-- The normalized vertical edge supplies the three injective regions used in
 the edge-blocked three-site chain.
 
@@ -287,6 +300,21 @@ theorem normalSquareVerticalEdge_injective_chain_of_verticalT
       κ.IsInjective normalSquareVerticalEdgeBlue ∧
       κ.IsInjective normalSquareVerticalEdgeComplement :=
   (normalSquareVerticalEdge_blockingDatum_of_verticalT h hUnion hT).injective_chain
+
+/-- The normalized vertical edge supplies the three injective regions once the
+rotated local \(T\)-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+theorem normalSquareVerticalEdge_injective_chain_of_verticalTCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareVerticalRegionTRectangleCover
+      (width := 7) (height := 5) 0 0) :
+    κ.IsInjective normalSquareVerticalEdgeRed ∧
+      κ.IsInjective normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeComplement :=
+  (normalSquareVerticalEdge_blockingDatum_of_verticalTCover h hUnion cover).injective_chain
 
 end PEPS
 end TNLean

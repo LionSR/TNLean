@@ -391,6 +391,25 @@ theorem verticalComp_injective
     (hUnion.union_injective hT (h.rect23_injective (by omega) (by omega)))
     (h.rect23_injective (by omega) (by omega))
 
+/-- In the normalized vertical-edge \(7\times5\) frame, a rectangular cover of
+the rotated local \(T\)-region implies injectivity of the actual complement of
+the rotated red and blue edge blocks.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem verticalComp_inj_of_cover
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareVerticalRegionTRectangleCover
+      (width := 7) (height := 5) 0 0) :
+    κ.IsInjective
+      (regionComplement
+        (squareLatticeContiguousRectangle 2 0 3 2 ∪
+          (squareLatticeContiguousRectangle 1 2 2 3 :
+            Finset (SquareLatticeVertex 7 5)))) :=
+  h.verticalComp_injective hUnion (h.verticalT_inj_of_cover hUnion cover)
+
 end NormalSquareLatticeRectangleInjectivityHypotheses
 
 end PEPS

@@ -1906,6 +1906,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.topCollar_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rightCollar_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.verticalComp_inj_of_cover}
     \leanok
     \uses{lem:peps_normalSquareEdgeComplementRegion,
         lem:peps_normalSquareRegionT_window_complement,
@@ -1920,7 +1921,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     contiguous \(2\times3\) rectangles.  For the rotated vertical edge-blocking
     regions, the corresponding complement is the rotated local \(T\)-region
     together with the same two right-collar rectangles; hence rotated
-    \(T\)-injectivity implies injectivity of the vertical complementary block.
+    \(T\)-injectivity, and hence a rectangular cover of rotated \(T\), implies
+    injectivity of the vertical complementary block.
 \end{lemma}
 % Maintainer note: this still leaves local/rotated T-injectivity and the
 % translated every-edge construction open.
@@ -1947,8 +1949,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum_of_verticalT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum_of_verticalTCover}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalT}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain_of_verticalTCover}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion,
@@ -1965,13 +1969,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     vertical-edge frame has the analogous red and blue rectangular blocks and
     the same set-theoretic blocking data; at this stage its complementary-block
     injectivity is either kept as an explicit hypothesis or obtained from
-    rotated \(T\)-injectivity by the vertical collar lemma.  In both cases the
-    named blocking datum supplies the corresponding three injective regions for
-    the edge-blocked chain.
+    rotated \(T\)-injectivity, and therefore from a rectangular cover of
+    rotated \(T\), by the vertical collar lemma.  In both cases the named
+    blocking datum supplies the corresponding three injective regions for the
+    edge-blocked chain.
 \end{lemma}
-% Maintainer note: vertical-edge complement injectivity is now reduced to
-% rotated T-injectivity.  The translated every-edge construction remains a
-% separate step.
+% Maintainer note: vertical-edge complement injectivity is now reduced to a
+% rotated T-cover.  The translated every-edge construction remains a separate
+% step.
 \begin{proof}\leanok
     The endpoint memberships are coordinate checks.  Rectangular injectivity
     gives the rectangular red and blue blocks.  For the horizontal edge, the
