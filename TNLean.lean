@@ -364,6 +364,7 @@ import TNLean.PEPS.InjectiveRegion
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.EdgeMiddlePhysical
+import TNLean.PEPS.NormalEdgeBlockingData
 import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.NormalEdgeComplementCover

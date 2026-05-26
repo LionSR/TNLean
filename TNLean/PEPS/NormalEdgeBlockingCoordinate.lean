@@ -49,13 +49,58 @@ abbrev normalSquareHorizontalEdgeBlue : Finset (SquareLatticeVertex 5 7) :=
 abbrev normalSquareHorizontalEdgeComplement : Finset (SquareLatticeVertex 5 7) :=
   normalSquareEdgeComplementRegion 0 0
 
+/-- The normalized horizontal edge has the red/blue/complement blocking data
+used in the proof of the normal square-lattice theorem.
+
+This definition records the set-theoretic and injectivity data for the concrete
+horizontal-edge blocking as one `NormalEdgeBlockingData` value. The remaining
+step toward
+`NormalEdgeBlockingHypotheses` is to translate this coordinate picture around
+every horizontal and vertical edge of the finite square lattice.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareHorizontalEdge_blockingDatum
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hT : κ.IsInjective (normalSquareRegionT (width := 5) (height := 7) 0 0)) :
+    NormalEdgeBlockingData κ (squareLatticeGraph 5 7) normalSquareHorizontalEdge where
+  red := normalSquareHorizontalEdgeRed
+  blue := normalSquareHorizontalEdgeBlue
+  complement := normalSquareHorizontalEdgeComplement
+  left_mem_red := by
+    simp [normalSquareHorizontalEdge, normalSquareHorizontalEdgeRed,
+      normalSquareRegionTVerticalBlock]
+  right_mem_blue := by
+    simp [normalSquareHorizontalEdge, normalSquareHorizontalEdgeBlue,
+      normalSquareRegionTHorizontalBlock]
+  red_injective := h.tVerticalBlock_injective (by omega) (by omega)
+  blue_injective := h.tHorizontalBlock_injective (by omega) (by omega)
+  complement_injective := h.topCollar_injective hUnion hT
+  red_disjoint_blue := normalSquareRegionTVerticalBlock_disjoint_horizontalBlock 0 0
+  red_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvComplement
+    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
+    exact hvComplement (by simp [normalSquareRegionTHole, hvRed])
+  blue_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvBlue hvComplement
+    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
+    exact hvComplement (by simp [normalSquareRegionTHole, hvBlue])
+  cover_univ := by
+    have hCover :=
+      normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock
+        (width := 5) (height := 7) 0 0
+    simpa [normalSquareHorizontalEdgeRed, normalSquareHorizontalEdgeBlue,
+      normalSquareHorizontalEdgeComplement, Finset.union_assoc, Finset.union_left_comm,
+      Finset.union_comm] using hCover
+
 /-- The normalized horizontal edge has the red/blue/complement blocking used in
 the proof of the normal square-lattice theorem.
 
-This theorem records the set-theoretic and injectivity data for the concrete
-horizontal-edge blocking. The remaining step toward
-`NormalEdgeBlockingHypotheses` is to translate this coordinate picture around
-every horizontal and vertical edge of the finite square lattice.
+This is the tuple form of `normalSquareHorizontalEdge_blockingDatum`, kept for
+downstream arguments that use the individual conclusions directly.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareHorizontalEdge_blockingData
@@ -74,29 +119,10 @@ theorem normalSquareHorizontalEdge_blockingData
       normalSquareHorizontalEdgeRed ∪ normalSquareHorizontalEdgeBlue ∪
           normalSquareHorizontalEdgeComplement =
         (Finset.univ : Finset (SquareLatticeVertex 5 7)) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · simp [normalSquareHorizontalEdge, normalSquareHorizontalEdgeRed,
-      normalSquareRegionTVerticalBlock]
-  · simp [normalSquareHorizontalEdge, normalSquareHorizontalEdgeBlue,
-      normalSquareRegionTHorizontalBlock]
-  · exact h.tVerticalBlock_injective (by omega) (by omega)
-  · exact h.tHorizontalBlock_injective (by omega) (by omega)
-  · exact h.topCollar_injective hUnion hT
-  · exact normalSquareRegionTVerticalBlock_disjoint_horizontalBlock 0 0
-  · rw [Finset.disjoint_left]
-    intro v hvRed hvComplement
-    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
-    exact hvComplement (by simp [normalSquareRegionTHole, hvRed])
-  · rw [Finset.disjoint_left]
-    intro v hvBlue hvComplement
-    rw [mem_normalSquareEdgeComplementRegion] at hvComplement
-    exact hvComplement (by simp [normalSquareRegionTHole, hvBlue])
-  · have hCover :=
-      normalSquareEdgeComplementRegion_union_verticalBlock_union_horizontalBlock
-        (width := 5) (height := 7) 0 0
-    simpa [normalSquareHorizontalEdgeRed, normalSquareHorizontalEdgeBlue,
-      normalSquareHorizontalEdgeComplement, Finset.union_assoc, Finset.union_left_comm,
-      Finset.union_comm] using hCover
+  let d := normalSquareHorizontalEdge_blockingDatum h hUnion hT
+  exact ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
+    d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
+    d.blue_disjoint_complement, d.cover_univ⟩
 
 /-- The distinguished vertical edge in the normalized \(7\times5\) frame.
 
@@ -131,14 +157,55 @@ abbrev normalSquareVerticalEdgeBlue : Finset (SquareLatticeVertex 7 5) :=
 abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
   regionComplement (normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue)
 
-/-- The normalized vertical edge has the red/blue/complement blocking geometry
+/-- The normalized vertical edge has the red/blue/complement blocking datum
 used in the proof of the normal square-lattice theorem.
 
-This theorem records the set-theoretic data for the vertical-edge blocking.
+This definition records the set-theoretic data for the vertical-edge blocking.
 Injectivity of the complementary block is kept as an explicit hypothesis here;
 deriving it from the source rectangular hypotheses is the remaining
 finite-geometry step before this can be promoted to an every-edge
 `NormalEdgeBlockingHypotheses` construction.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalEdge_blockingDatum
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hComplement : κ.IsInjective normalSquareVerticalEdgeComplement) :
+    NormalEdgeBlockingData κ (squareLatticeGraph 7 5) normalSquareVerticalEdge where
+  red := normalSquareVerticalEdgeRed
+  blue := normalSquareVerticalEdgeBlue
+  complement := normalSquareVerticalEdgeComplement
+  left_mem_red := by
+    simp [normalSquareVerticalEdge, normalSquareVerticalEdgeRed]
+  right_mem_blue := by
+    simp [normalSquareVerticalEdge, normalSquareVerticalEdgeBlue]
+  red_injective := h.rect32_injective (by omega) (by omega)
+  blue_injective := h.rect23_injective (by omega) (by omega)
+  complement_injective := hComplement
+  red_disjoint_blue := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvBlue
+    rw [mem_squareLatticeContiguousRectangle] at hvRed hvBlue
+    omega
+  red_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvRed hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
+  blue_disjoint_complement := by
+    rw [Finset.disjoint_left]
+    intro v hvBlue hvComplement
+    rw [mem_regionComplement] at hvComplement
+    exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
+  cover_univ := by
+    ext v
+    simp [normalSquareVerticalEdgeComplement, regionComplement]
+
+/-- The normalized vertical edge has the red/blue/complement blocking geometry
+used in the proof of the normal square-lattice theorem.
+
+This is the tuple form of `normalSquareVerticalEdge_blockingDatum`, kept for
+downstream arguments that use the individual conclusions directly.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdge_blockingData
@@ -156,25 +223,10 @@ theorem normalSquareVerticalEdge_blockingData
       normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue ∪
           normalSquareVerticalEdgeComplement =
         (Finset.univ : Finset (SquareLatticeVertex 7 5)) := by
-  refine ⟨?_, ?_, ?_, ?_, hComplement, ?_, ?_, ?_, ?_⟩
-  · simp [normalSquareVerticalEdge, normalSquareVerticalEdgeRed]
-  · simp [normalSquareVerticalEdge, normalSquareVerticalEdgeBlue]
-  · exact h.rect32_injective (by omega) (by omega)
-  · exact h.rect23_injective (by omega) (by omega)
-  · rw [Finset.disjoint_left]
-    intro v hvRed hvBlue
-    rw [mem_squareLatticeContiguousRectangle] at hvRed hvBlue
-    omega
-  · rw [Finset.disjoint_left]
-    intro v hvRed hvComplement
-    rw [mem_regionComplement] at hvComplement
-    exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
-  · rw [Finset.disjoint_left]
-    intro v hvBlue hvComplement
-    rw [mem_regionComplement] at hvComplement
-    exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
-  · ext v
-    simp [normalSquareVerticalEdgeComplement, regionComplement]
+  let d := normalSquareVerticalEdge_blockingDatum h hComplement
+  exact ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
+    d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
+    d.blue_disjoint_complement, d.cover_univ⟩
 
 end PEPS
 end TNLean

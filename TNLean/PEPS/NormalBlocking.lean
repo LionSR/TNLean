@@ -1,7 +1,6 @@
 import Mathlib.Data.Finset.Prod
 
-import TNLean.PEPS.Defs
-import TNLean.PEPS.InjectiveRegion
+import TNLean.PEPS.NormalEdgeBlockingData
 
 /-!
 # Normal PEPS blocking hypotheses
@@ -654,6 +653,22 @@ structure NormalEdgeBlockingHypotheses (G : SimpleGraph V) where
 namespace NormalEdgeBlockingHypotheses
 
 variable {ι}
+
+/-- The one-edge blocking data supplied by edge-centred blocking hypotheses. -/
+def blockingData (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    NormalEdgeBlockingData ι G e where
+  red := h.red e
+  blue := h.blue e
+  complement := h.complement e
+  left_mem_red := h.left_mem_red e
+  right_mem_blue := h.right_mem_blue e
+  red_injective := h.red_injective e
+  blue_injective := h.blue_injective e
+  complement_injective := h.complement_injective e
+  red_disjoint_blue := h.red_disjoint_blue e
+  red_disjoint_complement := h.red_disjoint_complement e
+  blue_disjoint_complement := h.blue_disjoint_complement e
+  cover_univ := h.cover_univ e
 
 /-- The edge-centred blocking supplies a three-region injective chain at every
 edge. -/

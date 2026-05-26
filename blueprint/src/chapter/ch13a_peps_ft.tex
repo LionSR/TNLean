@@ -1924,11 +1924,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeRed}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareVerticalEdge}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
@@ -1977,17 +1979,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{definition}[Normal edge-blocking hypotheses]%
     \label{def:peps_normalEdgeBlockingHypotheses}
+    \lean{TNLean.PEPS.NormalEdgeBlockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses}
     \leanok
     \uses{def:peps_edge, def:peps_regionInjectivityData}
-    Around each edge, the normal proof assumes a blocking into three injective
+    Around one edge, the normal proof uses a blocking into three injective
     regions: a red region containing one endpoint, a blue region containing the
     other endpoint, and an injective complementary region.  The three regions
-    are pairwise disjoint and cover the whole vertex set.
+    are pairwise disjoint and cover the whole vertex set.  The edge-blocking
+    hypotheses are the uniform version of this datum for every edge.
 \end{definition}
 
 \begin{theorem}[Injectivity supplied by normal edge blocking]%
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
+    \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.blockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.injective_chain_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
