@@ -203,13 +203,14 @@ injective regions used in the associated chain. A family of such data assembles
 into the normal edge-blocking hypotheses, and the assembled hypotheses recover
 the supplied one-edge datum and its three injective regions at each edge. In
 the current open rectangular coordinate model, this margin package is now also
-known not to apply to left-boundary horizontal edges or to bottom-boundary
-vertical edges; the corresponding $7\times7$ examples are recorded explicitly.
-Thus the remaining every-edge construction must include the boundary geometry
-rather than only translating the interior margin package; in particular, no
-family of this margin-cover data exists over all edges of the present open
-$7\times7$ graph. The realigned local and rotated $T$ covers and the
-construction of the appropriate data for every edge remain open.
+known not to apply to horizontal edges without enough left or right margin, nor
+to vertical edges without enough bottom or top margin; the corresponding
+$7\times7$ examples are recorded explicitly. Thus the remaining every-edge
+construction must include the boundary geometry rather than only translating
+the interior margin package; in particular, no family of this margin-cover data
+exists over all edges of the present open $7\times7$ graph. The realigned local
+and rotated $T$ covers and the construction of the appropriate data for every
+edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -367,12 +368,13 @@ alone. The following additional obligations remain.
           data now assembles into the normal edge-blocking hypotheses. The
           assembled hypotheses recover the supplied datum and its three
           injective regions at each edge. The open-boundary obstruction for
-          left-boundary horizontal edges and bottom-boundary vertical edges is
-          now formalized, including explicit $7\times7$ examples, so the
-          present margin package is a sufficient interior criterion rather than
-          the final every-edge construction. Consequently, the nonexistence of
-          a family of this margin-cover data over all edges of the current open
-          $7\times7$ graph is also formalized.
+          horizontal edges without enough left or right margin and vertical
+          edges without enough bottom or top margin is now formalized,
+          including explicit $7\times7$ examples, so the present margin package
+          is a sufficient interior criterion rather than the final every-edge
+          construction. Consequently, the nonexistence of a family of this
+          margin-cover data over all edges of the current open $7\times7$ graph
+          is also formalized.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue
