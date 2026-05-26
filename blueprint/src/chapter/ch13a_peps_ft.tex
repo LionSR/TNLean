@@ -1876,10 +1876,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
     finite union closure to the nonempty family.
 \end{proof}
 
-\begin{lemma}[The normalized \(5\times7\) edge complement has a top collar]%
+\begin{lemma}[The normalized edge complements have collars]%
     \label{lem:peps_normalSquareEdgeComplementRegion_topCollar}
     \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_topCollar}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRegion_eq_T_union_rightCollar}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.topCollar_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.rightCollar_injective}
     \leanok
     \uses{lem:peps_normalSquareEdgeComplementRegion,
         lem:peps_normalSquareRegionT_window_complement,
@@ -1889,13 +1891,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     complementary block \(A_3\) is the local-window \(T\)-region together with
     two top-collar contiguous \(3\times2\) rectangles.  Consequently, if the
     local \(T\)-region is injective, then rectangular injectivity and union
-    closure imply that \(A_3\) is injective.
+    closure imply that \(A_3\) is injective.  The vertical-edge \(7\times5\)
+    frame has the analogous right-collar decomposition, now using two
+    contiguous \(2\times3\) rectangles.
 \end{lemma}
 % Maintainer note: this still leaves local T-injectivity and the translated
 % every-edge construction open.
 \begin{proof}\leanok
-    The set identity follows by expanding the coordinate inequalities.  The
-    injectivity statement applies union closure first to the local
+    The two set identities follow by expanding the coordinate inequalities.
+    The injectivity statements apply union closure first to the local
     \(T\)-region and the first collar rectangle, and then to the second collar
     rectangle.
 \end{proof}

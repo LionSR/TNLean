@@ -157,6 +157,26 @@ theorem normalSquareEdgeComplementRegion_eq_T_union_topCollar :
     mem_normalSquareRegionTHole, mem_squareLatticeContiguousRectangle]
   omega
 
+/-- In the normalized vertical-edge \(7\times5\) frame, the finite-lattice
+edge-complementary block is the local \(T\)-region together with two right-collar
+contiguous \(2\times3\) rectangles.
+
+This is the vertical-edge counterpart of
+`normalSquareEdgeComplementRegion_eq_T_union_topCollar`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1499
+of `Papers/1804.04964/paper_normal.tex`. -/
+theorem normalSquareEdgeComplementRegion_eq_T_union_rightCollar :
+    (normalSquareEdgeComplementRegion (width := 7) (height := 5) 0 0) =
+      (normalSquareRegionT (width := 7) (height := 5) 0 0) ∪
+        squareLatticeContiguousRectangle 5 0 2 3 ∪
+          (squareLatticeContiguousRectangle 5 2 2 3 :
+            Finset (SquareLatticeVertex 7 5)) := by
+  ext v
+  simp only [Finset.mem_union, mem_normalSquareEdgeComplementRegion, mem_normalSquareRegionT,
+    mem_normalSquareRegionTHole, mem_squareLatticeContiguousRectangle]
+  omega
+
 namespace NormalSquareLatticeRectangleInjectivityHypotheses
 
 variable {width height : ℕ}
@@ -241,6 +261,26 @@ theorem topCollar_injective
   exact hUnion.union_injective
     (hUnion.union_injective hT (h.rect32_injective (by omega) (by omega)))
     (h.rect32_injective (by omega) (by omega))
+
+/-- In the normalized vertical-edge \(7\times5\) frame, the edge-complementary
+block is injective if the local \(T\)-region is injective.
+
+The two additional right-collar regions are contiguous \(2\times3\) rectangles,
+so rectangular injectivity and the union-of-injective-regions lemma add them to
+the local \(T\)-region.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem rightCollar_injective
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hT : κ.IsInjective (normalSquareRegionT (width := 7) (height := 5) 0 0)) :
+    κ.IsInjective (normalSquareEdgeComplementRegion (width := 7) (height := 5) 0 0) := by
+  rw [normalSquareEdgeComplementRegion_eq_T_union_rightCollar]
+  exact hUnion.union_injective
+    (hUnion.union_injective hT (h.rect23_injective (by omega) (by omega)))
+    (h.rect23_injective (by omega) (by omega))
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
 

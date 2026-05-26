@@ -144,8 +144,12 @@ than read directly from the current local-window complement. The normalized
 $5\times7$ horizontal-edge geometry is also formalized: $A_3$ is the
 local-window $T$-region together with two top-collar contiguous $3\times2$
 rectangles, so injectivity of local $T$ implies injectivity of $A_3$ by union
-closure and rectangular injectivity. The realigned local $T$ cover and the
-translated every-edge construction remain open.
+closure and rectangular injectivity. The vertical-edge $7\times5$ counterpart
+is now formalized as well: the corresponding complement is the local-window
+$T$-region together with two right-collar contiguous $2\times3$ rectangles, and
+the same conditional injectivity consequence follows from union closure. The
+realigned local $T$ cover and the translated every-edge construction remain
+open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -254,7 +258,8 @@ alone. The following additional obligations remain.
     \item Normalized $5\times7$ top-collar decomposition of that block:
           blueprint
           \path{lem:peps_normalSquareEdgeComplementRegion_topCollar}, issue
-          \#2004.
+          \#2004. This node now also contains the normalized $7\times5$
+          right-collar counterpart for vertical edges.
     \item Edge blocking into red, blue, and complementary injective regions:
           blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
     \item Application of Lemma \path{inj_isomorph} after normal blocking:
