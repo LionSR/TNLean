@@ -88,6 +88,8 @@ def _split_lean_decls(payload: str) -> list[str]:
     with ``leanblueprint web``, whose generated ``lean_decls`` file includes
     declarations from both one-line and multi-line tags.
     """
+    payload = re.sub(r"%[^\n]*\n\s*", "", payload)
+    payload = re.sub(r"%[^\n]*$", "", payload)
     normalised = re.sub(r"\s+", " ", payload)
     return [decl.strip() for decl in normalised.split(",") if decl.strip()]
 
@@ -651,7 +653,10 @@ def _print_report(report: SyncReport, root: Path) -> None:
     # leanok but missing
     if report.leanok_but_missing:
         print()
-        print(f"WARNING: \\leanok on items whose Lean decl is MISSING ({len(report.leanok_but_missing)}):")
+        print(
+            "WARNING: \\leanok on items whose Lean decl is MISSING "
+            f"({len(report.leanok_but_missing)}):"
+        )
         seen2: set[str] = set()
         for entry in report.leanok_but_missing:
             if entry.lean_decl not in seen2:
@@ -668,7 +673,10 @@ def _print_report(report: SyncReport, root: Path) -> None:
     # Missing from lean_decls
     if report.missing_from_lean_decls_file:
         print()
-        print(f"Blueprint refs missing from lean_decls file ({len(report.missing_from_lean_decls_file)}):")
+        print(
+            "Blueprint refs missing from lean_decls file "
+            f"({len(report.missing_from_lean_decls_file)}):"
+        )
         for name in report.missing_from_lean_decls_file:
             print(f"  + {name}")
 
