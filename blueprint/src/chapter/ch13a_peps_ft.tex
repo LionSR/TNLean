@@ -1429,6 +1429,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_inside}
     \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_left}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_right}
+    \lean{TNLean.PEPS.regionUnionPart_zero_union_one_eq_regionComplement_two_union_three}
+    \lean{TNLean.PEPS.regionUnionPart_one_union_two_eq_regionComplement_zero_union_three}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two_union_three}
     \lean{TNLean.PEPS.regionUnionPart_biUnion}
     \lean{TNLean.PEPS.regionUnionPart_exists_unique}
@@ -1442,7 +1444,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $1$ and $2$ reconstruct $B$, and pieces $0,1,2$ reconstruct $A\cup B$.
     Piece $3$ is the complement of \(A\cup B\), equivalently the complement of
     the three inside indexed pieces; pieces \(2,3\) reconstruct \(A^c\), pieces
-    \(0,3\) reconstruct \(B^c\), and adding all four pieces reconstructs $V$.
+    \(0,3\) reconstruct \(B^c\), pieces \(0,1\) are the complement of pieces
+    \(2,3\), pieces \(1,2\) are the complement of pieces \(0,3\), and adding
+    all four pieces reconstructs $V$.
     Equivalently, each vertex lies in one of the four regions, and the indexed
     four-region family has union $V$. In fact, every vertex belongs to exactly
     one indexed piece.
