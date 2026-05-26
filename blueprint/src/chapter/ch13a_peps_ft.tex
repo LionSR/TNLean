@@ -1918,6 +1918,37 @@ injective and normal PEPS, following Theorems~2 and~3 of
     rectangle.
 \end{proof}
 
+\begin{lemma}[Normalized horizontal-edge blocking data]%
+    \label{lem:peps_normalSquareHorizontalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeRed}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeBlue}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
+    \leanok
+    \uses{def:peps_squareLatticeCoordinateRegions,
+        lem:peps_normalSquareEdgeComplementRegion,
+        lem:peps_normalSquareRegionT_edgeBlocks_injective,
+        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    In the normalized \(5\times7\) horizontal-edge frame, the red block is the
+    vertical \(2\times3\) block, the blue block is the horizontal \(3\times2\)
+    block, and the complementary block is the finite-lattice edge complement
+    \(A_3\).  The left endpoint of the distinguished edge lies in the red
+    block, the right endpoint lies in the blue block, the three regions are
+    pairwise disjoint, and their union is the whole finite square lattice.
+    If the local \(T\)-region is injective, rectangular injectivity and union
+    closure give injectivity of all three blocks.
+\end{lemma}
+% Maintainer note: this is the normalized horizontal-edge instance.  The
+% translated every-edge construction and the vertical-edge instance remain
+% separate steps.
+\begin{proof}\leanok
+    The endpoint memberships are coordinate checks.  Rectangular injectivity
+    gives the two edge blocks, the collar lemma gives the complement, and the
+    disjointness and cover statements are the finite-lattice complement
+    identities for the two removed edge blocks.
+\end{proof}
+
 \begin{lemma}[Conditional injectivity of the normal \(R\) and \(S\) regions]%
     \label{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}
