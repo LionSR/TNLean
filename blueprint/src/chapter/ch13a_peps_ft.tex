@@ -2714,11 +2714,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
+\begin{definition}[Vertex-balanced edge scalars]%
+    \label{def:IsVertexBalanced}
+    \lean{TNLean.PEPS.IsVertexBalanced}
+    \leanok
+    \uses{def:edgeGaugeAt}
+    An edge-scalar family is vertex-balanced when the product of its oriented
+    endpoint scalars is $1$ at every vertex.
+\end{definition}
+
 \begin{definition}[Gauge equivalence modulo balanced edge scalars]%
     \label{def:GaugeEquivModEdgeScalars}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
     \leanok
-    \uses{def:edgeGaugeAt}
+    \uses{def:edgeGaugeAt, def:IsVertexBalanced}
     Two gauge families are equivalent modulo balanced edge scalars if there is
     a nonzero scalar $c_e$ on each edge such that the corresponding endpoint
     actions rescale the oriented edge gauges, and the oriented product of those
@@ -2744,6 +2753,33 @@ injective and normal PEPS, following Theorems~2 and~3 of
     because the scalars lie in a commutative field.
 \end{proof}
 
+\begin{theorem}[Inversion of oriented edge scalars]%
+    \label{thm:edgeScalarAt_inv}
+    \lean{TNLean.PEPS.edgeScalarAt_inv}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars}
+    Inverting an edge-scalar family inverts the scalar appearing on every
+    oriented endpoint.
+\end{theorem}
+
+\begin{proof}\leanok
+    Check the two endpoint cases. At the upper endpoint the definition already
+    uses the inverse scalar, so inverting the edge family removes that inverse.
+\end{proof}
+
+\begin{theorem}[Nonzero oriented edge scalars]%
+    \label{thm:edgeScalarAt_ne_zero}
+    \lean{TNLean.PEPS.edgeScalarAt_ne_zero}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars}
+    Every oriented endpoint scalar attached to an edge-scalar family is
+    nonzero.
+\end{theorem}
+
+\begin{proof}\leanok
+    Edge scalars are units, and the inverse of a unit is again a unit.
+\end{proof}
+
 \begin{theorem}[Product of balanced edge scalars]%
     \label{thm:IsVertexBalanced_mul}
     \lean{TNLean.PEPS.IsVertexBalanced.mul}
@@ -2756,6 +2792,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{proof}\leanok
     At each vertex, multiply the two oriented endpoint products. Both products
     are $1$, so the product family is also balanced.
+\end{proof}
+
+\begin{theorem}[Inverse of balanced edge scalars]%
+    \label{thm:IsVertexBalanced_inv}
+    \lean{TNLean.PEPS.IsVertexBalanced.inv}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, thm:edgeScalarAt_inv}
+    The pointwise inverse of a vertex-balanced edge-scalar family is again
+    vertex-balanced.
+\end{theorem}
+
+\begin{proof}\leanok
+    At each vertex, the oriented product for the inverse family is the inverse
+    of the original oriented product. Since the original product is $1$, its
+    inverse is also $1$.
 \end{proof}
 
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
@@ -2777,6 +2828,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Use the constant edge-scalar family $c_e=1$. Both endpoint actions are
     unchanged, and the product of the incident endpoint scalars at every vertex
     is $1$.
+\end{proof}
+
+\begin{theorem}[Symmetry of balanced edge-scalar equivalence]%
+    \label{thm:GaugeEquivModEdgeScalars_symm}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.symm}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_inv,
+        thm:edgeScalarAt_ne_zero}
+    If one gauge family differs from another by balanced edge scalars, then the
+    second differs from the first by the inverse balanced edge-scalar family.
+    \begin{center}
+        \TNPEPSEdgeGaugeOrientation
+    \end{center}
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the inverse edge-scalar family. The endpoint scalar is nonzero, so the
+    endpoint equality may be multiplied by its inverse.
 \end{proof}
 
 \begin{theorem}[Transitivity of balanced edge-scalar equivalence]%
