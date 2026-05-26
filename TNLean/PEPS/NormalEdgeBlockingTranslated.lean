@@ -520,6 +520,20 @@ def normalSquareVerticalTranslatedEdgeWindow
   NormalSquareTranslatedEdgeWindow.vertical xStart yStart hx hy
     (normalSquareVerticalTranslatedEdge_eq_upEdge (by omega) (by omega)) cover
 
+/-- The coordinate inequalities needed to place the translated horizontal
+edge-blocking frame around a coordinate right edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def HasNormalSquareHorizontalEdgeMargins (width height x y : ℕ) : Prop :=
+  1 ≤ x ∧ x + 4 ≤ width ∧ 2 ≤ y ∧ y + 3 ≤ height
+
+/-- The coordinate inequalities needed to place the translated vertical
+edge-blocking frame around a coordinate upward edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def HasNormalSquareVerticalEdgeMargins (width height x y : ℕ) : Prop :=
+  2 ≤ x ∧ x + 3 ≤ width ∧ 1 ≤ y ∧ y + 4 ≤ height
+
 /-- A coordinate right edge admits the translated horizontal window when the
 edge has enough room to place the normalized \(5\times7\) blocking frame around
 it.
@@ -745,7 +759,8 @@ theorem normalSquareEdgeMarginCover_rightEdge_bounds
     {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
     (d : NormalSquareEdgeMarginCover
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
-    1 ≤ x ∧ x + 4 ≤ width ∧ 2 ≤ y ∧ y + 3 ≤ height := by
+    HasNormalSquareHorizontalEdgeMargins width height x y := by
+  unfold HasNormalSquareHorizontalEdgeMargins
   cases d with
   | horizontal _hEdge hxLeft hxRight hyBottom hyTop _cover =>
       constructor
@@ -775,7 +790,8 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
     {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
     (d : NormalSquareEdgeMarginCover
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
-    2 ≤ x ∧ x + 3 ≤ width ∧ 1 ≤ y ∧ y + 4 ≤ height := by
+    HasNormalSquareVerticalEdgeMargins width height x y := by
+  unfold HasNormalSquareVerticalEdgeMargins
   cases d with
   | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
       have hVertical :
