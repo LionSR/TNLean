@@ -2092,6 +2092,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.injective_chain}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeWindow}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeWindow}
+    \lean{TNLean.PEPS.squareLatticeRightEdgeWindow}
+    \lean{TNLean.PEPS.squareLatticeUpEdgeWindow}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2101,6 +2103,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     one-edge blocking datum for that edge, hence the three injective regions
     used in the edge-blocked chain.  The coordinate right and upward edges
     obtain such windows directly from the corresponding translated picture.
+    Equivalently, an actual coordinate right or upward edge obtains such a
+    window when it has the necessary room around it for the translated
+    \(5\times7\) or \(7\times5\) frame and the complementary cover is supplied.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%

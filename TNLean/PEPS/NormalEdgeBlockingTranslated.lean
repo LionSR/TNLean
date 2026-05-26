@@ -520,6 +520,45 @@ def normalSquareVerticalTranslatedEdgeWindow
   NormalSquareTranslatedEdgeWindow.vertical xStart yStart hx hy
     (normalSquareVerticalTranslatedEdge_eq_upEdge (by omega) (by omega)) cover
 
+/-- A coordinate right edge admits the translated horizontal window when the
+edge has enough room to place the normalized \(5\times7\) blocking frame around
+it.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def squareLatticeRightEdgeWindow
+    {width height : ℕ} (x y : ℕ)
+    (hxLeft : 1 ≤ x) (hxRight : x + 4 ≤ width)
+    (hyBottom : 2 ≤ y) (hyTop : y + 3 ≤ height)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) (x - 1) (y - 2)) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height)
+        x y (by omega) (by omega)) := by
+  convert normalSquareHorizontalTranslatedEdgeWindow (x - 1) (y - 2)
+    (by omega) (by omega) cover using 1
+  ext <;> simp [squareLatticeRightEdge]
+  all_goals omega
+
+/-- A coordinate upward edge admits the translated vertical window when the
+edge has enough room to place the normalized \(7\times5\) blocking frame around
+it.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def squareLatticeUpEdgeWindow
+    {width height : ℕ} (x y : ℕ)
+    (hxLeft : 2 ≤ x) (hxRight : x + 3 ≤ width)
+    (hyBottom : 1 ≤ y) (hyTop : y + 4 ≤ height)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) (x - 2) (y - 1))) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height)
+        x y (by omega) (by omega)) := by
+  convert normalSquareVerticalTranslatedEdgeWindow (x - 2) (y - 1)
+    (by omega) (by omega) cover using 1
+  ext <;> simp [squareLatticeUpEdge]
+  all_goals omega
+
 /-- A choice of translated edge window for every edge assembles into the normal
 edge-blocking hypotheses.
 
