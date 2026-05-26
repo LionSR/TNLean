@@ -29,17 +29,10 @@ theorem normalSquareEdgeMarginCover_rightEdge_bounds
     (d : NormalSquareEdgeMarginCover
       (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
     HasNormalSquareHorizontalEdgeMargins width height x y := by
-  unfold HasNormalSquareHorizontalEdgeMargins
   cases d with
-  | horizontal _hEdge hxLeft hxRight hyBottom hyTop _cover =>
-      constructor
-      · simpa [squareLatticeRightEdge] using hxLeft
-      constructor
-      · simpa [squareLatticeRightEdge] using hxRight
-      constructor
-      · simpa [squareLatticeRightEdge] using hyBottom
-      · simpa [squareLatticeRightEdge] using hyTop
-  | vertical hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+  | horizontal _hEdge hMargins _cover =>
+      simpa [HasNormalSquareHorizontalEdgeMargins, squareLatticeRightEdge] using hMargins
+  | vertical hEdge _hMargins _cover =>
       have hHorizontal :
           IsHorizontalSquareLatticeEdge
             (squareLatticeRightEdge (width := width) (height := height) x y hx hy) :=
@@ -60,9 +53,8 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
     (d : NormalSquareEdgeMarginCover
       (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
     HasNormalSquareVerticalEdgeMargins width height x y := by
-  unfold HasNormalSquareVerticalEdgeMargins
   cases d with
-  | horizontal hEdge _hxLeft _hxRight _hyBottom _hyTop _cover =>
+  | horizontal hEdge _hMargins _cover =>
       have hVertical :
           IsVerticalSquareLatticeEdge
             (squareLatticeUpEdge (width := width) (height := height) x y hx hy) :=
@@ -72,14 +64,8 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
           ((squareLatticeEdge_not_horizontal_and_vertical
             (squareLatticeUpEdge (width := width) (height := height) x y hx hy)
             ⟨hEdge, hVertical⟩))
-  | vertical _hEdge hxLeft hxRight hyBottom hyTop _cover =>
-      constructor
-      · simpa [squareLatticeUpEdge] using hxLeft
-      constructor
-      · simpa [squareLatticeUpEdge] using hxRight
-      constructor
-      · simpa [squareLatticeUpEdge] using hyBottom
-      · simpa [squareLatticeUpEdge] using hyTop
+  | vertical _hEdge hMargins _cover =>
+      simpa [HasNormalSquareVerticalEdgeMargins, squareLatticeUpEdge] using hMargins
 
 /-- In the current open rectangular coordinate graph, a left-boundary right
 edge does not satisfy the translated horizontal margin package.

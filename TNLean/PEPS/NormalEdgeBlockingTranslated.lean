@@ -654,7 +654,7 @@ normal edge-blocking window.
 
 This packages the remaining finite-geometry input in the current open
 rectangular coordinate model: an edge must be horizontal or vertical, have the
-corresponding margins, and have a rectangular cover for its complementary
+corresponding named margins, and have a rectangular cover for its complementary
 block.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
@@ -662,14 +662,14 @@ inductive NormalSquareEdgeMarginCover {width height : ℕ}
     (e : Edge (squareLatticeGraph width height)) : Type (edgeCoverUniverse + 1)
   | horizontal
       (hEdge : IsHorizontalSquareLatticeEdge e)
-      (hxLeft : 1 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 4 ≤ width)
-      (hyBottom : 2 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 3 ≤ height)
+      (hMargins :
+        HasNormalSquareHorizontalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
       (cover : NormalSquareEdgeComplementRectangleCover.{edgeCoverUniverse}
         (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2))
   | vertical
       (hEdge : IsVerticalSquareLatticeEdge e)
-      (hxLeft : 2 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 3 ≤ width)
-      (hyBottom : 1 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 4 ≤ height)
+      (hMargins :
+        HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
       (cover : SquareLatticeRectangleCover.{edgeCoverUniverse}
         (normalSquareVerticalTranslatedEdgeComplement
           (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)))
@@ -683,10 +683,12 @@ def window {width height : ℕ} {e : Edge (squareLatticeGraph width height)}
     (d : NormalSquareEdgeMarginCover e) :
     NormalSquareTranslatedEdgeWindow e :=
   match d with
-  | horizontal hEdge hxLeft hxRight hyBottom hyTop cover =>
-      horizontalSquareLatticeEdgeWindow e hEdge hxLeft hxRight hyBottom hyTop cover
-  | vertical hEdge hxLeft hxRight hyBottom hyTop cover =>
-      verticalSquareLatticeEdgeWindow e hEdge hxLeft hxRight hyBottom hyTop cover
+  | horizontal hEdge hMargins cover =>
+      horizontalSquareLatticeEdgeWindow e hEdge
+        hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
+  | vertical hEdge hMargins cover =>
+      verticalSquareLatticeEdgeWindow e hEdge
+        hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
 
 /-- The one-edge blocking datum obtained from oriented margin-and-cover data.
 
