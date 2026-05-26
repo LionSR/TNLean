@@ -7,6 +7,7 @@
 
 \input{command}
 \providecommand{\ghissue}[1]{GitHub issue~\##1}
+\providecommand{\leanid}[1]{\path{#1}}
 
 \title{Normal PEPS Fundamental Theorem: Section 3 Route}
 \author{}
@@ -84,7 +85,7 @@ The present blueprint nodes are the following.
           regions $R$, $S$, and $T$. It is part of \ghissue{1375}. The
           coordinate rectangular hypotheses, union closure, and a supplied
           rectangular cover of the displayed $T$-region imply this
-          abstract package.
+          abstract structure.
     \item \path{thm:peps_normalEdgeBlockingToInjectiveChain} states that the
           normal square-lattice hypotheses allow a blocking around every edge into
           three injective regions. It is part of \ghissue{1375}.
@@ -148,14 +149,42 @@ argument itself.
 
 The origin-based local-window model for $T$ has no such rectangular cover
 whenever the ambient lattice contains the corresponding $5\times6$ window.
-The rotated local-window model for vertical edges has the analogous
-obstruction in a $6\times5$ window. The origin-based horizontal
-edge-complement model has the same obstruction in the $5\times7$ frame, and
-the origin-based vertical edge-complement model has the corresponding
-obstruction in the $7\times5$ frame. These no-cover results do not contradict
-the paper. They show that the source's injectivity argument for $T$ and $A_3$
-must be aligned with the finite PEPS geometry, rather than read directly from
-the present exact-cover criterion.
+The obstruction is a point-forcing argument. For the local-window target
+$T_{\mathrm{loc}}$ at the origin, let $R^{a\times b}_{x,y}$ denote the
+contiguous $a\times b$ rectangle with lower-left corner $(x,y)$. Then
+\begin{align}
+    p &:= (0,0) \in T_{\mathrm{loc}},                                    \\
+    p \in R^{2\times3}_{x,y}
+        &\Longrightarrow q_{23}:=(0,2)\in R^{2\times3}_{x,y},
+        \qquad q_{23}\notin T_{\mathrm{loc}},                             \\
+    p \in R^{3\times2}_{x,y}
+        &\Longrightarrow q_{32}:=(2,1)\in R^{3\times2}_{x,y},
+        \qquad q_{32}\notin T_{\mathrm{loc}}.
+\end{align}
+Thus any exact cover of $T_{\mathrm{loc}}$ by $2\times3$ and $3\times2$
+rectangles would cover $p$ by one of its pieces and would therefore also cover
+a point outside $T_{\mathrm{loc}}$. The same calculation applies to the
+rotated local-window model for vertical edges in a $6\times5$ window, to the
+origin-based horizontal edge-complement model in the $5\times7$ frame, and to
+the origin-based vertical edge-complement model in the $7\times5$ frame. The
+forced points are
+\[
+\begin{array}{c|c|c|c}
+    \text{target} & p & q_{23} & q_{32} \\
+    \hline
+    T_{\mathrm{loc}} & (0,0) & (0,2) & (2,1) \\
+    T_{\mathrm{loc}}^{\mathrm{rot}} & (0,0) & (1,2) & (2,1) \\
+    A_{3,\mathrm{hor}} & (0,0) & (0,2) & (2,1) \\
+    A_{3,\mathrm{ver}} & (0,0) & (1,2) & (2,1)
+\end{array}
+\]
+The formal point-forcing lemma is
+\leanid{TNLean.PEPS.not_squareLatticeRectangleCover_of_forced_points}. Its
+four present applications are the corresponding no-cover theorems for the
+local $T$ models and the edge-complement models. These no-cover results do not
+contradict the paper. They show that the source's injectivity argument for $T$
+and $A_3$ must be aligned with the finite PEPS geometry, rather than read
+directly from the present exact-cover criterion.
 
 The normalized horizontal edge frame has a collar identity: in the
 $5\times7$ frame, $A_3$ is the local-window $T$ region together with two
@@ -171,7 +200,7 @@ red, blue, and complementary regions. The distinguished edges have the
 expected orientations; their endpoints lie in the red and blue regions; the
 three regions are pairwise disjoint and cover the finite lattice. This one-edge
 datum is the local form of the later every-edge blocking hypotheses. A family
-of such one-edge data assembles into those hypotheses, and each datum supplies
+of such one-edge data determines those hypotheses, and each datum supplies
 the three injective regions used in the associated edge-blocked chain.
 
 The translated horizontal and vertical pictures carry the same data at an
@@ -189,8 +218,8 @@ and a rectangular cover of its complement. Such an assignment implies the
 normal edge-blocking hypotheses. An oriented margin-and-cover datum records the
 same input directly on each square-lattice edge: the edge orientation, the
 coordinate inequalities placing the translated frame, and the complementary
-cover. A family of these data also assembles into the normal edge-blocking
-hypotheses, and the assembled hypotheses recover the supplied one-edge datum
+cover. A family of these data also determines the normal edge-blocking
+hypotheses, and the resulting hypotheses recover the supplied one-edge datum
 at each edge.
 
 For the present open rectangular coordinate graph, the margin predicates
@@ -202,18 +231,22 @@ $7\times7$ graph. Explicit boundary obstructions are recorded on all four
 sides. The remaining every-edge construction must therefore include the
 boundary geometry and the source-faithful local and rotated $T$ covers.
 
-Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
-The earlier packaging gap for coordinate rectangular injectivity is also
-closed, and the rectangular decompositions of $R$ and $S$ are formalized. The
-conditional derivations of injectivity for $R$ and $S$ from union closure are
-also formalized, and the two edge blocks removed from the displayed $T$-window
-are injective under the coordinate rectangular hypotheses. The finite-lattice
+Verdict: this note records an open gap with a scope restriction. The earlier
+vocabulary gap for contiguous rectangular blocks is closed. The earlier
+coordinate rectangular-injectivity structure is also present, and the
+rectangular decompositions of $R$ and $S$ are formalized. The conditional
+derivations of injectivity for $R$ and $S$ from union closure are also
+formalized, and the two edge blocks removed from the displayed $T$-window are
+injective under the coordinate rectangular hypotheses. The finite-lattice
 complementary block around the chosen edge has a set-theoretic definition.
-The remaining open gap is the source-paper injectivity argument: prove the
-tensor-level union theorem, realign the local $T$-injectivity argument with the
-source finite PEPS geometry, translate the $5\times7$ collar decomposition
-around each edge, and then prove the unconditional injectivity of $R$, $S$, and
-the edge-complementary block.
+The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
+restricted sufficient condition, and the origin-based instances above show
+that it is not the source's injectivity argument. The source-faithful covers
+and the every-edge blocking construction are not yet derived. The remaining
+open gap is to prove the tensor-level union theorem, realign the local
+$T$-injectivity argument with the finite PEPS geometry of the source, translate
+the collar decomposition around each edge, and then prove the unconditional
+injectivity of $R$, $S$, and the edge-complementary block.
 
 The normal route itself is tracked by \ghissue{1373}. The normal-section
 diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
@@ -231,7 +264,7 @@ alone. The following additional obligations remain.
           complements of such regions.
     \item Prove the union-of-injective-regions lemma. The proof must follow the
           source proof by applying the left inverses for $A$ and $B$ in sequence.
-    \item Package the square-lattice normal hypotheses. The rectangular
+    \item Record the square-lattice normal hypotheses. The rectangular
           injectivity part is expressed for contiguous coordinate
           $2\times 3$ and $3\times 2$ rectangles; the remaining size data must
           be tied to the displayed regions and their required complements.
@@ -258,7 +291,7 @@ alone. The following additional obligations remain.
     \item Prove that the edge-centered red, blue, and complementary regions form a
           three-site injective chain around every edge. The normalized and
           translated one-edge data supply these chain hypotheses locally,
-          and translated edge windows assemble into the uniform hypotheses
+          and translated edge windows determine the uniform hypotheses
           once such a window is available for every edge. The remaining work is
           the finite-geometry construction of those windows. This is the normal
           analog of the injective edge-blocking bridge tracked by
@@ -286,7 +319,8 @@ alone. The following additional obligations remain.
           node also records the conditional implication from coordinate
           rectangular injectivity, union closure, and a rectangular cover of
           the displayed $T$-region to the abstract $R,S,T$ blocking-region
-          package.
+          structure.\footnote{The formal declaration is
+          \leanid{TNLean.PEPS.normalSquareBlockingRegions_of_TCover}.}
     \item Injectivity of the two edge blocks removed from the displayed
           $T$-window, and of their union under union closure: blueprint
           \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue
@@ -336,7 +370,7 @@ alone. The following additional obligations remain.
           issue \#2004. This is the coordinate-origin-parametric vertical
           step toward the every-edge construction. Its coordinate origin
           specializes to the normalized vertical picture.
-    \item Conditional assembly from translated edge windows:
+    \item Conditional construction from translated edge windows:
           blueprint
           \path{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows},
           issue \#2004. This records the formal boundary before proving that
@@ -345,29 +379,29 @@ alone. The following additional obligations remain.
           corresponding translated windows, and the margin hypotheses for
           actual coordinate right/up edges are explicit. Arbitrary horizontal
           and vertical edges inherit these criteria from their coordinate
-          representatives. The oriented margin-and-cover data package records
+          representatives. The oriented margin-and-cover data structure records
           the remaining per-edge input in the open rectangular coordinate
           model. One such datum directly supplies one-edge blocking data and
           the corresponding injective-chain conclusion, and a family of such
-          data assembles into the normal edge-blocking hypotheses. The
-          assembled hypotheses recover the supplied datum and its three
+          data determines the normal edge-blocking hypotheses. The
+          resulting hypotheses recover the supplied datum and its three
           injective regions at each edge. The horizontal and vertical margin
           predicates are named, the coordinate right/up and oriented-edge
           window constructors accept those predicates directly, translated
           windows on coordinate right/up edges force those predicates, and the
           open $7\times7$ graph does not admit a family of these
           translated windows over all edges; four explicit boundary examples
-          are recorded as a single conjunction. The per-edge margin-cover package
+          are recorded as a single conjunction. The per-edge margin-cover structure
           stores the same predicates, and the resulting open-boundary obstruction for
           horizontal edges without enough left or right margin and vertical
           edges without enough bottom or top margin is also formalized,
           including explicit $7\times7$ examples and their four-sided
-          conjunction. Thus the present margin package is a sufficient interior
+          conjunction. Thus the present margin criterion is a sufficient interior
           criterion rather than the final every-edge construction.
           Consequently, the nonexistence of a family of this margin-cover data
           over all edges of the current open $7\times7$ graph is also
           formalized.
-    \item Assembly of a family of one-edge blocking data into the uniform
+    \item A family of one-edge blocking data determining the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue
           \#2004.
