@@ -220,7 +220,7 @@ abbrev normalSquareVerticalEdgeBlue : Finset (SquareLatticeVertex 7 5) :=
 
 /-- The complementary block around the normalized vertical edge. -/
 abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
-  regionComplement (normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue)
+  normalSquareVerticalEdgeComplementRegion (width := 7) (height := 5)
 
 /-- The normalized vertical edge has the red/blue/complement blocking datum
 used in the proof of the normal square-lattice theorem.
@@ -255,16 +255,19 @@ def normalSquareVerticalEdge_blockingDatum
   red_disjoint_complement := by
     rw [Finset.disjoint_left]
     intro v hvRed hvComplement
-    rw [mem_regionComplement] at hvComplement
+    rw [normalSquareVerticalEdgeComplement,
+      normalSquareVerticalEdgeComplementRegion, mem_regionComplement] at hvComplement
     exact hvComplement (Finset.mem_union.mpr (Or.inl hvRed))
   blue_disjoint_complement := by
     rw [Finset.disjoint_left]
     intro v hvBlue hvComplement
-    rw [mem_regionComplement] at hvComplement
+    rw [normalSquareVerticalEdgeComplement,
+      normalSquareVerticalEdgeComplementRegion, mem_regionComplement] at hvComplement
     exact hvComplement (Finset.mem_union.mpr (Or.inr hvBlue))
   cover_univ := by
     ext v
-    simp [normalSquareVerticalEdgeComplement, regionComplement]
+    simp [normalSquareVerticalEdgeComplement, normalSquareVerticalEdgeComplementRegion,
+      normalSquareVerticalEdgeRed, normalSquareVerticalEdgeBlue, regionComplement]
 
 /-- The normalized vertical edge has the red/blue/complement blocking geometry
 used in the proof of the normal square-lattice theorem.
