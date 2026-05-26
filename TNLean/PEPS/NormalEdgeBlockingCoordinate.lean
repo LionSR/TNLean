@@ -124,6 +124,20 @@ theorem normalSquareHorizontalEdge_blockingData
     d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
     d.blue_disjoint_complement, d.cover_univ⟩
 
+/-- The normalized horizontal edge supplies the three injective regions used in
+the edge-blocked three-site chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalEdge_injective_chain
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hT : κ.IsInjective (normalSquareRegionT (width := 5) (height := 7) 0 0)) :
+    κ.IsInjective normalSquareHorizontalEdgeRed ∧
+      κ.IsInjective normalSquareHorizontalEdgeBlue ∧
+      κ.IsInjective normalSquareHorizontalEdgeComplement :=
+  (normalSquareHorizontalEdge_blockingDatum h hUnion hT).injective_chain
+
 /-- The distinguished vertical edge in the normalized \(7\times5\) frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
@@ -227,6 +241,23 @@ theorem normalSquareVerticalEdge_blockingData
   exact ⟨d.left_mem_red, d.right_mem_blue, d.red_injective, d.blue_injective,
     d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
     d.blue_disjoint_complement, d.cover_univ⟩
+
+/-- The normalized vertical edge supplies the three injective regions used in
+the edge-blocked three-site chain.
+
+The complementary-block injectivity remains an explicit input here; discharging
+that input from the rectangular hypotheses is the remaining source-geometry
+step.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalEdge_injective_chain
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hComplement : κ.IsInjective normalSquareVerticalEdgeComplement) :
+    κ.IsInjective normalSquareVerticalEdgeRed ∧
+      κ.IsInjective normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeComplement :=
+  (normalSquareVerticalEdge_blockingDatum h hComplement).injective_chain
 
 end PEPS
 end TNLean

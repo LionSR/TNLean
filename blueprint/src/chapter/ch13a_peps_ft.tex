@@ -1926,12 +1926,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareVerticalEdge}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareVerticalEdge_blockingData}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_injective_chain}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion,
@@ -1947,7 +1949,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     closure give injectivity of all three blocks.  The normalized \(7\times5\)
     vertical-edge frame has the analogous red and blue rectangular blocks and
     the same set-theoretic blocking data; at this stage its complementary-block
-    injectivity is kept as an explicit hypothesis.
+    injectivity is kept as an explicit hypothesis.  In both cases the named
+    blocking datum supplies the corresponding three injective regions for the
+    edge-blocked chain.
 \end{lemma}
 % Maintainer note: the vertical-edge complement injectivity is still
 % conditional.  The translated every-edge construction remains a separate step.
