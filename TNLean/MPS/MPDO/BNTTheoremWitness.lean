@@ -678,6 +678,36 @@ theorem blocked_coeff_eq
         (W.targetLabel n hn k) :=
   W.toTheoremData.blocked_coeff_eq n hn i j k
 
+/-- The blocked-basis comparison carried by an existential witness may be
+written using the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def blockedComparison_ofChi :
+    BNTBlockedBasisCoefficientComparison data
+      (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi) :=
+  W.toTheoremData.blockedComparison_ofChi
+
+/-- The blocked-basis coefficient comparison carried by an existential
+witness, written with the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_ofChi
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff n
+        (W.sourceLabel n hn i)
+        (W.sourceLabel n hn j)
+        (W.targetLabel n hn k) :=
+  W.toTheoremData.blocked_coeff_eq_ofChi n hn i j k
+
 /-- The BNT product expansion carried by an existential witness, with
 coefficients written as traces of the length-independent chi matrices.
 

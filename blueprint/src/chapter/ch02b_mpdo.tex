@@ -1743,12 +1743,16 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem data give the blocked coefficient comparison]%
     \label{thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
     \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremData.blockedComparison_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremData.blocked_coeff_eq_ofChi}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_bnt_blocked_basis_coefficient_eq}
     BNT-label theorem data give the comparison between the blocked-basis
     coefficients and the BNT-label coefficients through the source and target
-    label maps.
+    label maps.  Since the positive-length coefficients agree with the
+    canonical coefficient family determined by the same \(\chi\)-matrices, the
+    comparison can also be written with those canonical coefficients.
 \end{theorem}
 \begin{proof}\leanok
     This is the blocked-basis coefficient comparison carried by the theorem
@@ -2056,14 +2060,20 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem witnesses give the blocked coefficient comparison]%
     \label{thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq}
     \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blockedComparison_ofChi}
+    \lean{MPOTensor.BNTLabelTheoremWitness.blocked_coeff_eq_ofChi}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_blocked_coefficient_comparison}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.%
+        exists_blocked_coefficient_comparison_ofChi}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq}
     An existential BNT-label theorem witness gives the comparison between the
     blocked-basis coefficients and the BNT-label coefficients through the
-    source and target label maps.  The proposition-level nonempty form of the
-    witness gives the same comparison after choosing a witness.
+    source and target label maps.  The same comparison is also available with
+    the canonical coefficient family determined by the witness's
+    \(\chi\)-matrices.  The proposition-level nonempty form of the witness
+    gives the same comparisons after choosing a witness.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data comparison carried by the witness.

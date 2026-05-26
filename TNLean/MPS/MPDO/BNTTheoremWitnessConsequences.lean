@@ -169,6 +169,32 @@ theorem exists_blocked_coefficient_comparison {data : AlgebraStructureData d D}
   intro n hn i j k
   exact W.blocked_coeff_eq n hn i j k
 
+/-- Existence of the source BNT-label witness gives the blocked-basis
+comparison equation with the canonical coefficient family determined by the
+same \(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+This only rephrases the positive-length coefficient identity carried by the
+witness; constructing such a witness from an MPDO tensor remains the Appendix
+C.3--C.4 obligation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_blocked_coefficient_comparison_ofChi {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      ∀ (n : ℕ) (hn : 0 < n)
+        (i j : AlgebraStructureData.BlockedIndex data n)
+        (k : AlgebraStructureData.BlockedIndex data (2 * n)),
+        data.blockedStructureCoefficients n i j k =
+          (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff n
+            (W.sourceLabel n hn i)
+            (W.sourceLabel n hn j)
+            (W.targetLabel n hn k) := by
+  rcases h with ⟨W⟩
+  refine ⟨W, ?_⟩
+  intro n hn i j k
+  exact W.blocked_coeff_eq_ofChi n hn i j k
+
 /-- Existence of the source BNT-label witness gives the two source equations
 written with the BNT-label coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\).
 

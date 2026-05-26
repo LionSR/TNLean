@@ -493,6 +493,42 @@ theorem blocked_coeff_eq
         (H.targetLabel n hn k) :=
   H.blockedComparison.blocked_coeff_eq n hn i j k
 
+/-- The blocked-basis comparison carried by theorem data may be written using
+the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def blockedComparison_ofChi :
+    BNTBlockedBasisCoefficientComparison data
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) where
+  sourceLabel := H.sourceLabel
+  targetLabel := H.targetLabel
+  coeff_eq := by
+    intro n hn i j k
+    rw [H.blocked_coeff_eq n hn i j k]
+    exact H.coeff_eq_ofChi_coeff n hn
+      (H.sourceLabel n hn i) (H.sourceLabel n hn j) (H.targetLabel n hn k)
+
+/-- The blocked-basis coefficient comparison carried by theorem data, written
+with the canonical coefficient family determined by the same
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_ofChi
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi).coeff n
+        (H.sourceLabel n hn i)
+        (H.sourceLabel n hn j)
+        (H.targetLabel n hn k) :=
+  H.blockedComparison_ofChi.blocked_coeff_eq n hn i j k
+
 /-- The BNT product expansion with the coefficients written as traces of the
 length-independent chi matrices.
 
@@ -532,7 +568,7 @@ theorem blocked_coeff_eq_trace_pow
         (H.sourceLabel n hn i)
         (H.sourceLabel n hn j)
         (H.targetLabel n hn k) ^ n).trace :=
-  H.blockedComparison.blocked_coeff_eq_trace_pow H.positiveChi n hn i j k
+  H.blockedComparison_ofChi.blocked_coeff_eq_ofChi_trace_pow n hn i j k
 
 /-- The positive blocked chi witness obtained from the BNT-label theorem data
 and the blocked-basis comparison.
