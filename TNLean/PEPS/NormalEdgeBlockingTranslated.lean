@@ -631,6 +631,33 @@ def window {width height : ℕ} {e : Edge (squareLatticeGraph width height)}
   | vertical hEdge hxLeft hxRight hyBottom hyTop cover =>
       verticalSquareLatticeEdgeWindow e hEdge hxLeft hxRight hyBottom hyTop cover
 
+/-- The one-edge blocking datum obtained from oriented margin-and-cover data.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def blockingDatum
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (d : NormalSquareEdgeMarginCover e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    NormalEdgeBlockingData κ (squareLatticeGraph width height) e :=
+  d.window.blockingDatum h hUnion
+
+/-- Oriented margin-and-cover data supply the three injective regions for the
+edge-blocked chain.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem injective_chain
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (d : NormalSquareEdgeMarginCover e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    κ.IsInjective ((d.blockingDatum h hUnion).red) ∧
+      κ.IsInjective ((d.blockingDatum h hUnion).blue) ∧
+      κ.IsInjective ((d.blockingDatum h hUnion).complement) :=
+  (d.blockingDatum h hUnion).injective_chain
+
 end NormalSquareEdgeMarginCover
 
 /-- A choice of translated edge window for every edge assembles into the normal

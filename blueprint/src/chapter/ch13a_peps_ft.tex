@@ -2102,6 +2102,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.verticalSquareLatticeEdgeWindow}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover}
     \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.window}
+    \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.blockingDatum}
+    \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.injective_chain}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2117,7 +2119,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     The same criterion applies to an arbitrary horizontal or vertical
     square-lattice edge after identifying it with its coordinate right or
     upward representative.  The oriented margin-and-cover data package is the
-    corresponding per-edge form of this remaining finite-geometry input.
+    corresponding per-edge form of this remaining finite-geometry input; it
+    directly supplies the one-edge blocking datum and its three injective
+    regions.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%
