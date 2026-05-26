@@ -19,6 +19,165 @@ namespace PEPS
 
 /-! ### Boundary obstructions for the present open-rectangle model -/
 
+/-- A translated window on a coordinate right edge forces exactly the
+horizontal margin inequalities used by the current interior window package.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem normalSquareTranslatedEdgeWindow_rightEdge_margins
+    {width height x y : ℕ} {hx : x + 1 < width} {hy : y < height}
+    (w : NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) :
+    HasNormalSquareHorizontalEdgeMargins width height x y := by
+  cases w with
+  | horizontal xStart yStart hxw hyw edge_eq _cover =>
+      have hxcoord : xStart + 1 = x := by
+        have h :=
+          congrArg
+            (fun e : Edge (squareLatticeGraph width height) => e.1.1.1.1)
+            edge_eq
+        simpa [normalSquareHorizontalTranslatedEdge, squareLatticeRightEdge] using h
+      have hycoord : yStart + 2 = y := by
+        have h :=
+          congrArg
+            (fun e : Edge (squareLatticeGraph width height) => e.1.1.2.1)
+            edge_eq
+        simpa [normalSquareHorizontalTranslatedEdge, squareLatticeRightEdge] using h
+      unfold HasNormalSquareHorizontalEdgeMargins
+      omega
+  | vertical xStart yStart _hxw _hyw edge_eq _cover =>
+      have hVertical :
+          IsVerticalSquareLatticeEdge
+            (squareLatticeRightEdge (width := width) (height := height) x y hx hy) := by
+        rw [← edge_eq]
+        exact normalSquareVerticalTranslatedEdge_isVertical (by omega) (by omega)
+      have hHorizontal :
+          IsHorizontalSquareLatticeEdge
+            (squareLatticeRightEdge (width := width) (height := height) x y hx hy) :=
+        squareLatticeRightEdge_isHorizontal hx hy
+      exact
+        False.elim
+          ((squareLatticeEdge_not_horizontal_and_vertical _
+            ⟨hHorizontal, hVertical⟩))
+
+/-- A translated window on a coordinate upward edge forces exactly the vertical
+margin inequalities used by the current interior window package.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem normalSquareTranslatedEdgeWindow_upEdge_margins
+    {width height x y : ℕ} {hx : x < width} {hy : y + 1 < height}
+    (w : NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) :
+    HasNormalSquareVerticalEdgeMargins width height x y := by
+  cases w with
+  | horizontal xStart yStart _hxw _hyw edge_eq _cover =>
+      have hHorizontal :
+          IsHorizontalSquareLatticeEdge
+            (squareLatticeUpEdge (width := width) (height := height) x y hx hy) := by
+        rw [← edge_eq]
+        exact normalSquareHorizontalTranslatedEdge_isHorizontal (by omega) (by omega)
+      have hVertical :
+          IsVerticalSquareLatticeEdge
+            (squareLatticeUpEdge (width := width) (height := height) x y hx hy) :=
+        squareLatticeUpEdge_isVertical hx hy
+      exact
+        False.elim
+          ((squareLatticeEdge_not_horizontal_and_vertical _
+            ⟨hHorizontal, hVertical⟩))
+  | vertical xStart yStart hxw hyw edge_eq _cover =>
+      have hxcoord : xStart + 2 = x := by
+        have h :=
+          congrArg
+            (fun e : Edge (squareLatticeGraph width height) => e.1.1.1.1)
+            edge_eq
+        simpa [normalSquareVerticalTranslatedEdge, squareLatticeUpEdge] using h
+      have hycoord : yStart + 1 = y := by
+        have h :=
+          congrArg
+            (fun e : Edge (squareLatticeGraph width height) => e.1.1.2.1)
+            edge_eq
+        simpa [normalSquareVerticalTranslatedEdge, squareLatticeUpEdge] using h
+      unfold HasNormalSquareVerticalEdgeMargins
+      omega
+
+/-- In the current open rectangular coordinate graph, a left-boundary right
+edge does not admit a translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_leftBoundaryRightEdge_window {width height y : ℕ}
+    (hx : 0 + 1 < width) (hy : y < height) :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height) 0 y hx hy)) := by
+  rintro ⟨w⟩
+  exact Nat.not_succ_le_zero 0 (normalSquareTranslatedEdgeWindow_rightEdge_margins w).1
+
+/-- In the current open rectangular coordinate graph, a right edge too close
+to the right side does not admit a translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_rightMarginRightEdge_window {width height x y : ℕ}
+    (hx : x + 1 < width) (hy : y < height) (hRight : ¬ x + 4 ≤ width) :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height) x y hx hy)) := by
+  rintro ⟨w⟩
+  exact hRight (normalSquareTranslatedEdgeWindow_rightEdge_margins w).2.1
+
+/-- In the current open rectangular coordinate graph, a bottom-boundary upward
+edge does not admit a translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_bottomBoundaryUpEdge_window {width height x : ℕ}
+    (hx : x < width) (hy : 0 + 1 < height) :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height) x 0 hx hy)) := by
+  rintro ⟨w⟩
+  exact Nat.not_succ_le_zero 0 (normalSquareTranslatedEdgeWindow_upEdge_margins w).2.2.1
+
+/-- In the current open rectangular coordinate graph, an upward edge too close
+to the top side does not admit a translated edge window.
+
+This is a statement about the present open-rectangle model, not a contradiction
+of the source theorem's every-edge blocking sentence.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_topMarginUpEdge_window {width height x y : ℕ}
+    (hx : x < width) (hy : y + 1 < height) (hTop : ¬ y + 4 ≤ height) :
+    ¬ Nonempty (NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height) x y hx hy)) := by
+  rintro ⟨w⟩
+  exact hTop (normalSquareTranslatedEdgeWindow_upEdge_margins w).2.2.2
+
+/-- The current open \(7\times7\) rectangular coordinate graph does not admit
+a family of translated edge windows over all edges.
+
+This records that the present translated-window package is only an interior
+sufficient criterion for the source proof's edge-blocking step; the boundary
+geometry still has to be supplied separately.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_forall_normalSquareTranslatedEdgeWindow_seven :
+    ¬ Nonempty (∀ e : Edge (squareLatticeGraph 7 7),
+      NormalSquareTranslatedEdgeWindow e) := by
+  rintro ⟨windows⟩
+  exact not_leftBoundaryRightEdge_window (by decide) (by decide)
+    ⟨windows (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+      (by decide) (by decide))⟩
+
 /-- A translated margin-cover datum on a coordinate right edge forces exactly
 the horizontal margin inequalities used by the current interior package.
 

@@ -2098,6 +2098,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow}
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.blockingDatum}
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.injective_chain}
+    \lean{TNLean.PEPS.normalSquareTranslatedEdgeWindow_rightEdge_margins}
+    \lean{TNLean.PEPS.normalSquareTranslatedEdgeWindow_upEdge_margins}
+    \lean{TNLean.PEPS.not_leftBoundaryRightEdge_window}
+    \lean{TNLean.PEPS.not_rightMarginRightEdge_window}
+    \lean{TNLean.PEPS.not_bottomBoundaryUpEdge_window}
+    \lean{TNLean.PEPS.not_topMarginUpEdge_window}
+    \lean{TNLean.PEPS.not_forall_normalSquareTranslatedEdgeWindow_seven}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeWindow}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeWindow}
     \lean{TNLean.PEPS.squareLatticeRightEdgeWindow}
@@ -2145,11 +2152,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     regions.  The horizontal and vertical margin predicates name the coordinate
     inequalities needed to place these two translated frames, and there are
     corresponding coordinate and oriented-edge window constructors that take
-    these predicates directly.  On coordinate right and upward edges, the
-    margin-cover package stores these
-    named predicates, so such data force the corresponding horizontal and
-    vertical margin inequalities.  In the present open rectangular coordinate
-    model, this margin package does not apply to
+    these predicates directly.  On coordinate right and upward edges,
+    translated windows force the corresponding margin predicates.  The current
+    open \(7\times7\) model therefore does not admit translated windows for
+    every edge.  The margin-cover package stores these named predicates, so
+    such data force the corresponding horizontal and vertical margin
+    inequalities.  In the present open rectangular coordinate model, this
+    margin package does not apply to
     horizontal edges without enough left or right margin, nor to vertical edges
     without enough bottom or top margin; the corresponding \(7\times7\)
     examples are recorded explicitly, including a single four-sided boundary
@@ -2171,7 +2180,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge window, then the corresponding one-edge blockings assemble into the
     normal edge-blocking hypotheses.  This is the conditional assembly step;
     constructing such windows for all edges of the \(7\times7\) lattice remains
-    separate.  Equivalently, it is enough to supply the oriented
+    separate; the current open rectangular translated-window package does not
+    by itself supply such a family.  Equivalently, it is enough to supply the oriented
     margin-and-cover data at every edge.  The one-edge datum recovered from the
     assembled hypotheses is the datum supplied by the corresponding
     margin-and-cover input, and the assembled hypotheses give the three
