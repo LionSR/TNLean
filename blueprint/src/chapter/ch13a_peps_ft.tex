@@ -2725,6 +2725,39 @@ injective and normal PEPS, following Theorems~2 and~3 of
     endpoint scalars is $1$ at every vertex.
 \end{definition}
 
+\begin{theorem}[Multiplication of oriented edge scalars]%
+    \label{thm:edgeScalarAt_mul}
+    \lean{TNLean.PEPS.edgeScalarAt_mul}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars}
+    If two edge-scalar families are multiplied pointwise, then their endpoint
+    scalar on each oriented half-edge is the product of the two endpoint
+    scalars.
+    \begin{center}
+        \TNPEPSEdgeGaugeOrientation
+    \end{center}
+\end{theorem}
+
+\begin{proof}\leanok
+    At the lower endpoint this is ordinary multiplication of the edge scalars.
+    At the upper endpoint it is multiplication of their inverses, which agrees
+    because the scalars lie in a commutative field.
+\end{proof}
+
+\begin{theorem}[Product of balanced edge scalars]%
+    \label{thm:IsVertexBalanced_mul}
+    \lean{TNLean.PEPS.IsVertexBalanced.mul}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, thm:edgeScalarAt_mul}
+    The pointwise product of two vertex-balanced edge-scalar families is again
+    vertex-balanced.
+\end{theorem}
+
+\begin{proof}\leanok
+    At each vertex, multiply the two oriented endpoint products. Both products
+    are $1$, so the product family is also balanced.
+\end{proof}
+
 \begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
     \label{thm:GaugeEquivModEdgeScalars_refl}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.refl}
@@ -2744,6 +2777,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Use the constant edge-scalar family $c_e=1$. Both endpoint actions are
     unchanged, and the product of the incident endpoint scalars at every vertex
     is $1$.
+\end{proof}
+
+\begin{theorem}[Transitivity of balanced edge-scalar equivalence]%
+    \label{thm:GaugeEquivModEdgeScalars_trans}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
+    \leanok
+    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul}
+    If one gauge family differs from a second by balanced edge scalars, and the
+    second differs from a third by balanced edge scalars, then the first differs
+    from the third by the pointwise product of the two scalar families.
+    \begin{center}
+        \TNPEPSEdgeGaugeOrientation
+    \end{center}
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose the two endpoint rescalings. The endpoint scalar is the product of
+    the two endpoint scalars, and the product family is balanced by
+    Theorem~\ref{thm:IsVertexBalanced_mul}.
 \end{proof}
 
 \begin{theorem}[Balanced edge scalars preserve the local gauge action]%
