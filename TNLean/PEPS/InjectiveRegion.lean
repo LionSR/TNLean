@@ -196,6 +196,34 @@ def regionUnionPart [Fintype V] (A B : Finset V) (i : Fin 4) : Finset V :=
   simp [regionUnionPart, show (3 : Fin 4) ≠ 0 by decide,
     show (3 : Fin 4) ≠ 1 by decide, show (3 : Fin 4) ≠ 2 by decide]
 
+/-- The first two indexed regions reconstruct `A`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the source proof identifies `A` with the union of
+`A \ B` and `A ∩ B` before applying injectivity of `A`. -/
+theorem regionUnionPart_zero_union_one [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 1 = A := by
+  simpa using regionOnlyLeft_union_overlap A B
+
+/-- The middle two indexed regions reconstruct `B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after reinserting the overlap tensor, the source proof identifies
+`B` with the union of `A ∩ B` and `B \ A`. -/
+theorem regionUnionPart_one_union_two [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 1 ∪ regionUnionPart A B 2 = B := by
+  simpa using regionOverlap_union_onlyRight A B
+
+/-- The first three indexed regions reconstruct `A ∪ B`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the region whose injectivity is being proved is the union of the
+three inside parts of the four-region decomposition. -/
+theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2 =
+      A ∪ B := by
+  simpa using regionThreePart_union A B
+
 /-- The indexed four regions cover the whole finite vertex set. -/
 theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
     Finset.univ.biUnion (regionUnionPart A B) = Finset.univ := by
