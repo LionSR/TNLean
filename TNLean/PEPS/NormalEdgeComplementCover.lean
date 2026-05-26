@@ -71,9 +71,8 @@ abbrev NormalSquareEdgeComplementRectangleCover {width height : ℕ} (xStart ySt
   SquareLatticeRectangleCover
     (normalSquareEdgeComplementRegion (width := width) (height := height) xStart yStart)
 
-/-- The current normalized \(5\times6\) local-window model for \(T\) has no
-rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
-rectangles.
+/-- The current origin-based local-window model for \(T\) has no rectangular
+cover by contained source-paper \(2\times3\) and \(3\times2\) rectangles.
 
 This is a diagnostic statement about the present coordinate model
 `normalSquareRegionT`, not a claim about the source theorem.  The source says
@@ -83,26 +82,32 @@ needed to prove that sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1430--1444 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem not_normalSquareRegionT_rectangleCover_five_by_six :
-    ¬ Nonempty (NormalSquareRegionTRectangleCover (width := 5) (height := 6) 0 0) := by
+theorem not_normalSquareRegionT_rectangleCover_at_origin {width height : ℕ}
+    (hx : 5 ≤ width) (hy : 6 ≤ height) :
+    ¬ Nonempty
+      (NormalSquareRegionTRectangleCover (width := width) (height := height)
+        0 0) := by
   rintro ⟨cover⟩
-  let p : SquareLatticeVertex 5 6 := (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpT : p ∈ normalSquareRegionT (width := 5) (height := 6) 0 0 := by
+  let p : SquareLatticeVertex width height :=
+    (⟨0, by omega⟩, ⟨0, by omega⟩)
+  have hpT : p ∈ normalSquareRegionT (width := width) (height := height)
+      0 0 := by
     simp [p]
   have hpUnion : p ∈ cover.regions.biUnion cover.region := by
     rw [cover.cover]
     exact hpT
   rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
   rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 5 6 := (⟨0, by omega⟩, ⟨2, by omega⟩)
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨0, by omega⟩, ⟨2, by omega⟩)
     have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
-          Finset (SquareLatticeVertex 5 6)) := by
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
       simpa [hRegion] using hpi
     have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
-          Finset (SquareLatticeVertex 5 6)) := by
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q] at hpRect ⊢
       omega
@@ -110,20 +115,22 @@ theorem not_normalSquareRegionT_rectangleCover_five_by_six :
       simpa [hRegion] using hqRect
     have hqUnion : q ∈ cover.regions.biUnion cover.region :=
       Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareRegionT (width := 5) (height := 6) 0 0 := by
+    have hqT : q ∈ normalSquareRegionT (width := width) (height := height) 0 0 := by
       rwa [cover.cover] at hqUnion
-    have hqNotT : q ∉ normalSquareRegionT (width := 5) (height := 6) 0 0 := by
+    have hqNotT :
+        q ∉ normalSquareRegionT (width := width) (height := height) 0 0 := by
       simp [q]
     exact hqNotT hqT
-  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 5 6 := (⟨2, by omega⟩, ⟨1, by omega⟩)
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨2, by omega⟩, ⟨1, by omega⟩)
     have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
-          Finset (SquareLatticeVertex 5 6)) := by
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
       simpa [hRegion] using hpi
     have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
-          Finset (SquareLatticeVertex 5 6)) := by
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q] at hpRect ⊢
       omega
@@ -131,11 +138,25 @@ theorem not_normalSquareRegionT_rectangleCover_five_by_six :
       simpa [hRegion] using hqRect
     have hqUnion : q ∈ cover.regions.biUnion cover.region :=
       Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareRegionT (width := 5) (height := 6) 0 0 := by
+    have hqT : q ∈ normalSquareRegionT (width := width) (height := height) 0 0 := by
       rwa [cover.cover] at hqUnion
-    have hqNotT : q ∉ normalSquareRegionT (width := 5) (height := 6) 0 0 := by
+    have hqNotT :
+        q ∉ normalSquareRegionT (width := width) (height := height) 0 0 := by
       simp [q]
     exact hqNotT hqT
+
+/-- The current normalized \(5\times6\) local-window model for \(T\) has no
+rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
+rectangles.
+
+This is the normalized form of
+`not_normalSquareRegionT_rectangleCover_at_origin`.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1430--1444 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareRegionT_rectangleCover_five_by_six :
+    ¬ Nonempty (NormalSquareRegionTRectangleCover (width := 5) (height := 6) 0 0) := by
+  exact not_normalSquareRegionT_rectangleCover_at_origin (by decide) (by decide)
 
 /-- In the normalized horizontal-edge \(5\times7\) frame, the finite-lattice
 edge-complementary block is the local \(T\)-region together with two top-collar
@@ -225,37 +246,43 @@ abbrev NormalSquareVerticalRegionTRectangleCover {width height : ℕ}
   SquareLatticeRectangleCover
     (normalSquareVerticalRegionT (width := width) (height := height) xStart yStart)
 
-/-- The current normalized \(6\times5\) rotated local-window model for \(T\)
-has no rectangular cover by contained source-paper \(2\times3\) and
+/-- The current origin-based rotated local-window model for \(T\) has no
+rectangular cover by contained source-paper \(2\times3\) and
 \(3\times2\) rectangles.
 
 This is the vertical-edge counterpart of
-`not_normalSquareRegionT_rectangleCover_five_by_six`. It is a diagnostic
+`not_normalSquareRegionT_rectangleCover_at_origin`. It is a diagnostic
 statement about the present rotated local-window model, not a claim about the
 source theorem.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
-theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
-    ¬ Nonempty (NormalSquareVerticalRegionTRectangleCover (width := 6) (height := 5) 0 0) := by
+theorem not_normalSquareVerticalRegionT_rectangleCover_at_origin {width height : ℕ}
+    (hx : 6 ≤ width) (hy : 5 ≤ height) :
+    ¬ Nonempty
+      (NormalSquareVerticalRegionTRectangleCover (width := width) (height := height)
+        0 0) := by
   rintro ⟨cover⟩
-  let p : SquareLatticeVertex 6 5 := (⟨0, by omega⟩, ⟨0, by omega⟩)
-  have hpT : p ∈ normalSquareVerticalRegionT (width := 6) (height := 5) 0 0 := by
+  let p : SquareLatticeVertex width height :=
+    (⟨0, by omega⟩, ⟨0, by omega⟩)
+  have hpT : p ∈ normalSquareVerticalRegionT (width := width) (height := height)
+      0 0 := by
     simp [p]
   have hpUnion : p ∈ cover.regions.biUnion cover.region := by
     rw [cover.cover]
     exact hpT
   rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
   rcases cover.rectangular i hi with hRect | hRect
-  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 6 5 := (⟨1, by omega⟩, ⟨2, by omega⟩)
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨1, by omega⟩, ⟨2, by omega⟩)
     have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
-          Finset (SquareLatticeVertex 6 5)) := by
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
       simpa [hRegion] using hpi
     have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xStart yStart 2 3 :
-          Finset (SquareLatticeVertex 6 5)) := by
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q] at hpRect ⊢
       omega
@@ -263,20 +290,24 @@ theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
       simpa [hRegion] using hqRect
     have hqUnion : q ∈ cover.regions.biUnion cover.region :=
       Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareVerticalRegionT (width := 6) (height := 5) 0 0 := by
+    have hqT : q ∈ normalSquareVerticalRegionT (width := width) (height := height)
+        0 0 := by
       rwa [cover.cover] at hqUnion
-    have hqNotT : q ∉ normalSquareVerticalRegionT (width := 6) (height := 5) 0 0 := by
+    have hqNotT :
+        q ∉ normalSquareVerticalRegionT (width := width) (height := height)
+          0 0 := by
       simp [q]
     exact hqNotT hqT
-  · rcases hRect with ⟨xStart, yStart, _hx, _hy, hRegion⟩
-    let q : SquareLatticeVertex 6 5 := (⟨2, by omega⟩, ⟨1, by omega⟩)
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨2, by omega⟩, ⟨1, by omega⟩)
     have hpRect :
-        p ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
-          Finset (SquareLatticeVertex 6 5)) := by
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
       simpa [hRegion] using hpi
     have hqRect :
-        q ∈ (squareLatticeContiguousRectangle xStart yStart 3 2 :
-          Finset (SquareLatticeVertex 6 5)) := by
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
       rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
       simp [p, q] at hpRect ⊢
       omega
@@ -284,11 +315,28 @@ theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
       simpa [hRegion] using hqRect
     have hqUnion : q ∈ cover.regions.biUnion cover.region :=
       Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
-    have hqT : q ∈ normalSquareVerticalRegionT (width := 6) (height := 5) 0 0 := by
+    have hqT : q ∈ normalSquareVerticalRegionT (width := width) (height := height)
+        0 0 := by
       rwa [cover.cover] at hqUnion
-    have hqNotT : q ∉ normalSquareVerticalRegionT (width := 6) (height := 5) 0 0 := by
+    have hqNotT :
+        q ∉ normalSquareVerticalRegionT (width := width) (height := height)
+          0 0 := by
       simp [q]
     exact hqNotT hqT
+
+/-- The current normalized \(6\times5\) rotated local-window model for \(T\)
+has no rectangular cover by contained source-paper \(2\times3\) and
+\(3\times2\) rectangles.
+
+This is the normalized form of
+`not_normalSquareVerticalRegionT_rectangleCover_at_origin`.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
+    ¬ Nonempty
+      (NormalSquareVerticalRegionTRectangleCover (width := 6) (height := 5) 0 0) := by
+  exact not_normalSquareVerticalRegionT_rectangleCover_at_origin (by decide) (by decide)
 
 /-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
 rotated red and blue edge blocks is the rotated local \(T\)-region together

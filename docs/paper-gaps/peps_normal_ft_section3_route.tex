@@ -148,10 +148,11 @@ nonempty cover by contiguous $2\times3$ and $3\times2$ rectangles, then
 rectangular injectivity and finite union closure imply injectivity of that
 region. The formalized special cases are the local-window $T$-region and the
 finite-lattice complementary block. This is only a sufficient criterion, not
-the only source route. The present normalized $5\times6$ local-window model for
-$T$, and the rotated normalized $6\times5$ local-window model used for
-vertical edges, are now also known not to admit such rectangular covers. This
-local obstruction does not contradict the paper's statement; it shows that the
+the only source route. The present origin-based local-window model for $T$,
+and the origin-based rotated local-window model used for vertical edges, are
+now also known not to admit such rectangular covers whenever the ambient
+lattice contains the corresponding $5\times6$ or $6\times5$ window. This local
+obstruction does not contradict the paper's statement; it shows that the
 source cover still has to be realigned with the finite PEPS geometry rather
 than read directly from the current local-window complement. The normalized
 $5\times7$ horizontal-edge geometry is also formalized: $A_3$ is the
@@ -283,9 +284,10 @@ alone. The following additional obligations remain.
           block. The vertical $7\times5$ edge-blocking regions are now
           recorded set-theoretically, and the vertical complementary block is
           injective once the rotated local $T$-region has a rectangular cover.
-          The present normalized $5\times6$ local-window $T$ model and its
-          rotated normalized $6\times5$ counterpart are now known not to admit
-          rectangular-cover witnesses of the above form. The remaining
+          The present origin-based local-window $T$ model and its rotated
+          counterpart are now known not to admit rectangular-cover witnesses
+          of the above form whenever the ambient lattice contains the
+          corresponding $5\times6$ or $6\times5$ window. The remaining
           coordinate work is to realign the source local and rotated $T$
           covers with the finite PEPS geometry and translate these
           decompositions around every edge.
@@ -334,7 +336,7 @@ alone. The following additional obligations remain.
           \#2004. This node now also contains the rotated vertical local
           $T$-region cover criterion.
     \item Obstruction to applying that criterion directly to the present
-          normalized local-window $T$ models: blueprint
+          origin-based local-window $T$ models: blueprint
           \path{lem:peps_normalSquareRegionT_no_five_by_six_cover}, issue
           \#2004.
     \item Finite-lattice complementary block around an edge: blueprint
