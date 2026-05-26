@@ -503,7 +503,7 @@ theorem same_length_product_eq_sum_chi_trace_pow
     H.operators.operator L α * H.operators.operator L β =
       ∑ γ : Λ, (H.positiveChi.chi.matrix α β γ ^ L).trace •
         H.operators.operator L γ :=
-  H.sameLengthProduct.eq_sum_chi_trace_pow H.positiveChi L hL α β
+  H.same_length_product_form_ofChi.eq_sum_ofChi_trace_pow L hL α β
 
 /-- The idempotent scalar identity with length-one coefficients written as
 traces of the chi matrices.
@@ -515,7 +515,7 @@ theorem idempotent_eq_sum_chi_trace (γ : Λ) :
       ∑ α : Λ, ∑ β : Λ,
         (H.positiveChi.chi.matrix α β γ).trace *
           (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
-  H.idempotent.eq_sum_chi_trace H.positiveChi γ
+  H.idempotent_coefficient_form_ofChi.eq_sum_ofChi_trace γ
 
 /-- The blocked-basis coefficients obtained from BNT-label theorem data are
 traces of powers of the pulled-back BNT-label chi matrices.
