@@ -811,6 +811,32 @@ theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
             rw [hc v, one_mul]
   rw [hprod]
 
+/-- Balanced edge-scalar equivalent gauges define the same gauged PEPS tensor.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; balanced endpoint
+scalars leave every local gauged tensor unchanged, hence the whole gauged
+tensor is unchanged. -/
+theorem GaugeEquivModEdgeScalars.applyGauge_eq
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
+    applyGauge A X = applyGauge A Y := by
+  simp [applyGauge]
+  funext v η σ
+  exact GaugeEquivModEdgeScalars.gaugeVertex_eq (G := G) hXY v η σ
+
+/-- Balanced edge-scalar equivalent gauges give the same PEPS state.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the balanced quotient
+acts trivially on every local gauged tensor, and hence on the contracted state. -/
+theorem GaugeEquivModEdgeScalars.applyGauge_sameState
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
+    SameState (applyGauge A X) (applyGauge A Y) := by
+  intro σ
+  rw [GaugeEquivModEdgeScalars.applyGauge_eq (G := G) hXY]
+
 /-! ### Uniqueness modulo balanced edge scalars -/
 
 /-- If the gauged vertex tensors produced by two gauge families agree pointwise

@@ -2883,6 +2883,39 @@ injective and normal PEPS, following Theorems~2 and~3 of
     so every summand is unchanged.
 \end{proof}
 
+\begin{theorem}[Balanced edge scalars preserve the gauged tensor]%
+    \label{thm:GaugeEquivModEdgeScalars_applyGauge_eq}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_eq}
+    \leanok
+    \uses{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq, def:applyGauge}
+    If two gauge families differ by a balanced edge-scalar reweighting, then
+    applying them to the same PEPS tensor produces the same gauged tensor.
+    \begin{center}
+        \TNPEPSGaugeVertexAction
+    \end{center}
+\end{theorem}
+
+\begin{proof}\leanok
+    Compare the gauged tensor component at each vertex, virtual index, and
+    physical index. The preceding vertex-level theorem gives each component
+    equality.
+\end{proof}
+
+\begin{theorem}[Balanced edge scalars preserve the gauged state]%
+    \label{thm:GaugeEquivModEdgeScalars_applyGauge_sameState}
+    \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_sameState}
+    \leanok
+    \uses{thm:GaugeEquivModEdgeScalars_applyGauge_eq, def:peps_same_state}
+    If two gauge families differ by a balanced edge-scalar reweighting, then
+    the PEPS tensors obtained by applying those gauge families represent the
+    same state.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two gauged tensors are equal, hence all of their state coefficients are
+    equal.
+\end{proof}
+
 \begin{theorem}[Gauge uniqueness modulo balanced edge scalars]%
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
