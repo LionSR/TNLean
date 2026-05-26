@@ -295,6 +295,33 @@ theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
   ext v
   by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
 
+/-- The right-only and outside indexed regions form the complement of the
+first two indexed regions.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after injectivity of \(A=(A\setminus B)\cup(A\cap B)\) is applied,
+the remaining diagram is carried by the two complementary indexed pieces. -/
+theorem regionUnionPart_two_union_three_eq_regionComplement_zero_union_one [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 2 ∪ regionUnionPart A B 3 =
+      regionComplement (regionUnionPart A B 0 ∪ regionUnionPart A B 1) := by
+  rw [regionUnionPart_two_union_three_eq_regionComplement_left,
+    regionUnionPart_zero_union_one]
+
+/-- The left-only and outside indexed regions form the complement of the middle
+two indexed regions.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: after reinserting the overlap and applying injectivity of
+\(B=(A\cap B)\cup(B\setminus A)\), the remaining diagram is carried by the
+two complementary indexed pieces. -/
+theorem regionUnionPart_zero_union_three_eq_regionComplement_one_union_two [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 0 ∪ regionUnionPart A B 3 =
+      regionComplement (regionUnionPart A B 1 ∪ regionUnionPart A B 2) := by
+  rw [regionUnionPart_zero_union_three_eq_regionComplement_right,
+    regionUnionPart_one_union_two]
+
 /-- The first two indexed regions are the complement of the right-only and
 outside regions.
 
