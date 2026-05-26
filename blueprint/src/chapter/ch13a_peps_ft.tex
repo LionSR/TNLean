@@ -1725,6 +1725,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.SquareLatticeRectangleCover}
     \lean{TNLean.PEPS.NormalSquareRegionTRectangleCover}
     \lean{TNLean.PEPS.NormalSquareEdgeComplementRectangleCover}
+    \lean{TNLean.PEPS.NormalSquareVerticalEdgeComplementRectangleCover}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions,
         lem:peps_normalSquareEdgeComplementRegion}
@@ -1745,6 +1746,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_six_by_five}
     \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_at_origin}
     \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_five_by_seven}
+    \lean{TNLean.PEPS.not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
         lem:peps_normalSquareRegionT_window_complement}
@@ -1757,7 +1759,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(6\times5\) cases are recorded as corollaries.  The present origin-based
     horizontal edge-complement model has the analogous obstruction whenever
     the ambient lattice contains the \(5\times7\) frame; the normalized
-    \(5\times7\) case is again recorded as a corollary.
+    \(5\times7\) case is again recorded as a corollary.  The normalized
+    vertical edge-complement model has the corresponding \(7\times5\)
+    obstruction.
 \end{lemma}
 % Maintainer note: this is a local-model obstruction, not a statement of the
 % source theorem.  It records that the current coordinate model is not yet the
@@ -1769,7 +1773,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(3\times2\) rectangle containing it also contains a point of the removed
     horizontal edge block.  The rotated statement is the same coordinate
     argument with the two shapes interchanged.  The horizontal
-    edge-complement statement uses the same lower-left point.
+    edge-complement statement uses the same lower-left point, and so does the
+    normalized vertical edge-complement statement.
 \end{proof}
 
 \begin{lemma}[Injectivity from a rectangular cover]%

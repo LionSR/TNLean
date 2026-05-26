@@ -336,6 +336,22 @@ abbrev NormalSquareVerticalRegionTRectangleCover {width height : ℕ}
   SquareLatticeRectangleCover
     (normalSquareVerticalRegionT (width := width) (height := height) xStart yStart)
 
+/-- A finite rectangular cover of the actual normalized vertical
+edge-complementary block.
+
+This is the \(7\times5\) counterpart of
+`NormalSquareEdgeComplementRectangleCover` for the rotated vertical edge
+blocking.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500
+of `Papers/1804.04964/paper_normal.tex`. -/
+abbrev NormalSquareVerticalEdgeComplementRectangleCover {width height : ℕ} :=
+  SquareLatticeRectangleCover
+    (regionComplement
+      (squareLatticeContiguousRectangle 2 0 3 2 ∪
+        (squareLatticeContiguousRectangle 1 2 2 3 :
+          Finset (SquareLatticeVertex width height))))
+
 /-- The current origin-based rotated local-window model for \(T\) has no
 rectangular cover by contained source-paper \(2\times3\) and
 \(3\times2\) rectangles.
@@ -427,6 +443,91 @@ theorem not_normalSquareVerticalRegionT_rectangleCover_six_by_five :
     ¬ Nonempty
       (NormalSquareVerticalRegionTRectangleCover (width := 6) (height := 5) 0 0) := by
   exact not_normalSquareVerticalRegionT_rectangleCover_at_origin (by decide) (by decide)
+
+/-- The current normalized vertical edge-complement model has no rectangular
+cover by contained source-paper \(2\times3\) and \(3\times2\) rectangles.
+
+This is a diagnostic statement about the present
+`NormalSquareVerticalEdgeComplementRectangleCover` criterion, not a claim
+about the source theorem's injectivity assertion for the vertical counterpart
+of \(A_3\).
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareVerticalEdgeComplementRectangleCover_seven_by_five :
+    ¬ Nonempty
+      (NormalSquareVerticalEdgeComplementRectangleCover (width := 7) (height := 5)) := by
+  rintro ⟨cover⟩
+  let p : SquareLatticeVertex 7 5 := (⟨0, by omega⟩, ⟨0, by omega⟩)
+  have hpTarget :
+      p ∈ regionComplement
+        (squareLatticeContiguousRectangle 2 0 3 2 ∪
+          (squareLatticeContiguousRectangle 1 2 2 3 :
+            Finset (SquareLatticeVertex 7 5))) := by
+    simp [p]
+  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
+    rw [cover.cover]
+    exact hpTarget
+  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
+  rcases cover.rectangular i hi with hRect | hRect
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex 7 5 := (⟨1, by omega⟩, ⟨2, by omega⟩)
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex 7 5)) := by
+      simpa [hRegion] using hpi
+    have hqRect :
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex 7 5)) := by
+      rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
+      simp [p, q] at hpRect ⊢
+      omega
+    have hqRegion : q ∈ cover.region i := by
+      simpa [hRegion] using hqRect
+    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    have hqTarget :
+        q ∈ regionComplement
+          (squareLatticeContiguousRectangle 2 0 3 2 ∪
+            (squareLatticeContiguousRectangle 1 2 2 3 :
+              Finset (SquareLatticeVertex 7 5))) := by
+      rwa [cover.cover] at hqUnion
+    have hqNotTarget :
+        q ∉ regionComplement
+          (squareLatticeContiguousRectangle 2 0 3 2 ∪
+            (squareLatticeContiguousRectangle 1 2 2 3 :
+              Finset (SquareLatticeVertex 7 5))) := by
+      simp [q]
+    exact hqNotTarget hqTarget
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex 7 5 := (⟨2, by omega⟩, ⟨1, by omega⟩)
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex 7 5)) := by
+      simpa [hRegion] using hpi
+    have hqRect :
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex 7 5)) := by
+      rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
+      simp [p, q] at hpRect ⊢
+      omega
+    have hqRegion : q ∈ cover.region i := by
+      simpa [hRegion] using hqRect
+    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    have hqTarget :
+        q ∈ regionComplement
+          (squareLatticeContiguousRectangle 2 0 3 2 ∪
+            (squareLatticeContiguousRectangle 1 2 2 3 :
+              Finset (SquareLatticeVertex 7 5))) := by
+      rwa [cover.cover] at hqUnion
+    have hqNotTarget :
+        q ∉ regionComplement
+          (squareLatticeContiguousRectangle 2 0 3 2 ∪
+            (squareLatticeContiguousRectangle 1 2 2 3 :
+              Finset (SquareLatticeVertex 7 5))) := by
+      simp [q]
+    exact hqNotTarget hqTarget
 
 /-- In the normalized vertical-edge \(7\times5\) frame, the complement of the
 rotated red and blue edge blocks is the rotated local \(T\)-region together
