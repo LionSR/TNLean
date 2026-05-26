@@ -794,5 +794,22 @@ theorem not_bottomBoundaryUpEdge_marginCover_seven :
   | vertical _hEdge _hxLeft _hxRight hyBottom _hyTop _cover =>
       simp [squareLatticeUpEdge] at hyBottom
 
+/-- The current open \(7\times7\) rectangular coordinate graph does not admit
+a family of translated margin-cover data over all edges.
+
+This records that the present margin package is only an interior sufficient
+criterion for the source proof's edge-blocking step; the boundary geometry
+still has to be supplied separately.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1500. -/
+theorem not_forall_normalSquareEdgeMarginCover_seven :
+    ¬ Nonempty (∀ e : Edge (squareLatticeGraph 7 7),
+      NormalSquareEdgeMarginCover e) := by
+  rintro ⟨data⟩
+  exact not_leftBoundaryRightEdge_marginCover_seven
+    ⟨data (squareLatticeRightEdge (width := 7) (height := 7) 0 2
+      (by decide) (by decide))⟩
+
 end PEPS
 end TNLean

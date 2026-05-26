@@ -206,8 +206,10 @@ the current open rectangular coordinate model, this margin package is now also
 known not to apply to a left-boundary horizontal edge or to a bottom-boundary
 vertical edge of the $7\times7$ lattice. Thus the remaining every-edge
 construction must include the boundary geometry rather than only translating
-the interior margin package. The realigned local and rotated $T$ covers and
-the construction of the appropriate data for every edge remain open.
+the interior margin package; in particular, no family of this margin-cover
+data exists over all edges of the present open $7\times7$ graph. The realigned
+local and rotated $T$ covers and the construction of the appropriate data for
+every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -368,7 +370,9 @@ alone. The following additional obligations remain.
           left-boundary horizontal edge and a bottom-boundary vertical edge of
           the $7\times7$ lattice is now formalized, so the present margin
           package is explicitly a sufficient interior criterion rather than the
-          final every-edge construction.
+          final every-edge construction. Consequently, the nonexistence of a
+          family of this margin-cover data over all edges of the current open
+          $7\times7$ graph is also formalized.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue
