@@ -361,6 +361,23 @@ theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
       (H.positiveChi.chi.matrix α β γ ^ L).trace :=
   H.positiveChi.eq_trace_pow L hL α β γ
 
+/-- At every positive length, the coefficient family in theorem data agrees
+with the canonical coefficient family determined by its
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+The restriction \(0<L\) is essential: the source theorem only states the
+physical positive-length coefficients, and the formal coefficient family is
+not constrained at length zero by Theorem IV.13(ii).
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem coeff_eq_ofChi_coeff (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
+    H.coeffs.coeff L α β γ =
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi).coeff L α β γ := by
+  simpa [BNTLabelCoefficientFamily.ofChi] using
+    H.positive_chi_trace_power L hL α β γ
+
 /-- The diagonal entries of the chi matrices in theorem data are positive.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
