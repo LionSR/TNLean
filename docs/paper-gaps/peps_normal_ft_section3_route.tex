@@ -106,6 +106,16 @@ one of these orientations. With the ordered endpoints convention for edges,
 horizontal edges are coordinate right edges from their left endpoints, and
 vertical edges are coordinate upward edges from their lower endpoints.
 
+The four-region decomposition from Lemma \path{injective_union} is formalized
+both by named regions and by an indexed family in the source-paper order:
+$A\setminus B$, $A\cap B$, $B\setminus A$, and $(A\cup B)^c$. The indexed
+family reconstructs $A$, $B$, $A\cup B$, $A^c$, $B^c$, and the full vertex set.
+Its selected complementary pairs match the two places where the source proof
+applies injectivity of $A$ and then injectivity of $B$. The selected pieces are
+also disjoint in the forms needed for those two inverse applications, and every
+vertex belongs to exactly one indexed piece. These facts prepare the
+tensor-level boundary-contraction proof, but do not prove that theorem.
+
 The rectangular vocabulary separates coordinate products from source-paper
 contiguous blocks. Coordinate rectangles are products of finite coordinate
 sets, whereas contiguous coordinate rectangles are products of coordinate
