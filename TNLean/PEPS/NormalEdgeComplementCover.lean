@@ -158,6 +158,96 @@ theorem not_normalSquareRegionT_rectangleCover_five_by_six :
     ¬ Nonempty (NormalSquareRegionTRectangleCover (width := 5) (height := 6) 0 0) := by
   exact not_normalSquareRegionT_rectangleCover_at_origin (by decide) (by decide)
 
+/-- The current origin-based horizontal edge-complement model has no
+rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
+rectangles.
+
+This is a diagnostic statement about the present
+`NormalSquareEdgeComplementRectangleCover` criterion, not a claim about the
+source theorem's injectivity assertion for \(A_3\). It records that this cover
+criterion is not yet the source construction of the complementary block.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1499 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareEdgeComplementRectangleCover_at_origin {width height : ℕ}
+    (hx : 5 ≤ width) (hy : 7 ≤ height) :
+    ¬ Nonempty
+      (NormalSquareEdgeComplementRectangleCover (width := width) (height := height)
+        0 0) := by
+  rintro ⟨cover⟩
+  let p : SquareLatticeVertex width height :=
+    (⟨0, by omega⟩, ⟨0, by omega⟩)
+  have hpTarget :
+      p ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
+    simp [p]
+  have hpUnion : p ∈ cover.regions.biUnion cover.region := by
+    rw [cover.cover]
+    exact hpTarget
+  rcases Finset.mem_biUnion.mp hpUnion with ⟨i, hi, hpi⟩
+  rcases cover.rectangular i hi with hRect | hRect
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨0, by omega⟩, ⟨2, by omega⟩)
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
+      simpa [hRegion] using hpi
+    have hqRect :
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 2 3 :
+          Finset (SquareLatticeVertex width height)) := by
+      rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
+      simp [p, q] at hpRect ⊢
+      omega
+    have hqRegion : q ∈ cover.region i := by
+      simpa [hRegion] using hqRect
+    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    have hqTarget :
+        q ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
+      rwa [cover.cover] at hqUnion
+    have hqNotTarget :
+        q ∉ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
+      simp [q]
+    exact hqNotTarget hqTarget
+  · rcases hRect with ⟨xRect, yRect, _hx, _hy, hRegion⟩
+    let q : SquareLatticeVertex width height :=
+      (⟨2, by omega⟩, ⟨1, by omega⟩)
+    have hpRect :
+        p ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
+      simpa [hRegion] using hpi
+    have hqRect :
+        q ∈ (squareLatticeContiguousRectangle xRect yRect 3 2 :
+          Finset (SquareLatticeVertex width height)) := by
+      rw [mem_squareLatticeContiguousRectangle] at hpRect ⊢
+      simp [p, q] at hpRect ⊢
+      omega
+    have hqRegion : q ∈ cover.region i := by
+      simpa [hRegion] using hqRect
+    have hqUnion : q ∈ cover.regions.biUnion cover.region :=
+      Finset.mem_biUnion.mpr ⟨i, hi, hqRegion⟩
+    have hqTarget :
+        q ∈ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
+      rwa [cover.cover] at hqUnion
+    have hqNotTarget :
+        q ∉ normalSquareEdgeComplementRegion (width := width) (height := height) 0 0 := by
+      simp [q]
+    exact hqNotTarget hqTarget
+
+/-- The current normalized \(5\times7\) horizontal edge-complement model has
+no rectangular cover by contained source-paper \(2\times3\) and \(3\times2\)
+rectangles.
+
+This is the normalized form of
+`not_normalSquareEdgeComplementRectangleCover_at_origin`.
+
+Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
+lines 1475--1499 of `Papers/1804.04964/paper_normal.tex`. -/
+theorem not_normalSquareEdgeComplementRectangleCover_five_by_seven :
+    ¬ Nonempty
+      (NormalSquareEdgeComplementRectangleCover (width := 5) (height := 7) 0 0) := by
+  exact not_normalSquareEdgeComplementRectangleCover_at_origin (by decide) (by decide)
+
 /-- In the normalized horizontal-edge \(5\times7\) frame, the finite-lattice
 edge-complementary block is the local \(T\)-region together with two top-collar
 contiguous \(3\times2\) rectangles.

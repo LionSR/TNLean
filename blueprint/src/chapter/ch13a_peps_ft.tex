@@ -1737,12 +1737,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
 % Maintainer note: this definition records sufficient coordinate criteria.
 % The concrete local T cover remains to be constructed.
 
-\begin{lemma}[The present local \(T\)-windows have no rectangular cover]%
+\begin{lemma}[The present local \(T\)-window and \(A_3\) cover obstructions]%
     \label{lem:peps_normalSquareRegionT_no_five_by_six_cover}
     \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_at_origin}
     \lean{TNLean.PEPS.not_normalSquareRegionT_rectangleCover_five_by_six}
     \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_at_origin}
     \lean{TNLean.PEPS.not_normalSquareVerticalRegionT_rectangleCover_six_by_five}
+    \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_at_origin}
+    \lean{TNLean.PEPS.not_normalSquareEdgeComplementRectangleCover_five_by_seven}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
         lem:peps_normalSquareRegionT_window_complement}
@@ -1752,7 +1754,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(5\times6\) window.  The origin-based rotated local-window model used for
     vertical edges has the analogous obstruction whenever the ambient lattice
     contains the \(6\times5\) window.  The normalized \(5\times6\) and
-    \(6\times5\) cases are recorded as corollaries.
+    \(6\times5\) cases are recorded as corollaries.  The present origin-based
+    horizontal edge-complement model has the analogous obstruction whenever
+    the ambient lattice contains the \(5\times7\) frame; the normalized
+    \(5\times7\) case is again recorded as a corollary.
 \end{lemma}
 % Maintainer note: this is a local-model obstruction, not a statement of the
 % source theorem.  It records that the current coordinate model is not yet the
@@ -1763,7 +1768,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     a point of the removed vertical edge block, while any contiguous
     \(3\times2\) rectangle containing it also contains a point of the removed
     horizontal edge block.  The rotated statement is the same coordinate
-    argument with the two shapes interchanged.
+    argument with the two shapes interchanged.  The horizontal
+    edge-complement statement uses the same lower-left point.
 \end{proof}
 
 \begin{lemma}[Injectivity from a rectangular cover]%
