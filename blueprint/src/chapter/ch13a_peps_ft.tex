@@ -2129,6 +2129,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_blockingData_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers}
     \leanok
     \uses{def:peps_normalSquareTranslatedEdgeWindow,
         def:peps_normalEdgeBlockingHypotheses}
@@ -2139,7 +2140,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     separate.  Equivalently, it is enough to supply the oriented
     margin-and-cover data at every edge.  The one-edge datum recovered from the
     assembled hypotheses is the datum supplied by the corresponding
-    margin-and-cover input.
+    margin-and-cover input, and the assembled hypotheses give the three
+    injective regions at every edge.
 \end{theorem}
 \begin{proof}\leanok
     Apply the general assembly map for one-edge blocking data to the datum

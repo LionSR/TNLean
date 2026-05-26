@@ -714,5 +714,25 @@ theorem normalSquareEdgeBlockingHypotheses_blockingData_of_marginCovers
       (data e).blockingDatum h hUnion := by
   rfl
 
+/-- The edge-blocking hypotheses assembled from oriented margin-and-cover data
+give the three injective regions at every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareEdgeMarginCover.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_marginCovers
+        h hUnion data).red e) ∧
+      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_marginCovers
+        h hUnion data).blue e) ∧
+      κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_marginCovers
+        h hUnion data).complement e) :=
+  (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).injective_chain_at_edge e
+
 end PEPS
 end TNLean
