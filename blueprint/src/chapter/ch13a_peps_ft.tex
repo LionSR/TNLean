@@ -1526,6 +1526,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Square-lattice coordinate regions]%
     \label{def:peps_squareLatticeCoordinateRegions}
     \lean{TNLean.PEPS.SquareLatticeVertex}
+    \lean{TNLean.PEPS.squareLatticeHorizontalNeighbor}
+    \lean{TNLean.PEPS.squareLatticeVerticalNeighbor}
+    \lean{TNLean.PEPS.squareLatticeGraph}
     \lean{TNLean.PEPS.squareLatticeRectangle}
     \lean{TNLean.PEPS.squareLatticeFull}
     \lean{TNLean.PEPS.squareLatticeCoordinateInterval}
@@ -1541,10 +1544,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareRegionTHole}
     \lean{TNLean.PEPS.normalSquareRegionT}
     \lean{TNLean.PEPS.normalSquareEdgeComplementRegion}
+    \lean{TNLean.PEPS.squareLatticeGraph_adj_right}
+    \lean{TNLean.PEPS.squareLatticeGraph_adj_up}
     \leanok
     The finite $n\times m$ square lattice is represented by pairs of
-    coordinates.  A coordinate rectangle is a product of a horizontal
-    coordinate set and a vertical coordinate set.  The $2\times3$ and
+    coordinates.  The corresponding square-lattice graph has horizontal and
+    vertical nearest-neighbor edges; the two elementary adjacency lemmas record
+    the right-neighbor and upper-neighbor cases used for translated edge
+    blockings.  A coordinate rectangle is a product of a horizontal coordinate
+    set and a vertical coordinate set.  The $2\times3$ and
     $3\times2$ coordinate-product predicates assert only that these two
     coordinate sets have cardinalities $2,3$ and $3,2$, respectively.
     Contiguous coordinate rectangles are products of contiguous coordinate
