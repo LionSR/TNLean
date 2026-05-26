@@ -519,6 +519,21 @@ theorem regionUnionPart_zero_one_disjoint_two_three [Fintype V] (A B : Finset V)
   simpa [regionComplement] using
     (disjoint_sdiff_self_right : Disjoint A ((Finset.univ : Finset V) \ A))
 
+/-- The indexed subfamily forming `A` is disjoint from the indexed subfamily
+forming its complement.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the first inverse step separates the tensor over \(A\) from the
+two complementary indexed blocks. -/
+theorem regionUnionPart_biUnion_zero_one_disjoint_two_three [Fintype V]
+    (A B : Finset V) :
+    Disjoint (({0, 1} : Finset (Fin 4)).biUnion (regionUnionPart A B))
+      (({2, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_zero_one,
+    regionUnionPart_biUnion_two_three_eq_regionComplement_left]
+  simpa [regionComplement] using
+    (disjoint_sdiff_self_right : Disjoint A ((Finset.univ : Finset V) \ A))
+
 /-- The indexed region \(B=(A\cap B)\cup(B\setminus A)\) is disjoint from the
 two indexed pieces forming its complement.
 
@@ -529,6 +544,21 @@ theorem regionUnionPart_one_two_disjoint_zero_three [Fintype V] (A B : Finset V)
     Disjoint (regionUnionPart A B 1 ∪ regionUnionPart A B 2)
       (regionUnionPart A B 0 ∪ regionUnionPart A B 3) := by
   rw [regionUnionPart_one_union_two, regionUnionPart_zero_union_three_eq_regionComplement_right]
+  simpa [regionComplement] using
+    (disjoint_sdiff_self_right : Disjoint B ((Finset.univ : Finset V) \ B))
+
+/-- The indexed subfamily forming `B` is disjoint from the indexed subfamily
+forming its complement.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the second inverse step separates the tensor over \(B\) from the
+two complementary indexed blocks. -/
+theorem regionUnionPart_biUnion_one_two_disjoint_zero_three [Fintype V]
+    (A B : Finset V) :
+    Disjoint (({1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B))
+      (({0, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_one_two,
+    regionUnionPart_biUnion_zero_three_eq_regionComplement_right]
   simpa [regionComplement] using
     (disjoint_sdiff_self_right : Disjoint B ((Finset.univ : Finset V) \ B))
 
