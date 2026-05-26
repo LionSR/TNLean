@@ -413,6 +413,32 @@ theorem regionInside_disjoint_outside [Fintype V] (A B : Finset V) :
     (disjoint_sdiff_self_right :
       Disjoint (A ∪ B) ((Finset.univ : Finset V) \ (A ∪ B)))
 
+/-- The indexed region \(A=(A\setminus B)\cup(A\cap B)\) is disjoint from the
+two indexed pieces forming its complement.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: in the first inversion step, the tensor over \(A\) is removed and
+the remaining diagram lives on the complementary indexed pieces. -/
+theorem regionUnionPart_zero_one_disjoint_two_three [Fintype V] (A B : Finset V) :
+    Disjoint (regionUnionPart A B 0 ∪ regionUnionPart A B 1)
+      (regionUnionPart A B 2 ∪ regionUnionPart A B 3) := by
+  rw [regionUnionPart_zero_union_one, regionUnionPart_two_union_three_eq_regionComplement_left]
+  simpa [regionComplement] using
+    (disjoint_sdiff_self_right : Disjoint A ((Finset.univ : Finset V) \ A))
+
+/-- The indexed region \(B=(A\cap B)\cup(B\setminus A)\) is disjoint from the
+two indexed pieces forming its complement.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: in the second inversion step, the tensor over \(B\) is removed and
+only the complementary indexed pieces remain. -/
+theorem regionUnionPart_one_two_disjoint_zero_three [Fintype V] (A B : Finset V) :
+    Disjoint (regionUnionPart A B 1 ∪ regionUnionPart A B 2)
+      (regionUnionPart A B 0 ∪ regionUnionPart A B 3) := by
+  rw [regionUnionPart_one_union_two, regionUnionPart_zero_union_three_eq_regionComplement_right]
+  simpa [regionComplement] using
+    (disjoint_sdiff_self_right : Disjoint B ((Finset.univ : Finset V) \ B))
+
 /-- The union of the three inside indexed regions is disjoint from the outside
 indexed region.
 

@@ -1464,6 +1464,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionOverlap_disjoint_outside}
     \lean{TNLean.PEPS.regionOnlyRight_disjoint_outside}
     \lean{TNLean.PEPS.regionInside_disjoint_outside}
+    \lean{TNLean.PEPS.regionUnionPart_zero_one_disjoint_two_three}
+    \lean{TNLean.PEPS.regionUnionPart_one_two_disjoint_zero_three}
     \lean{TNLean.PEPS.regionUnionPart_inside_disjoint_three}
     \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
     \leanok
@@ -1472,7 +1474,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     In the four-region decomposition, the left-only and right-only parts are
     disjoint from the overlap and from each other. Each inside part, and hence
     the union of the three inside regions, is disjoint from the outside region.
-    The indexed four-region family is pairwise disjoint.
+    In indexed form, the pieces forming \(A\) are disjoint from the pieces
+    forming \(A^c\), and the pieces forming \(B\) are disjoint from the pieces
+    forming \(B^c\). The indexed four-region family is pairwise disjoint.
 \end{lemma}
 \begin{proof}\leanok
     Use the standard disjointness identities for set difference and
