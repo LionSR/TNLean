@@ -81,7 +81,10 @@ The present blueprint nodes are the following.
     \item \path{lem:peps_regionInjectivityUnionClosure_finite} records the
           finite nonempty iteration of the binary union-closure assertion.
     \item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
-          regions $R$, $S$, and $T$. It is part of \ghissue{1375}.
+          regions $R$, $S$, and $T$. It is part of \ghissue{1375}. The
+          coordinate rectangular hypotheses, union closure, and a supplied
+          rectangular cover of the displayed $T$-region now imply this
+          abstract package.
     \item \path{thm:peps_normalEdgeBlockingToInjectiveChain} states that the
           normal square-lattice hypotheses allow a blocking around every edge into
           three injective regions. It is part of \ghissue{1375}.
@@ -311,7 +314,11 @@ alone. The following additional obligations remain.
     \item Finite iteration of Lemma \path{injective_union}: blueprint
           \path{lem:peps_regionInjectivityUnionClosure_finite}, issue \#1374.
     \item Regions $R$, $S$, and $T$: blueprint
-          \path{def:peps_normalSquareBlockingRegions}, issue \#1375.
+          \path{def:peps_normalSquareBlockingRegions}, issue \#1375. This
+          node now also records the conditional implication from coordinate
+          rectangular injectivity, union closure, and a rectangular cover of
+          the displayed $T$-region to the abstract $R,S,T$ blocking-region
+          package.
     \item Injectivity of the two edge blocks removed from the displayed
           $T$-window, and of their union under union closure: blueprint
           \path{lem:peps_normalSquareRegionT_edgeBlocks_injective}, issue

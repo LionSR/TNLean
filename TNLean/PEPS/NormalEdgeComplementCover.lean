@@ -412,5 +412,39 @@ theorem verticalComp_inj_of_cover
 
 end NormalSquareLatticeRectangleInjectivityHypotheses
 
+/-- Rectangular injectivity, union closure, and a rectangular cover of the
+displayed \(T\)-region supply the abstract square-lattice blocking-region
+package.
+
+**Scope restriction (T-cover):** This conditional result assumes a
+rectangular cover of the displayed \(T\)-region. The source proof says that
+this region is injective once the PEPS is sufficiently large; the formal cover
+construction is still recorded separately in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500
+of `Papers/1804.04964/paper_normal.tex`. -/
+def normalSquareBlockingRegions_of_TCover {width height : ℕ}
+    {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hWidth : 7 ≤ width) (hHeight : 7 ≤ height)
+    (cover : NormalSquareRegionTRectangleCover (width := width) (height := height)
+      0 0) :
+    NormalSquareBlockingRegions κ where
+  width := width
+  height := height
+  seven_le_width := hWidth
+  seven_le_height := hHeight
+  card_eq_width_mul_height := by
+    simp [SquareLatticeVertex]
+  rectangles := h.toRectangular
+  regionR := normalSquareRegionR 0 0
+  regionS := normalSquareRegionS 0 0
+  regionT := normalSquareRegionT 0 0
+  regionR_injective := h.regionR_injective_of_union hUnion (by omega) (by omega)
+  regionS_injective := h.regionS_injective_of_union hUnion (by omega) (by omega)
+  regionT_injective := h.regionT_injective_of_cover hUnion cover
+
 end PEPS
 end TNLean

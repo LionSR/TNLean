@@ -2278,18 +2278,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{definition}[Normal square-lattice blocking regions]%
     \label{def:peps_normalSquareBlockingRegions}
     \lean{TNLean.PEPS.NormalSquareBlockingRegions}
+    \lean{TNLean.PEPS.normalSquareBlockingRegions_of_TCover}
     \leanok
     \uses{def:peps_normalRectangleInjectivityHypotheses,
-        def:peps_regionInjectivityData}
+        def:peps_regionInjectivityData,
+        lem:peps_normalSquareRegionRS_injective_of_unionClosure,
+        lem:peps_normalSquareRegionT_injective_of_cover}
     In the translationally invariant square-lattice proof, the source paper
     assumes that every \(2\times 3\) and \(3\times 2\) region is injective.
     The formal statement here is the corresponding abstract, scope-restricted
     hypothesis bundle: it records the rectangular injectivity assumptions, the
     size bound \(n,m\geq 7\) with \(|V|=nm\), and three finite regions
     \(R\), \(S\), and \(T\) whose injectivity is assumed directly.  It does
-    not yet assert that these regions are the displayed square-lattice unions,
-    nor that their translated variants give the edge-centred blocking around
-    every edge.  The source regions are:
+    not by itself assert that these regions are the displayed square-lattice
+    unions, nor that their translated variants give the edge-centred blocking
+    around every edge.  Conversely, for the coordinate square lattice, the
+    rectangular hypotheses, union closure, and a rectangular cover of the
+    displayed \(T\)-region give this abstract \(R,S,T\) package, with \(R\)
+    and \(S\) obtained from their rectangular decompositions and \(T\) obtained
+    from the supplied cover.  The source regions are:
     \begin{center}
         \TNTikZDiagram{TNPEPSNormalRegionsRS}{%
             \begin{tikzpicture}[tn picture, scale=0.90]
