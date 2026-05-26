@@ -562,6 +562,22 @@ theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
       (W.positiveChi.chi.matrix α β γ ^ L).trace :=
   W.toTheoremData.coeff_eq_trace_pow L hL α β γ
 
+/-- At every positive length, the coefficient family in an existential witness
+agrees with the canonical coefficient family determined by its
+\(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+The restriction \(0<L\) is essential: the source theorem only states the
+physical positive-length coefficients, and the formal coefficient family is
+not constrained at length zero by Theorem IV.13(ii).
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem coeff_eq_ofChi_coeff (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
+    W.coeffs.coeff L α β γ =
+      (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff L α β γ :=
+  W.toTheoremData.coeff_eq_ofChi_coeff L hL α β γ
+
 /-- The diagonal entries of the chi matrices in an existential witness are
 positive.
 
@@ -806,6 +822,27 @@ theorem exists_source_predicates {data : AlgebraStructureData d D}
   rcases h with ⟨W⟩
   exact ⟨W, W.same_length_product_form, W.idempotent_coefficient_form,
     W.positive_chi_trace_power, W.positive_chi_pos_entries⟩
+
+/-- Existence of the source BNT-label witness gives a concrete witness whose
+positive-length coefficients agree with the canonical coefficient family
+determined by its \(\chi_{\alpha,\beta,\gamma}\)-matrices.
+
+This statement deliberately keeps the positive-length hypothesis.  Theorem
+IV.13(ii) does not constrain the artificial length-zero value of the formal
+coefficient family.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem exists_positive_length_coeff_eq_ofChi {data : AlgebraStructureData d D}
+    (h : HasBNTLabelTheoremWitness data) :
+    ∃ W : BNTLabelTheoremWitness data,
+      ∀ L : ℕ, 0 < L → ∀ α β γ : W.Label,
+        W.coeffs.coeff L α β γ =
+          (BNTLabelCoefficientFamily.ofChi W.positiveChi.chi).coeff L α β γ := by
+  rcases h with ⟨W⟩
+  refine ⟨W, ?_⟩
+  intro L hL α β γ
+  exact W.coeff_eq_ofChi_coeff L hL α β γ
 
 /-- Existence of the source BNT-label witness gives a concrete witness whose
 blocked-basis \(\chi\)-family is the pullback of the BNT-label

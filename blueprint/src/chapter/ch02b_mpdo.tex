@@ -1700,13 +1700,16 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem data give coefficient trace powers]%
     \label{thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_data,
         thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     BNT-label theorem data give the coefficient identity
     $c^{(L)}_{\alpha,\beta,\gamma}
       = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
-    for every positive length $L$.
+    for every positive length $L$.  Equivalently, at every positive length, the
+    coefficient family agrees with the canonical coefficient family determined
+    by the same \(\chi\)-matrices.
 \end{theorem}
 \begin{proof}\leanok
     This is the positive-length $\chi$-trace identity belonging to the
@@ -1896,6 +1899,7 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem witnesses give source equations]%
     \label{thm:mpdo_has_bnt_label_theorem_witness_source_equations}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates}
+    \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_positive_length_coeff_eq_ofChi}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_coefficient_equations}
     \lean{MPOTensor.HasBNTLabelTheoremWitness.exists_source_chi_trace_equations}
     \leanok
@@ -1908,7 +1912,9 @@ the elementary trace-power identity for diagonal matrices.
     BNT-label coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\), and then with
     the coefficients expressed as
     \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})\) and
-    \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma})\), respectively.
+    \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma})\), respectively.  At
+    every positive length, the BNT-label coefficient family also agrees with
+    the canonical coefficient family determined by these \(\chi\)-matrices.
 \end{theorem}
 \begin{proof}\leanok
     Unpack the existential witness and apply the corresponding witness-level
@@ -1918,13 +1924,16 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[BNT theorem witnesses give coefficient trace powers]%
     \label{thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_trace_pow}
+    \lean{MPOTensor.BNTLabelTheoremWitness.coeff_eq_ofChi_coeff}
     \leanok
     \uses{def:mpdo_bnt_label_theorem_witness,
         thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow}
     An existential BNT-label theorem witness gives the formula
     $c_{\alpha,\beta,\gamma}^{(L)}
       = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{\,L})$
-    for every positive length $L$.
+    for every positive length $L$.  Equivalently, at positive lengths, its
+    coefficient family agrees with the canonical coefficient family determined
+    by the same \(\chi\)-matrices.
 \end{theorem}
 \begin{proof}\leanok
     Apply the corresponding theorem-data identity carried by the witness.
