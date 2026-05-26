@@ -245,6 +245,20 @@ theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
       A ∪ B := by
   simpa using regionThreePart_union A B
 
+/-- The fourth indexed region is the complement of the three inside indexed
+regions.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404: the proof first blocks the three regions inside `A ∪ B`, while
+the fourth tensor is attached to their complement. -/
+theorem regionUnionPart_three_eq_regionComplement_inside [Fintype V]
+    (A B : Finset V) :
+    regionUnionPart A B 3 =
+      regionComplement
+        (regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2) := by
+  rw [regionUnionPart_zero_union_one_union_two,
+    regionUnionPart_three_eq_regionComplement_union]
+
 /-- The three inside indexed regions and the outside region reconstruct `V`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
