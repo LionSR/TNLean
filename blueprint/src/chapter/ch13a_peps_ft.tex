@@ -2100,6 +2100,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.squareLatticeUpEdgeWindow}
     \lean{TNLean.PEPS.horizontalSquareLatticeEdgeWindow}
     \lean{TNLean.PEPS.verticalSquareLatticeEdgeWindow}
+    \lean{TNLean.PEPS.NormalSquareEdgeMarginCover}
+    \lean{TNLean.PEPS.NormalSquareEdgeMarginCover.window}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2114,12 +2116,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \(5\times7\) or \(7\times5\) frame and the complementary cover is supplied.
     The same criterion applies to an arbitrary horizontal or vertical
     square-lattice edge after identifying it with its coordinate right or
-    upward representative.
+    upward representative.  The oriented margin-and-cover data package is the
+    corresponding per-edge form of this remaining finite-geometry input.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%
     \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_marginCovers}
     \leanok
     \uses{def:peps_normalSquareTranslatedEdgeWindow,
         def:peps_normalEdgeBlockingHypotheses}
@@ -2127,7 +2131,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge window, then the corresponding one-edge blockings assemble into the
     normal edge-blocking hypotheses.  This is the conditional assembly step;
     constructing such windows for all edges of the \(7\times7\) lattice remains
-    separate.
+    separate.  Equivalently, it is enough to supply the oriented
+    margin-and-cover data at every edge.
 \end{theorem}
 \begin{proof}\leanok
     Apply the general assembly map for one-edge blocking data to the datum

@@ -196,9 +196,11 @@ and upward edges now obtain such windows directly from the corresponding
 translated picture, and the corresponding margin hypotheses for an actual
 coordinate right or upward edge are recorded. These margin-window criteria also
 apply to arbitrary horizontal or vertical edges after identifying them with
-their coordinate right or upward representatives. The realigned local and
-rotated $T$ covers and the construction of these windows for every edge remain
-open.
+their coordinate right or upward representatives. The remaining per-edge
+finite-geometry input is now packaged as oriented margin-and-cover data, and a
+family of such data assembles into the normal edge-blocking hypotheses. The
+realigned local and rotated $T$ covers and the construction of this data for
+every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -349,7 +351,10 @@ alone. The following additional obligations remain.
           corresponding translated windows, and the margin hypotheses for
           actual coordinate right/up edges are explicit. Arbitrary horizontal
           and vertical edges inherit these criteria from their coordinate
-          representatives.
+          representatives. The oriented margin-and-cover data package records
+          the remaining per-edge input in the open rectangular coordinate
+          model, and a family of such data now assembles into the normal
+          edge-blocking hypotheses.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

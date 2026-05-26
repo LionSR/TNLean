@@ -592,6 +592,47 @@ def verticalSquareLatticeEdgeWindow
   exact squareLatticeUpEdgeWindow e.1.1.1.1 e.1.1.2.1
     hxLeft hxRight hyBottom hyTop cover
 
+/-- Per-edge data sufficient to realize a square-lattice edge by a translated
+normal edge-blocking window.
+
+This packages the remaining finite-geometry input in the current open
+rectangular coordinate model: an edge must be horizontal or vertical, have the
+corresponding margins, and have a rectangular cover for its complementary
+block.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+inductive NormalSquareEdgeMarginCover {width height : ℕ}
+    (e : Edge (squareLatticeGraph width height)) : Type (edgeCoverUniverse + 1)
+  | horizontal
+      (hEdge : IsHorizontalSquareLatticeEdge e)
+      (hxLeft : 1 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 4 ≤ width)
+      (hyBottom : 2 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 3 ≤ height)
+      (cover : NormalSquareEdgeComplementRectangleCover.{edgeCoverUniverse}
+        (width := width) (height := height) (e.1.1.1.1 - 1) (e.1.1.2.1 - 2))
+  | vertical
+      (hEdge : IsVerticalSquareLatticeEdge e)
+      (hxLeft : 2 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 3 ≤ width)
+      (hyBottom : 1 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 4 ≤ height)
+      (cover : SquareLatticeRectangleCover.{edgeCoverUniverse}
+        (normalSquareVerticalTranslatedEdgeComplement
+          (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)))
+
+namespace NormalSquareEdgeMarginCover
+
+/-- The translated edge window obtained from oriented margin-and-cover data.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def window {width height : ℕ} {e : Edge (squareLatticeGraph width height)}
+    (d : NormalSquareEdgeMarginCover e) :
+    NormalSquareTranslatedEdgeWindow e :=
+  match d with
+  | horizontal hEdge hxLeft hxRight hyBottom hyTop cover =>
+      horizontalSquareLatticeEdgeWindow e hEdge hxLeft hxRight hyBottom hyTop cover
+  | vertical hEdge hxLeft hxRight hyBottom hyTop cover =>
+      verticalSquareLatticeEdgeWindow e hEdge hxLeft hxRight hyBottom hyTop cover
+
+end NormalSquareEdgeMarginCover
+
 /-- A choice of translated edge window for every edge assembles into the normal
 edge-blocking hypotheses.
 
@@ -610,6 +651,25 @@ def normalSquareTranslatedEdgeBlockingHypotheses_of_windows
     NormalEdgeBlockingHypotheses κ (squareLatticeGraph width height) :=
   NormalEdgeBlockingHypotheses.ofBlockingData fun e =>
     (windows e).blockingDatum h hUnion
+
+/-- A choice of oriented margin-and-cover data for every edge assembles into
+the normal edge-blocking hypotheses.
+
+This is the same conditional assembly as
+`normalSquareTranslatedEdgeBlockingHypotheses_of_windows`, with the remaining
+finite-geometry input expressed directly on each square-lattice edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareEdgeBlockingHypotheses_of_marginCovers
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareEdgeMarginCover.{edgeCoverUniverse} e) :
+    NormalEdgeBlockingHypotheses κ (squareLatticeGraph width height) :=
+  normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion fun e =>
+    (data e).window
 
 end PEPS
 end TNLean
