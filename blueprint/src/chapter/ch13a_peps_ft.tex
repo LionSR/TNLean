@@ -1549,6 +1549,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.squareLatticeGraph_adj}
     \lean{TNLean.PEPS.squareLatticeGraph_adj_right}
     \lean{TNLean.PEPS.squareLatticeGraph_adj_up}
+    \lean{TNLean.PEPS.squareLatticeRightEdge}
+    \lean{TNLean.PEPS.squareLatticeUpEdge}
     \lean{TNLean.PEPS.squareLatticeEdge_horizontal_or_vertical}
     \lean{TNLean.PEPS.squareLatticeEdge_not_horizontal_and_vertical}
     \lean{TNLean.PEPS.horizontalSquareLatticeEdge_coords}
@@ -1558,9 +1560,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coordinates.  The corresponding square-lattice graph has horizontal and
     vertical nearest-neighbor edges; the two elementary adjacency lemmas record
     the right-neighbor and upper-neighbor cases used for translated edge
-    blockings.  Every edge of this graph is horizontal or vertical, but not
-    both.  Since edges are represented by ordered endpoint pairs, a horizontal
-    edge is oriented from left to right and a vertical edge from bottom to top.
+    blockings, and the corresponding coordinate edges name those two
+    nearest-neighbor edges as elements of the edge set.  Every edge of this
+    graph is horizontal or vertical, but not both.  Since edges are represented
+    by ordered endpoint pairs, a horizontal edge is oriented from left to right
+    and a vertical edge from bottom to top.
     A coordinate rectangle is a product of a horizontal coordinate set and a
     vertical coordinate set.  The $2\times3$ and
     $3\times2$ coordinate-product predicates assert only that these two
@@ -2005,6 +2009,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeBlue}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeComplement}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_isHorizontal}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_eq_rightEdge}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_of_complementCover}
@@ -2026,9 +2031,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
     complementary injectivity.  In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain.  At coordinate origin
-    \(0,0\), the translated edge and the three translated regions specialize
-    to the normalized horizontal picture.
+    injective regions used in the edge-blocked chain.  The distinguished edge
+    is the corresponding coordinate right edge.  At coordinate origin \(0,0\),
+    the translated edge and the three translated regions specialize to the
+    normalized horizontal picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and horizontal orientation are coordinate
@@ -2045,6 +2051,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeBlue}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeComplement}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_isVertical}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_eq_upEdge}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_injective_chain}
     \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover}
@@ -2065,9 +2072,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     these three regions form the one-edge blocking datum; if it has a
     rectangular cover, rectangular injectivity and union closure supply that
     complementary injectivity.  In both forms the datum supplies the three
-    injective regions used in the edge-blocked chain.  At coordinate origin
-    \(0,0\), the translated edge and the three translated regions specialize
-    to the normalized vertical picture.
+    injective regions used in the edge-blocked chain.  The distinguished edge
+    is the corresponding coordinate upward edge.  At coordinate origin \(0,0\),
+    the translated edge and the three translated regions specialize to the
+    normalized vertical picture.
 \end{lemma}
 \begin{proof}\leanok
     The endpoint memberships and vertical orientation are coordinate checks.
@@ -2082,6 +2090,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow}
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.blockingDatum}
     \lean{TNLean.PEPS.NormalSquareTranslatedEdgeWindow.injective_chain}
+    \lean{TNLean.PEPS.normalSquareHorizontalTranslatedEdgeWindow}
+    \lean{TNLean.PEPS.normalSquareVerticalTranslatedEdgeWindow}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,
         lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
@@ -2089,7 +2099,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     translated horizontal or vertical edge pictures, together with a
     rectangular cover of the complementary block.  Such a window gives the
     one-edge blocking datum for that edge, hence the three injective regions
-    used in the edge-blocked chain.
+    used in the edge-blocked chain.  The coordinate right and upward edges
+    obtain such windows directly from the corresponding translated picture.
 \end{definition}
 
 \begin{theorem}[Assembly from translated edge windows]%

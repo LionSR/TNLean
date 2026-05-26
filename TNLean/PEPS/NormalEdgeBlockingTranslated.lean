@@ -73,6 +73,16 @@ theorem normalSquareHorizontalTranslatedEdge_isHorizontal {width height : ℕ}
     (normalSquareHorizontalTranslatedEdge xStart yStart hx hy).1.2
   simp [normalSquareHorizontalTranslatedEdge, squareLatticeHorizontalNeighbor]
 
+/-- The translated horizontal edge is the coordinate right edge at the
+corresponding lattice position.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareHorizontalTranslatedEdge_eq_rightEdge {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    normalSquareHorizontalTranslatedEdge xStart yStart hx hy =
+      squareLatticeRightEdge (xStart + 1) (yStart + 2) (by omega) (by omega) := by
+  rfl
+
 /-- A translated horizontal edge has red/blue/complement blocking data once
 the translated complementary block is known to be injective.
 
@@ -267,6 +277,16 @@ theorem normalSquareVerticalTranslatedEdge_isVertical {width height : ℕ}
     (normalSquareVerticalTranslatedEdge xStart yStart hx hy).1.1
     (normalSquareVerticalTranslatedEdge xStart yStart hx hy).1.2
   simp [normalSquareVerticalTranslatedEdge, squareLatticeVerticalNeighbor]
+
+/-- The translated vertical edge is the coordinate upward edge at the
+corresponding lattice position.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalTranslatedEdge_eq_upEdge {width height : ℕ}
+    {xStart yStart : ℕ} (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
+    normalSquareVerticalTranslatedEdge xStart yStart hx hy =
+      squareLatticeUpEdge (xStart + 2) (yStart + 1) (by omega) (by omega) := by
+  rfl
 
 /-- A translated vertical edge has red/blue/complement blocking data once the
 translated complementary block is known to be injective.
@@ -470,6 +490,35 @@ theorem injective_chain
   (w.blockingDatum h hUnion).injective_chain
 
 end NormalSquareTranslatedEdgeWindow
+
+/-- A translated horizontal window around a coordinate right edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareHorizontalTranslatedEdgeWindow
+    {width height : ℕ} (xStart yStart : ℕ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : NormalSquareEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeRightEdge (width := width) (height := height)
+        (xStart + 1) (yStart + 2) (by omega) (by omega)) :=
+  NormalSquareTranslatedEdgeWindow.horizontal xStart yStart hx hy
+    (normalSquareHorizontalTranslatedEdge_eq_rightEdge (by omega) (by omega)) cover
+
+/-- A translated vertical window around a coordinate upward edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+def normalSquareVerticalTranslatedEdgeWindow
+    {width height : ℕ} (xStart yStart : ℕ)
+    (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
+    (cover : SquareLatticeRectangleCover
+      (normalSquareVerticalTranslatedEdgeComplement
+        (width := width) (height := height) xStart yStart)) :
+    NormalSquareTranslatedEdgeWindow
+      (squareLatticeUpEdge (width := width) (height := height)
+        (xStart + 2) (yStart + 1) (by omega) (by omega)) :=
+  NormalSquareTranslatedEdgeWindow.vertical xStart yStart hx hy
+    (normalSquareVerticalTranslatedEdge_eq_upEdge (by omega) (by omega)) cover
 
 /-- A choice of translated edge window for every edge assembles into the normal
 edge-blocking hypotheses.

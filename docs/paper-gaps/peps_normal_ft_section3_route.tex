@@ -98,11 +98,12 @@ The formalization now also has a coordinate vocabulary for finite rectangular
 square lattices. Vertices are pairs of horizontal and vertical coordinates, and
 the finite rectangular square-lattice graph now records horizontal and vertical
 nearest-neighbor edges, with elementary right-neighbor and upper-neighbor
-adjacency lemmas available for the later translated edge blockings. The graph
-edge vocabulary also distinguishes horizontal and vertical square-lattice
-edges, and proves that every edge has exactly one of these two orientations.
-The ordered endpoints are now also identified: horizontal edges go from left to
-right, and vertical edges go from bottom to top. The coordinate rectangles are
+adjacency lemmas and named coordinate right/up edges available for the later
+translated edge blockings. The graph edge vocabulary also distinguishes
+horizontal and vertical square-lattice edges, and proves that every edge has
+exactly one of these two orientations. The ordered endpoints are now also
+identified: horizontal edges go from left to right and vertical edges go from
+bottom to top. The coordinate rectangles are
 products of finite coordinate sets; contiguous coordinate rectangles are
 products of finite coordinate intervals. The
 $2\times 3$ and $3\times 2$ coordinate-product predicates assert only the two
@@ -175,20 +176,24 @@ general coordinate origin: whenever the translated window fits in the finite
 square lattice, the translated horizontal edge has red, blue, and complementary
 regions, and a rectangular cover of the complementary region supplies the
 one-edge blocking datum. This translated datum now also exposes the three
-injective regions used in the associated edge-blocked chain. The vertical
-edge-blocking picture is now available in the same
+injective regions used in the associated edge-blocked chain, and the
+translated horizontal edge is identified with the corresponding coordinate
+right edge. The vertical edge-blocking picture is now available in the same
 coordinate-origin-parametric form, with its complementary region again
-discharged by a rectangular cover, and with the analogous injective-chain
-consequence. The normalized horizontal and vertical pictures are now recorded
-as the coordinate-origin specializations of these translated pictures. The
+discharged by a rectangular cover, with the analogous injective-chain
+consequence, and with the translated vertical edge identified as the
+corresponding coordinate upward edge. The normalized horizontal and vertical
+pictures are now recorded as the coordinate-origin specializations of these
+translated pictures. The
 normalized edge data and the translated edge data are kept in separate Lean
 modules, so the normalized source picture remains available independently from
 the coordinate-origin-parametric layer. A translated edge-window package now
 records the conditional every-edge assembly step: if every edge is supplied
 with a translated horizontal or vertical window and a rectangular cover of its
-complement, then the normal edge-blocking hypotheses follow. The realigned
-local and rotated $T$ covers and the construction of these windows for every
-edge remain open.
+complement, then the normal edge-blocking hypotheses follow. Coordinate right
+and upward edges now obtain such windows directly from the corresponding
+translated picture. The realigned local and rotated $T$ covers and the
+construction of these windows for every edge remain open.
 
 Verdict: the earlier vocabulary gap for contiguous rectangular blocks is closed.
 The earlier packaging gap for coordinate rectangular injectivity is also
@@ -335,7 +340,8 @@ alone. The following additional obligations remain.
           \path{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows},
           issue \#2004. This records the formal boundary before proving that
           every edge in the finite square lattice admits such a translated
-          window.
+          window. Coordinate right and upward edges are now tied to the
+          corresponding translated windows.
     \item Assembly of a family of one-edge blocking data into the uniform
           every-edge hypotheses: blueprint
           \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue

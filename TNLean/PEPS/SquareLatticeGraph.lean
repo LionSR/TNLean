@@ -98,6 +98,48 @@ theorem squareLatticeGraph_adj_up {width height : ℕ}
     (squareLatticeGraph width height).Adj (x, y) (x, ⟨y.1 + 1, hy⟩) := by
   exact Or.inr ⟨rfl, Or.inl rfl⟩
 
+/-- The horizontal edge from coordinate \((x,y)\) to \((x+1,y)\).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where translated horizontal edge blockings are placed around lattice edges. -/
+def squareLatticeRightEdge {width height : ℕ} (x y : ℕ)
+    (hx : x + 1 < width) (hy : y < height) :
+    Edge (squareLatticeGraph width height) where
+  val :=
+    (((⟨x, by omega⟩ : Fin width), (⟨y, hy⟩ : Fin height)),
+      ((⟨x + 1, hx⟩ : Fin width), (⟨y, hy⟩ : Fin height)))
+  property := by
+    constructor
+    · change toLex
+        (((⟨x, by omega⟩ : Fin width), (⟨y, hy⟩ : Fin height)) :
+            SquareLatticeVertex width height) <
+        toLex (((⟨x + 1, hx⟩ : Fin width), (⟨y, hy⟩ : Fin height)) :
+            SquareLatticeVertex width height)
+      rw [Prod.Lex.toLex_lt_toLex]
+      simp
+    · exact squareLatticeGraph_adj_right ⟨x, by omega⟩ ⟨y, hy⟩ hx
+
+/-- The vertical edge from coordinate \((x,y)\) to \((x,y+1)\).
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where translated vertical edge blockings are placed around lattice edges. -/
+def squareLatticeUpEdge {width height : ℕ} (x y : ℕ)
+    (hx : x < width) (hy : y + 1 < height) :
+    Edge (squareLatticeGraph width height) where
+  val :=
+    (((⟨x, hx⟩ : Fin width), (⟨y, by omega⟩ : Fin height)),
+      ((⟨x, hx⟩ : Fin width), (⟨y + 1, hy⟩ : Fin height)))
+  property := by
+    constructor
+    · change toLex
+        (((⟨x, hx⟩ : Fin width), (⟨y, by omega⟩ : Fin height)) :
+            SquareLatticeVertex width height) <
+        toLex (((⟨x, hx⟩ : Fin width), (⟨y + 1, hy⟩ : Fin height)) :
+            SquareLatticeVertex width height)
+      rw [Prod.Lex.toLex_lt_toLex]
+      exact Or.inr ⟨rfl, by simp⟩
+    · exact squareLatticeGraph_adj_up ⟨x, hx⟩ ⟨y, by omega⟩ hy
+
 /-- An edge of the finite square-lattice graph is horizontal when its endpoints
 are horizontal nearest neighbors.
 
