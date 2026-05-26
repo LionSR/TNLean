@@ -1993,14 +1993,20 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Injectivity supplied by normal edge blocking]%
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.blockingData}
+    \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.ofBlockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.injective_chain_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
-    For every edge, the normal edge-blocking hypotheses supply three injective
-    regions: the red region, the blue region, and the complementary region.
+    A family of one-edge blocking data assembles into the normal edge-blocking
+    hypotheses.  Conversely, for every edge, the normal edge-blocking
+    hypotheses supply the corresponding one-edge datum and hence three
+    injective regions: the red region, the blue region, and the complementary
+    region.
 \end{theorem}
 \begin{proof}\leanok
-    This is exactly the injectivity part of the edge-blocking hypotheses.
+    The assembly maps each field of the one-edge datum to the corresponding
+    field of the uniform hypotheses.  The injectivity statement is exactly the
+    injectivity part of those hypotheses.
 \end{proof}
 
 \begin{definition}[Normal one-site separation hypotheses]%

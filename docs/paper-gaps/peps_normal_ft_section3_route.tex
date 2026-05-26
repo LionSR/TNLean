@@ -155,7 +155,8 @@ vertical edge blockings are now both packaged as one-edge blocking data with
 their red, blue, and complementary regions: the edge endpoints lie in the red
 and blue regions, respectively, and the three regions are disjoint and cover
 the full finite square lattice. This one-edge datum is the local form of the
-later every-edge blocking hypotheses. For the horizontal edge, local
+later every-edge blocking hypotheses, and a family of one-edge data now
+assembles into those every-edge hypotheses. For the horizontal edge, local
 $T$-injectivity implies injectivity of all three blocks. For the vertical edge,
 injectivity of the complementary block is still an explicit hypothesis; the
 missing step is the source-faithful finite-geometry proof that discharges this
@@ -279,6 +280,10 @@ alone. The following additional obligations remain.
           \path{lem:peps_normalSquareHorizontalEdge_blockingData}, issue
           \#2004. These now use the common one-edge blocking-data structure.
           The vertical complement injectivity is still conditional.
+    \item Assembly of a family of one-edge blocking data into the uniform
+          every-edge hypotheses: blueprint
+          \path{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}, issue
+          \#2004.
     \item Edge blocking into red, blue, and complementary injective regions:
           blueprint \path{thm:peps_normalEdgeBlockingToInjectiveChain}, issue \#1375.
     \item Application of Lemma \path{inj_isomorph} after normal blocking:
