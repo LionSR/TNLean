@@ -1940,6 +1940,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[Normalized edge-blocking data]%
     \label{lem:peps_normalSquareHorizontalEdge_blockingData}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge}
+    \lean{TNLean.PEPS.normalSquareHorizontalEdge_isHorizontal}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeRed}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareHorizontalEdgeComplement}
@@ -1949,6 +1950,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_blockingDatum_of_TCover}
     \lean{TNLean.PEPS.normalSquareHorizontalEdge_injective_chain_of_TCover}
     \lean{TNLean.PEPS.normalSquareVerticalEdge}
+    \lean{TNLean.PEPS.normalSquareVerticalEdge_isVertical}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeRed}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeBlue}
     \lean{TNLean.PEPS.normalSquareVerticalEdgeComplement}
@@ -1967,15 +1969,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     In the normalized \(5\times7\) horizontal-edge frame, the red block is the
     vertical \(2\times3\) block, the blue block is the horizontal \(3\times2\)
     block, and the complementary block is the finite-lattice edge complement
-    \(A_3\).  The left endpoint of the distinguished edge lies in the red
-    block, the right endpoint lies in the blue block, the three regions are
-    pairwise disjoint, and their union is the whole finite square lattice.
+    \(A_3\).  The distinguished edge is a horizontal edge of the square-lattice
+    graph.  The left endpoint of the distinguished edge lies in the red block,
+    the right endpoint lies in the blue block, the three regions are pairwise
+    disjoint, and their union is the whole finite square lattice.
     If the local \(T\)-region is injective, rectangular injectivity and union
     closure give injectivity of all three blocks; in particular a rectangular
     cover of \(T\) suffices.  The normalized \(7\times5\) vertical-edge frame
-    has the analogous red and blue rectangular blocks and the same
-    set-theoretic blocking data; at this stage its complementary-block
-    injectivity is either kept as an explicit hypothesis or obtained from
+    has the analogous red and blue rectangular blocks, a distinguished vertical
+    edge, and the same set-theoretic blocking data; at this stage its
+    complementary-block injectivity is either kept as an explicit hypothesis or
+    obtained from
     rotated \(T\)-injectivity, and therefore from a rectangular cover of
     rotated \(T\), by the vertical collar lemma.  In both cases the named
     blocking datum supplies the corresponding three injective regions for the

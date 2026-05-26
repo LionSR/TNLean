@@ -37,6 +37,18 @@ def normalSquareHorizontalEdge : Edge (squareLatticeGraph 5 7) where
     · exact squareLatticeGraph_adj_right (⟨1, by decide⟩ : Fin 5)
         (⟨2, by decide⟩ : Fin 7) (by decide)
 
+/-- The distinguished normalized horizontal edge is horizontal in the
+square-lattice graph.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the edge blocking is applied separately to horizontal and vertical
+edges. -/
+theorem normalSquareHorizontalEdge_isHorizontal :
+    IsHorizontalSquareLatticeEdge normalSquareHorizontalEdge := by
+  change squareLatticeHorizontalNeighbor normalSquareHorizontalEdge.1.1
+    normalSquareHorizontalEdge.1.2
+  simp [normalSquareHorizontalEdge, squareLatticeHorizontalNeighbor]
+
 /-- The red block around the normalized horizontal edge. -/
 abbrev normalSquareHorizontalEdgeRed : Finset (SquareLatticeVertex 5 7) :=
   normalSquareRegionTVerticalBlock 0 0
@@ -185,6 +197,18 @@ def normalSquareVerticalEdge : Edge (squareLatticeGraph 7 5) where
       exact Or.inr ⟨rfl, by decide⟩
     · exact squareLatticeGraph_adj_up (⟨2, by decide⟩ : Fin 7)
         (⟨1, by decide⟩ : Fin 5) (by decide)
+
+/-- The distinguished normalized vertical edge is vertical in the
+square-lattice graph.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
+where the edge blocking is applied separately to horizontal and vertical
+edges. -/
+theorem normalSquareVerticalEdge_isVertical :
+    IsVerticalSquareLatticeEdge normalSquareVerticalEdge := by
+  change squareLatticeVerticalNeighbor normalSquareVerticalEdge.1.1
+    normalSquareVerticalEdge.1.2
+  simp [normalSquareVerticalEdge, squareLatticeVerticalNeighbor]
 
 /-- The red block around the normalized vertical edge. -/
 abbrev normalSquareVerticalEdgeRed : Finset (SquareLatticeVertex 7 5) :=
