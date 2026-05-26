@@ -361,9 +361,8 @@ def normalSquareVerticalTranslatedEdge_blockingDatum_of_complementCover
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) xStart yStart)) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
     NormalEdgeBlockingData κ (squareLatticeGraph width height)
       (normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega)) :=
   normalSquareVerticalTranslatedEdge_blockingDatum h hx hy
@@ -379,9 +378,8 @@ theorem normalSquareVerticalTranslatedEdge_injective_chain_of_complementCover
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
     (hUnion : RegionInjectivityUnionClosure κ)
     (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) xStart yStart)) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
     κ.IsInjective (normalSquareVerticalTranslatedEdgeRed xStart yStart) ∧
       κ.IsInjective (normalSquareVerticalTranslatedEdgeBlue xStart yStart) ∧
       κ.IsInjective (normalSquareVerticalTranslatedEdgeComplement xStart yStart) :=
@@ -451,9 +449,8 @@ inductive NormalSquareTranslatedEdgeWindow {width height : ℕ}
       (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
       (edge_eq :
         normalSquareVerticalTranslatedEdge xStart yStart (by omega) (by omega) = e)
-      (cover : SquareLatticeRectangleCover.{edgeCoverUniverse}
-        (normalSquareVerticalTranslatedEdgeComplement
-          (width := width) (height := height) xStart yStart))
+      (cover : NormalSquareVerticalEdgeComplementRectangleCover.{edgeCoverUniverse}
+        (width := width) (height := height) xStart yStart)
 
 namespace NormalSquareTranslatedEdgeWindow
 
@@ -514,9 +511,8 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def normalSquareVerticalTranslatedEdgeWindow
     {width height : ℕ} (xStart yStart : ℕ)
     (hx : xStart + 5 ≤ width) (hy : yStart + 5 ≤ height)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) xStart yStart)) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) xStart yStart) :
     NormalSquareTranslatedEdgeWindow
       (squareLatticeUpEdge (width := width) (height := height)
         (xStart + 2) (yStart + 1) (by omega) (by omega)) :=
@@ -586,9 +582,8 @@ def squareLatticeUpEdgeWindow
     {width height : ℕ} (x y : ℕ)
     (hxLeft : 2 ≤ x) (hxRight : x + 3 ≤ width)
     (hyBottom : 1 ≤ y) (hyTop : y + 4 ≤ height)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) (x - 2) (y - 1))) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) (x - 2) (y - 1)) :
     NormalSquareTranslatedEdgeWindow
       (squareLatticeUpEdge (width := width) (height := height)
         x y (by omega) (by omega)) := by
@@ -604,9 +599,8 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def squareLatticeUpEdgeWindow_of_margins
     {width height : ℕ} (x y : ℕ)
     (hMargins : HasNormalSquareVerticalEdgeMargins width height x y)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) (x - 2) (y - 1))) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) (x - 2) (y - 1)) :
     NormalSquareTranslatedEdgeWindow
       (squareLatticeUpEdge (width := width) (height := height)
         x y
@@ -659,9 +653,8 @@ def verticalSquareLatticeEdgeWindow
     (hEdge : IsVerticalSquareLatticeEdge e)
     (hxLeft : 2 ≤ e.1.1.1.1) (hxRight : e.1.1.1.1 + 3 ≤ width)
     (hyBottom : 1 ≤ e.1.1.2.1) (hyTop : e.1.1.2.1 + 4 ≤ height)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)) :
     NormalSquareTranslatedEdgeWindow e := by
   rw [verticalSquareLatticeEdge_eq_upEdge e hEdge]
   exact squareLatticeUpEdgeWindow e.1.1.1.1 e.1.1.2.1
@@ -676,9 +669,8 @@ def verticalSquareLatticeEdgeWindow_of_margins
     (hEdge : IsVerticalSquareLatticeEdge e)
     (hMargins :
       HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
-    (cover : SquareLatticeRectangleCover
-      (normalSquareVerticalTranslatedEdgeComplement
-        (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))) :
+    (cover : NormalSquareVerticalEdgeComplementRectangleCover
+      (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)) :
     NormalSquareTranslatedEdgeWindow e :=
   verticalSquareLatticeEdgeWindow e hEdge
     hMargins.1 hMargins.2.1 hMargins.2.2.1 hMargins.2.2.2 cover
@@ -704,9 +696,8 @@ inductive NormalSquareEdgeMarginCover {width height : ℕ}
       (hEdge : IsVerticalSquareLatticeEdge e)
       (hMargins :
         HasNormalSquareVerticalEdgeMargins width height e.1.1.1.1 e.1.1.2.1)
-      (cover : SquareLatticeRectangleCover.{edgeCoverUniverse}
-        (normalSquareVerticalTranslatedEdgeComplement
-          (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1)))
+      (cover : NormalSquareVerticalEdgeComplementRectangleCover.{edgeCoverUniverse}
+        (width := width) (height := height) (e.1.1.1.1 - 2) (e.1.1.2.1 - 1))
 
 namespace NormalSquareEdgeMarginCover
 
