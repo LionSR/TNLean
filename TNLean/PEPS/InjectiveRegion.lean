@@ -506,6 +506,26 @@ theorem regionUnionPart_exists_unique [Fintype V] (A B : Finset V) (v : V) :
       intro j hj
       fin_cases j <;> simp [hvA, hvB] at hj ⊢
 
+/-- The source union-closure assertion, applied to the selected indexed
+subregions forming \(A\) and \(B\), makes the three inside indexed regions
+injective.
+
+Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+1322--1404.  In the source proof, injectivity of
+\((A\setminus B)\cup(A\cap B)\) and of
+\((A\cap B)\cup(B\setminus A)\) gives injectivity of their union, namely the
+three inside blocks \(A\setminus B\), \(A\cap B\), and \(B\setminus A\). -/
+theorem RegionInjectivityUnionClosure.regionUnionPart_inside_injective [Fintype V]
+    {κ : RegionInjectivityData V} (hUnion : RegionInjectivityUnionClosure κ)
+    {A B : Finset V}
+    (hA : κ.IsInjective (({0, 1} : Finset (Fin 4)).biUnion (regionUnionPart A B)))
+    (hB : κ.IsInjective (({1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B))) :
+    κ.IsInjective (({0, 1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
+  rw [regionUnionPart_biUnion_zero_one] at hA
+  rw [regionUnionPart_biUnion_one_two] at hB
+  rw [regionUnionPart_biUnion_zero_one_two]
+  exact hUnion.union_injective hA hB
+
 /-- The left-only region is disjoint from the overlap. -/
 theorem regionOnlyLeft_disjoint_overlap (A B : Finset V) :
     Disjoint (regionOnlyLeft A B) (regionOverlap A B) := by

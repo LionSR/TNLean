@@ -1566,6 +1566,25 @@ injective and normal PEPS, following Theorems~2 and~3 of
     binary union closure.
 \end{proof}
 
+\begin{lemma}[Indexed inside union under closure]%
+    \label{lem:peps_regionInjectivityUnionClosure_inside}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_injective}
+    \leanok
+    \uses{def:peps_regionInjectivityData,
+        lem:peps_regionUnionDecomposition_identities}
+    Under the union-closure hypothesis for region injectivity, if the indexed
+    subfamilies \(\{0,1\}\) and \(\{1,2\}\) in the four-region decomposition
+    are injective, then the inside subfamily \(\{0,1,2\}\) is injective.
+    Equivalently, injectivity of the two source-paper regions
+    \((A\setminus B)\cup(A\cap B)\) and
+    \((A\cap B)\cup(B\setminus A)\) gives injectivity of
+    \(A\setminus B\cup A\cap B\cup B\setminus A\).
+\end{lemma}
+\begin{proof}\leanok
+    Rewrite the three selected indexed unions as \(A\), \(B\), and \(A\cup B\),
+    then apply binary union closure.
+\end{proof}
+
 \begin{definition}[Complement of a finite region]%
     \label{def:peps_regionComplement}
     \lean{TNLean.PEPS.regionComplement}
