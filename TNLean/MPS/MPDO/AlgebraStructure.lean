@@ -523,6 +523,44 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
         simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
       rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
 
+/-- Under the current algebra-structure predicate, the adjoint fixed points of
+every positive blocked transfer map coincide with the adjoint fixed points of
+the unblocked transfer map.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 2015--2067. This equality is only the fixed-point consequence of the
+present algebra-tower predicate. It is not the converse
+from the algebra formulation to the fusion formulation; the latter requires
+the positive trace-power coefficient comparison used in Appendix C.4. -/
+theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
+    {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
+    {n : ℕ} (hn : 0 < n) {X : Mat} :
+    (blockedTransferMap M n).adjoint X = X ↔ (transferMap M).adjoint X = X := by
+  constructor
+  · exact adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra hAlg hn
+  · exact adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply n
+
+/-- Under the current algebra-structure predicate and the faithful fixed-point
+side hypotheses, the stationary adjoint fixed-point tower is itself compatible
+with the MPO tensor.
+
+Applying the fixed-point equality above to the stationary tower constructed
+from the faithful fixed point yields compatibility with the MPO tensor.  It is
+still only a consequence of the present algebra-tower predicate, not the source
+converse from Theorem IV.13(ii) to the fusion-isometry formulation.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra
+    {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
+    (h_tp : Kraus.IsTP M.toMPSTensor)
+    {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
+    (AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M :=
+  AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
+    (M := M) (h_tp := h_tp) hρ hρ_fix
+    (fun _ hn X =>
+      (adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
+        (M := M) hAlg hn (X := X)).symm)
+
 /-! ### Diagonal $\chi$-matrices and the trace-power formula
 
 The paper arXiv:1606.00608 (Cirac--Perez-Garcia--Schuch--Verstraete 2017),
