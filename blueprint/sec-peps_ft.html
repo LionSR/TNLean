@@ -10740,7 +10740,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>             In the normalized horizontal-edge \(5\times 7\) frame, the finite-lattice complementary block \(A_3\) is the local-window \(T\)-region together with two top-collar contiguous \(3\times 2\) rectangles. Consequently, if the local \(T\)-region is injective, then rectangular injectivity and union closure imply that \(A_3\) is injective. There is also a transposed \(7\times 5\) horizontal-frame collar identity, now using two contiguous \(2\times 3\) right-collar rectangles. For the rotated vertical edge-blocking regions, the corresponding complement is the rotated local \(T\)-region together with the same two right-collar rectangles; hence rotated \(T\)-injectivity, and hence a rectangular cover of rotated \(T\), implies injectivity of the vertical complementary block. </p>
+  <p>             In the normalized horizontal-edge \(5\times 7\) frame, the finite-lattice complementary block \(A_3\) is the local-window \(T\)-region together with two top-collar contiguous \(3\times 2\) rectangles. Consequently, if the local \(T\)-region is injective, then rectangular injectivity and union closure imply that \(A_3\) is injective. There is also a transposed \(7\times 5\) horizontal-frame collar identity with two contiguous \(2\times 3\) right-collar rectangles. For the rotated vertical edge-blocking regions, the corresponding complement is the rotated local \(T\)-region together with the same two right-collar rectangles; hence rotated \(T\)-injectivity, and hence a rectangular cover of rotated \(T\), implies injectivity of the vertical complementary block. </p>
 
   </div>
 </div>
@@ -12083,13 +12083,13 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivModEdgeScalars">
+<div class="definition_thmwrapper theorem-style-definition" id="def:edgeScalarAt">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">17.151</span>
-    <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
+    <span class="definition_thmtitle">Oriented endpoint scalar</span>
     <div class="thm_header_extras">
 
     
@@ -12097,7 +12097,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#def:edgeScalarAt">#</a>
     
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
@@ -12132,6 +12132,138 @@
         
         <ul class="uses">
           
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeScalarAt" class="lean_decl">TNLean.PEPS.edgeScalarAt</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   An edge-scalar family \(c=(c_e)_{e\in E}\) determines the endpoint scalar \(c_{v,e}\) by \(c_{v,e}=c_e\) at the lower endpoint of \(e\) and \(c_{v,e}=c_e^{-1}\) at the upper endpoint. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:IsVertexBalanced">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">17.152</span>
+    <span class="definition_thmtitle">Vertex-balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:IsVertexBalanced">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 17.151</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsVertexBalanced" class="lean_decl">TNLean.PEPS.IsVertexBalanced</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   An edge-scalar family is vertex-balanced when \(\prod _{e\ni v} c_{v,e}=1\) for every vertex \(v\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivModEdgeScalars">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">17.153</span>
+    <span class="definition_thmtitle">Gauge equivalence modulo balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeGaugeAt">Definition 17.7</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 17.151</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 17.152</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
           <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars</a></li>
           
         </ul>
@@ -12143,17 +12275,17 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   Two gauge families are equivalent modulo balanced edge scalars if there is a nonzero scalar \(c_e\) on each edge such that the corresponding endpoint actions rescale the oriented edge gauges, and the oriented product of those endpoint scalars is \(1\) at every vertex. </p>
+  <p>   Two gauge families are equivalent modulo balanced edge scalars if there is a nonzero scalar \(c_e\) on each edge such that the corresponding endpoint actions satisfy \(X_{v,e}=c_{v,e}Y_{v,e}\), and \(\prod _{e\ni v}c_{v,e}=1\) for every vertex \(v\). </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:edgeScalarAt_mul">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.152</span>
-    <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
+    <span class="theorem_thmlabel">17.154</span>
+    <span class="theorem_thmtitle">Multiplication of oriented edge scalars</span>
     <div class="thm_header_extras">
 
     
@@ -12161,7 +12293,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_mul">#</a>
     
     <a class="icon proof" href="sec-peps_ft.html#a0000001203"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -12179,11 +12311,808 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.151</a></li>
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 17.151</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeScalarAt_mul" class="lean_decl">TNLean.PEPS.edgeScalarAt_mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two edge-scalar families are multiplied, then their endpoint scalars satisfy \((cd)_{v,e}=c_{v,e}d_{v,e}\) on every oriented half-edge. </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d9780cb9b8f0a243.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001203">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>At the lower endpoint this is ordinary multiplication of the edge scalars. At the upper endpoint, \((c_ed_e)^{-1}=c_e^{-1}d_e^{-1}\) because the edge scalars lie in \(\mathbb C^\times \). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:edgeScalarAt_inv">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.155</span>
+    <span class="theorem_thmtitle">Inversion of oriented edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_inv">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001205"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 17.151</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeScalarAt_inv" class="lean_decl">TNLean.PEPS.edgeScalarAt_inv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Inverting an edge-scalar family gives \((c^{-1})_{v,e}=c_{v,e}^{-1}\) on every oriented endpoint. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001205">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>At the lower endpoint, \((c^{-1})_{v,e}=c_e^{-1}=c_{v,e}^{-1}\). At the upper endpoint, \((c^{-1})_{v,e}=(c_e^{-1})^{-1}=c_{v,e}^{-1}\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:edgeScalarAt_ne_zero">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.156</span>
+    <span class="theorem_thmtitle">Nonzero oriented edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001206"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:edgeScalarAt">Definition 17.151</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.edgeScalarAt_ne_zero" class="lean_decl">TNLean.PEPS.edgeScalarAt_ne_zero</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every oriented endpoint scalar satisfies \(c_{v,e}\ne 0\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001206">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Edge scalars are units, and the inverse of a unit is again a unit. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:IsVertexBalanced_mul">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.157</span>
+    <span class="theorem_thmtitle">Product of balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_mul">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001207"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 17.152</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 17.154</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsVertexBalanced.mul" class="lean_decl">TNLean.PEPS.IsVertexBalanced.mul</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The pointwise product of two vertex-balanced edge-scalar families is again vertex-balanced. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001207">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>For every vertex \(v\), \(\prod _{e\ni v}(cd)_{v,e}= (\prod _{e\ni v}c_{v,e})(\prod _{e\ni v}d_{v,e})=1\cdot 1=1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:IsVertexBalanced_inv">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.158</span>
+    <span class="theorem_thmtitle">Inverse of balanced edge scalars</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_inv">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001208"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:IsVertexBalanced">Definition 17.152</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_inv">Theorem 17.155</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.IsVertexBalanced.inv" class="lean_decl">TNLean.PEPS.IsVertexBalanced.inv</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   The pointwise inverse of a vertex-balanced edge-scalar family is again vertex-balanced. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001208">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>For every vertex \(v\), \(\prod _{e\ni v}(c^{-1})_{v,e}= (\prod _{e\ni v}c_{v,e})^{-1}=1^{-1}=1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_refl">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.159</span>
+    <span class="theorem_thmtitle">Reflexivity of balanced edge-scalar equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001209"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.refl" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.refl</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Every edge-gauge family is equivalent to itself modulo balanced edge scalars, witnessed by \(c_e=1\) for every edge \(e\). </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d9780cb9b8f0a243.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001209">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>If \(c_e=1\), then \(c_{v,e}=1\), \(X_{v,e}=c_{v,e}X_{v,e}\), and \(\prod _{e\ni v}c_{v,e}=1\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_symm">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.160</span>
+    <span class="theorem_thmtitle">Symmetry of balanced edge-scalar equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001211"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">Theorem 17.158</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">Theorem 17.156</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.symm" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.symm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If one gauge family differs from another by balanced edge scalars, then the second differs from the first by the inverse balanced edge-scalar family. </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d9780cb9b8f0a243.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001211">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>If \(X_{v,e}=c_{v,e}Y_{v,e}\) with \(c_{v,e}\ne 0\), then \(Y_{v,e}=c_{v,e}^{-1}X_{v,e}\). The inverse scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_inv">17.158</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_trans">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.161</span>
+    <span class="theorem_thmtitle">Transitivity of balanced edge-scalar equivalence</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001213"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">Theorem 17.157</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:edgeScalarAt_mul">Theorem 17.154</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.trans" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.trans</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If one gauge family differs from a second by balanced edge scalars, and the second differs from a third by balanced edge scalars, then the first differs from the third by the pointwise product of the two scalar families. </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d9780cb9b8f0a243.svg" alt="\TNPEPSEdgeGaugeOrientation"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001213">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>From \(X_{v,e}=c_{v,e}Y_{v,e}\) and \(Y_{v,e}=d_{v,e}Z_{v,e}\) one obtains \(X_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}\). The product scalar family is balanced by Theorem&#160;<a href="sec-peps_ft.html#thm:IsVertexBalanced_mul">17.157</a>. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_equivalence">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.162</span>
+    <span class="theorem_thmtitle">The balanced edge-scalar quotient is an equivalence relation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001215"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">Theorem 17.159</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">Theorem 17.160</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">Theorem 17.161</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Gauge equivalence modulo balanced edge scalars is reflexive, symmetric, and transitive. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001215">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Reflexivity is witnessed by \(1\), symmetry by \(c^{-1}\), and transitivity by \(cd\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:GaugeEquivModEdgeScalars_setoid">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">17.163</span>
+    <span class="definition_thmtitle">The balanced edge-scalar quotient relation</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars_setoid">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">Theorem 17.162</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.setoid" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.setoid</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>   The preceding equivalence relation is the quotient relation on edge-gauge families modulo vertex-balanced edge scalars. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.164</span>
+    <span class="theorem_thmtitle">Balanced edge scalars preserve the local gauge action</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001216"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.151</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
           
           <li><a href="sec-peps_ft.html#def:gaugeVertex">Definition 17.8</a></li>
           
@@ -12220,7 +13149,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001203">
+<div class="proof_wrapper" id="a0000001216">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12228,7 +13157,170 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> In the defining sum for the gauged tensor, each incident edge contributes its endpoint scalar factor in addition to the original gauge entry. The product of these endpoint scalars is \(1\) by the balancing condition, so every summand is unchanged. </p>
+  <p> In each summand of the gauged tensor at \(v\), the edge scalars contribute the factor \(\prod _{e\ni v}c_{v,e}=1\). Hence the summand, and therefore the whole local tensor, is unchanged. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_applyGauge_eq">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.165</span>
+    <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged tensor</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001217"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">Theorem 17.164</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:applyGauge">Definition 17.9</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_eq" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_eq</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families differ by a balanced edge-scalar reweighting, then applying them to the same PEPS tensor produces the same gauged tensor. </p>
+<div class="centered"> <img class="tn-svg" src="tn_svg/tn-d8cf4086d21ec535.svg" alt="\TNPEPSGaugeVertexAction"></div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001217">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>For every vertex \(v\), virtual index \(\eta \), and physical index \(\sigma \), \((A^X)_v(\eta ,\sigma )=(A^Y)_v(\eta ,\sigma )\) for the two gauged tensors by Theorem&#160;<a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">17.164</a>. Hence the two gauged tensors are equal. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:GaugeEquivModEdgeScalars_applyGauge_sameState">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">17.166</span>
+    <span class="theorem_thmtitle">Balanced edge scalars preserve the gauged state</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_sameState">#</a>
+    
+    <a class="icon proof" href="sec-peps_ft.html#a0000001219"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">Theorem 17.165</a></li>
+          
+          <li><a href="sec-peps_ft.html#def:peps_same_state">Definition 17.6</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_sameState" class="lean_decl">TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_sameState</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   If two gauge families differ by a balanced edge-scalar reweighting, then the PEPS tensors obtained by applying those gauge families represent the same state. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001219">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The two gauged tensors are equal, hence all of their state coefficients are equal. </p>
 
   </div>
 </div>
@@ -12237,7 +13329,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">17.153</span>
+    <span class="theorem_thmlabel">17.167</span>
     <span class="theorem_thmtitle">Gauge uniqueness modulo balanced edge scalars</span>
     <div class="thm_header_extras">
 
@@ -12259,7 +13351,7 @@
         
         <ul class="uses">
           
-          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.151</a></li>
+          <li><a href="sec-peps_ft.html#def:GaugeEquivModEdgeScalars">Definition 17.153</a></li>
           
           <li><a href="sec-peps_ft.html#def:IsVertexInjective">Definition 17.14</a></li>
           
@@ -12296,18 +13388,18 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001204">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001220">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">17.154</span>
+    <span class="remark_thmlabel">17.168</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001204">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001220">#</a>
     
     
     
@@ -12320,7 +13412,7 @@
 	<a href="sect0001.html#Molnar2018NormalPEPS" >MGRPG+18</a>
 	, Section&#160;3
 	]
-</span>. The middle-region blocked coefficient is constructed by the preceding definitions; the remaining local-gauge step is the comparison with the corresponding three-site injective chain. The uniqueness statement has now been repaired to a quotient by balanced edge scalars, but its proof still requires the same blocking construction together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
+</span>. The middle-region blocked coefficient is constructed by the preceding definitions; the remaining local-gauge step is the comparison with the corresponding three-site injective chain. The corrected uniqueness statement is a quotient by balanced edge scalars; its proof still requires the same blocking construction together with the corresponding tensor-factor uniqueness statement at a single vertex. </p>
 
   </div>
 </div>
