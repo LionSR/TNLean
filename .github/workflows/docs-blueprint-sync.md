@@ -48,6 +48,7 @@ safe-outputs:
     allowed-files: [README.md, docs/**, blueprint/**]
     protected-files: fallback-to-issue
   noop:
+    report-as-issue: false
   missing-data:
 ---
 
