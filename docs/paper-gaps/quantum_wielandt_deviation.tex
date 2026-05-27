@@ -82,7 +82,7 @@ The proof passes through the usual eventual full-rank formulation and a
 blocking argument, but the conclusion is the equality
 $S_n(A)=M_D(\mathbb C)$ for one fixed length $n$. It is not merely a statement
 about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The general
-    theorem is \leanid{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
+    theorem is \leanid{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
     in \path{TNLean/Wielandt/Inequality/Bounds.lean:389--468}. The
     formal equivalence between the primitive condition used by Sanz--P\'erez-Garc\'ia--Wolf--Cirac
     and eventual full Kraus rank under normalization is in
@@ -103,17 +103,10 @@ under that assumption it proves
 These are the hypotheses in \cite[Theorem~1]{Sanz2010Quantum}. The older
 chosen-Kraus statements are still present, but only as corollaries obtained by
 taking $X=A_{i_0}$.\footnote{The relevant declarations are
-    \leanid{MPSTensor.wordSpan\_\allowbreak eq\_\allowbreak top\_\allowbreak of\_\allowbreak
-        isPrimitivePaper\_\allowbreak of\_\allowbreak mem\_\allowbreak wordSpan\_\allowbreak one\_\allowbreak
-        of\_\allowbreak isUnit} and
-    \leanid{MPSTensor.iIndex\_\allowbreak le\_\allowbreak of\_\allowbreak mem\_\allowbreak
-        wordSpan\_\allowbreak one\_\allowbreak of\_\allowbreak isUnit} for the invertible case, and
-    \leanid{MPSTensor.wordSpan\_\allowbreak eq\_\allowbreak top\_\allowbreak of\_\allowbreak
-        isPrimitivePaper\_\allowbreak of\_\allowbreak mem\_\allowbreak wordSpan\_\allowbreak one\_\allowbreak
-        of\_\allowbreak noninvertible\_\allowbreak eigenvector} and
-    \leanid{MPSTensor.iIndex\_\allowbreak le\_\allowbreak sq\_\allowbreak of\_\allowbreak
-        mem\_\allowbreak wordSpan\_\allowbreak one\_\allowbreak of\_\allowbreak noninvertible\_\allowbreak
-        eigenvector} for
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit} and
+    \leanid{MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit} for the invertible case, and
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector} and
+    \leanid{MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector} for
     the non-invertible case, all in
     \path{TNLean/Wielandt/Inequality/Bounds.lean}. The shorter
     chosen-generator statements in the same file are corollaries.}
@@ -131,8 +124,8 @@ bound.
 The formal proof now uses this one-step-subspace version. It adjoins the
 chosen $X\in S_1(A)$ as a redundant generator and proves that the exact word
 spans and the Kraus rank are unchanged. The span equality is
-\leanid{MPSTensor.wordSpan\_oneStepAugment\_eq}, and the Kraus-rank equality is
-\leanid{MPSTensor.krausRank\_oneStepAugment}, both in
+\leanid{MPSTensor.wordSpan_oneStepAugment_eq}, and the Kraus-rank equality is
+\leanid{MPSTensor.krausRank_oneStepAugment}, both in
 \path{TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean}. This reduces the
 paper's hypothesis to the single-generator argument without changing the
 channel invariant being bounded.
@@ -145,7 +138,7 @@ stated for an arbitrary such $X$, not only for a distinguished Kraus matrix.
 \section{Primitive-to-normal theorem with a chosen positive fixed point}
 
 The theorem
-\leanid{MPSTensor.isNormal\_of\_isPrimitiveMPS\_with\_posDef}\footnote{%
+\leanid{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}\footnote{%
     \path{TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean}.}
 proves normality from a chosen fixed point $\rho$ satisfying the local
 spectral-gap predicate \leanid{IsPrimitiveMPS} and the additional hypothesis
@@ -186,7 +179,7 @@ full quantum Wielandt theorem, but the theorem in
 \path{TNLean/Wielandt/Inequality/Bounds.lean} proves the stated bound for
 $i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
 \footnote{The cumulative-span theorem is
-    \leanid{MPSTensor.cumulativeSpan\_eq\_top} in
+    \leanid{MPSTensor.cumulativeSpan_eq_top} in
     \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
     theorem for the spaces $S_n(A)$ is the general theorem cited above.
     The blueprint makes this distinction in

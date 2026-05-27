@@ -29,7 +29,7 @@ $\mu^A_j,\mu^B_k\in\mathbb C$. The assembled MPV at length~$N$ is
 written $V^{(N)}(\mathtt{toTensorFromBlocks} \mu A)$ in the
 formalization.\footnote{%
     \leanid{MPSTensor.toTensorFromBlocks};
-    \leanid{MPSTensor.mpv\_toTensorFromBlocks\_eq\_sum}.}
+    \leanid{MPSTensor.mpv_toTensorFromBlocks_eq_sum}.}
 A cross-overlap $\langle V^{(N)}(A_j),V^{(N)}(B_k)\rangle$ is
 \leanid{MPSTensor.mpvOverlap}. \emph{Eventual proportionality} of the
 assembled families is the hypothesis that for some scalar sequence
@@ -48,10 +48,10 @@ The surviving one-copy normal-canonical BNT formulation
 sector with strict ordering
 \begin{align}
     \|\mu_1\|>\|\mu_2\|>\cdots>\|\mu_r\|
-    \tag{\leanid{mu\_strict\_anti}}
+    \tag{\leanid{mu_strict_anti}}
 \end{align}
 across the entire family.\footnote{%
-    \leanid{MPSTensor.IsNormalCanonicalFormBNT.mu\_strict\_anti} in
+    \leanid{MPSTensor.IsNormalCanonicalFormBNT.mu_strict_anti} in
     \doclink{TNLean/MPS/BNT/Construction}.}
 Together with the dominant normalization $\|\mu_1\|=1$, every
 sub-dominant block has modulus strictly less than~$1$.
@@ -114,7 +114,7 @@ and $\mathrm{RHS}_N:=c_N\langle V^{(N)}(B_{\mathrm{tot}}),V^{(N)}(B_{k_0})\rangl
 With $\|\mu^A_j\|\le 1$, every $(\mu^A_j)^N$ is bounded; together with
 \eqref{eq:Hk0} this forces $\mathrm{LHS}_N\to 0$. For $\mathrm{RHS}_N$,
 the current cross-overlap decay statement
-\leanid{MPSTensor.IsBNTCanonicalForm.cross\_overlap\_basis\_tendsto\_zero}
+\leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
 gives $\langle V^{(N)}(B_k),V^{(N)}(B_{k_0})\rangle\to 0$ for $k\ne k_0$,
 while the diagonal block has a nonzero limiting coefficient, so
 $\mathrm{RHS}_N=c_N(\mu^B_{k_0})^N(\ell+o(1))$.
@@ -128,7 +128,7 @@ $\bigl\|c_N(\mu^B_0/\mu^A_0)^N\bigr\|\to 1$.  Therefore
     \bigl\|\mu^B_{k_0}/\mu^B_0\bigr\|^N.
     \label{eq:decay}
 \end{align}
-Under $\|\mu^A_0\|=1$ and \leanid{mu\_strict\_anti}, the second factor
+Under $\|\mu^A_0\|=1$ and \leanid{mu_strict_anti}, the second factor
 in~\eqref{eq:decay} decays geometrically whenever $k_0\ne 0$, so
 $\mathrm{RHS}_N\to 0$ together with $\mathrm{LHS}_N$. No contradiction
 is available from the per-block projection. The dominant case
@@ -178,7 +178,7 @@ independence; it requires neither side to stay bounded away from~$0$.
 
 The current \leanid{SectorBNT} API provides the combined-family
 linear-independence mechanism as
-\leanid{MPSTensor.IsBNTCanonicalForm.combined\_family\_eventually\_li}.
+\leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}.
 The remaining task is to combine that statement with the proportional
 coefficient identity in the fixed-block setting, without appealing to the
 retired per-block-projection layer.
@@ -203,12 +203,12 @@ either
           $\mu_{j,q}$.  On the surviving \leanid{SectorDecomposition}
           surface this means keeping the raw coefficients
           $\sum_q\mu_{j,q}^N$ visible and using
-          \leanid{MPSTensor.IsBNTCanonicalForm.coeff\_not\_tendsto\_zero\_at\_block}
+          \leanid{MPSTensor.IsBNTCanonicalForm.coeff_not_tendsto_zero_at_block}
           rather than collapsing the sector to a single weight before the
           projection argument.  Tracked in \ghissue{1641}.
 \end{enumerate}
 
-The collapse $r_j=1$ enforced by \leanid{mu\_strict\_anti}
+The collapse $r_j=1$ enforced by \leanid{mu_strict_anti}
 identifies the two layers into a single weight; once collapsed, the
 non-dominant Step~1 conclusion cannot be reached by per-block
 projection under the one-copy normal-canonical BNT formulation because
