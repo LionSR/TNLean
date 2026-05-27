@@ -233,8 +233,8 @@ Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
 \(A=(A\setminus B)\cup(A\cap B)\). -/
 theorem regionUnionPart_biUnion_zero_one [Fintype V] (A B : Finset V) :
     ({0, 1} : Finset (Fin 4)).biUnion (regionUnionPart A B) = A := by
-  ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simpa [Finset.biUnion_insert, Finset.singleton_biUnion] using
+    regionUnionPart_zero_union_one A B
 
 /-- The middle two indexed regions reconstruct `B`.
 
@@ -252,8 +252,8 @@ Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
 applied to \(B=(A\cap B)\cup(B\setminus A)\). -/
 theorem regionUnionPart_biUnion_one_two [Fintype V] (A B : Finset V) :
     ({1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B) = B := by
-  ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simpa [Finset.biUnion_insert, Finset.singleton_biUnion] using
+    regionUnionPart_one_union_two A B
 
 /-- The first three indexed regions reconstruct `A ∪ B`.
 
@@ -272,18 +272,15 @@ Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
 indexed regions. -/
 theorem regionUnionPart_biUnion_zero_one_two [Fintype V] (A B : Finset V) :
     ({0, 1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B) = A ∪ B := by
-  ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simpa [Finset.biUnion_insert, Finset.singleton_biUnion, Finset.union_assoc] using
+    regionUnionPart_zero_union_one_union_two A B
 
-/-- The selected subfamily `3` is the outside indexed region.
-
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
-1322--1404: the tensor called `X` is carried by the fourth blocked region. -/
+/-- Convenience form of `Finset.singleton_biUnion` for the outside indexed
+region. -/
 theorem regionUnionPart_biUnion_three [Fintype V] (A B : Finset V) :
     ({3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
       regionUnionPart A B 3 := by
-  ext v
-  simp
+  rw [Finset.singleton_biUnion]
 
 /-- The selected subfamily `3` is the complement of the selected inside
 subfamily `0,1,2`.
@@ -296,20 +293,6 @@ theorem regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two [Fintype 
     ({3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
       regionComplement (({0, 1, 2} : Finset (Fin 4)).biUnion (regionUnionPart A B)) := by
   rw [regionUnionPart_biUnion_three, regionUnionPart_biUnion_zero_one_two,
-    regionUnionPart_three_eq_regionComplement_union]
-
-/-- The fourth indexed region is the complement of the three inside indexed
-regions.
-
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
-1322--1404: the proof first blocks the three regions inside `A ∪ B`, while
-the fourth tensor is attached to their complement. -/
-theorem regionUnionPart_three_eq_regionComplement_inside [Fintype V]
-    (A B : Finset V) :
-    regionUnionPart A B 3 =
-      regionComplement
-        (regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2) := by
-  rw [regionUnionPart_zero_union_one_union_two,
     regionUnionPart_three_eq_regionComplement_union]
 
 /-- The fourth indexed region is the intersection of the complements of `A`
@@ -334,7 +317,9 @@ theorem regionUnionPart_two_union_three_eq_regionComplement_left [Fintype V]
     (A B : Finset V) :
     regionUnionPart A B 2 ∪ regionUnionPart A B 3 = regionComplement A := by
   ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simp only [regionUnionPart_two, regionUnionPart_three, Finset.mem_union,
+    mem_regionOnlyRight, mem_regionOutsideUnion, mem_regionComplement]
+  tauto
 
 /-- The indexed subfamily `2,3` reconstructs the complement of `A`.
 
@@ -345,8 +330,8 @@ theorem regionUnionPart_biUnion_two_three_eq_regionComplement_left [Fintype V]
     (A B : Finset V) :
     ({2, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
       regionComplement A := by
-  ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simpa [Finset.biUnion_insert, Finset.singleton_biUnion] using
+    regionUnionPart_two_union_three_eq_regionComplement_left A B
 
 /-- The selected subfamily `2,3` is the complement of the selected subfamily
 `0,1`.
@@ -371,7 +356,9 @@ theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
     (A B : Finset V) :
     regionUnionPart A B 0 ∪ regionUnionPart A B 3 = regionComplement B := by
   ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simp only [regionUnionPart_zero, regionUnionPart_three, Finset.mem_union,
+    mem_regionOnlyLeft, mem_regionOutsideUnion, mem_regionComplement]
+  tauto
 
 /-- The indexed subfamily `0,3` reconstructs the complement of `B`.
 
@@ -382,8 +369,8 @@ theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_right [Fintype V]
     (A B : Finset V) :
     ({0, 3} : Finset (Fin 4)).biUnion (regionUnionPart A B) =
       regionComplement B := by
-  ext v
-  by_cases hvA : v ∈ A <;> by_cases hvB : v ∈ B <;> simp [hvA, hvB]
+  simpa [Finset.biUnion_insert, Finset.singleton_biUnion] using
+    regionUnionPart_zero_union_three_eq_regionComplement_right A B
 
 /-- The selected subfamily `0,3` is the complement of the selected subfamily
 `1,2`.
@@ -455,17 +442,6 @@ theorem regionUnionPart_one_union_two_eq_regionComplement_zero_union_three [Fint
   rw [regionUnionPart_one_union_two, regionUnionPart_zero_union_three_eq_regionComplement_right]
   ext v
   simp [regionComplement]
-
-/-- The three inside indexed regions and the outside region reconstruct `V`.
-
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
-1322--1404: after the three inside blocks form `A ∪ B`, the fourth block is
-the complementary tensor attached to `(A ∪ B)ᶜ`. -/
-theorem regionUnionPart_zero_union_one_union_two_union_three [Fintype V]
-    (A B : Finset V) :
-    regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2 ∪
-      regionUnionPart A B 3 = Finset.univ := by
-  simpa using regionFourPart_union A B
 
 /-- The indexed four regions cover the whole finite vertex set. -/
 theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
