@@ -187,11 +187,11 @@ The following compatibility theorems are proved in the present chapter.
 
 \subsection{The \texorpdfstring{$Z$}{Z}-gauge degree of freedom}
 
-\begin{definition}[Entrywise periodic \(Z\)-gauge ratio]\label{def:z_gauge_entry}
+\begin{definition}[Entrywise periodic $Z$-gauge ratio]\label{def:z_gauge_entry}
     \lean{MPSTensor.zGaugeEntry}
     \leanok
     Given complex weights $\mu,\nu$, define the entrywise
-    \(Z\)-gauge ratio by
+    $Z$-gauge ratio by
     \[
         z(\mu,\nu) := \mu/\nu.
     \]
@@ -217,7 +217,7 @@ The following compatibility theorems are proved in the present chapter.
     \]
 \end{lemma}
 
-\begin{definition}[Diagonal periodic \(Z\)-gauge matrix]\label{def:z_gauge_diagonal}
+\begin{definition}[Diagonal periodic $Z$-gauge matrix]\label{def:z_gauge_diagonal}
     \lean{MPSTensor.zGaugeDiagonal}
     \leanok
     \uses{def:z_gauge_entry}
@@ -228,7 +228,7 @@ The following compatibility theorems are proved in the present chapter.
     \]
 \end{definition}
 
-\begin{lemma}[Diagonal \(Z\)-gauge has finite order under matched powers]%
+\begin{lemma}[Diagonal $Z$-gauge has finite order under matched powers]%
     \label{lem:z_gauge_diagonal_pow}
     \lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
     \leanok
@@ -239,7 +239,7 @@ The following compatibility theorems are proved in the present chapter.
     \]
 \end{lemma}
 
-\begin{lemma}[Diagonal \(Z\)-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
+\begin{lemma}[Diagonal $Z$-gauge transports diagonal weights]\label{lem:z_gauge_diagonal_mul}
     \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
     \leanok
     \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
@@ -437,10 +437,10 @@ unconditional result.
     transfer map with the sector adjoint transfer map on the corner of~$P_k$.
     This is the inverse cyclic indexing of the off-diagonal convention in
     \cite[Appendix~A]{DeLasCuevas2017Irreducible}.  There the same adjoint
-    transfer map is written \(E^*\), and the source projectors satisfy
-    \(E^*(P_u)=P_{u+1}\) together with
-    \(A^i=\sum_u P_u A^i P_{u+1}\).  Here \(P_k\) corresponds to the source
-    sector \(u=-k \pmod m\), which turns the source shift into the displayed
+    transfer map is written $E^*$, and the source projectors satisfy
+    $E^*(P_u)=P_{u+1}$ together with
+    $A^i=\sum_u P_u A^i P_{u+1}$.  Here $P_k$ corresponds to the source
+    sector $u=-k \pmod m$, which turns the source shift into the displayed
     adjoint-transfer relation.
 \end{definition}
 
@@ -497,35 +497,49 @@ unconditional result.
         thm:overlap_decay_irr_tp,
         thm:overlap_decay_rect_irr_tp}
     Write the period-blocked tensors as
-    \[
-        \bar A \sim \bigoplus_{u\in\mathbb Z_m} A_u,\qquad
-        \bar B \sim \bigoplus_{v\in\mathbb Z_m} B_v ,
-    \]
-    with unit sector weights. For every length $N$,
+    $\bar A \sim \bigoplus_{u\in\mathbb Z_m} A_u$ and
+    $\bar B \sim \bigoplus_{v\in\mathbb Z_m} B_v$, with unit sector weights.
+    For every length $N$,
     \[
         O_{\bar A,\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
             O_{A_u,B_v}(N).
     \]
-    If no pair $(u,v)$ is gauge-phase equivalent, then for every $u,v$
-    the normal-tensor dichotomy gives $O_{A_u,B_v}(N)\to0$.
-    Hence the finite double sum gives $O_{\bar A,\bar B}(N)\to 0$.
+    The no-matching hypothesis is
+    $A_u \not\sim_{\mathrm{gp}} B_v$ for all $u,v\in\mathbb Z_m$. By the
+    normal-tensor overlap dichotomy,
+    $\lim_{N\to\infty} O_{A_u,B_v}(N)=0$ for every $u,v$.
+    Hence
+    \[
+        \lim_{N\to\infty} O_{\bar A,\bar B}(N)
+        =
+        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
+            \lim_{N\to\infty} O_{A_u,B_v}(N)
+        =0 .
+    \]
 
-    This decay is incompatible with a hypothetical global gauge-phase
-    equivalence. If $A$ and $B$ were gauge-phase equivalent, then
-    $\bar A$ and $\bar B$ would be gauge-phase equivalent. Thus
-    $V_N(\bar B)=\zeta^N X V_N(\bar A)X^{-1}$ at the virtual level, and
+    Suppose, to the contrary, that $A\sim_{\mathrm{gp}} B$. Blocking preserves
+    gauge-phase equivalence, so $\bar A\sim_{\mathrm{gp}}\bar B$. Thus, for
+    some invertible $X$ and some $\zeta\ne0$,
+    $V_N(\bar B)=\zeta^N X V_N(\bar A)X^{-1}$.
+    Gauge cancellation in the trace pairing gives
     \[
         O_{\bar A,\bar B}(N)
         =
-        \overline{\zeta}^{\,N} O_{\bar A,\bar A}(N).
+        \overline{\zeta}^{\,N} O_{\bar A,\bar A}(N),
+        \qquad
+        O_{\bar B,\bar B}(N)
+        =
+        |\zeta|^{2N} O_{\bar A,\bar A}(N).
     \]
-    The periodic self-overlap limits $O_{\bar A,\bar A}(N)\to m$ and
-    $O_{\bar B,\bar B}(N)\to m$ imply $|\zeta|=1$, and the displayed
-    identity cannot tend to zero. This contradiction proves that $A$ and
-    $B$ are not gauge-phase equivalent. The irreducible trace-preserving
-    overlap dichotomy then yields $O_{A,B}(N)\to0$.
+    Since $O_{\bar A,\bar A}(N)\to m$ and
+    $O_{\bar B,\bar B}(N)\to m$ with $m>0$, the second identity forces
+    $|\zeta|=1$. Therefore
+    $|O_{\bar A,\bar B}(N)|=O_{\bar A,\bar A}(N)\to m\ne0$, contradicting
+    $\lim_N O_{\bar A,\bar B}(N)=0$. Hence
+    $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
+    dichotomy gives $O_{A,B}(N)\to0$.
 \end{proof}
 
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}

@@ -132,7 +132,7 @@ onto $G_L(A)^\perp$ in the $L$-site Euclidean space.
     \leanok
     \uses{def:nsite_space_parent, def:ground_space_parent}
     Via the canonical identification between coefficient functions and the
-    Euclidean space \(\ell^{2}(\{0,\ldots,d{-}1\}^{L})\), one transports the local
+    Euclidean space $\ell^{2}(\{0,\ldots,d{-}1\}^{L})$, one transports the local
     ground space to a Hilbert-space subspace
     \[
         G_{L}^{\mathrm{ES}}(A) \subseteq \ell^{2}(\{0,\ldots,d{-}1\}^{L}).
@@ -1368,7 +1368,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \uses{thm:chain_ground_space_eq_mpv_blk, lem:mpv_eq_ground_space_map_one,
         thm:ground_space_map_injective}
     By Theorem~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the line
-    \(\spn\bigl\{V^{(N)}(A)\bigr\}\). It remains to show that the MPV is nonzero. If
+    $\spn\bigl\{V^{(N)}(A)\bigr\}$. It remains to show that the MPV is nonzero. If
     $V^{(N)}(A)=0$, then Lemma~\ref{lem:mpv_eq_ground_space_map_one} gives
     \[
         \Gamma_{N}(\Id) = \Gamma_{N}(0).
@@ -3064,15 +3064,15 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \lean{MPSTensor.exists_left_trace_test_of_three_block_trace_relation_right}
     \leanok
     \uses{def:l_blk_injective, lem:block_injective_two_sided_word_span}
-    Let \(A\) be \(L\)-block injective, and let \(\Delta_A\neq 0\).
-    Suppose that, for all words \(u,v,t\) of length \(L\),
+    Let $A$ be $L$-block injective, and let $\Delta_A\neq 0$.
+    Suppose that, for all words $u,v,t$ of length $L$,
     \[
         \tr\!\bigl(\Delta_A A_v A_t A_u\bigr)
         + \tr\!\bigl(\Delta_B B_v B_t B_u\bigr)=0 .
     \]
-    Then for every \(Z\in M_{D_A}(\mathbb C)\) there is a matrix
-    \(W\in M_{D_B}(\mathbb C)\) such that, for all words \(t\) of
-    length \(L\),
+    Then for every $Z\in M_{D_A}(\mathbb C)$ there is a matrix
+    $W\in M_{D_B}(\mathbb C)$ such that, for all words $t$ of
+    length $L$,
     \[
         \tr(ZA_t)+\tr(WB_t)=0 .
     \]
@@ -3081,16 +3081,16 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:block_injective_two_sided_word_span}
-    Since \(\Delta_A\neq0\), Lemma~\ref{lem:block_injective_two_sided_word_span}
-    writes \(Z\) as a linear combination of matrices \(A_u\Delta_A A_v\).
+    Since $\Delta_A\neq0$, Lemma~\ref{lem:block_injective_two_sided_word_span}
+    writes $Z$ as a linear combination of matrices $A_u\Delta_A A_v$.
     For one such term, cyclicity of the trace rewrites the three-block relation
     as
     \[
         \tr(A_u\Delta_A A_vA_t)
         +\tr(B_u\Delta_B B_vB_t)=0 .
     \]
-    Taking the same linear combination of the matrices \(B_u\Delta_BB_v\)
-    gives the required \(W\), and linearity gives the general case.
+    Taking the same linear combination of the matrices $B_u\Delta_BB_v$
+    gives the required $W$, and linearity gives the general case.
 \end{proof}
 
 \begin{lemma}[Finite-chain image inclusion from a three-block relation]
@@ -3105,25 +3105,25 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{lem:three_block_trace_reduction_nonzero_middle}
     Under the hypotheses of
-    Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-\(L\)
+    Lemma~\ref{lem:three_block_trace_reduction_nonzero_middle}, the length-$L$
     image spaces satisfy
     \[
         \mathcal G_L^A \subseteq \mathcal G_L^B .
     \]
     If the corresponding nonzero middle matrix exists on both sides, then
-    \(\mathcal G_L^A=\mathcal G_L^B\).
+    $\mathcal G_L^A=\mathcal G_L^B$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:three_block_trace_reduction_nonzero_middle}
-    Write a vector in \(\mathcal G_L^A\) as
-    \(t\mapsto \tr(A_tZ)\).  The preceding lemma supplies \(W\) with
-    \(\tr(ZA_t)+\tr(WB_t)=0\) for every word \(t\).  Cyclicity of the
+    Write a vector in $\mathcal G_L^A$ as
+    $t\mapsto \tr(A_tZ)$.  The preceding lemma supplies $W$ with
+    $\tr(ZA_t)+\tr(WB_t)=0$ for every word $t$.  Cyclicity of the
     trace gives
     \[
         \tr(A_tZ)=\tr(ZA_t)=-\tr(WB_t)=\tr(B_t(-W)),
     \]
-    so the vector lies in \(\mathcal G_L^B\).  The equality statement follows
+    so the vector lies in $\mathcal G_L^B$.  The equality statement follows
     by applying the same argument with the two blocks exchanged.
 \end{proof}
 
@@ -3170,23 +3170,23 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     \leanok
     \uses{lem:three_block_relation_ground_space_inclusion,
         thm:chain_ground_space_eq_mpv_blk}
-    If \(A\) and \(B\) are length-\(L\) block-injective, the map
-    \(Z\mapsto(t\mapsto\tr(A_tZ))\) has image dimension \(D_A^2\), and
-    similarly for \(B\).  Therefore an inclusion
-    \(\mathcal G_L^A\subseteq \mathcal G_L^B\), together with
-    \(D_B\le D_A\), forces \(D_A=D_B\) and
-    \(\mathcal G_L^A=\mathcal G_L^B\).  In particular, the three-block
+    If $A$ and $B$ are length-$L$ block-injective, the map
+    $Z\mapsto(t\mapsto\tr(A_tZ))$ has image dimension $D_A^2$, and
+    similarly for $B$.  Therefore an inclusion
+    $\mathcal G_L^A\subseteq \mathcal G_L^B$, together with
+    $D_B\le D_A$, forces $D_A=D_B$ and
+    $\mathcal G_L^A=\mathcal G_L^B$.  In particular, the three-block
     trace relation from
     Lemma~\ref{lem:three_block_relation_ground_space_inclusion} gives this
     equality whenever the source-paper size ordering is available.  If the
-    inclusion comes from the strictly larger block, \(D_B<D_A\), then the same
+    inclusion comes from the strictly larger block, $D_B<D_A$, then the same
     dimension step already contradicts the existence of the three-block trace
     relation.  More generally, if an external source input rules out the
-    simultaneous conclusion \(D_A=D_B\) and
-    \(\mathcal G_L^A=\mathcal G_L^B\), then the three-block image spaces
-    \(\mathcal G_{3L}^A\) and \(\mathcal G_{3L}^B\) have zero intersection.
+    simultaneous conclusion $D_A=D_B$ and
+    $\mathcal G_L^A=\mathcal G_L^B$, then the three-block image spaces
+    $\mathcal G_{3L}^A$ and $\mathcal G_{3L}^B$ have zero intersection.
     With injectivity at the three-block length, the strict-size branch itself
-    already gives homogeneous pair trace separation at length \(3L\).
+    already gives homogeneous pair trace separation at length $3L$.
     One such source input is non-proportionality of the periodic MPV states
     at a sufficiently long chain length, equivalently distinctness of the
     corresponding periodic MPV lines: equality of the local image spaces gives
@@ -3201,9 +3201,9 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     unequal-dimension branches over all ordered block pairs gives one common
     three-block trace-separation length, and hence the positive-length
     product-word span required by the selector construction.  Since
-    canonical-form/BNT blocks are one-site injective, one may take \(L=2\);
-    injectivity at lengths \(2\) and \(6\) then follows by passing from a
-    fixed injective length to positive multiples.  This length-\(6\) trace
+    canonical-form/BNT blocks are one-site injective, one may take $L=2$;
+    injectivity at lengths $2$ and $6$ then follows by passing from a
+    fixed injective length to positive multiples.  This length-$6$ trace
     separation is equivalently a full homogeneous pair span; concatenating
     one-letter words propagates fullness to all later homogeneous lengths, so
     the direct-sum witness also gives a uniform finite pair-span period window.
@@ -3218,11 +3218,11 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
 \begin{proof}\leanok
     \uses{lem:three_block_relation_ground_space_inclusion}
     Block injectivity makes the boundary-to-chain map injective, so
-    \(\dim\mathcal G_L^A=D_A^2\) and \(\dim\mathcal G_L^B=D_B^2\).
-    Inclusion gives \(D_A^2\le D_B^2\), while \(D_B\le D_A\) gives the
-    reverse inequality.  Hence \(D_A=D_B\), and equality of dimensions inside
+    $\dim\mathcal G_L^A=D_A^2$ and $\dim\mathcal G_L^B=D_B^2$.
+    Inclusion gives $D_A^2\le D_B^2$, while $D_B\le D_A$ gives the
+    reverse inequality.  Hence $D_A=D_B$, and equality of dimensions inside
     the inclusion gives equality of the image spaces.  In the strict-size
-    branch this contradicts \(D_B<D_A\).  For the conditional directness
+    branch this contradicts $D_B<D_A$.  For the conditional directness
     statement, a vector in the intersection of the two three-block image spaces
     has two boundary representations.  If the first boundary matrix is zero,
     the vector is zero.  Otherwise the difference of the two coefficient
@@ -3305,7 +3305,7 @@ Chapter~\ref{ch:bnt}~\cite{Fannes1992Finitely, PerezGarcia2007Matrix}.
     into gauge-phase equivalence, so under non-gauge-equivalence the graph
     branch is impossible.  For two blocks of unequal bond dimensions, the graph
     branch is also impossible because it would identify matrix algebras with
-    different finite dimensions over \(\C\).
+    different finite dimensions over $\C$.
 \end{lemma}
 
 \begin{proof}
