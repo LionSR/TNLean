@@ -1313,22 +1313,32 @@ the elementary trace-power identity for diagonal matrices.
     This is exactly the defining equality of BNT idempotent coefficient form.
 \end{proof}
 
-\begin{definition}[BNT comparison with blocked coefficients]%
-    \label{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+\begin{definition}[Blocked-basis BNT-label assignment]%
+    \label{def:mpdo_bnt_blocked_basis_label_assignment}
     \lean{MPOTensor.BNTBlockedBasisLabelAssignment}
     \lean{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel}
+    \leanok
+    \uses{def:mpdo_blocked_structure_coefficients}
+    The BNT-label assignment consists, for every positive blocked length $n$,
+    of a source label map $\sigma_n$ from the chosen basis of
+    $\mathcal A_n$ and a target label map $\tau_n$ from the chosen basis of
+    $\mathcal A_{2n}$ to the fixed BNT labels.  It also gives the combined
+    label map $\sigma_n \sqcup \tau_n$ on the disjoint union of these two
+    blocked bases.
+\end{definition}
+
+\begin{definition}[BNT comparison with blocked coefficients]%
+    \label{def:mpdo_bnt_blocked_basis_coefficient_comparison}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.sourceLabel}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.targetLabel}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_blocked_structure_coefficients}
-    The BNT-label assignment consists, for every positive blocked length $n$,
-    of a source label map $\sigma_n$ from the chosen basis of
-    $\mathcal A_n$ and a target label map $\tau_n$ from the chosen basis of
-    $\mathcal A_{2n}$ to the fixed BNT labels. A comparison between the
-    BNT-label coefficients and the chosen blocked-basis coefficients adds the
-    equality
+        def:mpdo_blocked_structure_coefficients,
+        def:mpdo_bnt_blocked_basis_label_assignment}
+    A comparison between the BNT-label coefficients and the chosen
+    blocked-basis coefficients consists of a BNT-label assignment together
+    with the equality
     \[
         c^{(n)}_{i,j,k}
         =
@@ -1686,6 +1696,7 @@ the elementary trace-power identity for diagonal matrices.
         def:mpdo_bnt_label_same_length_product_form,
         def:mpdo_bnt_label_idempotent_coefficient_form,
         def:mpdo_positive_bnt_label_chi_trace_power_form,
+        def:mpdo_bnt_blocked_basis_label_assignment,
         def:mpdo_bnt_blocked_basis_coefficient_comparison}
     The BNT-label theorem data consist of the fixed BNT-label coefficient
     system, the same-length BNT operator family and product identity, the trace
