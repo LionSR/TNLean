@@ -3059,20 +3059,19 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Write the period-blocked tensors as </p>
+  <p> Write the period-blocked tensors as \(\bar A \sim \bigoplus _{u\in \mathbb Z_m} A_u\) and \(\bar B \sim \bigoplus _{v\in \mathbb Z_m} B_v\), with unit sector weights. For every length \(N\), </p>
 <div class="displaymath" id="a0000000991">
-  \[  \bar A \sim \bigoplus _{u\in \mathbb Z_m} A_u,\qquad \bar B \sim \bigoplus _{v\in \mathbb Z_m} B_v ,  \]
-</div>
-<p> with unit sector weights. For every length \(N\), </p>
-<div class="displaymath" id="a0000000992">
   \[  O_{\bar A,\bar B}(N) = \sum _{u\in \mathbb Z_m}\sum _{v\in \mathbb Z_m} O_{A_u,B_v}(N).  \]
 </div>
-<p> If no pair \((u,v)\) is gauge-phase equivalent, then for every \(u,v\) the normal-tensor dichotomy gives \(O_{A_u,B_v}(N)\to 0\). Hence the finite double sum gives \(O_{\bar A,\bar B}(N)\to 0\). </p>
-<p>This decay is incompatible with a hypothetical global gauge-phase equivalence. If \(A\) and \(B\) were gauge-phase equivalent, then \(\bar A\) and \(\bar B\) would be gauge-phase equivalent. Thus \(V_N(\bar B)=\zeta ^N X V_N(\bar A)X^{-1}\) at the virtual level, and </p>
-<div class="displaymath" id="a0000000993">
-  \[  O_{\bar A,\bar B}(N) = \overline{\zeta }^{\, N} O_{\bar A,\bar A}(N).  \]
+<p> The no-matching hypothesis is \(A_u \not\sim _{\mathrm{gp}} B_v\) for all \(u,v\in \mathbb Z_m\). By the normal-tensor overlap dichotomy, \(\lim _{N\to \infty } O_{A_u,B_v}(N)=0\) for every \(u,v\). Hence </p>
+<div class="displaymath" id="a0000000992">
+  \[  \lim _{N\to \infty } O_{\bar A,\bar B}(N) = \sum _{u\in \mathbb Z_m}\sum _{v\in \mathbb Z_m} \lim _{N\to \infty } O_{A_u,B_v}(N) =0 .  \]
 </div>
-<p> The periodic self-overlap limits \(O_{\bar A,\bar A}(N)\to m\) and \(O_{\bar B,\bar B}(N)\to m\) imply \(|\zeta |=1\), and the displayed identity cannot tend to zero. This contradiction proves that \(A\) and \(B\) are not gauge-phase equivalent. The irreducible trace-preserving overlap dichotomy then yields \(O_{A,B}(N)\to 0\). </p>
+<p>Suppose, to the contrary, that \(A\sim _{\mathrm{gp}} B\). Blocking preserves gauge-phase equivalence, so \(\bar A\sim _{\mathrm{gp}}\bar B\). Thus, for some invertible \(X\) and some \(\zeta \ne 0\), \(V_N(\bar B)=\zeta ^N X V_N(\bar A)X^{-1}\). Gauge cancellation in the trace pairing gives </p>
+<div class="displaymath" id="a0000000993">
+  \[  O_{\bar A,\bar B}(N) = \overline{\zeta }^{\, N} O_{\bar A,\bar A}(N), \qquad O_{\bar B,\bar B}(N) = |\zeta |^{2N} O_{\bar A,\bar A}(N).  \]
+</div>
+<p> Since \(O_{\bar A,\bar A}(N)\to m\) and \(O_{\bar B,\bar B}(N)\to m\) with \(m{\gt}0\), the second identity forces \(|\zeta |=1\). Therefore \(|O_{\bar A,\bar B}(N)|=O_{\bar A,\bar A}(N)\to m\ne 0\), contradicting \(\lim _N O_{\bar A,\bar B}(N)=0\). Hence \(A\not\sim _{\mathrm{gp}}B\), and the irreducible trace-preserving overlap dichotomy gives \(O_{A,B}(N)\to 0\). </p>
 
   </div>
 </div>
