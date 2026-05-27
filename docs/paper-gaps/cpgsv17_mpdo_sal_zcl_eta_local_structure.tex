@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{The SAL--ZCL to Eta-Local Structure Step in
+\title{The SAL to Eta-Local Structure Step in
 Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
 \author{}
 \date{2026-05-27}
@@ -51,35 +51,31 @@ $B$-operators follows from their sector-local action.
 
 \section{Current formalization}
 
-The formal development currently has a structure
-\[
-  \texttt{MPOTensor.EtaLocalStructureData}\;K
-\]
-which records the assembled positive translation-invariant two-site bond and
-its realization of the finite-chain MPO. From this structure, the development
-proves the commuting-form property and the GSNNCH--ZCL consequences.
+The formal development currently records this as an eta-local structure for
+$K$.\footnote{The formal structure is
+\leanid{MPOTensor.EtaLocalStructureData}.} It contains the assembled positive
+translation-invariant two-site bond and its realization of the finite-chain
+MPO. From this structure, the development proves the commuting-form property
+and the GSNNCH--ZCL consequences.
 
-The declarations
-\[
-\begin{aligned}
-  &\texttt{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure},\\
-  &\texttt{MPOTensor.simple\_mpdo\_rfp\_chain\_of\_sal\_zcl\_and\_etaLocalStructure}
-\end{aligned}
-\]
-are scope-restricted assembly statements. They assume the eta-local structure
-instead of deriving it from the SAL--ZCL local coordinates. Thus they formalize
-the final packaging step after the $B_{n,n+1}$ have been constructed, not the
-source theorem that constructs those bonds from SAL.
+The two scope-restricted declarations are assembly
+statements.\footnote{These declarations are
+\leanid{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure} and
+\leanid{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}.}
+They assume the eta-local structure instead of deriving it from the SAL local
+coordinates. They also carry the ZCL hypothesis needed for the subsequent RFP
+consequences. Thus they formalize the final assembly step after the
+$B_{n,n+1}$ have been constructed, not the source theorem that constructs those
+bonds from SAL.
 
 \section{Missing step}
 
-The missing source-faithful theorem must construct
-\[
-  \texttt{MPOTensor.EtaLocalStructureData}\;K
-\]
-from the Appendix C.2 local data attached to a simple MPDO satisfying SAL and
-ZCL. Concretely, it must identify the local $\eta_{k,h}$ family with the
-original tensor coordinates, define the translation-invariant bond
+The missing source-faithful theorem must construct the formal eta-local
+structure \leanid{MPOTensor.EtaLocalStructureData} from the Appendix C.2 local
+data attached to a simple MPDO satisfying SAL. It must not add ZCL as a
+hypothesis for this construction. Concretely, it must identify the local
+$\eta_{k,h}$ family with the original tensor coordinates, define the
+translation-invariant bond
 $B_{n,n+1}$ above, prove $B_{n,n+1}\geq 0$, prove the commutation relations,
 and prove the finite-chain realization
 \[
@@ -87,10 +83,20 @@ and prove the finite-chain realization
 \]
 for positive scalars $c_N$.
 
+ZCL enters only after this commuting product form has been obtained, in the
+later step that derives the GSNNCH--ZCL and RFP conclusions.
+
 This is tracked by
 \href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until that
 construction exists, the scope-restricted assembly statements must not be
 presented as the full formalization of Proposition~C.6.
+
+\section{Classification}
+
+This note records an open gap for the SAL-to-bond construction of
+\leanid{MPOTensor.EtaLocalStructureData}. The two assembly declarations above
+are scope restrictions: they formalize only the post-assembly step after the
+nearest-neighbor bonds have already been constructed.
 
 \bibliographystyle{alpha}
 \bibliography{references}

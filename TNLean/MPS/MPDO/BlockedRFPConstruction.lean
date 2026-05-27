@@ -73,8 +73,9 @@ subadditivity, the resulting local `η`-structure, and a primitive real matrix
 condition.
 
 The structure is intentionally independent of a particular MPO tensor. The missing
-preceding theorem is the map from a concrete simple MPDO satisfying SAL/ZCL to
-such a structure and then onward to `HasCommutingForm`. -/
+preceding theorem is the map from a concrete simple MPDO to this structure and
+then onward to `HasCommutingForm`: SAL supplies the local `η`-structure, while
+ZCL supplies trace-power constancy and the rank-one factorization of `T`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
@@ -183,19 +184,22 @@ def ofEtaLocalStructure
   commutingForm := hEta.hasCommutingForm
   zcl := hZCL
 
-/-- Construct the blocked-RFP data from the local SAL--ZCL package and the
+/-- Construct the blocked-RFP data from the local SAL--ZCL hypotheses and the
 assembled `η`-local structure.
 
-Source: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
-lines 1501--1505, and Proposition 3to4, lines 1571--1593. The local package
-records the Lemmas C.3--C.4 consequences, while the eta-local structure records
-the already assembled positive nearest-neighbor product
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
+the post-assembly step: the local hypotheses record the Lemmas C.3--C.4
+consequences, while the eta-local structure records the already assembled
+positive nearest-neighbor product
 `σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
 
 **Scope restriction:** this constructor still assumes `EtaLocalStructureData K`;
-it does not construct the translated bond operators from SAL/ZCL. Documented in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`; the remaining
-construction is tracked by issue #823. -/
+it does not construct the translated bond operators from SAL. It also assumes
+the conditional primitive trace-power rank-one input `hPF`. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` and
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the remaining constructions are
+tracked by issue #823. -/
 def ofSALZCLAndEtaLocalStructure
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -289,18 +293,20 @@ theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
       IsRFP_MPDO_via_fusion K :=
   simple_mpdo_rfp_chain hEta.hasCommutingForm hZCL
 
-/-- The simple-MPDO RFP chain from local SAL--ZCL data once the eta-local
+/-- The simple-MPDO RFP chain from local SAL--ZCL hypotheses once the eta-local
 nearest-neighbor product has been assembled.
 
-Source: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
-lines 1501--1505, and Proposition 3to4, lines 1571--1593.
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
+the post-assembly step combining those outputs.
 
 **Scope restriction:** this theorem assumes the assembled eta-local structure
-instead of deriving it from SAL/ZCL. It records the final assembly step after
-the nearest-neighbor bonds $B_{n,n+1}$ and their commutation have been
-constructed. Documented in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`; the
-source-faithful construction is tracked by issue #823. -/
+instead of deriving it from SAL, and it assumes the conditional primitive
+trace-power rank-one input `hPF`. It records the final assembly step after the
+nearest-neighbor bonds $B_{n,n+1}$ and their commutation have been constructed.
+Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`
+and `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the source-faithful
+constructions are tracked by issue #823. -/
 theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d D}
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
