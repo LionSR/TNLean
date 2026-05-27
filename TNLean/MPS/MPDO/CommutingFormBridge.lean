@@ -141,7 +141,7 @@ theorem formAt_realizes (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N
 /-- The translated nearest-neighbor bonds carried by the `η`-local structure
 commute at every finite chain length.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the assembled two-site bonds \(B_{n,n+1}\) commute. -/
 theorem formAt_bondAt_comm (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N)
     (i j : Fin N) :
@@ -153,7 +153,7 @@ theorem formAt_bondAt_comm (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 �
 \(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\) at every finite chain
 length.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 after assembling the neighboring operators, the MPDO is a positive scalar
 multiple of the product of the translated nearest-neighbor bonds. -/
 theorem exists_positive_scalar_mpo_eq_product
@@ -165,7 +165,7 @@ theorem exists_positive_scalar_mpo_eq_product
 positive commuting nearest-neighbor product form appearing in Proposition C.6
 of arXiv:1606.00608.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the MPDO has the form \(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\),
 where the nearest-neighbor factors are positive and commute. -/
 theorem positive_commuting_product_form
@@ -198,7 +198,7 @@ theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :
 /-- The explicit `η`-local structure, together with ZCL, gives the
 GSNNCH-with-ZCL case of the simple-MPDO equivalence.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the assembled neighboring operators give a commuting nearest-neighbor product
 form. Adding ZCL gives item (iii) of Theorem 4.9 in the simple-MPDO case. -/
 theorem isGSNNCHWithZCL (data : EtaLocalStructureData M) (hZCL : IsZCL M) :

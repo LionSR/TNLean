@@ -168,7 +168,7 @@ def ofSALZCLAndCommutingForm
 
 /-- Construct the blocked-RFP data from the assembled `η`-local structure.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 once the local neighboring operators `η_{k,h}` have been assembled into a
 positive nearest-neighbor bond product, the translated bond operators commute
 and realize the finite-chain MPDO. This eta-local structure gives the
@@ -247,7 +247,7 @@ theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
 /-- Direct form of the simple-MPDO construction once the assembled `η`-local
 structure has been constructed.
 
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
 the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
 whose product realizes the MPDO. The eta-local structure is precisely this
 assembled positive commuting-bond form. -/

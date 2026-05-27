@@ -2495,34 +2495,48 @@ the elementary trace-power identity for diagonal matrices.
 
 \section{Blocked-RFP construction for simple MPDOs}
 
-\begin{definition}[Local simple-MPDO structure data]
+\begin{definition}[Local simple-MPDO structure]
     \label{def:simple_mpdo_local_structure_data}
     \lean{MPOTensor.SimpleMPDOLocalStructureData}
-    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
     \leanok
     \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
-    This structure collects the local Appendix~C.2 data: a normalized
+    This structure records the local Appendix~C.2 ingredients: a normalized
     three-site reduced state with equality in strong subadditivity, the
     resulting local $\eta$-structure, and the rank-one conclusion for the
-    auxiliary primitive matrix $T$. The hypotheses of Lemmas C.3--C.4 determine
-    such a structure.
+    auxiliary primitive matrix $T$.
 \end{definition}
 
-\begin{definition}[Simple-MPDO blocked-RFP data]
+\begin{theorem}[Local simple-MPDO structure from SAL--ZCL hypotheses]
+    \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
+    \leanok
+    \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
+        thm:sal_zcl_implies_rank_one_t}
+    The hypotheses of Lemmas C.3--C.4 determine the local simple-MPDO structure.
+\end{theorem}
+
+\begin{definition}[Simple-MPDO blocked-RFP structure]
     \label{def:simple_mpdo_blocked_rfp_data}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData}
-    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
     \leanok
     \uses{def:simple_mpdo_local_structure_data, def:mpdo_has_commuting_form,
         def:mpo_is_zcl}
-    For an MPO tensor $K$, this consists of the local Appendix~C.2 data, the
+    For an MPO tensor $K$, this records the local Appendix~C.2 ingredients, the
     commuting-form property, and zero correlation length. The local component
     consists of the hypotheses used in the entropy-side argument for commuting form.
-    The alternative construction takes the SAL--ZCL hypotheses together with an
-    already-supplied commuting-form witness.
 \end{definition}
 
-\begin{theorem}[Blocked-RFP data from $\eta$-local structure]
+\begin{theorem}[Blocked-RFP structure from SAL--ZCL and commuting form]
+    \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
+    \leanok
+    \uses{def:simple_mpdo_blocked_rfp_data,
+        thm:simple_mpdo_local_structure_data_of_sal_zcl}
+    The SAL--ZCL hypotheses together with a commuting-form witness determine
+    the simple-MPDO blocked-RFP structure.
+\end{theorem}
+
+\begin{theorem}[Blocked-RFP structure from $\eta$-local structure]
     \label{thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure}
     \leanok
