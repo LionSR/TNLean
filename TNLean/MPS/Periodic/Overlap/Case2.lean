@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.Case1
+import TNLean.MPS.SharedInfra.BlockAssembly
 
 /-!
 # Periodic overlap dichotomy: Case 2
@@ -268,18 +269,6 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
   classical
   by_contra hNone
   push Not at hNone
-  have hDecompA : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blockTensor (d := d) (D := D) A m) σ =
-        ∑ u : Fin m, mpv (blocksA u) σ := by
-    intro N σ
-    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (D := D) A m) blocksA hA_mpv σ
-  have hDecompB : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blockTensor (d := d) (D := D) B m) σ =
-        ∑ v : Fin m, mpv (blocksB v) σ := by
-    intro N σ
-    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (D := D) B m) blocksB hB_mpv σ
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
           (blockTensor (d := d) (D := D) A m)
@@ -287,39 +276,10 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
         ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
     intro N
-    calc
-      mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) B m) N
-        = ∑ σ : Cfg (blockPhysDim d m) N,
-          mpv (blockTensor (d := d) (D := D) A m) σ *
-            star (mpv (blockTensor (d := d) (D := D) B m) σ) := rfl
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            (∑ u : Fin m, mpv (blocksA u) σ) *
-              star (∑ v : Fin m, mpv (blocksB v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [hDecompA N σ, hDecompB N σ]
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ u : Fin m, ∑ v : Fin m,
-              mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [star_sum, Finset.sum_mul]
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.mul_sum]
-      _ = ∑ u : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ v : Fin m, mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m,
-            mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
-              simp [mpvOverlap]
+    exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+      (blockTensor (d := d) (D := D) A m)
+      (blockTensor (d := d) (D := D) B m)
+      blocksA blocksB hA_mpv hB_mpv N
   have hInnerZero : ∀ u : Fin m,
       Tendsto
         (fun N => ∑ v : Fin m,

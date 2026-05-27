@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.MultiBlock
+import TNLean.MPS.Overlap.Basic
 
 /-!
 # Shared direct-sum tensor infrastructure for MPS tensors
@@ -84,5 +85,60 @@ theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
     _ = ∑ k : Fin r, ((1 : ℂ) ^ N) • mpv (blocks k) σ := by
       rw [mpv_toTensorFromBlocks_eq_sum]
     _ = ∑ k : Fin r, mpv (blocks k) σ := by simp
+
+/-- The overlap of two tensors with unit-weight block diagonal MPV
+decompositions is the finite double sum of the overlaps of their blocks. -/
+theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+    {D₁ D₂ r : ℕ} {dimA dimB : Fin r → ℕ}
+    (T₁ : MPSTensor d D₁) (T₂ : MPSTensor d D₂)
+    (blocksA : (k : Fin r) → MPSTensor d (dimA k))
+    (blocksB : (k : Fin r) → MPSTensor d (dimB k))
+    (hSameA :
+      SameMPV₂ T₁
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocksA))
+    (hSameB :
+      SameMPV₂ T₂
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocksB))
+    (N : ℕ) :
+    mpvOverlap (d := d) T₁ T₂ N =
+      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+  classical
+  have hDecompA : ∀ σ : Fin N → Fin d, mpv T₁ σ =
+      ∑ u : Fin r, mpv (blocksA u) σ := by
+    intro σ
+    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₁ blocksA hSameA σ
+  have hDecompB : ∀ σ : Fin N → Fin d, mpv T₂ σ =
+      ∑ v : Fin r, mpv (blocksB v) σ := by
+    intro σ
+    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₂ blocksB hSameB σ
+  calc
+    mpvOverlap (d := d) T₁ T₂ N =
+        ∑ σ : Cfg d N, mpv T₁ σ * star (mpv T₂ σ) := rfl
+    _ = ∑ σ : Cfg d N,
+          (∑ u : Fin r, mpv (blocksA u) σ) *
+            star (∑ v : Fin r, mpv (blocksB v) σ) := by
+            refine Finset.sum_congr rfl ?_
+            intro σ _
+            rw [hDecompA σ, hDecompB σ]
+    _ = ∑ σ : Cfg d N,
+          ∑ u : Fin r, ∑ v : Fin r,
+            mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+            refine Finset.sum_congr rfl ?_
+            intro σ _
+            rw [star_sum, Finset.sum_mul]
+            refine Finset.sum_congr rfl ?_
+            intro u _
+            rw [Finset.mul_sum]
+    _ = ∑ u : Fin r, ∑ σ : Cfg d N,
+          ∑ v : Fin r, mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+            rw [Finset.sum_comm]
+    _ = ∑ u : Fin r, ∑ v : Fin r, ∑ σ : Cfg d N,
+          mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+            refine Finset.sum_congr rfl ?_
+            intro u _
+            rw [Finset.sum_comm]
+    _ = ∑ u : Fin r, ∑ v : Fin r,
+          mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+            simp [mpvOverlap]
 
 end MPSTensor

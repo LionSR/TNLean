@@ -13,6 +13,7 @@ import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Spectral.SpectralGapNT
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
@@ -754,12 +755,6 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
         (blockTensor (d := d) (D := D) A m) k)
       atTop (nhds (m : ℂ)) := by
   classical
-  have hDecomp : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
-      mpv (blockTensor (d := d) (D := D) A m) σ =
-        ∑ u : Fin m, mpv (blocks u) σ := by
-    intro N σ
-    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (D := D) A m) blocks hBlocks_mpv σ
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
           (blockTensor (d := d) (D := D) A m)
@@ -767,39 +762,10 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
         ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
     intro N
-    calc
-      mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) A m) N
-        = ∑ σ : Cfg (blockPhysDim d m) N,
-          mpv (blockTensor (d := d) (D := D) A m) σ *
-            star (mpv (blockTensor (d := d) (D := D) A m) σ) := rfl
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            (∑ u : Fin m, mpv (blocks u) σ) *
-              star (∑ v : Fin m, mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [hDecomp N σ]
-      _ = ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ u : Fin m, ∑ v : Fin m,
-              mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro σ _
-              rw [star_sum, Finset.sum_mul]
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.mul_sum]
-      _ = ∑ u : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            ∑ v : Fin m, mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
-            mpv (blocks u) σ * star (mpv (blocks v) σ) := by
-              refine Finset.sum_congr rfl ?_
-              intro u _
-              rw [Finset.sum_comm]
-      _ = ∑ u : Fin m, ∑ v : Fin m,
-            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
-              simp [mpvOverlap]
+    exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+      (blockTensor (d := d) (D := D) A m)
+      (blockTensor (d := d) (D := D) A m)
+      blocks blocks hBlocks_mpv hBlocks_mpv N
   have hInner : ∀ u : Fin m,
       Tendsto
         (fun N => ∑ v : Fin m,
