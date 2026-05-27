@@ -118,6 +118,50 @@ noncomputable def applyGauge (A : Tensor G d)
   bondDim := A.bondDim
   component v := gaugeVertex A X v
 
+/-- The tensor family obtained by absorbing an oriented edge-gauge family into
+the second PEPS tensor.
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038, where the tensors
+$\widetilde B_i$ are defined by absorbing into $B_i$ the edge gauges obtained
+from the injective-chain isomorphism lemma; the translationally invariant
+version is repeated in lines 1500--1519. This definition records only the
+absorption construction. The post-absorption insertion equality labelled
+eq:inj_equal_edge in the paper is a separate statement. -/
+noncomputable def absorbEdgeGauges (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) : Tensor G d :=
+  applyGauge B X
+
+/-- Absorbing edge gauges does not change the bond spaces.
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038. -/
+@[simp] theorem absorbEdgeGauges_bondDim (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) :
+    (absorbEdgeGauges B X).bondDim = B.bondDim := rfl
+
+/-- The local component formula for absorbing oriented edge gauges.
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038, and lines 1500--1519
+for the normal translationally invariant absorption picture. -/
+theorem absorbEdgeGauges_component (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
+    (v : V) (η : (ie : IncidentEdge G v) → Fin (B.bondDim ie.1)) (σ : Fin d) :
+    (absorbEdgeGauges B X).component v η σ = gaugeVertex B X v η σ := rfl
+
+/-- Edge-gauge absorption produces a modified tensor family $\widetilde B$ whose local
+components are obtained from $B$ by the oriented endpoint gauge action.
+
+Source: arXiv:1804.04964, Section 3, lines 1037--1038: after applying
+the injective-chain isomorphism lemma around every edge, the resulting edge
+gauges are absorbed into the tensors $B_i$ to form $\widetilde B_i$. This
+result constructs $\widetilde B$; it does not assert the later
+equality labelled eq:inj_equal_edge in the paper. -/
+theorem edge_gauge_absorption (B : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) :
+    (absorbEdgeGauges B X).bondDim = B.bondDim ∧
+      ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (B.bondDim ie.1)) (σ : Fin d),
+        (absorbEdgeGauges B X).component v η σ = gaugeVertex B X v η σ := by
+  exact ⟨rfl, fun _ _ _ => rfl⟩
+
 /-! ### Gauge equivalence -/
 
 /-- Two PEPS tensors are gauge-equivalent if they have the same bond dimensions

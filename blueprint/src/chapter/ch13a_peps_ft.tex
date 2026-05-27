@@ -109,6 +109,46 @@ injective and normal PEPS, following Theorems~2 and~3 of
     vertex tensors $A^X_v$.
 \end{definition}
 
+\begin{definition}[Absorb edge gauges]%
+    \label{def:peps_absorbEdgeGauges}
+    \lean{TNLean.PEPS.absorbEdgeGauges}
+    \leanok
+    \uses{def:applyGauge}
+    Given a tensor family $B$ and an oriented gauge matrix $X_e$ on every edge,
+    the absorbed tensor family is $\widetilde B=B^X$; at each vertex, its
+    local tensor is obtained by inserting the oriented endpoint matrices on
+    the incident virtual legs.
+\end{definition}
+
+\begin{theorem}[Absorbed gauges keep the bond spaces]%
+    \label{thm:peps_absorbEdgeGauges_bondDim}
+    \lean{TNLean.PEPS.absorbEdgeGauges_bondDim}
+    \leanok
+    \uses{def:peps_absorbEdgeGauges}
+    The absorbed tensor family has $D_{\widetilde B}(e)=D_B(e)$ for every
+    edge $e$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $\widetilde B=B^X$ is defined with the same bond-dimension function as
+    $B$, one has $D_{\widetilde B}(e)=D_{B^X}(e)=D_B(e)$ for every edge $e$.
+\end{proof}
+
+\begin{theorem}[Local formula for absorbed gauges]%
+    \label{thm:peps_absorbEdgeGauges_component}
+    \lean{TNLean.PEPS.absorbEdgeGauges_component}
+    \leanok
+    \uses{def:peps_absorbEdgeGauges, def:gaugeVertex}
+    If $M_{ie}$ is the oriented endpoint matrix attached to an incident edge
+    $ie$ at $v$, then
+    $\widetilde B_v(\eta,\sigma)=
+    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+\end{theorem}
+\begin{proof}\leanok
+    Expanding $\widetilde B=B^X$ at a vertex gives
+    $\widetilde B_v(\eta,\sigma)=(B^X)_v(\eta,\sigma)=
+    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+\end{proof}
+
 \begin{definition}[Gauge equivalence for PEPS]%
     \label{def:GaugeEquivPEPS}
     \lean{TNLean.PEPS.GaugeEquiv}
@@ -1281,24 +1321,35 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{proof}
 
 \begin{theorem}[Absorbing edge gauges into the second PEPS]%
-    \label{thm:peps_edgeGaugeAbsorption}
-    \notready
-    \uses{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism, def:gaugeVertex}
-    The edge gauges obtained by applying the three-site injective-chain theorem
-    at each edge can be absorbed into the tensors of the second family. At a
-    vertex $v$, each incident edge contributes the appropriate oriented gauge
-    or inverse gauge, producing the modified tensor $\widetilde B_v$:
+    \label{thm:peps_edge_gauge_absorption}
+    \lean{TNLean.PEPS.edge_gauge_absorption}
+    \leanok
+    \uses{def:peps_absorbEdgeGauges, thm:peps_absorbEdgeGauges_bondDim,
+        thm:peps_absorbEdgeGauges_component}
+    Given edge gauges $X_e$, set $\widetilde B=B^X$. Then
+    $D_{\widetilde B}=D_B$ and, for every vertex $v$,
+    $\widetilde B_v(\eta,\sigma)=
+    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$,
+    where $M_{ie}=X_e$ or $M_{ie}=(X_e^{-1})^t$ according to the orientation of
+    the endpoint $ie$.
     \begin{center}
         \TNPEPSEdgeGaugeAbsorption
     \end{center}
     After this absorption, arbitrary insertions of the same matrix on the same
     edge are compared in the first PEPS and the modified second PEPS.
 \end{theorem}
+\begin{proof}\leanok
+    With $\widetilde B=B^X$, Theorem~\ref{thm:peps_absorbEdgeGauges_bondDim}
+    gives $D_{\widetilde B}=D_B$, and
+    Theorem~\ref{thm:peps_absorbEdgeGauges_component} gives
+    $\widetilde B_v(\eta,\sigma)=
+    \sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))B_v(\eta',\sigma)$.
+\end{proof}
 
 \begin{theorem}[Post-absorption edge insertion equality]%
     \label{thm:peps_postAbsorptionEdgeInsertionEquality}
     \notready
-    \uses{thm:peps_edgeGaugeAbsorption, def:peps_edgeInsertedCoeff}
+    \uses{thm:peps_edge_gauge_absorption, def:peps_edgeInsertedCoeff}
     After the edge gauges have been absorbed into the second tensor family, for
     every edge and every matrix $X$, inserting $X$ on that edge in the first
     PEPS gives the same state as inserting $X$ on the same edge in the
@@ -2633,7 +2684,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \label{thm:peps_tiNormalGaugeAbsorption}
     \notready
     \uses{thm:peps_normalEdgeBlockingToInjectiveChain,
-        thm:peps_edgeGaugeAbsorption}
+        thm:peps_edge_gauge_absorption}
     In the translationally invariant normal square-lattice case, the edge
     gauges obtained after blocking are represented by one horizontal matrix
     $X$ and one vertical matrix $Y$, unique up to scalar. Absorbing these
