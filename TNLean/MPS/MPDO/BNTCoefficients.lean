@@ -75,8 +75,6 @@ positive diagonal matrices:
   c^{(L)}_{\alpha,\beta,\gamma}
     = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
 \]
-The definition uses `DiagonalChiFamily.tracePowerCoeff`, which is equal to the
-matrix trace by `DiagonalChiFamily.trace_matrix_pow`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -588,7 +586,6 @@ theorem pulledBlockedChi_tracePowerCoeff_of_pos
         (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) L := by
   rw [AlgebraStructureData.BlockedStructureChiFamily.tracePowerCoeff]
   rw [cmp.pulledBlockedChiFamily_toDiagonal_of_pos hχ n hn]
-  simp [DiagonalChiFamily.comap, DiagonalChiFamily.tracePowerCoeff, blockedLabel]
   rfl
 
 /-- At positive blocked length, the size of the pulled-back blocked chi matrix

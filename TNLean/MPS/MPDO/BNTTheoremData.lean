@@ -120,144 +120,6 @@ noncomputable def ofChi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
   positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi χ hχ
   blockedComparison := blockedComparison
 
-/-- The coefficient family of theorem data constructed from a \(\chi\)-family
-is the canonical trace-power coefficient family attached to that same
-\(\chi\)-family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_coeffs (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).coeffs =
-      BNTLabelCoefficientFamily.ofChi χ :=
-  rfl
-
-/-- The operator family in theorem data constructed from a \(\chi\)-family is
-the supplied same-length BNT operator family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_operators (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).operators = operators :=
-  rfl
-
-/-- The trace-scalar family in theorem data constructed from a \(\chi\)-family
-is the supplied family \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_traceScalars (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).traceScalars = traceScalars :=
-  rfl
-
-/-- The positive \(\chi\)-witness in theorem data constructed from a
-\(\chi\)-family uses that same \(\chi\)-family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.4, lines 2015--2037 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_positiveChi_chi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).positiveChi.chi = χ :=
-  rfl
-
-/-- The same-length product law carried by theorem data constructed from a
-\(\chi\)-family is the supplied product law for the canonical coefficient
-family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_same_length_product_form
-    (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).operators.HasSameLengthProductForm
-        (BNTLabelCoefficientFamily.ofChi χ) :=
-  sameLengthProduct
-
-/-- The idempotent coefficient law carried by theorem data constructed from a
-\(\chi\)-family is the supplied idempotent law for the canonical coefficient
-family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_idempotent_coefficient_form
-    (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).traceScalars.HasIdempotentCoefficientForm
-        (BNTLabelCoefficientFamily.ofChi χ) :=
-  idempotent
-
-/-- The blocked-basis comparison in theorem data constructed from a
-\(\chi\)-family is the supplied comparison with the canonical coefficient
-family.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
-Appendix C.3, lines 1830--1922 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_blockedComparison (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).blockedComparison = blockedComparison :=
-  rfl
-
 /-- The same-length product predicate carried by BNT-label theorem data.
 
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
@@ -309,48 +171,6 @@ def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : Λ :=
   H.blockedComparison.targetLabel n hn k
 
-/-- The source label map of theorem data constructed from a \(\chi\)-family is
-the source label map of the supplied blocked-basis comparison.
-
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_sourceLabel (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ))
-    (n : ℕ) (hn : 0 < n)
-    (i : AlgebraStructureData.BlockedIndex data n) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).sourceLabel n hn i =
-      blockedComparison.sourceLabel n hn i :=
-  rfl
-
-/-- The target label map of theorem data constructed from a \(\chi\)-family is
-the target label map of the supplied blocked-basis comparison.
-
-Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem ofChi_targetLabel (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries)
-    (operators : BNTLabelOperatorFamily Λ O)
-    (traceScalars : BNTLabelTraceScalarFamily Λ)
-    (sameLengthProduct :
-      operators.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
-    (idempotent :
-      traceScalars.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
-    (blockedComparison :
-      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ))
-    (n : ℕ) (hn : 0 < n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    (ofChi (data := data) χ hχ operators traceScalars sameLengthProduct
-      idempotent blockedComparison).targetLabel n hn k =
-      blockedComparison.targetLabel n hn k :=
-  rfl
-
 /-- The BNT-label coefficients in theorem data are traces of powers of the
 length-independent chi matrices.
 
@@ -374,9 +194,8 @@ Appendix C.4, lines 2015--2037 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem coeff_eq_ofChi_coeff (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
     H.coeffs.coeff L α β γ =
-      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi).coeff L α β γ := by
-  simpa [BNTLabelCoefficientFamily.ofChi] using
-    H.positive_chi_trace_power L hL α β γ
+      (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi).coeff L α β γ :=
+  H.positive_chi_trace_power L hL α β γ
 
 /-- The same-length product law carried by theorem data may be written using
 the canonical coefficient family determined by the same
