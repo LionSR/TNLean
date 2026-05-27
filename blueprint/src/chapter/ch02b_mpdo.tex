@@ -2554,6 +2554,28 @@ the elementary trace-power identity for diagonal matrices.
     unchanged.
 \end{proof}
 
+\begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
+    \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure}
+    \leanok
+    \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
+        thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
+    Suppose the local hypotheses of Lemmas~C.3--C.4 give
+    $\rho_{ABC}$, $I(A:C|B)_{\rho}=0$, a primitive matrix $T$ with
+    $\operatorname{tr}(T)=1$ and $\operatorname{tr}(T^m)$ independent of $m$,
+    and the rank-one conclusion for $T$. Suppose also that the assembled
+    $\eta$-local data give
+    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
+    Then these data determine the simple-MPDO blocked-RFP structure for $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    First form the local structure from the SAL--ZCL local hypotheses. The
+    $\eta$-local product formula supplies the commuting-form component, and ZCL
+    supplies the remaining component of the blocked-RFP structure.
+\end{proof}
+
 \begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
     \label{thm:structural_implies_rfp_blocked}
     \lean{MPOTensor.structural_implies_rfp_blocked}
@@ -2622,6 +2644,26 @@ the elementary trace-power identity for diagonal matrices.
     this with zero correlation length gives the GSNNCH-with-ZCL case; zero
     correlation length also gives the blocked fusion-isometry witness and the
     transfer-map fusion formulation.
+\end{proof}
+
+\begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
+    \label{thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure}
+    \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}
+    \leanok
+    \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
+        thm:simple_mpdo_rfp_chain_of_data}
+    Assume the local SAL--ZCL package of Lemmas~C.3--C.4 and the assembled
+    $\eta$-local product form
+    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
+    $K$ is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size
+    $2$, and satisfies the transfer-map fusion formulation of MPDO RFP.
+\end{theorem}
+
+\begin{proof}\leanok
+    Package the local SAL--ZCL data and the $\eta$-local product form into the
+    blocked-RFP structure, then apply
+    Theorem~\ref{thm:simple_mpdo_rfp_chain_of_data}.
 \end{proof}
 
 \begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]
