@@ -5,7 +5,7 @@ import Mathlib.Data.Matrix.Basic
 # Scalar reduction for three exposed PEPS legs
 
 This file formalizes the finite-dimensional tensor-factor step in
-arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`.
+arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2.
 
 After inverting the two injective tensors, the paper obtains one operator on
 three exposed virtual legs which simultaneously has the forms
@@ -25,7 +25,7 @@ variable [DecidableEq α] [DecidableEq β] [DecidableEq γ]
 /-- The form $I_\alpha\otimes Z$ on
 $\alpha\otimes\beta\otimes\gamma$.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`;
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2;
 `Papers/1804.04964/paper_normal.tex`, lines 1194--1204. -/
 def threeLegLeftIdentityForm (Z : Matrix (β × γ) (β × γ) ℂ) :
     Matrix (α × β × γ) (α × β × γ) ℂ :=
@@ -35,7 +35,7 @@ def threeLegLeftIdentityForm (Z : Matrix (β × γ) (β × γ) ℂ) :
 /-- The form $U\otimes I_\gamma$ on
 $\alpha\otimes\beta\otimes\gamma$.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`;
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2;
 `Papers/1804.04964/paper_normal.tex`, lines 1194--1204. -/
 def threeLegRightIdentityForm (U : Matrix (α × β) (α × β) ℂ) :
     Matrix (α × β × γ) (α × β × γ) ℂ :=
@@ -44,7 +44,7 @@ def threeLegRightIdentityForm (U : Matrix (α × β) (α × β) ℂ) :
 
 /-- The form with identity on the middle leg $\beta$.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`;
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2;
 `Papers/1804.04964/paper_normal.tex`, lines 1194--1204. -/
 def threeLegMiddleIdentityForm (W : Matrix (α × γ) (α × γ) ℂ) :
     Matrix (α × β × γ) (α × β × γ) ℂ :=
@@ -54,7 +54,7 @@ def threeLegMiddleIdentityForm (W : Matrix (α × γ) (α × γ) ℂ) :
 /-- Three compatible two-leg residual forms are scalar.
 
 This is the algebraic scalar-reduction step in arXiv:1804.04964, Section 3,
-Lemma `inj_equal_tensors_2`.  In the notation of the paper, the equality
+Lemma inj_equal_tensors_2.  In the notation of the paper, the equality
 $$
   I\otimes Z = U\otimes I = W
 $$
