@@ -1,9 +1,13 @@
 Review this PR for TWO categories ONLY:
   (A) blueprint ↔ Lean **mathematical equivalence and status accuracy**;
-  (B) prose quality — banned AI/software language AND no Lean jargon.
+  (B) prose quality — banned AI/software language, no Lean jargon, and
+      formula-driven proof sketches.
 
 Authoritative source for category B: `docs/prose_style.md`. Read it once
-before reviewing; do not paraphrase the tables here.
+before reviewing; do not paraphrase the tables here. In particular, enforce
+the rule that equations carry mathematical proof sketches: overlap arguments
+should display the limiting identities, and tensor-network arguments should
+display the contraction equalities or kernel implications.
 
 All other concerns (proof integrity, Mathlib style, performance, etc.)
 belong to the main `Claude Code Review (Lean)` workflow — do NOT comment
@@ -98,7 +102,7 @@ matches — the blueprint clearly *is* ready and the tag is stale.
   Lean proof actually invokes. Do not list everything the statement
   mentions; do not omit lemmas the proof uses.
 
-## Category B — 🟡 Prose quality and no-Lean-jargon
+## Category B — 🟡 Prose quality, formulas, and no-Lean-jargon
 
 **Read `docs/prose_style.md` before reviewing.** It is the single
 authoritative source for:
@@ -110,6 +114,12 @@ Apply judgment for context-sensitive entries (the doc lists which).
 Scope: blueprint `.tex` and Lean docstrings/comments/`section`
 `/`namespace` names. Out of scope: `docs/`, workflow YAML, `Papers/`,
 `Notes/`.
+
+For blueprint proof sketches, also check that the proof is carried by formulas
+when the mathematics depends on a concrete identity. Flag phrases such as
+"the overlap does not decay", "injectivity removes the boundary tensor", or
+"the sector overlaps give a contradiction" when the changed text does not
+write the corresponding limit, equality, kernel, or contraction identity.
 
 For each finding, cite the exact phrase, link to the line, and propose
 a concrete replacement from the table (or "drop").

@@ -507,10 +507,9 @@ unconditional result.
             O_{A_u,B_v}(N).
     \]
     The no-matching hypothesis is
-    $A_u \not\sim_{\mathrm{gp}} B_v$ for all $u,v\in\mathbb Z_m$. By the
-    normal-tensor overlap dichotomy,
-    $\lim_{N\to\infty} O_{A_u,B_v}(N)=0$ for every $u,v$.
-    Hence
+    $\forall u,v\in\mathbb Z_m,\ A_u \not\sim_{\mathrm{gp}} B_v$. The
+    normal-tensor overlap dichotomy gives
+    $\lim_{N\to\infty} O_{A_u,B_v}(N)=0$ for every $u,v$, and therefore
     \[
         \lim_{N\to\infty} O_{\bar A,\bar B}(N)
         =
@@ -519,11 +518,11 @@ unconditional result.
         =0 .
     \]
 
-    Suppose, to the contrary, that $A\sim_{\mathrm{gp}} B$. Blocking preserves
-    gauge-phase equivalence, so $\bar A\sim_{\mathrm{gp}}\bar B$. Thus, for
-    some invertible $X$ and some $\zeta\ne0$,
+    If $A\sim_{\mathrm{gp}} B$, then blocking gives
+    $\bar A\sim_{\mathrm{gp}}\bar B$, so for some invertible $X$ and
+    some $\zeta\ne0$,
     $V_N(\bar B)=\zeta^N X V_N(\bar A)X^{-1}$.
-    Gauge cancellation in the trace pairing gives
+    The trace pairing cancels the conjugating matrices:
     \[
         O_{\bar A,\bar B}(N)
         =
@@ -533,13 +532,28 @@ unconditional result.
         =
         |\zeta|^{2N} O_{\bar A,\bar A}(N).
     \]
-    Since $O_{\bar A,\bar A}(N)\to m$ and
-    $O_{\bar B,\bar B}(N)\to m$ with $m>0$, the second identity forces
-    $|\zeta|=1$. Therefore
-    $|O_{\bar A,\bar B}(N)|=O_{\bar A,\bar A}(N)\to m\ne0$, contradicting
-    $\lim_N O_{\bar A,\bar B}(N)=0$. Hence
+    With $O_{\bar A,\bar A}(N)\to m$ and $O_{\bar B,\bar B}(N)\to m>0$,
+    the second identity gives
+    \[
+        1
+        =
+        \lim_{N\to\infty}
+        \frac{O_{\bar B,\bar B}(N)}{O_{\bar A,\bar A}(N)}
+        =
+        \lim_{N\to\infty} |\zeta|^{2N},
+    \]
+    hence $|\zeta|=1$. The first identity then gives
+    \[
+        \lim_{N\to\infty}|O_{\bar A,\bar B}(N)|
+        =
+        \lim_{N\to\infty}|\zeta|^N |O_{\bar A,\bar A}(N)|
+        =
+        m\ne0,
+    \]
+    while the sector sum above gives
+    $\lim_{N\to\infty}O_{\bar A,\bar B}(N)=0$. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
-    dichotomy gives $O_{A,B}(N)\to0$.
+    dichotomy gives $\lim_{N\to\infty}O_{A,B}(N)=0$.
 \end{proof}
 
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
@@ -649,11 +663,25 @@ unconditional result.
     By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
     and $A$ and $B$ are equivalent up to repeated blocks. In the decay case,
-    equality of the MPV families identifies the cross-overlap with the
-    self-overlap of $A$ for every $N$. But
-    Theorem~\ref{thm:periodic_self_overlap_tendsto} gives
-    $\braket{V^{(m_a N)}(A)}{V^{(m_a N)}(A)} \to m_a$ along multiples of the
-    period $m_a$, contradiction.
+    equality of the MPV families gives, for every $N$,
+    \[
+        \braket{V^{(N)}(A)}{V^{(N)}(B)}
+        =
+        \braket{V^{(N)}(A)}{V^{(N)}(A)}.
+    \]
+    Along multiples of the period $m_a$ this would imply
+    \[
+        0
+        =
+        \lim_{N\to\infty}
+        \braket{V^{(m_aN)}(A)}{V^{(m_aN)}(B)}
+        =
+        \lim_{N\to\infty}
+        \braket{V^{(m_aN)}(A)}{V^{(m_aN)}(A)}
+        =
+        m_a,
+    \]
+    contradicting $m_a>0$.
 \end{proof}
 
 \begin{theorem}[Peripheral proportional case from phase rescaling]
