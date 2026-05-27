@@ -321,6 +321,13 @@ theorem positive_chi_trace_power :
     W.coeffs.HasPositiveLengthChiTracePowerForm W.positiveChi.chi :=
   W.toTheoremData.positive_chi_trace_power
 
+/-- The Appendix C.3 BNT-label assignment carried by an existential witness.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def labelAssignment : BNTBlockedBasisLabelAssignment data W.Label :=
+  W.toTheoremData.labelAssignment
+
 /-- The source BNT label attached by an existential witness to a chosen basis
 element of \(\mathcal A_n\).
 
@@ -328,7 +335,7 @@ Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def sourceLabel (n : ℕ) (hn : 0 < n)
     (i : AlgebraStructureData.BlockedIndex data n) : W.Label :=
-  W.toTheoremData.sourceLabel n hn i
+  W.labelAssignment.sourceLabel n hn i
 
 /-- The target BNT label attached by an existential witness to a chosen basis
 element of \(\mathcal A_{2n}\).
@@ -337,7 +344,7 @@ Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : W.Label :=
-  W.toTheoremData.targetLabel n hn k
+  W.labelAssignment.targetLabel n hn k
 
 /-- The BNT-label coefficients carried by an existential witness are traces of
 powers of the length-independent chi matrices.
