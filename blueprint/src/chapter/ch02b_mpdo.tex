@@ -2356,22 +2356,32 @@ the elementary trace-power identity for diagonal matrices.
     Theorem~\ref{thm:mpdo_is_gsnnch_iff_has_commuting_form}.
 \end{proof}
 
+\begin{definition}[Translation-invariant two-site bond data]
+    \label{def:mpdo_translation_invariant_bond_data}
+    \lean{MPOTensor.TranslationInvariantBondData}
+    \leanok
+    \uses{def:mpdo_commuting_form_data}
+    This records a single positive two-site bond together with its translated
+    copies on every finite periodic chain, requiring those translated copies to
+    commute pairwise.
+\end{definition}
+
 \begin{definition}[$\eta$-local commuting-form data]
     \label{def:mpdo_eta_local_structure_data}
-    \lean{MPOTensor.TranslationInvariantBondData}
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
-    \uses{def:mpdo_has_commuting_form}
-    This defines the eta-local form of Appendix~C.2: a single
-    translation-invariant positive two-site bond whose translated copies commute
-    on every periodic chain and realize the MPO at every finite length.
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
+    This defines the eta-local form of Appendix~C.2: the
+    translation-invariant positive two-site bond data together with the
+    requirement that the corresponding product realizes the MPO at every finite
+    length.
 \end{definition}
 
 \begin{definition}[Finite-chain data from a translation-invariant bond]
     \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_commuting_form_data}
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
     A translation-invariant positive two-site bond determines finite-chain
     commuting-form data at every length $N \ge 2$.
 \end{definition}
@@ -2382,7 +2392,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_commuting_form_data}
+    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
     The finite-chain data associated to a translation-invariant bond retains
     the original local bond, and the factor at site $i$ is the translated copy
     of that local two-site bond.
