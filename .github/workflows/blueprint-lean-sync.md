@@ -44,6 +44,7 @@ safe-outputs:
     if-no-changes: "warn"
     expires: 7d
   noop:
+    report-as-issue: false
   missing-data:
 ---
 
