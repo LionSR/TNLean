@@ -727,7 +727,7 @@ statement is Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \lean{MPSTensor.mpv_toTensorFromBlocks_weight_mul_left}
     \leanok
     Multiplying every block weight in a block-diagonal MPS tensor by the same
-    scalar \(c\) multiplies every length-\(N\) MPV coefficient by \(c^N\).
+    scalar $c$ multiplies every length-$N$ MPV coefficient by $c^N$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1693,10 +1693,10 @@ structure for completeness.
     \leanok
     \uses{thm:zero_block_separation,
         thm:pgvwc07_blockwise_unital_dual_package}
-    Let \(A\) be an arbitrary translation-invariant MPS tensor.  Then there is
-    a zero block of bond dimension \(D_0\), a finite family of nonzero blocks
-    \(C_k\), and positive real weights \(\mu_k\), such that for every chain
-    length \(N\) and every word \(\sigma \in \{0,\ldots,d-1\}^N\),
+    Let $A$ be an arbitrary translation-invariant MPS tensor.  Then there is
+    a zero block of bond dimension $D_0$, a finite family of nonzero blocks
+    $C_k$, and positive real weights $\mu_k$, such that for every chain
+    length $N$ and every word $\sigma \in \{0,\ldots,d-1\}^N$,
     \[
         \operatorname{MPV}_A
         =
@@ -1717,7 +1717,7 @@ structure for completeness.
 \begin{proof}\leanok
     \uses{thm:zero_block_separation,
         thm:pgvwc07_blockwise_unital_dual_package}
-    First apply the zero-block separation theorem to \(A\), retaining the
+    First apply the zero-block separation theorem to $A$, retaining the
     all-zero summands as a single zero block and extracting the nonzero
     irreducible summands.  Then apply the blockwise PGVWC07 unital and
     dual-diagonal theorem to this nonzero family.  Chaining the two MPV
@@ -1736,17 +1736,17 @@ structure for completeness.
         D_0+\sum_k D_k = D .
     \]
     In particular, the total bond dimension of the nonzero blocks is at most
-    the original bond dimension \(D\).
+    the original bond dimension $D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package,
         lem:mpv_zero_length}
     Evaluate the MPV identity of
     Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
-    empty word.  The length-zero coefficient of a bond-\(D\) tensor is \(D\);
-    the zero block contributes \(D_0\), and the direct sum of the nonzero
-    blocks contributes \(\sum_k D_k\).  This gives the displayed identity, and
-    the inequality follows because \(D_0\geq 0\).
+    empty word.  The length-zero coefficient of a bond-$D$ tensor is $D$;
+    the zero block contributes $D_0$, and the direct sum of the nonzero
+    blocks contributes $\sum_k D_k$.  This gives the displayed identity, and
+    the inequality follows because $D_0\geq 0$.
 \end{proof}
 
 \begin{theorem}[Positive-length PGVWC07 unital dual-diagonal form]%
@@ -1754,8 +1754,8 @@ structure for completeness.
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound}
     \leanok
     \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
-    For any MPS tensor \(A\) of bond dimension \(D\), there are nonzero blocks
-    \(C_k\) and positive real weights \(\mu_k\) such that each block is in the
+    For any MPS tensor $A$ of bond dimension $D$, there are nonzero blocks
+    $C_k$ and positive real weights $\mu_k$ such that each block is in the
     unital orientation,
     \[
         \sum_i C_k^i(C_k^i)^\dagger=\Id,
@@ -1766,36 +1766,36 @@ structure for completeness.
         \sum_i (C_k^i)^\dagger\Lambda_k C_k^i=\Lambda_k .
     \]
     Moreover, for
-    every chain length \(N>0\) and word
-    \(\sigma\in\{0,\ldots,d-1\}^N\),
+    every chain length $N>0$ and word
+    $\sigma\in\{0,\ldots,d-1\}^N$,
     \[
         \operatorname{MPV}_A(\sigma)
         =
         \operatorname{MPV}_{\bigoplus_k \mu_k C_k}(\sigma),
     \]
-    and the nonzero block dimensions satisfy \(\sum_k D_k\leq D\).
+    and the nonzero block dimensions satisfy $\sum_k D_k\leq D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}
     Apply Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound}.
     The all-zero summand contributes zero to every positive-length coefficient,
-    so it may be omitted from the displayed MPV identity for \(N>0\).  The
-    bound \(\sum_k D_k\leq D\) is one of the conclusions of that theorem.
+    so it may be omitted from the displayed MPV identity for $N>0$.  The
+    bound $\sum_k D_k\leq D$ is one of the conclusions of that theorem.
 \end{proof}
 
 \begin{definition}[Positive-length PGVWC07 canonical-form witness]%
     \label{def:pgvwc07_positive_length_witness}
     \lean{MPSTensor.PGVWC07PositiveLengthWitness}
     \leanok
-    A positive-length PGVWC07 canonical-form witness for an MPS tensor \(A\)
+    A positive-length PGVWC07 canonical-form witness for an MPS tensor $A$
     consists of a finite family of nonzero unital blocks, positive real
     weights, diagonal positive-definite dual fixed points, scalar fixed-point
     conclusions, positive block dimensions, positive-length MPV equality with
-    \(A\), and the total bond-dimension bound \(\sum_k D_k\leq D\).
+    $A$, and the total bond-dimension bound $\sum_k D_k\leq D$.
 
     This definition records the exact-MPV, nonempty-ring part of the PGVWC07
     construction.  It still does not include the source theorem's upper
-    normalization \(1\geq\lambda_k\), which depends on the global
+    normalization $1\geq\lambda_k$, which depends on the global
     spectral-radius normalization convention of
     \cite[Theorem~Th:TIcanonical, lines~765--766]{PerezGarcia2007Matrix}.
 \end{definition}
@@ -1807,10 +1807,10 @@ structure for completeness.
     \uses{def:pgvwc07_positive_length_witness}
     Let a positive-length PGVWC07 canonical-form witness have at least one
     nonzero block.  Then its positive real weights may be divided by their
-    largest value so that the new weights \(\nu_k\) are positive,
-    \(|\nu_k|\leq 1\) for all \(k\), and \(|\nu_{k_0}|=1\) for at least one
-    block \(k_0\).  If the original weights are \(\mu_k=s\nu_k\) with
-    \(s>0\), then for every chain length \(N>0\),
+    largest value so that the new weights $\nu_k$ are positive,
+    $|\nu_k|\leq 1$ for all $k$, and $|\nu_{k_0}|=1$ for at least one
+    block $k_0$.  If the original weights are $\mu_k=s\nu_k$ with
+    $s>0$, then for every chain length $N>0$,
     \[
         \operatorname{MPV}_A(\sigma)
         =
@@ -1824,9 +1824,9 @@ structure for completeness.
 \begin{proof}\leanok
     \uses{def:pgvwc07_positive_length_witness,
         lem:mpv_to_tensor_from_blocks_weight_mul_left}
-    Choose the largest positive real weight \(s\).  Dividing every weight by
-    \(s\) gives positive weights bounded above by \(1\), and a block attaining
-    the maximum has normalized weight \(1\).  The MPV identity follows from
+    Choose the largest positive real weight $s$.  Dividing every weight by
+    $s$ gives positive weights bounded above by $1$, and a block attaining
+    the maximum has normalized weight $1$.  The MPV identity follows from
     Lemma~\ref{lem:mpv_to_tensor_from_blocks_weight_mul_left}.
 \end{proof}
 
@@ -1913,17 +1913,17 @@ structure for completeness.
     \uses{thm:pgvwc07_positive_length_witness,
         lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv,
         thm:pgvwc07_positive_length_witness_weight_normalization}
-    Suppose that some positive-length MPV coefficient of an MPS tensor \(A\) is
-    nonzero.  Then there is a positive scalar \(s\) and a nonempty finite family
-    of PGVWC07 blocks \(C_k\) with positive normalized weights \(\nu_k\)
-    satisfying \(|\nu_k|\leq 1\) for all \(k\) and
-    \(|\nu_{k_0}|=1\) for some block \(k_0\).  Each block is in the unital
+    Suppose that some positive-length MPV coefficient of an MPS tensor $A$ is
+    nonzero.  Then there is a positive scalar $s$ and a nonempty finite family
+    of PGVWC07 blocks $C_k$ with positive normalized weights $\nu_k$
+    satisfying $|\nu_k|\leq 1$ for all $k$ and
+    $|\nu_{k_0}|=1$ for some block $k_0$.  Each block is in the unital
     orientation, has only scalar fixed points for its transfer map, and has a
     diagonal positive-definite fixed point for the dual transfer map.  Each
     block has positive bond dimension.  Moreover the globally rescaled tensor
-    \(s^{-1}A\) and the normalized weighted block tensor have the same
+    $s^{-1}A$ and the normalized weighted block tensor have the same
     positive-length MPV coefficients, and the block dimensions satisfy
-    \(\sum_k D_k\leq D\).
+    $\sum_k D_k\leq D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:pgvwc07_positive_length_witness,
@@ -1932,9 +1932,9 @@ structure for completeness.
         lem:mpv_smul}
     Start from the positive-length witness and use the nonzero coefficient to
     make the block family nonempty.  Divide the positive weights by their
-    maximum.  The exact coefficient identity for \(A\) contains the global
-    factor \(s^N\) at length \(N\); applying the scalar rescaling \(s^{-1}\) to
-    every matrix of \(A\) contributes the factor \(s^{-N}\), so the two factors
+    maximum.  The exact coefficient identity for $A$ contains the global
+    factor $s^N$ at length $N$; applying the scalar rescaling $s^{-1}$ to
+    every matrix of $A$ contributes the factor $s^{-N}$, so the two factors
     cancel at every positive length.
 \end{proof}
 
@@ -1943,8 +1943,8 @@ structure for completeness.
     \lean{MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_eq_zero}
     \leanok
     \uses{thm:pgvwc07_nonzero_normalized_exact_rescaled_form}
-    For every MPS tensor \(A\), either every positive-length MPV coefficient of
-    \(A\) is zero, or the exact rescaled normalized PGVWC07 form of
+    For every MPS tensor $A$, either every positive-length MPV coefficient of
+    $A$ is zero, or the exact rescaled normalized PGVWC07 form of
     Theorem~\ref{thm:pgvwc07_nonzero_normalized_exact_rescaled_form} exists.
 \end{theorem}
 \begin{proof}\leanok
@@ -1960,7 +1960,7 @@ structure for completeness.
     \leanok
     \uses{def:pgvwc07_positive_length_witness,
         thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
-    For every MPS tensor \(A\), the conclusions of
+    For every MPS tensor $A$, the conclusions of
     Theorem~\ref{thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound}
     give a positive-length PGVWC07 canonical-form witness.
 \end{theorem}
