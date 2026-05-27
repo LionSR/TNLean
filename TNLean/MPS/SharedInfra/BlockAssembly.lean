@@ -68,4 +68,21 @@ theorem mpv_toTensorFromBlocks_eq_sum
   rw [Matrix.trace_blockDiagonal']
   exact Finset.sum_congr rfl fun k _ => by simp [Matrix.trace_smul, hwlen]
 
+/-- If a tensor has the same MPV family as a unit-weight block diagonal
+assembly, then each MPV coefficient is the sum of the block coefficients. -/
+theorem mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+    {D r : ℕ} {dim : Fin r → ℕ}
+    (T : MPSTensor d D) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hSame :
+      SameMPV₂ T (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks))
+    {N : ℕ} (σ : Fin N → Fin d) :
+    mpv T σ = ∑ k : Fin r, mpv (blocks k) σ := by
+  calc
+    mpv T σ =
+        mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) σ :=
+      hSame N σ
+    _ = ∑ k : Fin r, ((1 : ℂ) ^ N) • mpv (blocks k) σ := by
+      rw [mpv_toTensorFromBlocks_eq_sum]
+    _ = ∑ k : Fin r, mpv (blocks k) σ := by simp
+
 end MPSTensor

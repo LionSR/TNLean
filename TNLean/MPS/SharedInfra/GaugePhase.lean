@@ -85,22 +85,22 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
       fun x => by ring]
   rw [← Finset.mul_sum, mul_pow]
 
-/-- If two self-overlaps both have norm limit `1`, and one scales from the other by powers of
-`ζ * conj ζ`, then `ζ` has unit norm. -/
-theorem norm_eq_one_of_selfOverlap_scale
+/-- If two self-overlaps have the same nonzero norm limit, and one scales from
+the other by powers of `ζ * conj ζ`, then `ζ` has unit norm. -/
+theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
-    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1))
-    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1))
+    {r : ℝ} (hr : r ≠ 0)
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds r))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds r))
     (hSelf : ∀ N : ℕ,
       mpvOverlap (d := d) B B N =
         (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
     ‖ζ‖ = 1 := by
   have hAA_ne : ∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) A A N‖ ≠ 0 :=
-    hAA.eventually_ne one_ne_zero
+    hAA.eventually_ne hr
   have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
       ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) := by
-    rw [show (1 : ℝ) = 1 / 1 from (one_div_one).symm]
-    exact hBB.div hAA one_ne_zero
+    simpa [div_self hr] using hBB.div hAA hr
   have hRatioEq : ∀ᶠ N in Filter.atTop,
       ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
     filter_upwards [hAA_ne] with N hN
@@ -121,6 +121,18 @@ theorem norm_eq_one_of_selfOverlap_scale
         with ⟨n, hn1, hn2⟩
       exact not_lt_of_ge hn1 hn2
   nlinarith [norm_nonneg ζ]
+
+/-- If two self-overlaps both have norm limit `1`, and one scales from the other by powers of
+`ζ * conj ζ`, then `ζ` has unit norm. -/
+theorem norm_eq_one_of_selfOverlap_scale
+    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1))
+    (hSelf : ∀ N : ℕ,
+      mpvOverlap (d := d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+    ‖ζ‖ = 1 :=
+  norm_eq_one_of_selfOverlap_scale_at_nonzero_limit one_ne_zero hAA hBB hSelf
 
 /-- The gauge phase `ζ` in a gauge-phase equivalence between two TP-normalized irreducible
 primitive blocks has unit norm. -/

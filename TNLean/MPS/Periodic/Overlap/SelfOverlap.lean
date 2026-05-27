@@ -519,7 +519,9 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
 
 /-! ## Self-overlap (first paragraph of Appendix A) -/
 
-private theorem mpvOverlap_blockTensor_self_eq
+/-- The self-overlap of a blocked tensor at length `N` is the self-overlap of
+the original tensor at length `N * L`. -/
+theorem mpvOverlap_blockTensor_self_eq
     [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
     mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (D := D) A L)
         (blockTensor (d := d) (D := D) A L) N =
@@ -756,13 +758,8 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
       mpv (blockTensor (d := d) (D := D) A m) σ =
         ∑ u : Fin m, mpv (blocks u) σ := by
     intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D) A m) σ =
-          mpv (toTensorFromBlocks (d := blockPhysDim d m)
-            (μ := fun _ : Fin m => (1 : ℂ)) blocks) σ := hBlocks_mpv N σ
-      _ = ∑ u : Fin m, ((1 : ℂ) ^ N) • mpv (blocks u) σ := by
-            rw [mpv_toTensorFromBlocks_eq_sum]
-      _ = ∑ u : Fin m, mpv (blocks u) σ := by simp
+    exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
+      (blockTensor (d := d) (D := D) A m) blocks hBlocks_mpv σ
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
           (blockTensor (d := d) (D := D) A m)
