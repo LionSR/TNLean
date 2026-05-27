@@ -621,6 +621,88 @@ endpoint scalars is `1` at every vertex. -/
 def IsVertexBalanced (c : (e : Edge G) → Units ℂ) : Prop :=
   ∀ v : V, ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie = 1
 
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- Endpoint scalars multiply pointwise under multiplication of edge scalars.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; endpoint factors are
+defined by the oriented edge scalar and its inverse. -/
+theorem edgeScalarAt_mul (c d : (e : Edge G) → Units ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeScalarAt (G := G) (fun e => c e * d e) v ie =
+      edgeScalarAt (G := G) c v ie * edgeScalarAt (G := G) d v ie := by
+  by_cases h : ie.1.1.1 = v
+  · simp [edgeScalarAt, h]
+  · simpa [edgeScalarAt, h] using
+      (mul_comm (((d ie.1 : Units ℂ) : ℂ)⁻¹) (((c ie.1 : Units ℂ) : ℂ)⁻¹))
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- Endpoint scalars invert pointwise under inversion of edge scalars.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the corrected quotient
+uses nonzero edge scalars and the inverse endpoint action on the opposite end
+of each oriented edge. -/
+theorem edgeScalarAt_inv (c : (e : Edge G) → Units ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeScalarAt (G := G) (fun e => (c e)⁻¹) v ie =
+      (edgeScalarAt (G := G) c v ie)⁻¹ := by
+  by_cases h : ie.1.1.1 = v
+  · simp [edgeScalarAt, h]
+  · simp [edgeScalarAt, h]
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- Endpoint scalar factors are nonzero.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; edge scalars are
+nonzero and the opposite endpoint uses their inverse. -/
+theorem edgeScalarAt_ne_zero (c : (e : Edge G) → Units ℂ)
+    (v : V) (ie : IncidentEdge G v) :
+    edgeScalarAt (G := G) c v ie ≠ 0 := by
+  by_cases h : ie.1.1.1 = v
+  · simp [edgeScalarAt, h]
+  · simp [edgeScalarAt, h]
+
+/-- Vertex-balanced edge scalars are closed under pointwise multiplication.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the corrected quotient
+uses the multiplicative group of edge scalars whose oriented product is `1` at
+each vertex. -/
+theorem IsVertexBalanced.mul {c d : (e : Edge G) → Units ℂ}
+    (hc : IsVertexBalanced (G := G) c)
+    (hd : IsVertexBalanced (G := G) d) :
+    IsVertexBalanced (G := G) (fun e => c e * d e) := by
+  intro v
+  calc
+    ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) (fun e => c e * d e) v ie =
+        ∏ ie : IncidentEdge G v,
+          edgeScalarAt (G := G) c v ie * edgeScalarAt (G := G) d v ie := by
+          refine Finset.prod_congr rfl ?_
+          intro ie _
+          simp [edgeScalarAt_mul]
+    _ =
+        (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie) *
+          ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) d v ie := by
+          rw [Finset.prod_mul_distrib]
+    _ = 1 := by simp [hc v, hd v]
+
+/-- Vertex-balanced edge scalars are closed under pointwise inversion.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the corrected quotient
+uses invertible edge scalars, and the inverse family again has oriented product
+`1` at every vertex. -/
+theorem IsVertexBalanced.inv {c : (e : Edge G) → Units ℂ}
+    (hc : IsVertexBalanced (G := G) c) :
+    IsVertexBalanced (G := G) (fun e => (c e)⁻¹) := by
+  intro v
+  calc
+    ∏ ie : IncidentEdge G v, edgeScalarAt (G := G) (fun e => (c e)⁻¹) v ie =
+        ∏ ie : IncidentEdge G v, (edgeScalarAt (G := G) c v ie)⁻¹ := by
+          refine Finset.prod_congr rfl ?_
+          intro ie _
+          simp [edgeScalarAt_inv]
+    _ = (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie)⁻¹ := by
+          rw [Finset.prod_inv_distrib]
+    _ = 1 := by simp [hc v]
+
 /-- Two PEPS gauge families are equivalent modulo balanced edge scalars if,
 after inserting the corresponding endpoint scalars, they induce the same
 oriented edge action on every incident half-edge. -/
@@ -631,6 +713,97 @@ def GaugeEquivModEdgeScalars (A : Tensor G d)
       ∀ (v : V) (ie : IncidentEdge G v),
         edgeGaugeAt A X v ie =
           edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie
+
+/-- Gauge equivalence modulo balanced edge scalars is reflexive.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the identity edge-scalar
+family is vertex-balanced and leaves every oriented endpoint action unchanged. -/
+theorem GaugeEquivModEdgeScalars.refl (A : Tensor G d)
+    (X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ) :
+    GaugeEquivModEdgeScalars (G := G) A X X := by
+  refine ⟨fun _ => 1, ?_, ?_⟩
+  · intro v
+    simp [edgeScalarAt]
+  · intro v ie
+    simp [edgeScalarAt]
+
+/-- Gauge equivalence modulo balanced edge scalars is symmetric.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; reversing a balanced
+edge-scalar reweighting uses the inverse edge-scalar family. -/
+theorem GaugeEquivModEdgeScalars.symm {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
+    GaugeEquivModEdgeScalars (G := G) A Y X := by
+  rcases hXY with ⟨c, hc, hXY⟩
+  refine ⟨fun e => (c e)⁻¹, IsVertexBalanced.inv (G := G) hc, ?_⟩
+  intro v ie
+  set s : ℂ := edgeScalarAt (G := G) c v ie with hs_def
+  have hs : s ≠ 0 := by
+    rw [hs_def]
+    exact edgeScalarAt_ne_zero (G := G) c v ie
+  calc
+    edgeGaugeAt A Y v ie = s⁻¹ • (s • edgeGaugeAt A Y v ie) := by
+      rw [smul_smul, inv_mul_cancel₀ hs, one_smul]
+    _ = s⁻¹ • edgeGaugeAt A X v ie := by
+      rw [← hXY v ie]
+    _ =
+        edgeScalarAt (G := G) (fun e => (c e)⁻¹) v ie •
+          edgeGaugeAt A X v ie := by
+          rw [edgeScalarAt_inv, ← hs_def]
+
+/-- Gauge equivalence modulo balanced edge scalars is transitive.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; composing two balanced
+edge-scalar reweightings multiplies their edge scalars, and the balancing
+condition is multiplicatively closed at every vertex. -/
+theorem GaugeEquivModEdgeScalars.trans {A : Tensor G d}
+    {X Y Z : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y)
+    (hYZ : GaugeEquivModEdgeScalars (G := G) A Y Z) :
+    GaugeEquivModEdgeScalars (G := G) A X Z := by
+  rcases hXY with ⟨c, hc, hXY⟩
+  rcases hYZ with ⟨d, hd, hYZ⟩
+  refine ⟨fun e => c e * d e, IsVertexBalanced.mul (G := G) hc hd, ?_⟩
+  intro v ie
+  calc
+    edgeGaugeAt A X v ie =
+        edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie := hXY v ie
+    _ =
+        edgeScalarAt (G := G) c v ie •
+          (edgeScalarAt (G := G) d v ie • edgeGaugeAt A Z v ie) := by
+          rw [hYZ v ie]
+    _ =
+        (edgeScalarAt (G := G) c v ie * edgeScalarAt (G := G) d v ie) •
+          edgeGaugeAt A Z v ie := by
+          rw [smul_smul]
+    _ =
+        edgeScalarAt (G := G) (fun e => c e * d e) v ie •
+          edgeGaugeAt A Z v ie := by
+          rw [edgeScalarAt_mul]
+
+/-- Gauge equivalence modulo balanced edge scalars is an equivalence relation.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the corrected quotient
+is the quotient of edge gauges by the vertex-balanced scalar action. -/
+theorem GaugeEquivModEdgeScalars.equivalence (A : Tensor G d) :
+    Equivalence (GaugeEquivModEdgeScalars (G := G) A) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro X
+    exact GaugeEquivModEdgeScalars.refl (G := G) A X
+  · intro X Y hXY
+    exact GaugeEquivModEdgeScalars.symm (G := G) hXY
+  · intro X Y Z hXY hYZ
+    exact GaugeEquivModEdgeScalars.trans (G := G) hXY hYZ
+
+/-- The quotient relation on gauge families modulo balanced edge scalars.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; this packages the
+corrected balanced edge-scalar quotient as a formal equivalence relation. -/
+def GaugeEquivModEdgeScalars.setoid (A : Tensor G d) :
+    Setoid ((e : Edge G) → GL (Fin (A.bondDim e)) ℂ) where
+  r := GaugeEquivModEdgeScalars (G := G) A
+  iseqv := GaugeEquivModEdgeScalars.equivalence (G := G) A
 
 /-- Balanced edge-scalar reweightings do not change the gauged tensor at a
 vertex. -/
@@ -663,6 +836,34 @@ theorem GaugeEquivModEdgeScalars.gaugeVertex_eq
       _ = ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) := by
             rw [hc v, one_mul]
   rw [hprod]
+
+/-- Balanced edge-scalar equivalent gauges define the same gauged PEPS tensor.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; balanced endpoint
+scalars leave every local gauged tensor unchanged, hence the whole gauged
+tensor is unchanged. -/
+theorem GaugeEquivModEdgeScalars.applyGauge_eq
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
+    applyGauge A X = applyGauge A Y := by
+  change Tensor.mk A.bondDim (fun v => gaugeVertex A X v) =
+    Tensor.mk A.bondDim (fun v => gaugeVertex A Y v)
+  congr
+  funext v η σ
+  exact GaugeEquivModEdgeScalars.gaugeVertex_eq (G := G) hXY v η σ
+
+/-- Balanced edge-scalar equivalent gauges give the same PEPS state.
+
+Source: `docs/paper-gaps/peps_gauge_edge_scalars.tex`; the balanced quotient
+acts trivially on every local gauged tensor, and hence on the contracted state. -/
+theorem GaugeEquivModEdgeScalars.applyGauge_sameState
+    {A : Tensor G d}
+    {X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ}
+    (hXY : GaugeEquivModEdgeScalars (G := G) A X Y) :
+    SameState (applyGauge A X) (applyGauge A Y) := by
+  intro σ
+  rw [GaugeEquivModEdgeScalars.applyGauge_eq (G := G) hXY]
 
 /-! ### Uniqueness modulo balanced edge scalars -/
 

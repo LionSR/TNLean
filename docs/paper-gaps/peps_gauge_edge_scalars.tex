@@ -72,11 +72,14 @@ vertex $v$ by the factors $c_{v,e}$ multiplies the gauged local tensor at $v$ by
 $\prod_{e\ni v} c_{v,e}$. If the scalar family is vertex-balanced, this product
 is $1$ at every vertex, so all local gauged tensors are unchanged. Thus local
 gauge uniqueness can at best be uniqueness modulo these balanced edge scalars.
-The formal statement uses this quotient as the corrected uniqueness statement.\footnote{The formal definitions are
+The formal statement uses this quotient as the corrected uniqueness statement;
+the quotient relation is an equivalence relation on gauge
+families.\footnote{The formal definitions are
 \leanid{TNLean.PEPS.edgeScalarAt}, \leanid{TNLean.PEPS.IsVertexBalanced}, and
-\leanid{TNLean.PEPS.GaugeEquivModEdgeScalars} in
-\path{TNLean/PEPS/FundamentalTheorem.lean:603--625}. The corresponding
-blueprint entries are at \path{blueprint/src/chapter/ch13a_peps_ft.tex:375--423}.}
+\leanid{TNLean.PEPS.GaugeEquivModEdgeScalars}; the quotient relation is
+\leanid{TNLean.PEPS.GaugeEquivModEdgeScalars.setoid} in
+\path{TNLean/PEPS/FundamentalTheorem.lean}. The corresponding blueprint
+entries are in \path{blueprint/src/chapter/ch13a_peps_ft.tex}.}
 
 \section{The triangle witness}
 
