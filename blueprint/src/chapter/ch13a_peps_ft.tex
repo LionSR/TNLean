@@ -1918,21 +1918,45 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[Injectivity from a rectangular cover of the edge complement]%
     \label{lem:peps_normalSquareEdgeComplementRegion_injective_of_cover}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.edgeComplement_injective}
+    \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.%
+        edgeComplement_injective_of_T_cover}
     \leanok
     \uses{def:peps_normalSquareRectangleCover,
         def:peps_normalRectangleInjectivityHypotheses,
         lem:peps_normalSquareRectangleCover_injective,
-        lem:peps_regionInjectivityUnionClosure_finite}
+        lem:peps_regionInjectivityUnionClosure_finite,
+        lem:peps_normalSquareEdgeComplementRegion_coverOfT}
     If the finite-lattice complementary block \(A_3\) has a nonempty finite
     cover by contiguous \(2\times3\) and \(3\times2\) rectangles, then
     rectangular injectivity and finite union closure imply that \(A_3\) is
-    injective.
+    injective.  In the normalized horizontal-edge \(5\times7\) frame, it is
+    enough to give such a cover of the local \(T\)-region, since adjoining the
+    two top-collar \(3\times2\) rectangles gives a cover of \(A_3\).
 \end{lemma}
 % Maintainer note: the concrete cover required by
 % \cite[Theorem~3]{Molnar2018NormalPEPS} remains to be constructed.
 \begin{proof}\leanok
     Apply rectangular injectivity to every rectangle in the cover, then apply
-    finite union closure to the nonempty family.
+    finite union closure to the nonempty family.  For the normalized
+    \(5\times7\) edge complement, first extend the local \(T\)-cover by the
+    two top-collar rectangles.
+\end{proof}
+
+\begin{lemma}[A cover of \(T\) extends to a cover of the edge complement]%
+    \label{lem:peps_normalSquareEdgeComplementRegion_coverOfT}
+    \lean{TNLean.PEPS.normalSquareEdgeComplementRectangleCoverOfT}
+    \leanok
+    \uses{def:peps_normalSquareRectangleCover,
+        lem:peps_normalSquareEdgeComplementRegion_topCollar}
+    In the normalized horizontal-edge \(5\times7\) frame, any rectangular cover
+    of the local \(T\)-region extends to a rectangular cover of the
+    edge-complementary block \(A_3\) by adjoining the two top-collar
+    contiguous \(3\times2\) rectangles.
+\end{lemma}
+\begin{proof}\leanok
+    Index the new cover by the old cover indices together with two extra
+    indices for the top-collar rectangles.  The set equality is exactly the
+    top-collar decomposition of the edge-complementary block.
 \end{proof}
 
 \begin{lemma}[The normalized edge complements have collars]%
