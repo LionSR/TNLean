@@ -167,8 +167,7 @@ private theorem mpvOverlap_eq_star_pow_mul_self_of_gaugePhase
           rw [hstar]
           ring
     _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
-          rw [← Finset.mul_sum]
-          rfl
+          simp [mpvOverlap, Finset.mul_sum]
 
 /-- A gauge-phase equivalence between the period-blocked tensors of two
 periodic tensors gives a mixed blocked overlap which does not tend to zero.
