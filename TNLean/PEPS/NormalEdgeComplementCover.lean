@@ -12,7 +12,7 @@ PEPS proof.
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
   entangled pair states generating the same state*, arXiv:1804.04964,
-  Section 3, Lemma `lem:injective_union` and Theorem 3]
+  Section 3, Lemma lem:injective_union and Theorem 3]
 -/
 
 namespace TNLean
@@ -25,7 +25,7 @@ Each member of the cover is required to be one of the source-paper contiguous
 condition for the union-of-injective-regions lemma to prove injectivity of the
 target region.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 structure SquareLatticeRectangleCover {width height : ℕ}
     (target : Finset (SquareLatticeVertex width height)) where
@@ -53,7 +53,7 @@ and every source-paper \(3\times2\) rectangle containing \(p\) also contains a
 point \(q_{32}\) outside the target, then no exact rectangular cover of the
 target exists.
 
-Source context: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and
+Source context: arXiv:1804.04964, Section 3, Lemma lem:injective_union and
 proof of Theorem 3, lines 1322--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem not_squareLatticeRectangleCover_of_forced_points {width height : ℕ}
@@ -539,7 +539,7 @@ edge-complementary block \(A_3\). It states that rectangular injectivity plus
 the union-of-injective-regions lemma proves injectivity once the coordinate
 cover is supplied.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem injective_of_rectangleCover
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -561,7 +561,7 @@ injective when the PEPS is large enough. It does not construct the cover; it
 states that rectangular injectivity plus the union-of-injective-regions lemma
 proves injectivity once the coordinate cover is supplied.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1444 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionT_injective_of_cover
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -579,7 +579,7 @@ This is the vertical counterpart of `regionT_injective_of_cover`. It does not
 construct the cover; it records the conditional passage from a source-sized
 rectangular cover to injectivity.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem verticalT_inj_of_cover
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -598,7 +598,7 @@ of Theorem 3. It does not construct the cover; it states that rectangular
 injectivity plus the union-of-injective-regions lemma proves injectivity after
 the coordinate cover is supplied.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeComplement_injective
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -615,7 +615,7 @@ of the local \(T\)-region proves injectivity of the edge-complementary block.
 The proof first adjoins the two top-collar rectangles to the \(T\)-cover, then
 applies the general rectangular-cover criterion.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeComplement_injective_of_T_cover
     {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
@@ -632,7 +632,7 @@ The two additional top-collar regions are contiguous \(3\times2\) rectangles,
 so rectangular injectivity and the union-of-injective-regions lemma add them to
 the local \(T\)-region.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem topCollar_injective
     {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
@@ -653,7 +653,7 @@ The two additional right-collar regions are contiguous \(2\times3\) rectangles,
 so rectangular injectivity and the union-of-injective-regions lemma add them to
 the local \(T\)-region.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1499 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem rightCollar_injective
     {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
@@ -673,7 +673,7 @@ of the rotated red and blue edge blocks is injective if the rotated local
 The two additional right-collar regions are contiguous \(2\times3\)
 rectangles.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem verticalComp_injective
     {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
@@ -691,7 +691,7 @@ theorem verticalComp_injective
 the rotated local \(T\)-region implies injectivity of the actual complement of
 the rotated red and blue edge blocks.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1500 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem verticalComp_inj_of_cover
     {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
