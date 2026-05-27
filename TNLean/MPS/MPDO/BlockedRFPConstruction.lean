@@ -234,21 +234,6 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
   refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
     data.isRFPViaFusion⟩
 
-/-- Direct form of the simple-MPDO construction once the assembled `η`-local
-structure has been constructed.
-
-Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
-the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
-whose product realizes the MPDO. The eta-local structure is precisely this
-assembled positive commuting-bond datum. -/
-theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
-    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
-    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
-      IsRFP_MPDO_via_fusion K := by
-  refine ⟨?_, structural_implies_rfp_blocked (K := K) hZCL, ?_⟩
-  · exact hEta.isGSNNCHWithZCL hZCL
-  · exact isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
-
 /-- Direct-argument form of Theorem 4.9 using only the hypotheses that enter the
 current theorem. -/
 theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
@@ -258,5 +243,18 @@ theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
   refine ⟨?_, structural_implies_rfp_blocked (K := K) hZCL, ?_⟩
   · exact (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨hCommuting, hZCL⟩
   · exact isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
+
+/-- Direct form of the simple-MPDO construction once the assembled `η`-local
+structure has been constructed.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
+the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
+whose product realizes the MPDO. The eta-local structure is precisely this
+assembled positive commuting-bond form. -/
+theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K :=
+  simple_mpdo_rfp_chain hEta.hasCommutingForm hZCL
 
 end MPOTensor
