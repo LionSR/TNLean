@@ -2358,6 +2358,7 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{definition}[$\eta$-local commuting-form data]
     \label{def:mpdo_eta_local_structure_data}
+    \lean{MPOTensor.TranslationInvariantBondData}
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_has_commuting_form}
@@ -2368,6 +2369,10 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{theorem}[$\eta$-local structure carries commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
+    \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
     \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
     \lean{MPOTensor.EtaLocalStructureData.formAt_bondAt_comm}
@@ -2377,7 +2382,7 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
     The $\eta$-local structure itself determines a commuting-form witness for every
     chain length $N \ge 2$.  In particular, the translated nearest-neighbor
-    bonds commute and the MPDO at length \(N\) is a positive scalar multiple of
+    bonds commute and the MPDO at length $N$ is a positive scalar multiple of
     their product, as in Proposition~C.6.
 \end{theorem}
 
@@ -2481,22 +2486,28 @@ the elementary trace-power identity for diagonal matrices.
     For an MPO tensor $K$, this consists of the local Appendix~C.2 data, the
     commuting-form property, and zero correlation length. The local component
     consists of the hypotheses used in the entropy-side argument for commuting form.
-    The auxiliary constructor takes the scoped SAL--ZCL local hypotheses
+    The alternative construction takes the scoped SAL--ZCL local hypotheses
     together with an already-supplied commuting-form witness.
 \end{definition}
 
-\begin{definition}[Blocked-RFP data from $\eta$-local structure]
-    \label{def:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
+\begin{theorem}[Blocked-RFP data from $\eta$-local structure]
+    \label{thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure}
     \leanok
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data,
         def:mpdo_eta_local_structure_data}
     Once the $\eta$-local structure has been assembled, it
-    supplies the commuting-form field of the blocked-RFP data. Together with
+    supplies the commuting-form property required by the blocked-RFP data. Together with
     the local Appendix~C.2 data and zero correlation length, this gives the
     explicit hypotheses used by the simple-MPDO construction theorem.
-\end{definition}
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the commuting-form property carried by the $\eta$-local structure and
+    keep the local Appendix~C.2 data and zero-correlation-length hypothesis
+    unchanged.
+\end{proof}
 
 \begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
     \label{thm:structural_implies_rfp_blocked}
@@ -2517,10 +2528,27 @@ the elementary trace-power identity for diagonal matrices.
     produces the blocked witness.
 \end{proof}
 
+\begin{theorem}[Simple-MPDO RFP chain from blocked-RFP data]
+    \label{thm:simple_mpdo_rfp_chain_of_data}
+    \lean{MPOTensor.simple_mpdo_rfp_chain_of_data}
+    \lean{MPOTensor.structural_implies_rfp_blocked_of_data}
+    \leanok
+    \uses{def:simple_mpdo_blocked_rfp_data,
+        thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion}
+    Given the blocked-RFP data for an MPO tensor $K$, one obtains the
+    GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size $2$, and
+    the transfer-map fusion formulation of MPDO RFP.
+\end{theorem}
+
+\begin{proof}\leanok
+    The commuting-form and zero-correlation-length assumptions give the
+    GSNNCH-with-ZCL case. Zero correlation length also gives the blocked
+    fusion-isometry witness and the transfer-map fusion formulation.
+\end{proof}
+
 \begin{theorem}[Simple-MPDO RFP chain from $\eta$-local structure]
     \label{thm:simple_mpdo_rfp_chain_of_eta_local_structure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure}
-    \lean{MPOTensor.simple_mpdo_rfp_chain_of_data}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpo_is_zcl,
         thm:mpdo_eta_local_structure_is_gsnnch_zcl,
