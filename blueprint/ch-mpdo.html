@@ -11221,12 +11221,76 @@
 
   </div>
 </div>
-<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_eta_local_structure_data">
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_translation_invariant_bond_data">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
     Definition
     </span>
     <span class="definition_thmlabel">25.133</span>
+    <span class="definition_thmtitle">Translation-invariant two-site bond</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.TranslationInvariantBondData" class="lean_decl">MPOTensor.TranslationInvariantBondData</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    This records a single positive two-site bond together with its translated copies on every finite periodic chain, requiring those translated copies to commute pairwise. </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_eta_local_structure_data">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">25.134</span>
     <span class="definition_thmtitle">\(\eta \)-local commuting-form data</span>
     <div class="thm_header_extras">
 
@@ -11249,6 +11313,8 @@
         </header>
         
         <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
           
@@ -11281,17 +11347,17 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    This defines the post-extraction form of Appendix&#160;C.2: a single translation-invariant positive two-site bond whose translated copies commute on every periodic chain and realize the MPO at every finite length. </p>
+  <p>    This defines the eta-local form of Appendix&#160;C.2: the translation-invariant positive two-site bond data together with the requirement that the corresponding product realizes the MPO at every finite length. </p>
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_eta_local_structure_has_commuting_form">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
+<div class="definition_thmwrapper theorem-style-definition" id="def:mpdo_translation_invariant_bond_to_commuting_form_data">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
     </span>
-    <span class="theorem_thmlabel">25.134</span>
-    <span class="theorem_thmtitle">\(\eta \)-local structure carries commuting form</span>
+    <span class="definition_thmlabel">25.135</span>
+    <span class="definition_thmtitle">Finite-chain data from a translation-invariant bond</span>
     <div class="thm_header_extras">
 
     
@@ -11299,7 +11365,73 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">#</a>
+    <a class="icon proof" href="ch-mpdo.html#def:mpdo_translation_invariant_bond_to_commuting_form_data">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.TranslationInvariantBondData.toCommutingFormData" class="lean_decl">MPOTensor.TranslationInvariantBondData.toCommutingFormData</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>    A translation-invariant positive two-site bond determines finite-chain commuting-form data at every length \(N \ge 2\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_translation_invariant_bond_to_commuting_form_data_components">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.136</span>
+    <span class="theorem_thmtitle">Component identities for finite-chain bond data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_translation_invariant_bond_to_commuting_form_data_components">#</a>
     
     <a class="icon proof" href="ch-mpdo.html#a0000001881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -11317,7 +11449,92 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.133</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond" class="lean_decl">MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN" class="lean_decl">MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt" class="lean_decl">MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>      The finite-chain data associated to a translation-invariant bond retains the original local bond and the supplied lower bound \(2 \le N\), and the factor at site \(i\) is the translated copy of that local two-site bond. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001881">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>These are the component identities for the finite-chain construction. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_eta_local_structure_has_commuting_form">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.137</span>
+    <span class="theorem_thmtitle">\(\eta \)-local structure carries commuting form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
           
@@ -11341,6 +11558,14 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.hasCommutingForm" class="lean_decl">MPOTensor.EtaLocalStructureData.hasCommutingForm</a></li>
           
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.formAt_realizes" class="lean_decl">MPOTensor.EtaLocalStructureData.formAt_realizes</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.formAt_bondAt_comm" class="lean_decl">MPOTensor.EtaLocalStructureData.formAt_bondAt_comm</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.exists_positive_scalar_mpo_eq_product" class="lean_decl">MPOTensor.EtaLocalStructureData.exists_positive_scalar_mpo_eq_product</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.positive_commuting_product_form" class="lean_decl">MPOTensor.EtaLocalStructureData.positive_commuting_product_form</a></li>
+          
         </ul>
     
       </div>
@@ -11350,11 +11575,17 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    The \(\eta \)-local structure itself determines a commuting-form witness for every chain length \(N \ge 2\). </p>
+  <p>        The \(\eta \)-local structure itself determines a commuting-form witness for every chain length \(N \ge 2\). In particular, the translated nearest-neighbor bonds commute and the MPDO at length \(N\) is a positive scalar multiple of their product, as in <span class="cite">
+	[
+	
+	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
+	, Proposition&#160;C.6
+	]
+</span>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001881">
+<div class="proof_wrapper" id="a0000001882">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11371,7 +11602,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.135</span>
+    <span class="theorem_thmlabel">25.138</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure gives GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -11382,7 +11613,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11398,7 +11629,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.133</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.129</a></li>
           
@@ -11435,7 +11666,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001882">
+<div class="proof_wrapper" id="a0000001883">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11447,13 +11678,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_has_commuting_form_of_eta_local_structure">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_eta_local_structure_is_gsnnch_zcl">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.136</span>
-    <span class="theorem_thmtitle">\(\eta \)-local structure implies commuting form</span>
+    <span class="theorem_thmlabel">25.139</span>
+    <span class="theorem_thmtitle">\(\eta \)-local structure with ZCL gives GSNNCH–ZCL</span>
     <div class="thm_header_extras">
 
     
@@ -11461,9 +11692,9 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">#</a>
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11479,7 +11710,90 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.134</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.137</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.132</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL" class="lean_decl">MPOTensor.EtaLocalStructureData.isGSNNCHWithZCL</a></li>
+          
+          <li><a href="../docs/find/#doc/MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure" class="lean_decl">MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>     Once the \(\eta \)-local structure gives the commuting nearest-neighbor product form, adding zero correlation length gives the GSNNCH–ZCL case of the simple-MPDO equivalence. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001884">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Use the commuting-form witness carried by the \(\eta \)-local structure and combine it with the ZCL hypothesis. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_has_commuting_form_of_eta_local_structure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.140</span>
+    <span class="theorem_thmtitle">\(\eta \)-local structure implies commuting form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.137</a></li>
           
         </ul>
     
@@ -11514,7 +11828,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001883">
+<div class="proof_wrapper" id="a0000001885">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11531,7 +11845,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.137</span>
+    <span class="theorem_thmlabel">25.141</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure implies GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -11542,7 +11856,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11558,7 +11872,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">Theorem 25.135</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">Theorem 25.138</a></li>
           
         </ul>
     
@@ -11593,7 +11907,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001884">
+<div class="proof_wrapper" id="a0000001886">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11605,26 +11919,26 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001885">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001887">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.138</span>
+    <span class="remark_thmlabel">25.142</span>
     <span class="remark_thmtitle">Entropy-side construction</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#a0000001885">#</a>
+    <a class="icon proof" href="ch-mpdo.html#a0000001887">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The entropy-side theorem still to be supplied constructs the local data needed for Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.136</a> from the SAL and ZCL hypotheses. The sector-reduced neighboring operators \(\eta _{k,h}\) are already provided by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">25.32</a>. What remains is to identify this sector family with the inverse-map construction in the original simple-MPDO tensor coordinates and assemble it into a single translation-invariant positive two-site bond realizing all finite chains. Once this assembly is available, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.136</a> yields the commuting-form conclusion and hence the GSNNCH branch of the simple-MPDO equivalence. </p>
+  <p> The entropy-side theorem still to be supplied constructs the local data needed for Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.140</a> from the SAL and ZCL hypotheses. The sector-reduced neighboring operators \(\eta _{k,h}\) are already provided by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">25.32</a>. What remains is to identify this sector family with the inverse-map construction in the original simple-MPDO tensor coordinates and assemble it into a single translation-invariant positive two-site bond realizing all finite chains. Once this construction is available, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.140</a> yields the commuting-form conclusion and hence the GSNNCH branch of the simple-MPDO equivalence. </p>
 
   </div>
 </div>
@@ -11634,8 +11948,8 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.139</span>
-    <span class="definition_thmtitle">Local simple-MPDO structure data</span>
+    <span class="definition_thmlabel">25.143</span>
+    <span class="definition_thmtitle">Local simple-MPDO structure</span>
     <div class="thm_header_extras">
 
     
@@ -11691,7 +12005,75 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    This structure collects the local Appendix&#160;C.2 data: a normalized three-site reduced state with equality in strong subadditivity, the resulting local \(\eta \)-structure, and the rank-one conclusion for the auxiliary primitive matrix \(T\). </p>
+  <p>    This structure records the local Appendix&#160;C.2 ingredients: a normalized three-site reduced state with equality in strong subadditivity, the resulting local \(\eta \)-structure, and the rank-one conclusion for the auxiliary primitive matrix \(T\). </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_local_structure_data_of_sal_zcl">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.144</span>
+    <span class="theorem_thmtitle">Local simple-MPDO structure from SAL–ZCL hypotheses</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:sal_implies_eta_structure">Theorem 25.26</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:sal_zcl_implies_rank_one_t">Theorem 25.38</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL" class="lean_decl">MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The hypotheses of Lemmas C.3–C.4 determine the local simple-MPDO structure. </p>
 
   </div>
 </div>
@@ -11700,8 +12082,8 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.140</span>
-    <span class="definition_thmtitle">Simple-MPDO blocked-RFP data</span>
+    <span class="definition_thmlabel">25.145</span>
+    <span class="definition_thmtitle">Simple-MPDO blocked-RFP structure</span>
     <div class="thm_header_extras">
 
     
@@ -11724,7 +12106,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.139</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
           
@@ -11759,7 +12141,156 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    For an MPO tensor \(K\), this consists of the local Appendix&#160;C.2 data, the commuting-form property, and zero correlation length. The local component consists of the hypotheses used in the entropy-side route to commuting form. </p>
+  <p>    For an MPO tensor \(K\), this records the local Appendix&#160;C.2 ingredients, the commuting-form property, and zero correlation length. The local component consists of the hypotheses used in the entropy-side argument for commuting form. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.146</span>
+    <span class="theorem_thmtitle">Blocked-RFP structure from SAL–ZCL and commuting form</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">Theorem 25.144</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    The SAL–ZCL hypotheses together with a commuting-form witness determine the simple-MPDO blocked-RFP structure. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.147</span>
+    <span class="theorem_thmtitle">Blocked-RFP structure from \(\eta \)-local structure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Once the \(\eta \)-local structure has been assembled, it supplies the commuting-form property required by the blocked-RFP structure. Together with the local Appendix&#160;C.2 ingredients and zero correlation length, this gives the explicit hypotheses used by the simple-MPDO construction theorem. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001888">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Use the commuting-form property carried by the \(\eta \)-local structure and keep the local Appendix&#160;C.2 ingredients and zero-correlation-length hypothesis unchanged. </p>
 
   </div>
 </div>
@@ -11768,7 +12299,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.141</span>
+    <span class="theorem_thmlabel">25.148</span>
     <span class="theorem_thmtitle">Zero correlation length gives a blocked fusion-isometry witness</span>
     <div class="thm_header_extras">
 
@@ -11779,7 +12310,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11836,7 +12367,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001886">
+<div class="proof_wrapper" id="a0000001889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11848,12 +12379,263 @@
 
   </div>
 </div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:structural_implies_rfp_blocked_of_data">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.149</span>
+    <span class="theorem_thmtitle">Blocked-RFP data give a blocked fusion-isometry witness</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked_of_data">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.148</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.structural_implies_rfp_blocked_of_data" class="lean_decl">MPOTensor.structural_implies_rfp_blocked_of_data</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains a blocked fusion-isometry witness at size \(2\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001890">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Apply the zero-correlation-length theorem to the ZCL component of the blocked-RFP data. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_data">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.150</span>
+    <span class="theorem_thmtitle">Simple-MPDO RFP chain from blocked-RFP data</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.148</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.simple_mpdo_rfp_chain_of_data" class="lean_decl">MPOTensor.simple_mpdo_rfp_chain_of_data</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    Given the blocked-RFP data for an MPO tensor \(K\), one obtains the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001891">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The commuting-form and zero-correlation-length assumptions give the GSNNCH-with-ZCL case. Zero correlation length also gives the blocked fusion-isometry witness and the transfer-map fusion formulation. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain_of_eta_local_structure">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.151</span>
+    <span class="theorem_thmtitle">Simple-MPDO RFP chain from \(\eta \)-local structure</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_eta_local_structure">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">Theorem 25.139</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.148</a></li>
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure" class="lean_decl">MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>    If the \(\eta \)-local structure has been constructed for an MPO tensor \(K\), then zero correlation length gives the GSNNCH-with-ZCL case, the blocked fusion-isometry witness at size \(2\), and the transfer-map fusion formulation of MPDO RFP. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001892">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The \(\eta \)-local structure supplies the commuting-form property. Combining this with zero correlation length gives the GSNNCH-with-ZCL case; zero correlation length also gives the blocked fusion-isometry witness and the transfer-map fusion formulation. </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:simple_mpdo_rfp_chain">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.142</span>
+    <span class="theorem_thmlabel">25.152</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from commuting form and ZCL</span>
     <div class="thm_header_extras">
 
@@ -11864,7 +12646,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001887"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11886,7 +12668,7 @@
           
           <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.132</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.141</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.148</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
@@ -11925,7 +12707,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001887">
+<div class="proof_wrapper" id="a0000001893">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11933,7 +12715,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">25.132</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">25.141</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">25.50</a> to zero correlation length, which is the MPDO RFP condition. </p>
+  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">25.132</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">25.148</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">25.50</a> to zero correlation length, which is the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -11942,7 +12724,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.143</span>
+    <span class="remark_thmlabel">25.153</span>
     <span class="remark_thmtitle">SAL–ZCL implication for the GSNNCH–ZCL criterion</span>
     <div class="thm_header_extras">
 
@@ -11964,11 +12746,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.139</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.140</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.142</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.152</a></li>
           
         </ul>
     
@@ -11980,7 +12762,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.142</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
+  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.152</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
 
   </div>
 </div>
