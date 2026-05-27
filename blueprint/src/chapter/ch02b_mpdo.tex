@@ -1315,22 +1315,27 @@ the elementary trace-power identity for diagonal matrices.
 
 \begin{definition}[BNT comparison with blocked coefficients]%
     \label{def:mpdo_bnt_blocked_basis_coefficient_comparison}
+    \lean{MPOTensor.BNTBlockedBasisLabelAssignment}
+    \lean{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.sourceLabel}
+    \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.targetLabel}
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_blocked_structure_coefficients}
-    A comparison between the BNT-label coefficients and the chosen
-    blocked-basis coefficients consists, for every positive blocked length
-    \(n\), of a source label map \(\sigma_n\) from the chosen basis of
-    \(\mathcal A_n\) and a target label map \(\tau_n\) from the chosen basis
-    of \(\mathcal A_{2n}\) to the fixed BNT labels, together with the equality
+    The BNT-label assignment consists, for every positive blocked length $n$,
+    of a source label map $\sigma_n$ from the chosen basis of
+    $\mathcal A_n$ and a target label map $\tau_n$ from the chosen basis of
+    $\mathcal A_{2n}$ to the fixed BNT labels. A comparison between the
+    BNT-label coefficients and the chosen blocked-basis coefficients adds the
+    equality
     \[
         c^{(n)}_{i,j,k}
         =
         c^{(n)}_{\sigma_n(i),\sigma_n(j),\tau_n(k)}.
     \]
     This is a blocked-basis comparison: the left hand side is expanded in the
-    chosen basis of \(\mathcal A_{2n}\), so the statement is not itself the
+    chosen basis of $\mathcal A_{2n}$, so the statement is not itself the
     same-length BNT product law.
     This records the coefficient-comparison statement separately from the
     construction of the label maps from the MPDO tensor.
@@ -1669,6 +1674,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremData.idempotent_eq_sum_ofChi}
     \lean{MPOTensor.BNTLabelTheoremData.positive_chi_pos_entries}
     \lean{MPOTensor.BNTLabelTheoremData.positive_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremData.labelAssignment}
     \lean{MPOTensor.BNTLabelTheoremData.sourceLabel}
     \lean{MPOTensor.BNTLabelTheoremData.targetLabel}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi}
@@ -1926,6 +1932,7 @@ the elementary trace-power identity for diagonal matrices.
     \lean{MPOTensor.BNTLabelTheoremWitness.idempotent_eq_sum_ofChi}
     \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries}
     \lean{MPOTensor.BNTLabelTheoremWitness.positive_chi_trace_power}
+    \lean{MPOTensor.BNTLabelTheoremWitness.labelAssignment}
     \lean{MPOTensor.BNTLabelTheoremWitness.sourceLabel}
     \lean{MPOTensor.BNTLabelTheoremWitness.targetLabel}
     \lean{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}

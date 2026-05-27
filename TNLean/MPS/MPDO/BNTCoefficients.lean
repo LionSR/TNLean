@@ -250,14 +250,56 @@ theorem HasIdempotentCoefficientForm.eq_sum [Fintype Λ]
 
 end BNTLabelTraceScalarFamily
 
+/-- Assignment of BNT labels to chosen blocked-basis elements.
+
+For each positive blocked length `n`, the source map reads a chosen basis label
+of \(\mathcal A_n\) as a BNT label, while the target map reads a chosen basis
+label of \(\mathcal A_{2n}\) as a BNT label.  This is the source-side
+Appendix C.3 input needed before one can compare the blocked-basis
+coefficients with the BNT-label coefficient system.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+structure BNTBlockedBasisLabelAssignment (data : AlgebraStructureData d D)
+    (Λ : Type*) where
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_n\).
+
+  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+  sourceLabel :
+    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data n → Λ
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\).
+
+  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+  targetLabel :
+    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
+
+namespace BNTBlockedBasisLabelAssignment
+
+variable {data : AlgebraStructureData d D} {Λ : Type*}
+  (labels : BNTBlockedBasisLabelAssignment data Λ)
+
+/-- The single label map on the disjoint union of source- and target-length
+blocked-basis labels.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def blockedLabel (n : ℕ) (hn : 0 < n) :
+    AlgebraStructureData.BlockedIndex data n ⊕
+      AlgebraStructureData.BlockedIndex data (2 * n) → Λ
+  | Sum.inl i => labels.sourceLabel n hn i
+  | Sum.inr k => labels.targetLabel n hn k
+
+end BNTBlockedBasisLabelAssignment
+
 /-- Comparison between chosen blocked-basis multiplication coefficients and
 BNT-label coefficients.
 
-For each positive blocked length `n`, the maps `sourceLabel` and `targetLabel`
-read the chosen basis labels of \(\mathcal A_n\) and \(\mathcal A_{2n}\) as
-BNT labels.  The comparison equality says that the blocked-basis coefficient of
-the product of two chosen basis elements is the corresponding BNT-label
-coefficient:
+The label assignment reads chosen basis labels of \(\mathcal A_n\) and
+\(\mathcal A_{2n}\) as BNT labels.  The comparison equality says that the
+blocked-basis coefficient of the product of two chosen basis elements is the
+corresponding BNT-label coefficient:
 \[
   c^{(n)}_{i,j,k}
     =
@@ -283,18 +325,11 @@ Appendix C.3, lines 1830--1922 of
 structure BNTBlockedBasisCoefficientComparison
     (data : AlgebraStructureData d D) {Λ : Type*}
     (c : BNTLabelCoefficientFamily Λ) where
-  /-- BNT label attached to a chosen basis element of \(\mathcal A_n\).
+  /-- The Appendix C.3 BNT-label assignment for the chosen blocked bases.
 
   Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-  sourceLabel :
-    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data n → Λ
-  /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\).
-
-  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
-  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-  targetLabel :
-    ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
+  labelAssignment : BNTBlockedBasisLabelAssignment data Λ
   /-- The blocked-basis coefficient is pulled back from the source-length
   BNT-label coefficient.
 
@@ -305,12 +340,25 @@ structure BNTBlockedBasisCoefficientComparison
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)),
     data.blockedStructureCoefficients n i j k =
-      c.coeff n (sourceLabel n hn i) (sourceLabel n hn j) (targetLabel n hn k)
+      c.coeff n (labelAssignment.sourceLabel n hn i)
+        (labelAssignment.sourceLabel n hn j) (labelAssignment.targetLabel n hn k)
 
 namespace BNTBlockedBasisCoefficientComparison
 
 variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
   (cmp : BNTBlockedBasisCoefficientComparison data c)
+
+/-- The source BNT label attached to a chosen basis element of
+\(\mathcal A_n\). -/
+def sourceLabel (n : ℕ) (hn : 0 < n)
+    (i : AlgebraStructureData.BlockedIndex data n) : Λ :=
+  cmp.labelAssignment.sourceLabel n hn i
+
+/-- The target BNT label attached to a chosen basis element of
+\(\mathcal A_{2n}\). -/
+def targetLabel (n : ℕ) (hn : 0 < n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) : Λ :=
+  cmp.labelAssignment.targetLabel n hn k
 
 /-- Restatement of the blocked-basis/BNT-label coefficient comparison. -/
 theorem blocked_coeff_eq (n : ℕ) (hn : 0 < n)
@@ -495,9 +543,8 @@ IV.13(ii), lines 972--985 of
 def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
     (n : ℕ) (hn : 0 < n) :
     AlgebraStructureData.BlockedIndex data n ⊕
-      AlgebraStructureData.BlockedIndex data (2 * n) → Λ
-  | Sum.inl i => cmp.sourceLabel n hn i
-  | Sum.inr k => cmp.targetLabel n hn k
+      AlgebraStructureData.BlockedIndex data (2 * n) → Λ :=
+  cmp.labelAssignment.blockedLabel n hn
 
 /-- A blocked-basis/BNT-label coefficient comparison transports a positive
 BNT-label chi trace-power witness to each blocked-basis coefficient. -/
