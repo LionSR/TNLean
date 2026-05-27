@@ -85,6 +85,36 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
       fun x => by ring]
   rw [← Finset.mul_sum, mul_pow]
 
+/-- If all matrix-product amplitudes of `B` are obtained from those of `A` by the
+length-dependent phase `ζ ^ N`, then the mixed overlap with `A` is
+`(conj ζ) ^ N` times the self-overlap of `A`. -/
+theorem mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul
+    {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
+    (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
+    ∀ N : ℕ,
+      mpvOverlap (d := d) A B N =
+        (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+  intro N
+  classical
+  calc
+    mpvOverlap (d := d) A B N =
+        ∑ σ : Cfg d N, mpv A σ * star (ζ ^ N * mpv A σ) := by
+          simp only [mpvOverlap]
+          refine Finset.sum_congr rfl ?_
+          intro σ _
+          rw [hmpv N σ]
+    _ = ∑ σ : Cfg d N,
+        (star ζ) ^ N * (mpv A σ * star (mpv A σ)) := by
+          refine Finset.sum_congr rfl ?_
+          intro σ _
+          have hstar :
+              star (ζ ^ N * mpv A σ) = star (mpv A σ) * (star ζ) ^ N := by
+            rw [StarMul.star_mul, star_pow]
+          rw [hstar]
+          ring
+    _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+          simp [mpvOverlap, Finset.mul_sum]
+
 /-- If two self-overlaps have the same nonzero norm limit, and one scales from
 the other by powers of `ζ * conj ζ`, then `ζ` has unit norm. -/
 theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit

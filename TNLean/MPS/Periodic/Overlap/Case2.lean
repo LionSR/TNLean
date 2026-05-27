@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Periodic.Overlap.Case1
 import TNLean.MPS.SharedInfra.BlockAssembly
+import TNLean.MPS.SharedInfra.GaugePhase
 
 /-!
 # Periodic overlap dichotomy: Case 2
@@ -135,41 +136,6 @@ private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
   rw [mpvOverlap_blockTensor_self_eq]
   simp [Nat.mul_comm]
 
-/-- Under a gauge-phase relation `B = ζ X A X⁻¹`, the mixed overlap with `A`
-equals `(conj ζ)^N` times the self-overlap of `A` at length `N`. -/
-private theorem mpvOverlap_eq_star_pow_mul_self_of_gaugePhase
-    (A B : MPSTensor d D)
-    (X : GL (Fin D) ℂ) (ζ : ℂ)
-    (hX :
-      ∀ i : Fin d,
-        B i =
-          ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
-            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
-    (N : ℕ) :
-    mpvOverlap (d := d) A B N =
-      (star ζ) ^ N * mpvOverlap (d := d) A A N := by
-  classical
-  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ :=
-    mpv_eq_pow_mul_of_gaugePhase A B X ζ hX
-  calc
-    mpvOverlap (d := d) A B N =
-        ∑ σ : Cfg d N, mpv A σ * star (ζ ^ N * mpv A σ) := by
-          simp only [mpvOverlap]
-          refine Finset.sum_congr rfl ?_
-          intro σ _
-          rw [hmpv N σ]
-    _ = ∑ σ : Cfg d N,
-        (star ζ) ^ N * (mpv A σ * star (mpv A σ)) := by
-          refine Finset.sum_congr rfl ?_
-          intro σ _
-          have hstar :
-              star (ζ ^ N * mpv A σ) = star (mpv A σ) * (star ζ) ^ N := by
-            rw [StarMul.star_mul, star_pow]
-          rw [hstar]
-          ring
-    _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
-          simp [mpvOverlap, Finset.mul_sum]
-
 /-- A gauge-phase equivalence between the period-blocked tensors of two
 periodic tensors gives a mixed blocked overlap which does not tend to zero.
 
@@ -207,7 +173,7 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
           mpvOverlap (d := blockPhysDim d m) Ablk Ablk N :=
     mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk) (ζ := ζ) hmpv
   have hm_norm_ne : ‖(m : ℂ)‖ ≠ 0 := by
-    exact_mod_cast (NeZero.ne m : m ≠ 0)
+    simpa using (Nat.cast_ne_zero.mpr (NeZero.ne m) : (m : ℂ) ≠ 0)
   have hζnorm : ‖ζ‖ = 1 := by
     exact norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
       (A := Ablk) (B := Bblk) (ζ := ζ) hm_norm_ne
@@ -216,7 +182,8 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
       ‖mpvOverlap (d := blockPhysDim d m) Ablk Bblk N‖ =
         ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖ := by
     intro N
-    rw [mpvOverlap_eq_star_pow_mul_self_of_gaugePhase Ablk Bblk X ζ hX N]
+    rw [mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk)
+      (ζ := ζ) hmpv N]
     simp [norm_pow, hζnorm]
   have hCrossNormZero : Tendsto
       (fun N => ‖mpvOverlap (d := blockPhysDim d m) Ablk Bblk N‖)
@@ -228,8 +195,8 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
     hCrossNormZero.congr hCrossNormEq
   have hLimit : (0 : ℝ) = ‖(m : ℂ)‖ :=
     tendsto_nhds_unique hA_self_norm_zero hA_self.norm
-  have hm_pos : 0 < ‖(m : ℂ)‖ := by
-    exact norm_pos_iff.mpr (by exact_mod_cast (NeZero.ne m : m ≠ 0))
+  have hm_pos : 0 < ‖(m : ℂ)‖ :=
+    (norm_nonneg _).lt_of_ne (Ne.symm hm_norm_ne)
   exact (ne_of_gt hm_pos) hLimit.symm
 
 /-- Mixed-overlap extraction after blocking.
