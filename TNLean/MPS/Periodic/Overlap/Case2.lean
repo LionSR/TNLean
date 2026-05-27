@@ -116,18 +116,177 @@ private theorem gaugePhaseEquiv_blockTensor
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
           simp [hGauge, blockTensor]
 
-/-- Missing mixed-overlap statement after blocking.
+/-- The self-overlap of a blocked tensor at length `N` is the self-overlap of the
+original tensor at length `N * L`. This is the trace form of the blocking
+identity used in arXiv:1708.00029, Appendix A, lines 908-914. -/
+private theorem mpvOverlap_blockTensor_self_eq
+    [NeZero D] (A : MPSTensor d D) (L N : ℕ) :
+    mpvOverlap (d := blockPhysDim d L) (blockTensor (d := d) (D := D) A L)
+        (blockTensor (d := d) (D := D) A L) N =
+      mpvOverlap (d := d) A A (N * L) := by
+  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap
+      (A := blockTensor (d := d) (D := D) A L)
+      (B := blockTensor (d := d) (D := D) A L) N]
+  rw [← trace_mixedTransferMap_pow_eq_mpvOverlap (A := A) (B := A) (N * L)]
+  simp [mixedTransferMap_self, transferMap_blockTensor, pow_mul, Nat.mul_comm]
+
+/-- A periodic tensor has nonzero blocked self-overlap limit after blocking by
+its period; the limit is the period itself. This restates
+`periodicSelfOverlap_tendsto` for the blocked tensor. -/
+private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
+    [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hP : IsPeriodic m A) :
+    Tendsto
+      (fun N => mpvOverlap (d := blockPhysDim d m)
+        (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) A m) N)
+      atTop (nhds (m : ℂ)) := by
+  have hSelf : Tendsto (fun N => mpvOverlap A A (m * N)) atTop (nhds (m : ℂ)) :=
+    periodicSelfOverlap_tendsto A hP
+  refine hSelf.congr' ?_
+  filter_upwards with N
+  rw [mpvOverlap_blockTensor_self_eq]
+  simp [Nat.mul_comm]
+
+/-- Under a gauge-phase relation `B = ζ X A X⁻¹`, the mixed overlap with `A`
+equals `(conj ζ)^N` times the self-overlap of `A` at length `N`. -/
+private theorem mpvOverlap_eq_star_pow_mul_self_of_gaugePhase
+    (A B : MPSTensor d D)
+    (X : GL (Fin D) ℂ) (ζ : ℂ)
+    (hX :
+      ∀ i : Fin d,
+        B i =
+          ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i *
+            ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
+    (N : ℕ) :
+    mpvOverlap (d := d) A B N =
+      (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+  classical
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ :=
+    mpv_eq_pow_mul_of_gaugePhase A B X ζ hX
+  calc
+    mpvOverlap (d := d) A B N =
+        ∑ σ : Cfg d N, mpv A σ * star (ζ ^ N * mpv A σ) := by
+          simp only [mpvOverlap]
+          refine Finset.sum_congr rfl ?_
+          intro σ _
+          rw [hmpv N σ]
+    _ = ∑ σ : Cfg d N,
+        (star ζ) ^ N * (mpv A σ * star (mpv A σ)) := by
+          refine Finset.sum_congr rfl ?_
+          intro σ _
+          have hstar :
+              star (ζ ^ N * mpv A σ) = star (mpv A σ) * (star ζ) ^ N := by
+            rw [StarMul.star_mul, star_pow]
+          rw [hstar]
+          ring
+    _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+          rw [← Finset.mul_sum]
+          rfl
+
+/-- A gauge-phase equivalence between the period-blocked tensors of two
+periodic tensors gives a mixed blocked overlap which does not tend to zero.
+
+The proof uses the nonzero blocked self-overlap limits from Appendix A,
+lines 908-914 of arXiv:1708.00029, to show that the gauge phase has unit
+modulus. -/
+private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
+    [NeZero D] (A B : MPSTensor d D) {m : ℕ} [NeZero m]
+    (hA : IsPeriodic m A) (hB : IsPeriodic m B)
+    (hGPE_block :
+      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) B m)) :
+    ¬ Tendsto
+      (fun N => mpvOverlap (d := blockPhysDim d m)
+        (blockTensor (d := d) (D := D) A m)
+        (blockTensor (d := d) (D := D) B m) N)
+      atTop (nhds (0 : ℂ)) := by
+  classical
+  intro hZero
+  obtain ⟨X, ζ, _hζ, hX⟩ := hGPE_block
+  let Ablk := blockTensor (d := d) (D := D) A m
+  let Bblk := blockTensor (d := d) (D := D) B m
+  have hA_self : Tendsto (fun N => mpvOverlap (d := blockPhysDim d m) Ablk Ablk N)
+      atTop (nhds (m : ℂ)) := by
+    simpa [Ablk] using blockTensor_selfOverlap_tendsto_of_isPeriodic A hA
+  have hB_self : Tendsto (fun N => mpvOverlap (d := blockPhysDim d m) Bblk Bblk N)
+      atTop (nhds (m : ℂ)) := by
+    simpa [Bblk] using blockTensor_selfOverlap_tendsto_of_isPeriodic B hB
+  have hmpv : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
+      mpv Bblk σ = ζ ^ N * mpv Ablk σ :=
+    mpv_eq_pow_mul_of_gaugePhase Ablk Bblk X ζ hX
+  have hSelfScale : ∀ N : ℕ,
+      mpvOverlap (d := blockPhysDim d m) Bblk Bblk N =
+        (ζ * starRingEnd ℂ ζ) ^ N *
+          mpvOverlap (d := blockPhysDim d m) Ablk Ablk N :=
+    mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := Ablk) (B := Bblk) (ζ := ζ) hmpv
+  have hA_self_ne : ∀ᶠ N in atTop,
+      ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖ ≠ 0 :=
+    hA_self.norm.eventually_ne (by
+      exact_mod_cast (NeZero.ne m : m ≠ 0))
+  have hRatio : Tendsto
+      (fun N => ‖mpvOverlap (d := blockPhysDim d m) Bblk Bblk N‖ /
+        ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖)
+      atTop (nhds (1 : ℝ)) := by
+    have hm_ne : ‖(m : ℂ)‖ ≠ 0 := by
+      exact_mod_cast (NeZero.ne m : m ≠ 0)
+    simpa [div_self hm_ne] using hB_self.norm.div hA_self.norm hm_ne
+  have hRatioEq : ∀ᶠ N in atTop,
+      ‖mpvOverlap (d := blockPhysDim d m) Bblk Bblk N‖ /
+          ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖ =
+        (‖ζ‖ ^ 2) ^ N := by
+    filter_upwards [hA_self_ne] with N hN
+    rw [hSelfScale N, norm_mul, norm_pow,
+      show ‖ζ * starRingEnd ℂ ζ‖ = ‖ζ‖ ^ 2 by
+        rw [norm_mul, RCLike.norm_conj, sq]]
+    rw [← pow_mul, Nat.mul_comm, pow_mul]
+    exact mul_div_cancel_of_imp (fun h => absurd h hN)
+  have hPow : Tendsto (fun N => (‖ζ‖ ^ 2) ^ N) atTop (nhds (1 : ℝ)) :=
+    hRatio.congr' hRatioEq
+  have hζnorm : ‖ζ‖ = 1 := by
+    have h1 : ‖ζ‖ ^ 2 = 1 := by
+      by_contra hne
+      rcases lt_or_gt_of_ne hne with hlt | hgt
+      · exact (hPow.ne_nhds one_ne_zero)
+          (tendsto_pow_atTop_nhds_zero_of_lt_one (by positivity) hlt)
+      · have hlt2 : ∀ᶠ n in atTop, (‖ζ‖ ^ 2) ^ n < 2 :=
+          hPow.eventually (Iio_mem_nhds (by norm_num : (1 : ℝ) < 2))
+        rcases ((Filter.tendsto_atTop.1
+            (tendsto_pow_atTop_atTop_of_one_lt hgt) 2).and hlt2).exists
+          with ⟨n, hn1, hn2⟩
+        exact not_lt_of_ge hn1 hn2
+    nlinarith [norm_nonneg ζ]
+  have hCrossNormEq : ∀ N,
+      ‖mpvOverlap (d := blockPhysDim d m) Ablk Bblk N‖ =
+        ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖ := by
+    intro N
+    rw [mpvOverlap_eq_star_pow_mul_self_of_gaugePhase Ablk Bblk X ζ hX N]
+    simp [norm_pow, hζnorm]
+  have hCrossNormZero : Tendsto
+      (fun N => ‖mpvOverlap (d := blockPhysDim d m) Ablk Bblk N‖)
+      atTop (nhds (0 : ℝ)) := by
+    simpa using hZero.norm
+  have hA_self_norm_zero : Tendsto
+      (fun N => ‖mpvOverlap (d := blockPhysDim d m) Ablk Ablk N‖)
+      atTop (nhds (0 : ℝ)) :=
+    hCrossNormZero.congr hCrossNormEq
+  have hLimit : (0 : ℝ) = ‖(m : ℂ)‖ :=
+    tendsto_nhds_unique hA_self_norm_zero hA_self.norm
+  have hm_pos : 0 < ‖(m : ℂ)‖ := by
+    exact norm_pos_iff.mpr (by exact_mod_cast (NeZero.ne m : m ≠ 0))
+  exact (ne_of_gt hm_pos) hLimit.symm
+
+/-- Mixed-overlap extraction after blocking.
 
 If two blocked tensors are globally gauge-phase equivalent and both are decomposed
 into cyclic compressed sectors, then some sector of the `A` decomposition has a
 non-decaying overlap with some sector of the `B` decomposition.
 
-This is the analytic core of the Wedderburn uniqueness step needed below.  The
-intended proof expands the total blocked overlap using `hA_mpv` and `hB_mpv` as a
-finite double sum of sector overlaps.  Global gauge-phase equivalence keeps the
-total blocked overlap nonzero asymptotically (after the usual unit-modulus
-normalization of the global phase), so not every mixed sector overlap can tend
-to zero. -/
+This is the analytic core of the same-period case in arXiv:1708.00029,
+Appendix A, lines 952-960. The proof expands the total blocked overlap using
+`hA_mpv` and `hB_mpv` as a finite double sum of sector overlaps. Global
+gauge-phase equivalence keeps the total blocked overlap from tending to zero,
+so not every mixed sector overlap can tend to zero. -/
 private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -137,10 +296,10 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dimA k))
     (blocksB :
       (k : Fin m) → MPSTensor (blockPhysDim d m) (dimB k))
-    (hA_blocks_lc :
+    (_hA_blocks_lc :
       ∀ k, ∑ i : Fin (blockPhysDim d m),
         (blocksA k i)ᴴ * blocksA k i = 1)
-    (hB_blocks_lc :
+    (_hB_blocks_lc :
       ∀ k, ∑ i : Fin (blockPhysDim d m),
         (blocksB k i)ᴴ * blocksB k i = 1)
     (hA_mpv :
@@ -149,10 +308,10 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
     (hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
-    (hA_cyclic : IsCyclicSectorDecomp A blocksA)
-    (hB_cyclic : IsCyclicSectorDecomp B blocksB)
-    (hNondegA : ∀ u, dimA u ≠ 0)
-    (hNondegB : ∀ v, dimB v ≠ 0)
+    (_hA_cyclic : IsCyclicSectorDecomp A blocksA)
+    (_hB_cyclic : IsCyclicSectorDecomp B blocksB)
+    (_hNondegA : ∀ u, dimA u ≠ 0)
+    (_hNondegB : ∀ v, dimB v ≠ 0)
     (hGPE_block :
       GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
         (blockTensor (d := d) (D := D) B m)) :
@@ -161,9 +320,98 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
         (fun N => mpvOverlap (d := blockPhysDim d m)
           (blocksA u) (blocksB v) N)
         atTop (nhds (0 : ℂ)) := by
-  sorry
+  classical
+  by_contra hNone
+  push Not at hNone
+  have hDecompA : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
+      mpv (blockTensor (d := d) (D := D) A m) σ =
+        ∑ u : Fin m, mpv (blocksA u) σ := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D) A m) σ =
+          mpv (toTensorFromBlocks (d := blockPhysDim d m)
+            (μ := fun _ : Fin m => (1 : ℂ)) blocksA) σ := hA_mpv N σ
+      _ = ∑ u : Fin m, ((1 : ℂ) ^ N) • mpv (blocksA u) σ := by
+            rw [mpv_toTensorFromBlocks_eq_sum]
+      _ = ∑ u : Fin m, mpv (blocksA u) σ := by simp
+  have hDecompB : ∀ N (σ : Fin N → Fin (blockPhysDim d m)),
+      mpv (blockTensor (d := d) (D := D) B m) σ =
+        ∑ v : Fin m, mpv (blocksB v) σ := by
+    intro N σ
+    calc
+      mpv (blockTensor (d := d) (D := D) B m) σ =
+          mpv (toTensorFromBlocks (d := blockPhysDim d m)
+            (μ := fun _ : Fin m => (1 : ℂ)) blocksB) σ := hB_mpv N σ
+      _ = ∑ v : Fin m, ((1 : ℂ) ^ N) • mpv (blocksB v) σ := by
+            rw [mpv_toTensorFromBlocks_eq_sum]
+      _ = ∑ v : Fin m, mpv (blocksB v) σ := by simp
+  have hOverlap_eq : ∀ N,
+      mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) B m) N =
+        ∑ u : Fin m, ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
+    intro N
+    calc
+      mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) B m) N
+        = ∑ σ : Cfg (blockPhysDim d m) N,
+          mpv (blockTensor (d := d) (D := D) A m) σ *
+            star (mpv (blockTensor (d := d) (D := D) B m) σ) := rfl
+      _ = ∑ σ : Cfg (blockPhysDim d m) N,
+            (∑ u : Fin m, mpv (blocksA u) σ) *
+              star (∑ v : Fin m, mpv (blocksB v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro σ _
+              rw [hDecompA N σ, hDecompB N σ]
+      _ = ∑ σ : Cfg (blockPhysDim d m) N,
+            ∑ u : Fin m, ∑ v : Fin m,
+              mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro σ _
+              rw [star_sum, Finset.sum_mul]
+              refine Finset.sum_congr rfl ?_
+              intro u _
+              rw [Finset.mul_sum]
+      _ = ∑ u : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
+            ∑ v : Fin m, mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+              rw [Finset.sum_comm]
+      _ = ∑ u : Fin m, ∑ v : Fin m, ∑ σ : Cfg (blockPhysDim d m) N,
+            mpv (blocksA u) σ * star (mpv (blocksB v) σ) := by
+              refine Finset.sum_congr rfl ?_
+              intro u _
+              rw [Finset.sum_comm]
+      _ = ∑ u : Fin m, ∑ v : Fin m,
+            mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
+              simp [mpvOverlap]
+  have hInnerZero : ∀ u : Fin m,
+      Tendsto
+        (fun N => ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N)
+        atTop (nhds (0 : ℂ)) := by
+    intro u
+    have := tendsto_finset_sum (s := Finset.univ) fun v _ => hNone u v
+    simpa using this
+  have hSumZero :
+      Tendsto
+        (fun N => ∑ u : Fin m, ∑ v : Fin m,
+          mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N)
+        atTop (nhds (0 : ℂ)) := by
+    have := tendsto_finset_sum (s := Finset.univ) fun u _ => hInnerZero u
+    simpa using this
+  have hGlobalZero :
+      Tendsto
+        (fun N => mpvOverlap (d := blockPhysDim d m)
+          (blockTensor (d := d) (D := D) A m)
+          (blockTensor (d := d) (D := D) B m) N)
+        atTop (nhds (0 : ℂ)) :=
+    hSumZero.congr fun N => (hOverlap_eq N).symm
+  exact
+    (gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
+      A B hA hB hGPE_block) hGlobalZero
 
-/-- Missing compressed-sector uniqueness statement after blocking.
+/-- Compressed-sector uniqueness statement after blocking.
 
 Once global gauge-phase equivalence has been transported to the blocked
 tensors, the cyclic sector decompositions of the two blocked tensors should be
@@ -239,11 +487,9 @@ This is the structural step used by the no-sector-match case: the cyclic
 sector decomposition is unique up to relabeling, and a global gauge-phase
 equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
 `hNondegA` supplies the nonzero-sector condition for the returned `A` sector, while
-`hNondegB` provides the typeclass needed to apply the mixed-sector overlap dichotomy.
-Both come from the periodic sector decomposition constructed by
-`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`. The missing
-mathematical input is the compressed-sector form of this uniqueness theorem,
-isolated here as the only missing ingredient. -/
+`hNondegB` provides the typeclass needed to apply the mixed-sector overlap
+dichotomy. Both come from the periodic sector decomposition constructed by
+`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
