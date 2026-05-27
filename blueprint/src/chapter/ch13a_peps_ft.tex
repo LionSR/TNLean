@@ -1310,10 +1310,45 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the paper.
 \end{remark}
 
+\begin{definition}[Left-identity three-leg residual form]%
+    \label{def:peps_threeLegLeftIdentityForm}
+    \lean{TNLean.PEPS.threeLegLeftIdentityForm}
+    \leanok
+    For three virtual leg spaces $\alpha,\beta,\gamma$ and an endomorphism
+    $Z$ of $\beta\otimes\gamma$, define the induced endomorphism of
+    $\alpha\otimes\beta\otimes\gamma$ by acting as the identity on the
+    $\alpha$ leg and as $Z$ on the remaining two legs. This is the
+    $I_\alpha\otimes Z$ form appearing after the first tensor is inverted in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Right-identity three-leg residual form]%
+    \label{def:peps_threeLegRightIdentityForm}
+    \lean{TNLean.PEPS.threeLegRightIdentityForm}
+    \leanok
+    For an endomorphism $U$ of $\alpha\otimes\beta$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $U$ on the
+    first two legs and as the identity on the $\gamma$ leg. This is the
+    $U\otimes I_\gamma$ form in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{definition}[Middle-identity three-leg residual form]%
+    \label{def:peps_threeLegMiddleIdentityForm}
+    \lean{TNLean.PEPS.threeLegMiddleIdentityForm}
+    \leanok
+    For an endomorphism $W$ of $\alpha\otimes\gamma$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $W$ on the
+    outer two legs and as the identity on the middle $\beta$ leg. This is the
+    third residual form in \cite[Section~3]{Molnar2018NormalPEPS}.
+\end{definition}
+
 \begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
     \label{thm:peps_twoInjectiveGaugeScalarReduction}
-    \notready
-    \uses{def:IsVertexInjective}
+    \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
+    \leanok
+    \uses{def:peps_threeLegLeftIdentityForm,
+        def:peps_threeLegRightIdentityForm,
+        def:peps_threeLegMiddleIdentityForm}
     In the proof of the generalized two-injective-tensor comparison, applying
     the inverse of the second injective tensor leaves three possible virtual
     operators on the exposed legs of the first tensor:
@@ -1321,7 +1356,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
         \TNPEPSTwoInjectiveGaugeScalarReduction
     \end{center}
     Inverting the first injective tensor then shows that the corresponding
-    tensor decompositions
+    residual operator on the three exposed virtual legs has the three
+    decompositions
     \[
         \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
         =
@@ -1329,10 +1365,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
         =
         \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}
     \]
-    force the residual virtual operators to be scalar multiples of the
-    identity. This is the scalar step in the proof of
-    Lemma~$\mathrm{inj\_equal\_tensors\_2}$.
+    Equivalently, for nonzero virtual leg spaces $\alpha,\beta,\gamma$, if one
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ lies simultaneously in
+    the three subspaces $I_\alpha\otimes \operatorname{End}(\beta\otimes\gamma)$,
+    $\operatorname{End}(\alpha\otimes\beta)\otimes I_\gamma$, and the analogous
+    subspace with $I_\beta$ in the middle leg, then it is a scalar multiple of
+    the identity. Thus the residual virtual operators are scalar multiples of
+    the identity. This is the scalar step in the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
+\begin{proof}\leanok
+    Compare matrix entries. Equality with
+    $\operatorname{End}(\alpha\otimes\beta)\otimes I_\gamma$ forces all
+    $I_\alpha\otimes Z$ entries with different $\gamma$-indices to vanish.
+    Equality with the middle-identity form forces all entries with different
+    $\beta$-indices to vanish. The remaining diagonal entries are equal because
+    the two identities compare them first along the $\beta$-direction and then
+    along the $\gamma$-direction. Substituting the resulting scalar form of $Z$
+    back into the two displayed equalities gives the same scalar form for $U$
+    and $W$.
+\end{proof}
 
 \begin{theorem}[Generalized two-injective-tensor comparison]%
     \label{thm:peps_twoInjectiveTensorInsertionComparison}
