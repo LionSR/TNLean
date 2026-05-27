@@ -886,10 +886,13 @@ retract.
 
 \begin{theorem}[Fusion-isometry data imply the MPDO RFP condition]%
     \label{thm:mpdo_rfp_of_fusion}
+    \lean{MPOTensor.FusionIsometryData.isRFP}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies the MPDO RFP condition.
+    A one-site fusion-isometry datum implies the MPDO RFP condition.  Hence the
+    fusion-isometry formulation, which supplies such data at every positive
+    blocked size, implies the same condition.
 \end{theorem}
 \begin{proof}\leanok
     Apply the definition at blocked size $n = 1$.

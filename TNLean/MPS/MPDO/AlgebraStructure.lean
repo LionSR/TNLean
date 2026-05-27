@@ -530,8 +530,8 @@ the unblocked transfer map.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 2015--2067. This equality is only the fixed-point consequence of the
 present algebra-tower predicate. It is not the converse
-`IsRFP_MPDO_via_algebra M → IsRFP_MPDO_via_fusion M`; the latter requires the
-positive trace-power coefficient comparison used in Appendix C.4. -/
+from the algebra formulation to the fusion formulation; the latter requires
+the positive trace-power coefficient comparison used in Appendix C.4. -/
 theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
     {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
     {n : ℕ} (hn : 0 < n) {X : Mat} :

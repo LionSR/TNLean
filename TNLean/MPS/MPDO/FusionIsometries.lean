@@ -156,7 +156,7 @@ idempotent transfer map through its range.
 
 Source: arXiv:1606.00608, Theorem IV.13(i), and Appendix C.4, lines
 2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`, where the converse
-algebra-to-fusion proof constructs the one-step maps `T` and `S`. -/
+algebra-to-fusion proof constructs the one-step maps \(T\) and \(S\). -/
 theorem fusionIsometryData_one_iff_isRFP (M : MPOTensor d D) :
     Nonempty (FusionIsometryData M 1) ↔ IsRFP M := by
   constructor
