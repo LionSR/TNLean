@@ -153,6 +153,13 @@ theorem positive_chi_trace_power :
     H.coeffs.HasPositiveLengthChiTracePowerForm H.positiveChi.chi :=
   H.positiveChi.tracePower
 
+/-- The Appendix C.3 BNT-label assignment carried by theorem data.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def labelAssignment : BNTBlockedBasisLabelAssignment data Λ :=
+  H.blockedComparison.labelAssignment
+
 /-- The source BNT label attached by theorem data to a chosen basis element of
 \(\mathcal A_n\).
 
@@ -160,7 +167,7 @@ Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def sourceLabel (n : ℕ) (hn : 0 < n)
     (i : AlgebraStructureData.BlockedIndex data n) : Λ :=
-  H.blockedComparison.sourceLabel n hn i
+  H.labelAssignment.sourceLabel n hn i
 
 /-- The target BNT label attached by theorem data to a chosen basis element of
 \(\mathcal A_{2n}\).
@@ -169,7 +176,7 @@ Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : Λ :=
-  H.blockedComparison.targetLabel n hn k
+  H.labelAssignment.targetLabel n hn k
 
 /-- The BNT-label coefficients in theorem data are traces of powers of the
 length-independent chi matrices.
@@ -322,8 +329,7 @@ Appendix C.3--C.4, lines 1830--1942 of
 def blockedComparison_ofChi :
     BNTBlockedBasisCoefficientComparison data
       (BNTLabelCoefficientFamily.ofChi H.positiveChi.chi) where
-  sourceLabel := H.sourceLabel
-  targetLabel := H.targetLabel
+  labelAssignment := H.labelAssignment
   coeff_eq := by
     intro n hn i j k
     rw [H.blocked_coeff_eq n hn i j k]
