@@ -7,9 +7,10 @@ import TNLean.MPS.MPDO.CommutingForm
 /-!
 # Local-to-global commuting-form data
 
-This file states the exact post-extraction output still needed from the
-simple-MPDO SAL + ZCL analysis of arXiv:1606.00608 Appendix C.2 in order to
-conclude `MPOTensor.HasCommutingForm`.
+This file states the exact eta-local structure still needed after the
+sector-local operators have been obtained in the simple-MPDO SAL + ZCL analysis
+of arXiv:1606.00608 Appendix C.2, in order to conclude
+`MPOTensor.HasCommutingForm`.
 
 The current repository already exposes the local entropy-side ingredients
 
@@ -107,7 +108,7 @@ from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate
 commuting-form witness at each length. The remaining assembly theorem should
-construct this data from the SAL and ZCL hypotheses, the sector-reduced
+construct this structure from the SAL and ZCL hypotheses, the sector-reduced
 `η_{k,h}` family, and the inverse-map realization layer. -/
 structure EtaLocalStructureData (M : MPOTensor d D) where
   /-- The chain-independent nearest-neighbor bond extracted from the local
@@ -195,11 +196,11 @@ theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :
   exact ⟨data.formAt N hN, data.formAt_realizes N hN⟩
 
 /-- The explicit `η`-local structure, together with ZCL, gives the
-GSNNCH-with-ZCL branch of the simple-MPDO equivalence.
+GSNNCH-with-ZCL case of the simple-MPDO equivalence.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
 the assembled neighboring operators give a commuting nearest-neighbor product
-form. Adding ZCL gives item (iii) of Theorem 4.9 in the simple-MPDO branch. -/
+form. Adding ZCL gives item (iii) of Theorem 4.9 in the simple-MPDO case. -/
 theorem isGSNNCHWithZCL (data : EtaLocalStructureData M) (hZCL : IsZCL M) :
     IsGSNNCHWithZCL M :=
   (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL M).2 ⟨data.hasCommutingForm, hZCL⟩
@@ -219,7 +220,7 @@ theorem isGSNNCH_of_etaLocalStructure {M : MPOTensor d D}
   hEta.isGSNNCH
 
 /-- Once the explicit local `η`-structure has been assembled, adding ZCL gives
-the GSNNCH-with-ZCL branch of the simple-MPDO equivalence. -/
+the GSNNCH-with-ZCL case of the simple-MPDO equivalence. -/
 theorem isGSNNCHWithZCL_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) (hZCL : IsZCL M) : IsGSNNCHWithZCL M :=
   hEta.isGSNNCHWithZCL hZCL
