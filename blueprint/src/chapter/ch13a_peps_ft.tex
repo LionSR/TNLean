@@ -1431,7 +1431,6 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionUnionPart_biUnion_zero_one_two}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_three}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two}
-    \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_inside}
     \lean{TNLean.PEPS.regionUnionPart_three_eq_regionComplement_left_inter_right}
     \lean{TNLean.PEPS.regionUnionPart_two_union_three_eq_regionComplement_left}
     \lean{TNLean.PEPS.regionUnionPart_biUnion_two_three_eq_regionComplement_left}
@@ -1443,7 +1442,6 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.regionUnionPart_zero_union_three_eq_regionComplement_one_union_two}
     \lean{TNLean.PEPS.regionUnionPart_zero_union_one_eq_regionComplement_two_union_three}
     \lean{TNLean.PEPS.regionUnionPart_one_union_two_eq_regionComplement_zero_union_three}
-    \lean{TNLean.PEPS.regionUnionPart_zero_union_one_union_two_union_three}
     \lean{TNLean.PEPS.regionUnionPart_biUnion}
     \lean{TNLean.PEPS.regionUnionPart_exists_unique}
     \leanok
@@ -1456,15 +1454,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $1$ and $2$ reconstruct $B$, and pieces $0,1,2$ reconstruct $A\cup B$.
     These same reconstructions are available as finite unions over the
     corresponding subfamilies of the indexed four-region family.
-    Piece $3$ is the complement of \(A\cup B\), equivalently the complement of
-    the three inside indexed pieces, and also \(A^c\cap B^c\). The singleton
-    subfamily \(\{3\}\) gives the outside block. Pieces \(2,3\)
-    reconstruct \(A^c\), equivalently the complement of pieces \(0,1\), and
-    pieces \(0,3\) reconstruct \(B^c\), equivalently the complement of pieces
-    \(1,2\), again both as explicit unions and as finite unions over the
-    indexed subfamilies. Conversely, pieces \(0,1\) are the
-    complement of pieces \(2,3\),
-    pieces \(1,2\) are the complement of pieces \(0,3\), and adding all four
+    Piece $3$ is the complement of $A\cup B$, equivalently the complement of
+    the three inside indexed pieces, and also $A^c\cap B^c$. The singleton
+    subfamily $\{3\}$ gives the outside block. Pieces $2,3$
+    reconstruct $A^c$, equivalently the complement of pieces $0,1$, and
+    pieces $0,3$ reconstruct $B^c$, equivalently the complement of pieces
+    $1,2$, again both as explicit unions and as finite unions over the
+    indexed subfamilies. Conversely, pieces $0,1$ are the
+    complement of pieces $2,3$,
+    pieces $1,2$ are the complement of pieces $0,3$, and adding all four
     pieces reconstructs $V$.
     Equivalently, each vertex lies in one of the four regions, and the indexed
     four-region family has union $V$. In fact, every vertex belongs to exactly
@@ -1495,9 +1493,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     In the four-region decomposition, the left-only and right-only parts are
     disjoint from the overlap and from each other. Each inside part, and hence
     the union of the three inside regions, is disjoint from the outside region.
-    In indexed form, the pieces forming \(A\) are disjoint from the pieces
-    forming \(A^c\), and the pieces forming \(B\) are disjoint from the pieces
-    forming \(B^c\), both as explicit binary unions and as finite unions over
+    In indexed form, the pieces forming $A$ are disjoint from the pieces
+    forming $A^c$, and the pieces forming $B$ are disjoint from the pieces
+    forming $B^c$, both as explicit binary unions and as finite unions over
     the corresponding selected indexed subfamilies. The indexed four-region
     family is pairwise disjoint.
 \end{lemma}
@@ -1573,15 +1571,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_regionInjectivityData,
         lem:peps_regionUnionDecomposition_identities}
     Under the union-closure hypothesis for region injectivity, if the indexed
-    subfamilies \(\{0,1\}\) and \(\{1,2\}\) in the four-region decomposition
-    are injective, then the inside subfamily \(\{0,1,2\}\) is injective.
+    subfamilies $\{0,1\}$ and $\{1,2\}$ in the four-region decomposition
+    are injective, then the inside subfamily $\{0,1,2\}$ is injective.
     Equivalently, injectivity of the two source-paper regions
-    \((A\setminus B)\cup(A\cap B)\) and
-    \((A\cap B)\cup(B\setminus A)\) gives injectivity of
-    \(A\setminus B\cup A\cap B\cup B\setminus A\).
+    $(A\setminus B)\cup(A\cap B)$ and
+    $(A\cap B)\cup(B\setminus A)$ gives injectivity of
+    $(A\setminus B)\cup(A\cap B)\cup(B\setminus A)$.
 \end{lemma}
 \begin{proof}\leanok
-    Rewrite the three selected indexed unions as \(A\), \(B\), and \(A\cup B\),
+    Rewrite the three selected indexed unions as $A$, $B$, and $A\cup B$,
     then apply binary union closure.
 \end{proof}
 
