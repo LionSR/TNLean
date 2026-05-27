@@ -116,7 +116,7 @@ future non-normal analogue stated with explicit separated-block hypotheses,
 would need a field allowing equal-modulus groups: rather than a global strict
 ordering on the full index set, the condition should be a strict ordering on
 the set of modulus classes, with each class admitting an arbitrary finite
-number of representative blocks. Relaxing \leanid{mu\_strict\_anti} to this
+number of representative blocks. Relaxing \leanid{mu_strict_anti} to this
 weaker form is the necessary type-level change. Without it, the
 general-multiplicity versions of
 Corollary~\texttt{II\_cor2} and of the gauge assembly step cannot be stated.
@@ -143,8 +143,8 @@ has already been supplied. Thus no current theorem is presented as deriving
 the source proportional comparison from the discarded coefficient hypotheses.
 
 The source normalization $\|\mu_1\| = 1$ is now recorded as the field
-\leanid{mu\_dom\_norm\_one} in \leanid{IsNormalCanonicalFormBNT},\footnote{%
-    \leanid{IsNormalCanonicalFormBNT.mu\_dom\_norm\_one},
+\leanid{mu_dom_norm_one} in \leanid{IsNormalCanonicalFormBNT},\footnote{%
+    \leanid{IsNormalCanonicalFormBNT.mu_dom_norm_one},
     \path{TNLean/MPS/BNT/Construction.lean} lines 192--198.} which
 brings the dominant-block normalization into alignment with the source
 convention. Under this normalization and the strict modulus ordering, every
@@ -157,12 +157,12 @@ normal-CF-BNT predicate have been audited against the one-copy-per-sector
 boundary.\footnote{The relevant Lean surfaces are
     \leanid{IsNormalCanonicalFormBNT},
     \leanid{IsNormalCanonicalFormBNT.ofSeparatedData},
-    \leanid{IsNormalCanonicalFormBNT.cross\_overlap\_tendsto\_zero},
+    \leanid{IsNormalCanonicalFormBNT.cross_overlap_tendsto_zero},
     \leanid{IsNormalCanonicalFormBNT.isBNT},
-    \leanid{isNormalCanonicalFormBNT\_commonRepresentativeBlocksAt},
-    \leanid{IsNormalCanonicalFormBNT.exists\_common\_blockTensor\_isInjective},
+    \leanid{isNormalCanonicalFormBNT_commonRepresentativeBlocksAt},
+    \leanid{IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective},
     and
-    \leanid{exists\_common\_blockTensor\_isInjective\_two\_of\_isNormalCanonicalFormBNT}.}
+    \leanid{exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}.}
 Each of these public surfaces either assumes or constructs an already chosen
 representative family, strictly ordered by weight modulus. They do not
 introduce a source-faithful canonical-form existence theorem and do not recover
@@ -185,7 +185,7 @@ formalization: the standalone Newton--Girard uniqueness lemma
 (\texttt{Lem:app\_simple}), the derivation of the blockwise power-sum
 identity from the BNT structure and the equal-MPV hypothesis, and the global
 gauge assembly with multiplicity identity factors. Supplying these components
-would also require relaxing the \leanid{mu\_strict\_anti} field from a global
+would also require relaxing the \leanid{mu_strict_anti} field from a global
 strict ordering to a class-level ordering.
 
 The corresponding tracked items are
