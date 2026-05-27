@@ -379,11 +379,10 @@ gauge-phase equivalent.
 
 This is the structural step used by the no-sector-match case: the cyclic
 sector decomposition is unique up to relabeling, and a global gauge-phase
-equivalence carries a nonzero sector of `A` to a sector of `B`. The hypothesis
-`hNondegA` supplies the nonzero-sector condition for the returned `A` sector, while
-`hNondegB` gives positive bond dimension for the corresponding `B` sector.
-Both come from the periodic sector decomposition constructed by
-`exists_cyclic_sector_decomp_after_blocking_of_isPeriodic`. -/
+equivalence carries a nonzero sector of `A` to a sector of `B`. The
+nondegeneracy assumptions ensure that the returned `A` sector has nonzero
+virtual dimension and that the corresponding `B` sector has positive bond
+dimension. Both assumptions come from the periodic sector decomposition. -/
 lemma exists_sector_match_of_gaugePhaseEquiv
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
@@ -470,20 +469,18 @@ If two periodic tensors have the same period `m` but no compressed sector
 pair matches (up to dimension cast and gauge-phase equivalence), their
 overlap decays to zero.
 
-The `hNoMatch` hypothesis quantifies over nondegenerate dimension
-equalities: for each sector pair `(u, v)` with `dimA u ≠ 0` and any
-proof that `dimA u = dimB v`, the compressed blocks are not gauge-phase
-equivalent. The nondegeneracy guard `dimA u ≠ 0` is essential: when
-`dimA u = 0`, `GaugePhaseEquiv` may hold vacuously for
-`MPSTensor _ 0`, and without this guard `hNoMatch` would be
-unsatisfiable whenever a zero-dimensional sector pair exists. With
-this guard and the separate nondegeneracy hypotheses
-`hNondegA : ∀ u, dimA u ≠ 0` and `hNondegB : ∀ v, dimB v ≠ 0`
-coming from the periodic sector decompositions, `hNoMatch` is exactly
-the negation of `hSomeMatch` in `periodicOverlap_gaugeEquiv_of_sector_match`,
-making the two conditions complementary for the dichotomy proof.  The
-`hNondegB` hypothesis is also needed by the mixed-sector overlap dichotomy
-used to extract a sector match from global gauge-phase equivalence.
+The no-match condition quantifies over nondegenerate dimension equalities:
+for each sector pair `(u, v)` with `dimA u ≠ 0` and any proof that
+`dimA u = dimB v`, the compressed blocks are not gauge-phase equivalent.
+The nondegeneracy guard `dimA u ≠ 0` is essential: when `dimA u = 0`,
+gauge-phase equivalence may hold vacuously for `MPSTensor _ 0`, and without
+this guard the no-match condition would be unsatisfiable whenever a
+zero-dimensional sector pair exists. With this guard and the separate
+assumption that every sector in both decompositions has nonzero virtual
+dimension, the no-match and sector-match conditions are complementary for
+the dichotomy proof. Positive virtual dimension on the `B` sectors is also
+needed by the mixed-sector overlap dichotomy used to extract a sector match
+from global gauge-phase equivalence.
 
 This is the "first case" of the same-period argument in Appendix A:
 block by `m`, decompose into normal sectors, and observe that all
