@@ -150,6 +150,16 @@ use unexplained shorthand such as "zero tail", "norm-class data", or
 "blockwise construction". Write, for example, "the remaining direct summand is
 the all-zero block" and display the corresponding direct-sum decomposition.
 
+For proof sketches, equations should carry the argument. Replace purely verbal
+phrases such as "the overlap does not decay" or "injectivity removes the
+boundary tensor" by the corresponding limit, kernel, equality, or contraction
+identity. In tensor-network arguments, name the regions and inserted tensors and
+write the implications between contractions explicitly, for example
+\[
+    \mathcal C_{\{0,1,2\}}(X)=0
+    \Rightarrow \mathcal C_{\{2\}}(X)=0 \Rightarrow X=0.
+\]
+
 When the Lean statement is stronger, weaker, or differently organized than the
 paper source, separate the two assertions:
 
