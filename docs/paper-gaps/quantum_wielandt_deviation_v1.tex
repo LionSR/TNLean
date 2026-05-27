@@ -82,7 +82,7 @@ The proof passes through the usual eventual full-rank formulation and a
 blocking argument, but the conclusion is the equality
 $S_n(A)=M_D(\mathbb C)$ for one fixed length $n$. It is not merely a statement
 about the increasing sum $S_0(A)+\cdots+S_n(A)$.\footnote{The general
-    theorem is \leanid{MPSTensor.iIndex\_le\_general\_of\_isPrimitivePaper}
+    theorem is \leanid{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
     in \path{TNLean/Wielandt/Inequality/Bounds.lean:389--468}. The
     formal equivalence between the primitive condition used by Sanz--P\'erez-Garc\'ia--Wolf--Cirac
     and eventual full Kraus rank under normalization is in
@@ -102,12 +102,12 @@ non-invertible and has a nonzero eigenvalue; under that assumption it proves
 The paper's hypotheses are weaker: they allow the invertible or non-invertible
 matrix to be any element of $S_1(A)$, hence any linear combination of the Kraus
 matrices.\footnote{The formal invertible case is
-    \leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_isUnit} and
-    \leanid{MPSTensor.iIndex\_le\_of\_isPrimitivePaper\_of\_isUnit} in
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit} and
+    \leanid{MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit} in
     \path{TNLean/Wielandt/Inequality/Bounds.lean:313--337}. The
     formal non-invertible case is
-    \leanid{MPSTensor.wordSpan\_eq\_top\_of\_isPrimitivePaper\_of\_noninvertible\_eigenvector}
-    and \leanid{MPSTensor.iIndex\_le\_sq\_of\_noninvertible\_eigenvector} in
+    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector}
+    and \leanid{MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector} in
     \path{TNLean/Wielandt/Inequality/Bounds.lean:213--243}.}
 
 \section{The mathematical difference}
@@ -155,7 +155,7 @@ full quantum Wielandt theorem, but the theorem in
 \path{TNLean/Wielandt/Inequality/Bounds.lean} proves the stated bound for
 $i(A)$, where $i(A)$ is defined using the spaces $S_n(A)$ themselves.
 \footnote{The cumulative-span theorem is
-    \leanid{MPSTensor.cumulativeSpan\_eq\_top} in
+    \leanid{MPSTensor.cumulativeSpan_eq_top} in
     \path{TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean:164--197}; the
     theorem for the spaces $S_n(A)$ is the general theorem cited above.
     The blueprint makes this distinction in

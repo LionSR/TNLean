@@ -55,7 +55,7 @@ separating two mathematical steps. First, the spectral-radius theorem shows
 that asymptotically unit-modulus overlap forces the cross-transfer spectral
 radius to be at least $1$.\footnote{%
     This theorem is
-    \leanid{MPSTensor.mixedTransferSpectralRadius\_ge\_one\_of\_mpvOverlap\_norm\_tendsto\_one};
+    \leanid{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one};
     it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean} and formalizes
     a step in the proof of Lemma~\texttt{equalMPS},
     \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
@@ -66,13 +66,13 @@ Second, the modulus-one spectral theorem turns the modulus-one spectral
 situation into gauge-phase equivalence by the Cauchy--Schwarz argument with the
 positive fixed point.\footnote{%
     This theorem is
-    \leanid{MPSTensor.modulus\_one\_eigenvalue\_implies\_gauge\_of\_irreducible\_TP};
+    \leanid{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP};
     it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
 The resulting same-dimension gauge-phase theorem has the source's overlap
 hypothesis and no MPV proportionality hypothesis, but it is stated for two
 tensors with the same bond dimension.\footnote{%
     The theorem is
-    \leanid{MPSTensor.gaugePhaseEquiv\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP};
+    \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP};
     it is in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}.}
 In this same-dimension component the formal theorem changes the normal-tensor
 hypothesis set in a controlled way: in CPSV16 a normal tensor has no
@@ -98,10 +98,10 @@ out a proper missing subspace, forcing equality of dimensions
 \cite[lines~1115--1117]{Cirac2016MPDO_arXiv}.
 
 The formalization records this conclusion as
-\leanid{MPSTensor.dim\_eq\_of\_overlap\_norm\_tendsto\_one\_of\_irreducible\_TP}
+\leanid{MPSTensor.dim_eq_of_overlap_norm_tendsto_one_of_irreducible_TP}
 in \path{TNLean/MPS/FundamentalTheorem/Proportional.lean}. Its proof uses the
 contrapositive of the rectangular overlap-decay theorem
-\leanid{MPSTensor.mpvOverlap\_tendsto\_zero\_of\_dim\_ne\_of\_irreducible\_TP}:
+\leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}:
 if the bond dimensions differ, the overlap tends to zero, contradicting the
 unit-modulus overlap hypothesis.
 
