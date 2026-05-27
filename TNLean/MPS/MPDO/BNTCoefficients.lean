@@ -10,12 +10,13 @@ import TNLean.MPS.MPDO.AlgebraStructure
 
 This file records the BNT-label coefficient side of arXiv:1606.00608,
 Theorem IV.13(ii).  It separates the paper's fixed BNT-label coefficients from
-the chosen blocked-basis coefficients in `AlgebraStructure.lean`.
+the chosen blocked-basis coefficients attached to the support algebras.
 
-The declarations here state the coefficient, product, trace-scalar, and
-blocked-basis comparison predicates.  They do not yet construct those objects
-from an MPDO tensor; that construction remains part of the Appendix C.3--C.4
-comparison work.
+The declarations here state the coefficient, product, trace-scalar, chi, and
+blocked-basis comparison predicates.  The theorem-data layer built from these
+predicates and the corresponding existential witness are recorded in separate
+files.  These files do not yet construct the source objects from an MPDO tensor;
+that construction remains part of the Appendix C.3--C.4 comparison work.
 
 ## References
 
@@ -45,20 +46,65 @@ The same-length product formula is recorded separately by
   O_L(M_\alpha)O_L(M_\beta)
     = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
 \]
-It also does not yet compare these coefficients with the chosen blocked-basis
-coefficients of the support algebras.  That comparison step is one of the
-remaining obligations recorded in
+Comparison with chosen blocked-basis coefficients is deliberately separated.
+The predicate
+`BNTBlockedBasisCoefficientComparison` records that comparison once the
+Appendix C.3 label maps have been supplied; constructing those maps from an
+MPDO tensor remains part of the gap recorded in
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
 Appendix C.4, lines 1925--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelCoefficientFamily (Λ : Type*) where
-  /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\). -/
+  /-- The coefficient \(c_{\alpha,\beta,\gamma}^{(L)}\).
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   coeff : ℕ → Λ → Λ → Λ → ℂ
 
 namespace BNTLabelCoefficientFamily
 
 variable {Λ : Type*} (c : BNTLabelCoefficientFamily Λ)
+
+/-- The BNT-label coefficient family canonically determined by a diagonal
+\(\chi_{\alpha,\beta,\gamma}\)-family.
+
+This is the source-side specialization used after Appendix C.4 constructs the
+positive diagonal matrices:
+\[
+  c^{(L)}_{\alpha,\beta,\gamma}
+    = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+\]
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+noncomputable def ofChi (χ : DiagonalChiFamily Λ) : BNTLabelCoefficientFamily Λ where
+  coeff L α β γ := χ.tracePowerCoeff α β γ L
+
+/-- Coefficients of the canonical BNT-label coefficient family associated to
+a \(\chi\)-family.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem ofChi_coeff (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
+    (ofChi χ).coeff L α β γ = χ.tracePowerCoeff α β γ L :=
+  rfl
+
+/-- Coefficients of the canonical BNT-label coefficient family are traces of
+powers of the corresponding diagonal \(\chi\)-matrices.
+
+The source theorem uses this expression for positive chain lengths in the
+same-length product formula; the canonical coefficient family is indexed by
+all natural lengths, and this equality follows from the definition and the
+diagonal trace identity.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem ofChi_coeff_eq_trace_matrix_pow
+    (χ : DiagonalChiFamily Λ) (L : ℕ) (α β γ : Λ) :
+    (ofChi χ).coeff L α β γ = (χ.matrix α β γ ^ L).trace := by
+  rw [ofChi_coeff, χ.trace_matrix_pow]
 
 /-- Positive-length trace-power compatibility for BNT-label coefficients.
 
@@ -68,17 +114,36 @@ for every positive chain length `L`, the coefficient
 diagonal matrix `χ_{\alpha,\beta,\gamma}`.  The matrix family is independent of
 `L`; only the exponent changes.  Unlike the unrestricted function-level
 predicate `HasChiTracePowerForm`, this predicate has exactly the positive-length
-quantifier used for Theorem IV.13(ii). -/
+quantifier used for Theorem IV.13(ii).
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def HasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) : Prop :=
   ∀ L : ℕ, 0 < L → ∀ α β γ : Λ,
     c.coeff L α β γ = χ.tracePowerCoeff α β γ L
 
-/-- Trace reformulation of positive-length BNT-label trace-power form. -/
+/-- Trace reformulation of positive-length BNT-label trace-power form.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow
     {χ : DiagonalChiFamily Λ} (h : c.HasPositiveLengthChiTracePowerForm χ)
     (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
     c.coeff L α β γ = (χ.matrix α β γ ^ L).trace := by
   rw [h L hL α β γ, χ.trace_matrix_pow]
+
+/-- The coefficient family canonically associated to a \(\chi\)-family has the
+positive-length trace-power form with respect to that same \(\chi\)-family.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem ofChi_hasPositiveLengthChiTracePowerForm (χ : DiagonalChiFamily Λ) :
+    (ofChi χ).HasPositiveLengthChiTracePowerForm χ := by
+  intro L _hL α β γ
+  rfl
 
 end BNTLabelCoefficientFamily
 
@@ -91,7 +156,10 @@ separate predicate `BNTLabelOperatorFamily.HasSameLengthProductForm`.
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelOperatorFamily (Λ : Type*) (O : ℕ → Type*) where
-  /-- The length-`L` operator \(O_L(M_\alpha)\). -/
+  /-- The length-`L` operator \(O_L(M_\alpha)\).
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   operator : ∀ L : ℕ, Λ → O L
 
 namespace BNTLabelOperatorFamily
@@ -143,7 +211,10 @@ source proof.  The coefficient identity itself is the predicate
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure BNTLabelTraceScalarFamily (Λ : Type*) where
-  /-- The scalar \(m_\alpha=\operatorname{tr}(\mu_\alpha)\). -/
+  /-- The scalar \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   traceScalar : Λ → ℂ
 
 namespace BNTLabelTraceScalarFamily
@@ -212,14 +283,24 @@ Appendix C.3, lines 1830--1922 of
 structure BNTBlockedBasisCoefficientComparison
     (data : AlgebraStructureData d D) {Λ : Type*}
     (c : BNTLabelCoefficientFamily Λ) where
-  /-- BNT label attached to a chosen basis element of \(\mathcal A_n\). -/
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_n\).
+
+  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   sourceLabel :
     ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data n → Λ
-  /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\). -/
+  /-- BNT label attached to a chosen basis element of \(\mathcal A_{2n}\).
+
+  Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   targetLabel :
     ∀ n : ℕ, 0 < n → AlgebraStructureData.BlockedIndex data (2 * n) → Λ
   /-- The blocked-basis coefficient is pulled back from the source-length
-  BNT-label coefficient. -/
+  BNT-label coefficient.
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+  Appendix C.3, lines 1830--1922 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   coeff_eq : ∀ (n : ℕ) (hn : 0 < n)
     (i j : AlgebraStructureData.BlockedIndex data n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)),
@@ -251,22 +332,49 @@ the BNT-label coefficient system.
 
 This is not yet a proof of Theorem IV.13(ii) from an MPDO tensor: it is the
 paper-faithful coefficient statement to be constructed.  The construction of
-this witness and the comparison to blocked bases remain the obligations
-described in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+this witness from the Appendix C.3--C.4 data remains the main obligation
+described in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`; the
+blocked-basis comparison predicate is recorded separately below.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 structure PositiveBNTLabelChiTracePowerForm
     {Λ : Type*} (c : BNTLabelCoefficientFamily Λ) where
-  /-- The length-independent BNT-label chi family. -/
+  /-- The length-independent BNT-label chi family.
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+  Appendix C.4, lines 1925--1942 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   chi : DiagonalChiFamily Λ
-  /-- Positivity of every diagonal entry. -/
+  /-- Positivity of every diagonal entry.
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   posEntries : chi.PosEntries
-  /-- Positive-length trace-power form for the BNT-label coefficients. -/
+  /-- Positive-length trace-power form for the BNT-label coefficients.
+
+  Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
+  `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   tracePower : c.HasPositiveLengthChiTracePowerForm chi
 
 namespace PositiveBNTLabelChiTracePowerForm
 
 variable {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
+
+/-- Build a positive BNT-label trace-power witness from a positive
+\(\chi\)-family by taking the coefficient family to be
+\(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L})\).
+
+This records the coefficient part of the Appendix C.4 construction: once the
+positive diagonal matrices \(\chi_{\alpha,\beta,\gamma}\) have been produced,
+the corresponding coefficient system is their trace-power family.
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+def ofChi (χ : DiagonalChiFamily Λ) (hχ : χ.PosEntries) :
+    PositiveBNTLabelChiTracePowerForm (BNTLabelCoefficientFamily.ofChi χ) where
+  chi := χ
+  posEntries := hχ
+  tracePower := BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm χ
 
 /-- A positive BNT-label chi witness gives the trace formula at every positive
 length. -/
@@ -302,6 +410,27 @@ theorem HasSameLengthProductForm.eq_sum_chi_trace_pow [Fintype Λ]
   intro γ _hγ
   rw [hχ.eq_trace_pow L hL α β γ]
 
+/-- The same-length BNT product formula for the canonical coefficient family
+associated to a \(\chi\)-family, written directly with trace-power
+coefficients.
+
+This is the coefficient-level form of arXiv:1606.00608,
+Theorem IV.13(ii), eq:algebra, lines 972--985, after choosing the canonical
+coefficient family described in Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem HasSameLengthProductForm.eq_sum_ofChi_trace_pow [Fintype Λ]
+    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
+    [∀ L : ℕ, Mul (O L)]
+    {χ : DiagonalChiFamily Λ}
+    (hop : op.HasSameLengthProductForm (BNTLabelCoefficientFamily.ofChi χ))
+    (L : ℕ) (hL : 0 < L) (α β : Λ) :
+    op.operator L α * op.operator L β =
+      ∑ γ : Λ, (χ.matrix α β γ ^ L).trace • op.operator L γ := by
+  rw [BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum (op := op) hop L hL α β]
+  refine Finset.sum_congr rfl ?_
+  intro γ _hγ
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+
 end BNTLabelOperatorFamily
 
 namespace BNTLabelTraceScalarFamily
@@ -329,6 +458,28 @@ theorem HasIdempotentCoefficientForm.eq_sum_chi_trace [Fintype Λ]
   rw [hχ.eq_trace_pow 1 Nat.zero_lt_one α β γ]
   simp
 
+/-- The BNT idempotent scalar identity for the canonical coefficient family
+associated to a \(\chi\)-family, written directly with length-one traces.
+
+This is the coefficient-level form of arXiv:1606.00608,
+Theorem IV.13(ii), idempotent equation, lines 981--985, after choosing the
+canonical coefficient family described in Appendix C.4, lines 2015--2037 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem HasIdempotentCoefficientForm.eq_sum_ofChi_trace [Fintype Λ]
+    {χ : DiagonalChiFamily Λ}
+    (hm : m.HasIdempotentCoefficientForm (BNTLabelCoefficientFamily.ofChi χ))
+    (γ : Λ) :
+    m.traceScalar γ =
+      ∑ α : Λ, ∑ β : Λ,
+        (χ.matrix α β γ).trace * (m.traceScalar α * m.traceScalar β) := by
+  rw [BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum (m := m) hm γ]
+  refine Finset.sum_congr rfl ?_
+  intro α _hα
+  refine Finset.sum_congr rfl ?_
+  intro β _hβ
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+  simp
+
 end BNTLabelTraceScalarFamily
 
 namespace BNTBlockedBasisCoefficientComparison
@@ -336,7 +487,11 @@ namespace BNTBlockedBasisCoefficientComparison
 variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficientFamily Λ}
 
 /-- The label map on the disjoint union of source and target blocked basis
-indices at a positive blocked length. -/
+indices at a positive blocked length.
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922, and Theorem
+IV.13(ii), lines 972--985 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def blockedLabel (cmp : BNTBlockedBasisCoefficientComparison data c)
     (n : ℕ) (hn : 0 < n) :
     AlgebraStructureData.BlockedIndex data n ⊕
@@ -359,6 +514,29 @@ theorem blocked_coeff_eq_trace_pow
   exact hχ.eq_trace_pow n hn
     (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
 
+/-- A blocked-basis/BNT-label coefficient comparison against the canonical
+coefficient family associated to a \(\chi\)-family rewrites each
+positive-length blocked coefficient as the corresponding trace power.
+
+This is the canonical-coefficient version of the blocked-basis comparison
+corollary.  It does not construct the comparison maps or the \(\chi\)-family
+from an MPDO tensor.
+Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_ofChi_trace_pow
+    {χ : DiagonalChiFamily Λ}
+    (cmp :
+      BNTBlockedBasisCoefficientComparison data (BNTLabelCoefficientFamily.ofChi χ))
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      (χ.matrix (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j)
+        (cmp.targetLabel n hn k) ^ n).trace := by
+  rw [cmp.blocked_coeff_eq n hn i j k]
+  rw [BNTLabelCoefficientFamily.ofChi_coeff_eq_trace_matrix_pow]
+
 /-- The blocked chi family obtained by pulling back a BNT-label chi witness
 along a blocked-basis comparison.
 
@@ -374,6 +552,101 @@ def pulledBlockedChiFamily
       hχ.chi.comap (cmp.blockedLabel n hn)
     else
       DiagonalChiFamily.empty _
+
+/-- At positive blocked length, the pulled-back blocked chi family is exactly
+the BNT-label chi family composed with the source and target comparison maps.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem pulledBlockedChiFamily_toDiagonal_of_pos
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n) :
+    (cmp.pulledBlockedChiFamily hχ).toDiagonal n =
+      hχ.chi.comap (cmp.blockedLabel n hn) := by
+  simp [pulledBlockedChiFamily, hn]
+
+/-- At positive blocked length, the finite-sum trace-power coefficient of the
+pulled-back blocked chi family is the corresponding BNT-label trace-power
+coefficient.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem pulledBlockedChi_tracePowerCoeff_of_pos
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n))
+    (L : ℕ) :
+    (cmp.pulledBlockedChiFamily hχ).tracePowerCoeff n i j k L =
+      hχ.chi.tracePowerCoeff
+        (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) L := by
+  rw [AlgebraStructureData.BlockedStructureChiFamily.tracePowerCoeff]
+  rw [cmp.pulledBlockedChiFamily_toDiagonal_of_pos hχ n hn]
+  rfl
+
+/-- At positive blocked length, the size of the pulled-back blocked chi matrix
+is the corresponding BNT-label chi-matrix size.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem pulledBlockedChi_dim_of_pos
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    (cmp.pulledBlockedChiFamily hχ).dim n i j k =
+      hχ.chi.dim
+        (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) := by
+  rw [AlgebraStructureData.BlockedStructureChiFamily.dim]
+  rw [cmp.pulledBlockedChiFamily_toDiagonal_of_pos hχ n hn]
+  rfl
+
+/-- At positive blocked length, the trace of the `L`-th power of the
+pulled-back blocked chi matrix is the trace of the `L`-th power of the
+corresponding BNT-label chi matrix.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem pulledBlockedChi_trace_matrix_pow_of_pos
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n))
+    (L : ℕ) :
+    ((cmp.pulledBlockedChiFamily hχ).matrix n i j k ^ L).trace =
+      (hχ.chi.matrix
+        (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) ^
+          L).trace := by
+  rw [AlgebraStructureData.BlockedStructureChiFamily.trace_matrix_pow]
+  rw [cmp.pulledBlockedChi_tracePowerCoeff_of_pos hχ n hn i j k L]
+  rw [← hχ.chi.trace_matrix_pow
+    (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k) L]
+
+/-- A blocked-basis/BNT-label coefficient comparison transports a positive
+BNT-label chi witness to the trace-power formula for the pulled-back
+blocked-basis chi matrix.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
+Appendix C.3--C.4, lines 1830--1942 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem blocked_coeff_eq_pulledBlockedChi_trace_pow
+    (cmp : BNTBlockedBasisCoefficientComparison data c)
+    (hχ : PositiveBNTLabelChiTracePowerForm c)
+    (n : ℕ) (hn : 0 < n)
+    (i j : AlgebraStructureData.BlockedIndex data n)
+    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
+    data.blockedStructureCoefficients n i j k =
+      ((cmp.pulledBlockedChiFamily hχ).matrix n i j k ^ n).trace := by
+  rw [cmp.blocked_coeff_eq_trace_pow hχ n hn i j k]
+  rw [cmp.pulledBlockedChi_trace_matrix_pow_of_pos hχ n hn i j k n]
 
 /-- A positive BNT-label chi witness and a blocked-basis comparison give a
 positive blocked chi trace-power witness.
@@ -412,404 +685,5 @@ def toPositiveBlockedStructureChiTracePowerForm
         (cmp.sourceLabel n hn i) (cmp.sourceLabel n hn j) (cmp.targetLabel n hn k)
 
 end BNTBlockedBasisCoefficientComparison
-
-/-- The BNT-label data asserted by the source theorem, together with its
-blocked-basis comparison.
-
-This record gathers the objects that the remaining Appendix C.3--C.4
-construction must produce from an MPDO tensor: the fixed BNT-label coefficient
-system, the same-length BNT operator family and product law, the trace scalars
-and idempotent condition, the positive length-independent chi witness, and the
-comparison with the chosen blocked bases.
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-structure BNTLabelTheoremData (data : AlgebraStructureData d D)
-    (Λ : Type*) (O : ℕ → Type*) [Fintype Λ]
-    [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
-    [∀ L : ℕ, Mul (O L)] where
-  /-- The BNT-label coefficient system \(c^{(L)}_{\alpha,\beta,\gamma}\). -/
-  coeffs : BNTLabelCoefficientFamily Λ
-  /-- The BNT-label operator family \(O_L(M_\alpha)\). -/
-  operators : BNTLabelOperatorFamily Λ O
-  /-- The trace scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\). -/
-  traceScalars : BNTLabelTraceScalarFamily Λ
-  /-- The same-length BNT product law. -/
-  sameLengthProduct : operators.HasSameLengthProductForm coeffs
-  /-- The idempotent scalar condition. -/
-  idempotent : traceScalars.HasIdempotentCoefficientForm coeffs
-  /-- The positive length-independent BNT-label chi witness. -/
-  positiveChi : PositiveBNTLabelChiTracePowerForm coeffs
-  /-- Comparison of the chosen blocked-basis coefficients with the BNT labels. -/
-  blockedComparison : BNTBlockedBasisCoefficientComparison data coeffs
-
-namespace BNTLabelTheoremData
-
-variable {data : AlgebraStructureData d D} {Λ : Type*} {O : ℕ → Type*}
-  [Fintype Λ] [∀ L : ℕ, AddCommMonoid (O L)] [∀ L : ℕ, Module ℂ (O L)]
-  [∀ L : ℕ, Mul (O L)] (H : BNTLabelTheoremData data Λ O)
-
-/-- The BNT-label coefficients in theorem data are traces of powers of the
-length-independent chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : Λ) :
-    H.coeffs.coeff L α β γ =
-      (H.positiveChi.chi.matrix α β γ ^ L).trace :=
-  H.positiveChi.eq_trace_pow L hL α β γ
-
-/-- The diagonal entries of the chi matrices in theorem data are positive.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem chi_entry_pos (α β γ : Λ)
-    (k : Fin (H.positiveChi.chi.dim α β γ)) :
-    0 < H.positiveChi.chi.entry α β γ k :=
-  H.positiveChi.posEntries α β γ k
-
-/-- The same-length BNT product equation carried by theorem data.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem same_length_product_eq_sum
-    (L : ℕ) (hL : 0 < L) (α β : Λ) :
-    H.operators.operator L α * H.operators.operator L β =
-      ∑ γ : Λ, H.coeffs.coeff L α β γ • H.operators.operator L γ :=
-  BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum
-    (op := H.operators) H.sameLengthProduct L hL α β
-
-/-- The idempotent scalar equation carried by theorem data.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem idempotent_eq_sum (γ : Λ) :
-    H.traceScalars.traceScalar γ =
-      ∑ α : Λ, ∑ β : Λ,
-        H.coeffs.coeff 1 α β γ *
-          (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
-  BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum
-    (m := H.traceScalars) H.idempotent γ
-
-/-- The BNT product expansion with the coefficients written as traces of the
-length-independent chi matrices. -/
-theorem same_length_product_eq_sum_chi_trace_pow
-    (L : ℕ) (hL : 0 < L) (α β : Λ) :
-    H.operators.operator L α * H.operators.operator L β =
-      ∑ γ : Λ, (H.positiveChi.chi.matrix α β γ ^ L).trace •
-        H.operators.operator L γ :=
-  H.sameLengthProduct.eq_sum_chi_trace_pow H.positiveChi L hL α β
-
-/-- The idempotent scalar identity with length-one coefficients written as
-traces of the chi matrices. -/
-theorem idempotent_eq_sum_chi_trace (γ : Λ) :
-    H.traceScalars.traceScalar γ =
-      ∑ α : Λ, ∑ β : Λ,
-        (H.positiveChi.chi.matrix α β γ).trace *
-          (H.traceScalars.traceScalar α * H.traceScalars.traceScalar β) :=
-  H.idempotent.eq_sum_chi_trace H.positiveChi γ
-
-/-- The blocked-basis coefficients obtained from BNT-label theorem data are
-traces of powers of the pulled-back BNT-label chi matrices. -/
-theorem blocked_coeff_eq_trace_pow
-    (n : ℕ) (hn : 0 < n)
-    (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    data.blockedStructureCoefficients n i j k =
-      (H.positiveChi.chi.matrix
-        (H.blockedComparison.sourceLabel n hn i)
-        (H.blockedComparison.sourceLabel n hn j)
-        (H.blockedComparison.targetLabel n hn k) ^ n).trace :=
-  H.blockedComparison.blocked_coeff_eq_trace_pow H.positiveChi n hn i j k
-
-/-- The positive blocked chi witness obtained from the BNT-label theorem data
-and the blocked-basis comparison. -/
-def toPositiveBlockedStructureChiTracePowerForm :
-    AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data :=
-  H.blockedComparison.toPositiveBlockedStructureChiTracePowerForm H.positiveChi
-
-/-- The blocked-basis chi family obtained by pulling back the uniform
-BNT-label chi family in theorem data along the blocked-basis comparison maps.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-def positiveBlockedChi : AlgebraStructureData.BlockedStructureChiFamily data :=
-  H.toPositiveBlockedStructureChiTracePowerForm.chi
-
-/-- The pulled-back blocked-basis chi entries obtained from BNT-label theorem
-data are positive.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem positiveBlockedChi_entry_pos
-    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n))
-    (r : Fin (H.positiveBlockedChi.dim n i j k)) :
-    0 < H.positiveBlockedChi.entry n i j k r :=
-  H.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
-
-/-- The blocked-basis coefficients obtained from BNT-label theorem data are
-traces of powers of the pulled-back blocked-basis chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
-    (n : ℕ) (hn : 0 < n)
-    (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    data.blockedStructureCoefficients n i j k =
-      (H.positiveBlockedChi.matrix n i j k ^ n).trace :=
-  H.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
-
-end BNTLabelTheoremData
-
-/-- Existential BNT-label theorem witness for the source statement.
-
-The BNT-label theorem data depend on a choice of BNT-label type and
-same-length operator spaces.  This structure collects those choices together
-with the corresponding theorem data.  The construction of such a witness from
-an MPDO tensor is the outstanding step toward Theorem IV.13(ii).
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
-  /-- The finite type of BNT labels. -/
-  Label : Type
-  /-- The ambient type of length-`L` BNT operators. -/
-  OperatorSpace : ℕ → Type
-  /-- The BNT-label type is finite. -/
-  labelFintype : Fintype Label
-  /-- Each length-`L` operator space is an additive commutative monoid. -/
-  operatorAddCommMonoid : ∀ L : ℕ, AddCommMonoid (OperatorSpace L)
-  /-- Each length-`L` operator space is a complex module. -/
-  operatorModule : ∀ L : ℕ, Module ℂ (OperatorSpace L)
-  /-- Each length-`L` operator space has the product used in the source algebra. -/
-  operatorMul : ∀ L : ℕ, Mul (OperatorSpace L)
-  /-- The BNT-label theorem data for these choices. -/
-  theoremData : @BNTLabelTheoremData d D data Label OperatorSpace
-    labelFintype operatorAddCommMonoid operatorModule operatorMul
-
-namespace BNTLabelTheoremWitness
-
-variable {data : AlgebraStructureData d D} (W : BNTLabelTheoremWitness data)
-
-/-- The BNT-label theorem data carried by an existential witness, with the
-algebraic structures on the label type and operator spaces supplied by the
-witness. -/
-def toTheoremData :
-    @BNTLabelTheoremData d D data W.Label W.OperatorSpace
-      W.labelFintype W.operatorAddCommMonoid W.operatorModule W.operatorMul :=
-  W.theoremData
-
-/-- The BNT-label coefficient system carried by an existential witness. -/
-def coeffs : BNTLabelCoefficientFamily W.Label := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.coeffs
-
-/-- The same-length BNT operator family carried by an existential witness. -/
-def operators : BNTLabelOperatorFamily W.Label W.OperatorSpace := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.operators
-
-/-- The BNT-label trace scalars carried by an existential witness. -/
-def traceScalars : BNTLabelTraceScalarFamily W.Label := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.traceScalars
-
-/-- The positive BNT-label chi witness carried by an existential witness. -/
-def positiveChi : PositiveBNTLabelChiTracePowerForm W.coeffs := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.positiveChi
-
-/-- The blocked-basis comparison carried by an existential witness. -/
-def blockedComparison : BNTBlockedBasisCoefficientComparison data W.coeffs := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.blockedComparison
-
-/-- The BNT-label coefficients carried by an existential witness are traces of
-powers of the length-independent chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem coeff_eq_trace_pow (L : ℕ) (hL : 0 < L) (α β γ : W.Label) :
-    W.coeffs.coeff L α β γ =
-      (W.positiveChi.chi.matrix α β γ ^ L).trace := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.coeff_eq_trace_pow L hL α β γ
-
-/-- The diagonal entries of the chi matrices in an existential witness are
-positive.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem chi_entry_pos (α β γ : W.Label)
-    (k : Fin (W.positiveChi.chi.dim α β γ)) :
-    0 < W.positiveChi.chi.entry α β γ k :=
-  W.positiveChi.posEntries α β γ k
-
-/-- The same-length BNT product equation carried by an existential witness.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem same_length_product_eq_sum (L : ℕ) (hL : 0 < L) (α β : W.Label) :
-    letI := W.labelFintype
-    letI := W.operatorAddCommMonoid L
-    letI := W.operatorModule L
-    letI := W.operatorMul L
-    W.operators.operator L α * W.operators.operator L β =
-      ∑ γ : W.Label, W.coeffs.coeff L α β γ • W.operators.operator L γ := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.same_length_product_eq_sum L hL α β
-
-/-- The idempotent scalar equation carried by an existential witness.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), idempotent, lines 981--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem idempotent_eq_sum (γ : W.Label) :
-    letI := W.labelFintype
-    W.traceScalars.traceScalar γ =
-      ∑ α : W.Label, ∑ β : W.Label,
-        W.coeffs.coeff 1 α β γ *
-          (W.traceScalars.traceScalar α *
-            W.traceScalars.traceScalar β) := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.idempotent_eq_sum γ
-
-/-- The BNT product expansion carried by an existential witness, with
-coefficients written as traces of the length-independent chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem same_length_product_eq_sum_chi_trace_pow
-    (L : ℕ) (hL : 0 < L) (α β : W.Label) :
-    letI := W.labelFintype
-    letI := W.operatorAddCommMonoid L
-    letI := W.operatorModule L
-    letI := W.operatorMul L
-    W.operators.operator L α * W.operators.operator L β =
-      ∑ γ : W.Label, (W.positiveChi.chi.matrix α β γ ^ L).trace •
-        W.operators.operator L γ := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.same_length_product_eq_sum_chi_trace_pow L hL α β
-
-/-- The idempotent scalar identity carried by an existential witness, with
-length-one coefficients written as traces of the chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 981--985 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem idempotent_eq_sum_chi_trace (γ : W.Label) :
-    letI := W.labelFintype
-    W.traceScalars.traceScalar γ =
-      ∑ α : W.Label, ∑ β : W.Label,
-        (W.positiveChi.chi.matrix α β γ).trace *
-          (W.traceScalars.traceScalar α *
-            W.traceScalars.traceScalar β) := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.idempotent_eq_sum_chi_trace γ
-
-/-- The blocked-basis coefficients pulled back by an existential witness are
-traces of powers of the BNT-label chi matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_trace_pow
-    (n : ℕ) (hn : 0 < n)
-    (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    data.blockedStructureCoefficients n i j k =
-      (W.positiveChi.chi.matrix
-        (W.blockedComparison.sourceLabel n hn i)
-        (W.blockedComparison.sourceLabel n hn j)
-        (W.blockedComparison.targetLabel n hn k) ^ n).trace := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.toTheoremData.blocked_coeff_eq_trace_pow n hn i j k
-
-/-- An existential BNT-label theorem witness gives a positive blocked
-trace-power witness for the chosen algebra-structure data. -/
-def toPositiveBlockedStructureChiTracePowerForm :
-    AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm data := by
-  letI := W.labelFintype
-  letI := W.operatorAddCommMonoid
-  letI := W.operatorModule
-  letI := W.operatorMul
-  exact W.theoremData.toPositiveBlockedStructureChiTracePowerForm
-
-/-- The blocked-basis chi family obtained by pulling back the uniform
-BNT-label chi family in an existential witness along the blocked-basis
-comparison maps.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-def positiveBlockedChi : AlgebraStructureData.BlockedStructureChiFamily data :=
-  W.toPositiveBlockedStructureChiTracePowerForm.chi
-
-/-- The pulled-back blocked-basis chi entries obtained from an existential
-BNT-label theorem witness are positive.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem positiveBlockedChi_entry_pos
-    (n : ℕ) (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n))
-    (r : Fin (W.positiveBlockedChi.dim n i j k)) :
-    0 < W.positiveBlockedChi.entry n i j k r :=
-  W.toPositiveBlockedStructureChiTracePowerForm.posEntries n i j k r
-
-/-- The blocked-basis coefficients obtained from an existential BNT-label
-theorem witness are traces of powers of the pulled-back blocked-basis chi
-matrices.
-
-Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
-Appendix C.3--C.4, lines 1830--1942 of
-`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem blocked_coeff_eq_positiveBlockedChi_trace_pow
-    (n : ℕ) (hn : 0 < n)
-    (i j : AlgebraStructureData.BlockedIndex data n)
-    (k : AlgebraStructureData.BlockedIndex data (2 * n)) :
-    data.blockedStructureCoefficients n i j k =
-      (W.positiveBlockedChi.matrix n i j k ^ n).trace :=
-  W.toPositiveBlockedStructureChiTracePowerForm.eq_trace_pow n hn i j k
-
-end BNTLabelTheoremWitness
 
 end MPOTensor
