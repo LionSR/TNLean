@@ -147,6 +147,25 @@ theorem isRFP (F : FusionIsometryData M 1) : IsRFP M := by
 
 end FusionIsometryData
 
+/-- A one-site transfer-map fusion retract is equivalent to the MPDO RFP
+condition.
+
+The forward direction is the retract calculation
+\(E_1^2 = S_1T_1S_1T_1 = S_1T_1\).  The reverse direction factors the
+idempotent transfer map through its range.
+
+Source: arXiv:1606.00608, Theorem IV.13(i), and Appendix C.4, lines
+2065--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`, where the converse
+algebra-to-fusion proof constructs the one-step maps \(T\) and \(S\). -/
+theorem fusionIsometryData_one_iff_isRFP (M : MPOTensor d D) :
+    Nonempty (FusionIsometryData M 1) ↔ IsRFP M := by
+  constructor
+  · rintro ⟨F⟩
+    exact F.isRFP
+  · intro hM
+    exact ⟨FusionIsometryData.ofBlockedTransferMapIdempotent
+      (M := M) (n := 1) (by simpa only [blockedTransferMap_one] using hM)⟩
+
 /-- If `M` is already an MPDO renormalization fixed point, then every positive
 blocked transfer map coincides with the original transfer map. -/
 theorem blockedTransferMap_eq_transferMap_of_isRFP {M : MPOTensor d D}
@@ -193,6 +212,16 @@ theorem isRFP_MPDO_via_fusion_iff_isRFP (M : MPOTensor d D) :
   constructor
   · exact isRFP_of_isRFP_MPDO_via_fusion
   · exact isRFP_MPDO_via_fusion_of_isRFP
+
+/-- The all-blocked transfer-map fusion formulation is equivalent to a
+one-site fusion retract.
+
+Thus, in the present transfer-map formulation, an algebra-to-fusion proof may
+be reduced to constructing the one-step retract appearing in Appendix C.4 of
+arXiv:1606.00608. -/
+theorem isRFP_MPDO_via_fusion_iff_fusionIsometryData_one (M : MPOTensor d D) :
+    IsRFP_MPDO_via_fusion M ↔ Nonempty (FusionIsometryData M 1) := by
+  rw [isRFP_MPDO_via_fusion_iff_isRFP, fusionIsometryData_one_iff_isRFP]
 
 /-- The transfer-map-level fusion formulation agrees with the pure-state RFP
 condition for the doubled-index MPS tensor. -/

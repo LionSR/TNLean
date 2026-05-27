@@ -886,10 +886,13 @@ retract.
 
 \begin{theorem}[Fusion-isometry data imply the MPDO RFP condition]%
     \label{thm:mpdo_rfp_of_fusion}
+    \lean{MPOTensor.FusionIsometryData.isRFP}
     \lean{MPOTensor.isRFP_of_isRFP_MPDO_via_fusion}
     \leanok
     \uses{def:mpdo_rfp_via_fusion}
-    The fusion-isometry formulation implies the MPDO RFP condition.
+    A one-site fusion-isometry datum implies the MPDO RFP condition.  Hence the
+    fusion-isometry formulation, which supplies such data at every positive
+    blocked size, implies the same condition.
 \end{theorem}
 \begin{proof}\leanok
     Apply the definition at blocked size $n = 1$.
@@ -897,6 +900,20 @@ retract.
     $$E_1^2 = S_1 T_1 S_1 T_1 = S_1 (T_1 S_1) T_1 = S_1 T_1 = E_1.$$
     Since $E_1$ is the original transfer map, this is exactly the MPDO RFP
     condition.
+\end{proof}
+
+\begin{theorem}[One-site fusion retract criterion]%
+    \label{thm:mpdo_one_site_fusion_iff_rfp}
+    \lean{MPOTensor.fusionIsometryData_one_iff_isRFP}
+    \leanok
+    \uses{def:mpdo_fusion_isometry}
+    A one-site transfer-map fusion-isometry datum exists if and only if the MPO
+    transfer map is idempotent.
+\end{theorem}
+\begin{proof}\leanok
+    The forward implication is the retract calculation
+    $E_1^2 = S_1T_1S_1T_1 = S_1T_1$. Conversely, if $E_1$ is idempotent, then
+    it factors through its range, giving the required one-site datum.
 \end{proof}
 
 \begin{theorem}[Transfer-map fusion criterion for MPDO RFP]%
@@ -924,6 +941,21 @@ retract.
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:mpdo_rfp_via_fusion_iff} with the diagonal pure-state
     recovery theorem for the MPO predicate.
+\end{proof}
+
+\begin{theorem}[All-blocked fusion reduces to one-site fusion]%
+    \label{thm:mpdo_fusion_iff_one_site_fusion}
+    \lean{MPOTensor.isRFP_MPDO_via_fusion_iff_fusionIsometryData_one}
+    \leanok
+    \uses{def:mpdo_rfp_via_fusion, thm:mpdo_one_site_fusion_iff_rfp,
+        thm:mpdo_rfp_via_fusion_iff}
+    The fusion-isometry formulation for all positive blocked sizes is
+    equivalent to the existence of a one-site transfer-map fusion-isometry
+    datum.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the one-site criterion with the equivalence between the all-blocked
+    fusion formulation and transfer-map idempotence.
 \end{proof}
 
 \section{Algebra structure}
@@ -1110,10 +1142,36 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     Induction on $n$ using $E_{n+1} = E_n \circ E_1$ and
     $(A \circ B)^{\dagger} = B^{\dagger} \circ A^{\dagger}$; the base case is
     $E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
-    Combined with Theorem~\ref{thm:mpdo_adjoint_fix_descent} this yields the
-    fixed-point equality
-    $\mathrm{Fix}(E_n^{\dagger}) = \mathrm{Fix}(E_1^{\dagger})$ at every positive
-    blocking size under the algebra-structure predicate.
+\end{proof}
+
+\begin{theorem}[Adjoint fixed-point equality for algebra towers]%
+    \label{thm:mpdo_adjoint_fix_equality_from_algebra}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
+        lem:mpdo_adjoint_fix_reverse}
+    If an MPO tensor satisfies the algebra-structure formulation, then for
+    every positive blocking size $n$ the adjoint fixed points of $E_n$ are
+    exactly the adjoint fixed points of $E_1$.
+\end{theorem}
+\begin{proof}\leanok
+    Combine Theorem~\ref{thm:mpdo_adjoint_fix_descent} with
+    Lemma~\ref{lem:mpdo_adjoint_fix_reverse}.
+\end{proof}
+
+\begin{theorem}[Algebra data give the stationary fixed-point tower]%
+    \label{thm:mpdo_stationary_tower_from_algebra}
+    \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra,
+        thm:mpdo_adjoint_fix_equality_from_algebra}
+    Under the trace-preserving normalization and a positive-definite fixed
+    point, any algebra-structure witness forces the stationary adjoint
+    fixed-point tower itself to be compatible with the MPO tensor.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the adjoint fixed-point equality obtained from the algebra-structure
+    predicate to the stationary tower constructed from the faithful fixed point.
 \end{proof}
 
 \begin{remark}[Why algebra data do not imply fusion data]%
