@@ -1310,10 +1310,45 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the paper.
 \end{remark}
 
+\begin{definition}[Left-identity three-leg residual form]%
+    \label{def:peps_threeLegLeftIdentityForm}
+    \lean{TNLean.PEPS.threeLegLeftIdentityForm}
+    \leanok
+    For three virtual leg spaces $\alpha,\beta,\gamma$ and an endomorphism
+    $Z$ of $\beta\otimes\gamma$, define the induced endomorphism of
+    $\alpha\otimes\beta\otimes\gamma$ by acting as the identity on the
+    $\alpha$ leg and as $Z$ on the remaining two legs. This is the
+    $I_\alpha\otimes Z$ form appearing after the first tensor is inverted in
+    Lemma~$\mathrm{inj\_equal\_tensors\_2}$.
+\end{definition}
+
+\begin{definition}[Right-identity three-leg residual form]%
+    \label{def:peps_threeLegRightIdentityForm}
+    \lean{TNLean.PEPS.threeLegRightIdentityForm}
+    \leanok
+    For an endomorphism $U$ of $\alpha\otimes\beta$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $U$ on the
+    first two legs and as the identity on the $\gamma$ leg. This is the
+    $U\otimes I_\gamma$ form in Lemma~$\mathrm{inj\_equal\_tensors\_2}$.
+\end{definition}
+
+\begin{definition}[Middle-identity three-leg residual form]%
+    \label{def:peps_threeLegMiddleIdentityForm}
+    \lean{TNLean.PEPS.threeLegMiddleIdentityForm}
+    \leanok
+    For an endomorphism $W$ of $\alpha\otimes\gamma$, define the induced
+    endomorphism of $\alpha\otimes\beta\otimes\gamma$ by acting as $W$ on the
+    outer two legs and as the identity on the middle $\beta$ leg. This is the
+    third residual form in Lemma~$\mathrm{inj\_equal\_tensors\_2}$.
+\end{definition}
+
 \begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
     \label{thm:peps_twoInjectiveGaugeScalarReduction}
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
+    \uses{def:peps_threeLegLeftIdentityForm,
+        def:peps_threeLegRightIdentityForm,
+        def:peps_threeLegMiddleIdentityForm}
     In the proof of the generalized two-injective-tensor comparison, applying
     the inverse of the second injective tensor leaves three possible virtual
     operators on the exposed legs of the first tensor:
