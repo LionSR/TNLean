@@ -162,8 +162,8 @@ theorem exists_positive_scalar_mpo_eq_product
   data.formAt_realizes N hN
 
 /-- At a fixed chain length, the `η`-local structure gives precisely the
-positive commuting nearest-neighbor product form appearing in Proposition
-`3to4`.
+positive commuting nearest-neighbor product form appearing in Proposition C.6
+of arXiv:1606.00608.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
 the MPDO has the form \(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\),
