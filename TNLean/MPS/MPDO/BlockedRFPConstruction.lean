@@ -19,10 +19,10 @@ side live in separate modules:
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
   consequences of Lemmas C.3--C.4.
 * `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
-  commuting-form witness of Proposition C.6 after the sector-local neighboring
-  operators have been assembled.
+  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.6,
+  after the sector-local neighboring operators have been assembled.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
-  Proposition C.6 and Theorem 4.9(iii).
+  arXiv:1606.00608, Appendix C.2, Proposition C.6 and Theorem 4.9(iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
@@ -234,7 +234,7 @@ theorem simple_mpdo_rfp_chain_of_data {K : MPOTensor d D}
   refine ⟨data.isGSNNCHWithZCL, structural_implies_rfp_blocked_of_data data,
     data.isRFPViaFusion⟩
 
-/-- Direct form of the simple-MPDO assembly once the assembled `η`-local
+/-- Direct form of the simple-MPDO construction once the assembled `η`-local
 structure has been constructed.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:

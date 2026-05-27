@@ -2370,15 +2370,27 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[Finite-chain data from a translation-invariant bond]
     \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_commuting_form_data}
+    A translation-invariant positive two-site bond determines finite-chain
+    commuting-form data at every length $N \ge 2$.
+\end{definition}
+
+\begin{theorem}[Component identities for finite-chain bond data]
+    \label{thm:mpdo_translation_invariant_bond_to_commuting_form_data_components}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
     \leanok
     \uses{def:mpdo_eta_local_structure_data, def:mpdo_commuting_form_data}
-    A translation-invariant positive two-site bond determines finite-chain
-    commuting-form data at every length $N \ge 2$. The factor at site $i$ is
-    the translated copy of the same local two-site bond.
-\end{definition}
+    The finite-chain data associated to a translation-invariant bond retains
+    the original local bond, and the factor at site $i$ is the translated copy
+    of that local two-site bond.
+\end{theorem}
+
+\begin{proof}\leanok
+    These are the component identities for the finite-chain construction.
+\end{proof}
 
 \begin{theorem}[$\eta$-local structure carries commuting form]
     \label{thm:mpdo_eta_local_structure_has_commuting_form}
@@ -2392,7 +2404,7 @@ the elementary trace-power identity for diagonal matrices.
     The $\eta$-local structure itself determines a commuting-form witness for every
     chain length $N \ge 2$.  In particular, the translated nearest-neighbor
     bonds commute and the MPDO at length $N$ is a positive scalar multiple of
-    their product, as in Proposition~C.6.
+    their product, as in \cite[Proposition~C.6]{Cirac2017MPDO_AnnPhys}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2466,7 +2478,7 @@ the elementary trace-power identity for diagonal matrices.
     What remains is to identify this sector family with the inverse-map
     construction in the original simple-MPDO tensor coordinates and assemble it
     into a single translation-invariant positive two-site bond realizing all
-    finite chains. Once this assembly is available,
+    finite chains. Once this construction is available,
     Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} yields the
     commuting-form conclusion and hence the GSNNCH branch of the simple-MPDO
     equivalence.
@@ -2477,12 +2489,14 @@ the elementary trace-power identity for diagonal matrices.
 \begin{definition}[Local simple-MPDO structure data]
     \label{def:simple_mpdo_local_structure_data}
     \lean{MPOTensor.SimpleMPDOLocalStructureData}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
     \leanok
     \uses{thm:sal_implies_eta_structure, thm:sal_zcl_implies_rank_one_t}
     This structure collects the local Appendix~C.2 data: a normalized
     three-site reduced state with equality in strong subadditivity, the
     resulting local $\eta$-structure, and the rank-one conclusion for the
-    auxiliary primitive matrix $T$.
+    auxiliary primitive matrix $T$. The scoped local hypotheses from Lemmas
+    C.3--C.4 determine such a structure.
 \end{definition}
 
 \begin{definition}[Simple-MPDO blocked-RFP data]
@@ -2537,10 +2551,23 @@ the elementary trace-power identity for diagonal matrices.
     produces the blocked witness.
 \end{proof}
 
+\begin{theorem}[Blocked-RFP data give a blocked fusion-isometry witness]
+    \label{thm:structural_implies_rfp_blocked_of_data}
+    \lean{MPOTensor.structural_implies_rfp_blocked_of_data}
+    \leanok
+    \uses{def:simple_mpdo_blocked_rfp_data, thm:structural_implies_rfp_blocked}
+    Given the blocked-RFP data for an MPO tensor $K$, one obtains a blocked
+    fusion-isometry witness at size $2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the zero-correlation-length theorem to the ZCL component of the
+    blocked-RFP data.
+\end{proof}
+
 \begin{theorem}[Simple-MPDO RFP chain from blocked-RFP data]
     \label{thm:simple_mpdo_rfp_chain_of_data}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_data}
-    \lean{MPOTensor.structural_implies_rfp_blocked_of_data}
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data,
         thm:structural_implies_rfp_blocked, def:mpdo_rfp_via_fusion}
