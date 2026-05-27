@@ -349,13 +349,19 @@ variable {data : AlgebraStructureData d D} {Λ : Type*} {c : BNTLabelCoefficient
   (cmp : BNTBlockedBasisCoefficientComparison data c)
 
 /-- The source BNT label attached to a chosen basis element of
-\(\mathcal A_n\). -/
+\(\mathcal A_n\).
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def sourceLabel (n : ℕ) (hn : 0 < n)
     (i : AlgebraStructureData.BlockedIndex data n) : Λ :=
   cmp.labelAssignment.sourceLabel n hn i
 
 /-- The target BNT label attached to a chosen basis element of
-\(\mathcal A_{2n}\). -/
+\(\mathcal A_{2n}\).
+
+Source: arXiv:1606.00608, Appendix C.3, lines 1830--1922 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 def targetLabel (n : ℕ) (hn : 0 < n)
     (k : AlgebraStructureData.BlockedIndex data (2 * n)) : Λ :=
   cmp.labelAssignment.targetLabel n hn k
