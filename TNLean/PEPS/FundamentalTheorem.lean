@@ -632,7 +632,8 @@ theorem edgeScalarAt_mul (c d : (e : Edge G) → Units ℂ)
       edgeScalarAt (G := G) c v ie * edgeScalarAt (G := G) d v ie := by
   by_cases h : ie.1.1.1 = v
   · simp [edgeScalarAt, h]
-  · simp [edgeScalarAt, h, mul_comm]
+  · simpa [edgeScalarAt, h] using
+      (mul_comm (((d ie.1 : Units ℂ) : ℂ)⁻¹) (((c ie.1 : Units ℂ) : ℂ)⁻¹))
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- Endpoint scalars invert pointwise under inversion of edge scalars.
@@ -737,8 +738,10 @@ theorem GaugeEquivModEdgeScalars.symm {A : Tensor G d}
   rcases hXY with ⟨c, hc, hXY⟩
   refine ⟨fun e => (c e)⁻¹, IsVertexBalanced.inv (G := G) hc, ?_⟩
   intro v ie
-  let s := edgeScalarAt (G := G) c v ie
-  have hs : s ≠ 0 := edgeScalarAt_ne_zero (G := G) c v ie
+  set s : ℂ := edgeScalarAt (G := G) c v ie with hs_def
+  have hs : s ≠ 0 := by
+    rw [hs_def]
+    exact edgeScalarAt_ne_zero (G := G) c v ie
   calc
     edgeGaugeAt A Y v ie = s⁻¹ • (s • edgeGaugeAt A Y v ie) := by
       rw [smul_smul, inv_mul_cancel₀ hs, one_smul]
@@ -747,7 +750,7 @@ theorem GaugeEquivModEdgeScalars.symm {A : Tensor G d}
     _ =
         edgeScalarAt (G := G) (fun e => (c e)⁻¹) v ie •
           edgeGaugeAt A X v ie := by
-          rw [edgeScalarAt_inv]
+          rw [edgeScalarAt_inv, ← hs_def]
 
 /-- Gauge equivalence modulo balanced edge scalars is transitive.
 
