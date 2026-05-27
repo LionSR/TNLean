@@ -544,10 +544,10 @@ theorem adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra
 side hypotheses, the stationary adjoint fixed-point tower is itself compatible
 with the MPO tensor.
 
-This packages the fixed-point equality above into the canonical stationary
-tower used by Wolf's adjoint fixed-point algebra theorem.  It is still only a
-consequence of the present algebra-tower predicate, not the source converse
-from Theorem IV.13(ii) to the fusion-isometry formulation.
+Applying the fixed-point equality above to the stationary tower constructed
+from the faithful fixed point yields compatibility with the MPO tensor.  It is
+still only a consequence of the present algebra-tower predicate, not the source
+converse from Theorem IV.13(ii) to the fusion-isometry formulation.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem stationaryOfFaithfulFixedPoint_compatible_of_isRFP_MPDO_via_algebra
