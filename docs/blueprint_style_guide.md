@@ -30,6 +30,12 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
     mathematical prose. The explicit proof-status markers in
     [`prose_style.md`](prose_style.md) are for Lean docstrings and comments, not
     blueprint-visible paragraphs.
+11. **Proofs are carried by formulas.** For mathematical proof sketches,
+    especially tensor-network and overlap arguments, state the main equations
+    explicitly instead of replacing them by verbal paraphrase. Short equations
+    should usually be inline with `$...$`; use displayed equations only when the
+    expression is long or when several implications must be compared. Avoid
+    long paragraphs whose only mathematical content is described in words.
 
 ## Proof Sketches Must Match Lean
 This is the most important rule. Every proof in the blueprint must faithfully describe what the Lean proof does:
@@ -46,6 +52,13 @@ This is the most important rule. Every proof in the blueprint must faithfully de
   blueprint prose.
   If the auxiliary route is no longer used by the checked proof, delete the entry
   rather than keeping an unmotivated theorem-like statement in the blueprint.
+- **Write tensor-network proofs with equations.** When a tensor-network proof
+  applies injectivity, inserts a boundary tensor, or compares two contractions,
+  introduce notation such as $P_i$, $\mathcal C_I$, or $X$ and write the
+  implication being used. A sketch like "apply injectivity twice" is not enough
+  when the paper proof distinguishes regions, boundaries, or inserted matrices.
+  Display the sequence of equalities or kernel implications that carries the
+  argument.
 
 ## Notation Consistency
 Notation must be **internally consistent** across the entire blueprint and **close to what the Lean code expresses**:
@@ -117,6 +130,12 @@ lengths, and atomic drawing commands. Chapter-facing diagrams are defined in
 move they depict. The web renderer in `blueprint/src/Packages/tn_diagrams.py`
 uses the same public commands and treats both TeX files as part of the diagram
 source.
+
+PEPS blueprint statements should keep the relevant tensor-network diagram
+attached to the theorem, lemma, or definition whose content it depicts. If the
+source paper proves a step by a diagrammatic equality or a blocked-region
+picture, the blueprint entry should contain the corresponding TikZ diagram and
+the proof sketch should name the regions or inserted tensors appearing in it.
 
 ## Lean Blueprint Macros
 - `\lean{Namespace.DeclName}` — links to Lean declaration
