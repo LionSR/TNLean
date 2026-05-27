@@ -106,6 +106,25 @@ one of these orientations. With the ordered endpoints convention for edges,
 horizontal edges are coordinate right edges from their left endpoints, and
 vertical edges are coordinate upward edges from their lower endpoints.
 
+The four-region decomposition from Lemma \path{injective_union} is formalized
+both by named regions and by an indexed family in the source-paper order:
+$A\setminus B$, $A\cap B$, $B\setminus A$, and $(A\cup B)^c$. The indexed
+family reconstructs $A$, $B$, $A\cup B$, $A^c$, $B^c$, and the full vertex set.
+The same reconstructions are available as finite unions over the selected
+indexed subfamilies $\{0,1\}$, $\{1,2\}$, $\{0,1,2\}$, $\{2,3\}$, and
+$\{0,3\}$. The singleton subfamily $\{3\}$ gives the outside block and is the
+complement of the selected inside subfamily $\{0,1,2\}$. Its selected
+complementary pairs match the two places where the source proof applies
+injectivity of $A$ and then injectivity of $B$. The
+selected subfamilies $\{0,1\}$ and $\{2,3\}$ are disjoint, as are
+$\{1,2\}$ and $\{0,3\}$; these are the disjointness forms needed for the two
+inverse applications. The abstract union-closure hypothesis also has the
+corresponding indexed inside-union form: injectivity of the selected subfamilies
+$\{0,1\}$ and $\{1,2\}$ implies injectivity of the inside subfamily
+$\{0,1,2\}$. Every vertex belongs to exactly one indexed piece. These facts
+prepare the tensor-level boundary-contraction proof, but do not prove that
+theorem.
+
 The rectangular vocabulary separates coordinate products from source-paper
 contiguous blocks. Coordinate rectangles are products of finite coordinate
 sets, whereas contiguous coordinate rectangles are products of coordinate
@@ -234,10 +253,12 @@ boundary geometry and the source-faithful local and rotated $T$ covers.
 Verdict: this note records an open gap with a scope restriction. The earlier
 vocabulary gap for contiguous rectangular blocks is closed. The earlier
 coordinate rectangular-injectivity structure is also present, and the
-rectangular decompositions of $R$ and $S$ are formalized. The conditional
-derivations of injectivity for $R$ and $S$ from union closure are also
-formalized, and the two edge blocks removed from the displayed $T$-window are
-injective under the coordinate rectangular hypotheses. The finite-lattice
+indexed finite-region geometry of Lemma \path{injective_union} is formalized
+down to the selected complement and closure forms used by the two inverse
+applications. The rectangular decompositions of $R$ and $S$ are formalized, and
+the conditional derivations of injectivity for $R$ and $S$ from union closure
+are also formalized. The two edge blocks removed from the displayed $T$-window
+are injective under the coordinate rectangular hypotheses. The finite-lattice
 complementary block around the chosen edge has a set-theoretic definition.
 The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
 restricted sufficient condition, and the origin-based instances above show
