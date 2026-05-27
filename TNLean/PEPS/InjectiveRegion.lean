@@ -53,7 +53,7 @@ This is the formal hypothesis supplied by the tensor-level
 union-of-injective-regions lemma.  It is recorded separately so later
 coordinate arguments may use the source lemma without repeating its proof.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404 of `Papers/1804.04964/paper_normal.tex`. -/
 structure RegionInjectivityUnionClosure (κ : RegionInjectivityData V) : Prop where
   /-- The union of two injective finite vertex regions is injective. -/
@@ -66,7 +66,7 @@ This is the finite iteration of the source lemma used when the displayed
 regions \(R\), \(S\), and \(T\) are described as unions of smaller injective
 rectangles.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and the
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and the
 examples following it, lines 1322--1430 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem RegionInjectivityUnionClosure.biUnion_injective
@@ -125,7 +125,7 @@ def regionComplement [Fintype V] (R : Finset V) : Finset V :=
 /-- The outside block in the four-region decomposition is the complement of
 `A ∪ B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the fourth region in the blocked proof is written as
 `(A ∪ B)ᶜ`. -/
 theorem regionOutsideUnion_eq_regionComplement_union [Fintype V]
@@ -209,7 +209,7 @@ def regionUnionPart [Fintype V] (A B : Finset V) (i : Fin 4) : Finset V :=
 
 /-- The fourth indexed region is the complement of `A ∪ B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the tensor called `X` is attached to `(A ∪ B)ᶜ`, the fourth
 piece of the blocked four-region picture. -/
 theorem regionUnionPart_three_eq_regionComplement_union [Fintype V]
@@ -219,7 +219,7 @@ theorem regionUnionPart_three_eq_regionComplement_union [Fintype V]
 
 /-- The first two indexed regions reconstruct `A`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the source proof identifies `A` with the union of
 `A \ B` and `A ∩ B` before applying injectivity of `A`. -/
 theorem regionUnionPart_zero_union_one [Fintype V] (A B : Finset V) :
@@ -228,7 +228,7 @@ theorem regionUnionPart_zero_union_one [Fintype V] (A B : Finset V) :
 
 /-- The subfamily of indexed regions `0,1` reconstructs `A`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the first inverse is applied to
 \(A=(A\setminus B)\cup(A\cap B)\). -/
 theorem regionUnionPart_biUnion_zero_one [Fintype V] (A B : Finset V) :
@@ -238,7 +238,7 @@ theorem regionUnionPart_biUnion_zero_one [Fintype V] (A B : Finset V) :
 
 /-- The middle two indexed regions reconstruct `B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after reinserting the overlap tensor, the source proof identifies
 `B` with the union of `A ∩ B` and `B \ A`. -/
 theorem regionUnionPart_one_union_two [Fintype V] (A B : Finset V) :
@@ -247,7 +247,7 @@ theorem regionUnionPart_one_union_two [Fintype V] (A B : Finset V) :
 
 /-- The subfamily of indexed regions `1,2` reconstructs `B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after reinserting the overlap tensor, the second inverse is
 applied to \(B=(A\cap B)\cup(B\setminus A)\). -/
 theorem regionUnionPart_biUnion_one_two [Fintype V] (A B : Finset V) :
@@ -257,7 +257,7 @@ theorem regionUnionPart_biUnion_one_two [Fintype V] (A B : Finset V) :
 
 /-- The first three indexed regions reconstruct `A ∪ B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the region whose injectivity is being proved is the union of the
 three inside parts of the four-region decomposition. -/
 theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
@@ -267,7 +267,7 @@ theorem regionUnionPart_zero_union_one_union_two [Fintype V] (A B : Finset V) :
 
 /-- The subfamily of indexed regions `0,1,2` reconstructs `A ∪ B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the injectivity conclusion is for the union of the three inside
 indexed regions. -/
 theorem regionUnionPart_biUnion_zero_one_two [Fintype V] (A B : Finset V) :
@@ -285,7 +285,7 @@ theorem regionUnionPart_biUnion_three [Fintype V] (A B : Finset V) :
 /-- The selected subfamily `3` is the complement of the selected inside
 subfamily `0,1,2`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the proof starts with the three inside indexed blocks and a
 boundary tensor on their complement. -/
 theorem regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two [Fintype V]
@@ -298,7 +298,7 @@ theorem regionUnionPart_biUnion_three_eq_regionComplement_zero_one_two [Fintype 
 /-- The fourth indexed region is the intersection of the complements of `A`
 and `B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after injectivity of `A` and then `B` are applied, the remaining
 tensor is supported on the outside region \((A \cup B)^c=A^c\cap B^c\). -/
 theorem regionUnionPart_three_eq_regionComplement_left_inter_right [Fintype V]
@@ -310,7 +310,7 @@ theorem regionUnionPart_three_eq_regionComplement_left_inter_right [Fintype V]
 /-- The right-only indexed region together with the outside region reconstructs
 the complement of `A`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after applying injectivity of `A`, the remaining diagram contains
 the `B \ A` block and the outside block. -/
 theorem regionUnionPart_two_union_three_eq_regionComplement_left [Fintype V]
@@ -323,7 +323,7 @@ theorem regionUnionPart_two_union_three_eq_regionComplement_left [Fintype V]
 
 /-- The indexed subfamily `2,3` reconstructs the complement of `A`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after injectivity of `A` is applied, the remaining diagram is
 carried by `B \ A` and the outside block. -/
 theorem regionUnionPart_biUnion_two_three_eq_regionComplement_left [Fintype V]
@@ -336,7 +336,7 @@ theorem regionUnionPart_biUnion_two_three_eq_regionComplement_left [Fintype V]
 /-- The selected subfamily `2,3` is the complement of the selected subfamily
 `0,1`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after applying injectivity of \(A\), the remaining indexed blocks
 are precisely the complement of the two blocks forming \(A\). -/
 theorem regionUnionPart_biUnion_two_three_eq_regionComplement_zero_one [Fintype V]
@@ -349,7 +349,7 @@ theorem regionUnionPart_biUnion_two_three_eq_regionComplement_zero_one [Fintype 
 /-- The left-only indexed region together with the outside region reconstructs
 the complement of `B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after the overlap is reinserted and injectivity of `B` is applied,
 the remaining outside tensor is attached to the complement of `B`. -/
 theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
@@ -362,7 +362,7 @@ theorem regionUnionPart_zero_union_three_eq_regionComplement_right [Fintype V]
 
 /-- The indexed subfamily `0,3` reconstructs the complement of `B`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after reinserting the overlap and applying injectivity of `B`, the
 remaining diagram is carried by `A \ B` and the outside block. -/
 theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_right [Fintype V]
@@ -375,7 +375,7 @@ theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_right [Fintype V]
 /-- The selected subfamily `0,3` is the complement of the selected subfamily
 `1,2`.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after reinserting the overlap and applying injectivity of \(B\),
 the remaining indexed blocks are precisely the complement of the two blocks
 forming \(B\). -/
@@ -389,7 +389,7 @@ theorem regionUnionPart_biUnion_zero_three_eq_regionComplement_one_two [Fintype 
 /-- The right-only and outside indexed regions form the complement of the
 first two indexed regions.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after injectivity of \(A=(A\setminus B)\cup(A\cap B)\) is applied,
 the remaining diagram is carried by the two complementary indexed pieces. -/
 theorem regionUnionPart_two_union_three_eq_regionComplement_zero_union_one [Fintype V]
@@ -402,7 +402,7 @@ theorem regionUnionPart_two_union_three_eq_regionComplement_zero_union_one [Fint
 /-- The left-only and outside indexed regions form the complement of the middle
 two indexed regions.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: after reinserting the overlap and applying injectivity of
 \(B=(A\cap B)\cup(B\setminus A)\), the remaining diagram is carried by the
 two complementary indexed pieces. -/
@@ -416,7 +416,7 @@ theorem regionUnionPart_zero_union_three_eq_regionComplement_one_union_two [Fint
 /-- The first two indexed regions are the complement of the right-only and
 outside regions.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the first inversion step uses injectivity of the region
 `A = (A \ B) ∪ (A ∩ B)`, whose complement is the remaining two indexed
 pieces. -/
@@ -431,7 +431,7 @@ theorem regionUnionPart_zero_union_one_eq_regionComplement_two_union_three [Fint
 /-- The middle two indexed regions are the complement of the left-only and
 outside regions.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the second inversion step uses injectivity of the region
 `B = (A ∩ B) ∪ (B \ A)`, whose complement is the remaining two indexed
 pieces. -/
@@ -461,7 +461,7 @@ theorem regionUnionPart_biUnion [Fintype V] (A B : Finset V) :
 /-- Each vertex belongs to exactly one indexed part of the four-region
 decomposition.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the proof blocks the tensor network into the four disjoint
 regions `A \ B`, `A ∩ B`, `B \ A`, and `(A ∪ B)ᶜ`. -/
 theorem regionUnionPart_exists_unique [Fintype V] (A B : Finset V) (v : V) :
@@ -486,7 +486,7 @@ theorem regionUnionPart_exists_unique [Fintype V] (A B : Finset V) (v : V) :
 subregions forming \(A\) and \(B\), makes the three inside indexed regions
 injective.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404.  In the source proof, injectivity of
 \((A\setminus B)\cup(A\cap B)\) and of
 \((A\cap B)\cup(B\setminus A)\) gives injectivity of their union, namely the
@@ -500,6 +500,25 @@ theorem RegionInjectivityUnionClosure.regionUnionPart_inside_injective [Fintype 
   rw [regionUnionPart_biUnion_zero_one] at hA
   rw [regionUnionPart_biUnion_one_two] at hB
   rw [regionUnionPart_biUnion_zero_one_two]
+  exact hUnion.union_injective hA hB
+
+/-- Binary-union form of the four-region injectivity step.
+
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
+1322--1404.  The source proof first uses injectivity of
+\((A\setminus B)\cup(A\cap B)\), then reinserts the overlap and uses
+injectivity of \((A\cap B)\cup(B\setminus A)\).  The remaining inside region
+is \((A\setminus B)\cup(A\cap B)\cup(B\setminus A)=A\cup B\). -/
+theorem RegionInjectivityUnionClosure.regionUnionPart_inside_binary_injective [Fintype V]
+    {κ : RegionInjectivityData V} (hUnion : RegionInjectivityUnionClosure κ)
+    {A B : Finset V}
+    (hA : κ.IsInjective (regionUnionPart A B 0 ∪ regionUnionPart A B 1))
+    (hB : κ.IsInjective (regionUnionPart A B 1 ∪ regionUnionPart A B 2)) :
+    κ.IsInjective
+      (regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2) := by
+  rw [regionUnionPart_zero_union_one] at hA
+  rw [regionUnionPart_one_union_two] at hB
+  rw [regionUnionPart_zero_union_one_union_two]
   exact hUnion.union_injective hA hB
 
 /-- The left-only region is disjoint from the overlap. -/
@@ -555,7 +574,7 @@ theorem regionInside_disjoint_outside [Fintype V] (A B : Finset V) :
 /-- The indexed region \(A=(A\setminus B)\cup(A\cap B)\) is disjoint from the
 two indexed pieces forming its complement.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: in the first inversion step, the tensor over \(A\) is removed and
 the remaining diagram lives on the complementary indexed pieces. -/
 theorem regionUnionPart_zero_one_disjoint_two_three [Fintype V] (A B : Finset V) :
@@ -568,7 +587,7 @@ theorem regionUnionPart_zero_one_disjoint_two_three [Fintype V] (A B : Finset V)
 /-- The indexed subfamily forming `A` is disjoint from the indexed subfamily
 forming its complement.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the first inverse step separates the tensor over \(A\) from the
 two complementary indexed blocks. -/
 theorem regionUnionPart_biUnion_zero_one_disjoint_two_three [Fintype V]
@@ -583,7 +602,7 @@ theorem regionUnionPart_biUnion_zero_one_disjoint_two_three [Fintype V]
 /-- The indexed region \(B=(A\cap B)\cup(B\setminus A)\) is disjoint from the
 two indexed pieces forming its complement.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: in the second inversion step, the tensor over \(B\) is removed and
 only the complementary indexed pieces remain. -/
 theorem regionUnionPart_one_two_disjoint_zero_three [Fintype V] (A B : Finset V) :
@@ -596,7 +615,7 @@ theorem regionUnionPart_one_two_disjoint_zero_three [Fintype V] (A B : Finset V)
 /-- The indexed subfamily forming `B` is disjoint from the indexed subfamily
 forming its complement.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the second inverse step separates the tensor over \(B\) from the
 two complementary indexed blocks. -/
 theorem regionUnionPart_biUnion_one_two_disjoint_zero_three [Fintype V]
@@ -611,7 +630,7 @@ theorem regionUnionPart_biUnion_one_two_disjoint_zero_three [Fintype V]
 /-- The union of the three inside indexed regions is disjoint from the outside
 indexed region.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union`, lines
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
 1322--1404: the tensor called `X` in the proof is attached to the outside
 block, separated from the three blocks inside `A ∪ B`. -/
 theorem regionUnionPart_inside_disjoint_three [Fintype V] (A B : Finset V) :

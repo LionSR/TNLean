@@ -810,7 +810,7 @@ theorem tHorizontalBlock_injective
 injective once rectangular injectivity is combined with the union-closure
 assertion from the source injective-union lemma.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1444 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem tHole_injective_of_union
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -825,7 +825,7 @@ theorem tHole_injective_of_union
 /-- Region \(R\) is injective once rectangular injectivity is combined with
 the union-closure assertion from the source injective-union lemma.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionR_injective_of_union
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
@@ -842,7 +842,7 @@ theorem regionR_injective_of_union
 /-- Region \(S\) is injective once rectangular injectivity is combined with
 the union-closure assertion from the source injective-union lemma.
 
-Source: arXiv:1804.04964, Section 3, Lemma `lem:injective_union` and proof of
+Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union and proof of
 Theorem 3, lines 1322--1430 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionS_injective_of_union
     (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)

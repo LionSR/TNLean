@@ -1588,6 +1588,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
         }
     \end{center}
 \end{lemma}
+\begin{proof}
+    Put $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
+    $P_3=(A\cup B)^c$.  Then $P_0\cup P_1=A$, $P_1\cup P_2=B$, and
+    $P_0\cup P_1\cup P_2=A\cup B$.  Let $\mathcal C_I$ denote contraction of
+    the blocked tensor over the region $\bigcup_{i\in I}P_i$.  To prove
+    injectivity of $A\cup B$, take a boundary tensor $X$ on $P_3$ such that
+    $\mathcal C_{\{0,1,2\}}(X)=0$.  Since $P_0\cup P_1=A$ is injective, its
+    left inverse gives
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \quad\Longrightarrow\quad
+        \mathcal C_{\{2\}}(X)=0 .
+    \]
+    Reinsert the tensor on $P_1$.  Since $P_1\cup P_2=B$ is injective, the
+    left inverse for $B$ gives
+    \[
+        \mathcal C_{\{1,2\}}(X)=0
+        \quad\Longrightarrow\quad
+        X=0 .
+    \]
+    Thus $\ker \mathcal C_{\{0,1,2\}}=\{0\}$, and therefore
+    $P_0\cup P_1\cup P_2=A\cup B$ is injective.
+\end{proof}
 
 \begin{definition}[Injectivity predicate for blocked regions]%
     \label{def:peps_regionInjectivityData}
@@ -1619,6 +1642,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{lemma}[Indexed inside union under closure]%
     \label{lem:peps_regionInjectivityUnionClosure_inside}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_injective}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_binary_injective}
     \leanok
     \uses{def:peps_regionInjectivityData,
         lem:peps_regionUnionDecomposition_identities}
@@ -1628,7 +1652,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Equivalently, injectivity of the two source-paper regions
     $(A\setminus B)\cup(A\cap B)$ and
     $(A\cap B)\cup(B\setminus A)$ gives injectivity of
-    $(A\setminus B)\cup(A\cap B)\cup(B\setminus A)$.
+    $(A\setminus B)\cup(A\cap B)\cup(B\setminus A)=A\cup B$.
 \end{lemma}
 \begin{proof}\leanok
     Rewrite the three selected indexed unions as $A$, $B$, and $A\cup B$,
