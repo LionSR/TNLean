@@ -100,8 +100,8 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the scoped Lemma C.3/C.4
-inputs already available in `SimpleLocalStructure.lean`. -/
+/-- Construct the local simple-MPDO structure from the Lemma C.3/C.4 hypotheses
+already available in `SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -147,7 +147,7 @@ namespace SimpleMPDOBlockedRFPData
 
 variable {K : MPOTensor d D}
 
-/-- Construct this structure directly from the scoped local lemmas of
+/-- Construct this structure directly from the local lemmas of
 `SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL. -/
 def ofSALZCLAndCommutingForm
     {dA dB dC n : ℕ}
