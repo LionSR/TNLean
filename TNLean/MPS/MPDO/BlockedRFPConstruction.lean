@@ -131,10 +131,10 @@ end SimpleMPDOLocalStructureData
 
 /-- Auxiliary structure for the simple-MPDO blocked-RFP argument.
 
-The field `localData` contains the Appendix C.2 local structure; the fields
-`commutingForm` and `zcl` contain the commuting-form conclusion and the MPO
-zero-correlation-length hypothesis. The missing theorem is the derivation of
-`commutingForm` from the entropy-side hypotheses attached to `K`. -/
+It consists of the Appendix C.2 local structure, the commuting-form conclusion,
+and the MPO zero-correlation-length hypothesis. The missing theorem is the
+derivation of the commuting-form conclusion from the entropy-side hypotheses
+attached to `K`. -/
 structure SimpleMPDOBlockedRFPData (K : MPOTensor d D) where
   /-- Local SAL/SSA/rank-one data from Appendix C.2. -/
   localData : SimpleMPDOLocalStructureData
@@ -171,9 +171,8 @@ def ofSALZCLAndCommutingForm
 Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
 once the local neighboring operators `η_{k,h}` have been assembled into a
 positive nearest-neighbor bond product, the translated bond operators commute
-and realize the finite-chain MPDO. In Lean this eta-local structure is
-`EtaLocalStructureData K`; its commuting-form consequence supplies the
-`commutingForm` field. -/
+and realize the finite-chain MPDO. This eta-local structure gives the
+commuting-form property required in the blocked-RFP argument. -/
 def ofEtaLocalStructure
     (localData : SimpleMPDOLocalStructureData)
     (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
@@ -209,7 +208,7 @@ theorem structural_implies_rfp_blocked {K : MPOTensor d D}
 /-- Hypothesis-parameterized blocked fusion-isometry witness.
 
 Relative to the current convention `IsRFP = IsZCL`, the present conclusion uses
-only `data.zcl`. The fields `localData` and `commutingForm` record the local
+only `data.zcl`. The components `localData` and `commutingForm` record the local
 Appendix C structure and the global commuting-form conclusion used in the
 larger simple-MPDO statement. -/
 theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
@@ -240,8 +239,8 @@ structure has been constructed.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `3to4`, lines 1571--1593:
 the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
-whose product realizes the MPDO. The Lean hypothesis `EtaLocalStructureData K`
-is precisely this assembled positive commuting-bond datum. -/
+whose product realizes the MPDO. The eta-local structure is precisely this
+assembled positive commuting-bond datum. -/
 theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
     (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧

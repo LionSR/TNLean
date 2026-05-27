@@ -2367,12 +2367,21 @@ the elementary trace-power identity for diagonal matrices.
     on every periodic chain and realize the MPO at every finite length.
 \end{definition}
 
-\begin{theorem}[$\eta$-local structure carries commuting form]
-    \label{thm:mpdo_eta_local_structure_has_commuting_form}
+\begin{definition}[Finite-chain data from a translation-invariant bond]
+    \label{def:mpdo_translation_invariant_bond_to_commuting_form_data}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bond}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
+    \leanok
+    \uses{def:mpdo_eta_local_structure_data, def:mpdo_commuting_form_data}
+    A translation-invariant positive two-site bond determines finite-chain
+    commuting-form data at every length $N \ge 2$. The factor at site $i$ is
+    the translated copy of the same local two-site bond.
+\end{definition}
+
+\begin{theorem}[$\eta$-local structure carries commuting form]
+    \label{thm:mpdo_eta_local_structure_has_commuting_form}
     \lean{MPOTensor.EtaLocalStructureData.hasCommutingForm}
     \lean{MPOTensor.EtaLocalStructureData.formAt_realizes}
     \lean{MPOTensor.EtaLocalStructureData.formAt_bondAt_comm}
