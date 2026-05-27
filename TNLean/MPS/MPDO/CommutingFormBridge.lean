@@ -7,9 +7,10 @@ import TNLean.MPS.MPDO.CommutingForm
 /-!
 # Local-to-global commuting-form data
 
-This file states the exact post-extraction output still needed from the
-simple-MPDO SAL + ZCL analysis of arXiv:1606.00608 Appendix C.2 in order to
-conclude `MPOTensor.HasCommutingForm`.
+This file states the exact eta-local structure still needed after the
+sector-local operators have been obtained in the simple-MPDO SAL + ZCL analysis
+of arXiv:1606.00608 Appendix C.2, in order to conclude
+`MPOTensor.HasCommutingForm`.
 
 The current repository already exposes the local entropy-side ingredients
 
@@ -36,6 +37,7 @@ commuting-form target.
 * `MPOTensor.TranslationInvariantBondData`
 * `MPOTensor.EtaLocalStructureData`
 * `MPOTensor.hasCommutingForm_of_etaLocalStructure`
+* `MPOTensor.isGSNNCHWithZCL_of_etaLocalStructure`
 
 ## References
 
@@ -106,7 +108,7 @@ from the local simple-MPDO analysis, together with proofs that it realizes the
 finite-chain MPO operators. This is stronger than `HasCommutingForm M`, since
 it requires one bond that works for every chain length rather than a separate
 commuting-form witness at each length. The remaining assembly theorem should
-construct this data from the SAL and ZCL hypotheses, the sector-reduced
+construct this structure from the SAL and ZCL hypotheses, the sector-reduced
 `η_{k,h}` family, and the inverse-map realization layer. -/
 structure EtaLocalStructureData (M : MPOTensor d D) where
   /-- The chain-independent nearest-neighbor bond extracted from the local
@@ -136,6 +138,46 @@ theorem formAt_realizes (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N
     (data.formAt N hN).Realizes (mpo M N) :=
   data.realizes_mpo N hN
 
+/-- The translated nearest-neighbor bonds carried by the `η`-local structure
+commute at every finite chain length.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+the assembled two-site bonds \(B_{n,n+1}\) commute. -/
+theorem formAt_bondAt_comm (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N)
+    (i j : Fin N) :
+    (data.formAt N hN).bondAt i * (data.formAt N hN).bondAt j =
+      (data.formAt N hN).bondAt j * (data.formAt N hN).bondAt i :=
+  (data.formAt N hN).bondAt_comm i j
+
+/-- The `η`-local structure gives the source product form
+\(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\) at every finite chain
+length.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+after assembling the neighboring operators, the MPDO is a positive scalar
+multiple of the product of the translated nearest-neighbor bonds. -/
+theorem exists_positive_scalar_mpo_eq_product
+    (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
+    ∃ c : ℝ, 0 < c ∧ mpo M N = (c : ℂ) • (data.formAt N hN).product :=
+  data.formAt_realizes N hN
+
+/-- At a fixed chain length, the `η`-local structure gives precisely the
+positive commuting nearest-neighbor product form appearing in Proposition C.6
+of arXiv:1606.00608.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+the MPDO has the form \(\sigma^{(N)}(\mathcal K) \propto \prod_n B_{n,n+1}\),
+where the nearest-neighbor factors are positive and commute. -/
+theorem positive_commuting_product_form
+    (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
+    (data.formAt N hN).bond.PosSemidef ∧
+      (∀ i j : Fin N,
+        (data.formAt N hN).bondAt i * (data.formAt N hN).bondAt j =
+          (data.formAt N hN).bondAt j * (data.formAt N hN).bondAt i) ∧
+      ∃ c : ℝ, 0 < c ∧ mpo M N = (c : ℂ) • (data.formAt N hN).product :=
+  ⟨(data.formAt N hN).bond_pos, data.formAt_bondAt_comm N hN,
+    data.exists_positive_scalar_mpo_eq_product N hN⟩
+
 /-- The chain-level GSNNCH witness induced by the local `η`-structure at a fixed
 chain length. -/
 theorem isGSNNCHAt (data : EtaLocalStructureData M) (N : ℕ) (hN : 2 ≤ N) :
@@ -153,6 +195,16 @@ theorem hasCommutingForm (data : EtaLocalStructureData M) : HasCommutingForm M :
   intro N hN
   exact ⟨data.formAt N hN, data.formAt_realizes N hN⟩
 
+/-- The explicit `η`-local structure, together with ZCL, gives the
+GSNNCH-with-ZCL case of the simple-MPDO equivalence.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+the assembled neighboring operators give a commuting nearest-neighbor product
+form. Adding ZCL gives item (iii) of Theorem 4.9 in the simple-MPDO case. -/
+theorem isGSNNCHWithZCL (data : EtaLocalStructureData M) (hZCL : IsZCL M) :
+    IsGSNNCHWithZCL M :=
+  (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL M).2 ⟨data.hasCommutingForm, hZCL⟩
+
 end EtaLocalStructureData
 
 /-- Once the explicit neighboring operators `η_{k,h}` have been assembled into
@@ -166,5 +218,11 @@ theorem hasCommutingForm_of_etaLocalStructure {M : MPOTensor d D}
 theorem isGSNNCH_of_etaLocalStructure {M : MPOTensor d D}
     (hEta : EtaLocalStructureData M) : IsGSNNCH M :=
   hEta.isGSNNCH
+
+/-- Once the explicit local `η`-structure has been assembled, adding ZCL gives
+the GSNNCH-with-ZCL case of the simple-MPDO equivalence. -/
+theorem isGSNNCHWithZCL_of_etaLocalStructure {M : MPOTensor d D}
+    (hEta : EtaLocalStructureData M) (hZCL : IsZCL M) : IsGSNNCHWithZCL M :=
+  hEta.isGSNNCHWithZCL hZCL
 
 end MPOTensor

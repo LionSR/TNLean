@@ -3,23 +3,26 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.SimpleLocalStructure
 
 /-!
 # Blocked-RFP construction for simple MPDOs
 
-This file states the current blocked-RFP theorem for the simple-MPDO
-branch of arXiv:1606.00608, Appendix C.2 / Theorem 4.9.
+This file states the current blocked-RFP theorem for the simple-MPDO case of
+arXiv:1606.00608, Appendix C.2 / Theorem 4.9.
 
 At the present repository state, the local entropy side and the commuting-form
 side live in separate modules:
 
 * `SimpleLocalStructure.lean` isolates the local SAL/SSA and rank-one-`T`
   consequences of Lemmas C.3--C.4.
+* `CommutingFormBridge.lean` isolates the `η`-local structure that carries the
+  commuting-form witness of arXiv:1606.00608, Appendix C.2, Proposition C.6,
+  after the sector-local neighboring operators have been assembled.
 * `CommutingForm.lean` states the GSNNCH / commuting-form target side of
-  Proposition C.6 and Theorem 4.9(iii).
+  arXiv:1606.00608, Appendix C.2, Proposition C.6 and Theorem 4.9(iii).
 
 What is still missing is the preceding theorem turning the local simple-MPDO data
 into the global commuting-form property. Because of that gap, the present file
@@ -31,7 +34,7 @@ The current consequences are:
 
 * a **blocked fusion-isometry witness** at size `2`, formalized as
   `Nonempty (FusionIsometryData K 2)`;
-* the GSNNCH-with-ZCL branch of Theorem 4.9;
+* the GSNNCH-with-ZCL case of Theorem 4.9;
 * the transfer-map fusion formulation of MPDO RFP.
 
 Thus this file supplies the Appendix C conclusion that later work can use
@@ -41,7 +44,9 @@ once the remaining local-to-global implication has been formalized.
 
 * `MPOTensor.SimpleMPDOLocalStructureData`
 * `MPOTensor.SimpleMPDOBlockedRFPData`
+* `MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure`
 * `MPOTensor.structural_implies_rfp_blocked`
+* `MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure`
 * `MPOTensor.simple_mpdo_rfp_chain`
 
 ## References
@@ -95,8 +100,8 @@ structure SimpleMPDOLocalStructureData where
 
 namespace SimpleMPDOLocalStructureData
 
-/-- Construct the local simple-MPDO structure from the scoped Lemma C.3/C.4
-inputs already available in `SimpleLocalStructure.lean`. -/
+/-- Construct the local simple-MPDO structure from the Lemma C.3/C.4 hypotheses
+already available in `SimpleLocalStructure.lean`. -/
 def ofSALZCL
     {dA dB dC n : ℕ}
     (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
@@ -126,10 +131,10 @@ end SimpleMPDOLocalStructureData
 
 /-- Auxiliary structure for the simple-MPDO blocked-RFP argument.
 
-The field `localData` contains the Appendix C.2 local structure; the fields
-`commutingForm` and `zcl` contain the commuting-form conclusion and the MPO
-zero-correlation-length hypothesis. The missing theorem is the derivation of
-`commutingForm` from the entropy-side hypotheses attached to `K`. -/
+It consists of the Appendix C.2 local structure, the commuting-form conclusion,
+and the MPO zero-correlation-length hypothesis. The missing theorem is the
+derivation of the commuting-form conclusion from the entropy-side hypotheses
+attached to `K`. -/
 structure SimpleMPDOBlockedRFPData (K : MPOTensor d D) where
   /-- Local SAL/SSA/rank-one data from Appendix C.2. -/
   localData : SimpleMPDOLocalStructureData
@@ -142,7 +147,7 @@ namespace SimpleMPDOBlockedRFPData
 
 variable {K : MPOTensor d D}
 
-/-- Construct this structure directly from the scoped local lemmas of
+/-- Construct this structure directly from the local lemmas of
 `SimpleLocalStructure.lean`, the commuting-form hypothesis, and MPO ZCL. -/
 def ofSALZCLAndCommutingForm
     {dA dB dC n : ℕ}
@@ -161,7 +166,22 @@ def ofSALZCLAndCommutingForm
   commutingForm := hCommuting
   zcl := hZCL
 
-/-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL branch of
+/-- Construct the blocked-RFP data from the assembled `η`-local structure.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+once the local neighboring operators `η_{k,h}` have been assembled into a
+positive nearest-neighbor bond product, the translated bond operators commute
+and realize the finite-chain MPDO. This eta-local structure gives the
+commuting-form property required in the blocked-RFP argument. -/
+def ofEtaLocalStructure
+    (localData : SimpleMPDOLocalStructureData)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    SimpleMPDOBlockedRFPData K where
+  localData := localData
+  commutingForm := hEta.hasCommutingForm
+  zcl := hZCL
+
+/-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL case of
 Theorem 4.9. -/
 theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
   (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨data.commutingForm, data.zcl⟩
@@ -188,7 +208,7 @@ theorem structural_implies_rfp_blocked {K : MPOTensor d D}
 /-- Hypothesis-parameterized blocked fusion-isometry witness.
 
 Relative to the current convention `IsRFP = IsZCL`, the present conclusion uses
-only `data.zcl`. The fields `localData` and `commutingForm` record the local
+only `data.zcl`. The components `localData` and `commutingForm` record the local
 Appendix C structure and the global commuting-form conclusion used in the
 larger simple-MPDO statement. -/
 theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
@@ -200,7 +220,7 @@ theorem structural_implies_rfp_blocked_of_data {K : MPOTensor d D}
 
 From the explicit simple-MPDO hypotheses one simultaneously recovers:
 
-* the GSNNCH-with-ZCL branch of Theorem 4.9(iii),
+* the GSNNCH-with-ZCL case of Theorem 4.9(iii),
 * the blocked fusion-isometry witness at size `2`, and
 * the transfer-map fusion formulation of MPDO RFP.
 
@@ -223,5 +243,18 @@ theorem simple_mpdo_rfp_chain {K : MPOTensor d D}
   refine ⟨?_, structural_implies_rfp_blocked (K := K) hZCL, ?_⟩
   · exact (isGSNNCHWithZCL_iff_hasCommutingForm_and_isZCL K).2 ⟨hCommuting, hZCL⟩
   · exact isRFP_MPDO_via_fusion_of_isRFP (M := K) (show IsRFP K from hZCL)
+
+/-- Direct form of the simple-MPDO construction once the assembled `η`-local
+structure has been constructed.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 3to4, lines 1571--1593:
+the neighboring `η_{k,h}` operators assemble into commuting two-site bonds
+whose product realizes the MPDO. The eta-local structure is precisely this
+assembled positive commuting-bond form. -/
+theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K :=
+  simple_mpdo_rfp_chain hEta.hasCommutingForm hZCL
 
 end MPOTensor
