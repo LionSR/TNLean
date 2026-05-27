@@ -60,14 +60,14 @@ structure BNTLabelTheoremWitness (data : AlgebraStructureData d D) where
   /-- Each length-`L` operator space is an additive commutative monoid.
 
   This is formal ambient linear-space structure for the operator algebra in
-  eq:algebra, not an extra source-side mathematical hypothesis.
+  arXiv:1606.00608 eq:algebra, not an extra source-side mathematical hypothesis.
   Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   operatorAddCommMonoid : ∀ L : ℕ, AddCommMonoid (OperatorSpace L)
   /-- Each length-`L` operator space is a complex module.
 
   This is formal ambient linear-space structure for the complex span in
-  eq:algebra, not an extra source-side mathematical hypothesis.
+  arXiv:1606.00608 eq:algebra, not an extra source-side mathematical hypothesis.
   Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985 of
   `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   operatorModule : ∀ L : ℕ, Module ℂ (OperatorSpace L)
