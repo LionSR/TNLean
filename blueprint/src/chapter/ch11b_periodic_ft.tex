@@ -491,6 +491,42 @@ unconditional result.
     If two periodic tensors with the same period admit no gauge-phase
     matching sector pair after blocking, then their overlap tends to zero.
 \end{theorem}
+\begin{proof}
+    \uses{lem:sector_blocked_normal_periodic,
+        thm:periodic_self_overlap_tendsto,
+        thm:overlap_decay_irr_tp,
+        thm:overlap_decay_rect_irr_tp}
+    Write the period-blocked tensors as
+    \[
+        \bar A \sim \bigoplus_{u\in\mathbb Z_m} A_u,\qquad
+        \bar B \sim \bigoplus_{v\in\mathbb Z_m} B_v ,
+    \]
+    with unit sector weights. For every length $N$,
+    \[
+        O_{\bar A,\bar B}(N)
+        =
+        \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
+            O_{A_u,B_v}(N).
+    \]
+    If no pair $(u,v)$ is gauge-phase equivalent, then for every $u,v$
+    the normal-tensor dichotomy gives $O_{A_u,B_v}(N)\to0$.
+    Hence the finite double sum gives $O_{\bar A,\bar B}(N)\to 0$.
+
+    This decay is incompatible with a hypothetical global gauge-phase
+    equivalence. If $A$ and $B$ were gauge-phase equivalent, then
+    $\bar A$ and $\bar B$ would be gauge-phase equivalent. Thus
+    $V_N(\bar B)=\zeta^N X V_N(\bar A)X^{-1}$ at the virtual level, and
+    \[
+        O_{\bar A,\bar B}(N)
+        =
+        \overline{\zeta}^{\,N} O_{\bar A,\bar A}(N).
+    \]
+    The periodic self-overlap limits $O_{\bar A,\bar A}(N)\to m$ and
+    $O_{\bar B,\bar B}(N)\to m$ imply $|\zeta|=1$, and the displayed
+    identity cannot tend to zero. This contradiction proves that $A$ and
+    $B$ are not gauge-phase equivalent. The irreducible trace-preserving
+    overlap dichotomy then yields $O_{A,B}(N)\to0$.
+\end{proof}
 
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
     \lean{MPSTensor.sectorMatch_propagation}
