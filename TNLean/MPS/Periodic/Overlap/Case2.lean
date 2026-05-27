@@ -268,7 +268,7 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
         atTop (nhds (0 : ℂ)) := by
   classical
   by_contra hNone
-  push Not at hNone
+  simp only [not_exists, not_not] at hNone
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
           (blockTensor (d := d) (D := D) A m)
