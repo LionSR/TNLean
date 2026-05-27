@@ -96,7 +96,7 @@ powers of the corresponding diagonal \(\chi\)-matrices.
 
 The source theorem uses this expression for positive chain lengths in the
 same-length product formula; the canonical coefficient family is indexed by
-all natural lengths, and this lemma unfolds that definition through the
+all natural lengths, and this equality follows from the definition and the
 diagonal trace identity.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and
 Appendix C.4, lines 2015--2037 of
