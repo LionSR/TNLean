@@ -1193,6 +1193,55 @@ injective and normal PEPS, following Theorems~2 and~3 of
     middle-tensor theorem then gives three-site injectivity for every edge.
 \end{proof}
 
+\begin{theorem}[Edge-middle tensor from singleton regions, nonempty middle case]%
+    \label{thm:peps_edgeMiddleTensorInjective_of_singletons}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons}
+    \leanok
+    \uses{thm:peps_finiteRegionInjectivityFromSingletons,
+        def:peps_edgeMiddleRegionInjectivityComparison}
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Assume $M_e\ne\varnothing$.
+    Assume also singleton comparison, union closure for $\kappa$, and the
+    comparison
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. If $A$ is
+    vertex-injective, then the edge-middle tensor family $T_{A,M_e}$ is
+    injective.
+\end{theorem}
+\begin{proof}\leanok
+    The finite-region theorem applied to
+    $M_e=\bigcup_{w\in M_e}\{w\}$ gives $\kappa(M_e)$. The edge-middle
+    comparison sends this to $\operatorname{inj}(T_{A,M_e})$.
+\end{proof}
+
+\begin{theorem}[One edge-blocked chain from singleton regions, nonempty middle case]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons}
+    \leanok
+    \uses{thm:peps_edgeMiddleTensorInjective_of_singletons,
+        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of the
+    preceding theorem, vertex injectivity of $A$ gives injectivity of the
+    edge-blocked three-site chain at $e$.
+\end{theorem}
+\begin{proof}\leanok
+    The preceding theorem gives $\operatorname{inj}(T_{A,M_e})$. The endpoint
+    reduction combines this middle-tensor injectivity with vertex injectivity
+    at $u$ and $v$.
+\end{proof}
+
+\begin{theorem}[All edge-blocked chains from singleton regions, nonempty middle case]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons}
+    \leanok
+    \uses{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
+    If $M_e=V\setminus\{u,v\}$ is nonempty for every edge $e=(u,v)$, then the
+    preceding one-edge statement applies at every edge. Thus vertex
+    injectivity of $A$ gives injectivity of every edge-blocked three-site
+    chain.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the one-edge statement separately to each edge $e$.
+\end{proof}
+
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
