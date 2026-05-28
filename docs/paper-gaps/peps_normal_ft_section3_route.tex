@@ -78,7 +78,9 @@ The present blueprint nodes are the following.
 
 \begin{itemize}
     \item \path{lem:peps_injectiveRegion_union} states the union-of-injective
-          regions lemma. It is tracked by \ghissue{1374}.
+          regions lemma. It is tracked by \ghissue{1374}. It records the
+          four-region decomposition and the two successive inverse applications
+          used in the source proof.
     \item \path{lem:peps_regionInjectivityUnionClosure_finite} records the
           finite nonempty iteration of the binary union-closure assertion.
     \item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
@@ -449,17 +451,20 @@ alone. The following additional obligations remain.
 
 The normal route has its own tensor-network diagrams. These are not substitutes
 for the injective theorem diagrams; they attach the additional normal blocking
-layer to named proof nodes.\footnote{In Chapter~13a these pictures are local
-TikZ figures wrapped in $\backslash$\texttt{TNTikZDiagram}, which also records
-the corresponding registered diagram command used by the web blueprint. The
-local figures and the registered commands share the normal-lattice commands in
-\path{blueprint/src/macros/tn_print.tex}.}
+layer to named proof nodes.\footnote{Chapter~13a calls the public TikZ commands
+    in \path{blueprint/src/macros/tn_print.tex}. The web blueprint renders
+    cached SVGs from the same commands through
+    \path{blueprint/src/Packages/tn_diagrams.py}.}
 
 \begin{itemize}
     \item Lemma \path{injective_union} shows the four regions
           $A\setminus B$, $A\cap B$, $B\setminus A$, and $(A\cup B)^c$.
     \item Definition \path{peps_normalSquareBlockingRegions} shows the regions
           $R$, $S$, and $T$ from the square-lattice proof.
+    \item Lemma \path{peps_normalSquareEdgeComplementRegion_topCollar} shows the
+          finite-lattice complementary block $A_3$ as the local $T$-region
+          together with the two top-collar rectangles in the normalized
+          $5\times7$ frame.
     \item Theorem \path{peps_normalEdgeBlockingToInjectiveChain} shows the
           red/blue/complementary blocking around a distinguished edge and the
           resulting three-site chain.
@@ -467,10 +472,6 @@ local figures and the registered commands share the normal-lattice commands in
           translationally invariant local gauge formula with horizontal gauge
           $X$ and vertical gauge $Y$.
 \end{itemize}
-
-The wrapper command and the five normal-PEPS diagram commands are registered in
-\path{blueprint/src/Packages/tn_diagrams.py}, so the web blueprint renders the
-same mathematical diagrams rather than a separate hand-written fallback.
 
 \section{Conclusion}
 
