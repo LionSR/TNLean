@@ -82,8 +82,9 @@ injectivity.
 
 For a one-vertex region, the blocked tensor is the original local tensor. The
 source proof in arXiv:1804.04964, Section 3, uses this as the base case before
-applying closure of injectivity under contractions. This proposition records
-that base case for the abstract region-injectivity predicate.
+applying closure of injectivity under contractions. This proposition records,
+for every vertex $v$, the implication
+$A\text{ vertex-injective}\Longrightarrow\kappa(\{v\})$.
 
 Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
