@@ -1298,12 +1298,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{thm:matrixAlgEquiv_inner_of_fin}
     Suppose the edge insertion correspondence is a $\C$-algebra isomorphism
     between the two full matrix algebras on the chosen bond. Then the two bond
-    dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this equality,
-    then the isomorphism is realized by conjugation with an invertible edge
-    matrix $Z_e$ after the canonical index identification:
-    $Y=Z_e\,(\operatorname{reindex}_{h_e} X)\,Z_e^{-1}$.
+    dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this
+    equality, and if
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the induced algebra
+    isomorphism, then the insertion correspondence is
+    $Y=Z_e\,\phi_{h_e}(X)\,Z_e^{-1}$ for an invertible edge matrix $Z_e$.
     \begin{center}
-        \TNGaugeConjugation{Z_e}{\operatorname{reindex}_{h_e}(X)}{Z_e^{-1}}
+        \TNGaugeConjugation{Z_e}{\phi_{h_e}(X)}{Z_e^{-1}}
     \end{center}
     This is the finite-dimensional matrix-algebra step in
     \cite[Section~3]{Molnar2018NormalPEPS}.
@@ -1381,18 +1382,28 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Post-absorption edge insertion equality]%
     \label{thm:peps_postAbsorptionEdgeInsertionEquality}
-    \notready
+    \lean{TNLean.PEPS.post_absorption_edge_insertion_equality}
+    \leanok
     \uses{thm:peps_edge_gauge_absorption, def:peps_edgeInsertedCoeff}
-    After the edge gauges have been absorbed into the second tensor family, for
-    every edge and every matrix $X$, inserting $X$ on that edge in the first
-    PEPS gives the same state as inserting $X$ on the same edge in the
-    modified second PEPS:
+    Let $A$ and $B$ be vertex-injective PEPS with the same state, and assume
+    the bond-dimension equality $h:D_A=D_B$.  After the edge gauges have been
+    absorbed into the second tensor family, there are gauges $Z_e$ and an
+    absorbed tensor family $\widetilde B=B^Z$ with $D_{\widetilde B}=D_B$.
+    Writing $C_T(e,X;\sigma)$ for the edge-inserted
+    coefficient of a tensor family $T$, and writing
+    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_{\widetilde B}(e)}$ for the algebra
+    isomorphism induced by $h_e:D_A(e)=D_{\widetilde B}(e)$, for every edge
+    $e$, every $X\in\MN{D_A(e)}$, and every physical configuration $\sigma$,
+    \[
+        C_A(e,X;\sigma)
+        =
+        C_{\widetilde B}(e,\phi_{h_e}(X);\sigma),
+    \]
+    Diagrammatically, this is the equality
     \begin{center}
         \TNPEPSEdgeInsertionEquality
     \end{center}
-    This is the blueprint form of the displayed equation
-    $\textup{eq:inj\_equal\_edge}$ in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    from \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}.
 \end{theorem}
 
 \begin{theorem}[Local gauge extraction]%
