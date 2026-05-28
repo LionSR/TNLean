@@ -1,3 +1,4 @@
+import TNLean.Algebra.MatrixAux
 import TNLean.MPS.Defs
 
 import Mathlib.LinearAlgebra.GeneralLinearGroup.AlgEquiv
@@ -11,8 +12,12 @@ This file provides the "abstract algebra" ingredients for the Fundamental Theore
 * **Simplicity** (`linear_mul_endomorphism_bijective`): A nonzero multiplicative linear
   endomorphism of a matrix algebra is bijective, because the kernel is a two-sided ideal
   in a simple ring.
-* **Skolem–Noether** (`skolemNoether_matrix`): Every algebra automorphism of `Matrix n n ℂ`
-  is inner (conjugation by an invertible matrix).
+* `matrixAlgEquiv_fin_eq`: an algebra isomorphism between full matrix algebras
+  forces the same matrix size.
+* `matrixAlgEquiv_inner_of_fin`: after this size identification, such an
+  isomorphism is inner.
+* **Skolem–Noether** (`skolemNoether_matrix`): Every algebra automorphism of
+  `Matrix n n ℂ` is inner (conjugation by an invertible matrix).
 * **`linearMapToAlgHom`**: Promotes a multiplicative surjective linear map to an algebra
   homomorphism (proving `T 1 = 1`).
 -/
@@ -49,6 +54,22 @@ theorem linear_mul_endomorphism_bijective
       simpa [f] using (TwoSidedIdeal.ker_eq_bot (f := f)).1 hker
     exact ⟨hinj, LinearMap.surjective_of_injective hinj⟩
 
+/-- Full matrix algebras over `ℂ` can be algebra-isomorphic only when their
+matrix sizes agree.
+
+Source: arXiv:1804.04964, Section 3, lines 582--584:
+after the insertion correspondence is shown to be an algebra isomorphism
+between full matrix algebras, the paper concludes that the two bond dimensions
+are the same. -/
+theorem matrixAlgEquiv_fin_eq {D E : ℕ}
+    (φ : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ) :
+    D = E := by
+  have hfinrank : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) =
+      Module.finrank ℂ (Matrix (Fin E) (Fin E) ℂ) :=
+    LinearEquiv.finrank_eq φ.toLinearEquiv
+  rw [Matrix.finrank_matrix_fin_eq_sq, Matrix.finrank_matrix_fin_eq_sq] at hfinrank
+  exact Nat.pow_left_injective (by norm_num) hfinrank
+
 /-- Skolem--Noether for matrices: every $\C$-algebra automorphism of $\MN{D}$ is inner.
 For any $f \in \Aut_{\C\text{-alg}}(\MN{D})$, there exists an invertible $X$ such that
 $f(M) = X M X^{-1}$ for all $M$. -/
@@ -58,7 +79,8 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
       f M = (X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) := by
   classical
   let e : Matrix n n ℂ ≃ₐ[ℂ] Module.End ℂ (n → ℂ) := Matrix.toLinAlgEquiv'
-  let fEnd : Module.End ℂ (n → ℂ) ≃ₐ[ℂ] Module.End ℂ (n → ℂ) := e.symm.trans (f.trans e)
+  let fEnd : Module.End ℂ (n → ℂ) ≃ₐ[ℂ] Module.End ℂ (n → ℂ) :=
+    e.symm.trans (f.trans e)
   obtain ⟨T, hT⟩ := AlgEquiv.eq_linearEquivConjAlgEquiv (f := fEnd)
   let X : GL n ℂ :=
     (Matrix.GeneralLinearGroup.toLin (n := n) (R := ℂ)).symm
@@ -85,11 +107,45 @@ theorem skolemNoether_matrix {n : Type*} [Fintype n] [DecidableEq n]
   -- Compute both sides under `e`.
   calc e (f M)
       = fEnd (e M) := by simp [fEnd]
-    _ = (T : (n → ℂ) →ₗ[ℂ] n → ℂ) ∘ₗ e M ∘ₗ (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
+    _ = (T : (n → ℂ) →ₗ[ℂ] n → ℂ) ∘ₗ e M ∘ₗ
+          (T.symm : (n → ℂ) →ₗ[ℂ] n → ℂ) := by
         rw [congrArg (· (e M)) hT]; simp [LinearEquiv.conjAlgEquiv_apply]
     _ = e (X : Matrix n n ℂ) * e M * e ((X⁻¹ : GL n ℂ) : Matrix n n ℂ) := by
         rw [← hX_lin, ← hX_lin_inv]; simp [Module.End.mul_eq_comp, LinearMap.comp_assoc]
     _ = e ((X : Matrix n n ℂ) * M * ((X⁻¹ : GL n ℂ) : Matrix n n ℂ)) := by simp [mul_assoc]
+
+/-- An algebra isomorphism between full matrix algebras is conjugation by an
+invertible matrix after the matrix sizes are identified.
+
+Source: arXiv:1804.04964, Section 3, lines 582--586:
+after the insertion correspondence is shown to be an algebra isomorphism
+between full matrix algebras, the paper identifies the two matrix sizes and
+applies Skolem--Noether to obtain an invertible gauge matrix. -/
+theorem matrixAlgEquiv_inner_of_fin {D E : ℕ}
+    (φ : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ) :
+    ∃ h : D = E, ∃ X : GL (Fin E) ℂ,
+      ∀ M : Matrix (Fin D) (Fin D) ℂ,
+        φ M = (X : Matrix (Fin E) (Fin E) ℂ) *
+            Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) M *
+            ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by
+  classical
+  have hDE : D = E := matrixAlgEquiv_fin_eq φ
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
+    Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE)
+  let f : Matrix (Fin E) (Fin E) ℂ ≃ₐ[ℂ] Matrix (Fin E) (Fin E) ℂ :=
+    e.symm.trans φ
+  obtain ⟨X, hX⟩ := skolemNoether_matrix (f := f)
+  refine ⟨hDE, X, ?_⟩
+  intro M
+  calc φ M
+      = f (e M) := by
+          change φ (e.symm (e M)) = φ M
+          rw [AlgEquiv.symm_apply_apply]
+    _ = (X : Matrix (Fin E) (Fin E) ℂ) * e M *
+          ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := hX (e M)
+    _ = (X : Matrix (Fin E) (Fin E) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDE) M *
+          ((X⁻¹ : GL (Fin E) ℂ) : Matrix (Fin E) (Fin E) ℂ) := by rfl
 
 /-- Promote a multiplicative surjective $\C$-linear map
 $T : \MN{D} \to \MN{D}$ to a $\C$-algebra homomorphism. The key step is
