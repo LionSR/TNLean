@@ -185,6 +185,20 @@ normal-form reductions.
     finite-dimensionality.
 \end{proof}
 
+\begin{theorem}[Matrix-algebra isomorphisms preserve size]%
+    \label{thm:matrixAlgEquiv_fin_eq}
+    \lean{MPSTensor.matrixAlgEquiv_fin_eq}
+    \leanok
+    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
+    $\C$-algebras, then $D=E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The isomorphism preserves complex vector-space dimension. Since
+    $\dim_{\C}\MN{D}=D^2$ and $\dim_{\C}\MN{E}=E^2$, it follows that
+    $D=E$.
+\end{proof}
+
 \begin{theorem}[Skolem--Noether]\label{thm:skolem_noether}
     \lean{MPSTensor.skolemNoether_matrix}
     \leanok
@@ -205,6 +219,24 @@ normal-form reductions.
     (this is a standard result in the theory of central
     simple algebras).
     Translating back to matrices gives the invertible~$X$.
+\end{proof}
+
+\begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
+    \label{thm:matrixAlgEquiv_inner_of_fin}
+    \lean{MPSTensor.matrixAlgEquiv_inner_of_fin}
+    \leanok
+    \uses{thm:matrixAlgEquiv_fin_eq, thm:skolem_noether}
+    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
+    $\C$-algebras, then $D=E$. If $h:D=E$ is this equality, then after the
+    canonical index identification along $h$ the isomorphism acts by
+    $\varphi(M)=X\,(\operatorname{reindex}_h M)\,X^{-1}$ for some invertible
+    matrix $X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The vector-space dimension comparison gives $D=E$. Transporting along
+    this equality turns the isomorphism into an automorphism of a single full
+    matrix algebra, so Skolem--Noether gives the required conjugating matrix.
 \end{proof}
 
 \begin{lemma}[Unit preservation of multiplicative surjective maps]\label{lem:linear_map_to_alg}
