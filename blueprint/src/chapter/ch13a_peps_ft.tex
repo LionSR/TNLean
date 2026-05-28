@@ -1271,9 +1271,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
         def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig,
         def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap,
         def:peps_localIncidentMatrixOp}
-    Let $e=(u,v)$ and suppose the edge-blocked three-site chain at $e$ is
-    injective. Let $O_1,O_2$ be physical operators at the two endpoint tensors.
-    Suppose that, for every physical configuration $\sigma$,
+    Let $e=(u,v)$. Assume that the edge-blocked three-site chain at $e$ is
+    injective. Let $O_1,O_2$ be physical operators at the endpoint tensors, and
+    write $\Phi_u,\Phi_v$ for the two local tensor maps. Suppose that, for every
+    physical configuration $\sigma$,
     \[
         \sum_{\beta}
         O_1(A_u(\beta_u))_{\sigma_u}\,
@@ -1285,20 +1286,21 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
         O_2(A_v(\beta_v))_{\sigma_v}.
     \]
-    Then there exists a matrix
-    $M\in\operatorname{Mat}_{D(e)}(\mathbb C)$ such that
+    Then
     \[
+        \exists M\in\MN{D(e)},\qquad
         O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
         \qquad
         O_2\Phi_v=\Phi_vT_{v,e}(M).
     \]
-    Thus the two equal neighboring physical insertions come from one virtual
-    operation on the shared bond:
+    The same implication is represented diagrammatically by the
+    $O_1,O_2\mapsto W$ step:
     \begin{center}
         \TNPEPSPhysicalToVirtualInsertion
     \end{center}
-    This is the $O_1,O_2\mapsto W$ step in the insertion-algebra argument of
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    This is the converse part of the insertion-algebra lemma in
+    \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
+    denoted $W$.
 \end{theorem}
 
 \begin{definition}[Edge-blocked insertion algebra correspondence]%
