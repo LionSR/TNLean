@@ -1552,7 +1552,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
     \leanok
     \uses{def:peps_blockedMiddleGaugeFormula,
-        thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
+        thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula,
+        thm:localGauge_exists}
     Suppose that the edge-centred three-site reduction supplies invertible
     matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
     configurations $\eta$ and physical indices $\sigma$,
@@ -1566,9 +1567,8 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSBlockedMiddleLocalGaugeFormula
     \end{center}
-    The open part is still the derivation of the blocked-middle formula from
-    equality of PEPS states; this theorem only records the resulting local
-    algebra.
+    % Open: derive the blocked-middle formula from SameState
+    % by the edge-centred three-site reduction.
 \end{theorem}
 \begin{proof}\leanok
     Apply the previous theorem to obtain the factorized local gauge datum, then
