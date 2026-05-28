@@ -157,14 +157,15 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
 /-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap
 decays to zero.
 
-*Proof*: split on whether `D₁ = D₂`. If not, use dimension mismatch
-(`periodicOverlap_tendsto_zero_of_ne_dim`). If `D₁ = D₂`, assume for
-contradiction that `GaugePhaseEquiv A B`; then
-`period_eq_of_gaugePhaseEquiv_of_isPeriodic` gives `m_a = m_b`, contradicting
-`hne`. So `¬ GaugePhaseEquiv`, and `mpvOverlap_tendsto_zero_of_irreducible_TP`
-gives the result.
-
-This is the first substantial argument in Appendix A of arXiv:1708.00029. -/
+Source: arXiv:1708.00029, Appendix A, lines 917--950.
+The local proof uses the Perron--Frobenius spectral form of the same obstruction:
+if $D_1=D_2$ and $B_i=\zeta X A_iX^{-1}$, then
+$\E_B(Y)=\zeta\overline{\zeta}\,X\E_A(X^{-1}YX^{-*})X^*$. Wolf Theorem 6.3
+forces $|\zeta|=1$, so the peripheral spectra of $\E_A$ and $\E_B$ agree. Since
+an $m$-periodic tensor has peripheral spectrum
+$\{e^{2\pi i r/m}:0\le r<m\}$, the periods would be equal. Thus different periods
+exclude gauge-phase equivalence, and the irreducible trace-preserving overlap
+dichotomy gives the decay. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
     {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
