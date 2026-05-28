@@ -587,7 +587,7 @@ unconditional result.
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
     \lean{MPSTensor.sectorMatch_propagation}
     \notready
-    \uses{def:periodic_tensor}
+    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Suppose
@@ -603,7 +603,7 @@ unconditional result.
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \notready
-    \uses{lem:sector_match_propagation}
+    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Assume
@@ -611,23 +611,32 @@ unconditional result.
     assume that for every $u$ there are $d_u=e_{u+q}$, $\zeta_u\ne0$, and
     $X_u\in\GL_{d_u}(\C)$ such that
     $B_{u+q}^\alpha=\zeta_u X_u A_u^\alpha X_u^{-1}$ for every blocked
-    physical index $\alpha$. In the source notation this means that, for every
-    physical block $(i_1,\ldots,i_m)$,
+    physical index $\alpha$. The source obtains a phase-only product identity
+    after absorbing these sector gauges into the $B$-sectors: with $Q_v$ the
+    cyclic sector projectors of $B$, it writes
+    \[
+        \widetilde B_v^i
+        =
+        U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger}.
+    \]
+    The contraction input is then, for every physical block $(i_1,\ldots,i_m)$,
     \[
         A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+m-1}^{i_m}
         =
         e^{i\lambda_{u+q}}
-        B_{u+q}^{i_1}B_{u+q+1}^{i_2}\cdots B_{u+q+m-1}^{i_m}.
+        \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2}
+        \cdots\widetilde B_{u+q+m-1}^{i_m}.
     \]
     Then there are a phase $\xi$ and an invertible matrix $U$ such that
-    $A^i=e^{i\xi}UB^iU^{-1}$ after the cyclic sector relabeling.
+    $A^i=e^{i\xi}UB^iU^{-1}$ for every physical index $i$.
 \end{lemma}
 
 \begin{theorem}[Sector match yields repeated-block equivalence]%
     \label{thm:periodic_overlap_gauge_equiv_sector_match}
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \notready
-    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match}
+    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match,
+        def:cyclic_sector_decomp}
     Let $A$ and $B$ be periodic tensors with the same period $m$. Let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical, and assume
