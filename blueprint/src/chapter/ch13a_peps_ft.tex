@@ -1659,7 +1659,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Let $A_1,A_2,B_1,B_2$ be injective tensors with the same shared virtual
     bonds and nonempty external boundary spaces, and assume that there is at
     least one shared virtual bond. For the set $\mathcal B$ of shared bonds, a
-    bond $b\in\mathcal B$, and $X\in\operatorname{Mat}_{D_b}$, set
+    bond $b\in\mathcal B$, and $X\in\MN{D_b}$, set
     \[
         C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
         =
@@ -1676,9 +1676,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSTwoInjectiveTensorInsertionComparison
     \end{center}
-    Then there is a nonzero scalar $\lambda$ such that
-    $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$. This is the blueprint
-    form of the two-injective tensor comparison in
+    Then
+    \[
+        \exists \lambda\in\C^\times,\qquad
+        A_1=\lambda B_1,\qquad
+        A_2=\lambda^{-1}B_2.
+    \]
+    This is the blueprint form of the two-injective tensor comparison in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
@@ -1753,7 +1757,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     $\widetilde B$, block one vertex $v$ against its complement. Assume that
     $A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}$ are injective as two-block
     tensors. The post-absorption insertion equality gives, for every shared
-    bond $b$, every matrix $X\in\operatorname{Mat}_{D_b}$, and all external and
+    bond $b$, every matrix $X\in\MN{D_b}$, and all external and
     physical indices,
     \[
         C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
@@ -1761,9 +1765,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_{\widetilde B_v,\widetilde B_{v^c}}
             (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
     \]
-    Then there is $\lambda_v\in\mathbb C^\times$ such that
-    $A_v(\eta,\sigma)=\lambda_v\widetilde B_v(\eta,\sigma)$ for every local
-    virtual configuration $\eta$ and physical index $\sigma$:
+    Then
+    \[
+        \exists\lambda_v\in\C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v.
+    \]
     \begin{center}
         \TNPEPSOneVertexComplementComparison
     \end{center}
