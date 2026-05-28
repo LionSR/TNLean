@@ -1107,14 +1107,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
-    \notready
+    \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
+    \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
         thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
-    If $A$ is vertex-injective, then for every edge $e=(u,v)$, the two
-    endpoint tensors together with the tensor obtained by blocking all vertices
-    outside $u$ and $v$ form an injective three-site MPS. This is the
-    precise assertion after the diagram
-    $\textup{eq:block\_to\_mps}$ in
+    If $A$ is vertex-injective, then for every edge $e=(u,v)$,
+    \[
+        \operatorname{inj}(T_{A,u}),\qquad
+        \operatorname{inj}(T_{A,V\setminus\{u,v\}}),\qquad
+        \operatorname{inj}(T_{A,v}).
+    \]
+    Here $T_{A,u}$ and $T_{A,v}$ are the two endpoint tensor maps, and
+    $T_{A,V\setminus\{u,v\}}$ is the blocked middle tensor family. This is the
+    precise assertion after the edge-blocking diagram in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
