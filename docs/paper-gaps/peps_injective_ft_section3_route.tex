@@ -206,9 +206,11 @@ Theorem can be proved in the manner of the paper.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
-  scalars into the local gauges. In the blueprint this specialization is the
-  separate not-yet-formalized theorem
-  \path{thm:peps_oneVertexComplementComparison}.
+  scalars into the local gauges. This specialization is now represented by
+  \leanid{TNLean.PEPS.one_vertex_complement_comparison}. The formal statement
+  uses the abstract two-block notation with nonempty external boundary spaces;
+  the source comparison is obtained from the one-vertex and complement blocks
+  after \path{eq:inj_equal_edge}.
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
@@ -262,9 +264,12 @@ It is meant to prevent the proof from drifting away from the source argument.
   one-point external-boundary specialization; the proof is tracked by
   issue~\#1361.
 \item One vertex versus its complement:
-  \path{thm:peps_oneVertexComplementComparison}, tracked by issue~\#1360.
+  \leanid{TNLean.PEPS.one_vertex_complement_comparison} records the
+  application of the generalized two-block comparison to a selected vertex and
+  its complement, under the abstract nonempty external-boundary formulation.
+  The source proof is tracked by issue~\#1360.
 \item Final gauge equivalence and uniqueness:
-  \path{thm:fundamentalTheorem_PEPS_of_bondDim} and the uniqueness endpoint,
+  \path{thm:fundamentalTheorem_PEPS_of_bondDim} and the uniqueness theorem,
   tracked by issues~\#780 and~\#842.
 \end{itemize}
 

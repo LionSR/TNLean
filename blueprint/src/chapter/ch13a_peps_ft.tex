@@ -1643,20 +1643,41 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{theorem}[One-vertex versus complement comparison]%
     \label{thm:peps_oneVertexComplementComparison}
-    \notready
-    \uses{def:IsVertexInjective, thm:peps_postAbsorptionEdgeInsertionEquality,
+    \lean{TNLean.PEPS.one_vertex_complement_comparison}
+    \leanok
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,
         thm:peps_twoInjectiveTensorInsertionComparison}
-    After the edge gauges have been absorbed into the second tensor family,
-    the paper blocks one vertex $v$ against its injective complement. Applying
-    the generalized two-injective-tensor comparison to two regions that differ
-    by exactly this vertex gives $A_v\propto \widetilde B_v$:
+    Let the shared bond type and the two external boundary spaces be nonempty.
+    After the edge gauges have been absorbed into the second tensor family
+    $\widetilde B$, block one vertex $v$ against its complement. Assume that
+    $A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}$ are injective as two-block
+    tensors. The post-absorption insertion equality gives, for every shared
+    bond $b$, every matrix $X\in\operatorname{Mat}_{D_b}$, and all external and
+    physical indices,
+    \[
+        C_{A_v,A_{v^c}}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{\widetilde B_v,\widetilde B_{v^c}}
+            (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    These are exactly the hypotheses of the two-injective comparison for this
+    two-block decomposition. Hence there is $\lambda_v\in\mathbb C^\times$
+    such that
+    $A_v(\eta,\sigma)=\lambda_v\widetilde B_v(\eta,\sigma)$ for every local
+    virtual configuration $\eta$ and physical index $\sigma$:
     \begin{center}
         \TNPEPSOneVertexComplementComparison
     \end{center}
-    This is the final local comparison following the equation
-    $\textup{eq:inj\_equal\_edge}$ in
-    \cite[Section~3]{Molnar2018NormalPEPS}.
+    This is the final local comparison following the post-absorption insertion
+    equality in \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} to
+    $A_v,\widetilde B_v$ and $A_{v^c},\widetilde B_{v^c}$. It gives a scalar
+    $\lambda_v\neq 0$ such that
+    $A_v=\lambda_v\widetilde B_v$ and
+    $A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}$; keep the first equality.
+\end{proof}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
         bond-dimension equality]%

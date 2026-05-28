@@ -9,9 +9,9 @@ This file records the source-facing finite-dimensional statement of the
 two-tensor comparison used in the proof of the injective PEPS Fundamental
 Theorem.
 
-The statement is Lemma `inj_equal_tensors_2` in
+The statement is Lemma inj_equal_tensors_2 in
 Molnár--Schuch--Verstraete--Cirac, arXiv:1804.04964, Section 3, lines
-1068--1203 of `Papers/1804.04964/paper_normal.tex`: if two pairs of
+1068--1203 of Papers/1804.04964/paper_normal.tex: if two pairs of
 injective tensors agree after inserting an arbitrary matrix on each shared
 virtual bond, then the corresponding tensors differ by reciprocal nonzero
 scalars.
@@ -29,8 +29,8 @@ variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
 
 /-- A configuration of the shared virtual bonds between two injective tensors.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`, displayed
-equation `eq:lem_inj_eq_ten_2`. The family `bondDim` indexes the virtual
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, displayed
+equation eq:lem_inj_eq_ten_2. The family `bondDim` indexes the virtual
 spaces carried by the parallel shared bonds in that diagram. -/
 abbrev SharedBondConfig (bondDim : Bond → Type*) : Type _ :=
   (b : Bond) → bondDim b
@@ -38,14 +38,14 @@ abbrev SharedBondConfig (bondDim : Bond → Type*) : Type _ :=
 /-- A finite-dimensional tensor block with an external virtual boundary, a
 shared virtual boundary, and a physical index.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`, where each
-of `A_1,A_2,B_1,B_2` is an injective tensor. -/
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, where each
+of A_1,A_2,B_1,B_2 is an injective tensor. -/
 abbrev TwoBlockTensor (bondDim : Bond → Type*) (External Physical : Type*) : Type _ :=
   External → SharedBondConfig bondDim → Physical → ℂ
 
 /-- Two shared-bond configurations agree away from the distinguished bond.
 
-Source: arXiv:1804.04964, Section 3, equation `eq:lem_inj_eq_ten_2`: inserting
+Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2: inserting
 a matrix `X` on one shared edge leaves all other shared virtual bonds
 contracted by the identity. -/
 def SameAwayFromBond (b : Bond)
@@ -59,7 +59,7 @@ The summation has two shared-bond configurations, one on each side of the
 inserted matrix. The factor `SameAwayFromBond b η θ` imposes identity
 contraction on every other shared bond.
 
-Source: arXiv:1804.04964, Section 3, equation `eq:lem_inj_eq_ten_2`. -/
+Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2. -/
 noncomputable def twoBlockInsertedCoeff
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     (A₁ : TwoBlockTensor bondDim External₁ Physical₁)
@@ -78,7 +78,7 @@ noncomputable def twoBlockInsertedCoeff
 physical vectors indexed by all virtual boundary configurations.
 
 This is the abstract form of injectivity used in arXiv:1804.04964, Section 3,
-Lemma `inj_equal_tensors_2`. -/
+Lemma inj_equal_tensors_2. -/
 def IsTwoBlockInjective
     {External Physical : Type*}
     (A : TwoBlockTensor bondDim External Physical) : Prop :=
@@ -88,7 +88,7 @@ def IsTwoBlockInjective
 /-- Equality of all one-bond matrix insertions for two pairs of injective
 tensors.
 
-Source: arXiv:1804.04964, Section 3, equation `eq:lem_inj_eq_ten_2`: for every
+Source: arXiv:1804.04964, Section 3, equation eq:lem_inj_eq_ten_2: for every
 shared virtual bond and every matrix inserted on that bond, the two-tensor
 contractions for the `A`-pair and the `B`-pair coincide. -/
 def SameTwoBlockInsertions
@@ -103,8 +103,8 @@ def SameTwoBlockInsertions
 
 /-- Scalar proportionality of two tensor blocks with the same boundary spaces.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`, conclusion
-`A_1 = λ B_1` and `A_2 = λ^{-1} B_2`. -/
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, conclusion
+A_1 = λ B_1 and A_2 = λ^{-1} B_2. -/
 def TwoBlockScalarProportional
     {External Physical : Type*}
     (A B : TwoBlockTensor bondDim External Physical) (c : ℂ) : Prop :=
@@ -112,9 +112,9 @@ def TwoBlockScalarProportional
     A η μ σ = c * B η μ σ
 
 /-- Reciprocal scalar proportionality of the two tensor pairs in
-Lemma `inj_equal_tensors_2`.
+Lemma inj_equal_tensors_2.
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`. -/
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2. -/
 def TwoBlockReciprocalScalarProportional
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
@@ -128,8 +128,8 @@ def TwoBlockReciprocalScalarProportional
 
 /-- **Generalized two-injective-tensor comparison.**
 
-Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`, lines
-1068--1203 of `Papers/1804.04964/paper_normal.tex`.
+Source: arXiv:1804.04964, Section 3, Lemma inj_equal_tensors_2, lines
+1068--1203 of Papers/1804.04964/paper_normal.tex.
 
 This is the source comparison theorem in an abstract form with nonempty
 spectator external boundary spaces; the statement in the paper is recovered by
@@ -153,10 +153,48 @@ theorem two_injective_tensor_insertion_comparison
     (hB₁ : IsTwoBlockInjective B₁) (hB₂ : IsTwoBlockInjective B₂)
     (hinsert : SameTwoBlockInsertions A₁ B₁ A₂ B₂) :
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
-  -- The remaining proof is Lemma `inj_equal_tensors_2` from
+  -- The remaining proof is Lemma inj_equal_tensors_2 from
   -- arXiv:1804.04964, Section 3, lines 1068--1203. It depends on the
   -- scalar-reduction substep tracked separately by issue #1362.
   sorry
+
+/-! ### One vertex against its complement -/
+
+/-- **One-vertex versus complement comparison.**
+
+Source: arXiv:1804.04964, Section 3, immediately after Lemma
+inj_equal_tensors_2, lines 1205--1210 of
+Papers/1804.04964/paper_normal.tex.
+
+After the edge gauges have been absorbed into the second PEPS tensor family,
+the source blocks one vertex against its complement. The post-absorption
+insertion equality arXiv:1804.04964, eq:inj_equal_edge, supplies equality of
+all one-bond insertions for this two-block pair. Applying Lemma
+inj_equal_tensors_2 then gives scalar proportionality of the selected vertex
+tensor with its modified counterpart.
+
+This theorem records precisely that final local use of the generalized
+two-injective comparison in an abstract form with nonempty spectator external
+boundary spaces: the selected vertex is the first block and its complement is
+the second block. -/
+theorem one_vertex_complement_comparison
+    {ExternalVertex ExternalComplement PhysicalVertex PhysicalComplement : Type*}
+    [Nonempty Bond] [Nonempty ExternalVertex] [Nonempty ExternalComplement]
+    (Avertex Bvertex : TwoBlockTensor bondDim ExternalVertex PhysicalVertex)
+    (Acomplement Bcomplement :
+      TwoBlockTensor bondDim ExternalComplement PhysicalComplement)
+    (hAvertex : IsTwoBlockInjective Avertex)
+    (hAcomplement : IsTwoBlockInjective Acomplement)
+    (hBvertex : IsTwoBlockInjective Bvertex)
+    (hBcomplement : IsTwoBlockInjective Bcomplement)
+    (hinsert :
+      SameTwoBlockInsertions Avertex Bvertex Acomplement Bcomplement) :
+    ∃ c : ℂ, c ≠ 0 ∧ TwoBlockScalarProportional Avertex Bvertex c := by
+  rcases two_injective_tensor_insertion_comparison
+      Avertex Bvertex Acomplement Bcomplement
+      hAvertex hAcomplement hBvertex hBcomplement hinsert with
+    ⟨c, hc_ne, hvertex, _hcomplement⟩
+  exact ⟨c, hc_ne, hvertex⟩
 
 end PEPS
 end TNLean
