@@ -2108,8 +2108,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \begin{center}
         \TNPEPSInjectiveRegionUnion
     \end{center}
-    The graphical proof proceeds by applying injectivity of $A$, reinserting
-    the tensor over $A\cap B$, and then applying injectivity of $B$:
+    Taking a boundary tensor $X$ on $(A\cup B)^c$ with
+    $\mathcal C_{\{0,1,2\}}(X)=0$, injectivity of $A$ gives
+    $\mathcal C_{\{2\}}(X)=0$; reinserting $A\cap B$ and applying
+    injectivity of $B$ then gives $X=0$:
     \begin{center}
         \TNPEPSInjectiveRegionUnionProof
     \end{center}
@@ -2265,11 +2267,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     the proof of \cite[Theorem~3]{Molnar2018NormalPEPS}.
     The source shapes are:
     \begin{center}
-        \TNPEPSCoordinateNormalRegionsRS
+        \TNPEPSNormalRegionsRS
 
         \vspace{0.5em}
 
-        \TNPEPSCoordinateNormalRegionT
+        \TNPEPSNormalRegionT
     \end{center}
     % Maintainer note: injectivity of this finite-lattice complementary block
     % is not yet proved; this definition only names the region.

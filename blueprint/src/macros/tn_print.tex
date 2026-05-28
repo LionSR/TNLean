@@ -634,7 +634,7 @@
 \newcommand{\pepsNormalSingleSiteDifference}{%
   \filldraw[yellow!75!white, draw=black!65, thick]
     (1.5,1.5) circle (0.16cm);
-  \node[black] at (1.5,1.5) {\scriptsize \(v\)};%
+  \node[black] at (1.5,1.5) {\scriptsize $v$};%
 }
 
 \newcommand{\pepsNormalDistinguishedEdge}{%
@@ -777,20 +777,12 @@
   \end{tikzpicture}%
 }
 
-\newcommand{\TNPEPSCoordinateNormalRegionsRS}{%
-  \TNPEPSNormalRegionsRS%
-}
-
 \newcommand{\TNPEPSNormalRegionT}{%
   \begin{tikzpicture}[tn picture, scale=0.90]
     \clip (-0.25,0.25) rectangle (3.25,3.25);
     \pepsNormalSquareLattice
     \pepsNormalRegionT
   \end{tikzpicture}%
-}
-
-\newcommand{\TNPEPSCoordinateNormalRegionT}{%
-  \TNPEPSNormalRegionT%
 }
 
 \newcommand{\TNPEPSNormalRectangleCover}{%
@@ -900,8 +892,8 @@
       \pepsNormalSquareLatticeDots
       \pepsNormalRedBlock
       \pepsNormalBlueBlock
-      \node at (1.50,-0.58) {edge blocking};
     \end{scope}
+    \node at (1.50,-0.58) {edge blocking};
     \node at (3.75,1.45) {and};
     \begin{scope}[xshift=4.60cm,yshift=-0.20cm]
       \begin{scope}

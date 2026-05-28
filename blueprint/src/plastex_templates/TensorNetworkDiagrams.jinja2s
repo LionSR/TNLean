@@ -43,10 +43,7 @@ name: TNPEPSTwoInjectiveGaugeScalarReduction TNPEPSOneVertexComplementComparison
 name: TNPEPSInjectiveRegionUnion TNPEPSInjectiveRegionUnionProof
 {{ obj.tn_svg_html }}
 
-name: TNPEPSCoordinateNormalRegionsRS
-{{ obj.tn_svg_html }}
-
-name: TNPEPSCoordinateNormalRegionT TNPEPSNormalEdgeBlockingHypotheses
+name: TNPEPSNormalEdgeBlockingHypotheses
 {{ obj.tn_svg_html }}
 
 name: TNPEPSNormalRectangleCover TNPEPSNormalEdgeComplementTopCollar
