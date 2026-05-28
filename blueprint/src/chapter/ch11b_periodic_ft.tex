@@ -468,11 +468,22 @@ unconditional result.
     \uses{thm:periodic_overlap_zero_ne_dim}
     Split on whether the bond dimensions agree. If not, the claim follows
     from Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. If $D_1 = D_2$,
-    suppose for contradiction that $A$ and $B$ are gauge-phase equivalent;
-    Perron--Frobenius eigenvalue uniqueness
-    \cite[Theorem~6.3]{Wolf2012Quantum} then forces
-    equal periods, contradicting the hypothesis. Hence the tensors are not
-    gauge-phase equivalent, and the overlap decays.
+    suppose for contradiction that $A$ and $B$ are gauge-phase equivalent,
+    so $B^i=\zeta X A^iX^{-1}$ with $X$ invertible and $\zeta\ne0$. Then
+    \[
+        \E_B(Y)
+        =
+        \zeta\overline{\zeta}\,
+        X\,\E_A(X^{-1}YX^{-*})\,X^* .
+    \]
+    Perron--Frobenius eigenvalue uniqueness \cite[Theorem~6.3]{Wolf2012Quantum}
+    applied to the positive fixed points gives $|\zeta|=1$, and therefore
+    $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. For a periodic
+    tensor of period $m$, the peripheral spectrum is
+    $\{e^{2\pi i r/m}:0\le r<m\}$. Hence $m_A=m_B$, contradicting the
+    hypothesis. Thus $A\not\sim_{\mathrm{gp}}B$, and the irreducible
+    trace-preserving overlap dichotomy gives
+    $\lim_{N\to\infty}O_{A,B}(N)=0$.
 \end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
