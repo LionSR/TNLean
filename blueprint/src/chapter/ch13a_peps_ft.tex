@@ -1308,11 +1308,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsEdgeBlockedInsertionAlgebraIsomorphism}
     \leanok
     \uses{def:peps_edgeInsertedCoeff}
-    For two PEPS tensors $A$ and $B$ and an edge $e$, this property asserts
-    the existence of an algebra isomorphism $\Phi$ between the two matrix
-    algebras on the chosen bond such that
-    $C_A(e,\sigma,X)=C_B(e,\sigma,\Phi(X))$ for every physical configuration
-    $\sigma$ and every inserted matrix $X$.
+    For two PEPS tensors $A$ and $B$ and an edge $e$, this property is
+    \[
+        \exists \Phi_e:\MN{D_A(e)}
+            \simeq_{\mathrm{alg}}
+            \MN{D_B(e)},\qquad
+        \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
+        C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
+    \]
 \end{definition}
 
 \begin{theorem}[Edge-blocked insertion algebra isomorphism]%
@@ -1327,19 +1330,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
     the edge $e$ are injective, and suppose the two PEPS tensors define the same
-    state. Then there is an algebra isomorphism
+    state. Then
     \[
-        \Phi_e:\operatorname{Mat}_{D_A(e)}(\mathbb C)
+        \exists \Phi_e:\MN{D_A(e)}
             \simeq_{\mathrm{alg}}
-            \operatorname{Mat}_{D_B(e)}(\mathbb C)
-    \]
-    such that, for every physical configuration $\sigma$ and every matrix
-    $X\in\operatorname{Mat}_{D_A(e)}(\mathbb C)$,
-    \[
+            \MN{D_B(e)},\qquad
+        \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
     \]
-    This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$
-    constructed in \cite[Section~3]{Molnar2018NormalPEPS}:
+    This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$ in
+    \cite[Section~3]{Molnar2018NormalPEPS}:
     \begin{center}
         \TNPEPSThreeSiteInsertionComparison
     \end{center}
