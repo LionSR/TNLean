@@ -1046,6 +1046,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
     composition is the claimed implication.
 \end{proof}
 
+\begin{theorem}[Finite regions from singleton regions and union closure]%
+    \label{thm:peps_finiteRegionInjectivityFromSingletons}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
+    \leanok
+    \uses{thm:peps_singletonRegionInjectivityFromVertexInjectivity,
+        lem:peps_regionInjectivityUnionClosure_finite}
+    Assume that $\kappa$ satisfies singleton comparison and union closure:
+    $\operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$ for every
+    vertex $v$, and
+    $\kappa(R)\wedge\kappa(S)\Longrightarrow\kappa(R\cup S)$. If $A$ is
+    vertex-injective, then every nonempty finite region $R$ satisfies
+    $\kappa(R)$.
+\end{theorem}
+\begin{proof}\leanok
+    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$. The preceding
+    theorem turns singleton comparison and vertex injectivity into
+    $\kappa(\{v\})$ for every $v\in R$. Applying the finite-union consequence
+    of union closure to these singleton regions gives $\kappa(R)$.
+\end{proof}
+
 \begin{definition}[Region injectivity supplies the edge-middle tensor]%
     \label{def:peps_edgeMiddleRegionInjectivityComparison}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison}

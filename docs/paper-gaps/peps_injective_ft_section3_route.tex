@@ -138,6 +138,11 @@ Theorem can be proved in the manner of the paper.
   region-injectivity predicate is recorded by
   \leanid{TNLean.PEPS.SingletonRegionInjectivityComparison} and
   \leanid{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}.
+  With the abstract union-closure lemma, this gives every nonempty finite
+  region by
+  \leanid{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}:
+  $R=\bigcup_{v\in R}\{v\}$ and $\kappa(\{v\})$ for every $v\in R$ imply
+  $\kappa(R)$.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
   and, for all edges at once, by
