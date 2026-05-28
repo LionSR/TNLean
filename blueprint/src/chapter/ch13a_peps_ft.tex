@@ -1539,15 +1539,38 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Compare matrix entries. Equality with
-    $\operatorname{End}(\alpha\otimes\beta)\otimes I_\gamma$ forces all
-    $I_\alpha\otimes Z$ entries with different $\gamma$-indices to vanish.
-    Equality with the middle-identity form forces all entries with different
-    $\beta$-indices to vanish. The remaining diagonal entries are equal because
-    the two identities compare them first along the $\beta$-direction and then
-    along the $\gamma$-direction. Substituting the resulting scalar form of $Z$
-    back into the two displayed equalities gives the same scalar form for $U$
-    and $W$.
+    Write the common operator as $T$. The equality
+    $T=I_\alpha\otimes Z=U\otimes I_\gamma$ gives, for all indices,
+    \[
+        \delta_{aa'} Z_{bc,b'c'}
+        =
+        U_{ab,a'b'}\delta_{cc'} .
+    \]
+    If $c\neq c'$, the right hand side is zero; choosing $a=a'$ gives
+    $Z_{bc,b'c'}=0$. Hence $Z$ is diagonal in the $\gamma$-index. Similarly,
+    the equality $T=I_\alpha\otimes Z=W_{\alpha\gamma}\otimes I_\beta$ gives
+    \[
+        \delta_{aa'} Z_{bc,b'c'}
+        =
+        W_{ac,a'c'}\delta_{bb'} ,
+    \]
+    so $Z_{bc,b'c'}=0$ whenever $b\neq b'$. Thus $Z_{bc,b'c'}=0$ unless
+    $b=b'$ and $c=c'$.
+
+    It remains to compare the surviving diagonal entries. From
+    $\delta_{aa'}Z_{bc,bc}=U_{ab,a'b}$, the value
+    $Z_{bc,bc}$ is independent of $c$. From the middle-identity equality it is
+    also independent of $b$. Therefore $Z=\lambda I_{\beta\otimes\gamma}$.
+    Substitution into
+    \[
+        I_\alpha\otimes Z
+        =
+        U\otimes I_\gamma
+        =
+        W_{\alpha\gamma}\otimes I_\beta
+    \]
+    gives $U=\lambda I_{\alpha\otimes\beta}$ and
+    $W_{\alpha\gamma}=\lambda I_{\alpha\otimes\gamma}$.
 \end{proof}
 
 \begin{theorem}[Generalized two-injective-tensor comparison]%
@@ -1575,6 +1598,33 @@ injective and normal PEPS, following Theorems~2 and~3 of
     form of the two-injective tensor comparison in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
+\begin{proof}
+    The proof is the argument of Lemma~$\mathrm{inj\_equal\_tensors\_2}$ in
+    \cite[Section~3]{Molnar2018NormalPEPS}. Applying the inverse of $A_2$ to
+    the three insertion equalities obtained by freeing each shared bond gives
+    \[
+        A_1
+        =
+        B_1\cdot Z
+        =
+        B_1\cdot U
+        =
+        B_1\cdot W,
+    \]
+    where $Z$, $U$, and $W$ act on the complementary pairs of exposed virtual
+    legs. Applying the inverse of $B_1$ gives the residual equality
+    \[
+        \sum_i I\otimes Z_i^{(1)}\otimes Z_i^{(2)}
+        =
+        \sum_i U_i^{(1)}\otimes U_i^{(2)}\otimes I
+        =
+        \sum_i W_i^{(1)}\otimes I\otimes W_i^{(2)}.
+    \]
+    The scalar-reduction theorem above gives $Z=\lambda I$, hence
+    $A_1=\lambda B_1$. Substituting this identity into the original insertion
+    equality with $X=I$ gives $A_2=\lambda^{-1}B_2$. Since $A_1$ and $B_1$ are
+    injective tensors, $\lambda\neq 0$.
+\end{proof}
 
 \begin{theorem}[One-vertex versus complement comparison]%
     \label{thm:peps_oneVertexComplementComparison}
