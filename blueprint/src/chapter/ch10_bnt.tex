@@ -284,11 +284,19 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
     For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
-    invertible matrix $U_N$ relating the two MPV families. Fix $j$. If every
-    mixed overlap $O_{A_iB_j}(N)$ tended to $0$, then taking inner products of
-    the relation with the $A_i$ and using that the Gram matrix of the
-    $A$-family tends to the identity would force the $j$th column of $U_N$ to
-    vanish asymptotically, contradicting the self-overlap limit of $B_j$.
+    invertible matrix $U_N$ relating the two MPV families. Fix $j$ and write
+    $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$. With
+    $G_A(N)=(O_{A_iA_\ell}(N))_{i,\ell}$ and
+    $b_j(N)=(O_{A_iB_j}(N))_i$, this gives
+    \[
+        G_A(N)\overline{u_j(N)}=b_j(N),
+        \qquad
+        O_{B_jB_j}(N)=u_j(N)^{\top}G_A(N)\overline{u_j(N)}.
+    \]
+    If all mixed overlaps $O_{A_iB_j}(N)$ tended to $0$, then
+    $b_j(N)\to0$; since $G_A(N)\to I$, one obtains
+    $\overline{u_j(N)}\to0$ and hence $u_j(N)\to0$. Thus
+    $O_{B_jB_j}(N)\to0$, contradicting $O_{B_jB_j}(N)\to1$.
     Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
     overlap. Theorems~\ref{thm:overlap_decay_rect}
     and~\ref{thm:overlap_decay} then force equal bond dimension and
@@ -342,9 +350,17 @@ and~\cite{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    If the two MPV states were proportional for all sufficiently large $N$,
-    the irreducible trace-preserving overlap decay theorem would force
-    gauge-phase equivalence. This contradicts the hypothesis.
+    Suppose that for all sufficiently large $N$ one had
+    $\ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}$. Then
+    \[
+        O_{AA}(N)=|c_N|^2O_{BB}(N),
+        \qquad
+        O_{AB}(N)=c_NO_{BB}(N).
+    \]
+    Since $O_{AA}(N)\to1$ and $O_{BB}(N)\to1$, the first identity gives
+    $|c_N|\to1$, and hence $|O_{AB}(N)|\to1$. The irreducible
+    trace-preserving overlap decay theorem gives $O_{AB}(N)\to0$ when
+    $A\not\sim_{\mathrm{gp}}B$, a contradiction.
 \end{proof}
 
 \section{Newton--Girard identities}
@@ -1049,13 +1065,20 @@ matching covers the whole BNT basis.
     separate.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}\leanok\uses{lem:sector_bnt_norm_phase_of_matched_mpv}
     Apply the proportional sector-matching theorem to obtain the bijection and
     dimension-compatible gauge-phase equivalences. Choosing the gauges and
-    scalars gives the displayed block identities. The normalized self-overlap
-    limits of the matched BNT blocks force the chosen scalars to have modulus
-    $1$, and the MPV scalar-power identity follows from gauge-phase
-    equivalence.
+    scalars gives $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, and therefore
+    \[
+        O_{Q_kQ_k}(N)
+        =
+        |\zeta_k|^{2N}O_{P_{\beta(k)}P_{\beta(k)}}(N).
+    \]
+    The normalized self-overlap limits give
+    $O_{Q_kQ_k}(N)\to1$ and $O_{P_{\beta(k)}P_{\beta(k)}}(N)\to1$, so
+    $|\zeta_k|^{2N}\to1$ and hence $|\zeta_k|=1$. The MPV scalar-power
+    identity follows from the same gauge equation:
+    $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
 \end{proof}
 
 \begin{lemma}[Full-basis coefficient identity from matched phases]%
@@ -1353,16 +1376,17 @@ matching covers the whole BNT basis.
 \begin{proof}\leanok
     \uses{thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
+        lem:sector_bnt_norm_phase_of_matched_mpv,
         lem:sector_bnt_matched_sector_weight_equiv,
         thm:sector_bnt_global_gauge_of_matched_weights}
     The full-basis matching theorem gives $\beta$, the bond-dimension
     identifications, and the gauge-phase equivalences between $Q_k$ and
     $P_{\beta(k)}$. Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     gives the eventual exact coefficient identities for the same phases
-    $\zeta_k$. The normalized self-overlap limits in the BNT hypotheses force
-    $|\zeta_k|=1$ for every matched sector. The matched-sector
-    weight-permutation theorem then gives the copy permutations and the
-    displayed pointwise weight identities. Finally
+    $\zeta_k$, while Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv}
+    gives $|\zeta_k|=1$.
+    The matched-sector weight-permutation theorem then gives the copy
+    permutations and the displayed pointwise weight identities. Finally
     Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights} assembles the
     block conjugacies into the flattened direct-sum conjugation by
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
