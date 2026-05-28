@@ -379,5 +379,6 @@ import TNLean.PEPS.InsertionRealization
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.EdgeGaugeExtraction
+import TNLean.PEPS.TwoInjectiveComparison
 -- The PEPS fundamental theorem is an exploratory capstone with recorded
 -- paper-alignment gaps; it is deliberately not part of the default root.
