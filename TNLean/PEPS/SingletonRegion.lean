@@ -14,6 +14,7 @@ original local tensor at that vertex.
   entangled pair states generating the same state*, arXiv:1804.04964,
   Section 3](https://arxiv.org/abs/1804.04964)
 - `Papers/1804.04964/paper_normal.tex`, lines 981--1009.
+- `Papers/1804.04964/paper_normal.tex`, lines 1322--1404.
 -/
 
 namespace TNLean
@@ -111,6 +112,40 @@ theorem ofSingletonComparison
     hComparison.singleton_region_injective v (hA.singletonRegionTensorInjective v)
 
 end SingletonRegionInjectivityFromVertexInjectivity
+
+namespace RegionInjectivityUnionClosure
+
+omit [Fintype V] in
+/-- Vertex injectivity gives injectivity of every nonempty finite region once
+singleton regions are compatible with the abstract region predicate and
+injectivity is closed under finite unions.
+
+The formula behind the proof is $R = \bigcup_{v \in R} \{v\}$. Vertex
+injectivity gives $\kappa(\{v\})$ for every $v$, and finite iteration of the
+injective-union lemma gives $\kappa(R)$.
+
+Source: arXiv:1804.04964, Section 3;
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009 and 1322--1404. -/
+theorem finset_injective_of_singletons
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hComparison :
+      SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A) {R : Finset V} (hR : R.Nonempty) :
+    κ.IsInjective R := by
+  classical
+  have hSingleton :
+      SingletonRegionInjectivityFromVertexInjectivity (G := G) (d := d) κ A :=
+    SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison hComparison
+  have hPieces : ∀ v ∈ R, κ.IsInjective ({v} : Finset V) := by
+    intro v _hv
+    exact hSingleton.singleton_injective hA v
+  have hBlocked :
+      κ.IsInjective (R.biUnion fun v => ({v} : Finset V)) :=
+    hUnion.biUnion_injective hR (fun v => ({v} : Finset V)) hPieces
+  simpa using hBlocked
+
+end RegionInjectivityUnionClosure
 
 end PEPS
 end TNLean
