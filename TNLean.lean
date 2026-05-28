@@ -365,6 +365,7 @@ import TNLean.Channel.Determinant
 import TNLean.PEPS.Defs
 import TNLean.PEPS.InjectiveRegion
 import TNLean.PEPS.VirtualInsertion
+import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.NormalEdgeBlockingData
