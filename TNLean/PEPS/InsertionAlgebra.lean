@@ -2,6 +2,7 @@ import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InsertionRealization
 import Mathlib.Algebra.Algebra.Equiv
+import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
 # Edge-blocked insertion algebra for PEPS
@@ -39,6 +40,26 @@ def IsEdgeBlockedInsertionAlgebraIsomorphism (A B : Tensor G d) (e : Edge G) : P
     ∀ (σ : V → Fin d) (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ),
       edgeInsertedCoeff (G := G) A e σ X =
         edgeInsertedCoeff (G := G) B e σ (Φ X)
+
+/-! ### Post-absorption inserted-edge comparison -/
+
+/-- Post-absorption equality of all inserted-edge coefficients.
+
+Source: arXiv:1804.04964, Section 3, `eq:inj_equal_edge`
+(`Papers/1804.04964/paper_normal.tex:1037-1065`). After absorbing the edge
+gauges into the modified second tensor family $\widetilde B$, for every edge
+and every inserted matrix, the first PEPS and $\widetilde B$ give the same
+edge-inserted coefficient. -/
+structure PostAbsorptionEdgeInsertionEquality (A Btilde : Tensor G d) : Prop where
+  /-- The absorbed tensor family has the same bond dimensions as the first PEPS. -/
+  bondDim_eq : A.bondDim = Btilde.bondDim
+  /-- The same inserted virtual matrix gives equal edge-inserted coefficients. -/
+  edgeInsertedCoeff_eq :
+    ∀ (e : Edge G) (σ : V → Fin d)
+      (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ),
+      edgeInsertedCoeff (G := G) A e σ M =
+        edgeInsertedCoeff (G := G) Btilde e σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun bondDim_eq e)) M)
 
 /-- **Edge-blocked insertion algebra isomorphism.**
 
