@@ -3,37 +3,12 @@ import TNLean.PEPS.LocalGauge
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
--- The contraction algebra is proved. The forward PEPS theorem is stated with
--- the remaining bond-dimension obligation separated below, and the converse
--- still depends on the mathematical hypotheses listed below.
---
--- Provability note: `IsVertexInjective` in `PEPS.Defs` is the
--- linear-independence formulation `∀ v, LinearIndependent ℂ (A.component v)`
--- (see issue #633 for the switch away from function-level injectivity, which
--- is strictly weaker). Linear independence gives each vertex tensor a left
--- inverse on its image and is the correct hypothesis for the repaired
--- uniqueness statement `gauge_unique_mod_edge_scalars`.
---
--- The unproved converse ingredients split into three groups:
--- * `gaugeConsistency` requires the edge-centred reduction from
---   arXiv:1804.04964, Section 3: after choosing an edge `e = (u,v)`,
---   blocking all vertices other than `u` and `v` gives a three-site injective
---   MPS; Lemma `inj_isomorph` assigns an edge gauge, and the gauges obtained
---   from all edges are absorbed into the second tensor family before the
---   equation labelled `eq:inj_equal_edge`. The local left inverse is in
---   `PEPS/VirtualInsertion`, the edge-blocked contraction is in `PEPS/Blocking`,
---   and `BlockedMiddleGaugeFormula` isolates the remaining implication from
---   `SameState` to the explicit local gauge formula.  Tracked by #780.
--- * The `hDim` step inside `fundamentalTheorem_PEPS` is factored out as the
---   conditional theorem `fundamentalTheorem_PEPS_of_bondDim`, so that the
---   bond-dimension equality is orthogonal to `gaugeConsistency`. Its derivation
---   from `SameState` plus vertex injectivity still requires a boundary-insertion
---   / blocking lemma.  Tracked by #874 (`PEPS: bond-dimension equality from
---   SameState and vertex injectivity`).
--- * `gauge_unique_mod_edge_scalars` is the repaired uniqueness statement. Its
---   proof still requires local tensor-factor uniqueness for the balanced
---   edge-scalar quotient.  Tracked by #842 (`Discharge sorry in
---   gauge_unique_mod_edge_scalars`).
+-- The contraction algebra is proved. The remaining converse ingredients are
+-- separated by mathematical role: edge-centred gauge extraction (#780), the
+-- bond-dimension equality from `SameState` and vertex injectivity (#874), and
+-- uniqueness modulo balanced edge scalars (#842). The hypothesis
+-- `IsVertexInjective` is the linear-independence formulation from `PEPS.Defs`,
+-- which gives the local left inverses used below.
 
 /-!
 # Fundamental Theorem for injective PEPS
@@ -569,6 +544,20 @@ theorem localGauge_exists (A B : Tensor G d)
   localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
 
 /-! ### Gauge consistency across edges -/
+
+/-- Post-absorption edge insertion equality from arXiv:1804.04964, Section 3,
+lines 1037--1065. Assuming the separately tracked bond-dimension equality
+`hDim` (#874), the edge gauges obtained from the three-site comparison can be
+absorbed into `B` so that every edge insertion in `A` agrees with the transported
+edge insertion in the absorbed tensor family. The remaining proof is #1364. -/
+theorem post_absorption_edge_insertion_equality (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hB : IsVertexInjective B) (hAB : SameState A B)
+    (hDim : A.bondDim = B.bondDim) :
+    ∃ Z, ∀ e X σ,
+      edgeInsertedCoeff (G := G) A e σ X =
+        edgeInsertedCoeff (G := G) (absorbEdgeGauges B Z) e σ
+          (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hDim e)) X) := by
+  sorry
 
 /-- Edge gauges obtained from the three-site reductions give one global gauge
 family.
