@@ -1739,9 +1739,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         C_{\widetilde B_v,\widetilde B_{v^c}}
             (b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
     \]
-    These are exactly the hypotheses of the two-injective comparison for this
-    two-block decomposition. Hence there is $\lambda_v\in\mathbb C^\times$
-    such that
+    Then there is $\lambda_v\in\mathbb C^\times$ such that
     $A_v(\eta,\sigma)=\lambda_v\widetilde B_v(\eta,\sigma)$ for every local
     virtual configuration $\eta$ and physical index $\sigma$:
     \begin{center}
@@ -1751,12 +1749,42 @@ injective and normal PEPS, following Theorems~2 and~3 of
     equality in \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} to
-    $A_v,\widetilde B_v$ and $A_{v^c},\widetilde B_{v^c}$. It gives a scalar
-    $\lambda_v\neq 0$ such that
-    $A_v=\lambda_v\widetilde B_v$ and
-    $A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}$; keep the first equality.
+    With $A_1=A_v$, $A_2=A_{v^c}$, $B_1=\widetilde B_v$, and
+    $B_2=\widetilde B_{v^c}$, the post-absorption equality is precisely
+    \[
+        \forall b,X,\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c},\quad
+        C_{A_1,A_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c})
+        =
+        C_{B_1,B_2}(b,X;\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}).
+    \]
+    Theorem~\ref{thm:peps_twoInjectiveTensorInsertionComparison} gives
+    \[
+        \exists\lambda_v\in\mathbb C^\times,\qquad
+        A_v=\lambda_v\widetilde B_v,\qquad
+        A_{v^c}=\lambda_v^{-1}\widetilde B_{v^c}.
+    \]
+    The desired local proportionality is the first equality.
 \end{proof}
+
+\begin{remark}[Normal-region form]
+    The normal-region application in \cite[Section~3]{Molnar2018NormalPEPS}
+    uses the same scalar comparison after comparing two injective regions
+    $R\subset S=R\cup\{v\}$. If the region comparisons give
+    $A_R=\lambda_R\widetilde B_R$ and
+    $A_S=\lambda_S\widetilde B_S$, then the source-paper diagram reads
+    \[
+        A_R A_v
+        =
+        A_S
+        =
+        \lambda_S\widetilde B_S
+        =
+        \lambda_S\widetilde B_R\widetilde B_v .
+    \]
+    Applying the left inverse supplied by injectivity of the block
+    $A_R=\lambda_R\widetilde B_R$ gives
+    $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
+\end{remark}
 
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
         bond-dimension equality]%
