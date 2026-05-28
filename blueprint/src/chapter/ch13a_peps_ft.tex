@@ -1259,12 +1259,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{proof}
 
 \begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
-    \label{thm:peps_physicalToVirtualInsertion}
-    \notready
-    \uses{def:IsVertexInjective}
-    Conversely, if two physical operations on neighboring particles act in the
-    same way on the three-site state, then injectivity of the adjacent tensors
-    recovers a virtual operation on their shared bond:
+    \label{thm:peps_physical_to_virtual_insertion}
+    \lean{TNLean.PEPS.physical_to_virtual_insertion}
+    \leanok
+    \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeBoundaryConfig,
+        def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig,
+        def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap,
+        def:peps_localIncidentMatrixOp}
+    Let $e=(u,v)$ and suppose the edge-blocked three-site chain at $e$ is
+    injective. Let $O_1,O_2$ be physical operators at the two endpoint tensors.
+    Suppose that, for every physical configuration $\sigma$,
+    \[
+        \sum_{\beta}
+        O_1(A_u(\beta_u))_{\sigma_u}\,
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        A_v(\beta_v)_{\sigma_v}
+        =
+        \sum_{\beta}
+        A_u(\beta_u)_{\sigma_u}\,
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})\,
+        O_2(A_v(\beta_v))_{\sigma_v}.
+    \]
+    Then there exists a matrix
+    $M\in\operatorname{Mat}_{D(e)}(\mathbb C)$ such that
+    \[
+        O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T}),
+        \qquad
+        O_2\Phi_v=\Phi_vT_{v,e}(M).
+    \]
+    Thus the two equal neighboring physical insertions come from one virtual
+    operation on the shared bond:
     \begin{center}
         \TNPEPSPhysicalToVirtualInsertion
     \end{center}
@@ -1292,7 +1316,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
         thm:peps_edgeBlockedThreeSiteInjective,
         thm:peps_virtualInsertionPhysicalRealization,
         thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,
-        thm:peps_physicalToVirtualInsertion,
+        thm:peps_physical_to_virtual_insertion,
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
     Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
     the edge $e$ are injective, and suppose the two PEPS tensors define the same
@@ -1440,7 +1464,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     injective-chain argument. The physical-realization and physical-to-virtual
     steps in that argument are recorded separately as
     Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization} and
-    \ref{thm:peps_physicalToVirtualInsertion}.
+    \ref{thm:peps_physical_to_virtual_insertion}.
     After Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality} supplies
     the factorized local gauge hypothesis, injectivity on the star neighborhood
     provides a left inverse that isolates the local edge gauges:

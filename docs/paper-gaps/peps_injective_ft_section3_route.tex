@@ -167,8 +167,9 @@ Theorem can be proved in the manner of the paper.
   independent inserted-edge index at the corresponding endpoint. On the left
   endpoint the formal statement uses the transpose of the inserted matrix,
   because the ordinary boundary supplies the right bond index. The converse
-  recovery $O_1,O_2\mapsto W$ remains open as
-  \path{thm:peps_physicalToVirtualInsertion}.
+  recovery $O_1,O_2\mapsto W$ is stated as
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion}; its proof remains open and
+  is tracked by issue~\#1370.
   Its local endpoint recovery component is now formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}:
   once the compressed endpoint actions are known to realize the same bond
@@ -242,7 +243,8 @@ It is meant to prevent the proof from drifting away from the source argument.
   endpoint coefficient expansion. These are tracked by issues~\#1369
   and~\#1995.
 \item Lemma \path{inj_isomorph}, $O_1,O_2\mapsto W$:
-  \path{thm:peps_physicalToVirtualInsertion}, tracked by issue~\#1370.
+  \leanid{TNLean.PEPS.physical_to_virtual_insertion} states the source recovery
+  step; its proof remains open and is tracked by issue~\#1370.
   The endpoint projected-recovery component for a common bond matrix is
   formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.

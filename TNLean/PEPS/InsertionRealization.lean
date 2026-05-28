@@ -1,4 +1,4 @@
-import TNLean.PEPS.Blocking
+import TNLean.PEPS.EdgeMiddlePhysical
 
 /-!
 # Physical realization of edge virtual insertions
@@ -18,6 +18,8 @@ corresponding endpoint.
   coefficient.
 - `edgeInsertedCoeff_eq_sum_right_physicalRealization`: the right endpoint
   physical realization gives the inserted-edge coefficient.
+- `physical_to_virtual_insertion`: equal neighboring physical insertions in the
+  edge-blocked three-site chain come from one matrix on the shared virtual bond.
 - `edgeInsertedCoeff_endpointPhysicalRealization`: vertex injectivity gives
   endpoint physical realizations of the inserted-edge coefficient.
 -/
@@ -125,6 +127,45 @@ theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
       A hA e O₁ M).2 hO₁
   · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
       A hA e O₂ M).2 hO₂
+
+/-- Equal neighboring physical insertions recover a common virtual matrix on the
+shared edge.
+
+This is the edge-blocked PEPS form of the $O_1,O_2\mapsto W$ step in
+Lemma $\mathrm{inj\_isomorph}$. If inserting $O_1$ at the left endpoint and
+inserting $O_2$ at the right endpoint give the same three-block coefficient for
+every physical configuration, then there is a matrix $M$ on the shared bond such
+that $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
+$O_2\Phi_v=\Phi_vT_{v,e}(M)$.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
+eq:resonate--eq:O->X, lines 355--486 of the local paper source.
+
+**Proof status:** This declaration states the source recovery step used by the
+insertion-algebra theorem. Its proof is tracked by issue #1370. -/
+theorem physical_to_virtual_insertion
+    (A : Tensor G d) (e : Edge G)
+    (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (hEq : ∀ σ : V → Fin d,
+      (∑ β : EdgeBoundaryConfig (G := G) A e,
+        O₁ (A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β)) (σ e.1.1) *
+          edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+          A.component e.1.2 (edgeRightLocalConfig (G := G) A e β) (σ e.1.2)) =
+        ∑ β : EdgeBoundaryConfig (G := G) A e,
+          A.component e.1.1 (edgeLeftLocalConfig (G := G) A e β) (σ e.1.1) *
+            edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
+            O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2)) :
+    ∃ M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ,
+      (∀ c : LocalVirtualConfig A e.1.1 → ℂ,
+        O₁ (localTensorMap A e.1.1 c) =
+          localTensorMap A e.1.1
+            (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose c)) ∧
+        ∀ c : LocalVirtualConfig A e.1.2 → ℂ,
+          O₂ (localTensorMap A e.1.2 c) =
+            localTensorMap A e.1.2
+              (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c) := by
+  sorry
 
 /-- The left-endpoint physical realization of a virtual matrix insertion
 reproduces the full inserted-edge coefficient.
