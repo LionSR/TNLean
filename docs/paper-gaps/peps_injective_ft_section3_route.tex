@@ -154,8 +154,9 @@ Theorem can be proved in the manner of the paper.
   The missing mathematical step is still the
   contraction theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The full
-  transfer remains the not-yet-formalized theorem
-  \path{thm:peps_edgeBlockedThreeSiteInjective}.
+  transfer is now stated as
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}; its
+  proof remains open and is tracked by issue~\#1366.
 \item The two internal steps in Lemma \path{inj_isomorph} must be formalized for
   the edge-blocked three-site MPS. The local endpoint part of the
   virtual-to-physical realization $X\mapsto O_1,O_2$ is formalized by
@@ -223,8 +224,9 @@ It is meant to prevent the proof from drifting away from the source argument.
 \begin{itemize}
 \item \path{eq:block_to_mps} edge blocking:
   \path{edgeBlockedCoeff_eq_stateCoeff} is locally proved; the injectivity
-  bridge is \path{thm:peps_edgeBlockedThreeSiteInjective}, tracked by
-  issue~\#1366. The middle physical index of this three-site object is
+  bridge is stated as
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}, with
+  proof tracked by issue~\#1366. The middle physical index of this three-site object is
   formalized by \leanid{TNLean.PEPS.EdgeMiddlePhysicalConfig}. The named
   injectivity statement is \leanid{TNLean.PEPS.EdgeBlockedThreeSiteInjective},
   and the endpoint assertions are proved from vertex injectivity, both for a

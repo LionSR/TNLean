@@ -298,5 +298,22 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all
   hA.edgeBlockedThreeSiteInjective_all_of_middle
     (hComparison.edgeMiddleTensorInjective_all hMiddleRegions)
 
+/-- Vertex injectivity is preserved by the edge blocking to a three-site MPS.
+
+For every edge $e=(u,v)$, the two endpoint tensor maps and the middle tensor
+obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.
+
+Source: arXiv:1804.04964, Section 3, eq:block_to_mps,
+`Papers/1804.04964/paper_normal.tex`, lines 979--1009.
+
+**Proof status:** This declaration states the source assertion. The missing
+proof is the finite-region contraction theorem saying that contracting
+vertex-injective tensors over the middle region gives an injective blocked
+tensor; it is tracked by issue #1366. -/
+theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
+    (hA : IsVertexInjective A) (e : Edge G) :
+    EdgeBlockedThreeSiteInjective (G := G) A e := by
+  sorry
+
 end PEPS
 end TNLean
