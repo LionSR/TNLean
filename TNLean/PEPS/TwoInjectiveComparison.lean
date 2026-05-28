@@ -131,20 +131,22 @@ def TwoBlockReciprocalScalarProportional
 Source: arXiv:1804.04964, Section 3, Lemma `inj_equal_tensors_2`, lines
 1068--1203 of `Papers/1804.04964/paper_normal.tex`.
 
-If `A₁,A₂,B₁,B₂` are injective tensors joined by a finite nonempty family of
-shared virtual bonds, and inserting an arbitrary matrix on any shared bond
-gives the same two-tensor coefficient for the `A`-pair and the `B`-pair, then
-there is a nonzero scalar `λ` such that `A₁ = λ B₁` and
-`A₂ = λ⁻¹ B₂`.
+This is the source comparison theorem in an abstract form with nonempty
+spectator external boundary spaces; the statement in the paper is recovered by
+taking these spaces to be one-point spaces. If `A₁,A₂,B₁,B₂` are injective
+tensors joined by a finite nonempty family of shared virtual bonds, and
+inserting an arbitrary matrix on any shared bond gives the same two-tensor
+coefficient for the `A`-pair and the `B`-pair, then there is a nonzero scalar
+`λ` such that `A₁ = λ B₁` and `A₂ = λ⁻¹ B₂`.
 
-**Proof status:** This is the main theorem of the cited source. The proof
-follows the paper's argument: use injectivity to apply the inverse of one
-tensor, reduce the residual virtual operators by the scalar-reduction step
+**Proof status:** This is the main comparison theorem recorded in this file.
+The proof follows the paper's argument: use injectivity to apply the inverse of
+one tensor, reduce the residual virtual operators by the scalar-reduction step
 recorded in the blueprint as `thm:peps_twoInjectiveGaugeScalarReduction`, and
 then apply the same argument to the other tensor. Tracked by issue #1361. -/
-theorem twoInjectiveTensorInsertionComparison
+theorem two_injective_tensor_insertion_comparison
     {External₁ External₂ Physical₁ Physical₂ : Type*}
-    [Nonempty Bond]
+    [Nonempty Bond] [Nonempty External₁] [Nonempty External₂]
     (A₁ B₁ : TwoBlockTensor bondDim External₁ Physical₁)
     (A₂ B₂ : TwoBlockTensor bondDim External₂ Physical₂)
     (hA₁ : IsTwoBlockInjective A₁) (hA₂ : IsTwoBlockInjective A₂)

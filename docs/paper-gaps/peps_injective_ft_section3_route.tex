@@ -198,9 +198,11 @@ Theorem can be proved in the manner of the paper.
   $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$. In the blueprint this is
   split into the scalar-reduction substep
   \path{thm:peps_twoInjectiveGaugeScalarReduction} and the formally stated
-  theorem endpoint
-  \leanid{TNLean.PEPS.twoInjectiveTensorInsertionComparison}. Its proof remains
-  open and is tracked by issue~\#1361.
+  comparison theorem
+  \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison}. The formal
+  statement is an abstract version with nonempty spectator external boundary
+  spaces; the source lemma is recovered by taking these spaces to be one-point
+  spaces. Its proof remains open and is tracked by issue~\#1361.
 \item The final two-tensor comparison must then be applied by blocking one
   vertex against its complement. The paper uses this to prove
   $A_i=\lambda_i\widetilde B_i$ at each vertex, and then incorporates the
@@ -254,9 +256,11 @@ It is meant to prevent the proof from drifting away from the source argument.
 \item Lemma \path{inj_equal_tensors_2}, scalar step:
   \path{thm:peps_twoInjectiveGaugeScalarReduction}, tracked by issue~\#1362.
 \item Lemma \path{inj_equal_tensors_2}, comparison:
-  \leanid{TNLean.PEPS.twoInjectiveTensorInsertionComparison} states the
-  abstract two-block insertion comparison with reciprocal scalar
-  proportionality. Its proof is tracked by issue~\#1361.
+  \leanid{TNLean.PEPS.two_injective_tensor_insertion_comparison} states the
+  abstract two-block insertion comparison with nonempty external boundary
+  spaces and reciprocal scalar proportionality. The source lemma is the
+  one-point external-boundary specialization; the proof is tracked by
+  issue~\#1361.
 \item One vertex versus its complement:
   \path{thm:peps_oneVertexComplementComparison}, tracked by issue~\#1360.
 \item Final gauge equivalence and uniqueness:
