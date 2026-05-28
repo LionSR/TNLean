@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The SAL to Eta-Local Structure Step in
+Cirac--Perez-Garcia--Schuch--Verstraete 2017 Appendix C.2}
+\author{}
+\date{2026-05-27}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Appendix C.2 of Cirac--P\'erez-Garcia--Schuch--Verstraete proves that a simple
+MPDO satisfying the strong area law has the commuting nearest-neighbor product
+form
+\[
+  \sigma^{(N)}({\cal K})\propto \prod_{n=1}^N B_{n,n+1},
+\]
+where $B_{n,n+1}\geq 0$ and the translated two-site operators commute
+\cite[Appendix~C.2, Proposition~C.6]{Cirac2016MPDO_arXiv}. In the local
+source file this is Proposition \texttt{3to4},
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1571--1593}.
+
+The proof uses the sector decomposition obtained earlier in Appendix C.2:
+\[
+  \tilde\sigma
+  =
+  \bigoplus_{k_1,\ldots,k_N}
+  \bigotimes_{n=1}^N \eta_{k_n,k_{n+1}},
+\]
+with $\eta_{k_n,k_{n+1}}\geq 0$ acting between the right subspace of site $n$
+and the left subspace of site $n+1$. It then defines
+\[
+  B_{n,n+1}
+  =
+  \sum_{k_n,k_{n+1}}
+  \operatorname{Id}_{H_{L,n}^{(k_n)}}\otimes
+  \eta_{k_n,k_{n+1}}\otimes
+  \operatorname{Id}_{H_{R,n+1}^{(k_{n+1})}},
+\]
+regarded as the identity away from sites $n,n+1$. With this definition,
+$\tilde\sigma=\prod_n B_{n,n+1}$ and the commutation of the translated
+$B$-operators follows from their sector-local action.
+
+\section{Current formalization}
+
+The formal development currently records this as an eta-local structure for
+$K$.\footnote{The formal structure is
+\leanid{MPOTensor.EtaLocalStructureData}.} It contains the assembled positive
+translation-invariant two-site bond and its realization of the finite-chain
+MPO. From this structure, the development proves the commuting-form property
+and the GSNNCH--ZCL consequences.
+
+The two scope-restricted declarations are assembly
+statements.\footnote{These declarations are
+\leanid{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure} and
+\leanid{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}.}
+They assume the eta-local structure instead of deriving it from the SAL local
+coordinates. They also carry the ZCL hypothesis needed for the subsequent RFP
+consequences. Thus they formalize the final assembly step after the
+$B_{n,n+1}$ have been constructed, not the source theorem that constructs those
+bonds from SAL.
+
+\section{Missing step}
+
+The missing source-faithful theorem must construct the formal eta-local
+structure \leanid{MPOTensor.EtaLocalStructureData} from the Appendix C.2 local
+data attached to a simple MPDO satisfying SAL. It must not add ZCL as a
+hypothesis for this construction. Concretely, it must identify the local
+$\eta_{k,h}$ family with the original tensor coordinates, define the
+translation-invariant bond
+$B_{n,n+1}$ above, prove $B_{n,n+1}\geq 0$, prove the commutation relations,
+and prove the finite-chain realization
+\[
+  \sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}
+\]
+for positive scalars $c_N$.
+
+ZCL enters only after this commuting product form has been obtained, in the
+later step that derives the GSNNCH--ZCL and RFP conclusions.
+
+This is tracked by
+\href{https://github.com/LionSR/TNLean/issues/823}{issue \#823}. Until that
+construction exists, the scope-restricted assembly statements must not be
+presented as the full formalization of Proposition~C.6.
+
+\section{Classification}
+
+This note records an open gap for the SAL-to-bond construction of
+\leanid{MPOTensor.EtaLocalStructureData}. The two assembly declarations above
+are scope restrictions: they formalize only the post-assembly step after the
+nearest-neighbor bonds have already been constructed.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
