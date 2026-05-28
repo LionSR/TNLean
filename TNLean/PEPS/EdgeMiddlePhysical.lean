@@ -1,18 +1,20 @@
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.InjectiveRegion
+import TNLean.PEPS.SingletonRegion
 
 /-!
 # Middle physical indices for edge-blocked PEPS
 
 This file gives the middle tensor in the edge-centered three-site decomposition
-its own physical index.  For an edge \(e=(u,v)\), the middle physical
-configuration is the family of physical indices on \(V\setminus\{u,v\}\).
+its own physical index. For an edge $e=(u,v)$, the middle physical
+configuration is the family of physical indices on $V\setminus\{u,v\}$.
 
 ## References
 
 - [Molnár, Schuch, Verstraete, Cirac, *Fundamental Theorem for injective PEPS*,
   arXiv:1804.04964, Section 3, `eq:block_to_mps`](https://arxiv.org/abs/1804.04964)
 - `Papers/1804.04964/paper_normal.tex`, lines 981--1009.
+- `Papers/1804.04964/paper_normal.tex`, lines 1322--1404.
 -/
 
 namespace TNLean
@@ -30,8 +32,8 @@ private theorem edge_ne_of_middle_incident_for_physical (e : Edge G) {v : V}
   · exact hvne.1 (hleft.symm.trans (congrArg (fun f : Edge G => f.1.1) hie))
   · exact hvne.2 (hright.symm.trans (congrArg (fun f : Edge G => f.1.2) hie))
 
-/-- Physical configurations on the middle block \(V\setminus\{u,v\}\) in the
-edge-centered three-site decomposition at the edge \(e=(u,v)\).
+/-- Physical configurations on the middle block $V\setminus\{u,v\}$ in the
+edge-centered three-site decomposition at the edge $e=(u,v)$.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
@@ -164,7 +166,7 @@ def EdgeMiddleTensorInjective (A : Tensor G d) (e : Edge G) : Prop :=
   LinearIndependent ℂ (edgeMiddleTensorFamily (G := G) A e)
 
 /-- Injectivity of the three-site chain obtained by blocking around a
-chosen edge \(e=(u,v)\).
+chosen edge $e=(u,v)$.
 
 The first and last assertions are the injectivity of the endpoint tensors. The
 middle assertion is the injectivity of the tensor obtained by blocking all
@@ -181,14 +183,14 @@ edge-blocked three-site chain.
 
 The source proof uses that contracting injective tensors over a finite region
 gives an injective blocked tensor. This proposition records the part of that
-claim needed for the middle region \(V\setminus\{u,v\}\) attached to an edge
-\(e=(u,v)\), without asserting the full contraction theorem.
+claim needed for the middle region $V\setminus\{u,v\}$ attached to an edge
+$e=(u,v)$, without asserting the full contraction theorem.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 structure EdgeMiddleRegionInjectivityComparison
     (κ : RegionInjectivityData V) (A : Tensor G d) : Prop where
-  /-- Region injectivity of \(V\setminus\{u,v\}\) gives injectivity of the
+  /-- Region injectivity of $V\setminus\{u,v\}$ gives injectivity of the
   corresponding edge-middle tensor family. -/
   middle_tensor_injective :
     ∀ e : Edge G, κ.IsInjective (edgeMiddleVertices e) →
@@ -285,7 +287,7 @@ edge-middle tensor family.
 This is the all-edge conditional form of the assertion following
 `eq:block_to_mps` in arXiv:1804.04964, Section 3. The remaining source-paper
 step is the contraction theorem showing that vertex injectivity gives
-injectivity of each finite middle region \(V\setminus\{u,v\}\).
+injectivity of each finite middle region $V\setminus\{u,v\}$.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
@@ -297,6 +299,77 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
   hA.edgeBlockedThreeSiteInjective_all_of_middle
     (hComparison.edgeMiddleTensorInjective_all hMiddleRegions)
+
+/-- Singleton comparison and finite union closure give the edge-middle tensor
+for a chosen edge whose middle region is nonempty.
+
+This is a restricted consequence of the source argument: it handles the case
+where $V\setminus\{u,v\}$ is a nonempty finite union of singleton regions.
+The remaining comparison from region injectivity to the concrete edge-middle
+tensor is still assumed.
+
+**Scope restriction (nonempty middle):** This theorem assumes
+`(edgeMiddleVertices e).Nonempty`; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
+`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
+and 1322--1404. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hSingleton : SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A) (e : Edge G)
+    (hMiddle : (edgeMiddleVertices e).Nonempty) :
+    EdgeMiddleTensorInjective (G := G) A e :=
+  hComparison.middle_tensor_injective e
+    (hUnion.finset_injective_of_singletons hSingleton hA hMiddle)
+
+/-- Singleton comparison and finite union closure give the edge-blocked
+three-site injectivity statement for an edge whose middle region is nonempty.
+
+**Scope restriction (nonempty middle):** This theorem assumes
+`(edgeMiddleVertices e).Nonempty`; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
+`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
+and 1322--1404. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hSingleton : SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A) (e : Edge G)
+    (hMiddle : (edgeMiddleVertices e).Nonempty) :
+    EdgeBlockedThreeSiteInjective (G := G) A e :=
+  hA.edgeBlockedThreeSiteInjective_of_middle e
+    (hComparison.edgeMiddleTensorInjective_of_singletons hUnion hSingleton hA e hMiddle)
+
+/-- Singleton comparison and finite union closure give edge-blocked three-site
+injectivity at every edge whose middle region is nonempty.
+
+This is the all-edge form of the preceding restricted consequence.
+
+**Scope restriction (nonempty middle):** This theorem assumes
+`∀ e : Edge G, (edgeMiddleVertices e).Nonempty`; see
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
+`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
+and 1322--1404. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hSingleton : SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A)
+    (hMiddle : ∀ e : Edge G, (edgeMiddleVertices e).Nonempty) :
+    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
+  fun e =>
+    hComparison.edgeBlockedThreeSiteInjective_of_singletons
+      hUnion hSingleton hA e (hMiddle e)
 
 /-- Vertex injectivity is preserved by the edge blocking to a three-site MPS.
 

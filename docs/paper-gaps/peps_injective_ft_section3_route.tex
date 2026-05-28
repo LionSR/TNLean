@@ -143,6 +143,16 @@ Theorem can be proved in the manner of the paper.
   \leanid{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}:
   $R=\bigcup_{v\in R}\{v\}$ and $\kappa(\{v\})$ for every $v\in R$ imply
   $\kappa(R)$.
+  The corresponding nonempty-middle edge-middle tensor consequence is recorded
+  in \path{thm:peps_edgeMiddleTensorInjective_of_singletons}:
+  for $M_e=V\setminus\{u,v\}$, the assumptions
+  $M_e\ne\varnothing$ and
+  $M_e=\bigcup_{w\in M_e}\{w\}$ give $\kappa(M_e)$; the edge-middle
+  comparison then gives injectivity of the middle tensor.
+  The endpoint reduction then gives the one-edge three-site statement
+  \path{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}, and
+  applying this to all edges satisfying $M_e\ne\varnothing$ gives
+  \path{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
   and, for all edges at once, by
