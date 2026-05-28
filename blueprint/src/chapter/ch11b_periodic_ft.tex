@@ -561,7 +561,10 @@ unconditional result.
     \]
 
     If $A\sim_{\mathrm{gp}} B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
-    some $X\in\GL_D(\C)$ and $\zeta\ne0$ the trace pairing gives
+    some $X\in\GL_D(\C)$ and $\zeta\ne0$,
+    $(\bar B)^\alpha=\zeta X(\bar A)^\alpha X^{-1}$. Thus, for every
+    configuration $\sigma$ of length $N$,
+    $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$. Hence
     \[
         O_{\bar A\bar B}(N)
         =
@@ -585,13 +588,14 @@ unconditional result.
     \lean{MPSTensor.sectorMatch_propagation}
     \notready
     \uses{def:periodic_tensor}
-    Suppose that one blocked sector pair satisfies
-    $P_u A^{[m]}=e^{i\lambda_v}U_v Q_v B^{[m]}U_v^\dagger$. Then for every
-    $l\in\mathbb Z_m$ there are $\lambda_{v+l}$ and $U_{v+l}$ with
+    Let $A$ and $B$ be left-canonical tensors with period $m$, and let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical. Suppose
+    $d_{u_0}=e_{v_0}$, $d_{u_0}\ne0$, and, after identifying the virtual spaces,
+    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$. Then for every $l\in\mathbb Z_m$ there
+    is an equality $d_{u_0+l}=e_{v_0+l}$ and, after this identification,
     \[
-        P_{u+l} A^{[m]}
-        =
-        e^{i\lambda_{v+l}}U_{v+l} Q_{v+l} B^{[m]}U_{v+l}^\dagger .
+        A_{u_0+l}\sim_{\mathrm{gp}}B_{v_0+l}.
     \]
 \end{lemma}
 
@@ -600,8 +604,15 @@ unconditional result.
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \notready
     \uses{lem:sector_match_propagation}
-    Assume $v=u+q$ in $\mathbb Z_m$ and, for every $u$ and every physical block
-    $(i_1,\ldots,i_m)$,
+    Let $A$ and $B$ be left-canonical tensors with period $m$, and let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical. Assume
+    $d_u\ne0$ and $A_u$ is normal for every $u$. Fix $q\in\mathbb Z_m$ and
+    assume that for every $u$ there are $d_u=e_{u+q}$, $\zeta_u\ne0$, and
+    $X_u\in\GL_{d_u}(\C)$ such that
+    $B_{u+q}^\alpha=\zeta_u X_u A_u^\alpha X_u^{-1}$ for every blocked
+    physical index $\alpha$. In the source notation this means that, for every
+    physical block $(i_1,\ldots,i_m)$,
     \[
         A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+m-1}^{i_m}
         =
@@ -617,9 +628,13 @@ unconditional result.
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \notready
     \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match}
-    For periodic tensors of the same period, the existence of one pair
-    $(u,v)$ with $P_u A^{[m]}=e^{i\lambda_v}U_v Q_v B^{[m]}U_v^\dagger$
-    implies repeated-block equivalence.
+    Let $A$ and $B$ be periodic tensors with the same period $m$. Let
+    $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
+    cyclic sector decompositions whose sectors are left-canonical, and assume
+    every sector $A_u$ has nonzero virtual dimension. If there are sectors
+    $u_0,v_0$ with $d_{u_0}=e_{v_0}$ and
+    $A_{u_0}\sim_{\mathrm{gp}}B_{v_0}$ after identifying their virtual spaces,
+    then $A$ and $B$ are equivalent up to repeated blocks.
 \end{theorem}
 
 \begin{theorem}[Different bond dimensions imply asymptotic orthogonality]%
