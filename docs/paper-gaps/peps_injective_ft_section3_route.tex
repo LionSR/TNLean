@@ -175,9 +175,10 @@ Theorem can be proved in the manner of the paper.
   matrix, the local virtual pullbacks recover that matrix on the shared bond.
 \item Equality of PEPS states must be upgraded to equality of edge-inserted
   coefficients after the three-site reduction. This is the step that produces
-  the matrix-algebra isomorphism on the chosen bond. In the blueprint this is
-  the not-yet-formalized theorem
-  \path{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}.
+  the matrix-algebra isomorphism on the chosen bond. The formally stated
+  theorem is
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}; its proof remains
+  open and is tracked by issue~\#1367.
 \item The algebra isomorphism must be converted into an invertible edge gauge,
   using the same finite-dimensional matrix-algebra argument as the
   one-dimensional injective theorem. In the blueprint this is the
@@ -246,8 +247,9 @@ It is meant to prevent the proof from drifting away from the source argument.
   formalized by
   \leanid{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
 \item Matrix-insertion algebra isomorphism:
-  \path{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, tracked by
-  issue~\#1367.
+  \leanid{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism} states the
+  edge-blocked matrix-algebra correspondence and its inserted-coefficient
+  equality. Its proof is tracked by issue~\#1367.
 \item Edge gauge from the algebra isomorphism:
   \path{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}, tracked by
   issue~\#1368.

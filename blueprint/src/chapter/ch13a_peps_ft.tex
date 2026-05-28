@@ -1272,20 +1272,43 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 
+\begin{definition}[Edge-blocked insertion algebra correspondence]%
+    \label{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property}
+    \lean{TNLean.PEPS.IsEdgeBlockedInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{def:peps_edgeInsertedCoeff}
+    For two PEPS tensors $A$ and $B$ and an edge $e$, this property asserts
+    the existence of an algebra isomorphism $\Phi$ between the two matrix
+    algebras on the chosen bond such that
+    $C_A(e,\sigma,X)=C_B(e,\sigma,\Phi(X))$ for every physical configuration
+    $\sigma$ and every inserted matrix $X$.
+\end{definition}
+
 \begin{theorem}[Edge-blocked insertion algebra isomorphism]%
     \label{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
-    \notready
-    \uses{thm:peps_edgeBlockedThreeSiteInjective,
+    \lean{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}
+    \leanok
+    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property,
+        thm:peps_edgeBlockedThreeSiteInjective,
         thm:peps_virtualInsertionPhysicalRealization,
         thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,
         thm:peps_physicalToVirtualInsertion,
         thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
-    Applying the three-site injective-chain theorem to the edge-blocked MPS
-    gives an algebra isomorphism between matrix insertions on the chosen edge in
-    the two PEPS tensors. Equivalently, for every matrix $X$ inserted on that
-    edge for the first tensor family, there is a uniquely determined matrix
-    $Y$ inserted on the corresponding edge for the second tensor family that
-    gives the same edge-blocked state:
+    Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
+    the edge $e$ are injective, and suppose the two PEPS tensors define the same
+    state. Then there is an algebra isomorphism
+    \[
+        \Phi_e:\operatorname{Mat}_{D_A(e)}(\mathbb C)
+            \simeq_{\mathrm{alg}}
+            \operatorname{Mat}_{D_B(e)}(\mathbb C)
+    \]
+    such that, for every physical configuration $\sigma$ and every matrix
+    $X\in\operatorname{Mat}_{D_A(e)}(\mathbb C)$,
+    \[
+        C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
+    \]
+    This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$
+    constructed in \cite[Section~3]{Molnar2018NormalPEPS}:
     \begin{center}
         \TNPEPSThreeSiteInsertionComparison
     \end{center}
