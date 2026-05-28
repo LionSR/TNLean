@@ -1111,7 +1111,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
         thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
-    If $A$ is vertex-injective, then for every edge $e=(u,v)$,
+    For a tensor map or blocked tensor family $T$, write
+    $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
+    is vertex-injective, then for every edge $e=(u,v)$,
     \[
         \operatorname{inj}(T_{A,u}),\qquad
         \operatorname{inj}(T_{A,V\setminus\{u,v\}}),\qquad
@@ -1955,7 +1957,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \notready
     \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities,
         lem:peps_regionUnionDecomposition_disjoint}
-    If two regions of a PEPS are injective, then their union is injective.
+    Let $V$ be a finite vertex set. Write $\operatorname{inj}(R)$ for the
+    assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
+    injective. For two possibly overlapping regions $A,B\subseteq V$,
+    \[
+        \operatorname{inj}(A)\wedge\operatorname{inj}(B)
+        \Longrightarrow
+        \operatorname{inj}(A\cup B).
+    \]
     The proof in \cite[Section~3]{Molnar2018NormalPEPS} blocks the network into
     four parts $A\setminus B$, $A\cap B$, $B\setminus A$, and
     $(A\cup B)^c$, and applies the two available left inverses in sequence:
