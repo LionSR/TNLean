@@ -1175,6 +1175,31 @@ injective and normal PEPS, following Theorems~2 and~3 of
     incident edge of $e$.
 \end{proof}
 
+\begin{theorem}[Endpoint recovery of a common virtual insertion]%
+    \label{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \lean{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \leanok
+    \uses{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq,
+        thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    Let $e=(u,v)$. If
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, then
+    $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$ and
+    $\Psi_vO_2\Phi_v=T_{v,e}(M)$.
+    Here $T_{w,e}(N)$ denotes the virtual operator on the legs incident to $w$
+    which acts by $N$ on the leg belonging to $e$ and by the identity on the
+    other incident legs.
+\end{theorem}
+\begin{proof}\leanok
+    The endpoint equivalences give
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u
+    \iff \Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$
+    and
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v
+    \iff \Psi_vO_2\Phi_v=T_{v,e}(M)$.
+    The two hypotheses are the left sides of these equivalences.
+\end{proof}
+
 \begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
