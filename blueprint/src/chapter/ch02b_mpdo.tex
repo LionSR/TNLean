@@ -2479,17 +2479,28 @@ the elementary trace-power identity for diagonal matrices.
 \end{proof}
 
 \begin{remark}[Entropy-side construction]
-    The entropy-side theorem still to be supplied constructs the local data needed for
-    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} from the SAL
-    and ZCL hypotheses. The sector-reduced neighboring operators $\eta_{k,h}$
-    are already provided by Definition~\ref{def:mpdo_eta_of_hayashi_markov}.
-    What remains is to identify this sector family with the inverse-map
-    construction in the original simple-MPDO tensor coordinates and assemble it
-    into a single translation-invariant positive two-site bond realizing all
-    finite chains. Once this construction is available,
-    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure} yields the
-    commuting-form conclusion and hence the GSNNCH branch of the simple-MPDO
-    equivalence.
+    The remaining entropy-side step is the construction of a single
+    $\eta$-local product form from $\mathrm{SAL}(K)$. The local $\eta_{k,h}$
+    are already supplied by
+    Definition~\ref{def:mpdo_eta_of_hayashi_markov}.  What remains is the
+    tensor-coordinate assembly
+    \[
+        B=\sum_{k,h}
+        \operatorname{Id}_{H_L^{(k)}}\otimes
+        \eta_{k,h}\otimes
+        \operatorname{Id}_{H_R^{(h)}},
+        \qquad B\ge 0,
+    \]
+    and, for every $N\ge 2$,
+    \[
+        \sigma^{(N)}(K)=c_N\prod_{n=1}^{N}B_{n,n+1},
+        \qquad c_N>0,\qquad
+        [B_{i,i+1},B_{j,j+1}]=0 .
+    \]
+    These equations are exactly the $\eta$-local product hypothesis; after that,
+    Theorem~\ref{thm:mpdo_has_commuting_form_of_eta_local_structure}
+    gives the commuting-form conclusion. Zero correlation length enters only in
+    the subsequent RFP and GSNNCH--ZCL conclusions.
 \end{remark}
 
 \section{Blocked-RFP construction for simple MPDOs}
@@ -2502,7 +2513,8 @@ the elementary trace-power identity for diagonal matrices.
     This structure records the local Appendix~C.2 ingredients: a normalized
     three-site reduced state with equality in strong subadditivity, the
     resulting local $\eta$-structure, and the rank-one conclusion for the
-    auxiliary primitive matrix $T$.
+    auxiliary primitive matrix $T$, supplied here through the conditional
+    rank-one criterion of Theorem~\ref{thm:sal_zcl_implies_rank_one_t}.
 \end{definition}
 
 \begin{theorem}[Local simple-MPDO structure from SAL--ZCL hypotheses]
@@ -2542,16 +2554,39 @@ the elementary trace-power identity for diagonal matrices.
     \uses{def:simple_mpdo_local_structure_data,
         def:simple_mpdo_blocked_rfp_data,
         def:mpdo_eta_local_structure_data}
-    Once the $\eta$-local structure has been assembled, it
-    supplies the commuting-form property required by the blocked-RFP structure. Together with
-    the local Appendix~C.2 ingredients and zero correlation length, this gives the
-    explicit hypotheses used by the simple-MPDO construction theorem.
+    Given the local Appendix~C.2 data, ZCL, and an $\eta$-local product
+    $\sigma^{(N)}(K)=c_N\prod_n B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge0$, and $[B_{i,i+1},B_{j,j+1}]=0$, one obtains the
+    simple-MPDO blocked-RFP structure for $K$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Use the commuting-form property carried by the $\eta$-local structure and
-    keep the local Appendix~C.2 ingredients and zero-correlation-length hypothesis
-    unchanged.
+    The $\eta$-local product gives the commuting-form property for $K$; the local
+    Appendix~C.2 hypotheses and ZCL fill the other two fields.
+\end{proof}
+
+\begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
+    \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure}
+    \leanok
+    \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
+        thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
+    Suppose the local hypotheses of Lemmas~C.3--C.4 give
+    $\rho_{ABC}$, $I(A:C|B)_{\rho}=0$, a primitive matrix $T$ with
+    $\operatorname{tr}(T)=1$ and $\operatorname{tr}(T^m)$ independent of $m$,
+    together with the conditional rank-one criterion for $T$. Suppose also
+    that $K$ has zero correlation length and that the assembled
+    $\eta$-local data give
+    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
+    Then these data determine the simple-MPDO blocked-RFP structure for $K$.
+\end{theorem}
+
+\begin{proof}\leanok
+    First form the local structure from the SAL--ZCL local hypotheses and the
+    conditional rank-one criterion for $T$. The $\eta$-local product formula
+    supplies the commuting-form component, and ZCL supplies the remaining
+    component of the blocked-RFP structure.
 \end{proof}
 
 \begin{theorem}[Zero correlation length gives a blocked fusion-isometry witness]
@@ -2622,6 +2657,26 @@ the elementary trace-power identity for diagonal matrices.
     this with zero correlation length gives the GSNNCH-with-ZCL case; zero
     correlation length also gives the blocked fusion-isometry witness and the
     transfer-map fusion formulation.
+\end{proof}
+
+\begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
+    \label{thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure}
+    \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}
+    \leanok
+    \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
+        thm:simple_mpdo_rfp_chain_of_data}
+    Assume the local SAL--ZCL hypotheses of Lemmas~C.3--C.4 and the assembled
+    $\eta$-local product form, with the conditional rank-one criterion for $T$,
+    $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
+    $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
+    $K$ is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size
+    $2$, and satisfies the transfer-map fusion formulation of MPDO RFP.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine the local SAL--ZCL hypotheses and the $\eta$-local product form into the
+    blocked-RFP structure, then apply
+    Theorem~\ref{thm:simple_mpdo_rfp_chain_of_data}.
 \end{proof}
 
 \begin{theorem}[Simple-MPDO RFP chain from commuting form and ZCL]

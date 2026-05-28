@@ -45,8 +45,10 @@ once the remaining local-to-global implication has been formalized.
 * `MPOTensor.SimpleMPDOLocalStructureData`
 * `MPOTensor.SimpleMPDOBlockedRFPData`
 * `MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure`
+* `MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure`
 * `MPOTensor.structural_implies_rfp_blocked`
 * `MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure`
+* `MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure`
 * `MPOTensor.simple_mpdo_rfp_chain`
 
 ## References
@@ -71,8 +73,9 @@ subadditivity, the resulting local `η`-structure, and a primitive real matrix
 condition.
 
 The structure is intentionally independent of a particular MPO tensor. The missing
-preceding theorem is the map from a concrete simple MPDO satisfying SAL/ZCL to
-such a structure and then onward to `HasCommutingForm`. -/
+preceding theorem is the map from a concrete simple MPDO to this structure and
+then onward to `HasCommutingForm`: SAL supplies the local `η`-structure, while
+ZCL supplies trace-power constancy and the rank-one factorization of `T`. -/
 structure SimpleMPDOLocalStructureData where
   /-- Dimensions of the three contiguous local regions. -/
   dA : ℕ
@@ -181,6 +184,39 @@ def ofEtaLocalStructure
   commutingForm := hEta.hasCommutingForm
   zcl := hZCL
 
+/-- Construct the blocked-RFP data from the local SAL--ZCL hypotheses and the
+assembled `η`-local structure.
+
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
+the post-assembly step: the local hypotheses record the Lemmas C.3--C.4
+consequences, while the eta-local structure records the already assembled
+positive nearest-neighbor product
+`σ^{(N)}(K) ∝ ∏ n, B_{n,n+1}` with commuting bonds.
+
+**Scope restriction:** this constructor still assumes `EtaLocalStructureData K`;
+it does not construct the translated bond operators from SAL. It also assumes
+the conditional primitive trace-power rank-one input `hPF`. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` and
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the remaining constructions are
+tracked by issue #823. -/
+def ofSALZCLAndEtaLocalStructure
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (hPF : Matrix.PrimitiveTracePowersConstantImpliesRankOne T)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    SimpleMPDOBlockedRFPData K :=
+  ofEtaLocalStructure
+    (SimpleMPDOLocalStructureData.ofSALZCL
+      rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF)
+    hEta hZCL
+
 /-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL case of
 Theorem 4.9. -/
 theorem isGSNNCHWithZCL (data : SimpleMPDOBlockedRFPData K) : IsGSNNCHWithZCL K :=
@@ -256,5 +292,36 @@ theorem simple_mpdo_rfp_chain_of_etaLocalStructure {K : MPOTensor d D}
     IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
       IsRFP_MPDO_via_fusion K :=
   simple_mpdo_rfp_chain hEta.hasCommutingForm hZCL
+
+/-- The simple-MPDO RFP chain from local SAL--ZCL hypotheses once the eta-local
+nearest-neighbor product has been assembled.
+
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593. This declaration is
+the post-assembly step combining those outputs.
+
+**Scope restriction:** this theorem assumes the assembled eta-local structure
+instead of deriving it from SAL, and it assumes the conditional primitive
+trace-power rank-one input `hPF`. It records the final assembly step after the
+nearest-neighbor bonds $B_{n,n+1}$ and their commutation have been constructed.
+Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`
+and `docs/paper-gaps/cpgsv17_pf_rank_one.tex`; the source-faithful
+constructions are tracked by issue #823. -/
+theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d D}
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (hPF : Matrix.PrimitiveTracePowersConstantImpliesRankOne T)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K :=
+  simple_mpdo_rfp_chain_of_data
+    (SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure
+      rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF hEta hZCL)
 
 end MPOTensor
