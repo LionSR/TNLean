@@ -452,8 +452,8 @@ unconditional result.
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
     \uses{def:periodic_tensor}
-    If $A$ is $m$-periodic, then the self-overlap along multiples of $m$
-    converges to $m$ (the period, viewed as a scalar).
+    If $A$ is $m$-periodic, then
+    $\lim_{N\to\infty} O_{AA}(mN)=m$.
 \end{theorem}
 
 \begin{theorem}[Different periods imply asymptotic orthogonality]%
@@ -461,29 +461,40 @@ unconditional result.
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_ne_period}
     \leanok
     \uses{def:periodic_tensor}
-    If $A$ and $B$ are periodic with different periods, then
-    $\braket{V^{(N)}(A)}{V^{(N)}(B)} \to 0$ as $N\to\infty$.
+    If $A$ and $B$ have periods $m_A\ne m_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:periodic_overlap_zero_ne_dim}
-    Split on whether the bond dimensions agree. If not, the claim follows
-    from Theorem~\ref{thm:periodic_overlap_zero_ne_dim}. If $D_1 = D_2$,
-    suppose for contradiction that $A$ and $B$ are gauge-phase equivalent,
-    so $B^i=\zeta X A^iX^{-1}$ with $X$ invertible and $\zeta\ne0$. Then
+    If $D_A\ne D_B$, use Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.
+    Assume $D_A=D_B$ and $A\sim_{\mathrm{gp}}B$, say
+    $B^i=\zeta X A^iX^{-1}$ with $X\in\GL_D(\C)$ and
+    $\zeta\ne0$. The transfer maps satisfy
     \[
         \E_B(Y)
         =
         \zeta\overline{\zeta}\,
         X\,\E_A(X^{-1}YX^{-*})\,X^* .
     \]
-    Perron--Frobenius eigenvalue uniqueness \cite[Theorem~6.3]{Wolf2012Quantum}
-    applied to the positive fixed points gives $|\zeta|=1$, and therefore
-    $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. For a periodic
-    tensor of period $m$, the peripheral spectrum is
-    $\{e^{2\pi i r/m}:0\le r<m\}$. Hence $m_A=m_B$, contradicting the
-    hypothesis. Thus $A\not\sim_{\mathrm{gp}}B$, and the irreducible
-    trace-preserving overlap dichotomy gives
-    $\lim_{N\to\infty}O_{A,B}(N)=0$.
+    With $\E_A(\rho_A)=\rho_A$, put
+    $\sigma=X\rho_A X^*$. Then
+    $\E_B(\sigma)=|\zeta|^2\sigma$, while $\E_B(\rho_B)=\rho_B$ for a
+    nonzero positive fixed point $\rho_B$. Perron--Frobenius eigenvalue
+    uniqueness \cite[Theorem~6.3]{Wolf2012Quantum} gives $|\zeta|^2=1$.
+    Hence $\E_B$ is conjugate to $\E_A$, so
+    $\sigma_{\mathrm{per}}(\E_A)=\sigma_{\mathrm{per}}(\E_B)$. Since
+    \[
+        \sigma_{\mathrm{per}}(\E_A)
+        =
+        \{e^{2\pi i r/m_A}:0\le r<m_A\},
+        \qquad
+        \sigma_{\mathrm{per}}(\E_B)
+        =
+        \{e^{2\pi i r/m_B}:0\le r<m_B\},
+    \]
+    equality of the two finite sets gives $m_A=m_B$, a contradiction. Thus
+    $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
+    dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
@@ -499,8 +510,28 @@ unconditional result.
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
     \leanok
     \uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
-    If two periodic tensors with the same period admit no gauge-phase
-    matching sector pair after blocking, then their overlap tends to zero.
+    Suppose $A$ and $B$ have the same total bond dimension and the same
+    period $m$. Let
+    $A_u$ and $B_v$ be period-blocked sector tensors of virtual dimensions
+    $d_u$ and $e_v$, indexed by $u,v\in\mathbb Z_m$, such that
+    \[
+        \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,\qquad
+        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v
+    \]
+    with unit weights, and the two decompositions are cyclic sector
+    decompositions. Assume each sector is left-canonical,
+    \[
+        \sum_{\alpha} (A_u^\alpha)^\dagger A_u^\alpha=I_{d_u},
+        \qquad
+        \sum_{\alpha} (B_v^\alpha)^\dagger B_v^\alpha=I_{e_v},
+    \]
+    Assume $\forall u,\ d_u\ne0$ and $\forall v,\ e_v\ne0$, and
+    whenever $d_u=e_v$, the corresponding sector tensors are not gauge-phase
+    equivalent after identifying their virtual spaces:
+    \[
+        d_u=e_v\quad\Longrightarrow\quad A_u\not\sim_{\mathrm{gp}}B_v .
+    \]
+    Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
 \begin{proof}
     \uses{lem:sector_blocked_normal_periodic,
@@ -512,20 +543,22 @@ unconditional result.
     $\bar B \sim \bigoplus_{v\in\mathbb Z_m} B_v$, with unit sector weights.
     For every length $N$,
     \[
-        O_{\bar A,\bar B}(N)
+        O_{\bar A\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-            O_{A_u,B_v}(N).
+            O_{A_uB_v}(N).
     \]
-    The no-matching hypothesis is
-    $\forall u,v\in\mathbb Z_m,\ A_u \not\sim_{\mathrm{gp}} B_v$. The
-    normal-tensor overlap dichotomy gives
-    $\lim_{N\to\infty} O_{A_u,B_v}(N)=0$ for every $u,v$, and therefore
+    For a sector pair $(u,v)$, if $d_u=e_v$, the no-matching hypothesis gives
+    $A_u \not\sim_{\mathrm{gp}} B_v$ after identifying the virtual spaces, and
+    the normal-tensor overlap dichotomy gives
+    $\lim_{N\to\infty} O_{A_uB_v}(N)=0$. If $d_u\ne e_v$, the rectangular
+    overlap dichotomy gives the same limit. Thus every summand tends to zero,
+    and therefore
     \[
-        \lim_{N\to\infty} O_{\bar A,\bar B}(N)
+        \lim_{N\to\infty} O_{\bar A\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
-            \lim_{N\to\infty} O_{A_u,B_v}(N)
+            \lim_{N\to\infty} O_{A_uB_v}(N)
         =0 .
     \]
 
@@ -535,36 +568,36 @@ unconditional result.
     $V_N(\bar B)=\zeta^N X V_N(\bar A)X^{-1}$.
     The trace pairing cancels the conjugating matrices:
     \[
-        O_{\bar A,\bar B}(N)
+        O_{\bar A\bar B}(N)
         =
-        \overline{\zeta}^{\,N} O_{\bar A,\bar A}(N),
+        \overline{\zeta}^{\,N} O_{\bar A\bar A}(N),
         \qquad
-        O_{\bar B,\bar B}(N)
+        O_{\bar B\bar B}(N)
         =
-        |\zeta|^{2N} O_{\bar A,\bar A}(N).
+        |\zeta|^{2N} O_{\bar A\bar A}(N).
     \]
-    With $O_{\bar A,\bar A}(N)\to m$ and $O_{\bar B,\bar B}(N)\to m>0$,
+    With $O_{\bar A\bar A}(N)\to m$ and $O_{\bar B\bar B}(N)\to m>0$,
     the second identity gives
     \[
         1
         =
         \lim_{N\to\infty}
-        \frac{O_{\bar B,\bar B}(N)}{O_{\bar A,\bar A}(N)}
+        \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)}
         =
         \lim_{N\to\infty} |\zeta|^{2N},
     \]
     hence $|\zeta|=1$. The first identity then gives
     \[
-        \lim_{N\to\infty}|O_{\bar A,\bar B}(N)|
+        \lim_{N\to\infty}|O_{\bar A\bar B}(N)|
         =
-        \lim_{N\to\infty}|\zeta|^N |O_{\bar A,\bar A}(N)|
+        \lim_{N\to\infty}|\zeta|^N |O_{\bar A\bar A}(N)|
         =
         m\ne0,
     \]
     while the sector sum above gives
-    $\lim_{N\to\infty}O_{\bar A,\bar B}(N)=0$. Thus
+    $\lim_{N\to\infty}O_{\bar A\bar B}(N)=0$. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
-    dichotomy gives $\lim_{N\to\infty}O_{A,B}(N)=0$.
+    dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{proof}
 
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
