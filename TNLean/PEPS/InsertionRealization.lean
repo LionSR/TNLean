@@ -94,6 +94,38 @@ theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
   localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.2 O₂
     (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
 
+/-- Projected endpoint physical realizations recover the corresponding virtual
+matrix insertion on both endpoints.
+
+This is the local endpoint part of the $O_1,O_2\mapsto W$ step in
+Lemma $\mathrm{inj\_isomorph}$: once the compressed physical actions are the
+canonical realizations of the same bond matrix, injectivity recovers the
+virtual insertion on the distinguished bond. The full three-site theorem still
+has to prove that such a common matrix is forced by equality of the two
+physical actions on the blocked state.
+
+Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, lines 363--486
+of the local paper source. -/
+theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
+    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
+    (O₁ O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
+    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ)
+    (hO₁ : (localProjector A hA e.1.1).comp (O₁.comp (localProjector A hA e.1.1)) =
+      physRealizeLocalOp A hA e.1.1
+        (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose))
+    (hO₂ : (localProjector A hA e.1.2).comp (O₂.comp (localProjector A hA e.1.2)) =
+      physRealizeLocalOp A hA e.1.2
+        (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)) :
+    localVirtualOpOfPhysicalOp A hA e.1.1 O₁ =
+        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ∧
+      localVirtualOpOfPhysicalOp A hA e.1.2 O₂ =
+        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M := by
+  constructor
+  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
+      A hA e O₁ M).2 hO₁
+  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
+      A hA e O₂ M).2 hO₂
+
 /-- The left-endpoint physical realization of a virtual matrix insertion
 reproduces the full inserted-edge coefficient.
 
