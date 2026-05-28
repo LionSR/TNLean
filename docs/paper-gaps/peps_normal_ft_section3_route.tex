@@ -78,11 +78,9 @@ The present blueprint nodes are the following.
 
 \begin{itemize}
     \item \path{lem:peps_injectiveRegion_union} states the union-of-injective
-          regions lemma. It is tracked by \ghissue{1374}. Chapter 13a now
-          includes both the four-region blocking picture and the graphical proof
-          sequence from the source proof, via
-          \path{\TNPEPSInjectiveRegionUnion} and
-          \path{\TNPEPSInjectiveRegionUnionProof}.
+          regions lemma. It is tracked by \ghissue{1374}. It records the
+          four-region decomposition and the two successive inverse applications
+          used in the source proof.
     \item \path{lem:peps_regionInjectivityUnionClosure_finite} records the
           finite nonempty iteration of the binary union-closure assertion.
     \item \path{def:peps_normalSquareBlockingRegions} records the square-lattice
@@ -261,10 +259,7 @@ indexed finite-region geometry of Lemma \path{injective_union} is formalized
 down to the selected complement and closure forms used by the two inverse
 applications. The rectangular decompositions of $R$ and $S$ are formalized, and
 the conditional derivations of injectivity for $R$ and $S$ from union closure
-are also formalized. Chapter 13a now includes TikZ diagrams for the rectangular
-cover criterion and the top-collar decomposition of $A_3$, so these formal
-sufficient conditions can be compared directly with the source drawings. The
-two edge blocks removed from the displayed $T$-window
+are also formalized. The two edge blocks removed from the displayed $T$-window
 are injective under the coordinate rectangular hypotheses. The finite-lattice
 complementary block around the chosen edge has a set-theoretic definition.
 The exact-cover criterion by $2\times3$ and $3\times2$ rectangles is only a
@@ -456,9 +451,10 @@ alone. The following additional obligations remain.
 
 The normal route has its own tensor-network diagrams. These are not substitutes
 for the injective theorem diagrams; they attach the additional normal blocking
-layer to named proof nodes. Chapter~13a calls the public TikZ commands in
-\path{blueprint/src/macros/tn_print.tex}, and the web blueprint renders cached
-SVGs from those same commands through \path{blueprint/src/Packages/tn_diagrams.py}.
+layer to named proof nodes.\footnote{Chapter~13a calls the public TikZ commands
+    in \path{blueprint/src/macros/tn_print.tex}. The web blueprint renders
+    cached SVGs from the same commands through
+    \path{blueprint/src/Packages/tn_diagrams.py}.}
 
 \begin{itemize}
     \item Lemma \path{injective_union} shows the four regions
@@ -476,10 +472,6 @@ SVGs from those same commands through \path{blueprint/src/Packages/tn_diagrams.p
           translationally invariant local gauge formula with horizontal gauge
           $X$ and vertical gauge $Y$.
 \end{itemize}
-
-The normal-PEPS diagram commands are registered in
-\path{blueprint/src/Packages/tn_diagrams.py}, so the web blueprint renders the
-same mathematical diagrams rather than a separate hand-written fallback.
 
 \section{Conclusion}
 
