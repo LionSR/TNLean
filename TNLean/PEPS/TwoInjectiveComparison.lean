@@ -124,7 +124,7 @@ def TwoBlockReciprocalScalarProportional
       TwoBlockScalarProportional A₁ B₁ c ∧
         TwoBlockScalarProportional A₂ B₂ c⁻¹
 
-/-! ### Source theorem endpoint -/
+/-! ### Main comparison theorem -/
 
 /-- **Generalized two-injective-tensor comparison.**
 
@@ -137,11 +137,11 @@ gives the same two-tensor coefficient for the `A`-pair and the `B`-pair, then
 there is a nonzero scalar `λ` such that `A₁ = λ B₁` and
 `A₂ = λ⁻¹ B₂`.
 
-**Proof status:** This is the source theorem endpoint. The proof follows the
-paper's argument: use injectivity to apply the inverse of one tensor, reduce
-the residual virtual operators by the scalar-reduction step recorded in the
-blueprint as `thm:peps_twoInjectiveGaugeScalarReduction`, and then apply the
-same argument to the other tensor. Tracked by issue #1361. -/
+**Proof status:** This is the main theorem of the cited source. The proof
+follows the paper's argument: use injectivity to apply the inverse of one
+tensor, reduce the residual virtual operators by the scalar-reduction step
+recorded in the blueprint as `thm:peps_twoInjectiveGaugeScalarReduction`, and
+then apply the same argument to the other tensor. Tracked by issue #1361. -/
 theorem twoInjectiveTensorInsertionComparison
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     [Nonempty Bond]

@@ -1580,13 +1580,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.IsTwoBlockInjective, TNLean.PEPS.SameTwoBlockInsertions}
     \lean{TNLean.PEPS.TwoBlockScalarProportional}
     \lean{TNLean.PEPS.TwoBlockReciprocalScalarProportional}
-    \notready
     \uses{thm:peps_twoInjectiveGaugeScalarReduction}
     Let $A_1,A_2,B_1,B_2$ be injective tensors with the same shared virtual
-    bonds. For a shared bond $b$ and a matrix $X\in\operatorname{Mat}_{D_b}$,
-    write $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for the
-    two-tensor coefficient with $X$ inserted on $b$ and the identity inserted
-    on every other shared bond. Assume
+    bonds, and assume that there is at least one shared virtual bond. For a
+    shared bond $b$ and a matrix $X\in\operatorname{Mat}_{D_b}$, write
+    $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for the two-tensor
+    coefficient with $X$ inserted on $b$ and the identity inserted on every
+    other shared bond. Assume
     $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)
     =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for every
     $b,X,\eta_1,\eta_2,\sigma_1,\sigma_2$:
@@ -1599,9 +1599,22 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
-    The proof is the argument of Lemma~$\mathrm{inj\_equal\_tensors\_2}$ in
+    The proof is the argument of the comparison lemma in
     \cite[Section~3]{Molnar2018NormalPEPS}. Applying the inverse of $A_2$ to
     the three insertion equalities obtained by freeing each shared bond gives
+    virtual operators $Z,U,W$ satisfying, for every external index $\eta$,
+    shared-boundary index $\mu$, and physical index $\sigma$ of the first
+    block,
+    \[
+        A_1(\eta,\mu,\sigma)
+        =
+        \sum_\nu B_1(\eta,\nu,\sigma) Z_{\nu,\mu}
+        =
+        \sum_\nu B_1(\eta,\nu,\sigma) U_{\nu,\mu}
+        =
+        \sum_\nu B_1(\eta,\nu,\sigma) W_{\nu,\mu}.
+    \]
+    In tensor notation this is
     \[
         A_1
         =
