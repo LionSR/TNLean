@@ -12,7 +12,7 @@ original local tensor at that vertex.
 
 - [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
   entangled pair states generating the same state*, arXiv:1804.04964,
-  Section 3, `eq:block_to_mps`](https://arxiv.org/abs/1804.04964)
+  Section 3](https://arxiv.org/abs/1804.04964)
 - `Papers/1804.04964/paper_normal.tex`, lines 981--1009.
 -/
 
@@ -27,7 +27,7 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 For a one-vertex region, the blocked physical space is the original physical
 space at that vertex.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 abbrev SingletonRegionPhysicalConfig (_v : V) : Type :=
   Fin d
@@ -37,20 +37,23 @@ abbrev SingletonRegionPhysicalConfig (_v : V) : Type :=
 For a one-vertex block, no contraction occurs: the blocked tensor is the
 original local tensor at $v$.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 def singletonRegionTensorFamily (A : Tensor G d) (v : V) :
     LocalVirtualConfig A v → SingletonRegionPhysicalConfig (d := d) v → ℂ :=
   A.component v
 
-/-- Injectivity of the singleton blocked-region tensor. -/
+/-- Injectivity of the singleton blocked-region tensor.
+
+Source: arXiv:1804.04964, Section 3;
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 def SingletonRegionTensorInjective (A : Tensor G d) (v : V) : Prop :=
   LinearIndependent ℂ (singletonRegionTensorFamily (G := G) A v)
 
 omit [Fintype V] in
 /-- Vertex injectivity is exactly injectivity of every singleton blocked tensor.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 theorem IsVertexInjective.singletonRegionTensorInjective {A : Tensor G d}
     (hA : IsVertexInjective A) (v : V) :
@@ -60,12 +63,12 @@ theorem IsVertexInjective.singletonRegionTensorInjective {A : Tensor G d}
 /-- Compatibility between the concrete singleton blocked tensor and an abstract
 region-injectivity predicate.
 
-The abstract predicate $\kappa.\mathrm{IsInjective}$ is used for finite blocked
+The abstract injectivity predicate $\kappa$ is used for finite blocked
 regions in the normal PEPS proof. This comparison records the one-vertex base
 case: if the concrete singleton blocked tensor is injective, then the
 corresponding singleton region is injective for $\kappa$.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 structure SingletonRegionInjectivityComparison
     (κ : RegionInjectivityData V) (A : Tensor G d) : Prop where
@@ -78,11 +81,11 @@ structure SingletonRegionInjectivityComparison
 injectivity.
 
 For a one-vertex region, the blocked tensor is the original local tensor. The
-source proof after `eq:block_to_mps` uses this as the base case before applying
-closure of injectivity under contractions. This proposition records that base
-case for the abstract region-injectivity predicate.
+source proof in arXiv:1804.04964, Section 3, uses this as the base case before
+applying closure of injectivity under contractions. This proposition records
+that base case for the abstract region-injectivity predicate.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 structure SingletonRegionInjectivityFromVertexInjectivity
     (κ : RegionInjectivityData V) (A : Tensor G d) : Prop where
@@ -96,7 +99,7 @@ omit [Fintype V] in
 /-- The concrete singleton-tensor comparison supplies the singleton base case
 of the source contraction step.
 
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+Source: arXiv:1804.04964, Section 3;
 `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
 theorem ofSingletonComparison
     {κ : RegionInjectivityData V} {A : Tensor G d}

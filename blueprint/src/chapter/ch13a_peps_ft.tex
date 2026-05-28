@@ -980,11 +980,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
 
 \begin{definition}[Singleton blocked region]%
     \label{def:peps_singletonRegionTensor}
-    \lean{TNLean.PEPS.SingletonRegionPhysicalConfig}
-    \lean{TNLean.PEPS.singletonRegionTensorFamily}
-    \lean{TNLean.PEPS.SingletonRegionTensorInjective}
-    \lean{TNLean.PEPS.SingletonRegionInjectivityComparison}
-    \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity}
+    \lean{TNLean.PEPS.SingletonRegionPhysicalConfig,
+        TNLean.PEPS.singletonRegionTensorFamily,
+        TNLean.PEPS.SingletonRegionTensorInjective,
+        TNLean.PEPS.SingletonRegionInjectivityComparison}
     \leanok
     \uses{def:IsVertexInjective, def:peps_regionInjectivityData}
     For a singleton block $\{v\}$, the blocked physical index is the original
@@ -1002,20 +1001,12 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Vertex injectivity gives singleton-block injectivity]%
     \label{thm:peps_singletonRegionTensorInjective}
     \lean{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}
-    \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}
     \leanok
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor}
     If $A$ is vertex-injective, then every singleton blocked tensor is
-    injective:
+    injective. For every vertex $v$,
     \[
-        \forall v,\qquad \operatorname{inj}(T_{A,\{v\}}).
-    \]
-    Consequently, any comparison
-    $\operatorname{inj}(T_{A,\{v\}})\Rightarrow\kappa(\{v\})$ supplies the
-    singleton base case
-    \[
-        A\text{ vertex-injective}\Longrightarrow
-        \forall v,\qquad \kappa(\{v\}).
+        \operatorname{inj}(T_{A,\{v\}}).
     \]
 \end{theorem}
 \begin{proof}\leanok
@@ -1026,14 +1017,33 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Thus $\operatorname{inj}(A_v)$ is exactly
     $\operatorname{inj}(T_{A,\{v\}})$. Vertex injectivity gives
     $\forall v,\operatorname{inj}(A_v)$, and therefore
-    $\forall v,\operatorname{inj}(T_{A,\{v\}})$. If
-    $\operatorname{inj}(T_{A,\{v\}})\Rightarrow\kappa(\{v\})$, then, for each
-    $v$,
+    $\forall v,\operatorname{inj}(T_{A,\{v\}})$. For a fixed $v$, this is the
+    displayed assertion.
+\end{proof}
+
+\begin{theorem}[Singleton comparison gives the region base case]%
+    \label{thm:peps_singletonRegionInjectivityFromVertexInjectivity}
+    \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity,
+        TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}
+    \leanok
+    \uses{def:IsVertexInjective, def:peps_singletonRegionTensor,
+        thm:peps_singletonRegionTensorInjective}
+    Assume that a region-injectivity predicate $\kappa$ satisfies, for every
+    vertex $v$,
     \[
-        A\text{ vertex-injective}
-        \Longrightarrow \operatorname{inj}(T_{A,\{v\}})
-        \Longrightarrow \kappa(\{v\}).
+        \operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\}).
     \]
+    Then, for every vertex $v$,
+    \[
+        A\text{ vertex-injective}\Longrightarrow\kappa(\{v\}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    For each $v$, the preceding theorem gives
+    $A\text{ vertex-injective}\Longrightarrow
+    \operatorname{inj}(T_{A,\{v\}})$. The comparison hypothesis gives
+    $\operatorname{inj}(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
+    composition is the claimed implication.
 \end{proof}
 
 \begin{definition}[Region injectivity supplies the edge-middle tensor]%
