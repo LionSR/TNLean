@@ -26,7 +26,7 @@ with positive entries such that, for every length $L$, the operators
 $O_L(M_\alpha)$ linearly span an algebra whose structure coefficients satisfy
 \[
     c^{(L)}_{\alpha,\beta,\gamma}
-      = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
+      = \tr(\chi_{\alpha,\beta,\gamma}^{L}).
 \]
 The important point for the present note is that the labels
 $\alpha,\beta,\gamma$ are BNT labels, not basis labels depending on $L$.
@@ -60,7 +60,7 @@ therefore express a positive-length, length-dependent blocked-basis analogue:
 \[
     c^{(n)}_{i,j,k}
       = \sum_r \chi_{n,i,j,k,r}^{\,n}
-      = \operatorname{tr}(\chi_{n,i,j,k}^{\,n}).
+      = \tr(\chi_{n,i,j,k}^{\,n}).
 \]
 Here $n$ is the source blocking length of the two factors in
 $\mathcal A_n$, while the coefficient $k$ is taken in the basis of
@@ -95,7 +95,7 @@ product
 so the two input factors have source length $n$, while the result is expanded
 in a basis at length $2n$. The exponent $n$ in
 \[
-    c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})
+    c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})
 \]
 is therefore the source length of the two factors, not the codomain length.
 This convention is only a blocked-basis analogue; it is not a replacement for
@@ -135,14 +135,14 @@ one-site and two-site decompositions.  The source identity
 \texttt{eq:algebra-appendix} is stated at lines~1933--1936 and used in this
 converse at lines~2048--2050:
 \[
-    \sum_\gamma \operatorname{tr}(\nu_\gamma^L) O_L(A_\gamma)
+    \sum_\gamma \tr(\nu_\gamma^L) O_L(A_\gamma)
       =
     \sum_{\alpha,\beta,\gamma}
-      \operatorname{tr}\bigl((\mu_\alpha\otimes\mu_\beta
+      \tr\bigl((\mu_\alpha\otimes\mu_\beta
         \otimes\chi_{\alpha,\beta,\gamma})^L\bigr) O_L(M_\gamma).
 \]
-Positivity and Lemma~\texttt{Lem:app\_simple} (lines~1155--1163) first give,
-after relabelling,
+Since both $A_\gamma$ and $M_\gamma$ are BNT, the comparison first gives,
+up to relabelling (line~2053),
 \[
     A_\gamma
       = e^{i\theta_\gamma} Z_\gamma M_\gamma Z_\gamma^{-1}.
@@ -152,8 +152,10 @@ unitary $U_\gamma$, as in line~2057, so
 \[
     A_\gamma = U_\gamma M_\gamma U_\gamma^{-1}
 \]
-with $U_\gamma$ unitary.  The same coefficient comparison gives the multiset
-identity
+with $U_\gamma$ unitary.  Since, for all sufficiently large $L$, the operators
+$O_L(A_\gamma)=O_L(M_\gamma)$ are linearly independent, and all coefficients are
+positive, the simple-matrix lemma (lines~1155--1163, used at line~2058) gives
+the multiset identity
 \[
     \{\nu_{\gamma,k}\}_k
       =
@@ -162,7 +164,7 @@ identity
 \]
 Summing this identity gives
 \[
-    \operatorname{tr}(\nu_\gamma)
+    \tr(\nu_\gamma)
       = \sum_{\alpha,\beta}m_\alpha m_\beta
           c^{(1)}_{\alpha,\beta,\gamma}
       = m_\gamma .
@@ -217,7 +219,7 @@ idempotent condition
       \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}m_\alpha m_\beta
 \]
 is also represented as a predicate on the trace scalars
-$m_\alpha=\operatorname{tr}(\mu_\alpha)$.\footnote{%
+$m_\alpha=\tr(\mu_\alpha)$.\footnote{%
 \leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}.}  A
 positive BNT-label $\chi$-witness consists of a length-independent diagonal
 family $\chi_{\alpha,\beta,\gamma}$, positivity of every diagonal entry, and
@@ -246,7 +248,7 @@ statement, but they do not yet construct the operators, trace scalars,
 coefficients, comparison maps, or $\chi$-matrices from an MPDO tensor.
 Once both the same-length BNT product form and a positive BNT-label
 $\chi$-witness are available, the same-length product expansion with
-coefficients written as $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
+coefficients written as $\tr(\chi_{\alpha,\beta,\gamma}^L)$
 is formalized as a direct corollary.\footnote{%
 \leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
 eq_sum_chi_trace_pow},
