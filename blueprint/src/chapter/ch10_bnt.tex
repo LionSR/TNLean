@@ -132,11 +132,12 @@ and~\cite{Cirac2021Matrix}.
     if it satisfies Definition~\ref{def:is_normal_canonical_form}
     and, in addition:
     \begin{enumerate}
-        \item the moduli are strictly decreasing
-              (strengthened from non-increasing),
+        \item the weight moduli
+              $|\mu_1| > |\mu_2| > \cdots > |\mu_r|$ are strictly decreasing
+              (a one-representative restriction),
         \item distinct blocks of the same bond dimension are
               not gauge-phase equivalent,
-        \item the dominant block has unit modulus, $\|\mu_1\| = 1$
+        \item the dominant block has unit modulus, $|\mu_1| = 1$
               (\cite[paragraph after \texttt{eq:II\_CF1}]{Cirac2016MPDO_arXiv}).
     \end{enumerate}
     This is a scope-restricted one-copy-per-sector surface: it keeps one
@@ -145,7 +146,11 @@ and~\cite{Cirac2021Matrix}.
     route is recorded in
     \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
     The strict ordering describes an already selected or grouped
-    representative family. It is not the source BNT expansion
+    representative family. Equal-modulus copies are not separated by this
+    surface; they appear as the individual weights $\mu_{j,q}$ in the
+    coefficient sum $c_N^{(j)} = \sum_q \mu_{j,q}^N$ used in the
+    sector-BNT surface below. This is not the source BNT
+    expansion
     \[
         A^i
         = \bigoplus_{j=1}^g \bigoplus_{q=1}^{r_j}
@@ -522,9 +527,9 @@ factorization is assumed.
     equivalent after identifying equal bond dimensions; and the
     \cite[\S II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization holds,
     \[
-        \forall (j,q),\ \lVert \mu_{j,q} \rVert \le 1,
+        \forall (j,q),\ |\mu_{j,q}| \le 1,
         \qquad
-        \exists\, (j_*, q_*) : \lVert \mu_{j_*, q_*} \rVert = 1.
+        \exists\, (j_*, q_*) : |\mu_{j_*, q_*}| = 1.
     \]
     The MPV expansion takes the raw two-layer form
     \[
@@ -569,17 +574,17 @@ factorization is assumed.
     \uses{lem:sector_bnt_coeff_eq_sum_weight_pow}
     Under the optional global modulus normalization
     \cite[\S II, lines~217--246]{Cirac2017MPDO_AnnPhys}, every raw weight satisfies
-    $\lVert \mu_{j,q} \rVert \le 1$, and the triangle inequality bounds
+    $|\mu_{j,q}| \le 1$, and the triangle inequality bounds
     the norm of the sector coefficient by the multiplicity:
     \[
-        \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j.
+        \bigl| c_N^{(j)} \bigr| \le r_j.
     \]
 \end{lemma}
 
 \begin{proof}\leanok
     Apply the triangle inequality to the raw power sum from
     Lemma~\ref{lem:sector_bnt_coeff_eq_sum_weight_pow} and bound each term by
-    $1$ using $\lVert \mu_{j,q} \rVert \le 1$.
+    $1$ using $|\mu_{j,q}| \le 1$.
 \end{proof}
 
 \begin{lemma}[Cross-overlap decay between distinct basis blocks]%
@@ -642,7 +647,7 @@ factorization is assumed.
     \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization yields
     directly
     \[
-        \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j
+        \bigl| c_N^{(j)} \bigr| \le r_j
     \]
     for every $N$ and basis index $j$, without an additional explicit
     modulus-bound hypothesis.
@@ -661,7 +666,7 @@ factorization is assumed.
     Under the BNT canonical form, the
     \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} unit-modulus existential
     provides indices $(j_*, q_*)$ with
-    $\lVert \mu_{j_*, q_*} \rVert = 1$.
+    $|\mu_{j_*, q_*}| = 1$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -677,7 +682,7 @@ factorization is assumed.
     The single-sector two-copy decomposition with raw weights
     $(1, 1/2)$ demonstrates that the BNT canonical form admits
     unequal-modulus copies: the modulus bound holds because
-    $\lVert 1 \rVert \le 1$ and $\lVert 1/2 \rVert = 1/2 \le 1$, and the
+    $|1| \le 1$ and $|1/2| = 1/2 \le 1$, and the
     unit-modulus existential is witnessed by the first copy with
     weight $1$. This is the
     \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization in
@@ -732,7 +737,7 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
     \uses{def:sector_bnt_cf, lem:sector_bnt_cesaro_nondecay}
     Let $P$ be a BNT canonical form and let $j_0$ be a sector index such
     that some copy of sector $j_0$ carries a unit-modulus weight, that is,
-    there exists $q$ with $\lVert \mu_{j_0, q}\rVert = 1$. Then the
+    there exists $q$ with $|\mu_{j_0, q}| = 1$. Then the
     sector-$j_0$ coefficient $c_N^{(j_0)} = \sum_q \mu_{j_0, q}^N$ does not
     tend to $0$ as $N \to \infty$.
 
@@ -748,7 +753,7 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 \begin{proof}\leanok
     Apply Lemma~\ref{lem:sector_bnt_cesaro_nondecay} to the family
     $q \mapsto \mu_{j_0, q}$, using the modulus bound
-    $\lVert \mu_{j_0, q}\rVert \le 1$ from the canonical-form normalization
+    $|\mu_{j_0, q}| \le 1$ from the canonical-form normalization
     together with the per-sector unit-modulus hypothesis.
 \end{proof}
 
