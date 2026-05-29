@@ -412,7 +412,7 @@ nonempty-region singleton theorem applies at every edge.
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
 `lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
 and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_card_gt_two
+theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card
     {κ : RegionInjectivityData V} {A : Tensor G d}
     (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
     (hUnion : RegionInjectivityUnionClosure κ)
@@ -479,7 +479,7 @@ nonempty-middle theorem applies uniformly.
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
 `lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
 and 1322--1404. -/
-theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_card_gt_two
+theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card
     {κ : RegionInjectivityData V} {A : Tensor G d}
     (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
     (hUnion : RegionInjectivityUnionClosure κ)

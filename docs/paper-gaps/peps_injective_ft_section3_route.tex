@@ -97,10 +97,10 @@ reindexing needed for the identity-insertion specialization. The current Lean
 layer includes the corresponding middle-tensor reindexing theorem
 \leanid{TNLean.PEPS.edgeMiddleWeight_eq_edgeOpenMiddleWeight}. The diagonal
 summand has also been isolated in
-\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}. The
-pointwise off-diagonal vanishing is recorded as
-\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_offDiagonal_summand}; what
-remains is to use
+\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}, and
+\leanid{TNLean.PEPS.edgeInsertedCoeff_identity_offDiagonal_summand} records the
+pointwise off-diagonal vanishing. The full identity-insertion specialization is
+\leanid{TNLean.PEPS.edgeInsertedCoeff_identity}; its proof uses
 \leanid{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig} to
 reindex the finite inserted-boundary sum along the diagonal.
 
@@ -110,17 +110,6 @@ The following statements are still needed before the injective PEPS Fundamental
 Theorem can be proved in the manner of the paper.
 
 \begin{enumerate}
-\item The identity matrix coefficient must be used to collapse the two inserted
-  bond indices to the diagonal. The diagonal summand theorem
-  \path{thm:peps_edgeInsertedCoeff_identity_diagonal_summand} and the
-  off-diagonal summand theorem
-  \path{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand} reduce this to
-  the diagonal equivalence
-  \path{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig} and the
-  finite diagonal reindexing theorem
-  \path{thm:peps_edgeInsertedCoeff_identity}, identifying the matrix-insertion
-  formalism with the ordinary three-block contraction when no nontrivial matrix
-  is inserted.
 \item Vertex injectivity must be shown to pass to the edge-blocked three-site
   object. This is the formal version of the paper's assertion that the
   regrouped MPS is injective. The middle physical index for this regrouped
@@ -154,7 +143,7 @@ Theorem can be proved in the manner of the paper.
   applying this to all edges satisfying $M_e\ne\varnothing$ gives
   \path{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
   The graph-cardinality variant
-  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_card_gt_two}
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
   packages the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
   the nonempty-middle hypothesis is automatic.
   Vertex injectivity supplies the two endpoint assertions by
