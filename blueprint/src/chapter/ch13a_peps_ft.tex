@@ -909,9 +909,26 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \uses{def:peps_virtualConfigEquivEdgeBoundary,
         thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches,
         thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
-    Fibre the global virtual sum by the edge-centered boundary data. The
-    remaining fibre sum is the blocked middle tensor, and the two endpoint
-    factors are reconstructed from the same boundary data.
+    Write $\operatorname{Coeff}_A(\sigma)$ for the PEPS state coefficient and
+    $C_A(e;\sigma)$ for the edge-blocked coefficient, and put $e=(u,v)$ and
+    $M_e=V\setminus\{u,v\}$. The equivalence
+    $\omega\leftrightarrow(\beta,\omega_{M_e})$ between global virtual
+    configurations and an edge boundary configuration with a compatible middle
+    configuration rewrites the PEPS coefficient as
+    \[
+        \sum_{\omega}
+        A_u(\omega|_u,\sigma_u)
+        \left(\prod_{x\in M_e}A_x(\omega|_x,\sigma_x)\right)
+        A_v(\omega|_v,\sigma_v)
+        =
+        \sum_{\beta}
+        A_u(\beta_u,\sigma_u)\,
+        C_{A,M_e}(\beta,\sigma|_{M_e})\,
+        A_v(\beta_v,\sigma_v).
+    \]
+    Under the equivalence, $\omega|_u=\beta_u$ and $\omega|_v=\beta_v$; the
+    inner sum over $\omega_{M_e}$ is exactly $C_{A,M_e}(\beta,\sigma|_{M_e})$.
+    Thus $C_A(e;\sigma)=\operatorname{Coeff}_A(\sigma)$.
 \end{proof}
 
 \begin{theorem}[Identity insertion equals the PEPS coefficient]%
@@ -924,8 +941,24 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge insertion coefficient is the original PEPS state coefficient.
 \end{theorem}
 \begin{proof}\leanok
-    Combine the identity-insertion reindexing with the edge-blocking
-    reindexing of the ordinary PEPS coefficient.
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. With $\Id$ inserted on $e$, the
+    inserted-boundary sum is
+    \[
+        C_A(e,\Id;\sigma)
+        =
+        \sum_{a,b,\lambda,\rho}
+        \delta_{a,b}\,
+        A_u(a,\lambda;\sigma_u)\,
+        C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})\,
+        A_v(b,\rho;\sigma_v).
+    \]
+    Here $a,b$ are the two copies of the distinguished bond index, while
+    $\lambda,\rho$ are the remaining virtual configurations at $u$ and $v$.
+    The factor $\delta_{a,b}$
+    leaves only the diagonal $a=b$, and the open-middle reindexing gives
+    $C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})
+    =C_{A,M_e}(a,\lambda,\rho;\sigma|_{M_e})$. Hence
+    $C_A(e,\Id;\sigma)=C_A(e;\sigma)=\operatorname{Coeff}_A(\sigma)$.
 \end{proof}
 
 \begin{theorem}[Same state gives the same edge-blocked coefficients]%
@@ -937,8 +970,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coefficients agree at every edge and every physical configuration.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite both edge-blocked coefficients as the corresponding PEPS state
-    coefficients and apply the same-state hypothesis.
+    For every physical configuration $\sigma$,
+    \[
+        C_A(e;\sigma)
+        =
+        \operatorname{Coeff}_A(\sigma)
+        =
+        \operatorname{Coeff}_B(\sigma)
+        =
+        C_B(e;\sigma).
+    \]
 \end{proof}
 
 \begin{theorem}[Same state gives the same identity insertions]%
@@ -951,8 +992,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     insertions agree at every edge and every physical configuration.
 \end{theorem}
 \begin{proof}\leanok
-    Rewrite both identity insertions as the corresponding PEPS state
-    coefficients and apply the same-state hypothesis.
+    For every physical configuration $\sigma$,
+    \[
+        C_A(e,\Id;\sigma)
+        =
+        \operatorname{Coeff}_A(\sigma)
+        =
+        \operatorname{Coeff}_B(\sigma)
+        =
+        C_B(e,\Id;\sigma).
+    \]
 \end{proof}
 
 \begin{definition}[Middle tensor family at an edge]%
@@ -1089,7 +1138,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     tensor maps in the edge-blocked three-site chain are injective.
 \end{theorem}
 \begin{proof}\leanok
-    Apply vertex injectivity at the two endpoints of the chosen edge.
+    If $e=(u,v)$, vertex injectivity gives
+    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, which are
+    the left and right endpoint tensor maps of the edge-blocked chain.
 \end{proof}
 
 \begin{theorem}[Endpoint injectivity at all edges]%
@@ -1103,8 +1154,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge.
 \end{theorem}
 \begin{proof}\leanok
-    For each edge $e$, Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective}
-    gives injectivity of the two endpoint tensor maps at $e$.
+    For each $e=(u,v)$, Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective}
+    gives
+    $\operatorname{inj}(T_{A,u})\wedge\operatorname{inj}(T_{A,v})$.
 \end{proof}
 
 \begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
@@ -1118,8 +1170,14 @@ injective and normal PEPS, following Theorems~2 and~3 of
     chain.
 \end{theorem}
 \begin{proof}\leanok
-    The endpoint assertions are supplied by vertex injectivity. The middle
-    assertion is the assumed injectivity of the blocked middle tensor.
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
+    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, while the
+    hypothesis is $\operatorname{inj}(T_{A,M_e})$. Hence
+    \[
+        \operatorname{inj}(T_{A,u})
+        \wedge \operatorname{inj}(T_{A,M_e})
+        \wedge \operatorname{inj}(T_{A,v}).
+    \]
 \end{proof}
 
 \begin{theorem}[All edge-blocked chains from middle-tensor injectivity]%
@@ -1133,9 +1191,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     tensor gives an injective edge-blocked three-site chain at every edge.
 \end{theorem}
 \begin{proof}\leanok
-    For each edge $e$, the one-edge reduction turns injectivity of the
-    edge-middle tensor family at $e$ into injectivity of the corresponding
-    three-site chain.
+    For each $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. Vertex injectivity gives
+    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, while the
+    hypothesis gives $\operatorname{inj}(T_{A,M_e})$. Hence
+    \[
+        \operatorname{inj}(T_{A,u})\wedge
+        \operatorname{inj}(T_{A,M_e})\wedge
+        \operatorname{inj}(T_{A,v})
+    \]
+    is the injectivity assertion for the edge-blocked three-site chain at $e$.
 \end{proof}
 
 \begin{theorem}[Region injectivity gives edge-blocked injectivity]%
@@ -1152,8 +1216,15 @@ injective and normal PEPS, following Theorems~2 and~3 of
     chain at the edge $e=(u,v)$.
 \end{theorem}
 \begin{proof}\leanok
-    The comparison gives injectivity of the middle tensor. The previous reduction
-    combines this with vertex injectivity at the two endpoints.
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The comparison gives
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. Vertex injectivity
+    supplies $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$.
+    The preceding reduction then gives
+    \[
+        \operatorname{inj}(T_{A,u})\wedge
+        \operatorname{inj}(T_{A,M_e})\wedge
+        \operatorname{inj}(T_{A,v}).
+    \]
 \end{proof}
 
 \begin{theorem}[Middle tensors from all middle regions]%
@@ -1168,10 +1239,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
     edge-middle tensor family is injective.
 \end{theorem}
 \begin{proof}\leanok
-    For each edge $e=(u,v)$, the hypotheses give
-    injectivity of the middle region $V\setminus\{u,v\}$ after blocking; the
-    comparison sends this to injectivity of the corresponding middle tensor
-    family.
+    For each edge $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. The hypotheses give
+    $\kappa(M_e)$. The comparison implication
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$ yields
+    $\operatorname{inj}(T_{A,M_e})$ for every edge.
 \end{proof}
 
 \begin{theorem}[All edge-blocked chains from middle-region injectivity]%
@@ -1189,8 +1260,16 @@ injective and normal PEPS, following Theorems~2 and~3 of
     chain at every edge.
 \end{theorem}
 \begin{proof}\leanok
-    The comparison gives middle-tensor injectivity for every edge. The all-edge
-    middle-tensor theorem then gives three-site injectivity for every edge.
+    For every edge $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. The region
+    hypothesis gives $\kappa(M_e)$, and the comparison gives
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$. Vertex
+    injectivity gives $\operatorname{inj}(T_{A,u})$ and
+    $\operatorname{inj}(T_{A,v})$. Thus
+    \[
+        \operatorname{inj}(T_{A,u})\wedge
+        \operatorname{inj}(T_{A,M_e})\wedge
+        \operatorname{inj}(T_{A,v}).
+    \]
 \end{proof}
 
 \begin{theorem}[Edge-middle tensor from singleton regions, nonempty middle case]%
