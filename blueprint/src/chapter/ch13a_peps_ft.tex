@@ -1513,22 +1513,37 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    For fixed $A$, $B$, a bond-dimension equality, and a vertex $v$, this
-    states the two local conclusions still needed from the blocked-middle
-    reduction in \cite[Section~3]{Molnar2018NormalPEPS}:
-    (i) each local component of $B$ lies in the image of the local tensor map
-    of $A$, and (ii) the canonical pullback through the chosen left inverse of
-    $A$ factorizes as one invertible matrix on each incident edge.
+    Fix $A$, $B$, a bond-dimension equality, and a vertex $v$. Let
+    $\mathcal T^A_v$ be the local tensor map of $A$, let $L^A_v$ be the
+    chosen left inverse of $\mathcal T^A_v$, and let
+    $\Pi^A_v=\mathcal T^A_vL^A_v$. The factorized local gauge datum consists
+    of the following two identities for local virtual configurations
+    $\eta,\eta'$:
+    \[
+        \Pi^A_v B_v(\eta,-)=B_v(\eta,-),
+        \qquad
+        L^A_vB_v(\eta,-)(\eta')
+        =
+        \prod_{e\ni v}X_e(\eta_e,\eta'_e),
+    \]
+    with $X_e\in\GL(D_A(e))$ on each incident edge. This is the local output
+    required from the blocked-middle reduction in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{definition}[Blocked-middle local gauge formula]%
     \label{def:peps_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
     \leanok
-    This states the explicit local gauge formula that the edge-centered
-    blocked-middle reduction is expected to produce: a family of invertible
-    matrices on the incident edges of $v$ whose product kernel reconstructs each
-    local component of $B$ from those of $A$.
+    The blocked-middle local gauge formula at $v$ is the assertion that there
+    are matrices $X_e\in\GL(D_A(e))$, one on each incident edge, such that for
+    all local virtual configurations $\eta$ and physical indices $\sigma$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
 \end{definition}
 
 \begin{theorem}[Blocked-middle formula implies factorized local gauge]%
@@ -1536,15 +1551,36 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
     \leanok
     \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
-    Any explicit local gauge formula from the blocked-middle reduction yields
-    the factorized local gauge datum. The remaining open step is to derive this
-    blocked-middle formula from equality of PEPS states.
+    If the blocked-middle local gauge formula holds at $v$ with matrices
+    $X_e$, then the factorized local gauge datum holds at $v$ with the same
+    matrices.
+    % Open: derive the displayed blocked-middle formula from equality of PEPS
+    % states by the edge-centred three-site reduction.
 \end{theorem}
 \begin{proof}\leanok
-    The explicit local gauge formula already places each local component of
-    $B$ in the image of the local tensor map of $A$. Applying the chosen left
-    inverse of $A$ identifies the canonical candidate with the same factorized
-    coefficient kernel, so both parts of the factorized local gauge datum follow.
+    For fixed $\eta$, set
+    $c_\eta(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. The displayed
+    blocked-middle formula is precisely
+    $B_v(\eta,-)=\mathcal T^A_vc_\eta$. Hence
+    \[
+        \Pi^A_vB_v(\eta,-)
+        =
+        \Pi^A_v\mathcal T^A_vc_\eta
+        =
+        \mathcal T^A_vc_\eta
+        =
+        B_v(\eta,-),
+    \]
+    and
+    \[
+        L^A_vB_v(\eta,-)(\eta')
+        =
+        L^A_v\mathcal T^A_vc_\eta(\eta')
+        =
+        c_\eta(\eta')
+        =
+        \prod_{e\ni v}X_e(\eta_e,\eta'_e).
+    \]
 \end{proof}
 
 \begin{theorem}[Blocked-middle formula gives a local gauge formula]%
@@ -1571,8 +1607,18 @@ injective and normal PEPS, following Theorems~2 and~3 of
     % by the edge-centred three-site reduction.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the previous theorem to obtain the factorized local gauge datum, then
-    use the local left inverse to read off the same product-kernel formula.
+    By the preceding theorem,
+    $L^A_vB_v(\eta,-)(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. Since
+    $\Pi^A_vB_v(\eta,-)=B_v(\eta,-)$ and
+    $\Pi^A_v=\mathcal T^A_vL^A_v$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}L^A_vB_v(\eta,-)(\eta')A_v(\eta',\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
 \end{proof}
 
 \begin{theorem}[Absorbing edge gauges into the second PEPS]%
