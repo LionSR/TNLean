@@ -159,6 +159,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/MPS/Irreducible` | Fixed-point projections, Form II reductions, scalar fixed points, adjoint irreducibility, and periodic-blocking infrastructure for irreducible blocks. |
 | `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, local projectors, ground spaces, intersection and wrapping-window arguments, commuting cases, and martingale estimates. |
 | `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | MPDO/LPDO foundations, canonical-form and zero-correlation-length predicates, pure RFP structures, and structural bridges. |
+| `TNLean/MPS/Examples` | Example tensors and state families, including AKLT, even-parity, GHZ, and $\mathbb{Z}/2$ examples. |
 | `TNLean/Wielandt` | Quantum Wielandt span growth, rank-one constructions, rectangular span, primitivity equivalences, and paper-facing endpoints. |
 | `TNLean/PEPS` | PEPS definitions, virtual insertions, identity-edge insertions, blocking, local gauge transformations, and the injective PEPS theorem frontier. |
 | `TNLean/PiAlgebra` | Algebraic Fundamental-Theorem variants and block-separation statements. |
