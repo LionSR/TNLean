@@ -175,6 +175,20 @@ Theorem can be proved in the manner of the paper.
   The all-edge conditional form
   is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
+  The finite induction on exposed middle vertices is separated as
+  \leanid{TNLean.PEPS.FiniteRegionKernelDescent}: for kernel conditions
+  $K_c(S)$ attached to a coefficient family $c=(c_\rho)_\rho$, the implications
+  $K_c(S)\Rightarrow K_c(S\setminus\{j\})$ imply
+  $K_c(M_e)\Rightarrow K_c(\varnothing)$. The edge-middle instance of this
+  coefficient argument is recorded by
+  \leanid{TNLean.PEPS.EdgeMiddleKernelDescentData}: the zero relation
+  $\sum_\rho c_\rho T_{A,M_e}^\rho(\tau)=0$ for every middle physical index
+  $\tau$ gives $K_c(M_e)$, and $K_c(\varnothing)$ gives $c_\rho=0$ for every
+  $\rho$. Consequently
+  \leanid{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective}
+  proves $\operatorname{inj}(T_{A,M_e})$ from such a datum, and
+  \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
+  combines it with the endpoint injectivity assertions.
   The missing mathematical step is still the
   contraction theorem used in the paper: contracting vertex-injective tensors
   over that finite middle region gives an injective blocked tensor. The full

@@ -1,4 +1,5 @@
 import TNLean.PEPS.Blocking
+import TNLean.PEPS.FiniteKernelDescent
 import TNLean.PEPS.InjectiveRegion
 import TNLean.PEPS.SingletonRegion
 
@@ -165,6 +166,71 @@ Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
 def EdgeMiddleTensorInjective (A : Tensor G d) (e : Edge G) : Prop :=
   LinearIndependent ℂ (edgeMiddleTensorFamily (G := G) A e)
 
+/-- Boundary labels of the middle tensor in the edge-blocked three-site chain.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+abbrev EdgeMiddleBoundaryLabel (A : Tensor G d) (e : Edge G) : Type _ :=
+  ResidualLocalConfig (G := G) A (edgeLeftIncident (G := G) e) ×
+    ResidualLocalConfig (G := G) A (edgeRightIncident (G := G) e)
+
+/-- Kernel-descent data for the edge-middle tensor.
+
+For a finitely supported coefficient family $c_{\rho}$, the source proof
+considers kernel conditions $K_c(S)$ for finite vertex sets $S$ in the middle
+region. The initial condition is the zero relation: for every middle physical
+index $\tau$,
+\[
+    \sum_{\rho} c_{\rho} T^{\rho}_{A,V\setminus\{u,v\}}(\tau)=0,
+\]
+which is $K_c(V\setminus\{u,v\})$. The deletion condition in
+the finite descent datum is $K_c(S)\Rightarrow K_c(S\setminus\{j\})$, obtained
+from the local left inverse at $j$. The terminal condition is
+$K_c(\varnothing)\Rightarrow c=0$.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+structure EdgeMiddleKernelDescentData (A : Tensor G d) (e : Edge G) where
+  /-- The finite kernel-descent datum attached to a coefficient family $c_{\rho}$.
+
+  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+  kernelDescent :
+    (EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ) → FiniteRegionKernelDescent V
+  /-- A zero linear relation among the middle tensor vectors gives
+  $K_c(V\setminus\{u,v\})$.
+
+  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+  initial_relation :
+    ∀ c : EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ,
+      Finsupp.linearCombination ℂ (edgeMiddleTensorFamily (G := G) A e) c = 0 →
+        (kernelDescent c).kernelCondition (edgeMiddleVertices e)
+  /-- The empty-region condition gives $c=0$.
+
+  Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+  `Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+  terminal_relation :
+    ∀ c : EdgeMiddleBoundaryLabel (G := G) A e →₀ ℂ,
+      (kernelDescent c).kernelCondition ∅ → c = 0
+
+namespace EdgeMiddleKernelDescentData
+
+/-- Kernel descent for the middle block gives injectivity of the edge-middle
+tensor family.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem edgeMiddleTensorInjective {A : Tensor G d} {e : Edge G}
+    (hDescent : EdgeMiddleKernelDescentData (G := G) A e) :
+    EdgeMiddleTensorInjective (G := G) A e := by
+  rw [EdgeMiddleTensorInjective, linearIndependent_iff]
+  intro c hc
+  exact hDescent.terminal_relation c <|
+    (hDescent.kernelDescent c).descend_to_empty (hDescent.initial_relation c hc)
+
+end EdgeMiddleKernelDescentData
+
 /-- Injectivity of the three-site chain obtained by blocking around a
 chosen edge $e=(u,v)$.
 
@@ -245,6 +311,17 @@ theorem IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle {A : Tenso
     (hMiddle : ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e) :
     ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
   fun e => hA.edgeBlockedThreeSiteInjective_of_middle e (hMiddle e)
+
+/-- Kernel descent for the middle block supplies the full edge-blocked
+three-site injectivity statement.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
+theorem IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent {A : Tensor G d}
+    (hA : IsVertexInjective A) (e : Edge G)
+    (hDescent : EdgeMiddleKernelDescentData (G := G) A e) :
+    EdgeBlockedThreeSiteInjective (G := G) A e :=
+  hA.edgeBlockedThreeSiteInjective_of_middle e hDescent.edgeMiddleTensorInjective
 
 /-- Region injectivity of the edge-middle block, together with the comparison to
 the edge-middle tensor family, gives the edge-blocked three-site injectivity
