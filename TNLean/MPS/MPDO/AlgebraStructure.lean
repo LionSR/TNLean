@@ -523,6 +523,62 @@ theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_apply
         simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
       rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih, hX]
 
+/-- Eigenvector version of the blocked adjoint calculation.
+
+If `X` is an eigenvector of the unblocked adjoint transfer map with eigenvalue
+`λ`, then it is an eigenvector of the adjoint blocked transfer map at size `n`
+with eigenvalue `λ^n`.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. This is the
+spectral fixed-point calculation underlying the obstruction to deriving the
+fusion formulation from the present support-algebra predicate alone. -/
+theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
+    {M : MPOTensor d D} (n : ℕ) {lam : ℂ} {X : Mat}
+    (hX : (transferMap M).adjoint X = lam • X) :
+    (blockedTransferMap M n).adjoint X = lam ^ n • X := by
+  induction n with
+  | zero =>
+      simp [blockedTransferMap_eq_pow, Module.End.one_eq_id]
+  | succ k ih =>
+      have hPow : blockedTransferMap M (k + 1) =
+          blockedTransferMap M k ∘ₗ transferMap M := by
+        simp only [blockedTransferMap_eq_pow, pow_succ, Module.End.mul_eq_comp]
+      rw [hPow, LinearMap.adjoint_comp, LinearMap.comp_apply, ih]
+      rw [map_smul, hX, smul_smul, pow_succ]
+
+/-- The current algebra-structure predicate rules out finite-order adjoint
+eigenvalues different from $1$.
+
+More explicitly, let `E` be the one-site transfer map. If
+`IsRFP_MPDO_via_algebra M` holds, `X ≠ 0`,
+`E† X = λ X`, and `λ^n = 1` for some `n > 0`, then `λ = 1`. This is exactly the
+finite-order consequence of the fixed-point equality
+$\operatorname{Fix}((E^n)^\dagger)=\operatorname{Fix}(E^\dagger)$. It is not
+the fusion-side idempotence statement $E^2=E$; the latter is the paper's
+coefficient-comparison argument in Appendix C.4.
+
+Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
+lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra
+    {M : MPOTensor d D} (hAlg : IsRFP_MPDO_via_algebra M)
+    {n : ℕ} (hn : 0 < n) {lam : ℂ} {X : Mat} (hX_ne : X ≠ 0)
+    (hX : (transferMap M).adjoint X = lam • X) (hlam : lam ^ n = 1) :
+    lam = 1 := by
+  have hBlocked : (blockedTransferMap M n).adjoint X = X := by
+    rw [adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
+      (M := M) n hX, hlam, one_smul]
+  have hFix : (transferMap M).adjoint X = X :=
+    adjoint_transferMap_apply_of_isRFP_MPDO_via_algebra hAlg hn hBlocked
+  have hLamX : lam • X = X := by
+    rw [← hX]
+    exact hFix
+  have hSub : (lam - 1) • X = 0 := by
+    rw [sub_smul, hLamX, one_smul, sub_self]
+  rcases smul_eq_zero.mp hSub with hLam_sub | hX_zero
+  · exact sub_eq_zero.mp hLam_sub
+  · exact (hX_ne hX_zero).elim
+
 /-- Under the current algebra-structure predicate, the adjoint fixed points of
 every positive blocked transfer map coincide with the adjoint fixed points of
 the unblocked transfer map.
