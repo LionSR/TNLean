@@ -12240,6 +12240,8 @@
           
           <li><a href="ch-mpdo.html#thm:sal_zcl_implies_rank_one_t">Theorem 25.38</a></li>
           
+          <li><a href="ch-mpdo.html#thm:psd_trace_powers_rank_one_t">Theorem 25.39</a></li>
+          
         </ul>
     
       </div>
@@ -12260,6 +12262,8 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL" class="lean_decl">MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL</a></li>
           
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef" class="lean_decl">MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef</a></li>
+          
         </ul>
     
       </div>
@@ -12269,7 +12273,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    The hypotheses of Lemmas C.3–C.4 determine the local simple-MPDO structure. </p>
+  <p>     The hypotheses of Lemmas C.3–C.4 determine the local simple-MPDO structure. There are two forms. The conditional form assumes the rank-one implication for \(T\). The corrected form assumes instead that \(T\ge 0\) as a matrix, with \(\operatorname {tr}(T)=1\) and \(\operatorname {tr}(T^m)=1\) for every \(m{\gt}0\), and then applies Theorem&#160;<a href="ch-mpdo.html#thm:psd_trace_powers_rank_one_t">25.39</a>. </p>
 
   </div>
 </div>
@@ -12394,6 +12398,8 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm</a></li>
           
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingFormOfPosSemidef" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingFormOfPosSemidef</a></li>
+          
         </ul>
     
       </div>
@@ -12403,7 +12409,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    The SAL–ZCL hypotheses together with a commuting-form witness determine the simple-MPDO blocked-RFP structure. </p>
+  <p>     The SAL–ZCL hypotheses together with a commuting-form witness determine the simple-MPDO blocked-RFP structure. In the PSD-corrected form, the matrix input is \(T\ge 0\), \(\operatorname {tr}(T)=1\), and \(\operatorname {tr}(T^m)=1\) for all \(m{\gt}0\), rather than an abstract Perron–Frobenius rank-one assumption for \(T\). </p>
 
   </div>
 </div>
@@ -12546,6 +12552,8 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure</a></li>
           
+          <li><a href="../docs/find/#doc/MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef" class="lean_decl">MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef</a></li>
+          
         </ul>
     
       </div>
@@ -12555,7 +12563,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Suppose the local hypotheses of Lemmas&#160;C.3–C.4 give \(\rho _{ABC}\), \(I(A:C|B)_{\rho }=0\), a primitive matrix \(T\) with \(\operatorname {tr}(T)=1\) and \(\operatorname {tr}(T^m)\) independent of \(m\), together with the conditional rank-one criterion for \(T\). Suppose also that \(K\) has zero correlation length and that the assembled \(\eta \)-local data give \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\) for all \(i,j\). Then these data determine the simple-MPDO blocked-RFP structure for \(K\). </p>
+  <p>     Suppose the local hypotheses of Lemmas&#160;C.3–C.4 give \(\rho _{ABC}\), \(I(A:C|B)_{\rho }=0\), a primitive matrix \(T\) with \(\operatorname {tr}(T)=1\) and \(\operatorname {tr}(T^m)\) independent of \(m\), together with the conditional rank-one criterion for \(T\). Suppose also that \(K\) has zero correlation length and that the assembled \(\eta \)-local data give \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\) for all \(i,j\). Then these data determine the simple-MPDO blocked-RFP structure for \(K\). In the PSD-corrected form, the conditional rank-one criterion is replaced by \(T\ge 0\), \(\operatorname {tr}(T)=1\), and \(\operatorname {tr}(T^m)=1\) for all \(m{\gt}0\). </p>
 
   </div>
 </div>
@@ -12963,6 +12971,8 @@
           
           <li><a href="../docs/find/#doc/MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure" class="lean_decl">MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure</a></li>
           
+          <li><a href="../docs/find/#doc/MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef" class="lean_decl">MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef</a></li>
+          
         </ul>
     
       </div>
@@ -12972,7 +12982,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>    Assume the local SAL–ZCL hypotheses of Lemmas&#160;C.3–C.4 and the assembled \(\eta \)-local product form, with the conditional rank-one criterion for \(T\), \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\). Then \(K\) is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size \(2\), and satisfies the transfer-map fusion formulation of MPDO RFP. </p>
+  <p>     Assume the local SAL–ZCL hypotheses of Lemmas&#160;C.3–C.4 and the assembled \(\eta \)-local product form, with the conditional rank-one criterion for \(T\), \(\sigma ^{(N)}(K)=c_N\prod _{n=1}^N B_{n,n+1}\) with \(c_N{\gt}0\), \(B_{n,n+1}\ge 0\), and \([B_{i,i+1},B_{j,j+1}]=0\). Then \(K\) is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size \(2\), and satisfies the transfer-map fusion formulation of MPDO RFP. The PSD-corrected form uses \(T\ge 0\) together with \(\operatorname {tr}(T^m)=1\) for all \(m{\gt}0\) in place of the conditional matrix rank-one hypothesis. </p>
 
   </div>
 </div>
