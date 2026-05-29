@@ -533,25 +533,33 @@ unconditional result.
     \]
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:sector_blocked_normal_periodic,
         thm:periodic_self_overlap_tendsto,
         thm:overlap_decay_irr_tp,
         thm:overlap_decay_rect_irr_tp}
-    Write the period-blocked tensors as
-    $\bar A \sim \bigoplus_{u\in\mathbb Z_m} A_u$ and
-    $\bar B \sim \bigoplus_{v\in\mathbb Z_m} B_v$, with unit sector weights.
-    For every length $N$,
+    Write
+    $\bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u$ and
+    $\bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v$.  For every $N$,
     \[
         O_{\bar A\bar B}(N)
         =
         \sum_{u\in\mathbb Z_m}\sum_{v\in\mathbb Z_m}
             O_{A_uB_v}(N).
     \]
-    For every sector pair $(u,v)$ the overlap dichotomy gives
-    $\lim_{N\to\infty} O_{A_uB_v}(N)=0$: if $d_u=e_v$, this follows from
-    $A_u \not\sim_{\mathrm{gp}} B_v$, while if $d_u\ne e_v$ it follows from
-    the rectangular dichotomy. Hence
+    For each sector pair $(u,v)$,
+    \[
+        d_u=e_v,\quad A_u\not\sim_{\mathrm{gp}}B_v
+        \quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0,
+    \]
+    and
+    \[
+        d_u\ne e_v
+        \quad\Longrightarrow\quad
+        \lim_{N\to\infty}O_{A_uB_v}(N)=0.
+    \]
+    The finite double sum therefore gives
     \[
         \lim_{N\to\infty} O_{\bar A\bar B}(N)
         =
@@ -562,9 +570,8 @@ unconditional result.
 
     If $A\sim_{\mathrm{gp}} B$, then $\bar A\sim_{\mathrm{gp}}\bar B$, so for
     some $X\in\GL_D(\C)$ and $\zeta\ne0$,
-    $(\bar B)^\alpha=\zeta X(\bar A)^\alpha X^{-1}$. Thus, for every
-    configuration $\sigma$ of length $N$,
-    $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$. Hence
+    $(\bar B)^\alpha=\zeta X(\bar A)^\alpha X^{-1}$. Thus
+    $V^{(N)}(\bar B)_\sigma=\zeta^N V^{(N)}(\bar A)_\sigma$, and
     \[
         O_{\bar A\bar B}(N)
         =
@@ -574,12 +581,26 @@ unconditional result.
         =
         |\zeta|^{2N} O_{\bar A\bar A}(N).
     \]
-    With $O_{\bar A\bar A}(N)\to m$ and $O_{\bar B\bar B}(N)\to m>0$, the
-    second identity gives
-    $1=\lim_{N\to\infty}O_{\bar B\bar B}(N)/O_{\bar A\bar A}(N)
-    =\lim_{N\to\infty}|\zeta|^{2N}$, hence $|\zeta|=1$. The first identity
-    gives $\lim_{N\to\infty}|O_{\bar A\bar B}(N)|=m\ne0$, whereas the sector
-    sum gives $\lim_{N\to\infty}O_{\bar A\bar B}(N)=0$. Thus
+    Since
+    $\lim_{N\to\infty}O_{\bar A\bar A}(N)
+    =\lim_{N\to\infty}O_{\bar B\bar B}(N)=m>0$,
+    \[
+        1
+        =
+        \lim_{N\to\infty}
+        \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)}
+        =
+        \lim_{N\to\infty}|\zeta|^{2N},
+    \]
+    hence $|\zeta|=1$.  Therefore
+    \[
+        \lim_{N\to\infty}|O_{\bar A\bar B}(N)|
+        =
+        \lim_{N\to\infty}O_{\bar A\bar A}(N)
+        =
+        m\ne0,
+    \]
+    contradicting $\lim_{N\to\infty}O_{\bar A\bar B}(N)=0$. Thus
     $A\not\sim_{\mathrm{gp}}B$, and the irreducible trace-preserving overlap
     dichotomy gives $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{proof}
@@ -669,6 +690,42 @@ unconditional result.
         \item $A$ and $B$ are equivalent up to repeated blocks.
     \end{enumerate}
 \end{theorem}
+\begin{proof}\notready
+    \uses{thm:periodic_overlap_zero_ne_period,
+        thm:periodic_overlap_zero_no_sector_match,
+        thm:periodic_overlap_zero_ne_dim,
+        thm:periodic_overlap_gauge_equiv_sector_match}
+    If $m_A\ne m_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$ by
+    Theorem~\ref{thm:periodic_overlap_zero_ne_period}.  Assume $m_A=m_B=m$.
+    If $D_A\ne D_B$, then
+    $\lim_{N\to\infty}O_{AB}(N)=0$ by
+    Theorem~\ref{thm:periodic_overlap_zero_ne_dim}.  Assume $D_A=D_B$.
+
+    Choose period-blocked sector decompositions
+    \[
+        \bar A\sim\bigoplus_{u\in\mathbb Z_m}A_u,
+        \qquad
+        \bar B\sim\bigoplus_{v\in\mathbb Z_m}B_v .
+    \]
+    If no pair $(u,v)$ satisfies
+    \[
+        d_u=e_v,
+        \qquad
+        A_u\sim_{\mathrm{gp}}B_v,
+    \]
+    then Theorem~\ref{thm:periodic_overlap_zero_no_sector_match} gives
+    $\lim_{N\to\infty}O_{AB}(N)=0$.
+
+    Otherwise there are $u_0,v_0\in\mathbb Z_m$ such that
+    \[
+        d_{u_0}=e_{v_0},
+        \qquad
+        A_{u_0}\sim_{\mathrm{gp}}B_{v_0}.
+    \]
+    Theorem~\ref{thm:periodic_overlap_gauge_equiv_sector_match} then gives
+    repeated-block equivalence between $A$ and $B$.
+\end{proof}
 
 \begin{theorem}[Eventual linear independence of a periodic basis]%
     \label{thm:periodic_basis_eventually_li}
@@ -690,22 +747,42 @@ unconditional result.
     \begin{enumerate}
         \item \emph{Blocking approach} (Section~\ref{sec:ft_equal_mpv_comparisons},
               following \cite{Cirac2017MPDO_AnnPhys}):
-              Block both $A$ and $B$ by a common period $p$ so that all
-              blocks of $A^{[p]}$ and $B^{[p]}$ are primitive
-              ($1$-periodic). Apply the aperiodic fundamental theorem to
-              the blocked tensors. The conclusion is that $A^{[p]}$ and
-              $B^{[p]}$ are gauge equivalent. The $Z$-gauge freedom
-              does not appear because blocking absorbs the periodicity.
+              for a common multiple $p$ of the periods,
+              \[
+                  A^{[p]}\sim\bigoplus_a C_a,
+                  \qquad
+                  B^{[p]}\sim\bigoplus_b D_b,
+              \]
+              with all $C_a,D_b$ normal.  The aperiodic theorem gives, after a
+              permutation of the normal summands,
+              \[
+                  D_{\pi(a)}^\alpha
+                  =
+                  X_a C_a^\alpha X_a^{-1}.
+              \]
+              This is a gauge statement for $A^{[p]}$ and $B^{[p]}$; the cyclic
+              phases have been absorbed into the period-$p$ words.
 
         \item \emph{Periodic approach} (Theorem~\ref{thm:periodic_ft},
               following \cite{DeLasCuevas2017Irreducible}):
-              Work directly with the periodic blocks of $A$ and $B$.
-              The conclusion includes an extra $Z$-gauge transformation
-              reflecting the non-trivial phase ambiguity that arises for
-              periodic blocks. The $Z$ matrix satisfies $Z^m = \Id$ and
-              commutes with all Kraus operators; it is invisible to the
-              MPV family because it only introduces $m$-th roots of unity
-              in the trace.
+              keep the cyclic sectors
+              \[
+                  A^i=\sum_{u\in\mathbb Z_m}P_uA^iP_{u+1},
+                  \qquad
+                  B^i=\sum_{v\in\mathbb Z_m}Q_vB^iQ_{v+1}.
+              \]
+              Sector matching gives phases $\phi_v$, a shift $q$, and unitaries
+              $U_v$ such that
+              \[
+                  P_uA^iP_{u+1}
+                  =
+                  e^{i\xi}e^{i\phi_{u+q}}
+                  U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{-1}
+                  e^{-i\phi_{u+q+1}}.
+              \]
+              In the equal-MPV theorem the proportional phase is absorbed, so
+              one obtains $ZA^i=UB^iU^{-1}$ with $Z^m=\Id$; the trace only sees
+              powers of the corresponding $m$-th roots of unity.
     \end{enumerate}
 
     Chapters~\ref{ch:canonical} and~\ref{ch:ft_proof} follow only the
