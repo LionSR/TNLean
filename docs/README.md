@@ -29,6 +29,8 @@ source-faithfulness requirements.
 - `paper-gaps/`
 - `pr_review_management.md`
 - `prose_style.md`
+- `stale_issue_audit.md`
+- `tn_diagram_grammar.md`
 - `upgrade_4_29.md`
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
