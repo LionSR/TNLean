@@ -6118,13 +6118,17 @@
 <div class="displaymath" id="a0000001950">
   \[  \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma .  \]
 </div>
-<p> Only then do the maps \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\) have the normalizing factors used in <span class="cite">
+<p> The reconstruction maps in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, lines&#160;2065–2085
 	]
-</span>. The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">11.17</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
+</span> then use </p>
+<div class="displaymath" id="a0000001951">
+  \[  \widetilde R_2\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma .  \]
+</div>
+<p> Thus \(\operatorname{tr}(\nu _\gamma )=m_\gamma \) and the defining equality \(m_\gamma =\operatorname{tr}(\mu _\gamma )\) normalize the factors \(\nu _\gamma /m_\gamma \) and \(\mu _\gamma /m_\gamma \), respectively, in \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\). The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">11.17</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
 
   </div>
 </div>
@@ -6202,7 +6206,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001951"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001952"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6250,14 +6254,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every triple \((\alpha , \beta , \gamma )\), if \(\chi _{\alpha ,\beta ,\gamma }\) has size \(r_{\alpha ,\beta ,\gamma }\), then for every \(L \ge 0\), </p>
-<div class="displaymath" id="a0000001952">
+<div class="displaymath" id="a0000001953">
   \[  \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L},  \]
 </div>
 <p> where \(\chi _{\alpha ,\beta ,\gamma ,k}\) are the diagonal entries. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001951">
+<div class="proof_wrapper" id="a0000001952">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6330,7 +6334,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A binary compatibility predicate between an abstract structure-coefficient family \(c^{(L)}_{\alpha ,\beta ,\gamma }\) and a diagonal \(\chi \) family: the pair \((c, \chi )\) is said to be in <em>trace-power form</em> when </p>
-<div class="displaymath" id="a0000001953">
+<div class="displaymath" id="a0000001954">
   \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L}  \]
 </div>
 <p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analogue of the target identity of <span class="cite">
@@ -6506,7 +6510,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label operator family and a BNT-label coefficient system have same-length product form when, for every positive length \(L\), </p>
-<div class="displaymath" id="a0000001954">
+<div class="displaymath" id="a0000001955">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma c^{(L)}_{\alpha ,\beta ,\gamma } O_L(M_\gamma ).  \]
 </div>
 <p> This is the product identity appearing in Theorem&#160;IV.13(ii), stated independently of the blocked-basis multiplication \(\mathcal A_n\times \mathcal A_n\to \mathcal A_{2n}\). </p>
@@ -6529,7 +6533,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001956"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6580,7 +6584,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001955">
+<div class="proof_wrapper" id="a0000001956">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6699,7 +6703,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label trace-scalar family and a BNT-label coefficient system have idempotent coefficient form when, for every BNT label \(\gamma \), </p>
-<div class="displaymath" id="a0000001956">
+<div class="displaymath" id="a0000001957">
   \[  m_\gamma = \sum _{\alpha ,\beta } c^{(1)}_{\alpha ,\beta ,\gamma }m_\alpha m_\beta .  \]
 </div>
 <p> This is the idempotent condition in Theorem&#160;IV.13(ii), stated separately from the trace-power formula. </p>
@@ -6722,7 +6726,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001957"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001958"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6773,7 +6777,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001957">
+<div class="proof_wrapper" id="a0000001958">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6920,7 +6924,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>     A comparison between the BNT-label coefficients and the chosen blocked-basis coefficients consists of a BNT-label assignment together with the equality </p>
-<div class="displaymath" id="a0000001958">
+<div class="displaymath" id="a0000001959">
   \[  c^{(n)}_{i,j,k} = c^{(n)}_{\sigma _n(i),\sigma _n(j),\tau _n(k)}.  \]
 </div>
 <p> This is a blocked-basis comparison: the left hand side is expanded in the chosen basis of \(\mathcal A_{2n}\), so the statement is not itself the same-length BNT product law. This records the coefficient-comparison statement separately from the construction of the label maps from the MPDO tensor. </p>
@@ -6943,7 +6947,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001959"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001960"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6994,7 +6998,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001959">
+<div class="proof_wrapper" id="a0000001960">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7069,7 +7073,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label coefficient system and a diagonal \(\chi \)-family are compatible when, for every positive length \(L\), </p>
-<div class="displaymath" id="a0000001960">
+<div class="displaymath" id="a0000001961">
   \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr).  \]
 </div>
 <p> The same matrix \(\chi _{\alpha ,\beta ,\gamma }\) is used for all positive \(L\). </p>
@@ -7092,7 +7096,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001961"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001962"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7145,7 +7149,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001961">
+<div class="proof_wrapper" id="a0000001962">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7173,7 +7177,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_of_chi_positive_length_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001962"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001963"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7226,7 +7230,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001962">
+<div class="proof_wrapper" id="a0000001963">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7324,7 +7328,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001963"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7377,7 +7381,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001963">
+<div class="proof_wrapper" id="a0000001964">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7405,7 +7409,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7455,13 +7459,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the same-length BNT product identity holds and the BNT-label coefficients come from a positive length-independent \(\chi \)-witness, then for every \(L{\gt}0\), </p>
-<div class="displaymath" id="a0000001965">
+<div class="displaymath" id="a0000001966">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname {tr}\bigl( \chi _{\alpha ,\beta ,\gamma }^{\, L} \bigr) O_L(M_\gamma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001964">
+<div class="proof_wrapper" id="a0000001965">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7489,7 +7493,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001966"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001967"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7539,13 +7543,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the same-length BNT product identity holds with the coefficient family canonically determined by a diagonal \(\chi \)-family, then for every \(L{\gt}0\), </p>
-<div class="displaymath" id="a0000001967">
+<div class="displaymath" id="a0000001968">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname {tr}\bigl( \chi _{\alpha ,\beta ,\gamma }^{\, L} \bigr) O_L(M_\gamma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001966">
+<div class="proof_wrapper" id="a0000001967">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7573,7 +7577,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001968"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001969"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7623,13 +7627,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the BNT trace scalars satisfy the idempotent coefficient condition and the BNT-label coefficients come from a positive length-independent \(\chi \)-witness, then </p>
-<div class="displaymath" id="a0000001969">
+<div class="displaymath" id="a0000001970">
   \[  m_\gamma = \sum _{\alpha ,\beta } \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001968">
+<div class="proof_wrapper" id="a0000001969">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7657,7 +7661,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001970"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001971"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7707,13 +7711,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the BNT trace scalars satisfy the idempotent coefficient condition with the coefficient family canonically determined by a diagonal \(\chi \)-family, then </p>
-<div class="displaymath" id="a0000001971">
+<div class="displaymath" id="a0000001972">
   \[  m_\gamma = \sum _{\alpha ,\beta } \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001970">
+<div class="proof_wrapper" id="a0000001971">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7741,7 +7745,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001972"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001973"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7797,13 +7801,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>     If the chosen blocked-basis coefficients are compared with the fixed BNT-label coefficient system, and that BNT-label system has a positive length-independent \(\chi \)-witness, then each positive-length blocked coefficient is the trace power of the corresponding BNT-label \(\chi \)-matrix: </p>
-<div class="displaymath" id="a0000001973">
+<div class="displaymath" id="a0000001974">
   \[  c^{(n)}_{i,j,k} = \operatorname {tr} \bigl( \chi _{\sigma _n(i),\sigma _n(j),\tau _n(k)}^{\, n} \bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001972">
+<div class="proof_wrapper" id="a0000001973">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7901,7 +7905,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001974"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7952,7 +7956,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001974">
+<div class="proof_wrapper" id="a0000001975">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8027,7 +8031,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The blocked multiplication coefficients are in trace-power form when, for every positive blocked size \(n\) and every multiplication triple \((i,j,k)\), the coefficient \(c^{(n)}_{i,j,k}\) equals </p>
-<div class="displaymath" id="a0000001975">
+<div class="displaymath" id="a0000001976">
   \[  \sum _r \chi _{n,i,j,k,r}^{\, n}.  \]
 </div>
 <p> Equivalently, by Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">25.92</a>, it is the trace of the \(n\)-th power of the corresponding diagonal matrix. The exponent \(n\) is the source blocking length of the two factors in \(\mathcal{A}_n\); the product is expanded in the basis of \(\mathcal{A}_{2n}\). </p>
@@ -8050,7 +8054,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001976"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001977"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8103,7 +8107,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001976">
+<div class="proof_wrapper" id="a0000001977">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8203,7 +8207,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001977"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001978"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8272,7 +8276,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001977">
+<div class="proof_wrapper" id="a0000001978">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8404,7 +8408,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001978"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8454,14 +8458,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   BNT-label theorem data give the same-length product equation </p>
-<div class="displaymath" id="a0000001979">
+<div class="displaymath" id="a0000001980">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma c^{(L)}_{\alpha ,\beta ,\gamma } O_L(M_\gamma )  \]
 </div>
 <p> for every positive length \(L\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001978">
+<div class="proof_wrapper" id="a0000001979">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8489,7 +8493,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001980"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8539,13 +8543,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   BNT-label theorem data give the idempotent scalar equation </p>
-<div class="displaymath" id="a0000001981">
+<div class="displaymath" id="a0000001982">
   \[  m_\gamma = \sum _{\alpha ,\beta } c^{(1)}_{\alpha ,\beta ,\gamma }m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001980">
+<div class="proof_wrapper" id="a0000001981">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8573,7 +8577,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8632,7 +8636,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001982">
+<div class="proof_wrapper" id="a0000001983">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8660,7 +8664,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8715,7 +8719,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001983">
+<div class="proof_wrapper" id="a0000001984">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8743,7 +8747,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8796,7 +8800,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001984">
+<div class="proof_wrapper" id="a0000001985">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8824,7 +8828,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8877,7 +8881,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001985">
+<div class="proof_wrapper" id="a0000001986">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8905,7 +8909,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8958,7 +8962,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001986">
+<div class="proof_wrapper" id="a0000001987">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8986,7 +8990,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9039,7 +9043,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001987">
+<div class="proof_wrapper" id="a0000001988">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9067,7 +9071,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9128,7 +9132,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001988">
+<div class="proof_wrapper" id="a0000001989">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9156,7 +9160,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9209,7 +9213,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001989">
+<div class="proof_wrapper" id="a0000001990">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9237,7 +9241,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_pos_entries">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9290,7 +9294,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001990">
+<div class="proof_wrapper" id="a0000001991">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9318,7 +9322,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9371,7 +9375,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001991">
+<div class="proof_wrapper" id="a0000001992">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9399,7 +9403,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001993"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9454,7 +9458,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001992">
+<div class="proof_wrapper" id="a0000001993">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9590,7 +9594,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_bnt_label_theorem_witness_source_equations">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001993"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001994"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9651,7 +9655,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001993">
+<div class="proof_wrapper" id="a0000001994">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9679,7 +9683,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001994"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9734,7 +9738,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001994">
+<div class="proof_wrapper" id="a0000001995">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9762,7 +9766,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001996"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9815,7 +9819,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001995">
+<div class="proof_wrapper" id="a0000001996">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9843,7 +9847,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001996"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001997"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9896,7 +9900,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001996">
+<div class="proof_wrapper" id="a0000001997">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9924,7 +9928,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001997"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001998"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9977,7 +9981,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001997">
+<div class="proof_wrapper" id="a0000001998">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10005,7 +10009,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001998"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001999"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10066,7 +10070,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001998">
+<div class="proof_wrapper" id="a0000001999">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10094,7 +10098,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001999"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002000"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10147,7 +10151,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001999">
+<div class="proof_wrapper" id="a0000002000">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10175,7 +10179,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002000"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10228,7 +10232,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002000">
+<div class="proof_wrapper" id="a0000002001">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10256,7 +10260,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10309,7 +10313,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002001">
+<div class="proof_wrapper" id="a0000002002">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10337,7 +10341,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10406,7 +10410,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002002">
+<div class="proof_wrapper" id="a0000002003">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10434,7 +10438,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002004"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10487,7 +10491,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002003">
+<div class="proof_wrapper" id="a0000002004">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10515,7 +10519,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_pos_entries">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002004"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10568,7 +10572,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002004">
+<div class="proof_wrapper" id="a0000002005">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10596,7 +10600,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002006"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10649,7 +10653,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002005">
+<div class="proof_wrapper" id="a0000002006">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10677,7 +10681,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002006"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002007"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10732,7 +10736,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002006">
+<div class="proof_wrapper" id="a0000002007">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10760,7 +10764,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002007"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10813,7 +10817,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002007">
+<div class="proof_wrapper" id="a0000002008">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11042,7 +11046,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11095,7 +11099,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002008">
+<div class="proof_wrapper" id="a0000002009">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11195,7 +11199,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11248,7 +11252,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002009">
+<div class="proof_wrapper" id="a0000002010">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11472,7 +11476,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_translation_invariant_bond_to_commuting_form_data_components">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002011"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11529,7 +11533,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002010">
+<div class="proof_wrapper" id="a0000002011">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11557,7 +11561,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002011"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11624,7 +11628,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002011">
+<div class="proof_wrapper" id="a0000002012">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11652,7 +11656,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002013"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11705,7 +11709,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002012">
+<div class="proof_wrapper" id="a0000002013">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11733,7 +11737,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002013"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11788,7 +11792,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002013">
+<div class="proof_wrapper" id="a0000002014">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11816,7 +11820,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11867,7 +11871,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002014">
+<div class="proof_wrapper" id="a0000002015">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11895,7 +11899,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002016"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11946,7 +11950,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002015">
+<div class="proof_wrapper" id="a0000002016">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11958,7 +11962,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000002016">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000002017">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -11970,7 +11974,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#a0000002016">#</a>
+    <a class="icon proof" href="ch-mpdo.html#a0000002017">#</a>
     
     
     
@@ -11978,11 +11982,11 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">25.32</a>. What remains is the tensor-coordinate assembly </p>
-<div class="displaymath" id="a0000002017">
+<div class="displaymath" id="a0000002018">
   \[  B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0,  \]
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="displaymath" id="a0000002018">
+<div class="displaymath" id="a0000002019">
   \[  \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0 .  \]
 </div>
 <p> These equations are exactly the \(\eta \)-local product hypothesis; after that, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.140</a> gives the commuting-form conclusion. Zero correlation length enters only in the subsequent RFP and GSNNCH–ZCL conclusions. </p>
@@ -12274,7 +12278,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002019"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002020"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12329,7 +12333,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002019">
+<div class="proof_wrapper" id="a0000002020">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12357,7 +12361,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002020"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002021"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12410,7 +12414,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002020">
+<div class="proof_wrapper" id="a0000002021">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12438,7 +12442,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002021"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12495,7 +12499,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002021">
+<div class="proof_wrapper" id="a0000002022">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12523,7 +12527,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked_of_data">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12576,7 +12580,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002022">
+<div class="proof_wrapper" id="a0000002023">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12604,7 +12608,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12659,7 +12663,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002023">
+<div class="proof_wrapper" id="a0000002024">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12687,7 +12691,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12746,7 +12750,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002024">
+<div class="proof_wrapper" id="a0000002025">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12774,7 +12778,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12827,7 +12831,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002025">
+<div class="proof_wrapper" id="a0000002026">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12855,7 +12859,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12916,7 +12920,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002026">
+<div class="proof_wrapper" id="a0000002027">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
