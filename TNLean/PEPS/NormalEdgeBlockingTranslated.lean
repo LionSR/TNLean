@@ -489,6 +489,28 @@ theorem injective_chain
       κ.IsInjective ((w.blockingDatum h hUnion).complement) :=
   (w.blockingDatum h hUnion).injective_chain
 
+/-- A translated edge window supplies endpoint membership, pairwise
+disjointness, and coverage by its three blocking regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_disjoint_cover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (w : NormalSquareTranslatedEdgeWindow e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    e.1.1 ∈ (w.blockingDatum h hUnion).red ∧
+      e.1.2 ∈ (w.blockingDatum h hUnion).blue ∧
+      Disjoint ((w.blockingDatum h hUnion).red) ((w.blockingDatum h hUnion).blue) ∧
+      Disjoint ((w.blockingDatum h hUnion).red)
+        ((w.blockingDatum h hUnion).complement) ∧
+      Disjoint ((w.blockingDatum h hUnion).blue)
+        ((w.blockingDatum h hUnion).complement) ∧
+      (w.blockingDatum h hUnion).red ∪ (w.blockingDatum h hUnion).blue ∪
+          (w.blockingDatum h hUnion).complement =
+        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
+  (w.blockingDatum h hUnion).endpoint_disjoint_cover
+
 end NormalSquareTranslatedEdgeWindow
 
 /-- A translated horizontal window around a coordinate right edge.
@@ -774,6 +796,28 @@ theorem injective_chain
       κ.IsInjective ((d.blockingDatum h hUnion).complement) :=
   (d.blockingDatum h hUnion).injective_chain
 
+/-- Oriented margin-and-cover data supply endpoint membership, pairwise
+disjointness, and coverage by the three blocking regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_disjoint_cover
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    {e : Edge (squareLatticeGraph width height)}
+    (d : NormalSquareEdgeMarginCover e)
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ) :
+    e.1.1 ∈ (d.blockingDatum h hUnion).red ∧
+      e.1.2 ∈ (d.blockingDatum h hUnion).blue ∧
+      Disjoint ((d.blockingDatum h hUnion).red) ((d.blockingDatum h hUnion).blue) ∧
+      Disjoint ((d.blockingDatum h hUnion).red)
+        ((d.blockingDatum h hUnion).complement) ∧
+      Disjoint ((d.blockingDatum h hUnion).blue)
+        ((d.blockingDatum h hUnion).complement) ∧
+      (d.blockingDatum h hUnion).red ∪ (d.blockingDatum h hUnion).blue ∪
+          (d.blockingDatum h hUnion).complement =
+        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
+  (d.blockingDatum h hUnion).endpoint_disjoint_cover
+
 end NormalSquareEdgeMarginCover
 
 /-- A choice of translated edge window for every edge assembles into the normal
@@ -849,6 +893,33 @@ theorem normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers
       κ.IsInjective ((normalSquareEdgeBlockingHypotheses_of_marginCovers
         h hUnion data).complement e) :=
   (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).injective_chain_at_edge e
+
+/-- The edge-blocking hypotheses assembled from oriented margin-and-cover data
+give endpoint membership, pairwise disjointness, and coverage at every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareEdgeBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (data :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareEdgeMarginCover.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    e.1.1 ∈ (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).red e ∧
+      e.1.2 ∈ (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).blue e ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).red e)
+        ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).blue e) ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).red e)
+        ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).complement e) ∧
+      Disjoint ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).blue e)
+        ((normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).complement e) ∧
+      (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).red e ∪
+          (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).blue e ∪
+            (normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data).complement e =
+        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
+  let H := normalSquareEdgeBlockingHypotheses_of_marginCovers h hUnion data
+  H.endpoint_disjoint_cover_at_edge e
 
 end PEPS
 end TNLean
