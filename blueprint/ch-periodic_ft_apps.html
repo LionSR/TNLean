@@ -2993,6 +2993,8 @@
     <span class="theorem_thmtitle">No sector match implies asymptotic orthogonality</span>
     <div class="thm_header_extras">
 
+    
+    ✓
         </div>
     <div class="thm_header_hidden_extras">
 
@@ -3079,19 +3081,35 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Write the period-blocked tensors as \(\bar A \sim \bigoplus _{u\in \mathbb Z_m} A_u\) and \(\bar B \sim \bigoplus _{v\in \mathbb Z_m} B_v\), with unit sector weights. For every length \(N\), </p>
+  <p> Write \(\bar A\sim \bigoplus _{u\in \mathbb Z_m}A_u\) and \(\bar B\sim \bigoplus _{v\in \mathbb Z_m}B_v\). For every \(N\), </p>
 <div class="displaymath" id="a0000001005">
   \[  O_{\bar A\bar B}(N) = \sum _{u\in \mathbb Z_m}\sum _{v\in \mathbb Z_m} O_{A_uB_v}(N).  \]
 </div>
-<p> For every sector pair \((u,v)\) the overlap dichotomy gives \(\lim _{N\to \infty } O_{A_uB_v}(N)=0\): if \(d_u=e_v\), this follows from \(A_u \not\sim _{\mathrm{gp}} B_v\), while if \(d_u\ne e_v\) it follows from the rectangular dichotomy. Hence </p>
+<p> For each sector pair \((u,v)\), </p>
 <div class="displaymath" id="a0000001006">
+  \[  d_u=e_v,\quad A_u\not\sim _{\mathrm{gp}}B_v \quad \Longrightarrow \quad \lim _{N\to \infty }O_{A_uB_v}(N)=0,  \]
+</div>
+<p> and </p>
+<div class="displaymath" id="a0000001007">
+  \[  d_u\ne e_v \quad \Longrightarrow \quad \lim _{N\to \infty }O_{A_uB_v}(N)=0.  \]
+</div>
+<p> The finite double sum therefore gives </p>
+<div class="displaymath" id="a0000001008">
   \[  \lim _{N\to \infty } O_{\bar A\bar B}(N) = \sum _{u\in \mathbb Z_m}\sum _{v\in \mathbb Z_m} \lim _{N\to \infty } O_{A_uB_v}(N) =0 .  \]
 </div>
-<p>If \(A\sim _{\mathrm{gp}} B\), then \(\bar A\sim _{\mathrm{gp}}\bar B\), so for some \(X\in \mathrm{GL}_D(\mathbb {C})\) and \(\zeta \ne 0\), \((\bar B)^\alpha =\zeta X(\bar A)^\alpha X^{-1}\). Thus, for every configuration \(\sigma \) of length \(N\), \(V^{(N)}(\bar B)_\sigma =\zeta ^N V^{(N)}(\bar A)_\sigma \). Hence </p>
-<div class="displaymath" id="a0000001007">
+<p>If \(A\sim _{\mathrm{gp}} B\), then \(\bar A\sim _{\mathrm{gp}}\bar B\), so for some \(X\in \mathrm{GL}_D(\mathbb {C})\) and \(\zeta \ne 0\), \((\bar B)^\alpha =\zeta X(\bar A)^\alpha X^{-1}\). Thus \(V^{(N)}(\bar B)_\sigma =\zeta ^N V^{(N)}(\bar A)_\sigma \), and </p>
+<div class="displaymath" id="a0000001009">
   \[  O_{\bar A\bar B}(N) = \overline{\zeta }^{\, N} O_{\bar A\bar A}(N), \qquad O_{\bar B\bar B}(N) = |\zeta |^{2N} O_{\bar A\bar A}(N).  \]
 </div>
-<p> With \(O_{\bar A\bar A}(N)\to m\) and \(O_{\bar B\bar B}(N)\to m{\gt}0\), the second identity gives \(1=\lim _{N\to \infty }O_{\bar B\bar B}(N)/O_{\bar A\bar A}(N) =\lim _{N\to \infty }|\zeta |^{2N}\), hence \(|\zeta |=1\). The first identity gives \(\lim _{N\to \infty }|O_{\bar A\bar B}(N)|=m\ne 0\), whereas the sector sum gives \(\lim _{N\to \infty }O_{\bar A\bar B}(N)=0\). Thus \(A\not\sim _{\mathrm{gp}}B\), and the irreducible trace-preserving overlap dichotomy gives \(\lim _{N\to \infty }O_{AB}(N)=0\). </p>
+<p> Since \(\lim _{N\to \infty }O_{\bar A\bar A}(N) =\lim _{N\to \infty }O_{\bar B\bar B}(N)=m{\gt}0\), </p>
+<div class="displaymath" id="a0000001010">
+  \[  1 = \lim _{N\to \infty } \frac{O_{\bar B\bar B}(N)}{O_{\bar A\bar A}(N)} = \lim _{N\to \infty }|\zeta |^{2N},  \]
+</div>
+<p> hence \(|\zeta |=1\). Therefore </p>
+<div class="displaymath" id="a0000001011">
+  \[  \lim _{N\to \infty }|O_{\bar A\bar B}(N)| = \lim _{N\to \infty }O_{\bar A\bar A}(N) = m\ne 0,  \]
+</div>
+<p> contradicting \(\lim _{N\to \infty }O_{\bar A\bar B}(N)=0\). Thus \(A\not\sim _{\mathrm{gp}}B\), and the irreducible trace-preserving overlap dichotomy gives \(\lim _{N\to \infty }O_{AB}(N)=0\). </p>
 
   </div>
 </div>
@@ -3156,7 +3174,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A\) and \(B\) be left-canonical tensors with period \(m\), and let \(\bar A\sim \bigoplus _u A_u\) and \(\bar B\sim \bigoplus _v B_v\) be unit-weight cyclic sector decompositions whose sectors are left-canonical. Suppose \(d_{u_0}=e_{v_0}\), \(d_{u_0}\ne 0\), and, after identifying the virtual spaces, \(A_{u_0}\sim _{\mathrm{gp}}B_{v_0}\). Then for every \(l\in \mathbb Z_m\) there is an equality \(d_{u_0+l}=e_{v_0+l}\) and, after this identification, </p>
-<div class="displaymath" id="a0000001008">
+<div class="displaymath" id="a0000001012">
   \[  A_{u_0+l}\sim _{\mathrm{gp}}B_{v_0+l}.  \]
 </div>
 
@@ -3223,11 +3241,11 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A\) and \(B\) be left-canonical tensors with period \(m\), and let \(\bar A\sim \bigoplus _u A_u\) and \(\bar B\sim \bigoplus _v B_v\) be unit-weight cyclic sector decompositions whose sectors are left-canonical. Assume \(d_u\ne 0\) and \(A_u\) is normal for every \(u\). Fix \(q\in \mathbb Z_m\) and assume that for every \(u\) there are \(d_u=e_{u+q}\), \(\zeta _u\ne 0\), and \(X_u\in \mathrm{GL}_{d_u}(\mathbb {C})\) such that \(B_{u+q}^\alpha =\zeta _u X_u A_u^\alpha X_u^{-1}\) for every blocked physical index \(\alpha \). The source obtains a phase-only product identity after absorbing these sector gauges into the \(B\)-sectors: with \(Q_v\) the cyclic sector projectors of \(B\), it writes </p>
-<div class="displaymath" id="a0000001009">
+<div class="displaymath" id="a0000001013">
   \[  \widetilde B_v^i = U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger }.  \]
 </div>
 <p> The contraction input is then, for every physical block \((i_1,\ldots ,i_m)\), </p>
-<div class="displaymath" id="a0000001010">
+<div class="displaymath" id="a0000001014">
   \[  A_u^{i_1}A_{u+1}^{i_2}\cdots A_{u+m-1}^{i_m} = e^{i\lambda _{u+q}} \widetilde B_{u+q}^{i_1}\widetilde B_{u+q+1}^{i_2} \cdots \widetilde B_{u+q+m-1}^{i_m}.  \]
 </div>
 <p> Then there are a phase \(\xi \) and an invertible matrix \(U\) such that \(A^i=e^{i\xi }UB^iU^{-1}\) for every physical index \(i\). </p>
@@ -3378,6 +3396,9 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:periodic_overlap_dichotomy">#</a>
     
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
     
     <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
 </button>
@@ -3390,6 +3411,14 @@
         </header>
         
         <ul class="uses">
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_ne_period">Theorem 15.27</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_no_sector_match">Theorem 15.29</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_ne_dim">Theorem 15.33</a></li>
+          
+          <li><a href="ch-periodic_ft_apps.html#thm:periodic_overlap_gauge_equiv_sector_match">Theorem 15.32</a></li>
           
           <li><a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_ne_period">Theorem 15.27</a></li>
           
@@ -3435,6 +3464,32 @@
   <li><p>\(A\) and \(B\) are equivalent up to repeated blocks. </p>
 </li>
 </ol>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001015">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> If \(m_A\ne m_B\), then \(\lim _{N\to \infty }O_{AB}(N)=0\) by Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_ne_period">15.27</a>. Assume \(m_A=m_B=m\). If \(D_A\ne D_B\), then \(\lim _{N\to \infty }O_{AB}(N)=0\) by Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_ne_dim">15.33</a>. Assume \(D_A=D_B\). </p>
+<p>Choose period-blocked sector decompositions </p>
+<div class="displaymath" id="a0000001016">
+  \[  \bar A\sim \bigoplus _{u\in \mathbb Z_m}A_u, \qquad \bar B\sim \bigoplus _{v\in \mathbb Z_m}B_v .  \]
+</div>
+<p> If no pair \((u,v)\) satisfies </p>
+<div class="displaymath" id="a0000001017">
+  \[  d_u=e_v, \qquad A_u\sim _{\mathrm{gp}}B_v,  \]
+</div>
+<p> then Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_zero_no_sector_match">15.29</a> gives \(\lim _{N\to \infty }O_{AB}(N)=0\). </p>
+<p>Otherwise there are \(u_0,v_0\in \mathbb Z_m\) such that </p>
+<div class="displaymath" id="a0000001018">
+  \[  d_{u_0}=e_{v_0}, \qquad A_{u_0}\sim _{\mathrm{gp}}B_{v_0}.  \]
+</div>
+<p> Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_gauge_equiv_sector_match">15.32</a> then gives repeated-block equivalence between \(A\) and \(B\). </p>
 
   </div>
 </div>
@@ -3529,7 +3584,15 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	
 	]
-</span>): Block both \(A\) and \(B\) by a common period \(p\) so that all blocks of \(A^{[p]}\) and \(B^{[p]}\) are primitive (\(1\)-periodic). Apply the aperiodic fundamental theorem to the blocked tensors. The conclusion is that \(A^{[p]}\) and \(B^{[p]}\) are gauge equivalent. The \(Z\)-gauge freedom does not appear because blocking absorbs the periodicity. </p>
+</span>): for a common multiple \(p\) of the periods, </p>
+<div class="displaymath" id="a0000001019">
+  \[  A^{[p]}\sim \bigoplus _a C_a, \qquad B^{[p]}\sim \bigoplus _b D_b,  \]
+</div>
+<p> with all \(C_a,D_b\) normal. The aperiodic theorem gives, after a permutation of the normal summands, </p>
+<div class="displaymath" id="a0000001020">
+  \[  D_{\pi (a)}^\alpha = X_a C_a^\alpha X_a^{-1}.  \]
+</div>
+<p> This is a gauge statement for \(A^{[p]}\) and \(B^{[p]}\); the cyclic phases have been absorbed into the period-\(p\) words. </p>
 </li>
   <li><p><em>Periodic approach</em> (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.24</a>, following <span class="cite">
 	[
@@ -3537,7 +3600,15 @@
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
 	
 	]
-</span>): Work directly with the periodic blocks of \(A\) and \(B\). The conclusion includes an extra \(Z\)-gauge transformation reflecting the non-trivial phase ambiguity that arises for periodic blocks. The \(Z\) matrix satisfies \(Z^m = \mathbb {1}\) and commutes with all Kraus operators; it is invisible to the MPV family because it only introduces \(m\)-th roots of unity in the trace. </p>
+</span>): keep the cyclic sectors </p>
+<div class="displaymath" id="a0000001021">
+  \[  A^i=\sum _{u\in \mathbb Z_m}P_uA^iP_{u+1}, \qquad B^i=\sum _{v\in \mathbb Z_m}Q_vB^iQ_{v+1}.  \]
+</div>
+<p> Sector matching gives phases \(\phi _v\), a shift \(q\), and unitaries \(U_v\) such that </p>
+<div class="displaymath" id="a0000001022">
+  \[  P_uA^iP_{u+1} = e^{i\xi }e^{i\phi _{u+q}} U_{u+q}Q_{u+q}B^iQ_{u+q+1}U_{u+q+1}^{-1} e^{-i\phi _{u+q+1}}.  \]
+</div>
+<p> In the equal-MPV theorem the proportional phase is absorbed, so one obtains \(ZA^i=UB^iU^{-1}\) with \(Z^m=\mathbb {1}\); the trace only sees powers of the corresponding \(m\)-th roots of unity. </p>
 </li>
 </ol>
 <p>Chapters&#160;<a href="ch-canonical.html">9</a> and&#160;<a href="ch-ft_proof.html">13</a> follow only the blocking argument: remove periodicity by blocking, then apply the aperiodic theory. The periodic extension treats periodic blocks directly. </p>
@@ -3558,7 +3629,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_same">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001011"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3613,7 +3684,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001011">
+<div class="proof_wrapper" id="a0000001023">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3622,11 +3693,11 @@
   </div>
   <div class="proof_content">
   <p>By Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_overlap_dichotomy">15.34</a>, either the overlap \(\langle V^{(N)}(A) | V^{(N)}(B) \rangle \) tends to \(0\) or the bond dimensions agree and \(A\) and \(B\) are equivalent up to repeated blocks. In the decay case, equality of the MPV families gives, for every \(N\), </p>
-<div class="displaymath" id="a0000001012">
+<div class="displaymath" id="a0000001024">
   \[  \langle V^{(N)}(A) | V^{(N)}(B) \rangle  = \langle V^{(N)}(A) | V^{(N)}(A) \rangle .  \]
 </div>
 <p> Along multiples of the period \(m_a\) this would imply </p>
-<div class="displaymath" id="a0000001013">
+<div class="displaymath" id="a0000001025">
   \[  0 = \lim _{N\to \infty } \langle V^{(m_aN)}(A) | V^{(m_aN)}(B) \rangle  = \lim _{N\to \infty } \langle V^{(m_aN)}(A) | V^{(m_aN)}(A) \rangle  = m_a,  \]
 </div>
 <p> contradicting \(m_a{\gt}0\). </p>
@@ -3647,7 +3718,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_periodic_ft_proportional_rescaling">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3700,7 +3771,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001014">
+<div class="proof_wrapper" id="a0000001026">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3759,7 +3830,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3826,13 +3897,13 @@
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an MPS tensor in irreducible form&#160;II and let \(U : G \to \mathrm{GL}_d(\mathbb {C})\) be a representation of a group \(G\) on the physical leg, acting unitarily (\(U(g)\,  U(g)^{\dagger } = \mathbb {1}\)). Assume moreover the periodic equal-case Fundamental Theorem of MPS (Theorem&#160;<a href="ch-periodic_ft_apps.html#thm:periodic_ft">15.24</a>) as an explicit hypothesis on the pair \((d, D)\), expressed by the hypothesis  \(d\, D\). If \(A\) is on-site symmetric under&#160;\(U\) — that is, the twisted tensor \(\widetilde{A}_g\) has the same MPV family as&#160;\(A\) for every \(g \in G\) — then for each \(g \in G\) there exists a positive period \(m_g\) and a \(\mathbb {Z}_{m_g}\)-gauge equivalence between&#160;\(A\) and&#160;\(\widetilde{A}_g\). </p>
 <p>Concretely there are matrices \(Z_g\) and&#160;\(Y_g\), with \(Z_g^{m_g} = \mathbb {1}\) and \([A^i, Z_g] = 0\), satisfying, for every physical index&#160;\(i\), </p>
-<div class="displaymath" id="a0000001016">
+<div class="displaymath" id="a0000001028">
   \[  Z_g\,  A^i = Y_g\,  \widetilde{A}_g^{\, i}\,  Y_g^{-1}  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001015">
+<div class="proof_wrapper" id="a0000001027">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3939,7 +4010,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001017"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3993,7 +4064,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Under the hypotheses of Corollary&#160;<a href="ch-periodic_ft_apps.html#cor:cor_4_1_physical_symmetry_zgauge">15.40</a> together with the periodic projective-rigidity hypothesis (Definition&#160;<a href="ch-periodic_ft_apps.html#def:periodic_projective_rigidity">15.41</a>), the \(Y_g\) family defines a projective representation of \(G\) on the bond space: there exist a scalar \(2\)-cochain \(\omega : G \times G \to \mathbb {C}^{\times }\) and virtual gauges \(X : G \to \mathrm{GL}_D(\mathbb {C})\) satisfying </p>
-<div class="displaymath" id="a0000001018">
+<div class="displaymath" id="a0000001030">
   \[  X(g)\,  X(h) \; =\;  \omega (g, h)\,  X(g h),  \]
 </div>
 <p> while for each \(g\) the matrix \(X(g^{-1})\) still realises the \(\mathbb {Z}_{m_g}\)-intertwining from <span class="cite">
@@ -4006,7 +4077,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001017">
+<div class="proof_wrapper" id="a0000001029">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4040,7 +4111,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:cor_4_1_projective_rep_cocycle">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001019"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001031"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4093,7 +4164,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001019">
+<div class="proof_wrapper" id="a0000001031">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4102,7 +4173,7 @@
   </div>
   <div class="proof_content">
   <p> Associativity of matrix multiplication applied to \(X(g)\,  X(h)\,  X(k)\), combined with the projective multiplication law, gives </p>
-<div class="displaymath" id="a0000001020">
+<div class="displaymath" id="a0000001032">
   \[  \omega (g, h)\,  \omega (g h, k)\,  X((g h) k) = \omega (g, h k)\,  \omega (h, k)\,  X(g (h k)).  \]
 </div>
 <p> Since \((g h) k = g (h k)\), both sides are scalar multiples of the same matrix \(X((g h) k)\). The matrix lies in \(\mathrm{GL}_D(\mathbb {C})\) and is therefore invertible, but the scalar cancellation leading from an equality of scalar multiples of a matrix to equality of the scalar coefficients additionally requires \(D {\gt} 0\) so that the underlying index set is inhabited. Cancelling then yields \(\omega (g, h)\,  \omega (g h, k) = \omega (g, h k)\,  \omega (h, k)\) in \(\mathbb {C}^{\times }\), hence in \(\mathrm{Units}(\mathbb {C})\). </p>
@@ -4334,7 +4405,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>    An MPS tensor \(B\) with physical dimension \(d\) and bond dimension \(D\) is <em>\(p\)-refinable</em> if there exist another such tensor \(A\) and an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\) (encoded as a matrix \(W \in M_{d^p \times d}(\mathbb {C})\) with \(W^{\dagger } W = \mathbb {1}\)) such that the \(p\)-blocked tensor \(A^{[p]}\) matches the \(W\)-image of \(B\) at the level of MPV coefficients: </p>
-<div class="displaymath" id="a0000001021">
+<div class="displaymath" id="a0000001033">
   \[  V^{(N)}(A^{[p]})_\tau \; =\;  \sum _{\sigma \in \{ 0,\ldots ,d-1\} ^N} \Big(\prod _{k} W_{\tau (k),\, \sigma (k)}\Big)\,  V^{(N)}(B)_\sigma  \]
 </div>
 <p> for every \(N \in \mathbb {N}\) and every \(\tau \in \{ 0,\ldots ,d^p-1\} ^N\). </p>
@@ -4358,7 +4429,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_pullback_irreducible_form">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001034"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4408,14 +4479,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>    Let \(B\) be an MPS tensor in irreducible form&#160;II. If \(B\) is \(p\)-refinable, then there exist a tensor \(A\), an isometry \(W : \mathbb {C}^d \to (\mathbb {C}^d)^{\otimes p}\), and the pullback tensor </p>
-<div class="displaymath" id="a0000001023">
+<div class="displaymath" id="a0000001035">
   \[  C^{\alpha } := \sum _{i=0}^{d-1} W_{\alpha ,i} B^i \qquad (\alpha \in \{ 0,\ldots ,d^p-1\} )  \]
 </div>
 <p> such that \(C\) is again in irreducible form&#160;II, \(\mathcal E_C = \mathcal E_B\), and \(C\) has the same MPV family as \(A^{[p]}\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001022">
+<div class="proof_wrapper" id="a0000001034">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4649,7 +4720,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_sameMPV_zgauge_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001036"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4704,7 +4775,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001024">
+<div class="proof_wrapper" id="a0000001036">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4732,7 +4803,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:p_refinement_forward_equalcase_reduction">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001037"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4789,7 +4860,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001025">
+<div class="proof_wrapper" id="a0000001037">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4817,7 +4888,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward_blocked_equalcase">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001038"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4876,7 +4947,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001026">
+<div class="proof_wrapper" id="a0000001038">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4911,7 +4982,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001039"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4976,7 +5047,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001027">
+<div class="proof_wrapper" id="a0000001039">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5004,7 +5075,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_forward">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001028"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001040"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5059,7 +5130,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001028">
+<div class="proof_wrapper" id="a0000001040">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5155,7 +5226,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:peripheral_equalcase_root_from_root_channel">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001041"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5208,7 +5279,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001029">
+<div class="proof_wrapper" id="a0000001041">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5236,7 +5307,7 @@
 
     <a class="icon proof" href="ch-periodic_ft_apps.html#thm:thm_4_1_p_refinement_reverse">#</a>
     
-    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001030"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-periodic_ft_apps.html#a0000001042"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5291,7 +5362,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001030">
+<div class="proof_wrapper" id="a0000001042">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
