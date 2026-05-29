@@ -1464,30 +1464,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
-    \uses{lem:peps_finiteRegionKernelDescent}
-    The endpoint assertions are
-    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, which follow
-    from vertex injectivity. The middle assertion is the remaining blocking
-    step: for every coefficient family $c_{\rho}$ on the residual boundary,
+    \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
+    Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
+    construct the edge-middle descent datum required by
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
+    finite relation
     \[
-        \Bigl(\forall \tau,\;
-            \sum_{\rho} c_{\rho}\,T_{A,V\setminus\{u,v\}}^{\rho}(\tau)=0\Bigr)
-        \Longrightarrow
-        \forall \rho,\; c_{\rho}=0.
-    \]
-    Let $R=V\setminus\{u,v\}$. For $S\subseteq R$, write
-    \[
-        K(S) \Longleftrightarrow
         \forall \tau,\;
-            \sum_{\rho} c_{\rho}\,T_{A,S}^{\rho}(\tau)=0.
+        \sum_{\rho} c_{\rho}\,T_{A,M_e}^{\rho}(\tau)=0,
     \]
-    If $j\in S$, contraction with the local left inverse at $j$ gives
+    the associated conditions $K_c(S)$ satisfy $K_c(M_e)$,
+    $j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus\{j\})$, and
+    $K_c(\varnothing)\Longrightarrow \forall\rho,\;c_{\rho}=0$. The descent
+    implication is the local contraction identity: for $j\in S$, vertex
+    injectivity at $j$ gives a left inverse $L_j$, and applying $L_j$ to the
+    relation contracts away that tensor,
     \[
-        K(S)\Longrightarrow K(S\setminus\{j\}).
+        j\in S,\;K_c(S)\quad\stackrel{L_j}{\Longrightarrow}\quad
+        K_c(S\setminus\{j\}).
     \]
-    The finite descent lemma gives $K(R)\Longrightarrow K(\varnothing)$.
-    Since $T_{A,\varnothing}$ is the empty contraction, $K(\varnothing)$ is
-    $\forall \rho,\;c_{\rho}=0$.
+    The kernel descent theorem gives $\operatorname{inj}(T_{A,M_e})$. The same
+    theorem, together with vertex injectivity at $u$ and $v$, gives
+    $\operatorname{inj}(T_{A,u})$, $\operatorname{inj}(T_{A,M_e})$, and
+    $\operatorname{inj}(T_{A,v})$ as the edge-blocked three-site injectivity
+    assertion.
 \end{proof}
 
 \begin{theorem}[Local virtual insertion realized physically on either endpoint]%
