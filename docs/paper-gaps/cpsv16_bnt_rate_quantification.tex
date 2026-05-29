@@ -20,8 +20,8 @@
 Fix a sector decomposition $P$ with basis blocks
 $\{P.\mathtt{basis}\,j\}_{j=0}^{g-1}$ and a spectral level
 $\lambda_j\in\mathbb C\setminus\{0\}$ with
-$\|\lambda_0\|>\|\lambda_1\|>\cdots>\|\lambda_{g-1}\|$ and
-$\|\lambda_0\|=1$. The bilinear cross-overlap between basis blocks
+$|\lambda_0|>|\lambda_1|>\cdots>|\lambda_{g-1}|$ and
+$|\lambda_0|=1$. The bilinear cross-overlap between basis blocks
 $j$ and $k$ at length $N$ is
 \begin{align}
     O_{j,k}(N) := 
@@ -37,7 +37,7 @@ written \leanid{mpvOverlap} in the formalization.\footnote{%
 For every ordered pair $j\ne k$ we are interested in a geometric
 bound
 \begin{align}
-    \|O_{j,k}(N)\| \le C_{j,k} \eta_{j,k}^N
+    |O_{j,k}(N)| \le C_{j,k} \eta_{j,k}^N
     \qquad(\forall N\in\mathbb N),
     \label{eq:rate}
 \end{align}
@@ -84,7 +84,7 @@ $j\ne k$,
 \begin{align}
     0\le C_{j,k},\quad 0\le\eta_{j,k}<1,
         \qquad
-    \eta_{j,k}\cdot\|\lambda_j/\lambda_k\|<1,
+    \eta_{j,k}\cdot|\lambda_j/\lambda_k|<1,
     \label{eq:hyp}
 \end{align}
 together with the geometric bound~\eqref{eq:rate} for all $N$.
@@ -113,14 +113,14 @@ $V^{(N)}(P.\mathtt{basis}\,k_0)$ on the right and renormalising by
 $\lambda_{k_0}^N$, that every $j\ne k_0$ contribute a term whose modulus
 is bounded by
 \begin{align}
-    \|O_{j,k_0}(N)\|\cdot\|\lambda_j/\lambda_{k_0}\|^N
-    \le C_{j,k_0}(\eta_{j,k_0}\cdot\|\lambda_j/\lambda_{k_0}\|)^N.
+    |O_{j,k_0}(N)|\cdot|\lambda_j/\lambda_{k_0}|^N
+    \le C_{j,k_0}(\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|)^N.
     \label{eq:product}
 \end{align}
 The right-hand side of~\eqref{eq:product} converges to $0$ exactly when
 \eqref{eq:hyp} holds. The qualitative limit~\eqref{eq:qual} alone
 gives $\eta_{j,k_0}<1$ but not the comparison
-$\eta_{j,k_0}\cdot\|\lambda_j/\lambda_{k_0}\|<1$, which is the
+$\eta_{j,k_0}\cdot|\lambda_j/\lambda_{k_0}|<1$, which is the
 content of the new hypothesis.
 
 \section{Classification}
@@ -132,7 +132,7 @@ in principle derivable from the spectral gap of the mixed transfer
 operator that powers
 \leanid{mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP},
 but the compatibility inequality
-$\eta_{j,k}\cdot\|\lambda_j/\lambda_k\|<1$ is not implied by the
+$\eta_{j,k}\cdot|\lambda_j/\lambda_k|<1$ is not implied by the
 BNT structure and must be either imposed or established analytically.
 
 The analytic derivation from the transfer matrix spectral gap is the

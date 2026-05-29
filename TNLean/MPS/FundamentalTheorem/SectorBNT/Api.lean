@@ -222,7 +222,7 @@ copy witness `hUnit : ∃ q, ‖P.weight j₀ q‖ = 1`, the power-sum coefficie
 The per-block unit-modulus hypothesis `hUnit` is taken as an explicit
 theorem-level argument rather than a structural field of
 `IsBNTCanonicalForm`: CPSV16 §II.C line 246 records only the *global*
-normalization $\exists j, \exists q, \|\mu_{j,q}\| = 1$, while CPSV21
+normalization $\exists j, \exists q, |\mu_{j,q}| = 1$, while CPSV21
 Section IV.A uses Definition 4.2 (lines 1846–1850) for the BNT basis and
 the display at lines 1864–1884 for the two-layer expansion.  It normalizes
 the spectral radius of the *basis* tensors, not the copy coefficients
