@@ -129,9 +129,14 @@ immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
 * per-block bond dimensions `dim k`,
 * per-block weights `weights k : ℂ`,
 * per-block tensors `blocks k : MPSTensor d (dim k)`, each normal,
-* an MPV-equality witness `A^i = ⊕_k weights k • blocks k^i` (encoded as
-  `SameMPV₂ A (toTensorFromBlocks weights blocks)`),
+* an MPV-equality witness `A^i = ⊕_k weights k • blocks k^i` at every positive
+  length (encoded as `SameMPV₂Pos A (toTensorFromBlocks weights blocks)`),
+* the bond-dimension identity `D = ∑_k D_k`, which is the length-zero content of
+  the decomposition,
 * modulus normalization `‖weights k‖ ≤ 1` for all `k`, and at least one `‖weights k‖ = 1`.
+
+Full all-length MPV equality is recovered from the positive-length witness and the
+bond-dimension identity through `SameMPV₂Pos.toSameMPV₂_of_bondDim_eq`.
 
 This is **data** (a `Type`); the propositional version is `IsCPSVCanonicalForm` below.
 -/
@@ -144,8 +149,13 @@ structure CPSVCanonicalFormData (A : MPSTensor d D) where
   weights : Fin r → ℂ
   /-- Per-block MPS tensors `A_k`. -/
   blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- `A` and the direct sum `⊕_k μ_k A_k` have the same MPV family at every length. -/
-  sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) weights blocks)
+  /-- `A` and the direct sum `⊕_k μ_k A_k` have the same MPV family at every positive
+  length. -/
+  sameMPV : SameMPV₂Pos A (toTensorFromBlocks (d := d) weights blocks)
+  /-- The bond dimension of `A` equals the total bond dimension `∑_k D_k` of the blocks.
+  This is the length-zero content of the decomposition, from which full MPV equality is
+  recovered through `SameMPV₂Pos.toSameMPV₂_of_bondDim_eq`. -/
+  bondDim_eq : D = ∑ k : Fin r, dim k
   /-- Each block `A_k` is a CPSV16 normal tensor. -/
   blocks_normal : ∀ k, IsNormalTensor (blocks k)
   /-- Modulus normalization (`MPDO-22-12-17-2.tex:246`): every weight has modulus at most one. -/
