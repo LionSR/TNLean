@@ -8197,7 +8197,7 @@
           
           <li><a href="sec-peps_ft.html#thm:peps_edgeMiddleTensorInjective_of_kernelDescent">Theorem 17.98</a></li>
           
-          <li><a href="sec-peps_ft.html#lem:peps_finiteRegionKernelDescent">Lemma 17.96</a></li>
+          <li><a href="sec-peps_ft.html#thm:peps_edgeMiddleTensorInjective_of_kernelDescent">Theorem 17.98</a></li>
           
         </ul>
     
@@ -8250,19 +8250,15 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The endpoint assertions are \(\operatorname {inj}(T_{A,u})\) and \(\operatorname {inj}(T_{A,v})\), which follow from vertex injectivity. The middle assertion is the remaining blocking step: for every coefficient family \(c_{\rho }\) on the residual boundary, </p>
+  <p> Fix \(e=(u,v)\) and put \(M_e=V\setminus \{ u,v\} \). From vertex injectivity, construct the edge-middle descent datum required by Theorem&#160;<a href="sec-peps_ft.html#thm:peps_edgeMiddleTensorInjective_of_kernelDescent">17.98</a>: for each finite relation </p>
 <div class="displaymath" id="a0000001218">
-  \[  \Bigl(\forall \tau ,\;  \sum _{\rho } c_{\rho }\, T_{A,V\setminus \{ u,v\} }^{\rho }(\tau )=0\Bigr) \Longrightarrow \forall \rho ,\;  c_{\rho }=0.  \]
+  \[  \forall \tau ,\;  \sum _{\rho } c_{\rho }\, T_{A,M_e}^{\rho }(\tau )=0,  \]
 </div>
-<p> Let \(R=V\setminus \{ u,v\} \). For \(S\subseteq R\), write </p>
+<p> the associated conditions \(K_c(S)\) satisfy \(K_c(M_e)\), \(j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus \{ j\} )\), and \(K_c(\varnothing )\Longrightarrow \forall \rho ,\; c_{\rho }=0\). The descent implication is the local contraction identity: for \(j\in S\), vertex injectivity at \(j\) gives a left inverse \(L_j\), and applying \(L_j\) to the relation contracts away that tensor, </p>
 <div class="displaymath" id="a0000001219">
-  \[  K(S) \Longleftrightarrow \forall \tau ,\;  \sum _{\rho } c_{\rho }\, T_{A,S}^{\rho }(\tau )=0.  \]
+  \[  j\in S,\; K_c(S)\quad \stackrel{L_j}{\Longrightarrow }\quad K_c(S\setminus \{ j\} ).  \]
 </div>
-<p> If \(j\in S\), contraction with the local left inverse at \(j\) gives </p>
-<div class="displaymath" id="a0000001220">
-  \[  K(S)\Longrightarrow K(S\setminus \{ j\} ).  \]
-</div>
-<p> The finite descent lemma gives \(K(R)\Longrightarrow K(\varnothing )\). Since \(T_{A,\varnothing }\) is the empty contraction, \(K(\varnothing )\) is \(\forall \rho ,\; c_{\rho }=0\). </p>
+<p> The kernel descent theorem gives \(\operatorname {inj}(T_{A,M_e})\). The same theorem, together with vertex injectivity at \(u\) and \(v\), gives \(\operatorname {inj}(T_{A,u})\), \(\operatorname {inj}(T_{A,M_e})\), and \(\operatorname {inj}(T_{A,v})\) as the edge-blocked three-site injectivity assertion. </p>
 
   </div>
 </div>
@@ -8282,7 +8278,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_virtualInsertionPhysicalRealization">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001221"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001220"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8338,7 +8334,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001221">
+<div class="proof_wrapper" id="a0000001220">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8366,7 +8362,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001223"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001222"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8419,7 +8415,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001223">
+<div class="proof_wrapper" id="a0000001222">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8447,7 +8443,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001224"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001223"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8500,7 +8496,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001224">
+<div class="proof_wrapper" id="a0000001223">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8528,7 +8524,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001225"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001224"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8581,7 +8577,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001225">
+<div class="proof_wrapper" id="a0000001224">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8609,7 +8605,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_rightPhysicalRealization">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001226"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001225"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8664,7 +8660,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001226">
+<div class="proof_wrapper" id="a0000001225">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8692,7 +8688,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_leftPhysicalRealization">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001227"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001226"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8747,7 +8743,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001227">
+<div class="proof_wrapper" id="a0000001226">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8775,7 +8771,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeInsertedCoeff_endpointPhysicalRealization">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001228"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001227"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8830,7 +8826,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001228">
+<div class="proof_wrapper" id="a0000001227">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8915,11 +8911,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(e=(u,v)\). Assume that the edge-blocked three-site chain at \(e\) is injective. Let \(O_1,O_2\) be physical operators at the endpoint tensors, and write \(\Phi _u,\Phi _v\) for the two local tensor maps. Suppose that, for every physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000001229">
+<div class="displaymath" id="a0000001228">
   \[  \sum _{\beta } O_1(A_u(\beta _u))_{\sigma _u}\,  C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}})\,  A_v(\beta _v)_{\sigma _v} = \sum _{\beta } A_u(\beta _u)_{\sigma _u}\,  C_{\mathrm{mid}}(\sigma ;\beta _{\mathrm{L}},\beta _{\mathrm{R}})\,  O_2(A_v(\beta _v))_{\sigma _v}.  \]
 </div>
 <p> Then </p>
-<div class="displaymath" id="a0000001230">
+<div class="displaymath" id="a0000001229">
   \[  \exists M\in M_{D(e)}(\mathbb {C}),\qquad O_1\Phi _u=\Phi _uT_{u,e}(M^{\mathsf T}), \qquad O_2\Phi _v=\Phi _vT_{v,e}(M).  \]
 </div>
 <p> The same implication is represented diagrammatically by the \(O_1,O_2\mapsto W\) step: </p>
@@ -8995,7 +8991,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For two PEPS tensors \(A\) and \(B\) and an edge \(e\), this property is </p>
-<div class="displaymath" id="a0000001232">
+<div class="displaymath" id="a0000001231">
   \[  \exists \Phi _e:M_{D_A(e)}(\mathbb {C}) \simeq _{\mathrm{alg}} M_{D_B(e)}(\mathbb {C}),\qquad \forall \sigma ,\  \forall X\in M_{D_A(e)}(\mathbb {C}),\quad C_A(e,\sigma ,X)=C_B(e,\sigma ,\Phi _e(X)).  \]
 </div>
 
@@ -9074,7 +9070,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose the two edge-blocked three-site chains associated to \(A\) and \(B\) at the edge \(e\) are injective, and suppose the two PEPS tensors define the same state. Then </p>
-<div class="displaymath" id="a0000001233">
+<div class="displaymath" id="a0000001232">
   \[  \exists \Phi _e:M_{D_A(e)}(\mathbb {C}) \simeq _{\mathrm{alg}} M_{D_B(e)}(\mathbb {C}),\qquad \forall \sigma ,\  \forall X\in M_{D_A(e)}(\mathbb {C}),\quad C_A(e,\sigma ,X)=C_B(e,\sigma ,\Phi _e(X)).  \]
 </div>
 <p> This is the edge-blocked form of the algebra isomorphism \(X\mapsto Y\) in <span class="cite">
@@ -9104,7 +9100,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001235"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001234"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9163,7 +9159,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001235">
+<div class="proof_wrapper" id="a0000001234">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9238,7 +9234,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   Fix \(A\), \(B\), a bond-dimension equality, and a vertex \(v\). Let \(\mathcal T^A_v\) be the local tensor map of \(A\), let \(L^A_v\) be the chosen left inverse of \(\mathcal T^A_v\), and let \(\Pi ^A_v=\mathcal T^A_vL^A_v\). The factorized local gauge datum consists of the following two identities for local virtual configurations \(\eta ,\eta '\): </p>
-<div class="displaymath" id="a0000001237">
+<div class="displaymath" id="a0000001236">
   \[  \Pi ^A_v B_v(\eta ,-)=B_v(\eta ,-), \qquad L^A_vB_v(\eta ,-)(\eta ') = \prod _{e\ni v}X_e(\eta _e,\eta '_e),  \]
 </div>
 <p> with \(X_e\in \mathrm{GL}(D_A(e))\) on each incident edge. This is the local output required from the blocked-middle reduction in <span class="cite">
@@ -9292,7 +9288,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>  The blocked-middle local gauge formula at \(v\) is the assertion that there are matrices \(X_e\in \mathrm{GL}(D_A(e))\), one on each incident edge, such that for all local virtual configurations \(\eta \) and physical indices \(\sigma \), </p>
-<div class="displaymath" id="a0000001238">
+<div class="displaymath" id="a0000001237">
   \[  B_v(\eta ,\sigma ) = \sum _{\eta '} \left(\prod _{e\ni v}X_e(\eta _e,\eta '_e)\right)A_v(\eta ',\sigma ).  \]
 </div>
 
@@ -9314,7 +9310,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001239"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001238"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9367,7 +9363,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001239">
+<div class="proof_wrapper" id="a0000001238">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9376,11 +9372,11 @@
   </div>
   <div class="proof_content">
   <p>For fixed \(\eta \), set \(c_\eta (\eta ')=\prod _{e\ni v}X_e(\eta _e,\eta '_e)\). The displayed blocked-middle formula is precisely \(B_v(\eta ,-)=\mathcal T^A_vc_\eta \). Hence </p>
-<div class="displaymath" id="a0000001240">
+<div class="displaymath" id="a0000001239">
   \[  \Pi ^A_vB_v(\eta ,-) = \Pi ^A_v\mathcal T^A_vc_\eta = \mathcal T^A_vc_\eta = B_v(\eta ,-),  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000001241">
+<div class="displaymath" id="a0000001240">
   \[  L^A_vB_v(\eta ,-)(\eta ') = L^A_v\mathcal T^A_vc_\eta (\eta ') = c_\eta (\eta ') = \prod _{e\ni v}X_e(\eta _e,\eta '_e).  \]
 </div>
 
@@ -9402,7 +9398,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_localGauge_exists_of_blockedMiddleGaugeFormula">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001242"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001241"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9454,7 +9450,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose that the edge-centred three-site reduction supplies invertible matrices \(X_e\) on the incident edges of \(v\) such that, for all local virtual configurations \(\eta \) and physical indices \(\sigma \), </p>
-<div class="displaymath" id="a0000001243">
+<div class="displaymath" id="a0000001242">
   \[  B_v(\eta ,\sigma ) = \sum _{\eta '} \left(\prod _{e\ni v} X_e(\eta _e,\eta '_e)\right)A_v(\eta ',\sigma ).  \]
 </div>
 <p> Then the same family \(X_e\) is a local gauge at \(v\): </p>
@@ -9462,7 +9458,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001242">
+<div class="proof_wrapper" id="a0000001241">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9471,7 +9467,7 @@
   </div>
   <div class="proof_content">
   <p>By the preceding theorem, \(L^A_vB_v(\eta ,-)(\eta ')=\prod _{e\ni v}X_e(\eta _e,\eta '_e)\). Since \(\Pi ^A_vB_v(\eta ,-)=B_v(\eta ,-)\) and \(\Pi ^A_v=\mathcal T^A_vL^A_v\), </p>
-<div class="displaymath" id="a0000001245">
+<div class="displaymath" id="a0000001244">
   \[  B_v(\eta ,\sigma ) = \sum _{\eta '}L^A_vB_v(\eta ,-)(\eta ')A_v(\eta ',\sigma ) = \sum _{\eta '} \left(\prod _{e\ni v}X_e(\eta _e,\eta '_e)\right)A_v(\eta ',\sigma ).  \]
 </div>
 
@@ -9493,7 +9489,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_edge_gauge_absorption">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001246"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001245"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9550,7 +9546,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001246">
+<div class="proof_wrapper" id="a0000001245">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9623,7 +9619,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   For tensor families \(A,\widetilde B\), the post-absorption comparison holds when \(h:D_A=D_{\widetilde B}\) and the following equality holds. For each edge \(e\), write \(\phi _{h_e}:M_{D_A(e)}(\mathbb {C}) \to M_{D_{\widetilde B}(e)}(\mathbb {C})\) for the matrix-algebra transport induced by \(h_e:D_A(e)=D_{\widetilde B}(e)\). Then, for every matrix \(X\in M_{D_A(e)}(\mathbb {C})\) and every physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000001248">
+<div class="displaymath" id="a0000001247">
   \[  C_A(e,X;\sigma ) = C_{\widetilde B}(e,\phi _{h_e}(X);\sigma ).  \]
 </div>
 
@@ -9692,7 +9688,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and \(B\) be vertex-injective PEPS with the same state, and assume the bond-dimension equality \(h:D_A=D_B\). After the edge gauges have been absorbed into the second tensor family, there are gauges \(Z_e\) and \(\widetilde B=B^Z\) such that \(D_{\widetilde B}=D_A\) and, for every edge \(e\), write \(\phi _{h_e}:M_{D_A(e)}(\mathbb {C})\to M_{D_{\widetilde B}(e)}(\mathbb {C})\) for the matrix-algebra transport induced by the corresponding equality \(h_e:D_A(e)=D_{\widetilde B}(e)\). Then, for every matrix \(X\in M_{D_A(e)}(\mathbb {C})\) and every physical configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000001249">
+<div class="displaymath" id="a0000001248">
   \[  C_A(e,X;\sigma ) = C_{\widetilde B}(e,\phi _{h_e}(X);\sigma ),  \]
 </div>
 <p> Diagrammatically, this is the equality </p>
@@ -9723,7 +9719,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:localGauge_exists">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001251"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001250"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9777,7 +9773,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001251">
+<div class="proof_wrapper" id="a0000001250">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9862,7 +9858,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001254">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001253">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -9873,7 +9869,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001254">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001253">#</a>
     
     
     
@@ -10062,7 +10058,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_twoInjectiveGaugeScalarReduction">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001255"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001254"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10116,7 +10112,7 @@
   <p>   In the proof of the generalized two-injective-tensor comparison, applying the inverse of the second injective tensor leaves three possible virtual operators on the exposed legs of the first tensor: </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-b26441d7560f57a3.svg" alt="\TNPEPSTwoInjectiveGaugeScalarReduction"></div>
 <p> Inverting the first injective tensor then shows that the corresponding residual operator on the three exposed virtual legs has the three decompositions </p>
-<div class="displaymath" id="a0000001257">
+<div class="displaymath" id="a0000001256">
   \[  \sum _i I\otimes Z_i^{(1)}\otimes Z_i^{(2)} = \sum _i U_i^{(1)}\otimes U_i^{(2)}\otimes I = \sum _i W_i^{(1)}\otimes I\otimes W_i^{(2)}  \]
 </div>
 <p> Equivalently, for nonzero virtual leg spaces \(\alpha ,\beta ,\gamma \), if one endomorphism of \(\alpha \otimes \beta \otimes \gamma \) lies simultaneously in the three subspaces \(I_\alpha \otimes \operatorname {End}(\beta \otimes \gamma )\), \(\operatorname {End}(\alpha \otimes \beta )\otimes I_\gamma \), and the analogous subspace with \(I_\beta \) in the middle leg, then it is a scalar multiple of the identity. Thus the residual virtual operators are scalar multiples of the identity. This is the scalar step in the proof of <span class="cite">
@@ -10129,7 +10125,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001255">
+<div class="proof_wrapper" id="a0000001254">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10138,16 +10134,16 @@
   </div>
   <div class="proof_content">
   <p>Write the common operator as \(T\). The equality \(T=I_\alpha \otimes Z=U\otimes I_\gamma \) gives, for all indices, </p>
-<div class="displaymath" id="a0000001258">
+<div class="displaymath" id="a0000001257">
   \[  \delta _{aa'} Z_{bc,b'c'} = U_{ab,a'b'}\delta _{cc'} .  \]
 </div>
 <p> If \(c\neq c'\), the right hand side is zero; choosing \(a=a'\) gives \(Z_{bc,b'c'}=0\). Hence \(Z\) is diagonal in the \(\gamma \)-index. Similarly, the equality \(T=I_\alpha \otimes Z=W_{\alpha \gamma }\otimes I_\beta \) gives </p>
-<div class="displaymath" id="a0000001259">
+<div class="displaymath" id="a0000001258">
   \[  \delta _{aa'} Z_{bc,b'c'} = W_{ac,a'c'}\delta _{bb'} ,  \]
 </div>
 <p> so \(Z_{bc,b'c'}=0\) whenever \(b\neq b'\). Thus \(Z_{bc,b'c'}=0\) unless \(b=b'\) and \(c=c'\). </p>
 <p>It remains to compare the surviving diagonal entries. From \(\delta _{aa'}Z_{bc,bc}=U_{ab,a'b}\), the value \(Z_{bc,bc}\) is independent of \(c\). From the middle-identity equality it is also independent of \(b\). Therefore \(Z=\lambda I_{\beta \otimes \gamma }\). Substitution into </p>
-<div class="displaymath" id="a0000001260">
+<div class="displaymath" id="a0000001259">
   \[  I_\alpha \otimes Z = U\otimes I_\gamma = W_{\alpha \gamma }\otimes I_\beta  \]
 </div>
 <p> gives \(U=\lambda I_{\alpha \otimes \beta }\) and \(W_{\alpha \gamma }=\lambda I_{\alpha \otimes \gamma }\). </p>
@@ -10168,7 +10164,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_twoInjectiveTensorInsertionComparison">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001261"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001260"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10228,13 +10224,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>       Let \(A_1,A_2,B_1,B_2\) be injective tensors with the same shared virtual bonds and nonempty external boundary spaces, and assume that there is at least one shared virtual bond. For the set \(\mathcal B\) of shared bonds, a bond \(b\in \mathcal B\), and \(X\in M_{D_b}(\mathbb {C})\), set </p>
-<div class="displaymath" id="a0000001262">
+<div class="displaymath" id="a0000001261">
   \[  C_{A_1,A_2}(b,X;\eta _1,\eta _2,\sigma _1,\sigma _2) = \sum _{\substack {\mu ,\nu \\ \mu |_{\mathcal B\setminus \{ b\} } =\nu |_{\mathcal B\setminus \{ b\} }}} X_{\mu _b,\nu _b} A_1(\eta _1,\mu ,\sigma _1)A_2(\eta _2,\nu ,\sigma _2).  \]
 </div>
 <p> Assume \(C_{A_1,A_2}(b,X;\eta _1,\eta _2,\sigma _1,\sigma _2) =C_{B_1,B_2}(b,X;\eta _1,\eta _2,\sigma _1,\sigma _2)\) for every \(b,X,\eta _1,\eta _2,\sigma _1,\sigma _2\): </p>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-5bf705cf76c90822.svg" alt="\TNPEPSTwoInjectiveTensorInsertionComparison"></div>
 <p> Then </p>
-<div class="displaymath" id="a0000001264">
+<div class="displaymath" id="a0000001263">
   \[  \exists \lambda \in \mathbb {C}^\times ,\qquad A_1=\lambda B_1,\qquad A_2=\lambda ^{-1}B_2.  \]
 </div>
 <p> This is the blueprint form of the two-injective tensor comparison in <span class="cite">
@@ -10247,7 +10243,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001261">
+<div class="proof_wrapper" id="a0000001260">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10262,20 +10258,20 @@
 	, Section&#160;3
 	]
 </span>. After grouping the relevant virtual spaces, reduce to three nonzero virtual legs \(\alpha ,\beta ,\gamma \). Applying the inverse of \(A_2\) to the insertion equalities obtained by freeing, respectively, the \((\beta ,\gamma )\), \((\alpha ,\beta )\), and \((\alpha ,\gamma )\) legs gives endomorphisms \(Z\), \(U\), and \(W\) such that, for every external index \(\eta \), shared-boundary index \(\mu \), and physical index \(\sigma \) of the first block, </p>
-<div class="displaymath" id="a0000001265">
+<div class="displaymath" id="a0000001264">
   \[  A_1(\eta ,\mu ,\sigma ) = \sum _\nu B_1(\eta ,\nu ,\sigma ) (I_\alpha \otimes Z)_{\nu ,\mu } = \sum _\nu B_1(\eta ,\nu ,\sigma ) (U\otimes I_\gamma )_{\nu ,\mu } = \sum _\nu B_1(\eta ,\nu ,\sigma ) (W_{\alpha \gamma }\otimes I_\beta )_{\nu ,\mu }.  \]
 </div>
 <p> Injectivity of \(B_1\) gives the residual equality </p>
-<div class="displaymath" id="a0000001266">
+<div class="displaymath" id="a0000001265">
   \[  I_\alpha \otimes Z = U\otimes I_\gamma = W_{\alpha \gamma }\otimes I_\beta .  \]
 </div>
 <p> Write \(Z=\sum _i Z_i^{(1)}\otimes Z_i^{(2)}\), \(U=\sum _i U_i^{(1)}\otimes U_i^{(2)}\), and \(W=\sum _i W_i^{(1)}\otimes W_i^{(2)}\). The previous display is exactly </p>
-<div class="displaymath" id="a0000001267">
+<div class="displaymath" id="a0000001266">
   \[  \sum _i I\otimes Z_i^{(1)}\otimes Z_i^{(2)} = \sum _i U_i^{(1)}\otimes U_i^{(2)}\otimes I = \sum _i W_i^{(1)}\otimes I\otimes W_i^{(2)}.  \]
 </div>
 <p> Theorem&#160;<a href="sec-peps_ft.html#thm:peps_twoInjectiveGaugeScalarReduction">17.124</a> gives \(Z=\lambda I_{\beta \otimes \gamma }\), \(U=\lambda I_{\alpha \otimes \beta }\), and \(W_{\alpha \gamma }=\lambda I_{\alpha \otimes \gamma }\). Hence \(A_1(\eta ,\mu ,\sigma )=\lambda B_1(\eta ,\mu ,\sigma )\). If \(\lambda =0\), then \(A_1=0\), contradicting injectivity of \(A_1\); hence \(\lambda \neq 0\). </p>
 <p>Put \(X=I_{D_b}\) in the insertion identity. Since \(A_1=\lambda B_1\), for every boundary and physical index one has </p>
-<div class="displaymath" id="a0000001268">
+<div class="displaymath" id="a0000001267">
   \[  \sum _\mu B_1(\eta _1,\mu ,\sigma _1) \bigl(A_2(\eta _2,\mu ,\sigma _2) -\lambda ^{-1}B_2(\eta _2,\mu ,\sigma _2)\bigr) =0 .  \]
 </div>
 <p> Injectivity of \(B_1\) gives \(A_2(\eta _2,\mu ,\sigma _2)=\lambda ^{-1}B_2(\eta _2,\mu ,\sigma _2)\). </p>
@@ -10298,7 +10294,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_oneVertexComplementComparison">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001269"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001268"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10348,11 +10344,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let the shared bond type and the two external boundary spaces be nonempty. After the edge gauges have been absorbed into the second tensor family \(\widetilde B\), block one vertex \(v\) against its complement. Assume that \(A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}\) are injective as two-block tensors. The post-absorption insertion equality gives, for every shared bond \(b\), every matrix \(X\in M_{D_b}(\mathbb {C})\), and all external and physical indices, </p>
-<div class="displaymath" id="a0000001270">
+<div class="displaymath" id="a0000001269">
   \[  C_{A_v,A_{v^c}}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}) = C_{\widetilde B_v,\widetilde B_{v^c}} (b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}).  \]
 </div>
 <p> Then </p>
-<div class="displaymath" id="a0000001271">
+<div class="displaymath" id="a0000001270">
   \[  \exists \lambda _v\in \mathbb {C}^\times ,\qquad A_v=\lambda _v\widetilde B_v.  \]
 </div>
 <div class="centered"> <img class="tn-svg" src="tn_svg/tn-3720d4d87d952da7.svg" alt="\TNPEPSOneVertexComplementComparison"></div>
@@ -10366,7 +10362,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001269">
+<div class="proof_wrapper" id="a0000001268">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10375,18 +10371,18 @@
   </div>
   <div class="proof_content">
   <p>With \(A_1=A_v\), \(A_2=A_{v^c}\), \(B_1=\widetilde B_v\), and \(B_2=\widetilde B_{v^c}\), the post-absorption equality is precisely </p>
-<div class="displaymath" id="a0000001273">
+<div class="displaymath" id="a0000001272">
   \[  \forall b,X,\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c},\quad C_{A_1,A_2}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}) = C_{B_1,B_2}(b,X;\eta _v,\eta _{v^c},\sigma _v,\sigma _{v^c}).  \]
 </div>
 <p> Theorem&#160;<a href="sec-peps_ft.html#thm:peps_twoInjectiveTensorInsertionComparison">17.125</a> gives </p>
-<div class="displaymath" id="a0000001274">
+<div class="displaymath" id="a0000001273">
   \[  \exists \lambda _v\in \mathbb C^\times ,\qquad A_v=\lambda _v\widetilde B_v,\qquad A_{v^c}=\lambda _v^{-1}\widetilde B_{v^c}.  \]
 </div>
 <p> The desired local proportionality is the first equality. </p>
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001275">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001274">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -10398,7 +10394,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001275">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001274">#</a>
     
     
     
@@ -10412,7 +10408,7 @@
 	, Section&#160;3
 	]
 </span> uses the same scalar comparison after comparing two injective regions \(R\subset S=R\cup \{ v\} \). If the region comparisons give \(A_R=\lambda _R\widetilde B_R\) and \(A_S=\lambda _S\widetilde B_S\), then the source-paper diagram reads </p>
-<div class="displaymath" id="a0000001276">
+<div class="displaymath" id="a0000001275">
   \[  A_R A_v = A_S = \lambda _S\widetilde B_S = \lambda _S\widetilde B_R\widetilde B_v .  \]
 </div>
 <p> Applying the left inverse supplied by injectivity of the block \(A_R=\lambda _R\widetilde B_R\) gives \(A_v=(\lambda _S/\lambda _R)\widetilde B_v\). </p>
@@ -10628,7 +10624,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionUnionDecomposition_identities">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001277"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001276"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10741,7 +10737,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001277">
+<div class="proof_wrapper" id="a0000001276">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10769,7 +10765,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionUnionDecomposition_disjoint">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001278"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001277"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10846,7 +10842,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001278">
+<div class="proof_wrapper" id="a0000001277">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10924,7 +10920,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_injectiveRegion_union_contractionChain">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001279"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001278"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10980,14 +10976,14 @@
 	, Section&#160;3
 	]
 </span>. If </p>
-<div class="displaymath" id="a0000001280">
+<div class="displaymath" id="a0000001279">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 2\} }(X)=0,\qquad \mathcal C_{\{ 2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 1,2\} }(X)=0,  \]
 </div>
 <p> and \(\mathcal C_{\{ 1,2\} }(X)=0\Longrightarrow X=0\), then \(\ker \mathcal C_{\{ 0,1,2\} }=\{ 0\} \). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001279">
+<div class="proof_wrapper" id="a0000001278">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10996,7 +10992,7 @@
   </div>
   <div class="proof_content">
   <p>For \(X\in K\) with \(\mathcal C_{\{ 0,1,2\} }(X)=0\), apply the three implications in sequence: </p>
-<div class="displaymath" id="a0000001281">
+<div class="displaymath" id="a0000001280">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 2\} }(X)=0 \Longrightarrow \mathcal C_{\{ 1,2\} }(X)=0 \Longrightarrow X=0.  \]
 </div>
 
@@ -11016,7 +11012,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_injectiveRegion_union">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001282"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001281"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11051,7 +11047,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>  Let \(V\) be a finite vertex set. Write \(\operatorname {inj}(R)\) for the assertion that the PEPS tensor blocked to the region \(R\subseteq V\) is injective. For two possibly overlapping regions \(A,B\subseteq V\), </p>
-<div class="displaymath" id="a0000001283">
+<div class="displaymath" id="a0000001282">
   \[  \operatorname {inj}(A)\wedge \operatorname {inj}(B) \Longrightarrow \operatorname {inj}(A\cup B).  \]
 </div>
 <p> The proof in <span class="cite">
@@ -11067,7 +11063,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001282">
+<div class="proof_wrapper" id="a0000001281">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11076,11 +11072,11 @@
   </div>
   <div class="proof_content">
   <p>Put \(P_0=A\setminus B\), \(P_1=A\cap B\), \(P_2=B\setminus A\), and \(P_3=(A\cup B)^c\). Then \(P_0\cup P_1=A\), \(P_1\cup P_2=B\), and \(P_0\cup P_1\cup P_2=A\cup B\). Let \(\mathcal C_I\) denote contraction of the blocked tensor over the region \(\bigcup _{i\in I}P_i\). To prove injectivity of \(A\cup B\), take a boundary tensor \(X\) on \(P_3\) such that \(\mathcal C_{\{ 0,1,2\} }(X)=0\). Since \(P_0\cup P_1=A\) is injective, its left inverse gives </p>
-<div class="displaymath" id="a0000001286">
+<div class="displaymath" id="a0000001285">
   \[  \mathcal C_{\{ 0,1,2\} }(X)=0 \quad \Longrightarrow \quad \mathcal C_{\{ 2\} }(X)=0 .  \]
 </div>
 <p> The remaining two steps are </p>
-<div class="displaymath" id="a0000001287">
+<div class="displaymath" id="a0000001286">
   \[  \begin{aligned}  \mathcal C_{\{ 2\} }(X)=0 & \quad \Longrightarrow \quad \mathcal C_{\{ 1,2\} }(X)=0,\\ \mathcal C_{\{ 1,2\} }(X)=0 & \quad \Longrightarrow \quad X=0 . \end{aligned}  \]
 </div>
 <p> The first implication is obtained by contracting with the tensor on \(P_1\), and the second is the left inverse for the injective region \(P_1\cup P_2=B\). Thus \(\ker \mathcal C_{\{ 0,1,2\} }=\{ 0\} \), and therefore \(P_0\cup P_1\cup P_2=A\cup B\) is injective. </p>
@@ -11149,7 +11145,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_finite">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001287"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11200,7 +11196,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001288">
+<div class="proof_wrapper" id="a0000001287">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11228,7 +11224,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_regionInjectivityUnionClosure_inside">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001289"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001288"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11283,7 +11279,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001289">
+<div class="proof_wrapper" id="a0000001288">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11477,7 +11473,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeCoordinateRegion_identities">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001291"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11554,7 +11550,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001292">
+<div class="proof_wrapper" id="a0000001291">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11582,7 +11578,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001292"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11637,7 +11633,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001293">
+<div class="proof_wrapper" id="a0000001292">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11665,7 +11661,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionTHole_rectangular_decomposition">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001294"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001293"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11722,7 +11718,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001294">
+<div class="proof_wrapper" id="a0000001293">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11750,7 +11746,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_window_complement">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001295"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001294"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11815,7 +11811,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001295">
+<div class="proof_wrapper" id="a0000001294">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11843,7 +11839,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001296"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001295"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11902,7 +11898,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001296">
+<div class="proof_wrapper" id="a0000001295">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12005,7 +12001,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_no_five_by_six_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001298"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001297"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12074,7 +12070,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001298">
+<div class="proof_wrapper" id="a0000001297">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12102,7 +12098,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRectangleCover_injective">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001298"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12157,7 +12153,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001299">
+<div class="proof_wrapper" id="a0000001298">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12185,7 +12181,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionR_regionS_difference">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001299"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12240,7 +12236,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001300">
+<div class="proof_wrapper" id="a0000001299">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12336,7 +12332,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_toRectangular">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001301"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001300"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12387,7 +12383,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001301">
+<div class="proof_wrapper" id="a0000001300">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12415,7 +12411,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_squareLatticeRectangleInjectivity_rectangles">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001301"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12470,7 +12466,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001302">
+<div class="proof_wrapper" id="a0000001301">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12498,7 +12494,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_edgeBlocks_injective">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001303"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001302"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12557,7 +12553,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001303">
+<div class="proof_wrapper" id="a0000001302">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12585,7 +12581,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionT_injective_of_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001303"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12646,7 +12642,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001304">
+<div class="proof_wrapper" id="a0000001303">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12674,7 +12670,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_injective_of_cover">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001305"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001304"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12735,7 +12731,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001305">
+<div class="proof_wrapper" id="a0000001304">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12763,7 +12759,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_coverOfT">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001305"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12816,7 +12812,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001306">
+<div class="proof_wrapper" id="a0000001305">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12844,7 +12840,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareEdgeComplementRegion_topCollar">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001307"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001306"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12922,7 +12918,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001307">
+<div class="proof_wrapper" id="a0000001306">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12950,7 +12946,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareHorizontalEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001309"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001308"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13055,7 +13051,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001309">
+<div class="proof_wrapper" id="a0000001308">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13083,7 +13079,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareHorizontalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001310"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001309"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13164,7 +13160,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001310">
+<div class="proof_wrapper" id="a0000001309">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13192,7 +13188,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareVerticalTranslatedEdge_blockingData">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001311"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001310"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13271,7 +13267,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001311">
+<div class="proof_wrapper" id="a0000001310">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13451,7 +13447,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001312"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001311"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13512,7 +13508,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001312">
+<div class="proof_wrapper" id="a0000001311">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13540,7 +13536,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#lem:peps_normalSquareRegionRS_injective_of_unionClosure">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001313"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001312"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13597,7 +13593,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001313">
+<div class="proof_wrapper" id="a0000001312">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13700,7 +13696,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalEdgeBlockingHypotheses_injectiveChain">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001315"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001314"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13760,14 +13756,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>         A family of one-edge blocking data determines the normal edge-blocking hypotheses. If \(H\) is assembled from the family \(d_e\), then the one-edge datum that \(H\) associates with \(e\) is \(d_e\). Conversely, for every edge, the normal edge-blocking hypotheses supply the corresponding one-edge datum. Write the endpoints of \(e\) as \(u_e{\lt}v_e\) in the canonical vertex ordering. If the three regions are \(R_e\), \(B_e\), and \(C_e\), then </p>
-<div class="displaymath" id="a0000001316">
+<div class="displaymath" id="a0000001315">
   \[  u_e \in R_e,\qquad v_e \in B_e,\qquad R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing ,\qquad R_e\cup B_e\cup C_e=V,  \]
 </div>
 <p> and the underlying PEPS tensor is injective on \(R_e\), \(B_e\), and \(C_e\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001315">
+<div class="proof_wrapper" id="a0000001314">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -13862,7 +13858,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:peps_normalOneSiteSeparation_mem_withSite_iff">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001318"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001317"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -13913,7 +13909,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001318">
+<div class="proof_wrapper" id="a0000001317">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14498,7 +14494,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_mul">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001324"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001323"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14550,7 +14546,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001324">
+<div class="proof_wrapper" id="a0000001323">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14578,7 +14574,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_inv">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001326"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001325"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14629,7 +14625,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001326">
+<div class="proof_wrapper" id="a0000001325">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14657,7 +14653,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:edgeScalarAt_ne_zero">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001327"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001326"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14708,7 +14704,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001327">
+<div class="proof_wrapper" id="a0000001326">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14736,7 +14732,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_mul">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001328"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001327"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14789,7 +14785,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001328">
+<div class="proof_wrapper" id="a0000001327">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14817,7 +14813,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:IsVertexBalanced_inv">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001329"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001328"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14870,7 +14866,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001329">
+<div class="proof_wrapper" id="a0000001328">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14898,7 +14894,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_refl">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001330"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001329"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -14950,7 +14946,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001330">
+<div class="proof_wrapper" id="a0000001329">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -14978,7 +14974,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_symm">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001332"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001331"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15034,7 +15030,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001332">
+<div class="proof_wrapper" id="a0000001331">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15062,7 +15058,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_trans">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001334"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001333"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15118,7 +15114,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001334">
+<div class="proof_wrapper" id="a0000001333">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15146,7 +15142,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_equivalence">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001336"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001335"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15201,7 +15197,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001336">
+<div class="proof_wrapper" id="a0000001335">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15295,7 +15291,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_gaugeVertex_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001337"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001336"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15352,7 +15348,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001337">
+<div class="proof_wrapper" id="a0000001336">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15380,7 +15376,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_eq">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001338"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001337"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15434,7 +15430,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001338">
+<div class="proof_wrapper" id="a0000001337">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15462,7 +15458,7 @@
 
     <a class="icon proof" href="sec-peps_ft.html#thm:GaugeEquivModEdgeScalars_applyGauge_sameState">#</a>
     
-    <a class="icon proof" href="sec-peps_ft.html#a0000001340"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001339"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -15515,7 +15511,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001340">
+<div class="proof_wrapper" id="a0000001339">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -15591,7 +15587,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001341">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001340">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -15602,7 +15598,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="sec-peps_ft.html#a0000001341">#</a>
+    <a class="icon proof" href="sec-peps_ft.html#a0000001340">#</a>
     
     
     
