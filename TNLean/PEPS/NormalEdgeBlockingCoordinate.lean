@@ -17,7 +17,7 @@ the normal square-lattice PEPS theorem.
 namespace TNLean
 namespace PEPS
 
-/-- The distinguished horizontal edge in the normalized \(5\times7\) frame.
+/-- The distinguished horizontal edge in the normalized $5\times7$ frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
 where the proof blocks the tensor network around a horizontal edge. -/
@@ -136,6 +136,28 @@ theorem normalSquareHorizontalEdge_blockingData
     d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
     d.blue_disjoint_complement, d.cover_univ⟩
 
+/-- The normalized horizontal edge has red/blue/complement blocking data once
+the local $T$-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+theorem normalSquareHorizontalEdge_blockingData_of_TCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareRegionTRectangleCover (width := 5) (height := 7) 0 0) :
+    normalSquareHorizontalEdge.1.1 ∈ normalSquareHorizontalEdgeRed ∧
+      normalSquareHorizontalEdge.1.2 ∈ normalSquareHorizontalEdgeBlue ∧
+      κ.IsInjective normalSquareHorizontalEdgeRed ∧
+      κ.IsInjective normalSquareHorizontalEdgeBlue ∧
+      κ.IsInjective normalSquareHorizontalEdgeComplement ∧
+      Disjoint normalSquareHorizontalEdgeRed normalSquareHorizontalEdgeBlue ∧
+      Disjoint normalSquareHorizontalEdgeRed normalSquareHorizontalEdgeComplement ∧
+      Disjoint normalSquareHorizontalEdgeBlue normalSquareHorizontalEdgeComplement ∧
+      normalSquareHorizontalEdgeRed ∪ normalSquareHorizontalEdgeBlue ∪
+          normalSquareHorizontalEdgeComplement =
+        (Finset.univ : Finset (SquareLatticeVertex 5 7)) :=
+  normalSquareHorizontalEdge_blockingData h hUnion (h.regionT_injective_of_cover hUnion cover)
+
 /-- The normalized horizontal edge supplies the three injective regions used in
 the edge-blocked three-site chain.
 
@@ -151,7 +173,7 @@ theorem normalSquareHorizontalEdge_injective_chain
   (normalSquareHorizontalEdge_blockingDatum h hUnion hT).injective_chain
 
 /-- The normalized horizontal edge has red/blue/complement blocking data once
-the local \(T\)-region has a rectangular cover.
+the local $T$-region has a rectangular cover.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 def normalSquareHorizontalEdge_blockingDatum_of_TCover
@@ -164,7 +186,7 @@ def normalSquareHorizontalEdge_blockingDatum_of_TCover
     (h.regionT_injective_of_cover hUnion cover)
 
 /-- The normalized horizontal edge supplies the three injective regions once
-the local \(T\)-region has a rectangular cover.
+the local $T$-region has a rectangular cover.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 theorem normalSquareHorizontalEdge_injective_chain_of_TCover
@@ -177,10 +199,10 @@ theorem normalSquareHorizontalEdge_injective_chain_of_TCover
       κ.IsInjective normalSquareHorizontalEdgeComplement :=
   (normalSquareHorizontalEdge_blockingDatum_of_TCover h hUnion cover).injective_chain
 
-/-- The distinguished vertical edge in the normalized \(7\times5\) frame.
+/-- The distinguished vertical edge in the normalized $7\times5$ frame.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500,
-where the proof says that vertical edges use the \(7\times5\) counterpart of
+where the proof says that vertical edges use the $7\times5$ counterpart of
 the horizontal-edge blocking. -/
 def normalSquareVerticalEdge : Edge (squareLatticeGraph 7 5) where
   val :=
@@ -296,8 +318,53 @@ theorem normalSquareVerticalEdge_blockingData
     d.complement_injective, d.red_disjoint_blue, d.red_disjoint_complement,
     d.blue_disjoint_complement, d.cover_univ⟩
 
+/-- The normalized vertical edge has red/blue/complement blocking data once the
+rotated local $T$-region is injective.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareVerticalEdge_blockingData_of_verticalT
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hT : κ.IsInjective (normalSquareVerticalRegionT (width := 7) (height := 5) 0 0)) :
+    normalSquareVerticalEdge.1.1 ∈ normalSquareVerticalEdgeRed ∧
+      normalSquareVerticalEdge.1.2 ∈ normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeRed ∧
+      κ.IsInjective normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeBlue ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeBlue normalSquareVerticalEdgeComplement ∧
+      normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue ∪
+          normalSquareVerticalEdgeComplement =
+        (Finset.univ : Finset (SquareLatticeVertex 7 5)) :=
+  normalSquareVerticalEdge_blockingData h (h.verticalComp_injective hUnion hT)
+
+/-- The normalized vertical edge has red/blue/complement blocking data once the
+rotated local $T$-region has a rectangular cover.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
+theorem normalSquareVerticalEdge_blockingData_of_verticalTCover
+    {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (cover : NormalSquareVerticalRegionTRectangleCover
+      (width := 7) (height := 5) 0 0) :
+    normalSquareVerticalEdge.1.1 ∈ normalSquareVerticalEdgeRed ∧
+      normalSquareVerticalEdge.1.2 ∈ normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeRed ∧
+      κ.IsInjective normalSquareVerticalEdgeBlue ∧
+      κ.IsInjective normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeBlue ∧
+      Disjoint normalSquareVerticalEdgeRed normalSquareVerticalEdgeComplement ∧
+      Disjoint normalSquareVerticalEdgeBlue normalSquareVerticalEdgeComplement ∧
+      normalSquareVerticalEdgeRed ∪ normalSquareVerticalEdgeBlue ∪
+          normalSquareVerticalEdgeComplement =
+        (Finset.univ : Finset (SquareLatticeVertex 7 5)) :=
+  normalSquareVerticalEdge_blockingData h (h.verticalComp_inj_of_cover hUnion cover)
+
 /-- The normalized vertical edge has red/blue/complement blocking data once
-the rotated local \(T\)-region is injective.
+the rotated local $T$-region is injective.
 
 This discharges the complementary-block input of
 `normalSquareVerticalEdge_blockingDatum` using the vertical collar identity.
@@ -312,7 +379,7 @@ def normalSquareVerticalEdge_blockingDatum_of_verticalT
   normalSquareVerticalEdge_blockingDatum h (h.verticalComp_injective hUnion hT)
 
 /-- The normalized vertical edge has red/blue/complement blocking data once the
-rotated local \(T\)-region has a rectangular cover.
+rotated local $T$-region has a rectangular cover.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 def normalSquareVerticalEdge_blockingDatum_of_verticalTCover
@@ -342,7 +409,7 @@ theorem normalSquareVerticalEdge_injective_chain
   (normalSquareVerticalEdge_blockingDatum h hComplement).injective_chain
 
 /-- The normalized vertical edge supplies the three injective regions once the
-rotated local \(T\)-region is injective.
+rotated local $T$-region is injective.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdge_injective_chain_of_verticalT
@@ -356,7 +423,7 @@ theorem normalSquareVerticalEdge_injective_chain_of_verticalT
   (normalSquareVerticalEdge_blockingDatum_of_verticalT h hUnion hT).injective_chain
 
 /-- The normalized vertical edge supplies the three injective regions once the
-rotated local \(T\)-region has a rectangular cover.
+rotated local $T$-region has a rectangular cover.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 theorem normalSquareVerticalEdge_injective_chain_of_verticalTCover

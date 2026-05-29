@@ -1143,6 +1143,42 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
 \end{proof}
 
+\begin{lemma}[Blocked powers of adjoint eigenvectors]%
+    \label{lem:mpdo_adjoint_blocked_eigenvector}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector}
+    \leanok
+    If $E=E_1$ and $E^\dagger X=\lambda X$, then
+    $E_n^\dagger X=\lambda^n X$ for every $n$.
+\end{lemma}
+\begin{proof}\leanok
+    The case $n=0$ is $E_0=\mathrm{id}$. For the induction step,
+    $E_{n+1}=E_n\circ E_1$, hence
+    \[
+        E_{n+1}^{\dagger}X
+        = E_1^{\dagger}E_n^{\dagger}X
+        = E_1^{\dagger}(\lambda^n X)
+        = \lambda^n E_1^{\dagger}X
+        = \lambda^{n+1}X .
+    \]
+\end{proof}
+
+\begin{theorem}[Finite-order adjoint eigenvalues for algebra towers]%
+    \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
+    \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
+        lem:mpdo_adjoint_blocked_eigenvector}
+    Assume the algebra-structure formulation holds. If $X\ne 0$,
+    $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
+    $\lambda=1$.
+\end{theorem}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:mpdo_adjoint_blocked_eigenvector},
+    $E_n^\dagger X=\lambda^n X=X$. The descent theorem gives
+    $E_1^\dagger X=X$. Thus $\lambda X=X$, so $(\lambda-1)X=0$. Since
+    $X\ne0$, one obtains $\lambda=1$.
+\end{proof}
+
 \begin{theorem}[Adjoint fixed-point equality for algebra towers]%
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra}
@@ -1176,38 +1212,81 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
 \begin{remark}[Why algebra data do not imply fusion data]%
     \label{rem:mpdo_algebra_to_fusion_gap}
     \uses{def:mpdo_rfp_via_algebra, def:mpdo_rfp_via_fusion, thm:newton_girard}
-    The converse implication
-    $\ref{def:mpdo_rfp_via_algebra} \Rightarrow \ref{def:mpdo_rfp_via_fusion}$
-    requires a stronger hypothesis than the algebra-structure formulation above.
-    Theorem
-    \ref{thm:mpdo_adjoint_fix_descent} already gives the strongest available
-    consequence of the algebra-structure data -- exclusion of \emph{finite
-        order} (root-of-unity) peripheral eigenvalues of the adjoint transfer
-    map, since any such eigenvalue would produce a new adjoint fixed point
-    at some positive blocking size. This does \emph{not}, however, exclude
-    unit-modulus eigenvalues of irrational phase, nor force idempotence of
-    the transfer map, so ergodic quantum channels with a strict spectral gap
-    on the $1$-complement still satisfy the predicate without being RFPs.
-    For instance, on $M_D(\mathbb{C})$ with $0 < \varepsilon < 1$ take
+    Write $E=E_1$ for the one-site transfer map.  The present algebra predicate
+    gives, for every $n>0$,
+    \[
+        \operatorname{Fix}\bigl((E^n)^\dagger\bigr)
+        = \operatorname{Fix}(E^\dagger).
+    \]
+    Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
+    $\operatorname{Fix}(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
+    Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}.  It does not imply
+    $E^2=E$.  For instance, if $\Pi_{\mathrm{diag}}$ is the projection onto
+    diagonal matrices and $0<\varepsilon<1$, set
     \[
         E(X)
         = \varepsilon\, X
         + (1 - \varepsilon)\, \Pi_{\mathrm{diag}}(X),
     \]
-    where $\Pi_{\mathrm{diag}}$ is the projection that zeroes the
-    off-diagonal entries of $X$; then $\Pi_{\mathrm{diag}} \circ
-        \Pi_{\mathrm{diag}} = \Pi_{\mathrm{diag}}$, the channel $E$ has
-    peripheral spectrum $\{1\}$ and diagonal fixed-point algebra at every
-    blocking size, yet $E \circ E \neq E$. Closing the converse therefore
-    requires strengthening the predicate to the coefficient formulation of
-    \cite[Theorem~IV.13~(ii)]{Cirac2017MPDO_AnnPhys}: the positive diagonal
-    matrices $\chi_{\alpha,\beta,\gamma}$ of Appendix~C.3 and the
-    coefficient identity
-    $c^{(L)}_{\alpha,\beta,\gamma}
-        = \mathrm{tr}(\chi_{\alpha,\beta,\gamma}^{L})$
-    of Appendix~C.4. The scalar Newton--Girard power-sum identity needed
-    for the latter step is already available as
-    Theorem~\ref{thm:newton_girard}.
+    so that
+    \[
+        E^n(X)
+        = \Pi_{\mathrm{diag}}(X)
+          + \varepsilon^n\bigl(X-\Pi_{\mathrm{diag}}(X)\bigr),
+        \qquad
+        E^2-E
+        = (\varepsilon^2-\varepsilon)
+          (\mathrm{id}-\Pi_{\mathrm{diag}}).
+    \]
+    The fixed-point algebra is diagonal for every $n>0$, but $E^2\ne E$.
+
+    The missing source step is the coefficient argument in
+    \cite[Appendix~C.4]{Cirac2017MPDO_AnnPhys}.  One needs the same-length
+    product law
+    \[
+        O_L(M_\alpha)O_L(M_\beta)
+        =
+        \sum_\gamma
+          \tr(\chi_{\alpha,\beta,\gamma}^{\,L})
+          O_L(M_\gamma)
+    \]
+    and the length-one idempotent trace identity
+    \[
+        m_\gamma
+        =
+        \sum_{\alpha,\beta}
+          \tr(\chi_{\alpha,\beta,\gamma})
+          m_\alpha m_\beta.
+    \]
+    The proof of \cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys} uses these
+    identities, positivity, and the simple-matrix lemma
+    \cite[lines~1155--1163]{Cirac2017MPDO_AnnPhys} to give
+    \[
+        \{\nu_{\gamma,k}\}_k
+        =
+        \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
+          \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3},
+        \qquad
+        \tr(\nu_\gamma)=m_\gamma.
+    \]
+    The reconstruction maps in \cite[lines~2065--2085]{Cirac2017MPDO_AnnPhys}
+    then use
+    \[
+        \widetilde R_2\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
+          = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
+        \qquad
+        \widetilde R_1\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
+          = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma .
+    \]
+    Thus $\tr(\nu_\gamma)=m_\gamma$ and the defining equality
+    $m_\gamma=\tr(\mu_\gamma)$ normalize the factors
+    $\nu_\gamma/m_\gamma$ and $\mu_\gamma/m_\gamma$, respectively, in
+    $T=\widetilde R_2\widetilde T R_1$ and
+    $S=\widetilde R_1\widetilde S R_2$.  The scalar
+    Newton--Girard power-sum identity needed to obtain the trace-power form is
+    already available as
+    Theorem~\ref{thm:newton_girard}; what remains is the MPDO construction of
+    the BNT-label witness carrying these two displayed equations.
 \end{remark}
 
 \subsection{Diagonal \texorpdfstring{$\chi$}{chi}-matrices and the trace-power formula}
