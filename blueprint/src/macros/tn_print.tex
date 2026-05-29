@@ -998,6 +998,29 @@
   \end{tikzpicture}%
 }
 
+\newcommand{\TNPEPSBlockedMiddleLocalGaugeFormula}{%
+  \begin{tikzpicture}[tn picture]
+    \TN@tensordot{bmA}{(0,0)}
+    \TN@tensordot{bmB}{(2.55,0)}
+    \draw[tn leg] (bmA) -- ++(40:0.55);
+    \draw[tn leg] (bmA) -- ++(100:0.55);
+    \draw[tn leg] (bmA) -- ++(160:0.55);
+    \draw[tn leg] (bmA) -- ++(220:0.55);
+    \draw[tn leg] (bmA) -- ++(300:0.55);
+    \draw[tn leg] (bmB) -- ++(40:0.55);
+    \draw[tn leg] (bmB) -- ++(100:0.55);
+    \draw[tn leg] (bmB) -- ++(160:0.55);
+    \draw[tn leg] (bmB) -- ++(220:0.55);
+    \draw[tn leg] (bmB) -- ++(300:0.55);
+    \draw[tn phys leg] (bmA.north) -- ++(0,0.62);
+    \draw[tn phys leg] (bmB.north) -- ++(0,0.62);
+    \node at ($(bmA)+(0,-0.62)$) {$A_v$};
+    \node at ($(bmB)+(0,-0.62)$) {$B_v$};
+    \node at (1.28,0.25) {$\prod_{e\ni v}X_e$};
+    \draw[->,tn leg] (0.62,0) -- (1.93,0);
+  \end{tikzpicture}%
+}
+
 \newcommand{\TNPEPSLocalGaugeExtraction}{%
   \begin{tikzpicture}[tn picture]
     \TN@tensordot{tnLv}{(0,0)}
