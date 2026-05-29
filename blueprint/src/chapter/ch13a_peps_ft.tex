@@ -3280,6 +3280,10 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Construction from translated edge windows]%
     \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_blockingData_of_windows}
+    \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_injective_chain_of_windows}
+    \lean{TNLean.PEPS.%
+        normalSquareTranslatedEdgeBlockingHypotheses_endpoint_disjoint_cover_of_windows}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_blockingData_of_marginCovers}
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers}
@@ -3294,16 +3298,17 @@ injective and normal PEPS, following Theorems~2 and~3 of
     hypotheses.  This is the conditional construction;
     constructing such windows for all edges of the $7\times7$ lattice remains
     separate; the current open rectangular translated-window criterion does not
-    by itself supply such a family.  Equivalently, it is enough to supply the oriented
-    margin-and-cover data at every edge.  The one-edge datum recovered from the
-    resulting hypotheses is the datum supplied by the corresponding
-    margin-and-cover input, and the resulting hypotheses give the three
-    injective regions at every edge, together with
+    by itself supply such a family.  The one-edge datum recovered from the
+    resulting hypotheses is the datum supplied by the corresponding translated
+    window, and the resulting hypotheses give the three injective regions at
+    every edge, together with
     $u_e\in R_e$, $v_e\in B_e$,
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
-    $R_e\cup B_e\cup C_e=V$.  The current open rectangular $7\times7$
-    model does not admit such margin-and-cover data for every edge, because
-    the boundary edges above fail this interior criterion.
+    $R_e\cup B_e\cup C_e=V$.  Equivalently, it is enough to supply the oriented
+    margin-and-cover data at every edge; the same recovered-datum, injectivity,
+    and disjoint-cover statements hold for that formulation.  The current open
+    rectangular $7\times7$ model does not admit such margin-and-cover data for
+    every edge, because the boundary edges above fail this interior criterion.
 \end{theorem}
 \begin{proof}\leanok
     Apply the general construction for one-edge blocking data to the datum
