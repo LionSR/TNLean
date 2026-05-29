@@ -1112,13 +1112,13 @@ matching covers the whole BNT basis.
 
 \begin{proof}\leanok
     \uses{lem:eventual_coeff_eq_of_eventual_li}
-    For all sufficiently large $N$, expand the equality of total MPVs as
+    For every $N$, expand the equality of total MPVs as
     \[
         \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
         =
         \sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)} .
     \]
-    The phase relation gives
+    For every $N$, the phase relation gives
     $\ket{V^{(N)}(Q_k)}=\zeta_k^N\ket{V^{(N)}(P_{\beta(k)})}$, hence
     \[
         \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
@@ -1209,11 +1209,11 @@ matching covers the whole BNT basis.
 \begin{proof}\leanok
     For all sufficiently large $N$, the coefficient identity in sector $k$ is
     \[
-        \sum_q \mu_{\beta(k),q}^{\,N}
+        \sum_r \mu_{\beta(k),r}^{\,N}
         =
-        \zeta_k^N\sum_p\nu_{k,p}^{\,N}
+        \zeta_k^N\sum_q\nu_{k,q}^{\,N}
         =
-        \sum_p(\zeta_k\nu_{k,p})^{N}.
+        \sum_q(\zeta_k\nu_{k,q})^{N}.
     \]
     Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} applies the finite
     power-sum comparison sector by sector, producing a copy permutation
