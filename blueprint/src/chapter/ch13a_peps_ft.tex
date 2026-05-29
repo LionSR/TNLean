@@ -1340,6 +1340,30 @@ injective and normal PEPS, following Theorems~2 and~3 of
     precise assertion after the edge-blocking diagram in
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
+\begin{proof}
+    The endpoint assertions are
+    $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, which follow
+    from vertex injectivity. The middle assertion is the remaining blocking
+    step: for every coefficient family $c_{\rho}$ on the residual boundary,
+    \[
+        \Bigl(\forall \tau,\;
+            \sum_{\rho} c_{\rho}\,T_{A,V\setminus\{u,v\}}^{\rho}(\tau)=0\Bigr)
+        \Longrightarrow
+        \forall \rho,\; c_{\rho}=0.
+    \]
+    Let $R=V\setminus\{u,v\}$. For $S\subseteq R$, write
+    \[
+        K(S) \Longleftrightarrow
+        \forall \tau,\;
+            \sum_{\rho} c_{\rho}\,T_{A,S}^{\rho}(\tau)=0.
+    \]
+    If $j\in S$, contraction with the local left inverse at $j$ gives
+    \[
+        K(S)\Longrightarrow K(S\setminus\{j\}).
+    \]
+    Hence $K(R)\Longrightarrow K(\varnothing)$. Since $T_{A,\varnothing}$ is
+    the empty contraction, $K(\varnothing)$ is $\forall \rho,\;c_{\rho}=0$.
+\end{proof}
 
 \begin{theorem}[Local virtual insertion realized physically on either endpoint]%
     \label{thm:peps_virtualInsertionPhysicalRealization}
