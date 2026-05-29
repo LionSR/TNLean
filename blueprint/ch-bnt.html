@@ -1553,11 +1553,11 @@
   <div class="definition_thmcontent">
   <p>  A family is in <em>normal canonical form with BNT separation</em> if it satisfies Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.24</a> and, in addition: </p>
 <ol class="enumerate">
-  <li><p>the moduli are strictly decreasing (strengthened from non-increasing), </p>
+  <li><p>the weight moduli \(|\mu _1| {\gt} |\mu _2| {\gt} \cdots {\gt} |\mu _r|\) are strictly decreasing (a one-representative restriction), </p>
 </li>
   <li><p>distinct blocks of the same bond dimension are not gauge-phase equivalent, </p>
 </li>
-  <li><p>the dominant block has unit modulus, \(\| \mu _1\|  = 1\) (<span class="cite">
+  <li><p>the dominant block has unit modulus, \(|\mu _1| = 1\) (<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
@@ -1566,7 +1566,7 @@
 </span>). </p>
 </li>
 </ol>
-<p> This is a scope-restricted one-copy-per-sector surface: it keeps one representative for each strict weight-modulus class and does not encode the full CPSV16 BNT multiplicity data. The missing general multiplicity route is recorded in <a href=""></a>docs/paper-gaps/ft_one_copy_scope_restriction.tex. The strict ordering describes an already selected or grouped representative family. It is not the source BNT expansion </p>
+<p> This is a scope-restricted one-copy-per-sector surface: it keeps one representative for each strict weight-modulus class and does not encode the full CPSV16 BNT multiplicity data. The missing general multiplicity route is recorded in <a href=""></a>docs/paper-gaps/ft_one_copy_scope_restriction.tex. The strict ordering describes an already selected or grouped representative family. Equal-modulus copies are not separated by this surface; they appear as the individual weights \(\mu _{j,q}\) in the coefficient sum \(c_N^{(j)} = \sum _q \mu _{j,q}^N\) used in the sector-BNT surface below. This is not the source BNT expansion </p>
 <div class="displaymath" id="a0000000673">
   \[  A^i = \bigoplus _{j=1}^g \bigoplus _{q=1}^{r_j} \mu _{j,q} X_{j,q} A_j^i X_{j,q}^{-1},  \]
 </div>
@@ -2608,7 +2608,7 @@
 	]
 </span> normalization holds, </p>
 <div class="displaymath" id="a0000000693">
-  \[  \forall (j,q),\  \lVert \mu _{j,q} \rVert \le 1, \qquad \exists \,  (j_*, q_*) : \lVert \mu _{j_*, q_*} \rVert = 1.  \]
+  \[  \forall (j,q),\  |\mu _{j,q}| \le 1, \qquad \exists \,  (j_*, q_*) : |\mu _{j_*, q_*}| = 1.  \]
 </div>
 <p> The MPV expansion takes the raw two-layer form </p>
 <div class="displaymath" id="a0000000694">
@@ -2794,9 +2794,9 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, §II, lines&#160;217–246
 	]
-</span>, every raw weight satisfies \(\lVert \mu _{j,q} \rVert \le 1\), and the triangle inequality bounds the norm of the sector coefficient by the multiplicity: </p>
+</span>, every raw weight satisfies \(|\mu _{j,q}| \le 1\), and the triangle inequality bounds the norm of the sector coefficient by the multiplicity: </p>
 <div class="displaymath" id="a0000000698">
-  \[  \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j.  \]
+  \[  \bigl| c_N^{(j)} \bigr| \le r_j.  \]
 </div>
 
   </div>
@@ -2809,7 +2809,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the triangle inequality to the raw power sum from Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_eq_sum_weight_pow">11.23</a> and bound each term by \(1\) using \(\lVert \mu _{j,q} \rVert \le 1\). </p>
+  <p>Apply the triangle inequality to the raw power sum from Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_eq_sum_weight_pow">11.23</a> and bound each term by \(1\) using \(|\mu _{j,q}| \le 1\). </p>
 
   </div>
 </div>
@@ -3076,7 +3076,7 @@
 	]
 </span> normalization yields directly </p>
 <div class="displaymath" id="a0000000703">
-  \[  \bigl\lVert c_N^{(j)} \bigr\rVert \le r_j  \]
+  \[  \bigl| c_N^{(j)} \bigr| \le r_j  \]
 </div>
 <p> for every \(N\) and basis index \(j\), without an additional explicit modulus-bound hypothesis. </p>
 
@@ -3163,7 +3163,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, §&#160;II.C, line&#160;246
 	]
-</span> unit-modulus existential provides indices \((j_*, q_*)\) with \(\lVert \mu _{j_*, q_*} \rVert = 1\). </p>
+</span> unit-modulus existential provides indices \((j_*, q_*)\) with \(|\mu _{j_*, q_*}| = 1\). </p>
 
   </div>
 </div>
@@ -3237,7 +3237,7 @@
         </div>
   </div>
   <div class="example_thmcontent">
-  <p>   The single-sector two-copy decomposition with raw weights \((1, 1/2)\) demonstrates that the BNT canonical form admits unequal-modulus copies: the modulus bound holds because \(\lVert 1 \rVert \le 1\) and \(\lVert 1/2 \rVert = 1/2 \le 1\), and the unit-modulus existential is witnessed by the first copy with weight \(1\). This is the <span class="cite">
+  <p>   The single-sector two-copy decomposition with raw weights \((1, 1/2)\) demonstrates that the BNT canonical form admits unequal-modulus copies: the modulus bound holds because \(|1| \le 1\) and \(|1/2| = 1/2 \le 1\), and the unit-modulus existential is witnessed by the first copy with weight \(1\). This is the <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3393,7 +3393,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) be a BNT canonical form and let \(j_0\) be a sector index such that some copy of sector \(j_0\) carries a unit-modulus weight, that is, there exists \(q\) with \(\lVert \mu _{j_0, q}\rVert = 1\). Then the sector-\(j_0\) coefficient \(c_N^{(j_0)} = \sum _q \mu _{j_0, q}^N\) does not tend to \(0\) as \(N \to \infty \). </p>
+  <p>   Let \(P\) be a BNT canonical form and let \(j_0\) be a sector index such that some copy of sector \(j_0\) carries a unit-modulus weight, that is, there exists \(q\) with \(|\mu _{j_0, q}| = 1\). Then the sector-\(j_0\) coefficient \(c_N^{(j_0)} = \sum _q \mu _{j_0, q}^N\) does not tend to \(0\) as \(N \to \infty \). </p>
 <p>This reads the <span class="cite">
 	[
 	
@@ -3418,7 +3418,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_cesaro_nondecay">11.30</a> to the family \(q \mapsto \mu _{j_0, q}\), using the modulus bound \(\lVert \mu _{j_0, q}\rVert \le 1\) from the canonical-form normalization together with the per-sector unit-modulus hypothesis. </p>
+  <p>Apply Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_cesaro_nondecay">11.30</a> to the family \(q \mapsto \mu _{j_0, q}\), using the modulus bound \(|\mu _{j_0, q}| \le 1\) from the canonical-form normalization together with the per-sector unit-modulus hypothesis. </p>
 
   </div>
 </div>
