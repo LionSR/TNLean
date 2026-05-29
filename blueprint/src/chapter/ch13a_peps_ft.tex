@@ -1547,6 +1547,34 @@ injective and normal PEPS, following Theorems~2 and~3 of
     coefficient kernel, so both parts of the factorized local gauge datum follow.
 \end{proof}
 
+\begin{theorem}[Blocked-middle formula gives a local gauge formula]%
+    \label{thm:peps_localGauge_exists_of_blockedMiddleGaugeFormula}
+    \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
+    \leanok
+    \uses{def:peps_blockedMiddleGaugeFormula,
+        thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula,
+        thm:localGauge_exists}
+    Suppose that the edge-centred three-site reduction supplies invertible
+    matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
+    configurations $\eta$ and physical indices $\sigma$,
+    \[
+        B_v(\eta,\sigma)
+        =
+        \sum_{\eta'}
+        \left(\prod_{e\ni v} X_e(\eta_e,\eta'_e)\right)A_v(\eta',\sigma).
+    \]
+    Then the same family $X_e$ is a local gauge at $v$:
+    \begin{center}
+        \TNPEPSBlockedMiddleLocalGaugeFormula
+    \end{center}
+    % Open: derive the blocked-middle formula from SameState
+    % by the edge-centred three-site reduction.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the previous theorem to obtain the factorized local gauge datum, then
+    use the local left inverse to read off the same product-kernel formula.
+\end{proof}
+
 \begin{theorem}[Absorbing edge gauges into the second PEPS]%
     \label{thm:peps_edge_gauge_absorption}
     \lean{TNLean.PEPS.edge_gauge_absorption}
@@ -1622,6 +1650,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \begin{theorem}[Local gauge extraction]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists}
+    \lean{TNLean.PEPS.localGauge_exists_of_factorizedLocalGauge}
     \leanok
     \uses{def:peps_hasFactorizedLocalGauge}
     Under the factorized local gauge hypothesis, the local gauge formula follows.

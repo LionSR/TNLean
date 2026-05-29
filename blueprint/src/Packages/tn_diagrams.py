@@ -86,6 +86,7 @@ _DIAGRAM_ARGS: dict[str, str] = {
     "TNPEPSEdgeGaugeOrientation": "",
     "TNPEPSGaugeVertexAction": "",
     "TNPEPSGaugeCancellation": "",
+    "TNPEPSBlockedMiddleLocalGaugeFormula": "",
     "TNPEPSLocalGaugeExtraction": "",
     "TNPEPSGlobalConsistency": "",
 }

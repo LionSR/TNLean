@@ -22,7 +22,10 @@ name: TNLocalEqualityStep TNPeriodicGauge TNGroundSpaceMap
 name: TNPEPSEdgeGaugeOrientation TNPEPSGaugeVertexAction
 {{ obj.tn_svg_html }}
 
-name: TNPEPSGaugeCancellation TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
+name: TNPEPSGaugeCancellation TNPEPSBlockedMiddleLocalGaugeFormula
+{{ obj.tn_svg_html }}
+
+name: TNPEPSLocalGaugeExtraction TNPEPSGlobalConsistency
 {{ obj.tn_svg_html }}
 
 name: TNPEPSEdgeBlockingReduction TNPEPSEdgeInsertedCoeff

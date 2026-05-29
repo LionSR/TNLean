@@ -270,5 +270,29 @@ theorem localGauge_exists_of_factorizedLocalGauge (A B : Tensor G d)
           intro η' _
           rw [hXv η η']
 
+/-- The blocked-middle local gauge formula gives the local gauge relation at a
+vertex.
+
+This is the direct algebraic consequence of the edge-centred three-site
+reduction: once the reduction supplies the product-kernel formula at the vertex,
+the canonical pullback through the local left inverse gives the same local gauge
+formula.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and the discussion after
+`eq:TN_5_particle_eq`, lines 981--1044 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem localGauge_exists_of_blockedMiddleGaugeFormula (A B : Tensor G d)
+    (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
+    (hBlocked : BlockedMiddleGaugeFormula A B hA hDim v) :
+    ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
+      ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
+        B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
+          ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
+            (∏ ie : IncidentEdge G v,
+              (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
+              A.component v η' σ :=
+  localGauge_exists_of_factorizedLocalGauge A B hA hDim v
+    (hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula A B hA hDim v hBlocked)
+
 end PEPS
 end TNLean
