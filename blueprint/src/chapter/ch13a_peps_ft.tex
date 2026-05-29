@@ -1340,10 +1340,13 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_card_gt_two}
     \leanok
     \uses{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card,
-        thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
-    If $2<|V|$, the nonempty-middle hypothesis holds for every edge
-    $e=(u,v)$. Thus singleton comparison, union closure, and vertex
-    injectivity give $\operatorname{inj}(T_{A,V\setminus\{u,v\}})$ and hence
+        thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons,
+        def:peps_edgeMiddleRegionInjectivityComparison}
+    Assume singleton comparison, union closure for $\kappa$, the comparison
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$, and vertex
+    injectivity of $A$. If $2<|V|$, then
+    $V\setminus\{u,v\}\ne\varnothing$ for every edge $e=(u,v)$, and these
+    hypotheses give $\operatorname{inj}(T_{A,V\setminus\{u,v\}})$ and
     edge-blocked three-site injectivity at every edge.
 \end{theorem}
 \begin{proof}\leanok
