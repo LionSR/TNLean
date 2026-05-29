@@ -5868,12 +5868,157 @@
 
   </div>
 </div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:mpdo_adjoint_blocked_eigenvector">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">25.65</span>
+    <span class="lemma_thmtitle">Blocked powers of adjoint eigenvectors</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#lem:mpdo_adjoint_blocked_eigenvector">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector" class="lean_decl">MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If \(E=E_1\) and \(E^\dagger X=\lambda X\), then \(E_n^\dagger X=\lambda ^n X\) for every \(n\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001943">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>The case \(n=0\) is \(E_0=\mathrm{id}\). For the induction step, \(E_{n+1}=E_n\circ E_1\), hence </p>
+<div class="displaymath" id="a0000001944">
+  \[  E_{n+1}^{\dagger }X = E_1^{\dagger }E_n^{\dagger }X = E_1^{\dagger }(\lambda ^n X) = \lambda ^n E_1^{\dagger }X = \lambda ^{n+1}X .  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_algebra_root_of_unity_eigenvalue">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">25.66</span>
+    <span class="theorem_thmtitle">Finite-order adjoint eigenvalues for algebra towers</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-mpdo.html#thm:mpdo_algebra_root_of_unity_eigenvalue">#</a>
+    
+    <a class="icon proof" href="ch-mpdo.html#a0000001945"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 25.54</a></li>
+          
+          <li><a href="ch-mpdo.html#thm:mpdo_adjoint_fix_descent">Theorem 25.63</a></li>
+          
+          <li><a href="ch-mpdo.html#lem:mpdo_adjoint_blocked_eigenvector">Lemma 25.65</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra" class="lean_decl">MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>   Assume the algebra-structure formulation holds. If \(X\ne 0\), \(E_1^\dagger X=\lambda X\), and \(\lambda ^n=1\) for some \(n{\gt}0\), then \(\lambda =1\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000001945">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>By Lemma&#160;<a href="ch-mpdo.html#lem:mpdo_adjoint_blocked_eigenvector">25.65</a>, \(E_n^\dagger X=\lambda ^n X=X\). The descent theorem gives \(E_1^\dagger X=X\). Thus \(\lambda X=X\), so \((\lambda -1)X=0\). Since \(X\ne 0\), one obtains \(\lambda =1\). </p>
+
+  </div>
+</div>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:mpdo_adjoint_fix_equality_from_algebra">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.65</span>
+    <span class="theorem_thmlabel">25.67</span>
     <span class="theorem_thmtitle">Adjoint fixed-point equality for algebra towers</span>
     <div class="thm_header_extras">
 
@@ -5884,7 +6029,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_adjoint_fix_equality_from_algebra">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001943"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001946"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5939,7 +6084,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001943">
+<div class="proof_wrapper" id="a0000001946">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5956,7 +6101,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.66</span>
+    <span class="theorem_thmlabel">25.68</span>
     <span class="theorem_thmtitle">Algebra data give the stationary fixed-point tower</span>
     <div class="thm_header_extras">
 
@@ -5967,7 +6112,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_stationary_tower_from_algebra">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001944"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001947"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5985,7 +6130,7 @@
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_algebra">Definition 25.54</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_adjoint_fix_equality_from_algebra">Theorem 25.65</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_adjoint_fix_equality_from_algebra">Theorem 25.67</a></li>
           
         </ul>
     
@@ -6020,7 +6165,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001944">
+<div class="proof_wrapper" id="a0000001947">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6037,7 +6182,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.67</span>
+    <span class="remark_thmlabel">25.69</span>
     <span class="remark_thmtitle">Why algebra data do not imply fusion data</span>
     <div class="thm_header_extras">
 
@@ -6076,15 +6221,15 @@
   </div>
   <div class="remark_thmcontent">
   <p>  Write \(E=E_1\) for the one-site transfer map. The present algebra predicate gives, for every \(n{\gt}0\), </p>
-<div class="displaymath" id="a0000001945">
+<div class="displaymath" id="a0000001948">
   \[  \operatorname {Fix}\bigl((E^n)^\dagger \bigr) = \operatorname {Fix}(E^\dagger ).  \]
 </div>
-<p> Hence a vector \(X\) with \(E^\dagger X=\lambda X\) and \(\lambda ^n=1\) lies in \(\operatorname {Fix}(E^\dagger )\), so \((\lambda -1)X=0\). Thus the predicate excludes root-of-unity peripheral eigenvalues. It does not imply \(E^2=E\). For instance, if \(\Pi _{\mathrm{diag}}\) is the projection onto diagonal matrices and \(0{\lt}\varepsilon {\lt}1\), set </p>
-<div class="displaymath" id="a0000001946">
+<p> Hence a vector \(X\) with \(E^\dagger X=\lambda X\) and \(\lambda ^n=1\) lies in \(\operatorname {Fix}(E^\dagger )\), so \((\lambda -1)X=0\) and \(\lambda =1\) by Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_algebra_root_of_unity_eigenvalue">25.66</a>. It does not imply \(E^2=E\). For instance, if \(\Pi _{\mathrm{diag}}\) is the projection onto diagonal matrices and \(0{\lt}\varepsilon {\lt}1\), set </p>
+<div class="displaymath" id="a0000001949">
   \[  E(X) = \varepsilon \,  X + (1 - \varepsilon )\,  \Pi _{\mathrm{diag}}(X),  \]
 </div>
 <p> so that </p>
-<div class="displaymath" id="a0000001947">
+<div class="displaymath" id="a0000001950">
   \[  E^n(X) = \Pi _{\mathrm{diag}}(X) + \varepsilon ^n\bigl(X-\Pi _{\mathrm{diag}}(X)\bigr), \qquad E^2-E = (\varepsilon ^2-\varepsilon ) (\mathrm{id}-\Pi _{\mathrm{diag}}).  \]
 </div>
 <p> The fixed-point algebra is diagonal for every \(n{\gt}0\), but \(E^2\ne E\). </p>
@@ -6095,11 +6240,11 @@
 	, Appendix&#160;C.4
 	]
 </span>. One needs the same-length product law </p>
-<div class="displaymath" id="a0000001948">
+<div class="displaymath" id="a0000001951">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }^{\, L}) O_L(M_\gamma )  \]
 </div>
 <p> and the length-one idempotent trace identity </p>
-<div class="displaymath" id="a0000001949">
+<div class="displaymath" id="a0000001952">
   \[  m_\gamma = \sum _{\alpha ,\beta } \operatorname{tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta .  \]
 </div>
 <p> The proof of <span class="cite">
@@ -6115,7 +6260,7 @@
 	, lines&#160;1155–1163
 	]
 </span> to give </p>
-<div class="displaymath" id="a0000001950">
+<div class="displaymath" id="a0000001953">
   \[  \{ \nu _{\gamma ,k}\} _k = \{ \mu _{\alpha ,k_1}\mu _{\beta ,k_2} \chi _{\alpha ,\beta ,\gamma ,k_3}\} _{\alpha ,\beta ,k_1,k_2,k_3}, \qquad \operatorname{tr}(\nu _\gamma )=m_\gamma .  \]
 </div>
 <p> The reconstruction maps in <span class="cite">
@@ -6125,7 +6270,7 @@
 	, lines&#160;2065–2085
 	]
 </span> then use </p>
-<div class="displaymath" id="a0000001951">
+<div class="displaymath" id="a0000001954">
   \[  \widetilde R_2\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma .  \]
 </div>
 <p> Thus \(\operatorname{tr}(\nu _\gamma )=m_\gamma \) and the defining equality \(m_\gamma =\operatorname{tr}(\mu _\gamma )\) normalize the factors \(\nu _\gamma /m_\gamma \) and \(\mu _\gamma /m_\gamma \), respectively, in \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\). The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">11.17</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
@@ -6145,7 +6290,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.68</span>
+    <span class="definition_thmlabel">25.70</span>
     <span class="definition_thmtitle">Diagonal \(\chi \) family</span>
     <div class="thm_header_extras">
 
@@ -6195,7 +6340,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.69</span>
+    <span class="theorem_thmlabel">25.71</span>
     <span class="theorem_thmtitle">Trace of \(\chi ^L\) equals the sum of \(L\)-th powers of entries</span>
     <div class="thm_header_extras">
 
@@ -6206,7 +6351,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001952"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001955"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6222,7 +6367,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.68</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.70</a></li>
           
         </ul>
     
@@ -6254,14 +6399,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For every triple \((\alpha , \beta , \gamma )\), if \(\chi _{\alpha ,\beta ,\gamma }\) has size \(r_{\alpha ,\beta ,\gamma }\), then for every \(L \ge 0\), </p>
-<div class="displaymath" id="a0000001953">
+<div class="displaymath" id="a0000001956">
   \[  \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L},  \]
 </div>
 <p> where \(\chi _{\alpha ,\beta ,\gamma ,k}\) are the diagonal entries. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001952">
+<div class="proof_wrapper" id="a0000001955">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6278,7 +6423,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.70</span>
+    <span class="definition_thmlabel">25.72</span>
     <span class="definition_thmtitle">Trace-power form of a structure-coefficient family</span>
     <div class="thm_header_extras">
 
@@ -6302,7 +6447,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.68</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.70</a></li>
           
         </ul>
     
@@ -6334,7 +6479,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A binary compatibility predicate between an abstract structure-coefficient family \(c^{(L)}_{\alpha ,\beta ,\gamma }\) and a diagonal \(\chi \) family: the pair \((c, \chi )\) is said to be in <em>trace-power form</em> when </p>
-<div class="displaymath" id="a0000001954">
+<div class="displaymath" id="a0000001957">
   \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr) = \sum _{k=1}^{r_{\alpha ,\beta ,\gamma }} \chi _{\alpha ,\beta ,\gamma ,k}^{L}  \]
 </div>
 <p> for every \(L \ge 0\) and every triple \((\alpha , \beta , \gamma )\), where \(r_{\alpha ,\beta ,\gamma }\) is the size of \(\chi _{\alpha ,\beta ,\gamma }\). This is the formal analogue of the target identity of <span class="cite">
@@ -6352,7 +6497,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.71</span>
+    <span class="definition_thmlabel">25.73</span>
     <span class="definition_thmtitle">BNT-label coefficient family</span>
     <div class="thm_header_extras">
 
@@ -6408,7 +6553,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.72</span>
+    <span class="definition_thmlabel">25.74</span>
     <span class="definition_thmtitle">BNT-label operator family</span>
     <div class="thm_header_extras">
 
@@ -6452,7 +6597,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.73</span>
+    <span class="definition_thmlabel">25.75</span>
     <span class="definition_thmtitle">Same-length BNT product form</span>
     <div class="thm_header_extras">
 
@@ -6476,9 +6621,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_operator_family">Definition 25.72</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_operator_family">Definition 25.74</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
         </ul>
     
@@ -6510,7 +6655,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label operator family and a BNT-label coefficient system have same-length product form when, for every positive length \(L\), </p>
-<div class="displaymath" id="a0000001955">
+<div class="displaymath" id="a0000001958">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma c^{(L)}_{\alpha ,\beta ,\gamma } O_L(M_\gamma ).  \]
 </div>
 <p> This is the product identity appearing in Theorem&#160;IV.13(ii), stated independently of the blocked-basis multiplication \(\mathcal A_n\times \mathcal A_n\to \mathcal A_{2n}\). </p>
@@ -6522,7 +6667,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.74</span>
+    <span class="theorem_thmlabel">25.76</span>
     <span class="theorem_thmtitle">Same-length BNT product expansion</span>
     <div class="thm_header_extras">
 
@@ -6533,7 +6678,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001956"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001959"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6549,7 +6694,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_same_length_product_form">Definition 25.73</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_same_length_product_form">Definition 25.75</a></li>
           
         </ul>
     
@@ -6584,7 +6729,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001956">
+<div class="proof_wrapper" id="a0000001959">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6601,7 +6746,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.75</span>
+    <span class="definition_thmlabel">25.77</span>
     <span class="definition_thmtitle">BNT-label trace-scalar family</span>
     <div class="thm_header_extras">
 
@@ -6645,7 +6790,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.76</span>
+    <span class="definition_thmlabel">25.78</span>
     <span class="definition_thmtitle">BNT idempotent coefficient form</span>
     <div class="thm_header_extras">
 
@@ -6669,9 +6814,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_trace_scalar_family">Definition 25.75</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_trace_scalar_family">Definition 25.77</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
         </ul>
     
@@ -6703,7 +6848,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label trace-scalar family and a BNT-label coefficient system have idempotent coefficient form when, for every BNT label \(\gamma \), </p>
-<div class="displaymath" id="a0000001957">
+<div class="displaymath" id="a0000001960">
   \[  m_\gamma = \sum _{\alpha ,\beta } c^{(1)}_{\alpha ,\beta ,\gamma }m_\alpha m_\beta .  \]
 </div>
 <p> This is the idempotent condition in Theorem&#160;IV.13(ii), stated separately from the trace-power formula. </p>
@@ -6715,7 +6860,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.77</span>
+    <span class="theorem_thmlabel">25.79</span>
     <span class="theorem_thmtitle">BNT idempotent coefficient expansion</span>
     <div class="thm_header_extras">
 
@@ -6726,7 +6871,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001958"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001961"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6742,7 +6887,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_idempotent_coefficient_form">Definition 25.76</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_idempotent_coefficient_form">Definition 25.78</a></li>
           
         </ul>
     
@@ -6777,7 +6922,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001958">
+<div class="proof_wrapper" id="a0000001961">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6794,7 +6939,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.78</span>
+    <span class="definition_thmlabel">25.80</span>
     <span class="definition_thmtitle">Blocked-basis BNT-label assignment</span>
     <div class="thm_header_extras">
 
@@ -6860,7 +7005,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.79</span>
+    <span class="definition_thmlabel">25.81</span>
     <span class="definition_thmtitle">BNT comparison with blocked coefficients</span>
     <div class="thm_header_extras">
 
@@ -6884,11 +7029,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 25.60</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_label_assignment">Definition 25.78</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_label_assignment">Definition 25.80</a></li>
           
         </ul>
     
@@ -6924,7 +7069,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>     A comparison between the BNT-label coefficients and the chosen blocked-basis coefficients consists of a BNT-label assignment together with the equality </p>
-<div class="displaymath" id="a0000001959">
+<div class="displaymath" id="a0000001962">
   \[  c^{(n)}_{i,j,k} = c^{(n)}_{\sigma _n(i),\sigma _n(j),\tau _n(k)}.  \]
 </div>
 <p> This is a blocked-basis comparison: the left hand side is expanded in the chosen basis of \(\mathcal A_{2n}\), so the statement is not itself the same-length BNT product law. This records the coefficient-comparison statement separately from the construction of the label maps from the MPDO tensor. </p>
@@ -6936,7 +7081,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.80</span>
+    <span class="theorem_thmlabel">25.82</span>
     <span class="theorem_thmtitle">Blocked coefficients are pulled back from BNT labels</span>
     <div class="thm_header_extras">
 
@@ -6947,7 +7092,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001960"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001963"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6963,7 +7108,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.79</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.81</a></li>
           
         </ul>
     
@@ -6998,7 +7143,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001960">
+<div class="proof_wrapper" id="a0000001963">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7015,7 +7160,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.81</span>
+    <span class="definition_thmlabel">25.83</span>
     <span class="definition_thmtitle">Positive-length BNT-label trace-power form</span>
     <div class="thm_header_extras">
 
@@ -7039,9 +7184,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.68</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.70</a></li>
           
         </ul>
     
@@ -7073,7 +7218,7 @@
   </div>
   <div class="definition_thmcontent">
   <p>   A BNT-label coefficient system and a diagonal \(\chi \)-family are compatible when, for every positive length \(L\), </p>
-<div class="displaymath" id="a0000001961">
+<div class="displaymath" id="a0000001964">
   \[  c^{(L)}_{\alpha ,\beta ,\gamma } = \operatorname {tr}\bigl(\chi _{\alpha ,\beta ,\gamma }^{L}\bigr).  \]
 </div>
 <p> The same matrix \(\chi _{\alpha ,\beta ,\gamma }\) is used for all positive \(L\). </p>
@@ -7085,7 +7230,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.82</span>
+    <span class="theorem_thmlabel">25.84</span>
     <span class="theorem_thmtitle">BNT-label coefficient as a positive-length trace power</span>
     <div class="thm_header_extras">
 
@@ -7096,7 +7241,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001962"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7112,9 +7257,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.81</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.83</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_trace_matrix_pow">Theorem 25.69</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_trace_matrix_pow">Theorem 25.71</a></li>
           
         </ul>
     
@@ -7149,7 +7294,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001962">
+<div class="proof_wrapper" id="a0000001965">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7166,7 +7311,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.83</span>
+    <span class="theorem_thmlabel">25.85</span>
     <span class="theorem_thmtitle">Canonical BNT coefficients from a \(\chi \)-family</span>
     <div class="thm_header_extras">
 
@@ -7177,7 +7322,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_of_chi_positive_length_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001963"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001966"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7193,9 +7338,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.81</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.83</a></li>
           
         </ul>
     
@@ -7230,7 +7375,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001963">
+<div class="proof_wrapper" id="a0000001966">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7247,7 +7392,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.84</span>
+    <span class="definition_thmlabel">25.86</span>
     <span class="definition_thmtitle">Positive BNT-label \(\chi \) trace-power witness</span>
     <div class="thm_header_extras">
 
@@ -7271,11 +7416,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.81</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_positive_length_chi_trace_power_form">Definition 25.83</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.68</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_diagonal_chi_family">Definition 25.70</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_of_chi_positive_length_trace_power">Theorem 25.83</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_of_chi_positive_length_trace_power">Theorem 25.85</a></li>
           
         </ul>
     
@@ -7317,7 +7462,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.85</span>
+    <span class="theorem_thmlabel">25.87</span>
     <span class="theorem_thmtitle">Positive BNT-label witness gives trace powers</span>
     <div class="thm_header_extras">
 
@@ -7328,7 +7473,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001964"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001967"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7344,9 +7489,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.82</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.84</a></li>
           
         </ul>
     
@@ -7381,7 +7526,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001964">
+<div class="proof_wrapper" id="a0000001967">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7398,7 +7543,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.86</span>
+    <span class="theorem_thmlabel">25.88</span>
     <span class="theorem_thmtitle">Same-length BNT product with chi-trace coefficients</span>
     <div class="thm_header_extras">
 
@@ -7409,7 +7554,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001965"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001968"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7425,9 +7570,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.74</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.76</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.85</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.87</a></li>
           
         </ul>
     
@@ -7459,13 +7604,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the same-length BNT product identity holds and the BNT-label coefficients come from a positive length-independent \(\chi \)-witness, then for every \(L{\gt}0\), </p>
-<div class="displaymath" id="a0000001966">
+<div class="displaymath" id="a0000001969">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname {tr}\bigl( \chi _{\alpha ,\beta ,\gamma }^{\, L} \bigr) O_L(M_\gamma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001965">
+<div class="proof_wrapper" id="a0000001968">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7482,7 +7627,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.87</span>
+    <span class="theorem_thmlabel">25.89</span>
     <span class="theorem_thmtitle">Same-length BNT product for canonical chi coefficients</span>
     <div class="thm_header_extras">
 
@@ -7493,7 +7638,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001967"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001970"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7509,9 +7654,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.74</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.76</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
         </ul>
     
@@ -7543,13 +7688,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the same-length BNT product identity holds with the coefficient family canonically determined by a diagonal \(\chi \)-family, then for every \(L{\gt}0\), </p>
-<div class="displaymath" id="a0000001968">
+<div class="displaymath" id="a0000001971">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma \operatorname {tr}\bigl( \chi _{\alpha ,\beta ,\gamma }^{\, L} \bigr) O_L(M_\gamma ).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001967">
+<div class="proof_wrapper" id="a0000001970">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7566,7 +7711,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.88</span>
+    <span class="theorem_thmlabel">25.90</span>
     <span class="theorem_thmtitle">BNT idempotent coefficients as chi traces</span>
     <div class="thm_header_extras">
 
@@ -7577,7 +7722,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001969"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001972"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7593,9 +7738,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.77</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.79</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.85</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.87</a></li>
           
         </ul>
     
@@ -7627,13 +7772,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the BNT trace scalars satisfy the idempotent coefficient condition and the BNT-label coefficients come from a positive length-independent \(\chi \)-witness, then </p>
-<div class="displaymath" id="a0000001970">
+<div class="displaymath" id="a0000001973">
   \[  m_\gamma = \sum _{\alpha ,\beta } \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001969">
+<div class="proof_wrapper" id="a0000001972">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7650,7 +7795,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.89</span>
+    <span class="theorem_thmlabel">25.91</span>
     <span class="theorem_thmtitle">BNT idempotent coefficients for canonical chi coefficients</span>
     <div class="thm_header_extras">
 
@@ -7661,7 +7806,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001971"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001974"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7677,9 +7822,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.77</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.79</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
         </ul>
     
@@ -7711,13 +7856,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If the BNT trace scalars satisfy the idempotent coefficient condition with the coefficient family canonically determined by a diagonal \(\chi \)-family, then </p>
-<div class="displaymath" id="a0000001972">
+<div class="displaymath" id="a0000001975">
   \[  m_\gamma = \sum _{\alpha ,\beta } \operatorname {tr}(\chi _{\alpha ,\beta ,\gamma }) m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001971">
+<div class="proof_wrapper" id="a0000001974">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7734,7 +7879,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.90</span>
+    <span class="theorem_thmlabel">25.92</span>
     <span class="theorem_thmtitle">Blocked coefficients inherit BNT trace powers</span>
     <div class="thm_header_extras">
 
@@ -7745,7 +7890,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001973"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001976"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7761,11 +7906,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.79</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.81</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.85</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.87</a></li>
           
         </ul>
     
@@ -7801,13 +7946,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>     If the chosen blocked-basis coefficients are compared with the fixed BNT-label coefficient system, and that BNT-label system has a positive length-independent \(\chi \)-witness, then each positive-length blocked coefficient is the trace power of the corresponding BNT-label \(\chi \)-matrix: </p>
-<div class="displaymath" id="a0000001974">
+<div class="displaymath" id="a0000001977">
   \[  c^{(n)}_{i,j,k} = \operatorname {tr} \bigl( \chi _{\sigma _n(i),\sigma _n(j),\tau _n(k)}^{\, n} \bigr).  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001973">
+<div class="proof_wrapper" id="a0000001976">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7824,7 +7969,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.91</span>
+    <span class="definition_thmlabel">25.93</span>
     <span class="definition_thmtitle">Blocked \(\chi \) family for multiplication coefficients</span>
     <div class="thm_header_extras">
 
@@ -7894,7 +8039,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.92</span>
+    <span class="theorem_thmlabel">25.94</span>
     <span class="theorem_thmtitle">Trace of a blocked \(\chi \) power</span>
     <div class="thm_header_extras">
 
@@ -7905,7 +8050,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001975"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001978"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -7921,7 +8066,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.91</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.93</a></li>
           
         </ul>
     
@@ -7956,7 +8101,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001975">
+<div class="proof_wrapper" id="a0000001978">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -7973,7 +8118,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.93</span>
+    <span class="definition_thmlabel">25.95</span>
     <span class="definition_thmtitle">Trace-power form for blocked multiplication coefficients</span>
     <div class="thm_header_extras">
 
@@ -7999,7 +8144,7 @@
           
           <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_coefficients">Definition 25.60</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.91</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.93</a></li>
           
         </ul>
     
@@ -8031,10 +8176,10 @@
   </div>
   <div class="definition_thmcontent">
   <p>   The blocked multiplication coefficients are in trace-power form when, for every positive blocked size \(n\) and every multiplication triple \((i,j,k)\), the coefficient \(c^{(n)}_{i,j,k}\) equals </p>
-<div class="displaymath" id="a0000001976">
+<div class="displaymath" id="a0000001979">
   \[  \sum _r \chi _{n,i,j,k,r}^{\, n}.  \]
 </div>
-<p> Equivalently, by Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">25.92</a>, it is the trace of the \(n\)-th power of the corresponding diagonal matrix. The exponent \(n\) is the source blocking length of the two factors in \(\mathcal{A}_n\); the product is expanded in the basis of \(\mathcal{A}_{2n}\). </p>
+<p> Equivalently, by Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">25.94</a>, it is the trace of the \(n\)-th power of the corresponding diagonal matrix. The exponent \(n\) is the source blocking length of the two factors in \(\mathcal{A}_n\); the product is expanded in the basis of \(\mathcal{A}_{2n}\). </p>
 
   </div>
 </div>
@@ -8043,7 +8188,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.94</span>
+    <span class="theorem_thmlabel">25.96</span>
     <span class="theorem_thmtitle">Blocked coefficient as a trace power</span>
     <div class="thm_header_extras">
 
@@ -8054,7 +8199,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001977"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001980"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8070,9 +8215,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_blocked_structure_chi_trace_power_form">Definition 25.93</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_blocked_structure_chi_trace_power_form">Definition 25.95</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">Theorem 25.92</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_trace_matrix_pow">Theorem 25.94</a></li>
           
         </ul>
     
@@ -8107,7 +8252,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001977">
+<div class="proof_wrapper" id="a0000001980">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8124,7 +8269,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.95</span>
+    <span class="definition_thmlabel">25.97</span>
     <span class="definition_thmtitle">Positive blocked \(\chi \) trace-power witness</span>
     <div class="thm_header_extras">
 
@@ -8148,9 +8293,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_blocked_structure_chi_trace_power_form">Definition 25.93</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_blocked_structure_chi_trace_power_form">Definition 25.95</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.91</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_blocked_structure_chi_family">Definition 25.93</a></li>
           
         </ul>
     
@@ -8196,7 +8341,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.96</span>
+    <span class="theorem_thmlabel">25.98</span>
     <span class="theorem_thmtitle">BNT witnesses give blocked \(\chi \) witnesses</span>
     <div class="thm_header_extras">
 
@@ -8207,7 +8352,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001978"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8223,13 +8368,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.79</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.81</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_blocked_structure_chi_trace_power_form">Definition 25.95</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_blocked_structure_chi_trace_power_form">Definition 25.97</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">Theorem 25.80</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">Theorem 25.82</a></li>
           
         </ul>
     
@@ -8276,7 +8421,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001978">
+<div class="proof_wrapper" id="a0000001981">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8293,7 +8438,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.97</span>
+    <span class="definition_thmlabel">25.99</span>
     <span class="definition_thmtitle">BNT-label theorem data</span>
     <div class="thm_header_extras">
 
@@ -8317,21 +8462,21 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.71</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_coefficient_family">Definition 25.73</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_operator_family">Definition 25.72</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_operator_family">Definition 25.74</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_trace_scalar_family">Definition 25.75</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_trace_scalar_family">Definition 25.77</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_same_length_product_form">Definition 25.73</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_same_length_product_form">Definition 25.75</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_idempotent_coefficient_form">Definition 25.76</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_idempotent_coefficient_form">Definition 25.78</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_label_assignment">Definition 25.78</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_label_assignment">Definition 25.80</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.79</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_blocked_basis_coefficient_comparison">Definition 25.81</a></li>
           
         </ul>
     
@@ -8397,7 +8542,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.98</span>
+    <span class="theorem_thmlabel">25.100</span>
     <span class="theorem_thmtitle">BNT theorem data give the same-length product law</span>
     <div class="thm_header_extras">
 
@@ -8408,7 +8553,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001979"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001982"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8424,9 +8569,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.74</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum">Theorem 25.76</a></li>
           
         </ul>
     
@@ -8458,14 +8603,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   BNT-label theorem data give the same-length product equation </p>
-<div class="displaymath" id="a0000001980">
+<div class="displaymath" id="a0000001983">
   \[  O_L(M_\alpha )O_L(M_\beta ) = \sum _\gamma c^{(L)}_{\alpha ,\beta ,\gamma } O_L(M_\gamma )  \]
 </div>
 <p> for every positive length \(L\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001979">
+<div class="proof_wrapper" id="a0000001982">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8482,7 +8627,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.99</span>
+    <span class="theorem_thmlabel">25.101</span>
     <span class="theorem_thmtitle">BNT theorem data give the idempotent scalar law</span>
     <div class="thm_header_extras">
 
@@ -8493,7 +8638,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001981"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8509,9 +8654,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.77</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_coefficient_eq_sum">Theorem 25.79</a></li>
           
         </ul>
     
@@ -8543,13 +8688,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   BNT-label theorem data give the idempotent scalar equation </p>
-<div class="displaymath" id="a0000001982">
+<div class="displaymath" id="a0000001985">
   \[  m_\gamma = \sum _{\alpha ,\beta } c^{(1)}_{\alpha ,\beta ,\gamma }m_\alpha m_\beta .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001981">
+<div class="proof_wrapper" id="a0000001984">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8566,7 +8711,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.100</span>
+    <span class="theorem_thmlabel">25.102</span>
     <span class="theorem_thmtitle">BNT theorem data give the blocked coefficient comparison</span>
     <div class="thm_header_extras">
 
@@ -8577,7 +8722,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001983"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8593,11 +8738,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">Theorem 25.80</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq">Theorem 25.82</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">Theorem 25.101</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">Theorem 25.103</a></li>
           
         </ul>
     
@@ -8636,7 +8781,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001983">
+<div class="proof_wrapper" id="a0000001986">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8653,7 +8798,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.101</span>
+    <span class="theorem_thmlabel">25.103</span>
     <span class="theorem_thmtitle">BNT theorem data give coefficient trace powers</span>
     <div class="thm_header_extras">
 
@@ -8664,7 +8809,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001984"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8680,9 +8825,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.85</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow">Theorem 25.87</a></li>
           
         </ul>
     
@@ -8719,7 +8864,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001984">
+<div class="proof_wrapper" id="a0000001987">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8736,7 +8881,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.102</span>
+    <span class="theorem_thmlabel">25.104</span>
     <span class="theorem_thmtitle">BNT theorem data give positive chi entries</span>
     <div class="thm_header_extras">
 
@@ -8747,7 +8892,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001985"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8763,9 +8908,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
         </ul>
     
@@ -8800,7 +8945,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001985">
+<div class="proof_wrapper" id="a0000001988">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8817,7 +8962,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.103</span>
+    <span class="theorem_thmlabel">25.105</span>
     <span class="theorem_thmtitle">BNT theorem data give the chi-trace product law</span>
     <div class="thm_header_extras">
 
@@ -8828,7 +8973,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001986"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8844,9 +8989,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow">Theorem 25.86</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow">Theorem 25.88</a></li>
           
         </ul>
     
@@ -8881,7 +9026,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001986">
+<div class="proof_wrapper" id="a0000001989">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8898,7 +9043,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.104</span>
+    <span class="theorem_thmlabel">25.106</span>
     <span class="theorem_thmtitle">BNT theorem data give the chi-trace idempotent law</span>
     <div class="thm_header_extras">
 
@@ -8909,7 +9054,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001987"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -8925,9 +9070,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace">Theorem 25.88</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace">Theorem 25.90</a></li>
           
         </ul>
     
@@ -8962,7 +9107,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001987">
+<div class="proof_wrapper" id="a0000001990">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -8979,7 +9124,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.105</span>
+    <span class="theorem_thmlabel">25.107</span>
     <span class="theorem_thmtitle">BNT theorem data give blocked coefficient trace powers</span>
     <div class="thm_header_extras">
 
@@ -8990,7 +9135,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001988"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9006,9 +9151,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow">Theorem 25.90</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_coefficient_eq_trace_pow">Theorem 25.92</a></li>
           
         </ul>
     
@@ -9043,7 +9188,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001988">
+<div class="proof_wrapper" id="a0000001991">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9060,7 +9205,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.106</span>
+    <span class="theorem_thmlabel">25.108</span>
     <span class="theorem_thmtitle">BNT theorem data give a positive blocked \(\chi \) witness</span>
     <div class="thm_header_extras">
 
@@ -9071,7 +9216,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001989"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9087,9 +9232,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form">Theorem 25.96</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_blocked_basis_to_positive_blocked_chi_trace_power_form">Theorem 25.98</a></li>
           
         </ul>
     
@@ -9132,7 +9277,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001989">
+<div class="proof_wrapper" id="a0000001992">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9149,7 +9294,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.107</span>
+    <span class="theorem_thmlabel">25.109</span>
     <span class="theorem_thmtitle">BNT theorem data give blocked trace-power form</span>
     <div class="thm_header_extras">
 
@@ -9160,7 +9305,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001990"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001993"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9176,9 +9321,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.106</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.108</a></li>
           
         </ul>
     
@@ -9213,7 +9358,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001990">
+<div class="proof_wrapper" id="a0000001993">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9230,7 +9375,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.108</span>
+    <span class="theorem_thmlabel">25.110</span>
     <span class="theorem_thmtitle">BNT theorem data give positive blocked chi families</span>
     <div class="thm_header_extras">
 
@@ -9241,7 +9386,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_pos_entries">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001991"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001994"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9257,9 +9402,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.106</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.108</a></li>
           
         </ul>
     
@@ -9294,7 +9439,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001991">
+<div class="proof_wrapper" id="a0000001994">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9311,7 +9456,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.109</span>
+    <span class="theorem_thmlabel">25.111</span>
     <span class="theorem_thmtitle">BNT theorem data give positive pulled-back blocked entries</span>
     <div class="thm_header_extras">
 
@@ -9322,7 +9467,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_positive_blocked_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001992"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9338,9 +9483,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.106</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.108</a></li>
           
         </ul>
     
@@ -9375,7 +9520,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001992">
+<div class="proof_wrapper" id="a0000001995">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9392,7 +9537,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.110</span>
+    <span class="theorem_thmlabel">25.112</span>
     <span class="theorem_thmtitle">BNT theorem data give pulled-back blocked trace powers</span>
     <div class="thm_header_extras">
 
@@ -9403,7 +9548,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_positive_blocked_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001993"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001996"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9419,11 +9564,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.106</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.108</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.126</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.128</a></li>
           
         </ul>
     
@@ -9458,7 +9603,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001993">
+<div class="proof_wrapper" id="a0000001996">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9475,7 +9620,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.111</span>
+    <span class="definition_thmlabel">25.113</span>
     <span class="definition_thmtitle">Existential BNT-label theorem witness</span>
     <div class="thm_header_extras">
 
@@ -9499,7 +9644,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.97</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_data">Definition 25.99</a></li>
           
         </ul>
     
@@ -9583,7 +9728,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.112</span>
+    <span class="theorem_thmlabel">25.114</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give source equations</span>
     <div class="thm_header_extras">
 
@@ -9594,7 +9739,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_bnt_label_theorem_witness_source_equations">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001994"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001997"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9610,7 +9755,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
         </ul>
     
@@ -9655,7 +9800,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001994">
+<div class="proof_wrapper" id="a0000001997">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9672,7 +9817,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.113</span>
+    <span class="theorem_thmlabel">25.115</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give coefficient trace powers</span>
     <div class="thm_header_extras">
 
@@ -9683,7 +9828,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001995"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001998"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9699,9 +9844,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">Theorem 25.101</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_coeff_eq_trace_pow">Theorem 25.103</a></li>
           
         </ul>
     
@@ -9738,7 +9883,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001995">
+<div class="proof_wrapper" id="a0000001998">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9755,7 +9900,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.114</span>
+    <span class="theorem_thmlabel">25.116</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give positive chi entries</span>
     <div class="thm_header_extras">
 
@@ -9766,7 +9911,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001996"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000001999"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9782,9 +9927,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.84</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_bnt_label_chi_trace_power_form">Definition 25.86</a></li>
           
         </ul>
     
@@ -9819,7 +9964,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001996">
+<div class="proof_wrapper" id="a0000001999">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9836,7 +9981,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.115</span>
+    <span class="theorem_thmlabel">25.117</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give the same-length product law</span>
     <div class="thm_header_extras">
 
@@ -9847,7 +9992,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001997"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002000"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9863,9 +10008,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum">Theorem 25.98</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum">Theorem 25.100</a></li>
           
         </ul>
     
@@ -9900,7 +10045,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001997">
+<div class="proof_wrapper" id="a0000002000">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9917,7 +10062,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.116</span>
+    <span class="theorem_thmlabel">25.118</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give the idempotent scalar law</span>
     <div class="thm_header_extras">
 
@@ -9928,7 +10073,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001998"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -9944,9 +10089,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum">Theorem 25.99</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum">Theorem 25.101</a></li>
           
         </ul>
     
@@ -9981,7 +10126,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001998">
+<div class="proof_wrapper" id="a0000002001">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -9998,7 +10143,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.117</span>
+    <span class="theorem_thmlabel">25.119</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give the blocked coefficient comparison</span>
     <div class="thm_header_extras">
 
@@ -10009,7 +10154,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000001999"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10025,9 +10170,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq">Theorem 25.100</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq">Theorem 25.102</a></li>
           
         </ul>
     
@@ -10070,7 +10215,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001999">
+<div class="proof_wrapper" id="a0000002002">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10087,7 +10232,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.118</span>
+    <span class="theorem_thmlabel">25.120</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give the chi-trace product law</span>
     <div class="thm_header_extras">
 
@@ -10098,7 +10243,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_same_length_product_eq_sum_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002000"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10114,9 +10259,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow">Theorem 25.103</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_same_length_product_eq_sum_chi_trace_pow">Theorem 25.105</a></li>
           
         </ul>
     
@@ -10151,7 +10296,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002000">
+<div class="proof_wrapper" id="a0000002003">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10168,7 +10313,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.119</span>
+    <span class="theorem_thmlabel">25.121</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give the chi-trace idempotent law</span>
     <div class="thm_header_extras">
 
@@ -10179,7 +10324,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_idempotent_eq_sum_chi_trace">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002001"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002004"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10195,9 +10340,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace">Theorem 25.104</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_idempotent_eq_sum_chi_trace">Theorem 25.106</a></li>
           
         </ul>
     
@@ -10232,7 +10377,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002001">
+<div class="proof_wrapper" id="a0000002004">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10249,7 +10394,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.120</span>
+    <span class="theorem_thmlabel">25.122</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give blocked coefficient trace powers</span>
     <div class="thm_header_extras">
 
@@ -10260,7 +10405,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002002"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10276,9 +10421,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow">Theorem 25.105</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_blocked_coeff_eq_trace_pow">Theorem 25.107</a></li>
           
         </ul>
     
@@ -10313,7 +10458,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002002">
+<div class="proof_wrapper" id="a0000002005">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10330,7 +10475,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.121</span>
+    <span class="theorem_thmlabel">25.123</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give positive blocked \(\chi \) witnesses</span>
     <div class="thm_header_extras">
 
@@ -10341,7 +10486,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002003"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002006"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10357,9 +10502,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.106</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form">Theorem 25.108</a></li>
           
         </ul>
     
@@ -10410,7 +10555,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002003">
+<div class="proof_wrapper" id="a0000002006">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10427,7 +10572,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.122</span>
+    <span class="theorem_thmlabel">25.124</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give blocked trace-power form</span>
     <div class="thm_header_extras">
 
@@ -10438,7 +10583,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_trace_power">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002004"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002007"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10454,9 +10599,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.121</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.123</a></li>
           
         </ul>
     
@@ -10491,7 +10636,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002004">
+<div class="proof_wrapper" id="a0000002007">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10508,7 +10653,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.123</span>
+    <span class="theorem_thmlabel">25.125</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give positive blocked chi families</span>
     <div class="thm_header_extras">
 
@@ -10519,7 +10664,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_pos_entries">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002005"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10535,9 +10680,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.121</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.123</a></li>
           
         </ul>
     
@@ -10572,7 +10717,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002005">
+<div class="proof_wrapper" id="a0000002008">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10589,7 +10734,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.124</span>
+    <span class="theorem_thmlabel">25.126</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give positive pulled-back blocked entries</span>
     <div class="thm_header_extras">
 
@@ -10600,7 +10745,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_positive_blocked_chi_entry_pos">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002006"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10616,9 +10761,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.121</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.123</a></li>
           
         </ul>
     
@@ -10653,7 +10798,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002006">
+<div class="proof_wrapper" id="a0000002009">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10670,7 +10815,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.125</span>
+    <span class="theorem_thmlabel">25.127</span>
     <span class="theorem_thmtitle">BNT theorem witnesses give pulled-back blocked trace powers</span>
     <div class="thm_header_extras">
 
@@ -10681,7 +10826,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_blocked_coeff_eq_positive_blocked_chi_trace_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002007"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10697,11 +10842,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.111</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_bnt_label_theorem_witness">Definition 25.113</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.121</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_bnt_label_theorem_witness_to_positive_blocked_chi_trace_power_form">Theorem 25.123</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.126</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.128</a></li>
           
         </ul>
     
@@ -10736,7 +10881,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002007">
+<div class="proof_wrapper" id="a0000002010">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10753,7 +10898,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.126</span>
+    <span class="theorem_thmlabel">25.128</span>
     <span class="theorem_thmtitle">Positive blocked \(\chi \) witness gives trace powers</span>
     <div class="thm_header_extras">
 
@@ -10764,7 +10909,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_positive_blocked_structure_chi_eq_trace_matrix_pow">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002008"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002011"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -10780,9 +10925,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_positive_blocked_structure_chi_trace_power_form">Definition 25.95</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_positive_blocked_structure_chi_trace_power_form">Definition 25.97</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.94</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_blocked_structure_chi_eq_trace_matrix_pow">Theorem 25.96</a></li>
           
         </ul>
     
@@ -10817,7 +10962,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002008">
+<div class="proof_wrapper" id="a0000002011">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -10835,7 +10980,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.127</span>
+    <span class="definition_thmlabel">25.129</span>
     <span class="definition_thmtitle">Commuting-form data for an MPDO</span>
     <div class="thm_header_extras">
 
@@ -10899,7 +11044,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.128</span>
+    <span class="definition_thmlabel">25.130</span>
     <span class="definition_thmtitle">Commuting-form property</span>
     <div class="thm_header_extras">
 
@@ -10923,7 +11068,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.129</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 25.1</a></li>
           
@@ -10965,7 +11110,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.129</span>
+    <span class="definition_thmlabel">25.131</span>
     <span class="definition_thmtitle">GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -10989,7 +11134,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
         </ul>
     
@@ -11035,7 +11180,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.130</span>
+    <span class="theorem_thmlabel">25.132</span>
     <span class="theorem_thmtitle">GSNNCH iff commuting form</span>
     <div class="thm_header_extras">
 
@@ -11046,7 +11191,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002009"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11062,9 +11207,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.129</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.131</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
         </ul>
     
@@ -11099,7 +11244,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002009">
+<div class="proof_wrapper" id="a0000002012">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11116,7 +11261,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.131</span>
+    <span class="definition_thmlabel">25.133</span>
     <span class="definition_thmtitle">GSNNCH with zero correlation length</span>
     <div class="thm_header_extras">
 
@@ -11140,7 +11285,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.129</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.131</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
@@ -11188,7 +11333,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.132</span>
+    <span class="theorem_thmlabel">25.134</span>
     <span class="theorem_thmtitle">GSNNCH–ZCL iff commuting form with ZCL</span>
     <div class="thm_header_extras">
 
@@ -11199,7 +11344,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002010"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002013"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11215,9 +11360,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 25.131</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch_zcl">Definition 25.133</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 25.130</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">Theorem 25.132</a></li>
           
         </ul>
     
@@ -11252,7 +11397,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002010">
+<div class="proof_wrapper" id="a0000002013">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11260,7 +11405,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">25.130</a>. </p>
+  <p>Unfold the definition of GSNNCH with zero correlation length and apply Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_iff_has_commuting_form">25.132</a>. </p>
 
   </div>
 </div>
@@ -11269,7 +11414,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.133</span>
+    <span class="definition_thmlabel">25.135</span>
     <span class="definition_thmtitle">Translation-invariant two-site bond</span>
     <div class="thm_header_extras">
 
@@ -11293,7 +11438,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.129</a></li>
           
         </ul>
     
@@ -11333,7 +11478,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.134</span>
+    <span class="definition_thmlabel">25.136</span>
     <span class="definition_thmtitle">\(\eta \)-local commuting-form data</span>
     <div class="thm_header_extras">
 
@@ -11357,9 +11502,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.135</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
         </ul>
     
@@ -11399,7 +11544,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.135</span>
+    <span class="definition_thmlabel">25.137</span>
     <span class="definition_thmtitle">Finite-chain data from a translation-invariant bond</span>
     <div class="thm_header_extras">
 
@@ -11423,9 +11568,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.135</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.129</a></li>
           
         </ul>
     
@@ -11465,7 +11610,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.136</span>
+    <span class="theorem_thmlabel">25.138</span>
     <span class="theorem_thmtitle">Component identities for finite-chain bond data</span>
     <div class="thm_header_extras">
 
@@ -11476,7 +11621,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_translation_invariant_bond_to_commuting_form_data_components">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002011"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11492,9 +11637,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.133</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_translation_invariant_bond_data">Definition 25.135</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.127</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_commuting_form_data">Definition 25.129</a></li>
           
         </ul>
     
@@ -11533,7 +11678,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002011">
+<div class="proof_wrapper" id="a0000002014">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11550,7 +11695,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.137</span>
+    <span class="theorem_thmlabel">25.139</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure carries commuting form</span>
     <div class="thm_header_extras">
 
@@ -11561,7 +11706,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002012"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11577,9 +11722,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
         </ul>
     
@@ -11628,7 +11773,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002012">
+<div class="proof_wrapper" id="a0000002015">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11645,7 +11790,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.138</span>
+    <span class="theorem_thmlabel">25.140</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure gives GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -11656,7 +11801,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002013"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002016"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11672,9 +11817,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.129</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_is_gsnnch">Definition 25.131</a></li>
           
         </ul>
     
@@ -11709,7 +11854,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002013">
+<div class="proof_wrapper" id="a0000002016">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11726,7 +11871,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.139</span>
+    <span class="theorem_thmlabel">25.141</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure with ZCL gives GSNNCH–ZCL</span>
     <div class="thm_header_extras">
 
@@ -11737,7 +11882,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002014"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002017"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11753,9 +11898,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.137</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.139</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.132</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.134</a></li>
           
         </ul>
     
@@ -11792,7 +11937,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002014">
+<div class="proof_wrapper" id="a0000002017">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11809,7 +11954,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.140</span>
+    <span class="theorem_thmlabel">25.142</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure implies commuting form</span>
     <div class="thm_header_extras">
 
@@ -11820,7 +11965,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002015"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002018"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11836,7 +11981,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.137</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_has_commuting_form">Theorem 25.139</a></li>
           
         </ul>
     
@@ -11871,7 +12016,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002015">
+<div class="proof_wrapper" id="a0000002018">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11888,7 +12033,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.141</span>
+    <span class="theorem_thmlabel">25.143</span>
     <span class="theorem_thmtitle">\(\eta \)-local structure implies GSNNCH</span>
     <div class="thm_header_extras">
 
@@ -11899,7 +12044,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:mpdo_is_gsnnch_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002016"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002019"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -11915,7 +12060,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">Theorem 25.138</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch">Theorem 25.140</a></li>
           
         </ul>
     
@@ -11950,7 +12095,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002016">
+<div class="proof_wrapper" id="a0000002019">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -11962,19 +12107,19 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000002017">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000002020">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.142</span>
+    <span class="remark_thmlabel">25.144</span>
     <span class="remark_thmtitle">Entropy-side construction</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-mpdo.html#a0000002017">#</a>
+    <a class="icon proof" href="ch-mpdo.html#a0000002020">#</a>
     
     
     
@@ -11982,14 +12127,14 @@
   </div>
   <div class="remark_thmcontent">
   <p> The remaining entropy-side step is the construction of a single \(\eta \)-local product form from \(\mathrm{SAL}(K)\). The local \(\eta _{k,h}\) are already supplied by Definition&#160;<a href="ch-mpdo.html#def:mpdo_eta_of_hayashi_markov">25.32</a>. What remains is the tensor-coordinate assembly </p>
-<div class="displaymath" id="a0000002018">
+<div class="displaymath" id="a0000002021">
   \[  B=\sum _{k,h} \operatorname {Id}_{H_L^{(k)}}\otimes \eta _{k,h}\otimes \operatorname {Id}_{H_R^{(h)}}, \qquad B\ge 0,  \]
 </div>
 <p> and, for every \(N\ge 2\), </p>
-<div class="displaymath" id="a0000002019">
+<div class="displaymath" id="a0000002022">
   \[  \sigma ^{(N)}(K)=c_N\prod _{n=1}^{N}B_{n,n+1}, \qquad c_N{\gt}0,\qquad [B_{i,i+1},B_{j,j+1}]=0 .  \]
 </div>
-<p> These equations are exactly the \(\eta \)-local product hypothesis; after that, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.140</a> gives the commuting-form conclusion. Zero correlation length enters only in the subsequent RFP and GSNNCH–ZCL conclusions. </p>
+<p> These equations are exactly the \(\eta \)-local product hypothesis; after that, Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_has_commuting_form_of_eta_local_structure">25.142</a> gives the commuting-form conclusion. Zero correlation length enters only in the subsequent RFP and GSNNCH–ZCL conclusions. </p>
 
   </div>
 </div>
@@ -11999,7 +12144,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.143</span>
+    <span class="definition_thmlabel">25.145</span>
     <span class="definition_thmtitle">Local simple-MPDO structure</span>
     <div class="thm_header_extras">
 
@@ -12065,7 +12210,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.144</span>
+    <span class="theorem_thmlabel">25.146</span>
     <span class="theorem_thmtitle">Local simple-MPDO structure from SAL–ZCL hypotheses</span>
     <div class="thm_header_extras">
 
@@ -12089,7 +12234,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.145</a></li>
           
           <li><a href="ch-mpdo.html#thm:sal_implies_eta_structure">Theorem 25.26</a></li>
           
@@ -12133,7 +12278,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">25.145</span>
+    <span class="definition_thmlabel">25.147</span>
     <span class="definition_thmtitle">Simple-MPDO blocked-RFP structure</span>
     <div class="thm_header_extras">
 
@@ -12157,9 +12302,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.145</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
@@ -12201,7 +12346,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.146</span>
+    <span class="theorem_thmlabel">25.148</span>
     <span class="theorem_thmtitle">Blocked-RFP structure from SAL–ZCL and commuting form</span>
     <div class="thm_header_extras">
 
@@ -12225,9 +12370,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">Theorem 25.144</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">Theorem 25.146</a></li>
           
         </ul>
     
@@ -12267,7 +12412,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.147</span>
+    <span class="theorem_thmlabel">25.149</span>
     <span class="theorem_thmtitle">Blocked-RFP structure from \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
@@ -12278,7 +12423,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002020"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12294,11 +12439,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.145</a></li>
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
           
         </ul>
     
@@ -12333,7 +12478,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002020">
+<div class="proof_wrapper" id="a0000002023">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12350,7 +12495,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.148</span>
+    <span class="theorem_thmlabel">25.150</span>
     <span class="theorem_thmtitle">Blocked-RFP structure from SAL–ZCL and \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
@@ -12361,7 +12506,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002021"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12377,9 +12522,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">Theorem 25.144</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_local_structure_data_of_sal_zcl">Theorem 25.146</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">Theorem 25.147</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure">Theorem 25.149</a></li>
           
         </ul>
     
@@ -12414,7 +12559,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002021">
+<div class="proof_wrapper" id="a0000002024">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12431,7 +12576,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.149</span>
+    <span class="theorem_thmlabel">25.151</span>
     <span class="theorem_thmtitle">Zero correlation length gives a blocked fusion-isometry witness</span>
     <div class="thm_header_extras">
 
@@ -12442,7 +12587,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002022"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12499,7 +12644,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002022">
+<div class="proof_wrapper" id="a0000002025">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12516,7 +12661,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.150</span>
+    <span class="theorem_thmlabel">25.152</span>
     <span class="theorem_thmtitle">Blocked-RFP data give a blocked fusion-isometry witness</span>
     <div class="thm_header_extras">
 
@@ -12527,7 +12672,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:structural_implies_rfp_blocked_of_data">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002023"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12543,9 +12688,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.149</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
           
         </ul>
     
@@ -12580,7 +12725,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002023">
+<div class="proof_wrapper" id="a0000002026">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12597,7 +12742,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.151</span>
+    <span class="theorem_thmlabel">25.153</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from blocked-RFP data</span>
     <div class="thm_header_extras">
 
@@ -12608,7 +12753,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002024"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12624,9 +12769,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.149</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
@@ -12663,7 +12808,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002024">
+<div class="proof_wrapper" id="a0000002027">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12680,7 +12825,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.152</span>
+    <span class="theorem_thmlabel">25.154</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
@@ -12691,7 +12836,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002025"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002028"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12707,13 +12852,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.134</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_eta_local_structure_data">Definition 25.136</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">Theorem 25.139</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_eta_local_structure_is_gsnnch_zcl">Theorem 25.141</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.149</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
@@ -12750,7 +12895,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002025">
+<div class="proof_wrapper" id="a0000002028">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12767,7 +12912,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.153</span>
+    <span class="theorem_thmlabel">25.155</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from SAL–ZCL and \(\eta \)-local structure</span>
     <div class="thm_header_extras">
 
@@ -12778,7 +12923,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002026"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002029"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12794,9 +12939,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure">Theorem 25.148</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure">Theorem 25.150</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">Theorem 25.151</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">Theorem 25.153</a></li>
           
         </ul>
     
@@ -12831,7 +12976,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002026">
+<div class="proof_wrapper" id="a0000002029">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12839,7 +12984,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Combine the local SAL–ZCL hypotheses and the \(\eta \)-local product form into the blocked-RFP structure, then apply Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">25.151</a>. </p>
+  <p>Combine the local SAL–ZCL hypotheses and the \(\eta \)-local product form into the blocked-RFP structure, then apply Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain_of_data">25.153</a>. </p>
 
   </div>
 </div>
@@ -12848,7 +12993,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">25.154</span>
+    <span class="theorem_thmlabel">25.156</span>
     <span class="theorem_thmtitle">Simple-MPDO RFP chain from commuting form and ZCL</span>
     <div class="thm_header_extras">
 
@@ -12859,7 +13004,7 @@
 
     <a class="icon proof" href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">#</a>
     
-    <a class="icon proof" href="ch-mpdo.html#a0000002027"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-mpdo.html#a0000002030"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -12875,13 +13020,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.128</a></li>
+          <li><a href="ch-mpdo.html#def:mpdo_has_commuting_form">Definition 25.130</a></li>
           
           <li><a href="ch-mpdo.html#def:mpo_is_zcl">Definition 25.9</a></li>
           
-          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.132</a></li>
+          <li><a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">Theorem 25.134</a></li>
           
-          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.149</a></li>
+          <li><a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">Theorem 25.151</a></li>
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
@@ -12920,7 +13065,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000002027">
+<div class="proof_wrapper" id="a0000002030">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -12928,7 +13073,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">25.132</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">25.149</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">25.50</a> to zero correlation length, which is the MPDO RFP condition. </p>
+  <p>The commuting-form and zero-correlation-length hypotheses give the GSNNCH–ZCL branch via Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_is_gsnnch_zcl_iff_has_commuting_form_and_is_zcl">25.134</a>. The blocked witness is Theorem&#160;<a href="ch-mpdo.html#thm:structural_implies_rfp_blocked">25.151</a>. The full transfer-map fusion formulation follows by applying the converse direction of Theorem&#160;<a href="ch-mpdo.html#thm:mpdo_rfp_via_fusion_iff">25.50</a> to zero correlation length, which is the MPDO RFP condition. </p>
 
   </div>
 </div>
@@ -12937,7 +13082,7 @@
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">25.155</span>
+    <span class="remark_thmlabel">25.157</span>
     <span class="remark_thmtitle">SAL–ZCL implication for the GSNNCH–ZCL criterion</span>
     <div class="thm_header_extras">
 
@@ -12959,11 +13104,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.143</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_local_structure_data">Definition 25.145</a></li>
           
-          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.145</a></li>
+          <li><a href="ch-mpdo.html#def:simple_mpdo_blocked_rfp_data">Definition 25.147</a></li>
           
-          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.154</a></li>
+          <li><a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">Theorem 25.156</a></li>
           
         </ul>
     
@@ -12975,7 +13120,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.154</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
+  <p>   The implication from SAL and ZCL alone to the conclusion of Appendix&#160;C.2 requires a derivation of the commuting-form property from the local simple-MPDO structure of Lemmas&#160;C.3–C.4. Once that derivation is available, Theorem&#160;<a href="ch-mpdo.html#thm:simple_mpdo_rfp_chain">25.156</a> gives the GSNNCH–ZCL branch and the blocked fusion-isometry witness. </p>
 
   </div>
 </div>
