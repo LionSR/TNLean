@@ -22,28 +22,28 @@ diagonal matrices
 \[
     \chi_{\alpha,\beta,\gamma}
 \]
-with positive entries such that, for every length \(L\), the operators
-\(O_L(M_\alpha)\) linearly span an algebra whose structure coefficients satisfy
+with positive entries such that, for every length $L$, the operators
+$O_L(M_\alpha)$ linearly span an algebra whose structure coefficients satisfy
 \[
     c^{(L)}_{\alpha,\beta,\gamma}
       = \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^{L}).
 \]
 The important point for the present note is that the labels
-\(\alpha,\beta,\gamma\) are BNT labels, not basis labels depending on \(L\).
-Thus the same diagonal matrix \(\chi_{\alpha,\beta,\gamma}\) is used for all
+$\alpha,\beta,\gamma$ are BNT labels, not basis labels depending on $L$.
+Thus the same diagonal matrix $\chi_{\alpha,\beta,\gamma}$ is used for all
 positive lengths; only the exponent changes.
 
-Here \(O_L(M_\alpha)\) denotes the length-\(L\) operator associated to the
-normal tensor labelled by \(\alpha\) in the basis of normal tensors. The phrase
-``BNT labels'' refers to these labels \(\alpha,\beta,\gamma\). The support
-algebra \(\mathcal A_n\) below is the formal support algebra chosen for the
-blocked length \(n\) in the Lean development.
+Here $O_L(M_\alpha)$ denotes the length-$L$ operator associated to the
+normal tensor labelled by $\alpha$ in the basis of normal tensors. The phrase
+``BNT labels'' refers to these labels $\alpha,\beta,\gamma$. The support
+algebra $\mathcal A_n$ below is the formal support algebra chosen for the
+blocked length $n$ in the Lean development.
 
 \section{Formalized blocked-basis analogue}
 
 The current blocked coefficient construction in
 \path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
-algebras \(\mathcal A_n\). Its multiplication coefficients have indices
+algebras $\mathcal A_n$. Its multiplication coefficients have indices
 \[
     i,j \in \mathrm{Basis}(\mathcal A_n),
     \qquad
@@ -62,11 +62,11 @@ therefore express a positive-length, length-dependent blocked-basis analogue:
       = \sum_r \chi_{n,i,j,k,r}^{\,n}
       = \operatorname{tr}(\chi_{n,i,j,k}^{\,n}).
 \]
-Here \(n\) is the source blocking length of the two factors in
-\(\mathcal A_n\), while the coefficient \(k\) is taken in the basis of
-\(\mathcal A_{2n}\). The predicate is intentionally restricted to
-\(0 < n\), avoiding the degenerate length-zero constraint
-\(c^{(0)}_{i,j,k} = \dim(\chi_{0,i,j,k})\), which is not part of the intended
+Here $n$ is the source blocking length of the two factors in
+$\mathcal A_n$, while the coefficient $k$ is taken in the basis of
+$\mathcal A_{2n}$. The predicate is intentionally restricted to
+$0 < n$, avoiding the degenerate length-zero constraint
+$c^{(0)}_{i,j,k} = \dim(\chi_{0,i,j,k})$, which is not part of the intended
 positive-chain statement.
 
 \section{Gap}
@@ -74,14 +74,14 @@ positive-chain statement.
 Verdict: scope restriction.
 
 This blocked-basis analogue is not the uniform BNT-label statement of
-Theorem~IV.13(ii). It allows the diagonal matrix to depend on \(n\), because
+Theorem~IV.13(ii). It allows the diagonal matrix to depend on $n$, because
 the available indices themselves depend on the blocked bases
-\(\mathcal A_n\) and \(\mathcal A_{2n}\). The source theorem instead provides
+$\mathcal A_n$ and $\mathcal A_{2n}$. The source theorem instead provides
 one matrix for each triple of BNT labels and uses that same matrix for every
-length \(L\).
+length $L$.
 
 There is a second scope restriction in the operation being compared. In the
-paper, the coefficients \(c^{(L)}_{\alpha,\beta,\gamma}\) belong to the
+paper, the coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ belong to the
 same-length operator algebra:
 \[
     O_L(M_\alpha) O_L(M_\beta)
@@ -92,8 +92,8 @@ product
 \[
     \mathcal A_n \times \mathcal A_n \longrightarrow \mathcal A_{2n},
 \]
-so the two input factors have source length \(n\), while the result is expanded
-in a basis at length \(2n\). The exponent \(n\) in
+so the two input factors have source length $n$, while the result is expanded
+in a basis at length $2n$. The exponent $n$ in
 \[
     c^{(n)}_{i,j,k}=\operatorname{tr}(\chi_{n,i,j,k}^{\,n})
 \]
@@ -118,24 +118,49 @@ uniform BNT-label statement has been separated from the chosen blocked bases.
 
 \section{Relation to the algebra-to-fusion converse}
 
-The converse direction \((\mathrm{ii})\Rightarrow(\mathrm{i})\) in the proof of
-Theorem~IV.13 uses the uniform BNT-label coefficients in an essential way.  In
-Appendix~C.4, lines~2046--2085, the authors compare the two BNT expansions
-coming from the one-site and two-site decompositions.  The source identity
+Let $E=E_1$ be the one-site transfer map.  The present algebra predicate gives
+the fixed-point-space identity
+\[
+    \operatorname{Fix}\bigl((E^n)^\dagger\bigr)
+      = \operatorname{Fix}(E^\dagger),
+    \qquad n>0.
+\]
+This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
+not imply the fusion-side idempotence equation $E^2=E$.
+
+The converse direction $(\mathrm{ii})\Rightarrow(\mathrm{i})$ in the proof of
+Theorem~IV.13 uses a stronger coefficient argument.  In Appendix~C.4,
+lines~2046--2085, the authors compare the two BNT expansions coming from the
+one-site and two-site decompositions.  The source identity
 \texttt{eq:algebra-appendix} is stated at lines~1933--1936 and used in this
-converse at lines~2048--2050.  Together with positivity of the coefficients
-and Lemma~\texttt{Lem:app\_simple} (lines~1155--1163), it first gives, after
-relabelling,
+converse at lines~2048--2050:
+\[
+    \sum_\gamma \operatorname{tr}(\nu_\gamma^L) O_L(A_\gamma)
+      =
+    \sum_{\alpha,\beta,\gamma}
+      \operatorname{tr}\bigl((\mu_\alpha\otimes\mu_\beta
+        \otimes\chi_{\alpha,\beta,\gamma})^L\bigr) O_L(M_\gamma).
+\]
+Positivity and Lemma~\texttt{Lem:app\_simple} (lines~1155--1163) first give,
+after relabelling,
 \[
     A_\gamma
       = e^{i\theta_\gamma} Z_\gamma M_\gamma Z_\gamma^{-1}.
 \]
-Proposition~IV.12 then removes the phase and identifies \(Z_\gamma\) with a
-unitary \(U_\gamma\), as in line~2057.  Thus
+Proposition~IV.12 then removes the phase and identifies $Z_\gamma$ with a
+unitary $U_\gamma$, as in line~2057, so
 \[
     A_\gamma = U_\gamma M_\gamma U_\gamma^{-1}
 \]
-with \(U_\gamma\) unitary, and Lemma~\texttt{Lem:app\_simple} also gives
+with $U_\gamma$ unitary.  The same coefficient comparison gives the multiset
+identity
+\[
+    \{\nu_{\gamma,k}\}_k
+      =
+    \{\mu_{\alpha,k_1}\mu_{\beta,k_2}
+      \chi_{\alpha,\beta,\gamma,k_3}\}_{\alpha,\beta,k_1,k_2,k_3}.
+\]
+Summing this identity gives
 \[
     \operatorname{tr}(\nu_\gamma)
       = \sum_{\alpha,\beta}m_\alpha m_\beta
@@ -152,27 +177,26 @@ have the normalizing factors required in lines~2065--2085.
 
 The present algebra predicate
 \leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
-coefficients, the positive \(\chi_{\alpha,\beta,\gamma}\), or the
-length-one idempotent trace identity.  It can prove equality of adjoint
-fixed-point spaces across positive blocking lengths, but this is weaker than
-the coefficient comparison used above.  Thus the source-faithful route to the
-fusion formulation must first construct the BNT-label theorem witness and the
-idempotent trace-scalar identity, and then use the one-site retract criterion
+coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
+idempotent trace identity.  It proves the fixed-point-space equation above, not
+the displayed BNT coefficient comparison.  Thus the source-faithful route to the
+fusion formulation must construct the BNT-label theorem witness from the MPDO
+tensor and then use the one-site retract criterion
 \leanid{MPOTensor.fusionIsometryData_one_iff_isRFP}.
 
 \section{BNT-label coefficient objects and remaining elimination plan}
 
-The same-length coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\), indexed
+The same-length coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, indexed
 by fixed BNT labels, is represented separately from the blocked-basis
 coefficients.\footnote{\leanid{MPOTensor.BNTLabelCoefficientFamily}.}  When the
 Appendix C.4 construction has already produced a diagonal
-\(\chi_{\alpha,\beta,\gamma}\)-family, there is also a canonical coefficient
+$\chi_{\alpha,\beta,\gamma}$-family, there is also a canonical coefficient
 family
 \[
     c^{(L)}_{\alpha,\beta,\gamma}
       = \sum_r \chi_{\alpha,\beta,\gamma,r}^{\,L}.
 \]
-This is recorded separately so that the \(\chi\)-family can serve as the single
+This is recorded separately so that the $\chi$-family can serve as the single
 source of those coefficients in the source-side special case.\footnote{%
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi},
 \leanid{MPOTensor.BNTLabelCoefficientFamily.ofChi_coeff},
@@ -185,7 +209,7 @@ same-length BNT product predicate records the algebra identity
     O_L(M_\alpha)O_L(M_\beta)
       = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma)
 \]
-for an abstract family of length-\(L\) BNT operators.\footnote{%
+for an abstract family of length-$L$ BNT operators.\footnote{%
 \leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}.}  The
 idempotent condition
 \[
@@ -219,16 +243,16 @@ of the Appendix C.3--C.4 witness construction. The predicate is not itself the
 same-length product statement of Theorem~IV.13(ii).
 These declarations specify the BNT-label coefficient objects and the comparison
 statement, but they do not yet construct the operators, trace scalars,
-coefficients, comparison maps, or \(\chi\)-matrices from an MPDO tensor.
+coefficients, comparison maps, or $\chi$-matrices from an MPDO tensor.
 Once both the same-length BNT product form and a positive BNT-label
-\(\chi\)-witness are available, the same-length product expansion with
-coefficients written as \(\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)\)
+$\chi$-witness are available, the same-length product expansion with
+coefficients written as $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$
 is formalized as a direct corollary.\footnote{%
 \leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
 eq_sum_chi_trace_pow},
 \leanid{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
 eq_sum_ofChi_trace_pow}.}
-Once both the comparison predicate and a positive BNT-label \(\chi\)-witness are
+Once both the comparison predicate and a positive BNT-label $\chi$-witness are
 available, the coefficient-level blocked trace-power formula is formalized as a
 direct corollary.\footnote{%
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq_trace_pow},
@@ -236,8 +260,8 @@ direct corollary.\footnote{%
 blocked_coeff_eq_ofChi_trace_pow},
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
 blocked_coeff_eq_pulledBlockedChi_trace_pow}.}
-The same hypotheses also give a positive blocked-basis \(\chi\)-witness by
-pulling back the uniform BNT-label \(\chi\)-family along the
+The same hypotheses also give a positive blocked-basis $\chi$-witness by
+pulling back the uniform BNT-label $\chi$-family along the
 comparison maps.\footnote{%
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
 pulledBlockedChiFamily_toDiagonal_of_pos},
@@ -250,9 +274,9 @@ pulledBlockedChi_trace_matrix_pow_of_pos},
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison.%
 toPositiveBlockedStructureChiTracePowerForm}.}
 Likewise, once the idempotent coefficient condition and the positive
-BNT-label \(\chi\)-witness are available, the length-one idempotent identity is
+BNT-label $\chi$-witness are available, the length-one idempotent identity is
 formalized with the coefficients rewritten as traces of the corresponding
-\(\chi\)-matrices.\footnote{%
+$\chi$-matrices.\footnote{%
 \leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
 eq_sum_chi_trace},
 \leanid{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.%
@@ -260,24 +284,24 @@ eq_sum_ofChi_trace}.}
 
 The BNT-label objects above are now also gathered into one theorem-data record:
 fixed coefficients, same-length operators and product law, trace scalars and
-idempotent condition, positive BNT-label \(\chi\)-witness, and blocked-basis
+idempotent condition, positive BNT-label $\chi$-witness, and blocked-basis
 comparison.\footnote{\leanid{MPOTensor.BNTLabelTheoremData}.}  This record is
 not an additional mathematical assumption in the source theorem; it is the
 single formal object collecting the source data supplied by the Appendix
 C.3--C.4 construction from an MPDO tensor.  There is also a construction for the
 source-side special case in which the coefficient family is the one canonically
-determined by the same \(\chi\)-family; it takes the product law, idempotent
+determined by the same $\chi$-family; it takes the product law, idempotent
 law, and blocked-basis comparison for those canonical coefficients.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.ofChi}.}  From such
 data, the source
 predicates themselves and the corresponding equation-level consequences are
 available: the same-length product law, the idempotent scalar law, the BNT-label
-\(\chi\)-positivity and trace-power predicates, the coefficient trace-power
-formula, positivity of the diagonal \(\chi\)-entries, the same-length chi-trace
+$\chi$-positivity and trace-power predicates, the coefficient trace-power
+formula, positivity of the diagonal $\chi$-entries, the same-length chi-trace
 product law, the chi-trace idempotent law, the blocked-basis coefficient
 trace-power formula, the blocked-basis coefficient comparison, the positive
-blocked \(\chi\)-witness, the pulled-back blocked trace-power predicate, and the
-pulled-back blocked-basis \(\chi\)-family with positive entries and trace-power
+blocked $\chi$-witness, the pulled-back blocked trace-power predicate, and the
+pulled-back blocked-basis $\chi$-family with positive entries and trace-power
 formula are immediate consequences.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremData.same_length_product_form},
 \leanid{MPOTensor.BNTLabelTheoremData.idempotent_coefficient_form},
@@ -336,10 +360,10 @@ algebraic structure, and the corresponding theorem data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.positiveBlockedChi}.}  The existential
 nonempty statement can also be unpacked directly into a concrete witness
 carrying the source predicates, the corresponding same-length and idempotent
-equations written with \(c^{(L)}_{\alpha,\beta,\gamma}\), and the same two
-equations with coefficients written as \(\chi\)-traces; the blocked-basis
-\(\chi\)-family is also identified as the pullback of the BNT-label
-\(\chi\)-family along the comparison maps.\footnote{%
+equations written with $c^{(L)}_{\alpha,\beta,\gamma}$, and the same two
+equations with coefficients written as $\chi$-traces; the blocked-basis
+$\chi$-family is also identified as the pullback of the BNT-label
+$\chi$-family along the comparison maps.\footnote{%
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.exists_source_predicates},
 \leanid{MPOTensor.HasBNTLabelTheoremWitness.%
 exists_positive_length_coeff_eq_ofChi},
@@ -356,7 +380,7 @@ exists_source_coefficient_equations},
 exists_source_chi_trace_equations}.}
 The existential
 statement has the analogous canonical construction from a positive
-\(\chi\)-family, again leaving the product, idempotent, and blocked-comparison
+$\chi$-family, again leaving the product, idempotent, and blocked-comparison
 statements as inputs rather than reconstructing them from an MPDO tensor.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.ofChi},
 \leanid{MPOTensor.BNTLabelTheoremWitness.hasBNTLabelTheoremWitness},
@@ -364,11 +388,11 @@ statements as inputs rather than reconstructing them from an MPDO tensor.\footno
 ofChi_hasBNTLabelTheoremWitness}.}  Such a witness
 immediately gives the source predicates and their consequences: the coefficient
 trace-power formula, the same-length product law, the idempotent scalar law,
-positivity of the diagonal \(\chi\)-entries, the blocked-basis coefficient
+positivity of the diagonal $\chi$-entries, the blocked-basis coefficient
 comparison, the same-length chi-trace product law, the chi-trace idempotent law,
 the blocked-basis coefficient trace-power formula, the positive blocked-basis
-\(\chi\)-witness, and the pulled-back blocked trace-power predicate and
-\(\chi\)-family for the chosen algebra-structure data.\footnote{%
+$\chi$-witness, and the pulled-back blocked trace-power predicate and
+$\chi$-family for the chosen algebra-structure data.\footnote{%
 \leanid{MPOTensor.BNTLabelTheoremWitness.same_length_product_form},
 \leanid{MPOTensor.BNTLabelTheoremWitness.idempotent_coefficient_form},
 \leanid{MPOTensor.BNTLabelTheoremWitness.positive_chi_pos_entries},
@@ -415,18 +439,18 @@ construction of this existential witness from the MPDO tensor.
 To eliminate the remaining gap, the formalization should introduce:
 \begin{enumerate}
     \item construction of the comparison maps relating the BNT-label
-        coefficients to the chosen blocked bases of \(\mathcal A_n\);
+        coefficients to the chosen blocked bases of $\mathcal A_n$;
     \item construction of the same-length BNT operator family and product law
         from the MPDO tensor, together with the comparison to the blocked
         support-algebra product
-        \(\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}\);
+        $\mathcal A_n \times \mathcal A_n \to \mathcal A_{2n}$;
     \item construction of the positive BNT-label
-        \(\chi_{\alpha,\beta,\gamma}\)-witness from the paper's Appendix C.3
+        $\chi_{\alpha,\beta,\gamma}$-witness from the paper's Appendix C.3
         and C.4 hypotheses;
     \item construction of the idempotent condition
-        \(m_\gamma =
+        $m_\gamma =
           \sum_{\alpha,\beta} c^{(1)}_{\alpha,\beta,\gamma}
-          m_\alpha m_\beta\) from the MPDO tensor;
+          m_\alpha m_\beta$ from the MPDO tensor;
     \item construction of the single
         \leanid{MPOTensor.BNTLabelTheoremWitness} from these source
         objects, and hence of the underlying
