@@ -211,6 +211,9 @@ def ofSALZCLAndCommutingForm
 PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
 ZCL.
 
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and Proposition 3to4,
+lines 1489--1505 and 1569--1593.
+
 **Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
 `SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef`; the correction is recorded
 in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
