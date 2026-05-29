@@ -1321,6 +1321,41 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Apply the one-edge statement separately to each edge $e$.
 \end{proof}
 
+\begin{definition}[Finite kernel descent datum]%
+    \label{def:peps_finiteRegionKernelDescent}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent}
+    \leanok
+    Let $V$ be a vertex type with decidable equality. A finite kernel descent
+    datum is a predicate $K$ on finite subsets $S\subseteq V$ together with
+    implications
+    \[
+        j\in S \quad\Longrightarrow\quad K(S)\Longrightarrow K(S\setminus\{j\}).
+    \]
+    In the edge-blocking proof, $K(S)$ is the assertion that the boundary
+    coefficients $c_{\rho}$, with the virtual indices exposed at that stage,
+    give zero after the tensors in $S$ have been contracted.
+\end{definition}
+
+\begin{lemma}[Finite descent of kernel conditions]%
+    \label{lem:peps_finiteRegionKernelDescent}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent.descend_to_empty}
+    \lean{TNLean.PEPS.FiniteRegionKernelDescent.descend}
+    \leanok
+    \uses{def:peps_finiteRegionKernelDescent}
+    For a finite kernel descent datum and any finite $R\subseteq V$,
+    \[
+        K(R)\Longrightarrow K(\varnothing).
+    \]
+    More generally, if $K(\varnothing)\Longrightarrow Q$, then
+    $K(R)\Longrightarrow Q$.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the finite set $R$. If $R=\varnothing$, there is nothing to
+    prove. Otherwise write $R=S\cup\{j\}$ with $j\notin S$. The deletion
+    implication gives $K(R)\Longrightarrow K(S)$, and the induction hypothesis
+    gives $K(S)\Longrightarrow K(\varnothing)$.
+\end{proof}
+
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
@@ -1341,6 +1376,7 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{theorem}
 \begin{proof}
+    \uses{lem:peps_finiteRegionKernelDescent}
     The endpoint assertions are
     $\operatorname{inj}(T_{A,u})$ and $\operatorname{inj}(T_{A,v})$, which follow
     from vertex injectivity. The middle assertion is the remaining blocking
@@ -1361,8 +1397,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \[
         K(S)\Longrightarrow K(S\setminus\{j\}).
     \]
-    Hence $K(R)\Longrightarrow K(\varnothing)$. Since $T_{A,\varnothing}$ is
-    the empty contraction, $K(\varnothing)$ is $\forall \rho,\;c_{\rho}=0$.
+    The finite descent lemma gives $K(R)\Longrightarrow K(\varnothing)$.
+    Since $T_{A,\varnothing}$ is the empty contraction, $K(\varnothing)$ is
+    $\forall \rho,\;c_{\rho}=0$.
 \end{proof}
 
 \begin{theorem}[Local virtual insertion realized physically on either endpoint]%
