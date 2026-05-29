@@ -1112,11 +1112,25 @@ matching covers the whole BNT basis.
 
 \begin{proof}\leanok
     \uses{lem:eventual_coeff_eq_of_eventual_li}
-    Expand the equality of the total MPVs in the $P$-basis and the $Q$-basis.
-    Substitute the displayed phase relation for every $Q_k$, and reindex the
-    resulting $Q$-sum by $\beta$. The BNT linear independence of the $P$-basis,
-    through Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li}, forces equality
-    of the corresponding coefficients for all sufficiently large lengths.
+    For all sufficiently large $N$, expand the equality of total MPVs as
+    \[
+        \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
+        =
+        \sum_{k\in J(Q)} c_N^{(k)}(Q)\ket{V^{(N)}(Q_k)} .
+    \]
+    The phase relation gives
+    $\ket{V^{(N)}(Q_k)}=\zeta_k^N\ket{V^{(N)}(P_{\beta(k)})}$, hence
+    \[
+        \sum_{j\in J(P)} c_N^{(j)}(P)\ket{V^{(N)}(P_j)}
+        =
+        \sum_{j\in J(P)}
+        \zeta_{\beta^{-1}(j)}^N
+        c_N^{(\beta^{-1}(j))}(Q)\ket{V^{(N)}(P_j)} .
+    \]
+    Lemma~\ref{lem:eventual_coeff_eq_of_eventual_li} applied to the
+    $P$-basis gives
+    $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ for all sufficiently
+    large $N$.
 \end{proof}
 
 \begin{lemma}[Full-basis coefficient identity from global gauges]%
@@ -1144,11 +1158,14 @@ matching covers the whole BNT basis.
 \begin{proof}\leanok
     \uses{lem:sector_bnt_norm_phase_of_matched_mpv,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
-    Choose the scalar-power MPV identity associated to each gauge-phase
-    equivalence. Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
-    unit modulus for each scalar. Applying
-    Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} to these
-    phases gives the eventual coefficient identities.
+    For each matched sector, the gauge-phase equivalence gives
+    $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
+    Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
+    $|\zeta_k|=1$. Applying
+    Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} to the
+    same phases gives
+    $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ for all sufficiently
+    large $N$.
 \end{proof}
 
 \begin{definition}[Copy-weight matching for matched BNT sectors]%
@@ -1190,10 +1207,19 @@ matching covers the whole BNT basis.
 \end{lemma}
 
 \begin{proof}\leanok
-    Apply Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} in each
-    matched sector.  The resulting copy permutations and pointwise weight
-    identities satisfy exactly the conditions of
-    Definition~\ref{def:sector_bnt_copy_weight_matching}.
+    For all sufficiently large $N$, the coefficient identity in sector $k$ is
+    \[
+        \sum_q \mu_{\beta(k),q}^{\,N}
+        =
+        \zeta_k^N\sum_p\nu_{k,p}^{\,N}
+        =
+        \sum_p(\zeta_k\nu_{k,p})^{N}.
+    \]
+    Lemma~\ref{lem:sector_bnt_matched_sector_weight_equiv} applies the finite
+    power-sum comparison sector by sector, producing a copy permutation
+    $\tau_k$ with
+    $\mu_{\beta(k),\tau_k(q)}=\zeta_k\nu_{k,q}$. Since $\zeta_k\ne0$, this is
+    equivalent to $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
 \end{proof}
 
 \begin{theorem}[Global gauge from matched sectors and copy weights]%
@@ -1228,12 +1254,19 @@ matching covers the whole BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Multiply the displayed sector identity by the matching copy weight
-    identity. The phase $\zeta_k$ cancels against $\zeta_k^{-1}$, giving a
-    conjugation identity for every flattened weighted block. Applying
-    Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} to the flattened
-    family assembles these block conjugacies into the displayed direct-sum
-    gauge.
+    For each matched copy,
+    \[
+        \nu_{k,q}Q_k^i
+        =
+        \bigl(\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}\bigr)
+        \bigl(\zeta_kX_kP_{\beta(k)}^iX_k^{-1}\bigr)
+        =
+        \mu_{\beta(k),\tau_k(q)}X_kP_{\beta(k)}^iX_k^{-1}.
+    \]
+    Thus every flattened weighted block is conjugated by its sector gauge
+    $X_k$. Lemma~\ref{lem:tensor_from_blocks_globalGauge_conj} assembles these
+    block conjugacies into the direct-sum gauge
+    $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 
 \begin{theorem}[Global gauge from a copy-weight matching]%
@@ -1258,8 +1291,10 @@ matching covers the whole BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    The copy-weight matching supplies the copy permutations and the weight
-    identities. Apply
+    The copy-weight matching supplies
+    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Together with
+    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, these are exactly the two
+    displayed hypotheses of
     Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
 \end{proof}
 
@@ -1285,9 +1320,13 @@ matching covers the whole BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the proportional sector-matching theorem. The unit-modulus phases
-    are nonzero, so the global-gauge theorem applies to any
-    copy-weight matching for the resulting phases.
+    The proportional sector-matching theorem supplies $\beta$, $X_k$, and
+    unit phases $\zeta_k$ satisfying
+    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $|\zeta_k|=1$, each
+    $\zeta_k$ is nonzero. A copy-weight matching gives
+    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$, so
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
+    direct-sum gauge.
 \end{proof}
 
 \begin{theorem}[Conditional proportional global gauge from coefficient identities]%
@@ -1318,12 +1357,14 @@ matching covers the whole BNT basis.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
-    to obtain the matched sectors, phases, block gauges, and the conditional
-    global gauge for any copy-weight matching. The unit-modulus phases are
-    nonzero. Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}
-    turns the coefficient identities into such a copy-weight matching, and the
-    conditional global-gauge conclusion applies.
+    The sector-matching theorem gives $\beta$, $X_k$, and $|\zeta_k|=1$ with
+    $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $\zeta_k\ne0$, the
+    coefficient identities
+    $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ produce
+    $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$ by
+    Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}.
+    Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    then applies to this copy-weight matching.
 \end{proof}
 
 \begin{theorem}[Full-basis global gauge in matched coordinates]%
