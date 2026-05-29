@@ -65,6 +65,18 @@ theorem injective_chain {G : SimpleGraph V} {e : Edge G}
     ι.IsInjective d.red ∧ ι.IsInjective d.blue ∧ ι.IsInjective d.complement :=
   ⟨d.red_injective, d.blue_injective, d.complement_injective⟩
 
+/-- The one-edge blocking datum records endpoint membership, pairwise
+disjointness, and coverage by the three regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_disjoint_cover {G : SimpleGraph V} {e : Edge G}
+    (d : NormalEdgeBlockingData ι G e) :
+    e.1.1 ∈ d.red ∧ e.1.2 ∈ d.blue ∧ Disjoint d.red d.blue ∧
+      Disjoint d.red d.complement ∧ Disjoint d.blue d.complement ∧
+      d.red ∪ d.blue ∪ d.complement = Finset.univ :=
+  ⟨d.left_mem_red, d.right_mem_blue, d.red_disjoint_blue,
+    d.red_disjoint_complement, d.blue_disjoint_complement, d.cover_univ⟩
+
 end NormalEdgeBlockingData
 
 /-- Edge-centred blocking into three injective regions.
@@ -142,12 +154,33 @@ def ofBlockingData (data : ∀ e : Edge G, NormalEdgeBlockingData ι G e) :
   blue_disjoint_complement e := (data e).blue_disjoint_complement
   cover_univ e := (data e).cover_univ
 
+/-- Recovering the one-edge datum from hypotheses assembled from one-edge data
+returns the datum supplied at that edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+@[simp] theorem ofBlockingData_blockingData
+    (data : ∀ e : Edge G, NormalEdgeBlockingData ι G e) (e : Edge G) :
+    (ofBlockingData data).blockingData e = data e :=
+  rfl
+
 /-- The edge-centred blocking supplies a three-region injective chain at every
 edge. -/
 theorem injective_chain_at_edge (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
     ι.IsInjective (h.red e) ∧ ι.IsInjective (h.blue e) ∧
       ι.IsInjective (h.complement e) :=
   (h.blockingData e).injective_chain
+
+/-- At every edge, the edge-centred blocking records endpoint membership,
+pairwise disjointness, and coverage by the three regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem endpoint_disjoint_cover_at_edge
+    (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    e.1.1 ∈ h.red e ∧ e.1.2 ∈ h.blue e ∧ Disjoint (h.red e) (h.blue e) ∧
+      Disjoint (h.red e) (h.complement e) ∧
+      Disjoint (h.blue e) (h.complement e) ∧
+      h.red e ∪ h.blue e ∪ h.complement e = Finset.univ :=
+  (h.blockingData e).endpoint_disjoint_cover
 
 end NormalEdgeBlockingHypotheses
 
