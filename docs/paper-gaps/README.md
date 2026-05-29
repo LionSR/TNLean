@@ -5,7 +5,24 @@ than the cited source paper states locally. A note should identify the exact
 source passage, state the mathematical input in paper notation, and then name
 the current formal boundary.
 
-For the non-periodic MPS Fundamental Theorem route:
+For the present non-periodic MPS Fundamental Theorem work, the repeated-copy and
+equal-modulus comparison has one current reference.
+
+- `blueprint/src/chapter/ch10_bnt.tex` records the SectorBNT canonical-form
+  surface, the repeated-copy sector coefficients, and the Newton--Girard
+  power-sum recovery.
+- `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
+  the Chapter 10 comparison is used in the equal-MPV Fundamental Theorem
+  argument.
+- GitHub issue #2150 tracks the remaining verification that the assembled
+  multi-block theorem uses this equal-modulus comparison without a surviving
+  strictly-decreasing-moduli restriction.
+
+Older notes in this directory record why previous one-copy or projection-based
+formulations were insufficient. They should be read as historical comparisons
+unless they are cited by one of the current blueprint chapters above.
+
+For the non-periodic MPS Fundamental Theorem background:
 
 - `canonical_bnt_ft_theorem_surface.tex` separates paper-level theorem
   statements from auxiliary formal declarations.

@@ -464,10 +464,11 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \label{thm:nonzero_block_same_mpv_zero_tail_eq}
     \lean{MPSTensor.nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
     \leanok
-    \uses{thm:nonzero_block_zero_tail_identity}
-    In the setting of Theorem~\ref{thm:nonzero_block_zero_tail_identity}, if
-    $z_A=z_B$, then the nonzero parts have the same MPV family: for every
-    length $N$ and every configuration $\sigma$,
+    \uses{lem:sameMPV2_live_of_zeroTail_eq}
+    Let the two tensors be written as an all-zero leftover block plus a nonzero
+    part, and suppose the original tensors have the same MPV family. If
+    $z_A=z_B$, then the nonzero parts have the same MPV family: for every length
+    $N$ and every configuration $\sigma$,
     \[
         V^{(N)}(A_{\mathrm{nz}})_\sigma
         =
@@ -476,11 +477,10 @@ a single tensor $\mathbf{0}_{d,D_0}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:nonzero_block_zero_tail_identity}
-    The positive-length cases are exactly the first conclusion of
-    Theorem~\ref{thm:nonzero_block_zero_tail_identity}. At $N=0$, substitute
-    the equality of zero-tail dimensions into the length-zero identity and cancel
-    the common scalar term.
+    \uses{lem:sameMPV2_live_of_zeroTail_eq}
+    Apply Lemma~\ref{lem:sameMPV2_live_of_zeroTail_eq} to the two zero-tail
+    decompositions. The equality $z_A=z_B$ identifies the all-zero summands, so
+    cancellation gives the nonzero-part equality at every length.
 \end{proof}
 
 
@@ -757,24 +757,21 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         def:same_mpv2_pos}
     Assume that the nonzero part can be identified with the common blocked
     alphabet. Then two tensors with the same MPV family admit one $p>0$ and
-    decompositions
+    nonzero weighted block families such that, for every $N\ge 1$,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
         =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_A})_\sigma
-        +
         V^{(N)}\!\bigl(\textstyle\bigoplus_x
         \mu^A_x A_x\bigr)_\sigma,
     \]
+    and
     \[
         V^{(N)}\!(B^{[p]})_\sigma
         =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_B})_\sigma
-        +
         V^{(N)}\!\bigl(\textstyle\bigoplus_y
         \mu^B_y B_y\bigr)_\sigma.
     \]
-    For $N\ge 1$, the two nonzero parts agree:
+    The two nonzero parts also agree at every positive length:
     \[
         V^{(N)}\!\bigl(\textstyle\bigoplus_x
         \mu^A_x A_x\bigr)_\sigma
@@ -782,18 +779,8 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         V^{(N)}\!\bigl(\textstyle\bigoplus_y
         \mu^B_y B_y\bigr)_\sigma.
     \]
-    At length zero,
-    \[
-        z_A
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_x
-        \mu^A_x A_x\bigr)_\varnothing
-        =
-        z_B
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_y
-        \mu^B_y B_y\bigr)_\varnothing.
-    \]
+    The all-zero leftover block is not part of this conclusion; its contribution
+    is restored by the separate zero-tail cancellation theorem.
     All blocks $A_x$ and $B_y$ are trace-preserving, primitive,
     tensor-irreducible, and of positive bond dimension, and all weights are
     nonzero.
@@ -804,10 +791,11 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
     Apply Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}
     to choose the common blocking length and the two common cyclic-sector families.
-    The assumed word identification converts the blocked nonzero part into the weighted
-    common-sector family on each side. The zero-tail equations then give the
-    displayed decompositions. The structural properties and nonzero weights come
-    from the common-sector families.
+    The assumed word identification converts the blocked nonzero part into the
+    weighted common-sector family on each side. Since the zero-tail term
+    vanishes at positive length, this gives the displayed positive-length
+    identities. The structural properties and nonzero weights come from the
+    common-sector families.
 \end{proof}
 
 \begin{theorem}[Transport of MPV and length-zero identities]%
@@ -1011,4 +999,29 @@ blocking.
     keeps the blocked weights nonzero, and
     Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} transports the
     zero-tail/nonzero MPV identity through the blocking step.
+\end{proof}
+
+\begin{theorem}[Two tensors after one-sided primitive reductions]%
+    \label{thm:after_blocking_tp_primitive_blockdecompositions_same_mpv2}
+    \lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
+    \leanok
+    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
+    If two MPS tensors $A$ and $B$ have the same MPV family, then applying
+    Theorem~\ref{thm:tp_primitive_blockdecomp} separately to $A$ and $B$ gives
+    positive blocking lengths $p_A,p_B$ and primitive weighted block sums
+    $A_{\mathrm{nz}}$ and $B_{\mathrm{nz}}$ such that
+    $A^{[p_A]}$ and $B^{[p_A]}$ have the same MPV family, and
+    $A^{[p_B]}$ and $B^{[p_B]}$ have the same MPV family. Moreover
+    $A^{[p_A]}$ and $A_{\mathrm{nz}}$ agree at every positive length, and
+    $B^{[p_B]}$ and $B_{\mathrm{nz}}$ agree at every positive length. All
+    displayed nonzero blocks are trace-preserving and primitive, have positive
+    bond dimension, and carry nonzero weights.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
+    Apply Theorem~\ref{thm:tp_primitive_blockdecomp} to each tensor. Equality of
+    MPV families is preserved by blocking. The all-zero summand has zero MPV
+    coefficients at positive length, so each blocked tensor agrees there with
+    its nonzero weighted block sum.
 \end{proof}

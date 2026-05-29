@@ -413,9 +413,11 @@ family, the canonically blocked weighted nonzero part with the same family writt
 using the reindexing of blocked physical words.  Then two tensors with the same
 MPV family have one common positive blocking length whose nonzero parts are
 weighted families of trace-preserving, primitive, tensor-irreducible blocks with
-positive bond dimensions and nonzero weights.  The zero-tail equations are stated
-at that same blocking length, and the two nonzero parts agree at all positive
-lengths, with the length-zero zero-tail identity recorded separately.
+positive bond dimensions and nonzero weights.  At every positive length each
+blocked tensor equals its nonzero part, and the two nonzero parts equal each
+other.  The all-zero leftover block contributes only at length zero, so it is
+omitted; the length-zero coefficient is restored once, at the end, from equality
+of the bond dimensions.
 
 The displayed reindexing equality is the remaining one-sided blocked-word
 theorem; this result isolates the mathematical hypotheses used before the later
@@ -426,19 +428,10 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
     (hSame : SameMPV₂ A B)
     (hReindexed : CommonSectorRelabelingHypothesis d) :
     ∃ p : ℕ, 0 < p ∧
-    ∃ (zeroTailA zeroTailB : ℕ),
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
@@ -446,11 +439,6 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       SameMPV₂Pos
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
-      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
-        (zeroTailA : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
-          (zeroTailB : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
       (∀ x, μA x ≠ 0) ∧
       (∀ x, μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
@@ -465,7 +453,7 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       (∀ x, 0 < dimB x) := by
   obtain ⟨p, hp, zeroTailA, rA₀, dimA₀, μA₀, blocksA₀,
       zeroTailB, rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
-      hFamilyA, hFamilyB, hZA, hZB, hPosCanon, hZeroCanon,
+      hFamilyA, hFamilyB, hZA, hZB, hPosCanon, _hZeroCanon,
       _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
       hIrrA, hIrrB, hDimA, hDimB⟩ :=
     afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
@@ -560,23 +548,6 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
             (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p)) σ :=
         hPosCanon N hN σ
       _ = mpv nonzeroB σ := hFlatB N σ
-  have hZeroFlat : ∀ σ : Fin 0 → Fin (blockPhysDim d p),
-      (zeroTailA : ℂ) + mpv nonzeroA σ = (zeroTailB : ℂ) + mpv nonzeroB σ := by
-    intro σ
-    calc
-      (zeroTailA : ℂ) + mpv nonzeroA σ =
-          (zeroTailA : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rA₀ => (μA₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimA₀ k) (blocksA₀ k) p)) σ := by
-        rw [← hFlatA 0 σ]
-      _ = (zeroTailB : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rB₀ => (μB₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p)) σ :=
-        hZeroCanon σ
-      _ = (zeroTailB : ℂ) + mpv nonzeroB σ := by
-        rw [hFlatB 0 σ]
   have hTPA' : ∀ x,
       ∑ i : Fin (blockPhysDim d p), (flatBlocksA x i)ᴴ * flatBlocksA x i = 1 := by
     intro x
@@ -605,12 +576,12 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
     intro x
     cases hFamilyB
     simpa [flatBlocksB] using hIrrB x
-  refine ⟨p, hp, zeroTailA, zeroTailB,
+  refine ⟨p, hp,
     (∑ k : Fin rA₀, familyA.period k), familyA.commonFlatDim, familyA.commonFlatWeight μA₀,
     flatBlocksA,
     (∑ k : Fin rB₀, familyB.period k), familyB.commonFlatDim, familyB.commonFlatWeight μB₀,
     flatBlocksB,
-    hZAflat, hZBflat, hAPos, hBPos, hNonzeroPos, hZeroFlat,
+    hAPos, hBPos, hNonzeroPos,
     hμA, hμB, hTPA', hTPB', hPrimA', hPrimB', hIrrA', hIrrB', hDimA, hDimB⟩
 
 /-- **Unconditional common primitive irreducible block decompositions.**
@@ -632,19 +603,10 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
     ∃ p : ℕ, 0 < p ∧
-    ∃ (zeroTailA zeroTailB : ℕ),
     ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
@@ -652,11 +614,6 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       SameMPV₂Pos
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
-      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
-        (zeroTailA : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) σ =
-          (zeroTailB : ℂ) +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) σ) ∧
       (∀ x, μA x ≠ 0) ∧
       (∀ x, μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
