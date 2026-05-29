@@ -1143,6 +1143,42 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
     $E_0 = \mathrm{id}$. This step does not require the algebra-structure data.
 \end{proof}
 
+\begin{lemma}[Blocked powers of adjoint eigenvectors]%
+    \label{lem:mpdo_adjoint_blocked_eigenvector}
+    \lean{MPOTensor.adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector}
+    \leanok
+    If $E=E_1$ and $E^\dagger X=\lambda X$, then
+    $E_n^\dagger X=\lambda^n X$ for every $n$.
+\end{lemma}
+\begin{proof}\leanok
+    The case $n=0$ is $E_0=\mathrm{id}$. For the induction step,
+    $E_{n+1}=E_n\circ E_1$, hence
+    \[
+        E_{n+1}^{\dagger}X
+        = E_1^{\dagger}E_n^{\dagger}X
+        = E_1^{\dagger}(\lambda^n X)
+        = \lambda^n E_1^{\dagger}X
+        = \lambda^{n+1}X .
+    \]
+\end{proof}
+
+\begin{theorem}[Finite-order adjoint eigenvalues for algebra towers]%
+    \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
+    \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_isRFP_MPDO_via_algebra}
+    \leanok
+    \uses{def:mpdo_rfp_via_algebra, thm:mpdo_adjoint_fix_descent,
+        lem:mpdo_adjoint_blocked_eigenvector}
+    Assume the algebra-structure formulation holds. If $X\ne 0$,
+    $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
+    $\lambda=1$.
+\end{theorem}
+\begin{proof}\leanok
+    By Lemma~\ref{lem:mpdo_adjoint_blocked_eigenvector},
+    $E_n^\dagger X=\lambda^n X=X$. The descent theorem gives
+    $E_1^\dagger X=X$. Thus $\lambda X=X$, so $(\lambda-1)X=0$. Since
+    $X\ne0$, one obtains $\lambda=1$.
+\end{proof}
+
 \begin{theorem}[Adjoint fixed-point equality for algebra towers]%
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_isRFP_MPDO_via_algebra}
@@ -1183,8 +1219,8 @@ family, and the corresponding multiplication / inclusion coefficient arrays.
         = \operatorname{Fix}(E^\dagger).
     \]
     Hence a vector $X$ with $E^\dagger X=\lambda X$ and $\lambda^n=1$ lies in
-    $\operatorname{Fix}(E^\dagger)$, so $(\lambda-1)X=0$.  Thus the predicate
-    excludes root-of-unity peripheral eigenvalues.  It does not imply
+    $\operatorname{Fix}(E^\dagger)$, so $(\lambda-1)X=0$ and $\lambda=1$ by
+    Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}.  It does not imply
     $E^2=E$.  For instance, if $\Pi_{\mathrm{diag}}$ is the projection onto
     diagonal matrices and $0<\varepsilon<1$, set
     \[
