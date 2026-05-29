@@ -1,7 +1,7 @@
-# Contributing to MPSLean
+# Contributing to TNLean
 
 This document codifies the conventions for pull requests, issues, code review,
-Lean style, and CI automation used in the MPSLean project.
+Lean style, and CI automation used in the TNLean project.
 
 ---
 
