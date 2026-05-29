@@ -2599,10 +2599,16 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[Local simple-MPDO structure from SAL--ZCL hypotheses]
     \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
     \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCL}
+    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
-        thm:sal_zcl_implies_rank_one_t}
-    The hypotheses of Lemmas C.3--C.4 determine the local simple-MPDO structure.
+        thm:sal_zcl_implies_rank_one_t, thm:psd_trace_powers_rank_one_t}
+    The hypotheses of Lemmas C.3--C.4 determine the local simple-MPDO
+    structure. There are two forms. The conditional form assumes the
+    rank-one implication for $T$. The corrected form assumes instead that
+    $T\ge 0$ as a matrix, with $\operatorname{tr}(T)=1$ and
+    $\operatorname{tr}(T^m)=1$ for every $m>0$, and then applies
+    Theorem~\ref{thm:psd_trace_powers_rank_one_t}.
 \end{theorem}
 
 \begin{definition}[Simple-MPDO blocked-RFP structure]
@@ -2619,11 +2625,15 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[Blocked-RFP structure from SAL--ZCL and commuting form]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_commuting_form}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingForm}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndCommutingFormOfPosSemidef}
     \leanok
     \uses{def:simple_mpdo_blocked_rfp_data,
         thm:simple_mpdo_local_structure_data_of_sal_zcl}
     The SAL--ZCL hypotheses together with a commuting-form witness determine
-    the simple-MPDO blocked-RFP structure.
+    the simple-MPDO blocked-RFP structure. In the PSD-corrected form, the
+    matrix input is $T\ge0$, $\operatorname{tr}(T)=1$, and
+    $\operatorname{tr}(T^m)=1$ for all $m>0$, rather than an abstract
+    Perron--Frobenius rank-one assumption for $T$.
 \end{theorem}
 
 \begin{theorem}[Blocked-RFP structure from $\eta$-local structure]
@@ -2647,6 +2657,7 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[Blocked-RFP structure from SAL--ZCL and $\eta$-local structure]
     \label{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure}
+    \lean{MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef}
     \leanok
     \uses{thm:simple_mpdo_local_structure_data_of_sal_zcl,
         thm:simple_mpdo_blocked_rfp_data_of_eta_local_structure}
@@ -2659,6 +2670,9 @@ the elementary trace-power identity for diagonal matrices.
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$ for all $i,j$.
     Then these data determine the simple-MPDO blocked-RFP structure for $K$.
+    In the PSD-corrected form, the conditional rank-one criterion is replaced
+    by $T\ge0$, $\operatorname{tr}(T)=1$, and
+    $\operatorname{tr}(T^m)=1$ for all $m>0$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2741,6 +2755,7 @@ the elementary trace-power identity for diagonal matrices.
 \begin{theorem}[Simple-MPDO RFP chain from SAL--ZCL and $\eta$-local structure]
     \label{thm:simple_mpdo_rfp_chain_of_sal_zcl_and_eta_local_structure}
     \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure}
+    \lean{MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef}
     \leanok
     \uses{thm:simple_mpdo_blocked_rfp_data_of_sal_zcl_and_eta_local_structure,
         thm:simple_mpdo_rfp_chain_of_data}
@@ -2749,7 +2764,10 @@ the elementary trace-power identity for diagonal matrices.
     $\sigma^{(N)}(K)=c_N\prod_{n=1}^N B_{n,n+1}$ with $c_N>0$,
     $B_{n,n+1}\ge 0$, and $[B_{i,i+1},B_{j,j+1}]=0$. Then
     $K$ is GSNNCH with ZCL, admits a blocked fusion-isometry witness at size
-    $2$, and satisfies the transfer-map fusion formulation of MPDO RFP.
+    $2$, and satisfies the transfer-map fusion formulation of MPDO RFP. The
+    PSD-corrected form uses $T\ge0$ together with
+    $\operatorname{tr}(T^m)=1$ for all $m>0$ in place of the conditional
+    matrix rank-one hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok

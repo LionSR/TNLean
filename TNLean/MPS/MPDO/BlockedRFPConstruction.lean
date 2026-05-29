@@ -46,9 +46,11 @@ once the remaining local-to-global implication has been formalized.
 * `MPOTensor.SimpleMPDOBlockedRFPData`
 * `MPOTensor.SimpleMPDOBlockedRFPData.ofEtaLocalStructure`
 * `MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure`
+* `MPOTensor.SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef`
 * `MPOTensor.structural_implies_rfp_blocked`
 * `MPOTensor.simple_mpdo_rfp_chain_of_etaLocalStructure`
 * `MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure`
+* `MPOTensor.simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef`
 * `MPOTensor.simple_mpdo_rfp_chain`
 
 ## References
@@ -130,6 +132,42 @@ def ofSALZCL
   hTraceConst := hTraceConst
   rankOne := sal_zcl_implies_rank_one_T T hPrimitive hTrace hTraceConst hPF
 
+/-- Construct the local simple-MPDO structure from the Lemma C.3 hypotheses and
+the PSD-corrected Lemma C.4 rank-one criterion.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and the corollary after
+it, lines 1489--1505.
+
+**Local fix (PSD rank-one criterion):** the source's primitive
+nonnegative-matrix inference at lines 1490--1498 is not valid as stated. This
+constructor uses the positive-semidefinite sufficient condition documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+def ofSALZCLOfPosSemidef
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hPSD : T.PosSemidef)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T) :
+    SimpleMPDOLocalStructureData where
+  dA := dA
+  dB := dB
+  dC := dC
+  rhoABC := rhoABC
+  hRhoDM := hRhoDM
+  hSSA := hSSA
+  eta := sal_implies_eta_structure rhoABC hRhoDM hSSA
+  Tdim := n
+  T := T
+  hPrimitive := hPrimitive
+  hTrace := hTrace
+  hTraceConst := hTraceConst
+  rankOne :=
+    sal_zcl_implies_rank_one_T_of_posSemidef T hPrimitive hPSD hTrace hTraceConst
+
 end SimpleMPDOLocalStructureData
 
 /-- Auxiliary structure for the simple-MPDO blocked-RFP argument.
@@ -166,6 +204,33 @@ def ofSALZCLAndCommutingForm
     SimpleMPDOBlockedRFPData K where
   localData := SimpleMPDOLocalStructureData.ofSALZCL
     rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF
+  commutingForm := hCommuting
+  zcl := hZCL
+
+/-- Construct this structure from the local SAL--ZCL hypotheses, the
+PSD-corrected rank-one criterion for `T`, a commuting-form hypothesis, and MPO
+ZCL.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 and Proposition 3to4,
+lines 1489--1505 and 1569--1593.
+
+**Local fix (PSD rank-one criterion):** this is the blocked-RFP version of
+`SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef`; the correction is recorded
+in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+def ofSALZCLAndCommutingFormOfPosSemidef
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hPSD : T.PosSemidef)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (hCommuting : HasCommutingForm K) (hZCL : IsZCL K) :
+    SimpleMPDOBlockedRFPData K where
+  localData := SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef
+    rhoABC hRhoDM hSSA T hPrimitive hPSD hTrace hTraceConst
   commutingForm := hCommuting
   zcl := hZCL
 
@@ -215,6 +280,38 @@ def ofSALZCLAndEtaLocalStructure
   ofEtaLocalStructure
     (SimpleMPDOLocalStructureData.ofSALZCL
       rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF)
+    hEta hZCL
+
+/-- Construct the blocked-RFP data from the local SAL--ZCL hypotheses, the
+PSD-corrected rank-one criterion for `T`, and the assembled `η`-local
+structure.
+
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593.
+
+**Scope restriction:** this constructor still assumes `EtaLocalStructureData K`;
+it does not construct the translated bond operators from SAL. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`; that
+construction is tracked by issue #823.
+
+**Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
+replacement for the matrix step in Lemma C.4, documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+def ofSALZCLAndEtaLocalStructureOfPosSemidef
+    {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hPSD : T.PosSemidef)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    SimpleMPDOBlockedRFPData K :=
+  ofEtaLocalStructure
+    (SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef
+      rhoABC hRhoDM hSSA T hPrimitive hPSD hTrace hTraceConst)
     hEta hZCL
 
 /-- Commuting-form data together with MPO ZCL yield the GSNNCH-with-ZCL case of
@@ -323,5 +420,37 @@ theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure {K : MPOTensor d 
   simple_mpdo_rfp_chain_of_data
     (SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructure
       rhoABC hRhoDM hSSA T hPrimitive hTrace hTraceConst hPF hEta hZCL)
+
+/-- The simple-MPDO RFP chain from local SAL--ZCL hypotheses, the
+PSD-corrected rank-one criterion for `T`, and the assembled eta-local
+nearest-neighbor product.
+
+References: arXiv:1606.00608, Appendix C.2, Corollary to Proposition 3.3,
+lines 1501--1505, and Proposition 3to4, lines 1571--1593.
+
+**Scope restriction:** this theorem assumes the assembled eta-local structure
+instead of deriving it from SAL. Documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`; the missing
+construction is tracked by issue #823.
+
+**Local fix (PSD rank-one criterion):** it uses the positive-semidefinite
+replacement for the matrix step in Lemma C.4, documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
+theorem simple_mpdo_rfp_chain_of_sal_zcl_and_etaLocalStructure_of_posSemidef
+    {K : MPOTensor d D} {dA dB dC n : ℕ}
+    (rhoABC : Matrix (Fin dA × Fin dB × Fin dC) (Fin dA × Fin dB × Fin dC) ℂ)
+    (hRhoDM : rhoABC.PosSemidef ∧ rhoABC.trace = 1)
+    (hSSA : IsSSAEquality rhoABC hRhoDM.1.isHermitian)
+    (T : Matrix (Fin n) (Fin n) ℝ)
+    (hPrimitive : Matrix.IsPrimitive T)
+    (hPSD : T.PosSemidef)
+    (hTrace : Matrix.trace T = 1)
+    (hTraceConst : Matrix.TracePowersConstant T)
+    (hEta : EtaLocalStructureData K) (hZCL : IsZCL K) :
+    IsGSNNCHWithZCL K ∧ Nonempty (FusionIsometryData K 2) ∧
+      IsRFP_MPDO_via_fusion K :=
+  simple_mpdo_rfp_chain_of_data
+    (SimpleMPDOBlockedRFPData.ofSALZCLAndEtaLocalStructureOfPosSemidef
+      rhoABC hRhoDM hSSA T hPrimitive hPSD hTrace hTraceConst hEta hZCL)
 
 end MPOTensor
