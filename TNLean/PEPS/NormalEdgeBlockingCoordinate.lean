@@ -139,9 +139,6 @@ theorem normalSquareHorizontalEdge_blockingData
 /-- The normalized horizontal edge has red/blue/complement blocking data once
 the local $T$-region has a rectangular cover.
 
-It states the individual membership, injectivity, disjointness, and covering
-conclusions obtained from the cover version of the horizontal blocking datum.
-
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 theorem normalSquareHorizontalEdge_blockingData_of_TCover
     {κ : RegionInjectivityData (SquareLatticeVertex 5 7)}
@@ -324,9 +321,6 @@ theorem normalSquareVerticalEdge_blockingData
 /-- The normalized vertical edge has red/blue/complement blocking data once the
 rotated local $T$-region is injective.
 
-It states the individual membership, injectivity, disjointness, and covering
-conclusions obtained after applying the vertical collar identity.
-
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdge_blockingData_of_verticalT
     {κ : RegionInjectivityData (SquareLatticeVertex 7 5)}
@@ -348,9 +342,6 @@ theorem normalSquareVerticalEdge_blockingData_of_verticalT
 
 /-- The normalized vertical edge has red/blue/complement blocking data once the
 rotated local $T$-region has a rectangular cover.
-
-It states the individual membership, injectivity, disjointness, and covering
-conclusions obtained from the rectangular cover of the rotated $T$-region.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1430--1500. -/
 theorem normalSquareVerticalEdge_blockingData_of_verticalTCover
