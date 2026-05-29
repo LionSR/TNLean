@@ -120,7 +120,7 @@ Theorem can be proved in the manner of the paper.
   finite diagonal reindexing theorem
   \path{thm:peps_edgeInsertedCoeff_identity}, identifying the matrix-insertion
   formalism with the ordinary three-block contraction when no nontrivial matrix
-  is inserted. This remaining finite-sum step is tracked by issue~\#1372.
+  is inserted.
 \item Vertex injectivity must be shown to pass to the edge-blocked three-site
   object. This is the formal version of the paper's assertion that the
   regrouped MPS is injective. The middle physical index for this regrouped
@@ -153,6 +153,10 @@ Theorem can be proved in the manner of the paper.
   \path{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}, and
   applying this to all edges satisfying $M_e\ne\varnothing$ gives
   \path{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
+  The graph-cardinality variant
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_card_gt_two}
+  packages the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
+  the nonempty-middle hypothesis is automatic.
   Vertex injectivity supplies the two endpoint assertions by
   \leanid{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
   and, for all edges at once, by
@@ -276,8 +280,8 @@ It is meant to prevent the proof from drifting away from the source argument.
   conditional bridge from middle-region injectivity is
   \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}.
 \item Identity insertion on the chosen bond:
-  \path{thm:peps_edgeInsertedCoeff_identity} is reduced to finite diagonal
-  reindexing, tracked by issue~\#1372.
+  \path{thm:peps_edgeInsertedCoeff_identity} is formalized by finite diagonal
+  reindexing.
 \item Lemma \path{inj_isomorph}, $X\mapsto O_1,O_2$:
   \path{thm:peps_virtualInsertionPhysicalRealization} formalizes the endpoint
   realization, and
