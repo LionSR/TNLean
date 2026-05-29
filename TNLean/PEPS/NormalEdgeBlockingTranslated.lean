@@ -839,6 +839,75 @@ def normalSquareTranslatedEdgeBlockingHypotheses_of_windows
   NormalEdgeBlockingHypotheses.ofBlockingData fun e =>
     (windows e).blockingDatum h hUnion
 
+/-- The edge datum recovered from the hypotheses assembled from translated
+windows is the datum supplied by the chosen translated window at that edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareTranslatedEdgeBlockingHypotheses_blockingData_of_windows
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (windows :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareTranslatedEdgeWindow.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    (normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).blockingData e =
+      (windows e).blockingDatum h hUnion := by
+  rfl
+
+/-- The edge-blocking hypotheses assembled from translated windows give the
+three injective regions at every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareTranslatedEdgeBlockingHypotheses_injective_chain_of_windows
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (windows :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareTranslatedEdgeWindow.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    κ.IsInjective ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+        h hUnion windows).red e) ∧
+      κ.IsInjective ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+        h hUnion windows).blue e) ∧
+      κ.IsInjective ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+        h hUnion windows).complement e) :=
+  (normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+    h hUnion windows).injective_chain_at_edge e
+
+/-- The edge-blocking hypotheses assembled from translated windows give
+endpoint membership, pairwise disjointness, and coverage at every edge.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
+theorem normalSquareTranslatedEdgeBlockingHypotheses_endpoint_disjoint_cover_of_windows
+    {width height : ℕ} {κ : RegionInjectivityData (SquareLatticeVertex width height)}
+    (h : NormalSquareLatticeRectangleInjectivityHypotheses κ)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (windows :
+      ∀ e : Edge (squareLatticeGraph width height),
+        NormalSquareTranslatedEdgeWindow.{edgeCoverUniverse} e)
+    (e : Edge (squareLatticeGraph width height)) :
+    e.1.1 ∈ (normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).red e ∧
+      e.1.2 ∈ (normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+        h hUnion windows).blue e ∧
+      Disjoint ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).red e)
+        ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).blue e) ∧
+      Disjoint ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).red e)
+        ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+          h hUnion windows).complement e) ∧
+      Disjoint ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+          h hUnion windows).blue e)
+        ((normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+          h hUnion windows).complement e) ∧
+      (normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).red e ∪
+          (normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows).blue e ∪
+            (normalSquareTranslatedEdgeBlockingHypotheses_of_windows
+              h hUnion windows).complement e =
+        (Finset.univ : Finset (SquareLatticeVertex width height)) :=
+  let H := normalSquareTranslatedEdgeBlockingHypotheses_of_windows h hUnion windows
+  H.endpoint_disjoint_cover_at_edge e
+
 /-- A choice of oriented margin-and-cover data for every edge assembles into
 the normal edge-blocking hypotheses.
 
