@@ -403,6 +403,27 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singl
   hComparison.middle_tensor_injective e
     (hUnion.finset_injective_of_singletons hSingleton hA hMiddle)
 
+/-- Singleton comparison and finite union closure give every edge-middle tensor
+when the ambient graph has more than two vertices.
+
+For $2<|V|$, each middle region $V\setminus\{u,v\}$ is nonempty, so the
+nonempty-region singleton theorem applies at every edge.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
+`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
+and 1322--1404. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hSingleton : SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A)
+    (hcard : 2 < Fintype.card V) :
+    ∀ e : Edge G, EdgeMiddleTensorInjective (G := G) A e :=
+  fun e =>
+    hComparison.edgeMiddleTensorInjective_of_singletons hUnion hSingleton hA e
+      (edgeMiddleVertices_nonempty_of_two_lt_card e hcard)
+
 /-- Singleton comparison and finite union closure give the edge-blocked
 three-site injectivity statement for an edge whose middle region is nonempty.
 
@@ -447,6 +468,28 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_
   fun e =>
     hComparison.edgeBlockedThreeSiteInjective_of_singletons
       hUnion hSingleton hA e (hMiddle e)
+
+/-- Singleton comparison and finite union closure give every edge-blocked
+three-site injectivity statement when the ambient graph has more than two
+vertices.
+
+For $2<|V|$, each edge has a nonempty middle region, and the preceding
+nonempty-middle theorem applies uniformly.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
+`lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
+and 1322--1404. -/
+theorem EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card
+    {κ : RegionInjectivityData V} {A : Tensor G d}
+    (hComparison : EdgeMiddleRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hUnion : RegionInjectivityUnionClosure κ)
+    (hSingleton : SingletonRegionInjectivityComparison (G := G) (d := d) κ A)
+    (hA : IsVertexInjective A)
+    (hcard : 2 < Fintype.card V) :
+    ∀ e : Edge G, EdgeBlockedThreeSiteInjective (G := G) A e :=
+  fun e =>
+    hComparison.edgeBlockedThreeSiteInjective_of_singletons
+      hUnion hSingleton hA e (edgeMiddleVertices_nonempty_of_two_lt_card e hcard)
 
 /-- Vertex injectivity is preserved by the edge blocking to a three-site MPS.
 

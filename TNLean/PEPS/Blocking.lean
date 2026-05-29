@@ -171,6 +171,20 @@ theorem edgeMiddleVertices_card (e : Edge G) :
     card_erase_erase_univ (V := V) e.1.1 e.1.2 (edgeLeft_ne_edgeRight e)
 
 omit [DecidableRel G.Adj] in
+/-- If the ambient graph has more than two vertices, every edge has a nonempty
+middle region.
+
+Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
+`Papers/1804.04964/paper_normal.tex`, lines 981--1009: the edge-blocking
+picture has a nonempty complementary middle block. -/
+theorem edgeMiddleVertices_nonempty_of_two_lt_card (e : Edge G)
+    (hcard : 2 < Fintype.card V) :
+    (edgeMiddleVertices e).Nonempty :=
+  Finset.card_pos.mp <| by
+    rw [edgeMiddleVertices_card]
+    exact Nat.sub_pos_of_lt hcard
+
+omit [DecidableRel G.Adj] in
 /-- Products over the vertex set factor through the three-region partition at
 any edge: the distinguished endpoints appear separately from the middle-region
 product. -/
