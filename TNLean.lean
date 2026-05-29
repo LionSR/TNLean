@@ -364,6 +364,7 @@ import TNLean.Channel.Determinant
 -- PEPS (exploratory)
 import TNLean.PEPS.Defs
 import TNLean.PEPS.InjectiveRegion
+import TNLean.PEPS.InjectiveRegionContraction
 import TNLean.PEPS.VirtualInsertion
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.Blocking

@@ -2267,11 +2267,59 @@ injective and normal PEPS, following Theorems~2 and~3 of
     intersection, together with the reconstruction of $A\cup B$.
 \end{proof}
 
+\begin{definition}[Contraction chain for the union injectivity proof]%
+    \label{def:peps_injectiveUnionContractionChain}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain}
+    \leanok
+    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
+    contraction chain for the proof of \cite[Section~3]{Molnar2018NormalPEPS}
+    consists of three linear maps
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$, together with the three implications
+    used in Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
+\end{definition}
+
+\begin{lemma}[Kernel criterion for the union contraction chain]%
+    \label{lem:peps_injectiveRegion_union_contractionChain}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain.union_contraction_ker_eq_bot}
+    \lean{TNLean.PEPS.InjectiveUnionContractionChain.union_contraction_injective}
+    \leanok
+    \uses{def:peps_injectiveUnionContractionChain}
+    Let $P_0=A\setminus B$, $P_1=A\cap B$, $P_2=B\setminus A$, and
+    $P_3=(A\cup B)^c$. Let $K$ be the boundary vector space attached to
+    $P_3$, and let
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$ be the three contraction maps in the
+    proof of \cite[Section~3]{Molnar2018NormalPEPS}. If
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{2\}}(X)=0,\qquad
+        \mathcal C_{\{2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{1,2\}}(X)=0,
+    \]
+    and
+    $\mathcal C_{\{1,2\}}(X)=0\Longrightarrow X=0$, then
+    $\ker \mathcal C_{\{0,1,2\}}=\{0\}$.
+\end{lemma}
+\begin{proof}\leanok
+    For $X\in K$ with $\mathcal C_{\{0,1,2\}}(X)=0$, apply the three
+    implications in sequence:
+    \[
+        \mathcal C_{\{0,1,2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{2\}}(X)=0
+        \Longrightarrow \mathcal C_{\{1,2\}}(X)=0
+        \Longrightarrow X=0.
+    \]
+\end{proof}
+
 \begin{lemma}[Union of injective regions]%
     \label{lem:peps_injectiveRegion_union}
     \notready
     \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities,
-        lem:peps_regionUnionDecomposition_disjoint}
+        lem:peps_regionUnionDecomposition_disjoint,
+        lem:peps_injectiveRegion_union_contractionChain}
     Let $V$ be a finite vertex set. Write $\operatorname{inj}(R)$ for the
     assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
     injective. For two possibly overlapping regions $A,B\subseteq V$,
