@@ -1356,12 +1356,66 @@ injective and normal PEPS, following Theorems~2 and~3 of
     gives $K(S)\Longrightarrow K(\varnothing)$.
 \end{proof}
 
+\begin{definition}[Edge-middle kernel descent data]%
+    \label{def:peps_edgeMiddleKernelDescentData}
+    \lean{TNLean.PEPS.EdgeMiddleBoundaryLabel,
+        TNLean.PEPS.EdgeMiddleKernelDescentData}
+    \leanok
+    \uses{def:peps_edgeMiddleTensorFamily,
+        def:peps_finiteRegionKernelDescent}
+    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. An edge-middle kernel descent
+    datum is indexed by boundary labels $\rho$ consisting of the two residual
+    endpoint configurations. It assigns to every finitely supported coefficient
+    family $c=(c_{\rho})_{\rho}$ a finite kernel descent datum $K_c(S)$ such that
+    \[
+        \left(
+            \forall\tau,\;
+            \sum_{\rho}c_{\rho}\,
+                T_{A,M_e}^{\rho}(\tau)=0
+        \right)
+        \Longrightarrow K_c(M_e),
+    \]
+    and
+    \[
+        K_c(\varnothing)\Longrightarrow \forall\rho,\;c_{\rho}=0.
+    \]
+\end{definition}
+
+\begin{theorem}[Kernel descent gives edge-middle injectivity]%
+    \label{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
+    \lean{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective,
+        TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
+    \leanok
+    \uses{def:peps_edgeMiddleKernelDescentData,
+        lem:peps_finiteRegionKernelDescent,
+        thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. If an edge-middle kernel descent
+    datum is given, then $T_{A,M_e}$ is injective. Consequently, if $A$ is
+    vertex-injective, the edge-blocked three-site chain at $e$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Let $c=(c_{\rho})_{\rho}$ be a finite linear relation among the middle
+    tensor vectors:
+    \[
+        \forall\tau,\;
+        \sum_{\rho}c_{\rho}\,
+            T_{A,M_e}^{\rho}(\tau)=0.
+    \]
+    The initial part of the descent datum gives $K_c(M_e)$. The finite descent
+    lemma gives $K_c(M_e)\Longrightarrow K_c(\varnothing)$, and the terminal
+    part gives $\forall\rho,\;c_{\rho}=0$. Thus every finite relation is
+    trivial, which is $\operatorname{inj}(T_{A,M_e})$. Vertex injectivity at
+    $u$ and $v$ gives $\operatorname{inj}(T_{A,u})$ and
+    $\operatorname{inj}(T_{A,v})$; the edge-blocked three-site injectivity at
+    $e$ follows.
+\end{proof}
+
 \begin{theorem}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
+        thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
     For a tensor map or blocked tensor family $T$, write
     $\operatorname{inj}(T)$ for the assertion that $T$ is injective. If $A$
     is vertex-injective, then for every edge $e=(u,v)$,
