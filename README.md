@@ -244,11 +244,11 @@ The formalization draws principally on the following sources.
 - M. Sanz, D. Pérez-García, M. M. Wolf, J. I. Cirac,
   *A quantum version of Wielandt's inequality*,
   [arXiv:0909.5347](https://arxiv.org/abs/0909.5347),
-  J. Math. Phys. **51**, 102205 (2010).
+  IEEE Trans. Inf. Theory **56**(9), 4668--4673 (2010).
 - J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete,
-  *Matrix Product Density Operators*,
+  *Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories*,
   [arXiv:1606.00608](https://arxiv.org/abs/1606.00608),
-  Annals of Physics **378** (2017).
+  Ann. Phys. **378**, 100--149 (2017).
 - G. De las Cuevas, J. I. Cirac, N. Schuch, D. Pérez-García,
   *Irreducible forms of Matrix Product States: Theory and Applications*,
   [arXiv:1708.00029](https://arxiv.org/abs/1708.00029),
@@ -257,9 +257,26 @@ The formalization draws principally on the following sources.
   *Matrix Product States and Projected Entangled Pair States*,
   [arXiv:2011.12127](https://arxiv.org/abs/2011.12127),
   Rev. Mod. Phys. **93**, 045003 (2021).
-- A. Molnár, N. Schuch, F. Verstraete, J. I. Cirac,
-  *Fundamental theorem for injective projected entangled pair states*,
-  [arXiv:1804.04964](https://arxiv.org/abs/1804.04964) (2018).
+- A. Molnár, J. Garre-Rubio, D. Pérez-García, N. Schuch, J. I. Cirac,
+  *Normal projected entangled pair states generating the same state*,
+  [arXiv:1804.04964](https://arxiv.org/abs/1804.04964),
+  New J. Phys. **20**, 113017 (2018).
+- D. Pérez-García, M. M. Wolf, M. Sanz, F. Verstraete, J. I. Cirac,
+  *String Order and Symmetries in Quantum Spin Lattices*,
+  [arXiv:0802.0447](https://arxiv.org/abs/0802.0447),
+  Phys. Rev. Lett. **100**, 167202 (2008).
+- C. Fernández-González, N. Schuch, M. M. Wolf, J. I. Cirac, D. Pérez-García,
+  *Frustration free gapless Hamiltonians for Matrix Product States*,
+  [arXiv:1210.6613](https://arxiv.org/abs/1210.6613),
+  Commun. Math. Phys. **333**, 299--333 (2015).
+- N. Schuch, I. Cirac, D. Pérez-García,
+  *PEPS as ground states: Degeneracy and topology*,
+  [arXiv:1001.3807](https://arxiv.org/abs/1001.3807),
+  Ann. Phys. **325**, 2153--2192 (2010).
+- J. I. Cirac, J. Garre-Rubio, D. Pérez-García,
+  *Mathematical open problems in projected entangled pair states*,
+  [arXiv:1903.09439](https://arxiv.org/abs/1903.09439),
+  Rev. Mat. Complut. **32**, 579--599 (2019).
 - M. M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012).
 - [Mathlib4](https://github.com/leanprover-community/mathlib4), the Lean 4
   mathematics library.

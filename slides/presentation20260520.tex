@@ -1,5 +1,5 @@
 % ══════════════════════════════════════════════════════════════════════
-%  Job talk - quantum information theorists, 2026
+%  talk - quantum information theorists, 2026
 %  Autoformalizing the fundamental theorem of matrix product states
 %  by multi-agent orchestration.
 %  Single self-contained file. Compile with latexmk from slides/.
@@ -58,7 +58,7 @@
 % --- Title metadata ---
 \title{Autoformalizing the fundamental theorem of matrix product states}
 \subtitle{A multi-agent, blueprint-guided formalization in Lean~4}
-\author{Sirui Lu \\
+\author{Sirui Lu \texorpdfstring{\\}{, }
   {\small with Erickson Tjoa and J.~Ignacio Cirac}}
 \institute{Max-Planck-Institut f\"ur Quantenoptik \quad\&\quad MCQST}
 \date{2026}
@@ -69,6 +69,7 @@
   pdfauthor={Sirui Lu, Erickson Tjoa, J. Ignacio Cirac},
   pdfsubject={Job talk, MPQ \& MCQST, 2026}
 }
+\pdfstringdefDisableCommands{\def\translate#1{#1}}
 
 \begin{document}
 
@@ -126,7 +127,7 @@
                 \item[$\circ$] \textbf{Liquid Tensor Experiment}~\cite{Commelin2023Liquid}
                 \item[$\circ$] \textbf{Strong Prime Number Theorem}~\cite{MathInc2025Strong}
             \end{itemize}
-        \item For research physics: PhysLean and a Lean verification of generalised quantum Stein's lemma~\cite{Meiburg2025Formalization}.
+        \item For research physics: PhysLib and a Lean verification of generalised quantum Stein's lemma~\cite{Meiburg2025Formalization}.
     \end{itemize}
     \vspace{0.6em}
     \textcolor{dimwhite}{\footnotesize The kernel verifies \emph{logic}, not \emph{intent}. That gap is the punchline of this talk.}
@@ -644,10 +645,10 @@ delegate_agent(
         \textbf{Per-node tags}
         \begin{itemize}
             \footnotesize
-            \item \texttt{\textbackslash lean} --- link to the Lean declaration.
-            \item \texttt{\textbackslash leanok} --- statement / proof done.
-            \item \texttt{\textbackslash notready} --- prerequisites missing.
-            \item \texttt{\textbackslash uses} --- DAG edges (dependencies).
+            \item \texttt{\char`\\lean} --- link to the Lean declaration.
+            \item \texttt{\char`\\leanok} --- statement / proof done.
+            \item \texttt{\char`\\notready} --- prerequisites missing.
+            \item \texttt{\char`\\uses} --- DAG edges (dependencies).
         \end{itemize}
         \column{0.49\textwidth}
         \begin{block}{Node colours = the frontier}
@@ -881,7 +882,7 @@ delegate_agent(
     \vspace{0.4em}
     \begin{itemize}
         \footnotesize
-        \item \emph{Figures are \textbf{lower bounds}.} The actual span across the chain is several times larger --- e.g.\ block separation accounts for $\sim$12{,}000 lines across \texttt{SectorComparison/}, \texttt{SectorBNT/}, \texttt{Blocking/}, \texttt{Periodic\,FT/}.
+        \item \textbf{Figures are lower bounds.} The actual span across the chain is several times larger --- e.g.\ block separation accounts for $\sim$12{,}000 lines across \texttt{SectorComparison/}, \texttt{SectorBNT/}, \texttt{Blocking/}, \texttt{Periodic\,FT/}.
         \item Take-away: algebra-heavy proofs (e.g.\ the Skolem--Noether step) expand modestly in Lean; spectral-analytic proofs (e.g.\ block separation, the Perron--Frobenius chain) expand $5\times$--$10\times$ --- they dominate the codebase.
     \end{itemize}
 \end{frame}
@@ -1279,7 +1280,7 @@ delegate_agent(
         Take $E = E_1 \oplus E_2$ with peripheral spectra $\{e^{i\alpha}\}$, $\{e^{i\beta}\}$ for $\alpha/\beta \notin \mathbb{Q}$. The peripheral set is $\{e^{i\alpha}, e^{i\beta}\}$ --- not a finite group, hence not all roots of unity.
     \end{block}
     \vspace{0.3em}
-    \textbf{Separate point --- peripheral eigenvalues can \emph{interact}:}
+    \textbf{Separate point --- peripheral eigenvalues can interact:}
     \[
         a_N \;=\; 1 + (-1)^N \;\;\text{(constant-modulus summands, no limit).}
     \]
@@ -1287,6 +1288,42 @@ delegate_agent(
     \vspace{0.3em}
     \\
     \textbf{Resolution.} Caught by a review agent in blueprint round 2, before any Lean attempt.
+\end{frame}
+
+%---------- B15: Proof walk-through, single-block FT ----------
+\begin{frame}{B15. Proof walk-through: single-block (injective) FT --- Skolem--Noether route}
+    \vspace{-0.4em}
+    \textcolor{dimwhite}{\footnotesize Setting: $A$ \emph{injective} ($\{A^i\}$ span $\MD$), $B$ same bond dimension, same MPV family. Goal: $B^i = X A^i X^{-1}$ for some $X \in \GL_D(\mathbb{C})$. Selected autonomously by the agent --- a non-standard MPS-toolkit route Mathlib's ring theory made most direct (cf.\ Draft \S\,2).}
+    \vspace{0.2em}
+    \begin{enumerate}\itemsep0.10em\small
+        \item \textbf{Linear extension.}
+            Cyclic-trace identities $\Tr(A^{i_1}\!\cdots A^{i_N}) = \Tr(B^{i_1}\!\cdots B^{i_N})$ for all words, combined with $\spn\{A^i\} = \MD$, give a unique $\mathbb{C}$-linear $T : \MD \to \MD$ with $T(A^i) = B^i$.
+
+        \item \textbf{Multiplicativity.}
+            The same trace identities force $T(A^i A^j) = B^i B^j$ on the spanning set; bilinear extension gives $T(MN) = T(M)\,T(N)$ on all of $\MD$.
+
+        \item \textbf{Nonzero.}
+            If $T = 0$ then $B^i = 0$, contradicting the nonvanishing of the trace identities (auxiliary lemma \texttt{trace\_ne\_zero\_of\_injective}, $\sim$10 Lean lines).
+
+        \item \textbf{Bijectivity.}
+            $\MD$ is simple $\Rightarrow$ a nonzero multiplicative endomorphism has trivial kernel; finite dimension $\Rightarrow$ bijective.
+
+        \item \textbf{Unit preservation.}
+            Surjectivity gives $Y$ with $T(Y) = \Id$; multiplicativity gives $T(\Id) = T(Y)\,T(\Id) = T(Y \cdot \Id) = \Id$ $\Rightarrow$ $T$ is a $\mathbb{C}$-algebra automorphism of $\MD$.
+
+        \item \textbf{Skolem--Noether.}
+            Every $\mathbb{C}$-algebra automorphism of $\MD$ is inner: $\exists\, X \in \GL_D(\mathbb{C})$ with $T(M) = X M X^{-1}$. Evaluate at $A^i$: $B^i = T(A^i) = X A^i X^{-1}$.\hfill\qed
+    \end{enumerate}
+    \vspace{0.2em}
+    \begin{center}
+    \begin{tikzpicture}
+        \node[draw=leangreen,thick,rounded corners=4pt,fill=cardbg,text=white,
+            text width=0.92\textwidth,align=center,inner sep=4pt,font=\scriptsize] {
+            \textbf{Paper-to-Lean expansion (Draft \S\,App.\,Expansion).}
+            Blueprint sketch: $16$ lines. Lean: $74$ lines for \texttt{fundamentalTheorem\_singleBlock} + $122$ for Skolem--Noether $\Rightarrow$ algebraic core expands $\approx 4{:}1$ (spectral-analytic chains expand $10\times$).
+        };
+    \end{tikzpicture}
+    \end{center}
 \end{frame}
 
 \end{document}
