@@ -169,13 +169,20 @@ Summing this identity gives
           c^{(1)}_{\alpha,\beta,\gamma}
       = m_\gamma .
 \]
-Only after this trace equality is obtained do the maps
+Only after this trace equality is obtained do the normalizing maps in
+\cite[lines~2065--2085]{Cirac2017MPDO_AnnPhys} have the form
 \[
-    T=\widetilde R_2\widetilde T R_1,
+    \widetilde R_2\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
+      = \bigoplus_\gamma \frac{\nu_\gamma}{m_\gamma}\otimes X_\gamma,
     \qquad
-    S=\widetilde R_1\widetilde S R_2
+    \widetilde R_1\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
+      = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma .
 \]
-have the normalizing factors required in lines~2065--2085.
+These are the maps used in
+$T=\widetilde R_2\widetilde T R_1$ and
+$S=\widetilde R_1\widetilde S R_2$.  The first denominator is normalized by
+$\tr(\nu_\gamma)=m_\gamma$, proved above; the second by the defining equality
+$m_\gamma=\tr(\mu_\gamma)$ for the original block coefficient.
 
 The present algebra predicate
 \leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
