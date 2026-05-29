@@ -517,6 +517,19 @@ injective and normal PEPS, following Theorems~2 and~3 of
     Every vertex is either $u$, $v$, or different from both.
 \end{proof}
 
+\begin{theorem}[Nonempty middle region from a cardinal bound]%
+    \label{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
+    \lean{TNLean.PEPS.edgeMiddleVertices_nonempty_of_two_lt_card}
+    \leanok
+    \uses{def:peps_edgeMiddleVertices}
+    If $2<|V|$, then for every edge $e=(u,v)$ the middle region
+    $V\setminus\{u,v\}$ is nonempty.
+\end{theorem}
+\begin{proof}\leanok
+    The middle region has cardinality $|V|-2$. Hence
+    $2<|V|$ gives $|V|-2>0$.
+\end{proof}
+
 \begin{theorem}[Product splitting at an edge]%
     \label{thm:peps_prod_univ_splitAtEdge}
     \lean{TNLean.PEPS.prod_univ_splitAtEdge}
@@ -1319,6 +1332,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
 \end{theorem}
 \begin{proof}\leanok
     Apply the one-edge statement separately to each edge $e$.
+\end{proof}
+
+\begin{theorem}[All edge-blocked chains from singleton regions, cardinal form]%
+    \label{thm:peps_edgeBlockedThreeSiteInjective_all_two_lt_card}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card}
+    \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
+    \leanok
+    \uses{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card,
+        thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons,
+        def:peps_edgeMiddleRegionInjectivityComparison}
+    Assume singleton comparison, union closure for $\kappa$, the comparison
+    $\kappa(M_e)\Longrightarrow\operatorname{inj}(T_{A,M_e})$, and vertex
+    injectivity of $A$. If $2<|V|$, then
+    $V\setminus\{u,v\}\ne\varnothing$ for every edge $e=(u,v)$, and these
+    hypotheses give $\operatorname{inj}(T_{A,V\setminus\{u,v\}})$ and
+    edge-blocked three-site injectivity at every edge.
+\end{theorem}
+\begin{proof}\leanok
+    For each $e=(u,v)$, Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
+    gives $V\setminus\{u,v\}\ne\varnothing$. Apply the preceding all-edge
+    singleton theorem.
 \end{proof}
 
 \begin{definition}[Finite kernel descent datum]%
