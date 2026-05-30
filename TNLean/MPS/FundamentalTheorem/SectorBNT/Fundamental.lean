@@ -358,6 +358,108 @@ theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
       (P := P) (Q := Q) β ζ hζ_ne hCoeff
   exact ⟨W, hGlobal W⟩
 
+/-- **Equal-MPV matched copy-weight witnesses.**
+
+From full-basis BNT matching and coefficient comparison one obtains a sector
+bijection β, bond-dimension equalities, unit phases ζ k, block gauges X k, and
+a copy-weight matching for the same phases.
+
+The matched coefficient identities give the sectorwise power-sum comparison
+\[
+  \sum_q \mu_{\beta(k),q}^N = \sum_q (\zeta_k \nu_{k,q})^N
+\]
+for all sufficiently large \(N\).  Finite power-sum comparison then gives the
+copy permutations and weight identities. -/
+theorem ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
+      Nonempty (SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ) := by
+  classical
+  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPVPos hP hQ hUnitP hUnitQ hEqual
+  let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
+    fun k => (hβMatchFull k).choose
+  let hGPE : ∀ k : Fin Q.basisCount,
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
+    fun k => (hβMatchFull k).choose_spec.1
+  let Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
+    fun k => (hGPE k).choose
+  let ζ : Fin Q.basisCount → ℂ := fun k => (hGPE k).choose_spec.choose
+  have hConj : ∀ (k : Fin Q.basisCount) (i : Fin d),
+      Q.basis k i =
+        ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+          (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+            Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)) := by
+    intro k i
+    exact (hGPE k).choose_spec.choose_spec.2 i
+  have hMpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ := by
+    intro k N σ
+    rw [mpv_eq_pow_mul_of_gaugePhase
+      (A := cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k)))
+      (B := Q.basis k) (Xblock k) (ζ k) (hConj k) N σ,
+      mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
+  have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
+    intro k
+    have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hP.basis_normalized_self_overlap (β k)).norm
+      simpa using h1
+    have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+        atTop (𝓝 (1 : ℝ)) := by
+      have h1 := (hQ.basis_normalized_self_overlap k).norm
+      simpa using h1
+    have hScale :=
+      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
+        (ζ := ζ k) (hMpv k)
+    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
+    intro k hzero
+    have hnorm := hζ_norm k
+    simp [hzero] at hnorm
+  have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
+  let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
+    SectorBNTCopyWeightMatching.of_coeff_identity
+      (P := P) (Q := Q) β ζ hζ_ne hCoeff
+  exact ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩
+
+/-- Reformulation for the all-length `SameMPV₂` form. -/
+theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
+    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
+    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+              Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))) ∧
+      Nonempty (SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ) :=
+  ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+    (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual.toSameMPV₂Pos
+
 /-- **BNT equal-MPV sector-witness theorem.**
 
 If two BNT sector decompositions satisfying `IsBNTCanonicalForm` generate the
@@ -379,26 +481,16 @@ theorem ft_sector_bnt_equal_sector_dataPos
         ∀ k, ∃ τ : Fin (Q.copies k) ≃ Fin (P.copies (β k)),
           ∀ q : Fin (Q.copies k), Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ q) := by
   classical
-  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPVPos hP hQ hUnitP hUnitQ hEqual
+  obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩ :=
+    ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+      (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual
   let hMatch : ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
       GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) :=
     fun k => by
-      obtain ⟨h, hGPE, _hNondecay⟩ := hβMatchFull k
-      exact ⟨h, hGPE⟩
-  have hCoeff := coeff_identity_via_global_gaugePos hP hQ hEqual β hMatch
-  let ζ : Fin Q.basisCount → ℂ := fun k => (hCoeff k).choose
-  have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := fun k =>
-    (hCoeff k).choose_spec.1
-  have hCoeff_eventual : ∀ k : Fin Q.basisCount,
-      ∃ N₀, ∀ N > N₀, P.coeff N (β k) = (ζ k) ^ N * Q.coeff N k := fun k =>
-    (hCoeff k).choose_spec.2
-  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
-    intro k hzero
-    have hnorm := hζ_norm k
-    simp [hzero] at hnorm
-  let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
-    SectorBNTCopyWeightMatching.of_coeff_identity
-      (P := P) (Q := Q) β ζ hζ_ne hCoeff_eventual
+      refine ⟨hDim k, Xblock k, ζ k, ?_, hConj k⟩
+      intro hzero
+      have hnorm := hζ_norm k
+      simp [hzero] at hnorm
   have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)
@@ -477,53 +569,13 @@ theorem ft_sector_bnt_equal_global_gaugePos
                 Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
                   (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
   classical
-  obtain ⟨β, hβMatchFull⟩ := bijective_match_of_sameMPVPos hP hQ hUnitP hUnitQ hEqual
-  let hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k :=
-    fun k => (hβMatchFull k).choose
-  let hGPE : ∀ k : Fin Q.basisCount,
-      GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
-    fun k => (hβMatchFull k).choose_spec.1
-  let Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
-    fun k => (hGPE k).choose
-  let ζ : Fin Q.basisCount → ℂ := fun k => (hGPE k).choose_spec.choose
-  have hConj : ∀ (k : Fin Q.basisCount) (i : Fin d),
-      Q.basis k i =
-        ζ k • ((Xblock k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
-          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
-          (((Xblock k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
-            Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)) := by
-    intro k i
-    exact (hGPE k).choose_spec.choose_spec.2 i
-  have hMpv : ∀ (k : Fin Q.basisCount) (N : ℕ) (σ : Fin N → Fin d),
-      mpv (Q.basis k) σ = (ζ k) ^ N * mpv (P.basis (β k)) σ := by
-    intro k N σ
-    rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k)))
-      (B := Q.basis k) (Xblock k) (ζ k) (hConj k) N σ,
-      mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
-  have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
-    intro k
-    have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
-        atTop (𝓝 (1 : ℝ)) := by
-      have h1 := (hP.basis_normalized_self_overlap (β k)).norm
-      simpa using h1
-    have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
-        atTop (𝓝 (1 : ℝ)) := by
-      have h1 := (hQ.basis_normalized_self_overlap k).norm
-      simpa using h1
-    have hScale :=
-      mpvOverlap_self_scale_of_mpv_eq_pow_mul (A := P.basis (β k)) (B := Q.basis k)
-        (ζ := ζ k) (hMpv k)
-    exact norm_eq_one_of_selfOverlap_scale (ζ := ζ k) hAA hBB hScale
+  obtain ⟨β, hDim, ζ, Xblock, hζ_norm, hConj, ⟨W⟩⟩ :=
+    ft_sector_bnt_equal_matched_copy_weight_witnessesPos
+      (P := P) (Q := Q) hP hQ hUnitP hUnitQ hEqual
   have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
     intro k hzero
     have hnorm := hζ_norm k
     simp [hzero] at hnorm
-  have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
-  let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
-    SectorBNTCopyWeightMatching.of_coeff_identity
-      (P := P) (Q := Q) β ζ hζ_ne hCoeff
   let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
     have hcard := Fintype.card_congr (W.copy_equiv k)
