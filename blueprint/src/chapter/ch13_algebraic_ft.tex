@@ -1360,29 +1360,11 @@ The first step is the weighted block-sum identity
 \]
 which is then combined with overlap estimates and the leading-block peel.
 
-\begin{definition}[Canonical-form data with ordered weights]\label{def:isCanonicalForm}
-    \lean{MPSTensor.IsCanonicalForm}
-    \leanok
-    \uses{def:injective}
-    A family of block tensors $\{A_k\}_{k=0}^{r-1}$ with scaling
-    weights $\mu_0, \ldots, \mu_{r-1} \in \C^{\times}$ has
-    \emph{canonical-form data with ordered weights} if:
-    \begin{enumerate}
-        \item each $A_k$ is injective,
-        \item each $A_k$ is left-canonical:
-              $\sum_i (A_k^i)^{\dagger}\, A_k^i = \Id_{D_k}$,
-        \item the weights are non-increasing by norm and nonzero:
-              $|\mu_0| \ge |\mu_1| \ge \cdots \ge |\mu_{r-1}| > 0$,
-        \item the self-overlaps are normalised:
-              $O_{A_k A_k}(N) \to 1$ as $N \to \infty$.
-    \end{enumerate}
-    This records the normalized ordered data used before the final
-    block-separation argument.  Equal-modulus blocks are still allowed here,
-    as in the canonical decompositions in arXiv:1606.00608.  The strict
-    inequality needed for the leading-block peeling argument is a separate
-    hypothesis in the block-separation lemmas below, and at the BNT level it
-    is obtained only after grouping repeated representatives.
-\end{definition}
+The bundled canonical-form predicate and its same-structure block-separation
+theorem are recorded once, in Chapter~\ref{ch:block_perm}
+(Definition~\ref{def:is_canonical_form} and Lemma~\ref{lem:block_sep}). This
+chapter only records the separated-data refinements used by the algebraic
+fundamental-theorem statements below.
 
 \begin{remark}
     See Definition~\ref{def:is_normal_canonical_form} for the normal canonical-form
@@ -1412,58 +1394,6 @@ which is then combined with overlap estimates and the leading-block peel.
     The strict weight ordering isolates the leading block, the overlap bounds
     show that the tail decays geometrically after dividing by the dominant
     weight, and one then iterates on the remaining blocks.
-\end{proof}
-
-\begin{lemma}[Block separation from canonical-form data and strict weights]%
-    \label{lem:per_block_sameMPV_of_canonical_form}
-    \lean{MPSTensor.per_block_sameMPV_of_canonical_form}
-    \leanok
-    \uses{def:isCanonicalForm, def:same_mpv}
-    Let $\{A_k\}$ have canonical-form data with ordered weights
-    $\{\mu_k\}$, and assume in addition that the weight norms are strictly
-    decreasing.  Let $\{B_k\}$ be another family with each $B_k$ injective
-    and left-canonical.
-    If $\mc{V}\!(\bigoplus_k \mu_k A_k)
-        = \mc{V}\!(\bigoplus_k \mu_k B_k)$,
-    then $\mc{V}(A_k) = \mc{V}(B_k)$ for each block~$k$ individually.
-    The proof isolates the leading block and treats the remaining blocks
-    as an exponentially decaying tail with
-    $\rho = |\mu_1|/|\mu_0| < 1$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:isCanonicalForm}
-    The proof proceeds by strong induction on the number of blocks~$r$.
-    For $r = 1$, the weighted sum degenerates and the result is
-    immediate after cancelling $\mu_0^N \ne 0$.
-
-    For $r \ge 2$, the global identity
-    $\sum_k \mu_k^N\, \bigl(V^{(N)}(A_k)_\sigma
-        - V^{(N)}(B_k)_\sigma\bigr) = 0$
-    holds for all $N$ and $\sigma$.
-    \[
-        \mu_0^N (V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma)
-        =
-        - \sum_{k \ge 1} \mu_k^N
-        (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma).
-    \]
-    Dividing by $\mu_0^N$ shows that the right-hand side is
-    $O(\rho^N)$ with $\rho = |\mu_1|/|\mu_0| < 1$.
-    Multiplying by the MPV components of $A_0$ and summing over $\sigma$
-    converts this to an overlap identity.
-    Dividing by $|\mu_0|^{2N}$ and using the strict norm ordering
-    $|\mu_1| / |\mu_0| < 1$, the tail terms
-    $(k \ge 1)$ decay geometrically with ratio
-    $\rho = |\mu_1| / |\mu_0|$.
-    The leading term ($k = 0$) therefore converges:
-    $O_{A_0 B_0}(N) \to 1$ as $N \to \infty$.
-    Combined with the normalised self-overlap
-    $O_{A_0 A_0}(N) \to 1$, this gives
-    $\mc{V}(A_0) = \mc{V}(B_0)$ via the gauge-phase equivalence
-    criterion.
-    Subtracting the leading block and applying the inductive hypothesis
-    yields $\mc{V}(A_k) = \mc{V}(B_k)$ for all remaining $k$.
 \end{proof}
 
 \begin{lemma}[Block separation from separated canonical data]%
@@ -1531,33 +1461,15 @@ which is then combined with overlap estimates and the leading-block peel.
     the matrices $X_k$ from Lemma~\ref{lem:fundamentalTheorem_multiBlock_explicit}.
 \end{proof}
 
-\begin{lemma}[Gauge comparison from canonical-form data and strict weights]%
-    \label{lem:fundamentalTheorem_canonicalForm}
-    \lean{MPSTensor.fundamentalTheorem_canonicalForm}
-    \leanok
-    \uses{lem:per_block_sameMPV_of_canonical_form,
-        lem:fundamentalTheorem_multiBlock_full}
-    Under the hypotheses of
-    Lemma~\ref{lem:per_block_sameMPV_of_canonical_form},
-    every block pair $A_k, B_k$ is gauge equivalent, and the
-    block-diagonal tensors are globally gauge equivalent.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:per_block_sameMPV_of_canonical_form,
-        lem:fundamentalTheorem_multiBlock_full}
-    Lemma~\ref{lem:per_block_sameMPV_of_canonical_form} gives per-block
-    $\mc{V}(A_k) = \mc{V}(B_k)$.
-    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} converts this
-    to per-block and global gauge equivalence.
-\end{proof}
-
 \begin{lemma}[Explicit gauge from canonical-form data and strict weights]%
     \label{lem:fundamentalTheorem_canonicalForm_explicit}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_explicit}
     \leanok
-    \uses{lem:fundamentalTheorem_of_separated_canonical_data_explicit}
-    Under the same hypotheses, there exist invertible matrices
+    \uses{def:is_canonical_form,
+        lem:fundamentalTheorem_of_separated_canonical_data_explicit}
+    Under the canonical-form hypotheses of Definition~\ref{def:is_canonical_form},
+    together with strict decrease of the weight moduli and the corresponding
+    injective left-canonical comparison family, there exist invertible matrices
     $X_k \in \GL_{D_k}(\C)$ such that
     $B_k^i = X_k\, A_k^i\, X_k^{-1}$
     for every block $k$ and physical index $i$.
