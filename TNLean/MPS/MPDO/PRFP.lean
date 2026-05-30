@@ -57,14 +57,6 @@ def purifyingMPSTensor {dK D' : ℕ}
     purifyingMPSTensor A ik = A ik.divNat ik.modNat :=
   rfl
 
-/-- The LPDO condition expressed in terms of `IsLPDOWitness`. -/
-theorem isLPDO_iff_exists_witness (M : MPOTensor d D) :
-    IsLPDO M ↔
-      ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
-        (e : Fin D ≃ Fin D' × Fin D'),
-        IsLPDOWitness M A e :=
-  Iff.rfl
-
 /-- An MPO tensor has a **purification RFP** when it is an LPDO with a
 purifying family `A` whose purifying MPS tensor is a pure-state renormalization
 fixed point: `IsLPDO M` and `MPSTensor.IsRFP (purifyingMPSTensor A)`.

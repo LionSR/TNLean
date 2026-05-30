@@ -92,30 +92,6 @@ omit [DecidableRel G.Adj] in
     simp [edgeMiddleVertices])
 
 omit [DecidableRel G.Adj] in
-theorem edgeLeftVertices_disjoint_edgeMiddleVertices (e : Edge G) :
-    Disjoint (edgeLeftVertices e) (edgeMiddleVertices e) := by
-  refine Finset.disjoint_left.mpr ?_
-  intro v hvLeft hvMiddle
-  exact (mem_edgeMiddleVertices_iff e v).mp hvMiddle |>.1 <| (mem_edgeLeftVertices e v).mp hvLeft
-
-omit [DecidableRel G.Adj] in
-theorem edgeRightVertices_disjoint_edgeMiddleVertices (e : Edge G) :
-    Disjoint (edgeRightVertices e) (edgeMiddleVertices e) := by
-  refine Finset.disjoint_left.mpr ?_
-  intro v hvRight hvMiddle
-  exact (mem_edgeMiddleVertices_iff e v).mp hvMiddle |>.2 <|
-    (mem_edgeRightVertices e v).mp hvRight
-
-omit [Fintype V] [DecidableRel G.Adj] in
-theorem edgeLeftVertices_disjoint_edgeRightVertices (e : Edge G) :
-    Disjoint (edgeLeftVertices e) (edgeRightVertices e) := by
-  refine Finset.disjoint_left.mpr ?_
-  intro v hvLeft hvRight
-  have hv₁ : v = e.1.1 := (mem_edgeLeftVertices e v).mp hvLeft
-  have hv₂ : v = e.1.2 := (mem_edgeRightVertices e v).mp hvRight
-  exact edgeLeft_ne_edgeRight e <| hv₁.symm.trans hv₂
-
-omit [DecidableRel G.Adj] in
 theorem edgeVertices_union (e : Edge G) :
     edgeLeftVertices e ∪ edgeMiddleVertices e ∪ edgeRightVertices e = Finset.univ := by
   ext v
