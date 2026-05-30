@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.MPS.Core.TPGauge
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 
 /-!
 # Irreducible spectral-radius identity (Wolf Theorem 6.3(4))
@@ -28,7 +28,7 @@ for irreducible completely positive maps on `M_D(ℂ)`.
 
 The proof uses a TP-gauge reduction. Starting from a positive-definite right
  eigenvector, we build a positive-definite adjoint eigenvector, rescale and gauge
- the Kraus family to a trace-preserving one, use the existing spectral-gap bound
+ the Kraus family to a trace-preserving one, use the existing transfer-operator gap bound
  to obtain spectral radius `1` in the gauged setting, and then undo the scalar
  rescaling and similarity.
 

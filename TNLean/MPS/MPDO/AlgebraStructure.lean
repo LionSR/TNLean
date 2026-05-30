@@ -94,7 +94,7 @@ eigenvalues of `(transferMap M).adjoint`, because any such eigenvalue would
 produce a blocked adjoint fixed point at some positive `n` that is not fixed
 by the unblocked adjoint. It does *not* exclude unit-modulus eigenvalues of
 irrational phase, and a fortiori it is not enough to force `transferMap M`
-itself to be idempotent. Ergodic channels with a strict spectral gap on the
+itself to be idempotent. Ergodic channels with a strict complementary gap on the
 `1`-complement therefore satisfy `IsRFP_MPDO_via_algebra M` without being
 MPDO RFPs: on `M_D(ℂ)`, with `0 < ε < 1`, consider
 `E(X) = ε · X + (1 - ε) · Π_diag(X)`, where `Π_diag` is the projection that

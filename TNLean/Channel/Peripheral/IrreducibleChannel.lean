@@ -8,7 +8,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.KrausRepresentation
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 
 /-!
 # Channel-level formulations for peripheral spectrum and primitivity
@@ -25,7 +25,7 @@ peripheral-spectrum theory from Wolf Chapter 6.
 * `peripheral_isRootOfUnity_of_irreducible_channel`:
   peripheral eigenvalues of an irreducible channel are roots of unity
 * `compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel`:
-  primitive irreducible channels have a strict complementary spectral gap
+  primitive irreducible channels have a strict complementary transfer-map gap
 
 The proofs reduce general channels to Kraus transfer maps and then reuse the
 existing MPS blocking / periodicity-removal formalization.
@@ -181,7 +181,7 @@ theorem peripheral_isRootOfUnity_of_irreducible_channel [NeZero D]
 /-- Channel-level formulation for `compl_eigenvalue_norm_lt_one_of_primitive`.
 
 For an irreducible channel, the auxiliary hypotheses needed by the general
-spectral-gap lemma are automatic: channel eigenvalues have norm at most `1`,
+complementary-gap lemma are automatic: channel eigenvalues have norm at most `1`,
 and trace-zero fixed points vanish by irreducibility. -/
 theorem compl_eigenvalue_norm_lt_one_of_primitive_of_irreducible_channel
     [NeZero D]

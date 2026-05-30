@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.QuantitativeGap
 import TNLean.MPS.RFP.Defs
 
@@ -12,7 +12,7 @@ import TNLean.MPS.RFP.Defs
 # RG flow convergence for canonical-form MPS tensors
 
 This file proves the convergence result for the renormalization-group (RG) flow
-applied to MPS tensors in canonical form. The proof follows the spectral-gap
+applied to MPS tensors in canonical form. The proof follows the transfer-map gap
 argument from arXiv:1606.00608, Appendix B, lines 1211--1244; see also the
 transfer-matrix and RGFP discussion in arXiv:2011.12127, lines 433--442 and
 870--892.
@@ -27,7 +27,7 @@ converges to an idempotent (the RFP).
 
 * `rg_flow_converges_of_cf`: the sequence of blocked transfer maps converges
   pointwise to an idempotent for any canonical-form tensor. The proof uses the
-  exponential spectral-gap bound to squeeze the difference
+  exponential transfer-map gap bound to squeeze the difference
   `E^n X - P X` to zero, then composes with the subsequence `2^n → ∞`.
 
 ## References
@@ -59,7 +59,7 @@ transfer map.
 The convergence is entry-wise on the `D² × D²` transfer matrix space:
 `∀ ρ, (E^{2^n}) ρ → E_∞ ρ` where `E_∞ ∘ E_∞ = E_∞`.
 
-The proof uses the spectral gap: for each block `k`, injectivity implies
+The proof uses the transfer-map gap: for each block `k`, injectivity implies
 primitivity of the transfer map, giving `E^n = P + N^n` where `P` is the
 fixed-point projection (idempotent) and `N = E - P` has spectral radius `< 1`.
 The exponential bound `‖E^n X - P X‖ ≤ C(1-δ)^n ‖X‖` from

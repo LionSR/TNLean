@@ -1,6 +1,6 @@
 import TNLean.PiAlgebra.CanonicalFormSep
-import TNLean.Spectral.SpectralGapRect
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGapRect
+import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.BNT.Separation
 import TNLean.MPS.BNT.Basic

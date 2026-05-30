@@ -6,7 +6,7 @@ import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.MPS.Tactic.Basic
 
@@ -123,8 +123,8 @@ completely positive maps (Wolf Chapter 6), formalized in
 > transformation `A_i ↦ ρ^{1/2} A_i ρ^{-1/2}` that makes the
 > tensor left-canonical.
 
-The spectral-gap connection to peripheral primitivity is supplied by
-`TNLean.MPS.Overlap.PeripheralToSpectralGap` (Wolf Proposition 6.8).
+The complementary transfer-map gap connection to peripheral primitivity is supplied by
+`TNLean.MPS.Overlap.PeripheralToTransferMapGap` (Wolf Proposition 6.8).
 -/
 
 namespace MPSTensor
@@ -244,8 +244,8 @@ theorem exists_blockTensor_leftCanonical_isPrimitive
     exists_blockTensor_isPrimitive (A := A) hTP hIrr
   refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
 
-/-- **Reduction theorem:** spectral-gap primitivity with a positive-definite fixed point implies
-normality. -/
+/-- **Reduction theorem:** complementary transfer-map gap primitivity with a
+positive-definite fixed point implies normality. -/
 theorem isNormal_of_isPrimitiveMPS
     [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
@@ -256,10 +256,10 @@ theorem isNormal_of_isPrimitiveMPS
 
 
 /-!
-## (5) Normality from primitive spectral-gap hypotheses
+## (5) Normality from primitive complementary-gap hypotheses
 
 For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
-`PeripheralToSpectralGap.lean` directly.
+`PeripheralToTransferMapGap.lean` directly.
 -/
 
 /-!

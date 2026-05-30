@@ -480,7 +480,7 @@ theorem sameMPV_of_charpoly_eq_all_words
 
 /-- Block separation for all blocks: a direct consequence of the core lemma.
 Under canonical form hypotheses, the summed identity implies per-block SameMPV.
-Requires injectivity of all blocks (used in the core lemma for the spectral gap
+Requires injectivity of all blocks (used in the core lemma for the transfer-operator gap
 argument). -/
 lemma block_separation_all_words
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

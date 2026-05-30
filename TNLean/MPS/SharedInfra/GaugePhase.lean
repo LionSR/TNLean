@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Spectral.MPVOverlapDecay
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Topology.TendstoHelpers
 
 import Mathlib.Data.Real.Sqrt

@@ -133,16 +133,16 @@ import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.Channel.Semigroup.RelaxationConditions
 
--- Layer 2c: Spectral theory (QPF + spectral gap)
+-- Layer 2c: Spectral theory (QPF + transfer-operator gaps)
 import TNLean.QPF.PosDef
 import TNLean.QPF.Uniqueness
 import TNLean.QPF.Assembly
 import TNLean.QPF.Primitive
 import TNLean.Spectral.MixedTransfer
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapDecay
-import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.CrossCorrelation
 import TNLean.Spectral.QuantitativeGap
@@ -211,7 +211,7 @@ import TNLean.MPS.BNT.Separation
 import TNLean.MPS.BNT.PermutationRigidityPrimitive
 import TNLean.MPS.BNT.Construction
 import TNLean.MPS.Structure.PrimitivityBridge
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.FundamentalTheorem.SectorDecomposition

@@ -148,7 +148,7 @@ PARTIALLY FORMALIZED in `TNLean.Channel.Peripheral.CyclicDecomposition`.
 * `IsPrimitive` — `TNLean.Channel.Peripheral.Spectrum`
 * `isPrimitive_of_compl_eigenvalues_lt_one` / `compl_eigenvalue_norm_lt_one_of_primitive`
 
-Other items: PARTIALLY via spectral gap formalization in `TNLean.Spectral.*`.
+Other items: PARTIALLY via transfer-operator gap formalization in `TNLean.Spectral.*`.
 
 ### Wolf Theorem 6.8 (CP primitive maps, Kraus span characterizations)
 

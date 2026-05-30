@@ -437,7 +437,7 @@ a block embedding of a mixed-transfer eigenvector.
     Chapter~\ref{ch:canonical}).
 \end{remark}
 
-\begin{theorem}[Strict transfer-operator gap]\label{thm:spectral_gap}
+\begin{theorem}[Strict transfer-operator gap]\label{thm:transfer_operator_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
     \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
@@ -481,7 +481,7 @@ a block embedding of a mixed-transfer eigenvector.
     Applying the same argument to $X^\dagger$ gives $D_1 \le D_2$.
 \end{proof}
 
-\begin{theorem}[Rectangular transfer-operator gap]\label{thm:spectral_gap_rect}
+\begin{theorem}[Rectangular transfer-operator gap]\label{thm:transfer_operator_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
     \leanok
     \uses{def:mixed_transfer_rect, def:injective}
@@ -516,9 +516,9 @@ a block embedding of a mixed-transfer eigenvector.
     normalized, then $O_{AB}(N) \to 0$ as $N \to \infty$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:spectral_gap_rect, thm:overlap_trace_rect}
+\begin{proof}\leanok\uses{thm:transfer_operator_gap_rect, thm:overlap_trace_rect}
     The transfer-operator gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
-    (Theorem~\ref{thm:spectral_gap_rect}) implies
+    (Theorem~\ref{thm:transfer_operator_gap_rect}) implies
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
     trace converges to~$0$.
     By Theorem~\ref{thm:overlap_trace_rect},
@@ -538,9 +538,9 @@ a block embedding of a mixed-transfer eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_gap}
+    \uses{thm:transfer_operator_gap}
     The transfer-operator gap $\rho(F_{AB}) < 1$
-    (Theorem~\ref{thm:spectral_gap})
+    (Theorem~\ref{thm:transfer_operator_gap})
     implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$
     by the Gelfand formula,
     so $F_{AB}^n(X) \to 0$ for every~$X$.
@@ -648,7 +648,7 @@ the Perron--Frobenius fixed point.
 \end{proof}
 
 \begin{theorem}[Strict transfer-operator gap (irreducible-TP)]%
-    \label{thm:spectral_gap_irr_tp}
+    \label{thm:transfer_operator_gap_irr_tp}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
     \uses{def:gauge_phase_equiv, def:irreducible_tensor,
@@ -673,11 +673,11 @@ the Perron--Frobenius fixed point.
     \uses{def:mixed_transfer, def:gauge_phase_equiv,
         def:irreducible_tensor}
     Under the hypotheses of
-    Theorem~\ref{thm:spectral_gap_irr_tp},
+    Theorem~\ref{thm:transfer_operator_gap_irr_tp},
     $F_{AB}^n(X) \to 0$ for every $X \in \MN{D}$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:spectral_gap_irr_tp}
+\begin{proof}\leanok\uses{thm:transfer_operator_gap_irr_tp}
     By the Gelfand formula,
     $\rho(F_{AB}) < 1$ implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$.
 \end{proof}
@@ -693,15 +693,15 @@ the Perron--Frobenius fixed point.
     Then $O_{AB}(N) \to 0$ as $N \to \infty$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:spectral_gap_irr_tp, thm:overlap_trace}
+\begin{proof}\leanok\uses{thm:transfer_operator_gap_irr_tp, thm:overlap_trace}
     Combine the transfer-operator gap
-    (Theorem~\ref{thm:spectral_gap_irr_tp})
+    (Theorem~\ref{thm:transfer_operator_gap_irr_tp})
     with the overlap--trace identity
     (Theorem~\ref{thm:overlap_trace}).
 \end{proof}
 
 \begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
-    \label{thm:spectral_gap_rect_irr_tp}
+    \label{thm:transfer_operator_gap_rect_irr_tp}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP}
     \leanok
     \uses{def:mixed_transfer_rect, def:irreducible_tensor}
@@ -733,10 +733,10 @@ the Perron--Frobenius fixed point.
     $O_{AB}(N) \to 0$ as $N \to \infty$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:spectral_gap_rect_irr_tp,
+\begin{proof}\leanok\uses{thm:transfer_operator_gap_rect_irr_tp,
         thm:overlap_trace_rect}
     Combine
-    Theorem~\ref{thm:spectral_gap_rect_irr_tp} with
+    Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} with
     Theorem~\ref{thm:overlap_trace_rect}.
 \end{proof}
 

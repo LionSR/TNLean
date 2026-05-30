@@ -5,15 +5,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.PiAlgebra.FundamentalTheoremComplete
 import TNLean.Algebra.MatrixAux
-import TNLean.Spectral.SpectralGap
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGap
+import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.QPF.Assembly
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.Irreducible.FormII
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Channel.Peripheral.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
@@ -160,8 +160,8 @@ structure HasOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
 /-- Strict weight ordering together with nonvanishing coefficients.
 
 This is the strengthened weight-ordering condition used in the block-separation
-proofs: `StrictAnti` on moduli guarantees a spectral gap between the dominant
-block and all others, which drives the geometric convergence. At the BNT level,
+proofs: `StrictAnti` on moduli guarantees a gap between the dominant block
+and all others, which drives the geometric convergence. At the BNT level,
 the grouping step ensures this holds. -/
 structure HasStrictOrderedNonzeroWeights {r : ℕ} (μ : Fin r → ℂ) : Prop where
   /-- Strict ordering of the block weights by modulus. -/
@@ -534,7 +534,7 @@ lemma leftCanonical_mpvOverlap_self_bound
       _ = (D : ℝ) * ∑ σ : Fin N → Fin d, (Matrix.trace ((M σ)ᴴ * M σ)).re := by
             simp [Finset.mul_sum]
       _ = (D : ℝ) * (Matrix.trace (∑ σ : Fin N → Fin d, (M σ)ᴴ * M σ)).re := by
-            -- Move `re` and `trace` outside the finite sum (as in `SpectralGap.sum_frobSq_words`).
+            -- Move `re` and `trace` outside the finite sum (as in `sum_frobSq_words`).
             congr 1
             rw [← Complex.re_sum, ← Matrix.trace_sum]
       _ = (D : ℝ) * (Matrix.trace (1 : Matrix (Fin D) (Fin D) ℂ)).re := by

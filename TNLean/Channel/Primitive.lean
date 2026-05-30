@@ -17,8 +17,9 @@ We formalize the **rank-one projection** onto a fixed point and the algebraic de
   E^n = P + (E-P)^n \qquad (n \ge 1)
 \]
 where `P` is the fixed-point projection. This decomposition is the algebraic core
-of Wolf Theorem 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensures
-`(E - P)^n → 0`, so `E^n → P`, giving convergence to the unique fixed state.
+of Wolf Theorem 6.7 item 3 → item 1: a complementary transfer-map gap for
+`E - P` ensures `(E - P)^n → 0`, so `E^n → P`, giving convergence to the
+unique fixed state.
 
 ## Main definitions
 
@@ -32,7 +33,7 @@ of Wolf Theorem 6.7 item 3 → item 1: the spectral gap `‖E - P‖ < 1` ensure
 
 ## Notation
 
-Within `section SpectralGapDecomposition`, we use local notation:
+Within `section ComplementaryDecomposition`, we use local notation:
 * `P` for `fixedPointProj ρ htr`
 * `N` for `E - P` (the complementary part)
 
@@ -104,7 +105,7 @@ theorem fixedPointProj_comp_E (hTP : IsTracePreservingMap E) :
 
 end TracePreservingInteraction
 
-section SpectralGapDecomposition
+section ComplementaryDecomposition
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 variable {ρ : Matrix (Fin D) (Fin D) ℂ} (htr : trace ρ ≠ 0)
@@ -141,7 +142,8 @@ theorem compl_pow_succ_mul_fixedPointProj (hρ : E ρ = ρ) (n : ℕ) :
 /-- For `P := fixedPointProj ρ` and `N := E - P`, we have `E^(n+1) = P + N^(n+1)`.
 
 This is the algebraic core of primitive convergence: the dynamics splits into the fixed-point
-part `P` and a complementary part `N` that decays under a spectral gap hypothesis. -/
+part `P` and a complementary part `N` that decays under a complementary transfer-map
+gap hypothesis. -/
 theorem pow_succ_eq_fixedPointProj_add_compl_pow
     (hTP : IsTracePreservingMap E) (hρ : E ρ = ρ) (n : ℕ) :
     E ^ (n + 1) = P + N ^ (n + 1) := by
@@ -167,4 +169,4 @@ theorem pow_eq_fixedPointProj_add_compl_pow
       simpa using
         pow_succ_eq_fixedPointProj_add_compl_pow (E := E) (ρ := ρ) (htr := htr) hTP hρ n
 
-end SpectralGapDecomposition
+end ComplementaryDecomposition

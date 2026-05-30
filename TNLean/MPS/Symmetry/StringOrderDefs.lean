@@ -6,7 +6,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Core.Transfer
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausRepresentation
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Analysis.Matrix.Order
 
 /-!

@@ -16,7 +16,7 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 
 /-!
-# Spectral gap for the mixed transfer operator
+# Transfer-operator gap for the mixed transfer operator
 
 The key analytic ingredient: if a linear operator on a finite-dimensional
 space has spectral radius strictly less than 1, then its iterates converge
@@ -27,7 +27,8 @@ to zero. This is the mechanism by which the mixed transfer operator
 
 * `eigenvalue_norm_le_one`: every eigenvalue of `F_{AB}` has modulus ≤ 1
 * `spectralRadius_mixedTransfer_le_one`: `ρ(F_{AB}) ≤ 1` for normalized tensors
-* `spectralRadius_mixedTransfer_lt_one`: strict spectral gap for non-equivalent blocks
+* `spectralRadius_mixedTransfer_lt_one`: strict transfer-operator gap for
+  non-equivalent blocks
 * `mixedTransfer_pow_tendsto_zero`: `F_{AB}^n → 0` for distinct blocks
 
 ## References
@@ -35,7 +36,7 @@ to zero. This is the mechanism by which the mixed transfer operator
 * CPGSV21: Cirac, Pérez-García, Schuch, Verstraete,
   *Matrix Product States and Projected Entangled Pair States*,
   Rev. Mod. Phys. 93 (2021), arXiv:2011.12127.
-  Sec. 2.3 (correlations and transfer matrix), Sec. 4 (spectral gap and
+  Sec. 2.3 (correlations and transfer matrix), Sec. 4 (transfer-operator gap and
   mixed transfer operator `F_{jk}`).
 * [Wolf2012Quantum] Wolf, *Quantum Channels & Operations: Guided Tour*,
   Proposition 6.1, Theorem 6.6, Section 6.2.
@@ -466,7 +467,7 @@ theorem modulus_one_eigenvalue_implies_gauge
   -- Step 3: Apply the core algebraic lemma
   exact eigenvector_gives_gauge A B X μ hA hB hA_norm hB_norm hFX hμ_eq hX_ne
 
-/-- **Spectral gap for distinct blocks**: `ρ(F_{AB}) < 1` when `A ≇ B`. -/
+/-- **Transfer-operator gap for distinct blocks**: `ρ(F_{AB}) < 1` when `A ≇ B`. -/
 theorem spectralRadius_mixedTransfer_lt_one
     (A B : MPSTensor d D)
     (hA : IsInjective A) (hB : IsInjective B)
@@ -527,14 +528,14 @@ end SpectralConvergence
 
 end MPSTensor
 
-/-! ## Uniform spectral gap from finite eigenvalue set -/
+/-! ## Uniform eigenvalue gap from a finite eigenvalue set -/
 
-/-- **Uniform spectral gap from finitely many eigenvalues with modulus < 1.**
+/-- **Uniform eigenvalue gap from finitely many eigenvalues with modulus < 1.**
 
 If an endomorphism has finitely many eigenvalues, and every eigenvalue `μ ≠ 1` satisfies
 `‖μ‖ < 1`, then there exists a uniform gap `δ > 0` such that `‖μ‖ ≤ 1 - δ` for all
 non-unit eigenvalues. This is a general finite-dimensional argument via `Finset.max'`. -/
-theorem uniform_spectral_gap_of_finite_lt_one
+theorem uniform_eigenvalue_gap_of_finite_lt_one
     {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
     {E : V →ₗ[K] V}
     (hfin : Set.Finite {μ : K | Module.End.HasEigenvalue E μ})
@@ -562,3 +563,13 @@ theorem uniform_spectral_gap_of_finite_lt_one
     linarith [Finset.le_max' norms ‖μ‖ hμ_norm_mem]
   · -- Empty: no non-1 eigenvalues, δ = 1 works vacuously
     exact ⟨1, one_pos, fun μ hμ hne => absurd ⟨μ, hμ, hne⟩ hS⟩
+
+/-- Deprecated name for `uniform_eigenvalue_gap_of_finite_lt_one`. -/
+@[deprecated uniform_eigenvalue_gap_of_finite_lt_one (since := "2026-05-30")]
+theorem uniform_spectral_gap_of_finite_lt_one
+    {K V : Type*} [NormedField K] [AddCommGroup V] [Module K V]
+    {E : V →ₗ[K] V}
+    (hfin : Set.Finite {μ : K | Module.End.HasEigenvalue E μ})
+    (hlt : ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ < 1) :
+    ∃ δ > 0, ∀ μ, Module.End.HasEigenvalue E μ → μ ≠ 1 → ‖μ‖ ≤ 1 - δ :=
+  uniform_eigenvalue_gap_of_finite_lt_one hfin hlt

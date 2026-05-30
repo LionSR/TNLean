@@ -31,8 +31,8 @@ the eigenvalues on the unit circle.
 * `isRootOfUnity_of_finite_powers` — pigeonhole for roots of unity
 * `peripheral_isRootOfUnity_of_pow_eigenvalue` — powers-are-eigenvalues ⟹ root of unity
 * `isPrimitive_iff_period_one` — primitive ↔ period = 1
-* `isPrimitive_of_compl_eigenvalues_lt_one` — spectral gap → primitive
-* `compl_eigenvalue_norm_lt_one_of_primitive` — primitive → spectral gap
+* `isPrimitive_of_compl_eigenvalues_lt_one` — complementary transfer-map gap → primitive
+* `compl_eigenvalue_norm_lt_one_of_primitive` — primitive → complementary transfer-map gap
 
 ## References
 
@@ -237,12 +237,12 @@ theorem isPrimitive_iff_period_one
 
 end ChannelPeriod
 
-/-! ## Part 5: Spectral gap ↔ primitivity -/
+/-! ## Part 5: Complementary transfer-map gap ↔ primitivity -/
 
-section SpectralGap
+section ComplementaryTransferMapGap
 
-/-- **Spectral gap → primitive**: if all eigenvalues of `E - P` have norm < 1,
-then 1 is the only peripheral eigenvalue of E.
+/-- **Complementary transfer-map gap → primitive**: if all eigenvalues of `E - P`
+have norm < 1, then 1 is the only peripheral eigenvalue of E.
 
 Key idea: for `μ ≠ 1`, trace preservation forces eigenvectors to have trace 0,
 so they lie in ker(P), making μ an eigenvalue of `E - P`. -/
@@ -282,8 +282,9 @@ theorem isPrimitive_of_compl_eigenvalues_lt_one
   have := hcompl μ (hasEigenvalue_of_eigenvector_eq _ μ X hNX hX_ne)
   linarith [hμ_norm.symm ▸ this]
 
-/-- **Primitive → spectral gap (eigenvalue level)**: if E is primitive, TP, and
-all eigenvalues of E have norm ≤ 1, then eigenvalues of `E - P` have norm < 1. -/
+/-- **Primitive → complementary transfer-map gap (eigenvalue level)**: if E is
+primitive, TP, and all eigenvalues of E have norm ≤ 1, then eigenvalues of
+`E - P` have norm < 1. -/
 theorem compl_eigenvalue_norm_lt_one_of_primitive
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (_hfix : E ρ = ρ) (_hne : ρ ≠ 0)
@@ -335,14 +336,14 @@ theorem compl_eigenvalue_norm_lt_one_of_primitive
       exact this
     exact (mul_eq_zero.mp h1).resolve_right htrX
 
-end SpectralGap
+end ComplementaryTransferMapGap
 
 /-! ## Part 6: Connection to MPS primitivity
 
 The peripheral spectrum framework connects to MPS theory via:
 
 1. Transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` is trace-preserving when `∑ᵢ Aᵢ† Aᵢ = I`.
-2. By `Spectral/SpectralGap.lean`, eigenvalues satisfy `‖μ‖ ≤ 1`.
+2. By `Spectral/TransferOperatorGap.lean`, eigenvalues satisfy `‖μ‖ ≤ 1`.
 3. `IsPrimitiveMPS` requires `spectralRadius(E - P) < 1`, which by
    `compl_eigenvalue_norm_lt_one_of_primitive` is equivalent to `IsPrimitive E`.
 4. For irreducible CPTP maps, multiplicative domain theory

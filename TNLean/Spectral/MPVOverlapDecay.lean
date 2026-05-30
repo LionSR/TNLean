@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Spectral.MPVOverlapTrace
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 
 import Mathlib.Topology.Algebra.Star
 import Mathlib.Analysis.Matrix.Normed
@@ -21,7 +21,7 @@ open Matrix Filter
 This file proves a literature-standard decay statement for the *MPV overlap*
 `mpvOverlap A B N` in the **square bond dimension** case
 (cf. PerezGarcia2007 Lemma 5; Wolf Theorem 6.6 for the underlying
-spectral-gap theory).
+transfer-operator gap theory).
 
 If `A` and `B` are injective, satisfy the trace-preserving normalization
 `∑ i, (A i)ᴴ * A i = 1` and `∑ i, (B i)ᴴ * B i = 1`, and are **not** gauge-phase
@@ -33,7 +33,8 @@ equivalent, then the MPV overlaps decay to `0` as `N → ∞`.
    operator trace of `((mixedTransferMap A B)^N)`.
 2. Expand `LinearMap.trace` as a finite double sum over matrix units
    `Matrix.single p q 1` using `linearMap_trace_eq_sum_apply_single`.
-3. For each fixed `(p,q)`, apply the spectral-gap lemma `mixedTransfer_pow_tendsto_zero`
+3. For each fixed `(p,q)`, apply the transfer-operator gap lemma
+   `mixedTransfer_pow_tendsto_zero`
    to get `((mixedTransferMap A B)^N) (Matrix.single p q 1) → 0`.
 4. Extract the `(p,q)` entry using the continuous linear functional
    `Matrix.entryLinearMap ℂ ℂ p q`.
@@ -69,7 +70,7 @@ theorem mpvOverlap_tendsto_zero
   have hterm : ∀ p q : Fin D,
       Filter.Tendsto (fun N => term p q N) Filter.atTop (nhds 0) := by
     intro p q
-    -- Matrix-level convergence from the spectral gap.
+    -- Matrix-level convergence from the transfer-operator gap.
     have hmat :
         Filter.Tendsto
           (fun N => ((mixedTransferMap A B) ^ N) (Matrix.single p q (1 : ℂ)))

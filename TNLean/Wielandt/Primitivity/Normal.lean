@@ -15,7 +15,7 @@ Wielandt development and recalls the normality side of the chain from
 `WielandtBound.lean`.
 
 It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
-from spectral-gap primitivity to normality with an additional positive-definite
+from complementary transfer-map gap primitivity to normality with an additional positive-definite
 fixed point hypothesis is assembled in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`.
 
@@ -74,7 +74,7 @@ theorem transferMap_pow_apply_eq_sum (A : MPSTensor d D) (n : ℕ)
 
 /-- **Every word length has a nonzero word product under primitivity.**
 
-Given `IsPrimitiveMPS A ρ` (transfer map has a spectral gap with PSD
+Given `IsPrimitiveMPS A ρ` (transfer map has a complementary gap with PSD
 fixed point `ρ`), for every `n : ℕ` there exists a word `σ : Fin n → Fin d`
 such that `evalWord A (List.ofFn σ) ≠ 0`.
 
@@ -158,7 +158,7 @@ in this file. The currently formalized route in
 `IsPrimitiveMPS A ρ` under the additional hypothesis that `ρ` is positive
 definite.
 
-What remains here is the gap from bare spectral-gap primitivity to eventual
+What remains here is the gap from bare complementary transfer-map gap primitivity to eventual
 full matrix spanning. Conceptually this should follow from irreducibility plus a
 Burnside- or peripheral-spectrum argument, but that formalization is kept out
 of this lightweight statement file.
