@@ -273,9 +273,9 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \label{rem:ft_after_blocking_structural}
     Applying Theorem~\ref{thm:tp_primitive_blockdecomp} to each of two
     same-MPV tensors $A$ and $B$ produces, after a positive blocking length,
-    a zero-tail tensor plus a left-canonical primitive nonzero block
-    decomposition for each side. This is a preliminary step in the chain
-    leading to
+    a left-canonical primitive nonzero block decomposition for each side,
+    together with the separate zero-block bond-dimension count. This is a
+    preliminary step in the chain leading to
     Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem},
     where the two sides are matched.
 \end{remark}
@@ -311,38 +311,6 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     unchanged by the reblocking convention.
 \end{proof}
 
-\begin{theorem}[Zero-tail weighted block decomposition after blocking]%
-    \label{thm:zero_tail_to_tensor_from_blocks_block_power}
-    \lean{MPSTensor.zeroTail_toTensorFromBlocks_blockPower}
-    \leanok
-    \uses{thm:zero_tail_decomp_block_tensor, thm:block_tensor_to_tensor_from_blocks,
-        def:block_diagonal_tensor}
-    Suppose that, for every length $N$ and every configuration $\sigma$,
-    \[
-        V^{(N)}(A)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z})_\sigma
-        +
-        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma.
-    \]
-    For every $p>0$, the blocked tensor satisfies, for every blocked
-    configuration $\tau$ of length $N$,
-    \[
-        V^{(N)}\!(A^{[p]})_\tau
-        =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z})_\tau
-        +
-        V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^r
-        \mu_k^{\,p} B_k^{[p]}\bigr)_\tau.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply Theorem~\ref{thm:zero_tail_decomp_block_tensor} to the assembled
-    weighted nonzero tensor and rewrite the blocked assembled tensor using
-    Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
-\end{proof}
-
 \begin{lemma}[One-sided zero-tail cancellation at positive length]%
     \label{thm:same_mpv2_pos_of_zero_tail_eq}
     \lean{MPSTensor.sameMPV₂Pos_of_zeroTail_eq}
@@ -371,6 +339,31 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \]
     Substituting this identity in the displayed zero-tail decomposition gives the
     positive-length equality.
+\end{proof}
+
+\begin{lemma}[Length-zero zero-tail bond-dimension identity]%
+    \label{thm:zero_tail_bond_dim_eq_of_mpv_decomp}
+    \lean{MPSTensor.zeroTail_bondDim_eq_of_mpv_decomp}
+    \leanok
+    \uses{def:zero_mps_tensor}
+    Suppose a tensor $A$ of bond dimension $D$ is written, for every length
+    $N$ and configuration $\sigma$, as
+    \[
+        V^{(N)}(A)_\sigma
+        =
+        V^{(N)}(\mathbf{0}_{d,z})_\sigma
+        +
+        V^{(N)}(L)_\sigma,
+    \]
+    where $L$ has bond dimension $D_L$. Then
+    \[
+        z + D_L = D.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    Evaluate the identity at the empty word. The MPV coefficient at length zero
+    is the trace of the identity on the corresponding bond space.
 \end{proof}
 
 \begin{theorem}[Positive-length equality of nonzero block tensors]%
@@ -637,15 +630,19 @@ blocking.
     \label{thm:tp_primitive_blockdecomp}
     \lean{MPSTensor.exists_tp_primitive_blockDecomp_after_blocking}
     \leanok
-    \uses{def:blocked_tensor, def:zero_mps_tensor}
+    \uses{def:blocked_tensor, def:same_mpv2_pos}
     For any MPS tensor $A$, there exist $p\ge 1$, a zero-tail bond dimension
     $D_0$, nonzero weights $(\mu_k)_{k=1}^r$, and blocks $(B_k)_{k=1}^r$ such
-    that, for every blocked configuration $\sigma$ of length $N$,
+    that, for every blocked configuration $\sigma$ of positive length $N$,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
-        = V^{(N)}\!(\mathbf{0}_{d^{[p]},D_0})_\sigma
-        + V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^{r}
+        = V^{(N)}\!\bigl(\textstyle\bigoplus_{k=1}^{r}
         \mu_k B_k\bigr)_\sigma.
+    \]
+    The zero-block contribution is recorded separately by the length-zero
+    identity
+    \[
+        D_0 + \sum_{k=1}^{r} D_k = D.
     \]
     Each block is left-canonical and primitive,
     \[
@@ -658,14 +655,18 @@ blocking.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
-        lem:block_weights_ne_zero, thm:zero_tail_to_tensor_from_blocks_block_power}
+        lem:block_weights_ne_zero, thm:same_mpv2_pos_of_zero_tail_eq,
+        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
+        thm:zero_tail_bond_dim_eq_of_mpv_decomp}
     Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the trivial block
     and left-canonical nontrivial blocks.
     Apply Theorem~\ref{thm:common_blocking_period} to find a common
     blocking period $p$ making all transfer maps primitive. Lemma~\ref{lem:block_weights_ne_zero}
-    keeps the blocked weights nonzero, and
-    Theorem~\ref{thm:zero_tail_to_tensor_from_blocks_block_power} transports the
-    zero-tail/nonzero MPV identity through the blocking step.
+    keeps the blocked weights nonzero. Theorem~\ref{thm:same_mpv2_pos_of_zero_tail_eq}
+    removes the all-zero summand at positive length, and
+    Theorem~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} transports the
+    resulting positive-length equality through the blocking step. The
+    length-zero identity is Theorem~\ref{thm:zero_tail_bond_dim_eq_of_mpv_decomp}.
 \end{proof}
 
 \begin{theorem}[Two tensors after one-sided primitive reductions]%

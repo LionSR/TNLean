@@ -51,41 +51,6 @@ theorem zeroTail_mpv_decomp_blockTensor
   congr 1
   exact (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) nonzeroPart p σ).symm
 
-/-- Reblocking a zero-tail plus weighted nonzero-block decomposition transports every
-nonzero-block weight to the corresponding blocking power. -/
-theorem zeroTail_toTensorFromBlocks_blockPower
-    {d D r z p : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D)
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hp : 0 < p)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μ k) ^ p)
-            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
-  intro N σ
-  have hBlock :=
-    zeroTail_mpv_decomp_blockTensor
-      (d := d) (D := D) (L := ∑ k : Fin r, dim k) (z := z) (p := p)
-      A (toTensorFromBlocks (d := d) (μ := μ) blocks) hp hMPV N σ
-  have hNonzeroPart := sameMPV₂_blockTensor_toTensorFromBlocks
-    (d := d) (dim := dim) μ blocks p
-  calc
-    mpv (blockTensor (d := d) (D := D) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
-            (toTensorFromBlocks (d := d) (μ := μ) blocks) p) σ := hBlock
-    _ = mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (fun k => (μ k) ^ p)
-            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
-          rw [hNonzeroPart N σ]
-
 /-- At positive lengths, a zero-tail decomposition reduces to the nonzero part. -/
 theorem sameMPV₂Pos_of_zeroTail_eq
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
@@ -100,6 +65,22 @@ theorem sameMPV₂Pos_of_zeroTail_eq
     mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ := hZeroTail N σ
     _ = mpv live σ := by
       rw [hZero, zero_add]
+
+/-- The length-zero coefficient of a zero-tail decomposition is the bond-dimension identity. -/
+theorem zeroTail_bondDim_eq_of_mpv_decomp
+    {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
+    (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
+    z + L = D := by
+  classical
+  let σ0 : Fin 0 → Fin d := Fin.elim0
+  have hCoeff : (D : ℂ) = (z + L : ℕ) := by
+    calc
+      (D : ℂ) = mpv A σ0 := (mpv_zero_length A σ0).symm
+      _ = mpv (zeroMPSTensor d z) σ0 + mpv live σ0 := hZeroTail 0 σ0
+      _ = (z : ℂ) + (L : ℂ) := by simp
+      _ = (z + L : ℕ) := by simp
+  exact_mod_cast hCoeff.symm
 
 /-- Remove matching zero tails from two MPV identities.
 
