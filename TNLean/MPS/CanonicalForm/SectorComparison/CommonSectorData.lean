@@ -10,7 +10,7 @@ open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
 
 /-!
-# Common-sector data for the after-blocking reduction
+# Common-sector witnesses for the after-blocking reduction
 
 This file collects the common-sector continuation of the structural
 canonical-form reduction following arXiv:1606.00608. Starting from the
@@ -21,8 +21,8 @@ to compare the resulting sector families.
 
 ## Main statements
 
-* `afterBlocking_perBlockCyclicData_of_sameMPV₂` — per-block cyclic-sector
-  data together with the positive-length nonzero-sector identities.
+* `afterBlocking_perBlockCyclicData_of_sameMPV₂` — per-block weights, blocks,
+  cyclic-sector decompositions, and positive-length nonzero-sector identities.
 * `afterBlocking_commonLengthCommonSectorData_of_sameMPV₂` — a two-sided
   common blocking length with common-sector families.
 
@@ -108,7 +108,7 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
 
 set_option maxHeartbeats 800000 in
 -- The next theorem has a large dependent existential conclusion, matching the
--- CPSV data used by the later sector comparison.
+-- CPSV witnesses used by the later sector comparison.
 
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
@@ -251,14 +251,14 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
 ### What remains for the full 1606.00608 Fundamental Theorem
 
 The complete fundamental theorem should take two tensors `A, B` with `SameMPV₂ A B`
-and pass from the blocked reduction data to the CPSV basis-of-normal-tensors
+and pass from the blocked reduction witnesses to the CPSV basis-of-normal-tensors
 sector comparison. The one-sided phase-class BNT construction is available as
 `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks`; the remaining overlap/span
-data are supplied at the two-sided comparison layer.
+hypotheses are supplied at the two-sided comparison layer.
 The sector matching extraction is available from primitive overlap-rigidity
 hypotheses through `SectorBasisOverlapSpanHypotheses.exists_sectorBasisMatching`.
 
-The comparison data match the CPSV boundary: blocked-word relabeling,
+The comparison hypotheses match the CPSV boundary: blocked-word relabeling,
 finite-length nonzero-block span comparison, and BNT sector
 matching.
 

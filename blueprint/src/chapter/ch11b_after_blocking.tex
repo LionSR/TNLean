@@ -343,6 +343,36 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     Theorem~\ref{thm:block_tensor_to_tensor_from_blocks}.
 \end{proof}
 
+\begin{lemma}[One-sided zero-tail cancellation at positive length]%
+    \label{thm:same_mpv2_pos_of_zero_tail_eq}
+    \lean{MPSTensor.sameMPV₂Pos_of_zeroTail_eq}
+    \leanok
+    \uses{def:same_mpv2_pos, def:zero_mps_tensor}
+    Suppose a tensor $A$ is written as an all-zero leftover block plus a
+    nonzero part $A_{\mathrm{nz}}$:
+    \[
+        V^{(N)}(A)_\sigma
+        =
+        V^{(N)}(\mathbf{0}_{d,z})_\sigma
+        +
+        V^{(N)}(A_{\mathrm{nz}})_\sigma.
+    \]
+    Then for every $N\ge 1$ and every configuration $\sigma$,
+    \[
+        V^{(N)}(A)_\sigma = V^{(N)}(A_{\mathrm{nz}})_\sigma.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:zero_mps_tensor}
+    For $N\ge 1$, one has
+    \[
+        V^{(N)}(\mathbf{0}_{d,z})_\sigma = 0.
+    \]
+    Substituting this identity in the displayed zero-tail decomposition gives the
+    positive-length equality.
+\end{proof}
+
 \begin{theorem}[Positive-length equality of nonzero block tensors]%
     \label{thm:nonzero_block_zero_tail_identity}
     \lean{MPSTensor.nonzeroBlock_sameMPV₂Pos_of_sameMPV₂}
@@ -405,7 +435,7 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
     \leanok
     \uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
-        def:primitive_irreducible_cyclic_sectors,
+        thm:same_mpv2_pos_of_zero_tail_eq, def:primitive_irreducible_cyclic_sectors,
         thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
     If two tensors $A$ and $B$ generate the same MPV family, then after the
     zero-block split and the trace-preserving gauge there are weighted
@@ -437,13 +467,22 @@ a single tensor $\mathbf{0}_{d,D_0}$.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
+        thm:same_mpv2_pos_of_zero_tail_eq,
         thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
     Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
-    zero-block summands vanish at positive length, so each tensor agrees with its
-    nonzero part there, and the positive-length equality theorem compares the two
-    nonzero parts. Finally apply
-    Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
-    trace-preserving irreducible nonzero-weight block.
+    one-sided zero-tail cancellation theorem gives, for every $N\ge 1$,
+    \[
+        V^{(N)}(A)_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_j \mu^A_j A_j)_\sigma,
+        \qquad
+        V^{(N)}(B)_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
+    \]
+    The positive-length equality theorem compares the two nonzero parts. Finally
+    apply Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to
+    every trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
 \begin{theorem}[Common blocking length for cyclic sectors]%
@@ -488,11 +527,19 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         thm:common_blocked_cyclic_sector_derived_properties}
     Start from the per-block cyclic-sector theorem. Let $p_A$ and $p_B$ be the
     least common multiples of the period-removal lengths on the two sides, and
-    use $p=\operatorname{lcm}(p_A,p_B)$. The prescribed-common-multiple theorem constructs both
-    one-sided sector families at this same length. The positive-length blocking
-    lemmas transport the one-sided tensor/nonzero-part equalities and the
-    two-sided nonzero-part equality to the common blocked alphabet; the sector
-    conclusions are the common-alphabet MPV equalities.
+    use $p=\operatorname{lcm}(p_A,p_B)$. The prescribed-common-multiple theorem
+    constructs both one-sided sector families at this same length. The
+    positive-length blocking lemmas transport the one-sided tensor/nonzero-part
+    equalities to the common blocked alphabet; for instance, for every $N\ge 1$,
+    \[
+        V^{(N)}\!(A^{[p]})_\sigma
+        =
+        V^{(N)}\!\bigl(\textstyle\bigoplus_j
+        (\mu^A_j)^p (A_j)^{[p]}\bigr)_\sigma.
+    \]
+    The same argument applies on the $B$ side, and the two-sided positive-length
+    blocking lemma gives the equality of the two powered nonzero parts. The
+    sector conclusions are the common-alphabet MPV equalities.
 \end{proof}
 
 \begin{theorem}[Length-zero identity under compatible blocking]%
