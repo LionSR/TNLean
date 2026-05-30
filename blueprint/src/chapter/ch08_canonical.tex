@@ -60,9 +60,13 @@ obtained from primitive blocks).
         \sum_i (A_k^i)^\dagger \Lambda_k A_k^i = \Lambda_k,
     \]
     where $\Lambda_k$ is diagonal, positive, and full-rank. Each block has
-    positive bond dimension. Moreover $\Id$ is the only fixed point of
-    $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$, and the total bond dimension
-    of the decomposition is at most $D$.
+    positive bond dimension. Moreover the only fixed points of
+    $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$ are the scalar multiples of
+    $\Id$: for every $X$,
+    \[
+        \E_{A_k}(X)=X \;\Longrightarrow\; \exists\,c\in\C,\; X = c\,\Id.
+    \]
+    The total bond dimension of the decomposition is at most $D$.
 
     This is the positive-length form of
     \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}, with the global
@@ -76,7 +80,7 @@ obtained from primitive blocks).
     gauge; derive the invariant support projection from a singular positive fixed
     point by the positivity contradiction; split the finite-ring trace into the
     supported and orthogonal summands; iterate, using a non-scalar fixed point to
-    split further until the identity is the only fixed point of each block; and
+    split further until each block has only scalar fixed points; and
     finally repeat the fixed-point argument for the dual map and diagonalize the
     resulting full-rank positive fixed point by a unitary gauge. Later
     primitive-block results are used only after their hypotheses have been
@@ -1015,13 +1019,13 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
     one-copy-per-sector subcase.
 \end{theorem}
 
-\begin{definition}[Granular sector decomposition]
+\begin{definition}[Single-copy sector decomposition]
     \label{def:trivial_sector_decomp}
     \lean{MPSTensor.trivialSectorDecomp}
     \leanok
     \uses{def:sector_weight_data}
     Given nonzero weights $(\mu_k)_{k=1}^r$ and blocks $(B_k)_{k=1}^r$, the
-    \emph{granular sector decomposition} has $r$ sectors, one basis block
+    \emph{single-copy sector decomposition} has $r$ sectors, one basis block
     $B_k$ per sector, multiplicity~$1$ in each sector, and sector weight
     $\mu_k$ on the $k$th sector. Equivalently, as a finite sum,
     \[
@@ -1030,12 +1034,12 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
     \]
 \end{definition}
 
-\begin{lemma}[Granular sector decomposition preserves the represented family]
+\begin{lemma}[Single-copy sector decomposition preserves the represented family]
     \label{lem:trivial_sector_decomp_same_mpv}
     \lean{MPSTensor.sameMPV₂_trivialSectorDecomp}
     \leanok
     \uses{def:trivial_sector_decomp}
-    The granular sector decomposition associated to $(\mu_k,B_k)_k$ represents
+    The single-copy sector decomposition associated to $(\mu_k,B_k)_k$ represents
     the same MPS family as the original weighted block sum
     $\bigoplus_k \mu_k B_k$.
 \end{lemma}
@@ -1047,14 +1051,14 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
     block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-\begin{theorem}[Trivial sector decomposition for the sorted distinct-modulus case]
+\begin{theorem}[Single-copy sector decomposition for the sorted distinct-modulus case]
     \label{thm:bnt_trivial_sector}
+    \notready
     \uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
     If $\mu_k \neq 0$ for all $k$ and $|\mu_1| > \cdots > |\mu_r|$, then the
-    granular sector decomposition associated to $(\mu,B)$ satisfies
-    $V^{(N)}(P) = V^{(N)}(\bigoplus_k \mu_k B_k)$ for every
-    $N \ge 1$ and has exactly one copy per sector. This is the distinct-modulus,
-    one-copy-per-sector subcase.
+    single-copy sector decomposition associated to $(\mu,B)$ represents the same
+    family as $\bigoplus_k \mu_k B_k$ for every $N \ge 1$ and has exactly one
+    copy per sector. This is the distinct-modulus, one-copy-per-sector subcase.
 \end{theorem}
 
 To remove the artificial distinct-modulus assumption, group blocks by common

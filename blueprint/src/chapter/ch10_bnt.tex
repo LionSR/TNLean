@@ -397,7 +397,7 @@ and~\cite{Cirac2021Matrix}.
 
 \begin{remark}[How the power-sum equality is used]
     The equal-MPV corollary in the source compares scalar power sums only after
-    the BNT representatives have already been matched. If the matched basis
+    the BNT representatives have already been matched. If the paired basis
     tensors satisfy $B_j=e^{i\phi_j}Y_jA_jY_j^{-1}$, then for every positive
     length $N$ the coefficient $\sum_q \mu_{j,q}^N$ of
     $\ket{V^{(N)}(A_j)}$ in the BNT expansion of $A$ equals the coefficient
@@ -502,7 +502,7 @@ and~\cite{Cirac2021Matrix}.
 \label{sec:sector_bnt_api}
 
 This section introduces the BNT canonical-form predicate following
-\cite[\S II, lines~287--301]{Cirac2017MPDO_AnnPhys} and
+\cite[\S II, lines~287--301]{Cirac2016MPDO_arXiv} and
 \cite[Definition~4.2, Proposition~4.3, and lines~1864--1884]{Cirac2021Matrix}.
 The predicate is
 defined on a sector decomposition with raw sector weights $\mu_{j,q}$ and
@@ -519,14 +519,14 @@ factorization is assumed.
     \uses{def:sector_weight_data}
     Given a sector decomposition $P$, the BNT canonical-form predicate
     records the minimal BNT hypotheses of
-    \cite{Cirac2017MPDO_AnnPhys,Cirac2021Matrix} without any equal-modulus
+    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} without any equal-modulus
     or strict-ordering condition on the raw sector weights. It asserts that
     each basis block has positive bond dimension, is injective, irreducible,
     and left-canonical; the normalized self-overlap of every basis block
     converges to $1$; the basis MPV family is eventually linearly
     independent; distinct same-dimension basis blocks are not gauge-phase
     equivalent after identifying equal bond dimensions; and the
-    \cite[\S II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization holds,
+    \cite[\S II.C, line~246]{Cirac2016MPDO_arXiv} normalization holds,
     \[
         \forall (j,q),\ |\mu_{j,q}| \le 1,
         \qquad
@@ -539,7 +539,7 @@ factorization is assumed.
         \sum_{j=1}^{g} \left(\sum_{q=1}^{r_j} \mu_{j,q}^N\right)
         V^{(N)}(P_j)_\sigma,
     \]
-    matching \cite[\S~II.C, lines~271--301]{Cirac2017MPDO_AnnPhys}
+    matching \cite[\S~II.C, lines~271--301]{Cirac2016MPDO_arXiv}
     and \cite[Definition~4.2, Proposition~4.3, and lines~1864--1884]
     {Cirac2021Matrix}.
     The line-246 normalization admits every example of the source paper
@@ -560,7 +560,7 @@ factorization is assumed.
     \]
     This is
     \cite[two-layer BNT and coefficient-expansion displays,
-        lines~287--301]{Cirac2017MPDO_AnnPhys} and
+        lines~287--301]{Cirac2016MPDO_arXiv} and
     \cite[lines~1864--1884]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -574,7 +574,7 @@ factorization is assumed.
     \leanok
     \uses{lem:sector_bnt_coeff_eq_sum_weight_pow}
     Under the optional global modulus normalization
-    \cite[\S II, lines~217--246]{Cirac2017MPDO_AnnPhys}, every raw weight satisfies
+    \cite[\S II, lines~217--246]{Cirac2016MPDO_arXiv}, every raw weight satisfies
     $|\mu_{j,q}| \le 1$, and the triangle inequality bounds
     the norm of the sector coefficient by the multiplicity:
     \[
@@ -597,10 +597,10 @@ factorization is assumed.
     $O_{P_j P_k}(N) \to 0$ as $N \to \infty$, where $P_j$ and $P_k$ are the
     basis blocks at indices $j$ and $k$. The argument follows the
     normal-tensor overlap dichotomy of
-    \cite[lines~1080--1091]{Cirac2017MPDO_AnnPhys}: differing bond dimensions
+    \cite[lines~1080--1091]{Cirac2016MPDO_arXiv}: differing bond dimensions
     force decay, and matching bond dimensions are ruled out by the
     gauge-phase distinctness clause of
-    \cite[lines~264--279]{Cirac2017MPDO_AnnPhys}.
+    \cite[lines~264--279]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -626,7 +626,7 @@ factorization is assumed.
         \bigl\{\ket{V^{(N)}(Q_k)}\bigr\}_{k=1}^{g_Q}
     \]
     is linearly independent for all sufficiently large $N$. This is the
-    corollary at \cite[lines~1121--1132]{Cirac2017MPDO_AnnPhys}, matching
+    corollary at \cite[lines~1121--1132]{Cirac2016MPDO_arXiv}, matching
     the BNT linear-independence input recorded at
     \cite[line~1850]{Cirac2021Matrix}.
 \end{lemma}
@@ -645,7 +645,7 @@ factorization is assumed.
     \leanok
     \uses{def:sector_bnt_cf, lem:sector_bnt_norm_coeff_le_copies}
     Under the BNT canonical form, the
-    \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization yields
+    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} normalization yields
     directly
     \[
         \bigl| c_N^{(j)} \bigr| \le r_j
@@ -665,7 +665,7 @@ factorization is assumed.
     \leanok
     \uses{def:sector_bnt_cf}
     Under the BNT canonical form, the
-    \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} unit-modulus existential
+    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} unit-modulus existential
     provides indices $(j_*, q_*)$ with
     $|\mu_{j_*, q_*}| = 1$.
 \end{lemma}
@@ -686,7 +686,7 @@ factorization is assumed.
     $|1| \le 1$ and $|1/2| = 1/2 \le 1$, and the
     unit-modulus existential is witnessed by the first copy with
     weight $1$. This is the
-    \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} normalization in
+    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} normalization in
     positive form, applied to the $C \oplus (1/2)C$ example.
 \end{example}
 
@@ -697,7 +697,7 @@ This section formalizes the analytic input that supplies, for any
 sector $j_0$ carrying a unit-modulus weight, the
 ``sector-$j_0$ coefficient does not asymptotically vanish''
 ingredient used in the matching step of
-\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}.
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}.
 The reduction is to a pure-analytic statement: a finite sum of $N$-th
 powers of complex numbers in the closed unit disk, with at least one
 unit-modulus summand, cannot tend to zero.
@@ -723,8 +723,8 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
     sequence $N \mapsto \sum_{q=0}^{r-1} (\mu_q)^N$ does not tend to $0$
     as $N \to \infty$. This is the analytic content of the unit-block
     non-decay step at
-    \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} and
-    \cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}.
+    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} and
+    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -742,10 +742,10 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
     sector-$j_0$ coefficient $c_N^{(j_0)} = \sum_q \mu_{j_0, q}^N$ does not
     tend to $0$ as $N \to \infty$.
 
-    This reads the \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys}
+    This reads the \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv}
     normalization sector by sector, together with the convergence use at
     \cite[Appendix ``Proofs of Section MPS'', line~1244]
-    {Cirac2017MPDO_AnnPhys}. The unit-modulus witness is supplied
+    {Cirac2016MPDO_arXiv}. The unit-modulus witness is supplied
     externally (as the hypothesis above) because the source statement is
     global (``at least one of them equals one'' over the two-layer index
     $(j, q)$) and does not pin the witness to a specific sector.
@@ -760,11 +760,11 @@ $c(N) \to 0 \Rightarrow |c(N)|^2 \to 0 \Rightarrow M_T \to 0$.
 
 \begin{remark}
     Used inside the matching theorem of
-    \cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys} this lemma
+    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv} this lemma
     supplies the non-decay step on $c_N^{(j_0)}$. The matching theorem takes
     the unit-modulus sector and witness as explicit parameters, mirroring
     the global character of the source normalization at
-    \cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys}.
+    \cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv}.
 \end{remark}
 
 \subsection{Matched-sector weight multiset equality}
@@ -780,13 +780,13 @@ recovery (Theorem~\ref{thm:power_sum_multiset}), and the
 \emph{matched-sector weight-permutation extractor} upgrading the multiset
 equality to an explicit per-copy indexing. Together they realise the
 $\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ recovery of
-\cite[Appendix MPV proof, lines~1184--1188]{Cirac2017MPDO_AnnPhys}. At the source level,
+\cite[Appendix MPV proof, lines~1184--1188]{Cirac2016MPDO_arXiv}. At the source level,
 the preceding block-selection argument supplies the matched normal sectors
-\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}; the sector-coefficient identity
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}; the sector-coefficient identity
 used here is the equal-MPV coefficient comparison of
-\cite[Appendix MPV proof, lines~1184--1188]{Cirac2017MPDO_AnnPhys}, followed by the
-global-gauge assembly in
-\cite[Appendix MPV proof, lines~1189--1192]{Cirac2017MPDO_AnnPhys}. The coefficient identity
+\cite[Appendix MPV proof, lines~1184--1188]{Cirac2016MPDO_arXiv}, followed by the
+global-gauge construction in
+\cite[Appendix MPV proof, lines~1189--1192]{Cirac2016MPDO_arXiv}. The coefficient identity
 is supplied, in the equal-MPV case, by
 Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase} below. In
 the proportional case it is kept as the remaining hypothesis of
@@ -806,7 +806,7 @@ Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
     \]
     Then the per-sector multiplicities agree, $r_{j_0}(P) = r_{\tilde k_0}(Q)$,
     and the rescaled per-copy weight multisets coincide.
-    This is \cite[Appendix MPV proof, lines~1184--1188]{Cirac2017MPDO_AnnPhys}
+    This is \cite[Appendix MPV proof, lines~1184--1188]{Cirac2016MPDO_arXiv}
     ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$ and matching
     multiplicities $r_{a,j} = r_{b,j}$) read on a single matched sector.
 \end{lemma}
@@ -841,7 +841,7 @@ Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}.
         \nu_{\tilde k_0, \tau(q)} = \zeta^{-1} \cdot \mu_{j_0, q}.
     \]
     This is the per-copy realisation of
-    \cite[Appendix MPV proof, line~1188]{Cirac2017MPDO_AnnPhys}
+    \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}
     ($\mu_{j,q} = \nu_{j,q} \cdot e^{i\varphi_j}$): the multiset equality
     from Lemma~\ref{lem:sector_bnt_matched_sector_weight_multiset_eq} is
     upgraded to a concrete indexing between the matched $P$- and
@@ -871,7 +871,7 @@ unit-modulus copy weight.
 
 The per-sector unit-weight hypothesis is the formal version used in the
 current full-basis theorem:
-\cite[\S~II.C, line~246]{Cirac2017MPDO_AnnPhys} records the
+\cite[\S~II.C, line~246]{Cirac2016MPDO_arXiv} records the
 modulus-one hypothesis as a single \emph{global} existential over the
 two-layer $(j, q)$ index of the BNT display, whereas the statement below
 assumes the corresponding witness in each sector. This is why the result is
@@ -905,7 +905,7 @@ basis, assuming the same per-sector unit-weight condition on both sides.
     \uses{lem:sector_bnt_combined_family_eventually_li,
         lem:sector_bnt_coeff_not_tendsto_zero_at_unit_block}
     The contrapositive of
-    \cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}, combined with
+    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}, combined with
     linear independence on the full family
     $\{P_j\}_j \cup \{Q_k\}_k$, is iterated externally over each sector
     $k$. Each iteration is discharged by the full-basis weak existential
@@ -927,7 +927,7 @@ basis, assuming the same per-sector unit-weight condition on both sides.
     (Lemma~\ref{lem:sector_bnt_combined_family_eventually_li}) on the
     \emph{full} family $\{P_j\}_j \sqcup \{Q_k\}_k$, the corollary
     input of \cite[Appendix MPV corollary, lines~1131--1133]
-    {Cirac2017MPDO_AnnPhys}, not
+    {Cirac2016MPDO_arXiv}, not
     on any partial union.
 \end{remark}
 
@@ -935,7 +935,7 @@ basis, assuming the same per-sector unit-weight condition on both sides.
 \label{subsec:sector_bnt_strong_match_bijective_symmetry}
 
 This subsection derives the symmetry argument of
-\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}:
+\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}:
 $g_a \ge g_b$ and $g_b \ge g_a$ together imply $g_a = g_b$.
 
 The strong existential matching theorem
@@ -946,13 +946,13 @@ $P$ and $Q$ swapped, using the corresponding per-sector hypothesis on $P$ and
 the symmetric flip of the same-MPV hypothesis, gives the other
 direction. The two matchings, combined with the basis-distinctness clause of
 the canonical-form predicate
-\cite[\S~II.C, lines~264--279]{Cirac2017MPDO_AnnPhys}, force injectivity
+\cite[\S~II.C, lines~264--279]{Cirac2016MPDO_arXiv}, force injectivity
 in both directions.
 
 \paragraph{Scope.}
 The literal source conclusion ``$g_a = g_b$ and a relabelling
 $B_k = e^{i\phi_k} X_k A_{j_k} X_k^{-1}$''
-(\cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys}) is formalized
+(\cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv}) is formalized
 below under the explicit per-sector unit-weight hypotheses
 \[
     \forall j\in J(P),\ \exists q,\ |\mu_{j,q}|=1,
@@ -1001,7 +1001,7 @@ separately in the following subsection.
     dimension equality
     $\dim_Q(k_1) = \dim_Q(k_2)$. The basis-distinctness clause of the
     canonical-form predicate on $Q$
-    (\cite[\S~II.C, lines~264--279]{Cirac2017MPDO_AnnPhys}) then forces
+    (\cite[\S~II.C, lines~264--279]{Cirac2016MPDO_arXiv}) then forces
     $k_1 = k_2$. Backward injectivity is symmetric.
 
     \emph{Bijection.} The two injections give equality of the two finite
@@ -1015,7 +1015,7 @@ separately in the following subsection.
 
 The matching theorem above gives the sector phases and gauges. The remaining
 coefficient comparison is the step at
-\cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys}. In the
+\cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}. In the
 equal-MPV setting, the full BNT basis and eventual linear independence give the
 comparison directly. In the proportional setting below, the same comparison
 is recorded as the explicit hypothesis needed before the copy weights can be
@@ -1069,8 +1069,8 @@ matching covers the whole BNT basis.
     \]
     This records the per-block phase conclusion of
     \cite[Appendix MPV theorem statement, lines~1167--1170]
-    {Cirac2017MPDO_AnnPhys}; the proof step at
-    \cite[Appendix MPV proof, line~1182]{Cirac2017MPDO_AnnPhys} is the
+    {Cirac2016MPDO_arXiv}; the proof step at
+    \cite[Appendix MPV proof, line~1182]{Cirac2016MPDO_arXiv} is the
     corresponding argument. The following coefficient-comparison step is
     separate.
     % Scope restriction documented in
@@ -1118,7 +1118,7 @@ matching covers the whole BNT basis.
         \zeta_k^N\,c_N^{(k)}(Q).
     \]
     This is the coefficient-comparison step of
-    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys} in full-basis
+    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv} in full-basis
     form.
 \end{lemma}
 
@@ -1164,7 +1164,7 @@ matching covers the whole BNT basis.
         c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q).
     \]
     This is the full-basis equal-MPV coefficient comparison of
-    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2017MPDO_AnnPhys}.
+    \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1192,7 +1192,7 @@ matching covers the whole BNT basis.
         \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
     \]
     This is the copy-level conclusion supplied by the equal-MPV coefficient comparison in
-    \cite[Appendix MPV proof, line~1188]{Cirac2017MPDO_AnnPhys}. For the
+    \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}. For the
     proportional theorem it remains the separate coefficient-comparison input.
 \end{definition}
 
@@ -1215,7 +1215,7 @@ matching covers the whole BNT basis.
         \nu_{k,q}=\zeta_k^{-1}\,\mu_{\beta(k),\tau_k(q)}.
     \]
     This is, sector by sector, the content of the coefficient comparison in
-    \cite[Appendix MPV proof, line~1188]{Cirac2017MPDO_AnnPhys}.
+    \cite[Appendix MPV proof, line~1188]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1260,8 +1260,8 @@ matching covers the whole BNT basis.
         \qquad
         X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
     \]
-    This is the direct-sum gauge assembly of
-    \cite[Appendix MPV proof, lines~1189--1192]{Cirac2017MPDO_AnnPhys}, separated from
+    This is the direct-sum gauge construction of
+    \cite[Appendix MPV proof, lines~1189--1192]{Cirac2016MPDO_arXiv}, separated from
     the coefficient-comparison step that supplies the weight identities.
 \end{theorem}
 
@@ -1468,7 +1468,7 @@ matching covers the whole BNT basis.
     \]
     for every physical index $i$. This is the explicit direct-sum gauge
     construction of
-    \cite[Appendix MPV proof, lines~1189--1192]{Cirac2017MPDO_AnnPhys}.
+    \cite[Appendix MPV proof, lines~1189--1192]{Cirac2016MPDO_arXiv}.
     % Scope restriction documented in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
 \end{theorem}
@@ -1509,7 +1509,7 @@ matching covers the whole BNT basis.
     matrices in $\MN{D}$ using the total bond-dimension equality. This is the
     normalized BNT form of
     \cite[Corollary~II.2 and Appendix MPV proof, lines~1189--1192]
-    {Cirac2017MPDO_AnnPhys}, under the same unit-modulus-copy normalization
+    {Cirac2016MPDO_arXiv}, under the same unit-modulus-copy normalization
     as Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     % Scope restriction documented in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
