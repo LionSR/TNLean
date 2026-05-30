@@ -867,24 +867,13 @@ large enough for the edge-blocking proof, and the specific \(R\), \(S\), and
 that the displayed regions are unions of smaller injective rectangles is left
 to the tensor-level region-injectivity theorem.
 
-**Scope restriction (R/S/T injectivity):** The injectivity assertions for
-\(R\), \(S\), and \(T\) are assumed directly, whereas arXiv:1804.04964,
-Section 3, derives them from the \(2\times 3\) and \(3\times 2\) rectangular
-injectivity assumptions using the union-of-injective-regions lemma. The
-coordinate regions \(R\), \(S\), and \(T\) are now recorded separately, and
-\(R\) and \(S\) have conditional injectivity lemmas assuming union closure, but
-the local-window \(T\) region still has no source-faithful injectivity
-derivation. In particular, the complementary region used as the third block in
-Theorem 3 is a finite-lattice complement around an edge, and this abstract
-structure still assumes its three region fields directly. The translated
-horizontal and vertical edge pictures and their conditional per-edge
-margin-and-cover construction are formalized separately, but this structure is
-not yet derived from that coordinate layer. Documented in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Remaining mathematical
-obligations 1--5. Elimination: derive these assertions from rectangular
-injectivity after the tensor-level union theorem and the finite-lattice
-complement construction are formalized, then construct the translated edge
-blockings for every edge.
+**Scope restriction (R/S/T injectivity):** This structure assumes injectivity
+of \(R\), \(S\), and \(T\) directly, whereas arXiv:1804.04964, Section 3
+derives those assertions from rectangular injectivity and the
+union-of-injective-regions argument. The authoritative source comparison and
+elimination plan are
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section
+"Remaining mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, Theorem 3 and its proof, lines
 1407--1504 of `Papers/1804.04964/paper_normal.tex`. -/
