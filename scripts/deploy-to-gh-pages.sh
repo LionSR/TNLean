@@ -71,7 +71,12 @@ echo "==> Updating blueprint..."
 rm -rf "$WORK_DIR/site/blueprint"
 mkdir -p "$WORK_DIR/site/blueprint"
 cp -r "$REPO_ROOT/blueprint/web/"* "$WORK_DIR/site/blueprint/"
-cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf" 2>/dev/null || true
+if [ ! -f "$REPO_ROOT/blueprint/print/print.pdf" ]; then
+  echo "::error::Blueprint PDF not found at blueprint/print/print.pdf"
+  echo "Run 'cd blueprint && leanblueprint pdf' before deploying."
+  exit 1
+fi
+cp "$REPO_ROOT/blueprint/print/print.pdf" "$WORK_DIR/site/blueprint.pdf"
 
 # Update homepage (remove all homepage files first, then copy fresh)
 echo "==> Updating homepage..."

@@ -64,6 +64,8 @@ jobs:
           set -o pipefail
           tmp_output_file="$(mktemp)"
 
+          leanblueprint pdf
+
           set +o pipefail
           leanblueprint web 2>&1 | tee "$tmp_output_file"
           cmd_status=${PIPESTATUS[0]}
