@@ -123,7 +123,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
-        thm:spectral_gap_irr_tp, thm:spectral_gap_wielandt}
+        thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
     The hypothesis ``$|\lambda_2| < 1$'' in
     Theorem~\ref{thm:correlator_exponential_bound} is a transfer-map gap
     condition: all non-leading eigenvalues of $\E_A$ lie strictly inside the
@@ -134,9 +134,9 @@ their spectral decomposition, and quantitative bounds on decay rates.
     (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}).
     The mixed-transfer gap needed for block separation is supplied for
     irreducible trace-preserving tensors
-    (Theorem~\ref{thm:spectral_gap_irr_tp}), and quantitative single-tensor
+    (Theorem~\ref{thm:transfer_operator_gap_irr_tp}), and quantitative single-tensor
     transfer-map bounds for injective tensors are recorded in
-    Theorem~\ref{thm:spectral_gap_wielandt}.
+    Theorem~\ref{thm:transfer_map_gap_wielandt}.
     Thus the analytical input needed to make
     Theorems~\ref{thm:correlator_sum_exponentials}
     and~\ref{thm:correlator_exponential_bound} unconditional is already
@@ -236,10 +236,10 @@ and rates for the single-tensor transfer map $\E_A$.
 \end{proof}
 
 \begin{theorem}[Transfer-map gap from injectivity]%
-    \label{thm:spectral_gap_wielandt}
-    \lean{MPSTensor.spectral_gap_of_injective}
+    \label{thm:transfer_map_gap_wielandt}
+    \lean{MPSTensor.transfer_map_gap_of_injective}
     \leanok
-    \uses{thm:spectral_gap}
+    \uses{thm:transfer_operator_gap}
     For an injective trace-preserving MPS tensor, there exists
     $\delta > 0$ such that every eigenvalue $\mu \neq 1$ of the
     transfer map satisfies $|\mu| \le 1 - \delta$.

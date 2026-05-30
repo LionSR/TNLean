@@ -8,7 +8,7 @@ import TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors
 import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.Channel.Peripheral.CyclicDecomposition
 import TNLean.Channel.Peripheral.GroupStructure

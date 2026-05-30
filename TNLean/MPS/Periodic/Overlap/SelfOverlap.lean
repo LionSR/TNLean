@@ -14,7 +14,7 @@ import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.MPS.SharedInfra.BlockAssembly
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.MultiplicativeDomainFull
 

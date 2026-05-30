@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Core.Transfer
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.TraceExpansion
 import TNLean.QPF.Assembly
 
@@ -22,7 +22,7 @@ The spectral statements `connectedCorrelator_eq_sum` and
 as an explicit hypothesis; the source (arXiv:2011.12127 [CPGSV21])
 states the connected-correlation formulas in Sec. 2.3
 ("Correlations, Entanglement, and the Transfer Matrix") and derives
-the spectral-gap hypotheses in Sec. 4 ("Formal results").
+the transfer-matrix gap hypotheses in Sec. 4 ("Formal results").
 The definitions here are used by the zero-correlation-length results.
 -/
 
@@ -109,7 +109,7 @@ The source CPGSV21, Sec. 2.3, notes that `|λ₂| < 1` defines the
 correlation length `ξ = −1/log|λ₂|`.  The exponential decay bound
 follows by applying the triangle inequality to the sum-of-exponentials
 expansion and using `|λⱼ| ≤ |λ₂| < 1` for all subleading eigenvalues
-(the spectral gap proved in Sec. 4).
+(the transfer-matrix gap proved in Sec. 4).
 -/
 theorem connectedCorrelator_bound
     (A : MPSTensor d D)

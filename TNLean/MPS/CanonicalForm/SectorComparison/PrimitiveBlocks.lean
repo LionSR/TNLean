@@ -48,7 +48,8 @@ with the PSD fixed point `ρ` of the original transfer map:
 2. `ρ` is also fixed by `transferMap (blockTensor A P)` (since `transferMap (blockTensor A P) = E^P`
    and `E ρ = ρ` implies `E^P ρ = ρ`)
 3. Uniqueness of PSD fixed points of `E^P`: if `E^P σ = σ`, set `σ' = σ - c•ρ`.
-   From the spectral gap of `IsPrimitiveMPS A ρ`, `E^n → Pρ` exponentially.
+   From the complementary transfer-map gap of `IsPrimitiveMPS A ρ`,
+   `E^n → Pρ` exponentially.
    Since `E^{Pk} σ' = Pρ σ' + N^{Pk} σ' = N^{Pk} σ'` (as `Pρ σ' = 0`)
    and `N^{Pk} σ' = σ'` (from `E^P σ' = σ'`), but `N^n → 0`, we get `σ' = 0`.
 4. Apply `isIrreducibleMap_of_channel_posDef_fixedPoint_unique` →
@@ -64,9 +65,10 @@ If `A` is TP, has a primitive transfer map, and is an irreducible tensor, then
 
 The key insight: the PosDef fixed point `ρ` of the original transfer map is also
 a PosDef fixed point of the blocked transfer map `E^P`. Uniqueness of PSD fixed
-points for `E^P` follows from the spectral gap of `IsPrimitiveMPS A ρ`: if
+points for `E^P` follows from the complementary transfer-map gap of
+`IsPrimitiveMPS A ρ`: if
 `E^P σ = σ` then `N^{Pk} σ' = σ'` (where `σ' = σ - c•ρ`, `N = E - Pρ`), but
-`N^n → 0` from the spectral gap, so `σ' = 0`. -/
+`N^n → 0` from the complementary gap, so `σ' = 0`. -/
 theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)

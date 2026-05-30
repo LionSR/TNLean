@@ -38,8 +38,8 @@ There are four distinct primitivity predicates in the codebase:
   `peripheralEigenvalues E = {1}`.
 * `MPSTensor.HasPrimitiveFixedPoint A` in
   `TNLean/MPS/Structure/PrimitivityBridge.lean`: the existential statement
-  `∃ ρ, IsPrimitiveMPS A ρ`, encoding the spectral-gap formulation used in the MPS
-  proof route.
+  `∃ ρ, IsPrimitiveMPS A ρ`, encoding the complementary transfer-map gap
+  formulation used in the MPS proof route.
 * `IsPrimitivePaper A` in this file: the uniform spreading condition from
   Proposition 3(a).
 * `IsPeripherallyPrimitive A` in this file: the transfer-map formulation of
@@ -163,8 +163,8 @@ This is the transfer-map formulation of the canonical predicate
 For orientation, the codebase distinguishes four related notions:
 
 * `_root_.IsPrimitive E`: generic peripheral-spectrum primitivity for any linear map `E`;
-* `MPSTensor.HasPrimitiveFixedPoint A`: existential statement around the spectral-gap
-  predicate `IsPrimitiveMPS`;
+* `MPSTensor.HasPrimitiveFixedPoint A`: existential statement around the
+  complementary transfer-map gap predicate `IsPrimitiveMPS`;
 * `IsPrimitivePaper A`: the paper-faithful uniform spreading condition;
 * `IsPeripherallyPrimitive A`: this thin transfer-map formulation.
 
@@ -198,8 +198,8 @@ quantum Perron–Frobenius theorem) and aperiodicity giving uniqueness of the
 peripheral eigenvalue.
 
 **Relationship to `IsPrimitiveMPS` / `HasPrimitiveFixedPoint`**: this is
-strictly stronger than the spectral-gap statement because the fixed point is
-required to be positive *definite* (not merely positive semidefinite). For
+strictly stronger than the complementary transfer-map gap statement because the
+fixed point is required to be positive *definite* (not merely positive semidefinite). For
 irreducible channels, the PSD fixed point is automatically PosDef, so the two
 notions coincide in that case.
 

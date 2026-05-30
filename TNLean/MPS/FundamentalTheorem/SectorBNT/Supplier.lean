@@ -6,7 +6,7 @@ import TNLean.MPS.CanonicalForm.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 
 /-!
 # Prepared-block SectorBNT constructor
@@ -80,7 +80,7 @@ Proof sketch (scout memo §2.4):
    `mpvOverlap Y Y N = (ζ · conj ζ)^N · mpvOverlap X X N`.
 3. Both self-overlaps tend to `1` by
    `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`
-   (`Overlap/PeripheralToSpectralGap.lean`).
+   (`Overlap/PeripheralToTransferMapGap.lean`).
 4. `norm_eq_one_of_selfOverlap_scale` (`SharedInfra/GaugePhase.lean`)
    concludes `‖ζ‖ = 1`.
 -/

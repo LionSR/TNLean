@@ -1,6 +1,6 @@
 import TNLean.MPS.BNT.Basic
 import TNLean.MPS.FundamentalTheorem.Proportional
-import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Overlap.CastDecay

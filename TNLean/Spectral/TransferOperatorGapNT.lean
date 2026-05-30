@@ -2,13 +2,13 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Spectral.SpectralGapRect
+import TNLean.Spectral.TransferOperatorGapRect
 import TNLean.Spectral.GaugeConstruction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
 
 /-!
-# Spectral gap for normal tensor (irreducible + TP) blocks
+# Transfer-operator gap for normal tensor (irreducible + TP) blocks
 
 This file proves the overlap dichotomy for irreducible trace-preserving / left-canonical
 blocks without assuming injectivity. The argument combines the Cauchy--Schwarz
@@ -20,10 +20,10 @@ The key new rigidity statement is
 left-canonical tensors have mixed-transfer spectral radius at least `1`, then they are
 already gauge-phase equivalent (cf. Wolf Theorem 6.6 adapted to MPS transfer maps).
 
-The same-dimension rigidity step is now fully formalized. The downstream strict-gap and
-overlap-decay consequences for equal bond dimension are routed through the existing
-spectral-radius infrastructure, and the rectangular different-dimension analogue is
-formalized below as well.
+The same-dimension rigidity step is now fully formalized. The downstream
+transfer-operator gap and overlap-decay consequences for equal bond dimension
+are routed through the existing spectral-radius infrastructure, and the
+rectangular different-dimension analogue is formalized below as well.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators NNReal ENNReal Matrix.Norms.Operator
@@ -225,8 +225,8 @@ theorem modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
     A B X μ hA_irr hB_irr hA_left hB_left hFX hμ_eq hX_ne
 
 /--
-**Strict mixed-transfer spectral gap** for distinct irreducible left-canonical blocks of the
-same bond dimension.
+**Strict mixed-transfer-operator gap** for distinct irreducible left-canonical blocks
+of the same bond dimension.
 -/
 theorem spectralRadius_mixedTransfer_lt_one_of_irreducible_TP
     (A B : MPSTensor d D)
@@ -607,8 +607,8 @@ set_option synthInstance.maxHeartbeats 200000 in
 -- The rectangular spectral-radius extraction uses the same CLM instance search and needs
 -- the same small local heartbeat bump.
 /--
-**Rectangular strict spectral gap** for irreducible left-canonical blocks of different bond
-sizes.
+**Rectangular strict transfer-operator gap** for irreducible left-canonical blocks
+of different bond sizes.
 
 The intended proof follows the same Cauchy--Schwarz rigidity mechanism as
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`, but in the rectangular setting:

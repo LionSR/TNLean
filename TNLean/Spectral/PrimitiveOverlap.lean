@@ -3,26 +3,26 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Channel.Primitive
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapTrace
 
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.Normed.Operator.CompleteCodomain
 
 /-!
-# Primitive overlap limit (spectral-gap formulation)
+# Primitive overlap limit (complementary transfer-map gap formulation)
 
 This module derives the **primitive/aperiodic overlap normalization**
 
 `mpvOverlap A A N → 1`
 
-from a spectral-gap hypothesis on the transfer map
+from a complementary transfer-map gap hypothesis
 (cf. Wolf Theorem 6.7: a primitive TP map has trivial peripheral spectrum,
 so its powers converge to the rank-one projection onto the stationary state).
 
 More precisely, if a trace-preserving map `E` has a (nonzero) fixed point `ρ`, and the
-spectral radius of the complementary map `N := E - fixedPointProj ρ` is strictly less than `1`,
-then `LinearMap.trace (E^n) → 1`.
+spectral radius of the complementary map `N := E - fixedPointProj ρ` is strictly
+less than `1`, then `LinearMap.trace (E^n) → 1`.
 
 For MPS tensors, the identity
 
@@ -33,9 +33,9 @@ then yields `mpvOverlap A A N → 1`.
 This matches the **primitive branch** of the Fundamental Theorem proofs
 (Cirac--Pérez-García--Schuch--Verstraete, Rev. Mod. Phys. 93 (2021)).
 
-We intentionally phrase primitivity as a **spectral-gap hypothesis**. Connecting this to Wolf's
-characterizations (irreducible + aperiodic, peripheral spectrum roots of unity, etc.) is a
-separate, future module.
+We intentionally phrase primitivity as a **complementary transfer-map gap**
+hypothesis. Connecting this to Wolf's characterizations (irreducible +
+aperiodic, peripheral spectrum roots of unity, etc.) is a separate module.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
@@ -74,13 +74,13 @@ lemma tendsto_trace_pow_of_tendsto_zero
       atTop (nhds (0 : ℂ))
   simpa [traceCLM, Function.comp_apply, hzero] using h
 
-/-- **Trace convergence from a spectral gap.**
+/-- **Trace convergence from a complementary transfer-map gap.**
 
 Let `P` be the rank-one projection onto a fixed point `ρ` and `N := E - P`.
 If `spectralRadius(N) < 1`, then `trace(E^n) → 1`.
 
 This is the analytic core used to replace the current hypothesis
-`mpvOverlap A A N → 1` by a genuine primitive/spectral-gap condition.
+`mpvOverlap A A N → 1` by a genuine complementary transfer-map gap condition.
 -/
 theorem linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one
     [NeZero D]
@@ -149,10 +149,11 @@ section MPV
 
 variable {d D : ℕ} [NeZero D]
 
-/-- **Primitive overlap limit** (spectral-gap formulation).
+/-- **Primitive overlap limit** (complementary transfer-map gap formulation).
 
-If the transfer map of a normalized tensor `A` has a fixed point `ρ` and a spectral gap on the
-complement of the fixed-point projection, then the MPV self-overlap converges to `1`.
+If the transfer map of a normalized tensor `A` has a fixed point `ρ` and the
+complement of the fixed-point projection has spectral radius less than `1`,
+then the MPV self-overlap converges to `1`.
 -/
 theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     (A : MPSTensor d D)
@@ -172,7 +173,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   -- First derive `trace((transferMap A)^N) → 1`.
   have hTP : IsTracePreservingMap (transferMap (d := d) (D := D) A) := by
     intro X
-    -- same proof as `MPSTensor.trace_transferMap` in `SpectralGap.lean`
+    -- same proof as `MPSTensor.trace_transferMap` in `TransferOperatorGap.lean`
     rw [transferMap_apply, Matrix.trace_sum]
     conv_lhs => arg 2; ext i; rw [Matrix.trace_mul_cycle]
     rw [← Matrix.trace_sum, ← Finset.sum_mul, hNorm, one_mul]
