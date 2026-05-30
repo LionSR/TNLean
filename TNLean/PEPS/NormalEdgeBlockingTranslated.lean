@@ -433,8 +433,8 @@ universe edgeCoverUniverse
 edge-blocking windows.
 
 The constructors deliberately record the rectangular cover of the complementary
-region. The remaining finite-geometry step in the source proof is to provide
-such a window for every edge of the \(7\times7\) square-lattice PEPS.
+region. The source-comparison status of the every-edge window construction is
+recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 inductive NormalSquareTranslatedEdgeWindow {width height : ℕ}
@@ -734,10 +734,11 @@ def verticalSquareLatticeEdgeWindow_of_margins
 /-- Per-edge data sufficient to realize a square-lattice edge by a translated
 normal edge-blocking window.
 
-This records the remaining finite-geometry input in the current open
-rectangular coordinate model: an edge must be horizontal or vertical, have the
-corresponding named margins, and have a rectangular cover for its complementary
-block.
+This records the per-edge finite-geometry input in the current rectangular
+coordinate model: an edge must be horizontal or vertical, have the corresponding
+named margins, and have a rectangular cover for its complementary block. The
+source-comparison status of the every-edge construction is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 inductive NormalSquareEdgeMarginCover {width height : ℕ}
@@ -912,7 +913,7 @@ theorem normalSquareTranslatedEdgeBlockingHypotheses_endpoint_disjoint_cover_of_
 the normal edge-blocking hypotheses.
 
 This is the same conditional construction as
-`normalSquareTranslatedEdgeBlockingHypotheses_of_windows`, with the remaining
+`normalSquareTranslatedEdgeBlockingHypotheses_of_windows`, with the per-edge
 finite-geometry input expressed directly on each square-lattice edge.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/

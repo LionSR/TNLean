@@ -65,10 +65,9 @@ abbrev normalSquareHorizontalEdgeComplement : Finset (SquareLatticeVertex 5 7) :
 used in the proof of the normal square-lattice theorem.
 
 This definition records the set-theoretic and injectivity data for the concrete
-horizontal-edge blocking as one `NormalEdgeBlockingData` value. The remaining
-step toward
-`NormalEdgeBlockingHypotheses` is to translate this coordinate picture around
-every horizontal and vertical edge of the finite square lattice.
+horizontal-edge blocking as one `NormalEdgeBlockingData` value. The
+source-comparison status of the every-edge construction is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def normalSquareHorizontalEdge_blockingDatum
@@ -248,10 +247,9 @@ abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
 used in the proof of the normal square-lattice theorem.
 
 This definition records the set-theoretic data for the vertical-edge blocking.
-Injectivity of the complementary block is kept as an explicit hypothesis here;
-deriving it from the source rectangular hypotheses is the remaining
-finite-geometry step before this can be promoted to an every-edge
-`NormalEdgeBlockingHypotheses` construction.
+Injectivity of the complementary block is kept as an explicit hypothesis here.
+The source-comparison status of that finite-geometry input is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def normalSquareVerticalEdge_blockingDatum
@@ -394,9 +392,9 @@ def normalSquareVerticalEdge_blockingDatum_of_verticalTCover
 /-- The normalized vertical edge supplies the three injective regions used in
 the edge-blocked three-site chain.
 
-The complementary-block injectivity remains an explicit input here; discharging
-that input from the rectangular hypotheses is the remaining source-geometry
-step.
+The complementary-block injectivity remains an explicit input here; the
+source-comparison status is recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdge_injective_chain
