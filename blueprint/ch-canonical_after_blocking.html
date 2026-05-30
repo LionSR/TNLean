@@ -1940,7 +1940,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.22</a> to each of two same-MPV tensors \(A\) and \(B\) produces, after a positive blocking length, a zero-tail tensor plus a left-canonical primitive nonzero block decomposition for each side. This is a preliminary step in the chain leading to Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.19</a>, where the two sides are matched. </p>
+  <p> Applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.22</a> to each of two same-MPV tensors \(A\) and \(B\) produces, after a positive blocking length, a left-canonical primitive nonzero block decomposition for each side, together with the separate zero-block bond-dimension count. This is a preliminary step in the chain leading to Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.19</a>, where the two sides are matched. </p>
 
   </div>
 </div>
@@ -2033,102 +2033,12 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:zero_tail_to_tensor_from_blocks_block_power">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.14</span>
-    <span class="theorem_thmtitle">Zero-tail weighted block decomposition after blocking</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000787"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_decomp_block_tensor">Theorem 12.13</a></li>
-          
-          <li><a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">Lemma 9.65</a></li>
-          
-          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.39</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.zeroTail_toTensorFromBlocks_blockPower" class="lean_decl">MPSTensor.zeroTail_toTensorFromBlocks_blockPower</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Suppose that, for every length \(N\) and every configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000000788">
-  \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}\! (\textstyle \bigoplus _{k=1}^r \mu _k B_k)_\sigma .  \]
-</div>
-<p> For every \(p{\gt}0\), the blocked tensor satisfies, for every blocked configuration \(\tau \) of length \(N\), </p>
-<div class="displaymath" id="a0000000789">
-  \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! (\mathbf{0}_{d^{[p]},z})_\tau + V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^r \mu _k^{\, p} B_k^{[p]}\bigr)_\tau .  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000787">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_decomp_block_tensor">12.13</a> to the assembled weighted nonzero tensor and rewrite the blocked assembled tensor using Theorem&#160;<a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">9.65</a>. </p>
-
-  </div>
-</div>
 <div class="lemma_thmwrapper theorem-style-plain" id="thm:same_mpv2_pos_of_zero_tail_eq">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">12.15</span>
+    <span class="lemma_thmlabel">12.14</span>
     <span class="lemma_thmtitle">One-sided zero-tail cancellation at positive length</span>
     <div class="thm_header_extras">
 
@@ -2139,7 +2049,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000790"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000787"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2191,17 +2101,17 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Suppose a tensor \(A\) is written as an all-zero leftover block plus a nonzero part \(A_{\mathrm{nz}}\): </p>
-<div class="displaymath" id="a0000000791">
+<div class="displaymath" id="a0000000788">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}(A_{\mathrm{nz}})_\sigma .  \]
 </div>
 <p> Then for every \(N\ge 1\) and every configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000000792">
+<div class="displaymath" id="a0000000789">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(A_{\mathrm{nz}})_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000790">
+<div class="proof_wrapper" id="a0000000787">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2210,10 +2120,96 @@
   </div>
   <div class="proof_content">
   <p> For \(N\ge 1\), one has </p>
-<div class="displaymath" id="a0000000793">
+<div class="displaymath" id="a0000000790">
   \[  V^{(N)}(\mathbf{0}_{d,z})_\sigma = 0.  \]
 </div>
 <p> Substituting this identity in the displayed zero-tail decomposition gives the positive-length equality. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="thm:zero_tail_bond_dim_eq_of_mpv_decomp">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">12.15</span>
+    <span class="lemma_thmtitle">Length-zero zero-tail bond-dimension identity</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_bond_dim_eq_of_mpv_decomp">#</a>
+    
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000791"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-canonical_after_blocking.html#def:zero_mps_tensor">Definition 12.1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.zeroTail_bondDim_eq_of_mpv_decomp" class="lean_decl">MPSTensor.zeroTail_bondDim_eq_of_mpv_decomp</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Suppose a tensor \(A\) of bond dimension \(D\) is written, for every length \(N\) and configuration \(\sigma \), as </p>
+<div class="displaymath" id="a0000000792">
+  \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}(L)_\sigma ,  \]
+</div>
+<p> where \(L\) has bond dimension \(D_L\). Then </p>
+<div class="displaymath" id="a0000000793">
+  \[  z + D_L = D.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000791">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>Evaluate the identity at the empty word. The MPV coefficient at length zero is the trace of the identity on the corresponding bond space. </p>
 
   </div>
 </div>
@@ -2431,7 +2427,7 @@
           
           <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.16</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">Lemma 12.15</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">Lemma 12.14</a></li>
           
           <li><a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">Definition 9.75</a></li>
           
@@ -2441,7 +2437,7 @@
           
           <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.16</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">Lemma 12.15</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">Lemma 12.14</a></li>
           
           <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.70</a></li>
           
@@ -2845,7 +2841,7 @@
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#def:zero_mps_tensor">Definition 12.1</a></li>
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
           <li><a href="ch-canonical.html#thm:tp_gauge_arbitrary">Theorem 9.36</a></li>
           
@@ -2853,7 +2849,11 @@
           
           <li><a href="ch-canonical.html#lem:block_weights_ne_zero">Lemma 9.69</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 12.14</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">Lemma 12.14</a></li>
+          
+          <li><a href="ch-canonical.html#thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks">Lemma 9.67</a></li>
+          
+          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_bond_dim_eq_of_mpv_decomp">Lemma 12.15</a></li>
           
         </ul>
     
@@ -2884,12 +2884,16 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For any MPS tensor \(A\), there exist \(p\ge 1\), a zero-tail bond dimension \(D_0\), nonzero weights \((\mu _k)_{k=1}^r\), and blocks \((B_k)_{k=1}^r\) such that, for every blocked configuration \(\sigma \) of length \(N\), </p>
+  <p>   For any MPS tensor \(A\), there exist \(p\ge 1\), a zero-tail bond dimension \(D_0\), nonzero weights \((\mu _k)_{k=1}^r\), and blocks \((B_k)_{k=1}^r\) such that, for every blocked configuration \(\sigma \) of positive length \(N\), </p>
 <div class="displaymath" id="a0000000815">
-  \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! (\mathbf{0}_{d^{[p]},D_0})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^{r} \mu _k B_k\bigr)_\sigma .  \]
+  \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^{r} \mu _k B_k\bigr)_\sigma .  \]
+</div>
+<p> The zero-block contribution is recorded separately by the length-zero identity </p>
+<div class="displaymath" id="a0000000816">
+  \[  D_0 + \sum _{k=1}^{r} D_k = D.  \]
 </div>
 <p> Each block is left-canonical and primitive, </p>
-<div class="displaymath" id="a0000000816">
+<div class="displaymath" id="a0000000817">
   \[  \sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}, \qquad \sigma _\partial (\mathcal{E}_{B_k})=\{ 1\} ,  \]
 </div>
 <p> and each bond dimension is positive. </p>
@@ -2904,7 +2908,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.36</a> to get the trivial block and left-canonical nontrivial blocks. Apply Theorem&#160;<a href="ch-canonical.html#thm:common_blocking_period">9.37</a> to find a common blocking period \(p\) making all transfer maps primitive. Lemma&#160;<a href="ch-canonical.html#lem:block_weights_ne_zero">9.69</a> keeps the blocked weights nonzero, and Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">12.14</a> transports the zero-tail/nonzero MPV identity through the blocking step. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.36</a> to get the trivial block and left-canonical nontrivial blocks. Apply Theorem&#160;<a href="ch-canonical.html#thm:common_blocking_period">9.37</a> to find a common blocking period \(p\) making all transfer maps primitive. Lemma&#160;<a href="ch-canonical.html#lem:block_weights_ne_zero">9.69</a> keeps the blocked weights nonzero. Lemma&#160;<a href="ch-canonical_after_blocking.html#thm:same_mpv2_pos_of_zero_tail_eq">12.14</a> removes the all-zero summand at positive length, and Lemma&#160;<a href="ch-canonical.html#thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks">9.67</a> transports the resulting positive-length equality through the blocking step. The length-zero identity is Lemma&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_bond_dim_eq_of_mpv_decomp">12.15</a>. </p>
 
   </div>
 </div>
@@ -2924,7 +2928,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:after_blocking_tp_primitive_blockdecompositions_same_mpv2">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000817"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000818"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2985,7 +2989,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000817">
+<div class="proof_wrapper" id="a0000000818">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
