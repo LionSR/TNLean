@@ -57,11 +57,13 @@ runs:
           chktex
           dvisvgm
           graphviz
+          latexmk
           libgraphviz-dev
           texlive-extra-utils
           texlive-fonts-recommended
           texlive-latex-extra
           texlive-pictures
+          texlive-xetex
         )
 
         if [ -n "$EXTRA_PACKAGES" ]; then
