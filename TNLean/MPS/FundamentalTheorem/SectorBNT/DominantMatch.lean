@@ -149,17 +149,6 @@ theorem exists_nondecaying_overlap_pair_of_sameMPVPos
   exists_nondecaying_overlap_pair_of_eventuallyProportional
     (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
 
-theorem exists_nondecaying_overlap_pair_of_sameMPV
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hQ_pos : 0 < Q.basisCount)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ j : Fin P.basisCount, ∃ k : Fin Q.basisCount,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
-          atTop (𝓝 0) :=
-  exists_nondecaying_overlap_pair_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ hQ_pos hEqual.toSameMPV₂Pos
-
 /-! ### Lemma 3: block matching at a user-supplied index `j₀`
 
 The main result of Phase 4b-ii: under `SameMPV₂` plus a unit-modulus

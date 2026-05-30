@@ -285,12 +285,4 @@ theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D]
     GaugeEquiv A B :=
   fundamentalTheorem_singleBlock hA (sameMPV_of_sameMPVFrom_of_injective hA hFrom)
 
-/-- For injective tensors, finite-length MPV agreement (from any threshold) is
-equivalent to gauge equivalence. -/
-theorem sameMPVFrom_iff_gaugeEquiv_of_injective [NeZero D]
-    {A B : MPSTensor d D} (hA : IsInjective A) {N₀ : ℕ} :
-    SameMPVFrom N₀ A B ↔ GaugeEquiv A B :=
-  ⟨fundamentalTheorem_singleBlock_finiteLength hA,
-   fun hGE => (GaugeEquiv.sameMPV hGE).sameMPVFrom _⟩
-
 end MPSTensor

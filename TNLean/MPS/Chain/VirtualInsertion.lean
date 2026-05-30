@@ -41,28 +41,6 @@ theorem physRealizeLeft_spec (A : MPSTensor d D) (hA : IsInjective A)
     X * A i = ∑ j, (physRealizeLeft A hA X) i j • A j :=
   (decompositionMap_sum (A := A) hA (X * A i)).symm
 
-/-- `physRealize` is linear in the inserted matrix. -/
-theorem physRealize_linear (A : MPSTensor d D) (hA : IsInjective A) :
-    ∀ (c : ℂ) (X Y : Matrix (Fin D) (Fin D) ℂ),
-      physRealize A hA (c • X + Y) = c • physRealize A hA X + physRealize A hA Y := by
-  intro c X Y
-  ext i j
-  simp [physRealize, mul_add]
-
-/-- Identity insertion does nothing. -/
-theorem physRealize_one (A : MPSTensor d D) (hA : IsInjective A)
-    (hLin : LinearIndependent ℂ A) :
-    physRealize A hA 1 = 1 := by
-  ext i j
-  let c : Fin d → ℂ := fun k => physRealize A hA 1 i k
-  have hc : Fintype.linearCombination ℂ A c = A i := by
-    simpa [c, Fintype.linearCombination_apply] using (physRealize_spec A hA 1 i).symm
-  have hsingle : Fintype.linearCombination ℂ A (Pi.single i (1 : ℂ)) = A i := by
-    simp [Fintype.linearCombination_apply_single]
-  have hc' : c = Pi.single i (1 : ℂ) :=
-    hLin.fintypeLinearCombination_injective (hc.trans hsingle.symm)
-  simpa [c, Matrix.one_apply, Pi.single_apply, eq_comm] using congrArg (fun f => f j) hc'
-
 /-- `physRealize` preserves multiplication. -/
 theorem physRealize_mul (A : MPSTensor d D) (hA : IsInjective A)
     (X Y : Matrix (Fin D) (Fin D) ℂ) :
@@ -93,24 +71,6 @@ theorem physRealize_mul (A : MPSTensor d D) (hA : IsInjective A)
           simp [physRealize]
     _ = (physRealize A hA X * physRealize A hA Y) i k := by
           simp [Matrix.mul_apply]
-
-/-- Nonzero insertion gives nonzero physical operation. -/
-theorem physRealize_injective (A : MPSTensor d D) (hA : IsInjective A)
-    (X : Matrix (Fin D) (Fin D) ℂ) (hX : X ≠ 0) :
-    physRealize A hA X ≠ 0 := by
-  intro hZero
-  have hAll : ∀ i : Fin d, A i * X = 0 := by
-    intro i
-    rw [physRealize_spec A hA X i, hZero]
-    simp
-  obtain ⟨c, hc⟩ := hA.exists_decomposition (1 : Matrix (Fin D) (Fin D) ℂ)
-  have hX0 : X = 0 := by
-    calc
-      X = (1 : Matrix (Fin D) (Fin D) ℂ) * X := by simp
-      _ = (∑ i, c i • A i) * X := by simp [hc]
-      _ = ∑ i, c i • (A i * X) := by simp [Finset.sum_mul]
-      _ = 0 := by simp [hAll]
-  exact hX hX0
 
 /-- Three-site coefficient with a virtual insertion `X` between the first and
 second local tensors. -/
