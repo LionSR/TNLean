@@ -1011,7 +1011,7 @@
 <h1 id="ch:canonical_after_blocking">12 Canonical-form reductions after blocking</h1>
 
 <h1 id="a0000000078">12.1 Scope</h1>
-<p>This chapter records the structural after-blocking decomposition of a single tensor (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.29</a>) and the joint two-tensor decomposition at a common blocking period (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.21</a>). These two statements supply the canonical-form input to the proof of the Fundamental Theorem in Chapter&#160;<a href="ch-ft_proof.html">13</a>. </p>
+<p>This chapter records the structural after-blocking decomposition of a single tensor (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.24</a>) and the joint two-tensor decomposition at a common blocking period (Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.19</a>). These two statements supply the canonical-form input to the proof of the Fundamental Theorem in Chapter&#160;<a href="ch-ft_proof.html">13</a>. </p>
 <h1 id="sec:zero_block_separation">12.2 Zero-tail separation</h1>
 
 <p>In an irreducible block decomposition, some blocks may have all-zero Kraus operators. Such blocks contribute only at length \(N=0\), where the contribution equals their bond dimension. The statements below isolate this contribution as a single tensor \(\mathbf{0}_{d,D_0}\). </p>
@@ -1940,7 +1940,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.29</a> to each of two same-MPV tensors \(A\) and \(B\) produces, after a positive blocking length, a zero-tail tensor plus a left-canonical primitive nonzero block decomposition for each side. This is a preliminary step in the chain leading to Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.21</a>, where the two sides are matched. </p>
+  <p> Applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.24</a> to each of two same-MPV tensors \(A\) and \(B\) produces, after a positive blocking length, a zero-tail tensor plus a left-canonical primitive nonzero block decomposition for each side. This is a preliminary step in the chain leading to Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.19</a>, where the two sides are matched. </p>
 
   </div>
 </div>
@@ -2123,13 +2123,13 @@
 
   </div>
 </div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:zero_tail_identity_to_tensor_from_blocks_block_power">
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:nonzero_block_zero_tail_identity">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">12.15</span>
-    <span class="theorem_thmtitle">Length-zero identity after blocking weighted blocks</span>
+    <span class="theorem_thmtitle">Positive-length equality of nonzero block tensors</span>
     <div class="thm_header_extras">
 
     
@@ -2137,7 +2137,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_identity_to_tensor_from_blocks_block_power">#</a>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">#</a>
     
     <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000790"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -2155,93 +2155,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">Lemma 9.65</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.zeroTail_identity_toTensorFromBlocks_blockPower" class="lean_decl">MPSTensor.zeroTail_identity_toTensorFromBlocks_blockPower</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Assume the length-zero identity </p>
-<div class="displaymath" id="a0000000791">
-  \[  z_A + V^{(0)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\varnothing = z_B + V^{(0)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\varnothing .  \]
-</div>
-<p> After any blocking length \(p\), the powered weighted block families satisfy </p>
-<div class="displaymath" id="a0000000792">
-  \[  z_A + V^{(0)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^{p} (A_j)^{[p]}\bigr)_\varnothing = z_B + V^{(0)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^{p} (B_k)^{[p]}\bigr)_\varnothing .  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000790">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p>At blocked length zero the flattened configuration is empty. The blocked assembled tensors are rewritten by Theorem&#160;<a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">9.65</a>, and the original length-zero identity is applied to the empty configuration. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:nonzero_block_zero_tail_identity">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.16</span>
-    <span class="theorem_thmtitle">Zero-tail identity for nonzero block tensors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000793"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#def:zero_mps_tensor">Definition 12.1</a></li>
           
@@ -2267,7 +2183,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂" class="lean_decl">MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.nonzeroBlock_sameMPV₂Pos_of_sameMPV₂" class="lean_decl">MPSTensor.nonzeroBlock_sameMPV₂Pos_of_sameMPV₂</a></li>
           
         </ul>
     
@@ -2279,21 +2195,17 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Suppose \(A\) and \(B\) have the same MPV family and admit decompositions </p>
-<div class="displaymath" id="a0000000794">
+<div class="displaymath" id="a0000000791">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z_A})_\sigma + V^{(N)}(A_{\mathrm{nz}})_\sigma , \qquad V^{(N)}(B)_\sigma = V^{(N)}(\mathbf{0}_{d,z_B})_\sigma + V^{(N)}(B_{\mathrm{nz}})_\sigma .  \]
 </div>
-<p> For every \(N\ge 1\) and every configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000000795">
+<p> Then for every \(N\ge 1\) and every configuration \(\sigma \), </p>
+<div class="displaymath" id="a0000000792">
   \[  V^{(N)}(A_{\mathrm{nz}})_\sigma = V^{(N)}(B_{\mathrm{nz}})_\sigma .  \]
-</div>
-<p> At length zero, </p>
-<div class="displaymath" id="a0000000796">
-  \[  z_A + V^{(0)}(A_{\mathrm{nz}})_\varnothing = z_B + V^{(0)}(B_{\mathrm{nz}})_\varnothing .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000793">
+<div class="proof_wrapper" id="a0000000790">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2301,7 +2213,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> For \(N{\gt}0\), the MPV of a zero-tail tensor is zero, so the two decompositions can be compared directly through the common MPV family. For \(N=0\), the zero-tail MPV is its bond dimension, giving the stated length-zero identity. </p>
+  <p> For \(N{\gt}0\) the MPV of an all-zero leftover block is zero, so the two decompositions can be compared directly through the common MPV family. </p>
 
   </div>
 </div>
@@ -2310,8 +2222,8 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.17</span>
-    <span class="theorem_thmtitle">Blocked nonzero parts and length zero</span>
+    <span class="theorem_thmlabel">12.16</span>
+    <span class="theorem_thmtitle">Positive-length equality of blocked nonzero parts</span>
     <div class="thm_header_extras">
 
     
@@ -2321,7 +2233,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:nonzero_block_block_power_zero_tail_identity">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000797"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000793"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2337,7 +2249,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.16</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.15</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 12.14</a></li>
           
@@ -2361,7 +2273,7 @@
         
         <ul class="uses">
           
-          <li><a href="../docs/find/#doc/MPSTensor.nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂" class="lean_decl">MPSTensor.nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂</a></li>
+          <li><a href="../docs/find/#doc/MPSTensor.nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂" class="lean_decl">MPSTensor.nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂</a></li>
           
         </ul>
     
@@ -2372,22 +2284,18 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the setting of Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">12.16</a>, let </p>
-<div class="displaymath" id="a0000000798">
+  <p>   In the setting of Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">12.15</a>, let </p>
+<div class="displaymath" id="a0000000794">
   \[  A_{\mathrm{nz}}=\textstyle \bigoplus _j \mu ^A_j A_j, \qquad B_{\mathrm{nz}}=\textstyle \bigoplus _k \mu ^B_k B_k.  \]
 </div>
 <p> After any positive common blocking length \(p\), the powered nonzero parts satisfy, for every \(N\ge 1\) and every blocked configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000000799">
+<div class="displaymath" id="a0000000795">
   \[  V^{(N)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\sigma .  \]
-</div>
-<p> At blocked length zero, </p>
-<div class="displaymath" id="a0000000800">
-  \[  z_A + V^{(0)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\varnothing = z_B + V^{(0)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\varnothing .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000797">
+<div class="proof_wrapper" id="a0000000793">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2395,7 +2303,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Use Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">12.14</a> on both zero-tail decompositions, block the original MPV equality, and apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">12.16</a> at the blocked physical dimension. </p>
+  <p>Use Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">12.14</a> on both zero-tail decompositions, block the original MPV equality, and apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">12.15</a> at the blocked physical dimension. </p>
 
   </div>
 </div>
@@ -2404,7 +2312,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.18</span>
+    <span class="theorem_thmlabel">12.17</span>
     <span class="theorem_thmtitle">Equal zero tails give full nonzero-part MPV equality</span>
     <div class="thm_header_extras">
 
@@ -2415,7 +2323,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:nonzero_block_same_mpv_zero_tail_eq">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000801"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000796"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2465,13 +2373,13 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let the two tensors be written as an all-zero leftover block plus a nonzero part, and suppose the original tensors have the same MPV family. If \(z_A=z_B\), then the nonzero parts have the same MPV family: for every length \(N\) and every configuration \(\sigma \), </p>
-<div class="displaymath" id="a0000000802">
+<div class="displaymath" id="a0000000797">
   \[  V^{(N)}(A_{\mathrm{nz}})_\sigma = V^{(N)}(B_{\mathrm{nz}})_\sigma .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000801">
+<div class="proof_wrapper" id="a0000000796">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2488,7 +2396,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.19</span>
+    <span class="theorem_thmlabel">12.18</span>
     <span class="theorem_thmtitle">Cyclic sectors after the zero-tail split</span>
     <div class="thm_header_extras">
 
@@ -2499,7 +2407,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000803"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000798"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2517,7 +2425,7 @@
           
           <li><a href="ch-canonical.html#thm:tp_gauge_arbitrary">Theorem 9.36</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.16</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.15</a></li>
           
           <li><a href="ch-canonical.html#def:primitive_irreducible_cyclic_sectors">Definition 9.72</a></li>
           
@@ -2525,7 +2433,7 @@
           
           <li><a href="ch-canonical.html#thm:tp_gauge_arbitrary">Theorem 9.36</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.16</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_zero_tail_identity">Theorem 12.15</a></li>
           
           <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.67</a></li>
           
@@ -2559,29 +2467,25 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If two tensors \(A\) and \(B\) generate the same MPV family, then after the zero-tail split and the trace-preserving gauge there are decompositions </p>
-<div class="displaymath" id="a0000000804">
+<div class="displaymath" id="a0000000799">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z_A})_\sigma + V^{(N)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\sigma ,  \]
 </div>
-<div class="displaymath" id="a0000000805">
+<div class="displaymath" id="a0000000800">
   \[  V^{(N)}(B)_\sigma = V^{(N)}(\mathbf{0}_{d,z_B})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\sigma .  \]
 </div>
 <p> The nonzero parts agree for every \(N\ge 1\): </p>
-<div class="displaymath" id="a0000000806">
+<div class="displaymath" id="a0000000801">
   \[  V^{(N)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\sigma = V^{(N)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\sigma .  \]
 </div>
-<p> At length zero, </p>
-<div class="displaymath" id="a0000000807">
-  \[  z_A + V^{(0)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\varnothing = z_B + V^{(0)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\varnothing .  \]
-</div>
 <p> Each nonzero block has primitive irreducible cyclic sectors: for each \(j\), there is \(m_j\ge 1\) and a unit-weight sector decomposition </p>
-<div class="displaymath" id="a0000000808">
+<div class="displaymath" id="a0000000802">
   \[  A_j^{[m_j]} \sim \textstyle \bigoplus _{u=1}^{m_j} C^A_{j,u},  \]
 </div>
 <p> and similarly for the blocks \(B_k\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000803">
+<div class="proof_wrapper" id="a0000000798">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2589,104 +2493,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the arbitrary-tensor TP-gauge theorem separately to \(A\) and \(B\). The zero-tail identity theorem compares the two resulting nonzero parts at positive lengths and gives the \(N=0\) identity. Finally apply Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">9.67</a> to every trace-preserving irreducible nonzero-weight block. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.20</span>
-    <span class="theorem_thmtitle">Common blocking for cyclic sectors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_blocked_cyclic_live_zero_tail">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000809"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.19</a></li>
-          
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">Lemma 9.69</a></li>
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.19</a></li>
-          
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">Lemma 9.69</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂" class="lean_decl">MPSTensor.afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then the zero-tail/TP-gauge decompositions of Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">12.19</a> can be refined by a common reblocking of the per-block cyclic sectors. The nonzero parts still satisfy, for every \(N\ge 1\), </p>
-<div class="displaymath" id="a0000000810">
-  \[  V^{(N)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\sigma = V^{(N)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\sigma ,  \]
-</div>
-<p> and the length-zero identity remains </p>
-<div class="displaymath" id="a0000000811">
-  \[  z_A + V^{(0)}\! (\textstyle \bigoplus _j \mu ^A_j A_j)_\varnothing = z_B + V^{(0)}\! (\textstyle \bigoplus _k \mu ^B_k B_k)_\varnothing .  \]
-</div>
-<p> Each common reblocked sector family has nonzero sector weights, and its sector tensors are left-canonical, primitive, tensor-irreducible, and of positive bond dimension. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000809">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">12.19</a>. Then apply Theorem&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.68</a> to the per-block cyclic-sector decompositions on each side. The nonzero unit-weight conclusion is Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flat_weight_ne_zero">9.69</a>. </p>
+  <p> Apply the arbitrary-tensor TP-gauge theorem separately to \(A\) and \(B\). The positive-length equality theorem compares the two resulting nonzero parts. Finally apply Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">9.67</a> to every trace-preserving irreducible nonzero-weight block. </p>
 
   </div>
 </div>
@@ -2695,7 +2502,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.21</span>
+    <span class="theorem_thmlabel">12.19</span>
     <span class="theorem_thmtitle">Common blocking length for cyclic sectors</span>
     <div class="thm_header_extras">
 
@@ -2706,7 +2513,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000812"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000803"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2722,25 +2529,25 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.19</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.18</a></li>
           
           <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">Lemma 9.73</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 12.14</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_block_power_zero_tail_identity">Theorem 12.17</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_block_power_zero_tail_identity">Theorem 12.16</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.75</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Lemma 9.74</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.19</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_per_block_cyclic_live_zero_tail">Theorem 12.18</a></li>
           
           <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family_common_multiple">Lemma 9.73</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_to_tensor_from_blocks_block_power">Theorem 12.14</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_block_power_zero_tail_identity">Theorem 12.17</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:nonzero_block_block_power_zero_tail_identity">Theorem 12.16</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.75</a></li>
           
@@ -2775,25 +2582,18 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two tensors generate the same MPV family, then the cyclic-sector decompositions on the two sides can be expressed at one common positive blocking length \(p\). For every blocked configuration \(\sigma \) of length \(N\), </p>
-<div class="displaymath" id="a0000000813">
-  \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! (\mathbf{0}_{d^{[p]},z_A})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\sigma ,  \]
+  <p>   If two tensors generate the same MPV family, then the cyclic-sector decompositions on the two sides can be expressed at one common positive blocking length \(p\). For every \(N\ge 1\) and every blocked configuration \(\sigma \), each blocked tensor equals its powered nonzero part, </p>
+<div class="displaymath" id="a0000000804">
+  \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\sigma , \qquad V^{(N)}\! (B^{[p]})_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\sigma ,  \]
 </div>
-<div class="displaymath" id="a0000000814">
-  \[  V^{(N)}\! (B^{[p]})_\sigma = V^{(N)}\! (\mathbf{0}_{d^{[p]},z_B})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\sigma .  \]
-</div>
-<p> For \(N\ge 1\), the powered nonzero parts agree: </p>
-<div class="displaymath" id="a0000000815">
+<p> and the two powered nonzero parts agree, </p>
+<div class="displaymath" id="a0000000805">
   \[  V^{(N)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\sigma .  \]
-</div>
-<p> At length zero, </p>
-<div class="displaymath" id="a0000000816">
-  \[  z_A + V^{(0)}\! \bigl(\textstyle \bigoplus _j (\mu ^A_j)^p (A_j)^{[p]}\bigr)_\varnothing = z_B + V^{(0)}\! \bigl(\textstyle \bigoplus _k (\mu ^B_k)^p (B_k)^{[p]}\bigr)_\varnothing .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000812">
+<div class="proof_wrapper" id="a0000000803">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2801,7 +2601,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Start from the per-block cyclic-sector theorem. Let \(p_A\) and \(p_B\) be the least common multiples of the period-removal lengths on the two sides, and use \(p=\operatorname {lcm}(p_A,p_B)\). The prescribed-common-multiple theorem constructs both one-sided sector families at this same length. The zero-tail and positive-length equalities are the existing reblocking statements, and the sector conclusions are the common-alphabet MPV equalities. </p>
+  <p> Start from the per-block cyclic-sector theorem. Let \(p_A\) and \(p_B\) be the least common multiples of the period-removal lengths on the two sides, and use \(p=\operatorname {lcm}(p_A,p_B)\). The prescribed-common-multiple theorem constructs both one-sided sector families at this same length. Blocking each one-sided decomposition and removing the all-zero leftover block at positive length gives the displayed positive-length equalities, and the sector conclusions are the common-alphabet MPV equalities. </p>
 
   </div>
 </div>
@@ -2810,7 +2610,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.22</span>
+    <span class="theorem_thmlabel">12.20</span>
     <span class="theorem_thmtitle">Length-zero identity under compatible blocking</span>
     <div class="thm_header_extras">
 
@@ -2819,7 +2619,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_blocked_word_comparison">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000817"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000806"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2858,22 +2658,22 @@
   </div>
   <div class="theorem_thmcontent">
   <p>  Assume a one-sided zero-tail decomposition </p>
-<div class="displaymath" id="a0000000818">
+<div class="displaymath" id="a0000000807">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma .  \]
 </div>
 <p> If direct blocking of each \(B_k\) agrees with the corresponding iterated cyclic-sector blocking, then, for the common-sector family \((C_x)_x\) and transported weights \((\widetilde\mu _x)_x\), every blocked configuration \(\tau \) of length \(N\) satisfies </p>
-<div class="displaymath" id="a0000000819">
+<div class="displaymath" id="a0000000808">
   \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! (\mathbf{0}_{d^{[p]},z})_\tau + V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
 </div>
 <p> For \(N\ge 1\), this gives </p>
-<div class="displaymath" id="a0000000820">
+<div class="displaymath" id="a0000000809">
   \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
 </div>
-<p> The conclusion above is proved under any of three equivalent hypothesis forms — blockwise comparison, blocked-word equality, and coordinate-grouping cast equality — and the same conclusion under the compact same-MPV hypothesis is recorded as Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">12.23</a> below, whose hypothesis is the blocked-tensor same-MPV relation (Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>) provided by Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">9.76</a>. </p>
+<p> The conclusion above is proved under any of three equivalent hypothesis forms — blockwise comparison, blocked-word equality, and coordinate-grouping cast equality — and the same conclusion under the compact same-MPV hypothesis is recorded as Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">12.21</a> below, whose hypothesis is the blocked-tensor same-MPV relation (Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>) provided by Theorem&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">9.76</a>. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000817">
+<div class="proof_wrapper" id="a0000000806">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2890,7 +2690,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.23</span>
+    <span class="theorem_thmlabel">12.21</span>
     <span class="theorem_thmtitle">Length-zero identity under word identification</span>
     <div class="thm_header_extras">
 
@@ -2901,7 +2701,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000821"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000810"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2959,21 +2759,21 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Assume a one-sided zero-tail decomposition </p>
-<div class="displaymath" id="a0000000822">
+<div class="displaymath" id="a0000000811">
   \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma .  \]
 </div>
 <p> If the blocked nonzero tensor agrees, after identifying blocked words, with the common cyclic-sector family \((C_x)_x\), then every blocked configuration \(\tau \) of length \(N\) satisfies </p>
-<div class="displaymath" id="a0000000823">
+<div class="displaymath" id="a0000000812">
   \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! (\mathbf{0}_{d^{[p]},z})_\tau + V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
 </div>
 <p> For \(N\ge 1\), </p>
-<div class="displaymath" id="a0000000824">
+<div class="displaymath" id="a0000000813">
   \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000821">
+<div class="proof_wrapper" id="a0000000810">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2990,7 +2790,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.24</span>
+    <span class="theorem_thmlabel">12.22</span>
     <span class="theorem_thmtitle">Primitive block decompositions at a common length</span>
     <div class="thm_header_extras">
 
@@ -3001,7 +2801,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000825"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000814"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3017,13 +2817,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 12.21</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 12.19</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">Lemma 9.76</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 12.21</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">Theorem 12.19</a></li>
           
           <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">Lemma 9.76</a></li>
           
@@ -3057,22 +2857,22 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Assume that the nonzero part can be identified with the common blocked alphabet. Then two tensors with the same MPV family admit one \(p{\gt}0\) and nonzero weighted block families such that, for every \(N\ge 1\), </p>
-<div class="displaymath" id="a0000000826">
+<div class="displaymath" id="a0000000815">
   \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _x \mu ^A_x A_x\bigr)_\sigma ,  \]
 </div>
 <p> and </p>
-<div class="displaymath" id="a0000000827">
+<div class="displaymath" id="a0000000816">
   \[  V^{(N)}\! (B^{[p]})_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _y \mu ^B_y B_y\bigr)_\sigma .  \]
 </div>
 <p> The two nonzero parts also agree at every positive length: </p>
-<div class="displaymath" id="a0000000828">
+<div class="displaymath" id="a0000000817">
   \[  V^{(N)}\! \bigl(\textstyle \bigoplus _x \mu ^A_x A_x\bigr)_\sigma = V^{(N)}\! \bigl(\textstyle \bigoplus _y \mu ^B_y B_y\bigr)_\sigma .  \]
 </div>
 <p> The all-zero leftover block is not part of this conclusion; its contribution is restored by the separate zero-tail cancellation theorem. All blocks \(A_x\) and \(B_y\) are trace-preserving, primitive, tensor-irreducible, and of positive bond dimension, and all weights are nonzero. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000825">
+<div class="proof_wrapper" id="a0000000814">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3080,312 +2880,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.21</a> to choose the common blocking length and the two common cyclic-sector families. The assumed word identification converts the blocked nonzero part into the weighted common-sector family on each side. Since the zero-tail term vanishes at positive length, this gives the displayed positive-length identities. The structural properties and nonzero weights come from the common-sector families. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:samempv_pos_zero_tail_identity_transport">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.25</span>
-    <span class="theorem_thmtitle">Transport of MPV and length-zero identities</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:samempv_pos_zero_tail_identity_transport">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000829"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂" class="lean_decl">MPSTensor.sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Let \(L_A\) and \(L_B\) satisfy the positive-length equality </p>
-<div class="displaymath" id="a0000000830">
-  \[  V^{(N)}(L_A)_\sigma = V^{(N)}(L_B)_\sigma  \]
-</div>
-<p> for every \(N\ge 1\), and the length-zero identity </p>
-<div class="displaymath" id="a0000000831">
-  \[  z_A + V^{(0)}(L_A)_\varnothing = z_B + V^{(0)}(L_B)_\varnothing .  \]
-</div>
-<p> If \(L_A\) and \(L_A'\) generate the same MPV family, and \(L_B\) and \(L_B'\) generate the same MPV family, then the transported nonzero parts satisfy </p>
-<div class="displaymath" id="a0000000832">
-  \[  V^{(N)}(L_A')_\sigma = V^{(N)}(L_B')_\sigma  \]
-</div>
-<p> for every \(N\ge 1\), and </p>
-<div class="displaymath" id="a0000000833">
-  \[  z_A + V^{(0)}(L_A')_\varnothing = z_B + V^{(0)}(L_B')_\varnothing .  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000829">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Use the two MPV equalities to replace \(L_A'\) by \(L_A\) and \(L_B\) by \(L_B'\) in the positive-length equality and in the \(N=0\) identity. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:zero_tail_common_flat_transport_of_reindexed">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.26</span>
-    <span class="theorem_thmtitle">Length-zero identity for common sectors</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_transport_of_reindexed">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000834"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">Theorem 12.23</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">Lemma 9.76</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Lemma 9.74</a></li>
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">Theorem 12.23</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_nonzero_part">Lemma 9.76</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Lemma 9.74</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.zeroTail_commonFlat_transport_of_reindexed" class="lean_decl">MPSTensor.zeroTail_commonFlat_transport_of_reindexed</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Assume the zero-tail decomposition </p>
-<div class="displaymath" id="a0000000835">
-  \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma  \]
-</div>
-<p> with all \(\mu _k\ne 0\). If the blocked nonzero part agrees with the common-sector tensor, then, for every blocked configuration \(\tau \) of length \(N\), </p>
-<div class="displaymath" id="a0000000836">
-  \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! (\mathbf{0}_{d^{[p]},z})_\tau + V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
-</div>
-<p> The common-sector tensor also satisfies </p>
-<div class="displaymath" id="a0000000837">
-  \[  V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k^{\, p} B_k^{[p]}\bigr)_\tau = V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau ,  \]
-</div>
-<p> and all transported weights \(\widetilde\mu _x\) are nonzero. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000834">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Combine Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_reindexed">12.23</a> with the common-sector MPV equality and the nonzero-weight statement. </p>
-
-  </div>
-</div>
-<div class="theorem_thmwrapper theorem-style-plain" id="thm:zero_tail_common_flat_transport_of_grouped_block_cast">
-  <div class="theorem_thmheading">
-    <span class="theorem_thmcaption">
-    Theorem
-    </span>
-    <span class="theorem_thmlabel">12.27</span>
-    <span class="theorem_thmtitle">Common sectors from grouped coordinates</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_transport_of_grouped_block_cast">#</a>
-    
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000838"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_blocked_word_comparison">Theorem 12.22</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.79</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Lemma 9.74</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:zero_tail_common_flat_of_blocked_word_comparison">Theorem 12.22</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.79</a></li>
-          
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_derived_properties">Lemma 9.74</a></li>
-          
-          <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees" class="lean_decl">MPSTensor.zeroTail_commonFlat_transport_of_groupedBlockCastAgrees</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="theorem_thmcontent">
-  <p>   Assume the zero-tail decomposition </p>
-<div class="displaymath" id="a0000000839">
-  \[  V^{(N)}(A)_\sigma = V^{(N)}(\mathbf{0}_{d,z})_\sigma + V^{(N)}\! (\textstyle \bigoplus _k \mu _k B_k)_\sigma  \]
-</div>
-<p> with all \(\mu _k\ne 0\). If the common blocked alphabet is identified with each iterated alphabet by grouping consecutive words, then, for every blocked configuration \(\tau \) of length \(N\), </p>
-<div class="displaymath" id="a0000000840">
-  \[  V^{(N)}\! (A^{[p]})_\tau = V^{(N)}\! (\mathbf{0}_{d^{[p]},z})_\tau + V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
-</div>
-<p> Equivalently, the directly blocked nonzero tensor and the common-sector tensor have the same MPV family: </p>
-<div class="displaymath" id="a0000000841">
-  \[  V^{(N)}\! \bigl(\textstyle \bigoplus _k \mu _k^{\, p} B_k^{[p]}\bigr)_\tau = V^{(N)}\! \bigl(\textstyle \bigoplus _x \widetilde\mu _x C_x\bigr)_\tau .  \]
-</div>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000000838">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The coordinate-grouping comparison identifies the directly blocked nonzero part with the weighted common-sector family. Combine this with the zero-tail identity and the nonzero-weight statement. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.19</a> to choose the common blocking length and the two common cyclic-sector families. The assumed word identification converts the blocked nonzero part into the weighted common-sector family on each side. Since the zero-tail term vanishes at positive length, this gives the displayed positive-length identities. The structural properties and nonzero weights come from the common-sector families. </p>
 
   </div>
 </div>
@@ -3397,7 +2892,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.28</span>
+    <span class="theorem_thmlabel">12.23</span>
     <span class="theorem_thmtitle">Unconditional primitive blocked sectors</span>
     <div class="thm_header_extras">
 
@@ -3408,7 +2903,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:blocked_sector_unconditional">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000842"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000818"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3464,14 +2959,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a left-canonical irreducible tensor whose adjoint transfer map has peripheral spectrum \(\{ \gamma ^j : 0 \le j {\lt} m\} \) for a primitive \(m\)th root of unity \(\gamma \). Let \((C_u)_{u=1}^m\), \((P_u)_{u=1}^m\), and \(\varphi _u : M_{\dim C_u}(\mathbb {C}) \xrightarrow {\sim } P_u M_{D}(\mathbb {C}) P_u\) be the blocked cyclic-sector decomposition. Then every sector tensor \(C_u\) satisfies </p>
-<div class="displaymath" id="a0000000843">
+<div class="displaymath" id="a0000000819">
   \[  \sigma _\partial (\mathcal{E}_{C_u})=\{ 1\} ,  \]
 </div>
 <p> and \(C_u\) is tensor-irreducible. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000842">
+<div class="proof_wrapper" id="a0000000818">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3488,7 +2983,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.29</span>
+    <span class="theorem_thmlabel">12.24</span>
     <span class="theorem_thmtitle">Arbitrary tensor to primitive block decomposition</span>
     <div class="thm_header_extras">
 
@@ -3499,7 +2994,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000844"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000820"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3557,18 +3052,18 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   For any MPS tensor \(A\), there exist \(p\ge 1\), a zero-tail bond dimension \(D_0\), nonzero weights \((\mu _k)_{k=1}^r\), and blocks \((B_k)_{k=1}^r\) such that, for every blocked configuration \(\sigma \) of length \(N\), </p>
-<div class="displaymath" id="a0000000845">
+<div class="displaymath" id="a0000000821">
   \[  V^{(N)}\! (A^{[p]})_\sigma = V^{(N)}\! (\mathbf{0}_{d^{[p]},D_0})_\sigma + V^{(N)}\! \bigl(\textstyle \bigoplus _{k=1}^{r} \mu _k B_k\bigr)_\sigma .  \]
 </div>
 <p> Each block is left-canonical and primitive, </p>
-<div class="displaymath" id="a0000000846">
+<div class="displaymath" id="a0000000822">
   \[  \sum _i (B_k^i)^\dagger B_k^i = \mathbb {1}, \qquad \sigma _\partial (\mathcal{E}_{B_k})=\{ 1\} ,  \]
 </div>
 <p> and each bond dimension is positive. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000844">
+<div class="proof_wrapper" id="a0000000820">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3585,7 +3080,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">12.30</span>
+    <span class="theorem_thmlabel">12.25</span>
     <span class="theorem_thmtitle">Two tensors after one-sided primitive reductions</span>
     <div class="thm_header_extras">
 
@@ -3596,7 +3091,7 @@
 
     <a class="icon proof" href="ch-canonical_after_blocking.html#thm:after_blocking_tp_primitive_blockdecompositions_same_mpv2">#</a>
     
-    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-canonical_after_blocking.html#a0000000823"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3612,13 +3107,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">Theorem 12.29</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">Theorem 12.24</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
           
-          <li><a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">Theorem 12.29</a></li>
+          <li><a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">Theorem 12.24</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
@@ -3653,11 +3148,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   If two MPS tensors \(A\) and \(B\) have the same MPV family, then applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.29</a> separately to \(A\) and \(B\) gives positive blocking lengths \(p_A,p_B\) and primitive weighted block sums \(A_{\mathrm{nz}}\) and \(B_{\mathrm{nz}}\) such that \(A^{[p_A]}\) and \(B^{[p_A]}\) have the same MPV family, and \(A^{[p_B]}\) and \(B^{[p_B]}\) have the same MPV family. Moreover \(A^{[p_A]}\) and \(A_{\mathrm{nz}}\) agree at every positive length, and \(B^{[p_B]}\) and \(B_{\mathrm{nz}}\) agree at every positive length. All displayed nonzero blocks are trace-preserving and primitive, have positive bond dimension, and carry nonzero weights. </p>
+  <p>   If two MPS tensors \(A\) and \(B\) have the same MPV family, then applying Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.24</a> separately to \(A\) and \(B\) gives positive blocking lengths \(p_A,p_B\) and primitive weighted block sums \(A_{\mathrm{nz}}\) and \(B_{\mathrm{nz}}\) such that \(A^{[p_A]}\) and \(B^{[p_A]}\) have the same MPV family, and \(A^{[p_B]}\) and \(B^{[p_B]}\) have the same MPV family. Moreover \(A^{[p_A]}\) and \(A_{\mathrm{nz}}\) agree at every positive length, and \(B^{[p_B]}\) and \(B_{\mathrm{nz}}\) agree at every positive length. All displayed nonzero blocks are trace-preserving and primitive, have positive bond dimension, and carry nonzero weights. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000847">
+<div class="proof_wrapper" id="a0000000823">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3665,7 +3160,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.29</a> to each tensor. Equality of MPV families is preserved by blocking. The all-zero summand has zero MPV coefficients at positive length, so each blocked tensor agrees there with its nonzero weighted block sum. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:tp_primitive_blockdecomp">12.24</a> to each tensor. Equality of MPV families is preserved by blocking. The all-zero summand has zero MPV coefficients at positive length, so each blocked tensor agrees there with its nonzero weighted block sum. </p>
 
   </div>
 </div>
