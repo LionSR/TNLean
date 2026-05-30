@@ -197,7 +197,7 @@ This is the "nondegeneracy → full span" direction.
 **Lemma B** (`norm_tracePairBilin_le`): operator-norm bound on the bilinear form:
 `‖Q_F(B)‖ ≤ D² · ‖Bᴴ‖ · ‖Φ(F)‖ · ‖B‖`,
 where `Φ = Module.End.toContinuousLinearMap` and `‖·‖` is the `l∞`-operator norm
-(the scoped norm in the `MPSTensor` namespace via `SpectralGap.lean`).
+(the scoped norm in the `MPSTensor` namespace via `TransferOperatorGap.lean`).
 This bounds the error term `Q_{(E − P_ρ)^n}(B)` uniformly. -/
 
 section UniformPositivity
@@ -325,7 +325,7 @@ private theorem wordSpan_eq_top_of_tracePairBilin_re_pos
 /-! #### Lemma B: operator-norm bound on the bilinear form
 
 The norm on `Matrix (Fin D) (Fin D) ℂ` in the `MPSTensor` namespace is the
-`l∞`-operator norm (scoped instance from `SpectralGap.lean`), under which
+`l∞`-operator norm (scoped instance from `TransferOperatorGap.lean`), under which
 matrix multiplication is submultiplicative (`norm_mul_le`).  We prove entry
 bounds and single-matrix norm bounds directly for this norm. -/
 

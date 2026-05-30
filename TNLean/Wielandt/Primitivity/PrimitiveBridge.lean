@@ -5,17 +5,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 import TNLean.MPS.Core.Transfer
 import TNLean.Wielandt.Primitivity.Definitions
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Wielandt.Primitivity.ToNormal
 import TNLean.Channel.Primitive
 import TNLean.Channel.Irreducible.FromSpectral
 
 /-!
-# Connecting results for primitive MPS and spectral-gap conditions
+# Connecting results for primitive MPS and complementary transfer-map gaps
 
 This module collects the connection between the transfer-map
-condition `IsStronglyIrreduciblePaper` and the spectral-gap predicate
+condition `IsStronglyIrreduciblePaper` and the complementary-gap predicate
 `IsPrimitiveMPS`.  These results are used by the Proposition 3(c)→(b) proof in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` and by downstream
 normality/canonical-form reductions.
@@ -23,10 +23,10 @@ normality/canonical-form reductions.
 ## Main results
 
 * `isPrimitiveMPS_of_isStronglyIrreduciblePaper` — strong irreducibility gives
-  spectral-gap primitivity for a positive-definite fixed point.
-* `IsPrimitiveMPS.isPeripherallyPrimitive` — spectral-gap primitivity implies
+  complementary transfer-map gap primitivity for a positive-definite fixed point.
+* `IsPrimitiveMPS.isPeripherallyPrimitive` — complementary transfer-map gap primitivity implies
   paper peripheral primitivity.
-* `isIrreducibleMap_of_isPrimitiveMPS_of_posDef` — primitive spectral-gap data
+* `isIrreducibleMap_of_isPrimitiveMPS_of_posDef` — primitive complementary-gap data
   with a positive-definite fixed point gives irreducibility of the transfer map.
 * `isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef` — the previous two
   implications stated as paper strong irreducibility.
@@ -46,14 +46,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## Strong irreducibility and primitive spectral-gap data -/
+/-! ## Strong irreducibility and primitive complementary-gap data -/
 
-/-- **Primitivity implication**: strong irreducibility implies the spectral-gap
+/-- **Primitivity implication**: strong irreducibility implies the complementary-gap
 predicate `IsPrimitiveMPS A ρ` for some positive-definite `ρ`.
 
 This is the structural step in Proposition 3(c)→(b): it connects the paper's
 spectral characterization (peripheral eigenvalues = {1}, irreducibility, and a
-positive-definite fixed point) to the operational spectral-gap hypothesis used
+positive-definite fixed point) to the operational complementary transfer-map gap used
 by the transfer-map convergence theory.
 
 The proof chains:
@@ -78,7 +78,7 @@ theorem isPrimitiveMPS_of_isStronglyIrreduciblePaper [NeZero D]
       hPrimMPS.fixedPoint_psd hPrimMPS.fixedPoint_ne_zero hPrimMPS.fixedPoint_is_fixed
   exact ⟨ρ', hPrimMPS, hρ'PD⟩
 
-/-- A primitive MPS tensor in the spectral-gap sense is peripherally primitive in
+/-- A primitive MPS tensor in the complementary-gap sense is peripherally primitive in
 the transfer-map sense.
 
 This is the easy spectral implication: if the complementary map `E - P_ρ` has
@@ -108,7 +108,7 @@ theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
       exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ _) _
         (fun z _ => (‖z‖₊ : ENNReal)) ν hν_mem
     have hν_lt : (‖ν‖₊ : ENNReal) < 1 :=
-      lt_of_le_of_lt hν_le hP.spectral_gap
+      lt_of_le_of_lt hν_le hP.complementary_transfer_map_gap
     have : ((‖ν‖₊ : ℝ) < 1) := by
       simpa using hν_lt
     simpa using this
@@ -119,7 +119,7 @@ theorem IsPrimitiveMPS.isPeripherallyPrimitive [NeZero D]
 /-- A primitive MPS tensor with a positive-definite fixed point has an
 irreducible transfer map.
 
-The spectral gap gives uniqueness of the fixed-point space via
+The complementary transfer-map gap gives uniqueness of the fixed-point space via
 `IsPrimitiveMPS.fixedPoint_unique`; combined with `ρ.PosDef`, Wolf's fixed-point
 criterion for irreducibility applies directly. -/
 theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
@@ -137,7 +137,7 @@ theorem isIrreducibleMap_of_isPrimitiveMPS_of_posDef [NeZero D]
   exact isIrreducibleMap_of_channel_posDef_fixedPoint_unique E hP.transferMap_isChannel ρ
     hρ_pd (by simpa [E] using hP.fixedPoint_is_fixed) huniq
 
-/-- Primitive spectral-gap data plus a positive-definite fixed point imply
+/-- Primitive complementary-gap data plus a positive-definite fixed point imply
 paper strong irreducibility. -/
 theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}

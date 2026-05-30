@@ -6,7 +6,7 @@ import TNLean.Channel.Basic
 This file provides a small self-contained interface for Kraus maps on matrices
 `Matrix n n ℂ`, parametrised by an arbitrary finite Kraus index type `ι`.
 
-The main purpose is to support the spectral-gap proof for the mixed transfer
+The main purpose is to support the transfer-operator gap proof for the mixed transfer
 operator, where we need a *weighted* Kadison–Schwarz equality:
 
 * `kadison_schwarz` : KS inequality for unital Kraus maps

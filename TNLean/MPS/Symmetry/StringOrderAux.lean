@@ -12,7 +12,7 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Channel.KrausRepresentation
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGapNT
 
 /-!
 # String order: trace-preserving gauge reduction and auxiliary proofs

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.Channel.Peripheral.Spectrum
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.QPF.Assembly
 import TNLean.MPS.Irreducible.FormII
 import TNLean.Channel.FixedPoint.Cesaro
@@ -12,16 +12,17 @@ import TNLean.MPS.Core.CPPrimitive
 import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 
 /-!
-# Peripheral primitivity → spectral gap primitivity (transfer map)
+# Peripheral primitivity → complementary transfer-map gap primitivity
 
 This file connects the **peripheral-spectrum** notion of primitivity for quantum channels
-(`peripheralEigenvalues E = {1}`) to the **spectral-gap** notion used in the MPS
-proof chain (`MPSTensor.IsPrimitiveMPS` / `MPSTensor.HasPrimitiveFixedPoint`).
+(`peripheralEigenvalues E = {1}`) to the **complementary transfer-map gap** notion
+used in the MPS proof chain (`MPSTensor.IsPrimitiveMPS` /
+`MPSTensor.HasPrimitiveFixedPoint`).
 
 Concretely, for the transfer map of an injective normalized tensor `A`, we prove:
 
 * trace-zero fixed points are trivial (`X = 0`),
-* peripheral primitivity implies a spectral gap for the complementary map `E - P`,
+* peripheral primitivity implies a complementary transfer-map gap for `E - P`,
 * hence `MPSTensor.HasPrimitiveFixedPoint A` and the overlap convergence
   `mpvOverlap → 1`.
 
@@ -46,7 +47,7 @@ The formal Lean declaration:
 > `TNLean.Channel.FixedPoint.Cesaro` supplies the PSD decomposition used in
 > `transferMap_hermitian_fixedPoint_eq_zero_of_trace_eq_zero` (line 93).
 > This is the Wolf Proposition 6.8 formalization consumed by the
-> peripheral-to-spectral-gap connection.
+  > peripheral-to-complementary-gap connection.
 -/
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal
@@ -199,7 +200,7 @@ private theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_hermitian_zer
 with trace zero must be the zero matrix.
 
 This is the key “uniqueness on the trace-zero subspace” hypothesis needed to turn
-peripheral primitivity into a spectral gap for `E - P`. -/
+peripheral primitivity into a complementary transfer-map gap for `E - P`. -/
 theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -280,7 +281,7 @@ theorem transferMap_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible
         (A := A) hIrrMap hNorm Y hYherm hYfix htrY)
     X hXfix htrX
 
-/-! ## Step 2: peripheral primitive ⇒ spectral gap for the complement -/
+/-! ## Step 2: peripheral primitive ⇒ complementary transfer-map gap -/
 
 private theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_aux
     {d D : ℕ} [NeZero D]
@@ -350,8 +351,8 @@ private theorem spectralRadius_compl_lt_one_of_peripheralPrimitive_aux
     exact (NNReal.coe_lt_one).1 this
   exact ⟨htrρ, by simpa only [map_sub, E] using hgap⟩
 
-/-- **Step 2:** peripheral primitivity of the transfer map implies a spectral gap for the
-complementary map `E - P` (where `P` projects onto the unique fixed point). -/
+/-- **Step 2:** peripheral primitivity of the transfer map implies a complementary
+transfer-map gap for `E - P` (where `P` projects onto the unique fixed point). -/
 theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -392,7 +393,7 @@ theorem spectralRadius_compl_lt_one_of_peripheralPrimitive
 /-! ## Step 3: express as MPS primitivity + overlap -/
 
 /-- Peripheral primitivity of the transfer map implies
-`MPSTensor.HasPrimitiveFixedPoint` (spectral-gap primitivity). -/
+`MPSTensor.HasPrimitiveFixedPoint` (complementary transfer-map gap primitivity). -/
 theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
@@ -407,7 +408,7 @@ theorem hasPrimitiveFixedPoint_of_peripheralPrimitive
   refine ⟨ρ, ?_⟩
   refine ⟨hNorm, hρ_ne, hρ_psd, hρ_fix, ?_⟩
   -- `fixedPointProj` ignores the trace-nonzero proof argument, so `hgap` matches the
-  -- `IsPrimitiveMPS` field `spectral_gap` definitionally.
+  -- `IsPrimitiveMPS` field `complementary_transfer_map_gap` definitionally.
   simpa only [map_sub] using hgap
 
 /-- As a corollary, peripheral primitivity implies the self-overlap converges to 1. -/

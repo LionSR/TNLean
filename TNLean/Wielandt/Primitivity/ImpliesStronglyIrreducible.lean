@@ -6,7 +6,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.MPS.CanonicalForm.Reduction
-import TNLean.MPS.Overlap.PeripheralToSpectralGap
+import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.Matrix.Spectrum

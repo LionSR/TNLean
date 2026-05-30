@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import TNLean.Spectral.SpectralGap
+import TNLean.Spectral.TransferOperatorGap
 import TNLean.Spectral.MPVOverlapDecay
 import TNLean.QPF.Assembly
 import TNLean.Channel.FixedPoint.CanonicalGauge
@@ -12,21 +12,22 @@ import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 import Mathlib.LinearAlgebra.Eigenspace.Basic
 
 /-!
-# Rectangular spectral gap for the mixed transfer operator
+# Rectangular transfer-operator gap for the mixed transfer operator
 
 When two MPS tensors `A : MPSTensor d D₁` and `B : MPSTensor d D₂` have **different bond
 dimensions** `D₁ ≠ D₂`, the spectral radius of the rectangular mixed transfer operator
 `mixedTransferMap₂ A B` is strictly less than 1 (assuming both tensors are injective and
 normalized).
 
-This is the "dimension-mismatch" spectral gap (cf. Wolf Theorem 6.6 adapted to
-MPS transfer maps with rectangular bond dimensions): if the bond dimensions differ, then
-the overlap `∑ σ, mpv A σ * conj(mpv B σ)` decays to zero exponentially.
+This is the dimension-mismatch transfer-operator gap (cf. Wolf Theorem 6.6
+adapted to MPS transfer maps with rectangular bond dimensions): if the bond
+dimensions differ, then the overlap
+`∑ σ, mpv A σ * conj(mpv B σ)` decays to zero exponentially.
 
 ## Main results
 
-* `mixedTransferSpectralRadius₂_lt_one_of_dim_ne`: strict spectral gap for dimension-mismatched
-  normalized injective tensors
+* `mixedTransferSpectralRadius₂_lt_one_of_dim_ne`: strict transfer-operator gap
+  for dimension-mismatched normalized injective tensors
 * `mpvOverlap_tendsto_zero_of_dim_ne`: the MPV overlap tends to zero when `D₁ ≠ D₂`
 
 ## Proof outline
@@ -235,7 +236,7 @@ section DimensionEquality
 /-- Core algebraic lemma: if there is an eigenvector of `mixedTransferMap₂ A B` with eigenvalue
 of modulus 1, then `D₁ = D₂`.
 
-This is the rectangular analogue of `eigenvector_gives_gauge` from `SpectralGap.lean`,
+This is the rectangular analogue of `eigenvector_gives_gauge` from `TransferOperatorGap.lean`,
 but instead of constructing a gauge equivalence, we derive equality of dimensions. -/
 private theorem dim_eq_of_modulus_one_eigenvector [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -311,8 +312,8 @@ section MainTheorem
 set_option synthInstance.maxHeartbeats 400000 in
 -- Instance search for the rectangular continuous endomorphism space needs a local
 -- heartbeat bump during the spectral-radius extraction.
-/-- **Dimension-mismatch spectral gap**: the spectral radius of the rectangular mixed transfer
-operator is strictly less than 1 when the bond dimensions differ. -/
+/-- **Dimension-mismatch transfer-operator gap**: the spectral radius of the rectangular
+mixed transfer operator is strictly less than 1 when the bond dimensions differ. -/
 theorem mixedTransferSpectralRadius₂_lt_one_of_dim_ne
     {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)

@@ -82,7 +82,7 @@ blocks are not gauge-phase equivalent — to the existence of a homogeneous leng
 
 **Spectral approach:** non-gauge-equivalence forces the spectral radius of the
 mixed transfer map below one, so the matrix-product-vector overlap decays to
-zero.  This is the non-decaying overlap argument from the spectral-gap
+zero.  This is the non-decaying overlap argument from the transfer-operator gap
 development.
 
 **Algebraic approach (this section):** non-gauge-equivalence implies all-length

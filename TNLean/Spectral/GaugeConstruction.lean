@@ -11,7 +11,7 @@ import Mathlib.Data.Matrix.Block
 import Mathlib.Analysis.Matrix.Normed
 
 /-!
-# Gauge construction for spectral-gap rigidity
+# Gauge construction for transfer-operator gap rigidity
 
 For tensors $A$ and $B$, a mixed-transfer eigenvector with $|\lambda|=1$
 can be transported through left-canonical gauges.  After embedding the
@@ -19,7 +19,7 @@ transported matrix into a block Kraus map, equality in the weighted
 Kadison--Schwarz inequality gives intertwining relations between the
 gauged Kraus operators.  This is the common argument in Wolf Theorem 6.6
 (peripheral spectrum of irreducible Schwarz maps) and PerezGarcia2007
-Lemma 5 (spectral gap for distinct MPS blocks).
+Lemma 5 (strict mixed-transfer-operator gap for distinct MPS blocks).
 -/
 
 open scoped Matrix Matrix.Norms.Operator MatrixOrder ComplexOrder BigOperators
@@ -666,8 +666,8 @@ theorem gaugePhaseEquiv_of_gauged_intertwining [NeZero D]
     simp only [A', gaugeTensor, Ymat, Yinv, Matrix.mul_assoc]
   simpa [Ygl] using this
 
-/-- Generic rectangular dimension comparison: the two intertwining relations force equality of dimensions
-once both gauged tensor families are injective. -/
+/-- Generic rectangular dimension comparison: the two intertwining relations force equality of
+dimensions once both gauged tensor families are injective. -/
 theorem dim_eq_of_gauged_intertwining [NeZero D₁] [NeZero D₂]
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (X : Matrix (Fin D₁) (Fin D₂) ℂ) (μ : ℂ)

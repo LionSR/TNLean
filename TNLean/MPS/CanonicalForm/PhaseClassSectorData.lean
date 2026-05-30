@@ -10,7 +10,7 @@ import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.SharedInfra.GaugePhase
 import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.Structure.PrimitivityBridge
-import TNLean.Spectral.SpectralGapNT
+import TNLean.Spectral.TransferOperatorGapNT
 
 open scoped Matrix BigOperators
 open Filter

@@ -21,8 +21,8 @@ The core chain is the channel Perron–Frobenius route with all hypotheses kept
 separate: trace preservation fixes the normalization convention, peripheral
 primitivity says that the peripheral spectrum of the transfer map is `{1}`,
 tensor irreducibility rules out nontrivial invariant projections, and these
-inputs produce a positive definite Perron fixed point.  The primitive spectral
-gap together with this faithful fixed point gives eventual full Kraus rank,
+inputs produce a positive definite Perron fixed point.  The primitive complementary
+transfer-map gap together with this faithful fixed point gives eventual full Kraus rank,
 which is the normality condition used here. A separate word-span argument then
 shows that blocking keeps normality.
 
@@ -92,7 +92,7 @@ is `1`.  The conclusion is obtained by the following implications:
   including a Perron fixed point for the transfer map.
 * Irreducibility upgrades the nonzero positive semidefinite Perron fixed point
   in that datum to a positive definite, faithful fixed point.
-* The primitive spectral gap together with the faithful fixed point gives
+* The primitive complementary transfer-map gap together with the faithful fixed point gives
   eventual full Kraus rank, equivalently `IsNormal A`. -/
 theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (A : MPSTensor d D)
@@ -109,7 +109,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   -- Step 3: Upgrade PSD → PosDef using tensor irreducibility.
   have hPD : ρ.PosDef :=
     posDef_of_isIrreducibleTensor_of_isPrimitiveMPS hPrimMPS hIrr
-  -- Step 4: IsNormal from the primitive spectral gap and a faithful fixed point.
+  -- Step 4: IsNormal from the primitive complementary gap and a faithful fixed point.
   exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
 
 /-- **TP + primitive + irreducible → injective after blocking**.
