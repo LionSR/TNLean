@@ -46,6 +46,13 @@ For the non-periodic MPS Fundamental Theorem background:
   step implicit in CPSV16 Theorem II.1, line 1182.
 - `quantum_wielandt_deviation.tex` records the local proof boundary for the
   quantum Wielandt inequality.
+- `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
+  blocked canonical form as an all-length matrix-product-vector identity
+  (carrying the empty-word "zero-tail" coefficient through the whole
+  after-blocking chain) is the wrong formal shape, and records the
+  positive-length comparison plus single bond-dimension identity that replaces
+  it. It also names the one headline decomposition theorem that still keeps the
+  explicit zero block to match CPSV16 Section 2.3.
 
 Parent-Hamiltonian notes live here too, but they are not part of the current
 non-periodic FT cleanup loop unless explicitly brought back into scope.

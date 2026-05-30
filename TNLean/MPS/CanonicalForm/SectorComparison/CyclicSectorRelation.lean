@@ -50,12 +50,6 @@ private def cyclicShift {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) : Fin m :=
     cyclicShift k 0 = k := by
   ext; simp [cyclicShift, Nat.mod_eq_of_lt k.is_lt]
 
-private lemma cyclicShift_succ {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
-    cyclicShift k (n + 1) = cyclicShift k n + 1 := by
-  ext
-  change ((↑k + n) + 1) % m = (((↑k + n) % m) + 1 % m) % m
-  exact Nat.add_mod (↑k + n) 1 m
-
 private lemma cyclicShift_succ_left {m : ℕ} [NeZero m] (k : Fin m) (n : ℕ) :
     cyclicShift k (n + 1) = cyclicShift (k + 1) n := by
   ext

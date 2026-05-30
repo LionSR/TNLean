@@ -124,6 +124,14 @@ The MPV relationship holds:
 In particular, for system sizes `N > 0`, the trivial block vanishes and
 `blockTensor A p` has the same MPVs as `toTensorFromBlocks μ blocks`.
 
+**Note on the length-zero term**: this statement keeps the explicit zero block
+to match the cited Section 2.3 decomposition, even though only the positive-length
+comparison carries mathematical content and the empty-word coefficient is just
+the bond-dimension count `zeroTailDim + ∑ dim = D ^ p`. The downstream consumer
+converts to the positive-length form at once. The reason the all-length shape is
+kept here, and the positive-length replacement, are described in
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`.
+
 **Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
 `IsIrreducibleTensor`, but blocking does not in general preserve tensor
 irreducibility. See the module documentation for the gap analysis. -/
