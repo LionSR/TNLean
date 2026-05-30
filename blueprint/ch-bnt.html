@@ -4891,9 +4891,9 @@
           
           <li><a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">Lemma 11.40</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_equiv">Lemma 11.34</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 11.43</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">Theorem 11.44</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 11.45</a></li>
           
           <li><a href="ch-bnt.html#thm:sector_bnt_bijective_match_of_sameMPV">Theorem 11.37</a></li>
           
@@ -4901,9 +4901,9 @@
           
           <li><a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">Lemma 11.38</a></li>
           
-          <li><a href="ch-bnt.html#lem:sector_bnt_matched_sector_weight_equiv">Lemma 11.34</a></li>
+          <li><a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">Lemma 11.43</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">Theorem 11.44</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">Theorem 11.45</a></li>
           
         </ul>
     
@@ -4975,7 +4975,15 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The full-basis matching theorem gives \(\beta \), the bond-dimension identifications, and the gauge-phase equivalences between \(Q_k\) and \(P_{\beta (k)}\). Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">11.40</a> gives the eventual exact coefficient identities for the same phases \(\zeta _k\), while Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">11.38</a> gives \(|\zeta _k|=1\). The matched-sector weight-permutation theorem then gives the copy permutations and the displayed pointwise weight identities. Finally Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_matched_weights">11.44</a> assembles the block conjugacies into the flattened direct-sum conjugation by \(X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k)\). </p>
+  <p> The full-basis matching theorem gives \(\beta \), the bond-dimension identifications, and the gauge-phase equivalences between \(Q_k\) and \(P_{\beta (k)}\). Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">11.40</a> gives the eventual exact coefficient identities for the same phases \(\zeta _k\), while Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_norm_phase_of_matched_mpv">11.38</a> gives \(|\zeta _k|=1\). For each sector \(k\), Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">11.43</a> applies to </p>
+<div class="displaymath" id="a0000000759">
+  \[  c_N^{(\beta (k))}(P) = \zeta _k^N c_N^{(k)}(Q), \qquad \sum _r \mu _{\beta (k),r}^{\, N} = \sum _q(\zeta _k\nu _{k,q})^N ,  \]
+</div>
+<p> and gives a copy permutation \(\tau _k\) satisfying </p>
+<div class="displaymath" id="a0000000760">
+  \[  \nu _{k,q}=\zeta _k^{-1}\mu _{\beta (k),\tau _k(q)} .  \]
+</div>
+<p> Finally Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_global_gauge_of_copy_weight_matching">11.45</a> assembles the block conjugacies into the flattened direct-sum conjugation by \(X=\bigoplus _k(\mathbf{1}_{r_k}\otimes X_k)\). </p>
 
   </div>
 </div>
@@ -4995,7 +5003,7 @@
 
     <a class="icon proof" href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">#</a>
     
-    <a class="icon proof" href="ch-bnt.html#a0000000759"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-bnt.html#a0000000761"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5045,11 +5053,11 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(P\) and \(Q\) be BNT canonical forms whose total tensors have the same MPV family. Assume that every sector of \(P\) and every sector of \(Q\) has at least one copy weight of modulus \(1\). Then the total bond dimensions agree; write their common value as \(D\). There is </p>
-<div class="displaymath" id="a0000000760">
+<div class="displaymath" id="a0000000762">
   \[  Y\in \mathrm{GL}_D(\mathbb {C})  \]
 </div>
 <p> such that, for every physical index \(i\), </p>
-<div class="displaymath" id="a0000000761">
+<div class="displaymath" id="a0000000763">
   \[  Q_{\mathrm{tot}}^i = Y\, P_{\mathrm{tot}}^i\, Y^{-1},  \]
 </div>
 <p> where \(P_{\mathrm{tot}}^i\) and \(Q_{\mathrm{tot}}^i\) are both regarded as matrices in \(M_{D}(\mathbb {C})\) using the total bond-dimension equality. This is the normalized BNT form of <span class="cite">
@@ -5062,7 +5070,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000759">
+<div class="proof_wrapper" id="a0000000761">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
