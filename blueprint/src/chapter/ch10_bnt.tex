@@ -1390,8 +1390,8 @@ matching covers the whole BNT basis.
     \uses{def:sector_bnt_cf,
         thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
-        lem:sector_bnt_matched_sector_weight_equiv,
-        thm:sector_bnt_global_gauge_of_matched_weights}
+        lem:sector_bnt_copy_weight_matching_of_coeff_identity,
+        thm:sector_bnt_global_gauge_of_copy_weight_matching}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors have the same
     MPV family. Assume that every sector of $P$ and every sector of $Q$ has at
     least one copy weight of modulus $1$. Then there exist:
@@ -1436,18 +1436,32 @@ matching covers the whole BNT basis.
     \uses{thm:sector_bnt_bijective_match_of_sameMPV,
         lem:sector_bnt_coeff_identity_via_matched_mpv_phase,
         lem:sector_bnt_norm_phase_of_matched_mpv,
-        lem:sector_bnt_matched_sector_weight_equiv,
-        thm:sector_bnt_global_gauge_of_matched_weights}
+        lem:sector_bnt_copy_weight_matching_of_coeff_identity,
+        thm:sector_bnt_global_gauge_of_copy_weight_matching}
     The full-basis matching theorem gives $\beta$, the bond-dimension
     identifications, and the gauge-phase equivalences between $Q_k$ and
     $P_{\beta(k)}$. Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     gives the eventual exact coefficient identities for the same phases
     $\zeta_k$, while Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv}
     gives $|\zeta_k|=1$.
-    The matched-sector weight-permutation theorem then gives the copy
-    permutations and the displayed pointwise weight identities. Finally
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights} assembles the
-    block conjugacies into the flattened direct-sum conjugation by
+    For each sector $k$,
+    Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity} applies to
+    \[
+        c_N^{(\beta(k))}(P)
+        =
+        \zeta_k^N c_N^{(k)}(Q),
+        \qquad
+        \sum_r \mu_{\beta(k),r}^{\,N}
+        =
+        \sum_q(\zeta_k\nu_{k,q})^N ,
+    \]
+    and gives a copy permutation $\tau_k$ satisfying
+    \[
+        \nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)} .
+    \]
+    Finally
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} assembles
+    the block conjugacies into the flattened direct-sum conjugation by
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 

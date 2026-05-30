@@ -392,28 +392,20 @@ theorem ft_sector_bnt_equal_sector_dataPos
   have hCoeff_eventual : ∀ k : Fin Q.basisCount,
       ∃ N₀, ∀ N > N₀, P.coeff N (β k) = (ζ k) ^ N * Q.coeff N k := fun k =>
     (hCoeff k).choose_spec.2
-  have hWeightData : ∀ k : Fin Q.basisCount,
-      ∃ (hCopies : P.copies (β k) = Q.copies k)
-        (τ : Fin (P.copies (β k)) ≃ Fin (Q.copies k)),
-        ∀ q : Fin (P.copies (β k)),
-          Q.weight k (τ q) = (ζ k)⁻¹ * P.weight (β k) q := by
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := by
+    intro k hzero
+    have hnorm := hζ_norm k
+    simp [hzero] at hnorm
+  let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
+    SectorBNTCopyWeightMatching.of_coeff_identity
+      (P := P) (Q := Q) β ζ hζ_ne hCoeff_eventual
+  have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
-    obtain ⟨N₀, hCoeff_k⟩ := hCoeff_eventual k
-    have hζ_ne : ζ k ≠ 0 := by
-      intro hzero
-      have hnorm := hζ_norm k
-      simp [hzero] at hnorm
-    exact matched_sector_weight_equiv (P := P) (Q := Q)
-      (j₀ := β k) (k₀' := k) (ζ := ζ k) hζ_ne (N₀ := N₀) hCoeff_k
-  let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := fun k =>
-    (hWeightData k).choose
+    have hcard := Fintype.card_congr (W.copy_equiv k)
+    simpa using hcard.symm
   refine ⟨β, hMatch, hCopies, ζ, hζ_norm, ?_⟩
   intro k
-  obtain ⟨hC, τPQ, hτPQ⟩ := hWeightData k
-  refine ⟨τPQ.symm, ?_⟩
-  intro q
-  have hpoint := hτPQ (τPQ.symm q)
-  simpa using hpoint
+  exact ⟨W.copy_equiv k, W.weight_eq k⟩
 
 /-- Reformulation for the all-length `SameMPV₂` form. -/
 theorem ft_sector_bnt_equal_sector_data
@@ -529,29 +521,20 @@ theorem ft_sector_bnt_equal_global_gaugePos
     have hnorm := hζ_norm k
     simp [hzero] at hnorm
   have hCoeff := coeff_identity_via_matched_mpv_phasePos hP hEqual β ζ hMpv
-  have hWeightData : ∀ k : Fin Q.basisCount,
-      ∃ (hCopies : P.copies (β k) = Q.copies k)
-        (τPQ : Fin (P.copies (β k)) ≃ Fin (Q.copies k)),
-        ∀ q : Fin (P.copies (β k)),
-          Q.weight k (τPQ q) = (ζ k)⁻¹ * P.weight (β k) q := by
+  let W : SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ :=
+    SectorBNTCopyWeightMatching.of_coeff_identity
+      (P := P) (Q := Q) β ζ hζ_ne hCoeff
+  let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
     intro k
-    obtain ⟨N₀, hCoeff_k⟩ := hCoeff k
-    exact matched_sector_weight_equiv (P := P) (Q := Q)
-      (j₀ := β k) (k₀' := k) (ζ := ζ k) (hζ_ne k) (N₀ := N₀) hCoeff_k
-  let hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := fun k =>
-    (hWeightData k).choose
+    have hcard := Fintype.card_congr (W.copy_equiv k)
+    simpa using hcard.symm
   let τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)) :=
-    fun k => (hWeightData k).choose_spec.choose.symm
-  have hWeight : ∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
-      Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q) := by
-    intro k q
-    have hpoint := (hWeightData k).choose_spec.choose_spec
-      ((hWeightData k).choose_spec.choose.symm q)
-    simpa [τ] using hpoint
+    W.copy_equiv
   obtain ⟨X, hXdef, hGauge⟩ :=
-    sector_bnt_global_gauge_of_matched_weights
-      (P := P) (Q := Q) β hDim τ ζ Xblock hζ_ne hConj hWeight
-  exact ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, hXdef, hGauge⟩
+    sector_bnt_global_gauge_of_copy_weight_matching
+      (P := P) (Q := Q) β hDim ζ Xblock hζ_ne hConj W
+  exact ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, W.weight_eq, X, hXdef,
+    hGauge⟩
 
 /-- Reformulation for the all-length `SameMPV₂` form.
 
