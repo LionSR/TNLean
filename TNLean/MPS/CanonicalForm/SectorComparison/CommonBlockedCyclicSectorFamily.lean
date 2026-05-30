@@ -135,16 +135,6 @@ noncomputable def commonFlatBlocks (F : CommonBlockedCyclicSectorFamily blocks)
   show MPSTensor (blockPhysDim d F.p) (F.sectorDim y.1 y.2) from
     F.commonSectorBlock y.1 y.2
 
-/-- The same flattened common-sector family expressed at a prescribed common length.
-
-The equality hypothesis is usually supplied by the two-sided common-length theorem,
-which constructs both one-sided cyclic-sector families with the same blocking length. -/
-noncomputable def commonFlatBlocksAt (F : CommonBlockedCyclicSectorFamily blocks)
-    {p' : ℕ} (hp : F.p = p') (x : Fin (∑ k : Fin r, F.period k)) :
-    MPSTensor (blockPhysDim d p') (F.commonFlatDim x) :=
-  cast (congr_arg (fun q => MPSTensor (blockPhysDim d q) (F.commonFlatDim x)) hp)
-    (F.commonFlatBlocks x)
-
 /-- The common-alphabet sector tensor for one original nonzero-weight block. -/
 noncomputable def commonSectorTensor (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (∑ s : Fin (F.period k), F.sectorDim k s) :=
@@ -571,38 +561,6 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCa
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) :=
   F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
-
-/-- If every original block has the same MPV family after direct blocking as after
-iterated blocking, then the weighted nonzero part agrees with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hBlock : ∀ k : Fin r,
-      SameMPV₂
-        (blockTensor (d := d) (D := dim k) (blocks k) F.p)
-        (F.commonReindexedBlock k)) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) := by
-  intro N σ
-  exact (F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ hBlock N σ).trans
-    (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
-
-/-- Agreement between the canonical identifications and the consecutive grouping maps identifies
-the directly blocked weighted nonzero part with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_groupedBlockCastAgrees
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) :=
-  F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise μ
     (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
 
 /-- If the canonical blocked nonzero part agrees with the explicitly reindexed
