@@ -433,8 +433,9 @@ universe edgeCoverUniverse
 edge-blocking windows.
 
 The constructors deliberately record the rectangular cover of the complementary
-region. The source-comparison status of the every-edge window construction is
-recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+region. The source comparison and every-edge window elimination plan are
+recorded in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section
+"Remaining mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 inductive NormalSquareTranslatedEdgeWindow {width height : ℕ}
@@ -737,8 +738,9 @@ normal edge-blocking window.
 This records the per-edge finite-geometry input in the current rectangular
 coordinate model: an edge must be horizontal or vertical, have the corresponding
 named margins, and have a rectangular cover for its complementary block. The
-source-comparison status of the every-edge construction is recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+source comparison and every-edge window elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 inductive NormalSquareEdgeMarginCover {width height : ℕ}
