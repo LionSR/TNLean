@@ -16,6 +16,14 @@ configuration is the family of physical indices on $V\setminus\{u,v\}$.
   arXiv:1804.04964, Section 3, `eq:block_to_mps`](https://arxiv.org/abs/1804.04964)
 - `Papers/1804.04964/paper_normal.tex`, lines 981--1009.
 - `Papers/1804.04964/paper_normal.tex`, lines 1322--1404.
+
+## Scope note
+
+The singleton-region consequences below still assume that the middle region
+$V\setminus\{u,v\}$ is nonempty. The source comparison and removal plan for
+this hypothesis are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 -/
 
 namespace TNLean
@@ -386,8 +394,7 @@ The remaining comparison from region injectivity to the concrete edge-middle
 tensor is still assumed.
 
 **Scope restriction (nonempty middle):** This theorem assumes
-`(edgeMiddleVertices e).Nonempty`; see
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+`(edgeMiddleVertices e).Nonempty`; see the module scope note.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
 `lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
@@ -428,8 +435,7 @@ theorem EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_
 three-site injectivity statement for an edge whose middle region is nonempty.
 
 **Scope restriction (nonempty middle):** This theorem assumes
-`(edgeMiddleVertices e).Nonempty`; see
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+`(edgeMiddleVertices e).Nonempty`; see the module scope note.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
 `lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
@@ -451,8 +457,7 @@ injectivity at every edge whose middle region is nonempty.
 This is the all-edge form of the preceding restricted consequence.
 
 **Scope restriction (nonempty middle):** This theorem assumes
-`∀ e : Edge G, (edgeMiddleVertices e).Nonempty`; see
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+`∀ e : Edge G, (edgeMiddleVertices e).Nonempty`; see the module scope note.
 
 Source: arXiv:1804.04964, Section 3, `eq:block_to_mps` and Lemma
 `lem:injective_union`; `Papers/1804.04964/paper_normal.tex`, lines 981--1009
