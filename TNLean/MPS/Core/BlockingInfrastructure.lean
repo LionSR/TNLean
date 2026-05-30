@@ -332,16 +332,6 @@ theorem replicatedWeights_pow_ne_zero
   intro x
   exact pow_ne_zero (p x.1) (hμ x.1)
 
-/-- A nonzero sector phase can be multiplied into a transported block weight
-without making the sector weight vanish. -/
-theorem replicatedWeights_pow_mul_phase_ne_zero
-    {m : Fin r → ℕ}
-    (μ : Fin r → ℂ) (θ : (Σ k : Fin r, Fin (m k)) → ℂ)
-    (hμ : ∀ k, μ k ≠ 0) (hθ : ∀ x, θ x ≠ 0) (p : Fin r → ℕ) :
-    ∀ x : Σ k : Fin r, Fin (m k), (μ x.1) ^ (p x.1) * θ x ≠ 0 := by
-  intro x
-  exact mul_ne_zero (replicatedWeights_pow_ne_zero μ hμ p x) (hθ x)
-
 end WeightTransport
 
 /-!
@@ -425,13 +415,6 @@ noncomputable def directToIteratedBlockIndex (d m n : ℕ)
     (List.ofFn fun j : Fin n =>
       blockIndexOfList d m (blockWordChunk d m n i j) (length_blockWordChunk d m n i j))
     (by simp)
-
-/-- Encoding the decoded word of a block gives back the original blocked index. -/
-theorem blockIndexOfList_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
-    blockIndexOfList d L (wordOfBlock d L i) (length_wordOfBlock d L i) = i := by
-  classical
-  unfold blockIndexOfList wordOfBlock decodeBlock
-  simp [blockPhysDim]
 
 /-- Decoding blocked physical indices as words is injective. -/
 theorem wordOfBlock_injective (d L : ℕ) : Function.Injective (wordOfBlock d L) := by
@@ -634,18 +617,6 @@ noncomputable def flattenedIteratedBlockTensor
     MPSTensor (blockPhysDim d (p * L)) D :=
   reindexPhysical (directToIteratedBlockIndex d p L)
     (blockTensor (d := blockPhysDim d p) (D := D) A L)
-
-/-- Evaluating a flattened iterated block is evaluating the iterated block on the grouped
-physical configuration. -/
-theorem mpv_flattenedIteratedBlockTensor
-    {d p D L N : ℕ} (A : MPSTensor (blockPhysDim d p) D)
-    (σ : Fin N → Fin (blockPhysDim d (p * L))) :
-    mpv (flattenedIteratedBlockTensor (d := d) (p := p) (D := D) A L) σ =
-      mpv (blockTensor (d := blockPhysDim d p) (D := D) A L)
-        (fun n => directToIteratedBlockIndex d p L (σ n)) := by
-  simpa [flattenedIteratedBlockTensor] using
-    (mpv_reindexPhysical (directToIteratedBlockIndex d p L)
-      (blockTensor (d := blockPhysDim d p) (D := D) A L) σ)
 
 /-- Flattened iterated blocking of an already `p`-blocked tensor agrees with direct blocking by
 `p * L` of the original tensor. -/

@@ -144,16 +144,6 @@ theorem frustration_free_ham_eq
   simp only [comp_sub, sub_comp, comp_id, id_comp]
   abel
 
-/-- Complement-product cancellation identity:
-`P ∘ (id − Q ∘ P) ∘ Q = 0` for commuting idempotents.
-This is `comp_complement_comm_zero` with swapped roles. -/
-theorem comp_complement_comm_zero_swap
-    {P Q : E →ₗ[ℂ] E}
-    (hP : P ∘ₗ P = P) (hQ : Q ∘ₗ Q = Q)
-    (hcomm : P ∘ₗ Q = Q ∘ₗ P) :
-    P ∘ₗ (id - Q ∘ₗ P) ∘ₗ Q = 0 :=
-  comp_complement_comm_zero hQ hP hcomm.symm
-
 end LinearMap
 
 end CommutingIdempotentAlgebra
@@ -256,18 +246,6 @@ theorem HasCommutingParentHam.mem_ground_iff {P_K : E →ₗ[ℂ] E}
       simp only [LinearMap.comp_apply]; rw [hXB, hAX]
     rwa [h.hK] at this
 
-/-- Ground-space vectors are fixed by `P_AX`. -/
-theorem HasCommutingParentHam.pAX_of_ground {P_K : E →ₗ[ℂ] E}
-    (h : HasCommutingParentHam P_K)
-    {v : E} (hv : P_K v = v) : h.P_AX v = v :=
-  ((h.mem_ground_iff v).mp hv).1
-
-/-- Ground-space vectors are fixed by `P_XB`. -/
-theorem HasCommutingParentHam.pXB_of_ground {P_K : E →ₗ[ℂ] E}
-    (h : HasCommutingParentHam P_K)
-    {v : E} (hv : P_K v = v) : h.P_XB v = v :=
-  ((h.mem_ground_iff v).mp hv).2
-
 end Decorrelation
 
 end HasCommutingParentHamProperties
@@ -346,28 +324,6 @@ theorem IsDecorrelated.singleton {P_K O_A O_B : E →ₗ[ℂ] E}
   intro O_A' hA O_B' hB
   rw [Set.mem_singleton_iff.mp hA, Set.mem_singleton_iff.mp hB]
   exact h
-
-/-- Decorrelation is preserved under unions of A-observable sets. -/
-theorem IsDecorrelated.union_obsA {P_K : E →ₗ[ℂ] E}
-    {ObsA₁ ObsA₂ ObsB : Set (E →ₗ[ℂ] E)}
-    (h₁ : IsDecorrelated P_K ObsA₁ ObsB)
-    (h₂ : IsDecorrelated P_K ObsA₂ ObsB) :
-    IsDecorrelated P_K (ObsA₁ ∪ ObsA₂) ObsB := by
-  intro O_A hOA O_B hOB
-  rcases hOA with h | h
-  · exact h₁ O_A h O_B hOB
-  · exact h₂ O_A h O_B hOB
-
-/-- Decorrelation is preserved under unions of B-observable sets. -/
-theorem IsDecorrelated.union_obsB {P_K : E →ₗ[ℂ] E}
-    {ObsA ObsB₁ ObsB₂ : Set (E →ₗ[ℂ] E)}
-    (h₁ : IsDecorrelated P_K ObsA ObsB₁)
-    (h₂ : IsDecorrelated P_K ObsA ObsB₂) :
-    IsDecorrelated P_K ObsA (ObsB₁ ∪ ObsB₂) := by
-  intro O_A hOA O_B hOB
-  rcases hOB with h | h
-  · exact h₁ O_A hOA O_B h
-  · exact h₂ O_A hOA O_B h
 
 end Decorrelation
 

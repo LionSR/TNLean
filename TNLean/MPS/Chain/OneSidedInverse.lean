@@ -73,9 +73,4 @@ theorem decompositionMap_sum {A : MPSTensor d D} (hA : IsInjective A)
   have := decompositionMap_spec hA X
   rwa [Fintype.linearCombination_apply] at this
 
-/-- The decomposition map is a right inverse of the linear combination map. -/
-theorem decompositionMap_rightInverse {A : MPSTensor d D} (hA : IsInjective A) :
-    Function.RightInverse (decompositionMap hA) (Fintype.linearCombination ℂ A) :=
-  decompositionMap_spec hA
-
 end MPSTensor

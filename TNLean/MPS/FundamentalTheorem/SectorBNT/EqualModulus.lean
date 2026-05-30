@@ -84,59 +84,6 @@ structure HasEqualModulusWeightLayer (P : SectorDecomposition d) where
 
 namespace HasEqualModulusWeightLayer
 
-variable {P : SectorDecomposition d}
-
-/-- **Phase weights are nonzero** (immediate from `phase_weight_norm_one`). -/
-lemma phase_weight_ne_zero (h : HasEqualModulusWeightLayer P)
-    (j : Fin P.basisCount) (q : Fin (P.copies j)) :
-    h.phase_weight j q ≠ 0 := by
-  intro hzero
-  have hnorm := h.phase_weight_norm_one j q
-  rw [hzero, norm_zero] at hnorm
-  exact one_ne_zero hnorm.symm
-
-/-- **All spectral-level moduli are bounded by `1`**, combining the
-dominant normalization with `Antitone`. -/
-lemma spectral_level_norm_le_one (h : HasEqualModulusWeightLayer P)
-    (j : Fin P.basisCount) : ‖h.spectral_level j‖ ≤ 1 := by
-  have hpos : 0 < P.basisCount := Nat.lt_of_le_of_lt (Nat.zero_le _) j.isLt
-  have hdom : ‖h.spectral_level ⟨0, hpos⟩‖ = 1 :=
-    h.spectral_level_dom_norm_one hpos
-  have hle : (⟨0, hpos⟩ : Fin P.basisCount) ≤ j :=
-    Fin.mk_le_of_le_val (Nat.zero_le _)
-  have hanti : ‖h.spectral_level j‖ ≤ ‖h.spectral_level ⟨0, hpos⟩‖ :=
-    h.spectral_level_antitone hle
-  rw [hdom] at hanti
-  exact hanti
-
-/-- **Sector coefficient identity** for the equal-modulus layer.
-
-When the equal-modulus factorization is available, the BNT sector
-coefficient `P.coeff N j = ∑_q (μ_{j,q})^N` factors as
-`(λ_j)^N · ∑_q (ν_{j,q})^N`. -/
-lemma coeff_eq_pow_unit_sum (h : HasEqualModulusWeightLayer P)
-    (N : ℕ) (j : Fin P.basisCount) :
-    P.coeff N j =
-      (h.spectral_level j) ^ N *
-        ∑ q : Fin (P.copies j), (h.phase_weight j q) ^ N := by
-  classical
-  unfold SectorDecomposition.coeff SectorWeightData.coeff
-  calc
-    ∑ q : Fin (P.copies j), (P.weight j q) ^ N
-        = ∑ q : Fin (P.copies j),
-            (h.spectral_level j * h.phase_weight j q) ^ N := by
-          refine Finset.sum_congr rfl ?_
-          intro q _
-          rw [h.weight_factor j q]
-    _ = ∑ q : Fin (P.copies j),
-          (h.spectral_level j) ^ N * (h.phase_weight j q) ^ N := by
-          refine Finset.sum_congr rfl ?_
-          intro q _
-          rw [mul_pow]
-    _ = (h.spectral_level j) ^ N *
-          ∑ q : Fin (P.copies j), (h.phase_weight j q) ^ N := by
-          rw [← Finset.mul_sum]
-
 end HasEqualModulusWeightLayer
 
 end MPSTensor

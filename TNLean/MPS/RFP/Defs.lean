@@ -146,13 +146,4 @@ theorem isRFP_iff_kraus_isometry (A : MPSTensor d D) :
     rintro ⟨V, hV, hprod⟩
     exact isRFP_of_kraus_isometry A V hV hprod
 
-/-- Equivalent formulation of `isRFP_iff_kraus_isometry` using the shorter historical name. -/
-theorem isRFP_iff_kraus (A : MPSTensor d D) :
-    IsRFP A ↔
-      ∃ V : Matrix (Fin d × Fin d) (Fin d) ℂ,
-        V.conjTranspose * V = 1 ∧
-        ∀ i₁ i₂ : Fin d,
-          A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j :=
-  isRFP_iff_kraus_isometry A
-
 end MPSTensor
