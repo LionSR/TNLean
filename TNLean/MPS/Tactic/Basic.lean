@@ -14,15 +14,12 @@ for recurring proof patterns in MPS / channel / overlap files.
 
 * `mps_block_words` : direct/iterated blocking maps, `wordOfBlock` expressions
 * `mps_transfer` : transfer map unfoldings
-* `mps_zero_tail` : zero-block MPV term simplification; the zero block contributes
-  its bond dimension at length zero and vanishes at positive length
 
 ## Tactic macros
 
 * `mpv_ext` : introduce `N`, `σ` for `SameMPV₂` or `N`, `hN`, `σ` for `SameMPV₂Pos`
 * `block_words` : normalize direct/iterated blocking maps and `wordOfBlock` expressions
 * `transfer_simp` : unfold transfer maps using `@[mps_transfer]`
-* `zero_tail_simp` : simplify zero-block MPV terms using `@[mps_zero_tail]`
 
 ## Design
 
@@ -40,9 +37,6 @@ register_simp_attr mps_block_words
 
 /-- Simp set for transfer map unfoldings. -/
 register_simp_attr mps_transfer
-
-/-- Simp set for zero-block MPV term simplification. -/
-register_simp_attr mps_zero_tail
 
 /-! ### Tactic macros -/
 
@@ -106,16 +100,3 @@ Currently the `mps_transfer` set contains `transferMap_apply`, so `transfer_simp
 unfolds `transferMap A X` to `∑ i, A i * X * (A i)ᴴ`.
 -/
 macro "transfer_simp" : tactic => `(tactic| simp only [mps_transfer])
-
-/--
-Simplify zero-block MPV terms using `@[mps_zero_tail]`.
-
-Currently the `mps_zero_tail` set contains `mpv_zeroMPSTensor`, so `zero_tail_simp`
-rewrites `mpv (zeroMPSTensor d D) σ` to `if N = 0 then (D : ℂ) else 0`.
-The user is responsible for resolving the `if` by providing the length case (e.g.
-`hN : 0 < N` or `hN : N ≠ 0`).
-
-The source paper calls these summands "zero blocks" (arXiv:1606.00608,
-Section~2.3).
--/
-macro "zero_tail_simp" : tactic => `(tactic| simp only [mps_zero_tail])

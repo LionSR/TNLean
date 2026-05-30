@@ -391,24 +391,6 @@ below: their total bond dimension is recorded as a plain natural number `zeroTai
 enters only through the length-zero dimension identity `D = zeroTailDim + ∑ k, dim k`.
 -/
 
-/-- The all-zero MPS tensor of given physical and bond dimension.
-
-Every Kraus operator is the zero matrix. At `N = 0`, its mpv equals the bond dimension (the trace
-of the identity); at `N > 0`, its mpv is `0`. -/
-def zeroMPSTensor (d D : ℕ) : MPSTensor d D := fun _ => 0
-
-@[mps_zero_tail]
-theorem mpv_zeroMPSTensor {N : ℕ} (σ : Fin N → Fin d') (D' : ℕ) :
-    mpv (zeroMPSTensor d' D') σ = if N = 0 then (D' : ℂ) else 0 := by
-  split
-  case isTrue hN =>
-    subst hN
-    simp [mpv, coeff, Matrix.trace_one]
-  case isFalse hN =>
-    have hpos : 0 < N := Nat.pos_of_ne_zero hN
-    exact mpv_eq_zero_of_all_zero (zeroMPSTensor d' D')
-      (fun _ => rfl) σ hpos
-
 /-- **Zero-block separation.**
 
 The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, some blocks may

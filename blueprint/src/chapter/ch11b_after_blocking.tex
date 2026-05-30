@@ -9,41 +9,15 @@ decomposition at a common blocking period
 These two statements supply the canonical-form input to the proof of the
 Fundamental Theorem in Chapter~\ref{ch:ft_proof}.
 
-\section{Zero-tail separation}%
+\section{Zero-block separation}%
 \label{sec:zero_block_separation}
 
 In an irreducible block decomposition, some blocks may have all-zero Kraus
 operators. Such blocks contribute only at length $N=0$, where the contribution
 equals their bond dimension. The statements below isolate this contribution as
-a single tensor $\mathbf{0}_{d,D_0}$.
-
-\begin{definition}[Zero MPS tensor]\label{def:zero_mps_tensor}
-    \lean{MPSTensor.zeroMPSTensor}
-    \leanok
-    The \emph{zero MPS tensor} of physical dimension $d$ and bond
-    dimension $D$, denoted $\mathbf{0}_{d,D}$, is the tensor whose
-    Kraus operators are all zero.
-\end{definition}
-
-\begin{theorem}[MPV of zero tensor]\label{thm:mpv_zero_tensor}
-    \lean{MPSTensor.mpv_zeroMPSTensor}
-    \leanok
-    \uses{def:zero_mps_tensor}
-    For any spin configuration $\sigma$ of length $N$,
-    \[
-        V^{(N)}(\mathbf{0}_{d,D})_\sigma
-        = \begin{cases}
-            D & \text{if } N = 0,   \\
-            0 & \text{if } N \ge 1.
-        \end{cases}
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    For $N = 0$, $(\mathbf{0}_{d,D})^{\varnothing} = \Id_D$,
-    so the MPV equals $\tr(\Id_D) = D$.
-    For $N \ge 1$, every word product of a zero tensor is zero.
-\end{proof}
+a single zero-block bond dimension $D_0$, which enters only through the
+length-zero dimension identity $D = D_0 + \sum_k D_k$; the positive-length
+content is recorded separately by an equality of MPV families.
 
 \begin{lemma}[All-zero irreducible blocks have bond dimension at most one]%
     \label{lem:irreducible_allZero_dim_le_one}
