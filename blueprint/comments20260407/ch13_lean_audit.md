@@ -107,7 +107,7 @@ Legend:
 | `MPSTensor.IsInjective.exists_rightInverse` | Match | Blueprint matches the Lean theorem: injectivity gives a linear right inverse of the linear-combination map. |
 | `MPSTensor.decompositionMap` | Match | Correctly describes a chosen right inverse. |
 | `MPSTensor.IsInjective.exists_decomposition` | Match | Correct. |
-| `MPSTensor.physRealize` | Match | Definition matches. The blueprint also mentions linearity; in Lean that is a separate theorem `physRealize_linear`, not part of this definition. |
+| `MPSTensor.physRealize` | Match | Definition matches. The blueprint also mentions linearity; that is a separate statement, not part of this definition. |
 | `MPSTensor.physRealize_spec` | Match | Correct. |
 | `MPSTensor.physRealize_mul` | Mismatch | Blueprint weakens Lean by adding an unnecessary basis hypothesis. Lean proves multiplicativity for every injective tensor. |
 | `MPSTensor.chainCombinedTensor_isInjective` | Mismatch | Blueprint states injectivity of a blocked product tensor; Lean proves injectivity of the repackaged combined tensor `chainCombinedTensor`. |
