@@ -13,8 +13,8 @@ spectral properties of the transfer map, i.e.\ by the modulus of its
 subleading eigenvalues.
 
 The spectral analysis of the transfer map and the mixed transfer operator,
-including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict spectral
-gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the resulting
+including the eigenvalue bound $\rho(F_{AB}) \le 1$, the strict
+transfer-operator gap $\rho(F_{AB}) < 1$ for non-equivalent blocks, and the resulting
 overlap decay, is developed in Chapter~\ref{ch:spectral}.  This chapter
 focuses on the \emph{correlator} side: one-point and two-point expectations,
 their spectral decomposition, and quantitative bounds on decay rates.
@@ -103,7 +103,7 @@ their spectral decomposition, and quantitative bounds on decay rates.
     then the connected correlator satisfies that exponential decay bound.
     The source~\cite[Sec.~2.3]{Cirac2021Matrix} obtains this by combining
     the sum-of-exponentials expansion with the triangle inequality, and
-    Sec.~4 provides the spectral gap condition $|\lambda_j|<1$ for the
+    Sec.~4 provides the transfer-map gap condition $|\lambda_j|<1$ for the
     subleading eigenvalues.
     % Extracting $C_{XY}$ and $\lambda_2$ from the transfer-map spectrum
     % is tracked in Issue~\#1447.
@@ -114,26 +114,29 @@ their spectral decomposition, and quantitative bounds on decay rates.
     Given the bound hypothesis, the estimate is immediate.
     The source~\cite[Sec.~2.3]{Cirac2021Matrix} obtains this bound
     by applying the triangle inequality to the sum-of-exponentials
-    expansion and using the spectral gap condition
+    expansion and using the transfer-map gap condition
     $|\lambda_j|\le|\lambda_2|<1$ for all subleading eigenvalues.
     % Deriving the bound from the eigendecomposition of $\E_A$
     % is tracked in Issue~\#1447.
 \end{proof}
 
-\begin{remark}[Spectral hypothesis and the spectral gap]%
+\begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:primitive_compl_lt_one,
         thm:spectral_gap_irr_tp, thm:spectral_gap_wielandt}
     The hypothesis ``$|\lambda_2| < 1$'' in
-    Theorem~\ref{thm:correlator_exponential_bound} is the source-paper
-    \emph{spectral gap} condition for the transfer map $\E_A$.
-    The complementary spectral gap $\rho(\E_A - P) < 1$ is established for
+    Theorem~\ref{thm:correlator_exponential_bound} is a transfer-map gap
+    condition: all non-leading eigenvalues of $\E_A$ lie strictly inside the
+    unit disk.  It is distinct from the Hamiltonian spectral gap of
+    Chapter~\ref{ch:parent_hamiltonian}.
+    The complementary transfer-map gap $\rho(\E_A - P) < 1$ is established for
     primitive channels
-    (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}),
-    for irreducible trace-preserving tensors
-    (Theorem~\ref{thm:spectral_gap_irr_tp}),
-    and quantitatively for injective tensors
-    (Theorem~\ref{thm:spectral_gap_wielandt}).
+    (Theorem~\ref{thm:primitive_compl_lt_one}, Chapter~\ref{ch:channels}).
+    The mixed-transfer gap needed for block separation is supplied for
+    irreducible trace-preserving tensors
+    (Theorem~\ref{thm:spectral_gap_irr_tp}), and quantitative single-tensor
+    transfer-map bounds for injective tensors are recorded in
+    Theorem~\ref{thm:spectral_gap_wielandt}.
     Thus the analytical input needed to make
     Theorems~\ref{thm:correlator_sum_exponentials}
     and~\ref{thm:correlator_exponential_bound} unconditional is already
@@ -166,9 +169,9 @@ their spectral decomposition, and quantitative bounds on decay rates.
     $\xi = -1/\log|\lambda_2| > 0$.
 \end{proof}
 
-\section{Quantitative spectral gap bounds}
+\section{Quantitative transfer-map gap bounds}
 
-The spectral gap theorems in Chapter~\ref{ch:channels} establish
+The transfer-map gap theorems in Chapter~\ref{ch:channels} establish
 $\rho(\E_A - P) < 1$ for primitive channels qualitatively.  This section
 gives the \emph{quantitative} refinements with explicit constants
 and rates for the single-tensor transfer map $\E_A$.
@@ -192,15 +195,16 @@ and rates for the single-tensor transfer map $\E_A$.
         \|\E_A^n(X) - P(X)\|
         \;\le\; C\,(1-\delta)^n\,\|X\|.
     \]
-    The spectral gap $\delta$ exists by primitivity
-    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary spectral gap).
+    The transfer-map gap $\delta$ exists by primitivity
+    (Theorem~\ref{thm:primitive_compl_lt_one}, the complementary transfer-map gap).
 \end{theorem}
 
 \begin{proof}
     \leanok
     Injectivity implies primitivity of the transfer map.
     The complementary spectral radius $\rho(\E_A - P) < 1$ then follows from
-    the primitive spectral gap theorem.  The Gelfand formula yields a
+    the primitive transfer-map gap theorem for the complementary map.
+    The Gelfand formula yields a
     geometric bound $\|\,(\E_A - P)^n\| \le C\,(1-\delta)^n$ for suitable
     constants, giving the claimed estimate.
 \end{proof}
@@ -231,7 +235,7 @@ and rates for the single-tensor transfer map $\E_A$.
     $\xi = -1/\log(1-\delta)$ yields the claimed estimate.
 \end{proof}
 
-\begin{theorem}[Spectral gap from injectivity]%
+\begin{theorem}[Transfer-map gap from injectivity]%
     \label{thm:spectral_gap_wielandt}
     \lean{MPSTensor.spectral_gap_of_injective}
     \leanok
@@ -243,7 +247,7 @@ and rates for the single-tensor transfer map $\E_A$.
 \begin{proof}
     \leanok
     Injectivity implies eventual full Kraus rank. This yields primitivity,
-    hence a spectral gap for the complementary map. Since the transfer map has
+    hence a complementary transfer-map gap. Since the transfer map has
     only finitely many eigenvalues, one may choose a uniform
     $\delta > 0$ separating $1$ from the remaining spectrum.
 \end{proof}

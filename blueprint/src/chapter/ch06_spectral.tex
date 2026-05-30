@@ -1,12 +1,18 @@
-\chapter{Spectral Gap and Block Separation}\label{ch:spectral}
+\chapter{Transfer-Operator Gaps and Block Separation}\label{ch:spectral}
 
 This chapter proves that the MPV overlaps between distinct
 (non-gauge-phase-equivalent) MPS blocks decay to zero as system
 size grows. It also proves the corresponding self-overlap convergence
-to~$1$ under the complementary spectral-gap hypothesis that encodes
+to~$1$ under the complementary transfer-map gap hypothesis that encodes
 primitivity in the cases of interest. The argument is based on a
 spectral analysis of the \emph{mixed transfer operator},
 following~\cite{PerezGarcia2007Matrix}.
+
+This chapter concerns gaps in the spectrum of transfer operators:
+$\rho(F_{AB}) < 1$ for mixed transfer operators, and
+$\rho(\E_A - P) < 1$ after removing the fixed-point projection. The
+unqualified phrase \emph{spectral gap} is reserved for the energy gap of a
+many-body Hamiltonian in Chapter~\ref{ch:parent_hamiltonian}.
 
 The algebraic mixed-transfer identities in the first two sections do
 not use normalization. Starting with the spectral-radius estimates,
@@ -197,7 +203,7 @@ mixed transfer power.
 
 \section{Frobenius norm estimates}
 
-The spectral-gap proofs use the Frobenius (Hilbert--Schmidt) norm
+The transfer-operator gap proofs use the Frobenius (Hilbert--Schmidt) norm
 as the natural norm for the finite-dimensional matrix algebra.
 We write $\|{\cdot}\|_F$ for this norm; it coincides with, and we use it
 interchangeably with, the Hilbert--Schmidt norm $\|{\cdot}\|_{\mathrm{HS}}$ on finite-dimensional spaces.
@@ -244,7 +250,7 @@ Euclidean space.
     Expand both sides as sums over entries and use $|z|^2 = \bar{z}z$.
 \end{proof}
 
-\section{Eigenvalue bound and spectral gap}
+\section{Eigenvalue bound and transfer-operator gap}
 
 The eigenvalue bound comes from a uniform Frobenius-norm estimate
 obtained directly from the trace-preserving normalization
@@ -426,12 +432,12 @@ a block embedding of a mixed-transfer eigenvector.
     the family \emph{trace-preserving} ($\sum_i (\tilde{A}^i)^\dagger \tilde{A}^i = \Id$).
     Both conventions appear in practice:
     the unital version via direct matrix square-root inversion
-    (used in the spectral-gap proof above), and the trace-preserving
+    (used in the transfer-operator gap proof above), and the trace-preserving
     version (used in the canonical-form reduction of
     Chapter~\ref{ch:canonical}).
 \end{remark}
 
-\begin{theorem}[Strict spectral gap]\label{thm:spectral_gap}
+\begin{theorem}[Strict transfer-operator gap]\label{thm:spectral_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
     \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
@@ -448,7 +454,7 @@ a block embedding of a mixed-transfer eigenvector.
     equivalence, contradicting the hypothesis.
 \end{proof}
 
-\section{Spectral gap --- rectangular case}
+\section{Transfer-operator gap --- rectangular case}
 
 \begin{theorem}[Rectangular intertwining forces equal bond dimension]%
     \label{thm:rectangular_intertwining_dim_eq}
@@ -475,7 +481,7 @@ a block embedding of a mixed-transfer eigenvector.
     Applying the same argument to $X^\dagger$ gives $D_1 \le D_2$.
 \end{proof}
 
-\begin{theorem}[Rectangular spectral gap]\label{thm:spectral_gap_rect}
+\begin{theorem}[Rectangular transfer-operator gap]\label{thm:spectral_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
     \leanok
     \uses{def:mixed_transfer_rect, def:injective}
@@ -511,7 +517,7 @@ a block embedding of a mixed-transfer eigenvector.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_gap_rect, thm:overlap_trace_rect}
-    The spectral gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
+    The transfer-operator gap $\rho(F_{AB}^{\mathrm{rect}}) < 1$
     (Theorem~\ref{thm:spectral_gap_rect}) implies
     $(F_{AB}^{\mathrm{rect}})^N \to 0$, so the operator
     trace converges to~$0$.
@@ -533,7 +539,7 @@ a block embedding of a mixed-transfer eigenvector.
 \begin{proof}
     \leanok
     \uses{thm:spectral_gap}
-    The spectral gap $\rho(F_{AB}) < 1$
+    The transfer-operator gap $\rho(F_{AB}) < 1$
     (Theorem~\ref{thm:spectral_gap})
     implies $\|F_{AB}^n\|_{\mathrm{op}} \to 0$
     by the Gelfand formula,
@@ -588,9 +594,9 @@ canonical-form separation arguments.
     Theorem~\ref{thm:qpf}.
 \end{remark}
 
-\section{Spectral gap under irreducible-TP hypotheses}
+\section{Transfer-operator gap under irreducible-TP hypotheses}
 
-The preceding spectral-gap results require \emph{injectivity} of both
+The preceding transfer-operator gap results require \emph{injectivity} of both
 tensors. The following variants weaken this to \emph{irreducibility}
 combined with trace-preserving normalization
 ($\sum_i (A^i)^\dagger A^i = \Id$), following Cirac et
@@ -641,7 +647,7 @@ the Perron--Frobenius fixed point.
     upgrades the intertwining to gauge-phase equivalence.
 \end{proof}
 
-\begin{theorem}[Strict spectral gap (irreducible-TP)]%
+\begin{theorem}[Strict transfer-operator gap (irreducible-TP)]%
     \label{thm:spectral_gap_irr_tp}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
@@ -688,13 +694,13 @@ the Perron--Frobenius fixed point.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:spectral_gap_irr_tp, thm:overlap_trace}
-    Combine the spectral gap
+    Combine the transfer-operator gap
     (Theorem~\ref{thm:spectral_gap_irr_tp})
     with the overlap--trace identity
     (Theorem~\ref{thm:overlap_trace}).
 \end{proof}
 
-\begin{theorem}[Rectangular spectral gap (irreducible-TP)]%
+\begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
     \label{thm:spectral_gap_rect_irr_tp}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP}
     \leanok
@@ -1597,15 +1603,18 @@ Theorem~\ref{thm:peripheral_cyclic_group}.
     $X = c \cdot U$ and the eigenspace is one-dimensional.
 \end{proof}
 
-\section{Primitive overlap convergence (spectral-gap form)}
+\section{Primitive overlap convergence (complementary transfer-map gap form)}
 
 The theorems in this section are stated directly in terms of the
 complementary map $E - P$. This is the analytic form needed for the later
-overlap argument, corresponding to the primitive-case specialization of~\cite[Theorem~6.7]{Wolf2012Quantum} where $T_\phi$ is a rank-one projection.
+overlap argument, corresponding to the primitive-case specialization
+of~\cite[Theorem~6.7]{Wolf2012Quantum} where $T_\phi$ is a rank-one
+projection.
 For primitive normalized transfer maps, Chapter~\ref{ch:channels} supplies
-this spectral-gap input under explicit hypotheses.
+this complementary transfer-map input under explicit hypotheses.
 
-\begin{theorem}[Complementary spectral gap implies trace convergence to $1$]\label{thm:trace_pow_one}
+\begin{theorem}[Complementary transfer-map gap implies trace convergence to $1$]%
+    \label{thm:trace_pow_one}
     \lean{MPSTensor.linearMap_trace_pow_tendsto_one_of_spectralRadius_compl_lt_one}
     \leanok
     \uses{def:fixed_point_proj, def:trace_preserving}
@@ -1630,7 +1639,8 @@ this spectral-gap input under explicit hypotheses.
     we have $\Tr(P) = \frac{\tr(\rho)}{\tr(\rho)} = 1$.
 \end{proof}
 
-\begin{theorem}[Self-overlap convergence from a complementary spectral gap]\label{thm:primitive_overlap}
+\begin{theorem}[Self-overlap convergence from a complementary transfer-map gap]%
+    \label{thm:primitive_overlap}
     \lean{MPSTensor.mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one}
     \leanok
     \uses{def:transfer_map, def:fixed_point_proj, def:mpv_overlap}
