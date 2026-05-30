@@ -18,6 +18,10 @@ predicates and the corresponding existential witness are recorded in separate
 files.  These files do not yet construct the source objects from an MPDO tensor;
 that construction remains part of the Appendix C.3--C.4 comparison work.
 
+The source comparison and remaining construction plan for these coefficient
+objects are recorded in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`,
+Section "BNT-label coefficient objects and remaining elimination plan".
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -51,7 +55,8 @@ The predicate
 `BNTBlockedBasisCoefficientComparison` records that comparison once the
 Appendix C.3 label maps have been supplied; constructing those maps from an
 MPDO tensor remains part of the gap recorded in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
+coefficient objects and remaining elimination plan".
 Source: arXiv:1606.00608, Theorem IV.13(ii), eq:algebra, lines 972--985, and
 Appendix C.4, lines 1925--1942 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -314,7 +319,8 @@ blocked support-algebra product
 map is defined on the chosen basis of \(\mathcal A_{2n}\).  It is a
 blocked-basis comparison statement, not the same-length product law itself.
 The restriction is documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
+coefficient objects and remaining elimination plan".
 
 This structure records the comparison statement only.  Constructing the label
 maps from the Appendix C.3 decomposition and relating this blocked product to
@@ -387,7 +393,8 @@ the BNT-label coefficient system.
 This is not yet a proof of Theorem IV.13(ii) from an MPDO tensor: it is the
 paper-faithful coefficient statement to be constructed.  The construction of
 this witness from the Appendix C.3--C.4 data remains the main obligation
-described in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`; the
+described in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section
+"BNT-label coefficient objects and remaining elimination plan"; the
 blocked-basis comparison predicate is recorded separately below.
 Source: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix C.4,
 lines 1925--1942 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
