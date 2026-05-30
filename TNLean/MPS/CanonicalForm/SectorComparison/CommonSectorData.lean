@@ -91,7 +91,7 @@ theorem afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂
       hIrrB, hTPB, hμB, hDimB, hMPVB⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
   have hBook :=
-    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+    nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hMPVA hMPVB
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB,
@@ -220,7 +220,7 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   have hAPosCanon := sameMPV₂Pos_of_zeroTail_eq _ _ hZA
   have hBPosCanon := sameMPV₂Pos_of_zeroTail_eq _ _ hZB
   have hBook :=
-    nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+    nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hp hMPVA hMPVB
   refine ⟨p, hp, rA, dimA, μA, blocksA,
     rB, dimB, μB, blocksB, familyA, familyB,

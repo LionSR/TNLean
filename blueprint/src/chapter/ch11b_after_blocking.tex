@@ -345,7 +345,7 @@ a single tensor $\mathbf{0}_{d,D_0}$.
 
 \begin{theorem}[Positive-length equality of nonzero block tensors]%
     \label{thm:nonzero_block_zero_tail_identity}
-    \lean{MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
+    \lean{MPSTensor.nonzeroBlock_sameMPV₂Pos_of_sameMPV₂}
     \leanok
     \uses{def:same_mpv2, def:same_mpv2_pos, def:zero_mps_tensor, def:block_diagonal_tensor}
     Suppose $A$ and $B$ have the same MPV family and admit decompositions
@@ -376,9 +376,9 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     decompositions can be compared directly through the common MPV family.
 \end{proof}
 
-\begin{theorem}[Blocked nonzero parts and length zero]%
+\begin{theorem}[Positive-length equality of blocked nonzero parts]%
     \label{thm:nonzero_block_block_power_zero_tail_identity}
-    \lean{MPSTensor.nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
+    \lean{MPSTensor.nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂}
     \leanok
     \uses{thm:nonzero_block_zero_tail_identity,
         thm:zero_tail_to_tensor_from_blocks_block_power, def:same_mpv2_pos}

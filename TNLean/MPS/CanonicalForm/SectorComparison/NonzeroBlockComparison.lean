@@ -41,7 +41,7 @@ contribution plus a weighted nonzero block tensor. Then the nonzero parts agree 
 positive length, since the all-zero leftover block contributes nothing there. The
 length-zero coefficient is recovered separately, at the end, from equality of the bond
 dimensions. -/
-theorem nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+theorem nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
     {d D₁ D₂ rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -76,7 +76,7 @@ weighted nonzero block tensor, then every positive common reblocking raises the
 nonzero weights to powers and preserves positive-length equality of the nonzero parts.
 The all-zero leftover block contributes only at length zero, so its coefficient is
 recovered separately, at the end, from equality of the bond dimensions. -/
-theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+theorem nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂
     {d D₁ D₂ rA rB p : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -110,7 +110,7 @@ theorem nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sam
       (blockTensor (d := d) (D := D₂) B p) :=
     sameMPV₂_blockTensor A B hSame p
   exact
-    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
+    nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
       (d := blockPhysDim d p)
       (blockTensor (d := d) (D := D₁) A p)
       (blockTensor (d := d) (D := D₂) B p)
