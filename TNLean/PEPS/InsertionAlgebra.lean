@@ -72,10 +72,10 @@ matrix insertions on the chosen bond of the first blocked chain correspond, by
 an algebra isomorphism, to matrix insertions on the chosen bond of the second
 blocked chain, and the corresponding inserted coefficients agree.
 
-**Proof status:** This declaration states the source theorem. The proof uses the
-already formalized virtual-to-physical realization at the two vertices, the
-physical-to-virtual recovery step tracked by issue #1370, and the
-uniqueness/bijection argument in Lemma inj_isomorph. Tracked by issue #1367. -/
+**Proof status:** This declaration states the source theorem. The available
+components and remaining implications are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem isEdgeBlockedInsertionAlgebraIsomorphism
     (A B : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)
