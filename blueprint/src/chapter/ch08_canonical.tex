@@ -50,9 +50,9 @@ obtained from primitive blocks).
     blocks $A_k$, possibly empty, such that the globally rescaled tensor
     $s^{-1}A$ has the same MPV coefficients on every positive-length ring as
     \[
-        \bigoplus_k \lambda_k A_k^i.
+        \bigoplus_k \mu_k A_k^i.
     \]
-    The weights are positive and satisfy $1\geq |\lambda_k|$; if the family is
+    The weights are positive and satisfy $1\geq |\mu_k|$; if the family is
     nonempty, then some weight has norm $1$. For each block,
     \[
         \sum_i A_k^i(A_k^i)^\dagger = \Id,
@@ -475,12 +475,10 @@ particular Theorem~\ref{thm:irreducible_action_cumulative_span}.
 
 \section{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
 
-% MAINTAINER: Definition~\ref{def:cf_cpsv} as stated does not list overlap
-% convergence O_{A_k A_k}(N) -> 1 as a separate clause; the prose below and the
-% next remark treat overlap convergence as part of the canonical-form
-% conditions. Reconcile the two presentations (cf. def:is_canonical_form).
-The canonical-form conditions used here include the self-overlap convergence
-$O_{A_k A_k}(N) \to 1$ for each block (cf.\ Definition~\ref{def:cf_cpsv}).
+The self-overlap convergence $O_{A_k A_k}(N) \to 1$ for each block is not part of
+Definition~\ref{def:cf_cpsv}; it is a derived consequence of block normality,
+obtained from the transfer-map gap criterion of Chapter~\ref{ch:spectral}
+(Remark~\ref{rem:primitivity_reduces_assumptions}).
 The CPSV result of this section is Theorem~\ref{thm:blocking_primitivity}:
 blocking an irreducible TP block by the least common multiple of its peripheral
 periods makes the resulting transfer map primitive, removing periodicity.
@@ -1827,7 +1825,7 @@ Chapter~\ref{ch:canonical_after_blocking}.
 
     This definition records the exact-MPV, nonempty-ring part of the PGVWC07
     construction. It does not include the source theorem's upper normalization
-    $1\geq\lambda_k$, which depends on the global spectral-radius normalization
+    $1\geq\mu_k$, which depends on the global spectral-radius normalization
     convention of \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
 \end{definition}
 
