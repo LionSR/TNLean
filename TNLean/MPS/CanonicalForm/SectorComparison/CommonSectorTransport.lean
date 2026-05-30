@@ -43,37 +43,6 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
 matrix product states, canonical form, common sectors, zero-tail decomposition
 -/
 
-/-- The representative common-sector family is normal-CF-BNT once the
-representative weights are strictly ordered and the representatives are
-BNT-separated.
-
-It combines the representative normal-canonical-form statement with the
-explicit hypothesis that distinct representatives are not gauge-phase equivalent.
-
-**Scope restriction (one-copy-per-sector):** The output is an
-`IsNormalCanonicalFormBNT` structure on the already chosen representative
-family. It keeps one representative for each strict weight-modulus class and
-does not reconstruct the repeated-copy CPSV16 BNT sector data. The restriction
-is documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
-lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-    {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)}
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (μ : Fin r → ℂ)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖))
-    (hNotGpe : BlocksNotGaugePhaseEquiv
-      (d := blockPhysDim d p) (F.commonRepresentativeBlocksAt hp))
-    (hμDom : ∀ h : 0 < r, ‖F.commonRepresentativeWeight μ ⟨0, h⟩‖ = 1) :
-    IsNormalCanonicalFormBNT (d := blockPhysDim d p)
-      (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
-  toIsNormalCanonicalForm :=
-    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti.antitone
-  mu_strict_anti := hAnti
-  blocks_not_equiv := hNotGpe
-  mu_dom_norm_one := hμDom
-
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/
 lemma zeroTail_commonFlat_of_blockwise

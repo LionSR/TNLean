@@ -456,68 +456,6 @@ private theorem sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoin
     _ = c • (φ k 1).1 := by simp
     _ = c • P k := by rw [hφ1_eq_P]
 
-/-- If each blocked sector channel has only scalar adjoint fixed points, then
-its cyclic projections satisfy `SectorFixedPointAlgebraRigidity`.
-
-This is the strongest currently available general route in the direction of the scalar
-blocked fixed-point algebra result
-(see Cirac--Perez-Garcia--Schuch--Verstraete 2021, Appendix A): once the blocked
-fixed-point algebra is known to be scalar on all compressed sectors,
-every `((transferMap A†)^m)`-fixed corner element is a scalar multiple of the
-corresponding sector projection, so the one-step adjoint transition is
-automatically multiplicative on the sector fixed-point algebra. -/
-theorem sectorFixedPointAlgebraRigidity_of_cyclic_decomp_after_blocking_of_scalarBlockedFixedPoints
-    {d D m : ℕ} [NeZero D] [NeZero m]
-    (A : MPSTensor d D)
-    {dim : Fin m → ℕ}
-    (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
-    (P : Fin m → MatrixAlg D)
-    (φ : (k : Fin m) →
-      Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
-    (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hcyclic :
-      ∀ k : Fin m,
-        transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
-    (hIntertwine :
-      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (transferMap (d := blockPhysDim d m) (D := dim k)
-            (fun i => (blocks k i)ᴴ) X)).1 =
-          transferMap (d := blockPhysDim d m) (D := D)
-            (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
-    (hMul :
-      ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
-    (hScalarFixed :
-      ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        transferMap (d := blockPhysDim d m) (D := dim k)
-            (fun i => (blocks k i)ᴴ) X = X →
-          ∃ c : ℂ, X = c • 1) :
-    SectorFixedPointAlgebraRigidity
-      (D := D) (m := m)
-      (transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) P := by
-  let T : MatrixEnd D := transferMap (d := d) (D := D) (fun i => (A i)ᴴ)
-  change SectorFixedPointAlgebraRigidity (D := D) (m := m) T P
-  intro k X Y hXP hPX hYP hPY hXfix hYfix
-  obtain ⟨cX, hcX⟩ :=
-    sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoints
-      (A := A) (blocks := blocks) (P := P) (φ := φ) hPproj hIntertwine hMul hScalarFixed
-      hXP hPX (by simpa [T] using hXfix)
-  obtain ⟨cY, hcY⟩ :=
-    sector_supported_pow_fixed_eq_smul_projection_of_scalarFixedPoints
-      (A := A) (blocks := blocks) (P := P) (φ := φ) hPproj hIntertwine hMul hScalarFixed
-      hYP hPY (by simpa [T] using hYfix)
-  have hTPk : T (P k) = P (k - 1) := by
-    simpa [T, show k - 1 + 1 = k by abel] using hcyclic (k - 1)
-  rw [hcX, hcY]
-  calc
-    T ((cX • P k) * (cY • P k)) = T ((cY * cX) • P k) := by
-          simp [smul_smul, (hPproj k).2]
-    _ = (cY * cX) • P (k - 1) := by rw [map_smul, hTPk]
-    _ = (cX • P (k - 1)) * (cY • P (k - 1)) := by
-          simp [smul_smul, (hPproj (k - 1)).2]
-    _ = T (cX • P k) * T (cY • P k) := by
-          simp only [map_smul, hTPk]
-
 /-- Unconditional: cyclic-sector blocks after period removal are primitive and
 tensor-irreducible.
 
