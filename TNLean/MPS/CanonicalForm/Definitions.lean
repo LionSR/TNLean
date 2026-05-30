@@ -9,15 +9,20 @@ import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
-# Normal tensor, canonical form, and basis of normal tensors (CPSV16)
+# Normal tensor and basis of normal tensors (CPSV16)
 
-This module records the definitions of the three central notions
+This module records the definitions of two of the central notions
 from arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete, "Matrix product density
 operators: Renormalization fixed points and boundary theories"):
 
-* normal tensor (NT), `MPSTensor.IsNormalTensor`,
-* canonical form (CF), `MPSTensor.IsCPSVCanonicalForm`, and
+* normal tensor (NT), `MPSTensor.IsNormalTensor`, and
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
+
+The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` plus the
+normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is
+carried by the strong downstream predicate
+`MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm`; the previously vestigial
+weak duplicate `IsCPSVCanonicalForm` (zero consumers) has been removed.
 
 The existing TNLean canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
 `TNLean.MPS.BNT.Construction`) ships several *strengthenings* of these definitions
@@ -30,9 +35,6 @@ The predicates here are the CPSV formulations.
 * `MPSTensor.IsNormalTensor`: `Papers/1606.00608/MPDO-22-12-17-2.tex:233-235`
   (Definition: NT is no nontrivial invariant projector + unique modulus-1
   eigenvalue of the associated CPM equal to its spectral radius equal to one).
-* `MPSTensor.IsCPSVCanonicalForm`: `Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`
-  (Definition: CF is `A^i = ⊕_k μ_k A_k^i` with each `A_k` normal; combined with
-  the normalization paragraph at line 246: `|μ_k| ≤ 1` and at least one `|μ_k| = 1`).
 * `MPSTensor.IsCPSVBasisOfNormalTensors`: `Papers/1606.00608/MPDO-22-12-17-2.tex:271-274`
   (Definition: BNT `{A_j}` of `A` is `A_j` all normal, MPV family of `A`
   spanned by MPV families of the `A_j` at every length, and eventually linearly
@@ -59,13 +61,9 @@ One direct connection is provided:
 * `MPSTensor.IsNormalTensor.of_irreducible_and_primitive` —
   combine an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
 
-Two further connections are intentionally **not** provided here, in keeping with the
+A further connection is intentionally **not** provided here, in keeping with the
 "clean layer, no `sorry`" quality bar:
 
-* A CF connection `IsCPSVCanonicalForm.of_isNormalCanonicalForm` would need to import
-  `TNLean.PiAlgebra.CanonicalFormSepAux` which transitively imports
-  `TNLean.MPS.FundamentalTheorem.*`; we keep `Definitions.lean` in a clean pre-FT
-  layer. Such a connection belongs in a separate downstream file.
 * A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
   block injectivity to the CPSV16 (no-invariant-proj + primitive-transfer)
@@ -117,70 +115,6 @@ theorem IsNormalTensor.of_irreducible_and_primitive
     IsNormalTensor A :=
   { no_invariant_proj := hIrr
     primitive_transfer := hPrim }
-
-/-! ## Canonical form (CF) -/
-
-/--
-`MPSTensor.CPSVCanonicalFormData A` is the data of a canonical-form
-decomposition of `A` from arXiv:1606.00608 eq. `II_CF1` plus the normalization paragraph
-immediately following (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`):
-
-* a number `r` of blocks,
-* per-block bond dimensions `dim k`,
-* per-block weights `weights k : ℂ`,
-* per-block tensors `blocks k : MPSTensor d (dim k)`, each normal,
-* an MPV-equality witness `A^i = ⊕_k weights k • blocks k^i` at every positive
-  length (encoded as `SameMPV₂Pos A (toTensorFromBlocks weights blocks)`),
-* the bond-dimension identity `D = ∑_k D_k`, which is the length-zero content of
-  the decomposition,
-* modulus normalization `‖weights k‖ ≤ 1` for all `k`, and at least one `‖weights k‖ = 1`.
-
-Full all-length MPV equality is recovered from the positive-length witness and the
-bond-dimension identity through `SameMPV₂Pos.toSameMPV₂_of_bondDim_eq`.
-
-This is **data** (a `Type`); the propositional version is `IsCPSVCanonicalForm` below.
--/
-structure CPSVCanonicalFormData (A : MPSTensor d D) where
-  /-- Number of blocks `r` in the direct-sum decomposition `A^i = ⊕_{k=1}^r μ_k A_k^i`. -/
-  r : ℕ
-  /-- Bond dimensions of the blocks `dim k = D_k`. -/
-  dim : Fin r → ℕ
-  /-- Block weights `μ k` of the decomposition. -/
-  weights : Fin r → ℂ
-  /-- Per-block MPS tensors `A_k`. -/
-  blocks : (k : Fin r) → MPSTensor d (dim k)
-  /-- `A` and the direct sum `⊕_k μ_k A_k` have the same MPV family at every positive
-  length. -/
-  sameMPV : SameMPV₂Pos A (toTensorFromBlocks (d := d) weights blocks)
-  /-- The bond dimension of `A` equals the total bond dimension `∑_k D_k` of the blocks.
-  This is the length-zero content of the decomposition, from which full MPV equality is
-  recovered through `SameMPV₂Pos.toSameMPV₂_of_bondDim_eq`. -/
-  bondDim_eq : D = ∑ k : Fin r, dim k
-  /-- Each block `A_k` is a CPSV16 normal tensor. -/
-  blocks_normal : ∀ k, IsNormalTensor (blocks k)
-  /-- Modulus normalization (`MPDO-22-12-17-2.tex:246`): every weight has modulus at most one. -/
-  weight_norm_le_one : ∀ k, ‖weights k‖ ≤ 1
-  /-- Modulus normalization (`MPDO-22-12-17-2.tex:246`): at least one weight has unit modulus. -/
-  weight_unit_exists : ∃ k, ‖weights k‖ = 1
-
-/--
-`MPSTensor.IsCPSVCanonicalForm A` is the propositional **canonical form**
-predicate from arXiv:1606.00608
-(`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`): `A` admits a normal-block
-direct-sum decomposition with weights normalized to `|μ_k| ≤ 1` and at least one
-`|μ_k| = 1`.
-
-This is `Nonempty (CPSVCanonicalFormData A)` — i.e. existence of a CPSV canonical-form
-decomposition witness.
--/
-def IsCPSVCanonicalForm (A : MPSTensor d D) : Prop :=
-  Nonempty (CPSVCanonicalFormData A)
-
-/-- Promote a CPSV canonical-form data witness to the propositional predicate. -/
-theorem IsCPSVCanonicalForm.of_data
-    {A : MPSTensor d D} (h : CPSVCanonicalFormData A) :
-    IsCPSVCanonicalForm A :=
-  ⟨h⟩
 
 /-! ## Basis of normal tensors (BNT) -/
 
