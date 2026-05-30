@@ -983,39 +983,13 @@ repeated-copy sectors do occur: for instance, $A = C \oplus (-C)$ has one normal
 tensor $C$ with weights $1$ and $-1$, and its length-$N$ MPV coefficients are
 $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
 
-\begin{theorem}[Sorting by strictly decreasing weight norms]
-    \label{thm:bnt_sorted_reindexing}
-    Let $(\mu_k)_{k=1}^r$ be nonzero complex weights whose moduli are pairwise
-    distinct. Then there exists a permutation $\sigma$ of $\{1,\ldots,r\}$ such that
-    \[
-        |\mu_{\sigma(1)}| > |\mu_{\sigma(2)}| > \cdots > |\mu_{\sigma(r)}| > 0.
-    \]
-\end{theorem}
-
-\begin{theorem}[Sorted decomposition preserves the represented MPS family]
-    \label{thm:bnt_sorted_blockdecomp}
-    \uses{thm:bnt_sorted_reindexing}
-    Under the same hypothesis, with $\sigma$ as above and
-    $\tilde\mu_k := \mu_{\sigma(k)}$, $\tilde B_k := B_{\sigma(k)}$,
-    \[
-        \mc{V}\!(\textstyle\bigoplus_k \mu_k B_k)
-        =  \mc{V}\!(\textstyle\bigoplus_k \tilde\mu_k \tilde B_k),
-        \qquad |\tilde\mu_1| > \cdots > |\tilde\mu_r|.
-    \]
-\end{theorem}
-
-\begin{theorem}[Normal canonical form after sorting]
-    \label{thm:bnt_sorted_ncf}
-    \uses{def:is_normal_canonical_form, thm:bnt_sorted_blockdecomp}
-    Suppose $(\mu_k, B_k)_{k=1}^r$ satisfies $\mu_k \neq 0$, $|\mu_k|$ pairwise
-    distinct, and each $B_k$ is irreducible, left-canonical
-    ($\sum_i (B_k^i)^\dagger B_k^i = \Id$), with primitive transfer map and
-    $\dim B_k > 0$. Then after sorting by strictly decreasing
-    $|\mu_{\sigma(k)}|$, the resulting family $(\tilde\mu_k, \tilde B_k)$
-    satisfies the normal canonical form conditions of
-    Definition~\ref{def:is_normal_canonical_form}. This is the distinct-modulus,
-    one-copy-per-sector subcase.
-\end{theorem}
+The distinct-modulus, one-copy-per-sector subcase (sorting blocks by strictly
+decreasing weight modulus and matching the normal canonical form one sector at a
+time) is subsumed by the general phase-class BNT sector construction of
+Chapter~\ref{ch:ft_proof}
+(Definition~\ref{def:mpv_phase_class_data},
+Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}), so it is no longer
+recorded as separate sorting theorems here.
 
 \begin{definition}[Single-copy sector decomposition]
     \label{def:trivial_sector_decomp}
@@ -1049,43 +1023,12 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
     block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-\begin{theorem}[Single-copy sector decomposition for the sorted distinct-modulus case]
-    \label{thm:bnt_trivial_sector}
-    \notready
-    \uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
-    If $\mu_k \neq 0$ for all $k$ and $|\mu_1| > \cdots > |\mu_r|$, then the
-    single-copy sector decomposition associated to $(\mu,B)$ represents the same
-    family as $\bigoplus_k \mu_k B_k$ for every $N \ge 1$ and has exactly one
-    copy per sector. This is the distinct-modulus, one-copy-per-sector subcase.
-\end{theorem}
-
-To remove the artificial distinct-modulus assumption, group blocks by common
-weight modulus. The next two definitions record this grouping; it is the
-mechanism that handles equal-modulus sectors in Chapter~\ref{ch:bnt}.
-
-\begin{definition}[Partition by common weight modulus]
-    \label{def:norm_class_grouping_data}
-    Let $(\mu_k)_{k=1}^r$ be a finite family of complex weights. A
-    \emph{partition by common weight modulus} consists of: a number of classes $s \le r$;
-    representative values $\lambda_1 > \cdots > \lambda_s > 0$;
-    multiplicities $(m_j)_{j=1}^s$ with $\sum_j m_j = r$; for each $j$ an
-    enumeration $\iota_j : \{1,\ldots,m_j\} \hookrightarrow \{1,\ldots,r\}$ of
-    the indices $k$ with $|\mu_k| = \lambda_j$; and the regrouping identity
-    \[
-        \sum_{k=1}^{r} f(k) =  \sum_{j=1}^{s} \sum_{q=1}^{m_j} f(\iota_j(q)),
-    \]
-    for every function $f$.
-\end{definition}
-
-\begin{definition}[Common-modulus enumeration in decreasing order]
-    \label{def:norm_class_grouping}
-    \uses{def:norm_class_grouping_data}
-    For any finite family $(\mu_k)_{k=1}^r$ of complex weights, sorting
-    the distinct moduli $\{|\mu_k| : 1 \le k \le r,\ \mu_k \neq 0\}$ in
-    strictly decreasing order yields a common-modulus partition (in the
-    sense of Definition~\ref{def:norm_class_grouping_data}) with
-    representative values $\lambda_1 > \cdots > \lambda_s$.
-\end{definition}
+The sorted distinct-modulus sector statement and the regrouping of blocks by
+common weight modulus (which handles equal-modulus sectors) are subsumed by the
+phase-class BNT sector construction of Chapter~\ref{ch:ft_proof}
+(Definition~\ref{def:mpv_phase_class_data},
+Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) and the
+basis-of-normal-tensors development of Chapter~\ref{ch:bnt}.
 
 \section{Scope and BNT input reductions}\label{sec:open_directions}
 
@@ -1100,9 +1043,10 @@ mechanism that handles equal-modulus sectors in Chapter~\ref{ch:bnt}.
     The invariant-subspace decomposition, TP gauges, and one-block period-removal
     statements are recorded above. Chapter~\ref{ch:canonical_after_blocking}
     contains the common-blocking construction, the zero-tail identities, and the
-    common-sector decompositions over one blocked physical alphabet. The
-    distinct-modulus case is covered by the sorted normal-canonical-form theorem
-    (Theorem~\ref{thm:bnt_sorted_ncf}); equal-modulus families require the
+    common-sector decompositions over one blocked physical alphabet. Both the
+    distinct-modulus and the equal-modulus cases are covered by the phase-class
+    BNT sector construction of Chapter~\ref{ch:ft_proof}
+    (Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) together with the
     basis-of-normal-tensors and multiplicity comparison developed in
     Chapter~\ref{ch:bnt}.
 \end{remark}
