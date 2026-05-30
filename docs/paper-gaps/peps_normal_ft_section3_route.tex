@@ -278,50 +278,61 @@ diagram work is tracked by \ghissue{1376}. The general PEPS status tracker is
 \section{Remaining mathematical obligations}
 
 The normal PEPS theorem cannot be obtained by citing the injective theorem
-alone. The list below is the authoritative record of the remaining
-mathematical obligations for the square-lattice normal blocking route. Lean
-docstrings and blueprint entries should point here rather than repeat this
-status in full.
+alone. The lists below are the authoritative record for the square-lattice
+normal blocking route. Lean docstrings and blueprint entries should point here
+rather than repeat this status in full.
+
+The following part of the formalization is already present.
+\begin{itemize}
+    \item Region injectivity is represented by
+          \leanid{TNLean.PEPS.RegionInjectivityData}, with region complements
+          and the finite-region union-closure hypothesis.
+    \item The four-region decomposition for Lemma \path{injective_union} is
+          formalized both by named regions and by the indexed family
+          \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
+          \((A\cup B)^c\), including the reconstruction, disjointness, and
+          selected-complement identities used by the two inverse applications.
+    \item The abstract contraction-chain criterion for Lemma
+          \path{injective_union} is formalized: if the three implications
+          \[
+              \mathcal C_{\{0,1,2\}}(X)=0
+              \Longrightarrow \mathcal C_{\{2\}}(X)=0
+              \Longrightarrow \mathcal C_{\{1,2\}}(X)=0
+              \Longrightarrow X=0
+          \]
+          are supplied, then the union contraction has trivial kernel.
+    \item The square-lattice coordinate model, contiguous \(2\times3\) and
+          \(3\times2\) rectangles, and the coordinate rectangular-injectivity
+          hypotheses are present.
+    \item The source regions \(R\) and \(S\) are explicit finite coordinate
+          regions, their rectangular decompositions are formalized, and their
+          injectivity follows conditionally from rectangular injectivity and
+          union closure.
+    \item The displayed local \(T\)-region, the finite-lattice
+          edge-complement regions, their sufficient rectangular-cover criteria,
+          the no-cover diagnostics for the present origin-based local models,
+          and the normalized collar decompositions are formalized.
+    \item The one-edge, translated-window, and margin-cover hypotheses
+          for normal edge blocking are present, together with their endpoint,
+          disjointness, coverage, and injective-chain consequences.
+\end{itemize}
+
+The remaining obligations are the following.
 
 \begin{enumerate}
-    \item Define a formal notion of injectivity for a blocked region, not only for
-          a single vertex. The statement must be able to express the regions
-          $A\setminus B$, $A\cap B$, $B\setminus A$, $R$, $S$, $T$, and
-          complements of such regions.
-    \item Prove the union-of-injective-regions lemma. The proof must follow the
-          source proof by applying the left inverses for $A$ and $B$ in sequence.
-    \item Record the square-lattice normal hypotheses. The rectangular
-          injectivity part is expressed for contiguous coordinate
-          $2\times 3$ and $3\times 2$ rectangles; the remaining size data must
-          be tied to the displayed regions and their required complements.
-    \item Prove that the paper's regions $R$, $S$, and $T$ are injective
-          under those hypotheses. Regions $R$ and $S$ are explicit unions of
-          contiguous rectangles, with the displayed rectangular decompositions
-          and the expected one-site difference. Union closure therefore gives
-          their injectivity conditionally on the source union lemma. The local
-          model for $T$ is the complement of the two displayed edge blocks in
-          the source $5\times6$ window; those two blocks have the required
-          rectangular shapes and are injective under rectangular injectivity.
-          Rectangular-cover data give sufficient injectivity criteria for the
-          local $T$ region, the rotated vertical local $T$ region, and the
-          finite-lattice complementary block. The normalized horizontal
-          $5\times7$ and vertical $7\times5$ collar identities show how local
-          or rotated $T$ injectivity implies injectivity of the corresponding
-          edge-complementary block. The same exact-cover criterion has
-          point-forcing obstructions for the present origin-based local $T$
-          models and origin-based edge-complement models in the
-          $5\times6$, $6\times5$, $5\times7$, and $7\times5$ frames. Thus the
-          remaining coordinate work is to align the source local and rotated
-          $T$ covers with the finite PEPS geometry and translate these
-          decompositions around every edge.
-    \item Prove that the edge-centered red, blue, and complementary regions form a
-          three-site injective chain around every edge. The normalized and
-          translated one-edge data supply these chain hypotheses locally,
-          and translated edge windows determine the uniform hypotheses
-          once such a window is available for every edge. The remaining work is
-          the finite-geometry construction of those windows. This is the normal
-          analog of the injective edge-blocking bridge tracked by
-          \ghissue{1366}.
+    \item Prove the tensor-level union-of-injective-regions lemma. The proof
+          must follow the source proof by applying the left inverses for $A$
+          and $B$ in sequence.
+    \item Realign the source proof of injectivity for the local and rotated
+          \(T\)-regions with the finite PEPS geometry. The present exact-cover
+          criterion is a useful sufficient condition, but the recorded
+          point-forcing obstructions show that it is not the source argument
+          for the origin-based local models.
+    \item Prove the every-edge finite-geometry construction. The normalized and
+          translated one-edge data give the desired red, blue, and
+          complementary injective regions when the corresponding window or
+          margin-cover datum is supplied; the remaining task is to construct
+          source-faithful data for every edge, including boundary edges.
     \item Reuse the injective-chain insertion route after this blocking:
           \ghissue{1367}, \ghissue{1368}, \ghissue{1363}, \ghissue{1364},
           \ghissue{1361}, and \ghissue{1360}.
