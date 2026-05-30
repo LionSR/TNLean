@@ -45,9 +45,6 @@ primitive block decomposition.
 * `isNormalCanonicalForm_of_tp_primitive_irr_sorted` — a blocked TP-primitive
   family with irreducible blocks and non-increasing weights is already in
   normal canonical form.
-* `exists_normalCanonicalForm_of_primitive_input` — primitive block data with
-  distinct weight norms yields a normal canonical form without nontrivial
-  blocking.
 
 ## References
 
@@ -220,44 +217,5 @@ theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
     { mu_antitone := hAnti
       mu_ne_zero := hμne }
     hDim
-
-/-!
-## Reduction shortcut for pre-primitive blocks
-
-When the tensor already has primitive blocks with distinct weight norms
-(e.g., from an external construction or a tensor that is already aperiodic),
-the blocking step is trivial (p = 1) and the full `IsNormalCanonicalForm`
-follows directly via `exists_normalCanonicalForm_of_primitive_blockDecomp`.
--/
-
-/-- **Reduction shortcut for pre-primitive blocks.**
-
-If an arbitrary tensor `A` already admits a primitive block decomposition with
-pairwise distinct weight norms, then the normal canonical form exists after
-trivial blocking (p = 1). -/
-theorem exists_normalCanonicalForm_of_primitive_input
-    (A : MPSTensor d D)
-    {r₁ : ℕ} {dim₁ : Fin r₁ → ℕ}
-    (μ₁ : Fin r₁ → ℂ)
-    (blocks₁ : (k : Fin r₁) → MPSTensor d (dim₁ k))
-    (hSame₁ : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁))
-    (hIrr₁ : ∀ k, IsIrreducibleTensor (blocks₁ k))
-    (hTP₁ : ∀ k, ∑ i : Fin d, (blocks₁ k i)ᴴ * blocks₁ k i = 1)
-    (hPrim₁ : ∀ k,
-      _root_.IsPrimitive (transferMap (d := d) (D := dim₁ k) (blocks₁ k)))
-    (hDistinct : ∀ j k, j ≠ k → ‖μ₁ j‖ ≠ ‖μ₁ k‖)
-    (hμne₁ : ∀ k, μ₁ k ≠ 0)
-    (hDim₁ : ∀ k, 0 < dim₁ k) :
-    ∃ p : ℕ, 0 < p ∧
-      ∃ r : ℕ,
-      ∃ dim : Fin r → ℕ,
-      ∃ μ : Fin r → ℂ,
-      ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
-        SameMPV₂
-          (blockTensor (d := d) (D := D) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
-        IsNormalCanonicalForm (d := blockPhysDim d p) μ blocks :=
-  exists_normalCanonicalForm_of_primitive_blockDecomp
-    A μ₁ blocks₁ hSame₁ hIrr₁ hTP₁ hPrim₁ hDistinct hμne₁ hDim₁
 
 end MPSTensor

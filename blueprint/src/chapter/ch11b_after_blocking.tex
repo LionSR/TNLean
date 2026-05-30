@@ -186,33 +186,6 @@ an equality of MPV families.
     The hypotheses are exactly the constructor for normal canonical form.
 \end{proof}
 
-\begin{theorem}[Normal canonical form from an already primitive block decomposition]%
-    \label{thm:ncf_from_primitive_input}
-    \lean{MPSTensor.exists_normalCanonicalForm_of_primitive_input}
-    \leanok
-    \uses{def:is_normal_canonical_form}
-    Suppose $A$ admits a block decomposition into irreducible left-canonical
-    primitive blocks with pairwise distinct weight norms, nonzero weights, and
-    positive bond dimensions. Then there exist $p>0$, weights $(\nu_k)$, and
-    blocks $(B_k)$ satisfying Definition~\ref{def:is_normal_canonical_form} such
-    that, for every blocked $N$ and $\sigma$,
-    \[
-        V^{(N)}\!(A^{[p]})_\sigma
-        =
-        V^{(N)}\!(\textstyle\bigoplus_k \nu_k B_k)_\sigma.
-    \]
-    This is the after-blocking form of
-    Theorem~\ref{thm:exists_normal_canonical_form}; the distinct-modulus
-    hypothesis is the subcase discussed in the remark after
-    Definition~\ref{def:is_normal_canonical_form}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:exists_normal_canonical_form}
-    Apply Theorem~\ref{thm:exists_normal_canonical_form} to the given primitive
-    block decomposition.
-\end{proof}
-
 \begin{theorem}[Common blocking period for two primitive normal tensors]%
     \label{thm:common_period_two_tensors}
     \lean{MPSTensor.bilateral_commonPeriod_blocking_tp_primitive_normal}
