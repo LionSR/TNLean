@@ -99,11 +99,6 @@ noncomputable def verticalTransferMap (M : MPOTensor d D) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   MPSTensor.transferMap (diagonalTensor M)
 
-lemma verticalTransferMap_apply (M : MPOTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    verticalTransferMap M X = ∑ i : Fin d, M i i * X * (M i i)ᴴ := by
-  simp [verticalTransferMap, diagonalTensor, MPSTensor.transferMap_apply]
-
 /-- Lightweight horizontal canonical-form data for a family of blocks.
 
 This is the fragment of the full canonical-form data needed for the MPDO

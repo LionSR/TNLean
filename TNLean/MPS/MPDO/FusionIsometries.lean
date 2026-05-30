@@ -223,12 +223,6 @@ theorem isRFP_MPDO_via_fusion_iff_fusionIsometryData_one (M : MPOTensor d D) :
     IsRFP_MPDO_via_fusion M ↔ Nonempty (FusionIsometryData M 1) := by
   rw [isRFP_MPDO_via_fusion_iff_isRFP, fusionIsometryData_one_iff_isRFP]
 
-/-- The transfer-map-level fusion formulation agrees with the pure-state RFP
-condition for the doubled-index MPS tensor. -/
-theorem isRFP_MPDO_via_fusion_iff_toMPSTensor_isRFP (M : MPOTensor d D) :
-    IsRFP_MPDO_via_fusion M ↔ MPSTensor.IsRFP M.toMPSTensor := by
-  rw [isRFP_MPDO_via_fusion_iff_isRFP, isRFP_iff_toMPSTensor_isRFP]
-
 end MPOTensor
 
 namespace MPSTensor

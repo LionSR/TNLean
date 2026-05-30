@@ -393,17 +393,6 @@ recovers the original matrix. -/
   exact reconstructFromBlockedCoefficients_of_mem
     (data := data) (n := n) (X := X) ((hCompat n hn X).2 hX)
 
-/-- Any coefficient family reconstructed inside a compatible algebra tower is fixed by the
-adjoint blocked transfer map. -/
-theorem adjoint_blockedTransferMap_reconstructFromBlockedCoefficients_eq
-    (data : AlgebraStructureData d D) {M : MPOTensor d D}
-    (hCompat : data.CompatibleWith M) {n : ℕ} (hn : 0 < n)
-    (a : BlockedCoefficients data n) :
-    (blockedTransferMap M n).adjoint
-        (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) =
-      (((data.reconstructFromBlockedCoefficients n a : data.A n) : Mat)) :=
-  (hCompat n hn _).1 (data.reconstructFromBlockedCoefficients n a).property
-
 /-- The coefficient family of the blocked product of two chosen basis elements. -/
 noncomputable def blockedStructureCoefficients
     (data : AlgebraStructureData d D) (n : ℕ)
@@ -445,16 +434,6 @@ noncomputable def blockedInclusionCoefficients
         (data.blockedInclusionCoefficients n i) =
       data.iota n (data.blockedBasis n i) := by
   simp [blockedInclusionCoefficients]
-
-/-- Ambient-matrix form of the blocked inclusion reconstruction formula. -/
-theorem coe_iota_eq_sum_blockedInclusionCoefficients
-    (data : AlgebraStructureData d D) (n : ℕ) (i : BlockedIndex data n) :
-    ((data.iota n (data.blockedBasis n i) : data.A (n + 1)) : Mat) =
-      ∑ k, data.blockedInclusionCoefficients n i k •
-        ((data.blockedBasis (n + 1) k : data.A (n + 1)) : Mat) := by
-  simpa [reconstructFromBlockedInclusionCoefficients] using
-    coe_reconstructFromBlockedCoefficients_apply
-      (data := data) (n := n + 1) (a := data.blockedInclusionCoefficients n i)
 
 end AlgebraStructureData
 
