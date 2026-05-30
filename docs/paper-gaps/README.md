@@ -6,7 +6,7 @@ source passage, state the mathematical input in paper notation, and then name
 the current formal boundary.
 
 For the present non-periodic MPS Fundamental Theorem work, the repeated-copy and
-equal-modulus comparison has one current reference.
+equal-modulus comparison has these current reference points.
 
 - `blueprint/src/chapter/ch10_bnt.tex` records the SectorBNT canonical-form
   surface, the repeated-copy sector coefficients, and the Newton--Girard
@@ -17,6 +17,13 @@ equal-modulus comparison has one current reference.
 - GitHub issue #2150 tracks the remaining verification that the assembled
   multi-block theorem uses this equal-modulus comparison without a surviving
   strictly-decreasing-moduli restriction.
+
+The separate global-versus-per-sector unit-witness restriction has one current
+paper-gap note.
+
+- `cpsv16_global_vs_persector_unit_witness.tex` records that the current
+  full-basis matching theorems assume a unit-modulus copy in every sector,
+  while CPSV16 line 246 gives only one global unit-weight witness.
 
 Older notes in this directory record why previous one-copy or projection-based
 formulations were insufficient. They should be read as historical comparisons

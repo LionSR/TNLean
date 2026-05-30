@@ -640,7 +640,12 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literalPos
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
+/-- Reformulation for the all-length `SameMPV₂` form.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

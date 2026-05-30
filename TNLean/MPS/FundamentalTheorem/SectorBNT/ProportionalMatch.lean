@@ -248,7 +248,12 @@ The theorem intentionally stops before the raw coefficient identity.  Under
 length-dependent proportionality scalar; it is not the equal-MPV coefficient
 identity proved by `coeff_identity_via_matched_mpv_phase`, and it is not
 contained in CPSV16 Appendix MPV proof, lines 1187–1192, without the equal-MPV
-specialization. -/
+specialization.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
