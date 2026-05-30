@@ -1323,7 +1323,7 @@ used to produce rank-one elements.
 
 \begin{proof}\leanok\uses{thm:primitive_overlap}
     Immediate from the self-overlap convergence under a
-    complementary spectral gap
+    complementary transfer-map gap
     (Theorem~\ref{thm:primitive_overlap}).
 \end{proof}
 
@@ -1368,9 +1368,9 @@ spectral radius $< 1$.
 
 The primitivity condition of Definition~\ref{def:primitive_mps}
 combines TP normalization, a nonzero PSD fixed point, and a complementary
-spectral gap. It is connected to normality through the following results.
+transfer-map gap. It is connected to normality through the following results.
 
-\begin{theorem}[Fixed-point uniqueness from spectral gap]%
+\begin{theorem}[Fixed-point uniqueness from a complementary transfer-map gap]%
     \label{thm:fixedpoint_unique_spectral}
     \lean{MPSTensor.IsPrimitiveMPS.fixedPoint_unique}
     \leanok
@@ -1385,7 +1385,7 @@ spectral gap. It is connected to normality through the following results.
     Set $\sigma' = \sigma - \frac{\tr(\sigma)}{\tr(\rho)} \rho$.
     Then $\tr(\sigma') = 0$ and $(\E_A - P_\rho)(\sigma') = \sigma'$.
     If $\sigma' \neq 0$, then $1$ is an eigenvalue of $\E_A - P_\rho$,
-    contradicting the spectral gap
+    contradicting the complementary transfer-map gap
     $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
 \end{proof}
 
@@ -1400,21 +1400,21 @@ spectral gap. It is connected to normality through the following results.
 
 \begin{proof}\leanok
     The spectral radius of $\E_A - P_\rho$ is strictly less
-    than $1$ by the spectral-gap hypothesis.
+    than $1$ by the complementary transfer-map gap hypothesis.
     Apply the general result that powers of an operator
     with spectral radius $< 1$ tend to zero.
 \end{proof}
 
-\begin{remark}[Primitivity: spectral gap vs.\ positive definiteness]%
+\begin{remark}[Primitivity: transfer-map gap vs.\ positive definiteness]%
     \label{rem:prim_definition_mismatch}\leanok
     The primitivity condition used in Section~\ref{subsec:prim_to_normal}
     has three parts: TP normalization $\sum_i (A^i)^\dagger A^i = \Id$,
-    a nonzero PSD fixed point $\rho$, and the spectral gap
+    a nonzero PSD fixed point $\rho$, and the complementary transfer-map gap
     $\rho_{\mathrm{spec}}(\E_A - P_\rho) < 1$.
     The notion of ``primitive'' in
     \cite[Proposition~3]{Sanz2010Quantum} additionally requires
     $\rho$ to be positive definite (full rank).
-    Without positive definiteness, the spectral-gap condition alone
+    Without positive definiteness, the transfer-map gap condition alone
     does \emph{not} imply irreducibility or normality.
     A counterexample is $D = 2$, $\rho = \diag(1,0)$.
 
@@ -1590,8 +1590,8 @@ For Burnside-style arguments it is more natural to work with invariant
 
 The results in this subsection remove the aperiodicity assumption
 from the normality conclusions.
-They connect the spectral-gap primitivity of
-Definition~\ref{def:primitive_mps} directly to normality
+They connect primitivity in Definition~\ref{def:primitive_mps},
+formulated via a complementary transfer-map gap, directly to normality
 (eventually full Kraus rank),
 using the convergence of the transfer-map iterates to the
 projection onto the fixed-point subspace.
@@ -1639,7 +1639,7 @@ projection onto the fixed-point subspace.
     \uses{thm:irreducible_map_from_primitive, thm:prim_overlap_one}
     Combine Theorem~\ref{thm:irreducible_map_from_primitive}
     (irreducibility) with the peripheral-spectrum primitivity from
-    the spectral-gap hypothesis
+    the transfer-map gap hypothesis
     (Theorem~\ref{thm:prim_overlap_one}).
 \end{proof}
 
@@ -1653,9 +1653,10 @@ projection onto the fixed-point subspace.
     (has eventually full Kraus rank).
     No aperiodicity assumption is needed.
 
-    This is the key connection between the spectral-gap primitivity of
-    Definition~\ref{def:primitive_mps} and normality; it removes the need for
-    the aperiodicity-based argument.
+    This is the key connection between primitivity in
+    Definition~\ref{def:primitive_mps}, formulated via a complementary
+    transfer-map gap, and normality; it removes the need for the
+    aperiodicity-based argument.
 \end{theorem}
 
 \begin{proof}
