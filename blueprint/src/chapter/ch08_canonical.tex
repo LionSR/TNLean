@@ -488,8 +488,8 @@ periods makes the resulting transfer map primitive, removing periodicity.
     spectral hypotheses on the per-block transfer map $\E_{A_k}$: a
     positive-definite primitive fixed point, or the peripheral-spectrum
     condition $\sigma_\partial(\E_{A_k}) = \{1\}$. In both cases the
-    overlap clause $O_{A_k A_k}(N) \to 1$ follows from the spectral-gap
-    criterion of Chapter~\ref{ch:spectral}. Both statements assume the
+    overlap clause $O_{A_k A_k}(N) \to 1$ follows from the complementary
+    transfer-map gap criterion of Chapter~\ref{ch:spectral}. Both statements assume the
     blocks are already in the required normal form; they are not the
     arbitrary-input canonical-form existence theorem of
     \cite[Theorem~Th:TIcanonical]{PerezGarcia2007Matrix}.
@@ -499,10 +499,10 @@ periods makes the resulting transfer map primitive, removing periodicity.
     The remark above shows that the overlap convergence hypothesis in the
     canonical form conditions is redundant once peripheral-spectrum
     primitivity is known.
-    The argument factors through the spectral-gap formulation of
+    The argument factors through the complementary transfer-map gap formulation of
     Chapter~\ref{ch:spectral}: peripheral-spectrum primitivity is first
-    converted to that spectral-gap condition, and the overlap limit is then
-    deduced from it.
+    converted to that complementary transfer-map gap condition, and the
+    overlap limit is then deduced from it.
     In~\cite{Cirac2021Matrix}, primitivity is obtained from
     irreducibility plus periodicity removal by blocking to period one.
     Theorem~\ref{thm:blocking_primitivity} is precisely this
@@ -594,8 +594,8 @@ periods makes the resulting transfer map primitive, removing periodicity.
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form}
     Peripheral-spectrum primitivity is one of the hypotheses. Together with
-    irreducibility and TP normalization, it yields the spectral-gap
-    primitive theorem needed for overlap convergence, so the self-overlap
+    irreducibility and TP normalization, it yields the complementary
+    transfer-map gap theorem needed for overlap convergence, so the self-overlap
     condition follows from the other hypotheses rather than appearing as
     a separate assumption.
 \end{proof}
@@ -962,8 +962,8 @@ is the normality of a TP-primitive irreducible block.
 
 \begin{proof}\leanok
     \uses{thm:normal_from_primitive_posdef, thm:psd_fp_pd_irred}
-    Peripheral primitivity and irreducibility yield the spectral-gap
-    condition. The PSD fixed point is positive definite by
+    Peripheral primitivity and irreducibility yield the complementary
+    transfer-map gap condition. The PSD fixed point is positive definite by
     Theorem~\ref{thm:psd_fp_pd_irred}.
     Apply Theorem~\ref{thm:normal_from_primitive_posdef}.
 \end{proof}
