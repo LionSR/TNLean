@@ -452,10 +452,10 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
   classical
   -- Step 1: arbitrary-input two-sided reduction at `B = A`.
-  obtain ⟨p₀, hp₀, _zeroTailA, _zeroTailB,
+  obtain ⟨p₀, hp₀,
       rA, dimA, μA, blocksA,
       _rB, _dimB, _μB, _blocksB,
-      _hZAflat, _hZBflat, hAPos, _hBPos, _hNonzeroPos, _hZeroFlat,
+      hAPos, _hBPos, _hNonzeroPos,
       hμA, _hμB, hTPA, _hTPB, hPrimA, _hPrimB,
       hIrrA, _hIrrB, hDimA, _hDimB⟩ :=
     unconditional_commonPrimitiveIrreducibleBlocks
