@@ -135,6 +135,12 @@ theorem SameMPV₂Pos.symm {d D₁ D₂ : ℕ}
     (h : SameMPV₂Pos A B) : SameMPV₂Pos B A :=
   fun N hN σ => (h N hN σ).symm
 
+/-- Positive-length MPV equality is transitive. -/
+theorem SameMPV₂Pos.trans {d D₁ D₂ D₃ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {C : MPSTensor d D₃}
+    (hAB : SameMPV₂Pos A B) (hBC : SameMPV₂Pos B C) : SameMPV₂Pos A C :=
+  fun N hN σ => (hAB N hN σ).trans (hBC N hN σ)
+
 /-- Weak scalar proportionality of MPVs.
 
 For each `N` there exists `c_N` with `V_N(A) = c_N · V_N(B)`.  The scalar is

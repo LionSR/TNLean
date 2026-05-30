@@ -58,7 +58,7 @@ general tensor, normalize nonzero irreducible blocks by a trace-preserving gauge
 and remove periods by blocking or cyclic-sector decomposition.  What is not yet
 advertised as a completed theorem is the fully automatic passage from arbitrary
 raw tensors to the final paper-level canonical form with all common-length,
-zero-tail, and sector-comparison hypotheses derived internally.
+length-zero dimension, and sector-comparison hypotheses derived internally.
 
 ### Quantum channels and Perron--Frobenius theory
 
@@ -154,7 +154,7 @@ import.  The main source tree is organized as follows.
 | `TNLean/Channel` | Quantum-channel representations, Schwarz theory, fixed points, irreducibility, peripheral spectra, semigroups, determinants, POVMs, and Wolf chapter index modules. |
 | `TNLean/QPF`, `TNLean/Spectral` | Perron--Frobenius, positivity, mixed transfers, overlap decay, spectral gaps, and quantitative correlation estimates. |
 | `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | MPS tensors, words, blocking, chains, transfer maps, and overlap matrices. |
-| `TNLean/MPS/Tactic` | Custom `simp` attribute sets (`mps_block_words`, `mps_transfer`, `mps_zero_tail`) and tactic macros (`mpv_ext`, `block_words`, `transfer_simp`, `zero_tail_simp`) for recurring MPS proof patterns. |
+| `TNLean/MPS/Tactic` | Custom `simp` attribute sets (`mps_block_words`, `mps_transfer`) and tactic macros (`mpv_ext`, `block_words`, `transfer_simp`) for recurring MPS proof patterns. |
 | `TNLean/MPS/FundamentalTheorem`, `TNLean/MPS/BNT`, `TNLean/MPS/CanonicalForm`, `TNLean/MPS/Periodic`, `TNLean/MPS/Structure` | Single-block, same-structure, BNT, periodic, and canonical-form Fundamental-Theorem material. |
 | `TNLean/MPS/Symmetry` | Gauge uniqueness, on-site symmetries, virtual representations, cocycle coboundaries, symmetric MPS, and string-order infrastructure. |
 | `TNLean/MPS/Irreducible` | Fixed-point projections, Form II reductions, scalar fixed points, adjoint irreducibility, and periodic-blocking infrastructure for irreducible blocks. |
@@ -175,8 +175,8 @@ The issue tracker contains fine-grained formalization tasks.  The main fronts at
 the present release state are:
 
 - completing the arbitrary-tensor-to-final-canonical-form path, especially common
-  blocking lengths, cyclic-sector comparison, zero-tail transport, and the
-  finite-length span equalities used by the block permutation theorem;
+  blocking lengths, cyclic-sector comparison, length-zero dimension bookkeeping,
+  and the finite-length span equalities used by the block permutation theorem;
 - strengthening the parent-Hamiltonian story from intersection and uniqueness
   results toward martingale and overlapping-window spectral-gap estimates;
 - extending the quantum Wielandt endpoint to the sharpened bounds and subspace

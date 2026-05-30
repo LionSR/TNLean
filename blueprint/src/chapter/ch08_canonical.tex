@@ -786,20 +786,24 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
     \label{thm:tp_gauge_arbitrary}
     \lean{MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail}
     \leanok
-    \uses{def:irreducible_tensor, def:zero_mps_tensor}
+    \uses{def:irreducible_tensor, def:same_mpv2_pos}
     For any MPS tensor $A$, there exist:
     \begin{enumerate}
-        \item a zero-tail bond dimension $D_0$,
+        \item a zero-block bond dimension $D_0$,
         \item nontrivial blocks $(B_k)_{k=1}^r$ with nonzero weights
               $(\mu_k)_{k=1}^r$, each block irreducible and
               left-canonical ($\sum_i (B_k^i)^\dagger B_k^i = \Id$),
               with positive bond dimension,
     \end{enumerate}
-    such that
+    such that, for every length $N \ge 1$ and every configuration $\sigma$,
     \[
         V^{(N)}(A)_\sigma
-        = V^{(N)}(\mathbf{0}_{d,D_0})_\sigma
-        + V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma.
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma,
+    \]
+    and the zero-block contribution is recorded by the length-zero dimension
+    identity
+    \[
+        D = D_0 + \sum_{k=1}^r D_k.
     \]
     This is the furthest unconditional reduction step available for arbitrary tensors
     before periodicity removal.
@@ -807,9 +811,22 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 
 \begin{proof}\leanok
     \uses{thm:zero_block_separation, thm:tp_data_irreducible}
-    Apply Theorem~\ref{thm:zero_block_separation} to separate the
-    trivial block and nontrivial blocks. Then apply the blockwise TP-gauge theorem
-    to the nontrivial blocks. The MPV identity composes across both steps.
+    Apply Theorem~\ref{thm:zero_block_separation} to obtain the zero-block
+    dimension $D_0$ and nonzero irreducible blocks $(B_k)_{k=1}^r$ with
+    \[
+        V^{(N)}(A)_\sigma
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma
+    \]
+    for $N \ge 1$.  Then apply the blockwise TP-gauge theorem to replace
+    each $B_k$ by a left-canonical block $\widetilde{B}_k$ with weight
+    $\mu_k$, giving
+    \[
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k \widetilde{B}_k)_\sigma
+    \]
+    for $N \ge 1$.  The length-zero dimension identity
+    $D = D_0 + \sum_{k=1}^r D_k$ is preserved throughout.
 \end{proof}
 
 \section{Blocking and primitivity reduction}%
