@@ -32,22 +32,11 @@ The "zero tail" in the produced decomposition is the total bond dimension of
 the separated all-zero leftover blocks.  It is the dimension gap allowed by
 `∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
 
-It also includes two immediate consequences when extra hypotheses are already
-available: the sorted normal-canonical-form criterion for blocked primitive
-families and the trivial-blocking shortcut for tensors that already come with a
-primitive block decomposition.
-
 ## Main statements
 
 * `exists_tp_primitive_blockDecomp_after_blocking` — arbitrary tensors admit a
   positive-length blocked decomposition into TP-primitive blocks, together with
   the separate zero-block bond-dimension count.
-* `isNormalCanonicalForm_of_tp_primitive_irr_sorted` — a blocked TP-primitive
-  family with irreducible blocks and non-increasing weights is already in
-  normal canonical form.
-* `exists_normalCanonicalForm_of_primitive_input` — primitive block data with
-  distinct weight norms yields a normal canonical form without nontrivial
-  blocking.
 
 ## References
 
@@ -178,86 +167,5 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
         A μ₀ blocks₀ hPos₀ P hP
   -- (f) Length-zero bond-dimension count.
   · exact hDimId₀.symm
-
-/-!
-## Conditional normal canonical form
-
-If the blocked weights are ordered by non-increasing norm, and the blocked
-blocks are irreducible, then the data can be shown to satisfy
-`IsNormalCanonicalForm`.  Equal weight moduli are allowed; requiring pairwise
-distinct norms is only a restricted separated-representative branch.
-
-This is a conditional theorem: the extra hypotheses are genuine conditions
-that the reduction does not produce automatically (see gap documentation above).
--/
-
-/-- **Conditional normal canonical form after blocking.**
-
-If the blocked data additionally satisfy tensor irreducibility for each block,
-and the weight moduli are already sorted in non-increasing order, then the data
-forms an `IsNormalCanonicalForm` directly.  Equal moduli are allowed here, as in
-the canonical form of arXiv:1606.00608; strict separation belongs only to the
-restricted strict-representative branch.
-
-For the unsorted case, use `exists_normalCanonicalForm_of_primitive_blockDecomp`
-which handles both sorting and blocking internally. -/
-theorem isNormalCanonicalForm_of_tp_primitive_irr_sorted
-    {d' : ℕ}
-    {r : ℕ} {dim : Fin r → ℕ}
-    {μ : Fin r → ℂ}
-    (blocks : (k : Fin r) → MPSTensor d' (dim k))
-    (hTP : ∀ k, ∑ i : Fin d', (blocks k i)ᴴ * blocks k i = 1)
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d') (D := dim k) (blocks k)))
-    (hDim : ∀ k, 0 < dim k)
-    (hμne : ∀ k, μ k ≠ 0)
-    (hIrr : ∀ k, IsIrreducibleTensor (blocks k))
-    (hAnti : Antitone (fun k : Fin r => ‖μ k‖)) :
-    IsNormalCanonicalForm (d := d') μ blocks :=
-  IsNormalCanonicalForm.ofSeparatedData
-    (HasIrreducibleBlocks.ofForall hIrr)
-    (IsLeftCanonicalBlockFamily.ofForall hTP)
-    (HasPrimitiveBlocks.ofForall hPrim)
-    { mu_antitone := hAnti
-      mu_ne_zero := hμne }
-    hDim
-
-/-!
-## Reduction shortcut for pre-primitive blocks
-
-When the tensor already has primitive blocks with distinct weight norms
-(e.g., from an external construction or a tensor that is already aperiodic),
-the blocking step is trivial (p = 1) and the full `IsNormalCanonicalForm`
-follows directly via `exists_normalCanonicalForm_of_primitive_blockDecomp`.
--/
-
-/-- **Reduction shortcut for pre-primitive blocks.**
-
-If an arbitrary tensor `A` already admits a primitive block decomposition with
-pairwise distinct weight norms, then the normal canonical form exists after
-trivial blocking (p = 1). -/
-theorem exists_normalCanonicalForm_of_primitive_input
-    (A : MPSTensor d D)
-    {r₁ : ℕ} {dim₁ : Fin r₁ → ℕ}
-    (μ₁ : Fin r₁ → ℂ)
-    (blocks₁ : (k : Fin r₁) → MPSTensor d (dim₁ k))
-    (hSame₁ : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ₁) blocks₁))
-    (hIrr₁ : ∀ k, IsIrreducibleTensor (blocks₁ k))
-    (hTP₁ : ∀ k, ∑ i : Fin d, (blocks₁ k i)ᴴ * blocks₁ k i = 1)
-    (hPrim₁ : ∀ k,
-      _root_.IsPrimitive (transferMap (d := d) (D := dim₁ k) (blocks₁ k)))
-    (hDistinct : ∀ j k, j ≠ k → ‖μ₁ j‖ ≠ ‖μ₁ k‖)
-    (hμne₁ : ∀ k, μ₁ k ≠ 0)
-    (hDim₁ : ∀ k, 0 < dim₁ k) :
-    ∃ p : ℕ, 0 < p ∧
-      ∃ r : ℕ,
-      ∃ dim : Fin r → ℕ,
-      ∃ μ : Fin r → ℂ,
-      ∃ blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k),
-        SameMPV₂
-          (blockTensor (d := d) (D := D) A p)
-          (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
-        IsNormalCanonicalForm (d := blockPhysDim d p) μ blocks :=
-  exists_normalCanonicalForm_of_primitive_blockDecomp
-    A μ₁ blocks₁ hSame₁ hIrr₁ hTP₁ hPrim₁ hDistinct hμne₁ hDim₁
 
 end MPSTensor
