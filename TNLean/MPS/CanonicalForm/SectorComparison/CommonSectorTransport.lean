@@ -43,37 +43,6 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
 matrix product states, canonical form, common sectors, zero-tail decomposition
 -/
 
-/-- The representative common-sector family is normal-CF-BNT once the
-representative weights are strictly ordered and the representatives are
-BNT-separated.
-
-It combines the representative normal-canonical-form statement with the
-explicit hypothesis that distinct representatives are not gauge-phase equivalent.
-
-**Scope restriction (one-copy-per-sector):** The output is an
-`IsNormalCanonicalFormBNT` structure on the already chosen representative
-family. It keeps one representative for each strict weight-modulus class and
-does not reconstruct the repeated-copy CPSV16 BNT sector data. The restriction
-is documented in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
-lemma isNormalCanonicalFormBNT_commonRepresentativeBlocksAt
-    {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)}
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (μ : Fin r → ℂ)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hAnti : StrictAnti (fun k : Fin r => ‖F.commonRepresentativeWeight μ k‖))
-    (hNotGpe : BlocksNotGaugePhaseEquiv
-      (d := blockPhysDim d p) (F.commonRepresentativeBlocksAt hp))
-    (hμDom : ∀ h : 0 < r, ‖F.commonRepresentativeWeight μ ⟨0, h⟩‖ = 1) :
-    IsNormalCanonicalFormBNT (d := blockPhysDim d p)
-      (F.commonRepresentativeWeight μ) (F.commonRepresentativeBlocksAt hp) where
-  toIsNormalCanonicalForm :=
-    F.isNormalCanonicalForm_commonRepresentativeBlocksAt hp μ hμ hAnti.antitone
-  mu_strict_anti := hAnti
-  blocks_not_equiv := hNotGpe
-  mu_dom_norm_one := hμDom
-
 /-- If each directly blocked nonzero block agrees with its iterated-blocking version,
 the zero-tail equation can be written using the derived common-sector family. -/
 lemma zeroTail_commonFlat_of_blockwise
@@ -198,99 +167,6 @@ lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed
     A μ blocks F hp hMPV hRelabel
   exact sameMPV₂Pos_of_zeroTail_eq _ _ hZeroTail
 
-/-- Replacing nonzero parts by MPV-equivalent tensors preserves the positive-length
-MPV equality and the length-zero zero-tail identity. -/
-lemma sameMPV₂Pos_and_zeroTail_identity_of_sameMPV₂
-    {d LA LB LA' LB' zeroTailA zeroTailB : ℕ}
-    (liveA : MPSTensor d LA) (liveB : MPSTensor d LB)
-    (flatA : MPSTensor d LA') (flatB : MPSTensor d LB')
-    (hA : SameMPV₂ liveA flatA) (hB : SameMPV₂ liveB flatB)
-    (hPos : SameMPV₂Pos liveA liveB)
-    (hZero : ∀ σ : Fin 0 → Fin d,
-      (zeroTailA : ℂ) + mpv liveA σ = (zeroTailB : ℂ) + mpv liveB σ) :
-    SameMPV₂Pos flatA flatB ∧
-      ∀ σ : Fin 0 → Fin d,
-        (zeroTailA : ℂ) + mpv flatA σ = (zeroTailB : ℂ) + mpv flatB σ := by
-  refine ⟨?_, ?_⟩
-  · intro N hN σ
-    calc
-      mpv flatA σ = mpv liveA σ := (hA N σ).symm
-      _ = mpv liveB σ := hPos N hN σ
-      _ = mpv flatB σ := hB N σ
-  · intro σ
-    calc
-      (zeroTailA : ℂ) + mpv flatA σ = (zeroTailA : ℂ) + mpv liveA σ := by
-        rw [(hA 0 σ).symm]
-      _ = (zeroTailB : ℂ) + mpv liveB σ := hZero σ
-      _ = (zeroTailB : ℂ) + mpv flatB σ := by
-        rw [hB 0 σ]
-
-/-- Once the canonical blocked nonzero part agrees with the reindexed common-sector
-nonzero part, the zero-tail equation, the transported-weight equality, and the
-nonvanishing of the common-sector weights are available together. -/
-lemma zeroTail_commonFlat_transport_of_reindexed
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hRelabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
-    (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ) ∧
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) ∧
-    (∀ x, F.commonFlatWeight μ x ≠ 0) := by
-  refine ⟨?_, ?_, ?_⟩
-  · exact zeroTail_commonFlat_of_reindexed A μ blocks F hMPV hRelabel
-  · exact F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hRelabel
-  · intro x
-    exact F.commonFlatWeight_ne_zero μ hμ x
-
-/-- The one-sided zero-tail equation, weighted nonzero-part equality, and nonvanishing
-of transported common-sector weights obtained from the coordinate-grouping condition. -/
-lemma zeroTail_commonFlat_transport_of_groupedBlockCastAgrees
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hμ : ∀ k, μ k ≠ 0)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ) ∧
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) ∧
-    (∀ x, F.commonFlatWeight μ x ≠ 0) := by
-  refine ⟨?_, ?_, ?_⟩
-  · exact zeroTail_commonFlat_of_groupedBlockCastAgrees A μ blocks F hMPV hCast
-  · exact F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_groupedBlockCastAgrees μ hCast
-  · intro x
-    exact F.commonFlatWeight_ne_zero μ hμ x
-
 /-- The one-sided blocked-word relabeling hypothesis for cyclic-sector data.
 
 It says that, for every common cyclic-sector family, the canonically blocked
@@ -386,9 +262,9 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       (∀ x, IsIrreducibleTensor (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
-  obtain ⟨p, hp, zeroTailA, rA₀, dimA₀, μA₀, blocksA₀,
-      zeroTailB, rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
-      hFamilyA, hFamilyB, hZA, hZB, hPosCanon, _hZeroCanon,
+  obtain ⟨p, hp, rA₀, dimA₀, μA₀, blocksA₀,
+      rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
+      hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hPosCanon,
       _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
       hIrrA, hIrrB, hDimA, hDimB⟩ :=
     afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
@@ -422,54 +298,12 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       nonzeroB := by
     cases hFamilyB
     simpa [flatBlocksB, nonzeroB] using hFlatB_raw
-  have hZAflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-          mpv nonzeroA σ := by
-    intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rA₀ => (μA₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimA₀ k) (blocksA₀ k) p)) σ :=
-        hZA N σ
-      _ = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv nonzeroA σ := by
-        rw [hFlatA N σ]
-  have hZBflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-          mpv nonzeroB σ := by
-    intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rB₀ => (μB₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p)) σ :=
-        hZB N σ
-      _ = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv nonzeroB σ := by
-        rw [hFlatB N σ]
   have hAPos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) nonzeroA := by
     intro N hN σ
-    have hZero : mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv nonzeroA σ :=
-        hZAflat N σ
-      _ = mpv nonzeroA σ := by rw [hZero]; simp
+    exact (hAPosCanon N hN σ).trans (hFlatA N σ)
   have hBPos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) nonzeroB := by
     intro N hN σ
-    have hZero : mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv nonzeroB σ :=
-        hZBflat N σ
-      _ = mpv nonzeroB σ := by rw [hZero]; simp
+    exact (hBPosCanon N hN σ).trans (hFlatB N σ)
   have hNonzeroPos : SameMPV₂Pos nonzeroA nonzeroB := by
     intro N hN σ
     calc
