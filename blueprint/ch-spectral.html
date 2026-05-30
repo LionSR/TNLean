@@ -12,7 +12,7 @@
 <meta name="generator" content="plasTeX" />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spectral Gap and Block Separation</title>
+<title>Transfer-Operator Gaps and Block Separation</title>
 <link rel="next" href="ch-wielandt.html" title="Wielandt Bound" />
 <link rel="prev" href="ch-qpf.html" title="Perron–Frobenius Theory for Channels and Transfer Maps" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
@@ -213,7 +213,7 @@
   </ul>
  </li>
 <li class=" active current">
-  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Spectral Gap and Block Separation</span></a>
+  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Transfer-Operator Gaps and Block Separation</span></a>
   <span class="expand-toc">▼</span>
   <ul class="sub-toc-1 active">
      <li class="">
@@ -226,10 +226,10 @@
   <a href="ch-spectral.html#a0000000043"><span class="toc_ref">7.3</span> <span class="toc_entry">Frobenius norm estimates</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and spectral gap</span></a>
+  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and transfer-operator gap</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Spectral gap — rectangular case</span></a>
+  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Transfer-operator gap — rectangular case</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000046"><span class="toc_ref">7.6</span> <span class="toc_entry">MPV overlap decay</span></a>
@@ -238,7 +238,7 @@
   <a href="ch-spectral.html#a0000000047"><span class="toc_ref">7.7</span> <span class="toc_entry">Block separation</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Spectral gap under irreducible-TP hypotheses</span></a>
+  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Transfer-operator gap under irreducible-TP hypotheses</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000049"><span class="toc_ref">7.9</span> <span class="toc_entry">Conditional expectation from a faithful fixed point</span></a>
@@ -276,7 +276,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (spectral-gap form)</span></a>
+  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (complementary transfer-map gap form)</span></a>
  </li>
 
   </ul>
@@ -762,7 +762,7 @@
   <a href="ch-correlations.html#a0000000106"><span class="toc_ref">19.2</span> <span class="toc_entry">Spectral expansion and exponential decay</span></a>
  </li>
 <li class="">
-  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative spectral gap bounds</span></a>
+  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative transfer-map gap bounds</span></a>
  </li>
 <li class="">
   <a href="ch-correlations.html#a0000000108"><span class="toc_ref">19.4</span> <span class="toc_entry">Relation to parent Hamiltonians</span></a>
@@ -1008,15 +1008,16 @@
 
 
 <div class="main-text">
-<h1 id="ch:spectral">7 Spectral Gap and Block Separation</h1>
+<h1 id="ch:spectral">7 Transfer-Operator Gaps and Block Separation</h1>
 
-<p>This chapter proves that the MPV overlaps between distinct (non-gauge-phase-equivalent) MPS blocks decay to zero as system size grows. It also proves the corresponding self-overlap convergence to&#160;\(1\) under the complementary spectral-gap hypothesis that encodes primitivity in the cases of interest. The argument is based on a spectral analysis of the <em>mixed transfer operator</em>, following&#160;<span class="cite">
+<p>This chapter proves that the MPV overlaps between distinct (non-gauge-phase-equivalent) MPS blocks decay to zero as system size grows. It also proves the corresponding self-overlap convergence to&#160;\(1\) under the complementary transfer-map gap hypothesis that encodes primitivity in the cases of interest. The argument is based on a spectral analysis of the <em>mixed transfer operator</em>, following&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	
 	]
 </span>. </p>
+<p>This chapter concerns gaps in the spectrum of transfer operators: \(\rho (F_{AB}) {\lt} 1\) for mixed transfer operators, and \(\rho (\mathcal{E}_A - P) {\lt} 1\) after removing the fixed-point projection. The unqualified phrase <em>spectral gap</em> is reserved for the energy gap of a many-body Hamiltonian in Chapter&#160;<a href="ch-parent_hamiltonian.html">18</a>. </p>
 <p>The algebraic mixed-transfer identities in the first two sections do not use normalization. Starting with the spectral-radius estimates, we assume the trace-preserving normalization </p>
 <div class="displaymath" id="a0000000374">
   \[  \sum _i (A^i)^\dagger A^i = \mathbb {1}.  \]
@@ -1718,7 +1719,7 @@
   </div>
 </div>
 <h1 id="a0000000043">7.3 Frobenius norm estimates</h1>
-<p>The spectral-gap proofs use the Frobenius (Hilbert–Schmidt) norm as the natural norm for the finite-dimensional matrix algebra. We write \(\| {\cdot }\| _F\) for this norm; it coincides with, and we use it interchangeably with, the Hilbert–Schmidt norm \(\| {\cdot }\| _{\mathrm{HS}}\) on finite-dimensional spaces. We use the squared version and an isometric embedding into Euclidean space. </p>
+<p>The transfer-operator gap proofs use the Frobenius (Hilbert–Schmidt) norm as the natural norm for the finite-dimensional matrix algebra. We write \(\| {\cdot }\| _F\) for this norm; it coincides with, and we use it interchangeably with, the Hilbert–Schmidt norm \(\| {\cdot }\| _{\mathrm{HS}}\) on finite-dimensional spaces. We use the squared version and an isometric embedding into Euclidean space. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:frob_sq">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -1970,7 +1971,7 @@
 
   </div>
 </div>
-<h1 id="a0000000044">7.4 Eigenvalue bound and spectral gap</h1>
+<h1 id="a0000000044">7.4 Eigenvalue bound and transfer-operator gap</h1>
 <p>The eigenvalue bound comes from a uniform Frobenius-norm estimate obtained directly from the trace-preserving normalization (cf.&#160;<span class="cite">
 	[
 	
@@ -2464,7 +2465,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The right-canonical gauge used here, \(A'^i = \rho ^{-1/2} A^i \rho ^{1/2}\), makes \(\{ A'^i\} \) a <em>unital</em> Kraus family (\(\sum _i A'^i (A'^i)^\dagger = \mathbb {1}\)). A different convention, \(\tilde{A}^i = \rho ^{1/2} A^i \rho ^{-1/2}\), makes the family <em>trace-preserving</em> (\(\sum _i (\tilde{A}^i)^\dagger \tilde{A}^i = \mathbb {1}\)). Both conventions appear in practice: the unital version via direct matrix square-root inversion (used in the spectral-gap proof above), and the trace-preserving version (used in the canonical-form reduction of Chapter&#160;<a href="ch-canonical.html">9</a>). </p>
+  <p>The right-canonical gauge used here, \(A'^i = \rho ^{-1/2} A^i \rho ^{1/2}\), makes \(\{ A'^i\} \) a <em>unital</em> Kraus family (\(\sum _i A'^i (A'^i)^\dagger = \mathbb {1}\)). A different convention, \(\tilde{A}^i = \rho ^{1/2} A^i \rho ^{-1/2}\), makes the family <em>trace-preserving</em> (\(\sum _i (\tilde{A}^i)^\dagger \tilde{A}^i = \mathbb {1}\)). Both conventions appear in practice: the unital version via direct matrix square-root inversion (used in the transfer-operator gap proof above), and the trace-preserving version (used in the canonical-form reduction of Chapter&#160;<a href="ch-canonical.html">9</a>). </p>
 
   </div>
 </div>
@@ -2474,7 +2475,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">7.20</span>
-    <span class="theorem_thmtitle">Strict spectral gap</span>
+    <span class="theorem_thmtitle">Strict transfer-operator gap</span>
     <div class="thm_header_extras">
 
     
@@ -2555,7 +2556,7 @@
 
   </div>
 </div>
-<h1 id="a0000000045">7.5 Spectral gap — rectangular case</h1>
+<h1 id="a0000000045">7.5 Transfer-operator gap — rectangular case</h1>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:rectangular_intertwining_dim_eq">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -2647,7 +2648,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">7.22</span>
-    <span class="theorem_thmtitle">Rectangular spectral gap</span>
+    <span class="theorem_thmtitle">Rectangular transfer-operator gap</span>
     <div class="thm_header_extras">
 
     
@@ -2810,7 +2811,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The spectral gap \(\rho (F_{AB}^{\mathrm{rect}}) {\lt} 1\) (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_rect">7.22</a>) implies \((F_{AB}^{\mathrm{rect}})^N \to 0\), so the operator trace converges to&#160;\(0\). By Theorem&#160;<a href="ch-spectral.html#thm:overlap_trace_rect">7.8</a>, \(O_{AB}(N) = \operatorname{Tr}((F_{AB}^{\mathrm{rect}})^N) \to 0\). </p>
+  <p> The transfer-operator gap \(\rho (F_{AB}^{\mathrm{rect}}) {\lt} 1\) (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_rect">7.22</a>) implies \((F_{AB}^{\mathrm{rect}})^N \to 0\), so the operator trace converges to&#160;\(0\). By Theorem&#160;<a href="ch-spectral.html#thm:overlap_trace_rect">7.8</a>, \(O_{AB}(N) = \operatorname{Tr}((F_{AB}^{\mathrm{rect}})^N) \to 0\). </p>
 
   </div>
 </div>
@@ -2896,7 +2897,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The spectral gap \(\rho (F_{AB}) {\lt} 1\) (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap">7.20</a>) implies \(\| F_{AB}^n\| _{\mathrm{op}} \to 0\) by the Gelfand formula, so \(F_{AB}^n(X) \to 0\) for every&#160;\(X\). </p>
+  <p> The transfer-operator gap \(\rho (F_{AB}) {\lt} 1\) (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap">7.20</a>) implies \(\| F_{AB}^n\| _{\mathrm{op}} \to 0\) by the Gelfand formula, so \(F_{AB}^n(X) \to 0\) for every&#160;\(X\). </p>
 
   </div>
 </div>
@@ -3121,8 +3122,8 @@
 
   </div>
 </div>
-<h1 id="a0000000048">7.8 Spectral gap under irreducible-TP hypotheses</h1>
-<p>The preceding spectral-gap results require <em>injectivity</em> of both tensors. The following variants weaken this to <em>irreducibility</em> combined with trace-preserving normalization (\(\sum _i (A^i)^\dagger A^i = \mathbb {1}\)), following Cirac et al.&#160;<span class="cite">
+<h1 id="a0000000048">7.8 Transfer-operator gap under irreducible-TP hypotheses</h1>
+<p>The preceding transfer-operator gap results require <em>injectivity</em> of both tensors. The following variants weaken this to <em>irreducibility</em> combined with trace-preserving normalization (\(\sum _i (A^i)^\dagger A^i = \mathbb {1}\)), following Cirac et al.&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017Annals" >CPGSV17b</a>
@@ -3246,7 +3247,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">7.29</span>
-    <span class="theorem_thmtitle">Strict spectral gap (irreducible-TP)</span>
+    <span class="theorem_thmtitle">Strict transfer-operator gap (irreducible-TP)</span>
     <div class="thm_header_extras">
 
     
@@ -3495,7 +3496,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine the spectral gap (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">7.29</a>) with the overlap–trace identity (Theorem&#160;<a href="ch-spectral.html#thm:overlap_trace">7.7</a>). </p>
+  <p> Combine the transfer-operator gap (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">7.29</a>) with the overlap–trace identity (Theorem&#160;<a href="ch-spectral.html#thm:overlap_trace">7.7</a>). </p>
 
   </div>
 </div>
@@ -3505,7 +3506,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">7.32</span>
-    <span class="theorem_thmtitle">Rectangular spectral gap (irreducible-TP)</span>
+    <span class="theorem_thmtitle">Rectangular transfer-operator gap (irreducible-TP)</span>
     <div class="thm_header_extras">
 
     
@@ -7729,21 +7730,21 @@
 
   </div>
 </div>
-<h1 id="a0000000058">7.15 Primitive overlap convergence (spectral-gap form)</h1>
+<h1 id="a0000000058">7.15 Primitive overlap convergence (complementary transfer-map gap form)</h1>
 <p>The theorems in this section are stated directly in terms of the complementary map \(E - P\). This is the analytic form needed for the later overlap argument, corresponding to the primitive-case specialization of&#160;<span class="cite">
 	[
 	
 	<a href="sect0001.html#Wolf2012Quantum" >Wol12</a>
 	, Theorem&#160;6.7
 	]
-</span> where \(T_\phi \) is a rank-one projection. For primitive normalized transfer maps, Chapter&#160;<a href="ch-channels.html">4</a> supplies this spectral-gap input under explicit hypotheses. </p>
+</span> where \(T_\phi \) is a rank-one projection. For primitive normalized transfer maps, Chapter&#160;<a href="ch-channels.html">4</a> supplies this complementary transfer-map input under explicit hypotheses. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:trace_pow_one">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">7.97</span>
-    <span class="theorem_thmtitle">Complementary spectral gap implies trace convergence to \(1\)</span>
+    <span class="theorem_thmtitle">Complementary transfer-map gap implies trace convergence to \(1\)</span>
     <div class="thm_header_extras">
 
     
@@ -7826,7 +7827,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">7.98</span>
-    <span class="theorem_thmtitle">Self-overlap convergence from a complementary spectral gap</span>
+    <span class="theorem_thmtitle">Self-overlap convergence from a complementary transfer-map gap</span>
     <div class="thm_header_extras">
 
     

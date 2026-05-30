@@ -213,7 +213,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Spectral Gap and Block Separation</span></a>
+  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Transfer-Operator Gaps and Block Separation</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
@@ -226,10 +226,10 @@
   <a href="ch-spectral.html#a0000000043"><span class="toc_ref">7.3</span> <span class="toc_entry">Frobenius norm estimates</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and spectral gap</span></a>
+  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and transfer-operator gap</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Spectral gap — rectangular case</span></a>
+  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Transfer-operator gap — rectangular case</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000046"><span class="toc_ref">7.6</span> <span class="toc_entry">MPV overlap decay</span></a>
@@ -238,7 +238,7 @@
   <a href="ch-spectral.html#a0000000047"><span class="toc_ref">7.7</span> <span class="toc_entry">Block separation</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Spectral gap under irreducible-TP hypotheses</span></a>
+  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Transfer-operator gap under irreducible-TP hypotheses</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000049"><span class="toc_ref">7.9</span> <span class="toc_entry">Conditional expectation from a faithful fixed point</span></a>
@@ -276,7 +276,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (spectral-gap form)</span></a>
+  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (complementary transfer-map gap form)</span></a>
  </li>
 
   </ul>
@@ -762,7 +762,7 @@
   <a href="ch-correlations.html#a0000000106"><span class="toc_ref">19.2</span> <span class="toc_entry">Spectral expansion and exponential decay</span></a>
  </li>
 <li class="">
-  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative spectral gap bounds</span></a>
+  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative transfer-map gap bounds</span></a>
  </li>
 <li class="">
   <a href="ch-correlations.html#a0000000108"><span class="toc_ref">19.4</span> <span class="toc_entry">Relation to parent Hamiltonians</span></a>
@@ -1012,7 +1012,7 @@
 
 <p>This chapter derives the transfer-matrix expression for thermodynamic-limit correlators of a normal MPS and the resulting exponential decay estimate. The key mechanism is spectral: after removing the leading eigenvalue contribution, the connected part is governed by subleading eigenvalues of the transfer map. </p>
 <p>When the MPS tensor generates a parent Hamiltonian (Chapter&#160;<a href="ch-parent_hamiltonian.html">18</a>), the correlator quantifies spatial correlations in the ground state. The exponential decay rate is set by the spectral properties of the transfer map, i.e. by the modulus of its subleading eigenvalues. </p>
-<p>The spectral analysis of the transfer map and the mixed transfer operator, including the eigenvalue bound \(\rho (F_{AB}) \le 1\), the strict spectral gap \(\rho (F_{AB}) {\lt} 1\) for non-equivalent blocks, and the resulting overlap decay, is developed in Chapter&#160;<a href="ch-spectral.html">7</a>. This chapter focuses on the <em>correlator</em> side: one-point and two-point expectations, their spectral decomposition, and quantitative bounds on decay rates. </p>
+<p>The spectral analysis of the transfer map and the mixed transfer operator, including the eigenvalue bound \(\rho (F_{AB}) \le 1\), the strict transfer-operator gap \(\rho (F_{AB}) {\lt} 1\) for non-equivalent blocks, and the resulting overlap decay, is developed in Chapter&#160;<a href="ch-spectral.html">7</a>. This chapter focuses on the <em>correlator</em> side: one-point and two-point expectations, their spectral decomposition, and quantitative bounds on decay rates. </p>
 <h1 id="a0000000105">19.1 Connected correlators from the transfer map</h1>
 <div class="definition_thmwrapper theorem-style-definition" id="def:one_point_expectation">
   <div class="definition_thmheading">
@@ -1391,7 +1391,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Sec.&#160;2.3
 	]
-</span> obtains this by combining the sum-of-exponentials expansion with the triangle inequality, and Sec.&#160;4 provides the spectral gap condition \(|\lambda _j|{\lt}1\) for the subleading eigenvalues. </p>
+</span> obtains this by combining the sum-of-exponentials expansion with the triangle inequality, and Sec.&#160;4 provides the transfer-map gap condition \(|\lambda _j|{\lt}1\) for the subleading eigenvalues. </p>
 
   </div>
 </div>
@@ -1409,7 +1409,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Sec.&#160;2.3
 	]
-</span> obtains this bound by applying the triangle inequality to the sum-of-exponentials expansion and using the spectral gap condition \(|\lambda _j|\le |\lambda _2|{\lt}1\) for all subleading eigenvalues. </p>
+</span> obtains this bound by applying the triangle inequality to the sum-of-exponentials expansion and using the transfer-map gap condition \(|\lambda _j|\le |\lambda _2|{\lt}1\) for all subleading eigenvalues. </p>
 
   </div>
 </div>
@@ -1419,7 +1419,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">19.6</span>
-    <span class="remark_thmtitle">Spectral hypothesis and the spectral gap</span>
+    <span class="remark_thmtitle">Transfer-map spectral hypothesis</span>
     <div class="thm_header_extras">
 
         </div>
@@ -1458,7 +1458,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>  The hypothesis “\(|\lambda _2| {\lt} 1\)” in Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">19.5</a> is the source-paper <em>spectral gap</em> condition for the transfer map \(\mathcal{E}_A\). The complementary spectral gap \(\rho (\mathcal{E}_A - P) {\lt} 1\) is established for primitive channels (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.51</a>, Chapter&#160;<a href="ch-channels.html">4</a>), for irreducible trace-preserving tensors (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">7.29</a>), and quantitatively for injective tensors (Theorem&#160;<a href="ch-correlations.html#thm:spectral_gap_wielandt">19.11</a>). Thus the analytical input needed to make Theorems&#160;<a href="ch-correlations.html#thm:correlator_sum_exponentials">19.4</a> and&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">19.5</a> unconditional is already present; what remains is extracting the spectral expansion coefficients \(c_j,\lambda _j\) from the eigendecomposition of \(\mathcal{E}_A\) (Issue&#160;#1447). </p>
+  <p>  The hypothesis “\(|\lambda _2| {\lt} 1\)” in Theorem&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">19.5</a> is a transfer-map gap condition: all non-leading eigenvalues of \(\mathcal{E}_A\) lie strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of Chapter&#160;<a href="ch-parent_hamiltonian.html">18</a>. The complementary transfer-map gap \(\rho (\mathcal{E}_A - P) {\lt} 1\) is established for primitive channels (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.51</a>, Chapter&#160;<a href="ch-channels.html">4</a>). The mixed-transfer gap needed for block separation is supplied for irreducible trace-preserving tensors (Theorem&#160;<a href="ch-spectral.html#thm:spectral_gap_irr_tp">7.29</a>), and quantitative single-tensor transfer-map bounds for injective tensors are recorded in Theorem&#160;<a href="ch-correlations.html#thm:spectral_gap_wielandt">19.11</a>. Thus the analytical input needed to make Theorems&#160;<a href="ch-correlations.html#thm:correlator_sum_exponentials">19.4</a> and&#160;<a href="ch-correlations.html#thm:correlator_exponential_bound">19.5</a> unconditional is already present; what remains is extracting the spectral expansion coefficients \(c_j,\lambda _j\) from the eigendecomposition of \(\mathcal{E}_A\) (Issue&#160;#1447). </p>
 
   </div>
 </div>
@@ -1608,8 +1608,8 @@
 
   </div>
 </div>
-<h1 id="a0000000107">19.3 Quantitative spectral gap bounds</h1>
-<p>The spectral gap theorems in Chapter&#160;<a href="ch-channels.html">4</a> establish \(\rho (\mathcal{E}_A - P) {\lt} 1\) for primitive channels qualitatively. This section gives the <em>quantitative</em> refinements with explicit constants and rates for the single-tensor transfer map \(\mathcal{E}_A\). </p>
+<h1 id="a0000000107">19.3 Quantitative transfer-map gap bounds</h1>
+<p>The transfer-map gap theorems in Chapter&#160;<a href="ch-channels.html">4</a> establish \(\rho (\mathcal{E}_A - P) {\lt} 1\) for primitive channels qualitatively. This section gives the <em>quantitative</em> refinements with explicit constants and rates for the single-tensor transfer map \(\mathcal{E}_A\). </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:exponential_convergence_primitive">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1685,7 +1685,7 @@
 <div class="displaymath" id="a0000001572">
   \[  \| \mathcal{E}_A^n(X) - P(X)\|  \; \le \;  C\, (1-\delta )^n\, \| X\| .  \]
 </div>
-<p> The spectral gap \(\delta \) exists by primitivity (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.51</a>, the complementary spectral gap). </p>
+<p> The transfer-map gap \(\delta \) exists by primitivity (Theorem&#160;<a href="ch-channels.html#thm:primitive_compl_lt_one">4.51</a>, the complementary transfer-map gap). </p>
 
   </div>
 </div>
@@ -1697,7 +1697,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Injectivity implies primitivity of the transfer map. The complementary spectral radius \(\rho (\mathcal{E}_A - P) {\lt} 1\) then follows from the primitive spectral gap theorem. The Gelfand formula yields a geometric bound \(\| \, (\mathcal{E}_A - P)^n\|  \le C\, (1-\delta )^n\) for suitable constants, giving the claimed estimate. </p>
+  <p>Injectivity implies primitivity of the transfer map. The complementary spectral radius \(\rho (\mathcal{E}_A - P) {\lt} 1\) then follows from the primitive transfer-map gap theorem for the complementary map. The Gelfand formula yields a geometric bound \(\| \, (\mathcal{E}_A - P)^n\|  \le C\, (1-\delta )^n\) for suitable constants, giving the claimed estimate. </p>
 
   </div>
 </div>
@@ -1794,7 +1794,7 @@
     Theorem
     </span>
     <span class="theorem_thmlabel">19.11</span>
-    <span class="theorem_thmtitle">Spectral gap from injectivity</span>
+    <span class="theorem_thmtitle">Transfer-map gap from injectivity</span>
     <div class="thm_header_extras">
 
     
@@ -1863,7 +1863,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Injectivity implies eventual full Kraus rank. This yields primitivity, hence a spectral gap for the complementary map. Since the transfer map has only finitely many eigenvalues, one may choose a uniform \(\delta {\gt} 0\) separating \(1\) from the remaining spectrum. </p>
+  <p>Injectivity implies eventual full Kraus rank. This yields primitivity, hence a complementary transfer-map gap. Since the transfer map has only finitely many eigenvalues, one may choose a uniform \(\delta {\gt} 0\) separating \(1\) from the remaining spectrum. </p>
 
   </div>
 </div>

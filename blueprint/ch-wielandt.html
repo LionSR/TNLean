@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Wielandt Bound</title>
 <link rel="next" href="ch-canonical.html" title="Canonical Form Reduction" />
-<link rel="prev" href="ch-spectral.html" title="Spectral Gap and Block Separation" />
+<link rel="prev" href="ch-spectral.html" title="Transfer-Operator Gaps and Block Separation" />
 <link rel="up" href="index.html" title="Fundamental Theorem of Matrix Product States" />
 <link rel="stylesheet" href="styles/theme-white.css" />
 <link rel="stylesheet" href="styles/amsthm.css" />
@@ -213,7 +213,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Spectral Gap and Block Separation</span></a>
+  <a href="ch-spectral.html"><span class="toc_ref">7</span> <span class="toc_entry">Transfer-Operator Gaps and Block Separation</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
@@ -226,10 +226,10 @@
   <a href="ch-spectral.html#a0000000043"><span class="toc_ref">7.3</span> <span class="toc_entry">Frobenius norm estimates</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and spectral gap</span></a>
+  <a href="ch-spectral.html#a0000000044"><span class="toc_ref">7.4</span> <span class="toc_entry">Eigenvalue bound and transfer-operator gap</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Spectral gap — rectangular case</span></a>
+  <a href="ch-spectral.html#a0000000045"><span class="toc_ref">7.5</span> <span class="toc_entry">Transfer-operator gap — rectangular case</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000046"><span class="toc_ref">7.6</span> <span class="toc_entry">MPV overlap decay</span></a>
@@ -238,7 +238,7 @@
   <a href="ch-spectral.html#a0000000047"><span class="toc_ref">7.7</span> <span class="toc_entry">Block separation</span></a>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Spectral gap under irreducible-TP hypotheses</span></a>
+  <a href="ch-spectral.html#a0000000048"><span class="toc_ref">7.8</span> <span class="toc_entry">Transfer-operator gap under irreducible-TP hypotheses</span></a>
  </li>
 <li class="">
   <a href="ch-spectral.html#a0000000049"><span class="toc_ref">7.9</span> <span class="toc_entry">Conditional expectation from a faithful fixed point</span></a>
@@ -276,7 +276,7 @@
   </ul>
  </li>
 <li class="">
-  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (spectral-gap form)</span></a>
+  <a href="ch-spectral.html#a0000000058"><span class="toc_ref">7.15</span> <span class="toc_entry">Primitive overlap convergence (complementary transfer-map gap form)</span></a>
  </li>
 
   </ul>
@@ -762,7 +762,7 @@
   <a href="ch-correlations.html#a0000000106"><span class="toc_ref">19.2</span> <span class="toc_entry">Spectral expansion and exponential decay</span></a>
  </li>
 <li class="">
-  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative spectral gap bounds</span></a>
+  <a href="ch-correlations.html#a0000000107"><span class="toc_ref">19.3</span> <span class="toc_entry">Quantitative transfer-map gap bounds</span></a>
  </li>
 <li class="">
   <a href="ch-correlations.html#a0000000108"><span class="toc_ref">19.4</span> <span class="toc_entry">Relation to parent Hamiltonians</span></a>
@@ -6016,7 +6016,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Immediate from the self-overlap convergence under a complementary spectral gap (Theorem&#160;<a href="ch-spectral.html#thm:primitive_overlap">7.98</a>). </p>
+  <p> Immediate from the self-overlap convergence under a complementary transfer-map gap (Theorem&#160;<a href="ch-spectral.html#thm:primitive_overlap">7.98</a>). </p>
 
   </div>
 </div>
@@ -6188,14 +6188,14 @@
 </div>
 <h2 id="subsec:prim_to_normal">8.10.1 From primitivity to normality</h2>
 
-<p>The primitivity condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a> combines TP normalization, a nonzero PSD fixed point, and a complementary spectral gap. It is connected to normality through the following results. </p>
+<p>The primitivity condition of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a> combines TP normalization, a nonzero PSD fixed point, and a complementary transfer-map gap. It is connected to normality through the following results. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:fixedpoint_unique_spectral">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
     Theorem
     </span>
     <span class="theorem_thmlabel">8.65</span>
-    <span class="theorem_thmtitle">Fixed-point uniqueness from spectral gap</span>
+    <span class="theorem_thmtitle">Fixed-point uniqueness from a complementary transfer-map gap</span>
     <div class="thm_header_extras">
 
     
@@ -6264,7 +6264,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Set \(\sigma ' = \sigma - \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Then \(\operatorname{tr}(\sigma ') = 0\) and \((\mathcal{E}_A - P_\rho )(\sigma ') = \sigma '\). If \(\sigma ' \neq 0\), then \(1\) is an eigenvalue of \(\mathcal{E}_A - P_\rho \), contradicting the spectral gap \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P_\rho ) {\lt} 1\). </p>
+  <p>Set \(\sigma ' = \sigma - \frac{\operatorname{tr}(\sigma )}{\operatorname{tr}(\rho )} \rho \). Then \(\operatorname{tr}(\sigma ') = 0\) and \((\mathcal{E}_A - P_\rho )(\sigma ') = \sigma '\). If \(\sigma ' \neq 0\), then \(1\) is an eigenvalue of \(\mathcal{E}_A - P_\rho \), contradicting the complementary transfer-map gap \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P_\rho ) {\lt} 1\). </p>
 
   </div>
 </div>
@@ -6343,7 +6343,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The spectral radius of \(\mathcal{E}_A - P_\rho \) is strictly less than \(1\) by the spectral-gap hypothesis. Apply the general result that powers of an operator with spectral radius \({\lt} 1\) tend to zero. </p>
+  <p>The spectral radius of \(\mathcal{E}_A - P_\rho \) is strictly less than \(1\) by the complementary transfer-map gap hypothesis. Apply the general result that powers of an operator with spectral radius \({\lt} 1\) tend to zero. </p>
 
   </div>
 </div>
@@ -6353,7 +6353,7 @@
     Remark
     </span>
     <span class="remark_thmlabel">8.67</span>
-    <span class="remark_thmtitle">Primitivity: spectral gap vs. positive definiteness</span>
+    <span class="remark_thmtitle">Primitivity: transfer-map gap vs. positive definiteness</span>
     <div class="thm_header_extras">
 
     
@@ -6368,13 +6368,13 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>The primitivity condition used in Section&#160;<a href="ch-wielandt.html#subsec:prim_to_normal">8.10.1</a> has three parts: TP normalization \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), a nonzero PSD fixed point \(\rho \), and the spectral gap \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P_\rho ) {\lt} 1\). The notion of “primitive” in <span class="cite">
+  <p>The primitivity condition used in Section&#160;<a href="ch-wielandt.html#subsec:prim_to_normal">8.10.1</a> has three parts: TP normalization \(\sum _i (A^i)^\dagger A^i = \mathbb {1}\), a nonzero PSD fixed point \(\rho \), and the complementary transfer-map gap \(\rho _{\mathrm{spec}}(\mathcal{E}_A - P_\rho ) {\lt} 1\). The notion of “primitive” in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Sanz2010Quantum" >SPGWC10</a>
 	, Proposition&#160;3
 	]
-</span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the spectral-gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
+</span> additionally requires \(\rho \) to be positive definite (full rank). Without positive definiteness, the transfer-map gap condition alone does <em>not</em> imply irreducibility or normality. A counterexample is \(D = 2\), \(\rho = \operatorname{diag}(1,0)\). </p>
 <p>With the additional hypothesis \(\rho {\gt} 0\), Theorem&#160;<a href="ch-wielandt.html#thm:primitive_implies_irreducible">8.68</a> gives irreducibility. Together with the Burnside argument below (Section&#160;<a href="ch-wielandt.html#subsec:burnside_full_span">8.10.3</a>) and Theorem&#160;<a href="ch-wielandt.html#thm:algspan_to_normal">8.84</a>, one obtains </p>
 <div class="displaymath" id="a0000000547">
   \[  \text{primitive} + \rho \text{ positive definite} \Rightarrow \text{irreducible} \Rightarrow \operatorname{alg}(A) = M_{D}(\mathbb {C}) \Rightarrow \text{normal}.  \]
@@ -6977,7 +6977,7 @@
 </div>
 <h2 id="subsec:prim_normality_connection">8.10.4 From primitivity to strong irreducibility and normality</h2>
 
-<p>The results in this subsection remove the aperiodicity assumption from the normality conclusions. They connect the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a> directly to normality (eventually full Kraus rank), using the convergence of the transfer-map iterates to the projection onto the fixed-point subspace. </p>
+<p>The results in this subsection remove the aperiodicity assumption from the normality conclusions. They connect primitivity in Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a>, formulated via a complementary transfer-map gap, directly to normality (eventually full Kraus rank), using the convergence of the transfer-map iterates to the projection onto the fixed-point subspace. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:irreducible_map_from_primitive">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -7145,7 +7145,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_map_from_primitive">8.76</a> (irreducibility) with the peripheral-spectrum primitivity from the spectral-gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">8.62</a>). </p>
+  <p> Combine Theorem&#160;<a href="ch-wielandt.html#thm:irreducible_map_from_primitive">8.76</a> (irreducibility) with the peripheral-spectrum primitivity from the transfer-map gap hypothesis (Theorem&#160;<a href="ch-wielandt.html#thm:prim_overlap_one">8.62</a>). </p>
 
   </div>
 </div>
@@ -7219,7 +7219,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   If \(A\) is a primitive MPS tensor with positive-definite fixed point&#160;\(\rho \), then \(A\) is normal (has eventually full Kraus rank). No aperiodicity assumption is needed. </p>
-<p>This is the key connection between the spectral-gap primitivity of Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a> and normality; it removes the need for the aperiodicity-based argument. </p>
+<p>This is the key connection between primitivity in Definition&#160;<a href="ch-wielandt.html#def:primitive_mps">8.61</a>, formulated via a complementary transfer-map gap, and normality; it removes the need for the aperiodicity-based argument. </p>
 
   </div>
 </div>
@@ -7872,7 +7872,7 @@
 
   <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
 
-  <a href="ch-spectral.html" title="Spectral Gap and Block Separation"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+  <a href="ch-spectral.html" title="Transfer-Operator Gaps and Block Separation"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
 </a>
   <a href="index.html" title="Fundamental Theorem of Matrix Product States"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
 </a>
