@@ -1020,9 +1020,19 @@ Chapter~\ref{ch:algebraic_ft}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:gauge_phase_equiv, def:irreducible_tensor}
-    Primitivity forces the peripheral spectrum to consist of $\{1\}$ alone,
-    so the gauge phase must have modulus one.
+    \uses{thm:gauge_phase_mpv_scaling}
+    The gauge-phase equivalence $B^i = \zeta\,X A^i X^{-1}$ scales every MPV
+    coefficient by $\zeta^N$,
+    \[
+        V^{(N)}(B)_\sigma = \zeta^N\,V^{(N)}(A)_\sigma,
+    \]
+    so the self-overlaps satisfy
+    \[
+        O_{BB}(N) = |\zeta|^{2N}\,O_{AA}(N).
+    \]
+    For primitive irreducible trace-preserving blocks the self-overlaps
+    converge in modulus, $\|O_{AA}(N)\|\to 1$ and $\|O_{BB}(N)\|\to 1$, so
+    $|\zeta|^{2N}\to 1$, which forces $|\zeta|=1$.
 \end{proof}
 
 \begin{theorem}[Existential BNT independence from overlap limits]%
