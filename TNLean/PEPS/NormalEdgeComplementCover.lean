@@ -255,12 +255,11 @@ theorem normalSquareEdgeComplementRegion_eq_T_union_topCollar :
 cover of the normalized horizontal-edge \(5\times7\) complementary block by
 adding the two top-collar \(3\times2\) rectangles.
 
-**Scope restriction (T-cover):** This construction is conditional on a
-rectangular cover of the displayed local \(T\)-region. Under the present
-exact-cover criterion, the origin local \(T\)-region has no such cover for
-\(5 \leq\) `width` and \(6 \leq\) `height`, hence also for this \(5\times7\)
-frame. The source-faithful finite PEPS geometry is recorded as an open
-obligation in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+**Scope restriction (T-cover):** This construction remains conditional on a
+rectangular cover of the displayed local \(T\)-region. The source comparison,
+the exact-cover obstruction, and the elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 This is the rectangular-cover form of the top-collar decomposition of the
 edge-complementary block. It separates this finite-lattice collar step from
@@ -710,14 +709,10 @@ displayed \(T\)-region supply the abstract square-lattice blocking-region
 structure.
 
 **Scope restriction (T-cover):** This conditional result assumes a
-rectangular cover of the displayed \(T\)-region at the origin. Under the
-present exact-cover criterion, no such cover exists:
-`not_normalSquareRegionT_rectangleCover_at_origin` rules it out for
-\(5 \leq\) `width` and \(6 \leq\) `height`, and hence a fortiori under the
-`7 ≤ width` and `7 ≤ height` bounds assumed here. The conditional theorem is
-therefore currently vacuous at the origin in the current coordinate model. A
-source-faithful cover construction tied to the finite PEPS geometry is recorded
-as an open obligation in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+rectangular cover of the displayed \(T\)-region at the origin. The source
+comparison, the exact-cover obstruction, and the elimination plan are recorded
+in `docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500
 of `Papers/1804.04964/paper_normal.tex`. -/
