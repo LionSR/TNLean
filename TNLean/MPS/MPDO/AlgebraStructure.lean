@@ -745,13 +745,11 @@ dependent-index version of the matrices
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, Theorem IV.13(ii)] for the
 blocked structure coefficients.
 
-**Scope restriction (blocked bases):** The paper's chi matrices are indexed by
-fixed BNT labels and are uniform in the length parameter. This structure is
-instead indexed by the chosen blocked bases, so its data may depend on `n`.
-This deviation is documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. Elimination: introduce
-the BNT-label coefficients and a comparison map from blocked bases to those
-labels, then recover the uniform chi family from the paper's Appendix C.3. -/
+**Scope restriction (blocked bases):** This is the length-dependent
+blocked-basis analogue of the paper's uniform BNT-label chi family. The source
+comparison and elimination plan are recorded in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
+coefficient objects and remaining elimination plan". -/
 structure BlockedStructureChiFamily (data : AlgebraStructureData d D) where
   /-- For each blocked length `n`, a diagonal family on the disjoint union of
   domain and codomain basis labels. The intended triples have shape
@@ -817,13 +815,11 @@ blocked-basis analogue of the coefficient condition in
 `n` is the source blocking length of the two factors in `A n`; the product is
 expanded in the basis of `A (2 * n)`.
 
-**Scope restriction (blocked bases):** The source theorem uses one chi matrix
-for each BNT-label triple, uniformly for all lengths. This predicate allows the
-chi data to vary with the blocked length because its indices are the chosen
-bases of `A n` and `A (2 * n)`. This deviation is documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. Elimination: replace this
-length-dependent blocked-basis predicate by the BNT-label trace-power form and
-derive the present statement by comparison with the blocked bases. -/
+**Scope restriction (blocked bases):** This is the length-dependent
+blocked-basis trace-power predicate, not the paper's uniform BNT-label
+trace-power form. The source comparison and elimination plan are recorded in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
+coefficient objects and remaining elimination plan". -/
 def HasBlockedStructureChiTracePowerForm
     (data : AlgebraStructureData d D) (χ : BlockedStructureChiFamily data) :
     Prop :=
@@ -851,9 +847,11 @@ with the blocked-basis trace-power identity. It records
 `HasBlockedStructureChiTracePowerForm` together with positivity.
 
 **Scope restriction (blocked bases):** As for
-`BlockedStructureChiFamily`, this is the length-dependent blocked-basis analogue
-of the paper's uniform BNT-label chi family. The deviation and elimination plan
-are documented in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
+`BlockedStructureChiFamily`, this is the length-dependent blocked-basis
+analogue of the paper's uniform BNT-label chi witness. The source comparison
+and elimination plan are recorded in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`, Section "BNT-label
+coefficient objects and remaining elimination plan". -/
 structure PositiveBlockedStructureChiTracePowerForm
     (data : AlgebraStructureData d D) where
   /-- The length-dependent blocked chi family. -/
