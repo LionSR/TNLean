@@ -63,8 +63,19 @@ content is recorded separately by an equality of MPV families.
     (Theorem~\ref{thm:irred_decomp}) and partition the blocks
     by whether each has a nonzero Kraus operator.  Their total bond
     dimension $D_0$ accumulates the bond dimensions of the all-zero blocks.
-    At positive length the all-zero blocks contribute nothing, giving the MPV
-    equality; evaluating at the empty word gives the dimension identity.
+    For every all-zero irreducible block $C_j$ and every $N \ge 1$,
+    \[
+        V^{(N)}(C_j)_\sigma = 0,
+    \]
+    hence
+    \[
+        V^{(N)}(A)_\sigma
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma.
+    \]
+    At $N = 0$, the MPV coefficient is the bond dimension, giving
+    \[
+        D = D_0 + \sum_{k=1}^r D_k.
+    \]
 \end{proof}
 
 \section{After-blocking decompositions and zero-tail identities}

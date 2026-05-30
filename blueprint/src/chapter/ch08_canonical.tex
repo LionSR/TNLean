@@ -811,10 +811,22 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 
 \begin{proof}\leanok
     \uses{thm:zero_block_separation, thm:tp_data_irreducible}
-    Apply Theorem~\ref{thm:zero_block_separation} to separate the
-    zero-block dimension and the nontrivial blocks. Then apply the blockwise
-    TP-gauge theorem to the nontrivial blocks. The positive-length equality and
-    the dimension identity compose across both steps.
+    Apply Theorem~\ref{thm:zero_block_separation} to obtain the zero-block
+    dimension $D_0$ and nonzero irreducible blocks $(B_k)_{k=1}^r$ with
+    \[
+        V^{(N)}(A)_\sigma
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma
+    \]
+    for $N \ge 1$.  Then apply the blockwise TP-gauge theorem to replace
+    each $B_k$ by a left-canonical block $\widetilde{B}_k$ with weight
+    $\mu_k$, giving
+    \[
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r B_k)_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k \widetilde{B}_k)_\sigma
+    \]
+    for $N \ge 1$.  The length-zero dimension identity
+    $D = D_0 + \sum_{k=1}^r D_k$ is preserved throughout.
 \end{proof}
 
 \section{Blocking and primitivity reduction}%
