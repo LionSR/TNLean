@@ -5,9 +5,9 @@ import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 -- The contraction algebra is proved. The remaining converse ingredients are
--- separated by mathematical role: edge-centred gauge extraction (#780), the
--- bond-dimension equality from `SameState` and vertex injectivity (#874), and
--- uniqueness modulo balanced edge scalars (#842). The hypothesis
+-- separated by mathematical role in
+-- `docs/paper-gaps/peps_injective_ft_section3_route.tex` and
+-- `docs/paper-gaps/peps_gauge_edge_scalars.tex`. The hypothesis
 -- `IsVertexInjective` is the linear-independence formulation from `PEPS.Defs`,
 -- which gives the local left inverses used below.
 
@@ -17,8 +17,8 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 **Root-only.** This module is currently not imported downstream — it
 records the full statement of the PEPS Fundamental Theorem
 (arXiv:1804.04964 §3, Theorem 2), with the forward bond-dimension
-obligation and converse gaps documented explicitly.  See issue #1512 for
-the root-only audit.
+obligation and converse gaps documented in the paper-gap notes cited below.
+The separate root-only audit is tracked by issue #1512.
 
 This file develops the Fundamental Theorem for injective PEPS on simple graphs
 (arXiv:1804.04964, Theorem 2, Section 3):
@@ -570,9 +570,10 @@ This theorem records the global-gauge conclusion needed by the injective PEPS
 Fundamental Theorem under the already separated bond-dimension equality
 hypothesis.
 
-**Proof status:** The statement is still open. It depends on the edge-blocked
-three-site injective MPS comparison and the passage from the source insertion
-identity to the factorized local gauge formula; see issue #780. -/
+**Proof status:** The statement is still open. The edge-blocked route and the
+remaining insertion-to-gauge obligations are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem gaugeConsistency (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B)
@@ -589,7 +590,8 @@ theorem gaugeConsistency (A B : Tensor G d)
   -- The key remaining consistency step is: for each edge e = (u,v), the gauges
   -- extracted from u and v must agree as inverse-transposes, with the
   -- orientation convention in `edgeGaugeAt`.
-  -- Proof obligation tracked by #780.
+  -- The current status is recorded in
+  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   sorry
 
 /-! ### Main theorem -/
@@ -602,9 +604,9 @@ states and vertex injectivity imply the gauge formula
 `B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge.
 
 **Proof status:** This theorem is proved from the conditional global-gauge
-statement `gaugeConsistency`. The source theorem does not assume matching bond
-dimensions separately; removing `hDim` requires the boundary-insertion argument
-tracked by issue #874. -/
+statement above. The remaining difference from the source theorem is recorded
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim) :
@@ -620,9 +622,9 @@ and have the same state coefficients, then there are invertible edge matrices
 endpoint action of the matrices `X_e` on the incident virtual legs.
 
 **Proof status:** The theorem is stated with the source's hypothesis set. The
-remaining formal proof obligations are the bond-dimension equality from
-`SameState` and vertex injectivity (#874), and the edge-centred gauge extraction
-recorded in `gaugeConsistency` (#780). -/
+remaining bond-dimension and edge-centred gauge obligations are recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hAB : SameState A B) :
@@ -631,7 +633,8 @@ theorem fundamentalTheorem_PEPS (A B : Tensor G d)
   -- insertions. Linear independence at each vertex (`IsVertexInjective`) gives
   -- the right local data, while the global comparison still requires a
   -- boundary-insertion / blocking lemma.
-  -- Proof obligation tracked by #874.
+  -- The current status is recorded in
+  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   have hDim : A.bondDim = B.bondDim := by
     sorry
   -- With matching bond dimensions, `gaugeConsistency` supplies the global gauges.
@@ -939,7 +942,7 @@ see `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
 **Proof status:** The proof has been reduced to equality of products of
 incident edge-gauge entries at each vertex. The remaining step extracts the
 local scalar ratios and reconciles them into one vertex-balanced edge-scalar
-family; see issue #842. -/
+family; see `docs/paper-gaps/peps_gauge_edge_scalars.tex`. -/
 theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     (hA : IsVertexInjective A)
     (hDim : A.bondDim = B.bondDim)
@@ -975,7 +978,8 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
   -- `IsVertexBalanced c`. This is the local scalar-ratio argument of
   -- arXiv:1804.04964 Section 3; it is independent of the virtual-insertion and
   -- blocking lemmas used for local gauge existence.
-  -- Proof obligation tracked by #842.
+  -- The current status is recorded in
+  -- `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
   sorry
 
 end PEPS
