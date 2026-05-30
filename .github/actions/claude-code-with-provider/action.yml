@@ -224,7 +224,7 @@ runs:
 
           model_opus="$INPUT_CLAUDE_OPUS_MODEL"
           if [ -z "$model_opus" ]; then
-            model_opus="${CLAUDE_OPUS_MODEL:-claude-opus-4-7}"
+            model_opus="${CLAUDE_OPUS_MODEL:-claude-opus-4-8}"
           fi
 
           model_sonnet="$INPUT_CLAUDE_SONNET_MODEL"
