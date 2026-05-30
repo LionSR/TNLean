@@ -47,7 +47,7 @@ block and a weighted family of normal blocks,
 where $\mathbf 0_{z}$ is the zero tensor on a bond space of dimension~$z$,
 the $B_k$ are normal (primitive, trace-preserving, irreducible) blocks of
 bond dimension $D_k$, the weights satisfy $\mu_k\neq 0$, and
-$z+\sum_k D_k = D^{\,p}$ is the bond dimension of $A^{[p]}$.
+$z+\sum_k D_k = D$ is the bond dimension of $A^{[p]}$.
 
 \section{The point at issue}
 
@@ -71,7 +71,7 @@ bond space,
 Hence the \emph{entire} content of the length-zero instance
 of~\eqref{eq:all-length} is the dimension count
 \begin{align}
-  z + \sum_k D_k = D^{\,p},\label{eq:dim}
+  z + \sum_k D_k = D,\label{eq:dim}
 \end{align}
 which is already part of~\eqref{eq:zero-block}. Every length $N\ge 1$ carries
 the genuine mathematical content: the weighted normal-block comparison
@@ -117,49 +117,26 @@ This is the source-faithful shape: the nonzero normal blocks are compared at
 positive length, and the zero block appears only as the scalar~$z$
 in~\eqref{eq:dim}.
 
-\section{The remaining formal boundary}
+\section{Formal status}
 
-One theorem still states the reduction in the all-length form
-of~\eqref{eq:all-length}: the single-tensor after-blocking decomposition
-that produces~\eqref{eq:zero-block} with its explicit zero block.\footnote{%
-  \leanid{exists_tp_primitive_blockDecomp_after_blocking}, blueprint
-  \path{thm:tp_primitive_blockdecomp} in
-  \path{blueprint/src/chapter/ch11b_after_blocking.tex}; its support lemma is
-  \leanid{zeroTail_toTensorFromBlocks_blockPower}.}
-It is kept in that form for two reasons. First, the explicit zero block is the
-literal content of \cite[Section~2.3]{Cirac2016MPDO_arXiv} and is named as the
-``zero-tail term'' in the surrounding blueprint exposition, so the displayed
-statement should still exhibit it. Second, its only consumer already converts
-to the positive-length form~\eqref{eq:pos} at the correct boundary, so no
-downstream lemma carries the empty-word instance any further.
-
-The source-faithful simplification, if pursued, is to replace the all-length
-clause of that theorem by the positive-length comparison~\eqref{eq:pos}
-against the blocked normal blocks, using the elementary fact that blocking
-preserves a positive-length identity,\footnote{%
-  The missing one-line lemma is
-  \(\leanid{SameMPV₂Pos}\,A\,B \Rightarrow
-  \leanid{SameMPV₂Pos}\,(A^{[p]})\,(B^{[p]})\) for $p\ge 1$, from
-  $N\ge 1\wedge p\ge 1 \Rightarrow Np\ge 1$. With it, clause~(e) of the
-  theorem becomes a \leanid{SameMPV₂Pos} statement and the support lemma
-  \leanid{zeroTail_toTensorFromBlocks_blockPower} is no longer needed.}
-together with the dimension identity~\eqref{eq:dim}. This change is deferred
-because it edits the zero-tail exposition in two blueprint chapters; it is a
-prose and statement reshaping, not new mathematics.
+\leanid{exists_tp_primitive_blockDecomp_after_blocking}, blueprint
+\path{thm:tp_primitive_blockdecomp} in
+\path{blueprint/src/chapter/ch11b_after_blocking.tex}, now uses the
+source-faithful shape: its MPV clause is the positive-length comparison
+in~\eqref{eq:pos}, and the empty-word contribution is the separate identity
+\(z+\sum_k D_k=D\).  The former support lemma
+\leanid{zeroTail_toTensorFromBlocks_blockPower} has therefore been removed.
 
 \section{Conclusion}
 
 The blocked canonical form~\eqref{eq:zero-block} is correct, and the dimension
-count~\eqref{eq:dim} is part of it. The defect is one of formal shape: stating
-the reduction as the all-length matrix-product-vector
-identity~\eqref{eq:all-length} fuses a trivial empty-word dimension count with
-the substantive positive-length comparison and forces the two through the whole
-after-blocking chain together, against the article, which keeps the zero block
-only as a bond-dimension term. The faithful statement is the positive-length
-comparison~\eqref{eq:pos} with the length-zero coefficient restored once
-from~\eqref{eq:dim}. The development now uses this shape everywhere except the
-single headline decomposition theorem, where the explicit zero block is kept to
-match the cited exposition.
+count~\eqref{eq:dim} is part of it. The former formal defect was one of shape:
+stating the reduction as the all-length matrix-product-vector
+identity~\eqref{eq:all-length} fused a trivial empty-word dimension count with
+the substantive positive-length comparison. The faithful statement is the
+positive-length comparison~\eqref{eq:pos} with the length-zero coefficient
+restored once from~\eqref{eq:dim}. The development now uses this shape in the
+after-blocking primitive decomposition and its downstream consumers.
 
 \bibliographystyle{alpha}
 \bibliography{references}

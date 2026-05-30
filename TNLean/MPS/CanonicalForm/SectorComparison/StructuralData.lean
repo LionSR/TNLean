@@ -60,11 +60,11 @@ The full proof chain is:
 
 The after-blocking primitive block decomposition provides:
 - A blocking period `p > 0`
-- A trivial all-zero block of dimension `zeroTailDim`, representing the CPSV
-  allowance `∑ k, D_k ≤ D` where zero blocks may occur
 - A family of TP sector blocks
-- The MPV relationship: `blockTensor A p` is `SameMPV₂`-equivalent to
-  `zeroMPSTensor + toTensorFromBlocks μ sectors` for some weights `μ`
+- The positive-length MPV relationship: `blockTensor A p` is `SameMPV₂Pos`-equivalent to
+  `toTensorFromBlocks μ sectors` for some weights `μ`
+- A separate zero-block bond-dimension count, representing the CPSV allowance
+  `∑ k, D_k ≤ D` where zero blocks may occur
 
 The current library already settles the common-period blocking arithmetic and
 now has a one-sided phase-class BNT construction for TP primitive irreducible
@@ -211,17 +211,19 @@ theorem afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d pA) (μ := μA) blocksA) ∧
       SameMPV₂Pos (blockTensor (d := d) (D := D₂) B pB)
         (toTensorFromBlocks (d := blockPhysDim d pB) (μ := μB) blocksB) := by
-  obtain ⟨zeroTailA, pA, hpA, rA, dimA, μA, blocksA, hTPA, hPrimA, hDimA, hμA, hMPVA⟩ :=
+  obtain ⟨_zeroTailA, pA, hpA, rA, dimA, μA, blocksA,
+      hTPA, hPrimA, hDimA, hμA, hMPVA, _hBondA⟩ :=
     exists_tp_primitive_blockDecomp_after_blocking A
-  obtain ⟨zeroTailB, pB, hpB, rB, dimB, μB, blocksB, hTPB, hPrimB, hDimB, hμB, hMPVB⟩ :=
+  obtain ⟨_zeroTailB, pB, hpB, rB, dimB, μB, blocksB,
+      hTPB, hPrimB, hDimB, hμB, hMPVB, _hBondB⟩ :=
     exists_tp_primitive_blockDecomp_after_blocking B
   refine ⟨pA, hpA, rA, dimA, μA, blocksA,
     pB, hpB, rB, dimB, μB, blocksB,
     ?_, ?_, hTPA, hTPB, hPrimA, hPrimB, hμA, hμB, hDimA, hDimB, ?_, ?_⟩
   · exact sameMPV₂_blockTensor A B hSame pA
   · exact sameMPV₂_blockTensor A B hSame pB
-  · exact sameMPV₂Pos_of_zeroTail_eq _ _ hMPVA
-  · exact sameMPV₂Pos_of_zeroTail_eq _ _ hMPVB
+  · exact hMPVA
+  · exact hMPVB
 
 
 end FundamentalTheoremAfterBlocking
