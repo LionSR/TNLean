@@ -5,12 +5,12 @@
 % docs/paper-gaps/pgvwc07_ti_uniqueness_scope.tex; the same-structure
 % lemmas below are not the PGVWC07 uniqueness theorem
 % (\cite[Theorem~thm-uniq, lines~1002--1015]{PerezGarcia2007Matrix}).
-This chapter records three reduction outputs: the algebra-automorphism
-decomposition Theorem~\ref{thm:pi_auto_decomp}; the per-block linear-extension
-product automorphism Theorem~\ref{thm:pi_linear_ext}; and the strict-weight
-block separation Lemmas~\ref{lem:block_sep} and~\ref{lem:block_sep_normal},
-together with the canonical-form gauge comparison
-Lemma~\ref{lem:ft_canonical}.
+This chapter records two reduction outputs: the algebra-automorphism
+decomposition Theorem~\ref{thm:pi_auto_decomp}; and the strict-weight block
+separation Lemmas~\ref{lem:block_sep} and~\ref{lem:block_sep_normal}, together
+with the canonical-form gauge comparison Lemma~\ref{lem:ft_canonical}.  The
+per-block linear-extension construction is stated once in
+Chapter~\ref{ch:algebraic_ft}, Section~\ref{sec:pi_algebra}.
 
 \section{Block permutation algebra}
 
@@ -147,59 +147,6 @@ Lemma~\ref{lem:ft_canonical}.
 
     This is a standard result in the theory of semisimple algebras;
     see~\cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
-\end{proof}
-
-\section{Product algebra linear extension}
-
-\begin{definition}[Per-block linear extension]\label{def:per_block_linear_ext}
-    \lean{MPSTensor.perBlockLinearExtension}
-    \leanok
-    \uses{def:injective, def:same_mpv}
-    Given injective tensors $A_k, B_k$ of bond dimension~$D_k$
-    with the same MPV for each block~$k$,
-    the \emph{per-block linear extension} $T_k$ is the unique
-    linear map $\MN{D_k} \to \MN{D_k}$ satisfying
-    $T_k(A_k^i) = B_k^i$ for all~$i$.
-    It exists (and is unique) because $\{A_k^i\}$ spans
-    $\MN{D_k}$ by injectivity.
-\end{definition}
-
-\begin{definition}[Product algebra automorphism]\label{def:pi_alg_equiv}
-    \lean{MPSTensor.piAlgEquiv}
-    \leanok
-    \uses{def:per_block_linear_ext}
-    The \emph{product algebra automorphism} is the componentwise map
-    $T : \prod_k \MN{D_k} \to \prod_k \MN{D_k}$ defined by
-    $T(M)_k := T_k(M_k)$.
-    Theorem~\ref{thm:pi_linear_ext} shows that each $T_k$ is a
-    $\C$-algebra homomorphism and that this map is a
-    $\C$-algebra automorphism.
-\end{definition}
-
-\begin{theorem}[Per-block linear extensions define a product algebra automorphism]\label{thm:pi_linear_ext}
-    \lean{MPSTensor.piAlgEquiv_decomposition}
-    \leanok
-    \uses{def:injective, def:per_block_linear_ext}
-    Let $A_k$ and $B_k$ be injective tensors of bond dimension
-    $D_k$ for $k = 1, \ldots, r$, and suppose the per-block
-    same-MPV condition holds.
-    Then the per-block linear extensions $T_k : A_k^i \mapsto B_k^i$
-    define an algebra automorphism of $\prod_k \MN{D_k}$,
-    which decomposes as a permutation $\pi$ with
-    $D_{\pi(k)} = D_k$ and per-block conjugation matrices $X_k$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:linear_ext, thm:linear_ext_mul, lem:linear_map_to_alg,
-        thm:pi_auto_decomp}
-    Each $T_k$ exists uniquely and is multiplicative by
-    Theorems~\ref{thm:linear_ext} and~\ref{thm:linear_ext_mul}.
-    Promotion to algebra homomorphisms
-    (Lemma~\ref{lem:linear_map_to_alg}) and componentwise composition give an
-    algebra automorphism of $\prod_k \MN{D_k}$.
-    Theorem~\ref{thm:pi_auto_decomp} then decomposes this automorphism as a
-    block permutation together with per-block inner automorphisms.
 \end{proof}
 
 \section{Burnside and invariant projections}
