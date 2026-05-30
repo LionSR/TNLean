@@ -1042,7 +1042,7 @@
 	, Theorem&#160;Th:TIcanonical
 	]
 </span>; the trace-preserving (left-canonical) orientation \(\sum _i (A_k^i)^\dagger A_k^i=\mathbb {1}\) is used by the reductions of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. The two orientations exchange under the conjugate-transposed Kraus family \(K_i:=(A^i)^\dagger \), whose transfer map is the Frobenius adjoint of \(\mathcal{E}_A\). </p>
-<p>The PGVWC07 source theorem is recorded as a single headline statement (Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>). The canonical-form reduction that feeds the proof of the Fundamental Theorem in Chapter&#160;<a href="ch-ft_proof.html">13</a> does not pass through PGVWC07; it goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.36</a>, Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">9.67</a>, and the after-blocking reductions of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. </p>
+<p>The PGVWC07 source theorem is recorded as a single headline statement (Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>). The canonical-form reduction that feeds the proof of the Fundamental Theorem in Chapter&#160;<a href="ch-ft_proof.html">13</a> does not pass through PGVWC07; it goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.36</a>, Theorem&#160;<a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">9.70</a>, and the after-blocking reductions of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. </p>
 <p>The reduction outputs of this chapter are: Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a> (the source-faithful PGVWC07 translation-invariant canonical form); Theorem&#160;<a href="ch-canonical.html#thm:CFII_data">9.31</a> and Theorem&#160;<a href="ch-canonical.html#thm:cyclic_sector_decomp_irr_tp_prim_irr">9.40</a> (block-injective and primitive-irreducible TP-gauge reductions); and Theorem&#160;<a href="ch-canonical.html#thm:exists_normal_canonical_form">9.34</a> (the normal canonical form obtained from primitive blocks). </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:pgvwc07_ti_canonical_form">
   <div class="theorem_thmheading">
@@ -3716,7 +3716,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be a left-canonical irreducible tensor. Then there is a period \(m \ge 1\) and a unit-weight decomposition of \(A^{[m]}\) into sector blocks \((C_k)_{k=1}^m\) such that every \(C_k\) is left-canonical, has primitive transfer map, is tensor-irreducible, and has nonzero bond dimension. </p>
-<p>Equivalently: the cyclic-sector decomposition of \(A^{[m]}\) produces unit blocks that already satisfy the trace-preservation, primitivity, and irreducibility hypotheses needed for the common-blocking step (Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.68</a>). </p>
+<p>Equivalently: the cyclic-sector decomposition of \(A^{[m]}\) produces unit blocks that already satisfy the trace-preservation, primitivity, and irreducibility hypotheses needed for the common-blocking step (Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a>). </p>
 
   </div>
 </div>
@@ -5246,12 +5246,222 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_weights_ne_zero">
+<div class="lemma_thmwrapper theorem-style-plain" id="thm:same_mpv2_pos_block_tensor">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
     <span class="lemma_thmlabel">9.66</span>
+    <span class="lemma_thmtitle">Positive-length equality survives blocking</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:same_mpv2_pos_block_tensor">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.sameMPV₂Pos_blockTensor" class="lean_decl">MPSTensor.sameMPV₂Pos_blockTensor</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  If two tensors have the same MPV coefficients at every positive length, then their blocked tensors have the same MPV coefficients at every positive length after any positive blocking length. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">9.67</span>
+    <span class="lemma_thmtitle">Positive-length blocking of a weighted block sum</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
+          
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.39</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+          <li><a href="ch-canonical.html#thm:same_mpv2_pos_block_tensor">Lemma 9.66</a></li>
+          
+          <li><a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">Lemma 9.65</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks" class="lean_decl">MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Suppose \(A\) and a weighted block sum \(\bigoplus _k \mu _k B_k\) have the same MPV coefficients at every positive length. Then after any positive blocking length \(p\), the blocked tensor \(A^{[p]}\) and the weighted block sum \(\bigoplus _k \mu _k^{\, p} B_k^{[p]}\) have the same MPV coefficients at every positive length. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="thm:same_mpv2_pos_to_tensor_from_blocks_block_power">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">9.68</span>
+    <span class="lemma_thmtitle">Positive-length equality of powered block sums</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="ch-canonical.html#thm:same_mpv2_pos_to_tensor_from_blocks_block_power">#</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
+          
+          <li><a href="ch-mps.html#def:block_diagonal_tensor">Definition 2.39</a></li>
+          
+          <li><a href="ch-mps.html#def:same_mpv2_pos">Definition 2.13</a></li>
+          
+          <li><a href="ch-canonical.html#thm:same_mpv2_pos_block_tensor">Lemma 9.66</a></li>
+          
+          <li><a href="ch-canonical.html#thm:block_tensor_to_tensor_from_blocks">Lemma 9.65</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="../docs/find/#doc/MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower" class="lean_decl">MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Suppose two weighted block sums \(\bigoplus _j \mu ^A_j A_j\) and \(\bigoplus _k \mu ^B_k B_k\) have the same MPV coefficients at every positive length. Then after any positive common blocking length \(p\), the powered block sums \(\bigoplus _j (\mu ^A_j)^p A_j^{[p]}\) and \(\bigoplus _k (\mu ^B_k)^p B_k^{[p]}\) have the same MPV coefficients at every positive length. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:block_weights_ne_zero">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">9.69</span>
     <span class="lemma_thmtitle">Nonzero weights survive blocking</span>
     <div class="thm_header_extras">
 
@@ -5295,7 +5505,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.67</span>
+    <span class="lemma_thmlabel">9.70</span>
     <span class="lemma_thmtitle">Primitive cyclic sectors of irreducible TP tensors</span>
     <div class="thm_header_extras">
 
@@ -5365,7 +5575,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.68</span>
+    <span class="lemma_thmlabel">9.71</span>
     <span class="lemma_thmtitle">Common reblocking of cyclic-sector families</span>
     <div class="thm_header_extras">
 
@@ -5389,7 +5599,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.67</a></li>
+          <li><a href="ch-canonical.html#thm:has_primitive_irreducible_cyclic_sectors_tp_irr">Lemma 9.70</a></li>
           
           <li><a href="ch-mps.html#def:blocked_tensor">Definition 2.42</a></li>
           
@@ -5431,7 +5641,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.69</span>
+    <span class="lemma_thmlabel">9.72</span>
     <span class="lemma_thmtitle">Nonzero unit weight of the common reblocked family</span>
     <div class="thm_header_extras">
 
@@ -5455,7 +5665,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
           
         </ul>
     
@@ -5486,7 +5696,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  The unit weight on each sector of the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.68</a> is nonzero. </p>
+  <p>  The unit weight on each sector of the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a> is nonzero. </p>
 
   </div>
 </div>
@@ -5495,7 +5705,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.70</span>
+    <span class="lemma_thmlabel">9.73</span>
     <span class="lemma_thmtitle">Sector irreducibility for the adjoint blocked map</span>
     <div class="thm_header_extras">
 
@@ -5559,7 +5769,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.71</span>
+    <span class="lemma_thmlabel">9.74</span>
     <span class="lemma_thmtitle">Iterated blocking at the transfer-map level</span>
     <div class="thm_header_extras">
 
@@ -5628,7 +5838,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.72</span>
+    <span class="definition_thmlabel">9.75</span>
     <span class="definition_thmtitle">Primitive irreducible cyclic-sector decomposition</span>
     <div class="thm_header_extras">
 
@@ -5698,7 +5908,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.73</span>
+    <span class="lemma_thmlabel">9.76</span>
     <span class="lemma_thmtitle">Common reblocking at a prescribed multiple</span>
     <div class="thm_header_extras">
 
@@ -5722,7 +5932,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
           
         </ul>
     
@@ -5753,7 +5963,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  With hypotheses as in Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.68</a>, and given any integer \(p\) that is a common multiple of the per-block period-removal lengths \((m_k)\), the common reblocking can be performed at the prescribed length \(p\) rather than only at some sufficiently large length. </p>
+  <p>  With hypotheses as in Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a>, and given any integer \(p\) that is a common multiple of the per-block period-removal lengths \((m_k)\), the common reblocking can be performed at the prescribed length \(p\) rather than only at some sufficiently large length. </p>
 
   </div>
 </div>
@@ -5762,7 +5972,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.74</span>
+    <span class="lemma_thmlabel">9.77</span>
     <span class="lemma_thmtitle">Structural properties of the common reblocked sectors</span>
     <div class="thm_header_extras">
 
@@ -5786,7 +5996,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
           
         </ul>
     
@@ -5817,7 +6027,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  Each sector tensor in the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.68</a> is trace-preserving (\(\sum _i (B^i)^\dagger B^i = \mathbb {1}\)), has primitive transfer map (\(\sigma _\partial (\mathcal{E}_B) = \{ 1\} \)), is tensor-irreducible, and has positive bond dimension. </p>
+  <p>  Each sector tensor in the common reblocked cyclic-sector family of Lemma&#160;<a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">9.71</a> is trace-preserving (\(\sum _i (B^i)^\dagger B^i = \mathbb {1}\)), has primitive transfer map (\(\sigma _\partial (\mathcal{E}_B) = \{ 1\} \)), is tensor-irreducible, and has positive bond dimension. </p>
 
   </div>
 </div>
@@ -5826,7 +6036,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.75</span>
+    <span class="lemma_thmlabel">9.78</span>
     <span class="lemma_thmtitle">Common-alphabet flattening</span>
     <div class="thm_header_extras">
 
@@ -5850,7 +6060,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
           
         </ul>
     
@@ -5890,7 +6100,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.76</span>
+    <span class="lemma_thmlabel">9.79</span>
     <span class="lemma_thmtitle">Reindexed nonzero-part identity</span>
     <div class="thm_header_extras">
 
@@ -5914,7 +6124,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.75</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.78</a></li>
           
         </ul>
     
@@ -5945,7 +6155,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>  The nonzero-part decomposition of a weighted block sum \(\bigoplus _k \mu _k B_k\) carries over under the common-alphabet identification of Lemma&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">9.75</a>: the common-alphabet sectors have the same nonzero-part decomposition as the direct \(p\)-blocked tensors. </p>
+  <p>  The nonzero-part decomposition of a weighted block sum \(\bigoplus _k \mu _k B_k\) carries over under the common-alphabet identification of Lemma&#160;<a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">9.78</a>: the common-alphabet sectors have the same nonzero-part decomposition as the direct \(p\)-blocked tensors. </p>
 
   </div>
 </div>
@@ -5954,7 +6164,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.77</span>
+    <span class="definition_thmlabel">9.80</span>
     <span class="definition_thmtitle">Coordinate-grouping predicate</span>
     <div class="thm_header_extras">
 
@@ -5978,7 +6188,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.68</a></li>
+          <li><a href="ch-canonical.html#thm:exists_common_blocked_cyclic_sector_family">Lemma 9.71</a></li>
           
         </ul>
     
@@ -6018,7 +6228,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.78</span>
+    <span class="lemma_thmlabel">9.81</span>
     <span class="lemma_thmtitle">Digit-level flattening identification</span>
     <div class="thm_header_extras">
 
@@ -6042,7 +6252,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.77</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.80</a></li>
           
         </ul>
     
@@ -6082,7 +6292,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.79</span>
+    <span class="lemma_thmlabel">9.82</span>
     <span class="lemma_thmtitle">Direct and iterated blocking comparison</span>
     <div class="thm_header_extras">
 
@@ -6106,9 +6316,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.75</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_reindexed_samempv">Lemma 9.78</a></li>
           
-          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.77</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.80</a></li>
           
         </ul>
     
@@ -6161,7 +6371,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.80</span>
+    <span class="theorem_thmlabel">9.83</span>
     <span class="theorem_thmtitle">Single irreducible-block PGVWC07 canonical-form theorem</span>
     <div class="thm_header_extras">
 
@@ -6261,7 +6471,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.81</span>
+    <span class="theorem_thmlabel">9.84</span>
     <span class="theorem_thmtitle">Blockwise PGVWC07 unital and dual-diagonal block decomposition</span>
     <div class="thm_header_extras">
 
@@ -6290,9 +6500,9 @@
           
           <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.16</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">Theorem 9.80</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">Theorem 9.83</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">Theorem 9.80</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">Theorem 9.83</a></li>
           
         </ul>
     
@@ -6350,7 +6560,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">9.80</a> to each nonzero irreducible block. Gauge equivalence and the final unitary conjugation preserve the block MPV coefficients up to the displayed spectral-radius weights, and unitary conjugation carries the scalar fixed-point property of the unital transfer map. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_irreducible_unital_dual_package">9.83</a> to each nonzero irreducible block. Gauge equivalence and the final unitary conjugation preserve the block MPV coefficients up to the displayed spectral-radius weights, and unitary conjugation carries the scalar fixed-point property of the unital transfer map. </p>
 
   </div>
 </div>
@@ -6359,7 +6569,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.82</span>
+    <span class="theorem_thmlabel">9.85</span>
     <span class="theorem_thmtitle">Arbitrary-input PGVWC07 unital dual-diagonal form with zero block</span>
     <div class="thm_header_extras">
 
@@ -6388,11 +6598,11 @@
           
           <li><a href="ch-canonical_after_blocking.html#thm:zero_block_separation">Theorem 12.4</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_blockwise_unital_dual_package">Theorem 9.81</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_blockwise_unital_dual_package">Theorem 9.84</a></li>
           
           <li><a href="ch-canonical_after_blocking.html#thm:zero_block_separation">Theorem 12.4</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_blockwise_unital_dual_package">Theorem 9.81</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_blockwise_unital_dual_package">Theorem 9.84</a></li>
           
         </ul>
     
@@ -6455,7 +6665,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.83</span>
+    <span class="theorem_thmlabel">9.86</span>
     <span class="theorem_thmtitle">Bond-dimension bound for the zero-block PGVWC07 form</span>
     <div class="thm_header_extras">
 
@@ -6482,9 +6692,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.82</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.85</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.82</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">Theorem 9.85</a></li>
           
           <li><a href="ch-mps.html#lem:mpv_zero_length">Lemma 2.14</a></li>
           
@@ -6517,7 +6727,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   In the decomposition of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">9.82</a>, the zero-block bond dimension and the nonzero block dimensions satisfy </p>
+  <p>   In the decomposition of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">9.85</a>, the zero-block bond dimension and the nonzero block dimensions satisfy </p>
 <div class="displaymath" id="a0000000633">
   \[  D_0+\sum _k D_k = D.  \]
 </div>
@@ -6533,7 +6743,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Evaluate the MPV identity of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">9.82</a> on the empty word. The length-zero coefficient of a bond-\(D\) tensor is \(D\); the zero block contributes \(D_0\), and the direct sum of the nonzero blocks contributes \(\sum _k D_k\). This gives the displayed identity, and the inequality follows because \(D_0\geq 0\). </p>
+  <p> Evaluate the MPV identity of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_package">9.85</a> on the empty word. The length-zero coefficient of a bond-\(D\) tensor is \(D\); the zero block contributes \(D_0\), and the direct sum of the nonzero blocks contributes \(\sum _k D_k\). This gives the displayed identity, and the inequality follows because \(D_0\geq 0\). </p>
 
   </div>
 </div>
@@ -6542,7 +6752,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.84</span>
+    <span class="theorem_thmlabel">9.87</span>
     <span class="theorem_thmtitle">Positive-length PGVWC07 unital dual-diagonal form</span>
     <div class="thm_header_extras">
 
@@ -6569,9 +6779,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">Theorem 9.83</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">Theorem 9.86</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">Theorem 9.83</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">Theorem 9.86</a></li>
           
         </ul>
     
@@ -6626,7 +6836,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">9.83</a>. The all-zero summand contributes zero to every positive-length coefficient, so it may be omitted from the displayed MPV identity for \(N{\gt}0\). The bound \(\sum _k D_k\leq D\) is one of the conclusions of that theorem. </p>
+  <p> Apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_zero_tail_unital_dual_bond_dim_bound">9.86</a>. The all-zero summand contributes zero to every positive-length coefficient, so it may be omitted from the displayed MPV identity for \(N{\gt}0\). The bound \(\sum _k D_k\leq D\) is one of the conclusions of that theorem. </p>
 
   </div>
 </div>
@@ -6635,7 +6845,7 @@
     <span class="definition_thmcaption">
     Definition
     </span>
-    <span class="definition_thmlabel">9.85</span>
+    <span class="definition_thmlabel">9.88</span>
     <span class="definition_thmtitle">Positive-length PGVWC07 canonical-form witness</span>
     <div class="thm_header_extras">
 
@@ -6686,7 +6896,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.86</span>
+    <span class="theorem_thmlabel">9.89</span>
     <span class="theorem_thmtitle">Weight normalization for a nonempty PGVWC07 witness</span>
     <div class="thm_header_extras">
 
@@ -6713,9 +6923,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
           <li><a href="ch-canonical.html#lem:mpv_to_tensor_from_blocks_weight_mul_left">Lemma 9.33</a></li>
           
@@ -6779,7 +6989,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.87</span>
+    <span class="theorem_thmlabel">9.90</span>
     <span class="theorem_thmtitle">Projective form of PGVWC07 weight normalization</span>
     <div class="thm_header_extras">
 
@@ -6806,13 +7016,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
           <li><a href="ch-mps.html#def:nonzero_proportional_mpv">Definition 2.18</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.86</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.89</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.86</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.89</a></li>
           
           <li><a href="ch-mps.html#lem:mpv_zero_length">Lemma 2.14</a></li>
           
@@ -6869,7 +7079,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">9.88</span>
+    <span class="lemma_thmlabel">9.91</span>
     <span class="lemma_thmtitle">Nonzero positive-length coefficient gives a nonempty PGVWC07 witness</span>
     <div class="thm_header_extras">
 
@@ -6896,11 +7106,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
           <li><a href="ch-mps.html#thm:mpv_decomposition">Theorem 2.41</a></li>
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
           <li><a href="ch-mps.html#thm:mpv_decomposition">Theorem 2.41</a></li>
           
@@ -6954,7 +7164,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.89</span>
+    <span class="theorem_thmlabel">9.92</span>
     <span class="theorem_thmtitle">Nonzero projective PGVWC07 normalized form</span>
     <div class="thm_header_extras">
 
@@ -6981,17 +7191,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.92</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.95</a></li>
           
-          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.88</a></li>
+          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.91</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization_projective">Theorem 9.87</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization_projective">Theorem 9.90</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.92</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.95</a></li>
           
-          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.88</a></li>
+          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.91</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization_projective">Theorem 9.87</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization_projective">Theorem 9.90</a></li>
           
         </ul>
     
@@ -7034,7 +7244,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> First use Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">9.92</a>. The nonzero positive-length coefficient makes the witness nonempty by Lemma&#160;<a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">9.88</a>. Apply the projective weight-normalization theorem to this nonempty witness. </p>
+  <p> First use Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">9.95</a>. The nonzero positive-length coefficient makes the witness nonempty by Lemma&#160;<a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">9.91</a>. Apply the projective weight-normalization theorem to this nonempty witness. </p>
 
   </div>
 </div>
@@ -7043,7 +7253,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.90</span>
+    <span class="theorem_thmlabel">9.93</span>
     <span class="theorem_thmtitle">Exact normalized PGVWC07 form after global rescaling</span>
     <div class="thm_header_extras">
 
@@ -7070,17 +7280,17 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.92</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.95</a></li>
           
-          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.88</a></li>
+          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.91</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.86</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.89</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.92</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness">Theorem 9.95</a></li>
           
-          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.88</a></li>
+          <li><a href="ch-canonical.html#lem:pgvwc07_positive_length_witness_nonempty_of_nonzero_mpv">Lemma 9.91</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.86</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_positive_length_witness_weight_normalization">Theorem 9.89</a></li>
           
           <li><a href="ch-mps.html#lem:mpv_smul">Lemma 2.22</a></li>
           
@@ -7134,7 +7344,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.91</span>
+    <span class="theorem_thmlabel">9.94</span>
     <span class="theorem_thmtitle">Zero/nonzero dichotomy for exact rescaled PGVWC07 form</span>
     <div class="thm_header_extras">
 
@@ -7161,9 +7371,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">Theorem 9.90</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">Theorem 9.93</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">Theorem 9.90</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">Theorem 9.93</a></li>
           
         </ul>
     
@@ -7194,7 +7404,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For every MPS tensor \(A\), either every positive-length MPV coefficient of \(A\) is zero, or the exact rescaled normalized PGVWC07 form of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">9.90</a> exists. </p>
+  <p>   For every MPS tensor \(A\), either every positive-length MPV coefficient of \(A\) is zero, or the exact rescaled normalized PGVWC07 form of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">9.93</a> exists. </p>
 
   </div>
 </div>
@@ -7206,7 +7416,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> If some positive-length coefficient is nonzero, apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">9.90</a>. Otherwise, every positive-length coefficient is zero. </p>
+  <p> If some positive-length coefficient is nonzero, apply Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_nonzero_normalized_exact_rescaled_form">9.93</a>. Otherwise, every positive-length coefficient is zero. </p>
 
   </div>
 </div>
@@ -7215,7 +7425,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">9.92</span>
+    <span class="theorem_thmlabel">9.95</span>
     <span class="theorem_thmtitle">Existence of the positive-length PGVWC07 witness</span>
     <div class="thm_header_extras">
 
@@ -7242,13 +7452,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.84</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.87</a></li>
           
-          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.85</a></li>
+          <li><a href="ch-canonical.html#def:pgvwc07_positive_length_witness">Definition 9.88</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.84</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">Theorem 9.87</a></li>
           
         </ul>
     
@@ -7279,7 +7489,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   For every MPS tensor \(A\), the conclusions of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.84</a> give a positive-length PGVWC07 canonical-form witness. </p>
+  <p>   For every MPS tensor \(A\), the conclusions of Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.87</a> give a positive-length PGVWC07 canonical-form witness. </p>
 
   </div>
 </div>
@@ -7291,7 +7501,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Unpack Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.84</a> and use its conclusions as the fields of the witness. </p>
+  <p> Unpack Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_arbitrary_positive_length_unital_dual_bond_dim_bound">9.87</a> and use its conclusions as the fields of the witness. </p>
 
   </div>
 </div>
