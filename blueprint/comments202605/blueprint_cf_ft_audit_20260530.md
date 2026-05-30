@@ -15,77 +15,70 @@ by the multi-copy sector structure (`SectorDecomposition` + `IsBNTCanonicalForm`
 carrying the global unit witness). Driving rewrites from those docs would re-introduce
 retired architecture.
 
-The current chapters are good-to-strong. The defects are surgical: 2 blockers,
-4 majors, 40 minors, plus a modest Lean N=0 cleanup localized to the current branch.
+This file is now annotated with resolution status rather than left as a list of
+live blockers. The single current item-by-item ledger is
+`blueprint/comments202605/STATUS_erickson_items_20260530.md`. On current
+`main`, B1 is resolved, B2 is recorded as a documented scope restriction, and
+M1--M2 are resolved. Other findings below remain audit candidates unless they
+are separately marked as resolved.
 
-Severity histogram (blueprint): 2 blocker, 4 major, 40 minor.
+Original severity histogram (blueprint): 2 blocker, 4 major, 40 minor.
 
 ---
 
-## Blockers (both in ch10_bnt)
+## Resolved or documented blockers (ch10_bnt)
 
-### B1 — `def:bnt` tags the wrong Lean declaration  (ch10-01)
-`def:bnt` (ch10:18–43) displays the abstract 3-clause Definition 4.2 BNT (each block
-normal; the MPV lies in the span of the block MPVs; the block MPVs are eventually
-linearly independent). That prose matches `MPSTensor.IsBNT` (`BNT/Basic.lean:75`).
-But the entry tags `\lean{MPSTensor.IsBNTCanonicalForm}` — the 10-field much stronger
-structure already (correctly) tagged by `def:sector_bnt_cf` (ch10:517). Statement
-`\leanok` is therefore invalid, and the abstract BNT definition is left unlinked.
+### B1: resolved, `def:bnt` now tags the abstract BNT declaration  (ch10-01)
+The audit found that `def:bnt` displayed the abstract three-clause Definition 4.2
+BNT but tagged the stronger multi-copy canonical-form predicate. Current
+`ch10_bnt.tex` tags this entry as `\lean{MPSTensor.IsBNT}`, matching the prose:
+each block is normal, the total MPV lies in the span of the block MPVs, and the
+block MPVs are eventually linearly independent.
 
-**Fix:** retarget `def:bnt` → `\lean{MPSTensor.IsBNT}`, keep the 3-clause prose. The
-downstream `lem:cf_bnt_is_bnt_split` and `lem:normal_cf_bnt_is_bnt` already conclude
-`IsBNT`, so their `\uses{def:bnt}` becomes correct. Leave `def:sector_bnt_cf` as the
-sole entry for `IsBNTCanonicalForm`. Re-run `leanblueprint checkdecls`.
+**Resolution:** `def:bnt` is the single blueprint entry for `MPSTensor.IsBNT`.
+`def:sector_bnt_cf` remains the single blueprint entry for
+`MPSTensor.IsBNTCanonicalForm`.
 
-### B2 — per-sector vs global unit-modulus witness: faithfulness-rule violation  (ch10-02 / ch10-07; mirrored ch11 F3/F4)
+### B2: documented, per-sector vs global unit-modulus witness  (ch10-02 / ch10-07; mirrored ch11 F3/F4)
 Four equal-MPV / matching theorems carry **per-sector** unit-modulus hypotheses
 `∀ j ∃ q ‖μ_{j,q}‖ = 1` (and `∀ k` for the Q side) — `StrongMatch.lean:132,270`,
 `FundamentalCoord.lean:644`:
 - `thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV` (884)
 - `thm:sector_bnt_bijective_match_of_sameMPV` (965)
 - `thm:sector_bnt_equal_global_gauge` (1376)
-- `thm:sector_bnt_equal_mps_gaugeEquiv_literal` (1442) — most exposed; calls itself
+- `thm:sector_bnt_equal_mps_gaugeEquiv_literal` (1442), the most exposed; calls itself
   "the normalized BNT form of Corollary II.2".
 
 CPSV16 §II.C line 246 (and Cor II.2, line 1182) states only a **single global**
 existential `∃ (j*,q*) |μ_{j*,q*}| = 1`. The per-sector form is strictly stronger and
-absent from the source. Per the CLAUDE.md Faithfulness rule, these are scope-restricted
-theorems; bearing `\leanok` against the source labels without a paper-gap note is the
-"smuggled hypothesis" antipattern. The core structure `IsBNTCanonicalForm`
+absent from the source. Per the CLAUDE.md Faithfulness rule, these are
+scope-restricted theorems, not unrestricted formalizations of the source
+theorem. The core structure `IsBNTCanonicalForm`
 (`Basic.lean:152-161`, `weight_unit_exists`) faithfully carries the **global** witness;
 ch08's BNT supplier also correctly carries only the global witness (confirmed clean).
-No existing note covers this gap (`ft_one_copy_scope_restriction.tex` is the r_j=1
-case; `cpsv16_two_layer_sector_refinement.tex` only remarks the factorization).
 
-**Fix:** write `docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex` (global
-line-246 existential vs the per-sector Lean hypotheses; elimination plan: derive the
-per-sector witness from the global one inside the line-1182 matching argument, or
-split off all-strict-modulus sectors via the dominant-block argument). Add a complete
-`\path{}` sentence to the four entries above + the two proportional
-`..._global_gauge_of_...` theorems, modeled on ch07 `cor:uniform_injective_blocking`
-and ch10 `def:normal_cf_bnt` (144–148). Keep `\leanok` (Lean statements match the
-per-sector form); ensure none is presented as the unrestricted source theorem.
+**Resolution:** the gap and elimination plan are recorded in
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. Chapter 10
+states the per-sector hypotheses in the theorem prose and keeps the paper-gap
+path in LaTeX comments, as required by `docs/prose_style.md`. The `\leanok`
+tags are retained because the blueprint statements state the per-sector
+hypotheses that the Lean declarations actually assume.
 
 ---
 
 ## Majors
 
-### M1 — ch08: false "only fixed point" claim  (C08-01)
-`thm:pgvwc07_ti_canonical_form` headline (ch08:63) writes "$\Id$ is the only fixed
-point of $\E_{A_k}$". False: every $c\,\Id$ is fixed by a unital map. Lean
-(`WeightNormalization.lean:389-391`) says the fixed-point space is spanned by $\Id$:
-`∀ X, transferMap (blocks k) X = X → ∃ c, X = c • 1`.
-**Fix:** "the only fixed points of $\E_{A_k}$ are scalar multiples of $\Id$"; display
-$\E_{A_k}(X) = X \Rightarrow X = c\,\Id$.
+### M1: resolved, ch08 fixed-point statement  (C08-01)
+The audit found that `thm:pgvwc07_ti_canonical_form` stated "$\Id$ is the only
+fixed point of $\E_{A_k}$". Current `ch08_canonical.tex` states the correct
+fixed-point space: every fixed point is a scalar multiple of $\Id$, matching
+`WeightNormalization.lean`.
 
-### M2 — ch10: inconsistent bibliographic edition / line numbers  (ch10-03 / FT-08)
-The sector-BNT section (ch10:505+) pins ~41 line-range citations to
-`Cirac2017MPDO_AnnPhys` (Annals pagination), whose line numbers differ from
-arXiv:1606.00608v4 — the edition the Lean docstrings use (`Basic.lean:152` "CPSV16
-§II.C line 246"). A reviewer cannot verify line 246 / line 1182 against the cited
-edition. **Fix:** pin every line-range citation to `Cirac2016MPDO_arXiv`, verify each
-range (246, 264–279, 1080–1091, 1121–1132, 1167–1170, 1182, 1184–1192) resolves there,
-collapse the three keys to the two papers actually used.
+### M2: resolved, ch10 bibliographic edition / line numbers  (ch10-03 / FT-08)
+The audit found line-range citations in the sector-BNT section pointing to the
+Annals edition while using arXiv line numbers. Current `ch10_bnt.tex` uses
+`Cirac2016MPDO_arXiv` for the CPSV16 line-range references, matching the Lean
+docstrings and the local source file.
 
 ### M3 — ch11b: hidden hypothesis on a conditional theorem  (F-A-01)
 `thm:after_blocking_common_primitive_irreducible_blocks_reindexed` (ch11b:751–799)
