@@ -140,10 +140,9 @@ coefficient for the `A`-pair and the `B`-pair, then there is a nonzero scalar
 `λ` such that `A₁ = λ B₁` and `A₂ = λ⁻¹ B₂`.
 
 **Proof status:** This is the main comparison theorem recorded in this file.
-The proof follows the paper's argument: use injectivity to apply the inverse of
-one tensor, reduce the residual virtual operators by the scalar-reduction step
-recorded in the blueprint as `thm:peps_twoInjectiveGaugeScalarReduction`, and
-then apply the same argument to the other tensor. Tracked by issue #1361. -/
+The scalar-reduction substep and the remaining comparison argument are recorded
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem two_injective_tensor_insertion_comparison
     {External₁ External₂ Physical₁ Physical₂ : Type*}
     [Nonempty Bond] [Nonempty External₁] [Nonempty External₂]
@@ -155,7 +154,8 @@ theorem two_injective_tensor_insertion_comparison
     TwoBlockReciprocalScalarProportional A₁ B₁ A₂ B₂ := by
   -- The remaining proof is Lemma inj_equal_tensors_2 from
   -- arXiv:1804.04964, Section 3, lines 1068--1203. It depends on the
-  -- scalar-reduction substep tracked separately by issue #1362.
+  -- scalar-reduction substep recorded in
+  -- `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
   sorry
 
 /-! ### One vertex against its complement -/
