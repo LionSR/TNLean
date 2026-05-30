@@ -69,58 +69,6 @@ theorem nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
     _ = mpv B σ := hSame N σ
     _ = mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := hBσ
 
-/-- **Reblocked nonzero-block equality at positive length.**
-
-If two tensors have the same MPVs and each is expressed as an all-zero leftover block plus a
-weighted nonzero block tensor, then every positive common reblocking raises the
-nonzero weights to powers and preserves positive-length equality of the nonzero parts.
-The all-zero leftover block contributes only at length zero, so its coefficient is
-recovered separately, at the end, from equality of the bond dimensions. -/
-theorem nonzeroBlock_blockPower_sameMPV₂Pos_of_sameMPV₂
-    {d D₁ D₂ rA rB p : ℕ}
-    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hSame : SameMPV₂ A B)
-    (zeroTailA zeroTailB : ℕ)
-    (μA : Fin rA → ℂ) (blocksA : (k : Fin rA) → MPSTensor d (dimA k))
-    (μB : Fin rB → ℂ) (blocksB : (k : Fin rB) → MPSTensor d (dimB k))
-    (hp : 0 < p)
-    (hA : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d zeroTailA) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ)
-    (hB : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv B σ = mpv (zeroMPSTensor d zeroTailB) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) :
-    SameMPV₂Pos
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) := by
-  have hAblock :=
-    zeroTail_toTensorFromBlocks_blockPower
-      (d := d) (D := D₁) (r := rA) (z := zeroTailA) (p := p) (dim := dimA)
-      A μA blocksA hp hA
-  have hBblock :=
-    zeroTail_toTensorFromBlocks_blockPower
-      (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := p) (dim := dimB)
-      B μB blocksB hp hB
-  have hAB : SameMPV₂ (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p) :=
-    sameMPV₂_blockTensor A B hSame p
-  exact
-    nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
-      (d := blockPhysDim d p)
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p)
-      hAB zeroTailA zeroTailB
-      (fun k => (μA k) ^ p)
-      (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)
-      (fun k => (μB k) ^ p)
-      (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)
-      hAblock hBblock
-
 /-- **Recover full nonzero-block `SameMPV₂` once all-zero leftover blocks agree.**
 
 This combines the positive-length theorem with the single additional

@@ -1432,6 +1432,42 @@ Chapter~\ref{ch:periodic_ft_apps}.
     where $\sim$ denotes generation of the same MPV family at every length.
 \end{lemma}
 
+\begin{lemma}[Positive-length equality survives blocking]%
+    \label{thm:same_mpv2_pos_block_tensor}
+    \lean{MPSTensor.sameMPV₂Pos_blockTensor}\leanok
+    \uses{def:blocked_tensor, def:same_mpv2_pos}
+    If two tensors have the same MPV coefficients at every positive length, then
+    their blocked tensors have the same MPV coefficients at every positive length
+    after any positive blocking length.
+\end{lemma}
+
+\begin{lemma}[Positive-length blocking of a weighted block sum]%
+    \label{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
+    \lean{MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks}\leanok
+    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos,
+        thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    Suppose $A$ and a weighted block sum
+    $\bigoplus_k \mu_k B_k$ have the same MPV coefficients at every positive
+    length.  Then after any positive blocking length $p$, the blocked tensor
+    $A^{[p]}$ and the weighted block sum
+    $\bigoplus_k \mu_k^{\,p} B_k^{[p]}$ have the same MPV coefficients at every
+    positive length.
+\end{lemma}
+
+\begin{lemma}[Positive-length equality of powered block sums]%
+    \label{thm:same_mpv2_pos_to_tensor_from_blocks_block_power}
+    \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}\leanok
+    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos,
+        thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    Suppose two weighted block sums
+    $\bigoplus_j \mu^A_j A_j$ and $\bigoplus_k \mu^B_k B_k$
+    have the same MPV coefficients at every positive length.  Then after any
+    positive common blocking length $p$, the powered block sums
+    $\bigoplus_j (\mu^A_j)^p A_j^{[p]}$ and
+    $\bigoplus_k (\mu^B_k)^p B_k^{[p]}$ have the same MPV coefficients at every
+    positive length.
+\end{lemma}
+
 \begin{lemma}[Nonzero weights survive blocking]%
     \label{lem:block_weights_ne_zero}
     \lean{MPSTensor.blockWeights_ne_zero}\leanok
