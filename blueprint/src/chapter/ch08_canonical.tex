@@ -147,22 +147,17 @@ tensors of Chapter~\ref{ch:bnt}.
     normality. Absence of nontrivial invariant projections is essential.
 \end{remark}
 
-\begin{definition}[CPSV canonical form (CF)]\label{def:cf_cpsv}
-    \lean{MPSTensor.IsCPSVCanonicalForm}
-    \leanok
-    A tensor $A$ is in \emph{canonical form} if there is a finite family
-    of normal tensors $A_k$ of physical dimension $d$ and bond dimension $D_k$,
-    and weights $\mu_k \in \C$ for $k = 1,\ldots,r$, such that, for each
-    physical index $i$,
-    \[
-        A^i \cong \bigoplus_{k=1}^r \mu_k\, A_k^i,
-    \]
-    in the sense that $A$ and the weighted direct sum
-    $\bigoplus_{k=1}^r \mu_k A_k$ generate the same MPV family at every positive
-    length, the bond dimensions satisfy $D = \sum_{k=1}^r D_k$, and the weights
-    satisfy the normalization $|\mu_k| \le 1$ for all $k$ and $|\mu_k| = 1$ for at
-    least one $k$.
-\end{definition}
+The CPSV \emph{canonical form} (CF) of a tensor $A$ is the normal-block
+decomposition
+\[
+    A^i \cong \bigoplus_{k=1}^r \mu_k A_k^i
+\]
+with weights normalized by $|\mu_k| \le 1$ and with at least one
+$|\mu_k|=1$; see \cite[Section~II.C]{Cirac2017MPDO_AnnPhys}.  In the
+statements below, the structural part is supplied by the stronger normal
+canonical form of Definition~\ref{def:is_normal_canonical_form}.  The global
+weight normalization is a separate source hypothesis whenever it is needed, so
+the CPSV canonical form is not listed as a second definition here.
 
 \begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
@@ -189,7 +184,7 @@ tensors of Chapter~\ref{ch:bnt}.
     stronger predicates of Definition~\ref{def:is_normal_canonical_form} and
     of Chapter~\ref{ch:bnt} require either the fundamental-theorem step or
     the algebraic-to-spectral normality equivalence; these appear in
-    downstream chapters.
+    later chapters.
 \end{remark}
 
 \section{Transfer map normalization}\label{sec:transfer_map_normalization}
@@ -476,7 +471,8 @@ particular Theorem~\ref{thm:irreducible_action_cumulative_span}.
 \section{Canonical form from primitivity}\label{sec:canonical_from_primitivity}
 
 The self-overlap convergence $O_{A_k A_k}(N) \to 1$ for each block is not part of
-Definition~\ref{def:cf_cpsv}; it is a derived consequence of block normality,
+the CPSV canonical-form definition of \cite[Section~II.C]{Cirac2017MPDO_AnnPhys};
+it is a derived consequence of block normality,
 obtained from the transfer-map gap criterion of Chapter~\ref{ch:spectral}
 (Remark~\ref{rem:primitivity_reduces_assumptions}).
 The CPSV result of this section is Theorem~\ref{thm:blocking_primitivity}:
@@ -485,8 +481,8 @@ periods makes the resulting transfer map primitive, removing periodicity.
 
 \begin{remark}[Two ways to obtain the canonical-form predicate from normal blocks]
     Given a family of injective, left-canonical, strictly-ordered
-    nonzero-weight blocks $(\mu_k, A_k)$, the canonical-form conditions of
-    Definition~\ref{def:cf_cpsv} can be established from either of two
+    nonzero-weight blocks $(\mu_k, A_k)$, the CPSV canonical-form conditions of
+    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} can be established from either of two
     spectral hypotheses on the per-block transfer map $\E_{A_k}$: a
     positive-definite primitive fixed point, or the peripheral-spectrum
     condition $\sigma_\partial(\E_{A_k}) = \{1\}$. In both cases the
@@ -822,7 +818,7 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 
 Blocking by an integer~$p$ carries MPV equalities, weights, transfer maps,
 and identifications of the blocked physical alphabet. The consequence needed
-downstream is the existence of a common blocking period under which every
+later is the existence of a common blocking period under which every
 transfer map in a finite family becomes primitive.
 
 \begin{theorem}[Common blocking period for a block family]%
@@ -983,39 +979,13 @@ repeated-copy sectors do occur: for instance, $A = C \oplus (-C)$ has one normal
 tensor $C$ with weights $1$ and $-1$, and its length-$N$ MPV coefficients are
 $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
 
-\begin{theorem}[Sorting by strictly decreasing weight norms]
-    \label{thm:bnt_sorted_reindexing}
-    Let $(\mu_k)_{k=1}^r$ be nonzero complex weights whose moduli are pairwise
-    distinct. Then there exists a permutation $\sigma$ of $\{1,\ldots,r\}$ such that
-    \[
-        |\mu_{\sigma(1)}| > |\mu_{\sigma(2)}| > \cdots > |\mu_{\sigma(r)}| > 0.
-    \]
-\end{theorem}
-
-\begin{theorem}[Sorted decomposition preserves the represented MPS family]
-    \label{thm:bnt_sorted_blockdecomp}
-    \uses{thm:bnt_sorted_reindexing}
-    Under the same hypothesis, with $\sigma$ as above and
-    $\tilde\mu_k := \mu_{\sigma(k)}$, $\tilde B_k := B_{\sigma(k)}$,
-    \[
-        \mc{V}\!(\textstyle\bigoplus_k \mu_k B_k)
-        =  \mc{V}\!(\textstyle\bigoplus_k \tilde\mu_k \tilde B_k),
-        \qquad |\tilde\mu_1| > \cdots > |\tilde\mu_r|.
-    \]
-\end{theorem}
-
-\begin{theorem}[Normal canonical form after sorting]
-    \label{thm:bnt_sorted_ncf}
-    \uses{def:is_normal_canonical_form, thm:bnt_sorted_blockdecomp}
-    Suppose $(\mu_k, B_k)_{k=1}^r$ satisfies $\mu_k \neq 0$, $|\mu_k|$ pairwise
-    distinct, and each $B_k$ is irreducible, left-canonical
-    ($\sum_i (B_k^i)^\dagger B_k^i = \Id$), with primitive transfer map and
-    $\dim B_k > 0$. Then after sorting by strictly decreasing
-    $|\mu_{\sigma(k)}|$, the resulting family $(\tilde\mu_k, \tilde B_k)$
-    satisfies the normal canonical form conditions of
-    Definition~\ref{def:is_normal_canonical_form}. This is the distinct-modulus,
-    one-copy-per-sector subcase.
-\end{theorem}
+The distinct-modulus, one-copy-per-sector subcase (sorting blocks by strictly
+decreasing weight modulus and matching the normal canonical form one sector at a
+time) is subsumed by the general phase-class BNT sector construction of
+Chapter~\ref{ch:ft_proof}
+(Definition~\ref{def:mpv_phase_class_data},
+Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}), so it is no longer
+recorded as separate sorting theorems here.
 
 \begin{definition}[Single-copy sector decomposition]
     \label{def:trivial_sector_decomp}
@@ -1049,43 +1019,12 @@ $(1 + (-1)^N)\,V^{(N)}(C)_\sigma$, which is not a single scalar power.
     block-sum expression for $\bigoplus_k \mu_k B_k$.
 \end{proof}
 
-\begin{theorem}[Single-copy sector decomposition for the sorted distinct-modulus case]
-    \label{thm:bnt_trivial_sector}
-    \notready
-    \uses{def:trivial_sector_decomp, lem:trivial_sector_decomp_same_mpv}
-    If $\mu_k \neq 0$ for all $k$ and $|\mu_1| > \cdots > |\mu_r|$, then the
-    single-copy sector decomposition associated to $(\mu,B)$ represents the same
-    family as $\bigoplus_k \mu_k B_k$ for every $N \ge 1$ and has exactly one
-    copy per sector. This is the distinct-modulus, one-copy-per-sector subcase.
-\end{theorem}
-
-To remove the artificial distinct-modulus assumption, group blocks by common
-weight modulus. The next two definitions record this grouping; it is the
-mechanism that handles equal-modulus sectors in Chapter~\ref{ch:bnt}.
-
-\begin{definition}[Partition by common weight modulus]
-    \label{def:norm_class_grouping_data}
-    Let $(\mu_k)_{k=1}^r$ be a finite family of complex weights. A
-    \emph{partition by common weight modulus} consists of: a number of classes $s \le r$;
-    representative values $\lambda_1 > \cdots > \lambda_s > 0$;
-    multiplicities $(m_j)_{j=1}^s$ with $\sum_j m_j = r$; for each $j$ an
-    enumeration $\iota_j : \{1,\ldots,m_j\} \hookrightarrow \{1,\ldots,r\}$ of
-    the indices $k$ with $|\mu_k| = \lambda_j$; and the regrouping identity
-    \[
-        \sum_{k=1}^{r} f(k) =  \sum_{j=1}^{s} \sum_{q=1}^{m_j} f(\iota_j(q)),
-    \]
-    for every function $f$.
-\end{definition}
-
-\begin{definition}[Common-modulus enumeration in decreasing order]
-    \label{def:norm_class_grouping}
-    \uses{def:norm_class_grouping_data}
-    For any finite family $(\mu_k)_{k=1}^r$ of complex weights, sorting
-    the distinct moduli $\{|\mu_k| : 1 \le k \le r,\ \mu_k \neq 0\}$ in
-    strictly decreasing order yields a common-modulus partition (in the
-    sense of Definition~\ref{def:norm_class_grouping_data}) with
-    representative values $\lambda_1 > \cdots > \lambda_s$.
-\end{definition}
+The sorted distinct-modulus sector statement and the regrouping of blocks by
+common weight modulus (which handles equal-modulus sectors) are subsumed by the
+phase-class BNT sector construction of Chapter~\ref{ch:ft_proof}
+(Definition~\ref{def:mpv_phase_class_data},
+Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) and the
+basis-of-normal-tensors development of Chapter~\ref{ch:bnt}.
 
 \section{Scope and BNT input reductions}\label{sec:open_directions}
 
@@ -1100,9 +1039,10 @@ mechanism that handles equal-modulus sectors in Chapter~\ref{ch:bnt}.
     The invariant-subspace decomposition, TP gauges, and one-block period-removal
     statements are recorded above. Chapter~\ref{ch:canonical_after_blocking}
     contains the common-blocking construction, the zero-tail identities, and the
-    common-sector decompositions over one blocked physical alphabet. The
-    distinct-modulus case is covered by the sorted normal-canonical-form theorem
-    (Theorem~\ref{thm:bnt_sorted_ncf}); equal-modulus families require the
+    common-sector decompositions over one blocked physical alphabet. Both the
+    distinct-modulus and the equal-modulus cases are covered by the phase-class
+    BNT sector construction of Chapter~\ref{ch:ft_proof}
+    (Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) together with the
     basis-of-normal-tensors and multiplicity comparison developed in
     Chapter~\ref{ch:bnt}.
 \end{remark}
