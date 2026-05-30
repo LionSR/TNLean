@@ -41,7 +41,8 @@ primitive block decomposition.
 ## Main statements
 
 * `exists_tp_primitive_blockDecomp_after_blocking` — arbitrary tensors admit a
-  blocked decomposition into a zero tail and TP-primitive blocks.
+  positive-length blocked decomposition into TP-primitive blocks, together with
+  the separate zero-block bond-dimension count.
 * `isNormalCanonicalForm_of_tp_primitive_irr_sorted` — a blocked TP-primitive
   family with irreducible blocks and non-increasing weights is already in
   normal canonical form.
@@ -115,21 +116,14 @@ a decomposition:
   - positive bond dimension;
   - nonzero weight `μ k`.
 
-The MPV relationship holds:
+The MPV relationship holds at every positive blocked length:
 ```
-  mpv (blockTensor A p) σ = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailDim) σ
-    + mpv (toTensorFromBlocks μ blocks) σ
+  mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ
 ```
 
-In particular, for system sizes `N > 0`, the trivial block vanishes and
-`blockTensor A p` has the same MPVs as `toTensorFromBlocks μ blocks`.
-
-**Note on the length-zero term**: this statement keeps the explicit zero block
-to match the cited Section 2.3 decomposition, even though only the positive-length
-comparison carries mathematical content and the empty-word coefficient is just
-the bond-dimension count `zeroTailDim + ∑ dim = D ^ p`. The downstream consumer
-converts to the positive-length form at once. The reason the all-length shape is
-kept here, and the positive-length replacement, are described in
+The zero block appears only through the length-zero bond-dimension identity
+`zeroTailDim + ∑ dim = D`. This separates the source's positive-length
+comparison from the empty-word dimension count, as described in
 `docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`.
 
 **Note on the original blocks**: The pre-blocking blocks (from step 2) ARE
@@ -149,14 +143,16 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
       (∀ k, 0 < dim k) ∧
       -- (d) Nonzero weights
       (∀ k, μ k ≠ 0) ∧
-      -- (e) MPV relationship
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailDim) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ) := by
+      -- (e) Positive-length MPV relationship
+      SameMPV₂Pos
+        (blockTensor (d := d) (D := D) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+      -- (f) Length-zero bond-dimension count
+      zeroTailDim + ∑ k : Fin r, dim k = D := by
   classical
   -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
-  obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀, hIrr₀, hTP₀, hμNe₀, hDim₀, hMPV₀⟩ :=
+  obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀,
+      hIrr₀, hTP₀, hμNe₀, hDim₀, hMPV₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
@@ -166,7 +162,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     fun k => blockTensor (d := d) (D := dim₀ k) (blocks₀ k) P with blocks₁_def
   set μ₁ : Fin r₀ → ℂ := fun k => (μ₀ k) ^ P with μ₁_def
   -- Step D: Verify all properties.
-  refine ⟨zeroTailDim, P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨zeroTailDim, P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
   -- (a) TP under blocking.
   · intro k
     exact leftCanonical_blockTensor (d := d) (D := dim₀ k) (A := blocks₀ k) (L := P) (hTP₀ k)
@@ -176,11 +172,17 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   · exact hDim₀
   -- (d) Nonzero weights: `(μ₀ k)^P` remains nonzero since `μ₀ k ≠ 0`.
   · exact blockWeights_ne_zero μ₀ hμNe₀ P
-  -- (e) MPV relationship.
-  · simpa [μ₁_def, blocks₁_def] using
-      zeroTail_toTensorFromBlocks_blockPower
-        (d := d) (D := D) (r := r₀) (z := zeroTailDim) (p := P) (dim := dim₀)
-        A μ₀ blocks₀ hP hMPV₀
+  -- (e) Positive-length MPV relationship.
+  · have hPos₀ : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) :=
+      sameMPV₂Pos_of_zeroTail_eq A
+        (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) hMPV₀
+    simpa [μ₁_def, blocks₁_def] using
+      sameMPV₂Pos_blockTensor_toTensorFromBlocks
+        (d := d) (D := D) (r := r₀) (dim := dim₀)
+        A μ₀ blocks₀ hPos₀ P hP
+  -- (f) Length-zero bond-dimension count.
+  · exact zeroTail_bondDim_eq_of_mpv_decomp A
+      (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) hMPV₀
 
 /-!
 ## Conditional normal canonical form
