@@ -378,11 +378,11 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     and the original length-zero identity is applied to the empty configuration.
 \end{proof}
 
-\begin{theorem}[Zero-tail identity for nonzero block tensors]%
+\begin{theorem}[Positive-length equality of nonzero block tensors]%
     \label{thm:nonzero_block_zero_tail_identity}
     \lean{MPSTensor.nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂}
     \leanok
-    \uses{def:same_mpv2, def:zero_mps_tensor, def:block_diagonal_tensor}
+    \uses{def:same_mpv2, def:same_mpv2_pos, def:zero_mps_tensor, def:block_diagonal_tensor}
     Suppose $A$ and $B$ have the same MPV family and admit decompositions
     \[
         V^{(N)}(A)_\sigma
@@ -397,25 +397,18 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         +
         V^{(N)}(B_{\mathrm{nz}})_\sigma.
     \]
-    For every $N\ge 1$ and every configuration $\sigma$,
+    Then for every $N\ge 1$ and every configuration $\sigma$,
     \[
         V^{(N)}(A_{\mathrm{nz}})_\sigma
         =
         V^{(N)}(B_{\mathrm{nz}})_\sigma.
     \]
-    At length zero,
-    \[
-        z_A + V^{(0)}(A_{\mathrm{nz}})_\varnothing
-        =
-        z_B + V^{(0)}(B_{\mathrm{nz}})_\varnothing.
-    \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:zero_mps_tensor}
-    For $N>0$, the MPV of a zero-tail tensor is zero, so the two decompositions
-    can be compared directly through the common MPV family. For $N=0$, the
-    zero-tail MPV is its bond dimension, giving the stated length-zero identity.
+    For $N>0$ the MPV of an all-zero leftover block is zero, so the two
+    decompositions can be compared directly through the common MPV family.
 \end{proof}
 
 \begin{theorem}[Blocked nonzero parts and length zero]%
@@ -438,18 +431,6 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         =
         V^{(N)}\!\bigl(\textstyle\bigoplus_k
         (\mu^B_k)^p (B_k)^{[p]}\bigr)_\sigma.
-    \]
-    At blocked length zero,
-    \[
-        z_A
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_j
-        (\mu^A_j)^p (A_j)^{[p]}\bigr)_\varnothing
-        =
-        z_B
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_k
-        (\mu^B_k)^p (B_k)^{[p]}\bigr)_\varnothing.
     \]
 \end{theorem}
 
@@ -513,16 +494,6 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         =
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
-    At length zero,
-    \[
-        z_A
-        +
-        V^{(0)}\!(\textstyle\bigoplus_j \mu^A_j A_j)_\varnothing
-        =
-        z_B
-        +
-        V^{(0)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\varnothing.
-    \]
     Each nonzero block has primitive irreducible cyclic sectors: for each $j$,
     there is $m_j\ge 1$ and a unit-weight sector decomposition
     \[
@@ -535,8 +506,8 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
         thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
     Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
-    zero-tail identity theorem compares the two resulting nonzero parts at
-    positive lengths and gives the $N=0$ identity. Finally apply
+    positive-length equality theorem compares the two resulting nonzero parts.
+    Finally apply
     Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to every
     trace-preserving irreducible nonzero-weight block.
 \end{proof}
@@ -555,17 +526,7 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     \[
         V^{(N)}\!(\textstyle\bigoplus_j \mu^A_j A_j)_\sigma
         =
-        V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma,
-    \]
-    and the length-zero identity remains
-    \[
-        z_A
-        +
-        V^{(0)}\!(\textstyle\bigoplus_j \mu^A_j A_j)_\varnothing
-        =
-        z_B
-        +
-        V^{(0)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\varnothing.
+        V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
     Each common reblocked sector family has nonzero sector weights, and its
     sector tensors are left-canonical, primitive, tensor-irreducible, and of
@@ -594,42 +555,24 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         thm:common_blocked_cyclic_sector_derived_properties}
     If two tensors generate the same MPV family, then the cyclic-sector
     decompositions on the two sides can be expressed at one common positive
-    blocking length $p$. For every blocked configuration $\sigma$ of length $N$,
+    blocking length $p$. For every $N\ge 1$ and every blocked configuration
+    $\sigma$, each blocked tensor equals its powered nonzero part,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
         =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_A})_\sigma
-        +
-        V^{(N)}\!\bigl(\textstyle\bigoplus_j
-        (\mu^A_j)^p (A_j)^{[p]}\bigr)_\sigma,
-    \]
-    \[
+        V^{(N)}\!\bigl(\textstyle\bigoplus_j (\mu^A_j)^p (A_j)^{[p]}\bigr)_\sigma,
+        \qquad
         V^{(N)}\!(B^{[p]})_\sigma
         =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z_B})_\sigma
-        +
-        V^{(N)}\!\bigl(\textstyle\bigoplus_k
-        (\mu^B_k)^p (B_k)^{[p]}\bigr)_\sigma.
+        V^{(N)}\!\bigl(\textstyle\bigoplus_k (\mu^B_k)^p (B_k)^{[p]}\bigr)_\sigma,
     \]
-    For $N\ge 1$, the powered nonzero parts agree:
+    and the two powered nonzero parts agree,
     \[
         V^{(N)}\!\bigl(\textstyle\bigoplus_j
         (\mu^A_j)^p (A_j)^{[p]}\bigr)_\sigma
         =
         V^{(N)}\!\bigl(\textstyle\bigoplus_k
         (\mu^B_k)^p (B_k)^{[p]}\bigr)_\sigma.
-    \]
-    At length zero,
-    \[
-        z_A
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_j
-        (\mu^A_j)^p (A_j)^{[p]}\bigr)_\varnothing
-        =
-        z_B
-        +
-        V^{(0)}\!\bigl(\textstyle\bigoplus_k
-        (\mu^B_k)^p (B_k)^{[p]}\bigr)_\varnothing.
     \]
 \end{theorem}
 
@@ -643,9 +586,10 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     Start from the per-block cyclic-sector theorem. Let $p_A$ and $p_B$ be the
     least common multiples of the period-removal lengths on the two sides, and
     use $p=\operatorname{lcm}(p_A,p_B)$. The prescribed-common-multiple theorem constructs both
-    one-sided sector families at this same length. The zero-tail and
-    positive-length equalities are the existing reblocking statements, and the
-    sector conclusions are the common-alphabet MPV equalities.
+    one-sided sector families at this same length. Blocking each one-sided
+    decomposition and removing the all-zero leftover block at positive length
+    gives the displayed positive-length equalities, and the sector conclusions
+    are the common-alphabet MPV equalities.
 \end{proof}
 
 \begin{theorem}[Length-zero identity under compatible blocking]%

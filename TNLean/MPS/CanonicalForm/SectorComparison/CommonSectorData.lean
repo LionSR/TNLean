@@ -49,8 +49,8 @@ This is the faithful predecessor to the common nonzero-sector statement. From
 `SameMPV₂ A B`, it first separates the all-zero leftover block and then applies
 the TP gauge to obtain irreducible nonzero-weight blocks on both sides. It then
 removes the period of each block separately, producing primitive irreducible cyclic sectors for
-every nonzero-weight block. The nonzero parts agree at positive lengths, and the length-zero
-case is given as the explicit zero-tail identity.
+every nonzero-weight block. The nonzero parts agree at every positive length; the length-zero
+coefficient is recovered separately, at the end, from equality of the bond dimensions.
 
 The theorem intentionally keeps the per-block period-removal lengths inside
 `HasPrimitiveIrreducibleCyclicSectors`. It does not conflate those lengths with a
@@ -82,9 +82,6 @@ theorem afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂
       SameMPV₂Pos
         (toTensorFromBlocks (d := d) (μ := μA) blocksA)
         (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
-      (∀ σ : Fin 0 → Fin d,
-        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
-          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
   obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
@@ -99,9 +96,7 @@ theorem afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB,
     hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hMPVA, hMPVB,
-    ?_, hBook.2, ?_, ?_⟩
-  · intro N hN σ
-    exact hBook.1 hN σ
+    hBook, ?_, ?_⟩
   · intro k
     letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
     exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
@@ -119,9 +114,8 @@ existence of the original nonzero-weight block families on both sides and, for e
 finite flattened sector family at the corresponding common blocked physical
 dimension.  The flattened sectors are trace-preserving, have primitive transfer
 maps, are tensor-irreducible, have positive bond dimensions, and carry nonzero
-unit weights.  The statement keeps the checked zero-tail equations,
-positive-length equality of the nonzero parts, and the length-zero identity at the unblocked
-nonzero-block level. -/
+unit weights.  The statement keeps the checked zero-tail equations and the
+positive-length equality of the nonzero parts. -/
 theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
@@ -149,15 +143,12 @@ theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
       SameMPV₂Pos
         (toTensorFromBlocks (d := d) (μ := μA) blocksA)
         (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
-      (∀ σ : Fin 0 → Fin d,
-        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
-          (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ) ∧
       (∀ x, familyA.flatWeight x ≠ 0) ∧
       (∀ x, familyB.flatWeight x ≠ 0) := by
   obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
       zeroTailB, rB, dimB, μB, blocksB,
       hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
-      hMPVA, hMPVB, hPos, hZero, hCycA, hCycB⟩ :=
+      hMPVA, hMPVB, hPos, hCycA, hCycB⟩ :=
     afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
   obtain ⟨familyA⟩ :=
     exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors
@@ -168,7 +159,7 @@ theorem afterBlocking_commonBlockedCyclicDataWithZeroTail_of_sameMPV₂
   refine ⟨zeroTailA, rA, dimA, μA, blocksA,
     zeroTailB, rB, dimB, μB, blocksB, familyA, familyB,
     hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB,
-    hMPVA, hMPVB, hPos, hZero, ?_, ?_⟩
+    hMPVA, hMPVB, hPos, ?_, ?_⟩
   · intro x
     exact familyA.flatWeight_ne_zero x
   · intro x
@@ -181,40 +172,38 @@ set_option maxHeartbeats 800000 in
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**
 
 Starting from `SameMPV₂ A B`, this theorem chooses one positive physical blocking
-length for both sides.  At that common length it gives the exact zero-tail
-identity for the canonically blocked nonzero parts, the positive-length equality
-of those nonzero parts, and the relabeled cyclic-sector families produced by
-`CommonBlockedCyclicSectorFamily` on both sides.
+length for both sides.  At that common length it gives, for each side, the
+positive-length equality between the blocked tensor and its weighted nonzero part,
+the positive-length equality of the two nonzero parts, and the relabeled
+cyclic-sector families produced by `CommonBlockedCyclicSectorFamily`.
 
 The last two `SameMPV₂` conclusions are deliberately stated for the relabeled
 blocked sector blocks.  They isolate the remaining equality under the chosen word
-reindexing needed to replace the canonical blocked nonzero blocks in the zero-tail
-equations by the derived primitive irreducible common-sector blocks. -/
+reindexing needed to replace the canonical blocked nonzero blocks by the derived
+primitive irreducible common-sector blocks. -/
 theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     {d D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂ A B) :
     ∃ (p : ℕ), 0 < p ∧
-    ∃ (zeroTailA : ℕ) (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
+    ∃ (rA : ℕ) (dimA : Fin rA → ℕ) (μA : Fin rA → ℂ)
       (blocksA : (k : Fin rA) → MPSTensor d (dimA k)),
-    ∃ (zeroTailB : ℕ) (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
+    ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (k : Fin rB) → MPSTensor d (dimB k)),
     ∃ (familyA : CommonBlockedCyclicSectorFamily blocksA),
     ∃ (familyB : CommonBlockedCyclicSectorFamily blocksB),
       familyA.p = p ∧
       familyB.p = p ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k => (μA k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-        mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k => (μB k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ) ∧
+      SameMPV₂Pos
+        (blockTensor (d := d) (D := D₁) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p)
+          (fun k => (μA k) ^ p)
+          (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) ∧
+      SameMPV₂Pos
+        (blockTensor (d := d) (D := D₂) B p)
+        (toTensorFromBlocks (d := blockPhysDim d p)
+          (fun k => (μB k) ^ p)
+          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
       SameMPV₂Pos
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μA k) ^ p)
@@ -222,13 +211,6 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μB k) ^ p)
           (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
-      (∀ σ : Fin 0 → Fin (blockPhysDim d p),
-        (zeroTailA : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (fun k => (μA k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ =
-        (zeroTailB : ℂ) + mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (fun k => (μB k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ) ∧
       SameMPV₂
         (toTensorFromBlocks (d := blockPhysDim d familyA.p)
           (μ := fun k : Fin rA => (μA k) ^ familyA.p) familyA.commonReindexedBlock)
@@ -258,7 +240,7 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
       zeroTailB, rB, dimB, μB, blocksB,
       _hIrrA, _hIrrB, _hTPA, _hTPB, hμA, hμB, _hDimA, _hDimB,
-      hMPVA, hMPVB, _hPos, _hZero, hCycA, hCycB⟩ :=
+      hMPVA, hMPVB, _hPos, hCycA, hCycB⟩ :=
     afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂ A B hSame
   let periodA : Fin rA → ℕ := fun k => (hCycA k).choose
   let periodB : Fin rB → ℕ := fun k => (hCycB k).choose
@@ -294,12 +276,14 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   have hZB := zeroTail_toTensorFromBlocks_blockPower
     (d := d) (D := D₂) (r := rB) (z := zeroTailB) (p := p) (dim := dimB)
     B μB blocksB hp hMPVB
+  have hAPosCanon := sameMPV₂Pos_of_zeroTail_eq _ _ hZA
+  have hBPosCanon := sameMPV₂Pos_of_zeroTail_eq _ _ hZB
   have hBook :=
     nonzeroBlock_blockPower_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
       A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hp hMPVA hMPVB
-  refine ⟨p, hp, zeroTailA, rA, dimA, μA, blocksA,
-    zeroTailB, rB, dimB, μB, blocksB, familyA, familyB,
-    hFamilyA, hFamilyB, hZA, hZB, hBook.1, hBook.2, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
+  refine ⟨p, hp, rA, dimA, μA, blocksA,
+    rB, dimB, μB, blocksB, familyA, familyB,
+    hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hBook, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_, ?_, ?_⟩
   · exact familyA.sameMPV₂_weightedCommonReindexedBlock_commonFlat μA
   · exact familyB.sameMPV₂_weightedCommonReindexedBlock_commonFlat μB

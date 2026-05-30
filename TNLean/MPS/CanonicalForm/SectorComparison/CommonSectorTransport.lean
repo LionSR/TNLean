@@ -386,9 +386,9 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       (∀ x, IsIrreducibleTensor (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
-  obtain ⟨p, hp, zeroTailA, rA₀, dimA₀, μA₀, blocksA₀,
-      zeroTailB, rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
-      hFamilyA, hFamilyB, hZA, hZB, hPosCanon, _hZeroCanon,
+  obtain ⟨p, hp, rA₀, dimA₀, μA₀, blocksA₀,
+      rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
+      hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hPosCanon,
       _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
       hIrrA, hIrrB, hDimA, hDimB⟩ :=
     afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
@@ -422,54 +422,12 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
       nonzeroB := by
     cases hFamilyB
     simpa [flatBlocksB, nonzeroB] using hFlatB_raw
-  have hZAflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-          mpv nonzeroA σ := by
-    intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rA₀ => (μA₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimA₀ k) (blocksA₀ k) p)) σ :=
-        hZA N σ
-      _ = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv nonzeroA σ := by
-        rw [hFlatA N σ]
-  have hZBflat : ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-          mpv nonzeroB σ := by
-    intro N σ
-    calc
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ +
-            mpv (toTensorFromBlocks (d := blockPhysDim d p)
-              (fun k : Fin rB₀ => (μB₀ k) ^ p)
-              (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p)) σ :=
-        hZB N σ
-      _ = mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv nonzeroB σ := by
-        rw [hFlatB N σ]
   have hAPos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) nonzeroA := by
     intro N hN σ
-    have hZero : mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₁) A p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailA) σ + mpv nonzeroA σ :=
-        hZAflat N σ
-      _ = mpv nonzeroA σ := by rw [hZero]; simp
+    exact (hAPosCanon N hN σ).trans (hFlatA N σ)
   have hBPos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) nonzeroB := by
     intro N hN σ
-    have hZero : mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [Nat.ne_of_gt hN]
-    calc
-      mpv (blockTensor (d := d) (D := D₂) B p) σ =
-          mpv (zeroMPSTensor (blockPhysDim d p) zeroTailB) σ + mpv nonzeroB σ :=
-        hZBflat N σ
-      _ = mpv nonzeroB σ := by rw [hZero]; simp
+    exact (hBPosCanon N hN σ).trans (hFlatB N σ)
   have hNonzeroPos : SameMPV₂Pos nonzeroA nonzeroB := by
     intro N hN σ
     calc
