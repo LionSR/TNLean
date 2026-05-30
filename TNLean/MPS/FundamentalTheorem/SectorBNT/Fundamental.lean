@@ -244,7 +244,12 @@ The theorem therefore separates the two mathematical ingredients:
 * the still-open proportional coefficient comparison must construct the
   copy-weight matching.  Once it is available, the global gauge is the
   equal-MPV corollary's direct-sum algebra from Appendix MPV proof,
-  lines 1189--1192. -/
+  lines 1189--1192.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -300,7 +305,12 @@ the copy-weight matching and the direct-sum global gauge follows.
 The coefficient identity is the precise remaining CPSV16 Appendix MPV line
 1188 input; until it is derived from the proportional MPV hypothesis, this
 theorem is a conditional assembly statement rather than the unrestricted
-source theorem. -/
+source theorem.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -543,7 +553,12 @@ theorem ft_sector_bnt_equal_global_gaugePos
       (P := P) (Q := Q) β hDim τ ζ Xblock hζ_ne hConj hWeight
   exact ⟨β, hDim, hCopies, τ, ζ, Xblock, hζ_norm, hConj, hWeight, X, hXdef, hGauge⟩
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
+/-- Reformulation for the all-length `SameMPV₂` form.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem ft_sector_bnt_equal_global_gauge
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)

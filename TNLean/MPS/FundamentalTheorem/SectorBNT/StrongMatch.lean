@@ -128,7 +128,12 @@ theorem forall_k_exists_j_nondecaying_overlap_of_sameMPVPos
     apply hNonDecay_swapped
     exact tendsto_mpvOverlap_zero_swap (P.basis j) (Q.basis k) hTend
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
+/-- Reformulation for the all-length `SameMPV₂` form.
+
+**Scope restriction (per-sector unit weights):** This theorem keeps the
+per-sector unit-weight hypothesis of the positive-length form. CPSV16
+Section II.C, line 246 gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
@@ -266,7 +271,12 @@ theorem bijective_match_of_sameMPVPos
   intro k
   simpa [β] using φ₀_spec k
 
-/-- Reformulation for the all-length `SameMPV₂` form. -/
+/-- Reformulation for the all-length `SameMPV₂` form.
+
+**Scope restriction (per-sector unit weights):** This theorem assumes a
+unit-modulus copy in every sector on both sides. CPSV16 Section II.C, line 246
+gives only one global unit-weight witness. See
+`docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex`. -/
 theorem bijective_match_of_sameMPV
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
