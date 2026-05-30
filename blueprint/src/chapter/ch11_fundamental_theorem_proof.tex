@@ -725,23 +725,6 @@ Definition~\ref{def:mpv_common_phase_cover}).
     so the conclusion follows directly from that lemma.
 \end{proof}
 
-\begin{lemma}[Cancellation of leftover zero blocks]\label{lem:sameMPV2_live_of_zeroTail_eq}
-    \lean{MPSTensor.sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq}
-    \leanok
-    \uses{def:same_mpv2, def:mpv}
-    Let $A$ and $B$ have the same MPV family, each decomposed as an all-zero
-    leftover block plus a nonzero part. If the leftover zero-block dimensions
-    agree, then the nonzero parts themselves have the same MPV family, including
-    at length zero.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Since $z_A=z_B$, the two all-zero leftover tensors are the same tensor at
-    every length. Subtracting this common summand from the original MPV equality
-    gives the equality of the two nonzero parts, including at length zero.
-\end{proof}
-
 \begin{definition}[Blocked-word identification for common sectors]%
     \label{def:common_sector_relabeling_hypothesis}
     \lean{MPSTensor.CommonSectorRelabelingHypothesis}

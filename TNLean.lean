@@ -243,7 +243,6 @@ import TNLean.MPS.CanonicalForm.NormalReduction
 import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation
-import TNLean.MPS.CanonicalForm.SectorComparison.ZeroTailTransport
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.PhaseClassSectorData

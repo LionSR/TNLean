@@ -44,10 +44,11 @@ variable {d D : ℕ}
 
 ### Overview
 
-After blocking, the canonical-form reduction writes an MPS tensor as an
-all-zero summand together with a weighted direct sum of nonzero sectors:
-`blockTensor A p ~ zeroMPSTensor d D₀ + toTensorFromBlocks μ sectors`, with
-`p > 0`.  This is the formal counterpart of the CPSV allowance
+After blocking, the canonical-form reduction relates an MPS tensor to a weighted
+direct sum of nonzero sectors at positive length,
+`SameMPV₂Pos (blockTensor A p) (toTensorFromBlocks μ sectors)`, with `p > 0`,
+while the all-zero blocks enter only through the length-zero dimension identity
+`D = D₀ + ∑ k, D_k`.  This is the formal counterpart of the CPSV allowance
 `∑ k, D_k ≤ D`, where zero blocks may occur.
 
 The full proof chain is:

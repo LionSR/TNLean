@@ -280,155 +280,11 @@ a single tensor $\mathbf{0}_{d,D_0}$.
     where the two sides are matched.
 \end{remark}
 
-\begin{theorem}[Zero-tail decomposition after blocking]%
-    \label{thm:zero_tail_decomp_block_tensor}
-    \lean{MPSTensor.zeroTail_mpv_decomp_blockTensor}
-    \leanok
-    \uses{def:blocked_tensor, def:zero_mps_tensor}
-    Suppose that, for every length $N$ and every configuration $\sigma$,
-    \[
-        V^{(N)}(A)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z})_\sigma
-        +
-        V^{(N)}(L)_\sigma.
-    \]
-    For every $p>0$, the blocked tensor satisfies, for every blocked
-    configuration $\tau$ of length $N$,
-    \[
-        V^{(N)}\!(A^{[p]})_\tau
-        =
-        V^{(N)}\!(\mathbf{0}_{d^{[p]},z})_\tau
-        +
-        V^{(N)}\!(L^{[p]})_\tau.
-    \]
-    The zero-tail term contributes only at blocked length $0$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Flatten a blocked word of length $N$ to an original word of length $Np$. Since
-    $p>0$, this length is zero exactly when $N=0$, so the zero-tail MPV is
-    unchanged by the reblocking convention.
-\end{proof}
-
-\begin{lemma}[One-sided zero-tail cancellation at positive length]%
-    \label{thm:same_mpv2_pos_of_zero_tail_eq}
-    \lean{MPSTensor.sameMPV₂Pos_of_zeroTail_eq}
-    \leanok
-    \uses{def:same_mpv2_pos, def:zero_mps_tensor}
-    Suppose a tensor $A$ is written as an all-zero leftover block plus a
-    nonzero part $A_{\mathrm{nz}}$:
-    \[
-        V^{(N)}(A)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z})_\sigma
-        +
-        V^{(N)}(A_{\mathrm{nz}})_\sigma.
-    \]
-    Then for every $N\ge 1$ and every configuration $\sigma$,
-    \[
-        V^{(N)}(A)_\sigma = V^{(N)}(A_{\mathrm{nz}})_\sigma.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:zero_mps_tensor}
-    For $N\ge 1$, one has
-    \[
-        V^{(N)}(\mathbf{0}_{d,z})_\sigma = 0.
-    \]
-    Substituting this identity in the displayed zero-tail decomposition gives the
-    positive-length equality.
-\end{proof}
-
-\begin{lemma}[Length-zero zero-tail bond-dimension identity]%
-    \label{thm:zero_tail_bond_dim_eq_of_mpv_decomp}
-    \lean{MPSTensor.zeroTail_bondDim_eq_of_mpv_decomp}
-    \leanok
-    \uses{def:zero_mps_tensor}
-    Suppose a tensor $A$ of bond dimension $D$ is written, for every length
-    $N$ and configuration $\sigma$, as
-    \[
-        V^{(N)}(A)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z})_\sigma
-        +
-        V^{(N)}(L)_\sigma,
-    \]
-    where $L$ has bond dimension $D_L$. Then
-    \[
-        z + D_L = D.
-    \]
-\end{lemma}
-
-\begin{proof}\leanok
-    Evaluate the identity at the empty word. The MPV coefficient at length zero
-    is the trace of the identity on the corresponding bond space.
-\end{proof}
-
-\begin{theorem}[Positive-length equality of nonzero block tensors]%
-    \label{thm:nonzero_block_zero_tail_identity}
-    \lean{MPSTensor.nonzeroBlock_sameMPV₂Pos_of_sameMPV₂}
-    \leanok
-    \uses{def:same_mpv2, def:same_mpv2_pos, def:zero_mps_tensor, def:block_diagonal_tensor}
-    Suppose $A$ and $B$ have the same MPV family and admit decompositions
-    \[
-        V^{(N)}(A)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z_A})_\sigma
-        +
-        V^{(N)}(A_{\mathrm{nz}})_\sigma,
-        \qquad
-        V^{(N)}(B)_\sigma
-        =
-        V^{(N)}(\mathbf{0}_{d,z_B})_\sigma
-        +
-        V^{(N)}(B_{\mathrm{nz}})_\sigma.
-    \]
-    Then for every $N\ge 1$ and every configuration $\sigma$,
-    \[
-        V^{(N)}(A_{\mathrm{nz}})_\sigma
-        =
-        V^{(N)}(B_{\mathrm{nz}})_\sigma.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:zero_mps_tensor}
-    For $N>0$ the MPV of an all-zero leftover block is zero, so the two
-    decompositions can be compared directly through the common MPV family.
-\end{proof}
-
-\begin{theorem}[Equal zero tails give full nonzero-part MPV equality]%
-    \label{thm:nonzero_block_same_mpv_zero_tail_eq}
-    \lean{MPSTensor.nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq}
-    \leanok
-    \uses{lem:sameMPV2_live_of_zeroTail_eq}
-    Let the two tensors be written as an all-zero leftover block plus a nonzero
-    part, and suppose the original tensors have the same MPV family. If
-    $z_A=z_B$, then the nonzero parts have the same MPV family: for every length
-    $N$ and every configuration $\sigma$,
-    \[
-        V^{(N)}(A_{\mathrm{nz}})_\sigma
-        =
-        V^{(N)}(B_{\mathrm{nz}})_\sigma.
-    \]
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:sameMPV2_live_of_zeroTail_eq}
-    Apply Lemma~\ref{lem:sameMPV2_live_of_zeroTail_eq} to the two zero-tail
-    decompositions. The equality $z_A=z_B$ identifies the all-zero summands, so
-    cancellation gives the nonzero-part equality at every length.
-\end{proof}
-
-
 \begin{theorem}[Cyclic sectors after the zero-block split]%
     \label{thm:ft_after_blocking_per_block_cyclic_live_zero_tail}
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
     \leanok
-    \uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
-        thm:same_mpv2_pos_of_zero_tail_eq, def:primitive_irreducible_cyclic_sectors,
+    \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
         thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
     If two tensors $A$ and $B$ generate the same MPV family, then after the
     zero-block split and the trace-preserving gauge there are weighted
@@ -459,11 +315,10 @@ a single tensor $\mathbf{0}_{d,D_0}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary, thm:nonzero_block_zero_tail_identity,
-        thm:same_mpv2_pos_of_zero_tail_eq,
+    \uses{thm:tp_gauge_arbitrary,
         thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
-    Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. The
-    one-sided zero-tail cancellation theorem gives, for every $N\ge 1$,
+    Apply the arbitrary-tensor TP-gauge theorem separately to $A$ and $B$. Its
+    positive-length conclusion gives, for every $N\ge 1$,
     \[
         V^{(N)}(A)_\sigma
         =
@@ -473,7 +328,8 @@ a single tensor $\mathbf{0}_{d,D_0}$.
         =
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
-    The positive-length equality theorem compares the two nonzero parts. Finally
+    Chaining these through the common MPV family $V(A)=V(B)$ identifies the two
+    nonzero parts at every positive length. Finally
     apply Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to
     every trace-preserving irreducible nonzero-weight block.
 \end{proof}
@@ -655,18 +511,18 @@ blocking.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary, thm:common_blocking_period,
-        lem:block_weights_ne_zero, thm:same_mpv2_pos_of_zero_tail_eq,
-        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks,
-        thm:zero_tail_bond_dim_eq_of_mpv_decomp}
-    Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the trivial block
-    and left-canonical nontrivial blocks.
+        lem:block_weights_ne_zero,
+        thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
+    Apply Theorem~\ref{thm:tp_gauge_arbitrary} to get the zero-block dimension,
+    the left-canonical nontrivial blocks, the positive-length equality, and the
+    dimension identity $D = D_0 + \sum_k D_k$.
     Apply Theorem~\ref{thm:common_blocking_period} to find a common
     blocking period $p$ making all transfer maps primitive. Lemma~\ref{lem:block_weights_ne_zero}
-    keeps the blocked weights nonzero. Lemma~\ref{thm:same_mpv2_pos_of_zero_tail_eq}
-    removes the all-zero summand at positive length, and
+    keeps the blocked weights nonzero, and
     Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} transports the
-    resulting positive-length equality through the blocking step. The
-    length-zero identity is Lemma~\ref{thm:zero_tail_bond_dim_eq_of_mpv_decomp}.
+    positive-length equality through the blocking step. The
+    length-zero identity is the dimension identity carried by
+    Theorem~\ref{thm:tp_gauge_arbitrary}.
 \end{proof}
 
 \begin{theorem}[Two tensors after one-sided primitive reductions]%
