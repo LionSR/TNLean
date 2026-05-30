@@ -70,7 +70,7 @@ The current library already settles the common-period blocking arithmetic and
 now has a one-sided phase-class BNT construction for TP primitive irreducible
 nonzero-weight blocks, one-sided overlap data, and zero-tail sector comparison
 from finite-length span or BNT comparison hypotheses. The theorem
-`afterBlocking_perBlockCyclicDataWithZeroTail_of_sameMPV₂`
+`afterBlocking_perBlockCyclicData_of_sameMPV₂`
 follows the CPSV order: first separate the all-zero leftover block and
 TP-gauge the irreducible nonzero-weight blocks, then remove each block's period by
 cyclic sectors.

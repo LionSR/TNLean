@@ -235,6 +235,36 @@ theorem sameMPV₂Pos_blockTensor
     _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
+/-- Positive-length equality with a weighted nonzero-block tensor is preserved by
+positive physical blocking, with each weight transported to the corresponding power. -/
+theorem sameMPV₂Pos_blockTensor_toTensorFromBlocks
+    {D r : ℕ} {dim : Fin r → ℕ}
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (hSame : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks))
+    (p : ℕ) (hp : 0 < p) :
+    SameMPV₂Pos
+      (blockTensor (d := d) (D := D) A p)
+      (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μ k) ^ p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+  have hBlock : SameMPV₂Pos
+      (blockTensor (d := d) (D := D) A p)
+      (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+        (toTensorFromBlocks (d := d) (μ := μ) blocks) p) :=
+    sameMPV₂Pos_blockTensor
+      (d := d) A (toTensorFromBlocks (d := d) (μ := μ) blocks) hSame p hp
+  have hCanon := sameMPV₂_blockTensor_toTensorFromBlocks
+    (d := d) (dim := dim) μ blocks p
+  mpv_ext
+  calc
+    mpv (blockTensor (d := d) (D := D) A p) σ =
+        mpv (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+          (toTensorFromBlocks (d := d) (μ := μ) blocks) p) σ := hBlock N hN σ
+    _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
+        (fun k => (μ k) ^ p)
+        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := hCanon N σ
+
 /-- Positive-length equality of weighted nonzero-block tensors is preserved after
 positive common blocking, with each weight transported to the corresponding power. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
