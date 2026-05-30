@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralData
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorRepresentatives
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
@@ -13,19 +13,11 @@ namespace MPSTensor
 /-!
 # Common-sector transport after canonical-form blocking
 
-This module contains the zero-tail transport lemmas and common-sector
-reindexing hypotheses used after the structural canonical-form reduction has
-produced common cyclic-sector data.
-
-Here "zero-tail" means the total bond dimension of the separated all-zero
-leftover blocks in the block decomposition.  It is the dimension gap allowed by
-`∑ k, D_k ≤ D`, where the remaining summands are zero blocks.
+This module contains the common-sector reindexing hypotheses used after the
+structural canonical-form reduction has produced common cyclic-sector data.
 
 ## Main statements
 
-* `zeroTail_commonFlat_of_reindexed` and
-  `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed` transport zero-tail
-  decompositions through the common-sector relabeling data.
 * `CommonSectorRelabelingHypothesis` and
   `CommonGroupedBlockCastHypothesis` encode the remaining blocked-word
   comparison data.
@@ -40,132 +32,8 @@ leftover blocks in the block decomposition.  It is the dimension gap allowed by
 
 ## Tags
 
-matrix product states, canonical form, common sectors, zero-tail decomposition
+matrix product states, canonical form, common sectors
 -/
-
-/-- If each directly blocked nonzero block agrees with its iterated-blocking version,
-the zero-tail equation can be written using the derived common-sector family. -/
-lemma zeroTail_commonFlat_of_blockwise
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hBlock : ∀ k : Fin r,
-      SameMPV₂
-        (blockTensor (d := d) (D := dim k) (blocks k) F.p)
-        (F.commonReindexedBlock k)) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
-  have hCanon := zeroTail_toTensorFromBlocks_blockPower
-    (d := d) (D := D) (r := r) (z := z) (p := F.p) (dim := dim)
-    A μ blocks F.p_pos hMPV
-  have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise μ hBlock
-  exact zeroTail_eq_of_sameMPV₂ _ _ _ hCanon hFlat
-
-/-- If the canonical identifications agree with consecutive grouping for every nonzero block,
-the zero-tail equation can be written using the derived common-sector family. -/
-lemma zeroTail_commonFlat_of_groupedBlockCastAgrees
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ :=
-  zeroTail_commonFlat_of_blockwise A μ blocks F hMPV
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
-
-/-- If the canonical blocked nonzero part agrees with the common reindexed blocks,
-the zero-tail equation can be rewritten using the derived common-sector family.
-Thus the blocked tensor has the same MPV coefficients as the weighted common-sector
-tensor, with the same all-zero-block contribution at length zero. -/
-lemma zeroTail_commonFlat_of_reindexed
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hLabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d F.p)),
-      mpv (blockTensor (d := d) (D := D) A F.p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d F.p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
-            (μ := F.commonFlatWeight μ) F.commonFlatBlocks) σ := by
-  have hCanon := zeroTail_toTensorFromBlocks_blockPower
-    (d := d) (D := D) (r := r) (z := z) (p := F.p) (dim := dim)
-    A μ blocks F.p_pos hMPV
-  have hFlat := F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hLabel
-  exact zeroTail_eq_of_sameMPV₂ _ _ _ hCanon hFlat
-
-/-- The preceding zero-tail rewriting expressed at a prescribed common length. -/
-lemma zeroTail_commonFlatAt_of_reindexed
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hRelabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
-    ∀ (N : ℕ) (σ : Fin N → Fin (blockPhysDim d p)),
-      mpv (blockTensor (d := d) (D := D) A p) σ =
-        mpv (zeroMPSTensor (blockPhysDim d p) z) σ +
-          mpv (toTensorFromBlocks (d := blockPhysDim d p)
-            (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) σ := by
-  subst p
-  simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocksAt] using
-    zeroTail_commonFlat_of_reindexed A μ blocks F hMPV hRelabel
-
-/-- At positive lengths, the blocked tensor has the same MPV coefficients as the
-weighted common-sector family once the blocked words have been reindexed. -/
-lemma sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed
-    {d D r z : ℕ} {dim : Fin r → ℕ}
-    (A : MPSTensor d D) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks)
-    {p : ℕ} (hp : F.p = p)
-    (hMPV : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ)
-    (hRelabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
-    SameMPV₂Pos
-      (blockTensor (d := d) (D := D) A p)
-      (toTensorFromBlocks (d := blockPhysDim d p)
-        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
-  have hZeroTail := zeroTail_commonFlatAt_of_reindexed
-    (d := d) (D := D) (r := r) (z := z) (dim := dim)
-    A μ blocks F hp hMPV hRelabel
-  exact sameMPV₂Pos_of_zeroTail_eq _ _ hZeroTail
 
 /-- The one-sided blocked-word relabeling hypothesis for cyclic-sector data.
 

@@ -56,11 +56,4 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
       (p := periods i) (q := lcmPeriod periods)
       (dvd_lcmPeriod periods i) (lcmPeriod_pos hPeriodsPos) (hPrim i)
 
-/-- The common-period blocked family has the expected physical dimension. -/
-lemma commonPeriodBlocking_apply
-    {dim : Fin k → ℕ}
-    (blocks : (i : Fin k) → MPSTensor d (dim i)) (periods : Fin k → ℕ) (i : Fin k) :
-    commonPeriodBlocking (d := d) blocks periods i =
-      blockTensor (d := d) (D := dim i) (blocks i) (lcmPeriod periods) := rfl
-
 end MPSTensor

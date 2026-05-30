@@ -86,21 +86,6 @@ theorem zeroTail_toTensorFromBlocks_blockPower
             (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := by
           rw [hNonzeroPart N σ]
 
-/-- Transport a zero-tail decomposition along an MPV equivalence of its nonzero part. -/
-theorem zeroTail_eq_of_sameMPV₂
-    {d D L L' z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
-    (flat : MPSTensor d L')
-    (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ)
-    (hFlat : SameMPV₂ live flat) :
-    ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d z) σ + mpv flat σ := by
-  intro N σ
-  calc
-    mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ := hZeroTail N σ
-    _ = mpv (zeroMPSTensor d z) σ + mpv flat σ := by
-      rw [hFlat N σ]
-
 /-- At positive lengths, a zero-tail decomposition reduces to the nonzero part. -/
 theorem sameMPV₂Pos_of_zeroTail_eq
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
