@@ -819,8 +819,8 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 % as explicit hypotheses, whereas the blueprint statement above quantifies
 % only over the period. The hypotheses are derivable from the period-m
 % hypothesis and left-canonical irreducibility via the upstream Wielandt and
-% quantum Perron-Frobenius statements; the form used later is the next
-% theorem, thm:cyclic_sector_decomp_irr_tp, which carries the \leanok.
+% quantum Perron-Frobenius statements; the consumed form is the next
+% theorem, thm:cyclic_sector_decomp_irr_tp_prim_irr, which carries the \leanok.
 \begin{proof}
     The cyclic decomposition of the adjoint transfer map gives projections
     $(P_k)$ with $\E_{A^\dagger}(P_{k+1}) = P_k$. Iterating the cyclic relation
@@ -828,27 +828,6 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
     identity $\E_{(A^{[m]})^\dagger} = (\E_{A^\dagger})^m$ identifies these with
     the adjoint transfer map of $A^{[m]}$. Apply the block decomposition from
     adjoint-fixed projections.
-\end{proof}
-
-\begin{theorem}[Period removal for irreducible TP tensors]%
-    \label{thm:cyclic_sector_decomp_irr_tp}
-    \lean{MPSTensor.exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor}
-    \leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor}
-    Let $A$ be a left-canonical irreducible tensor. Then there exist $m \ge 1$ and
-    left-canonical blocks $(C_k)_{k=1}^m$ such that $A^{[m]}$ admits a unit-weight
-    decomposition into the $C_k$. This is the period-removal step
-    of~\cite[Section~2.3]{Cirac2017MPDO_AnnPhys}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking}
-    Left-canonicality makes $K_i := (A^i)^\dagger$ unital, irreducibility passes
-    to the adjoint map, and the quantum Perron--Frobenius theorem provides a
-    positive-definite fixed point. The cyclic peripheral-spectrum theorem gives a
-    period $m$ and the cyclic projections and compression equivalences, and
-    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} produces the
-    decomposition.
 \end{proof}
 
 \begin{theorem}[Period removal with primitive irreducible sectors]%
@@ -869,9 +848,12 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 \begin{proof}\leanok
     \uses{thm:peripheral_cyclic_structure,
         thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
-    Repeat the cyclic-sector construction of
-    Theorem~\ref{thm:cyclic_sector_decomp_irr_tp}, keep the projections and
-    compression equivalences, and apply
+    Left-canonicality makes $K_i := (A^i)^\dagger$ unital, irreducibility passes
+    to the adjoint map, and the quantum Perron--Frobenius theorem provides a
+    positive-definite fixed point; the cyclic peripheral-spectrum theorem and
+    Theorem~\ref{thm:cyclic_sector_decomp_after_blocking} then produce the
+    cyclic-sector decomposition. Keep the projections and compression
+    equivalences, and apply
     Theorem~\ref{thm:blocked_sector_unconditional} to the sector blocks.
 \end{proof}
 
