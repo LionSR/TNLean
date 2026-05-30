@@ -1010,22 +1010,27 @@
 <div class="main-text">
 <h1 id="ch:ft_proof">13 Proof of the Fundamental Theorem</h1>
 
-<p>This chapter records the aperiodic comparison results used in the proof of the Fundamental Theorem of Matrix Product States. We first state strict special cases for canonical-form tensors with already selected BNT representatives, and then state the sector-decomposition theorem that keeps the repeated-copy multiplicities appearing in the CPSV BNT comparison. We then treat the equal-MPV case, including the common-block-structure specialization that deduces gauge equivalence. The results combine the canonical form reduction (Chapter&#160;<a href="ch-canonical.html">9</a>), block separation (Chapter&#160;<a href="ch-block_perm.html">10</a>), spectral gap (Chapter&#160;<a href="ch-spectral.html">7</a>), and the BNT permutation arguments of Chapter&#160;<a href="ch-bnt.html">11</a>. The common after-blocking reductions of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a> are placed immediately before this chapter because they produce the common primitive block decompositions used in the equal-MPV comparison. The direct-sum gauge assembly statements belong to the algebraic assembly layer of Chapter&#160;<a href="ch-algebraic_ft.html">16</a>, where the block correspondence is already fixed. Thus the chapter boundary separates the preparation of the common blocked surface from the later assembly of gauges and MPV equalities; it does not place any channel-representation or semigroup material among the hypotheses of the aperiodic Fundamental Theorem. </p>
-<p>The theorems in this chapter follow the approach of <span class="cite">
+<p>The final aperiodic proof of the Fundamental Theorem is separated here into three kinds of statements. </p>
+<ol class="enumerate">
+  <li><p>Section&#160;<a href="ch-ft_proof.html#sec:ft_source_theorems">13.1</a> records the source statements from the literature. They remain marked as not ready until the canonical-form reduction, BNT representative comparison, repeated-copy coefficient comparison, and global gauge conclusion have all been proved together from the source hypotheses. </p>
+</li>
+  <li><p>Sections&#160;<a href="ch-ft_proof.html#sec:ft_pair_span_padding">13.2</a> and <a href="ch-ft_proof.html#sec:ft_equal_mpv_comparisons">13.3</a> state the proved comparison results: homogeneous pair-span padding, BNT coefficient comparison, sector-weight multiset recovery, sector-basis matching, and the conditional equal-MPV sector theorem. </p>
+</li>
+  <li><p>Section&#160;<a href="ch-ft_proof.html#sec:ft_overlap_bnt_preparation">13.4</a> records the overlap and BNT preparation used to pass from primitive irreducible blocks to linearly independent BNT representatives. </p>
+</li>
+</ol>
+<p>The equal-MPV comparison used here is the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">11</a>. This chapter records where that comparison enters the Fundamental Theorem proof. The comparison is made at fixed sufficiently large system size. If a coefficient belongs to a non-dominant sector, it may decay with&#160;\(N\), but BNT linear independence still detects whether it is zero. No projection-limit argument for non-dominant sectors is used. </p>
+<p>Normality appears in two forms in this proof. The algebraic form is eventual exact-length spanning, \(S_L(A)=M_{D}(\mathbb {C})\) for some&#160;\(L\). Spectral primitivity enters only through separate implications, such as the primitive-to-normality results of Chapter&#160;<a href="ch-wielandt.html">8</a>. When the statements below assume trace-preserving, primitive, irreducible blocks, the passage to BNT representatives uses those separate implications rather than redefining normality. </p>
+<p>The proof follows the aperiodic comparison in <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	
 	]
-</span>: they first block the tensor to remove non-trivial periodicity, then apply the aperiodic fundamental theorem. Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a> develops the stronger irreducible-form framework of <span class="cite">
-	[
-	
-	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
-	
-	]
-</span>, which gives a fundamental theorem valid for periodic tensors directly, with an extra \(Z\)-gauge degree of freedom. </p>
+</span>: block to remove non-trivial periodicity, choose BNT representatives, compare coefficients using linear independence, recover weights by power sums, and then construct the block-diagonal gauge. The periodic irreducible-form theorem with its additional \(Z\)-gauge degree of freedom is treated separately in Chapter&#160;<a href="ch-periodic_ft_apps.html">15</a>. </p>
 <h1 id="sec:ft_source_theorems">13.1 Source theorems</h1>
 
+<p>The next two statements are the literature-level canonical-form theorems. The proved intermediate statements used toward them appear in the later sections of this chapter and in Chapter&#160;<a href="ch-bnt.html">11</a>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:cpgsv_multiblock_ft_source">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1045,7 +1050,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p> This is the multi-block fundamental theorem of <span class="cite">
+  <p> Let \(A\) and \(B\) be MPS tensors in canonical form. Write their bases of normal tensors as \((A_k)_{k=1}^{g_a}\) and \((B_\ell )_{\ell =1}^{g_b}\). If, for every system size&#160;\(N\), the MPVs generated by \(A\) and \(B\) are proportional, then \(g_a=g_b\). After relabelling the basis of normal tensors of \(A\), there are scalars \(\zeta _k \in \mathbb {C}\) with \(|\zeta _k|=1\) and invertible matrices \(Y_k\) such that, for every \(k\) and every physical index&#160;\(i\), </p>
+<div class="displaymath" id="a0000000848">
+  \[  B_k^i = \zeta _k\, Y_k\, A_k^i\, Y_k^{-1}.  \]
+</div>
+<p> Thus the paired normal tensors have the same bond dimension and the same gauge-phase class. </p>
+
+  </div>
+</div>
+<p>This is the multi-block theorem of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -1057,15 +1070,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Theorem&#160;4.5 and Corollary&#160;IV.5
 	]
-</span>. Let \(A\) and \(B\) be MPS tensors in canonical form. Write their bases of normal tensors as \((A_k)_{k=1}^{g_a}\) and \((B_\ell )_{\ell =1}^{g_b}\). If, for every system size \(N\), the MPVs generated by \(A\) and \(B\) are proportional, then \(g_a=g_b\). After relabelling the basis of normal tensors of \(A\), there are scalars \(\zeta _k \in \mathbb {C}\) with \(|\zeta _k|=1\) and invertible matrices \(Y_k\) such that, for every \(k\) and every physical index \(i\), </p>
-<div class="displaymath" id="a0000000845">
-  \[  B_k^i = \zeta _k\, Y_k\, A_k^i\, Y_k^{-1}.  \]
-</div>
-<p> In particular, the matched normal tensors have the same bond dimension and the same gauge-phase class. </p>
-
-  </div>
-</div>
-<p>The same-MPV input is reduced to a common primitive block decomposition by Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.21</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. The BNT matching and coefficient comparison are developed in Chapter&#160;<a href="ch-bnt.html">11</a>. The per-block gauge-phase witnesses, copy-weight identities, and block-diagonal gauge are then assembled in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">11.48</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">16</a> are useful algebraic consequences, but they are not the source proof of the BNT block matching. </p>
+</span>. The same-MPV input is reduced to common primitive block decompositions by Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">12.21</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">12</a>. The BNT matching and coefficient comparison are developed in Chapter&#160;<a href="ch-bnt.html">11</a>. The per-block gauge-phase witnesses, copy-weight identities, and block-diagonal gauge construction are then combined in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">11.48</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">16</a> are useful algebraic consequences, but they are not the BNT block-matching theorem itself. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:cpgsv_equal_case_source">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1085,7 +1090,15 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p> This is the equal-case corollary of <span class="cite">
+  <p> Let \(A\) and \(B\) be canonical-form representations generating the same MPV family for every system size&#160;\(N\). Then the matrix dimensions of \(A^i\) and \(B^i\) coincide, and there is one invertible matrix \(X\) such that, for every physical index&#160;\(i\), </p>
+<div class="displaymath" id="a0000000849">
+  \[  A^i = X\, B^i\, X^{-1}.  \]
+</div>
+<p> Thus the equal case removes the blockwise phase freedom of the proportional theorem and gives a single global conjugacy. </p>
+
+  </div>
+</div>
+<p>This is the equal-case corollary of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -1097,24 +1110,10 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Corollary&#160;IV.5
 	]
-</span>. If \(A\) and \(B\) are two canonical-form representations generating the same MPV family at every system size \(N\), then the matrix dimensions of \(A^i\) and \(B^i\) coincide. Moreover, there is one invertible matrix \(X\) such that, for every physical index \(i\), </p>
-<div class="displaymath" id="a0000000846">
-  \[  A^i = X\, B^i\, X^{-1}.  \]
-</div>
-<p> Thus the equal case removes the blockwise phase freedom appearing in the proportional theorem and gives a single global conjugacy. </p>
-
-  </div>
-</div>
-<p>The coefficient identities for the matched sectors are supplied by the BNT matching of Chapter&#160;<a href="ch-bnt.html">11</a>; the weight recovery uses Newton–Girard. The resulting global conjugacy is recorded in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">11.49</a>. </p>
+</span>. The coefficient identities for the paired sectors are supplied by the BNT comparison of Chapter&#160;<a href="ch-bnt.html">11</a>; the weight recovery uses Newton–Girard. The resulting global conjugacy is recorded in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">11.49</a>. </p>
 <h1 id="sec:ft_pair_span_padding">13.2 Homogeneous Pair-Span Padding</h1>
 
-<p>The pair-span padding lemmas below are shared algebraic infrastructure for the aperiodic Fundamental Theorem route. They are used to pass from the Wielandt/block-injective homogeneous span information of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	
-	]
-</span> to the fixed-length separation statements used by BNT comparison. Parent-Hamiltonian arguments later reuse the same predicates, but the source role of the identity-pair lemma is the Fundamental Theorem pair-span step. </p>
+<p>The pair-span padding lemmas below are algebraic statements about fixed-length word spans in the product algebra. They convert a full homogeneous pair-word span at one positive length into the identity pair at all sufficiently large lengths, which is the exact-length form needed in BNT separation. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:pair_identity_span_top">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -1131,7 +1130,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:pair_identity_span_top">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000847"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1186,22 +1185,22 @@
   <div class="lemma_thmcontent">
   <p>      Let \(A\) and \(B\) be MPS tensors of bond dimensions \(D_1\) and \(D_2\). </p>
 <ol class="enumerate">
-  <li><p>If the homogeneous pair-word span is the full product algebra at some length \(n\), i.e. </p>
-<div class="displaymath" id="a0000000848">
-  \[  \operatorname{span}\{ (A^w,B^w)\mid |w|=n\}  = M_{D_1}(\mathbb {C})\times M_{D_2}(\mathbb {C}),  \]
+  <li><p>If the homogeneous pair-word span is the full product algebra at length&#160;\(n\), </p>
+<div class="displaymath" id="a0000000851">
+  \[  \operatorname{span}_{\mathbb {C}}\{ (A^w,B^w): |w|=n\}  = M_{D_1}(\mathbb {C})\times M_{D_2}(\mathbb {C}),  \]
 </div>
-<p> then the simultaneous identity pair \((\mathbb {1}_{D_1},\mathbb {1}_{D_2})\) belongs to that same homogeneous span. </p>
+<p> then the identity pair \((\mathbb {1}_{D_1},\mathbb {1}_{D_2})\) belongs to the same homogeneous span. </p>
 </li>
-  <li><p>If the span is full at one positive length \(S{\gt}0\), then the identity pair lies in the homogeneous pair-word span at every sufficiently large length: </p>
-<div class="displaymath" id="a0000000849">
-  \[  \exists L \in \mathbb {N}, \forall n \ge L, (\mathbb {1}_{D_1},\mathbb {1}_{D_2})\in \operatorname{span}\{ (A^w,B^w)\mid |w|=n\} .  \]
+  <li><p>If the span is full at one positive length \(S{\gt}0\), then there is \(L \in \mathbb {N}\) such that, for every \(n \ge L\), </p>
+<div class="displaymath" id="a0000000852">
+  \[  (\mathbb {1}_{D_1},\mathbb {1}_{D_2})\in \operatorname{span}_{\mathbb {C}}\{ (A^w,B^w): |w|=n\} .  \]
 </div>
 </li>
 </ol>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000847">
+<div class="proof_wrapper" id="a0000000850">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1209,26 +1208,33 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Statement&#160;(1) is immediate: if the span is already the whole product algebra, then it contains the identity pair. For&#160;(2), fullness at a positive length propagates by multiplying a word of length \(T\) by a one-letter word, so induction gives fullness at every length \(S+k\). Applying&#160;(1) at each such length gives the conclusion with \(L=S\). </p>
+  <p>Statement&#160;(1) is immediate from equality with the full product algebra. For&#160;(2), fullness at a positive length propagates to all larger lengths by the positive-length span-propagation lemma. Applying&#160;(1) at each propagated length gives the identity pair in every sufficiently large homogeneous span. </p>
 
   </div>
 </div>
 <h1 id="sec:ft_equal_mpv_comparisons">13.3 Equal-MPV Comparisons</h1>
 
-<p>The source corollary for equal MPVs says that if two canonical-form tensors generate the same MPV family for all system sizes, then their matrix dimensions coincide and the full tensors are related by one invertible gauge <span class="cite">
+<p>The equal-MPV proof is a coefficient comparison. In the one-copy aligned case, write </p>
+<div class="displaymath" id="a0000000853">
+  \[  A^i=\bigoplus _{j=1}^{g}\mu _j^A A_j^i, \qquad B^i=\bigoplus _{j=1}^{g}\mu _{\pi (j)}^B B_{\pi (j)}^i,  \]
+</div>
+<p> and suppose the paired basis blocks satisfy </p>
+<div class="displaymath" id="a0000000854">
+  \[  B_{\pi (j)}^i = e^{\mathrm{i}\phi _j}X_jA_j^iX_j^{-1}.  \]
+</div>
+<p> Then equality of the total MPVs gives, for every&#160;\(N\), </p>
+<div class="displaymath" id="a0000000855">
+  \[  \begin{aligned}  0 &  = |V^{(N)}(A)\rangle -|V^{(N)}(B)\rangle  \\ &  = \sum _{j=1}^{g} \left[(\mu _j^A)^N - (\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j})^N\right] |V^{(N)}(A_j)\rangle . \end{aligned}  \]
+</div>
+<p> For all sufficiently large&#160;\(N\), BNT linear independence forces each displayed coefficient to vanish. Since the weights are nonzero and the equality holds for all consecutive sufficiently large&#160;\(N\), one obtains \(\mu _j^A=\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j}\). The phases are then absorbed into the weights, and the block gauges \(X_j\) form the block-diagonal global gauge. </p>
+<p>The repeated-copy and equal-modulus part of the comparison is not restated as a separate theorem in this chapter. Its reference is Chapter&#160;<a href="ch-bnt.html">11</a>: the coefficient identity Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">11.40</a>, the copy-weight recovery Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">11.43</a>, and the global-gauge Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">11.48</a>. No strict ordering of the moduli is used in these SectorBNT statements; strict-modulus or one-copy comparisons are special cases, not substitutes for the literature theorem. </p>
+<p>The source equal-MPV corollary says that canonical-form tensors generating the same MPV family for all system sizes are globally conjugate <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Corollary&#160;II.2
 	]
-</span>. In the proof, this corollary is obtained by matching the BNT blocks and then comparing the sector-weight power sums. </p>
-<p>The block-matching conclusion (block-count, bond-dimension, and gauge-phase identification of corresponding sectors) and the global gauge identification are formalised on the BNT canonical form of Chapter&#160;<a href="ch-bnt.html">11</a>. The literal coordinate form of <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Corollary&#160;II.2 and §&#160;II.C, lines 1184–1192
-	]
-</span> is recorded there under the unit-modulus-copy normalization. </p>
+</span>. The BNT block-count, bond-dimension, gauge-phase, copy-count, and weight-multiset conclusions are recorded in Chapter&#160;<a href="ch-bnt.html">11</a>. The coordinate form of the same result is recorded there under the unit-modulus-copy normalization. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:equalMPS_dimension_from_unit_overlap">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1245,7 +1251,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:equalMPS_dimension_from_unit_overlap">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000850"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000856"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1293,14 +1299,14 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) and \(B\) be irreducible trace-preserving blocks, possibly with different bond dimensions. If </p>
-<div class="displaymath" id="a0000000851">
+<div class="displaymath" id="a0000000857">
   \[  \lim _{N\to \infty } \left|\langle V^{(N)}(B) | V^{(N)}(A) \rangle \right|=1,  \]
 </div>
 <p> then the two bond dimensions are equal. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000850">
+<div class="proof_wrapper" id="a0000000856">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1308,7 +1314,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>The proof is the contrapositive of rectangular overlap decay: if the two bond dimensions differ, the mixed overlap tends to \(0\), contradicting the assumed convergence of its modulus to \(1\). </p>
+  <p>The displayed quantity is the modulus of the Hilbert-space inner product; it agrees in modulus with the mixed MPV overlap. The proof is the contrapositive of rectangular overlap decay: if the two bond dimensions differ, then </p>
+<div class="displaymath" id="a0000000858">
+  \[  \lim _{N\to \infty } \left|\langle V^{(N)}(B) | V^{(N)}(A) \rangle \right|=0,  \]
+</div>
+<p> contradicting the assumed convergence of this modulus to&#160;\(1\). </p>
 
   </div>
 </div>
@@ -1326,7 +1336,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:ft_equal_same_structure">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000852"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1362,7 +1372,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000852">
+<div class="proof_wrapper" id="a0000000859">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1370,31 +1380,28 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> On the BNT canonical form this is the specialization of the global-gauge equality theorem (Chapter&#160;<a href="ch-bnt.html">11</a>) to the case where \(P\) and \(Q\) share a common \((g, D_k, \mu _k)\) block structure: the basis bijection \(\beta \) is trivial, the per-block gauge matrices \(X_k\) furnish the per-pair gauge equivalences, and the flattened direct-sum gauge \(X\) assembles them into the global conjugation on \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\). </p>
+  <p> This is the one-copy, already aligned subcase of the BNT global-gauge theorem. In Chapter&#160;<a href="ch-bnt.html">11</a>, specialize Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">11.48</a> to sector decompositions \(P\) and \(Q\) with the same \((g,D_k,\mu _k)\) block structure. The basis permutation is the identity, the per-block matrices \(X_k\) give the pairwise gauge equivalences, and the block-diagonal matrix \(X=\bigoplus _k X_k\) gives the global conjugation on \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\). </p>
 
   </div>
 </div>
 <h2 id="sec:bnt_power_sum_recovery">13.3.1 Sector multiplicities and weight recovery</h2>
 
-<p>This subsection records the coefficient comparison used when several canonical-form blocks are phase and gauge transforms of the same basis normal tensor. If the \(j\)th basis block occurs with nonzero weights \(\mu _{j,1},\ldots ,\mu _{j,r_j}\), its length-\(N\) contribution is governed by the power sum </p>
-<div class="displaymath" id="a0000000853">
-  \[  c_{S,j}^{(N)}=\sum _{q=1}^{r_j}\mu _{j,q}^{N}.  \]
+<p>This subsection records the coefficient comparison for sectors with repeated copies. If the \(j\)th basis block occurs with nonzero weights \(\mu _{j,1},\ldots ,\mu _{j,r_j}\), its contribution at length&#160;\(N\) is </p>
+<div class="displaymath" id="a0000000860">
+  \[  c_{S,j}^{(N)} = \sum _{q=1}^{r_j}\mu _{j,q}^{N}.  \]
 </div>
-<p> This is the scalar part of the source decomposition </p>
-<div class="displaymath" id="a0000000854">
-  \[  A^i=\bigoplus _{j=1}^g\bigoplus _{q=1}^{r_j} \mu _{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.  \]
-</div>
-<p> The sector tensor used below is the representative form after the gauge conjugations \(X_{j,q}\) have already been absorbed into the choice of basis block and gauge phases. Thus BNT linear independence separates the coefficient arrays \(c_{S,j}^{(N)}\), and elementary power-sum algebra recovers both the multiplicity \(r_j\) and the multiset of weights attached to the basis block. In the later PEPS application this information is not presented as a separate chain of MPS comparison theorems: Theorem&#160;IV.13 of&#160;<span class="cite">
+<p> After the basis blocks have been paired up to gauge phase, both sides are written in the same BNT basis. The full family of basis MPV states is linearly independent for all sufficiently large&#160;\(N\), so equality of total MPVs separates the coefficient arrays \(c_{S,j}^{(N)}\). Equality of those power sums for all sufficiently large&#160;\(N\) determines both the multiplicity \(r_j\) and the multiset of weights. </p>
+<p>The same scalar power-sum algebra appears in the PEPS application of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	
+	, Theorem&#160;IV.13
 	]
-</span> uses structure coefficients </p>
-<div class="displaymath" id="a0000000855">
-  \[  c_{\alpha ,\beta ,\gamma }^{(L)} =\operatorname{tr}\! \left(\chi _{\alpha ,\beta ,\gamma }^L\right), \qquad m_\gamma =\sum _{\alpha ,\beta }c_{\alpha ,\beta ,\gamma }^{(1)} m_\alpha m_\beta ,  \]
+</span>, where structure coefficients are written as </p>
+<div class="displaymath" id="a0000000861">
+  \[  c_{\alpha ,\beta ,\gamma }^{(L)} =\operatorname{tr}\! \left(\chi _{\alpha ,\beta ,\gamma }^L\right), \qquad m_\gamma =\sum _{\alpha ,\beta }c_{\alpha ,\beta ,\gamma }^{(1)} m_\alpha m_\beta .  \]
 </div>
-<p> and the appendix writes the vertical canonical forms as \(\bigoplus _\alpha \mu _\alpha \otimes M_\alpha \) and \(\bigoplus _\beta \nu _\beta \otimes A_\beta \), with \(m_\alpha =\operatorname{tr}(\mu _\alpha )\) and \(n_\beta =\operatorname{tr}(\nu _\beta )\). Here \(\mu _\alpha \) and \(\nu _\beta \) are diagonal positive matrices in the source paper; only their traces are the scalar coefficients compared in this subsection. The one-index coefficients \(c_{S,j}^{(N)}\) below are the corresponding power-sum comparison after the basis blocks have already been matched. The geometric extrapolation and Newton–Girard steps are external finite-sequence facts used to recover the lists of weights from those power sums. </p>
+<p> In the source appendix the vertical canonical forms are \(\bigoplus _\alpha \mu _\alpha \otimes M_\alpha \) and \(\bigoplus _\beta \nu _\beta \otimes A_\beta \), with \(m_\alpha =\operatorname{tr}(\mu _\alpha )\) and \(n_\beta =\operatorname{tr}(\nu _\beta )\). There \(\mu _\alpha \) and \(\nu _\beta \) are diagonal positive matrices; only their traces enter as the scalar coefficients compared here. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:sector_weight_data">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -1437,11 +1444,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  A sector-weight tuple over \(g\) basis blocks consists of multiplicities \(r_j {\gt} 0\), weights \(\mu _{j,q} \neq 0\) for \(q \in \{ 1,\ldots ,r_j\} \), and the <em>sector coefficients</em> </p>
-<div class="displaymath" id="a0000000856">
-  \[  c_{S,j}^{(N)} := \sum _{q=1}^{r_j} \mu _{j,q}^N  \]
+  <p>  A sector-weight tuple over \(g\) basis blocks consists of multiplicities \(r_j {\gt} 0\), nonzero weights \(\mu _{j,q}\) for \(q \in \{ 1,\ldots ,r_j\} \), and the sector coefficients </p>
+<div class="displaymath" id="a0000000862">
+  \[  c_{S,j}^{(N)} := \sum _{q=1}^{r_j} \mu _{j,q}^N.  \]
 </div>
-<p> for the tuple \(S\). A <em>sector decomposition</em> consists of the basis blocks \((A_j)_{j=1}^g\) together with these multiplicities and weights. </p>
+<p> A <em>sector decomposition</em> consists of the basis blocks \((A_j)_{j=1}^g\) together with these multiplicities and weights. </p>
 
   </div>
 </div>
@@ -1506,7 +1513,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   For a sector decomposition \(S\) with associated tensor \(A_{\mathrm{tot}}\), the MPV satisfies </p>
-<div class="displaymath" id="a0000000857">
+<div class="displaymath" id="a0000000863">
   \[  V^{(N)}(A_{\mathrm{tot}})_\sigma = \sum _{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma .  \]
 </div>
 
@@ -1575,8 +1582,8 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   If two sector-weight tuples \(S, T\) over the same basis, with coefficient arrays \(c_{S,j}^{(N)}\) and \(c_{T,j}^{(N)}\), produce equal total MPVs and the basis is eventually linearly independent (the BNT property), then there is \(N_0\) such that </p>
-<div class="displaymath" id="a0000000858">
-  \[  \forall N{\gt}N_0,\  \forall j,\qquad c_{S,j}^{(N)}=c_{T,j}^{(N)}.  \]
+<div class="displaymath" id="a0000000864">
+  \[  \forall N{\gt}N_0,\  \forall j,\quad c_{S,j}^{(N)}=c_{T,j}^{(N)}.  \]
 </div>
 
   </div>
@@ -1597,7 +1604,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:bnt_power_sum_recover_copies_weights">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000859"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000865"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1650,14 +1657,14 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(S\) and \(T\) be two sector-weight tuples over the same basis, without assuming their multiplicities agree. If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then there are copy-count equalities \(r_j^S = r_j^T\) for every basis block&#160;\(j\), and, after transporting along these equalities, the sector weight multisets are equal for every&#160;\(j\): </p>
-<div class="displaymath" id="a0000000860">
+  <p>   Let \(S\) and \(T\) be two sector-weight tuples over the same basis, without assuming their multiplicities agree. If the basis is eventually linearly independent and the total MPVs of \(S\) and \(T\) agree, then there are copy-count equalities \(r_j^S = r_j^T\) for every basis block&#160;\(j\), and, after identifying the corresponding copy index sets, the sector weight multisets are equal for every&#160;\(j\): </p>
+<div class="displaymath" id="a0000000866">
   \[  \{ \mu _{j,q}^{S}:1\le q\le r_j^S\}  = \{ \mu _{j,q}^{T}:1\le q\le r_j^T\} .  \]
 </div>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000859">
+<div class="proof_wrapper" id="a0000000865">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1666,7 +1673,7 @@
   </div>
   <div class="proof_content">
   <p> BNT linear independence and equality of total MPVs give eventual coefficient equality by Lemma&#160;<a href="ch-ft_proof.html#lem:coeff_eventually_eq">13.8</a>. Thus, for each basis sector \(j\), the two finite nonzero weight families satisfy </p>
-<div class="displaymath" id="a0000000861">
+<div class="displaymath" id="a0000000867">
   \[  \sum _{q=1}^{r_j^S}(\mu _{j,q}^S)^N = \sum _{q=1}^{r_j^T}(\mu _{j,q}^T)^N  \]
 </div>
 <p> for all sufficiently large \(N\). The signed-geometric-sequence argument extends this to every positive exponent. Applying the finite-range unequal-cardinality power-sum theorem (Theorem&#160;<a href="ch-bnt.html#thm:bounded_power_sum_multiset">11.19</a>) gives both \(r_j^S=r_j^T\) and equality of the sector weight multisets. </p>
@@ -1689,7 +1696,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000862"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000868"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1740,15 +1747,15 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks and, for each \(j\), a nonzero complex number \(\zeta _j\) such that </p>
-<div class="displaymath" id="a0000000863">
+  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) pairing the basis blocks and, for each \(j\), a nonzero complex number \(\zeta _j\) such that </p>
+<div class="displaymath" id="a0000000869">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for every \(N\) and \(\sigma \). If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then the copy counts satisfy \(r_j^P=r_{\pi (j)}^Q\), and after multiplying the weights of \(Q_{\pi (j)}\) by \(\zeta _j\) the sector weight multisets agree. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000862">
+<div class="proof_wrapper" id="a0000000868">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1756,7 +1763,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Absorb the factors \(\zeta _j\) into the sector weights of \(Q\) and keep the basis blocks of \(P\). The phase-matching hypothesis and the sector decomposition formula show that the resulting decomposition has the same total MPV family as&#160;\(Q\), hence also as&#160;\(P\). One is then in the shared-basis situation of Lemma&#160;<a href="ch-ft_proof.html#lem:bnt_power_sum_recover_copies_weights">13.9</a>, which recovers both the copy-count equalities and the claimed equality of weight multisets. </p>
+  <p> Absorb the factors \(\zeta _j\) into the sector weights of \(Q\) and use the basis blocks of \(P\). The phase-matching hypothesis and the sector decomposition formula show that the resulting decomposition has the same total MPV family as&#160;\(Q\), hence also as&#160;\(P\). This is the shared-basis case of Lemma&#160;<a href="ch-ft_proof.html#lem:bnt_power_sum_recover_copies_weights">13.9</a>, which recovers the copy-count equalities and the claimed equality of weight multisets. </p>
 
   </div>
 </div>
@@ -1776,7 +1783,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:phase_match_sector_weights">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000864"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000870"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1825,15 +1832,15 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) there is a nonzero complex number \(\zeta _j\) such that </p>
-<div class="displaymath" id="a0000000865">
+  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) pairing the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and for each \(j\) there is a nonzero complex number \(\zeta _j\) such that </p>
+<div class="displaymath" id="a0000000871">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma  \]
 </div>
 <p> for every \(N\) and \(\sigma \). If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000864">
+<div class="proof_wrapper" id="a0000000870">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1861,7 +1868,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:gauge_phase_matched_basis_sector_weights">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000866"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -1914,11 +1921,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) matching the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and each matched pair of basis blocks is gauge-phase equivalent. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) after multiplication by the corresponding gauge phase. </p>
+  <p>   Let \(P\) and \(Q\) be sector decompositions. Assume there is a permutation \(\pi \) pairing the basis blocks, the multiplicities satisfy \(r_j^P = r_{\pi (j)}^Q\), and each corresponding pair of basis blocks is gauge-phase equivalent. If the total MPV families of \(P\) and \(Q\) agree and the basis blocks of \(P\) are eventually linearly independent, then for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) after multiplication by the corresponding gauge phase. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000866">
+<div class="proof_wrapper" id="a0000000872">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -1926,7 +1933,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Gauge-phase equivalence gives the required phase-scaling identity for the MPVs by Theorem&#160;<a href="ch-mps.html#thm:gauge_phase_mpv_scaling">2.27</a>. The conclusion then follows immediately from Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_sector_weights">13.11</a>. </p>
+  <p> Gauge-phase equivalence gives the required phase-scaling identity for the MPVs by Theorem&#160;<a href="ch-mps.html#thm:gauge_phase_mpv_scaling">2.27</a>. The conclusion then follows from Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_sector_weights">13.11</a>. </p>
 
   </div>
 </div>
@@ -1936,7 +1943,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">13.13</span>
-    <span class="definition_thmtitle">Sector basis matching witness</span>
+    <span class="definition_thmtitle">Sector basis matching</span>
     <div class="thm_header_extras">
 
     
@@ -1994,16 +2001,16 @@
   <div class="definition_thmcontent">
   <p>   A <em>sector basis matching</em> between two sector decompositions \(P\) and \(Q\) consists of </p>
 <ol class="enumerate">
-  <li><p>a basis permutation (bijection) \(\pi : \{ 1,\ldots ,g_P\}  \simeq \{ 1,\ldots ,g_Q\} \), </p>
+  <li><p>a basis permutation \(\pi : \{ 1,\ldots ,g_P\}  \simeq \{ 1,\ldots ,g_Q\} \), </p>
 </li>
   <li><p>per-block multiplicity equalities \(r_j^P = r_{\pi (j)}^Q\), </p>
 </li>
   <li><p>per-block bond-dimension equalities \(D_j^P = D_{\pi (j)}^Q\), and </p>
 </li>
-  <li><p>per-block gauge-phase equivalences \(P_j \simeq _{\mathrm{gp}} Q_{\pi (j)}\) after transporting \(P_j\) across the bond-dimension equality. </p>
+  <li><p>per-block gauge-phase equivalences \(P_j \simeq _{\mathrm{gp}} Q_{\pi (j)}\) after identifying the two matrix algebras by the bond-dimension equality. </p>
 </li>
 </ol>
-<p> The hypotheses consumed by Lemma&#160;<a href="ch-ft_proof.html#lem:gauge_phase_matched_basis_sector_weights">13.12</a> are exactly the fields of this matching tuple. </p>
+<p> The hypotheses of Lemma&#160;<a href="ch-ft_proof.html#lem:gauge_phase_matched_basis_sector_weights">13.12</a> are exactly these listed components. </p>
 
   </div>
 </div>
@@ -2069,7 +2076,7 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   A <em>sector basis pre-matching</em> between sector decompositions \(P\) and \(Q\) consists of a permutation of their basis blocks, equality of the matched bond dimensions, and gauge-phase equivalence of each matched pair. It does not include the copy-count equality; that equality is recovered from total MPV equality and BNT linear independence in Lemma&#160;<a href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">13.18</a>. </p>
+  <p>   A <em>sector basis pre-matching</em> between sector decompositions \(P\) and \(Q\) consists of a permutation of their basis blocks, equality of the paired bond dimensions, and gauge-phase equivalence of each corresponding pair. It does not include the copy-count equality; that equality is recovered from total MPV equality and BNT linear independence in Lemma&#160;<a href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">13.18</a>. </p>
 
   </div>
 </div>
@@ -2225,7 +2232,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:sector_basis_overlap_ortho_to_span">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000867"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000873"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2282,7 +2289,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000867">
+<div class="proof_wrapper" id="a0000000873">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2290,7 +2297,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is just collecting the one-family fields on the left and right, and adding the remaining injectivity and span-comparison hypotheses. </p>
+  <p> Combine the one-family hypotheses on the two sides with the remaining injectivity and span-comparison hypotheses. These are exactly the assertions in Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_overlap_span_hyps">13.16</a>. </p>
 
   </div>
 </div>
@@ -2310,7 +2317,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000868"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2365,7 +2372,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000868">
+<div class="proof_wrapper" id="a0000000874">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2374,10 +2381,10 @@
   </div>
   <div class="proof_content">
   <p> Gauge-phase equivalence gives the required phase-scaling identities for the corresponding basis MPVs: </p>
-<div class="displaymath" id="a0000000869">
+<div class="displaymath" id="a0000000875">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma .  \]
 </div>
-<p> Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">13.10</a> then recovers the missing copy-count equalities, which are precisely the extra fields needed for Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_matching">13.13</a>. </p>
+<p> Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">13.10</a> then recovers the missing copy-count equalities, which are precisely the extra assertions needed for Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_matching">13.13</a>. </p>
 
   </div>
 </div>
@@ -2397,7 +2404,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:sector_basis_matching_from_overlap_ortho_span">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000870"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2456,7 +2463,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000870">
+<div class="proof_wrapper" id="a0000000876">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2464,7 +2471,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The permutation-rigidity lemma for bases of normal tensors gives a permutation, the matched bond dimensions, and the gauge-phase equivalences of the basis blocks, hence a sector basis pre-matching. Asymptotic orthonormality gives the BNT linear-independence condition, and Lemma&#160;<a href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">13.18</a> recovers the copy-count equalities from equality of the total MPV families. </p>
+  <p> The permutation-rigidity lemma for bases of normal tensors gives a permutation, the paired bond dimensions, and the gauge-phase equivalences of the basis blocks, hence a sector basis pre-matching. Asymptotic orthonormality gives the BNT linear-independence condition, and Lemma&#160;<a href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">13.18</a> recovers the copy-count equalities from equality of the total MPV families. </p>
 
   </div>
 </div>
@@ -2484,7 +2491,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:sector_basis_overlap_span_to_matching">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000871"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000877"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2539,7 +2546,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000871">
+<div class="proof_wrapper" id="a0000000877">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2567,7 +2574,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sector_decomp_pair_overlap_span_of_block_span">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000872"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2620,7 +2627,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000872">
+<div class="proof_wrapper" id="a0000000878">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2628,7 +2635,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Apply the phase-class construction on both sides and expose the representative overlap/span data internally. The one-sided positive-dimension, injectivity, normalization, and overlap fields fill all fields of Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_overlap_span_hyps">13.16</a> except the two-family span equality. That span equality follows by transporting the assumed nonzero-block span equality through the two representative-span identities. </p>
+  <p>Choose one MPV phase-class representative on each side. The one-sided positive-dimension, injectivity, normalization, and overlap hypotheses give all one-family assertions in Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_overlap_span_hyps">13.16</a>. The assumed nonzero-block span equality is preserved when each block is replaced by a phase-equivalent representative. This supplies the two-family span equality for the sector bases. </p>
 
   </div>
 </div>
@@ -2692,7 +2699,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>    Two blocks \(A\) and \(B\) are MPV-phase equivalent if there is a nonzero scalar \(\zeta \) such that, for every system size \(N\) and every physical word, the MPV coefficient of \(B\) equals \(\zeta ^N\) times the MPV coefficient of \(A\). The two bond dimensions are allowed to differ. </p>
+  <p>    Two blocks \(A\) and \(B\) are MPV-phase equivalent if there is a nonzero scalar \(\zeta \) such that, for every system size&#160;\(N\) and every physical word, </p>
+<div class="displaymath" id="a0000000879">
+  \[  V^{(N)}(B)_\sigma = \zeta ^N V^{(N)}(A)_\sigma .  \]
+</div>
+<p> The two bond dimensions are allowed to differ. </p>
 
   </div>
 </div>
@@ -2776,7 +2787,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:nonzero_block_span_eq_of_common_phase_cover">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000873"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2829,7 +2840,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000873">
+<div class="proof_wrapper" id="a0000000880">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2857,7 +2868,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:mpv_common_phase_cover_span_eq">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000874"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2910,7 +2921,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000874">
+<div class="proof_wrapper" id="a0000000881">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -2938,7 +2949,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:common_phase_cover_of_block_matching">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000875"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -2987,11 +2998,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   If a BNT block-matching comparison has produced a permutation of the two basis families together with matched bond dimensions and gauge-phase equivalences, then the two basis families have a common MPV phase cover. </p>
+  <p>   If a BNT block-matching comparison has produced a permutation of the two basis families together with paired bond dimensions and gauge-phase equivalences, then the two basis families have a common MPV phase cover. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000875">
+<div class="proof_wrapper" id="a0000000882">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3019,7 +3030,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:common_phase_cover_of_equiv_phase">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000876"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000883"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3069,14 +3080,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \((A_s)_{s \in S}\) and \((B_t)_{t \in T}\) be two finite block families. Suppose there is a bijection \(\sigma :S \to T\) and, for each \(s \in S\), a scalar \(\omega _s \in \mathbb {C}^\times \) such that </p>
-<div class="displaymath" id="a0000000877">
+<div class="displaymath" id="a0000000884">
   \[  |V^{(N)}(B_{\sigma (s)})\rangle  = \omega _s^N |V^{(N)}(A_s)\rangle   \]
 </div>
-<p> for every length \(N\ge 0\), with \(|V^{(0)}(C)\rangle \) interpreted as the bond dimension of \(C\). For each matched pair, the case \(N=0\) records equality of bond dimensions. Then the two block families admit a common MPV phase cover. </p>
+<p> for every length \(N\ge 0\), with \(|V^{(0)}(C)\rangle \) interpreted as the bond dimension of \(C\). For each corresponding pair, the case \(N=0\) records equality of bond dimensions. Then the two block families admit a common MPV phase cover. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000876">
+<div class="proof_wrapper" id="a0000000883">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3104,7 +3115,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:nonzero_block_span_eq_of_block_matching">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000878"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3161,7 +3172,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000878">
+<div class="proof_wrapper" id="a0000000885">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3189,7 +3200,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:nonzero_block_span_eq_of_equiv_phase">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000879"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3242,7 +3253,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000879">
+<div class="proof_wrapper" id="a0000000886">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3270,7 +3281,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sectorDecomp_pair_overlapSpan_of_commonPhaseCover">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000880"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000887"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3327,7 +3338,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000880">
+<div class="proof_wrapper" id="a0000000887">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3335,7 +3346,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The common cover gives finite-length span equality for the two nonzero-weight block families. The phase-class representative construction then transports this span equality to the BNT sector bases and supplies the remaining one-family overlap hypotheses. </p>
+  <p> The common cover gives finite-length span equality for the two nonzero-weight block families. The phase-class representative construction then carries this span equality to the BNT sector bases and supplies the remaining one-family overlap hypotheses. </p>
 
   </div>
 </div>
@@ -3355,7 +3366,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:sector_matching_weight_multisets">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000881"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000888"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3406,11 +3417,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Given two sector decompositions \(P\) and \(Q\), a sector basis matching (Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_matching">13.13</a>) between them, eventual linear independence of the basis MPV states of \(P\), and equality of the total MPV families of \(P\) and \(Q\), one obtains nonzero phases \((\zeta _j)_j\) such that for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
+  <p>   Given two sector decompositions \(P\) and \(Q\), a sector basis matching (Definition&#160;<a href="ch-ft_proof.html#def:sector_basis_matching">13.13</a>) between them, eventual linear independence of the basis MPV states of \(P\), and equality of the total MPV families of \(P\) and \(Q\), one obtains nonzero scalars \((\zeta _j)_j\) such that for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000881">
+<div class="proof_wrapper" id="a0000000888">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3438,7 +3449,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:sameMPV2_live_of_zeroTail_eq">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000882"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000889"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3457,8 +3468,6 @@
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
           <li><a href="ch-mps.html#def:mpv">Definition 2.4</a></li>
-          
-          <li><a href="ch-canonical_after_blocking.html#thm:mpv_zero_tensor">Theorem 12.2</a></li>
           
         </ul>
     
@@ -3493,7 +3502,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000882">
+<div class="proof_wrapper" id="a0000000889">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3501,11 +3510,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> At positive lengths the all-zero leftover block vanishes, so the nonzero parts agree. Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:mpv_zero_tensor">12.2</a> gives the exact value </p>
-<div class="displaymath" id="a0000000883">
-  \[  V^{(0)}(\mathbf{0}_{d,D_0})_\varnothing =D_0,  \]
-</div>
-<p> so equality of the two leftover zero-block dimensions gives cancellation at length zero as well. </p>
+  <p>Since \(z_A=z_B\), the two all-zero leftover tensors are the same tensor at every length. Subtracting this common summand from the original MPV equality gives the equality of the two nonzero parts, including at length zero. </p>
 
   </div>
 </div>
@@ -3549,10 +3554,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  This is the one-sided assertion that the canonically blocked weighted nonzero part agrees, as an MPV family, with the same common cyclic-sector family after identifying blocked physical words. It isolates the coordinate equality between direct and iterated blocking. The coordinate-grouping theorem below supplies this condition in the theorems that take it as a hypothesis, so it is not a new mathematical hypothesis. </p>
+  <p>  This is the one-sided assertion that the canonically blocked weighted nonzero part agrees, as an MPV family, with the same common cyclic-sector family after identifying blocked physical words. It is the coordinate equality between direct blocking and iterated blocking. </p>
 
   </div>
 </div>
+<p>The coordinate-grouping theorem below proves this assertion for the canonical word grouping. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:common_grouped_block_cast_hypothesis">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -3582,7 +3588,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.75</a></li>
+          <li><a href="ch-canonical.html#def:common_blocked_cyclic_sector_grouped_block_cast">Definition 9.77</a></li>
           
         </ul>
     
@@ -3613,10 +3619,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>   This is the corresponding global assertion at the level of blocked words: every common blocked cyclic-sector family satisfies the coordinate-grouping condition for each original nonzero block. Equivalently, the canonical identification with each iterated blocked alphabet agrees with grouping the direct blocked word into consecutive words of the period-removal length. The next lemma proves this assertion from the concrete word-cast construction. </p>
+  <p>   This is the corresponding global assertion at the level of blocked words: every common blocked cyclic-sector family satisfies the coordinate-grouping condition for each original nonzero block. Equivalently, the canonical identification with each iterated blocked alphabet agrees with grouping the direct blocked word into consecutive words of the period-removal length. </p>
 
   </div>
 </div>
+<p>The next lemma proves this assertion from the concrete word-grouping construction. </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:common_grouped_block_cast_of_flatten_word">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -3633,7 +3640,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:common_grouped_block_cast_of_flatten_word">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000884"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000890"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3651,9 +3658,9 @@
           
           <li><a href="ch-ft_proof.html#def:common_grouped_block_cast_hypothesis">Definition 13.34</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.76</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.78</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.76</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.78</a></li>
           
         </ul>
     
@@ -3688,7 +3695,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000884">
+<div class="proof_wrapper" id="a0000000890">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3696,7 +3703,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the grouped-block cast comparison to each original nonzero block. </p>
+  <p> Apply the grouped-block comparison to each original nonzero block. </p>
 
   </div>
 </div>
@@ -3716,7 +3723,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#lem:common_grouped_block_cast_to_relabeling">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000885"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3736,9 +3743,9 @@
           
           <li><a href="ch-ft_proof.html#def:common_sector_relabeling_hypothesis">Definition 13.33</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.77</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.79</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.77</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_blocked_word_comparison">Lemma 9.79</a></li>
           
         </ul>
     
@@ -3769,11 +3776,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   If the global coordinate-grouping hypothesis holds, then the blocked-word identification used by the common-sector structural theorem holds. The proof is exactly the weighted finite-sum comparison for direct and iterated blocking applied to each common cyclic-sector family. </p>
+  <p>   If the global coordinate-grouping hypothesis holds, then the blocked-word identification used by the common-sector structural theorem holds. The proof is the weighted finite-sum comparison for direct and iterated blocking applied to each common cyclic-sector family. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000885">
+<div class="proof_wrapper" id="a0000000891">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3781,7 +3788,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply the coordinate-grouping comparison to each one-sided family and sum over the original nonzero blocks with the transported powers of the weights. </p>
+  <p> Apply the coordinate-grouping comparison to each one-sided family and sum over the original nonzero blocks with the corresponding powers of the weights. </p>
 
   </div>
 </div>
@@ -3801,7 +3808,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:unconditional_common_primitive_irreducible_blocks">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000886"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -3819,7 +3826,7 @@
           
           <li><a href="ch-canonical_after_blocking.html#thm:after_blocking_common_primitive_irreducible_blocks_reindexed">Theorem 12.24</a></li>
           
-          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.76</a></li>
+          <li><a href="ch-canonical.html#thm:common_blocked_cyclic_sector_flatten_word_of_block_cast">Lemma 9.78</a></li>
           
           <li><a href="ch-ft_proof.html#lem:common_grouped_block_cast_to_relabeling">Lemma 13.36</a></li>
           
@@ -3854,11 +3861,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Let \(A\) and \(B\) have the same MPV family. Then there is a positive blocking length at which both blocked tensors decompose into a leftover all-zero block and a weighted direct sum of trace-preserving, primitive, tensor-irreducible blocks with positive bond dimensions and nonzero weights. The two nonzero-sector families have the same positive-length MPV family, and the leftover zero blocks satisfy the length-zero identity. </p>
+  <p>   Let \(A\) and \(B\) have the same MPV family. Then there is a positive blocking length at which both blocked tensors have the same positive-length MPV family as weighted direct sums of trace-preserving, primitive, tensor-irreducible blocks with positive bond dimensions and nonzero weights. The two weighted nonzero-sector families have the same positive-length MPV family. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000886">
+<div class="proof_wrapper" id="a0000000892">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -3870,7 +3877,7 @@
 
   </div>
 </div>
-<div class="remark_thmwrapper theorem-style-remark" id="a0000000887">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000000893">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
@@ -3882,18 +3889,18 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-ft_proof.html#a0000000887">#</a>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000893">#</a>
     
     
     
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> The equal-case proof in the source starts after both tensors have been put in canonical form and after a basis of normal tensors has been chosen. In that notation the BNT expansion has the form </p>
-<div class="displaymath" id="a0000000888">
+  <p> The source proof starts after both tensors have been put in canonical form and after a basis of normal tensors has been chosen. In that notation the BNT expansion has the form </p>
+<div class="displaymath" id="a0000000894">
   \[  |V^{(N)}(A)\rangle  = \sum _{j=1}^g \left(\sum _{q=1}^{r^A_j}(\mu ^A_{j,q})^N\right) |V^{(N)}(A_j)\rangle ,  \]
 </div>
-<p> and similarly for \(B\). The proportional theorem of <span class="cite">
+<p> and similarly for&#160;\(B\). The proportional theorem of <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2016MPDO_arXiv" >CPGSV16</a>
@@ -3901,15 +3908,15 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	
 	]
-</span> first matches the BNT representatives: after a relabelling, </p>
-<div class="displaymath" id="a0000000889">
-  \[  B_j^i=e^{i\phi _j}Y_jA_j^iY_j^{-1}.  \]
+</span> first pairs the BNT representatives: after relabelling, </p>
+<div class="displaymath" id="a0000000895">
+  \[  B_j^i=e^{\mathrm{i}\phi _j}Y_jA_j^iY_j^{-1}.  \]
 </div>
-<p> Only after this representative matching does the equal case compare the scalar coefficient power sums: for each \(j=1,\ldots ,g\) and \(N\ge 1\), the sums \(\sum _{q=1}^{r^A_j}(\mu ^A_{j,q})^N\) and \(\sum _{q=1}^{r^B_j}(\mu ^B_{j,q}e^{i\phi _j})^N\) are equal. Newton–Girard then recovers the multiplicities and weight multisets, and the block gauges \(Y_j\) are placed on the diagonal to give the global conjugating matrix. This is the equal-case corollary <span class="cite">
+<p> The equal case then uses the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">11</a>: Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">11.41</a> gives the matched coefficient identities, Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">11.43</a> recovers multiplicities and weight multisets, and Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">11.48</a> assembles the block gauges \(Y_j\) into the block-diagonal global conjugating matrix. This is the equal-case corollary <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, Corollary&#160;II.2, lines 354–361 and appendix 1172–1192
+	, Corollary&#160;II.2
 	]
 </span>, restated in <span class="cite">
 	[
@@ -3918,25 +3925,18 @@
 	, Corollary&#160;IV.5
 	]
 </span>. </p>
-<p>The formalization of this route is split into two theorems. The first gives the BNT basis bijection \(\beta \), the per-block gauge-phase witnesses, copy-count equality, and the scalar coefficient comparison \(\nu _{k,q} = \zeta _k^{-1} \mu _{\beta (k),\tau (q)}\) that follows from the source power-sum comparison. The second assembles the per-block gauge matrices \(Y_j = X_k\) on the flattened direct sum to produce the global conjugation \(X\), matching the appendix construction at <span class="cite">
-	[
-	
-	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
-	, lines 1189–1192
-	]
-</span>. </p>
-<p>The comparison theorems above formalize only the part of this route after the common blocked nonzero sectors and their BNT matching data have been supplied. The structural reduction supplies a common positive blocking length and decompositions </p>
-<div class="displaymath" id="a0000000890">
+<p>The comparison theorems above start after the common blocked nonzero sectors and their BNT block comparison have been supplied. The structural reduction gives a common positive blocking length and decompositions </p>
+<div class="displaymath" id="a0000000896">
   \[  A^{[p]}\sim \mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}}, \qquad B^{[p]}\sim \mathbf{0}_{d^p,z_B}\oplus B_{\mathrm{nz}}, \qquad z_A=z_B,  \]
 </div>
-<p> with trace-preserving, primitive, irreducible nonzero sectors. The remaining inputs are the one-site injectivity of those sectors and the BNT block-matching comparison for the representative families. These are genuine upstream assumptions of the conditional statements here; they are not proved from equality of MPV families in this chapter. </p>
-<p>Common phase covers are an auxiliary way to express the finite-length span equality needed by the sector-comparison theorem. They are not a separate form of the source theorem. Lemma&#160;<a href="ch-ft_proof.html#lem:mpv_common_phase_cover_span_eq">13.25</a> turns a common phase cover into span equality, while Lemma&#160;<a href="ch-ft_proof.html#lem:common_phase_cover_of_block_matching">13.26</a> constructs such covers from BNT block-matching data. Establishing the missing representative BNT comparison and exact-length block-injective span remains the open CPSV passage from equality of total MPV vectors to the componentwise power-sum identities. </p>
+<p> with trace-preserving, primitive, irreducible nonzero sectors. The remaining inputs for the unrestricted source theorem are one-site injectivity of those sectors and the BNT block comparison for the representative families. </p>
+<p>Common phase covers are only a criterion for the finite-length span equality needed by the sector-comparison theorem. Lemma&#160;<a href="ch-ft_proof.html#lem:mpv_common_phase_cover_span_eq">13.25</a> turns a common phase cover into span equality, while Lemma&#160;<a href="ch-ft_proof.html#lem:common_phase_cover_of_block_matching">13.26</a> constructs such covers from BNT block-matching information. </p>
 
   </div>
 </div>
 <h1 id="sec:ft_overlap_bnt_preparation">13.4 Overlap and BNT preparation for the Fundamental Theorem</h1>
 
-<p>The following results are source-relevant overlap and basis-of-normal-tensors preparation steps. They are not part of the after-blocking canonical-form reduction, and they are not direct consequences of the injective single-block Fundamental Theorem. Instead, they supply the overlap dichotomy, phase normalization, and eventual linear independence used when passing from normal blocks to BNT representatives. The purely same-index direct-sum assembly statements are collected in Chapter&#160;<a href="ch-algebraic_ft.html">16</a>. </p>
+<p>The following results supply the single-block and basis-of-normal-tensors inputs for the sector comparison. The proportional single-block theorem gives gauge-phase equivalence from proportional MPVs. The overlap-limit criterion then gives eventual linear independence of the chosen BNT representatives. The same-index direct-sum constructions are collected in Chapter&#160;<a href="ch-algebraic_ft.html">16</a>. </p>
 <h2 id="subsec:ft_proportional_single_block">13.4.1 Proportional single-block ingredient</h2>
 
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:proportional_ft">
@@ -3955,7 +3955,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:proportional_ft">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000891"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000897"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4012,7 +4012,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000891">
+<div class="proof_wrapper" id="a0000000897">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4020,14 +4020,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By contradiction. If \(A\) and \(B\) are not gauge-phase equivalent, then \(O_{AB}(N) \to 0\) (Theorem&#160;<a href="ch-spectral.html#thm:overlap_decay">7.25</a>). From the proportionality hypothesis, \(O_{AB}(N) = c_N O_{BB}(N)\). Since \(O_{BB}(N) \to 1\), it follows that \(c_N \to 0\). But \(O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0\), contradicting \(O_{AA}(N) \to 1\). </p>
-<p>In&#160;<span class="cite">
-	[
-	
-	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
-	
-	]
-</span>, the proportional case is handled as part of the canonical form argument. Here it is obtained directly from the overlap-decay theorem. </p>
+  <p> Suppose \(A\) and \(B\) are not gauge-phase equivalent. Then the overlap-decay theorem gives \(O_{AB}(N)\to 0\). The proportionality hypothesis gives </p>
+<div class="displaymath" id="a0000000898">
+  \[  O_{AB}(N)=c_N O_{BB}(N), \qquad O_{AA}(N)=|c_N|^2 O_{BB}(N).  \]
+</div>
+<p> Since \(O_{BB}(N)\to 1\), the first identity implies \(c_N\to 0\). The second identity then gives \(O_{AA}(N)\to 0\), contradicting \(O_{AA}(N)\to 1\). </p>
 
   </div>
 </div>
@@ -4049,7 +4046,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:unit_modulus_phase_tp_prim_irred">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000892"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000899"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4067,11 +4064,11 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.16</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.16</a></li>
           
         </ul>
     
@@ -4106,7 +4103,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000892">
+<div class="proof_wrapper" id="a0000000899">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4134,7 +4131,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_li_from_overlap_limits_exists">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000893"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000900"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4187,7 +4184,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000893">
+<div class="proof_wrapper" id="a0000000900">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4215,7 +4212,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sector_decomp_linear_independent">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000894"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000901"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4231,15 +4228,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.43</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.45</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.44</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.46</a></li>
           
           <li><a href="ch-bnt.html#def:bnt">Definition 11.1</a></li>
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.43</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.45</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.44</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.46</a></li>
           
         </ul>
     
@@ -4274,7 +4271,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000894">
+<div class="proof_wrapper" id="a0000000901">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -4282,7 +4279,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">9.44</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
+  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">9.46</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
 
   </div>
 </div>
@@ -4292,7 +4289,7 @@
     Definition
     </span>
     <span class="definition_thmlabel">13.43</span>
-    <span class="definition_thmtitle">MPV phase class data</span>
+    <span class="definition_thmtitle">MPV phase classes</span>
     <div class="thm_header_extras">
 
     
@@ -4330,7 +4327,11 @@
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p>  For a finite family of blocks, put \(j \sim k\) when there is a nonzero scalar factor \(\zeta \) such that \(|V^{(N)}(B_k)\rangle =\zeta ^N|V^{(N)}(B_j)\rangle \) for every length&#160;\(N\). The associated structure enumerates the finite quotient, chooses one representative per class, records the scalar relating the representative to each member, and shows that distinct representatives are not gauge-phase equivalent. </p>
+  <p>  For a finite family of blocks, put \(j \sim k\) when there is a nonzero scalar factor \(\zeta \) such that </p>
+<div class="displaymath" id="a0000000902">
+  \[  |V^{(N)}(B_k)\rangle  = \zeta ^N|V^{(N)}(B_j)\rangle   \]
+</div>
+<p> for every length&#160;\(N\). The associated tuple enumerates the finite quotient, chooses one representative per class, records the scalar relating the representative to each member, and proves that distinct representatives are not MPV-phase equivalent. </p>
 
   </div>
 </div>
@@ -4350,7 +4351,7 @@
 
     <a class="icon proof" href="ch-ft_proof.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">#</a>
     
-    <a class="icon proof" href="ch-ft_proof.html#a0000000895"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-ft_proof.html#a0000000903"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -4409,7 +4410,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000000895">
+<div class="proof_wrapper" id="a0000000903">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
