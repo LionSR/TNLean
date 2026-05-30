@@ -2084,7 +2084,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7fd8c330a750>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f23f2df2750>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) &  = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond} \\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) &  = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
@@ -5501,87 +5501,13 @@
   \[  \sum _k \mu _k^N V^{(N)}(A_k)_\sigma = \sum _k \mu _k^N V^{(N)}(B_k)_\sigma ,  \]
 </div>
 <p> which is then combined with overlap estimates and the leading-block peel. </p>
-<div class="definition_thmwrapper theorem-style-definition" id="def:isCanonicalForm">
-  <div class="definition_thmheading">
-    <span class="definition_thmcaption">
-    Definition
-    </span>
-    <span class="definition_thmlabel">16.60</span>
-    <span class="definition_thmtitle">Canonical-form data with ordered weights</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-algebraic_ft.html#def:isCanonicalForm">#</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.IsCanonicalForm" class="lean_decl">MPSTensor.IsCanonicalForm</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="definition_thmcontent">
-  <p>   A family of block tensors \(\{ A_k\} _{k=0}^{r-1}\) with scaling weights \(\mu _0, \ldots , \mu _{r-1} \in \mathbb {C}^{\times }\) has <em>canonical-form data with ordered weights</em> if: </p>
-<ol class="enumerate">
-  <li><p>each \(A_k\) is injective, </p>
-</li>
-  <li><p>each \(A_k\) is left-canonical: \(\sum _i (A_k^i)^{\dagger }\,  A_k^i = \mathbb {1}_{D_k}\), </p>
-</li>
-  <li><p>the weights are non-increasing by norm and nonzero: \(|\mu _0| \ge |\mu _1| \ge \cdots \ge |\mu _{r-1}| {\gt} 0\), </p>
-</li>
-  <li><p>the self-overlaps are normalised: \(O_{A_k A_k}(N) \to 1\) as \(N \to \infty \). </p>
-</li>
-</ol>
-<p> This records the normalized ordered data used before the final block-separation argument. Equal-modulus blocks are still allowed here, as in the canonical decompositions in arXiv:1606.00608. The strict inequality needed for the leading-block peeling argument is a separate hypothesis in the block-separation lemmas below, and at the BNT level it is obtained only after grouping repeated representatives. </p>
-
-  </div>
-</div>
+<p>The bundled canonical-form predicate and its same-structure block-separation theorem are recorded once, in Chapter&#160;<a href="ch-block_perm.html">10</a> (Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">10.12</a> and Lemma&#160;<a href="ch-block_perm.html#lem:block_sep">10.19</a>). This chapter only records the separated-data refinements used by the algebraic fundamental-theorem statements below. </p>
 <div class="remark_thmwrapper theorem-style-remark" id="a0000001103">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.61</span>
+    <span class="remark_thmlabel">16.60</span>
     <div class="thm_header_extras">
 
         </div>
@@ -5603,7 +5529,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.62</span>
+    <span class="lemma_thmlabel">16.61</span>
     <span class="lemma_thmtitle">Block separation from weighted word identities</span>
     <div class="thm_header_extras">
 
@@ -5681,13 +5607,13 @@
 
   </div>
 </div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:per_block_sameMPV_of_canonical_form">
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:per_block_sameMPV_of_separated_canonical_data">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.63</span>
-    <span class="lemma_thmtitle">Block separation from canonical-form data and strict weights</span>
+    <span class="lemma_thmlabel">16.62</span>
+    <span class="lemma_thmtitle">Block separation from separated canonical data</span>
     <div class="thm_header_extras">
 
     
@@ -5695,7 +5621,7 @@
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_canonical_form">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">#</a>
     
     <a class="icon proof" href="ch-algebraic_ft.html#a0000001106"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
@@ -5713,97 +5639,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#def:isCanonicalForm">Definition 16.60</a></li>
-          
           <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
           
-          <li><a href="ch-algebraic_ft.html#def:isCanonicalForm">Definition 16.60</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.per_block_sameMPV_of_canonical_form" class="lean_decl">MPSTensor.per_block_sameMPV_of_canonical_form</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   Let \(\{ A_k\} \) have canonical-form data with ordered weights \(\{ \mu _k\} \), and assume in addition that the weight norms are strictly decreasing. Let \(\{ B_k\} \) be another family with each \(B_k\) injective and left-canonical. If \(\mathcal{V}\! (\bigoplus _k \mu _k A_k) = \mathcal{V}\! (\bigoplus _k \mu _k B_k)\), then \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for each block&#160;\(k\) individually. The proof isolates the leading block and treats the remaining blocks as an exponentially decaying tail with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000001106">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> The proof proceeds by strong induction on the number of blocks&#160;\(r\). For \(r = 1\), the weighted sum degenerates and the result is immediate after cancelling \(\mu _0^N \ne 0\). </p>
-<p>For \(r \ge 2\), the global identity \(\sum _k \mu _k^N\,  \bigl(V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma \bigr) = 0\) holds for all \(N\) and \(\sigma \). </p>
-<div class="displaymath" id="a0000001107">
-  \[  \mu _0^N (V^{(N)}(A_0)_\sigma - V^{(N)}(B_0)_\sigma ) = - \sum _{k \ge 1} \mu _k^N (V^{(N)}(A_k)_\sigma - V^{(N)}(B_k)_\sigma ).  \]
-</div>
-<p> Dividing by \(\mu _0^N\) shows that the right-hand side is \(O(\rho ^N)\) with \(\rho = |\mu _1|/|\mu _0| {\lt} 1\). Multiplying by the MPV components of \(A_0\) and summing over \(\sigma \) converts this to an overlap identity. Dividing by \(|\mu _0|^{2N}\) and using the strict norm ordering \(|\mu _1| / |\mu _0| {\lt} 1\), the tail terms \((k \ge 1)\) decay geometrically with ratio \(\rho = |\mu _1| / |\mu _0|\). The leading term (\(k = 0\)) therefore converges: \(O_{A_0 B_0}(N) \to 1\) as \(N \to \infty \). Combined with the normalised self-overlap \(O_{A_0 A_0}(N) \to 1\), this gives \(\mathcal{V}(A_0) = \mathcal{V}(B_0)\) via the gauge-phase equivalence criterion. Subtracting the leading block and applying the inductive hypothesis yields \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\) for all remaining \(k\). </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:per_block_sameMPV_of_separated_canonical_data">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">16.64</span>
-    <span class="lemma_thmtitle">Block separation from separated canonical data</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">#</a>
-    
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001108"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-mps.html#def:same_mpv">Definition 2.11</a></li>
-          
-          <li><a href="ch-algebraic_ft.html#lem:block_separation_all_words">Lemma 16.62</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:block_separation_all_words">Lemma 16.61</a></li>
           
         </ul>
     
@@ -5838,7 +5676,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001108">
+<div class="proof_wrapper" id="a0000001106">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5846,7 +5684,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Equality of the block-diagonal MPV families gives the weighted word identity required by Lemma&#160;<a href="ch-algebraic_ft.html#lem:block_separation_all_words">16.62</a>. The separated hypotheses supply exactly the injectivity, left-canonicality, strict-weight, and self-overlap assumptions needed there. </p>
+  <p> Equality of the block-diagonal MPV families gives the weighted word identity required by Lemma&#160;<a href="ch-algebraic_ft.html#lem:block_separation_all_words">16.61</a>. The separated hypotheses supply exactly the injectivity, left-canonicality, strict-weight, and self-overlap assumptions needed there. </p>
 
   </div>
 </div>
@@ -5855,7 +5693,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.65</span>
+    <span class="lemma_thmlabel">16.63</span>
     <span class="lemma_thmtitle">Gauge comparison from separated canonical data</span>
     <div class="thm_header_extras">
 
@@ -5866,7 +5704,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001109"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001107"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5882,9 +5720,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.64</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.62</a></li>
           
-          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.64</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.62</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">Lemma 16.51</a></li>
           
@@ -5917,11 +5755,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Under the hypotheses of Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.64</a>, every block pair \(A_k,B_k\) is gauge equivalent, and the block-diagonal tensors are globally gauge equivalent. </p>
+  <p>   Under the hypotheses of Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.62</a>, every block pair \(A_k,B_k\) is gauge equivalent, and the block-diagonal tensors are globally gauge equivalent. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001109">
+<div class="proof_wrapper" id="a0000001107">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -5929,7 +5767,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> First apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.64</a> to get \(\mathcal{V}(A_k)=\mathcal{V}(B_k)\) for every block&#160;\(k\). Then apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">16.51</a>. </p>
+  <p> First apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.62</a> to get \(\mathcal{V}(A_k)=\mathcal{V}(B_k)\) for every block&#160;\(k\). Then apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">16.51</a>. </p>
 
   </div>
 </div>
@@ -5938,7 +5776,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.66</span>
+    <span class="lemma_thmlabel">16.64</span>
     <span class="lemma_thmtitle">Explicit gauge from separated canonical data</span>
     <div class="thm_header_extras">
 
@@ -5949,7 +5787,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001110"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001108"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -5965,9 +5803,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data">Lemma 16.65</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data">Lemma 16.63</a></li>
           
-          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.64</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">Lemma 16.62</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_explicit">Lemma 16.52</a></li>
           
@@ -6001,14 +5839,14 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Under the same hypotheses, there exist invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that </p>
-<div class="displaymath" id="a0000001111">
+<div class="displaymath" id="a0000001109">
   \[  B_k^i = X_k\,  A_k^i\,  X_k^{-1}  \]
 </div>
 <p> for every block \(k\) and physical index \(i\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001110">
+<div class="proof_wrapper" id="a0000001108">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6016,92 +5854,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.64</a> with the matrices \(X_k\) from Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_explicit">16.52</a>. </p>
-
-  </div>
-</div>
-<div class="lemma_thmwrapper theorem-style-plain" id="lem:fundamentalTheorem_canonicalForm">
-  <div class="lemma_thmheading">
-    <span class="lemma_thmcaption">
-    Lemma
-    </span>
-    <span class="lemma_thmlabel">16.67</span>
-    <span class="lemma_thmtitle">Gauge comparison from canonical-form data and strict weights</span>
-    <div class="thm_header_extras">
-
-    
-    ✓
-        </div>
-    <div class="thm_header_hidden_extras">
-
-    <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_canonicalForm">#</a>
-    
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001112"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
-</a>
-    
-    
-    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
-</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Uses</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_canonical_form">Lemma 16.63</a></li>
-          
-          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">Lemma 16.51</a></li>
-          
-          <li><a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_canonical_form">Lemma 16.63</a></li>
-          
-          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">Lemma 16.51</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-    
-    <button class="modal lean">L∃∀N</button>
-        <div class="modal-container">
-      <div class="modal-content">
-        <header>
-          <h1>Lean declarations</h1>
-          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
-</button>
-        </header>
-        
-        <ul class="uses">
-          
-          <li><a href="../docs/find/#doc/MPSTensor.fundamentalTheorem_canonicalForm" class="lean_decl">MPSTensor.fundamentalTheorem_canonicalForm</a></li>
-          
-        </ul>
-    
-      </div>
-    </div>
-
-    
-        </div>
-  </div>
-  <div class="lemma_thmcontent">
-  <p>   Under the hypotheses of Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_canonical_form">16.63</a>, every block pair \(A_k, B_k\) is gauge equivalent, and the block-diagonal tensors are globally gauge equivalent. </p>
-
-  </div>
-</div>
-<div class="proof_wrapper" id="a0000001112">
-  <div class="proof_heading">
-    <span class="proof_caption">
-    Proof
-    </span>
-    <span class="expand-proof">▶</span>
-  </div>
-  <div class="proof_content">
-  <p> Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_canonical_form">16.63</a> gives per-block \(\mathcal{V}(A_k) = \mathcal{V}(B_k)\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_full">16.51</a> converts this to per-block and global gauge equivalence. </p>
+  <p> Combine Lemma&#160;<a href="ch-algebraic_ft.html#lem:per_block_sameMPV_of_separated_canonical_data">16.62</a> with the matrices \(X_k\) from Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_multiBlock_explicit">16.52</a>. </p>
 
   </div>
 </div>
@@ -6110,7 +5863,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.68</span>
+    <span class="lemma_thmlabel">16.65</span>
     <span class="lemma_thmtitle">Explicit gauge from canonical-form data and strict weights</span>
     <div class="thm_header_extras">
 
@@ -6121,7 +5874,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:fundamentalTheorem_canonicalForm_explicit">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001113"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001110"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6137,9 +5890,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">Lemma 16.66</a></li>
+          <li><a href="ch-block_perm.html#def:is_canonical_form">Definition 10.12</a></li>
           
-          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">Lemma 16.66</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">Lemma 16.64</a></li>
+          
+          <li><a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">Lemma 16.64</a></li>
           
         </ul>
     
@@ -6170,11 +5925,11 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Under the same hypotheses, there exist invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that \(B_k^i = X_k\,  A_k^i\,  X_k^{-1}\) for every block \(k\) and physical index \(i\). </p>
+  <p>   Under the canonical-form hypotheses of Definition&#160;<a href="ch-block_perm.html#def:is_canonical_form">10.12</a>, together with strict decrease of the weight moduli and the corresponding injective left-canonical comparison family, there exist invertible matrices \(X_k \in \mathrm{GL}_{D_k}(\mathbb {C})\) such that \(B_k^i = X_k\,  A_k^i\,  X_k^{-1}\) for every block \(k\) and physical index \(i\). </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001113">
+<div class="proof_wrapper" id="a0000001110">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6182,7 +5937,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">16.66</a> with the strict-ordering data from the separated hypotheses. </p>
+  <p> Apply Lemma&#160;<a href="ch-algebraic_ft.html#lem:fundamentalTheorem_of_separated_canonical_data_explicit">16.64</a> with the strict-ordering data from the separated hypotheses. </p>
 
   </div>
 </div>
@@ -6193,7 +5948,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.69</span>
+    <span class="lemma_thmlabel">16.66</span>
     <span class="lemma_thmtitle">Equal-case block matching with differing bond dimensions</span>
     <div class="thm_header_extras">
 
@@ -6204,7 +5959,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:ft_sector_bnt_equal_sector_data_different_dims">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001114"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001111"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6265,7 +6020,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001114">
+<div class="proof_wrapper" id="a0000001111">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6284,7 +6039,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.70</span>
+    <span class="theorem_thmlabel">16.67</span>
     <span class="theorem_thmtitle">Translation-invariant reduction corollary</span>
     <div class="thm_header_extras">
 
@@ -6295,7 +6050,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#thm:ti_reduction_corollary">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001115"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001112"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6356,7 +6111,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001115">
+<div class="proof_wrapper" id="a0000001112">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6373,7 +6128,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.71</span>
+    <span class="theorem_thmlabel">16.68</span>
     <span class="theorem_thmtitle">Translation-invariant reduction from same state</span>
     <div class="thm_header_extras">
 
@@ -6384,7 +6139,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#thm:ti_reduction_of_sameState">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001116"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001113"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6402,11 +6157,11 @@
           
           <li><a href="ch-algebraic_ft.html#def:same_state_reduction_hyp">Definition 16.18</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.70</a></li>
+          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.67</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:sameMPV_chainCombined_of_sameState">Lemma 16.19</a></li>
           
-          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.70</a></li>
+          <li><a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">Theorem 16.67</a></li>
           
         </ul>
     
@@ -6437,11 +6192,11 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Assume a same-state reduction hypothesis for \((d,D)\). Let \(A\) and \(B\) be MPS tensors of bond dimension \(D\), and let \(n \ge 3\). If the two constant chains \((A,\ldots ,A)\) and \((B,\ldots ,B)\) generate the same chain state, with \(A\) injective, then the same conclusion as in Theorem&#160;<a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">16.70</a> holds: \(B\) is gauge equivalent to \(A\), and \(B\) is injective. </p>
+  <p>   Assume a same-state reduction hypothesis for \((d,D)\). Let \(A\) and \(B\) be MPS tensors of bond dimension \(D\), and let \(n \ge 3\). If the two constant chains \((A,\ldots ,A)\) and \((B,\ldots ,B)\) generate the same chain state, with \(A\) injective, then the same conclusion as in Theorem&#160;<a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">16.67</a> holds: \(B\) is gauge equivalent to \(A\), and \(B\) is injective. </p>
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001116">
+<div class="proof_wrapper" id="a0000001113">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6449,7 +6204,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The same-state reduction hypothesis upgrades equality of the two constant chain states to equality of their combined-tensor MPV families. Then Theorem&#160;<a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">16.70</a> applies. </p>
+  <p> The same-state reduction hypothesis upgrades equality of the two constant chain states to equality of their combined-tensor MPV families. Then Theorem&#160;<a href="ch-algebraic_ft.html#thm:ti_reduction_corollary">16.67</a> applies. </p>
 
   </div>
 </div>
@@ -6460,7 +6215,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.72</span>
+    <span class="lemma_thmlabel">16.69</span>
     <span class="lemma_thmtitle">Gauge ratio commutes with tensor matrices</span>
     <div class="thm_header_extras">
 
@@ -6471,7 +6226,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001117"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001114"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6524,7 +6279,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001117">
+<div class="proof_wrapper" id="a0000001114">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6541,7 +6296,7 @@
     <span class="lemma_thmcaption">
     Lemma
     </span>
-    <span class="lemma_thmlabel">16.73</span>
+    <span class="lemma_thmlabel">16.70</span>
     <span class="lemma_thmtitle">Gauge ratio is scalar for injective tensors</span>
     <div class="thm_header_extras">
 
@@ -6552,7 +6307,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001120"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001117"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6568,13 +6323,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.72</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.69</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.12</a></li>
           
-          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.72</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">Lemma 16.69</a></li>
           
           <li><a href="ch-algebraic_ft.html#lem:center_scalar">Lemma 16.12</a></li>
           
@@ -6611,7 +6366,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001120">
+<div class="proof_wrapper" id="a0000001117">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6619,7 +6374,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The same two-gauge picture shows that the ratio \(Y^{-1}X\) acts invisibly on the local tensor. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">16.72</a>, \(Y^{-1}X\) commutes with all \(A^i\). Since \(\{ A^i\} \) spans \(M_{D}(\mathbb {C})\), the matrix \(Y^{-1}X\) commutes with all of \(M_{D}(\mathbb {C})\). By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.12</a>, it is a scalar matrix. </p>
+  <p> The same two-gauge picture shows that the ratio \(Y^{-1}X\) acts invisibly on the local tensor. By Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_commutes">16.69</a>, \(Y^{-1}X\) commutes with all \(A^i\). Since \(\{ A^i\} \) spans \(M_{D}(\mathbb {C})\), the matrix \(Y^{-1}X\) commutes with all of \(M_{D}(\mathbb {C})\). By Lemma&#160;<a href="ch-algebraic_ft.html#lem:center_scalar">16.12</a>, it is a scalar matrix. </p>
 
   </div>
 </div>
@@ -6628,7 +6383,7 @@
     <span class="theorem_thmcaption">
     Theorem
     </span>
-    <span class="theorem_thmlabel">16.74</span>
+    <span class="theorem_thmlabel">16.71</span>
     <span class="theorem_thmtitle">Projective multiplication law for gauge matrices</span>
     <div class="thm_header_extras">
 
@@ -6639,7 +6394,7 @@
 
     <a class="icon proof" href="ch-algebraic_ft.html#thm:gaugeMatrix_projective_mul">#</a>
     
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001121"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001118"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
 </a>
     
     
@@ -6655,7 +6410,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.73</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.70</a></li>
           
           <li><a href="ch-mps.html#def:injective">Definition 2.28</a></li>
           
@@ -6663,7 +6418,7 @@
           
           <li><a href="ch-symmetry.html#lem:twisted_tensor_mul">Lemma 14.5</a></li>
           
-          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.73</a></li>
+          <li><a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">Lemma 16.70</a></li>
           
           <li><a href="ch-symmetry.html#lem:twisted_tensor_mul">Lemma 14.5</a></li>
           
@@ -6697,7 +6452,7 @@
   </div>
   <div class="theorem_thmcontent">
   <p>   Let \(A\) be an injective MPS tensor with on-site symmetry under a group representation \(U : G \to \mathrm{GL}_d(\mathbb {C})\). For each \(g \in G\), let \(X(g) \in \mathrm{GL}_D(\mathbb {C})\) satisfy \(\widetilde{A}_g^i = X(g)\,  A^i\,  X(g)^{-1}\) for all&#160;\(i\). Then for all \(g, h \in G\), there exists \(c(g,h) \in \mathbb {C}\) such that </p>
-<div class="displaymath" id="a0000001122">
+<div class="displaymath" id="a0000001119">
   \[  X(h)\,  X(g) = c(g,h)\,  X(g \cdot h).  \]
 </div>
 <p> In fact \(c(g,h) \ne 0\) since both sides are invertible, so \(c(g,h) \in \mathbb {C}^{\times }\). Diagrammatically, the two candidate gauges are competing local replacements for the same twisted tensor: </p>
@@ -6706,7 +6461,7 @@
 
   </div>
 </div>
-<div class="proof_wrapper" id="a0000001121">
+<div class="proof_wrapper" id="a0000001118">
   <div class="proof_heading">
     <span class="proof_caption">
     Proof
@@ -6714,24 +6469,24 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> By the composition law \(\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g\) (Lemma&#160;<a href="ch-symmetry.html#lem:twisted_tensor_mul">14.5</a>), both \(X(h)\, X(g)\) and \(X(gh)\) conjugate \(A\) to \(\widetilde{A}_{gh}\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">16.73</a> then gives the scalar factor. </p>
+  <p> By the composition law \(\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g\) (Lemma&#160;<a href="ch-symmetry.html#lem:twisted_tensor_mul">14.5</a>), both \(X(h)\, X(g)\) and \(X(gh)\) conjugate \(A\) to \(\widetilde{A}_{gh}\). Lemma&#160;<a href="ch-algebraic_ft.html#lem:gauge_ratio_isScalar">16.70</a> then gives the scalar factor. </p>
 
   </div>
 </div>
 <h1 id="sec:closing">16.14 Closing remarks</h1>
 
-<div class="remark_thmwrapper theorem-style-remark" id="a0000001124">
+<div class="remark_thmwrapper theorem-style-remark" id="a0000001121">
   <div class="remark_thmheading">
     <span class="remark_thmcaption">
     Remark
     </span>
-    <span class="remark_thmlabel">16.75</span>
+    <span class="remark_thmlabel">16.72</span>
     <div class="thm_header_extras">
 
         </div>
     <div class="thm_header_hidden_extras">
 
-    <a class="icon proof" href="ch-algebraic_ft.html#a0000001124">#</a>
+    <a class="icon proof" href="ch-algebraic_ft.html#a0000001121">#</a>
     
     
     
