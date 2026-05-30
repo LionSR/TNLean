@@ -66,13 +66,15 @@ theorem sameMPV₂Pos_of_zeroTail_eq
     _ = mpv live σ := by
       rw [hZero, zero_add]
 
-/-- The length-zero coefficient of a zero-tail decomposition is the bond-dimension identity. -/
+/-- The length-zero coefficient of a zero-tail decomposition is the bond-dimension identity.
+
+At the empty word, the MPV coefficient is the trace of the identity on the
+corresponding bond space. -/
 theorem zeroTail_bondDim_eq_of_mpv_decomp
     {d D L z : ℕ} (A : MPSTensor d D) (live : MPSTensor d L)
     (hZeroTail : ∀ (N : ℕ) (σ : Fin N → Fin d),
       mpv A σ = mpv (zeroMPSTensor d z) σ + mpv live σ) :
     z + L = D := by
-  classical
   let σ0 : Fin 0 → Fin d := Fin.elim0
   have hCoeff : (D : ℂ) = (z + L : ℕ) := by
     calc
