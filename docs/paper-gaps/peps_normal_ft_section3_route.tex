@@ -285,8 +285,12 @@ rather than repeat this status in full.
 The following part of the formalization is already present.
 \begin{itemize}
     \item Region injectivity is represented by
-          \leanid{TNLean.PEPS.RegionInjectivityData}, with region complements
-          and the finite-region union-closure hypothesis.
+          \leanid{TNLean.PEPS.RegionInjectivityData}; the same infrastructure
+          contains the region-complement definitions
+          \leanid{TNLean.PEPS.regionComplement} and
+          \leanid{TNLean.PEPS.regionOutsideUnion}, and the finite-region
+          union-closure hypothesis
+          \leanid{TNLean.PEPS.RegionInjectivityUnionClosure}.
     \item The four-region decomposition for Lemma \path{injective_union} is
           formalized both by named regions and by the indexed family
           \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
