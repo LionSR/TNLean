@@ -142,7 +142,9 @@ Source: arXiv:1804.04964, Section 3, Lemma inj_isomorph, equations
 eq:resonate--eq:O->X, lines 355--486 of the local paper source.
 
 **Proof status:** This declaration states the source recovery step used by the
-insertion-algebra theorem. Its proof is tracked by issue #1370. -/
+insertion-algebra theorem. The current formal status is recorded in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section "Remaining
+mathematical obligations". -/
 theorem physical_to_virtual_insertion
     (A : Tensor G d) (e : Edge G)
     (hA : EdgeBlockedThreeSiteInjective (G := G) A e)

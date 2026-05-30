@@ -107,7 +107,9 @@ reindex the finite inserted-boundary sum along the diagonal.
 \section{Remaining mathematical obligations}
 
 The following statements are still needed before the injective PEPS Fundamental
-Theorem can be proved in the manner of the paper.
+Theorem can be proved in the manner of the paper.\footnote{This list and the
+ledger below are the status record referenced by the Section~3 docstrings and
+blueprint comments.}
 
 \begin{enumerate}
 \item Vertex injectivity must be shown to pass to the edge-blocked three-site
@@ -143,7 +145,8 @@ Theorem can be proved in the manner of the paper.
   applying this to all edges satisfying $M_e\ne\varnothing$ gives
   \path{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
   The graph-cardinality variant
-  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
+  \leanid{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.%
+edgeBlockedThreeSiteInjective_all_two_lt_card}
   packages the common case $2<|V|$: since $|M_e|=|V|-2>0$ for every edge,
   the nonempty-middle hypothesis is automatic.
   Vertex injectivity supplies the two endpoint assertions by
@@ -247,6 +250,11 @@ Theorem can be proved in the manner of the paper.
   uses the abstract two-block notation with nonempty external boundary spaces;
   the source comparison is obtained from the one-vertex and complement blocks
   after \path{eq:inj_equal_edge}.
+\item The boundary-insertion argument must remove the separate
+  bond-dimension-identification hypothesis in
+  \leanid{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}. This is the
+  remaining difference between that conditional theorem and the source theorem;
+  it is tracked by issue~\#874.
 \end{enumerate}
 
 \section{Source-to-formalization ledger}
@@ -309,7 +317,7 @@ It is meant to prevent the proof from drifting away from the source argument.
   The source proof is tracked by issue~\#1360.
 \item Final gauge equivalence and uniqueness:
   \path{thm:fundamentalTheorem_PEPS_of_bondDim} and the uniqueness theorem,
-  tracked by issues~\#780 and~\#842.
+  tracked by issues~\#780, \#842, and the boundary-insertion issue~\#874.
 \end{itemize}
 
 \section{Blueprint diagrams}

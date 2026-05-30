@@ -504,10 +504,10 @@ obtained by blocking $V\setminus\{u,v\}$ form an injective three-site chain.
 Source: arXiv:1804.04964, Section 3, eq:block_to_mps,
 `Papers/1804.04964/paper_normal.tex`, lines 979--1009.
 
-**Proof status:** This declaration states the source assertion. The missing
-proof is the finite-region contraction theorem saying that contracting
-vertex-injective tensors over the middle region gives an injective blocked
-tensor; it is tracked by issue #1366. -/
+**Proof status:** This declaration states the source assertion. The current
+formal reductions and the remaining finite-region contraction theorem are
+recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`, Section
+"Remaining mathematical obligations". -/
 theorem IsVertexInjective.edgeBlockedThreeSiteInjective {A : Tensor G d}
     (hA : IsVertexInjective A) (e : Edge G) :
     EdgeBlockedThreeSiteInjective (G := G) A e := by
