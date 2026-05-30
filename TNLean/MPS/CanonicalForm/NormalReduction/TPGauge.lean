@@ -28,19 +28,19 @@ Its public outputs are:
 * `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
   normalization for an irreducible block decomposition.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` —
-  the arbitrary-input version with the all-zero summands kept as a zero block.
+  the arbitrary-input version recording the positive-length nonzero-block equality
+  together with the length-zero dimension identity `D = zeroTailDim + ∑ dim`.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` —
-  the preceding theorem together with the length-zero bond-dimension identity.
+  the preceding theorem together with the total bond-dimension bound.
 * `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` —
-  the positive-length version with the explicit zero-block summand removed.
+  the positive-length version recording only the bond-dimension bound.
 * `MPSTensor.exists_pgvwc07_positiveLengthWitness` — the same positive-length
   theorem recorded as a single structured witness.
 * `MPSTensor.exists_tp_gauge_from_arbitrary_with_zeroTail` — the corresponding
   arbitrary-input result obtained after zero-block separation.
 
 The auxiliary declarations stay file-local because they are elementary lemmas for
-rescaling, gauge transport, and the final zero-block identity (the paper calls
-this the ``zero block'' case).
+rescaling and gauge transport.
 -/
 
 namespace MPSTensor
@@ -657,35 +657,17 @@ results: from any `A : MPSTensor d D`, we obtain:
 * a weighted family of nonzero blocks in either the PGVWC07 unital orientation
   with dual-diagonal fixed points or the older TP-gauge orientation.
 
-The MPV relationship accounts exactly for both contributions:
+The decomposition is recorded by two facts that carry all the content without
+constructing a separate zero tensor:
 
-  `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ blocks) σ`
+* the positive-length equality
+  `SameMPV₂Pos A (toTensorFromBlocks μ blocks)`, and
+* the length-zero dimension identity `D = zeroTailDim + ∑ k, dim k`.
 
 The PGVWC07 unital statement below is the strongest unconditional arbitrary-input
 step available here before the final total bond-dimension bound is threaded
 through the construction.
 -/
-
-private theorem mpv_zero_tail_chain_of_sameMPV₂
-    {Dnz r : ℕ} {zeroTailDim : ℕ}
-    {dim : Fin r → ℕ} {μ : Fin r → ℂ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)}
-    (A : MPSTensor d D)
-    (A_nonzero : MPSTensor d Dnz)
-    (hMPV₀ :
-      ∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ)
-    (hSame₁ : SameMPV₂ A_nonzero (toTensorFromBlocks (d := d) (μ := μ) blocks)) :
-    ∀ (N : ℕ) (σ : Fin N → Fin d),
-      mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-  intro N σ
-  calc
-    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv A_nonzero σ := hMPV₀ N σ
-    _ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-        congr 1
-        exact hSame₁ N σ
 
 /-- **Arbitrary-input PGVWC07 unital dual-diagonal form with zero blocks.**
 
@@ -725,11 +707,10 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
       (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) := by
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      D = zeroTailDim + ∑ k : Fin r, dim k := by
   classical
-  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hMPV₀⟩ :=
+  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hDimId₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
   let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r₀ => (1 : ℂ)) blocks₀
   have hSame_refl : SameMPV₂ A_nonzero
@@ -740,9 +721,13 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail
     exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
       hNonzero₀
   refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hΛData₁, hScalar₁,
-    hμPos₁, hμNe₁, hDim₁, ?_⟩
-  exact mpv_zero_tail_chain_of_sameMPV₂
-    (d := d) (D := D) (zeroTailDim := zeroTailDim) A A_nonzero hMPV₀ hSame₁
+    hμPos₁, hμNe₁, hDim₁, ?_, ?_⟩
+  · exact hPos₀.trans hSame₁.toSameMPV₂Pos
+  · have hsum : (∑ k : Fin r₀, dim₀ k) = ∑ k : Fin r₁, dim₁ k := by
+      have h0 := hSame₁ 0 (Fin.elim0 : Fin 0 → Fin d)
+      rw [mpv_zero_length, mpv_zero_length] at h0
+      exact_mod_cast h0
+    rw [hDimId₀, hsum]
 
 /-- **Bond-dimension identity for the arbitrary-input PGVWC07 zero-block form.**
 
@@ -774,31 +759,15 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
       (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) ∧
-      zeroTailDim + ∑ k : Fin r, dim k = D ∧
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      D = zeroTailDim + ∑ k : Fin r, dim k ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
-  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hMPV⟩ :=
+  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hPos, hDimId⟩ :=
     exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail (d := d) (D := D) A
-  let σ0 : Fin 0 → Fin d := Fin.elim0
-  have hZero :
-      (D : ℂ) = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := by
-    calc
-      (D : ℂ) = mpv A σ0 := (mpv_zero_length A σ0).symm
-      _ = mpv (zeroMPSTensor d zeroTailDim) σ0 +
-            mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ0 := hMPV 0 σ0
-      _ = (zeroTailDim : ℂ) + (∑ k : Fin r, dim k : ℂ) := by
-            simp
-      _ = (zeroTailDim + ∑ k : Fin r, dim k : ℕ) := by
-            simp
-  have hBond : zeroTailDim + ∑ k : Fin r, dim k = D := by
-    exact_mod_cast hZero.symm
-  have hBound : ∑ k : Fin r, dim k ≤ D := by
-    omega
-  exact ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hMPV,
-    hBond, hBound⟩
+  have hBound : ∑ k : Fin r, dim k ≤ D := by omega
+  exact ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, hμNe, hDim, hPos,
+    hDimId, hBound⟩
 
 /-- **Positive-length PGVWC07 unital dual-diagonal form.**
 
@@ -832,20 +801,11 @@ theorem exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound
       SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
   classical
-  obtain ⟨zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, _hμNe, hDim, hMPV,
-    _hBond, hBound⟩ :=
+  obtain ⟨_zeroTailDim, r, dim, μ, blocks, hΛ, hScalar, hμPos, _hμNe, hDim, hPos,
+    _hDimId, hBound⟩ :=
     exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound
       (d := d) (D := D) A
-  refine ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, ?_, hBound⟩
-  intro N hN σ
-  calc
-    mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-        mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := hMPV N σ
-    _ = 0 + mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-        rw [mpv_zeroMPSTensor]
-        simp [Nat.ne_of_gt hN]
-    _ = mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-        simp
+  exact ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hPos, hBound⟩
 
 /-- **Structured positive-length PGVWC07 canonical-form witness.**
 
@@ -896,7 +856,9 @@ Every nonzero block satisfies:
 * positive bond dimension;
 * nonzero weight.
 
-The MPV of `A` equals the zero-block contribution plus the weighted nonzero-block sum.
+At positive length, `A` has the same MPV as the weighted nonzero-block sum, and the
+zero-block contribution is recorded only through the length-zero dimension identity
+`D = zeroTailDim + ∑ k, dim k`.
 
 **Scope restriction (translation-invariant canonical-form proof step):**
 Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
@@ -916,12 +878,11 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ) := by
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      D = zeroTailDim + ∑ k : Fin r, dim k := by
   classical
   -- Step 1: Obtain the zero-block-separated irreducible decomposition.
-  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, hDim₀, hMPV₀⟩ :=
+  obtain ⟨zeroTailDim, r₀, dim₀, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hDimId₀⟩ :=
     exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
   -- Step 2: Apply blockwise TP gauge to the nonzero blocks.
   -- We feed `A_nonzero := toTensorFromBlocks μ=1 blocks₀` as the input tensor.
@@ -933,9 +894,13 @@ theorem exists_tp_gauge_from_arbitrary_with_zeroTail (A : MPSTensor d D) :
   obtain ⟨r₁, dim₁, μ₁, blocks₁, hSame₁, hIrr₁, hLeft₁, hμNe₁, hDim₁⟩ :=
     exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
   -- Step 3: Assemble the result.
-  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_⟩
-  exact mpv_zero_tail_chain_of_sameMPV₂
-    (d := d) (D := D) (zeroTailDim := zeroTailDim) A A_nonzero hMPV₀ hSame₁
+  refine ⟨zeroTailDim, r₁, dim₁, μ₁, blocks₁, hIrr₁, hLeft₁, hμNe₁, hDim₁, ?_, ?_⟩
+  · exact hPos₀.trans hSame₁.toSameMPV₂Pos
+  · have hsum : (∑ k : Fin r₀, dim₀ k) = ∑ k : Fin r₁, dim₁ k := by
+      have h0 := hSame₁ 0 (Fin.elim0 : Fin 0 → Fin d)
+      rw [mpv_zero_length, mpv_zero_length] at h0
+      exact_mod_cast h0
+    rw [hDimId₀, hsum]
 
 
 end MPSTensor
