@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.StructuralData
-import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorRepresentatives
+import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
