@@ -20,7 +20,7 @@ $D = D_0 + \sum_k D_k$, together with a positive-length equality of MPV families
 
 The present chapter develops the per-tensor steps. Chapter~%
 \ref{ch:canonical_after_blocking} continues the same chain past a common blocking
-length and outputs the primitive-block decomposition consumed by the Fundamental
+length and produces the primitive-block decomposition used in the Fundamental
 Theorem in Chapter~\ref{ch:ft_proof}. The grouping of equal-modulus and
 repeated-copy sectors into bases of normal tensors is carried out in
 Chapter~\ref{ch:bnt}.
@@ -530,11 +530,11 @@ the transfer map primitive, removing periodicity.
     distinct moduli and one copy per sector. This is the distinct-modulus,
     one-copy subcase: equal-modulus sectors are first grouped by the common value
     of $|\mu_k|$, and repeated copies are then treated by the phase-class BNT
-    sector construction of Chapter~\ref{ch:ft_proof}
-    (Definition~\ref{def:mpv_phase_class_data},
-    Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}) and the bases of
-    normal tensors of Chapter~\ref{ch:bnt}. This caveat is stated once here and
-    referenced where the subcase recurs.
+    sector construction of Chapter~\ref{ch:bnt}
+    (Definition~\ref{def:mpv_phase_class_data}) and the collapsed sector theorem
+    of Chapter~\ref{ch:ft_proof}
+    (Theorem~\ref{thm:bnt_sector_decomp_tp_prim_irr_collapsed}). This caveat is
+    stated once here and referenced where the subcase recurs.
 \end{remark}
 
 \begin{theorem}[Self-overlap is derived in normal canonical form]%
@@ -548,8 +548,11 @@ the transfer map primitive, removing periodicity.
 \begin{proof}\leanok
     \uses{def:is_normal_canonical_form}
     Peripheral-spectrum primitivity, together with irreducibility and TP
-    normalization, yields the complementary transfer-map gap, from which overlap
-    convergence follows.
+    normalization, yields the complementary transfer-map gap. Hence, for every
+    block~$k$,
+    \[
+        \lim_{N \to \infty} O_{A_k A_k}(N) = 1.
+    \]
 \end{proof}
 
 \begin{remark}
@@ -737,10 +740,20 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 \begin{proof}\leanok
     \uses{thm:zero_block_separation, thm:tp_data_irreducible}
     Theorem~\ref{thm:zero_block_separation} supplies $D_0$ and the nonzero
-    irreducible blocks with the positive-length MPV equality. The blockwise
-    TP-gauge theorem then replaces each block by a left-canonical block with
-    weight $\mu_k$, and the length-zero identity $D = D_0 + \sum_k D_k$ is
-    preserved.
+    irreducible blocks $(C_k)_{k=1}^r$. For every $N \ge 1$ and every $\sigma$,
+    \[
+        V^{(N)}(A)_\sigma
+        = V^{(N)}\!(\textstyle\bigoplus_{k=1}^r C_k)_\sigma.
+    \]
+    The blockwise TP-gauge theorem then replaces each $C_k$ by a
+    left-canonical block $B_k$ with weight $\mu_k$. Again for every $N \ge 1$
+    and every $\sigma$,
+    \[
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r C_k)_\sigma
+        =
+        V^{(N)}\!(\textstyle\bigoplus_{k=1}^r \mu_k B_k)_\sigma.
+    \]
+    The length-zero identity $D = D_0 + \sum_{k=1}^r D_k$ is preserved.
 \end{proof}
 
 \section{Blocking and primitivity reduction}%
@@ -806,7 +819,7 @@ map~\cite[Theorem~6.6]{Wolf2012Quantum}.
 % as explicit hypotheses, whereas the blueprint statement above quantifies
 % only over the period. The hypotheses are derivable from the period-m
 % hypothesis and left-canonical irreducibility via the upstream Wielandt and
-% quantum Perron-Frobenius statements; the consumed form is the next
+% quantum Perron-Frobenius statements; the form used later is the next
 % theorem, thm:cyclic_sector_decomp_irr_tp, which carries the \leanok.
 \begin{proof}
     The cyclic decomposition of the adjoint transfer map gives projections
