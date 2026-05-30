@@ -104,18 +104,17 @@ Chapter~\ref{ch:canonical_after_blocking}.
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail}
     \leanok
     \uses{thm:zero_block_separation,
-        thm:pgvwc07_blockwise_unital_dual_package}
+        thm:pgvwc07_blockwise_unital_dual_package, def:same_mpv2_pos}
     Let $A$ be an arbitrary translation-invariant MPS tensor. Then there is
-    a zero block of bond dimension $D_0$, a finite family of nonzero blocks
+    a zero-block bond dimension $D_0$, a finite family of nonzero blocks
     $C_k$, and positive real weights $\mu_k$, such that for every chain
-    length $N$ and every word $\sigma \in \{0,\ldots,d-1\}^N$,
+    length $N \ge 1$ and every word $\sigma \in \{0,\ldots,d-1\}^N$,
     \[
         \operatorname{MPV}_A
         =
-        \operatorname{MPV}_{\mathbf{0}_{D_0}}
-        +
-        \operatorname{MPV}_{\oplus_k \mu_k C_k}.
+        \operatorname{MPV}_{\oplus_k \mu_k C_k},
     \]
+    together with the length-zero dimension identity $D = D_0 + \sum_k D_k$.
     Each nonzero block is in the unital orientation,
     \[
         \sum_i C_k^i(C_k^i)^\dagger=\Id ,
@@ -130,10 +129,11 @@ Chapter~\ref{ch:canonical_after_blocking}.
     \uses{thm:zero_block_separation,
         thm:pgvwc07_blockwise_unital_dual_package}
     First apply the zero-block separation theorem to $A$, retaining the
-    all-zero summands as a single zero block and extracting the nonzero
-    irreducible summands. Then apply the blockwise PGVWC07 unital and
-    dual-diagonal theorem to this nonzero family. Combining the two MPV
-    identities gives the displayed zero-block formula.
+    all-zero summands only through their total bond dimension $D_0$ and
+    extracting the nonzero irreducible summands. Then apply the blockwise
+    PGVWC07 unital and dual-diagonal theorem to this nonzero family. Composing
+    the positive-length equalities and the dimension identities gives the
+    statement.
 \end{proof}
 
 \begin{theorem}[Bond-dimension bound for the zero-block PGVWC07 form]%
@@ -145,20 +145,16 @@ Chapter~\ref{ch:canonical_after_blocking}.
     Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}, the
     zero-block bond dimension and the nonzero block dimensions satisfy
     \[
-        D_0+\sum_k D_k = D.
+        D = D_0+\sum_k D_k.
     \]
     In particular, the total bond dimension of the nonzero blocks is at most
     the original bond dimension $D$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package,
-        lem:mpv_zero_length}
-    Evaluate the MPV identity of
-    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package} on the
-    empty word. The length-zero coefficient of a bond-$D$ tensor is $D$;
-    the zero block contributes $D_0$, and the direct sum of the nonzero
-    blocks contributes $\sum_k D_k$. This gives the displayed identity, and
-    the inequality follows because $D_0\geq 0$.
+    \uses{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}
+    The dimension identity is part of
+    Theorem~\ref{thm:pgvwc07_arbitrary_zero_tail_unital_dual_package}, and the
+    inequality follows because $D_0\geq 0$.
 \end{proof}
 
 \begin{theorem}[Positive-length PGVWC07 unital dual-diagonal form]%

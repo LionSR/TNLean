@@ -152,7 +152,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   classical
   -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
   obtain ⟨zeroTailDim, r₀, dim₀, μ₀, blocks₀,
-      hIrr₀, hTP₀, hμNe₀, hDim₀, hMPV₀⟩ :=
+      hIrr₀, hTP₀, hμNe₀, hDim₀, hPos₀, hDimId₀⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D) A
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
@@ -173,16 +173,12 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   -- (d) Nonzero weights: `(μ₀ k)^P` remains nonzero since `μ₀ k ≠ 0`.
   · exact blockWeights_ne_zero μ₀ hμNe₀ P
   -- (e) Positive-length MPV relationship.
-  · have hPos₀ : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) :=
-      sameMPV₂Pos_of_zeroTail_eq A
-        (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) hMPV₀
-    simpa [μ₁_def, blocks₁_def] using
+  · simpa [μ₁_def, blocks₁_def] using
       sameMPV₂Pos_blockTensor_toTensorFromBlocks
         (d := d) (D := D) (r := r₀) (dim := dim₀)
         A μ₀ blocks₀ hPos₀ P hP
   -- (f) Length-zero bond-dimension count.
-  · exact zeroTail_bondDim_eq_of_mpv_decomp A
-      (toTensorFromBlocks (d := d) (μ := μ₀) blocks₀) hMPV₀
+  · exact hDimId₀.symm
 
 /-!
 ## Conditional normal canonical form

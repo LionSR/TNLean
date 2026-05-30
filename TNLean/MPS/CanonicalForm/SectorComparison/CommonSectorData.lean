@@ -81,19 +81,17 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
         (toTensorFromBlocks (d := d) (μ := μB) blocksB) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
-  obtain ⟨zeroTailA, rA, dimA, μA, blocksA,
-      hIrrA, hTPA, hμA, hDimA, hMPVA⟩ :=
+  obtain ⟨_zeroTailA, rA, dimA, μA, blocksA,
+      hIrrA, hTPA, hμA, hDimA, hAPos, _hDimIdA⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₁) A
-  obtain ⟨zeroTailB, rB, dimB, μB, blocksB,
-      hIrrB, hTPB, hμB, hDimB, hMPVB⟩ :=
+  obtain ⟨_zeroTailB, rB, dimB, μB, blocksB,
+      hIrrB, hTPB, hμB, hDimB, hBPos, _hDimIdB⟩ :=
     exists_tp_gauge_from_arbitrary_with_zeroTail (d := d) (D := D₂) B
-  have hBook :=
-    nonzeroBlock_sameMPV₂Pos_of_sameMPV₂
-      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hMPVA hMPVB
-  have hAPos := sameMPV₂Pos_of_zeroTail_eq A
-    (toTensorFromBlocks (d := d) (μ := μA) blocksA) hMPVA
-  have hBPos := sameMPV₂Pos_of_zeroTail_eq B
-    (toTensorFromBlocks (d := d) (μ := μB) blocksB) hMPVB
+  -- The two nonzero parts agree at positive length: chain through the common MPV family.
+  have hBook : SameMPV₂Pos
+      (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) :=
+    (hAPos.symm.trans hSame.toSameMPV₂Pos).trans hBPos
   refine ⟨rA, dimA, μA, blocksA, rB, dimB, μB, blocksB,
     hIrrA, hIrrB, hTPA, hTPB, hμA, hμB, hDimA, hDimB, hAPos, hBPos,
     hBook, ?_, ?_⟩

@@ -386,8 +386,9 @@ Key facts (matching the paper's canonical-form reduction, eq. II_Aiplusk1):
 - For `N > 0`, all-zero blocks contribute `0` to the MPV (`mpv_eq_zero_of_all_zero`).
 - For `N = 0`, each block of dimension `Dₖ` contributes `Dₖ` (the trace of the identity).
 
-The zero block is represented as a single all-zero tensor `zeroMPSTensor d zeroTailDim`;
-its MPV is `zeroTailDim` at `N = 0` and `0` for `N > 0`.
+The all-zero blocks are not assembled into a separate tensor in the separation theorem
+below: their total bond dimension is recorded as a plain natural number `zeroTailDim`, which
+enters only through the length-zero dimension identity `D = zeroTailDim + ∑ k, dim k`.
 -/
 
 /-- The all-zero MPS tensor of given physical and bond dimension.
@@ -414,18 +415,17 @@ The paper states that in the canonical form $A^i = \oplus_{k=1}^r \mu_k A_k^i$, 
 be zero: "there can be zero blocks." Every MPS tensor `A : MPSTensor d D` admits an irreducible
 block decomposition that is faithfully partitioned into:
 
-* a **zero block** of dimension `zeroTailDim`, equal to the sum of the bond dimensions of the
+* a **zero-block dimension** `zeroTailDim`, equal to the sum of the bond dimensions of the
   all-zero irreducible blocks, and
 * a family of **nonzero blocks** `blocks k : MPSTensor d (dim k)` for `k : Fin r`, each with at
   least one nonzero Kraus operator, positive bond dimension, and irreducibility.
 
-The MPV relationship is:
+The decomposition is recorded by two facts that together carry all the content:
 
-  `mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ + mpv (toTensorFromBlocks μ≡1 blocks) σ`
-
-which at `N = 0` reduces to `D = zeroTailDim + ∑ k, dim k` and at `N > 0` reduces to
-`mpv A σ = mpv (toTensorFromBlocks μ≡1 blocks) σ` (the zero block contributes only at
-length 0).
+* the positive-length equality `SameMPV₂Pos A (toTensorFromBlocks μ≡1 blocks)` (the all-zero
+  blocks contribute nothing at positive length), and
+* the length-zero dimension identity `D = zeroTailDim + ∑ k, dim k` (the empty-word coefficient
+  is the bond dimension).
 
 This separation is **exact**: the positive-length vectors see only the nonzero blocks, while the
 length-zero identity D = D_0 + Σ_k D_k from the paper is preserved. -/
@@ -435,9 +435,9 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
       (∀ k, IsIrreducibleTensor (blocks k)) ∧
       (∀ k, ∃ i, blocks k i ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv A σ = mpv (zeroMPSTensor d zeroTailDim) σ +
-          mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) σ) := by
+      SameMPV₂Pos A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+      D = zeroTailDim + ∑ k : Fin r, dim k := by
   classical
   -- Step 1: Obtain the irreducible block decomposition.
   obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀⟩ :=
@@ -459,32 +459,13 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
   set dim : Fin r → ℕ := fun j => dim₀ (nonzeroEquiv.symm j).1 with dim_def
   set newBlocks : (k : Fin r) → MPSTensor d (dim k) :=
     fun j => blocks₀ (nonzeroEquiv.symm j).1 with newBlocks_def
-  -- Step 3: Prove all properties.
-  refine ⟨zeroTailDim, r, dim, newBlocks, ?_, ?_, ?_, ?_⟩
-  -- (a) Irreducibility of nonzero blocks.
-  · intro k
-    exact hIrr₀ (nonzeroEquiv.symm k).1
-  -- (b) Each nonzero block has a nonzero Kraus operator.
-  · intro k
-    have hMem := (nonzeroEquiv.symm k).2
-    -- Membership in `nonzeroSet` means `isNonzero`.
-    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
-      (Finset.mem_filter.mp hMem).2
-    exact hNonzero
-  -- (c) Each nonzero block has positive bond dimension.
-  · intro k
-    have hMem := (nonzeroEquiv.symm k).2
-    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
-      (Finset.mem_filter.mp hMem).2
-    rcases hNonzero with ⟨i, hi⟩
-    by_contra h
-    push Not at h
-    have hd0 : dim k = 0 := Nat.le_zero.mp h
-    have hEmpty : IsEmpty (Fin (dim k)) := by rw [hd0]; infer_instance
-    have hzero : newBlocks k i = 0 := by ext a b; exact (hEmpty.false a).elim
-    exact hi hzero
-  -- (d) MPV relationship.
-  · intro N σ
+  -- The MPV of `A` decomposes into the nonzero-block direct sum plus the
+  -- length-zero zero-tail contribution.
+  have key : ∀ (N : ℕ) (σ : Fin N → Fin d),
+      mpv A σ =
+        mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ +
+          (if N = 0 then (zeroTailDim : ℂ) else 0) := by
+    intro N σ
     -- Expand A's MPV via the original decomposition.
     have hA : mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := by
       have h := hSame₀ N σ
@@ -535,11 +516,42 @@ theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
             Finset.mem_filter.mpr ⟨Finset.mem_univ k, hne⟩
           exact absurd hkNonzero (Finset.disjoint_right.mp hDisj hk)
         exact mpv_eq_zero_of_all_zero (blocks₀ k) hkz σ (Nat.pos_of_ne_zero hN)
-    -- Expand the zero-tail MPV.
-    have hZeroTail : mpv (zeroMPSTensor d zeroTailDim) σ =
-        if N = 0 then (zeroTailDim : ℂ) else 0 :=
-      mpv_zeroMPSTensor σ zeroTailDim
     -- Chain everything together.
-    rw [hA, hSplit, hNonzeroSum, hZeroSum, hZeroTail, hNonzero, add_comm]
+    rw [hA, hSplit, hNonzeroSum, hZeroSum, hNonzero]
+  -- Step 3: Prove all properties.
+  refine ⟨zeroTailDim, r, dim, newBlocks, ?_, ?_, ?_, ?_, ?_⟩
+  -- (a) Irreducibility of nonzero blocks.
+  · intro k
+    exact hIrr₀ (nonzeroEquiv.symm k).1
+  -- (b) Each nonzero block has a nonzero Kraus operator.
+  · intro k
+    have hMem := (nonzeroEquiv.symm k).2
+    -- Membership in `nonzeroSet` means `isNonzero`.
+    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
+      (Finset.mem_filter.mp hMem).2
+    exact hNonzero
+  -- (c) Each nonzero block has positive bond dimension.
+  · intro k
+    have hMem := (nonzeroEquiv.symm k).2
+    have hNonzero : isNonzero (nonzeroEquiv.symm k).1 :=
+      (Finset.mem_filter.mp hMem).2
+    rcases hNonzero with ⟨i, hi⟩
+    by_contra h
+    push Not at h
+    have hd0 : dim k = 0 := Nat.le_zero.mp h
+    have hEmpty : IsEmpty (Fin (dim k)) := by rw [hd0]; infer_instance
+    have hzero : newBlocks k i = 0 := by ext a b; exact (hEmpty.false a).elim
+    exact hi hzero
+  -- (d) Positive-length MPV relationship: the zero tail vanishes for `N > 0`.
+  · intro N hN σ
+    have hkey := key N σ
+    rw [if_neg (Nat.ne_of_gt hN), add_zero] at hkey
+    exact hkey
+  -- (e) Length-zero dimension identity: the empty-word coefficient is the bond dimension.
+  · have h0 := key 0 (Fin.elim0 : Fin 0 → Fin d)
+    rw [if_pos rfl, mpv_zero_length, mpv_zero_length] at h0
+    -- `h0 : (D : ℂ) = (∑ k, dim k : ℂ) + (zeroTailDim : ℂ)`
+    have hnat : D = (∑ k : Fin r, dim k) + zeroTailDim := by exact_mod_cast h0
+    omega
 
 end MPSTensor
