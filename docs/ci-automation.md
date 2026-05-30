@@ -716,7 +716,7 @@ label name, update `.github/workflows/auto-fix.yml` and the
 
 ### Model
 
-Anthropic Claude workflows use `claude-opus-4-7`, configured via `--model` in
+Anthropic Claude workflows use `claude-opus-4-8`, configured via `--model` in
 the `claude_args` parameter of the relevant workflow file. DeepSeek mention and
 review runs use the same wrapper in `deepseek` provider mode and select
 `deepseek-v4-pro[1m]` by default unless the repository variables override it.
