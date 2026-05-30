@@ -7,6 +7,13 @@ This file records the coordinate margin consequences of the translated
 edge-blocking criterion and the resulting open-boundary obstruction for the
 present open rectangular square-lattice model.
 
+The boundary nonexistence statements below concern this open-rectangle model.
+They do not contradict the every-edge blocking sentence in arXiv:1804.04964.
+The comparison with the paper, the boundary obstruction, and the remaining
+finite-geometry obligations are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
@@ -104,9 +111,6 @@ theorem normalSquareTranslatedEdgeWindow_upEdge_margins
 /-- In the current open rectangular coordinate graph, a left-boundary right
 edge does not admit a translated edge window.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_leftBoundaryRightEdge_window {width height y : ℕ}
@@ -119,9 +123,6 @@ theorem not_leftBoundaryRightEdge_window {width height y : ℕ}
 /-- In the current open \(7\times7\) rectangular coordinate graph, the left
 boundary right edge at height \(2\) does not admit a translated edge window.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_leftBoundaryRightEdge_window_seven :
@@ -132,9 +133,6 @@ theorem not_leftBoundaryRightEdge_window_seven :
 
 /-- In the current open rectangular coordinate graph, a right edge too close
 to the right side does not admit a translated edge window.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -149,9 +147,6 @@ theorem not_rightMarginRightEdge_window {width height x y : ℕ}
 edge at horizontal coordinate \(5\) and height \(2\) does not admit a
 translated edge window.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_rightMarginRightEdge_window_seven :
@@ -162,9 +157,6 @@ theorem not_rightMarginRightEdge_window_seven :
 
 /-- In the current open rectangular coordinate graph, a bottom-boundary upward
 edge does not admit a translated edge window.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -179,9 +171,6 @@ theorem not_bottomBoundaryUpEdge_window {width height x : ℕ}
 boundary upward edge at horizontal coordinate \(2\) does not admit a translated
 edge window.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_bottomBoundaryUpEdge_window_seven :
@@ -192,9 +181,6 @@ theorem not_bottomBoundaryUpEdge_window_seven :
 
 /-- In the current open rectangular coordinate graph, an upward edge too close
 to the top side does not admit a translated edge window.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -209,9 +195,6 @@ theorem not_topMarginUpEdge_window {width height x y : ℕ}
 edge at horizontal coordinate \(2\) and height \(5\) does not admit a
 translated edge window.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_topMarginUpEdge_window_seven :
@@ -224,8 +207,8 @@ theorem not_topMarginUpEdge_window_seven :
 horizontal and vertical boundary edges on all four sides that do not admit
 translated edge windows.
 
-This records a four-sided obstruction to reading the present translated-window
-criterion as the source theorem's every-edge construction.
+This records a four-sided obstruction for the present translated-window
+criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -251,9 +234,9 @@ theorem not_fourSidedBoundaryWindow_seven :
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated edge windows over all edges.
 
-This records that the present translated-window criterion is only an interior
-sufficient criterion for the source proof's edge-blocking step; the boundary
-geometry still has to be supplied separately.
+This records that the present translated-window criterion is an interior
+sufficient criterion; the boundary geometry still has to be supplied
+separately.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -316,9 +299,6 @@ theorem normalSquareEdgeMarginCover_upEdge_bounds
 /-- In the current open rectangular coordinate graph, a left-boundary right
 edge does not satisfy the translated horizontal margin criterion.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_leftBoundaryRightEdge_marginCover {width height y : ℕ}
@@ -332,9 +312,6 @@ theorem not_leftBoundaryRightEdge_marginCover {width height y : ℕ}
 boundary right edge at height \(2\) does not satisfy the translated horizontal
 margin criterion.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_leftBoundaryRightEdge_marginCover_seven :
@@ -345,9 +322,6 @@ theorem not_leftBoundaryRightEdge_marginCover_seven :
 
 /-- In the current open rectangular coordinate graph, a right edge too close
 to the right side does not satisfy the translated horizontal margin criterion.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -362,9 +336,6 @@ theorem not_rightMarginRightEdge_marginCover {width height x y : ℕ}
 edge at horizontal coordinate \(5\) and height \(2\) does not satisfy the
 translated horizontal margin criterion.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_rightMarginRightEdge_marginCover_seven :
@@ -375,9 +346,6 @@ theorem not_rightMarginRightEdge_marginCover_seven :
 
 /-- In the current open rectangular coordinate graph, a bottom-boundary upward
 edge does not satisfy the translated vertical margin criterion.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -392,9 +360,6 @@ theorem not_bottomBoundaryUpEdge_marginCover {width height x : ℕ}
 boundary upward edge at horizontal coordinate \(2\) does not satisfy the
 translated vertical margin criterion.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_bottomBoundaryUpEdge_marginCover_seven :
@@ -405,9 +370,6 @@ theorem not_bottomBoundaryUpEdge_marginCover_seven :
 
 /-- In the current open rectangular coordinate graph, an upward edge too close
 to the top side does not satisfy the translated vertical margin criterion.
-
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -422,9 +384,6 @@ theorem not_topMarginUpEdge_marginCover {width height x y : ℕ}
 edge at horizontal coordinate \(2\) and height \(5\) does not satisfy the
 translated vertical margin criterion.
 
-This is a statement about the present open-rectangle model, not a contradiction
-of the source theorem's every-edge blocking sentence.
-
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
 theorem not_topMarginUpEdge_marginCover_seven :
@@ -437,8 +396,7 @@ theorem not_topMarginUpEdge_marginCover_seven :
 horizontal and vertical boundary edges on all four sides that do not satisfy
 the translated margin-cover criterion.
 
-This records a four-sided obstruction to reading the present margin criterion as
-the source theorem's every-edge construction.
+This records a four-sided obstruction for the present margin criterion.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
@@ -464,9 +422,8 @@ theorem not_fourSidedBoundaryMarginCover_seven :
 /-- The current open \(7\times7\) rectangular coordinate graph does not admit
 a family of translated margin-cover data over all edges.
 
-This records that the present margin criterion is only an interior sufficient
-criterion for the source proof's edge-blocking step; the boundary geometry
-still has to be supplied separately.
+This records that the present margin criterion is an interior sufficient
+criterion; the boundary geometry still has to be supplied separately.
 
 Source context: arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1475--1500. -/
