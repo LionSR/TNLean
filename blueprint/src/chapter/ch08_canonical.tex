@@ -147,13 +147,16 @@ tensors of Chapter~\ref{ch:bnt}.
     normality. Absence of nontrivial invariant projections is essential.
 \end{remark}
 
-The CPSV \emph{canonical form} (CF) of a tensor $A$ --- a normal-block
-direct-sum decomposition $A^i \cong \bigoplus_{k=1}^r \mu_k A_k^i$ with weights
-normalized to $|\mu_k| \le 1$ and at least one $|\mu_k| = 1$ --- is the source
-definition of \cite[Section~II.C]{Cirac2017MPDO_AnnPhys}. In TNLean this role is
-played by the strong downstream predicate
-\texttt{MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm}, so no separate
-weak CF predicate is recorded here.
+The CPSV \emph{canonical form} (CF) of a tensor $A$ is the normal-block
+decomposition
+\[
+    A^i \cong \bigoplus_{k=1}^r \mu_k A_k^i
+\]
+with weights normalized by $|\mu_k| \le 1$ and with at least one
+$|\mu_k|=1$; see \cite[Section~II.C]{Cirac2017MPDO_AnnPhys}.  In the
+formal statements below, this condition is used through the stronger normal
+canonical form of Definition~\ref{def:is_normal_canonical_form}, so it is not
+listed as a second definition here.
 
 \begin{definition}[CPSV basis of normal tensors (BNT)]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
@@ -180,7 +183,7 @@ weak CF predicate is recorded here.
     stronger predicates of Definition~\ref{def:is_normal_canonical_form} and
     of Chapter~\ref{ch:bnt} require either the fundamental-theorem step or
     the algebraic-to-spectral normality equivalence; these appear in
-    downstream chapters.
+    later chapters.
 \end{remark}
 
 \section{Transfer map normalization}\label{sec:transfer_map_normalization}
@@ -814,7 +817,7 @@ Theorem~\ref{thm:pgvwc07_ti_canonical_form}.
 
 Blocking by an integer~$p$ carries MPV equalities, weights, transfer maps,
 and identifications of the blocked physical alphabet. The consequence needed
-downstream is the existence of a common blocking period under which every
+later is the existence of a common blocking period under which every
 transfer map in a finite family becomes primitive.
 
 \begin{theorem}[Common blocking period for a block family]%

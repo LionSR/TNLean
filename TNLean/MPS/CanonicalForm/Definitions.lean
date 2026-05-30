@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Core.Transfer
 import TNLean.MPS.Overlap.Basic
-import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.Channel.Peripheral.Spectrum
 
 /-!
@@ -19,16 +18,17 @@ operators: Renormalization fixed points and boundary theories"):
 * basis of normal tensors (BNT), `MPSTensor.IsCPSVBasisOfNormalTensors`.
 
 The canonical-form (CF) decomposition of arXiv:1606.00608 eq. `II_CF1` plus the
-normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is
-carried by the strong downstream predicate
-`MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm`; the previously vestigial
-weak duplicate `IsCPSVCanonicalForm` (zero consumers) has been removed.
+normalization paragraph (`Papers/1606.00608/MPDO-22-12-17-2.tex:237-246`) is not
+introduced here as a separate predicate.  The later normal canonical form
+predicate `MPSTensor.IsCanonicalFormSepAux.IsNormalCanonicalForm` records the
+strengthened form used in the Fundamental Theorem: normal blocks together with
+left-canonical normalization, strict nonzero weights, primitive transfer maps,
+and positive block dimensions.
 
-The existing TNLean canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
-`TNLean.MPS.BNT.Construction`) ships several *strengthenings* of these definitions
-(adding left-canonical normalization, strict modulus ordering, one-copy-per-sector,
-etc.) that are convenient for downstream FT proofs but drift from the paper text.
-The predicates here are the CPSV formulations.
+The existing canonical-form layer (`TNLean.PiAlgebra.CanonicalFormSepAux`,
+`TNLean.MPS.BNT.Construction`) contains several strengthenings of these definitions
+(left-canonical normalization, strict modulus ordering, and one copy per sector).
+The predicates in this file are the CPSV formulations.
 
 ## Paper anchors
 
@@ -61,8 +61,7 @@ One direct connection is provided:
 * `MPSTensor.IsNormalTensor.of_irreducible_and_primitive` —
   combine an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
 
-A further connection is intentionally **not** provided here, in keeping with the
-"clean layer, no `sorry`" quality bar:
+A further connection is intentionally not provided here:
 
 * A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
