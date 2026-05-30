@@ -60,11 +60,16 @@ per-sector unit-weight hypotheses are supplied, they prove the sector matching,
 coefficient comparison, copy-weight recovery, and direct-sum gauge
 construction without imposing any strict ordering of the copy-weight moduli.
 
-\section{Relation to the equal-modulus issue}
+\section{Equal-modulus declaration path}
 
-This restriction is logically separate from the retired strict-moduli
-formulation.  The current SectorBNT coefficient comparison works with raw
-sector coefficients
+The current formal assembly is organized through
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/}.  There is no separate
+\path{TNLean/MPS/FundamentalTheorem/Multi/} assembly directory on the current
+main branch.
+
+The equal-modulus question is logically separate from the per-sector
+unit-witness restriction above.  The current SectorBNT coefficient comparison
+works with raw sector coefficients
 \[
   c_N^{(j)} = \sum_q \mu_{j,q}^N
 \]
@@ -72,6 +77,37 @@ and the copy weights are recovered from these coefficients by the finite
 power-sum argument.  Equal-modulus copies such as the two copies in
 \(C \oplus (-C)\), and unequal-modulus copies such as \(C \oplus (1/2)C\),
 are both represented by the raw two-layer SectorBNT formulation.
+
+The declaration path is as follows.
+\begin{itemize}
+  \item \leanid{MPSTensor.IsBNTCanonicalForm} records the raw copy weights
+        \(\mu_{j,q}\), their coefficient sums, the bound
+        \(|\mu_{j,q}| \le 1\), and the single global unit witness.  It imposes
+        neither a strict ordering of the moduli nor an equal-modulus layer.
+  \item Sectorwise non-decay is supplied, after a unit-modulus copy in the
+        given sector is available, by the declarations
+        \path{MPSTensor.CesaroNonDecay.sum_pow_not_tendsto_zero_of_unit_modulus}
+        and \path{MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero}.
+  \item Eventual equality of the sector coefficient sequences is converted into
+        equality of copy weights by
+        \leanid{MPSTensor.matched_sector_weight_multiset_eq} and
+        \leanid{MPSTensor.matched_sector_weight_equiv}, using the finite
+        power-sum recovery theorem
+        \path{Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card}.
+  \item \leanid{MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity}
+        packages this recovery into the copy-weight matching used by the
+        proportional global-gauge theorem.
+  \item In the equal-MPV path,
+        \path{MPSTensor.ft_sector_bnt_equal_sector_data} and
+        \path{MPSTensor.ft_sector_bnt_equal_global_gauge} invoke the same
+        coefficient-to-copy-weight step.  The coordinate-level statement is
+        \path{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}.
+\end{itemize}
+
+Thus equal-modulus examples such as \(C \oplus (-C)\) are handled by the raw
+coefficient comparison and finite power-sum recovery after sector matching.  No
+theorem in this SectorBNT declaration path assumes a strict ordering of the
+copy-weight moduli.
 
 The remaining extra hypothesis is not strictness of moduli.  It is the
 per-sector existence of a unit-modulus copy weight, which is stronger than the
