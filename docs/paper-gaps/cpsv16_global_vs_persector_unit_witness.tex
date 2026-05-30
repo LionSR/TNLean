@@ -1,0 +1,119 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command}
+
+\title{Global and Per-Sector Unit-Weight Witnesses in the CPSV16 BNT Argument}
+\author{}
+\date{2026-05-30}
+
+\begin{document}
+\maketitle
+
+\section{The source normalization}
+
+Cirac--Perez-Garcia--Schuch--Verstraete 2016 normalizes the raw coefficients in
+the basis-of-normal-tensors (BNT) expansion by a single global condition.  In
+the notation of the two-layer display
+\[
+  A^i =
+  \bigoplus_{j=1}^{g}\bigoplus_{q=1}^{r_j}
+  \mu_{j,q} X_{j,q} A_j^i X_{j,q}^{-1},
+\]
+the source assumes
+\[
+  |\mu_{j,q}| \le 1 \quad \text{for all } (j,q),
+  \qquad
+  |\mu_{j_\ast,q_\ast}| = 1 \quad \text{for some } (j_\ast,q_\ast).
+\]
+This is the normalization at CPSV16 Section II.C, line 246 of the local
+arXiv source.
+
+Thus the paper-level canonical form does not state that every BNT sector
+\(j\) contains a copy \(q\) of modulus one.  A sector may contain only strictly
+subunit copy weights, while some other sector carries the global unit witness.
+
+\section{The formal boundary}
+
+The formal predicate \leanid{MPSTensor.IsBNTCanonicalForm} records the source
+normalization faithfully: it has a bound on all copy weights and a single
+global unit-weight witness.  It does not contain the per-sector condition
+\[
+  \forall j,\ \exists q,\ |\mu_{j,q}| = 1.
+\]
+
+Several full-basis matching and global-gauge theorems currently assume this
+per-sector condition explicitly.  The condition is used to apply the Cesaro
+non-decay lemma sector by sector in the CPSV16 Appendix MPV line-1182 matching
+argument.  The affected formal argument includes the strong matching theorem,
+the bijective matching theorem, the proportional matched-sector theorem, and
+the equal-MPV global-gauge theorems in the SectorBNT formulation.
+
+Consequently these declarations are not the unrestricted CPSV16 theorem or
+corollary.  They are scope-restricted full-basis statements: after the
+per-sector unit-weight hypotheses are supplied, they prove the sector matching,
+coefficient comparison, copy-weight recovery, and direct-sum gauge
+construction without imposing any strict ordering of the copy-weight moduli.
+
+\section{Relation to the equal-modulus issue}
+
+This restriction is logically separate from the retired strict-moduli
+formulation.  The current SectorBNT coefficient comparison works with raw
+sector coefficients
+\[
+  c_N^{(j)} = \sum_q \mu_{j,q}^N
+\]
+and the copy weights are recovered from these coefficients by the finite
+power-sum argument.  Equal-modulus copies such as the two copies in
+\(C \oplus (-C)\), and unequal-modulus copies such as \(C \oplus (1/2)C\),
+are both represented by the raw two-layer SectorBNT formulation.
+
+The remaining extra hypothesis is not strictness of moduli.  It is the
+per-sector existence of a unit-modulus copy weight, which is stronger than the
+single global unit witness stated in CPSV16 line 246.
+
+\section{Elimination plan}
+
+There are two possible ways to remove the restriction.
+
+First, one may prove the CPSV16 matching step directly from the global witness.
+In that approach, the line-1182 argument must show that every sector relevant
+to the full-basis matching either receives a unit-modulus witness from the
+source normalization after the appropriate comparison, or is eliminated by the
+same non-decay contradiction used in the paper.
+
+Second, one may split the BNT basis into the unit-supporting part and the
+strictly subunit part, prove matching on the unit-supporting part, and then
+derive the remaining sectors by the coefficient identities.  This argument must
+still end with the same raw coefficient comparison and finite power-sum
+recovery used by the current SectorBNT theorems.
+
+Until one of these arguments is formalized, the per-sector statements should
+remain marked as scope-restricted versions of the BNT Fundamental Theorem
+argument.  They should not be cited as the unrestricted CPSV16 theorem or
+corollary.
+
+\section{Current declarations}
+
+The main declarations carrying the additional per-sector hypothesis are:
+\begin{itemize}
+  \item \leanid{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV},
+  \item \leanid{MPSTensor.bijective_match_of_sameMPV},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching},
+  \item \leanid{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity},
+  \item \leanid{MPSTensor.ft_sector_bnt_equal_global_gauge},
+  \item \leanid{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}.
+\end{itemize}
+
+The faithful structural normalization remains the global unit-weight field
+\path{MPSTensor.IsBNTCanonicalForm.weight_unit_exists} in
+\path{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

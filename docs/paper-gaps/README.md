@@ -14,6 +14,10 @@ equal-modulus comparison has one current reference.
 - `blueprint/src/chapter/ch11_fundamental_theorem_proof.tex` records only how
   the Chapter 10 comparison is used in the equal-MPV Fundamental Theorem
   argument.
+- `cpsv16_global_vs_persector_unit_witness.tex` records the separate
+  scope restriction that the current full-basis matching theorems assume a
+  unit-modulus copy in every sector, while CPSV16 line 246 gives only one
+  global unit-weight witness.
 - GitHub issue #2150 tracks the remaining verification that the assembled
   multi-block theorem uses this equal-modulus comparison without a surviving
   strictly-decreasing-moduli restriction.
