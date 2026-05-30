@@ -211,36 +211,17 @@ theorem sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq
     (hz : z₁ = z₂) :
     SameMPV₂ liveA liveB := by
   intro N σ
+  -- With equal zero-tail dimensions the two zero tails are the same tensor, so
+  -- their length-`N` contributions cancel directly without splitting on `N = 0`.
   have hsum :
-      mpv (zeroMPSTensor d z₁) σ + mpv liveA σ =
+      mpv (zeroMPSTensor d z₂) σ + mpv liveA σ =
         mpv (zeroMPSTensor d z₂) σ + mpv liveB σ := by
     calc
-      mpv (zeroMPSTensor d z₁) σ + mpv liveA σ = mpv A σ := (hA N σ).symm
+      mpv (zeroMPSTensor d z₂) σ + mpv liveA σ
+          = mpv (zeroMPSTensor d z₁) σ + mpv liveA σ := by rw [hz]
+      _ = mpv A σ := (hA N σ).symm
       _ = mpv B σ := hSame N σ
       _ = mpv (zeroMPSTensor d z₂) σ + mpv liveB σ := hB N σ
-  by_cases hN : N = 0
-  · subst hN
-    have hz₁mpv : mpv (zeroMPSTensor d z₁) σ = (z₁ : ℂ) := by
-      rw [mpv_zeroMPSTensor]
-      simp
-    have hz₂mpv : mpv (zeroMPSTensor d z₂) σ = (z₂ : ℂ) := by
-      rw [mpv_zeroMPSTensor]
-      simp
-    have hsum' :
-        (z₂ : ℂ) + mpv liveA σ = (z₂ : ℂ) + mpv liveB σ := by
-      rw [hz₁mpv, hz₂mpv] at hsum
-      rw [hz] at hsum
-      exact hsum
-    exact add_left_cancel hsum'
-  · have hz₁mpv : mpv (zeroMPSTensor d z₁) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [hN]
-    have hz₂mpv : mpv (zeroMPSTensor d z₂) σ = 0 := by
-      rw [mpv_zeroMPSTensor]
-      simp [hN]
-    have hsum' : (0 : ℂ) + mpv liveA σ = 0 + mpv liveB σ := by
-      rw [hz₁mpv, hz₂mpv] at hsum
-      exact hsum
-    simpa [zero_add] using hsum'
+  exact add_left_cancel hsum
 
 end MPSTensor

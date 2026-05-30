@@ -169,20 +169,12 @@ theorem nonzeroBlock_sameMPV₂_of_sameMPV₂_of_zeroTail_eq
         mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ)
     (hZeroTail : zeroTailA = zeroTailB) :
     SameMPV₂ (toTensorFromBlocks (d := d) (μ := μA) blocksA)
-      (toTensorFromBlocks (d := d) (μ := μB) blocksB) := by
-  have hBook :=
-    nonzeroBlock_positive_sameMPV₂_and_zeroTail_identity_of_sameMPV₂
-      A B hSame zeroTailA zeroTailB μA blocksA μB blocksB hA hB
-  intro N σ
-  by_cases hN : N = 0
-  · subst N
-    have h0 := hBook.2 σ
-    have h0' : (zeroTailB : ℂ) +
-        mpv (toTensorFromBlocks (d := d) (μ := μA) blocksA) σ =
-        (zeroTailB : ℂ) +
-        mpv (toTensorFromBlocks (d := d) (μ := μB) blocksB) σ := by
-      simpa [hZeroTail] using h0
-    exact add_left_cancel h0'
-  · exact hBook.1 (Nat.pos_of_ne_zero hN) σ
+      (toTensorFromBlocks (d := d) (μ := μB) blocksB) :=
+  -- The nonzero block tensors are the live parts of the two zero-tail
+  -- decompositions, so this is the generic zero-tail cancellation lemma.
+  sameMPV₂_live_of_sameMPV₂_with_zeroTail_eq A B
+    (toTensorFromBlocks (d := d) (μ := μA) blocksA)
+    (toTensorFromBlocks (d := d) (μ := μB) blocksB)
+    hSame hA hB hZeroTail
 
 end MPSTensor

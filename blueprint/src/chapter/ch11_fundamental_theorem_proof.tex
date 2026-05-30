@@ -1,45 +1,56 @@
-
 \chapter{Proof of the Fundamental Theorem}\label{ch:ft_proof}
 
-This chapter records the aperiodic comparison results used in the proof of the
-Fundamental Theorem of Matrix Product States. We first state strict special
-cases for canonical-form tensors with already selected BNT
-representatives, and then state the sector-decomposition theorem that keeps the
-repeated-copy multiplicities appearing in the CPSV BNT comparison.
-We then treat the equal-MPV case, including the common-block-structure
-specialization that deduces gauge equivalence.
-The results combine the canonical form reduction
-(Chapter~\ref{ch:canonical}),
-block separation (Chapter~\ref{ch:block_perm}),
-spectral gap (Chapter~\ref{ch:spectral}),
-and the BNT permutation arguments of Chapter~\ref{ch:bnt}.
-The common after-blocking reductions of
-Chapter~\ref{ch:canonical_after_blocking} are placed immediately before this
-chapter because they produce the common primitive block decompositions used in
-the equal-MPV comparison. The direct-sum gauge assembly statements belong to
-the algebraic assembly layer of Chapter~\ref{ch:algebraic_ft}, where the
-block correspondence is already fixed. Thus the chapter boundary separates the
-preparation of the common blocked surface from the later assembly of gauges and
-MPV equalities; it does not place any channel-representation or semigroup
-material among the hypotheses of the aperiodic Fundamental Theorem.
+The final aperiodic proof of the Fundamental Theorem is separated here into
+three kinds of statements.
+\begin{enumerate}
+    \item Section~\ref{sec:ft_source_theorems} records the source statements from
+          the literature. They remain marked as not ready until the
+          canonical-form reduction, BNT representative comparison, repeated-copy
+          coefficient comparison, and global gauge conclusion have all been
+          proved together from the source hypotheses.
+    \item Sections~\ref{sec:ft_pair_span_padding} and
+          \ref{sec:ft_equal_mpv_comparisons} state the proved comparison
+          results: homogeneous pair-span padding, BNT coefficient comparison,
+          sector-weight multiset recovery, sector-basis matching, and the
+          conditional equal-MPV sector theorem.
+    \item Section~\ref{sec:ft_overlap_bnt_preparation} records the overlap and
+          BNT preparation used to pass from primitive irreducible blocks to
+          linearly independent BNT representatives.
+\end{enumerate}
 
-The theorems in this chapter follow the approach of
-\cite{Cirac2017MPDO_AnnPhys}:
-they first block the tensor to remove non-trivial periodicity, then
-apply the aperiodic fundamental theorem.
-Chapter~\ref{ch:periodic_ft_apps} develops the stronger
-irreducible-form framework of \cite{DeLasCuevas2017Irreducible},
-which gives a fundamental theorem valid for periodic tensors directly,
-with an extra $Z$-gauge degree of freedom.
+The equal-MPV comparison used here is the SectorBNT coefficient comparison of
+Chapter~\ref{ch:bnt}. This chapter records where that comparison enters the
+Fundamental Theorem proof. The comparison is made at fixed sufficiently large
+system size. If a coefficient belongs to a non-dominant sector, it may decay
+with~$N$, but BNT linear independence still detects whether it is zero. No
+projection-limit argument for non-dominant sectors is used.
+
+Normality appears in two forms in this proof. The algebraic form is eventual
+exact-length spanning, $S_L(A)=\MN{D}$ for some~$L$. Spectral primitivity enters
+only through separate implications, such as the primitive-to-normality results of
+Chapter~\ref{ch:wielandt}. When the statements below assume trace-preserving,
+primitive, irreducible blocks, the passage to BNT representatives uses those
+separate implications rather than redefining normality.
+
+The proof follows the aperiodic comparison in
+\cite{Cirac2017MPDO_AnnPhys}: block to remove non-trivial periodicity, choose
+BNT representatives, compare coefficients using linear independence, recover
+weights by power sums, and then construct the block-diagonal gauge. The periodic
+irreducible-form theorem with its additional $Z$-gauge degree of freedom is
+treated separately in Chapter~\ref{ch:periodic_ft_apps}.
 
 % NOTE: The aperiodic Fundamental Theorem proof is now formalised on the
 % BNT canonical-form statements, see Chapter~\ref{ch:bnt}.
 % Lean targets: \texttt{MPSTensor.ft\_sector\_bnt\_equal\_sector\_data},
 % \texttt{MPSTensor.ft\_sector\_bnt\_equal\_global\_gauge}.
-% The literal $\mathrm{II\_cor2}$ coordinate form (CPSV16 lines 1184--1192)
+% The coordinate form traditionally labelled $\mathrm{II\_cor2}$ in the source
 % is recorded in Chapter~\ref{ch:bnt} for the unit-modulus BNT normalization.
 
 \section{Source theorems}\label{sec:ft_source_theorems}
+
+The next two statements are the literature-level canonical-form theorems. The
+proved intermediate statements used toward them appear in the later sections of
+this chapter and in Chapter~\ref{ch:bnt}.
 
 % The source-level CPSV16 proportional theorem remains not ready here: the
 % paper-faithful proof requires the full multi-copy BNT coefficient comparison
@@ -47,69 +58,66 @@ with an extra $Z$-gauge degree of freedom.
 \begin{theorem}[Multi-block fundamental theorem for normal tensors]%
     \label{thm:cpgsv_multiblock_ft_source}
     \notready
-    This is the multi-block fundamental theorem of
-    \cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}; see also
-    \cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. Let $A$ and $B$
-    be MPS tensors in canonical form. Write their bases of normal tensors as
-    $(A_k)_{k=1}^{g_a}$ and $(B_\ell)_{\ell=1}^{g_b}$. If, for every system
-    size $N$, the MPVs generated by $A$ and $B$ are proportional, then
-    $g_a=g_b$. After relabelling the basis of normal tensors of $A$, there are
-    scalars $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices
-    $Y_k$ such that, for every $k$ and every physical index $i$,
+    Let $A$ and $B$ be MPS tensors in canonical form. Write their bases of
+    normal tensors as $(A_k)_{k=1}^{g_a}$ and
+    $(B_\ell)_{\ell=1}^{g_b}$. If, for every system size~$N$, the MPVs
+    generated by $A$ and $B$ are proportional, then $g_a=g_b$. After relabelling
+    the basis of normal tensors of $A$, there are scalars
+    $\zeta_k \in \C$ with $|\zeta_k|=1$ and invertible matrices $Y_k$ such that,
+    for every $k$ and every physical index~$i$,
     \[
         B_k^i
         =
         \zeta_k\,Y_k\,A_k^i\,Y_k^{-1}.
     \]
-    In particular, the matched normal tensors have the same bond dimension and
-    the same gauge-phase class.
+    Thus the paired normal tensors have the same bond dimension and the same
+    gauge-phase class.
 \end{theorem}
 
-The same-MPV input is reduced to a common primitive block decomposition by
+This is the multi-block theorem of
+\cite[Theorem~II.1]{Cirac2017MPDO_AnnPhys}; see also
+\cite[Theorem~4.5 and Corollary~IV.5]{Cirac2021Matrix}. The same-MPV input is
+reduced to common primitive block decompositions by
 Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} of
 Chapter~\ref{ch:canonical_after_blocking}. The BNT matching and coefficient
 comparison are developed in Chapter~\ref{ch:bnt}. The per-block gauge-phase
-witnesses, copy-weight identities, and block-diagonal gauge are then assembled
-in Theorem~\ref{thm:sector_bnt_equal_global_gauge}. The same-index direct-sum
-corollaries of Chapter~\ref{ch:algebraic_ft} are useful algebraic consequences,
-but they are not the source proof of the BNT block matching.
+witnesses, copy-weight identities, and block-diagonal gauge construction are
+then combined in Theorem~\ref{thm:sector_bnt_equal_global_gauge}. The same-index
+direct-sum corollaries of Chapter~\ref{ch:algebraic_ft} are useful algebraic
+consequences, but they are not the BNT block-matching theorem itself.
 
 % The equal-case source corollary remains not ready until the unrestricted
-% source theorem has been assembled from the common blocked surface, the
+% source theorem has been proved from the common blocked surface, the
 % paper-faithful BNT coefficient comparison, and the global gauge construction.
 \begin{theorem}[Equal canonical-form representations are globally conjugate]%
     \label{thm:cpgsv_equal_case_source}
     \notready
-    This is the equal-case corollary of
-    \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}; see also
-    \cite[Corollary~IV.5]{Cirac2021Matrix}. If $A$ and $B$ are two
-    canonical-form representations generating the same MPV family at every
-    system size $N$, then the matrix dimensions of $A^i$ and $B^i$ coincide.
-    Moreover, there is one invertible matrix $X$ such that, for every physical
-    index $i$,
+    Let $A$ and $B$ be canonical-form representations generating the same MPV
+    family for every system size~$N$. Then the matrix dimensions of $A^i$ and
+    $B^i$ coincide, and there is one invertible matrix $X$ such that, for every
+    physical index~$i$,
     \[
         A^i
         =
         X\,B^i\,X^{-1}.
     \]
-    Thus the equal case removes the blockwise phase freedom appearing in the
-    proportional theorem and gives a single global conjugacy.
+    Thus the equal case removes the blockwise phase freedom of the proportional
+    theorem and gives a single global conjugacy.
 \end{theorem}
 
-The coefficient identities for the matched sectors are supplied by the BNT
-matching of Chapter~\ref{ch:bnt}; the weight recovery uses Newton--Girard. The
-resulting global conjugacy is recorded in
-Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
+This is the equal-case corollary of
+\cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}; see also
+\cite[Corollary~IV.5]{Cirac2021Matrix}. The coefficient identities for the
+paired sectors are supplied by the BNT comparison of Chapter~\ref{ch:bnt}; the
+weight recovery uses Newton--Girard. The resulting global conjugacy is recorded
+in Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \section{Homogeneous Pair-Span Padding}\label{sec:ft_pair_span_padding}
 
-The pair-span padding lemmas below are shared algebraic infrastructure for the
-aperiodic Fundamental Theorem route. They are used to pass from the
-Wielandt/block-injective homogeneous span information of
-\cite{Cirac2017MPDO_AnnPhys} to the fixed-length separation statements used by
-BNT comparison. Parent-Hamiltonian arguments later reuse the same predicates,
-but the source role of the identity-pair lemma is the Fundamental Theorem
-pair-span step.
+The pair-span padding lemmas below are algebraic statements about fixed-length
+word spans in the product algebra. They convert a full homogeneous pair-word span
+at one positive length into the identity pair at all sufficiently large lengths,
+which is the exact-length form needed in BNT separation.
 
 \begin{lemma}[Identity pair from full homogeneous pair-word span]\label{lem:pair_identity_span_top}
     \lean{MPSTensor.pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop}
@@ -120,52 +128,82 @@ pair-span step.
     \uses{def:pair_trace_separation_words}
     Let $A$ and $B$ be MPS tensors of bond dimensions $D_1$ and $D_2$.
     \begin{enumerate}
-        \item If the homogeneous pair-word span is the full product algebra at some
-              length $n$, i.e.\
+        \item If the homogeneous pair-word span is the full product algebra at
+              length~$n$,
               \[
-                  \spn\{(A^w,B^w)\mid |w|=n\} = \MN{D_1}\times\MN{D_2},
+                  \spn_{\C}\{(A^w,B^w): |w|=n\}
+                  =
+                  \MN{D_1}\times\MN{D_2},
               \]
-              then the simultaneous identity pair $(\Id_{D_1},\Id_{D_2})$ belongs to that
-              same homogeneous span.
-        \item If the span is full at one positive length $S>0$, then the identity
-              pair lies in the homogeneous pair-word span at every sufficiently large
-              length:
+              then the identity pair
+              $(\Id_{D_1},\Id_{D_2})$ belongs to the same homogeneous span.
+        \item If the span is full at one positive length $S>0$, then there is
+              $L \in \N$ such that, for every $n \ge L$,
               \[
-                  \exists L \in \N,
-                  \forall n \ge L,
                   (\Id_{D_1},\Id_{D_2})\in
-                  \spn\{(A^w,B^w)\mid |w|=n\}.
+                  \spn_{\C}\{(A^w,B^w): |w|=n\}.
               \]
     \end{enumerate}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Statement~(1) is immediate: if the span is already the whole product algebra,
-    then it contains the identity pair.
-    For~(2), fullness at a positive length propagates by multiplying a word of
-    length $T$ by a one-letter word, so induction gives fullness at every
-    length $S+k$. Applying~(1) at each such length gives the conclusion with
-    $L=S$.
+    Statement~(1) is immediate from equality with the full product algebra.
+    For~(2), fullness at a positive length propagates to all larger lengths by
+    the positive-length span-propagation lemma. Applying~(1) at each propagated
+    length gives the identity pair in every sufficiently large homogeneous span.
 \end{proof}
 
 \section{Equal-MPV Comparisons}%
 \label{sec:ft_equal_mpv_comparisons}
 
-The source corollary for equal MPVs says that if two canonical-form tensors
-generate the same MPV family for all system sizes, then their matrix dimensions
-coincide and the full tensors are related by one invertible gauge
-\cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}. In the proof, this corollary is
-obtained by matching the BNT blocks and then comparing the sector-weight power
-sums.
+The equal-MPV proof is a coefficient comparison. In the one-copy aligned case,
+write
+\[
+    A^i=\bigoplus_{j=1}^{g}\mu_j^A A_j^i,
+    \qquad
+    B^i=\bigoplus_{j=1}^{g}\mu_{\pi(j)}^B B_{\pi(j)}^i,
+\]
+and suppose the paired basis blocks satisfy
+\[
+    B_{\pi(j)}^i = e^{\mathrm{i}\phi_j}X_jA_j^iX_j^{-1}.
+\]
+Then equality of the total MPVs gives, for every~$N$,
+\[
+    \begin{aligned}
+        0
+         & =
+        \ket{V^{(N)}(A)}-\ket{V^{(N)}(B)} \\
+         & =
+        \sum_{j=1}^{g}
+        \left[(\mu_j^A)^N
+            -
+            (\mu_{\pi(j)}^B e^{\mathrm{i}\phi_j})^N\right]
+        \ket{V^{(N)}(A_j)}.
+    \end{aligned}
+\]
+For all sufficiently large~$N$, BNT linear independence forces each displayed
+coefficient to vanish. Since the weights are nonzero and the equality holds for
+all consecutive sufficiently large~$N$, one obtains
+$\mu_j^A=\mu_{\pi(j)}^B e^{\mathrm{i}\phi_j}$. The phases are then absorbed into
+the weights, and the block gauges $X_j$ form the block-diagonal global gauge.
 
-The block-matching conclusion (block-count, bond-dimension, and
-gauge-phase identification of corresponding sectors) and the global
-gauge identification are formalised on the BNT canonical form of
-Chapter~\ref{ch:bnt}. The literal coordinate form of
-\cite[Corollary~II.2 and \S~II.C, lines 1184--1192]
-{Cirac2017MPDO_AnnPhys}
-is recorded there under the unit-modulus-copy normalization.
+The repeated-copy and equal-modulus part of the comparison is not restated as a
+separate theorem in this chapter. Its reference is Chapter~\ref{ch:bnt}: the
+coefficient identity
+Lemma~\ref{lem:sector_bnt_coeff_identity_via_matched_mpv_phase}, the
+copy-weight recovery
+Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity}, and the
+global-gauge Theorem~\ref{thm:sector_bnt_equal_global_gauge}. No strict ordering
+of the moduli is used in these SectorBNT statements; strict-modulus or one-copy
+comparisons are special cases, not substitutes for the literature theorem.
+
+The source equal-MPV corollary says that canonical-form tensors generating the
+same MPV family for all system sizes are globally conjugate
+\cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}. The BNT block-count,
+bond-dimension, gauge-phase, copy-count, and weight-multiset conclusions are
+recorded in Chapter~\ref{ch:bnt}. The coordinate form of the same result is
+recorded there under the unit-modulus-copy normalization.
 % Maintainer note (Lean): see the declarations
 % MPSTensor.ft_sector_bnt_equal_sector_data and
 % MPSTensor.ft_sector_bnt_equal_global_gauge, and
@@ -187,9 +225,14 @@ is recorded there under the unit-modulus-copy normalization.
 
 \begin{proof}
     \leanok
-    The proof is the contrapositive of rectangular overlap decay: if the two
-    bond dimensions differ, the mixed overlap tends to $0$, contradicting
-    the assumed convergence of its modulus to $1$.
+    The displayed quantity is the modulus of the Hilbert-space inner product; it
+    agrees in modulus with the mixed MPV overlap. The proof is the contrapositive
+    of rectangular overlap decay: if the two bond dimensions differ, then
+    \[
+        \lim_{N\to\infty}
+        \left|\braket{V^{(N)}(B)}{V^{(N)}(A)}\right|=0,
+    \]
+    contradicting the assumed convergence of this modulus to~$1$.
 \end{proof}
 
 \begin{lemma}[Common-block equal-MPV comparison]\label{lem:ft_equal_same_structure}
@@ -208,13 +251,14 @@ is recorded there under the unit-modulus-copy normalization.
 
 \begin{proof}
     \uses{thm:sector_bnt_equal_global_gauge}
-    On the BNT canonical form this is the specialization of the global-gauge
-    equality theorem (Chapter~\ref{ch:bnt}) to the case where $P$ and $Q$
-    share a common $(g, D_k, \mu_k)$ block structure: the basis bijection
-    $\beta$ is trivial, the per-block gauge matrices $X_k$ furnish the
-    per-pair gauge equivalences, and the flattened direct-sum gauge $X$
-    assembles them into the global conjugation on $\bigoplus_k \mu_k A_k$
-    and $\bigoplus_k \mu_k B_k$.
+    This is the one-copy, already aligned subcase of the BNT global-gauge
+    theorem. In Chapter~\ref{ch:bnt}, specialize
+    Theorem~\ref{thm:sector_bnt_equal_global_gauge} to sector decompositions
+    $P$ and $Q$ with the same $(g,D_k,\mu_k)$ block structure. The basis
+    permutation is the identity, the per-block matrices $X_k$ give the pairwise
+    gauge equivalences, and the block-diagonal matrix $X=\bigoplus_k X_k$
+    gives the global conjugation on
+    $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$.
     % Maintainer note (Lean): see
     % MPSTensor.ft_sector_bnt_equal_global_gauge in
     % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
@@ -223,59 +267,48 @@ is recorded there under the unit-modulus-copy normalization.
 \subsection{Sector multiplicities and weight recovery}%
 \label{sec:bnt_power_sum_recovery}
 
-This subsection records the coefficient comparison used when several
-canonical-form blocks are phase and gauge transforms of the same basis
-normal tensor. If the $j$th basis block occurs with nonzero weights
-$\mu_{j,1},\ldots,\mu_{j,r_j}$, its length-$N$ contribution is governed by
-the power sum
+This subsection records the coefficient comparison for sectors with repeated
+copies. If the $j$th basis block occurs with nonzero weights
+$\mu_{j,1},\ldots,\mu_{j,r_j}$, its contribution at length~$N$ is
 \[
-    c_{S,j}^{(N)}=\sum_{q=1}^{r_j}\mu_{j,q}^{N}.
+    c_{S,j}^{(N)} = \sum_{q=1}^{r_j}\mu_{j,q}^{N}.
 \]
-This is the scalar part of the source decomposition
-\[
-    A^i=\bigoplus_{j=1}^g\bigoplus_{q=1}^{r_j}
-    \mu_{j,q}X_{j,q}A_j^iX_{j,q}^{-1}.
-\]
-The sector tensor used below is the representative form after the gauge
-conjugations $X_{j,q}$ have already been absorbed into the choice of basis
-block and gauge phases. Thus BNT linear independence separates the coefficient arrays
-$c_{S,j}^{(N)}$, and elementary power-sum algebra recovers both the
-multiplicity $r_j$ and the multiset of weights attached to the basis block.
-In the later PEPS application this information is not presented as a separate
-chain of MPS comparison theorems: Theorem~IV.13 of~\cite{Cirac2017MPDO_AnnPhys} uses
-structure coefficients
+After the basis blocks have been paired up to gauge phase, both sides are written
+in the same BNT basis. The full family of basis MPV states is linearly
+independent for all sufficiently large~$N$, so equality of total MPVs separates
+the coefficient arrays $c_{S,j}^{(N)}$. Equality of those power sums for all
+sufficiently large~$N$ determines both the multiplicity $r_j$ and the multiset of
+weights.
+
+The same scalar power-sum algebra appears in the PEPS application of
+\cite[Theorem~IV.13]{Cirac2017MPDO_AnnPhys}, where structure coefficients are
+written as
 \[
     c_{\alpha,\beta,\gamma}^{(L)}
     =\tr\!\left(\chi_{\alpha,\beta,\gamma}^L\right),
     \qquad
     m_\gamma=\sum_{\alpha,\beta}c_{\alpha,\beta,\gamma}^{(1)}
-    m_\alpha m_\beta,
+    m_\alpha m_\beta.
 \]
-and the appendix writes the vertical canonical forms as
+In the source appendix the vertical canonical forms are
 $\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$ and
 $\bigoplus_\beta \nu_\beta\otimes A_\beta$, with
-$m_\alpha=\tr(\mu_\alpha)$ and
-$n_\beta=\tr(\nu_\beta)$.
-Here $\mu_\alpha$ and $\nu_\beta$ are diagonal positive matrices in the
-source paper; only their traces are the scalar coefficients compared in this
-subsection.
-The one-index coefficients $c_{S,j}^{(N)}$ below are the corresponding
-power-sum comparison after the basis blocks have already been matched. The
-geometric extrapolation and Newton--Girard steps are external finite-sequence
-facts used to recover the lists of weights from those power sums.
+$m_\alpha=\tr(\mu_\alpha)$ and $n_\beta=\tr(\nu_\beta)$. There
+$\mu_\alpha$ and $\nu_\beta$ are diagonal positive matrices; only their traces
+enter as the scalar coefficients compared here.
 
 \begin{definition}[Sector weights and sector decomposition]%
     \label{def:sector_weight_data}
     \lean{MPSTensor.SectorWeightData, MPSTensor.SectorDecomposition}
     \leanok
-    A sector-weight tuple over $g$ basis blocks consists of
-    multiplicities $r_j > 0$, weights
-    $\mu_{j,q} \neq 0$ for $q \in \{1,\ldots,r_j\}$, and the
-    \emph{sector coefficients}
+    A sector-weight tuple over $g$ basis blocks consists of multiplicities
+    $r_j > 0$, nonzero weights $\mu_{j,q}$ for
+    $q \in \{1,\ldots,r_j\}$, and the sector coefficients
     \[
-        c_{S,j}^{(N)} := \sum_{q=1}^{r_j} \mu_{j,q}^N
+        c_{S,j}^{(N)}
+        :=
+        \sum_{q=1}^{r_j} \mu_{j,q}^N.
     \]
-    for the tuple $S$.
     A \emph{sector decomposition} consists of the basis blocks
     $(A_j)_{j=1}^g$ together with these multiplicities and weights.
 \end{definition}
@@ -289,7 +322,8 @@ facts used to recover the lists of weights from those power sums.
     the MPV satisfies
     \[
         V^{(N)}(A_{\mathrm{tot}})_\sigma
-        = \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
+        =
+        \sum_{j=1}^{g} c_{S,j}^{(N)} V^{(N)}(A_j)_\sigma.
     \]
 \end{lemma}
 
@@ -303,7 +337,7 @@ facts used to recover the lists of weights from those power sums.
     and the basis is eventually linearly independent (the BNT property),
     then there is $N_0$ such that
     \[
-        \forall N>N_0,\ \forall j,\qquad
+        \forall N>N_0,\ \forall j,\quad
         c_{S,j}^{(N)}=c_{T,j}^{(N)}.
     \]
 \end{lemma}
@@ -317,8 +351,8 @@ facts used to recover the lists of weights from those power sums.
     their multiplicities agree. If the basis is eventually linearly
     independent and the total MPVs of $S$ and $T$ agree, then there are
     copy-count equalities $r_j^S = r_j^T$ for every basis block~$j$, and,
-    after transporting along these equalities, the sector weight multisets
-    are equal for every~$j$:
+    after identifying the corresponding copy index sets, the sector weight
+    multisets are equal for every~$j$:
     \[
         \{\mu_{j,q}^{S}:1\le q\le r_j^S\}
         =
@@ -350,7 +384,7 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{def:sector_weight_data}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
-    $\pi$ matching the basis blocks and, for each $j$, a nonzero complex
+    $\pi$ pairing the basis blocks and, for each $j$, a nonzero complex
     number $\zeta_j$ such that
     \[
         V^{(N)}(Q_{\pi(j)})_\sigma = \zeta_j^N V^{(N)}(P_j)_\sigma
@@ -364,13 +398,12 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
     \leanok
     \uses{lem:paper_decomp_formula, lem:bnt_power_sum_recover_copies_weights}
-    Absorb the factors $\zeta_j$ into the sector weights of $Q$ and keep the
+    Absorb the factors $\zeta_j$ into the sector weights of $Q$ and use the
     basis blocks of $P$. The phase-matching hypothesis and the sector
     decomposition formula show that the resulting decomposition has the same
-    total MPV family as~$Q$, hence also as~$P$. One is then in the
-    shared-basis situation of Lemma~\ref{lem:bnt_power_sum_recover_copies_weights},
-    which recovers both the copy-count equalities and the claimed equality of
-    weight multisets.
+    total MPV family as~$Q$, hence also as~$P$. This is the shared-basis case
+    of Lemma~\ref{lem:bnt_power_sum_recover_copies_weights}, which recovers the
+    copy-count equalities and the claimed equality of weight multisets.
 \end{proof}
 
 \begin{lemma}[Two-basis sector comparison after phase matching]%
@@ -379,7 +412,7 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{def:sector_weight_data}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
-    $\pi$ matching the basis blocks, the multiplicities satisfy
+    $\pi$ pairing the basis blocks, the multiplicities satisfy
     $r_j^P = r_{\pi(j)}^Q$, and for each $j$ there is a nonzero complex number
     $\zeta_j$ such that
     \[
@@ -406,8 +439,8 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{def:sector_weight_data, def:gauge_phase_equiv}
     Let $P$ and $Q$ be sector decompositions. Assume there is a permutation
-    $\pi$ matching the basis blocks, the multiplicities satisfy
-    $r_j^P = r_{\pi(j)}^Q$, and each matched pair of basis blocks is
+    $\pi$ pairing the basis blocks, the multiplicities satisfy
+    $r_j^P = r_{\pi(j)}^Q$, and each corresponding pair of basis blocks is
     gauge-phase equivalent. If the total MPV families of $P$ and $Q$ agree
     and the basis blocks of $P$ are eventually linearly independent, then
     for each $j$ the sector weight multiset of $P_j$ equals the multiset
@@ -420,11 +453,10 @@ facts used to recover the lists of weights from those power sums.
     \uses{thm:gauge_phase_mpv_scaling, lem:phase_match_sector_weights}
     Gauge-phase equivalence gives the required phase-scaling identity for the
     MPVs by Theorem~\ref{thm:gauge_phase_mpv_scaling}. The conclusion then
-    follows immediately from
-    Lemma~\ref{lem:phase_match_sector_weights}.
+    follows from Lemma~\ref{lem:phase_match_sector_weights}.
 \end{proof}
 
-\begin{definition}[Sector basis matching witness]%
+\begin{definition}[Sector basis matching]%
     \label{def:sector_basis_matching}
     \lean{MPSTensor.SectorBasisMatching}
     \leanok
@@ -432,16 +464,16 @@ facts used to recover the lists of weights from those power sums.
     A \emph{sector basis matching} between two sector decompositions $P$ and $Q$
     consists of
     \begin{enumerate}
-        \item a basis permutation (bijection)
+        \item a basis permutation
               $\pi : \{1,\ldots,g_P\} \simeq \{1,\ldots,g_Q\}$,
         \item per-block multiplicity equalities $r_j^P = r_{\pi(j)}^Q$,
         \item per-block bond-dimension equalities $D_j^P = D_{\pi(j)}^Q$, and
         \item per-block gauge-phase equivalences $P_j \simeq_{\mathrm{gp}} Q_{\pi(j)}$
-              after transporting $P_j$ across the bond-dimension equality.
+              after identifying the two matrix algebras by the bond-dimension equality.
     \end{enumerate}
-    The hypotheses consumed by
-    Lemma~\ref{lem:gauge_phase_matched_basis_sector_weights} are exactly the fields of
-    this matching tuple.
+    The hypotheses of
+    Lemma~\ref{lem:gauge_phase_matched_basis_sector_weights} are exactly these
+    listed components.
 \end{definition}
 
 \begin{definition}[Sector basis pre-matching]%
@@ -451,8 +483,8 @@ facts used to recover the lists of weights from those power sums.
     \uses{def:sector_weight_data, def:gauge_phase_equiv}
     A \emph{sector basis pre-matching} between sector decompositions $P$
     and $Q$ consists of a permutation of their basis blocks, equality of the
-    matched bond dimensions, and gauge-phase equivalence of each matched pair.
-    It does not include the copy-count equality; that equality is recovered
+    paired bond dimensions, and gauge-phase equivalence of each corresponding
+    pair. It does not include the copy-count equality; that equality is recovered
     from total MPV equality and BNT linear independence in
     Lemma~\ref{lem:sector_basis_pre_matching_to_matching}.
 \end{definition}
@@ -495,8 +527,9 @@ facts used to recover the lists of weights from those power sums.
 \begin{proof}
     \leanok
     \uses{def:sector_basis_overlap_ortho_hyps, def:sector_basis_overlap_span_hyps}
-    This is just collecting the one-family fields on the left and right, and adding
-    the remaining injectivity and span-comparison hypotheses.
+    Combine the one-family hypotheses on the two sides with the remaining
+    injectivity and span-comparison hypotheses. These are exactly the assertions
+    in Definition~\ref{def:sector_basis_overlap_span_hyps}.
 \end{proof}
 
 \begin{lemma}[A pre-matching gives a sector basis matching]%
@@ -521,8 +554,8 @@ facts used to recover the lists of weights from those power sums.
         \zeta_j^N V^{(N)}(P_j)_\sigma.
     \]
     Lemma~\ref{lem:phase_match_recover_copies_weights} then recovers the
-    missing copy-count equalities, which are precisely the extra fields needed
-    for Definition~\ref{def:sector_basis_matching}.
+    missing copy-count equalities, which are precisely the extra assertions
+    needed for Definition~\ref{def:sector_basis_matching}.
 \end{proof}
 
 \begin{theorem}[Overlap rigidity gives a sector basis matching]%
@@ -541,7 +574,7 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{lem:bnt_perm_simple, lem:sector_basis_pre_matching_to_matching}
     The permutation-rigidity lemma for bases of normal tensors gives a
-    permutation, the matched bond dimensions, and the gauge-phase equivalences
+    permutation, the paired bond dimensions, and the gauge-phase equivalences
     of the basis blocks, hence a sector basis pre-matching. Asymptotic
     orthonormality gives the BNT linear-independence condition, and
     Lemma~\ref{lem:sector_basis_pre_matching_to_matching} recovers the
@@ -583,12 +616,13 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
     \leanok
-    Apply the phase-class construction on both sides and expose the
-    representative overlap/span data internally. The one-sided positive-dimension,
-    injectivity, normalization, and overlap fields fill all fields of
-    Definition~\ref{def:sector_basis_overlap_span_hyps} except the two-family
-    span equality. That span equality follows by transporting the assumed
-    nonzero-block span equality through the two representative-span identities.
+    Choose one MPV phase-class representative on each side. The one-sided
+    positive-dimension, injectivity, normalization, and overlap hypotheses give
+    all one-family assertions in
+    Definition~\ref{def:sector_basis_overlap_span_hyps}. The assumed
+    nonzero-block span equality is preserved when each block is replaced by a
+    phase-equivalent representative. This supplies the two-family span equality
+    for the sector bases.
 \end{proof}
 
 \begin{definition}[MPV phase equivalence for nonzero-weight blocks]
@@ -597,8 +631,12 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{def:mpv}
     Two blocks $A$ and $B$ are MPV-phase equivalent if there is a nonzero
-    scalar $\zeta$ such that, for every system size $N$ and every physical word,
-    the MPV coefficient of $B$ equals $\zeta^N$ times the MPV coefficient of $A$.
+    scalar $\zeta$ such that, for every system size~$N$ and every physical word,
+    \[
+        V^{(N)}(B)_\sigma
+        =
+        \zeta^N V^{(N)}(A)_\sigma.
+    \]
     The two bond dimensions are allowed to differ.
 \end{definition}
 
@@ -656,7 +694,7 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{def:mpv_common_phase_cover}
     If a BNT block-matching comparison has produced a permutation of
-    the two basis families together with matched bond dimensions and gauge-phase
+    the two basis families together with paired bond dimensions and gauge-phase
     equivalences, then the two basis families have a common MPV phase cover.
 \end{lemma}
 
@@ -682,7 +720,7 @@ facts used to recover the lists of weights from those power sums.
         \omega_s^N \ket{V^{(N)}(A_s)}
     \]
     for every length $N\ge 0$, with $\ket{V^{(0)}(C)}$ interpreted as the
-    bond dimension of $C$. For each matched pair, the case $N=0$ records
+    bond dimension of $C$. For each corresponding pair, the case $N=0$ records
     equality of bond dimensions. Then the two block families admit a common MPV
     phase cover.
 \end{lemma}
@@ -746,7 +784,7 @@ facts used to recover the lists of weights from those power sums.
     \uses{lem:mpv_common_phase_cover_span_eq,
         thm:bnt_sector_decomp_pair_overlap_span_of_block_span}
     The common cover gives finite-length span equality for the two nonzero-weight
-    block families. The phase-class representative construction then transports
+    block families. The phase-class representative construction then carries
     this span equality to the BNT sector bases and supplies the remaining
     one-family overlap hypotheses.
 \end{proof}
@@ -759,7 +797,7 @@ facts used to recover the lists of weights from those power sums.
     Given two sector decompositions $P$ and $Q$, a sector basis matching
     (Definition~\ref{def:sector_basis_matching}) between them, eventual
     linear independence of the basis MPV states of $P$, and equality of the
-    total MPV families of $P$ and $Q$, one obtains nonzero phases $(\zeta_j)_j$
+    total MPV families of $P$ and $Q$, one obtains nonzero scalars $(\zeta_j)_j$
     such that for each $j$ the sector weight multiset of $P_j$ equals the
     multiset obtained from that of $Q_{\pi(j)}$ by multiplication by~$\zeta_j$.
 \end{theorem}
@@ -784,40 +822,38 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpv_zero_tensor}
-    At positive lengths the all-zero leftover block vanishes, so the nonzero
-    parts agree. Theorem~\ref{thm:mpv_zero_tensor} gives the exact value
-    \[
-        V^{(0)}(\mathbf{0}_{d,D_0})_\varnothing=D_0,
-    \]
-    so equality of the two leftover zero-block dimensions gives cancellation
-    at length zero as well.
+    Since $z_A=z_B$, the two all-zero leftover tensors are the same tensor at
+    every length. Subtracting this common summand from the original MPV equality
+    gives the equality of the two nonzero parts, including at length zero.
 \end{proof}
 
 \begin{definition}[Blocked-word identification for common sectors]%
     \label{def:common_sector_relabeling_hypothesis}
     \lean{MPSTensor.CommonSectorRelabelingHypothesis}
     \leanok
-    This is the one-sided assertion that the canonically blocked weighted nonzero
-    part agrees, as an MPV family, with the same common cyclic-sector family after
-    identifying blocked physical words. It isolates the coordinate equality between
-    direct and iterated blocking. The
-    coordinate-grouping theorem below supplies this condition in the theorems that
-    take it as a hypothesis, so it is not a new mathematical hypothesis.
+    This is the one-sided assertion that the canonically blocked weighted
+    nonzero part agrees, as an MPV family, with the same common cyclic-sector
+    family after identifying blocked physical words. It is the coordinate
+    equality between direct blocking and iterated blocking.
 \end{definition}
+
+The coordinate-grouping theorem below proves this assertion for the canonical
+word grouping.
 
 \begin{definition}[Global coordinate-grouping hypothesis for common sectors]%
     \label{def:common_grouped_block_cast_hypothesis}
     \lean{MPSTensor.CommonGroupedBlockCastHypothesis}
     \leanok
     \uses{def:common_blocked_cyclic_sector_grouped_block_cast}
-    This is the corresponding global assertion at the level of blocked words: every
-    common blocked cyclic-sector family satisfies the coordinate-grouping condition
-    for each original nonzero block. Equivalently, the canonical identification with
-    each iterated blocked alphabet agrees with grouping the direct blocked word into
-    consecutive words of the period-removal length. The next lemma proves this
-    assertion from the concrete word-cast construction.
+    This is the corresponding global assertion at the level of blocked words:
+    every common blocked cyclic-sector family satisfies the coordinate-grouping
+    condition for each original nonzero block. Equivalently, the canonical
+    identification with each iterated blocked alphabet agrees with grouping the
+    direct blocked word into consecutive words of the period-removal length.
 \end{definition}
+
+The next lemma proves this assertion from the concrete word-grouping
+construction.
 
 \begin{lemma}[Canonical coordinate grouping]%
     \label{lem:common_grouped_block_cast_of_flatten_word}
@@ -832,7 +868,7 @@ facts used to recover the lists of weights from those power sums.
 
 \begin{proof}\leanok
     \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
-    Apply the grouped-block cast comparison to each original nonzero block.
+    Apply the grouped-block comparison to each original nonzero block.
 \end{proof}
 
 \begin{lemma}[Coordinate grouping gives the word identification]%
@@ -844,15 +880,15 @@ facts used to recover the lists of weights from those power sums.
         thm:common_blocked_cyclic_sector_blocked_word_comparison}
     If the global coordinate-grouping hypothesis holds, then the blocked-word
     identification used by the common-sector structural theorem holds. The
-    proof is exactly the weighted finite-sum comparison for direct and iterated
-    blocking applied to each common cyclic-sector family.
+    proof is the weighted finite-sum comparison for direct and iterated blocking
+    applied to each common cyclic-sector family.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:common_blocked_cyclic_sector_blocked_word_comparison}
     Apply the coordinate-grouping comparison to each one-sided family and sum over
-    the original nonzero blocks with the transported powers of the weights.
+    the original nonzero blocks with the corresponding powers of the weights.
 \end{proof}
 
 \begin{theorem}[Unconditional common primitive block decompositions]%
@@ -861,11 +897,11 @@ facts used to recover the lists of weights from those power sums.
     \leanok
     \uses{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
     Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
-    length at which both blocked tensors decompose into a leftover all-zero
-    block and a weighted direct sum of trace-preserving, primitive,
+    length at which both blocked tensors have the same positive-length MPV
+    family as weighted direct sums of trace-preserving, primitive,
     tensor-irreducible blocks with positive bond dimensions and nonzero weights.
-    The two nonzero-sector families have the same positive-length MPV family,
-    and the leftover zero blocks satisfy the length-zero identity.
+    The two weighted nonzero-sector families have the same positive-length MPV
+    family.
 \end{theorem}
 
 \begin{proof}
@@ -880,9 +916,9 @@ facts used to recover the lists of weights from those power sums.
 \end{proof}
 
 \begin{remark}[Equal-case comparison after canonical reduction]
-    The equal-case proof in the source starts after both tensors have been put in
-    canonical form and after a basis of normal tensors has been chosen. In that
-    notation the BNT expansion has the form
+    The source proof starts after both tensors have been put in canonical form
+    and after a basis of normal tensors has been chosen. In that notation the BNT
+    expansion has the form
     \[
         \ket{V^{(N)}(A)}
         =
@@ -890,39 +926,26 @@ facts used to recover the lists of weights from those power sums.
         \left(\sum_{q=1}^{r^A_j}(\mu^A_{j,q})^N\right)
         \ket{V^{(N)}(A_j)},
     \]
-    and similarly for $B$. The proportional theorem of
-    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} first matches the BNT
-    representatives: after a relabelling,
+    and similarly for~$B$. The proportional theorem of
+    \cite{Cirac2016MPDO_arXiv,Cirac2021Matrix} first pairs the BNT
+    representatives: after relabelling,
     \[
-        B_j^i=e^{i\phi_j}Y_jA_j^iY_j^{-1}.
+        B_j^i=e^{\mathrm{i}\phi_j}Y_jA_j^iY_j^{-1}.
     \]
-    Only after this representative matching does the equal case compare the scalar
-    coefficient power sums: for each $j=1,\ldots,g$ and $N\ge 1$, the sums
-    $\sum_{q=1}^{r^A_j}(\mu^A_{j,q})^N$ and
-    $\sum_{q=1}^{r^B_j}(\mu^B_{j,q}e^{i\phi_j})^N$ are equal.
-    Newton--Girard then recovers the multiplicities and weight multisets, and the
-    block gauges $Y_j$ are placed on the diagonal to give the global conjugating
-    matrix. This is the equal-case corollary
-    \cite[Corollary~II.2, lines 354--361 and appendix 1172--1192]{Cirac2017MPDO_AnnPhys},
-    restated in \cite[Corollary~IV.5]{Cirac2021Matrix}.
+    The equal case then uses the SectorBNT coefficient comparison of
+    Chapter~\ref{ch:bnt}: Lemma~\ref{lem:sector_bnt_coeff_identity_via_global_gauge}
+    gives the matched coefficient identities,
+    Lemma~\ref{lem:sector_bnt_copy_weight_matching_of_coeff_identity} recovers
+    multiplicities and weight multisets, and
+    Theorem~\ref{thm:sector_bnt_equal_global_gauge} assembles the block gauges
+    $Y_j$ into the block-diagonal global conjugating matrix. This is the
+    equal-case corollary
+    \cite[Corollary~II.2]{Cirac2017MPDO_AnnPhys}, restated in
+    \cite[Corollary~IV.5]{Cirac2021Matrix}.
 
-    The formalization of this route is split into two theorems. The first
-    gives the BNT basis bijection $\beta$, the per-block gauge-phase
-    witnesses, copy-count equality, and the scalar coefficient comparison
-    $\nu_{k,q} = \zeta_k^{-1} \mu_{\beta(k),\tau(q)}$ that follows from the
-    source power-sum comparison. The second
-    assembles the per-block gauge matrices $Y_j = X_k$ on the flattened
-    direct sum to produce the global conjugation $X$, matching the appendix
-    construction at \cite[lines 1189--1192]{Cirac2017MPDO_AnnPhys}.
-    % Maintainer note (Lean): the two theorems are
-    % MPSTensor.ft_sector_bnt_equal_sector_data and
-    % MPSTensor.ft_sector_bnt_equal_global_gauge in
-    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
-
-    The comparison theorems above formalize only the part of this route after the
-    common blocked nonzero sectors and their BNT matching data have been supplied.
-    The structural reduction supplies a common positive blocking length and
-    decompositions
+    The comparison theorems above start after the common blocked nonzero sectors
+    and their BNT block comparison have been supplied. The structural reduction
+    gives a common positive blocking length and decompositions
     \[
         A^{[p]}\sim\mathbf{0}_{d^p,z_A}\oplus A_{\mathrm{nz}},
         \qquad
@@ -930,32 +953,29 @@ facts used to recover the lists of weights from those power sums.
         \qquad z_A=z_B,
     \]
     with trace-preserving, primitive, irreducible nonzero sectors. The remaining
-    inputs are the one-site injectivity of those sectors and the BNT block-matching
-    comparison for the representative families. These
-    are genuine upstream assumptions of the conditional statements here; they are
-    not proved from equality of MPV families in this chapter.
+    inputs for the unrestricted source theorem are one-site injectivity of those
+    sectors and the BNT block comparison for the representative families.
 
-    Common phase covers are an auxiliary way to express the finite-length span
-    equality needed by the sector-comparison theorem. They are not a separate
-    form of the source theorem. Lemma~\ref{lem:mpv_common_phase_cover_span_eq}
+    Common phase covers are only a criterion for the finite-length span equality
+    needed by the sector-comparison theorem. Lemma~\ref{lem:mpv_common_phase_cover_span_eq}
     turns a common phase cover into span equality, while
-    Lemma~\ref{lem:common_phase_cover_of_block_matching} constructs
-    such covers from BNT block-matching data. Establishing the missing
-    representative BNT comparison and exact-length block-injective span remains the
-    open CPSV passage from equality of total MPV vectors to the
-    componentwise power-sum identities.
+    Lemma~\ref{lem:common_phase_cover_of_block_matching} constructs such covers
+    from BNT block-matching information.
+    % Maintainer note (Lean): the two theorems are
+    % MPSTensor.ft_sector_bnt_equal_sector_data and
+    % MPSTensor.ft_sector_bnt_equal_global_gauge in
+    % TNLean/MPS/FundamentalTheorem/SectorBNT/Fundamental.lean.
 \end{remark}
 
 \section{Overlap and BNT preparation for the Fundamental Theorem}%
 \label{sec:ft_overlap_bnt_preparation}
 
-The following results are source-relevant overlap and basis-of-normal-tensors
-preparation steps. They are not part of the after-blocking canonical-form
-reduction, and they are not direct consequences of the injective single-block
-Fundamental Theorem. Instead, they supply the overlap dichotomy, phase
-normalization, and eventual linear independence used when passing from normal
-blocks to BNT representatives. The purely same-index direct-sum assembly
-statements are collected in Chapter~\ref{ch:algebraic_ft}.
+The following results supply the single-block and basis-of-normal-tensors inputs
+for the sector comparison. The proportional single-block theorem gives
+gauge-phase equivalence from proportional MPVs. The overlap-limit criterion then
+gives eventual linear independence of the chosen BNT representatives. The
+same-index direct-sum constructions are collected in
+Chapter~\ref{ch:algebraic_ft}.
 
 \subsection{Proportional single-block ingredient}%
 \label{subsec:ft_proportional_single_block}
@@ -977,18 +997,15 @@ statements are collected in Chapter~\ref{ch:algebraic_ft}.
 \begin{proof}
     \leanok
     \uses{thm:overlap_decay}
-    By contradiction.
-    If $A$ and $B$ are not gauge-phase equivalent, then
-    $O_{AB}(N) \to 0$ (Theorem~\ref{thm:overlap_decay}).
-    From the proportionality hypothesis,
-    $O_{AB}(N) = c_N O_{BB}(N)$.
-    Since $O_{BB}(N) \to 1$, it follows that $c_N \to 0$.
-    But $O_{AA}(N) = |c_N|^2 O_{BB}(N) \to 0$,
-    contradicting $O_{AA}(N) \to 1$.
-
-    In~\cite{PerezGarcia2007Matrix}, the proportional case
-    is handled as part of the canonical form argument.
-    Here it is obtained directly from the overlap-decay theorem.
+    Suppose $A$ and $B$ are not gauge-phase equivalent. Then the overlap-decay
+    theorem gives $O_{AB}(N)\to0$. The proportionality hypothesis gives
+    \[
+        O_{AB}(N)=c_N O_{BB}(N),
+        \qquad
+        O_{AA}(N)=|c_N|^2 O_{BB}(N).
+    \]
+    Since $O_{BB}(N)\to1$, the first identity implies $c_N\to0$. The second
+    identity then gives $O_{AA}(N)\to0$, contradicting $O_{AA}(N)\to1$.
 \end{proof}
 
 \subsection{Equal-norm primitive irreducible blocks (BNT input)}%
@@ -1043,17 +1060,21 @@ statements are collected in Chapter~\ref{ch:algebraic_ft}.
     sector decomposition.
 \end{proof}
 
-\begin{definition}[MPV phase class data]%
+\begin{definition}[MPV phase classes]%
     \label{def:mpv_phase_class_data}
     \lean{MPSTensor.MPVPhaseEquiv, MPSTensor.MPVPhaseClassData, MPSTensor.mpvPhaseClassData}
     \leanok
     For a finite family of blocks, put $j \sim k$ when there is a nonzero
     scalar factor $\zeta$ such that
-    $\ket{V^{(N)}(B_k)}=\zeta^N\ket{V^{(N)}(B_j)}$ for every length~$N$.
-    The associated structure enumerates the finite quotient, chooses one
-    representative per class, records the scalar relating the representative to
-    each member, and shows that distinct representatives are not gauge-phase
-    equivalent.
+    \[
+        \ket{V^{(N)}(B_k)}
+        =
+        \zeta^N\ket{V^{(N)}(B_j)}
+    \]
+    for every length~$N$. The associated tuple enumerates the finite quotient,
+    chooses one representative per class, records the scalar relating the
+    representative to each member, and proves that distinct representatives are
+    not MPV-phase equivalent.
 \end{definition}
 
 \begin{theorem}[Phase-class BNT sector construction]%

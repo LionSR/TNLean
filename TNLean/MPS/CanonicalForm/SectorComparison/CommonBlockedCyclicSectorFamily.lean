@@ -516,21 +516,6 @@ theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
   F.blockTensor_eq_commonReindexedBlock_of_word_eq k
     (F.wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees k hCast)
 
-/-- Direct blocking of one original block has the same MPV family as the block obtained
-through iterated blocking, whenever the associated blocked-word decodings agree. -/
-theorem blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq
-    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
-    (hWord : ∀ i : Fin (blockPhysDim d F.p),
-      wordOfBlock d F.p i =
-        wordOfBlock d (F.period k * F.extra k)
-          (iteratedBlockIndex d (F.period k) (F.extra k)
-            (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
-    SameMPV₂
-      (blockTensor (d := d) (D := dim k) (blocks k) F.p)
-      (F.commonReindexedBlock k) := by
-  rw [F.blockTensor_eq_commonReindexedBlock_of_word_eq k hWord]
-  exact fun _ _ => rfl
-
 /-- Direct and iterated common blocking of one original block have the same MPV family
 when the canonical identification with the iterated alphabet agrees with consecutive grouping. -/
 theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
@@ -573,24 +558,6 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
           (mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
             F.commonReindexedBlock σ).symm
 
-/-- Agreement of blocked-word decodings assembles the weighted direct sum obtained by
-blocking the original nonzero blocks with the one obtained through iterated blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_word_eq
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
-      wordOfBlock d F.p i =
-        wordOfBlock d (F.period k * F.extra k)
-          (iteratedBlockIndex d (F.period k) (F.extra k)
-            (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) :=
-  F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
-
 /-- Agreement between the canonical identifications and the consecutive grouping maps assembles
 the weighted direct sum obtained by direct blocking with the one obtained through iterated
 blocking. -/
@@ -623,24 +590,6 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise
   intro N σ
   exact (F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ hBlock N σ).trans
     (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
-
-/-- Agreement of blocked-word decodings identifies the directly blocked weighted
-nonzero part with the derived common-sector family. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_word_eq
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hWord : ∀ (k : Fin r) (i : Fin (blockPhysDim d F.p)),
-      wordOfBlock d F.p i =
-        wordOfBlock d (F.period k * F.extra k)
-          (iteratedBlockIndex d (F.period k) (F.extra k)
-            (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := F.commonFlatWeight μ) F.commonFlatBlocks) :=
-  F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_blockwise μ
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_word_eq k (hWord k))
 
 /-- Agreement between the canonical identifications and the consecutive grouping maps identifies
 the directly blocked weighted nonzero part with the derived common-sector family. -/
@@ -679,26 +628,6 @@ theorem sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed
   intro N σ
   exact (hRelabel N σ).trans
     (F.sameMPV₂_weightedCommonReindexedBlock_commonFlat μ N σ)
-
-/-- The preceding comparison expressed at a prescribed common length. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonFlatAt_of_reindexed
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    {p' : ℕ} (hp : F.p = p')
-    (hRelabel : SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d p')
-        (μ := fun k : Fin r => (μ k) ^ p')
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p'))
-      (toTensorFromBlocks (d := blockPhysDim d p')
-        (μ := F.commonFlatWeight μ) (F.commonFlatBlocksAt hp)) := by
-  subst p'
-  simpa [commonFlatBlocksAt] using
-    F.sameMPV₂_weightedCanonicalBlock_commonFlat_of_reindexed μ hRelabel
 
 /-- Each sector tensor in the common reblocked cyclic-sector family is trace-preserving,
 has primitive transfer map, is tensor-irreducible, and has positive bond dimension. -/
