@@ -170,22 +170,6 @@ an equality of MPV families.
     irreducibility from Theorem~\ref{thm:blocked_irreducible_tp_primitive}.
 \end{proof}
 
-\begin{theorem}[Sorted TP primitive irreducible family forms a normal canonical form]%
-    \label{thm:ncf_sorted_tp_primitive_irred}
-    \lean{MPSTensor.isNormalCanonicalForm_of_tp_primitive_irr_sorted}
-    \leanok
-    \uses{def:is_normal_canonical_form}
-    Let $(\mu_k,A_k)_{k=1}^r$ have $|\mu_1| \ge \cdots \ge |\mu_r|$ and
-    $\mu_k \ne 0$ for every $k$. If every block is left-canonical, primitive,
-    irreducible, and of positive bond dimension, then $(\mu_k,A_k)_{k=1}^r$
-    satisfies the six conditions of Definition~\ref{def:is_normal_canonical_form}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:is_normal_canonical_form}
-    The hypotheses are exactly the constructor for normal canonical form.
-\end{proof}
-
 \begin{theorem}[Common blocking period for two primitive normal tensors]%
     \label{thm:common_period_two_tensors}
     \lean{MPSTensor.bilateral_commonPeriod_blocking_tp_primitive_normal}
