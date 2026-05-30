@@ -64,10 +64,11 @@ abbrev normalSquareHorizontalEdgeComplement : Finset (SquareLatticeVertex 5 7) :
 /-- The normalized horizontal edge has the red/blue/complement blocking data
 used in the proof of the normal square-lattice theorem.
 
-This definition records the set-theoretic and injectivity data for the concrete
-horizontal-edge blocking as one `NormalEdgeBlockingData` value. The
-source-comparison status of the every-edge construction is recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+This definition records the set-theoretic and injectivity facts for the concrete
+horizontal-edge blocking as one `NormalEdgeBlockingData` value. The source
+comparison and every-edge elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def normalSquareHorizontalEdge_blockingDatum
@@ -246,10 +247,11 @@ abbrev normalSquareVerticalEdgeComplement : Finset (SquareLatticeVertex 7 5) :=
 /-- The normalized vertical edge has the red/blue/complement blocking datum
 used in the proof of the normal square-lattice theorem.
 
-This definition records the set-theoretic data for the vertical-edge blocking.
+This definition records the set-theoretic facts for the vertical-edge blocking.
 Injectivity of the complementary block is kept as an explicit hypothesis here.
-The source-comparison status of that finite-geometry input is recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The source comparison and finite-geometry elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 def normalSquareVerticalEdge_blockingDatum
@@ -392,9 +394,10 @@ def normalSquareVerticalEdge_blockingDatum_of_verticalTCover
 /-- The normalized vertical edge supplies the three injective regions used in
 the edge-blocked three-site chain.
 
-The complementary-block injectivity remains an explicit input here; the
-source-comparison status is recorded in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+The complementary-block injectivity remains an explicit input here. The source
+comparison and finite-geometry elimination plan are recorded in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`, Section "Remaining
+mathematical obligations".
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 theorem normalSquareVerticalEdge_injective_chain
