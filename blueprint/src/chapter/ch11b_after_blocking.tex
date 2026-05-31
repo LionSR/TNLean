@@ -429,27 +429,3 @@ blocking.
     Lemma~\ref{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks} carries
     the positive-length equality through blocking.
 \end{proof}
-
-\begin{theorem}[Two tensors after one-sided primitive reductions]%
-    \label{thm:after_blocking_tp_primitive_blockdecompositions_same_mpv2}
-    \lean{MPSTensor.afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂}
-    \leanok
-    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
-    If $A$ and $B$ have the same MPV family, then applying
-    Theorem~\ref{thm:tp_primitive_blockdecomp} separately to $A$ and $B$ gives
-    positive blocking lengths $p_A,p_B$ and primitive weighted block sums
-    $A_{\mathrm{nz}}$, $B_{\mathrm{nz}}$ such that $A^{[p_A]}$ and $B^{[p_A]}$
-    have the same MPV family, $A^{[p_B]}$ and $B^{[p_B]}$ have the same MPV
-    family, $A^{[p_A]}$ agrees with $A_{\mathrm{nz}}$ at every positive length,
-    and $B^{[p_B]}$ agrees with $B_{\mathrm{nz}}$ at every positive length. All
-    displayed nonzero blocks are trace-preserving and primitive, of positive bond
-    dimension, with nonzero weights.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:tp_primitive_blockdecomp, def:same_mpv2, def:same_mpv2_pos}
-    Apply Theorem~\ref{thm:tp_primitive_blockdecomp} to each tensor. Equality of
-    MPV families is preserved by blocking, and the all-zero summand has zero MPV
-    coefficients at positive length, so each blocked tensor agrees there with its
-    nonzero weighted block sum.
-\end{proof}
