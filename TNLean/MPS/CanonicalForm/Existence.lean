@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.Channel.PerronFrobenius.Existence
 import TNLean.MPS.Irreducible.FormII
-import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.MPS.Tactic.Basic
@@ -31,7 +30,6 @@ and Cirac:
 * Pérez-García, Verstraete, Wolf, and Cirac, proof of Theorem Th:TIcanonical,
   lines 765-770 and 827-832: the full-rank fixed-point gauge and the final
   dual fixed-point diagonalization.
-* arXiv:1606.00608, lines 227-231: blocking removes peripheral periodicity.
 
 We also keep a couple of formulations for already-normalized primitive / injective block families,
 but those are **not** obtained from arbitrary input in this file.
@@ -203,30 +201,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
 
 
 /-!
-## (4) Periodicity removal by blocking
-
-This is the Appendix-A periodicity-removal step for TP irreducible blocks, routed through the
-adjoint-transfer formulation.
--/
-
-/-- **Periodicity removal by blocking for irreducible trace-preserving blocks.**
-
-If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
-transfer map primitive. -/
-theorem exists_blockTensor_isPrimitive
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    ∃ p : ℕ, 0 < p ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
-  have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  simpa using
-    (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
-
-/-!
-## (5) Normality from primitive complementary-gap hypotheses
+## (4) Normality from primitive complementary-gap hypotheses
 
 For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
 `PeripheralToTransferMapGap.lean` directly.
