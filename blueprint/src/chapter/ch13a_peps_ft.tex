@@ -3497,6 +3497,29 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \end{center}
 \end{definition}
 
+\begin{theorem}[Square-lattice normal blocking hypotheses from margin covers]%
+    \label{thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_edgeBlocking_of_marginCovers}
+    \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_blockingData_of_marginCovers}
+    \lean{TNLean.PEPS.%
+        normalSquarePEPSBlockingHypotheses_oneSiteSeparation_of_marginCovers}
+    \leanok
+    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows,
+        def:peps_normalPEPSBlockingHypotheses,
+        def:peps_normalOneSiteSeparationHypotheses}
+    Given rectangular injectivity hypotheses, finite union closure, oriented
+    margin-and-cover hypotheses at every edge, and one-site separation, the finite
+    square lattice satisfies the general normal blocking hypotheses.  The
+    edge-blocking hypotheses are exactly the margin-cover construction, the
+    one-edge datum at an edge is the datum supplied there, and the one-site
+    separation is exactly the supplied one-site separation.
+\end{theorem}
+\begin{proof}\leanok
+    Combine the edge-blocking hypotheses constructed from the margin-cover
+    hypotheses with the given one-site separation hypotheses.
+\end{proof}
+
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
     \label{thm:fundamentalTheorem_normalPEPS}
     \notready
