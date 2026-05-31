@@ -14,15 +14,10 @@ This module produces the **gauge-phase match** for a single BNT basis block of
 one BNT canonical form against some block of the other, under `SameMPV₂` of
 the assembled tensors.
 
-The module has two layers:
-
-1. **Lemma 1** — interpret `SameMPV₂` as a special case of
-   `EventuallyNonzeroProportionalMPV₂` with constant scalar `1`.
-2. **Lemma 2** — the **block matching** statement: for any sector
-   `j₀ : Fin P.basisCount`, the structural per-block unit-modulus witness
-   gives a block `k₀` of `Q` of equal bond dimension, gauge-phase
-   equivalent (cast-left shape) to the `P`-block at `j₀`,
-   and with a non-decaying cross-overlap.
+For any sector `j₀ : Fin P.basisCount`, the structural per-block
+unit-modulus witness gives a block `k₀` of `Q` of equal bond dimension,
+gauge-phase equivalent (cast-left shape) to the `P`-block at `j₀`, and
+with a non-decaying cross-overlap.
 
 ## Hypothesis structure
 
@@ -35,8 +30,8 @@ normalization convention, `IsBNTCanonicalForm` carries the modulus-bound
 field
 
 * `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
-  modulus bound.  Lemma 2 below feeds this in via `hP.weight_norm_le_one`
-  and `hQ.weight_norm_le_one`.
+  modulus bound.  The block matching theorem below feeds this in via
+  `hP.weight_norm_le_one` and `hQ.weight_norm_le_one`.
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖weight j q‖ = 1` is
 **not** a structural field — CPSV16 line 246 is **global** (the
@@ -98,25 +93,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Lemma 1: `SameMPV₂` as a special case of eventual nonzero proportionality
-
-`SameMPV₂` is the equal-MPV hypothesis.  By taking the proportionality scalar
-to be the constant `1`, it is a degenerate special case of
-`EventuallyNonzeroProportionalMPV₂` (per-`N` nonzero scalar with
-eventual scope).  The conversion is a direct `Filter.Eventually` argument.
-
-Paper anchor: CPSV16 equal-MPV corollary, lines 1172–1192, instantiates
-`thm1` with equal MPV; the proportionality scalar is `1`.
--/
-theorem SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
-    {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : SameMPV₂Pos A B) :
-    EventuallyNonzeroProportionalMPV₂ A B := by
-  refine Filter.eventually_atTop.mpr ⟨1, fun N hN => ?_⟩
-  refine ⟨1, one_ne_zero, fun σ => ?_⟩
-  simpa using h N hN σ
-
-/-! ### Lemma 2: block matching at a user-supplied index `j₀`
+/-! ### Block matching at a user-supplied index `j₀`
 
 The main result of Phase 4b-ii: under `SameMPV₂` plus a unit-modulus
 witness `∃ q, ‖P.weight j₀ q‖ = 1` at a user-supplied sector index
