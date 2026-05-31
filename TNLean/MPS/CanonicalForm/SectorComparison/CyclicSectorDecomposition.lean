@@ -80,7 +80,7 @@ private theorem cyclic_projection_nonzero_of_sum_one
 
 /-- Each cyclic projection lies in the multiplicative domain of the one-step
 adjoint transfer map. -/
-theorem cyclic_projection_mem_multiplicativeDomain
+private theorem cyclic_projection_mem_multiplicativeDomain
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -140,7 +140,7 @@ theorem cyclic_projection_mem_multiplicativeDomain
 
 /-- The adjoint transfer map is multiplicative on the left of a cyclic
 projection. -/
-theorem cyclic_projection_mul_left
+private theorem cyclic_projection_mul_left
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -161,7 +161,7 @@ theorem cyclic_projection_mul_left
 
 /-- The adjoint transfer map is multiplicative on the right of a cyclic
 projection. -/
-theorem cyclic_projection_mul_right
+private theorem cyclic_projection_mul_right
     {d D m : ℕ} [NeZero D] [NeZero m]
     {A : MPSTensor d D}
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -210,7 +210,8 @@ corner irreducibility theorem for `((transferMap A†)^m)` on each projection
 `P k`. In particular, this theorem isolates the orbit-sum / `hProjStep` part of
 the non-periodic proof chain from the subsequent compression-transport
 step. -/
-theorem primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
+private theorem
+    primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking_of_cornerIrreducible
     {d D m : ℕ} [NeZero D] [NeZero m]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
