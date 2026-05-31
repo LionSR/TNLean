@@ -1388,19 +1388,9 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     $p$-blocked tensors.
 \end{lemma}
 
-\begin{definition}[Coordinate-grouping predicate]%
-    \label{def:common_blocked_cyclic_sector_grouped_block_cast}
-    \lean{MPSTensor.CommonBlockedCyclicSectorFamily.groupedBlockCastAgrees}\leanok
-    \uses{thm:exists_common_blocked_cyclic_sector_family}
-    The canonical identification of the common-alphabet sectors with the iterated
-    alphabet $(d^{[m_k]})^{e_k}$ agrees with grouping any direct word of length
-    $p = m_k e_k$ into $e_k$ consecutive words of length $m_k$.
-\end{definition}
-
 \begin{lemma}[Digit-level flattening identification]%
     \label{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
     \lean{MPSTensor.CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq}\leanok
-    \uses{def:common_blocked_cyclic_sector_grouped_block_cast}
     For $p = mn$, the canonical word-flattening identification sends a $p$-letter
     word to the concatenation of $n$ consecutive $m$-letter words: the two
     encodings of a word of length $p$ over $d^{[p]}$ and over $(d^{[m]})^{n}$ are
