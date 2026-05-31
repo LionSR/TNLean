@@ -225,36 +225,6 @@ theorem exists_blockTensor_isPrimitive
   simpa using
     (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor (A := A) hTP hIrr hDpos)
 
-/-- **Trace-preserving normalization after blocking.**
-
-If `A` is trace-preserving and irreducible, then some physical blocking makes the
-blocked transfer map primitive, and the blocked tensor remains left-canonical. -/
-theorem exists_blockTensor_leftCanonical_isPrimitive
-    [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor (d := d) (D := D) A) :
-    ∃ p : ℕ, 0 < p ∧
-      (∑ i : Fin (blockPhysDim d p),
-          (blockTensor (d := d) (D := D) A p i)ᴴ *
-            blockTensor (d := d) (D := D) A p i = 1) ∧
-      _root_.IsPrimitive
-        (transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p)) := by
-  obtain ⟨p, hp, hPrim⟩ :=
-    exists_blockTensor_isPrimitive (A := A) hTP hIrr
-  refine ⟨p, hp, leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := p) hTP, hPrim⟩
-
-/-- **Reduction theorem:** complementary transfer-map gap primitivity with a
-positive-definite fixed point implies normality. -/
-theorem isNormal_of_isPrimitiveMPS
-    [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hPrim : IsPrimitiveMPS A ρ)
-    (hPD : ρ.PosDef) :
-    IsNormal A :=
-  isNormal_of_isPrimitiveMPS_with_posDef hPrim hPD
-
-
 /-!
 ## (5) Normality from primitive complementary-gap hypotheses
 
