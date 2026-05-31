@@ -32,8 +32,6 @@ shows that blocking keeps normality.
   tensor irreducibility imply normality.
 * `exists_blockTensor_isInjective_of_tp_primitive_irreducible` — the same
   hypotheses give an extra blocking whose blocked tensor is one-site injective.
-* `isNormal_live_block_of_primitive` — the same conclusion for a single
-  nonzero-weight block from the reduction data.
 * `isNormal_blockTensor_of_isNormal` — blocking preserves normality.
 * `IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective` — a finite
   normal-canonical BNT family admits one positive blocking length at which all
@@ -287,18 +285,6 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     refine ⟨L, hLpos, hBound, ?_⟩
     exact (isNBlkInjective_iff_blockTensor_isInjective A L).1
       ((wordSpan_eq_top_iff_isNBlkInjective A L).mp hTop)
-
-/-- **Pre-blocking blocks are normal once primitive.**
-
-For the nonzero-weight blocks from the arbitrary-tensor TP-gauge reduction, if a
-block additionally has a primitive transfer map, then it is normal. -/
-theorem isNormal_live_block_of_primitive [NeZero D]
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleTensor A)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    IsNormal A :=
-  isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
 
 /-!
 ## IsNormal is preserved by blocking
