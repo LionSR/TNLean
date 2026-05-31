@@ -328,7 +328,7 @@ private lemma Nat.div_pow_mod_pow_block (x d m j t : ℕ) (ht : t < m) :
 
 /-- Flattening the explicit length-`n` blocked decoding of a length-`m*n` index agrees with
 the direct length-`m*n` decoding. -/
-theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
+private theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
     (hp_eq : p = m * n) (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
     (i : Fin (blockPhysDim d p)) :
     flattenBlockedWord d m
@@ -451,7 +451,7 @@ private theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastA
   rfl
 
 /-- Blockwise MPV comparisons assemble over the weighted direct sum after common blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
+private theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hBlock : ∀ k : Fin r,
       SameMPV₂
@@ -496,7 +496,7 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
 
 /-- The direct $p$-blocked tensor $B_k^{[p]}$ has the same MPV family as its image in the
 common alphabet via `commonReindexedBlock`. This is the unconditional common-alphabet
-comparison used by `blocked_word_comparison` and `reindexed_nonzero_part`. -/
+comparison used by `reindexed_nonzero_part`. -/
 theorem blockTensor_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
@@ -505,20 +505,6 @@ theorem blockTensor_sameMPV₂_commonReindexedBlock
   F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k
     (groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
       (fun hp_eq => flattenWordOfBlock_cast_eq hp_eq) F k)
-
-/-- Direct blocking at length `p = m_k * e_k` and iterated blocking
-`(B_k^{[m_k]})^{[e_k]}` produce the same MPV family after the canonical
-alphabet identification. -/
-theorem blocked_word_comparison (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) :
-    SameMPV₂
-      (blockTensor (d := d) (D := dim k) (blocks k) F.p)
-      (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-        (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))) := by
-  intro N σ
-  exact (F.blockTensor_sameMPV₂_commonReindexedBlock k N σ).trans
-    (F.reindexed_sameMPV₂ k N σ).symm
 
 /-- The nonzero-part decomposition of a weighted block sum $\bigoplus_k \mu_k B_k$
 transports through the common-alphabet identification: the common-alphabet sectors
