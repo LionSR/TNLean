@@ -106,11 +106,6 @@ def flatWeight (F : CommonBlockedCyclicSectorFamily blocks) :
     Fin (∑ k : Fin r, F.period k) → ℂ :=
   fun _ => 1
 
-/-- The unit weights of the flattened common-alphabet sectors are nonzero. -/
-theorem flatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
-    (x : Fin (∑ k : Fin r, F.period k)) : F.flatWeight x ≠ 0 := by
-  simp [flatWeight]
-
 /-- The common-alphabet sector obtained by later reblocking one cyclic sector. -/
 noncomputable def commonSectorBlock (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
