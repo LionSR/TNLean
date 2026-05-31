@@ -240,8 +240,8 @@ theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
 /-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
 tensor `B_k^{[p]}` after transport to the common blocked alphabet.
 
-By definition, `commonReindexedBlock k` is the direct `p`-blocked tensor of
-block `k`, transported to the common physical alphabet `blockPhysDim d p` by the canonical
+By definition, `commonReindexedBlock k` is the direct $p$-blocked tensor of
+block $k$, transported to the common physical alphabet $d^{[p]}$ by the canonical
 reindexing. -/
 theorem reindexed_sameMPV₂
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
