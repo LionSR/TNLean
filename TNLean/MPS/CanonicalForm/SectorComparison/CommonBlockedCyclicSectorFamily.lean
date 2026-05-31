@@ -237,13 +237,13 @@ theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
   let y := F.flatKey x
   simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
 
-/-- Iterated blocking of a nonzero-weight block is the relabeled common block.
+/-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
+tensor `B_k^{[p]}` after transport to the common blocked alphabet.
 
-This is an internal flattening/comparison lemma: it identifies the MPV
-family of the iterated block `(B_k^{[m_k]})^{[e_k]}` with that of the
-reindexed direct block of length `p = m_k e_k`.  The reindexing uses
-the canonical identification of blocked physical words. -/
-theorem nestedBlock_sameMPV₂_commonReindexedBlock
+By definition, `commonReindexedBlock k` is the direct `p`-blocked tensor of
+block `k`, transported to the common physical alphabet `blockPhysDim d p` by the canonical
+reindexing. -/
+theorem reindexed_sameMPV₂
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
@@ -268,7 +268,7 @@ theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
         mpv (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
           (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
             (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))) σ :=
-      ((F.nestedBlock_sameMPV₂_commonReindexedBlock k) N σ).symm
+      ((F.reindexed_sameMPV₂ k) N σ).symm
     _ = mpv (F.commonSectorTensor k) σ := by
       simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
 
@@ -585,19 +585,6 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
     0 < F.sectorDim k s :=
   ⟨F.commonSectorBlock_tp k s, F.commonSectorBlock_primitive k s,
     F.commonSectorBlock_irreducible k s, F.commonSectorBlock_dim_pos k s⟩
-
-/-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
-tensor `B_k^{[p]}` (under the canonical alphabet identification) in the sense of
-generating the same MPV family.  By definition, `commonReindexedBlock k` is the direct
-$p$-blocked tensor of block $k$, transported to the common alphabet $d^{[p]}$ via the
-canonical reindexing. -/
-theorem reindexed_sameMPV₂ (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
-    SameMPV₂
-      (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-        (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k)))
-      (F.commonReindexedBlock k) :=
-  F.nestedBlock_sameMPV₂_commonReindexedBlock k
 
 /-- The direct $p$-blocked tensor $B_k^{[p]}$ has the same MPV family as its image in the
 common alphabet via `commonReindexedBlock`. This is the unconditional form of
