@@ -209,9 +209,9 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
     hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hBook, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_,
     ?_, ?_⟩
   · intro x
-    exact familyA.commonFlatWeight_ne_zero μA hμA x
+    exact pow_ne_zero familyA.p (hμA (familyA.flatKey x).1)
   · intro x
-    exact familyB.commonFlatWeight_ne_zero μB hμB x
+    exact pow_ne_zero familyB.p (hμB (familyB.flatKey x).1)
   · intro x
     let y := familyA.flatKey x
     simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
