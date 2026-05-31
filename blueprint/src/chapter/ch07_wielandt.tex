@@ -1028,26 +1028,25 @@ namely to find $n_0$ such that $S_{n_0}(A) = \MN{D}$
     Lemma~\ref{lem:blocking_transfer}.
 \end{proof}
 
-\begin{corollary}[Uniform injective blocking for normal BNT families]%
+\begin{corollary}[Uniform injective blocking for separated normal-canonical families]%
     \label{cor:uniform_injective_blocking_normal_bnt}
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
     \uses{thm:normal_tp_primitive_irred,
         thm:bounded_injective_blocking_normal_left_canonical}
-    Let $(A_x)_{x \in X}$ be a finite normal-canonical BNT family whose
+    Let $(A_x)_{x \in X}$ be a finite separated normal-canonical family whose
     blocks have positive virtual bond dimension. Then there is a positive
     integer $L$ such that every blocked tensor $A_x^{[L]}$ is one-site
     injective. The same conclusion holds simultaneously for two finite
-    normal-canonical BNT families whose blocks have positive virtual bond
+    separated normal-canonical families whose blocks have positive virtual bond
     dimension.
 
     This is a common-blocking theorem for the scope-restricted
     one-copy-per-sector surface of Definition~\ref{def:normal_cf_bnt}. It
-    assumes that the normal-CF-BNT representative families have already been
-    selected and strictly ordered; it does not reconstruct the full CPSV16 BNT
-    sector decomposition with repeated copies inside one sector. The restriction
-    is recorded in
+    assumes that the representative families have already been selected and
+    strictly ordered; it does not reconstruct the full CPSV sector decomposition
+    with repeated copies inside one sector. The restriction is recorded in
     \path{docs/paper-gaps/ft_one_copy_scope_restriction.tex}.
 \end{corollary}
 

@@ -15,6 +15,27 @@ and~\cite{Cirac2021Matrix}.
 
 \section{Basis of normal tensors}
 
+\begin{definition}[CPSV basis of normal tensors]\label{def:bnt_cpsv}
+    \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
+    \leanok
+    A finite family $\{A_j\}_{j=1}^g$ of normal tensors, with bond dimension
+    allowed to depend on $j$, is a \emph{basis of normal tensors} for $A$ if:
+    \begin{enumerate}
+        \item each $A_j$ is normal in the sense of Definition~\ref{def:nt_cpsv};
+        \item for every system length $N$ there exist coefficients
+              $c_j^{(N)} \in \C$ with
+              \[
+                  \ket{V^{(N)}(A)}
+                  = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)};
+              \]
+        \item there exists $N_0$ such that for all $N > N_0$ the family
+              $\{\ket{V^{(N)}(A_j)}\}_{j=1}^{g}$ is linearly independent.
+    \end{enumerate}
+    This is the basis-of-normal-tensors definition in
+    \cite[\S~II.C, lines~271--274]{Cirac2017MPDO_AnnPhys} and
+    \cite[Definition~4.2]{Cirac2021Matrix}.
+\end{definition}
+
 \begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
     \lean{MPSTensor.IsBNT}
     \leanok
@@ -672,6 +693,241 @@ Chapter~\ref{ch:ft_proof}.
     $C \oplus (1/2) C$, and $C \oplus (-C) \oplus (1/2) C$) and is
     not derivable from the per-block normality hypotheses alone.
 \end{definition}
+
+\subsection{Prepared-block construction of BNT canonical forms}%
+\label{subsec:paperbnt_supplier}
+
+The CPSV basis-of-normal-tensors predicate in Definition~\ref{def:bnt_cpsv}
+is strengthened by the sector-decomposition predicate of
+Definition~\ref{def:sector_bnt_cf}, which records multiplicities, span, and
+weight-norm conditions. The results below separate the after-blocking
+preparation of suitable blocks from the normalized-weight BNT construction.
+
+\begin{lemma}[Common injective blocking for primitive irreducible families]%
+    \label{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    \lean{MPSTensor.exists_common_injective_blocking_of_tp_primitive_irr_family}
+    \leanok
+    \uses{thm:tp_primitive_irred_block_injective,
+        thm:tp_primitive_irreducible_extra_blocking}
+    Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension MPS tensors,
+    each trace-preserving, primitive, and tensor-irreducible. Then there is a
+    single $L\ge 1$ such that each $B_k^{[L]}$ is one-site injective, and this
+    blocking preserves trace preservation, primitivity, and irreducibility for
+    every block.
+\end{lemma}
+
+\begin{proof}\leanok
+    For each block,
+    Theorem~\ref{thm:tp_primitive_irred_block_injective} gives a positive length
+    at which it becomes one-site injective; the product of these lengths is a
+    common length. Injectivity persists under positive further blocking, and
+    Theorem~\ref{thm:tp_primitive_irreducible_extra_blocking} preserves the other
+    hypotheses.
+\end{proof}
+
+\begin{theorem}[Prepared BNT blocks after blocking]%
+    \label{thm:prepared_bnt_blocks_after_blocking}
+    \lean{MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos}
+    \leanok
+    \uses{thm:unconditional_common_primitive_irreducible_blocks,
+        thm:common_injective_blocking_tp_primitive_irreducible_family}
+    Let $A$ be an MPS tensor. Then there is a blocking length $p\ge 1$, nonzero
+    weights $\mu_k$, and blocks $B_k$ over the $p$-blocked alphabet such that:
+    \begin{enumerate}
+        \item each block has positive bond dimension;
+        \item each block is trace-preserving, primitive, tensor-irreducible, and
+              one-site injective;
+        \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
+              at every positive length.
+    \end{enumerate}
+    No weight-modulus normalization is asserted at this stage.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the common primitive irreducible block decomposition to $(A,A)$,
+    giving a positive blocking length and a nonzero weighted family of
+    trace-preserving primitive irreducible blocks with the positive-length MPV
+    identity. Lemma~\ref{thm:common_injective_blocking_tp_primitive_irreducible_family}
+    supplies one common further blocking making every block one-site injective
+    while preserving the other hypotheses; finally identify the iterated blocked
+    alphabet with the direct one.
+\end{proof}
+
+\begin{theorem}[BNT from normal blocks with normalized weights]%
+    \label{thm:paperbnt_supplier_prepared}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_injective_blocks}
+    \leanok
+    Let $r \in \N$, and for each $k = 1,\ldots,r$ let $D_k \in \N$,
+    $\mu_k \in \C$, and let $B_k$ be an MPS tensor of physical dimension $d$ and
+    bond dimension $D_k$. Assume:
+    \begin{enumerate}
+        \item \textbf{positive bond dimensions:} $D_k > 0$ for all $k$,
+        \item \textbf{TP normalization:} $\sum_i (B_k^i)^\dagger B_k^i = \Id$,
+        \item \textbf{primitivity:} $\E_{B_k}$ is primitive for each $k$,
+        \item \textbf{irreducibility:} each $B_k$ is irreducible,
+        \item \textbf{injectivity:} each $B_k$ is injective,
+        \item \textbf{nonzero weights:} $\mu_k \neq 0$ for all $k$,
+        \item \textbf{bounded weights:} $|\mu_k| \le 1$ for all $k$,
+        \item \textbf{global unit witness:} $|\mu_k| = 1$ for some $k$.
+    \end{enumerate}
+    Then there exists a sector decomposition $P$ such that $P$ and
+    $\bigoplus_{k=1}^{r} \mu_k B_k$ generate the same MPV family at every length,
+    and $P$ satisfies the BNT conditions of Definition~\ref{def:bnt_cpsv}
+    together with the multiplicity, span, and weight-bound conditions of
+    Definition~\ref{def:sector_bnt_cf}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The phase-class quotient groups gauge-phase-equivalent blocks into sectors
+    with unit-modulus per-copy scalars. The TP, primitive, and irreducible
+    hypotheses are those under which the phase-class construction applies, while
+    injectivity gives the eventual linear-independence condition. The resulting
+    sector decomposition inherits the span and multiplicity conditions, and the
+    bounded-weight and global-unit hypotheses give the weight-norm conditions.
+\end{proof}
+
+\begin{lemma}[Total dimension of a dimension-preserving phase-class quotient]%
+    \label{lem:collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim}
+    \leanok
+    In the phase-class quotient of the prepared-block BNT supplier, suppose every
+    original copy weight is nonzero and every block in a phase class has the bond
+    dimension of its representative. Then the total bond dimension of the
+    collapsed sector decomposition equals the sum of the bond dimensions of the
+    original prepared blocks.
+\end{lemma}
+
+\begin{proof}\leanok
+    Sum the representative bond dimensions over the copies in each phase class.
+    The same-dimension hypothesis replaces each representative dimension by the
+    enumerated original block dimension, and the phase-class regrouping identity
+    recovers the original direct-sum dimension.
+\end{proof}
+
+\begin{lemma}[Prepared phase-equivalent blocks have the same bond dimension]%
+    \label{lem:prepared_phase_equiv_dim_eq}
+    \lean{MPSTensor.dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
+    \leanok
+    % Source: Lemma equalMPS (Cirac2016MPDO_arXiv), dimension conclusion.
+    Let $X$ and $Y$ be trace-preserving, primitive, irreducible MPS blocks of
+    positive bond dimension. If their MPV families differ by a nonzero scalar
+    power, then their bond dimensions are equal.
+\end{lemma}
+
+\begin{proof}\leanok\uses{thm:overlap_decay_rect_irr_tp}
+    Self-overlap normalization forces the scalar relating the two MPV families to
+    have unit modulus, so the rectangular overlap has norm tending to $1$. If the
+    bond dimensions differed, the rectangular overlap-decay theorem would force
+    that overlap to tend to $0$.
+\end{proof}
+
+\begin{lemma}[Prepared phase classes preserve bond dimension]%
+    \label{lem:prepared_phase_class_dim_eq}
+    \lean{MPSTensor.mpvPhaseClassData_dim_eq_of_tp_primitive_irr}
+    \leanok
+    % Source: prop:char-BNT (Cirac2017MPDO_AnnPhys), with appendix restatement
+    % and the same-CF BNT uniqueness note.
+    In a prepared family of positive-bond-dimension trace-preserving primitive
+    irreducible blocks, every block in an MPV phase class has the bond dimension
+    of its representative.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:prepared_phase_equiv_dim_eq}
+    Apply Lemma~\ref{lem:prepared_phase_equiv_dim_eq} to each representative and
+    each member of its phase class.
+\end{proof}
+
+\begin{lemma}[Prepared collapsed BNT total dimension]%
+    \label{lem:prepared_collapsed_bnt_sector_decomp_total_dim}
+    \lean{MPSTensor.collapsedBntSectorDecomp_totalDim_eq_sum_dim_of_tp_primitive_irr}
+    \leanok
+    % Source: canonical-form eq:II_CF1 (Cirac2017MPDO_AnnPhys) and the
+    % phase-class quotient prop:char-BNT with its appendix restatement.
+    For prepared trace-preserving primitive irreducible blocks of positive bond
+    dimension with all copy weights nonzero, the phase-class quotient preserves
+    the total bond dimension: the collapsed sector decomposition has total bond
+    dimension equal to the sum of the original block dimensions.
+\end{lemma}
+
+\begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim,
+        lem:prepared_phase_class_dim_eq}
+    Lemma~\ref{lem:prepared_phase_class_dim_eq} supplies the same-dimension
+    hypothesis in Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim}.
+\end{proof}
+
+\begin{theorem}[Conditional BNT form after blocking for an arbitrary tensor]%
+    \label{thm:paperbnt_supplier_after_blocking}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos}
+    \leanok
+    \uses{thm:prepared_bnt_blocks_after_blocking,
+        thm:paperbnt_supplier_prepared}
+    Let $A$ be an MPS tensor. Then there exists a blocking length $p \ge 1$,
+    nonzero weights $\mu_k$, and blocks $B_k$ over the blocked alphabet, such
+    that:
+    \begin{enumerate}
+        \item every block has positive bond dimension;
+        \item every block is TP-normalized, primitive, irreducible, and
+              injective;
+        \item $A^{[p]}$ and $\bigoplus_k \mu_k B_k$ generate the same MPV family
+              at every positive length.
+    \end{enumerate}
+    Moreover, under $|\mu_k| \le 1$ for every $k$ and $|\mu_k|=1$ for at least
+    one $k$, there exists a sector decomposition $P$ over the blocked alphabet in
+    the strengthened BNT canonical form of Definition~\ref{def:sector_bnt_cf}
+    such that
+    $A^{[p]}$ and $P$ generate the same MPV family at every positive length.
+\end{theorem}
+
+\begin{proof}\leanok
+    The after-blocking reduction supplies the TP-normalized primitive irreducible
+    injective blocks and the positive-length MPV identity. The normalized-weight
+    hypotheses are the choice that
+    \cite[Section~II.C]{Cirac2017MPDO_AnnPhys} makes;
+    Theorem~\ref{thm:paperbnt_supplier_prepared} then produces the sector
+    decomposition, following the BNT selection of
+    \cite[Appendix~A]{Cirac2017MPDO_AnnPhys}. The missing rescaling step is
+    recorded in Remark~\ref{rem:arbitrary_input_reduction_gap}.
+\end{proof}
+
+\begin{theorem}[Conditional BNT form after blocking, completed at length zero]%
+    \label{thm:paperbnt_supplier_after_blocking_total_dim}
+    \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_of_totalDim}
+    \leanok
+    \uses{thm:paperbnt_supplier_after_blocking,
+        def:same_mpv2,
+        def:same_mpv2_pos,
+        lem:samempv2pos_to_samempv2_of_bonddim_eq}
+    In the setting of Theorem~\ref{thm:paperbnt_supplier_after_blocking}, the same
+    prepared blocks may be chosen so that the positive-length MPV identity
+    upgrades to all lengths whenever the total bond dimension of $P$ equals the
+    bond dimension of the blocked input tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive-length statement is
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking}. At length zero the MPV
+    coefficient is the bond dimension, so equality of the two total bond
+    dimensions supplies the missing length-zero coefficient, and the
+    positive-length identity gives all remaining lengths.
+\end{proof}
+
+\begin{remark}[Arbitrary-input reduction]%
+    \label{rem:arbitrary_input_reduction_gap}
+    Theorem~\ref{thm:paperbnt_supplier_after_blocking} gives the arbitrary-input
+    reduction, conditional on the two weight-normalization hypotheses displayed
+    there. The preparatory part,
+    Theorem~\ref{thm:prepared_bnt_blocks_after_blocking}, produces the
+    TP-normalized primitive irreducible injective blocks and the positive-length
+    MPV identity but not the weight normalization. Since the all-zero summand
+    contributes only at length zero, the nonzero primitive blocks identify the
+    MPV family for $N\ge 1$. The proof that the prepared weights can always be
+    rescaled to satisfy $|\mu_k|\le 1$ with a unit-modulus witness is the one
+    remaining step, recorded in
+    \texttt{docs/paper-gaps/cpsv16\_cf\_normalization\_and\_proportional\_comparison.tex};
+    the length-zero trace identity and the fully unblocked canonical form remain
+    part of the reduction in Chapter~\ref{ch:canonical_after_blocking}.
+\end{remark}
+
 
 \begin{lemma}[Raw two-layer sector coefficient identity]%
     \label{lem:sector_bnt_coeff_eq_sum_weight_pow}
