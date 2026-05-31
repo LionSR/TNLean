@@ -209,7 +209,7 @@ Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), Appendix MPV
 theorem statement lines 1167–1170, and Appendix MPV proof line 1182 (matching
 proof); CPSV21 lines 1891–1894 (proportional-MPV theorem-level target).
 This is the proportional analogue
-of `ft_sector_bnt_equal_mps_gaugeEquiv_witnesses` (`SectorBNT/FundamentalCoord.lean`)
+of `ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos` (`SectorBNT/FundamentalCoord.lean`)
 in the matching layer. The source proportional theorem stops at sector
 matching; the weight comparison and global gauge in CPSV16 Appendix MPV proof,
 lines 1187–1192, belong to the equal-MPV corollary unless an additional
