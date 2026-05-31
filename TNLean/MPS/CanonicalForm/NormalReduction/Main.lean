@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.MPS.Core.Blocking
-import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
+import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.PiAlgebra.CanonicalFormSep
 
