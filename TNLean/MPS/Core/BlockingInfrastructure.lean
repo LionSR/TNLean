@@ -586,7 +586,7 @@ map returns the direct block tensor at length `m*n`.
 
 This lemma avoids the `Fin.cast` / `Fintype.equivFin` identification and instead uses the
 explicit bijection `directToIteratedBlockIndex`. It gives a direct connection between iterated
-and direct blocking without needing `groupedBlockCastAgrees`. -/
+and direct blocking without an additional coordinate-grouping hypothesis. -/
 theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
     reindexPhysical (directToIteratedBlockIndex d m n)
@@ -675,7 +675,7 @@ theorem sameMPV₂_toTensorFromBlocks_flattenedIteratedBlockPower
 
 /-- Iterated blocking expressed with the block-grouping bijection equals direct blocking.
 This is the tensor-level version of the blocked-word identity that underlies
-`groupedBlockCastAgrees`. -/
+the common-sector coordinate comparison. -/
 theorem sameMPV₂_reindexPhysical_directToIteratedBlockIndex_blockTensor
     {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
     SameMPV₂
@@ -707,13 +707,12 @@ The proof is purely combinatorial.  With the explicit `finFunctionFinEquiv` enco
 coordinate comparison reduces to the base-`d` digit identity relating a length-`m*n`
 word to a length-`n` word over length-`m` blocks.
 
-### Relationship with `flattenWordOfBlock_cast_eq`
+### Relationship with the common-sector word identity
 
-The theorem `flattenWordOfBlock_cast_eq` in `CyclicSectorDecomposition.lean` encodes the same
-combinatorial identity as a list equality.  The lemma
-`groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq` shows that this list-level
-assertion implies the coordinate-level one required by `groupedBlockCastAgrees`, and the
-sector-comparison theorem uses it to remove the former blocking-coordinate hypothesis.
+The common-sector comparison uses the same combinatorial fact as a list equality: flattening
+a word of length `n` over length-`m` blocks gives the direct word of length `m*n`.  That
+list-level assertion supplies the coordinate comparison needed for the common-alphabet
+blocked tensor theorem.
 -/
 
 /-- Casting the physical dimension of both tensors preserves rectangular MPV equality. -/

@@ -331,7 +331,8 @@ and do not correspond to independent results of CPSV.
 
 /-- The canonical identification from the common blocked alphabet to one iterated blocked alphabet
 agrees with the map obtained by grouping a direct blocked word into consecutive blocks. -/
-def groupedBlockCastAgrees (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) : Prop :=
+private def groupedBlockCastAgrees
+    (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) : Prop :=
   ∀ i : Fin (blockPhysDim d F.p),
     Fin.cast ((F.blockPhysDim_nested_eq k).symm) i =
       directToIteratedBlockIndex d (F.period k) (F.extra k)
@@ -341,7 +342,7 @@ def groupedBlockCastAgrees (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin
 order-preserving cast from the common blocked alphabet gives the corresponding direct
 blocked index.  This isolates the remaining point as a comparison between the `Fin.cast`
 identification and the canonical direct/iterated blocking equivalence. -/
-theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
+private theorem groupedBlockCastAgrees_iff_iteratedBlockIndex_cast
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     F.groupedBlockCastAgrees k ↔
       ∀ i : Fin (blockPhysDim d F.p),
@@ -401,7 +402,7 @@ theorem flattenWordOfBlock_cast_eq {d m n p : ℕ}
 
 /-- The global grouping-cast hypothesis applied to a specific family reduces to the
 core Fintype-level assertion. -/
-theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
+private theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
     {d : ℕ} (h_flatten : ∀ {m n p : ℕ} (_ : p = m * n)
       (h_card : blockPhysDim (blockPhysDim d m) n = blockPhysDim d p)
       (i : Fin (blockPhysDim d p)),
@@ -438,7 +439,7 @@ theorem groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
 /-- The blocked-word comparison follows if the canonical identification from the common
 alphabet to an iterated alphabet agrees with the grouping map that reads a direct word in
 consecutive blocks of length $m_k$ (the period of block $k$). -/
-theorem wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees
+private theorem wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     ∀ i : Fin (blockPhysDim d F.p),
@@ -469,7 +470,7 @@ one original block gives the corresponding block obtained through iterated block
 
 The hypothesis compares the word read from the common block alphabet with the word
 read after first viewing the same index as an iterated block and then flattening it. -/
-theorem blockTensor_eq_commonReindexedBlock_of_word_eq
+private theorem blockTensor_eq_commonReindexedBlock_of_word_eq
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hWord : ∀ i : Fin (blockPhysDim d F.p),
       wordOfBlock d F.p i =
@@ -484,7 +485,7 @@ theorem blockTensor_eq_commonReindexedBlock_of_word_eq
 /-- Direct blocking of one original block is the relabeled common block when the
 canonical identification with the iterated alphabet agrees with consecutive grouping of the
 direct word. -/
-theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
+private theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k :=
@@ -493,7 +494,7 @@ theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
 
 /-- Direct and iterated common blocking of one original block have the same MPV family
 when the canonical identification with the iterated alphabet agrees with consecutive grouping. -/
-theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
+private theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     SameMPV₂
@@ -532,21 +533,6 @@ theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) σ :=
           (mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
             F.commonReindexedBlock σ).symm
-
-/-- Agreement between the canonical identifications and the consecutive grouping maps assembles
-the weighted direct sum obtained by direct blocking with the one obtained through iterated
-blocking. -/
-theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees
-    (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
-    (hCast : ∀ k : Fin r, F.groupedBlockCastAgrees k) :
-    SameMPV₂
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
-      (toTensorFromBlocks (d := blockPhysDim d F.p)
-        (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) :=
-  F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ
-    (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k (hCast k))
 
 /-- If the canonical blocked nonzero part agrees with the explicitly reindexed
 blocks, then the weighted nonzero part agrees with the derived common-sector family.
@@ -587,9 +573,8 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
     F.commonSectorBlock_irreducible k s, F.commonSectorBlock_dim_pos k s⟩
 
 /-- The direct $p$-blocked tensor $B_k^{[p]}$ has the same MPV family as its image in the
-common alphabet via `commonReindexedBlock`. This is the unconditional form of
-`blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees`, used as a building
-block in `blocked_word_comparison` and `reindexed_nonzero_part`. -/
+common alphabet via `commonReindexedBlock`. This is the unconditional common-alphabet
+comparison used by `blocked_word_comparison` and `reindexed_nonzero_part`. -/
 theorem blockTensor_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
