@@ -62,7 +62,8 @@ New derived operations for an existing `F : MPSTensor.CommonBlockedCyclicSectorF
 
 New structural/nonvanishing facts:
 
-- `F.commonBlockWeight_ne_zero` and `F.commonFlatWeight_ne_zero`.
+- Nonvanishing of the common-block and flattened powered weights, discharged from
+  the original nonzero block weights by `pow_ne_zero`.
 - `F.commonSectorBlock_tp`, `F.commonSectorBlock_primitive`,
   `F.commonSectorBlock_irreducible`, `F.commonSectorBlock_dim_pos`.
 - `F.commonFlatBlocks_tp`, `F.commonFlatBlocks_primitive`,
@@ -116,8 +117,8 @@ exact nonzero-part data those theorems will eventually need. The new data provid
 - **Sector families:** `family.commonFlatBlocks` at physical dimension
   `blockPhysDim d family.p`.
 - **Weights:** `family.commonFlatWeight μ`, equal to `(μ k) ^ family.p` on every sector
-  coming from nonzero-weight block `k`; `family.commonFlatWeight_ne_zero` proves nonvanishing from
-  the original nonzero weights.
+  coming from nonzero-weight block `k`; nonvanishing is proved from the original
+  nonzero weights by `pow_ne_zero`.
 - **TP/primitive/irreducible/positive dimension:** the `commonFlatBlocks_*` theorems give
   all four structural properties needed before a later injectivity refinement.
 - **Exact relabeled nonzero decomposition:**
