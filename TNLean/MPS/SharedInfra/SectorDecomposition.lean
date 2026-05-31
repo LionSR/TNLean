@@ -133,12 +133,6 @@ theorem toTensor_eq_toTensorFromBlocks_flat (P : SectorDecomposition d) :
     P.toTensor = toTensorFromBlocks (d := d) (μ := P.flatWeight) P.flatBasis :=
   rfl
 
-/-- Every flattened sector weight is nonzero. -/
-theorem flatWeight_ne_zero (P : SectorDecomposition d) (s : Fin P.totalCopies) :
-    P.flatWeight s ≠ 0 := by
-  simpa [SectorDecomposition.flatWeight] using
-    P.weight_ne_zero (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
-
 /--
 Intermediate expansion: first sum over the basis index `j`, then over its copies `q`.
 -/
