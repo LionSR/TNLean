@@ -227,21 +227,43 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂
   · intro x
     exact familyB.commonFlatWeight_ne_zero μB hμB x
   · intro x
-    exact familyA.commonFlatBlocks_tp x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).1
   · intro x
-    exact familyB.commonFlatBlocks_tp x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).1
   · intro x
-    exact familyA.commonFlatBlocks_primitive x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.1
   · intro x
-    exact familyB.commonFlatBlocks_primitive x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.1
   · intro x
-    exact familyA.commonFlatBlocks_irreducible x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.2.1
   · intro x
-    exact familyB.commonFlatBlocks_irreducible x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatBlocks,
+      CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.2.1
   · intro x
-    exact familyA.commonFlatDim_pos x
+    let y := familyA.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyA.derived_properties y.1 y.2).2.2.2
   · intro x
-    exact familyB.commonFlatDim_pos x
+    let y := familyB.flatKey x
+    simpa [CommonBlockedCyclicSectorFamily.commonFlatDim, y] using
+      (familyB.derived_properties y.1 y.2).2.2.2
 
 /-!
 ### What remains for the full 1606.00608 Fundamental Theorem

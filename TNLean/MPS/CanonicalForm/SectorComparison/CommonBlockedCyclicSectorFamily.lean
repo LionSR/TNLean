@@ -183,60 +183,6 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
     simpa [commonSectorBlock] using hcast
 
-/-- Derived common-alphabet sectors are trace-preserving. -/
-theorem commonSectorBlock_tp (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) :
-    ∑ i : Fin (blockPhysDim d F.p),
-      (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1 :=
-  (commonSectorBlock_structural F k s).1
-
-/-- Derived common-alphabet sectors have primitive transfer maps. -/
-theorem commonSectorBlock_primitive (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) :
-    _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
-        (F.commonSectorBlock k s)) :=
-  (commonSectorBlock_structural F k s).2.1
-
-/-- Derived common-alphabet sectors are tensor-irreducible. -/
-theorem commonSectorBlock_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) : IsIrreducibleTensor (F.commonSectorBlock k s) :=
-  (commonSectorBlock_structural F k s).2.2
-
-/-- Derived common-alphabet sectors have positive bond dimensions. -/
-theorem commonSectorBlock_dim_pos (F : CommonBlockedCyclicSectorFamily blocks)
-    (k : Fin r) (s : Fin (F.period k)) : 0 < F.sectorDim k s :=
-  F.sector_dim_pos k s
-
-/-- The derived flattened common-sector family is trace-preserving. -/
-theorem commonFlatBlocks_tp (F : CommonBlockedCyclicSectorFamily blocks)
-    (x : Fin (∑ k : Fin r, F.period k)) :
-    ∑ i : Fin (blockPhysDim d F.p),
-      (F.commonFlatBlocks x i)ᴴ * F.commonFlatBlocks x i = 1 := by
-  let y := F.flatKey x
-  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_tp y.1 y.2
-
-/-- The derived flattened common-sector family has primitive transfer maps. -/
-theorem commonFlatBlocks_primitive (F : CommonBlockedCyclicSectorFamily blocks)
-    (x : Fin (∑ k : Fin r, F.period k)) :
-    _root_.IsPrimitive
-      (transferMap (d := blockPhysDim d F.p) (D := F.commonFlatDim x)
-        (F.commonFlatBlocks x)) := by
-  let y := F.flatKey x
-  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_primitive y.1 y.2
-
-/-- The derived flattened common-sector family is tensor-irreducible. -/
-theorem commonFlatBlocks_irreducible (F : CommonBlockedCyclicSectorFamily blocks)
-    (x : Fin (∑ k : Fin r, F.period k)) : IsIrreducibleTensor (F.commonFlatBlocks x) := by
-  let y := F.flatKey x
-  simpa [commonFlatBlocks, commonFlatDim, y] using F.commonSectorBlock_irreducible y.1 y.2
-
-/-- The derived flattened common-sector family has positive bond dimensions. -/
-theorem commonFlatDim_pos (F : CommonBlockedCyclicSectorFamily blocks)
-    (x : Fin (∑ k : Fin r, F.period k)) : 0 < F.commonFlatDim x := by
-  let y := F.flatKey x
-  simpa [commonFlatDim, y] using F.commonSectorBlock_dim_pos y.1 y.2
-
 /-- The iterated blocked tensor `(B_k^{[m_k]})^{[e_k]}` agrees with the directly blocked
 tensor `B_k^{[p]}` after transport to the common blocked alphabet.
 
@@ -544,9 +490,9 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
         (transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
           (F.commonSectorBlock k s)) ∧
     IsIrreducibleTensor (F.commonSectorBlock k s) ∧
-    0 < F.sectorDim k s :=
-  ⟨F.commonSectorBlock_tp k s, F.commonSectorBlock_primitive k s,
-    F.commonSectorBlock_irreducible k s, F.commonSectorBlock_dim_pos k s⟩
+    0 < F.sectorDim k s := by
+  have h := commonSectorBlock_structural F k s
+  exact ⟨h.1, h.2.1, h.2.2, F.sector_dim_pos k s⟩
 
 /-- The direct $p$-blocked tensor $B_k^{[p]}$ has the same MPV family as its image in the
 common alphabet via `commonReindexedBlock`. This is the unconditional common-alphabet
