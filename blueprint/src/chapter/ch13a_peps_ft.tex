@@ -2392,17 +2392,27 @@ injective and normal PEPS, following Theorems~2 and~3 of
     intersection, together with the reconstruction of $A\cup B$.
 \end{proof}
 
+\begin{definition}[Contraction maps for the union injectivity proof]%
+    \label{def:peps_injectiveUnionContractionMaps}
+    \lean{TNLean.PEPS.InjectiveUnionContractionMaps}
+    \leanok
+    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
+    contraction-map family for the proof of
+    \cite[Section~3]{Molnar2018NormalPEPS} consists of three linear maps
+    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
+    $\mathcal C_{\{2\}}:K\to E_2$, and
+    $\mathcal C_{\{1,2\}}:K\to E_{12}$.
+\end{definition}
+
 \begin{definition}[Contraction chain for the union injectivity proof]%
     \label{def:peps_injectiveUnionContractionChain}
     \lean{TNLean.PEPS.InjectiveUnionContractionChain}
     \leanok
-    Let $K$, $E_{012}$, $E_2$, and $E_{12}$ be complex vector spaces. A
-    contraction chain for the proof of \cite[Section~3]{Molnar2018NormalPEPS}
-    consists of three linear maps
-    $\mathcal C_{\{0,1,2\}}:K\to E_{012}$,
-    $\mathcal C_{\{2\}}:K\to E_2$, and
-    $\mathcal C_{\{1,2\}}:K\to E_{12}$, together with the three implications
-    used in Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
+    \uses{def:peps_injectiveUnionContractionMaps}
+    A contraction chain consists of the three contraction maps of
+    Definition~\ref{def:peps_injectiveUnionContractionMaps}, together with the
+    three implications used in
+    Lemma~\ref{lem:peps_injectiveRegion_union_contractionChain}.
 \end{definition}
 
 \begin{lemma}[Kernel criterion for the union contraction chain]%

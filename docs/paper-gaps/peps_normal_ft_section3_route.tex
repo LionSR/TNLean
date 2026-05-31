@@ -296,8 +296,13 @@ The following part of the formalization is already present.
           \(A\setminus B\), \(A\cap B\), \(B\setminus A\), and
           \((A\cup B)^c\), including the reconstruction, disjointness, and
           selected-complement identities used by the two inverse applications.
+    \item The three contraction maps for Lemma \path{injective_union} are
+          separated as
+          \leanid{TNLean.PEPS.InjectiveUnionContractionMaps}.
     \item The abstract contraction-chain criterion for Lemma
-          \path{injective_union} is formalized: if the three implications
+          \path{injective_union} is formalized by
+          \leanid{TNLean.PEPS.InjectiveUnionContractionChain}: if the three
+          implications
           \[
               \mathcal C_{\{0,1,2\}}(X)=0
               \Longrightarrow \mathcal C_{\{2\}}(X)=0
