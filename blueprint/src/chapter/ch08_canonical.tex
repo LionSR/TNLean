@@ -1380,9 +1380,11 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
     \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}\leanok
     \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,
-        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
-    The nonzero-part decomposition of $\bigoplus_k \mu_k B_k$ carries over under
-    the common-alphabet identification of
+        thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
+        thm:common_blocked_cyclic_sector_weighted_common_reindexed}
+    The powered nonzero-part decomposition
+    $\bigoplus_k \mu_k^p B_k^{[p]}$ carries over under the common-alphabet
+    identification of
     Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_samempv}: the
     common-alphabet sectors have the same nonzero-part decomposition as the direct
     $p$-blocked tensors.
