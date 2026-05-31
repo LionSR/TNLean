@@ -301,70 +301,13 @@ exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
     equality of the two powered nonzero parts.
 \end{proof}
 
-\begin{theorem}[Primitive block decompositions at a common length]%
-    \label{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    \lean{MPSTensor.afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts}
-    \leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
-        def:same_mpv2_pos}
-    Assume the nonzero part can be identified with the common blocked alphabet.
-    Then two tensors with the same MPV family admit one $p>0$ and nonzero
-    weighted block families such that, for every $N\ge 1$,
-    \[
-        V^{(N)}\!(A^{[p]})_\sigma
-        =
-        V^{(N)}\!(\textstyle\bigoplus_x \mu^A_x A_x)_\sigma,
-        \qquad
-        V^{(N)}\!(B^{[p]})_\sigma
-        =
-        V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma,
-    \]
-    and the two nonzero parts agree at every positive length,
-    \[
-        V^{(N)}\!(\textstyle\bigoplus_x \mu^A_x A_x)_\sigma
-        =
-        V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma.
-    \]
-    The all-zero leftover is restored by the separate zero-tail cancellation
-    theorem. All blocks are trace-preserving, primitive, tensor-irreducible, and
-    of positive bond dimension, and all weights are nonzero.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
-        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
-    Apply
-    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
-    choose the common blocking length and the two common cyclic-sector families.
-    The assumed word identification converts the blocked nonzero part into the
-    weighted common-sector family on each side, and since the zero-tail term
-    vanishes at positive length, this gives the displayed identities. The
-    structural properties and nonzero weights come from the common-sector
-    families.
-\end{proof}
-
-\begin{definition}[Blocked-word identification for common sectors]%
-    \label{def:common_sector_relabeling_hypothesis}
-    \lean{MPSTensor.CommonSectorRelabelingHypothesis}
-    \leanok
-    This is the one-sided assertion that the canonically blocked weighted
-    nonzero part agrees, as an MPV family, with the same common cyclic-sector
-    family after identifying blocked physical words. It is the coordinate
-    equality between direct blocking and iterated blocking.
-\end{definition}
-
-The unconditional theorem below obtains this assertion directly from the
-blockwise common-alphabet comparison already proved for common cyclic-sector
-families.
-
 \begin{theorem}[Unconditional common primitive block decompositions]%
     \label{thm:unconditional_common_primitive_irreducible_blocks}
     \lean{MPSTensor.unconditional_commonPrimitiveIrreducibleBlocks}
     \leanok
-    \uses{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
-        thm:common_blocked_cyclic_sector_weighted_common_reindexed,
-        thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
+        thm:common_blocked_cyclic_sector_reindexed_nonzero_part,
+        def:same_mpv2_pos}
     Let $A$ and $B$ have the same MPV family. Then there is a positive blocking
     length at which both blocked tensors have the same positive-length MPV
     family as weighted direct sums of trace-preserving, primitive,
@@ -375,36 +318,27 @@ families.
 
 \begin{proof}
     \leanok
-    \uses{thm:common_blocked_cyclic_sector_block_tensor_common_reindexed,
-        thm:common_blocked_cyclic_sector_weighted_common_reindexed,
-        thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    Write $\widetilde B_k$ for the image of $B_k^{[p]}$ in the common blocked
-    alphabet.
-    For each common cyclic-sector family, the canonical identification between
-    direct $p$-blocking and the transported common alphabet gives, for every
-    length $N$ and blocked word $\sigma$,
-    \[
-        V^{(N)}(B_k^{[p]})_\sigma
-        =
-        V^{(N)}(\widetilde B_k)_\sigma .
-    \]
-    The weighted direct sums therefore satisfy
+    \uses{thm:ft_after_blocking_common_length_common_sector_theorem,
+        thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
+    Apply
+    Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem} to
+    choose the common blocking length and the two common cyclic-sector families.
+    For either one of these families, write $G_k$ for its cyclic-sector blocks,
+    and write $(\nu_x,C_x)$ for the weights and blocks of the flattened
+    common-sector family from
+    Lemma~\ref{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}. The
+    common-alphabet nonzero-part identity gives, for every length $N$ and
+    blocked word $\sigma$,
     \[
         V^{(N)}\!
-        \bigl(\textstyle\bigoplus_k \mu_k^p B_k^{[p]}\bigr)_\sigma
-        =
-        \sum_k (\mu_k^p)^N V^{(N)}(B_k^{[p]})_\sigma
-        =
-        \sum_k (\mu_k^p)^N V^{(N)}(\widetilde B_k)_\sigma
+        \bigl(\textstyle\bigoplus_k \mu_k^p G_k^{[p]}\bigr)_\sigma
         =
         V^{(N)}\!
-        \bigl(\textstyle\bigoplus_k \mu_k^p \widetilde B_k\bigr)_\sigma .
+        \bigl(\textstyle\bigoplus_x \nu_x C_x\bigr)_\sigma ,
     \]
-    This is the relabeling hypothesis of
-    Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}. Then
-    Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    yields a positive length $p$ and weighted primitive block families such that,
-    for every $N\ge 1$ and blocked word $\sigma$,
+    Applying this on the two sides of the comparison yields a positive length
+    $p$ and weighted primitive block families such that, for every $N\ge 1$ and
+    blocked word $\sigma$,
     \[
         V^{(N)}\!(A^{[p]})_\sigma
         =
@@ -414,7 +348,9 @@ families.
         =
         V^{(N)}\!(\textstyle\bigoplus_y \mu^B_y B_y)_\sigma,
     \]
-    with the two weighted nonzero parts equal at every positive length.
+    with the two weighted nonzero parts equal at every positive length. The
+    structural properties and the nonvanishing of the weights come from the
+    common-sector families.
 \end{proof}
 
 \section{Primitive-block decomposition of an arbitrary tensor}%
