@@ -101,11 +101,6 @@ noncomputable def flatKey (F : CommonBlockedCyclicSectorFamily blocks)
     (x : Fin (∑ k : Fin r, F.period k)) : (k : Fin r) × Fin (F.period k) :=
   finSigmaFinEquiv.symm x
 
-/-- The flattened sectors produced by `CommonBlockedCyclicSectorFamily` carry unit weights. -/
-def flatWeight (F : CommonBlockedCyclicSectorFamily blocks) :
-    Fin (∑ k : Fin r, F.period k) → ℂ :=
-  fun _ => 1
-
 /-- The common-alphabet sector obtained by later reblocking one cyclic sector. -/
 noncomputable def commonSectorBlock (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :
@@ -149,12 +144,6 @@ blocking by the common length. -/
 noncomputable def commonFlatWeight (F : CommonBlockedCyclicSectorFamily blocks)
     (μ : Fin r → ℂ) : Fin (∑ k : Fin r, F.period k) → ℂ :=
   fun x => (μ (F.flatKey x).1) ^ F.p
-
-/-- Flattened sector weights remain nonzero after common blocking. -/
-theorem commonFlatWeight_ne_zero (F : CommonBlockedCyclicSectorFamily blocks)
-    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
-    (x : Fin (∑ k : Fin r, F.period k)) : F.commonFlatWeight μ x ≠ 0 :=
-  pow_ne_zero F.p (hμ (F.flatKey x).1)
 
 private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamily blocks)
     (k : Fin r) (s : Fin (F.period k)) :

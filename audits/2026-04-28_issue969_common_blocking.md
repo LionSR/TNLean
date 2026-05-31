@@ -39,8 +39,10 @@ or injectivity/Wielandt blocking length.
   - a flattened finite sector family at physical dimension `blockPhysDim d p`;
   - TP, primitive transfer maps, tensor irreducibility, positive dimensions;
   - the checked per-block iterated-blocking MPV compatibility condition.
-- `MPSTensor.CommonBlockedCyclicSectorFamily.flatWeight` and `.flatWeight_ne_zero`:
-  the flattened common-reblocked sectors carry nonzero unit weights.
+- The predecessor version recorded nonzero unit weights on the flattened
+  common-reblocked sectors. In the current API, the actual powered flattened
+  weights are `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight`, and
+  nonvanishing is discharged directly from the original nonzero weights.
 - `MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors`:
   constructs the one-sided common reblocked family by taking the LCM of the per-block
   periods and applying `tp_primitive_irreducible_extra_blocking` to each cyclic sector.
