@@ -108,21 +108,8 @@ an equality of MPV families.
     positive scaling factors are absorbed into the weights $\mu_k$.
 \end{proof}
 
-\begin{theorem}[Primitive nonzero blocks are normal]%
-    \label{thm:normal_live_block_primitive}
-    \lean{MPSTensor.isNormal_live_block_of_primitive}
-    \leanok
-    \uses{def:normal, def:irreducible_tensor}
-    Let $A$ be irreducible of positive bond dimension. If
-    $\sum_i (A^i)^\dagger A^i = \Id$ and $\sigma_\partial(\E_A)=\{1\}$, then $A$ is
-    normal. This is the nonzero-block instance of
-    Theorem~\ref{thm:normal_tp_primitive_irred}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:normal_tp_primitive_irred}
-    Apply Theorem~\ref{thm:normal_tp_primitive_irred}.
-\end{proof}
+For a primitive nonzero block satisfying the same hypotheses, normality is
+exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
 
 \begin{theorem}[Blocking preserves irreducibility for primitive irreducible blocks]%
     \label{thm:blocked_irreducible_tp_primitive}
