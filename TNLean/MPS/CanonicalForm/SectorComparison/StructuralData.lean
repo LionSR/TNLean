@@ -10,10 +10,8 @@ open Filter
 /-!
 # Structural after-blocking theorem for canonical-form reduction
 
-This file collects the final structural statements in the current
-canonical-form reduction following arXiv:1606.00608. It gives a common-period blocking theorem
-for two tensors and the resulting structural after-blocking statement that both
-sides have TP-primitive decompositions.
+This file records the common-period blocking theorem for two tensors in the
+current canonical-form reduction following arXiv:1606.00608.
 
 ## Main statements
 
