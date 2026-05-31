@@ -55,7 +55,7 @@ The Z-gauge construction (Theorem 3.8 steps 5–7) is fully proved.
 ## Key references
 
 * arXiv:1708.00029 (De las Cuevas–Schuch–Pérez-García–Cirac, 2017)
-* `MPSTensor.ft_sector_bnt_proportional_sector_match` — current
+* `MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses` — current
   sector-decomposition matching template for the non-periodic theorem
 * Z-gauge construction lemmas in `ZGauge.lean`
 -/

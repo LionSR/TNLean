@@ -11,8 +11,8 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
 This file assembles the full-basis and bijective matching consequences from the
 analytic core into the final proportional sector-matching theorem.
 
-The main theorem `MPSTensor.ft_sector_bnt_proportional_sector_match` delivers
-the basis-count identity $g_P = g_Q$, a basis bijection
+The main theorem `MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses`
+delivers the basis-count identity $g_P = g_Q$, a basis bijection
 $\beta : \{1,\dots,g_Q\} \to \{1,\dots,g_P\}$, per-block bond-dimension
 equality $D_P^{(\beta k)} = D_Q^{(k)}$, and per-block gauge-phase equivalence
 $B_k = \zeta_k X_k A_{\beta k} X_k^{-1}$.
@@ -197,47 +197,9 @@ theorem bijective_match_of_eventuallyProportional
 
 /-! ### Final theorem: proportional sector matching with basis-count equality -/
 
-/-- **Proportional sector matching for two BNT canonical forms.**
-
-If two BNT canonical sector decompositions have eventually proportional
-assembled tensors with nonzero per-$N$ scalar, and each basis sector on both
-sides carries a unit-modulus copy weight, then the basis counts agree and
-there is a basis bijection carrying matched bond-dimension equality and
-per-block gauge-phase equivalence.
-
-Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`), Appendix MPV
-theorem statement lines 1167–1170, and Appendix MPV proof line 1182 (matching
-proof); CPSV21 lines 1891–1894 (proportional-MPV theorem-level target).
-This is the proportional analogue
-of `ft_sector_bnt_equal_mps_gaugeEquiv_witnessesPos` (`SectorBNT/FundamentalCoord.lean`)
-in the matching layer. The source proportional theorem stops at sector
-matching; the weight comparison and global gauge in CPSV16 Appendix MPV proof,
-lines 1187–1192, belong to the equal-MPV corollary unless an additional
-proportional coefficient theorem controls the length-dependent scalar. -/
-theorem ft_sector_bnt_proportional_sector_match
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hUnitP : ∀ j : Fin P.basisCount, ∃ q : Fin (P.copies j), ‖P.weight j q‖ = 1)
-    (hUnitQ : ∀ k : Fin Q.basisCount, ∃ q : Fin (Q.copies k), ‖Q.weight k q‖ = 1)
-    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
-    P.basisCount = Q.basisCount ∧
-    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
-      ∀ k : Fin Q.basisCount, ∃ h : P.basisDim (β k) = Q.basisDim k,
-        GaugePhaseEquiv
-          (cast (congr_arg (MPSTensor d) h) (P.basis (β k))) (Q.basis k) := by
-  classical
-  obtain ⟨β, hβ⟩ :=
-    bijective_match_of_eventuallyProportional hP hQ hUnitP hUnitQ hProp
-  refine ⟨?_, β, ?_⟩
-  · have hCard := Fintype.card_congr β
-    simpa using hCard.symm
-  · intro k
-    obtain ⟨h, hGE, _⟩ := hβ k
-    exact ⟨h, hGE⟩
-
 /-- **Proportional sector matching with explicit unit phases and block gauges.**
 
-This is the witness form of `ft_sector_bnt_proportional_sector_match`: after
+This is the witness form of the proportional BNT sector matching: after
 the proportional BNT block matching of CPSV16 Appendix MPV proof, line 1182, the
 matched gauge-phase equivalences provide actual matrices `Xblock k` and
 scalars `ζ k`.  The BNT self-overlap normalization forces `‖ζ k‖ = 1`, so
