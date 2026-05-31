@@ -80,8 +80,7 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
   obtain ⟨p, hp, rA₀, dimA₀, μA₀, blocksA₀,
       rB₀, dimB₀, μB₀, blocksB₀, familyA, familyB,
       hFamilyA, hFamilyB, hAPosCanon, hBPosCanon, hPosCanon,
-      _hReindexedA, _hReindexedB, hμA, hμB, hTPA, hTPB, hPrimA, hPrimB,
-      hIrrA, hIrrB, hDimA, hDimB⟩ :=
+      hμA, hμB, hTPA, hTPB, hPrimA, hPrimB, hIrrA, hIrrB, hDimA, hDimB⟩ :=
     afterBlocking_commonLengthCommonSectorData_of_sameMPV₂ A B hSame
   have hFlatA_raw := familyA.reindexed_nonzero_part μA₀
   have hFlatB_raw := familyB.reindexed_nonzero_part μB₀
