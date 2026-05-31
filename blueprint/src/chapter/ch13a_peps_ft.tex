@@ -3332,8 +3332,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     regions: a red region containing one endpoint, a blue region containing the
     other endpoint, and an injective complementary region.  The three regions
     are pairwise disjoint and cover the whole vertex set.  The edge-blocking
-    hypotheses are the uniform version of this datum for every edge.  The local
-    blocking picture used in the proof of
+    hypotheses are precisely this one-edge datum at every edge; the red,
+    blue, and complementary regions are read off from it.  The local blocking
+    picture used in the proof of
     \cite[Theorem~3]{Molnar2018NormalPEPS}:
     \begin{center}
         \TNPEPSNormalEdgeBlockingHypotheses
@@ -3351,12 +3352,11 @@ injective and normal PEPS, following Theorems~2 and~3 of
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses.endpoint_disjoint_cover_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
-    A family of one-edge blocking data determines the normal edge-blocking
+    A family of one-edge blocking data is precisely the normal edge-blocking
     hypotheses.  If $H$ is assembled from the family $d_e$, then the one-edge
-    datum that $H$ associates with $e$ is $d_e$.  Conversely, for every edge,
-    the normal edge-blocking hypotheses supply the corresponding one-edge
-    datum.  Write the endpoints of $e$ as $u_e<v_e$ in the canonical vertex
-    ordering.  If the three regions are $R_e$, $B_e$, and $C_e$, then
+    datum that $H$ associates with $e$ is $d_e$.  Write the endpoints of $e$
+    as $u_e<v_e$ in the canonical vertex ordering.  If the three regions are
+    $R_e$, $B_e$, and $C_e$, then
     \[
         u_e \in R_e,\qquad v_e \in B_e,\qquad
         R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing,\qquad
@@ -3365,10 +3365,9 @@ injective and normal PEPS, following Theorems~2 and~3 of
     and the underlying PEPS tensor is injective on $R_e$, $B_e$, and $C_e$.
 \end{theorem}
 \begin{proof}\leanok
-    The construction sends each assumption in the one-edge datum to the
-    matching assumption in the uniform hypotheses.  The displayed endpoint,
-    disjointness, coverage, and injectivity statements are exactly the
-    corresponding assumptions of the one-edge datum.
+    By construction, the one-edge datum at each edge $e$ is $d_e$.
+    The displayed endpoint, disjointness, coverage, and injectivity statements
+    are exactly the corresponding assumptions of that one-edge datum.
 \end{proof}
 
 \begin{definition}[Normal one-site separation hypotheses]%
