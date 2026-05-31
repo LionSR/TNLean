@@ -205,7 +205,7 @@ theorem reindexed_sameMPV₂
       (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
 
 /-- A relabeled nonzero-weight block is represented by its common-alphabet cyclic sectors. -/
-theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
+private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂ (F.commonReindexedBlock k) (F.commonSectorTensor k) := by
   intro N σ
@@ -219,7 +219,7 @@ theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
       simpa [commonSectorTensor, commonSectorBlock] using F.nested_same k N σ
 
 /-- Weighted nonzero blocks with explicit relabelings flatten to the common-sector family. -/
-theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
+private theorem sameMPV₂_weightedCommonReindexedBlock_commonFlat
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ) :
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
