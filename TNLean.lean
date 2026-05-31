@@ -226,7 +226,6 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
-import TNLean.MPS.FundamentalTheorem.SectorBNT.WeakExistential
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
 import TNLean.MPS.Periodic.Overlap

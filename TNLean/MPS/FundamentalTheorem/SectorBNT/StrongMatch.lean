@@ -40,7 +40,7 @@ bijective matching and global-gauge theorems.
 The result is a **single `∀ k, ∃ j` existential statement** on the
 original pair, with the per-sector unit-modulus hypothesis supplied as an
 argument. The proof uses the full combined family at once, through
-`exists_block_match_of_sameMPV` and the full-family combined linear
+`exists_block_match_of_sameMPVPos` and the full-family combined linear
 independence lemma `combined_family_eventually_li`, rather than deleting
 sectors one by one.
 
@@ -53,7 +53,7 @@ using per-sector unit-modulus hypotheses on both sides, to derive
 ## Proof of the existential
 
 Given a sector `k` of `Q` with a unit-modulus weight, apply the
-existing `exists_block_match_of_sameMPV` (`SectorBNT/DominantMatch`)
+existing `exists_block_match_of_sameMPVPos` (`SectorBNT/DominantMatch`)
 **with `P` and `Q` swapped**:
 
 * feed `hQ`, `hP` (in that order);
@@ -88,7 +88,7 @@ for every sector `k` of `Q`, there exists a sector `j` of `P` of equal bond
 dimension, gauge-phase equivalent to `Q.basis k` after the dimension cast, and
 with non-decaying cross-overlap.
 
-The proof iterates `exists_block_match_of_sameMPV` over every `Q`-sector
+The proof iterates `exists_block_match_of_sameMPVPos` over every `Q`-sector
 with `(P, Q)` swapped, so it consumes the per-block unit-modulus
 witnesses on the *swapped* side, namely `hUnitQ : ∀ k, ∃ q, ‖μ_{k,q}‖ = 1`
 for $Q$.  The per-block unit-modulus convention is paper-implicit in

@@ -58,12 +58,7 @@ duplicated.
 
 ## Connections to existing strong predicates
 
-One direct connection is provided:
-
-* `MPSTensor.IsNormalTensor.of_irreducible_and_primitive` —
-  combine an `IsIrreducibleTensor` proof with a primitive-transfer-map proof.
-
-A further connection is intentionally not provided here:
+A connection is intentionally not provided here:
 
 * A BNT connection `IsCPSVBasisOfNormalTensors.of_isBNT` would require the implication
   `MPSTensor.IsNormal → IsNormalTensor` per block, i.e. from algebraic eventual
@@ -107,15 +102,6 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
   /-- (ii) the associated CPM has a unique eigenvalue of magnitude equal to its
   spectral radius equal to one (primitive transfer map). -/
   primitive_transfer : _root_.IsPrimitive (transferMap (d := d) (D := D) A)
-
-/-- An irreducible tensor whose transfer map is primitive is a CPSV16 normal tensor. -/
-theorem IsNormalTensor.of_irreducible_and_primitive
-    {A : MPSTensor d D}
-    (hIrr : IsIrreducibleTensor A)
-    (hPrim : _root_.IsPrimitive (transferMap (d := d) (D := D) A)) :
-    IsNormalTensor A :=
-  { no_invariant_proj := hIrr
-    primitive_transfer := hPrim }
 
 /-! ## Basis of normal tensors (BNT) -/
 

@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
-import TNLean.MPS.FundamentalTheorem.SectorBNT.WeakExistential
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Overlap.CastDecay
 import TNLean.Analysis.ConvergenceHelpers
@@ -15,19 +14,10 @@ This module produces the **gauge-phase match** for a single BNT basis block of
 one BNT canonical form against some block of the other, under `SameMPV₂` of
 the assembled tensors.
 
-The module has three layers:
-
-1. **Lemma 1** — interpret `SameMPV₂` as a special case of
-   `EventuallyNonzeroProportionalMPV₂` with constant scalar `1`.
-2. **Lemma 2** — specialise the Phase 3 weak existential
-   (`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
-   `SectorBNT/WeakExistential.lean`) to the `SameMPV₂` hypothesis: some pair
-   of basis blocks has a non-decaying cross-overlap.
-3. **Lemma 3** — the **block matching** statement: for any sector
-   `j₀ : Fin P.basisCount`, the structural per-block unit-modulus witness
-   gives a block `k₀` of `Q` of equal bond dimension, gauge-phase
-   equivalent (cast-left shape) to the `P`-block at `j₀`,
-   and with a non-decaying cross-overlap.
+For any sector `j₀ : Fin P.basisCount`, the structural per-block
+unit-modulus witness gives a block `k₀` of `Q` of equal bond dimension,
+gauge-phase equivalent (cast-left shape) to the `P`-block at `j₀`, and
+with a non-decaying cross-overlap.
 
 ## Hypothesis structure
 
@@ -40,8 +30,8 @@ normalization convention, `IsBNTCanonicalForm` carries the modulus-bound
 field
 
 * `weight_norm_le_one : ∀ j q, ‖weight j q‖ ≤ 1`  — CPSV16 line 246, the
-  modulus bound.  Lemma 3 below feeds this in via `hP.weight_norm_le_one`
-  and `hQ.weight_norm_le_one`.
+  modulus bound.  The block matching theorem below feeds this in via
+  `hP.weight_norm_le_one` and `hQ.weight_norm_le_one`.
 
 The per-block unit-modulus convention `∀ j, ∃ q, ‖weight j q‖ = 1` is
 **not** a structural field — CPSV16 line 246 is **global** (the
@@ -103,53 +93,7 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-! ### Lemma 1: `SameMPV₂` as a special case of eventual nonzero proportionality
-
-`SameMPV₂` is the equal-MPV hypothesis.  By taking the proportionality scalar
-to be the constant `1`, it is a degenerate special case of
-`EventuallyNonzeroProportionalMPV₂` (per-`N` nonzero scalar with
-eventual scope).  The conversion is a direct `Filter.Eventually` argument.
-
-Paper anchor: CPSV16 equal-MPV corollary, lines 1172–1192, instantiates
-`thm1` with equal MPV; the proportionality scalar is `1`.
--/
-theorem SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
-    {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : SameMPV₂Pos A B) :
-    EventuallyNonzeroProportionalMPV₂ A B := by
-  refine Filter.eventually_atTop.mpr ⟨1, fun N hN => ?_⟩
-  refine ⟨1, one_ne_zero, fun σ => ?_⟩
-  simpa using h N hN σ
-
-theorem SameMPV₂.toEventuallyNonzeroProportionalMPV₂
-    {d D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    (h : SameMPV₂ A B) :
-    EventuallyNonzeroProportionalMPV₂ A B :=
-  h.toSameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂
-
-/-! ### Lemma 2: weak non-decay existential for `SameMPV₂`
-
-The Phase 3 weak existential
-(`exists_nondecaying_overlap_pair_of_eventuallyProportional`,
-`SectorBNT/WeakExistential.lean`) immediately specialises to the
-`SameMPV₂` hypothesis via Lemma 1.
-
-Paper anchor: CPSV16 lines 1121–1132 (Lem1, combined-family eventual LI),
-applied along the contrapositive route of the CPSV16 equal-MPV corollary,
-lines 1172–1192.
--/
-theorem exists_nondecaying_overlap_pair_of_sameMPVPos
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hQ_pos : 0 < Q.basisCount)
-    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
-    ∃ j : Fin P.basisCount, ∃ k : Fin Q.basisCount,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (P.basis j) (Q.basis k) N)
-          atTop (𝓝 0) :=
-  exists_nondecaying_overlap_pair_of_eventuallyProportional
-    (P := P) (Q := Q) hP hQ hQ_pos hEqual.toEventuallyNonzeroProportionalMPV₂
-
-/-! ### Lemma 3: block matching at a user-supplied index `j₀`
+/-! ### Block matching at a user-supplied index `j₀`
 
 The main result of Phase 4b-ii: under `SameMPV₂` plus a unit-modulus
 witness `∃ q, ‖P.weight j₀ q‖ = 1` at a user-supplied sector index
@@ -486,25 +430,5 @@ theorem exists_block_match_of_sameMPVPos
         (hB_norm := hQ.basis_left_canonical k₀)
         (hNot := hNot)
   exact ⟨k₀, hDim, hGPE, hk₀⟩
-
-/-- Reformulation for the all-length `SameMPV₂` form.  Forwards to the
-positive-length core via `SameMPV₂.toSameMPV₂Pos`. -/
-theorem exists_block_match_of_sameMPV
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (j₀ : Fin P.basisCount)
-    (hUnitP_at_j₀ : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1)
-    (hP_pos : 0 < P.basisCount) (hQ_pos : 0 < Q.basisCount)
-    (hEqual : SameMPV₂ P.toTensor Q.toTensor) :
-    ∃ k₀ : Fin Q.basisCount,
-      ∃ h : P.basisDim j₀ = Q.basisDim k₀,
-        GaugePhaseEquiv
-            (cast (congr_arg (MPSTensor d) h) (P.basis j₀))
-            (Q.basis k₀) ∧
-        ¬ Tendsto (fun N : ℕ =>
-            mpvOverlap (d := d) (P.basis j₀) (Q.basis k₀) N)
-          atTop (𝓝 0) :=
-  exists_block_match_of_sameMPVPos
-    (P := P) (Q := Q) hP hQ j₀ hUnitP_at_j₀ hP_pos hQ_pos hEqual.toSameMPV₂Pos
 
 end MPSTensor

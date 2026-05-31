@@ -117,35 +117,11 @@ def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasPrimitiveBlocks (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasPrimitiveBlocks
 
-/-- Project restricted normal-CF-BNT hypotheses to strict weight inequalities.
-
-This projection is for the already-grouped single-representative special case, not
-for the full CPSV multiplicity BNT surface. -/
-def toHasStrictOrderedNonzeroWeights (hNCF : IsNormalCanonicalFormBNT μ A) :
-    HasStrictOrderedNonzeroWeights μ where
-  mu_strict_anti := hNCF.mu_strict_anti
-  mu_ne_zero := hNCF.toIsNormalCanonicalForm.mu_ne_zero
-
 /-- Project normal-CF-BNT hypotheses to self-overlap normalization. -/
 def toHasNormalizedSelfOverlap [∀ k, NeZero (dim k)]
     (hNCF : IsNormalCanonicalFormBNT μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   hNCF.toIsNormalCanonicalForm.toHasNormalizedSelfOverlap
-
-/-- Each block weight has modulus at most `1`.
-
-Source: arXiv:1606.00608, paragraph after `eq:II_CF1`. The dominant block
-weight has unit modulus (`mu_dom_norm_one`); the remaining blocks have
-strictly smaller modulus by `mu_strict_anti`, hence are bounded by `1`. -/
-lemma mu_norm_le_one (hNCF : IsNormalCanonicalFormBNT μ A) (k : Fin r) :
-    ‖μ k‖ ≤ 1 := by
-  by_cases hr : 0 < r
-  · have hdom : ‖μ ⟨0, hr⟩‖ = 1 := hNCF.mu_dom_norm_one hr
-    have hle : (⟨0, hr⟩ : Fin r) ≤ k := Fin.mk_le_of_le_val (Nat.zero_le _)
-    have hanti : ‖μ k‖ ≤ ‖μ ⟨0, hr⟩‖ := hNCF.mu_strict_anti.antitone hle
-    rw [hdom] at hanti
-    exact hanti
-  · exact absurd k.isLt (by omega)
 
 /-- Rebuild `IsNormalCanonicalFormBNT` from the additive split formulation plus
 the BNT separation assumption and the source-faithful dominant-block
@@ -371,21 +347,6 @@ namespace IsNormalCanonicalFormBNT
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 variable {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-
-/-- Cross-overlap decay for normal-CF-BNT blocks.
-
-**Scope restriction (one-copy-per-sector):** The hypothesis
-`IsNormalCanonicalFormBNT` is the separated, already grouped variant documented
-in `docs/paper-gaps/ft_one_copy_scope_restriction.tex`. -/
-theorem cross_overlap_tendsto_zero
-    [∀ k, NeZero (dim k)]
-    (hNCF : IsNormalCanonicalFormBNT μ A) (j k : Fin r) (hjk : j ≠ k) :
-    Tendsto (fun N => mpvOverlap (d := d) (A j) (A k) N) atTop (nhds 0) :=
-  cross_overlap_tendsto_zero_of_separated_normal_bnt_data A
-    hNCF.toHasIrreducibleBlocks
-    hNCF.toIsLeftCanonicalBlockFamily
-    hNCF.blocks_not_equiv
-    j k hjk
 
 /-- A normal-canonical-form decomposition with BNT separation yields a valid `IsBNT`
 structure once the equivalent blockwise `IsNormal` witnesses (eventual block injectivity) are

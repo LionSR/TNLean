@@ -281,22 +281,6 @@ theorem coeff_tendsto_zero_of_all_weights_subnorm
     exact tendsto_pow_atTop_nhds_zero_of_norm_lt_one (hSubnorm q)
   simpa using hSumZero
 
-/-- **Thermodynamic-limit non-vanishing of a unit-block coefficient.**
-
-A user-facing alias for `coeff_not_tendsto_zero_at_block`.  The CPSV16
-§II.C line-246 normalization picks out the unit-modulus copies whose
-power-sum coefficient does **not** vanish in the thermodynamic limit.
-
-This is the coefficient form of that thermodynamic-limit non-vanishing
-condition, with the per-block unit-modulus witness supplied as an explicit
-theorem-level hypothesis.  This coefficient form is the input used in the
-Fundamental Theorem proof. -/
-lemma thermodynamic_limit_nonvanishing
-    (h : IsBNTCanonicalForm P) (j₀ : Fin P.basisCount)
-    (hUnit : ∃ q : Fin (P.copies j₀), ‖P.weight j₀ q‖ = 1) :
-    ¬ Tendsto (fun N : ℕ => P.coeff N j₀) atTop (𝓝 0) :=
-  h.coeff_not_tendsto_zero_at_block j₀ hUnit
-
 end IsBNTCanonicalForm
 
 end MPSTensor
