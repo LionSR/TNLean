@@ -34,7 +34,7 @@ lines 1846–1884 (which normalizes the spectral radius of the BNT *basis
 tensors*, not the copy coefficients) — is **not** a structural field of
 `IsBNTCanonicalForm`.
 The fundamental-theorem statements (`coeff_not_tendsto_zero_at_block`,
-`exists_block_match_of_sameMPV`, `bijective_match_of_sameMPV`,
+`exists_block_match_of_sameMPVPos`, `bijective_match_of_sameMPV`,
 `ft_sector_bnt_equal_*`) take the per-block witness as an explicit
 hypothesis at the theorem level, keeping the canonical-form predicate
 minimal and the line 1182 implicit convention local to the theorems

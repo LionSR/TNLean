@@ -180,17 +180,6 @@ def toHasOrderedNonzeroWeights (hμ : HasStrictOrderedNonzeroWeights μ) :
   mu_antitone := hμ.mu_strict_anti.antitone
   mu_ne_zero := hμ.mu_ne_zero
 
-/-- Strictly modulus-ordered nonzero block weights are injective. -/
-theorem mu_injective (hμ : HasStrictOrderedNonzeroWeights μ) : Function.Injective μ := by
-  intro j k hjk
-  have h : ‖μ j‖ = ‖μ k‖ := by rw [hjk]
-  exact hμ.mu_strict_anti.injective h
-
-/-- The modulus profile of strict nonzero weights is injective. -/
-theorem mu_norm_injective (hμ : HasStrictOrderedNonzeroWeights μ) :
-    Function.Injective (fun k : Fin r => ‖μ k‖) :=
-  hμ.mu_strict_anti.injective
-
 end HasStrictOrderedNonzeroWeights
 
 /-- Self-overlap normalization for each block: `mpvOverlap (A k) (A k) N → 1`. -/
@@ -261,38 +250,10 @@ def toIsLeftCanonicalBlockFamily (hCF : IsCanonicalForm μ A) :
     IsLeftCanonicalBlockFamily (d := d) A :=
   IsLeftCanonicalBlockFamily.ofForall hCF.leftCanonical
 
-/-- Project the bundled conditions to the relaxed (non-increasing) weight data. -/
-def toHasOrderedNonzeroWeights (hCF : IsCanonicalForm μ A) :
-    HasOrderedNonzeroWeights μ where
-  mu_antitone := hCF.mu_antitone
-  mu_ne_zero := hCF.mu_ne_zero
-
 /-- Project the bundled conditions to self-overlap normalization data. -/
 def toHasNormalizedSelfOverlap (hCF : IsCanonicalForm μ A) :
     HasNormalizedSelfOverlap (d := d) A :=
   HasNormalizedSelfOverlap.ofForall hCF.overlap_tendsto_one
-
-/-- Assemble `IsCanonicalForm` from the additive split conditions (relaxed ordering). -/
-def ofSeparatedData
-    (hInj : HasInjectiveBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hμ : HasOrderedNonzeroWeights μ)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
-    IsCanonicalForm μ A where
-  block_injective := hInj.block_injective
-  leftCanonical := hLeft.leftCanonical
-  mu_antitone := hμ.mu_antitone
-  mu_ne_zero := hμ.mu_ne_zero
-  overlap_tendsto_one := hOverlap.overlap_tendsto_one
-
-/-- Assemble `IsCanonicalForm` from the additive split conditions (strict ordering). -/
-def ofStrictSeparatedData
-    (hInj : HasInjectiveBlocks (d := d) A)
-    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
-    (hμ : HasStrictOrderedNonzeroWeights μ)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A) :
-    IsCanonicalForm μ A :=
-  ofSeparatedData hInj hLeft hμ.toHasOrderedNonzeroWeights hOverlap
 
 end IsCanonicalForm
 
@@ -348,12 +309,6 @@ def toHasPrimitiveBlocks (hNCF : IsNormalCanonicalForm μ A) :
     HasPrimitiveBlocks (d := d) A :=
   HasPrimitiveBlocks.ofForall hNCF.block_primitive
 
-/-- Project the bundled conditions to the relaxed (non-increasing) weight data. -/
-def toHasOrderedNonzeroWeights (hNCF : IsNormalCanonicalForm μ A) :
-    HasOrderedNonzeroWeights μ where
-  mu_antitone := hNCF.mu_antitone
-  mu_ne_zero := hNCF.mu_ne_zero
-
 /-- Assemble `IsNormalCanonicalForm` from the additive split conditions (relaxed ordering). -/
 def ofSeparatedData
     (hIrr : HasIrreducibleBlocks (d := d) A)
@@ -403,28 +358,6 @@ def toHasNormalizedSelfOverlap
   HasNormalizedSelfOverlap.ofForall hNCF.overlap_tendsto_one
 
 end IsNormalCanonicalForm
-
-namespace IsCanonicalForm
-
-/-- Upgrade an `IsCanonicalForm` witness to the weaker normal-canonical-form interface,
-provided irreducibility, peripheral primitivity, and positive bond dimensions are supplied
-separately. -/
-theorem toIsNormalCanonicalForm
-    {r : ℕ} {dim : Fin r → ℕ}
-    {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
-    (hCF : IsCanonicalForm μ A)
-    (hIrr : ∀ k, IsIrreducibleTensor (A k))
-    (hPrim : ∀ k, _root_.IsPrimitive (transferMap (d := d) (D := dim k) (A k)))
-    (hDim : ∀ k, 0 < dim k) :
-    IsNormalCanonicalForm μ A where
-  block_irreducible := hIrr
-  leftCanonical := hCF.leftCanonical
-  block_primitive := hPrim
-  mu_antitone := hCF.mu_antitone
-  mu_ne_zero := hCF.mu_ne_zero
-  dim_pos := hDim
-
-end IsCanonicalForm
 
 /-! ### MPV overlap bounds from left-canonical normalization
 
