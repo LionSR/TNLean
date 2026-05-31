@@ -99,20 +99,6 @@ structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
   original bond dimension. -/
   bondDim_le : ∑ k : Fin r, dim k ≤ D
 
-/-- Positive PGVWC07 witness weights are nonzero.
-
-Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, lines
-751--752, writes the canonical-form weights as positive real numbers.  In the
-positive-length witness, nonvanishing is therefore a consequence of the
-positive-real weight field. -/
-theorem PGVWC07PositiveLengthWitness.weight_ne_zero
-    {A : MPSTensor d D} (W : PGVWC07PositiveLengthWitness (d := d) (D := D) A) :
-    ∀ k, W.weights k ≠ 0 := by
-  intro k
-  obtain ⟨a, ha_pos, hweight⟩ := W.weight_pos k
-  rw [hweight]
-  exact_mod_cast (ne_of_gt ha_pos)
-
 private noncomputable def gaugeMulVecLinearEquiv {D : ℕ} (X : GL (Fin D) ℂ) :
     (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) where
   toFun v := (X : Matrix (Fin D) (Fin D) ℂ) *ᵥ v
