@@ -385,8 +385,8 @@ construction.
 \begin{proof}\leanok
     \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast}
     For each original nonzero block $k$, write $m_k$ for its period-removal
-    length and $e_k$ for the later blocking length, so $p=m_k e_k$. The
-    digit-level identity gives, for every blocked coordinate $i$,
+    length and $e_k$ for the later blocking length, so $p=m_k e_k$. For every
+    blocked coordinate $i$, the digit-level identity gives
     \[
         \operatorname{flatten}_{m_k}\!
         \bigl(\operatorname{word}_{(d^{[m_k]})^{[e_k]}}(i)\bigr)
@@ -447,18 +447,18 @@ construction.
 
 \begin{proof}
     \leanok
-    \uses{thm:common_blocked_cyclic_sector_flatten_word_of_block_cast,
+    \uses{lem:common_grouped_block_cast_of_flatten_word,
         lem:common_grouped_block_cast_to_relabeling,
         thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
-    For $p=mn$, the canonical digit grouping satisfies
+    For $p=mn$ and every blocked coordinate $i$, the canonical digit grouping
+    satisfies
     \[
         \operatorname{flatten}_{m}
         \bigl(\operatorname{word}_{(d^{[m]})^{[n]}}(i)\bigr)
         =
-        \operatorname{word}_{d^{[p]}}(i)
+        \operatorname{word}_{d^{[p]}}(i).
     \]
-    for every blocked coordinate $i$. Hence the global coordinate-grouping
-    hypothesis holds, and
+    Hence the global coordinate-grouping hypothesis holds, and
     Lemma~\ref{lem:common_grouped_block_cast_to_relabeling} gives the
     blocked-word identification for common sectors. Then
     Theorem~\ref{thm:after_blocking_common_primitive_irreducible_blocks_reindexed}
