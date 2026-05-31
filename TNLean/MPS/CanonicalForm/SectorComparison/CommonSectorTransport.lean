@@ -14,16 +14,15 @@ namespace MPSTensor
 # Common-sector transport after canonical-form blocking
 
 This module contains the common-sector reindexing hypotheses used after the
-structural canonical-form reduction has produced common cyclic-sector data.
+structural canonical-form reduction has produced common cyclic-sector families.
 
 ## Main statements
 
-* `CommonSectorRelabelingHypothesis` and
-  `CommonGroupedBlockCastHypothesis` encode the remaining blocked-word
-  comparison data.
+* `CommonSectorRelabelingHypothesis` encodes the remaining blocked-word
+  comparison hypothesis used by the conditional common-sector theorem.
 * `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`
   and `unconditional_commonPrimitiveIrreducibleBlocks` turn the structural
-  common-sector data into common primitive irreducible block decompositions.
+  common-sector families into common primitive irreducible block decompositions.
 
 ## References
 
@@ -35,7 +34,7 @@ structural canonical-form reduction has produced common cyclic-sector data.
 matrix product states, canonical form, common sectors
 -/
 
-/-- The one-sided blocked-word relabeling hypothesis for cyclic-sector data.
+/-- The one-sided blocked-word relabeling hypothesis for cyclic-sector families.
 
 It says that, for every common cyclic-sector family, the canonically blocked
 weighted nonzero tensor agrees as an MPV family with the same blocks read through
@@ -51,37 +50,6 @@ abbrev CommonSectorRelabelingHypothesis (d : ℕ) : Prop :=
         (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock)
-
-/-- The global coordinate-grouping assertion for common cyclic-sector families.
-
-It requires every common blocked cyclic-sector family to satisfy the
-coordinate-grouping condition for each original block, so the canonical identification
-with the iterated blocked alphabet is the explicit grouping of direct blocked words. -/
-abbrev CommonGroupedBlockCastHypothesis (d : ℕ) : Prop :=
-  ∀ {r : ℕ} {dim : Fin r → ℕ}
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (F : CommonBlockedCyclicSectorFamily blocks),
-    ∀ k : Fin r, F.groupedBlockCastAgrees k
-
-namespace CommonGroupedBlockCastHypothesis
-
-/-- The canonical coordinate grouping for common blocked cyclic-sector families. -/
-lemma of_flattenWordOfBlock_cast_eq (d : ℕ) : CommonGroupedBlockCastHypothesis d := by
-  intro r dim blocks F k
-  exact F.groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
-    (fun hp_eq h_card i =>
-      CommonBlockedCyclicSectorFamily.flattenWordOfBlock_cast_eq hp_eq h_card i) k
-
-/-- The coordinate-grouping assertion implies the one-sided reindexing hypothesis
-used by the common-sector structural theorem. -/
-lemma toRelabelingHypothesis {d : ℕ}
-    (hCast : CommonGroupedBlockCastHypothesis d) :
-    CommonSectorRelabelingHypothesis d := by
-  intro r dim μ blocks F
-  exact F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_groupedBlockCastAgrees μ
-    (hCast blocks F)
-
-end CommonGroupedBlockCastHypothesis
 
 set_option maxHeartbeats 800000 in
 -- The conclusion records both decompositions and all their structural hypotheses together.
@@ -223,17 +191,9 @@ theorem afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 
-The proved blocked-word flattening identity supplies the grouped-cast hypothesis needed to
-apply `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts` without any
-blocking-coordinate hypothesis.
-
-The proof chains:
-1. `flattenWordOfBlock_cast_eq` → `CommonGroupedBlockCastHypothesis d`
-   (via `groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq`)
-2. `CommonGroupedBlockCastHypothesis d` → `CommonSectorRelabelingHypothesis d`
-   (via `CommonGroupedBlockCastHypothesis.toRelabelingHypothesis`)
-3. `CommonSectorRelabelingHypothesis d` → the full common-block decomposition
-   (via `afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts`)
+The proof obtains the required relabeling assertion directly from the family-level
+comparison between direct blocking and the common alphabet, then assembles the
+blockwise equalities over the weighted direct sum.
 -/
 theorem unconditional_commonPrimitiveIrreducibleBlocks
     {d D₁ D₂ : ℕ}
@@ -263,10 +223,10 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, IsIrreducibleTensor (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
       (∀ x, 0 < dimB x) := by
-  have h_group : CommonGroupedBlockCastHypothesis d :=
-    CommonGroupedBlockCastHypothesis.of_flattenWordOfBlock_cast_eq d
   have h_relabel : CommonSectorRelabelingHypothesis d :=
-    h_group.toRelabelingHypothesis
+    fun μ blocks F =>
+      F.sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockwise μ
+        (fun k => F.blockTensor_sameMPV₂_commonReindexedBlock k)
   exact afterBlocking_commonPrimitiveIrreducibleBlocks_of_reindexedNonzeroParts
     A B hSame h_relabel
 
