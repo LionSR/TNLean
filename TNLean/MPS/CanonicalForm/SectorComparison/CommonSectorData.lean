@@ -95,12 +95,14 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂
     hBook, ?_, ?_⟩
   · intro k
     letI : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
-    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
-      (blocksA k) (hTPA k) (hIrrA k)
+    simpa [HasPrimitiveIrreducibleCyclicSectors] using
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+        (d := d) (D := dimA k) (blocksA k) (hTPA k) (hIrrA k)
   · intro k
     letI : NeZero (dimB k) := ⟨Nat.ne_of_gt (hDimB k)⟩
-    exact hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor
-      (blocksB k) (hTPB k) (hIrrB k)
+    simpa [HasPrimitiveIrreducibleCyclicSectors] using
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+        (d := d) (D := dimB k) (blocksB k) (hTPB k) (hIrrB k)
 
 set_option maxHeartbeats 800000 in
 -- The next theorem has a large dependent existential conclusion, matching the

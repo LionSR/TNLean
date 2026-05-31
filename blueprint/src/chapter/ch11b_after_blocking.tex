@@ -200,7 +200,7 @@ exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂}
     \leanok
     \uses{thm:tp_gauge_arbitrary, def:primitive_irreducible_cyclic_sectors,
-        thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+        thm:cyclic_sector_decomp_irr_tp_prim_irr}
     If $A$ and $B$ generate the same MPV family, then after the zero-block split
     and the trace-preserving gauge there are weighted nonzero-block tensors
     $\bigoplus_j \mu^A_j A_j$ and $\bigoplus_k \mu^B_k B_k$ with, for every
@@ -227,7 +227,7 @@ exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
 
 \begin{proof}\leanok
     \uses{thm:tp_gauge_arbitrary,
-        thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
+        thm:cyclic_sector_decomp_irr_tp_prim_irr}
     Apply Theorem~\ref{thm:tp_gauge_arbitrary} separately to $A$ and $B$. Its
     positive-length conclusion gives, for $N\ge 1$,
     \[
@@ -240,7 +240,7 @@ exactly Theorem~\ref{thm:normal_tp_primitive_irred}.
         V^{(N)}\!(\textstyle\bigoplus_k \mu^B_k B_k)_\sigma.
     \]
     Chaining these through $V(A)=V(B)$ identifies the two nonzero parts. Finally
-    apply Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr} to
+    apply Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr} to
     every trace-preserving irreducible nonzero-weight block.
 \end{proof}
 
