@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -1081,7 +1081,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Theorem&#160;4.5 and Corollary&#160;IV.5
 	]
-</span>. The same-MPV input is reduced to common primitive block decompositions by Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">10.9</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. The BNT matching and coefficient comparison are developed in Chapter&#160;<a href="ch-bnt.html">12</a>. The per-block gauge-phase witnesses, copy-weight identities, and block-diagonal gauge construction are then combined in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.57</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">16</a> are useful algebraic consequences, but they are not the BNT block-matching theorem itself. </p>
+</span>. The same-MPV input is reduced to common primitive block decompositions by Theorem&#160;<a href="ch-canonical_after_blocking.html#thm:ft_after_blocking_common_length_common_sector_theorem">10.9</a> of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. The BNT matching and coefficient comparison are developed in Chapter&#160;<a href="ch-bnt.html">12</a>. The per-block gauge-phase witnesses, copy-weight identities, and block-diagonal gauge construction are then combined in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.68</a>. The same-index direct-sum corollaries of Chapter&#160;<a href="ch-algebraic_ft.html">16</a> are useful algebraic consequences, but they are not the BNT block-matching theorem itself. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:cpgsv_equal_case_source">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1121,7 +1121,7 @@
 	<a href="sect0001.html#Cirac2021Matrix" >CPGSV21</a>
 	, Corollary&#160;IV.5
 	]
-</span>. The coefficient identities for the paired sectors are supplied by the BNT comparison of Chapter&#160;<a href="ch-bnt.html">12</a>; the weight recovery uses Newton–Girard. The resulting global conjugacy is recorded in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">12.58</a>. </p>
+</span>. The coefficient identities for the paired sectors are supplied by the BNT comparison of Chapter&#160;<a href="ch-bnt.html">12</a>; the weight recovery uses Newton–Girard. The resulting global conjugacy is recorded in Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_mps_gaugeEquiv_literal">12.69</a>. </p>
 <h1 id="sec:ft_pair_span_padding">13.2 Homogeneous Pair-Span Padding</h1>
 
 <p>The pair-span padding lemmas below are algebraic statements about fixed-length word spans in the product algebra. They convert a full homogeneous pair-word span at one positive length into the identity pair at all sufficiently large lengths, which is the exact-length form needed in BNT separation. </p>
@@ -1238,7 +1238,7 @@
   \[  \begin{aligned}  0 &  = |V^{(N)}(A)\rangle -|V^{(N)}(B)\rangle  \\ &  = \sum _{j=1}^{g} \left[(\mu _j^A)^N - (\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j})^N\right] |V^{(N)}(A_j)\rangle . \end{aligned}  \]
 </div>
 <p> For all sufficiently large&#160;\(N\), BNT linear independence forces each displayed coefficient to vanish. Since the weights are nonzero and the equality holds for all consecutive sufficiently large&#160;\(N\), one obtains \(\mu _j^A=\mu _{\pi (j)}^B e^{\mathrm{i}\phi _j}\). The phases are then absorbed into the weights, and the block gauges \(X_j\) form the block-diagonal global gauge. </p>
-<p>The repeated-copy and equal-modulus part of the comparison is not restated as a separate theorem in this chapter. Its reference is Chapter&#160;<a href="ch-bnt.html">12</a>: the coefficient identity Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">12.48</a>, the copy-weight recovery Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">12.51</a>, and the global-gauge Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.57</a>. No strict ordering of the moduli is used in these SectorBNT statements; strict-modulus or one-copy comparisons are special cases, not substitutes for the literature theorem. </p>
+<p>The repeated-copy and equal-modulus part of the comparison is not restated as a separate theorem in this chapter. Its reference is Chapter&#160;<a href="ch-bnt.html">12</a>: the coefficient identity Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_matched_mpv_phase">12.59</a>, the copy-weight recovery Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">12.62</a>, and the global-gauge Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.68</a>. No strict ordering of the moduli is used in these SectorBNT statements; strict-modulus or one-copy comparisons are special cases, not substitutes for the literature theorem. </p>
 <p>The source equal-MPV corollary says that canonical-form tensors generating the same MPV family for all system sizes are globally conjugate <span class="cite">
 	[
 	
@@ -1363,11 +1363,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
           <li><a href="ch-mps.html#def:gauge_equiv">Definition 2.10</a></li>
           
-          <li><a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">Theorem 12.57</a></li>
+          <li><a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">Theorem 12.68</a></li>
           
         </ul>
     
@@ -1391,7 +1391,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is the one-copy, already aligned subcase of the BNT global-gauge theorem. In Chapter&#160;<a href="ch-bnt.html">12</a>, specialize Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.57</a> to sector decompositions \(P\) and \(Q\) with the same \((g,D_k,\mu _k)\) block structure. The basis permutation is the identity, the per-block matrices \(X_k\) give the pairwise gauge equivalences, and the block-diagonal matrix \(X=\bigoplus _k X_k\) gives the global conjugation on \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\). </p>
+  <p> This is the one-copy, already aligned subcase of the BNT global-gauge theorem. In Chapter&#160;<a href="ch-bnt.html">12</a>, specialize Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.68</a> to sector decompositions \(P\) and \(Q\) with the same \((g,D_k,\mu _k)\) block structure. The basis permutation is the identity, the per-block matrices \(X_k\) give the pairwise gauge equivalences, and the block-diagonal matrix \(X=\bigoplus _k X_k\) gives the global conjugation on \(\bigoplus _k \mu _k A_k\) and \(\bigoplus _k \mu _k B_k\). </p>
 
   </div>
 </div>
@@ -1413,7 +1413,7 @@
   \[  c_{\alpha ,\beta ,\gamma }^{(L)} =\operatorname{tr}\! \left(\chi _{\alpha ,\beta ,\gamma }^L\right), \qquad m_\gamma =\sum _{\alpha ,\beta }c_{\alpha ,\beta ,\gamma }^{(1)} m_\alpha m_\beta .  \]
 </div>
 <p> In the source appendix the vertical canonical forms are \(\bigoplus _\alpha \mu _\alpha \otimes M_\alpha \) and \(\bigoplus _\beta \nu _\beta \otimes A_\beta \), with \(m_\alpha =\operatorname{tr}(\mu _\alpha )\) and \(n_\beta =\operatorname{tr}(\nu _\beta )\). There \(\mu _\alpha \) and \(\nu _\beta \) are diagonal positive matrices; only their traces enter as the scalar coefficients compared here. </p>
-<p>The base sector-weight and sector-decomposition data types are recorded once, in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:sector_weight_data">12.22</a>). </p>
+<p>The base sector-weight and sector-decomposition data types are recorded once, in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:sector_weight_data">12.23</a>). </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:paper_decomp_formula">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -1443,7 +1443,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
         </ul>
     
@@ -1510,9 +1510,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
         </ul>
     
@@ -1582,13 +1582,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
           <li><a href="ch-ft_proof.html#lem:coeff_eventually_eq">Lemma 13.7</a></li>
           
-          <li><a href="ch-bnt.html#thm:bounded_power_sum_multiset">Theorem 12.19</a></li>
+          <li><a href="ch-bnt.html#thm:bounded_power_sum_multiset">Theorem 12.20</a></li>
           
         </ul>
     
@@ -1638,7 +1638,7 @@
 <div class="displaymath" id="a0000000792">
   \[  \sum _{q=1}^{r_j^S}(\mu _{j,q}^S)^N = \sum _{q=1}^{r_j^T}(\mu _{j,q}^T)^N  \]
 </div>
-<p> for all sufficiently large \(N\). The signed-geometric-sequence argument extends this to every positive exponent. Applying the finite-range unequal-cardinality power-sum theorem (Theorem&#160;<a href="ch-bnt.html#thm:bounded_power_sum_multiset">12.19</a>) gives both \(r_j^S=r_j^T\) and equality of the sector weight multisets. </p>
+<p> for all sufficiently large \(N\). The signed-geometric-sequence argument extends this to every positive exponent. Applying the finite-range unequal-cardinality power-sum theorem (Theorem&#160;<a href="ch-bnt.html#thm:bounded_power_sum_multiset">12.20</a>) gives both \(r_j^S=r_j^T\) and equality of the sector weight multisets. </p>
 
   </div>
 </div>
@@ -1674,7 +1674,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
           <li><a href="ch-ft_proof.html#lem:paper_decomp_formula">Lemma 13.6</a></li>
           
@@ -1761,7 +1761,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
           <li><a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">Lemma 13.9</a></li>
           
@@ -1846,7 +1846,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
@@ -1899,7 +1899,7 @@
 
   </div>
 </div>
-<p>The sector-basis matching predicates used by the comparison results below are recorded in Chapter&#160;<a href="ch-bnt.html">12</a>: Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.23</a> (sector basis matching), Definition&#160;<a href="ch-bnt.html#def:sector_basis_pre_matching">12.24</a> (sector basis pre-matching), Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">12.25</a> (single-family overlap-orthogonality hypotheses), and Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.26</a> (primitive overlap-span hypotheses). </p>
+<p>The sector-basis matching predicates used by the comparison results below are recorded in Chapter&#160;<a href="ch-bnt.html">12</a>: Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.24</a> (sector basis matching), Definition&#160;<a href="ch-bnt.html#def:sector_basis_pre_matching">12.25</a> (sector basis pre-matching), Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">12.26</a> (single-family overlap-orthogonality hypotheses), and Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.27</a> (primitive overlap-span hypotheses). </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:sector_basis_overlap_ortho_to_span">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -1932,13 +1932,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">Definition 12.25</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">Definition 12.26</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.26</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.27</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">Definition 12.25</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_ortho_hyps">Definition 12.26</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.26</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.27</a></li>
           
         </ul>
     
@@ -1981,7 +1981,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Combine the one-family hypotheses on the two sides with the remaining injectivity and span-comparison hypotheses. These are exactly the assertions in Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.26</a>. </p>
+  <p> Combine the one-family hypotheses on the two sides with the remaining injectivity and span-comparison hypotheses. These are exactly the assertions in Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.27</a>. </p>
 
   </div>
 </div>
@@ -2017,9 +2017,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_basis_pre_matching">Definition 12.24</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_pre_matching">Definition 12.25</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.23</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.24</a></li>
           
           <li><a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">Lemma 13.9</a></li>
           
@@ -2068,7 +2068,7 @@
 <div class="displaymath" id="a0000000800">
   \[  V^{(N)}(Q_{\pi (j)})_\sigma = \zeta _j^N V^{(N)}(P_j)_\sigma .  \]
 </div>
-<p> Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">13.9</a> then recovers the missing copy-count equalities, which are precisely the extra assertions needed for Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.23</a>. </p>
+<p> Lemma&#160;<a href="ch-ft_proof.html#lem:phase_match_recover_copies_weights">13.9</a> then recovers the missing copy-count equalities, which are precisely the extra assertions needed for Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.24</a>. </p>
 
   </div>
 </div>
@@ -2104,13 +2104,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.22</a></li>
+          <li><a href="ch-bnt.html#def:sector_weight_data">Definition 12.23</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.23</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.24</a></li>
           
           <li><a href="ch-mps.html#def:mpv_overlap">Definition 2.48</a></li>
           
-          <li><a href="ch-bnt.html#lem:bnt_perm_simple">Lemma 12.15</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_perm_simple">Lemma 12.16</a></li>
           
           <li><a href="ch-ft_proof.html#lem:sector_basis_pre_matching_to_matching">Lemma 13.13</a></li>
           
@@ -2191,9 +2191,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.26</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.27</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.23</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.24</a></li>
           
           <li><a href="ch-ft_proof.html#thm:sector_basis_matching_from_overlap_ortho_span">Theorem 13.14</a></li>
           
@@ -2274,7 +2274,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.26</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.27</a></li>
           
           <li><a href="ch-ft_proof.html#thm:bnt_sector_decomp_tp_prim_irr_collapsed">Theorem 13.30</a></li>
           
@@ -2319,11 +2319,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p>Choose one MPV phase-class representative on each side. The one-sided positive-dimension, injectivity, normalization, and overlap hypotheses give all one-family assertions in Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.26</a>. The assumed nonzero-block span equality is preserved when each block is replaced by a phase-equivalent representative. This supplies the two-family span equality for the sector bases. </p>
+  <p>Choose one MPV phase-class representative on each side. The one-sided positive-dimension, injectivity, normalization, and overlap hypotheses give all one-family assertions in Definition&#160;<a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">12.27</a>. The assumed nonzero-block span equality is preserved when each block is replaced by a phase-equivalent representative. This supplies the two-family span equality for the sector bases. </p>
 
   </div>
 </div>
-<p>The MPV phase-equivalence and common-phase-cover predicates are recorded in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:mpv_block_phase_equiv">12.27</a> and Definition&#160;<a href="ch-bnt.html#def:mpv_common_phase_cover">12.28</a>). </p>
+<p>The MPV phase-equivalence and common-phase-cover predicates are recorded in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:mpv_block_phase_equiv">12.28</a> and Definition&#160;<a href="ch-bnt.html#def:mpv_common_phase_cover">12.29</a>). </p>
 <div class="lemma_thmwrapper theorem-style-plain" id="lem:nonzero_block_span_eq_of_common_phase_cover">
   <div class="lemma_thmheading">
     <span class="lemma_thmcaption">
@@ -2356,7 +2356,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.27</a></li>
+          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.28</a></li>
           
           <li><a href="ch-mps.html#def:mpv_state">Definition 2.46</a></li>
           
@@ -2437,7 +2437,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.28</a></li>
+          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.29</a></li>
           
           <li><a href="ch-ft_proof.html#lem:nonzero_block_span_eq_of_common_phase_cover">Lemma 13.17</a></li>
           
@@ -2518,9 +2518,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.28</a></li>
+          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.29</a></li>
           
-          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.27</a></li>
+          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.28</a></li>
           
         </ul>
     
@@ -2599,9 +2599,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.28</a></li>
+          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.29</a></li>
           
-          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.27</a></li>
+          <li><a href="ch-bnt.html#def:mpv_block_phase_equiv">Definition 12.28</a></li>
           
         </ul>
     
@@ -2850,9 +2850,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.28</a></li>
+          <li><a href="ch-bnt.html#def:mpv_common_phase_cover">Definition 12.29</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.26</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_overlap_span_hyps">Definition 12.27</a></li>
           
           <li><a href="ch-ft_proof.html#lem:mpv_common_phase_cover_span_eq">Lemma 13.18</a></li>
           
@@ -2935,7 +2935,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.23</a></li>
+          <li><a href="ch-bnt.html#def:sector_basis_matching">Definition 12.24</a></li>
           
           <li><a href="ch-ft_proof.html#lem:gauge_phase_matched_basis_sector_weights">Lemma 13.11</a></li>
           
@@ -2970,7 +2970,7 @@
         </div>
   </div>
   <div class="theorem_thmcontent">
-  <p>   Given two sector decompositions \(P\) and \(Q\), a sector basis matching (Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.23</a>) between them, eventual linear independence of the basis MPV states of \(P\), and equality of the total MPV families of \(P\) and \(Q\), one obtains nonzero scalars \((\zeta _j)_j\) such that for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
+  <p>   Given two sector decompositions \(P\) and \(Q\), a sector basis matching (Definition&#160;<a href="ch-bnt.html#def:sector_basis_matching">12.24</a>) between them, eventual linear independence of the basis MPV states of \(P\), and equality of the total MPV families of \(P\) and \(Q\), one obtains nonzero scalars \((\zeta _j)_j\) such that for each \(j\) the sector weight multiset of \(P_j\) equals the multiset obtained from that of \(Q_{\pi (j)}\) by multiplication by&#160;\(\zeta _j\). </p>
 
   </div>
 </div>
@@ -3022,7 +3022,7 @@
 <div class="displaymath" id="a0000000815">
   \[  B_j^i=e^{\mathrm{i}\phi _j}Y_jA_j^iY_j^{-1}.  \]
 </div>
-<p> The equal case then uses the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">12</a>: Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">12.49</a> gives the matched coefficient identities, Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">12.51</a> recovers multiplicities and weight multisets, and Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.57</a> assembles the block gauges \(Y_j\) into the block-diagonal global conjugating matrix. This is the equal-case corollary <span class="cite">
+<p> The equal case then uses the SectorBNT coefficient comparison of Chapter&#160;<a href="ch-bnt.html">12</a>: Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_coeff_identity_via_global_gauge">12.60</a> gives the matched coefficient identities, Lemma&#160;<a href="ch-bnt.html#lem:sector_bnt_copy_weight_matching_of_coeff_identity">12.62</a> recovers multiplicities and weight multisets, and Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.68</a> assembles the block gauges \(Y_j\) into the block-diagonal global conjugating matrix. This is the equal-case corollary <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
@@ -3174,7 +3174,7 @@
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.14</a></li>
           
           <li><a href="ch-mps.html#thm:gauge_phase_mpv_scaling">Theorem 2.27</a></li>
           
@@ -3263,9 +3263,9 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 12.3</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 12.4</a></li>
           
-          <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 12.3</a></li>
+          <li><a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">Lemma 12.4</a></li>
           
         </ul>
     
@@ -3308,7 +3308,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> This is Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">12.3</a>, restated with an explicit threshold \(N_0\). </p>
+  <p> This is Lemma&#160;<a href="ch-bnt.html#lem:bnt_overlap_orthonormal_li">12.4</a>, restated with an explicit threshold \(N_0\). </p>
 
   </div>
 </div>
@@ -3344,15 +3344,15 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.40</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.39</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.41</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.40</a></li>
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
-          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.40</a></li>
+          <li><a href="ch-canonical.html#def:trivial_sector_decomp">Definition 9.39</a></li>
           
-          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.41</a></li>
+          <li><a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">Lemma 9.40</a></li>
           
         </ul>
     
@@ -3395,11 +3395,11 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">9.41</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
+  <p> The equality of represented families is Lemma&#160;<a href="ch-canonical.html#lem:trivial_sector_decomp_same_mpv">9.40</a>. The assumed eventual linear independence is exactly the BNT condition for the basis blocks of the granular sector decomposition. </p>
 
   </div>
 </div>
-<p>The MPV phase-class data type is recorded in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:mpv_phase_class_data">12.29</a>). </p>
+<p>The MPV phase-class data type is recorded in Chapter&#160;<a href="ch-bnt.html">12</a> (Definition&#160;<a href="ch-bnt.html#def:mpv_phase_class_data">12.30</a>). </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:bnt_sector_decomp_tp_prim_irr_collapsed">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -3432,11 +3432,11 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 12.29</a></li>
+          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 12.30</a></li>
           
           <li><a href="ch-ft_proof.html#thm:bnt_li_from_overlap_limits_exists">Theorem 13.28</a></li>
           
-          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 12.29</a></li>
+          <li><a href="ch-bnt.html#def:mpv_phase_class_data">Definition 12.30</a></li>
           
           <li><a href="ch-ft_proof.html#thm:bnt_li_from_overlap_limits_exists">Theorem 13.28</a></li>
           

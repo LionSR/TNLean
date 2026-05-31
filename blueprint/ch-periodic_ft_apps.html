@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -1124,7 +1124,7 @@
 	<a href="sect0001.html#DeLasCuevas2017Irreducible" >DlCCSPG17</a>
 	, Section&#160;II
 	]
-</span>. It extends the normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.24</a>), which requires the stronger condition that every block is \(1\)-periodic. </p>
+</span>. It extends the normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.23</a>), which requires the stronger condition that every block is \(1\)-periodic. </p>
 
   </div>
 </div>
@@ -1147,7 +1147,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p> Every tensor in normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.24</a>) is in irreducible form with all periods equal to&#160;\(1\). The irreducible form is strictly more general: it accommodates blocks such as the antiferromagnet, which are \(2\)-periodic. </p>
+  <p> Every tensor in normal canonical form (Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.23</a>) is in irreducible form with all periods equal to&#160;\(1\). The irreducible form is strictly more general: it accommodates blocks such as the antiferromagnet, which are \(2\)-periodic. </p>
 
   </div>
 </div>
@@ -2551,9 +2551,9 @@
           
           <li><a href="ch-periodic_ft_apps.html#def:common_period_blocking">Definition 15.22</a></li>
           
-          <li><a href="ch-canonical.html#thm:iterated_blocking_transfer">Lemma 9.65</a></li>
+          <li><a href="ch-canonical.html#thm:iterated_blocking_transfer">Lemma 9.54</a></li>
           
-          <li><a href="ch-canonical.html#thm:primitive_blocking_divisible">Lemma 9.56</a></li>
+          <li><a href="ch-canonical.html#thm:primitive_blocking_divisible">Lemma 9.45</a></li>
           
         </ul>
     

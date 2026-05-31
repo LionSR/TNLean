@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -1027,7 +1027,7 @@
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical
 	]
-</span>, following the source proof order. They faithfully transcribe the PGVWC07 single-tensor construction and are kept here only as a reference. None of these recordings is on the main route of the Fundamental Theorem reduction, which instead goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.35</a> and the after-blocking statements of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
+</span>, following the source proof order. They faithfully transcribe the PGVWC07 single-tensor construction and are kept here only as a reference. None of these recordings is on the main route of the Fundamental Theorem reduction, which instead goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.34</a> and the after-blocking statements of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
 <h1 id="sec:pgvwc07_intermediates">26.1 Source-faithful PGVWC07 intermediate steps</h1>
 
 <p>The theorems below record the intermediate construction steps of the proof of <span class="cite">
@@ -1036,7 +1036,7 @@
 	<a href="sect0001.html#PerezGarcia2007Matrix" >PGVWC07</a>
 	, Theorem&#160;Th:TIcanonical
 	]
-</span>, in the source proof order: single-block unital and dual-diagonal construction; blockwise composition; arbitrary-input form with the explicit zero summand; the length-zero dimension identity; the positive-length form; the positive-length witness; weight normalization; the nonzero-coefficient existence theorem; and the dichotomy that yields Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>. These are recordings of the source structure. They are not used by the canonical-form reduction in the proof of the Fundamental Theorem, which goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.35</a> and the after-blocking statements of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
+</span>, in the source proof order: single-block unital and dual-diagonal construction; blockwise composition; arbitrary-input form with the explicit zero summand; the length-zero dimension identity; the positive-length form; the positive-length witness; weight normalization; the nonzero-coefficient existence theorem; and the dichotomy that yields Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_ti_canonical_form">9.1</a>. These are recordings of the source structure. They are not used by the canonical-form reduction in the proof of the Fundamental Theorem, which goes through Theorem&#160;<a href="ch-canonical.html#thm:tp_gauge_arbitrary">9.34</a> and the after-blocking statements of Chapter&#160;<a href="ch-canonical_after_blocking.html">10</a>. </p>
 <div class="theorem_thmwrapper theorem-style-plain" id="thm:pgvwc07_irreducible_unital_dual_package">
   <div class="theorem_thmheading">
     <span class="theorem_thmcaption">
@@ -1069,13 +1069,13 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.14</a></li>
           
           <li><a href="ch-qpf.html#thm:unital_data_irreducible">Theorem 6.24</a></li>
           
-          <li><a href="ch-canonical.html#thm:irreducible_unital_scalar_fixed_point">Theorem 9.17</a></li>
+          <li><a href="ch-canonical.html#thm:irreducible_unital_scalar_fixed_point">Theorem 9.16</a></li>
           
-          <li><a href="ch-canonical.html#thm:pgvwc07_dual_diag_unital">Theorem 9.31</a></li>
+          <li><a href="ch-canonical.html#thm:pgvwc07_dual_diag_unital">Theorem 9.30</a></li>
           
         </ul>
     
@@ -1133,7 +1133,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Theorem&#160;<a href="ch-qpf.html#thm:unital_data_irreducible">6.24</a> gives the unital gauge. Gauge equivalence preserves irreducibility of the bond-space action, so Theorem&#160;<a href="ch-canonical.html#thm:irreducible_unital_scalar_fixed_point">9.17</a> shows that every fixed point of the unital representative is scalar. Then Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_dual_diag_unital">9.31</a> gives the unitary diagonalization of the dual fixed point. </p>
+  <p> Theorem&#160;<a href="ch-qpf.html#thm:unital_data_irreducible">6.24</a> gives the unital gauge. Gauge equivalence preserves irreducibility of the bond-space action, so Theorem&#160;<a href="ch-canonical.html#thm:irreducible_unital_scalar_fixed_point">9.16</a> shows that every fixed point of the unital representative is scalar. Then Theorem&#160;<a href="ch-canonical.html#thm:pgvwc07_dual_diag_unital">9.30</a> gives the unitary diagonalization of the dual fixed point. </p>
 
   </div>
 </div>
@@ -1169,7 +1169,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.15</a></li>
+          <li><a href="ch-canonical.html#def:irreducible_tensor">Definition 9.14</a></li>
           
           <li><a href="ch-pgvwc07_recordings.html#thm:pgvwc07_irreducible_unital_dual_package">Theorem 26.1</a></li>
           
@@ -1598,7 +1598,7 @@
           
           <li><a href="ch-pgvwc07_recordings.html#def:pgvwc07_positive_length_witness">Definition 26.6</a></li>
           
-          <li><a href="ch-canonical.html#lem:mpv_to_tensor_from_blocks_weight_mul_left">Lemma 9.32</a></li>
+          <li><a href="ch-canonical.html#lem:mpv_to_tensor_from_blocks_weight_mul_left">Lemma 9.31</a></li>
           
         </ul>
     
@@ -1651,7 +1651,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Choose the largest positive real weight \(s\). Dividing every weight by \(s\) gives positive weights bounded above by \(1\), and a block attaining the maximum has normalized weight \(1\). The MPV identity follows from Lemma&#160;<a href="ch-canonical.html#lem:mpv_to_tensor_from_blocks_weight_mul_left">9.32</a>. </p>
+  <p> Choose the largest positive real weight \(s\). Dividing every weight by \(s\) gives positive weights bounded above by \(1\), and a block attaining the maximum has normalized weight \(1\). The MPV identity follows from Lemma&#160;<a href="ch-canonical.html#lem:mpv_to_tensor_from_blocks_weight_mul_left">9.31</a>. </p>
 
   </div>
 </div>

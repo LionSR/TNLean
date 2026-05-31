@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -4073,7 +4073,7 @@
           
           <li><a href="ch-mpdo.html#def:mpo_tensor">Definition 25.1</a></li>
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
@@ -6219,7 +6219,7 @@
           
           <li><a href="ch-mpdo.html#def:mpdo_rfp_via_fusion">Definition 25.47</a></li>
           
-          <li><a href="ch-bnt.html#thm:newton_girard">Theorem 12.17</a></li>
+          <li><a href="ch-bnt.html#thm:newton_girard">Theorem 12.18</a></li>
           
         </ul>
     
@@ -6284,7 +6284,7 @@
 <div class="displaymath" id="a0000001909">
   \[  \widetilde R_2\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\nu _\gamma }{m_\gamma }\otimes X_\gamma , \qquad \widetilde R_1\Bigl(\bigoplus _\gamma X_\gamma \Bigr) = \bigoplus _\gamma \frac{\mu _\gamma }{m_\gamma }\otimes X_\gamma .  \]
 </div>
-<p> Thus \(\operatorname{tr}(\nu _\gamma )=m_\gamma \) and the defining equality \(m_\gamma =\operatorname{tr}(\mu _\gamma )\) normalize the factors \(\nu _\gamma /m_\gamma \) and \(\mu _\gamma /m_\gamma \), respectively, in \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\). The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">12.17</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
+<p> Thus \(\operatorname{tr}(\nu _\gamma )=m_\gamma \) and the defining equality \(m_\gamma =\operatorname{tr}(\mu _\gamma )\) normalize the factors \(\nu _\gamma /m_\gamma \) and \(\mu _\gamma /m_\gamma \), respectively, in \(T=\widetilde R_2\widetilde T R_1\) and \(S=\widetilde R_1\widetilde S R_2\). The scalar Newton–Girard power-sum identity needed to obtain the trace-power form is already available as Theorem&#160;<a href="ch-bnt.html#thm:newton_girard">12.18</a>; what remains is the MPDO construction of the BNT-label witness carrying these two displayed equations. </p>
 
   </div>
 </div>

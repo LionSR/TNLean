@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -13543,7 +13543,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
           <li><a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">Lemma 18.158</a></li>
           
@@ -13644,7 +13644,7 @@
     <span class="expand-proof">▶</span>
   </div>
   <div class="proof_content">
-  <p> Block injectivity writes each target sector matrix as a fixed-length linear combination of word evaluations. For a canonical-form/BNT family, Definition&#160;<a href="ch-bnt.html#def:bnt">12.1</a> gives one-site injectivity of each block, hence \(1\)-block injectivity by Lemma&#160;<a href="ch-mps.html#lem:one_block_injective_of_injective">2.30</a>. For a target tuple \((M_j)_j\), write \(M_k\) as a one-letter linear combination in block \(k\), multiply by the selector for \(k\), and sum over \(k\). The selector kills all off-target blocks, while it is the identity on block \(k\), so the length-\((1+S)\) word tuples span the full product algebra. If one starts with pairwise separators instead, first use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">18.159</a> to multiply them into full selectors; if one starts from the pair trace-separation criterion, first use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">18.158</a>. The projection-span and commutant consequences then follow from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">18.149</a>. </p>
+  <p> Block injectivity writes each target sector matrix as a fixed-length linear combination of word evaluations. For a canonical-form/BNT family, Definition&#160;<a href="ch-bnt.html#def:bnt">12.2</a> gives one-site injectivity of each block, hence \(1\)-block injectivity by Lemma&#160;<a href="ch-mps.html#lem:one_block_injective_of_injective">2.30</a>. For a target tuple \((M_j)_j\), write \(M_k\) as a one-letter linear combination in block \(k\), multiply by the selector for \(k\), and sum over \(k\). The selector kills all off-target blocks, while it is the identity on block \(k\), so the length-\((1+S)\) word tuples span the full product algebra. If one starts with pairwise separators instead, first use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_selectors_from_pairwise_separators">18.159</a> to multiply them into full selectors; if one starts from the pair trace-separation criterion, first use Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:pair_trace_separation_to_pairwise_selectors">18.158</a>. The projection-span and commutant consequences then follow from Lemma&#160;<a href="ch-parent_hamiltonian.html#lem:block_projection_span_from_product_word_span">18.149</a>. </p>
 
   </div>
 </div>
@@ -13882,7 +13882,7 @@
         
         <ul class="uses">
           
-          <li><a href="ch-bnt.html#def:bnt">Definition 12.1</a></li>
+          <li><a href="ch-bnt.html#def:bnt">Definition 12.2</a></li>
           
           <li><a href="ch-mpdo.html#rem:word_tuple_span_top">Remark 25.42</a></li>
           

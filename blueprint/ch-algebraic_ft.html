@@ -345,7 +345,7 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-1">
      <li class="">
-  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors, canonical forms, and bases of normal tensors</span></a>
+  <a href="ch-canonical.html#sec:cpsv_canonical_defs"><span class="toc_ref">9.1</span> <span class="toc_entry">Normal tensors and canonical forms</span></a>
  </li>
 <li class="">
   <a href="ch-canonical.html#sec:transfer_map_normalization"><span class="toc_ref">9.2</span> <span class="toc_entry">Transfer map normalization</span></a>
@@ -379,20 +379,17 @@
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Basis of Normal Tensors</span></a>
+  <a href="ch-canonical.html#a0000000069"><span class="toc_ref">9.11.1</span> <span class="toc_entry">Single-copy sector decompositions</span></a>
  </li>
 
   </ul>
  </li>
 <li class="">
-  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope and BNT input reductions</span></a>
+  <a href="ch-canonical.html#sec:open_directions"><span class="toc_ref">9.12</span> <span class="toc_entry">Scope of the canonical-form reduction</span></a>
   <span class="expand-toc">▶</span>
   <ul class="sub-toc-2">
      <li class="">
-  <a href="ch-canonical.html#subsec:paperbnt_supplier"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Building a BNT from normal blocks with normalized weights</span></a>
- </li>
-<li class="">
-  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.2</span> <span class="toc_entry">Auxiliary lemmas</span></a>
+  <a href="ch-canonical.html#subsec:internal_lean_only_labels"><span class="toc_ref">9.12.1</span> <span class="toc_entry">Auxiliary lemmas</span></a>
  </li>
 
   </ul>
@@ -454,6 +451,9 @@
   <ul class="sub-toc-2">
      <li class="">
   <a href="ch-bnt.html#sec:bnt_sector_decompositions"><span class="toc_ref">12.4.1</span> <span class="toc_entry">Sector decompositions and phase matching</span></a>
+ </li>
+<li class="">
+  <a href="ch-bnt.html#subsec:paperbnt_supplier"><span class="toc_ref">12.4.2</span> <span class="toc_entry">Prepared-block construction of BNT canonical forms</span></a>
  </li>
 
   </ul>
@@ -2098,7 +2098,7 @@
   </div>
   <div class="lemma_thmcontent">
   <p>   Let \(A_1, A_2\) and \(B_1, B_2\) be injective MPS tensors with the same bond dimension \(D\). Suppose that for all \(X \in M_{D}(\mathbb {C})\) (on the internal bond), all \(Y \in M_{D}(\mathbb {C})\) (on the external bond), and all physical indices \(i,j\), </p>
-<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f029e4ac590>">
+<div class="displaymath" id="<plasTeX.TeXFragment object at 0x7f4647420530>">
   \begin{align}  \operatorname{tr}(A_1^{i}\,  X\,  A_2^{j}) &  = \operatorname{tr}(B_1^{i}\,  X\,  B_2^{j}) \label{eq:internal_bond} \\ \operatorname{tr}(A_2^{j}\,  Y\,  A_1^{i}) &  = \operatorname{tr}(B_2^{j}\,  Y\,  B_1^{i}) \label{eq:external_bond} \end{align}
 </div>
 <p> Diagrammatically, inserting \(X\) on the bond between the two sites (Eq.&#160;??): </p>
@@ -4057,7 +4057,7 @@
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
 	, Theorem&#160;II.1
 	]
-</span>. In the source proof, that matching is obtained from BNT overlap, independence, and coefficient comparison; the corresponding global gauge assembly is Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.57</a>. </p>
+</span>. In the source proof, that matching is obtained from BNT overlap, independence, and coefficient comparison; the corresponding global gauge assembly is Theorem&#160;<a href="ch-bnt.html#thm:sector_bnt_equal_global_gauge">12.68</a>. </p>
 <div class="definition_thmwrapper theorem-style-definition" id="def:global_gauge_of_blocks">
   <div class="definition_thmheading">
     <span class="definition_thmcaption">
@@ -5534,7 +5534,7 @@
         </div>
   </div>
   <div class="remark_thmcontent">
-  <p>See Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.24</a> for the normal canonical-form data statement. </p>
+  <p>See Definition&#160;<a href="ch-canonical.html#def:is_normal_canonical_form">9.23</a> for the normal canonical-form data statement. </p>
 
   </div>
 </div>
@@ -5991,7 +5991,7 @@
           
           <li><a href="ch-mps.html#def:same_mpv2">Definition 2.12</a></li>
           
-          <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 12.30</a></li>
+          <li><a href="ch-bnt.html#def:sector_bnt_cf">Definition 12.31</a></li>
           
           <li><a href="ch-mps.html#def:gauge_phase_equiv">Definition 2.23</a></li>
           
@@ -6024,7 +6024,7 @@
         </div>
   </div>
   <div class="lemma_thmcontent">
-  <p>   Let \(P\) and \(Q\) be two BNT canonical forms (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">12.30</a>), each admitting a unit-modulus copy weight in every basis sector, possibly with different sector counts and different bond dimensions before matching. If their block-diagonal tensors generate the same MPV family (Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>), then the basis sectors are bijectively matched by a permutation \(\beta \), each matched basis pair is gauge-phase equivalent (Definition&#160;<a href="ch-mps.html#def:gauge_phase_equiv">2.23</a>), the matched copy multiplicities agree, and the copy weights agree up to a unit-modulus phase \(\zeta \) and a copy-index reindexing. This is the sector-data form of the equal-case theorem <span class="cite">
+  <p>   Let \(P\) and \(Q\) be two BNT canonical forms (Definition&#160;<a href="ch-bnt.html#def:sector_bnt_cf">12.31</a>), each admitting a unit-modulus copy weight in every basis sector, possibly with different sector counts and different bond dimensions before matching. If their block-diagonal tensors generate the same MPV family (Definition&#160;<a href="ch-mps.html#def:same_mpv2">2.12</a>), then the basis sectors are bijectively matched by a permutation \(\beta \), each matched basis pair is gauge-phase equivalent (Definition&#160;<a href="ch-mps.html#def:gauge_phase_equiv">2.23</a>), the matched copy multiplicities agree, and the copy weights agree up to a unit-modulus phase \(\zeta \) and a copy-index reindexing. This is the sector-data form of the equal-case theorem <span class="cite">
 	[
 	
 	<a href="sect0001.html#Cirac2017MPDO_AnnPhys" >CPGSV17a</a>
