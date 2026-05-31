@@ -88,50 +88,69 @@ union is the whole vertex set, and each region is injective.
 
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500. -/
 structure NormalEdgeBlockingHypotheses (G : SimpleGraph V) where
-  /-- The first injective block around each edge. -/
-  red : Edge G → Finset V
-  /-- The second injective block around each edge. -/
-  blue : Edge G → Finset V
-  /-- The complementary injective block around each edge. -/
-  complement : Edge G → Finset V
-  /-- The left endpoint of the edge lies in the red block. -/
-  left_mem_red : ∀ e : Edge G, e.1.1 ∈ red e
-  /-- The right endpoint of the edge lies in the blue block. -/
-  right_mem_blue : ∀ e : Edge G, e.1.2 ∈ blue e
-  /-- The red block is injective. -/
-  red_injective : ∀ e : Edge G, ι.IsInjective (red e)
-  /-- The blue block is injective. -/
-  blue_injective : ∀ e : Edge G, ι.IsInjective (blue e)
-  /-- The complementary block is injective. -/
-  complement_injective : ∀ e : Edge G, ι.IsInjective (complement e)
-  /-- The red and blue blocks are disjoint. -/
-  red_disjoint_blue : ∀ e : Edge G, Disjoint (red e) (blue e)
-  /-- The red and complementary blocks are disjoint. -/
-  red_disjoint_complement : ∀ e : Edge G, Disjoint (red e) (complement e)
-  /-- The blue and complementary blocks are disjoint. -/
-  blue_disjoint_complement : ∀ e : Edge G, Disjoint (blue e) (complement e)
-  /-- The three edge-centred blocks cover the vertex set. -/
-  cover_univ : ∀ e : Edge G, red e ∪ blue e ∪ complement e = Finset.univ
+  /-- The one-edge blocking datum attached to each edge. -/
+  blockingData : ∀ e : Edge G, NormalEdgeBlockingData ι G e
 
 namespace NormalEdgeBlockingHypotheses
 
 variable {ι}
 
-/-- The one-edge blocking data supplied by edge-centred blocking hypotheses. -/
-def blockingData (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
-    NormalEdgeBlockingData ι G e where
-  red := h.red e
-  blue := h.blue e
-  complement := h.complement e
-  left_mem_red := h.left_mem_red e
-  right_mem_blue := h.right_mem_blue e
-  red_injective := h.red_injective e
-  blue_injective := h.blue_injective e
-  complement_injective := h.complement_injective e
-  red_disjoint_blue := h.red_disjoint_blue e
-  red_disjoint_complement := h.red_disjoint_complement e
-  blue_disjoint_complement := h.blue_disjoint_complement e
-  cover_univ := h.cover_univ e
+/-- The first injective block around each edge. -/
+def red (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) : Finset V :=
+  (h.blockingData e).red
+
+/-- The second injective block around each edge. -/
+def blue (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) : Finset V :=
+  (h.blockingData e).blue
+
+/-- The complementary injective block around each edge. -/
+def complement (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) : Finset V :=
+  (h.blockingData e).complement
+
+/-- The left endpoint of the edge lies in the red block. -/
+theorem left_mem_red (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    e.1.1 ∈ h.red e :=
+  (h.blockingData e).left_mem_red
+
+/-- The right endpoint of the edge lies in the blue block. -/
+theorem right_mem_blue (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    e.1.2 ∈ h.blue e :=
+  (h.blockingData e).right_mem_blue
+
+/-- The red block is injective. -/
+theorem red_injective (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    ι.IsInjective (h.red e) :=
+  (h.blockingData e).red_injective
+
+/-- The blue block is injective. -/
+theorem blue_injective (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    ι.IsInjective (h.blue e) :=
+  (h.blockingData e).blue_injective
+
+/-- The complementary block is injective. -/
+theorem complement_injective (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    ι.IsInjective (h.complement e) :=
+  (h.blockingData e).complement_injective
+
+/-- The red and blue blocks are disjoint. -/
+theorem red_disjoint_blue (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    Disjoint (h.red e) (h.blue e) :=
+  (h.blockingData e).red_disjoint_blue
+
+/-- The red and complementary blocks are disjoint. -/
+theorem red_disjoint_complement (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    Disjoint (h.red e) (h.complement e) :=
+  (h.blockingData e).red_disjoint_complement
+
+/-- The blue and complementary blocks are disjoint. -/
+theorem blue_disjoint_complement (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    Disjoint (h.blue e) (h.complement e) :=
+  (h.blockingData e).blue_disjoint_complement
+
+/-- The three edge-centred blocks cover the vertex set. -/
+theorem cover_univ (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) :
+    h.red e ∪ h.blue e ∪ h.complement e = Finset.univ :=
+  (h.blockingData e).cover_univ
 
 /-- Assemble edge-centred blocking hypotheses from one-edge blocking data
 available for every edge.
@@ -141,18 +160,7 @@ where the proof blocks around every edge before applying the injective
 three-site comparison. -/
 def ofBlockingData (data : ∀ e : Edge G, NormalEdgeBlockingData ι G e) :
     NormalEdgeBlockingHypotheses ι G where
-  red e := (data e).red
-  blue e := (data e).blue
-  complement e := (data e).complement
-  left_mem_red e := (data e).left_mem_red
-  right_mem_blue e := (data e).right_mem_blue
-  red_injective e := (data e).red_injective
-  blue_injective e := (data e).blue_injective
-  complement_injective e := (data e).complement_injective
-  red_disjoint_blue e := (data e).red_disjoint_blue
-  red_disjoint_complement e := (data e).red_disjoint_complement
-  blue_disjoint_complement e := (data e).blue_disjoint_complement
-  cover_univ e := (data e).cover_univ
+  blockingData := data
 
 /-- Recovering the one-edge datum from hypotheses assembled from one-edge data
 returns the datum supplied at that edge.
