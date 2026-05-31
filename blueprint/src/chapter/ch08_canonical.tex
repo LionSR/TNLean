@@ -37,7 +37,7 @@ The source PGVWC07 theorem is recorded as a single headline statement
 (Theorem~\ref{thm:pgvwc07_ti_canonical_form}). The reduction that feeds the
 Fundamental Theorem does not pass through it: it goes through
 Theorem~\ref{thm:tp_gauge_arbitrary},
-Theorem~\ref{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}, and the
+Theorem~\ref{thm:cyclic_sector_decomp_irr_tp_prim_irr}, and the
 after-blocking reductions of Chapter~\ref{ch:canonical_after_blocking}. The
 principal outputs of this chapter are
 Theorem~\ref{thm:pgvwc07_ti_canonical_form} (the PGVWC07 translation-invariant
@@ -1280,29 +1280,15 @@ the periodic extension of Chapter~\ref{ch:periodic_ft_apps}.
     preserves the nonzero-weight hypothesis of a weighted block decomposition.
 \end{lemma}
 
-\begin{lemma}[Primitive cyclic sectors of irreducible TP tensors]%
-    \label{thm:has_primitive_irreducible_cyclic_sectors_tp_irr}
-    \lean{MPSTensor.hasPrimitiveIrreducibleCyclicSectors_of_TP_of_isIrreducibleTensor}\leanok
-    \uses{def:irreducible_tensor, def:tp_kraus, def:primitive_channel,
-        thm:cyclic_sector_decomp_irr_tp_prim_irr}
-    Let $A$ be a left-canonical irreducible MPS tensor with $D > 0$. Then there
-    exist a period $m \ge 1$ and left-canonical blocks $(C_k)_{k=1}^m$ with
-    primitive transfer maps, tensor-irreducible structure, and positive bond
-    dimensions such that $A^{[m]}$ generates the same MPV family as
-    $\bigoplus_{k=1}^m C_k$ (unit weights).
-\end{lemma}
-
 \begin{lemma}[Common reblocking of cyclic-sector families]%
     \label{thm:exists_common_blocked_cyclic_sector_family}
     \lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}\leanok
-    \uses{thm:has_primitive_irreducible_cyclic_sectors_tp_irr,
-        def:blocked_tensor}
-    Given a finite family $(B_k)_{k=1}^r$ of left-canonical irreducible TP tensors
-    with positive bond dimensions and per-block period-removal lengths
-    $(m_k)_{k=1}^r$, there is a common blocking length $p$ such that each
-    $B_k^{[p]}$ admits a unit-weight direct-sum decomposition over a single common
-    blocked alphabet $d^{[p]}$ into left-canonical blocks with primitive transfer
-    maps, tensor irreducibility, and positive bond dimensions.
+    \uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor}
+    Given a finite family $(B_k)_{k=1}^r$, each with primitive irreducible cyclic
+    sectors, there is a common blocking length $p$ such that each $B_k^{[p]}$
+    admits a unit-weight direct-sum decomposition over a single common blocked
+    alphabet $d^{[p]}$ into left-canonical blocks with primitive transfer maps,
+    tensor irreducibility, and positive bond dimensions.
 \end{lemma}
 
 \begin{lemma}[Nonzero unit weight of the common reblocked family]%
